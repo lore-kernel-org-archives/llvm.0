@@ -1,113 +1,319 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41DF748E;
-	Thu,  9 Feb 2023 12:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675944462; x=1707480462;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DgCLLbd2OgAmMyk1BGiXGFxAIxijBM0hplnfm2Nw+Fo=;
-  b=LBYhzMIBYjRo0EdSWZPiSjHZ6g8EERT3aGFghUk59jVW56p3TbRUdtJV
-   2449jscxWA8ijadOZHcjg3Uu6J4wcD82s+Kfqapc0UNWqFD+LosH4tNYZ
-   eXCgk41CtXpCCeCs++NEW6auk8pcxS6j9dZ56c6TGhwK3MnUYMgfb6S9A
-   3YumA8uckMtH8ljVmjfTXHogUOydVFLEJ1ASWYGQAejooHbGT1NydOsnu
-   klAB5x4dfFlhrLzn6e7TPDXTaVj32EoPFPyHpI657WTeKCQa7h1OhvZIV
-   iEjxQcnRZE9zCKlPFqLJKLnK/Qa0fodp+oeFUBIHVySRrnDC4Bo/iwfBo
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="332206008"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="332206008"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 04:07:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="841568158"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="841568158"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2023 04:07:40 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pQ5iF-00052g-0A;
-	Thu, 09 Feb 2023 12:07:39 +0000
-Date: Thu, 9 Feb 2023 20:07:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: kyrie wu <kyrie.wu@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-	irui wang <irui.wang@mediatek.com>
-Subject: drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1859:38:
- warning: unused variable 'mtk8195_jpegdec_drvdata'
-Message-ID: <202302092008.IgpNeNCW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE1233ED
+	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 13:08:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1675948135;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Bw39xUm/apggQ1i5X5e78IuyEVEQICuYA4ehNUdLHig=;
+	b=e07cf7COJXWZ9df+eAJJhHwMsdckLVNQpadnyLPB0pqlQswEZ9yGLAsxcaZ0EHNJ4ODemP
+	K0+q1GeQ7k03lq9zuN3R/7imrE58ncb0HaH0R3DL77miVASh7FKeDAwA6TnHabQZiFqfWp
+	6mJ6jlsWgaFDOopRiwZbZ7useu4jpec=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-381-vJjeifo1Mb-tezRQmOd7kQ-1; Thu, 09 Feb 2023 08:08:54 -0500
+X-MC-Unique: vJjeifo1Mb-tezRQmOd7kQ-1
+Received: by mail-qv1-f72.google.com with SMTP id ec11-20020ad44e6b000000b0056c2005684aso1191919qvb.23
+        for <llvm@lists.linux.dev>; Thu, 09 Feb 2023 05:08:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bw39xUm/apggQ1i5X5e78IuyEVEQICuYA4ehNUdLHig=;
+        b=RbM3XPUbuj3/QuBLeJmWHnsnSnB+wnA3wETduakfvo4f9W9CLogES4ZzRFbuKsH9R+
+         RZW7uqzyCdGlqbAHjpqwQzeWOJh+N7Vayh9kRLdIRPZqMbu5VQXoGovTiE6jER2RwoKH
+         DKyoYYRV0hdPsowt1cBSEEyXosdrBobaMgX0T6gtLh/OecNvt7jAVIAMTCzjQiGPzWTD
+         6qzkwNroH8WwxKdJr5Ff9q53beZa0nhhyxjVyvJnW9rhFG8RcMJcJ1b16efIOiEO1o2P
+         k/6QJwyX2EiUTilfcinHMMAGPuszkopRVUXcMB50V2jNkUADbxUPDZgOcfPHIC4sGXxX
+         6BDA==
+X-Gm-Message-State: AO0yUKVmrb+9N4wWnm+dnEIM6zNuovC50k8tnvE6T94gLVjNQ/hltJjs
+	9nQeOQATlj5YT5l6+qQitb8O9xTzRVQb9Kdx3FAMmRP0H5mhGw+HG9g+iz6e5cwzgaMGMuvEZC1
+	F8J5JZnUcC79MDA==
+X-Received: by 2002:ac8:5f0d:0:b0:3b8:4cba:e26e with SMTP id x13-20020ac85f0d000000b003b84cbae26emr20066130qta.51.1675948133882;
+        Thu, 09 Feb 2023 05:08:53 -0800 (PST)
+X-Google-Smtp-Source: AK7set9QS0vKnZmDTVsHXHzq5+tgyb7V+h5PIe/cKTWx1dhZTBnEgvK29rzOogD3eXi+scqWsZ86qQ==
+X-Received: by 2002:ac8:5f0d:0:b0:3b8:4cba:e26e with SMTP id x13-20020ac85f0d000000b003b84cbae26emr20066092qta.51.1675948133601;
+        Thu, 09 Feb 2023 05:08:53 -0800 (PST)
+Received: from fedora (ec2-3-80-233-239.compute-1.amazonaws.com. [3.80.233.239])
+        by smtp.gmail.com with ESMTPSA id 17-20020ac82091000000b003b960aad697sm1228102qtd.9.2023.02.09.05.08.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 05:08:52 -0800 (PST)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: Sean Christopherson <seanjc@google.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>
+Cc: Tom Rix <trix@redhat.com>, kvm@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] KVM: nVMX: Move EVMCS1_SUPPORT_* macros to hyperv.c
+In-Reply-To: <20230208205430.1424667-2-seanjc@google.com>
+References: <20230208205430.1424667-1-seanjc@google.com>
+ <20230208205430.1424667-2-seanjc@google.com>
+Date: Thu, 09 Feb 2023 14:08:49 +0100
+Message-ID: <87pmaj6l5q.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain
 
-Hi kyrie,
+Sean Christopherson <seanjc@google.com> writes:
 
-FYI, the error/warning still remains.
+> Move the macros that define the set of VMCS controls that are supported
+> by eVMCS1 from hyperv.h to hyperv.c, i.e. make them "private".   The
+> macros should never be consumed directly by KVM at-large since the "final"
+> set of supported controls depends on guest CPUID.
+>
+> No functional change intended.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/hyperv.c | 105 ++++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/vmx/hyperv.h | 105 --------------------------------------
+>  2 files changed, 105 insertions(+), 105 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/hyperv.c b/arch/x86/kvm/vmx/hyperv.c
+> index 22daca752797..b6748055c586 100644
+> --- a/arch/x86/kvm/vmx/hyperv.c
+> +++ b/arch/x86/kvm/vmx/hyperv.c
+> @@ -13,6 +13,111 @@
+>  
+>  #define CC KVM_NESTED_VMENTER_CONSISTENCY_CHECK
+>  
+> +/*
+> + * Enlightened VMCSv1 doesn't support these:
+> + *
+> + *	POSTED_INTR_NV                  = 0x00000002,
+> + *	GUEST_INTR_STATUS               = 0x00000810,
+> + *	APIC_ACCESS_ADDR		= 0x00002014,
+> + *	POSTED_INTR_DESC_ADDR           = 0x00002016,
+> + *	EOI_EXIT_BITMAP0                = 0x0000201c,
+> + *	EOI_EXIT_BITMAP1                = 0x0000201e,
+> + *	EOI_EXIT_BITMAP2                = 0x00002020,
+> + *	EOI_EXIT_BITMAP3                = 0x00002022,
+> + *	GUEST_PML_INDEX			= 0x00000812,
+> + *	PML_ADDRESS			= 0x0000200e,
+> + *	VM_FUNCTION_CONTROL             = 0x00002018,
+> + *	EPTP_LIST_ADDRESS               = 0x00002024,
+> + *	VMREAD_BITMAP                   = 0x00002026,
+> + *	VMWRITE_BITMAP                  = 0x00002028,
+> + *
+> + *	TSC_MULTIPLIER                  = 0x00002032,
+> + *	PLE_GAP                         = 0x00004020,
+> + *	PLE_WINDOW                      = 0x00004022,
+> + *	VMX_PREEMPTION_TIMER_VALUE      = 0x0000482E,
+> + *
+> + * Currently unsupported in KVM:
+> + *	GUEST_IA32_RTIT_CTL		= 0x00002814,
+> + */
+> +#define EVMCS1_SUPPORTED_PINCTRL					\
+> +	(PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR |				\
+> +	 PIN_BASED_EXT_INTR_MASK |					\
+> +	 PIN_BASED_NMI_EXITING |					\
+> +	 PIN_BASED_VIRTUAL_NMIS)
+> +
+> +#define EVMCS1_SUPPORTED_EXEC_CTRL					\
+> +	(CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR |				\
+> +	 CPU_BASED_HLT_EXITING |					\
+> +	 CPU_BASED_CR3_LOAD_EXITING |					\
+> +	 CPU_BASED_CR3_STORE_EXITING |					\
+> +	 CPU_BASED_UNCOND_IO_EXITING |					\
+> +	 CPU_BASED_MOV_DR_EXITING |					\
+> +	 CPU_BASED_USE_TSC_OFFSETTING |					\
+> +	 CPU_BASED_MWAIT_EXITING |					\
+> +	 CPU_BASED_MONITOR_EXITING |					\
+> +	 CPU_BASED_INVLPG_EXITING |					\
+> +	 CPU_BASED_RDPMC_EXITING |					\
+> +	 CPU_BASED_INTR_WINDOW_EXITING |				\
+> +	 CPU_BASED_CR8_LOAD_EXITING |					\
+> +	 CPU_BASED_CR8_STORE_EXITING |					\
+> +	 CPU_BASED_RDTSC_EXITING |					\
+> +	 CPU_BASED_TPR_SHADOW |						\
+> +	 CPU_BASED_USE_IO_BITMAPS |					\
+> +	 CPU_BASED_MONITOR_TRAP_FLAG |					\
+> +	 CPU_BASED_USE_MSR_BITMAPS |					\
+> +	 CPU_BASED_NMI_WINDOW_EXITING |					\
+> +	 CPU_BASED_PAUSE_EXITING |					\
+> +	 CPU_BASED_ACTIVATE_SECONDARY_CONTROLS)
+> +
+> +#define EVMCS1_SUPPORTED_2NDEXEC					\
+> +	(SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE |			\
+> +	 SECONDARY_EXEC_WBINVD_EXITING |				\
+> +	 SECONDARY_EXEC_ENABLE_VPID |					\
+> +	 SECONDARY_EXEC_ENABLE_EPT |					\
+> +	 SECONDARY_EXEC_UNRESTRICTED_GUEST |				\
+> +	 SECONDARY_EXEC_DESC |						\
+> +	 SECONDARY_EXEC_ENABLE_RDTSCP |					\
+> +	 SECONDARY_EXEC_ENABLE_INVPCID |				\
+> +	 SECONDARY_EXEC_XSAVES |					\
+> +	 SECONDARY_EXEC_RDSEED_EXITING |				\
+> +	 SECONDARY_EXEC_RDRAND_EXITING |				\
+> +	 SECONDARY_EXEC_TSC_SCALING |					\
+> +	 SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE |				\
+> +	 SECONDARY_EXEC_PT_USE_GPA |					\
+> +	 SECONDARY_EXEC_PT_CONCEAL_VMX |				\
+> +	 SECONDARY_EXEC_BUS_LOCK_DETECTION |				\
+> +	 SECONDARY_EXEC_NOTIFY_VM_EXITING |				\
+> +	 SECONDARY_EXEC_ENCLS_EXITING)
+> +
+> +#define EVMCS1_SUPPORTED_3RDEXEC (0ULL)
+> +
+> +#define EVMCS1_SUPPORTED_VMEXIT_CTRL					\
+> +	(VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR |				\
+> +	 VM_EXIT_SAVE_DEBUG_CONTROLS |					\
+> +	 VM_EXIT_ACK_INTR_ON_EXIT |					\
+> +	 VM_EXIT_HOST_ADDR_SPACE_SIZE |					\
+> +	 VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
+> +	 VM_EXIT_SAVE_IA32_PAT |					\
+> +	 VM_EXIT_LOAD_IA32_PAT |					\
+> +	 VM_EXIT_SAVE_IA32_EFER |					\
+> +	 VM_EXIT_LOAD_IA32_EFER |					\
+> +	 VM_EXIT_CLEAR_BNDCFGS |					\
+> +	 VM_EXIT_PT_CONCEAL_PIP |					\
+> +	 VM_EXIT_CLEAR_IA32_RTIT_CTL)
+> +
+> +#define EVMCS1_SUPPORTED_VMENTRY_CTRL					\
+> +	(VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR |				\
+> +	 VM_ENTRY_LOAD_DEBUG_CONTROLS |					\
+> +	 VM_ENTRY_IA32E_MODE |						\
+> +	 VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |				\
+> +	 VM_ENTRY_LOAD_IA32_PAT |					\
+> +	 VM_ENTRY_LOAD_IA32_EFER |					\
+> +	 VM_ENTRY_LOAD_BNDCFGS |					\
+> +	 VM_ENTRY_PT_CONCEAL_PIP |					\
+> +	 VM_ENTRY_LOAD_IA32_RTIT_CTL)
+> +
+> +#define EVMCS1_SUPPORTED_VMFUNC (0)
+> +
+>  DEFINE_STATIC_KEY_FALSE(enable_evmcs);
+>  
+>  #define EVMCS1_OFFSET(x) offsetof(struct hv_enlightened_vmcs, x)
+> diff --git a/arch/x86/kvm/vmx/hyperv.h b/arch/x86/kvm/vmx/hyperv.h
+> index 78d17667e7ec..1299143d00df 100644
+> --- a/arch/x86/kvm/vmx/hyperv.h
+> +++ b/arch/x86/kvm/vmx/hyperv.h
+> @@ -22,111 +22,6 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+>  
+>  #define KVM_EVMCS_VERSION 1
+>  
+> -/*
+> - * Enlightened VMCSv1 doesn't support these:
+> - *
+> - *	POSTED_INTR_NV                  = 0x00000002,
+> - *	GUEST_INTR_STATUS               = 0x00000810,
+> - *	APIC_ACCESS_ADDR		= 0x00002014,
+> - *	POSTED_INTR_DESC_ADDR           = 0x00002016,
+> - *	EOI_EXIT_BITMAP0                = 0x0000201c,
+> - *	EOI_EXIT_BITMAP1                = 0x0000201e,
+> - *	EOI_EXIT_BITMAP2                = 0x00002020,
+> - *	EOI_EXIT_BITMAP3                = 0x00002022,
+> - *	GUEST_PML_INDEX			= 0x00000812,
+> - *	PML_ADDRESS			= 0x0000200e,
+> - *	VM_FUNCTION_CONTROL             = 0x00002018,
+> - *	EPTP_LIST_ADDRESS               = 0x00002024,
+> - *	VMREAD_BITMAP                   = 0x00002026,
+> - *	VMWRITE_BITMAP                  = 0x00002028,
+> - *
+> - *	TSC_MULTIPLIER                  = 0x00002032,
+> - *	PLE_GAP                         = 0x00004020,
+> - *	PLE_WINDOW                      = 0x00004022,
+> - *	VMX_PREEMPTION_TIMER_VALUE      = 0x0000482E,
+> - *
+> - * Currently unsupported in KVM:
+> - *	GUEST_IA32_RTIT_CTL		= 0x00002814,
+> - */
+> -#define EVMCS1_SUPPORTED_PINCTRL					\
+> -	(PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR |				\
+> -	 PIN_BASED_EXT_INTR_MASK |					\
+> -	 PIN_BASED_NMI_EXITING |					\
+> -	 PIN_BASED_VIRTUAL_NMIS)
+> -
+> -#define EVMCS1_SUPPORTED_EXEC_CTRL					\
+> -	(CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR |				\
+> -	 CPU_BASED_HLT_EXITING |					\
+> -	 CPU_BASED_CR3_LOAD_EXITING |					\
+> -	 CPU_BASED_CR3_STORE_EXITING |					\
+> -	 CPU_BASED_UNCOND_IO_EXITING |					\
+> -	 CPU_BASED_MOV_DR_EXITING |					\
+> -	 CPU_BASED_USE_TSC_OFFSETTING |					\
+> -	 CPU_BASED_MWAIT_EXITING |					\
+> -	 CPU_BASED_MONITOR_EXITING |					\
+> -	 CPU_BASED_INVLPG_EXITING |					\
+> -	 CPU_BASED_RDPMC_EXITING |					\
+> -	 CPU_BASED_INTR_WINDOW_EXITING |				\
+> -	 CPU_BASED_CR8_LOAD_EXITING |					\
+> -	 CPU_BASED_CR8_STORE_EXITING |					\
+> -	 CPU_BASED_RDTSC_EXITING |					\
+> -	 CPU_BASED_TPR_SHADOW |						\
+> -	 CPU_BASED_USE_IO_BITMAPS |					\
+> -	 CPU_BASED_MONITOR_TRAP_FLAG |					\
+> -	 CPU_BASED_USE_MSR_BITMAPS |					\
+> -	 CPU_BASED_NMI_WINDOW_EXITING |					\
+> -	 CPU_BASED_PAUSE_EXITING |					\
+> -	 CPU_BASED_ACTIVATE_SECONDARY_CONTROLS)
+> -
+> -#define EVMCS1_SUPPORTED_2NDEXEC					\
+> -	(SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE |			\
+> -	 SECONDARY_EXEC_WBINVD_EXITING |				\
+> -	 SECONDARY_EXEC_ENABLE_VPID |					\
+> -	 SECONDARY_EXEC_ENABLE_EPT |					\
+> -	 SECONDARY_EXEC_UNRESTRICTED_GUEST |				\
+> -	 SECONDARY_EXEC_DESC |						\
+> -	 SECONDARY_EXEC_ENABLE_RDTSCP |					\
+> -	 SECONDARY_EXEC_ENABLE_INVPCID |				\
+> -	 SECONDARY_EXEC_XSAVES |					\
+> -	 SECONDARY_EXEC_RDSEED_EXITING |				\
+> -	 SECONDARY_EXEC_RDRAND_EXITING |				\
+> -	 SECONDARY_EXEC_TSC_SCALING |					\
+> -	 SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE |				\
+> -	 SECONDARY_EXEC_PT_USE_GPA |					\
+> -	 SECONDARY_EXEC_PT_CONCEAL_VMX |				\
+> -	 SECONDARY_EXEC_BUS_LOCK_DETECTION |				\
+> -	 SECONDARY_EXEC_NOTIFY_VM_EXITING |				\
+> -	 SECONDARY_EXEC_ENCLS_EXITING)
+> -
+> -#define EVMCS1_SUPPORTED_3RDEXEC (0ULL)
+> -
+> -#define EVMCS1_SUPPORTED_VMEXIT_CTRL					\
+> -	(VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR |				\
+> -	 VM_EXIT_SAVE_DEBUG_CONTROLS |					\
+> -	 VM_EXIT_ACK_INTR_ON_EXIT |					\
+> -	 VM_EXIT_HOST_ADDR_SPACE_SIZE |					\
+> -	 VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
+> -	 VM_EXIT_SAVE_IA32_PAT |					\
+> -	 VM_EXIT_LOAD_IA32_PAT |					\
+> -	 VM_EXIT_SAVE_IA32_EFER |					\
+> -	 VM_EXIT_LOAD_IA32_EFER |					\
+> -	 VM_EXIT_CLEAR_BNDCFGS |					\
+> -	 VM_EXIT_PT_CONCEAL_PIP |					\
+> -	 VM_EXIT_CLEAR_IA32_RTIT_CTL)
+> -
+> -#define EVMCS1_SUPPORTED_VMENTRY_CTRL					\
+> -	(VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR |				\
+> -	 VM_ENTRY_LOAD_DEBUG_CONTROLS |					\
+> -	 VM_ENTRY_IA32E_MODE |						\
+> -	 VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL |				\
+> -	 VM_ENTRY_LOAD_IA32_PAT |					\
+> -	 VM_ENTRY_LOAD_IA32_EFER |					\
+> -	 VM_ENTRY_LOAD_BNDCFGS |					\
+> -	 VM_ENTRY_PT_CONCEAL_PIP |					\
+> -	 VM_ENTRY_LOAD_IA32_RTIT_CTL)
+> -
+> -#define EVMCS1_SUPPORTED_VMFUNC (0)
+> -
+>  struct evmcs_field {
+>  	u16 offset;
+>  	u16 clean_field;
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: dedc21500334b97b80d4ca37ab683cde214fcb03 media: mtk-jpegdec: add jpeg decode worker interface
-date:   4 months ago
-config: mips-randconfig-r005-20230209 (https://download.01.org/0day-ci/archive/20230209/202302092008.IgpNeNCW-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dedc21500334b97b80d4ca37ab683cde214fcb03
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dedc21500334b97b80d4ca37ab683cde214fcb03
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/ drivers/soc/renesas/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302092008.IgpNeNCW-lkp@intel.com
-
-All warnings (new ones prefixed by >>):
-
-   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1818:38: warning: unused variable 'mt8173_jpeg_drvdata' [-Wunused-const-variable]
-   static const struct mtk_jpeg_variant mt8173_jpeg_drvdata = {
-                                        ^
-   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1833:38: warning: unused variable 'mtk_jpeg_drvdata' [-Wunused-const-variable]
-   static const struct mtk_jpeg_variant mtk_jpeg_drvdata = {
-                                        ^
-   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1848:32: warning: unused variable 'mtk8195_jpegenc_drvdata' [-Wunused-variable]
-   static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
-                                  ^
->> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1859:38: warning: unused variable 'mtk8195_jpegdec_drvdata' [-Wunused-const-variable]
-   static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
-                                        ^
-   4 warnings generated.
-
-
-vim +/mtk8195_jpegdec_drvdata +1859 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-
-  1858	
-> 1859	static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
-  1860		.formats = mtk_jpeg_dec_formats,
-  1861		.num_formats = MTK_JPEG_DEC_NUM_FORMATS,
-  1862		.qops = &mtk_jpeg_dec_qops,
-  1863		.m2m_ops = &mtk_jpeg_multicore_dec_m2m_ops,
-  1864		.dev_name = "mtk-jpeg-dec",
-  1865		.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
-  1866		.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-  1867		.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
-  1868	};
-  1869	
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Vitaly
+
