@@ -1,43 +1,43 @@
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F6F36C;
-	Thu,  9 Feb 2023 01:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE96387;
+	Thu,  9 Feb 2023 01:30:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675904962; x=1707440962;
+  t=1675906223; x=1707442223;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GI8IwpHrCtLwdiOPxD0L9G1DYq+NLvDgg0Cnzqj/6BM=;
-  b=HkNvNb82/Ue86lo8DpYPO9U9JzmrWdlmXu/zcJlokhY/KssRbPeMdjfc
-   EfXeUUwlbd6QgU3WU89fLEBcIb3xMZz4/JpnCV2svojv5WaiQE1DcqKs5
-   OTUdbD2nYcbHgizXHCdscWNI4osfIXlLVYzDvf2iP78MJqjB/QsmNQ63b
-   Pklp5MvzEkxrVYUbtc9kxta7dN7hg1RJGdjwSunvCtKNsK7epythGwoyA
-   rBbD66IK2SjBrGgVYTVlPbeyaxbr9Y4a1++mmWr9tcQ2wNKoBgupbdaiG
-   uNePGGQABK8KlsiVY6O8s9h8su25kQ2Fpy8qZwy1OE7Qm/P6q4NzEewpx
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309625003"
+  bh=yBJ52FUGL78dzZOqChYA7Idv2yLAxA4Cx/vsei37ZYs=;
+  b=V+Hxmi1Bms6nRkFMcE7AY2YSDmnMJXu/tWOiv5CK+TjalWi/0m884jXs
+   Vfp4eJTZqjbZ8Vw6TokD1lW7QFPMEAUwafEXhkVb3FmxnieZaFJ1zrNTX
+   DW7BKZaLTquFSLSiFa3ylrGfvYt0zn93pVXd6LATB/XoeiWDZMAx+KsG6
+   cHqq7zk8s46TZB5IBXFYIzf5sOfmcGAP9kMQnSj/o2Kop4Q3FnODHu2DR
+   02TFLQyiWGMbyZTjYhGjpAgg2VQoilDRDBrgCtJ9p4eYoVC3CXA5nNSxS
+   s3UXbFwukb/FQ/9BstYee4gzrTy5QIxl3HB/K9MbNd7ZHFw2BOGhvxvJs
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309629370"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="309625003"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 17:09:21 -0800
+   d="scan'208";a="309629370"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 17:30:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776267162"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="660840478"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="776267162"
+   d="scan'208";a="660840478"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Feb 2023 17:09:19 -0800
+  by orsmga007.jf.intel.com with ESMTP; 08 Feb 2023 17:30:20 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pPvR8-0004jS-2X;
-	Thu, 09 Feb 2023 01:09:18 +0000
-Date: Thu, 9 Feb 2023 09:09:09 +0800
+	id 1pPvlT-0004k6-1m;
+	Thu, 09 Feb 2023 01:30:19 +0000
+Date: Thu, 9 Feb 2023 09:30:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Robin Murphy <robin.murphy@arm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
- warning: unused variable 'samsung_jpeg_match'
-Message-ID: <202302090840.vIjaH7GJ-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+Subject: drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable
+ 'ipmmu_of_ids'
+Message-ID: <202302090916.LwXEX2k8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,43 +47,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Mauro,
+Hi Robin,
 
 FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
-date:   11 months ago
-config: s390-randconfig-r014-20230209 (https://download.01.org/0day-ci/archive/20230209/202302090840.vIjaH7GJ-lkp@intel.com/config)
+commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 iommu/ipmmu-vmsa: Clean up bus_set_iommu()
+date:   5 months ago
+config: s390-randconfig-r012-20230209 (https://download.01.org/0day-ci/archive/20230209/202302090916.LwXEX2k8-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install s390 cross compiling tool for clang build
         # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b87d6d7fa405e23478f1e1dff6d66b5a533a5433
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        git checkout b87d6d7fa405e23478f1e1dff6d66b5a533a5433
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302090840.vIjaH7GJ-lkp@intel.com
+| Link: https://lore.kernel.org/oe-kbuild-all/202302090916.LwXEX2k8-lkp@intel.com
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
-   In file included from include/linux/io.h:13:
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __raw_readb(PCI_IOBASE + addr);
                              ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
@@ -92,10 +93,11 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
    #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
                                                         ^
-   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
-   In file included from include/linux/io.h:13:
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
@@ -104,74 +106,103 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
    #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
                                                         ^
-   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
-   In file included from include/linux/io.h:13:
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
    In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writeb(value, PCI_IOBASE + addr);
                                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            readsb(PCI_IOBASE + addr, buffer, count);
                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            readsw(PCI_IOBASE + addr, buffer, count);
                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            readsl(PCI_IOBASE + addr, buffer, count);
                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            writesb(PCI_IOBASE + addr, buffer, count);
                    ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            writesw(PCI_IOBASE + addr, buffer, count);
                    ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            writesl(PCI_IOBASE + addr, buffer, count);
                    ~~~~~~~~~~ ^
->> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
-   static const struct of_device_id samsung_jpeg_match[] = {
+>> drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable 'ipmmu_of_ids' [-Wunused-const-variable]
+   static const struct of_device_id ipmmu_of_ids[] = {
                                     ^
    13 warnings generated.
 
 
-vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
 
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
-3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
-7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
-6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
-80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
+33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
+33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
+33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
+33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
+60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
+60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
+60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
+757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
+757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
+757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
+b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
+b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
+b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
+58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
+58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
+0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
+0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
+0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
+0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
+98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
+98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
+98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
+3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
+b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
+b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
+b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
+3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
+9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
+33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
+33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
+33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
+33f3ac9b511612 Magnus Damm             2017-10-16  995  };
+33f3ac9b511612 Magnus Damm             2017-10-16  996  
 
-:::::: The code at line 3126 was first introduced by commit
-:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+:::::: The code at line 946 was first introduced by commit
+:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
 
-:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+:::::: TO: Magnus Damm <damm+renesas@opensource.se>
+:::::: CC: Alex Williamson <alex.williamson@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
