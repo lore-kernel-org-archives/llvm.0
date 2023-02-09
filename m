@@ -1,150 +1,119 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FC636C
-	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 01:49:50 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id d8-20020a6b6e08000000b00722d8d9c432so284099ioh.19
-        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 17:49:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WCjm3XDqMJ/rIukhzP8LuyX3GsAuuGdYjwTc+fA8jAA=;
-        b=QCOD/lx7Ftxz9BA8NP+iEWeM++e7n2t256/dxOFaL2qM+KslX9H2E/FTwr1FvUoFgg
-         ZzeB6ydRKgTbRyWNyrVFyF99ewHqZVH/MqJrR9xVJjjzFlXJ8J+JbdT1wNY/UQCeBltE
-         vVwaeqK1jHw24puh8IifB3Q1fj9cdq/l/Sxun1HtmIki+AX6FSAwp0KernAp5y/v/tn+
-         rC/Zq55UIVehOF9uPXqE/BBy2gbS5KGmcQQ0OUJ7YE8tNNPd6R6+XSYqunvEK1w3JiVm
-         YB6Xo9Gb9swYV9zWLGcxrKlVYE9LT3S1Wr9eZWIbSDZb1F4LbvO/nk7Iasd4JHqPbFS3
-         6URA==
-X-Gm-Message-State: AO0yUKXxBrmol6C+/QHBAr4dq+NMYILhNu9/7LDFZDgS3zF6nwyBXOdM
-	K9/j8nJyIh9eP4Oy0viyDA8iVSyRB2hpFWSOhbTcGHTIWYJi
-X-Google-Smtp-Source: AK7set+vbB2Jkvd3XjuPT7n7AUfCgB4H7e4HpOqvZqdJnyGMjBpvp4Rxpr2DiKpm//VxAnGpHzFo+c8b/rQS7CjJ7iCrakb5Slzi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23E936C
+	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 02:16:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98292C433EF;
+	Thu,  9 Feb 2023 02:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1675908992;
+	bh=zxuoxziI8jyG8v98JQH01KgPXTbx+A+CFTlPIEN0GQU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Sm6TfzLOF0gZqsGaSMjp84t6qn5Of94Ig7kL6TWiZkCPPaGkgV1yw8cNw2+Dn/sTC
+	 YcCkMCT2cafy6T3FwQakjS/o8MmYmG86ALCYSbqskN4S2yTIpEIoAWjNwHbvh4aztd
+	 et1ANYNbJPyNYOsFs5awDf8GXvUfY2PcpbRUJLG5fC+oFU2Cg37K3QrGdjMBAw38vG
+	 60kYVKZ4cOAgEtybsVOpvbutdzgky/m4h+phH2N9mNCP1CffDQ2qzVjXFWiFEuoaQF
+	 6+pcx0WDlrMczyafXBtyAjPCjrnf6WCbzR+LFokGTEOxfHbDNvDbPwdhPErAzoRRWW
+	 XUtOKTCpsOLzQ==
+Date: Wed, 8 Feb 2023 19:16:29 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+	Mark Zhang <markzhang@nvidia.com>,
+	Patrisious Haddad <phaddad@nvidia.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	=?iso-8859-1?Q?H=E5kon?= Bugge <haakon.bugge@oracle.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] RDMA/cma: Distinguish between sockaddr_in and
+ sockaddr_in6 by size
+Message-ID: <Y+RXfXDDKxKHjLbh@dev-arch.thelio-3990X>
+References: <20230208232549.never.139-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:cc64:0:b0:3c2:c93f:e40 with SMTP id
- j4-20020a02cc64000000b003c2c93f0e40mr1986705jaq.126.1675907389894; Wed, 08
- Feb 2023 17:49:49 -0800 (PST)
-Date: Wed, 08 Feb 2023 17:49:49 -0800
-In-Reply-To: <000000000000cce8cd05f435fc77@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a6b67d05f43a9854@google.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in folio_flags
-From: syzbot <syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, mike.kravetz@oracle.com, 
-	muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208232549.never.139-kees@kernel.org>
 
-syzbot has found a reproducer for the following issue on:
+On Wed, Feb 08, 2023 at 03:25:53PM -0800, Kees Cook wrote:
+> Clang can do some aggressive inlining, which provides it with greater
+> visibility into the sizes of various objects that are passed into
+> helpers. Specifically, compare_netdev_and_ip() can see through the type
+> given to the "sa" argument, which means it can generate code for "struct
+> sockaddr_in" that would have been passed to ipv6_addr_cmp() (that expects
+> to operate on the larger "struct sockaddr_in6"), which would result in a
+> compile-time buffer overflow condition detected by memcmp(). Logically,
+> this state isn't reachable due to the sa_family assignment two callers
+> above and the check in compare_netdev_and_ip(). Instead, provide a
+> compile-time check on sizes so the size-mismatched code will be elided
+> when inlining. Avoids the following warning from Clang:
+> 
+> ../include/linux/fortify-string.h:652:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
+>                         __read_overflow();
+>                         ^
+> note: In function 'cma_netevent_callback'
+> note:   which inlined function 'node_from_ndev_ip'
+> 1 error generated.
+> 
+> When the underlying object size is not known (e.g. with GCC and older
+> Clang), the result of __builtin_object_size() is SIZE_MAX, which
+> will also compile away, leaving the code as it was originally.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1687
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: Mark Zhang <markzhang@nvidia.com>
+> Cc: Patrisious Haddad <phaddad@nvidia.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: linux-rdma@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-HEAD commit:    38d2b86a665b Add linux-next specific files for 20230208
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15f5e3a7480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3691b32dd4410e01
-dashboard link: https://syzkaller.appspot.com/bug?extid=d632e24db18585d7b3c6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1454ddf3480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a8431f480000
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/0a9d60e90514/disk-38d2b86a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/71311be5f1a1/vmlinux-38d2b86a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a242870cc8eb/bzImage-38d2b86a.xz
+Should this have a 'Cc: stable@vger.kernel.org', since we see this in
+6.1?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com
-
-memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=5080 'syz-executor561'
-BUG: unable to handle page fault for address: ffffffffffffffed
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD c570067 P4D c570067 PUD c572067 PMD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 5080 Comm: syz-executor561 Not tainted 6.2.0-rc7-next-20230208-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-RIP: 0010:PageTail include/linux/page-flags.h:290 [inline]
-RIP: 0010:folio_flags.constprop.0+0x2c/0x150 include/linux/page-flags.h:317
-Code: 49 89 fc 55 53 e8 84 4e b7 ff 49 8d 7c 24 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 f8 00 00 00 <49> 8b 5c 24 08 31 ff 83 e3 01 48 89 de e8 c2 4a b7 ff 48 85 db 0f
-RSP: 0018:ffffc90003cbfc08 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffffffffffffffe5 RCX: 0000000000000000
-RDX: 1ffffffffffffffd RSI: ffffffff81cd1f5c RDI: ffffffffffffffed
-RBP: ffffffffffffffe5 R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000ffffffe5 R11: 0000000000000000 R12: ffffffffffffffe5
-R13: 000feffffff00000 R14: 0000000000000046 R15: 000feffffff00000
-FS:  0000555556e84300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffed CR3: 000000002bb37000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- folio_test_head include/linux/page-flags.h:781 [inline]
- folio_test_large include/linux/page-flags.h:802 [inline]
- PageHeadHuge+0x18/0xc0 mm/hugetlb.c:2060
- folio_test_hugetlb include/linux/page-flags.h:830 [inline]
- folio_file_page include/linux/pagemap.h:702 [inline]
- shmem_read_mapping_page_gfp+0x34/0x100 mm/shmem.c:4366
- shmem_read_mapping_page include/linux/shmem_fs.h:124 [inline]
- udmabuf_create+0x93b/0x1440 drivers/dma-buf/udmabuf.c:286
- udmabuf_ioctl_create drivers/dma-buf/udmabuf.c:346 [inline]
- udmabuf_ioctl+0x156/0x2c0 drivers/dma-buf/udmabuf.c:377
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb0a3f40bb9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd5ab9a6e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb0a3f40bb9
-RDX: 0000000020000080 RSI: 0000000040187542 RDI: 0000000000000005
-RBP: 00007fb0a3f04d60 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb0a3f04df0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
-CR2: ffffffffffffffed
----[ end trace 0000000000000000 ]---
-RIP: 0010:PageTail include/linux/page-flags.h:290 [inline]
-RIP: 0010:folio_flags.constprop.0+0x2c/0x150 include/linux/page-flags.h:317
-Code: 49 89 fc 55 53 e8 84 4e b7 ff 49 8d 7c 24 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 f8 00 00 00 <49> 8b 5c 24 08 31 ff 83 e3 01 48 89 de e8 c2 4a b7 ff 48 85 db 0f
-RSP: 0018:ffffc90003cbfc08 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffffffffffffffe5 RCX: 0000000000000000
-RDX: 1ffffffffffffffd RSI: ffffffff81cd1f5c RDI: ffffffffffffffed
-RBP: ffffffffffffffe5 R08: 0000000000000005 R09: 0000000000000000
-R10: 00000000ffffffe5 R11: 0000000000000000 R12: ffffffffffffffe5
-R13: 000feffffff00000 R14: 0000000000000046 R15: 000feffffff00000
-FS:  0000555556e84300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffed CR3: 000000002bb37000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	49 89 fc             	mov    %rdi,%r12
-   3:	55                   	push   %rbp
-   4:	53                   	push   %rbx
-   5:	e8 84 4e b7 ff       	callq  0xffb74e8e
-   a:	49 8d 7c 24 08       	lea    0x8(%r12),%rdi
-   f:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  16:	fc ff df
-  19:	48 89 fa             	mov    %rdi,%rdx
-  1c:	48 c1 ea 03          	shr    $0x3,%rdx
-  20:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-  24:	0f 85 f8 00 00 00    	jne    0x122
-* 2a:	49 8b 5c 24 08       	mov    0x8(%r12),%rbx <-- trapping instruction
-  2f:	31 ff                	xor    %edi,%edi
-  31:	83 e3 01             	and    $0x1,%ebx
-  34:	48 89 de             	mov    %rbx,%rsi
-  37:	e8 c2 4a b7 ff       	callq  0xffb74afe
-  3c:	48 85 db             	test   %rbx,%rbx
-  3f:	0f                   	.byte 0xf
-
+> ---
+>  drivers/infiniband/core/cma.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+> index 1d2bff91d78b..308155937713 100644
+> --- a/drivers/infiniband/core/cma.c
+> +++ b/drivers/infiniband/core/cma.c
+> @@ -479,13 +479,20 @@ static int compare_netdev_and_ip(int ifindex_a, struct sockaddr *sa,
+>  	if (sa->sa_family != sb->sa_family)
+>  		return sa->sa_family - sb->sa_family;
+>  
+> -	if (sa->sa_family == AF_INET)
+> -		return memcmp((char *)&((struct sockaddr_in *)sa)->sin_addr,
+> -			      (char *)&((struct sockaddr_in *)sb)->sin_addr,
+> +	if (sa->sa_family == AF_INET &&
+> +	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in)) {
+> +		return memcmp(&((struct sockaddr_in *)sa)->sin_addr,
+> +			      &((struct sockaddr_in *)sb)->sin_addr,
+>  			      sizeof(((struct sockaddr_in *)sa)->sin_addr));
+> +	}
+> +
+> +	if (sa->sa_family == AF_INET6 &&
+> +	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in6)) {
+> +		return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
+> +				     &((struct sockaddr_in6 *)sb)->sin6_addr);
+> +	}
+>  
+> -	return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
+> -			     &((struct sockaddr_in6 *)sb)->sin6_addr);
+> +	return -1;
+>  }
+>  
+>  static int cma_add_id_to_tree(struct rdma_id_private *node_id_priv)
+> -- 
+> 2.34.1
+> 
