@@ -1,135 +1,178 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2427B160
-	for <llvm@lists.linux.dev>; Wed,  8 Feb 2023 23:25:55 +0000 (UTC)
-Received: by mail-pl1-f170.google.com with SMTP id f6so900409pln.12
-        for <llvm@lists.linux.dev>; Wed, 08 Feb 2023 15:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0M2E7/02dlvJiZTVnIWyTeiMgvIxEtCuzBBJQtnX/JM=;
-        b=Kd9X91L6aWl2C3IzFAJHT8vpU0II3tABmPdCDH04pU/uxfCFwSa5tkFhGGB5PhDCDp
-         +k/qHRN10g97J7gf+YNa+8elgTJi5pXXGs8Mu4qnhlM5t5IkP6iwW10whdguunezqGri
-         DevJn+KBLyJ4SSCRG+EOWDHZk57IPnjTS4lvQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0M2E7/02dlvJiZTVnIWyTeiMgvIxEtCuzBBJQtnX/JM=;
-        b=KO1P8bPze+X5lKCj9EhB5npm3hNLG5q8xLfuP3vJIWJEeHIS37YlJHnfguHwpSq0Dt
-         3QS+oNudCW2xrTHdd6Lg0kCyKIjVlHQ6I4HrW7URt6IkSTy/b2WRTVFS5ISampSIY4eO
-         gL2IMZarr0xvjrHcNg0lmBsm6W9Qfu6AbOrDToI6A1XJEeGixGa6hTZRZG/Jv5wgicDm
-         uUWBs3BloHAokjzXa1yery7YHRNtnSnOG0Ib6CahQlISpZAmQvQidBr4FLg6DtTOZ3bu
-         3fIa8Wx1OCbiN/TuwUP4MUAmn/AfUmrBrvA07mJCsSNhNzqK6id3mVUn4iMR8875TJKi
-         o03w==
-X-Gm-Message-State: AO0yUKXzMZb0Ne9p66Szj2LoDfiFYIX4HjtfbewZ2j7fSOJNHzjg1kjw
-	FQYcvU2ZaGi0NFih4y55+kw+Cg==
-X-Google-Smtp-Source: AK7set8SetsuX6rbiBZxlHxYNn9FBxyZwIzOoKbjerCb50EmBWaeirDi/oDkDvepCt8g5slk5CyDfQ==
-X-Received: by 2002:a17:902:e807:b0:196:8d48:8760 with SMTP id u7-20020a170902e80700b001968d488760mr9818064plg.31.1675898755570;
-        Wed, 08 Feb 2023 15:25:55 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q7-20020a170902a3c700b0019937ea86c1sm3530plb.143.2023.02.08.15.25.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 15:25:54 -0800 (PST)
-From: Kees Cook <keescook@chromium.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Kees Cook <keescook@chromium.org>,
-	Leon Romanovsky <leon@kernel.org>,
-	Mark Zhang <markzhang@nvidia.com>,
-	Patrisious Haddad <phaddad@nvidia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-rdma@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	=?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] RDMA/cma: Distinguish between sockaddr_in and sockaddr_in6 by size
-Date: Wed,  8 Feb 2023 15:25:53 -0800
-Message-Id: <20230208232549.never.139-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98F6F36C;
+	Thu,  9 Feb 2023 01:09:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675904962; x=1707440962;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GI8IwpHrCtLwdiOPxD0L9G1DYq+NLvDgg0Cnzqj/6BM=;
+  b=HkNvNb82/Ue86lo8DpYPO9U9JzmrWdlmXu/zcJlokhY/KssRbPeMdjfc
+   EfXeUUwlbd6QgU3WU89fLEBcIb3xMZz4/JpnCV2svojv5WaiQE1DcqKs5
+   OTUdbD2nYcbHgizXHCdscWNI4osfIXlLVYzDvf2iP78MJqjB/QsmNQ63b
+   Pklp5MvzEkxrVYUbtc9kxta7dN7hg1RJGdjwSunvCtKNsK7epythGwoyA
+   rBbD66IK2SjBrGgVYTVlPbeyaxbr9Y4a1++mmWr9tcQ2wNKoBgupbdaiG
+   uNePGGQABK8KlsiVY6O8s9h8su25kQ2Fpy8qZwy1OE7Qm/P6q4NzEewpx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309625003"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="309625003"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 17:09:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776267162"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="776267162"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Feb 2023 17:09:19 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pPvR8-0004jS-2X;
+	Thu, 09 Feb 2023 01:09:18 +0000
+Date: Thu, 9 Feb 2023 09:09:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
+ warning: unused variable 'samsung_jpeg_match'
+Message-ID: <202302090840.vIjaH7GJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3113; h=from:subject:message-id; bh=S5Y2WqgnxK+dD2vZwFfFa98eG26CHb9Bq4BbhYiNp8M=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj5C+AQcHckxweuEWNyvark/PYjLKlD6QPhLzpFhW2 //P+xfOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY+QvgAAKCRCJcvTf3G3AJkaXD/ 0Q8vmWdNfRbhG7QjCOcU5RLk01tCzr6qK2z1IjOYKHSQah3XfBTRyJZZ6vdhRyO33/vPn+wg8g1ixe v8iVPQSpq9MtHlf16dKbjUBL8LAJT2JmJw4I9Mwzu8m0/Pt7PmmtqhydIHOrwNjXy099XMFTWVhNNl OcylAZWnoHIgfY7yGkCSlu59hc3DltyZIwJywxmAMV1CtrciasjEmk3yYduudNO6/m50OvgL439gF+ ckhKNrLD60fhgVLXIa20QbjsOPOIVoVDYirEbTR7Ju3j4gh2YfLfinNlDVKkN1Afshh0iRqBtQUP1k XI313gn/kog5bX+i8KYpn5GPPCy5psYt3CGa9HS0lrWemsFl1jAW64WCTFviA5jYPIjwqdvADQPigk ugy1yvXLa9EZfqFur8+9xZ2fOQXUNcvRaAiInxTOih5NJCVcS+d6qBP0kq01iGxbmytAYmRwM0Xr7i QQvv8UpTELf+EjmUo44tM7LmG6/otUaqBAw9xbLfM7zt11cDzcegecfShJmC9BQuzmjTnljOM1f814 hv6ldPRxbT4KWgwtFuhE8G/bzGWqTZvRXXUTKQG/EM0rJR3tq1HziF1hvD8FY0Q7huXzjGZgCGjoQq kthAUN+/dyo141RIa3xqY9ZyXr79CLSYcjl89NEWOwbnCBCC6wWnaz3hY1oA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Clang can do some aggressive inlining, which provides it with greater
-visibility into the sizes of various objects that are passed into
-helpers. Specifically, compare_netdev_and_ip() can see through the type
-given to the "sa" argument, which means it can generate code for "struct
-sockaddr_in" that would have been passed to ipv6_addr_cmp() (that expects
-to operate on the larger "struct sockaddr_in6"), which would result in a
-compile-time buffer overflow condition detected by memcmp(). Logically,
-this state isn't reachable due to the sa_family assignment two callers
-above and the check in compare_netdev_and_ip(). Instead, provide a
-compile-time check on sizes so the size-mismatched code will be elided
-when inlining. Avoids the following warning from Clang:
+Hi Mauro,
 
-../include/linux/fortify-string.h:652:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
-                        __read_overflow();
-                        ^
-note: In function 'cma_netevent_callback'
-note:   which inlined function 'node_from_ndev_ip'
-1 error generated.
+FYI, the error/warning still remains.
 
-When the underlying object size is not known (e.g. with GCC and older
-Clang), the result of __builtin_object_size() is SIZE_MAX, which
-will also compile away, leaving the code as it was originally.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+date:   11 months ago
+config: s390-randconfig-r014-20230209 (https://download.01.org/0day-ci/archive/20230209/202302090840.vIjaH7GJ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1687
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: Mark Zhang <markzhang@nvidia.com>
-Cc: Patrisious Haddad <phaddad@nvidia.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-rdma@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/infiniband/core/cma.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302090840.vIjaH7GJ-lkp@intel.com
 
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index 1d2bff91d78b..308155937713 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -479,13 +479,20 @@ static int compare_netdev_and_ip(int ifindex_a, struct sockaddr *sa,
- 	if (sa->sa_family != sb->sa_family)
- 		return sa->sa_family - sb->sa_family;
- 
--	if (sa->sa_family == AF_INET)
--		return memcmp((char *)&((struct sockaddr_in *)sa)->sin_addr,
--			      (char *)&((struct sockaddr_in *)sb)->sin_addr,
-+	if (sa->sa_family == AF_INET &&
-+	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in)) {
-+		return memcmp(&((struct sockaddr_in *)sa)->sin_addr,
-+			      &((struct sockaddr_in *)sb)->sin_addr,
- 			      sizeof(((struct sockaddr_in *)sa)->sin_addr));
-+	}
-+
-+	if (sa->sa_family == AF_INET6 &&
-+	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in6)) {
-+		return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
-+				     &((struct sockaddr_in6 *)sb)->sin6_addr);
-+	}
- 
--	return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
--			     &((struct sockaddr_in6 *)sb)->sin6_addr);
-+	return -1;
- }
- 
- static int cma_add_id_to_tree(struct rdma_id_private *node_id_priv)
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
+   static const struct of_device_id samsung_jpeg_match[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
+
+:::::: The code at line 3126 was first introduced by commit
+:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+
+:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
