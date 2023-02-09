@@ -1,97 +1,91 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6563FA92C
-	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 20:05:47 +0000 (UTC)
-Received: by mail-pj1-f42.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so3405103pjb.5
-        for <llvm@lists.linux.dev>; Thu, 09 Feb 2023 12:05:47 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EAF2F3A
+	for <llvm@lists.linux.dev>; Thu,  9 Feb 2023 20:50:41 +0000 (UTC)
+Received: by mail-ej1-f50.google.com with SMTP id sa10so10196816ejc.9
+        for <llvm@lists.linux.dev>; Thu, 09 Feb 2023 12:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CIfREX/YQWh4b/q/oQJmrJNs03C5pbZw938goHZ0As0=;
-        b=C3LGkKaZ/egq9pyVVyVUA/uUoyAfyHfgHZtTpDQ42GhMZ5h6GZ1iZ4R7W9FnEMNf+W
-         z273Vxq5Fu0FUidkreu9oK0Il3x8I5FgMMlY9mplRGsomy2jRPQb6DoZhFjQg4KbSjlH
-         TpGfM2kAFHBlSy0ig7CVp38EvJMZ6MCsrLsik=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=16FEumpbkgL1MCG/IVXi8cJSa5wU9goiP6cIWmoP7F4=;
+        b=Gh9a8uG0WIdgAQFXBDEUSdZ7S1K86OT6H1iU4sahvmhqa55CnTVXKVd8wMt2BTOnj2
+         NvcrAzKOhYK9HCHFw97nMkR8AVPfCav6p2EmZ7Mh6fF8AAfqAPp1IcZdWGQ7nrl8Z2qy
+         0wHWrIW8WPjK2MqRNi0qeuD+TgJtbm331iwRkx3iIT7sBOijAR3V4nqd7L3WcLMJOlkW
+         9gliPZDQpG242NjQRZdu6uWTwh3oS8UxJWi+wyQ1JY8jABZFJYTHNVUXShEqPAfNwS7X
+         FeOgnifYuUOKFr6LBcAvKRVCHlhM+GtOc2zr9BzBVfNcJ0+3fp13bKZkYjnHposTO+mN
+         R55w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CIfREX/YQWh4b/q/oQJmrJNs03C5pbZw938goHZ0As0=;
-        b=R78wBOE81lQVQCykTqUKovdAvwvmt1N47M17FUG17gL8kZclBNvf6US5eAoUu1/nMl
-         wmcr4NCLycSpI08jIfuj51p/IPMquCQep1+gA89NkeBjPT0t1jBjhk/4/2On9xwiB1XP
-         lNcCeakTCSnImqVwPVr8+I+iGqJxvvGNCenBNtTn7gDb9EhhTvpgdphgvQvvOB5VgPVY
-         cXUBa+JDFb4SCZRWGVUPkquzC99D7OlC96HBbql+Qmuw1Gfmqbu6Gamiw0IKnhF3Q54f
-         7U9m8+BiYoQp/NAuwiZjFyWk2LX0bnx1cK9opFpRWYYRL1xOQi01hsutdGvL1XOk62yA
-         Ocjw==
-X-Gm-Message-State: AO0yUKVXr1KT96lkDlE65UUYuqV6ms8vTPI0wBdiv7dQm5Ez2agG/zVw
-	joOYTdRIDwGcKgh1q3RKTFNskg==
-X-Google-Smtp-Source: AK7set/V2FOS5XFwG1dSzxjyTU/evZqkEa4kdYXJ7FE1Q2EBIaFEC8a8SbHRIQBi30Xmq4fgtz7Mzg==
-X-Received: by 2002:a17:902:e5ce:b0:197:19f7:52b4 with SMTP id u14-20020a170902e5ce00b0019719f752b4mr14816901plf.42.1675973146806;
-        Thu, 09 Feb 2023 12:05:46 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id jm13-20020a17090304cd00b001948ff5cc32sm1883026plb.215.2023.02.09.12.05.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 12:05:46 -0800 (PST)
-Message-ID: <63e5521a.170a0220.297d7.3a80@mx.google.com>
-X-Google-Original-Message-ID: <202302091202.@keescook>
-Date: Thu, 9 Feb 2023 12:05:45 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>, Haowen Bai <baihaowen@meizu.com>,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
-References: <20230209192337.never.690-kees@kernel.org>
- <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=16FEumpbkgL1MCG/IVXi8cJSa5wU9goiP6cIWmoP7F4=;
+        b=DnN/tmKX5SskxuOwFsFynIr0KXCr42FszO/zXNTq0txCU1gQlbBafwXrgYUH/YT3mo
+         heMC2mksliEdcpfSdMPTPiHIwIbdqvmwJlg3tWoYL37UIcaunmPTO5jBD7MpPLcmlYWk
+         8F/hKsdu1jiIuM9EbnOFBezGhG3S0PBlDeAQgKLHzFjtNP6VCsaiCEPFOJOmlDV+sWjv
+         PLuNZlAyXVyMFk7awykvPcdVy+fPyn7C1OHeUQj/6YosMLayW9EthAILND6OmxYAPy16
+         HfHz9RxnfMmZHwit4Qhs5M5yDdo35iF4dGvLTlSq0gbWWEX4a6TNJL6q1RXftXTLXyCa
+         IYpA==
+X-Gm-Message-State: AO0yUKUJCQJn0VAAsJmi261o4k0J4uJdK7SnjtDZ1DcfX8lB8SVvIGwa
+	HaO9ECeOdNg1AOs6dOg3hCKeiZWr0cd5mt6xth4=
+X-Google-Smtp-Source: AK7set+p5mLQGphNYZB7dnhNqdO21SQcEKpkwXk0xEbzZMF4iA+oCC60QJo2PoyrdEwk2ZZkmnVRGCMKWTd9t4QQN1k=
+X-Received: by 2002:a17:906:eb8f:b0:878:786e:8c39 with SMTP id
+ mh15-20020a170906eb8f00b00878786e8c39mr2906402ejb.105.1675975840025; Thu, 09
+ Feb 2023 12:50:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com>
+References: <20230209192337.never.690-kees@kernel.org> <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com>
+ <63e5521a.170a0220.297d7.3a80@mx.google.com>
+In-Reply-To: <63e5521a.170a0220.297d7.3a80@mx.google.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 9 Feb 2023 12:50:28 -0800
+Message-ID: <CAADnVQKsB2n0=hShYpYnTr5yFYRt5MX2QMWo3V9SB9JrM6GhTg@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
+To: Kees Cook <keescook@chromium.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, Haowen Bai <baihaowen@meizu.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	LKML <linux-kernel@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 09, 2023 at 11:52:10AM -0800, Andrii Nakryiko wrote:
-> Do we need to add a new type to UAPI at all here? We can make this new
-> struct internal to kernel code (e.g. struct bpf_lpm_trie_key_kern) and
-> point out that it should match the layout of struct bpf_lpm_trie_key.
-> User-space can decide whether to use bpf_lpm_trie_key as-is, or if
-> just to ensure their custom struct has the same layout (I see some
-> internal users at Meta do just this, just make sure that they have
-> __u32 prefixlen as first member).
+On Thu, Feb 9, 2023 at 12:05 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Feb 09, 2023 at 11:52:10AM -0800, Andrii Nakryiko wrote:
+> > Do we need to add a new type to UAPI at all here? We can make this new
+> > struct internal to kernel code (e.g. struct bpf_lpm_trie_key_kern) and
+> > point out that it should match the layout of struct bpf_lpm_trie_key.
+> > User-space can decide whether to use bpf_lpm_trie_key as-is, or if
+> > just to ensure their custom struct has the same layout (I see some
+> > internal users at Meta do just this, just make sure that they have
+> > __u32 prefixlen as first member).
+>
+> The uses outside the kernel seemed numerous enough to justify a new UAPI
+> struct (samples, selftests, etc). It also paves a single way forward
+> when the userspace projects start using modern compiler options (e.g.
+> systemd is usually pretty quick to adopt new features).
 
-The uses outside the kernel seemed numerous enough to justify a new UAPI
-struct (samples, selftests, etc). It also paves a single way forward
-when the userspace projects start using modern compiler options (e.g.
-systemd is usually pretty quick to adopt new features).
+I don't understand how the new uapi struct bpf_lpm_trie_key_u8 helps.
+cilium progs and progs/map_ptr_kern.c
+cannot do s/bpf_lpm_trie_key/bpf_lpm_trie_key_u8/.
+They will fail to build, so they're stuck with bpf_lpm_trie_key.
 
-> This whole union work-around seems like just extra cruft that we don't
-> really need in UAPI.
-
-The union is really only there so that possible uses of container_of()
-would be happy. But I did add a BUILD_BUG_ON() test for member offset
-equality, so a hard cast would be safe too. I'm happy to drop it if
-that's preferred?
-
--- 
-Kees Cook
+Can we do just
+struct bpf_lpm_trie_key_kern {
+  __u32   prefixlen;
+  __u8    data[];
+};
+and use it in the kernel?
+What is the disadvantage?
