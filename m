@@ -1,111 +1,97 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3C9A21;
-	Fri, 10 Feb 2023 08:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676017774; x=1707553774;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FvTZ8CF0SRrWAA/WY3/QF/tDGnDdOk3LmVrb3b04Erk=;
-  b=fTr/sqtFwjgRLjMknWNGn+4HDqiOrw2yXe5BskKoULVJWu6W1h9rSutU
-   HCIRONyaDrNQIhGNbsdZ2Yqz6QGJ52VZakhaY40qYCrfOMoApWi0M3uXm
-   mPJFBjq7b7AaFY4ATbSj+vvMcd/NeDSxY9x0M1xBNjKIPpzR03tm8WrB6
-   7f5dEbJvSGEldu9xssHwACbxI8hPjPfiqq0FM6Lt/6Z1nvB9W8XDhr6zL
-   CtzMfbV5P3YyxxRikt0Na4WWBGbd30Kmfkpn7R8x8SiKoheFsBIzLz2q+
-   3V46eXdHWv36N+YBpG9N9OYrse/fuERojCsWAj1f/3rblJxFm/Ero4WFH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="310000968"
-X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="scan'208";a="310000968"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 00:29:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="791888447"
-X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="scan'208";a="791888447"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 10 Feb 2023 00:29:30 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pQOmf-0005gf-2f;
-	Fri, 10 Feb 2023 08:29:29 +0000
-Date: Fri, 10 Feb 2023 16:29:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Moudy Ho <moudy.ho@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org,
-	Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-	daoyuan huang <daoyuan.huang@mediatek.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Subject: drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c:49:34: warning:
- unused variable 'mdp_of_ids'
-Message-ID: <202302101603.xNtJ8p91-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E54A29
+	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 09:55:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1676022923;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XlYTQ4KlxOnSSgOz5EYIJQVx78dcnp/7ObBZhHdZOfo=;
+	b=AFYsqaLP07REA8xGySf/LhwgISCO51Xn1ILsKIBY+XgUubhDocHPoLU0fLtdD592oaFqeY
+	In6cvGHCgGFInltu6m+rZDe9cVmZs8Wbg3DwVsxmk/Z3oB8O9RtPqVqX7gj9e68ANph+Sm
+	vlQzT2luRFl/w+7mR5kRGSZR5ur2mtU=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-587-wZfglyESPpaqiiAkPNLjIg-1; Fri, 10 Feb 2023 04:55:21 -0500
+X-MC-Unique: wZfglyESPpaqiiAkPNLjIg-1
+Received: by mail-ej1-f69.google.com with SMTP id ud13-20020a170907c60d00b0088d773d11d6so3287065ejc.17
+        for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 01:55:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XlYTQ4KlxOnSSgOz5EYIJQVx78dcnp/7ObBZhHdZOfo=;
+        b=PHSw7zKJ/oL9BDhaGevAF52mpkgjZphVZNROoa+DSdeOYxbyYtTgvCS7Zdrs8TLkwv
+         9mKZ0BKgb3rDdaRwB/FuAAe1TWvf1KxMW+A8osThw01RONyH1bzQvU8eHdC+h/oY23Fb
+         6Wg3Aq5i/Q37np/KNNg6Kg9nsd1myk9ehqxpsVPK1FCT7od3XDJxnoOGz161IFVmW/nG
+         w51l7fMwKLonoRzvOW8hgho0LHC06fhHiq1EpnAQDcVQyR649SiKNiyMpqmJkFDy0VnD
+         Sd9ITxbaerPsCiTEwLptDWoQHIMGo5+8n/8j+as9GW6VcxUeqAGxcaNFm6m+QB0pZqC3
+         sgQQ==
+X-Gm-Message-State: AO0yUKUUj5dVng+QR9ayKpnoTQ7M+eeuibkCgo8rfOzEpwIx7Kc+F/XM
+	zkzjmdgpklpl0tuDfwyDIAiDIN6IFFpl3weqfyKpm9nZtlwx9q+QuFOaHsd0nj31l4KcFuTcEf3
+	jFIWzSvsdk76w7A==
+X-Received: by 2002:a17:907:8e86:b0:8aa:33c4:87d5 with SMTP id tx6-20020a1709078e8600b008aa33c487d5mr14015956ejc.10.1676022920962;
+        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
+X-Google-Smtp-Source: AK7set8l6KUkKlyqNem1AZE2/KhW2JD0JqV9K6hSx1e0fgBDbFsSiIPL5QzIdySg4c0oOxOTyn5rmw==
+X-Received: by 2002:a17:907:8e86:b0:8aa:33c4:87d5 with SMTP id tx6-20020a1709078e8600b008aa33c487d5mr14015949ejc.10.1676022920808;
+        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id a18-20020a170906469200b007c0f217aadbsm2140397ejr.24.2023.02.10.01.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>
+Cc: Tom Rix <trix@redhat.com>, kvm@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for
+ CONFIG_HYPERV=n
+In-Reply-To: <Y+WaN8wW1EOvPbXe@google.com>
+References: <20230208205430.1424667-1-seanjc@google.com>
+ <20230208205430.1424667-3-seanjc@google.com> <87mt5n6kx6.fsf@redhat.com>
+ <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
+ <Y+WaN8wW1EOvPbXe@google.com>
+Date: Fri, 10 Feb 2023 10:55:19 +0100
+Message-ID: <875yc97sl4.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain
 
-Hi Moudy,
+Sean Christopherson <seanjc@google.com> writes:
 
-FYI, the error/warning still remains.
+> On Thu, Feb 09, 2023, Paolo Bonzini wrote:
+>> On 2/9/23 14:13, Vitaly Kuznetsov wrote:
+>> > > +static __always_inline bool is_evmcs_enabled(void)
+>> > > +{
+>> > > +	return static_branch_unlikely(&enable_evmcs);
+>> > > +}
+>> > I have a suggestion. While 'is_evmcs_enabled' name is certainly not
+>> > worse than 'enable_evmcs', it may still be confusing as it's not clear
+>> > which eVMCS is meant: are we running a guest using eVMCS or using eVMCS
+>> > ourselves? So what if we rename this to a very explicit 'is_kvm_on_hyperv()'
+>> > and hide the implementation details (i.e. 'evmcs') inside?
+>> 
+>> I prefer keeping eVMCS in the name,
+>
+> +1, IIUC KVM can run on Hyper-V without eVMCS being enabled.
+>
+>> but I agree a better name could be something like kvm_uses_evmcs()?
+>
+> kvm_is_using_evmcs()?
+>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   38c1e0c65865426676123cc9a127526fa02bcac6
-commit: 61890ccaefaff89f5babd2c8412fd222c3f5fe38 media: platform: mtk-mdp3: add MediaTek MDP3 driver
-date:   5 months ago
-config: hexagon-randconfig-r024-20230210 (https://download.01.org/0day-ci/archive/20230210/202302101603.xNtJ8p91-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=61890ccaefaff89f5babd2c8412fd222c3f5fe38
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 61890ccaefaff89f5babd2c8412fd222c3f5fe38
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp3/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302101603.xNtJ8p91-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c:49:34: warning: unused variable 'mdp_of_ids' [-Wunused-const-variable]
-   static const struct of_device_id mdp_of_ids[] = {
-                                    ^
-   1 warning generated.
---
->> drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:607:34: warning: unused variable 'mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mdp_comp_dt_ids[] = {
-                                    ^
->> drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:627:34: warning: unused variable 'mdp_sub_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mdp_sub_comp_dt_ids[] = {
-                                    ^
-   2 warnings generated.
-
-
-vim +/mdp_of_ids +49 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-
-    48	
-  > 49	static const struct of_device_id mdp_of_ids[] = {
-    50		{ .compatible = "mediatek,mt8183-mdp3-rdma",
-    51		  .data = &mt8183_mdp_driver_data,
-    52		},
-    53		{},
-    54	};
-    55	MODULE_DEVICE_TABLE(of, mdp_of_ids);
-    56	
+Sounds good to me!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Vitaly
+
