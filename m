@@ -1,41 +1,85 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05C433C0;
-	Fri, 10 Feb 2023 15:59:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676044780; x=1707580780;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=c1c1OibmwmGzwzf2Uo1gMoX7bROgHnvoQ9L0quL4gEM=;
-  b=IoeHKyvK2fN3JkTiqCBGi8tMfTtt1PaUiKrmggz8ce0H22lIwGiJtg59
-   VgxpKAIM+fWK9SAIW2zZmSB4nj0Eq01wPI4jmabTlUbJ3OkAGA78lA8yt
-   Zo0JeqtjoHQtG5s2sOWXZWWzmlUPCt0esbJGGBXmrgcEUzNdGiUwOsnw7
-   E3r1V3wXAZ82LpTO95CGXxVKgjGV78bsBJLBkRump7lNX3LFzcZ5SOOTB
-   20DRdAWyVaPAUEnysY/p2gZpx+Hio6Xlp56yGu5WZqjwhu+OD+eMa46gC
-   zM2mXINNvCF0vYPrGb9gSCNUoQPiL9Jyci+6rFSmpB5sZH3n1t5j0Vk9d
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="332589132"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="332589132"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 07:59:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="698457543"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="698457543"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 10 Feb 2023 07:59:39 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pQVoI-0005sX-1q;
-	Fri, 10 Feb 2023 15:59:38 +0000
-Date: Fri, 10 Feb 2023 23:59:13 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [peterz-queue:x86/core 6/6] vmlinux.o: warning: objtool:
- __vmx_vcpu_run+0x108: stack layout conflict in alternatives
-Message-ID: <202302102350.fZr3u4Ca-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BE733FA
+	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 16:14:29 +0000 (UTC)
+Received: by mail-pl1-f173.google.com with SMTP id b5so6966370plz.5
+        for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 08:14:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XLSb4oI7+G/vrSC0uBHgAIzrNQ2OQDigOg7jJ9N0vsg=;
+        b=PCPKWUiaCusJdtCnECjumkp3J1QvA96YuTv4FJeFmqch8ud9Ii1ettciB81E6lmxzM
+         ojwbJHWAygEfNd6w0P6ZsUJAubVYEOs26iO6TxuOgvL32qs0t9jkmKfoMSza9drYHX8x
+         UFPZ7dTgd7iPZey2976DHnac0YGp0YxcroCQDglPkZ4yQh2SkjDr5AgfRs5mLjxHVhD8
+         uv/PbxLh9NRocXRsPcut3fJ1I3akWLndIeS392QoS5f7noQpMgleq/gOAgHuMLND/72J
+         M8bjq7qDCYjFiqx6zRhz7mJPr5lXINJVZ1N+uIvDonwqgR4TaXio8FAhxjmKH23KLHvu
+         LWPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XLSb4oI7+G/vrSC0uBHgAIzrNQ2OQDigOg7jJ9N0vsg=;
+        b=69l98npdZBh9QvleRXuAsEo/BYDyJkhXGebYMi0Lf6TNyqRamm9U9CBLqK5sCetSRJ
+         r4RTjxFSGXEMquFinNfuq/hOjobb9xSFnvPliAMll80EbP+Va1RluFDXuJCoKzMMSnFy
+         ge2tIuhh0xLwkqckKBBGmZWIhDmW6fVtska/cJpJVmjWhyxjAv7rSm+SGTg4WdFtWLgs
+         MYXF2WkxwRHar4W3vwYR8RnmefapqDssu6mswdj7upOiOA+Q70bep+aeFMC/8iiNPuSN
+         3s5Fc4bTRXwqHHflfOs2EWAbcWoEZA6IpGkkDyiFF+X5l5XH4wl181mI/7eAE2ulm+oz
+         vwBA==
+X-Gm-Message-State: AO0yUKU4hX24YJFTj8MWGZmJmkBK7qlLR7J/7xYEUFDwyS6C6w11IKSr
+	C1DpZ/hqn0ooPgNFYlTCYOU=
+X-Google-Smtp-Source: AK7set9p9yRN0uGRPX49Nz2FWepxAbly3CMmVUioeLM705OspCHjKCSUUpUpjuwRsqWhbSyuJdCL8w==
+X-Received: by 2002:a17:902:d2d0:b0:198:a338:b9c5 with SMTP id n16-20020a170902d2d000b00198a338b9c5mr19125012plc.2.1676045668657;
+        Fri, 10 Feb 2023 08:14:28 -0800 (PST)
+Received: from localhost ([124.248.219.206])
+        by smtp.gmail.com with ESMTPSA id w14-20020a170902a70e00b0018997f6fc88sm3590399plq.34.2023.02.10.08.14.27
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 10 Feb 2023 08:14:28 -0800 (PST)
+Date: Fri, 10 Feb 2023 08:14:15 -0800
+From: Dan Li <ashimida.1990@gmail.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: concord@gentoo.org, linux-hardening@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Qing Zhao <qing.zhao@oracle.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Marco Elver <elver@google.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Song Liu <song@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Juergen Gross <jgross@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>, Borislav Petkov <bp@suse.de>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Aaron Tomlin <atomlin@redhat.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	Yuntao Wang <ytcoode@gmail.com>,
+	Changbin Du <changbin.du@intel.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
+Message-ID: <20230210161415.mktok5dt5fiqmqss@ubuntu>
+References: <20221219061758.23321-1-ashimida.1990@gmail.com>
+ <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
+ <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
+ <202301061929.6881F6CD40@keescook>
+ <20230107154213.ocyghxd2k66gbvv6@ubuntu>
+ <63e3f989.170a0220.60c91.c5ce@mx.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,90 +88,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <63e3f989.170a0220.60c91.c5ce@mx.google.com>
+User-Agent: NeoMutt/20171215
 
-TO: Peter Zijlstra <peterz@infradead.org>
+On 02/08, Kees Cook wrote:
+> On Sat, Jan 07, 2023 at 07:42:13AM -0800, Dan Li wrote:
+> > Hi Kees,
+> > 
+> > In the next version I'll make the gcc implementation consistent with clang.
+> 
+> Hi!
+> 
+> Just checking in on this, since there are a lot of interested folks. :)
+> What's the status on the next version (and has anyone been found to
+> tackle the x86 backend part)? Is there anything we can help with?
+> 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/core
-head:   cc1feb4e38be192cd99f7598777ff691f8a8a20e
-commit: cc1feb4e38be192cd99f7598777ff691f8a8a20e [6/6] x86: Tweak FILL_RETURN_BUFFER some more
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230210/202302102350.fZr3u4Ca-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=cc1feb4e38be192cd99f7598777ff691f8a8a20e
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue x86/core
-        git checkout cc1feb4e38be192cd99f7598777ff691f8a8a20e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi Kees,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302102350.fZr3u4Ca-lkp@intel.com/
+Sorry for the long delay. It's been hard for me to find time to finish this
+until the end of February due to job changes (even weekends are busy :( ).
 
-All warnings (new ones prefixed by >>):
+As much as I'd love to get it done as soon as possible, I'm sorry I probably
+won't be able to submit the next version until March (maybe mid).
 
-   vmlinux.o: warning: objtool: __switch_to_asm+0x32: stack layout conflict in alternatives
->> vmlinux.o: warning: objtool: __vmx_vcpu_run+0x108: stack layout conflict in alternatives
-   vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x33: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __ct_user_enter+0xa7: call to __kasan_check_write() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __ct_user_exit+0x71: call to __kasan_check_write() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: __vmx_vcpu_run+0x97: objtool isn't smart enough to handle this CFI save/restore combo
+If anyone could help improve this, I'd be very grateful, otherwise I'll have
+the next version done by the end of March (as a promise), and also try it in
+x86 platform.
 
+Sincerely apologize!
 
-objdump-func vmlinux.o __vmx_vcpu_run:
-0000 00000000000003b0 <__vmx_vcpu_run>:
-0000      3b0:	f3 0f 1e fa          	endbr64
-0004      3b4:	55                   	push   %rbp
-0005      3b5:	48 89 e5             	mov    %rsp,%rbp
-0008      3b8:	41 57                	push   %r15
-000a      3ba:	41 56                	push   %r14
-000c      3bc:	41 55                	push   %r13
-000e      3be:	41 54                	push   %r12
-0010      3c0:	53                   	push   %rbx
-0011      3c1:	57                   	push   %rdi
-0012      3c2:	52                   	push   %rdx
-0013      3c3:	56                   	push   %rsi
-0014      3c4:	88 d3                	mov    %dl,%bl
-0016      3c6:	48 8d 34 24          	lea    (%rsp),%rsi
-001a      3ca:	e8 00 00 00 00       	call   3cf <__vmx_vcpu_run+0x1f>	3cb: R_X86_64_PLT32	vmx_update_host_rsp-0x4
-001f      3cf:	eb 22                	jmp    3f3 <__vmx_vcpu_run+0x43>
-0021      3d1:	48 8b 7c 24 10       	mov    0x10(%rsp),%rdi
-0026      3d6:	8b bf b0 1f 00 00    	mov    0x1fb0(%rdi),%edi
-002c      3dc:	65 8b 34 25 00 00 00 00 	mov    %gs:0x0,%esi	3e0: R_X86_64_32S	x86_spec_ctrl_current
-0034      3e4:	39 fe                	cmp    %edi,%esi
-0036      3e6:	74 0b                	je     3f3 <__vmx_vcpu_run+0x43>
-0038      3e8:	b9 48 00 00 00       	mov    $0x48,%ecx
-003d      3ed:	31 d2                	xor    %edx,%edx
-003f      3ef:	89 f8                	mov    %edi,%eax
-0041      3f1:	0f 30                	wrmsr
-0043      3f3:	48 8b 04 24          	mov    (%rsp),%rax
-0047      3f7:	f6 c3 01             	test   $0x1,%bl
-004a      3fa:	48 8b 48 08          	mov    0x8(%rax),%rcx
-004e      3fe:	48 8b 50 10          	mov    0x10(%rax),%rdx
-0052      402:	48 8b 58 18          	mov    0x18(%rax),%rbx
-0056      406:	48 8b 68 28          	mov    0x28(%rax),%rbp
-005a      40a:	48 8b 70 30          	mov    0x30(%rax),%rsi
-005e      40e:	48 8b 78 38          	mov    0x38(%rax),%rdi
-0062      412:	4c 8b 40 40          	mov    0x40(%rax),%r8
-0066      416:	4c 8b 48 48          	mov    0x48(%rax),%r9
-006a      41a:	4c 8b 50 50          	mov    0x50(%rax),%r10
-006e      41e:	4c 8b 58 58          	mov    0x58(%rax),%r11
-0072      422:	4c 8b 60 60          	mov    0x60(%rax),%r12
-0076      426:	4c 8b 68 68          	mov    0x68(%rax),%r13
-007a      42a:	4c 8b 70 70          	mov    0x70(%rax),%r14
-007e      42e:	4c 8b 78 78          	mov    0x78(%rax),%r15
-0082      432:	48 8b 00             	mov    (%rax),%rax
-0085      435:	74 08                	je     43f <__vmx_vcpu_run+0x8f>
-0087      437:	0f 01 c3             	vmresume
-008a      43a:	e9 b3 00 00 00       	jmp    4f2 <vmx_vmexit+0xab>
-008f      43f:	0f 01 c2             	vmlaunch
-0092      442:	e9 ab 00 00 00       	jmp    4f2 <vmx_vmexit+0xab>
+Dan.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> Thanks!
+> 
+> -Kees
+> 
+> -- 
+> Kees Cook
