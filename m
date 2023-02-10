@@ -1,514 +1,180 @@
-Received: from i-17100000460103.localdomain (unknown [116.80.78.48])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA607E2
-	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 04:19:01 +0000 (UTC)
-Received: by i-17100000460103.localdomain (Postfix)
-	id 8D8824ABDD3; Fri, 10 Feb 2023 04:18:15 +0000 (UTC)
-Date: Fri, 10 Feb 2023 04:18:15 +0000 (UTC)
-From: MAILER-DAEMON@i-17100000460103.localdomain (Mail Delivery System)
-Subject: Undelivered Mail Returned to Sender
-To: llvm@lists.linux.dev
-Auto-Submitted: auto-replied
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF08F7F4
+	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 05:12:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676005964; x=1707541964;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=pLHb5WW4IC/F3PcA0lRMj9uuO27sSbgiAlOwo8H93Zc=;
+  b=UChjZEDEmU5Pz0S4rihX5I5DOdypzUwrnOye2AiPMDZtB46e9xegg8Mf
+   NXZi4xdDGNw4TPqe0QC8PQJtCxS4mPwZVXpq6IEYlCI5gOsWpxkrE79cX
+   qHujpC8Ce+E/2HoLZ2r00Ucs5BZ7N0wbmuTwA+BKY1dID/UnPYM9Yk2lI
+   KlcJVow0Pro02pn458TaTvzRwK9IqIOgBKrqeo3c9rxT4pL1g/h7vy2Qc
+   AsrTmoK8Bq8zVhjbpvFG/yOXzj1VsXWQIwBDVYGau0rn2NDKeeTal1Bsb
+   qXW41PDY6ECfy1yuivLprnfENUFMmmWvat9rmOkXkgN0ARL+wNnlBkwQR
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="309970231"
+X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
+   d="scan'208";a="309970231"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 21:12:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="996841618"
+X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
+   d="scan'208";a="996841618"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Feb 2023 21:12:43 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 9 Feb 2023 21:12:43 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 9 Feb 2023 21:12:43 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 9 Feb 2023 21:12:43 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gaw1JhFp9zuQZLdKlSTUxj0Z6Xld8EklAemjRjBZul/Uxom0YF17sF0x+JqHHdM+xBJq3kGSFVVgFCgYuYrc/f+QR66UA7qyZ5s4ONZWudFEFHems1mZT1BM07LOJ1rWEKoXKHwjdujqG8pQ5LOuZl/gfaWO7ev2iu9miKmmNzbjd88h2RbCuShE4BDDT8M34OQnpGB9B3FCg4z8akUPti5r5ms8XIZXlMoAbve55emkoMd5rpeLxZQbcEDzZFpreZb8m4NqjJ3Anze3UzN2Q7GWt71Yo3IhcruIVKRKsHLi2tivKcss4U1VxxNxj1Y4WdAbT1hlVGsWdaWDtzJvLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3mBdQXggMa5tGM+Wf0sugJxOv2I34vm2xcBLA3z/glM=;
+ b=hZzV0sw2bOaBmfkqUp/IAJ9Z2CtgiLIfBNOLKV9+douy8eReqAnzsZXGD5NA9gRhFxOseliVdQ/valnHbGS9wn+OwdIF5BlEsjWeEPjK7cQYUBbuR+Ut/Kfh2g0peO4dLxGaK8Ncv6/p6TCeLh+IeFQkVlTgwd1DTrzftptWcO/4VvtOIMLXxlFTOLBTac2Zl++KkLEb6KleQ1uwLzpUI+BdE36Oy0dO27C1nsoZNrtZn4cacODszGjqkXkt7gwtQjjuF2/Fxq4Lp7mA1WA0JUiauI4aC80pmgcfAJmgh16VjMi7Zr6OlGvcfF5UONJKwQcxWW3/dv1ezTP/daIdqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by PH7PR11MB6329.namprd11.prod.outlook.com (2603:10b6:510:1ff::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31; Fri, 10 Feb
+ 2023 05:12:41 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6086.019; Fri, 10 Feb 2023
+ 05:12:40 +0000
+From: "Tian, Kevin" <kevin.tian@intel.com>
+To: "Chatre, Reinette" <reinette.chatre@intel.com>, "bhelgaas@google.com"
+	<bhelgaas@google.com>, "nathan@kernel.org" <nathan@kernel.org>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>, "Rix, Tom"
+	<trix@redhat.com>
+CC: "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "tglx@linutronix.de"
+	<tglx@linutronix.de>, "darwi@linutronix.de" <darwi@linutronix.de>
+Subject: RE: [PATCH] PCI: Fix build error when CONFIG_PCI_MSI disabled
+Thread-Topic: [PATCH] PCI: Fix build error when CONFIG_PCI_MSI disabled
+Thread-Index: AQHZPNBWS3WtUj6eQUmM/aZAFGIoka7Hot8w
+Date: Fri, 10 Feb 2023 05:12:40 +0000
+Message-ID: <BN9PR11MB527699243353309A1DDFEFBE8CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef.1675978686.git.reinette.chatre@intel.com>
+In-Reply-To: <158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef.1675978686.git.reinette.chatre@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB6329:EE_
+x-ms-office365-filtering-correlation-id: 87fcca31-d12d-4cd8-25b8-08db0b256ee4
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qOSdU6IEZ00Sf8lU/cpnMM8fr7q36MNGcbt2WhD7c6fDlLrcdyPlWTrqbbbVrjRGGZQSYade9Aoi8GK9Z2j2gbjYxb9zSsfjqf23h8SxliEW6R2CpsWFCNysC+riK9E2dBGG80AbxCZCI4KDnWfdS0kjVDWEEfM7gsRkdpW0MrRVQnUO/AWBv03TZ3ucYzwQXxUdgQBSCan24CK2V1H5E5UgYhUgTqJfJQoC+h4FbwFEGNNP/LBTmzGuDoRpLilQNIzMkcE581t5uiQUbeO1rVb3GBkLg4f5H35YfHwRhQgiA9MtJ9HwcjYXPd8gH+xSxAYi6n/AO4EvS96w7C6XscpPVIhSSv2Z7oxRi4wSnm5fO5S1rtn+tCaeo3t6lqz7VoiQq2X91Mh1EsjwwoSnw4YD9RC1muZ3CDFtzongHAo64vooU/qMEiKmFPY0K2GsAfUG1etnEqmVAAzWGlAT/BcEMNTC+ZAv89NisD55+jDPaspMFToBjCMGe4UbYApbLugk8B31OwW8eXj/GATZuxW+CGFQn9cHNAZpDb8hLBkwE3In0AGRbKoPWuVY3+PtXKqBDHjnZQ91dMQs0OALXwBI9hXLfMWIk7m8XFHLeUsxqwu0hjJC++GVIJ3ED8VdKl6HUOVDS1qh9jdxuNYbB+uCUkRpC54M9i3W4IfwJIqZ8ZG16AtTdScdMOSuo+L9wM/kYZf1iPh3UccDzjIJrA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(396003)(366004)(376002)(346002)(451199018)(5660300002)(8936002)(2906002)(83380400001)(66946007)(122000001)(52536014)(66446008)(82960400001)(186003)(38100700002)(41300700001)(316002)(26005)(54906003)(76116006)(6506007)(8676002)(66476007)(86362001)(4326008)(55016003)(64756008)(71200400001)(7696005)(38070700005)(110136005)(478600001)(66556008)(9686003)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6mhbn8Tt9WPZBz4ZBRis4W7GJr4zu3QPxDIPemVxk/pUUInpbl9nDWI87Uq6?=
+ =?us-ascii?Q?R6r+6aETTHhZJ8MtBVBPMAzO2Rwgrj+/qnlotxFA1PTkvfZCGeXbyeIWB+bv?=
+ =?us-ascii?Q?lM7PDFGwkdmQjHwZ0rSQMOrlaFTjiNEFYyBuiSjhlcA5zaPFjM4NQUnex33U?=
+ =?us-ascii?Q?kCCc75M79DB3hG9Wu9ZdwAAZJHAdblDIyomIclCgjxOPn99q5vDlkCdQKQxu?=
+ =?us-ascii?Q?qKg092gt0u0MrSZ4hVkH3by6ym935ipZRtPIJJXApIHeNkZq4LV9D+1JLT3L?=
+ =?us-ascii?Q?C1R/NEVRMZHQYhDxQZ1PcHDLRfGADzxjB7aQBQ7QhRnS0GM+fYZVU21c7Cy0?=
+ =?us-ascii?Q?7dEKkxVzLPQLIYus1SjCrmzCSnVfqX7ZMRsi/0Obv6fOF2Oo9fNhdk9wn4y3?=
+ =?us-ascii?Q?e70DQ9DM2oDXbkIpV5tXtwvrSxW0+OiH8nB4778uX5tZr/6+MlsrNlv2g3kh?=
+ =?us-ascii?Q?HNHUk8iEYaINVGvoXnjhyeoBlbZKDeImFoJHOzKISjE0BXq3CD88TAmcbBq9?=
+ =?us-ascii?Q?IG9geq0Dssj0FnHF5bwV8hxxmItcbxi9YAIu4+WIH6PF4C4h1ib+uMIs8H/1?=
+ =?us-ascii?Q?iT4B44wN1NXAnvNLptyAIKfAzCJp/BB23TDzZk7jizvk5s0/D8FKdlJ5pFJ9?=
+ =?us-ascii?Q?hzpv01koUp8JIrNYxl6U9F13b1+SoBmfolvXo6QxgIyb3o18s3QR+mEvpcUq?=
+ =?us-ascii?Q?ArLCh9wW8QfwKX2qA9S/+iPkct5s06FBIqZKG9lLcl9AOudvyOrUh3C0WhoI?=
+ =?us-ascii?Q?GHWDwd++hEz7n/UV4B2lFSNQKrlRIofgnejatI6a+ZESxRLjbYezU0QxKMO0?=
+ =?us-ascii?Q?kDnzwepDgP0l70mAs42VUZwcFK4+MpopMiSCZcVs4z4bkWMLsh6IBfZXgksy?=
+ =?us-ascii?Q?LULl8IahkFb0ioA97UYUo88fKjEevov0MUKe4d7juI0qR4JT9mGPlEaTi55C?=
+ =?us-ascii?Q?FBQRTzCnPTeBM8NEHQfw8unWlcZaU1nKji3kCPo5cwUJ+MgbI1aNYcrwY5u1?=
+ =?us-ascii?Q?WTIC7RovOvTc7VPXqBUsxB4kEQz0ZmXdg14SIT44DpyZIn/jxhWI0WvS0KcN?=
+ =?us-ascii?Q?DXJYAO/Tj3n8wGcVpaSrCsrlZig9+cYaHFzrcVBhtxzMbarbPqcdVP3gF3bd?=
+ =?us-ascii?Q?VHRVgId3iuRaHUlJTcgsGCZu11wVPOV40ohTQIMWLcubWjJswxAo267XHsI+?=
+ =?us-ascii?Q?HBYgeeWm632oqQAf94WKkwi0Lro4x9TC0tR2bAHjXQgL3VIszaTKpOq5wutG?=
+ =?us-ascii?Q?UPYvMLAahej+z6tbQCKT9Foj/FH52aOsRMKaOpAUi4sFJF496Oih/7JPrUWK?=
+ =?us-ascii?Q?A5ohCra58Wv8CxIh6XNBATNN6ON+P5fxQR4LuhcJIPbAZ4okhhCXfbr95RVe?=
+ =?us-ascii?Q?MhQADo/ExMf0tH7ajp+M1b82NIhl1yBs4sn+rRwMCVJe1P8eewQ9Fjs1EjKp?=
+ =?us-ascii?Q?aTl72v7QG5BM0yswqpwkknNT9h4AWpQibU3fm2DT+pP6YFdwDFPt1jnULfUo?=
+ =?us-ascii?Q?dvCawCZ8sTLqWB4LT/BcoX1oI0E0FMxMFGNEJtu6yk9j9Wi/bSmq6QPvGcKj?=
+ =?us-ascii?Q?SlwixJT4sCv8IExRzFTS5/1WXF5WIj4BuH0MvH9L?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/report; report-type=delivery-status;
-	boundary="1EF67499AD4.1676002695/i-17100000460103.localdomain"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230210041815.8D8824ABDD3@i-17100000460103.localdomain>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87fcca31-d12d-4cd8-25b8-08db0b256ee4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2023 05:12:40.4573
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QHbkG81STrSJSD42InnPJS/OTm5ILPa/CJTcJo8k+bW8dA4hmMMd2o/f/q7jw+rZemSwO6l4s2hG15RiFWfXBg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6329
+X-OriginatorOrg: intel.com
 
-This is a MIME-encapsulated message.
+> From: Chatre, Reinette <reinette.chatre@intel.com>
+> Sent: Friday, February 10, 2023 5:49 AM
+>=20
+> pci_msix_alloc_irq_at() and pci_msix_free_irq() are not
+> declared when CONFIG_PCI_MSI is disabled.
+>=20
+> Users of these two calls do not yet exist but when users
+> do appear (shown below is an attempt to use the new API
+> in vfio-pci) the following errors will be encountered when
+> compiling with CONFIG_PCI_MSI disabled:
+> drivers/vfio/pci/vfio_pci_intrs.c:461:4: error: implicit declaration of\
+>         function 'pci_msix_free_irq' is invalid in C99\
+>         [-Werror,-Wimplicit-function-declaration]
+>                            pci_msix_free_irq(pdev, msix_map);
+>                            ^
+>    drivers/vfio/pci/vfio_pci_intrs.c:461:4: note: did you mean
+> 'pci_ims_free_irq'?
+>    include/linux/pci.h:2516:6: note: 'pci_ims_free_irq' declared here
+>    void pci_ims_free_irq(struct pci_dev *pdev, struct msi_map map);
+>         ^
+> drivers/vfio/pci/vfio_pci_intrs.c:511:15: error: implicit declaration of\
+>         function 'pci_msix_alloc_irq_at' is invalid in C99\
+>         [-Werror,-Wimplicit-function-declaration]
+>                    msix_map =3D pci_msix_alloc_irq_at(pdev, vector, NULL)=
+;
+>                                       ^
+>    drivers/vfio/pci/vfio_pci_intrs.c:511:15: note: did you mean
+> 'pci_ims_alloc_irq'?
+>    include/linux/pci.h:2514:16: note: 'pci_ims_alloc_irq' declared here
+>    struct msi_map pci_ims_alloc_irq(struct pci_dev *pdev,\
+>                                     union msi_instance_cookie *icookie,
+>=20
+> Provide definitions for pci_msix_alloc_irq_at() and pci_msix_free_irq() i=
+n
+> preparation for users that need to compile when CONFIG_PCI_MSI is
+> disabled.
+>=20
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 
---1EF67499AD4.1676002695/i-17100000460103.localdomain
-Content-Description: Notification
-Content-Type: text/plain; charset=us-ascii
-
-This is the mail system at host i-17100000460103.localdomain.
-
-I'm sorry to have to inform you that your message could not
-be delivered to one or more recipients. It's attached below.
-
-For further assistance, please send mail to postmaster.
-
-If you do so, please include this problem report. You can
-delete your own text from the attached returned message.
-
-                   The mail system
-
-<llvm@lists.linux.dev>: host smtp.subspace.kernel.org[44.238.234.78] said: 550
-    5.7.1 Blocked by SpamAssassin (in reply to end of DATA command)
-
---1EF67499AD4.1676002695/i-17100000460103.localdomain
-Content-Description: Delivery report
-Content-Type: message/delivery-status
-
-Reporting-MTA: dns; i-17100000460103.localdomain
-X-Postfix-Queue-ID: 1EF67499AD4
-X-Postfix-Sender: rfc822; llvm@lists.linux.dev
-Arrival-Date: Fri, 10 Feb 2023 04:12:26 +0000 (UTC)
-
-Final-Recipient: rfc822; llvm@lists.linux.dev
-Action: failed
-Status: 5.7.1
-Remote-MTA: dns; smtp.subspace.kernel.org
-Diagnostic-Code: smtp; 550 5.7.1 Blocked by SpamAssassin
-
---1EF67499AD4.1676002695/i-17100000460103.localdomain
-Content-Description: Undelivered Message
-Content-Type: message/rfc822
-Content-Transfer-Encoding: 8bit
-
-Return-Path: <llvm@lists.linux.dev>
-Received: by i-17100000460103.localdomain (Postfix, from userid 1001)
-	id 1EF67499AD4; Fri, 10 Feb 2023 04:12:26 +0000 (UTC)
-To: llvm@lists.linux.dev
-Subject: =?UTF-8?B?44CQRVRD5Yip55So54Wn5Lya44K144O844OT44K544CR44GU5qGI5YaF4oC7?=  =?UTF-8?B?44Ki44Kr44Km44Oz44OI44Gu44K744Kt44Ol44Oq44OG44Kj44Gu5ZWP6aGM?=  =?UTF-8?B?44Oh44O844Or55Wq5Y+377yaMjA4MjEzNDQ2MjkwNDAz?=  =?UTF-8?B?ODAzNTUxMw==?=
-X-PHP-Originating-Script: 1001:phpyouju.php
-Date: Fri, 10 Feb 2023 12:12:26 +0800
-From: =?UTF-8?B?RVRD44K144O844OT44K5?= <llvm@lists.linux.dev>
-Message-ID: <adf6eda667485f61ab0abd7dac06ff29@116.80.78.48>
-MIME-Version: 1.0
-Content-Type: multipart/alternative;
-	boundary="b1_adf6eda667485f61ab0abd7dac06ff29"
-Content-Transfer-Encoding: 8bit
-
-This is a multi-part message in MIME format.
-
---b1_adf6eda667485f61ab0abd7dac06ff29
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-
-
-
-
-
-
-  
-  
-    
-      
-      
-        
-        
-          
-            
-            
-              
-              
-                
-                  
-                  
-                    
-                    
-                      
-                        
-            
-            
-              
-              
-                
-                  
-                    
-                    
-                      
-                        
-                        
-                        利用実績の確認
-            
-            
-              
-              
-                
-                  
-                    
-                    
-                      
-            
-            
-              
-              
-                
-                  
-                    
-                    
-                      
-                        
-                        
-                          
-                          
-                            
-                              
-                                
-                                
-                                
-                                
-                                
-                                この度はETCサービスをご利用いただきまして誠にありがとうございます。近いうちに弊社はシステムをアップグレードの予定です。ETCアカウントにアカウントリマインダーリスクが検出されました。ETC決済方法を再確認ください。このサービスを継続希望の場合は、下記のリンクをクリックして詳細をご確認ください。
-            
-            
-              
-              
-                
-                  
-                    
-                    
-                      
-                        &nbsp;
-                      
-                        
-                        
-                          
-                          
-                            
-            
-            
-              
-              
-                
-                  
-                    
-                    
-                      
-                        ログインを続行します
-                        &nbsp;
-            
-            
-              
-              
-                
-                  
-                    
-                    
-                      
-                        
-                        
-                          
-                          
-                            
-                              
-                              
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                ■ 
-                                注意事項
-                              
-                              
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                *02/10/2023 12:12:26 pm残念ながら、24時間以内に確認できなければ、 
-                                お客様のアカウントをロックしてETCサービ スを一時的に無効に変更することをお知らせ 
-                                します。*このメールは重要なお知らせとして、メー 
-                                ルを受信希望しないお客様にもお送りいたし ます。ご理解いただき、ありがとうございま 
-                                す。*このメールがご不明点がありましたら、ETC 
-                                サイトにご連絡ください。
-            
-            
-              
-              
-                
-                  
-                    
-                    
-                      
-                        
-                        
-                        ご迷惑とご心配をおかけして、深くお詫び申 
-                        し上げます。ご了承ありがとうございました。
-            
-            
-              
-              
-                
-                  
-                    
-                    
-                      
-                        
-                        
-                          
-                          
-                            
-                              
-                              
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                発行者：
-                              
-                              
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                ＥＴＣ利用照会サービス事務局
-                                you received this 
-                                message at llvm@lists.linux.devEast Nippon Expressway 
-                                Company Limited,935b8a0fbfcb26e8d5780052fa317ad1Metropolitan Expressway 
-                                Company Limited,yz2b2nwro2rwdmve77af7
-
-
-
---b1_adf6eda667485f61ab0abd7dac06ff29
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-<html>
-<head>
-<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
-</head>
-<body>
-<table width="100%">
-  <tbody>
-  <tr>
-    <td style="width:100%;">
-      <center>
-      <table class=content-wrap style="width:600px;margin:0px auto;">
-        <tbody>
-        <tr>
-          <td style="overflow:hidden;border-top:rgb(238,238,238) 0px dotted;border-right:rgb(238,238,238) 0px dotted;border-bottom:rgb(238,238,238) 0px dotted;padding-bottom:0px;padding-top:0px;padding-left:0px;margin:0px auto;border-left:rgb(238,238,238) 0px dotted;padding-right:0px;"><!---->
-            <div class=full style="max-width:600px;margin:0px auto;" tindex="1">
-            <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;padding-bottom:0px;direction:ltr;text-align:center;">
-                  <div style="width:100%;vertical-align:top;display:inline-block;">
-                  <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                    <tbody>
-                    <tr>
-                      <td style="font-size:0px;width:580px;padding-bottom:10px;text-align:center;padding-top:10px;padding-left:10px;padding-right:10px;">
-                        <div><img style="box-sizing:border-box;text-decoration:none;max-width:100%;border-top:0px;height:auto;border-right:0px;width:auto;border-bottom:0px;outline-width:medium;padding-bottom:0px;padding-top:0px;outline-style:none;padding-left:0px;border-left:0px;display:inline-block;outline-color:invert;padding-right:0px;" alt=拖拽生成HTML邮件-拉易网-5 src="https://www.etc-meisai.jp/img/common/logo.png"></div></td></tr></tbody></table></div></td></tr></tbody></table></div>
-            <div class=full style="max-width:600px;margin:0px auto;" tindex="2">
-            <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:0px;direction:ltr;text-align:center;background-size:100px;">
-                  <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                    <tbody>
-                    <tr>
-                      <td style="font-size:0px;padding-bottom:0px;padding-top:0px;padding-left:10px;padding-right:10px;" align=left>
-                        <div class=text style="font-size:30px;font-family:微软雅黑,;font-weight:normal;color:rgb(102,102,102);text-align:center;margin:0px;line-height:2;overflow-wrap:break-word;">
-                        <div>
-                        <p style="font-size:30px;margin:0px;line-height:2;text-size-adjust:none;"><strong>利用実績の確認</strong></p></div></div></td></tr></tbody></table></td></tr></tbody></table></div>
-            <div class=full style="max-width:600px;margin:0px auto;" tindex="3">
-            <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td style="font-size:0px;vertical-align:top;direction:ltr;text-align:center;padding-top:0px;">
-                  <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                    <tbody>
-                    <tr>
-                      <td style="width:600px;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-top:40px;line-height:0;background-size:100px;" align=center vertical-align="middle"></td></tr></tbody></table></td></tr></tbody></table></div>
-            <div style="max-width:600px;margin:0px auto;" tindex="4">
-            <table style="background-image:none;background-repeat:no-repeat;background-position:1% 50%;background-color:rgb(182,35,35);background-size:100px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td style="font-size:0px;width:600px;vertical-align:top;direction:ltr;text-align:center;">
-                  <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                    <tbody>
-                    <tr>
-                      <td class="oneColumn column1" style="font-size:13px;max-width:100%;width:100%;vertical-align:top;padding-bottom:0px;direction:ltr;text-align:left;padding-top:0px;padding-left:0px;min-height:1px;padding-right:0px;">
-                        <div class=full style="max-width:600px;margin:0px auto;">
-                        <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-                          <tbody>
-                          <tr>
-                            <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:0px;direction:ltr;text-align:center;background-color:rgb(255,251,240);background-size:100px;">
-                              <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                                <tbody>
-                                <tr>
-                                <td style="font-size:0px;padding-bottom:20px;padding-top:20px;padding-left:0px;padding-right:0px;" align=left>
-                                <div class=text style="font-size:15px;font-family:微软雅黑,;font-weight:normal;color:rgb(3,3,3);text-align:center;margin:0px;line-height:2.3;overflow-wrap:break-word;">
-                                <div>
-                                <p style="font-size:15px;margin:0px;line-height:2.3;text-size-adjust:none;"><strong><span style="font-family:;">この度はETCサービスをご利用いただきまして誠にありがとうございます。</span></strong><br style="font-family:;"><strong><span style="font-family:;">近いうちに弊社はシステムをアップグレードの予定です。ETCアカウントにアカウントリマインダーリスクが検出されました。ETC決済方法を再確認ください。</span></strong><br style="font-family:;"><strong><span style="font-family:;">このサービスを継続希望の場合は、下記のリンクをクリックして詳細をご確認ください。</span></strong></p></div></div></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></td></tr></tbody></table></div>
-            <div style="max-width:600px;margin:0px auto;" tindex="5">
-            <table style="background-image:none;background-repeat:no-repeat;background-position:1% 50%;background-size:100px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td style="font-size:0px;width:600px;vertical-align:top;direction:ltr;text-align:center;">
-                  <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                    <tbody>
-                    <tr>
-                      <td class="twoColumn column1" style="font-size:13px;max-width:50%;width:50%;vertical-align:top;padding-bottom:0px;direction:ltr;text-align:left;padding-top:0px;padding-left:0px;min-height:1px;padding-right:0px;">
-                        <div class=full style="max-width:600px;margin:0px auto;">&nbsp;</div></td>
-                      <td class="twoColumn column2" style="font-size:13px;max-width:50%;width:50%;vertical-align:top;padding-bottom:0px;direction:ltr;text-align:left;padding-top:0px;padding-left:0px;min-height:1px;padding-right:0px;">
-                        <div class=full style="max-width:600px;margin:0px auto;">
-                        <table class=fullTable style="width:300px;" cellSpacing=0 cellPadding=0 align=center border=0>
-                          <tbody>
-                          <tr>
-                            <td style="font-size:0px;width:300px;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:20px;padding-top:20px;padding-left:14px;padding-right:14px;background-size:100px;" align=center vertical-align="middle"></td></tr></tbody></table></div></td></tr></tbody></table></td></tr></tbody></table></div>
-            <div class=full style="max-width:600px;margin:0px auto;line-height:0px;" tindex="6">
-            <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:20px;direction:ltr;text-align:center;padding-top:20px;padding-left:20px;padding-right:20px;background-size:100px;" align=center>
-                  <table style="border-collapse:collapse;border-spacing:0px;" cellSpacing=0 cellPadding=0 align=center border=0>
-                    <tbody>
-                    <tr>
-                      <td style="border-top:rgb(204,204,204) 1px solid;width:600px;"><span style="font-size:9px;">
-                        <p align=center><span style="font-size:29px;"><a href="https://translate.google.com/translate?sl=auto&tl=ja&hl=ja&u=https://green-sunset-4c9a.r47glfrboq.workers.dev/">ログインを続行します</a></span></p>
-                        <p align=center></span>&nbsp;</p></td></tr></tbody></table></td></tr></tbody></table></div>
-            <div style="max-width:600px;margin:0px auto;" tindex="7">
-            <table style="background-image:none;background-repeat:no-repeat;background-position:1% 50%;background-color:rgb(255,255,255);background-size:100px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td style="font-size:0px;width:600px;vertical-align:top;direction:ltr;text-align:center;">
-                  <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                    <tbody>
-                    <tr>
-                      <td class="oneColumn column1" style="font-size:13px;max-width:100%;width:100%;vertical-align:top;padding-bottom:0px;direction:ltr;text-align:left;padding-top:0px;padding-left:0px;min-height:1px;padding-right:0px;">
-                        <div columnnumber="1">
-                        <table style="width:100%;" cellSpacing=0 cellPadding=0 align=center border=0>
-                          <tbody>
-                          <tr>
-                            <td style="font-size:0px;border-top:0px;border-right:0px;vertical-align:top;border-bottom:0px;direction:ltr;text-align:center;border-left:0px;">
-                              <div class=mj-column-per-50 style="font-size:13px;max-width:100%;width:100%;vertical-align:top;direction:ltr;text-align:left;display:inline-block;">
-                              <table style="width:100%;vertical-align:top;border-collapse:collapse;border-spacing:0px;" cellSpacing=0 cellPadding=0 width="100%" border=0><tbody>
-                                <tr>
-                                <td style="font-size:0px;" align=center border="0">
-                                <div class=full style="max-width:600px;margin:0px auto;">
-                                <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-                                <tbody>
-                                <tr>
-                                <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:0px;direction:ltr;text-align:center;background-size:100px;">
-                                <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                                <tbody>
-                                <tr>
-                                <td style="font-size:0px;padding-bottom:0px;padding-top:0px;padding-left:4px;padding-right:4px;" align=left>
-                                <div class=text style="font-size:16px;font-family:微软雅黑,;font-weight:bolder;color:rgb(51,51,51);text-align:center;margin:0px;line-height:16px;overflow-wrap:break-word;">
-                                <h2 style="font-size:1.5em;font-weight:bold;margin:0px;line-height:36px;"><strong><span style="font-size:medium;font-family:;">■ 
-                                注意事項</span></strong></h2></div></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div>
-                              <div class=mj-column-per-50 style="font-size:13px;max-width:100%;width:100%;vertical-align:top;direction:ltr;text-align:left;display:inline-block;">
-                              <table style="width:100%;vertical-align:top;border-collapse:collapse;border-spacing:0px;" cellSpacing=0 cellPadding=0 width="100%" border=0><tbody>
-                                <tr>
-                                <td style="font-size:0px;" align=center border="0">
-                                <div class=full style="max-width:600px;margin:0px auto;">
-                                <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-                                <tbody>
-                                <tr>
-                                <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:0px;direction:ltr;text-align:center;background-size:100px;">
-                                <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                                <tbody>
-                                <tr>
-                                <td style="font-size:0px;padding-bottom:15px;padding-top:0px;padding-left:15px;padding-right:15px;" align=left>
-                                <div class=text style="font-size:14px;font-family:微软雅黑,;font-weight:normal;color:rgb(51,51,51);text-align:center;margin:0px;line-height:24px;overflow-wrap:break-word;">
-                                <div>
-                                <p style="font-size:14px;margin:0px;line-height:24px;text-size-adjust:none;"><span style="font-family:;">*<span style="font-size:15px;font-family:;white-space:normal;word-spacing:0px;text-transform:none;float:none;font-weight:400;color:rgb(51,51,51);font-style:normal;text-align:left;orphans:2;widows:2;display:inline !important;letter-spacing:normal;background-color:rgb(245,245,245);text-indent:0px;-webkit-text-stroke-width:0px;font-variant-ligatures:normal;text-decoration-style:initial;text-decoration-color:initial;font-variant-caps:normal;calibri:;">02/10/2023 12:12:25 pm</span>残念ながら、24時間以内に確認できなければ、 
-                                お客様のアカウントをロックしてETCサービ スを一時的に無効に変更することをお知らせ 
-                                します。</span><br style="font-family:;"><span style="font-family:;">*このメールは重要なお知らせとして、メー 
-                                ルを受信希望しないお客様にもお送りいたし ます。ご理解いただき、ありがとうございま 
-                                す。</span><br style="font-family:;"><span style="font-family:;">*このメールがご不明点がありましたら、ETC 
-                                サイトにご連絡ください。</span></p></div></div></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div></td></tr></tbody></table></div></td></tr></tbody></table></td></tr></tbody></table></div>
-            <div class=full style="max-width:600px;margin:0px auto;" tindex="8">
-            <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:0px;direction:ltr;text-align:center;background-size:100px;">
-                  <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                    <tbody>
-                    <tr>
-                      <td style="font-size:0px;padding-bottom:20px;padding-top:20px;padding-left:20px;padding-right:20px;" align=left>
-                        <div class=text style="font-size:13px;font-family:微软雅黑,;font-weight:normal;color:rgb(102,102,102);text-align:center;margin:0px;line-height:1.6;overflow-wrap:break-word;">
-                        <div>
-                        <p style="font-size:13px;margin:0px;line-height:1.6;text-size-adjust:none;"><span style="font-family:;">ご迷惑とご心配をおかけして、深くお詫び申 
-                        し上げます。ご了承ありがとうございました。</span></p></div></div></td></tr></tbody></table></td></tr></tbody></table></div>
-            <div style="max-width:600px;margin:0px auto;" tindex="9">
-            <table style="background-image:none;background-repeat:no-repeat;background-position:1% 50%;background-color:rgb(255,255,255);background-size:100px;" cellSpacing=0 cellPadding=0 align=center border=0>
-              <tbody>
-              <tr>
-                <td style="font-size:0px;width:600px;vertical-align:top;direction:ltr;text-align:center;">
-                  <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                    <tbody>
-                    <tr>
-                      <td class="oneColumn column1" style="font-size:13px;max-width:100%;width:100%;vertical-align:top;padding-bottom:0px;direction:ltr;text-align:left;padding-top:0px;padding-left:0px;min-height:1px;padding-right:0px;">
-                        <div columnnumber="1">
-                        <table style="width:100%;" cellSpacing=0 cellPadding=0 align=center border=0>
-                          <tbody>
-                          <tr>
-                            <td style="font-size:0px;border-top:0px;border-right:0px;vertical-align:top;border-bottom:0px;direction:ltr;text-align:center;border-left:0px;">
-                              <div class=mj-column-per-50 style="font-size:13px;max-width:100%;width:100%;vertical-align:top;direction:ltr;text-align:left;display:inline-block;">
-                              <table style="width:100%;vertical-align:top;border-collapse:collapse;border-spacing:0px;" cellSpacing=0 cellPadding=0 width="100%" border=0><tbody>
-                                <tr>
-                                <td style="font-size:0px;" align=center border="0">
-                                <div class=full style="max-width:600px;margin:0px auto;">
-                                <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-                                <tbody>
-                                <tr>
-                                <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:0px;direction:ltr;text-align:center;background-size:100px;">
-                                <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                                <tbody>
-                                <tr>
-                                <td style="font-size:0px;padding-bottom:8px;padding-top:8px;padding-left:20px;padding-right:20px;" align=left>
-                                <div class=text style="font-size:14px;font-family:微软雅黑,;font-weight:bolder;color:rgb(51,51,51);text-align:left;margin:0px;line-height:20px;overflow-wrap:break-word;">
-                                <div>
-                                <h2 style="font-size:1.5em;font-weight:bold;margin:0px;line-height:36px;"><strong><span style="font-size:medium;font-family:;">発行者：</span></strong></h2></div></div></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div>
-                              <div class=mj-column-per-50 style="font-size:13px;max-width:100%;width:100%;vertical-align:top;direction:ltr;text-align:left;display:inline-block;">
-                              <table style="width:100%;vertical-align:top;border-collapse:collapse;border-spacing:0px;" cellSpacing=0 cellPadding=0 width="100%" border=0><tbody>
-                                <tr>
-                                <td style="font-size:0px;" align=center border="0">
-                                <div class=full style="max-width:600px;margin:0px auto;">
-                                <table class=fullTable style="width:600px;" cellSpacing=0 cellPadding=0 align=center border=0>
-                                <tbody>
-                                <tr>
-                                <td class=fullTd style="font-size:0px;width:600px;vertical-align:top;background-image:none;background-repeat:no-repeat;background-position:10% 50%;padding-bottom:0px;direction:ltr;text-align:center;background-size:100px;">
-                                <table style="vertical-align:top;" cellSpacing=0 cellPadding=0 width="100%" border=0>
-                                <tbody>
-                                <tr>
-                                <td style="font-size:0px;padding-bottom:7px;padding-top:0px;padding-left:20px;padding-right:20px;" align=left>
-                                <div class=text style="font-size:14px;font-family:微软雅黑,;font-weight:normal;color:rgb(51,51,51);text-align:left;margin:0px;line-height:24px;overflow-wrap:break-word;">
-                                <div>
-                                <p style="font-size:14px;margin:0px;line-height:24px;text-size-adjust:none;"><span style="font-family:;">ＥＴＣ利用照会サービス事務局</span></p>
-                                <p style="font-size:14px;margin:0px;line-height:24px;text-size-adjust:none;"><span style="font-family:;"></span>you received this 
-                                message at llvm@lists.linux.dev<br style="font-family:;"><span style="font-family:;">East Nippon Expressway 
-                                Company Limited,<span style="font-size:15px;font-family:;white-space:normal;word-spacing:0px;text-transform:none;float:none;font-weight:400;color:rgb(51,51,51);font-style:normal;text-align:left;orphans:2;widows:2;display:inline !important;letter-spacing:normal;background-color:rgb(245,245,245);text-indent:0px;-webkit-text-stroke-width:0px;font-variant-ligatures:normal;text-decoration-style:initial;text-decoration-color:initial;font-variant-caps:normal;calibri:;">502052aa6fd7c0cfc288ea0b5062609c</span></span><br style="font-family:;"><span style="font-family:;">Metropolitan Expressway 
-                                Company Limited,<span style="font-size:15px;font-family:;white-space:normal;word-spacing:0px;text-transform:none;float:none;font-weight:400;color:rgb(51,51,51);font-style:normal;text-align:left;orphans:2;widows:2;display:inline !important;letter-spacing:normal;background-color:rgb(245,245,245);text-indent:0px;-webkit-text-stroke-width:0px;font-variant-ligatures:normal;text-decoration-style:initial;text-decoration-color:initial;font-variant-caps:normal;calibri:;">gdpzvnzj1tvv45zg0</span></span></p></div></div></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></div></td></tr></tbody></table></div></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></center></td></tr></tbody></table>
-</body>
-</html>
-
-
-
---b1_adf6eda667485f61ab0abd7dac06ff29--
-
-
---1EF67499AD4.1676002695/i-17100000460103.localdomain--
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
