@@ -1,45 +1,56 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9327D27733;
-	Thu,  9 Feb 2023 23:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675986977; x=1707522977;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CeXNWFB90goiNYzN4ujmRtSAdv4/UDZJQfguE+ses44=;
-  b=EPwnaX6+6phL2iT+cf0K++ppj3uuoYjzF3VykgtnT0P9JLwn+nC89eXZ
-   DW/4CrMoXsgHJB97+0zh9d347Isi3+6ebpx3MASdVmYyvdxs1Z62aQ3+2
-   CRk5M6DzZANcUnfWHme2GCt21LEMEpRg/8GHvHVCusr9431Gvco6/9fU7
-   1dU9KHasCcVatveCPb7k0yj+b4+cIKNZ0xM/Il5C5o4DmKacFok6b7sCx
-   x1aUqzipqdsTCzHMZUzpYbmy4axJAo1ZFhUwWorwiNy2Nz+417X9OeeSd
-   yAVL9qKNaQytw8tLzkEGU92CcblUNd+Nv6ZNgcch0dyk2PrXW0IAHNEw6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="332422891"
-X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="332422891"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 15:56:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="810576103"
-X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="810576103"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Feb 2023 15:56:12 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pQGlv-0005Nm-1b;
-	Thu, 09 Feb 2023 23:56:11 +0000
-Date: Fri, 10 Feb 2023 07:55:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [linux-next:master 5911/11577]
- drivers/soc/renesas/pwc-rzv2m.c:124:34: warning: unused variable
- 'rzv2m_pwc_of_match'
-Message-ID: <202302100744.d1zZxXFn-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B958624
+	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 01:13:34 +0000 (UTC)
+Received: by mail-pj1-f48.google.com with SMTP id m2-20020a17090a414200b00231173c006fso7399738pjg.5
+        for <llvm@lists.linux.dev>; Thu, 09 Feb 2023 17:13:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k3av9jkUvE9A6NJ/myH2LVzHPBwDhgbAq+TXm0rIoTM=;
+        b=PHZQYT5oASeECsZsHRHQMGmmlRn/fh1qFIyHRbeqb6UKHavmxO4hmYGKVNZ3HXfHCP
+         OC+jObRKncg1lbUI1c6zLMxOulEL4CDQTfhrHtjSFhe60xMZzvHSZKHiz04WTd812P6c
+         /gmzgZGkx8I5YMNuPo9O28D4S2q+ikgRILRReal9hzuIijl6Zu4RVW6sHImTFlsiNrI3
+         YVkJmEkMBeHhPbqmrRnCQuyvV8054XIVeM+4KGPkRjrFvaIx64M0S/WFnVQwX9NNiWbF
+         hMWRMMEk9Iz3eHX6+Tp6StYtSqPySt+Z95pXifmRZBUzvX8dri+GKO8RUx9Sfcd1JPKs
+         b1Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k3av9jkUvE9A6NJ/myH2LVzHPBwDhgbAq+TXm0rIoTM=;
+        b=4V4HcdVEWBQxfXvUowcSV/fuLDO1nib3p/pDkvwGZ1XkFmMxrxsbq7tiODEzlyw2gm
+         j6EvzlCci7mtPZXwsqLLd7wEeupE3nWDATZYCqhPB1YSTkRs+UERjSlWdcHW4c3Xoisw
+         CS0Zfw3c20a8UamltpaTHpwPpt7frKI2UGqamfDnNQ2aqm2+iwI5B1RbJXGKtMq6Jb4/
+         iLDyyPy8XVdO4lS7cy8+NBkRLT242sld9GhRxtmSxEUL2g5qT7476c0gdRJ8FAuknSsa
+         zN4JBbhrGRMheOy4ZYYrDkOvPrZ02/U+QueUUAckyiH7LZU1J7vn6skq9z3dap9CFpjH
+         XrKw==
+X-Gm-Message-State: AO0yUKXGGjgI7aucCKFm9dsRXxZL6TCDv4EiNhHREd2SitySqKZdnyB3
+	Rkxvosw49pcttD3ScBDx3oUuJA==
+X-Google-Smtp-Source: AK7set9pFw3J5w5r/xV/SoTgrT6GjoR14zs1JLwGP7oCVVKObwM+RL2W/uCJ6aaf3zqmyu8HS/ZqXg==
+X-Received: by 2002:a17:902:ed89:b0:198:af50:e4e4 with SMTP id e9-20020a170902ed8900b00198af50e4e4mr102079plj.10.1675991613691;
+        Thu, 09 Feb 2023 17:13:33 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i25-20020aa78b59000000b0059428b51220sm2040561pfd.186.2023.02.09.17.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 17:13:32 -0800 (PST)
+Date: Fri, 10 Feb 2023 01:13:27 +0000
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>, Tom Rix <trix@redhat.com>,
+	kvm@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for
+ CONFIG_HYPERV=n
+Message-ID: <Y+WaN8wW1EOvPbXe@google.com>
+References: <20230208205430.1424667-1-seanjc@google.com>
+ <20230208205430.1424667-3-seanjc@google.com>
+ <87mt5n6kx6.fsf@redhat.com>
+ <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,48 +59,24 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   20f513df926fac0594a3b65f79d856bd64251861
-commit: 0c56f949f626e59ef7c5b18e2706fed2a6afc4a2 [5911/11577] soc: renesas: Add PWC support for RZ/V2M
-config: mips-randconfig-r005-20230209 (https://download.01.org/0day-ci/archive/20230210/202302100744.d1zZxXFn-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=0c56f949f626e59ef7c5b18e2706fed2a6afc4a2
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 0c56f949f626e59ef7c5b18e2706fed2a6afc4a2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/soc/renesas/
+On Thu, Feb 09, 2023, Paolo Bonzini wrote:
+> On 2/9/23 14:13, Vitaly Kuznetsov wrote:
+> > > +static __always_inline bool is_evmcs_enabled(void)
+> > > +{
+> > > +	return static_branch_unlikely(&enable_evmcs);
+> > > +}
+> > I have a suggestion. While 'is_evmcs_enabled' name is certainly not
+> > worse than 'enable_evmcs', it may still be confusing as it's not clear
+> > which eVMCS is meant: are we running a guest using eVMCS or using eVMCS
+> > ourselves? So what if we rename this to a very explicit 'is_kvm_on_hyperv()'
+> > and hide the implementation details (i.e. 'evmcs') inside?
+> 
+> I prefer keeping eVMCS in the name,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302100744.d1zZxXFn-lkp@intel.com/
++1, IIUC KVM can run on Hyper-V without eVMCS being enabled.
 
-All warnings (new ones prefixed by >>):
+> but I agree a better name could be something like kvm_uses_evmcs()?
 
->> drivers/soc/renesas/pwc-rzv2m.c:124:34: warning: unused variable 'rzv2m_pwc_of_match' [-Wunused-const-variable]
-   static const struct of_device_id rzv2m_pwc_of_match[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/rzv2m_pwc_of_match +124 drivers/soc/renesas/pwc-rzv2m.c
-
-   123	
- > 124	static const struct of_device_id rzv2m_pwc_of_match[] = {
-   125		{ .compatible = "renesas,rzv2m-pwc" },
-   126		{ /* sentinel */ }
-   127	};
-   128	MODULE_DEVICE_TABLE(of, rzv2m_pwc_of_match);
-   129	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+kvm_is_using_evmcs()?
