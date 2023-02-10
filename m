@@ -1,184 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D370463AB
-	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 18:18:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9687C4339E;
-	Fri, 10 Feb 2023 18:18:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676053118;
-	bh=OOnQiLtiUJOqoDdzJaP936hrThLt6/kh3l2/k+KX7a4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TcnPILo3ifUOzSjnjIJD8HddzLBYjFKyGJWT2qDyb8TEg3hHJZhrbyMm5CifS1SOi
-	 7wNojkMhvLvjxjNFQFCqrP/FsXzQ7X1JE3unugRnE6KNkRbXXLhgBx9SukXe0xNVSh
-	 YRRSa/KV40FwBltSA6l7JZCxOVIHyVPzBFW7uFy7tHEcC0UZWhqScxOkSOeLQIx6s1
-	 vM9oV1lQjvATqH35a5Q2OzKoLIegya7YhzHbOLQWubjS8v3Ho+1pduf7XwOCnEVRZF
-	 gcs537M8ATNLtaJ/geUJR97AUp5ZKM2fq2OkfAi35j+IKL9YwM2mrEe8+iz9GaIjaS
-	 auZQpo86cSaJA==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Ben Hutchings <ben@decadent.org.uk>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	llvm@lists.linux.dev
-Subject: [PATCH v5 2/7] kbuild: deb-pkg: create source package without cleaning
-Date: Sat, 11 Feb 2023 03:18:23 +0900
-Message-Id: <20230210181828.124765-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230210181828.124765-1-masahiroy@kernel.org>
-References: <20230210181828.124765-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0FD6D1B;
+	Fri, 10 Feb 2023 18:48:21 +0000 (UTC)
+Received: by mail-lj1-f170.google.com with SMTP id g14so7284505ljh.10;
+        Fri, 10 Feb 2023 10:48:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Un3RuNgUuXGsJqK22XSK4qt6d+DyNCQCjtzKzuT7iV8=;
+        b=f9JS4IqNiocsgZc6Q/4lDcG5ZyE4R6yte4HjVwg25QhIMi0OxcI2Idc0Wsf2N0cXr8
+         uYzJolc2LaVFTfA8998whggL4qW3+S0ZUuvjoqaAWLX2QkGgnlrsCSgnCSJ086ZxsDH8
+         5Se49xq6SduTGP2z1hpH8RH9WDUUL/f8Y6ANP4f7finsEEDNbI09goPQXKMK06IMZlfm
+         Tn87yF5WS5OLso/gv4LxnILz3sblGrUZjk3Ge7N3mDj+A8Ig7U30mEs+cUFmzSmKP8lX
+         SIWtJnaMpxoky4iN/ylKMCQvYu4O5t0pumPq7vE42QANhx9i5M3B1e0/RiDJvplf8Ahf
+         iMVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Un3RuNgUuXGsJqK22XSK4qt6d+DyNCQCjtzKzuT7iV8=;
+        b=gMI6Fm0gghkImyIa1W5xS7huLeG9ExyIR0Zw33TUq9Us9CNtvKT5nJESoZXclG1jYN
+         FyXj2YjY8VepfYSVhOXXeWKTMC2E+yanMT436FY1LBAJOLkLvCqvjpiNSLMSh6LupYIF
+         BvpcOG1LStrlYiRsnaVHqyD2BEHoWmnx7mfBS7YCRLSULspo4J2Y+t/DBpi2Kd5ot6b2
+         BX3kjiQ2sm5UHzECyRBNnSB12cjXycxxVBJFmcK8NJFQfGf56YoZkB6xwuA9wgGjOFxh
+         MiPKZ6zAOtzBQlk26/nNcwhclNyeDdIAKhZYH9OU+wb7inlVklo4NGU/hxbYosYmMAW2
+         K5dw==
+X-Gm-Message-State: AO0yUKXSQx5piTF4IlRMvvItXJykLhL0ooeDjiK9DnViw6cUBtgBFEvk
+	EtmZRChdIzvF+DU8z1YoyJsmDgG7UIzFq+5rxYc=
+X-Google-Smtp-Source: AK7set8VRS+sDgEAjIlJHWcEeXq4SCqwMaW9eBNL4x1j4y7j6PNnrHHn0QLhNZpl8G3BRlEZNZm327D7hQyW1CAeZVo=
+X-Received: by 2002:a2e:8e32:0:b0:283:33bb:42a5 with SMTP id
+ r18-20020a2e8e32000000b0028333bb42a5mr2276152ljk.29.1676054899654; Fri, 10
+ Feb 2023 10:48:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230118122817.42466-4-francesco@dolcini.it> <202301241423.sEVD92vC-lkp@intel.com>
+In-Reply-To: <202301241423.sEVD92vC-lkp@intel.com>
+From: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date: Fri, 10 Feb 2023 10:48:08 -0800
+Message-ID: <CABBYNZLeccgTS81JksTngmbQ5Hk+ThSKDLW8V2qujT3O315u+w@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] Bluetooth: hci_mrvl: Add serdev support for 88W8997
+To: kernel test robot <lkp@intel.com>
+Cc: Francesco Dolcini <francesco@dolcini.it>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	Marcel Holtmann <marcel@holtmann.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Johan Hedberg <johan.hedberg@gmail.com>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Francesco Dolcini <francesco.dolcini@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
 
-If you run 'make deb-pkg', all objects are lost due to 'make clean',
-which makes the incremental builds impossible.
+Hi Francesco,
 
-Instead of cleaning, pass the exclude list to tar's --exclude-from
-option.
+On Mon, Jan 23, 2023 at 10:38 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Francesco,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on robh/for-next]
+> [also build test WARNING on bluetooth-next/master bluetooth/master horms-ipvs/master net/master net-next/master linus/master v6.2-rc5 next-20230123]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Francesco-Dolcini/dt-bindings-bluetooth-marvell-add-88W8997-DT-binding/20230118-210919
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> patch link:    https://lore.kernel.org/r/20230118122817.42466-4-francesco%40dolcini.it
+> patch subject: [PATCH v1 3/4] Bluetooth: hci_mrvl: Add serdev support for 88W8997
+> config: hexagon-randconfig-r021-20230123 (https://download.01.org/0day-ci/archive/20230124/202301241423.sEVD92vC-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/2ae116c8ad209e0bf11559519915e511c44c28be
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Francesco-Dolcini/dt-bindings-bluetooth-marvell-add-88W8997-DT-binding/20230118-210919
+>         git checkout 2ae116c8ad209e0bf11559519915e511c44c28be
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/ lib/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>    In file included from drivers/bluetooth/hci_mrvl.c:12:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val = __raw_readb(PCI_IOBASE + addr);
+>                              ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>                                                            ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+>    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>                                                      ^
+>    In file included from drivers/bluetooth/hci_mrvl.c:12:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>                                                            ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+>    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>                                                      ^
+>    In file included from drivers/bluetooth/hci_mrvl.c:12:
+>    In file included from include/linux/skbuff.h:17:
+>    In file included from include/linux/bvec.h:10:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writeb(value, PCI_IOBASE + addr);
+>                                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>                                                          ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>                                                          ~~~~~~~~~~ ^
+> >> drivers/bluetooth/hci_mrvl.c:450:36: warning: unused variable 'mrvl_proto_8997' [-Wunused-const-variable]
+>    static const struct hci_uart_proto mrvl_proto_8997 = {
 
-Previously, *.diff.gz contained some check-in files such as
-.clang-format, .cocciconfig.
+This last error seems to be caused by your changes, please fix it.
 
-With this commit, *.diff.gz will only contain the .config and debian/.
-The other source files will go into the .orig tarball.
 
-linux.tar.gz is rebuilt only when the source files that would go into
-the tarball are changed.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-Changes in v5:
-  - Avoid unneeded rebuild of the tarball when nothing in the source tree
-    is changed.
-
-Changes in v4:
-  - Fix a typo in comment
-
-Changes in v3:
-  - Add --extra-pattern='*.rej'
-  - Exclude symlinks at the toplevel
-  - Add --sort=name tar option
-
- scripts/Makefile.package | 40 ++++++++++++++++++++++++++++++++++------
- scripts/package/mkdebian | 24 ++++++++++++++++++++++++
- 2 files changed, 58 insertions(+), 6 deletions(-)
-
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index dfbf40454a99..0dda909f87a9 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -80,13 +80,12 @@ binrpm-pkg:
- 		$(UTS_MACHINE)-linux -bb $(objtree)/binkernel.spec
- 
- PHONY += deb-pkg
--deb-pkg:
--	$(MAKE) clean
-+deb-pkg: linux.tar.gz
- 	$(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
--	$(call cmd,src_tar,$(KDEB_SOURCENAME))
--	origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
--		mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
--	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
-+	$(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
-+		cp linux.tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
-+	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
-+		--build=source,binary --source-option=-sP -nc -us -uc
- 
- PHONY += bindeb-pkg
- bindeb-pkg:
-@@ -120,6 +119,32 @@ $(tar-pkgs):
- 	$(MAKE) -f $(srctree)/Makefile
- 	+$(CONFIG_SHELL) $(srctree)/scripts/package/buildtar $@
- 
-+# Source Tarball
-+# ---------------------------------------------------------------------------
-+
-+scripts/list-gitignored: FORCE
-+	$(Q)$(MAKE) -f $(srctree)/Makefile scripts_package
-+
-+# 1f5d3a6b6532e25a5cdf1f311956b2b03d343a48 removed '*.rej' from .gitignore,
-+# but it is definitely a generated file.
-+filechk_filelist = \
-+	$< --exclude='*.rej' --output=$@_exclude --prefix=./ --rootdir=$(srctree) --stat=-
-+
-+.tmp_filelist: scripts/list-gitignored FORCE
-+	$(call filechk,filelist)
-+
-+quiet_cmd_tar = TAR     $@
-+      cmd_tar = tar $(compress-opt) -c -f $@ \
-+                --exclude=./$@ --exclude-from=$<_exclude \
-+                --owner=0 --group=0 --sort=name \
-+                --transform 's:^\.:$*:S' -C $(tar-rootdir) .
-+
-+tar-rootdir := $(srctree)
-+
-+%.tar.gz: compress-opt := -I $(KGZIP)
-+%.tar.gz: .tmp_filelist
-+	$(call cmd,tar)
-+
- # perf-pkg - generate a source tarball with perf source
- # ---------------------------------------------------------------------------
- 
-@@ -174,4 +199,7 @@ help:
- 	@echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
- 	@echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
- 
-+PHONY += FORCE
-+FORCE:
-+
- .PHONY: $(PHONY)
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index c3bbef7a6754..68b13ef590ba 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -84,6 +84,8 @@ set_debarch() {
- 	fi
- }
- 
-+rm -rf debian
-+
- # Some variables and settings used throughout the script
- version=$KERNELRELEASE
- if [ -n "$KDEB_PKGVERSION" ]; then
-@@ -135,6 +137,28 @@ fi
- mkdir -p debian/source/
- echo "1.0" > debian/source/format
- 
-+# Ugly: ignore anything except .config or debian/
-+cat<<'EOF' > debian/source/local-options
-+diff-ignore
-+
-+extend-diff-ignore = ^[^.d]
-+
-+extend-diff-ignore = ^\.[^c]
-+extend-diff-ignore = ^\.c($|[^o])
-+extend-diff-ignore = ^\.co($|[^n])
-+extend-diff-ignore = ^\.con($|[^f])
-+extend-diff-ignore = ^\.conf($|[^i])
-+extend-diff-ignore = ^\.confi($|[^g])
-+extend-diff-ignore = ^\.config.
-+
-+extend-diff-ignore = ^d($|[^e])
-+extend-diff-ignore = ^de($|[^b])
-+extend-diff-ignore = ^deb($|[^i])
-+extend-diff-ignore = ^debi($|[^a])
-+extend-diff-ignore = ^debia($|[^n])
-+extend-diff-ignore = ^debian[^/]
-+EOF
-+
- echo $debarch > debian/arch
- extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
- extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
 -- 
-2.34.1
-
+Luiz Augusto von Dentz
