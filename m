@@ -1,46 +1,46 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2588433FA
-	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 16:18:39 +0000 (UTC)
-Received: by mail-pl1-f178.google.com with SMTP id b5so6977696plz.5
-        for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 08:18:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8995D63AA
+	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 16:20:47 +0000 (UTC)
+Received: by mail-pf1-f182.google.com with SMTP id a5so3773341pfv.10
+        for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 08:20:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WxXdZQxEy9ORSki1sFbClnXS6XD9R5tAV6m7018Aoxg=;
-        b=RLLvPVwEe37bC3gIxP2Bv5EbvbxNVa3e9DSJanGQhPNO0KGbiSFyKCQ7dU+E9Ud6dW
-         lIs4g+WD8OhzR0WDnPRqrT540emzHx41b2q3WvX/nfsB/EHmW7PhLz4ywQhN4EfAYRuV
-         f42OEecWXAMLbOCvgXanc9orcfCRZTm91zG/sGRAIiVbXozInbRILnOr1fnnYLVwW/ES
-         rzWtdnF78Chord9FKMSKBmRKsatVzaLls5eh/0nKU1maiIzrpV8MpYD0FD15T5HuReDV
-         dGuM3kcGExCcdKn+JWv33YQA+SFbhAioyZUitqsq2h/DiWcj8Y78JDbHXx7Al2bLNfW8
-         MpHA==
+        bh=T+s3+R4BwN91gBepBEWrEY8Vvh5YNXMDaNjOtbjtONA=;
+        b=PUD2yf2TNOz8iOQztqPJfdJ9ELRnWxBC9OXLVvc0IMpv2hMRfQrlK0ITtiAdKBU+hf
+         vxUuKzjUsfHAY0amGyhDBmbYFLp9jyu+2l1wbj0hM2w1m4vZaEtz/nkmxs6lVQLolEi9
+         H6TpF62UjRYsKAjxBWJFu0xALWrrCFLrdjELIMPIHZuuyQmv8eOw9r/khi+IPv5UC5Tw
+         rVWB2YIsKZGJHrLiEZqJdsvwqFWegdKM7enGODXCgR/bQqsBw5TEeoEoLBtYDz44hYd1
+         4Ee9OBaXLQXdoS4ianvnXhjRuGc6E6k7hOS4SKR1ulB57R9R4a8XTclSEFIQ007wNoUP
+         nPBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WxXdZQxEy9ORSki1sFbClnXS6XD9R5tAV6m7018Aoxg=;
-        b=KZRfPGl/S8JnNsWlH6ALyTUVg6KdDcI5+w+wnZ7rCPJG5RiwrhUBtuOPWlQI790lxU
-         ovTCddnwb8B/yKuN5irIt3uYPxFrSbf4oeNHfjHRRcUM2HGOW+A6y7rH9vFfOQntUdqN
-         n5xSegYcn7TkwAn3JRzNiOhXlfwWptCOELRLhHC8U3eoE758SAgUmMkDkmPoU1z7rOPV
-         I4ED/bPSRHKKmR7qH0CU6LaDmY5TjLCVTliIvi5IKZ9JvWkm8hOnEKRCniP6+FeuZpX1
-         AeX8awd+4LqMtyfp9j4ZkZFt7nP40f+fYrzcuGCxoL9KbxYiXJkonK4g8eV03Wsvi8v/
-         qEkw==
-X-Gm-Message-State: AO0yUKWnWZ8CMaiRs8RCc35W58TdhGIBo9iHgs6MNM6tr55Z3UVUppDR
-	E4/NYFM8AwvhMYV4Hq+pz44=
-X-Google-Smtp-Source: AK7set8aF8P+ZlNIMzRzl1T1H/DSMSa4lsmTbGM6NWsjEMzuyTqi2Jrn0/eW0THES6OU8oRuG4QGGQ==
-X-Received: by 2002:a17:903:2303:b0:195:f06f:84fc with SMTP id d3-20020a170903230300b00195f06f84fcmr17146571plh.40.1676045918601;
-        Fri, 10 Feb 2023 08:18:38 -0800 (PST)
+        bh=T+s3+R4BwN91gBepBEWrEY8Vvh5YNXMDaNjOtbjtONA=;
+        b=xIkYR+HK8mbA2EyOBQulWn1A9fn43RLwO7FiU8C/Eqg7DRMOqkF820qsq3N9oCeqPr
+         FkX8wcPa27FdstBocpVXvH/OGT9ZM29jxM3TGCUqp9og8Y4WKxVcRYz8BQnLm0tVUdwH
+         JrYNLC8S0FCT4jK6d8JXYcT8d4gRs8jexq+aRVt8piuDmfMBh2UPFMDHiVUnvO1h56Bb
+         ZRB86Lb7EK1W4g9N9Xf+/x+wzodvFlGxlD2h4AWe8Kj0g2zKHiixkYtoWaqH1vYATjsi
+         lV8e2SOEupcBjUyFgzqoMk+Tk2pwdOgY6SDaAk8yuXYalmYdfbioz1+wEBfx/fltv8NU
+         DKpA==
+X-Gm-Message-State: AO0yUKVMTAbDxg83iunvPKP3BhoKgdWfisltGjH7J1dtxgiwljfC+rCV
+	WPgwH8r8pqAAyjnx9gefaVc=
+X-Google-Smtp-Source: AK7set99SI3pKlRjrZCRkEnyIZEEUot5w8CzY221yQ6oODsw8IKivq7tbJBLTxpHBLVzJB9Y5m+i2g==
+X-Received: by 2002:a62:1d91:0:b0:5a8:718c:5ee9 with SMTP id d139-20020a621d91000000b005a8718c5ee9mr1786799pfd.25.1676046046923;
+        Fri, 10 Feb 2023 08:20:46 -0800 (PST)
 Received: from localhost ([124.248.219.206])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902dc8300b00198fe021f93sm2335425pld.77.2023.02.10.08.18.37
+        by smtp.gmail.com with ESMTPSA id i1-20020aa78d81000000b0058ba2ebee1bsm3433711pfr.213.2023.02.10.08.20.46
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 10 Feb 2023 08:18:38 -0800 (PST)
-Date: Fri, 10 Feb 2023 08:18:27 -0800
+        Fri, 10 Feb 2023 08:20:46 -0800 (PST)
+Date: Fri, 10 Feb 2023 08:20:33 -0800
 From: Dan Li <ashimida.1990@gmail.com>
-To: Hongtao Liu <crazylht@gmail.com>
+To: Peter Collingbourne <pcc@google.com>
 Cc: gcc-patches@gcc.gnu.org, Richard Sandiford <richard.sandiford@arm.com>,
 	Masahiro Yamada <masahiroy@kernel.org>,
 	Michal Marek <michal.lkml@markovi.net>,
@@ -73,9 +73,9 @@ Cc: gcc-patches@gcc.gnu.org, Richard Sandiford <richard.sandiford@arm.com>,
 	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
 Subject: Re: [RFC/RFT 0/3] Add compiler support for Control Flow Integrity
-Message-ID: <20230210161827.ze2dtrfugydlbw2p@ubuntu>
+Message-ID: <20230210162033.tb5b6cd3j3vxr6vv@ubuntu>
 References: <20221219055431.22596-1-ashimida.1990@gmail.com>
- <CAMZc-bzmACcpSePKxuuA=ug2+yik+Zo3-mfqr2OyZ-n_nT=OnQ@mail.gmail.com>
+ <CAMn1gO6hwaSDCqigwoH981ffVbU8OvgJhrGh997kGseCSbpAJA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,12 +84,11 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMZc-bzmACcpSePKxuuA=ug2+yik+Zo3-mfqr2OyZ-n_nT=OnQ@mail.gmail.com>
+In-Reply-To: <CAMn1gO6hwaSDCqigwoH981ffVbU8OvgJhrGh997kGseCSbpAJA@mail.gmail.com>
 User-Agent: NeoMutt/20171215
 
-On 02/09, Hongtao Liu wrote:
-> On Mon, Dec 19, 2022 at 3:59 PM Dan Li via Gcc-patches
-> <gcc-patches@gcc.gnu.org> wrote:
+On 02/08, Peter Collingbourne wrote:
+> On Sun, Dec 18, 2022 at 10:06 PM Dan Li <ashimida.1990@gmail.com> wrote:
 > >
 > > This series of patches is mainly used to support the control flow
 > > integrity protection of the linux kernel [1], which is similar to
@@ -98,18 +97,19 @@ On 02/09, Hongtao Liu wrote:
 > > I hope that this feature will also support user-mode CFI in the
 > > future (at least for developers who can recompile the runtime),
 > > so I use -fsanitize=cfi as a compilation option here.
-> >
-> > Any suggestion please let me know :).
-> Do you have this series as a branch somewhere that we could also try for x86?
+> 
+> Please don't. The various CFI-related build flags are confusing enough
+> without also having this inconsistency between Clang and GCC.
 
-Hi Hongtao,
+Hi Peter,
 
-I haven't tried this feature on the x86 platform, if possible, I will try it in
-the next version.
+Got it, as discussed before[1], in the next version I will use the same
+compile option.
+
+[1]. https://patchwork.kernel.org/project/linux-arm-kernel/patch/20221219061758.23321-1-ashimida.1990@gmail.com/
 
 Thanks,
 Dan.
 
-> --
-> BR,
-> Hongtao
+> 
+> Peter
