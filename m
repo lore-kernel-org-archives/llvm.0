@@ -1,108 +1,109 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1242FAF
-	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 21:37:55 +0000 (UTC)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DF42FAF;
+	Fri, 10 Feb 2023 21:49:59 +0000 (UTC)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2CEF03F128
-	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 21:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1676065068;
-	bh=eC2XZoUBnGDmxKSPMrW/XXx7BIGT4mv6vf3OxAuOY0I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=qszRP6nfD5Z6e5yHuNoGB8vmCQ7fGoKFJ5HWoDzuBfu335hS1Drtd/iPNBrrEyObh
-	 GJV6gZChzXwsYDAUBTw0RRwsFAnuabzV4hlIEnHvLyFxWoXN7/QTYavnrUgfO+G51v
-	 iQtaahRsfjNoSvB/xldAOaImfkS3O81dADOaHKKaefn7jfm/821ntvbaOlOOsO+82Z
-	 HPceLDhMvdwC1CSwvheEISwMWs9L1W8MhGfpwnhwJVY27dWUAeUCGuj3f9VEHFzQoD
-	 2yQPprvPge8JLwlEm9yEIVMTlKYvmul6m45HSWEn6FVv0V8ag9q6jD0eS+V06p9v+4
-	 zSyRDZd6HURdg==
-Received: by mail-ej1-f69.google.com with SMTP id i7-20020a17090685c700b008ab19875638so4269336ejy.3
-        for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 13:37:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eC2XZoUBnGDmxKSPMrW/XXx7BIGT4mv6vf3OxAuOY0I=;
-        b=ibBTxaxyF7AUFRBqpsvDgSXIUvf5Fe/I56k6OUG7if621FyR734qK9pfkdaAs+6rsf
-         h2o+hf3MYRQ4nVjSa4I8eyD1CQCM2N0g+/63zkewenK0f+TRfefMvOwLqgYvGjRMG3EF
-         hPN5FjNa+x6KQMEzK4PihY/juG2OWyzWJcPsNDEcdcvpnKIYOdA9Fimk/q90hWZCqQDh
-         9mRcy0iJO98OKxpW8e3a+VbvlYRtaQPn954aPzMDVUskuXLGQoxRpteChVyRwP9eNaak
-         JxfvyUwkH2hs6L+CEcLsSyY/w/u0cJo6J5l8/X3kmvOXTCWaXsIw1DCncpl7lWc0scc+
-         0Pcw==
-X-Gm-Message-State: AO0yUKXdBaRh03nb3GpWpr/WHPJybUIsn5Uf6iGnXNf4ZMzWCbLbVX6G
-	+sRgK5wPZysQS1H1VTU2IS729rZ6xAgwJ94DbPrsBBqYZfzvkxrcRINpc0oBdpyfCxhwv8rw42a
-	2ugDzVk5QbmWYE1PDBQPOeKdeUeMyPWk=
-X-Received: by 2002:a17:906:d54f:b0:8aa:875d:9d9a with SMTP id cr15-20020a170906d54f00b008aa875d9d9amr19218553ejc.50.1676065067217;
-        Fri, 10 Feb 2023 13:37:47 -0800 (PST)
-X-Google-Smtp-Source: AK7set9tQPWSKYHZI8inu8XKqYP5n9wE+26d1aWDJPmcuaYvCIZs5H3m4k+oT+RGH2S9Xw5DEwqt5w==
-X-Received: by 2002:a17:906:d54f:b0:8aa:875d:9d9a with SMTP id cr15-20020a170906d54f00b008aa875d9d9amr19218529ejc.50.1676065067021;
-        Fri, 10 Feb 2023 13:37:47 -0800 (PST)
-Received: from localhost (host-87-7-128-191.retail.telecomitalia.it. [87.7.128.191])
-        by smtp.gmail.com with ESMTPSA id y22-20020a170906449600b0084d35ffbc20sm2906112ejo.68.2023.02.10.13.37.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 13:37:46 -0800 (PST)
-Date: Fri, 10 Feb 2023 22:37:45 +0100
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	bjorn3_gh@protonmail.com,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rust: allow to use INIT_STACK_ALL_ZERO
-Message-ID: <Y+a5KQjQopSXwVPJ@righiandr-XPS-13-7390>
-References: <20230210172203.101331-1-andrea.righi@canonical.com>
- <Y+aBT8AD9RXde24X@dev-arch.thelio-3990X>
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5F11C1EC06C0;
+	Fri, 10 Feb 2023 22:49:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1676065795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=aoz7bS9et9aIGm0OcKdmUFu0AmMnaNrDzjbYJ5AYcWE=;
+	b=YUuOccxbhcbE9xhuxZJq+fn0Y5GAqFEE0OTgoBRpbpvvRjm2tfrzYizxHLKeGfTfdh3UPM
+	CKYHy0i15MmW9z8ukyT8IJzlGOuX60IDZ98bL9feDRSn5neZOv96FynQGJ8FsGfNM0jo/+
+	8+rxQfq2aJNdBbzzZslcrsiHIcO5QJI=
+Date: Fri, 10 Feb 2023 22:49:51 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Philip Li <philip.li@intel.com>
+Cc: kernel test robot <lkp@intel.com>, Babu Moger <babu.moger@amd.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [tip:x86/cache 9/13]
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but
+ not used
+Message-ID: <Y+a7/2uOc2/maFX7@zn.tnic>
+References: <202301242015.kbzkVteJ-lkp@intel.com>
+ <Y8/XoT23HVXHSY73@zn.tnic>
+ <Y+RjOpXP1Bbv268n@rli9-mobl>
+ <Y+TCq4k+0AhfjZkL@zn.tnic>
+ <Y+W2tFIfGJ1c8uml@rli9-mobl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y+aBT8AD9RXde24X@dev-arch.thelio-3990X>
+In-Reply-To: <Y+W2tFIfGJ1c8uml@rli9-mobl>
 
-On Fri, Feb 10, 2023 at 10:39:27AM -0700, Nathan Chancellor wrote:
-> On Fri, Feb 10, 2023 at 06:22:03PM +0100, Andrea Righi wrote:
-> > With CONFIG_INIT_STACK_ALL_ZERO enabled, bindgen is passing
-> > -ftrivial-auto-var-init=zero to clang, that triggers the following:
-> > 
-> >   error: '-ftrivial-auto-var-init=zero' hasn't been enabled; enable it at your own peril for benchmarking purpose only with '-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang'
-> > 
-> > This flag should be dropped in clang-17, but at the moment it seems more
-> > reasonable to add it to the bindgen CFLAGS to prevent the error above.
-> > 
-> > In this way we can enable CONFIG_INIT_STACK_ALL_ZERO with CONFIG_RUST
-> > without triggering any build error.
-> > 
-> > Link: https://reviews.llvm.org/D125142
-> > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+On Fri, Feb 10, 2023 at 11:15:00AM +0800, Philip Li wrote:
+> Sorry for confusion, we do full make for the kernel to gather all issues.
+> And we try to provide a quicker way for developer to reproduce the issue,
+> thus the step in reproduce part shows the subdirectories that could reproduce
+> the reported issue.
+
+Aah, ok.
+
+I guess those reproduction instructions should then say:
+
+"... the fastest way to reproduce is ..."
+
+Or so.
+
+> Got it. Internally, we use the merge strategy to combine as many branches
+> as we can to run build testing, and bisect the issues if found. We need
+> further think of how to let high priority issues to be reported out earlier.
+
+Hmm, I wouldn't do that.
+
+If you test a whole bunch of patchsets, then you're not really testing
+each of them but you're testing the common thing which you've created by
+merging.
+
+I think it makes most sense to test single patchsets, single tree
+branches which should hopefully contain commits which belong to a single
+topic - this is how we aim to do them in the tip tree, at least, but
+others do different things, and so on.
+
+And then test linux-next. But I think you do that.
+
+> Thanks, so far, we recommend to use --base option in our report mail, like
 > 
-> If this went via the kbuild tree, would we be able to use
-> $(CC_AUTO_VAR_INIT_ZERO_ENABLER)?
+> 	[If your patch is applied to the wrong git tree, kindly drop us a note.
+> 	And when submitting patch, we suggest to use '--base' as documented in
+> 	https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> https://git.kernel.org/masahiroy/linux-kbuild/c/4e3feaad6ff8a7a57e3bf3308a93c93e3a2e17a6
-> 
-> Although, I suppose this could be a problem if the version of clang
-> being used to build the kernel does not support this flag while the
-> version of libclang in bindgen requires it?
+> And we do need a place to put such information, so people can refer to. Without
+> a public available site for us, we will update https://github.com/intel/lkp-tests/wiki
+> firstly to host enough information.
 
-I didn't have much success with CC_AUTO_VAR_INIT_ZERO_ENABLER, but maybe
-a better way is to check if the version of libclang used by bindgen is
-less than 17, considering that is extra clang option is supposed to be
-dropped in clang-17:
+Right, make that URL part of every report so that people can go and read
+about it and know what are best practices. I'll try to remember myself
+to use --base too.
 
-https://github.com/llvm/llvm-project/issues/44842
+> Thanks for the hint, this is doable, and we definitely need do this. I will
+> plan it to have initial version ready by Q1.
 
-I'll send a v2, unless we find a better way to support this auto var
-zero-init feature.
+You have a wiki page above already. Add a status subpage and dump into
+it periodically what current trees are being tested. And this way you
+have *something* to go with. You can always improve it later on.
 
--Andrea
+> Thanks a lot Boris, these suggestions are very helpful to further improve the
+> 0-day ci service.
+
+You're welcome - I'm glad that can be of help.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
