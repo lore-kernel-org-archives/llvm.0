@@ -1,42 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C62963B;
-	Fri, 10 Feb 2023 01:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844AA624;
+	Fri, 10 Feb 2023 01:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675991895; x=1707527895;
+  t=1675994356; x=1707530356;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ll2yXoKA7g4EDQfVpAY2RZFnezn4j169aR6rfZ+443s=;
-  b=FN8ildSY+A8L59cATGU/1zUeIY7BRo5Y9qi67XU8uD3KJ9SIw3sXBA3p
-   Ivx3rf/IDzDQ2ryaMl2mi17B3oXDboClfe5TXvDJ7ol9t/LEjAefUz2eU
-   FjnO5wKsPamkB8hC+x5Gnc+n462SnQ0I1z0brPoX787nQXbVcUL6RQoOs
-   CWAzGdUwmr18Sq1YxOUCHqXeyiLohzU8B5utmT30/WV/iP5u0647Ub1OL
-   xK1yJzOVv4wF8EZQemI+MTO7nhqiOvCaZyIf/wBJWa2Li26Ni/3h1/3w4
-   Rh8nnokTSIMPUfxC/+iop5H8q2e/XeQYXvqT9zfMU1KfcHxveFFHRHhyM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="318318317"
+  bh=G9Lcx3FnINMmOlyeSeP/pVV0yaB2mrasmLWakZilSfY=;
+  b=Y1xrmfbz3q5o5/AhbVCJxwI8o30Xssrw49Rc/RfnF7UtB2Jk7HZFmPUj
+   drjobXC+4swSG7E1ujh7DZLiBR6yyNGZnVeBwbtRg4+c06HdAIiyONby3
+   g+h4ID7iDjausvoLpittyOl6oNlZdOLMkocteSWE+VtVBOeKUS3knjKHD
+   4lN96SYHdOZp/rXEitUL1fye2ssjVnwo1GcGVys6vmQlgaP8qK5/NWxVe
+   qvfG1Ty7h4CSyVj8b88H4E91Uh7lqVcq6zI/64paxAuYsdXtzePnMzk/E
+   LaIpadz0LyQ2ASxNRiEJ62Fbz2hBTyA25p4xgAAcBiLsP8P3JOaBnDTRr
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="392709642"
 X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="318318317"
+   d="scan'208";a="392709642"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 17:18:14 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 17:59:15 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="791799552"
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="791808078"
 X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="791799552"
+   d="scan'208";a="791808078"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 09 Feb 2023 17:18:13 -0800
+  by orsmga004.jf.intel.com with ESMTP; 09 Feb 2023 17:59:14 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pQI3I-0005QD-2m;
-	Fri, 10 Feb 2023 01:18:12 +0000
-Date: Fri, 10 Feb 2023 09:17:43 +0800
+	id 1pQIgz-0005RU-2y;
+	Fri, 10 Feb 2023 01:59:13 +0000
+Date: Fri, 10 Feb 2023 09:58:25 +0800
 From: kernel test robot <lkp@intel.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: Re: [RFC 1/1] v4l: async: Add some debug prints
-Message-ID: <202302100919.j3SFqccW-lkp@intel.com>
+Message-ID: <202302100915.9sd03PJI-lkp@intel.com>
 References: <20230209221634.35239-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,8 +61,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/v4l-async-Ad
 base:   git://linuxtv.org/media_tree.git master
 patch link:    https://lore.kernel.org/r/20230209221634.35239-1-sakari.ailus%40linux.intel.com
 patch subject: [RFC 1/1] v4l: async: Add some debug prints
-config: hexagon-randconfig-r024-20230209 (https://download.01.org/0day-ci/archive/20230210/202302100919.j3SFqccW-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230210/202302100915.9sd03PJI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -72,91 +72,22 @@ reproduce (this is a W=1 build):
         git checkout e7f54a8293c1023ad1d5c5cd757278037d55088f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/v4l2-core/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302100919.j3SFqccW-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302100915.9sd03PJI-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/media/v4l2-core/v4l2-async.c:11:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/media/v4l2-core/v4l2-async.c:11:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/media/v4l2-core/v4l2-async.c:11:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/media/v4l2-core/v4l2-async.c:276:5: error: call to undeclared function 'deb_dbg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> drivers/media/v4l2-core/v4l2-async.c:276:5: error: implicit declaration of function 'deb_dbg' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
                                    deb_dbg(subdev_notifier->sd->dev,
                                    ^
-   drivers/media/v4l2-core/v4l2-async.c:290:1: error: function definition is not allowed here
+>> drivers/media/v4l2-core/v4l2-async.c:290:1: error: function definition is not allowed here
    {
    ^
-   drivers/media/v4l2-core/v4l2-async.c:319:1: error: function declared in block scope cannot have 'static' storage class
+>> drivers/media/v4l2-core/v4l2-async.c:319:1: error: function declared in block scope cannot have 'static' storage class
    static int
    ^
    drivers/media/v4l2-core/v4l2-async.c:324:1: error: function definition is not allowed here
@@ -208,7 +139,7 @@ All errors (new ones prefixed by >>):
    {
    ^
    fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   6 warnings and 20 errors generated.
+   20 errors generated.
 
 
 vim +/deb_dbg +276 drivers/media/v4l2-core/v4l2-async.c
@@ -240,6 +171,44 @@ vim +/deb_dbg +276 drivers/media/v4l2-core/v4l2-async.c
    281		return true;
    282	}
    283	
+   284	/*
+   285	 * Complete the master notifier if possible. This is done when all async
+   286	 * sub-devices have been bound; v4l2_device is also available then.
+   287	 */
+   288	static int
+   289	v4l2_async_nf_try_complete(struct v4l2_async_notifier *notifier)
+ > 290	{
+   291		/* Quick check whether there are still more sub-devices here. */
+   292		if (!list_empty(&notifier->waiting))
+   293			return 0;
+   294	
+   295		if (notifier->sd)
+   296			deb_dbg(notifier->sd->dev, "trying to complete\n");
+   297	
+   298		/* Check the entire notifier tree; find the root notifier first. */
+   299		while (notifier->parent)
+   300			notifier = notifier->parent;
+   301	
+   302		/* This is root if it has v4l2_dev. */
+   303		if (!notifier->v4l2_dev) {
+   304			if (notifier->sd)
+   305				deb_dbg(notifier->sd->dev,
+   306					"V4L2 device not available\n");
+   307			return 0;
+   308		}
+   309	
+   310		/* Is everything ready? */
+   311		if (!v4l2_async_nf_can_complete(notifier))
+   312			return 0;
+   313	
+   314		deb_dbg(notifier->sd->dev, "complete\n");
+   315	
+   316		return v4l2_async_nf_call_complete(notifier);
+   317	}
+   318	
+ > 319	static int
+   320	v4l2_async_nf_try_all_subdevs(struct v4l2_async_notifier *notifier);
+   321	
 
 -- 
 0-DAY CI Kernel Test Service
