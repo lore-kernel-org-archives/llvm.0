@@ -1,80 +1,106 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56AC63AB;
-	Fri, 10 Feb 2023 16:58:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=PIJ0eiwfFC1GcgQRe2pQ3GvN25J7vzagLnLLu75el5k=; b=aRbizo8R1YCqdlZkx3H4Md57rz
-	7rGHnY3xgNI5bMqgSqllNpyBYPxo45kX2INBwQtPauIuM4gpNX0yhXgVatbhMibek/kO3dSjFrXlm
-	nPa08dieeFYxe91EVhmwK9HMW+I1SVkHYJ6PW9m3MlYeqYN/TRceZujurEYhAPsVaNjbnj7gCXltw
-	gnabn4Qxwi/hdtX9TjouFI49tJFQw/WiTLI6cZWNj3pTueje/wpUSwoCG4IvC+bCfSEYJAmpgiZ2d
-	iIfot5NLndR7MbNs44y710y9VrjkIYekN0SvoakB+bp9jCiG2IZ53XavkynjNYkvo/NigP8yt7bCC
-	NPa4LCkg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1pQWjE-003HNs-4D; Fri, 10 Feb 2023 16:58:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AFD63AB
+	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 17:22:15 +0000 (UTC)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F3F8D30030F;
-	Fri, 10 Feb 2023 17:58:27 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id DCB8D2083D40F; Fri, 10 Feb 2023 17:58:27 +0100 (CET)
-Date: Fri, 10 Feb 2023 17:58:27 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [peterz-queue:objtool/shrink-reloc 6/9]
- tools/objtool/include/objtool/elf.h:85:92: error: '_Static_assert' with no
- message is a C2x extension
-Message-ID: <Y+Z3s8RJhkWjg32L@hirez.programming.kicks-ass.net>
-References: <202302110008.pUtcZnVo-lkp@intel.com>
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B00A43F5E0
+	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 17:22:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1676049725;
+	bh=S/oztqFWeJmzmDr/U8nZfNkMKK2hxPAiujJO+Umo16I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=qvyPWeT34QkKF1H90NqcC7RCf83vXhwFnQhk/wrRuX5Aj1g5g7vpqiTmwCiveUY+5
+	 GJpnPDgXs3N+jMEd3F+8OvKLzE16LZkNR8LxRqT1+iKbJ4eNs6r00t6J28sCzTuszk
+	 T2S/vCt+ckG6nnjKo8ilJBFkxAVGuPYaX4HV/hBE3L3oDJMcIPQafV+ozpsZxsNCLh
+	 e2O3zHef9VITfFTI6UOD1EChWAuvwOGzsfV7rlPfEe1yQ4YGCGPc29KGC4FDVbU53g
+	 MGLt9aZILvjU5kphfwZPeneeZAhVB4T1TG7V5W7SUaAFUcJkGZxjaMvag+X//qgoIX
+	 UhXTyXfVeJtXQ==
+Received: by mail-ej1-f69.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso3957341ejb.14
+        for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 09:22:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S/oztqFWeJmzmDr/U8nZfNkMKK2hxPAiujJO+Umo16I=;
+        b=CpeVFaSOicsH8K2uow8XnS9mV07gB7TRqkzl+saJg8NKQq59rpQ4L46KgO9N/Kdmw9
+         7HNvd0NTGQf9fzzADtsNXkmYzFlcuNPJbVxckrrU/otqfhtIQKLGEOTKqDrSVc/Og/j/
+         fg8f3fMedpQ3yWtT3U5pbcsR4QyBAtpuspgXDEBrGOHnPj1Sf0XLXMkLfplLj45yvwm/
+         hUbxS2skk2eI4i+7XLvJgHdyFrP2K1nVuVntp320JagdkiEmzMERK6Q7SHNJi6EMmoNB
+         2VG5VUrlFcA9Y8dyEZx4AZB7fuEKeGoKxIFsc2lDCnAClZubG/167XwXhi5O5E8M/lMk
+         374A==
+X-Gm-Message-State: AO0yUKVsLIBP/2yyp9h4f6MF1vl+tdnyLnzKW7hq3t2Sh5vWPMEOv03Q
+	zDzbjG/x/kcqG0uf0scxq2Us2hgGfcSB+sx55aLf8xp3bRx+tbwBwZgK1InQ2IztrTX5KR584io
+	HCgRwrE1tN5bNjj8mbOn7C3e+nyDvX/Q=
+X-Received: by 2002:a17:906:1614:b0:87b:dba1:1bf3 with SMTP id m20-20020a170906161400b0087bdba11bf3mr16347219ejd.30.1676049725207;
+        Fri, 10 Feb 2023 09:22:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set/YIySZYVz31YG5CrgtiBo3ntekvjcI08pZJN9QSahhumZtZTxLAgUnewRtPJBbaHEL0+GH+g==
+X-Received: by 2002:a17:906:1614:b0:87b:dba1:1bf3 with SMTP id m20-20020a170906161400b0087bdba11bf3mr16347206ejd.30.1676049725036;
+        Fri, 10 Feb 2023 09:22:05 -0800 (PST)
+Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-87-7-128-191.retail.telecomitalia.it. [87.7.128.191])
+        by smtp.gmail.com with ESMTPSA id i12-20020a170906250c00b008adc971f5acsm2655543ejb.178.2023.02.10.09.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 09:22:04 -0800 (PST)
+From: Andrea Righi <andrea.righi@canonical.com>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	bjorn3_gh@protonmail.com,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rust: allow to use INIT_STACK_ALL_ZERO
+Date: Fri, 10 Feb 2023 18:22:03 +0100
+Message-Id: <20230210172203.101331-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.37.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202302110008.pUtcZnVo-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Feb 11, 2023 at 12:50:43AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git objtool/shrink-reloc
-> head:   6aedb7889b9dbd5094ff15b388ac2d2f6663148c
-> commit: 371de6c485805b337819a1a5f4a2f37ec739f328 [6/9] objtool: Remove reloc::offset
-> config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230211/202302110008.pUtcZnVo-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=371de6c485805b337819a1a5f4a2f37ec739f328
->         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
->         git fetch --no-tags peterz-queue objtool/shrink-reloc
->         git checkout 371de6c485805b337819a1a5f4a2f37ec739f328
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202302110008.pUtcZnVo-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from weak.c:10:
->    In file included from tools/objtool/include/objtool/objtool.h:13:
-> >> tools/objtool/include/objtool/elf.h:85:92: error: '_Static_assert' with no message is a C2x extension [-Werror,-Wc2x-extensions]
->    static_assert(offsetof(struct reloc, rela.r_offset) == offsetof(struct reloc, rel.r_offset));
->                                                                                               ^
+With CONFIG_INIT_STACK_ALL_ZERO enabled, bindgen is passing
+-ftrivial-auto-var-init=zero to clang, that triggers the following:
 
-Boo, I included build_bug.h which has:
+  error: '-ftrivial-auto-var-init=zero' hasn't been enabled; enable it at your own peril for benchmarking purpose only with '-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang'
 
-tools/include/linux/build_bug.h:#define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+This flag should be dropped in clang-17, but at the moment it seems more
+reasonable to add it to the bindgen CFLAGS to prevent the error above.
 
-I'll go dig out me clang I suppose.
+In this way we can enable CONFIG_INIT_STACK_ALL_ZERO with CONFIG_RUST
+without triggering any build error.
+
+Link: https://reviews.llvm.org/D125142
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ rust/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/rust/Makefile b/rust/Makefile
+index ff70c4c916f8..5e26db07a1dc 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -267,7 +267,8 @@ BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
+ # All warnings are inhibited since GCC builds are very experimental,
+ # many GCC warnings are not supported by Clang, they may only appear in
+ # some configurations, with new GCC versions, etc.
+-bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET)
++bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET) \
++			-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+ 
+ bindgen_c_flags = $(filter-out $(bindgen_skip_c_flags), $(c_flags)) \
+ 	$(bindgen_extra_c_flags)
+-- 
+2.37.2
+
