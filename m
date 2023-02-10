@@ -1,97 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E54A29
-	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 09:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1676022923;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XlYTQ4KlxOnSSgOz5EYIJQVx78dcnp/7ObBZhHdZOfo=;
-	b=AFYsqaLP07REA8xGySf/LhwgISCO51Xn1ILsKIBY+XgUubhDocHPoLU0fLtdD592oaFqeY
-	In6cvGHCgGFInltu6m+rZDe9cVmZs8Wbg3DwVsxmk/Z3oB8O9RtPqVqX7gj9e68ANph+Sm
-	vlQzT2luRFl/w+7mR5kRGSZR5ur2mtU=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-587-wZfglyESPpaqiiAkPNLjIg-1; Fri, 10 Feb 2023 04:55:21 -0500
-X-MC-Unique: wZfglyESPpaqiiAkPNLjIg-1
-Received: by mail-ej1-f69.google.com with SMTP id ud13-20020a170907c60d00b0088d773d11d6so3287065ejc.17
-        for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 01:55:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XlYTQ4KlxOnSSgOz5EYIJQVx78dcnp/7ObBZhHdZOfo=;
-        b=PHSw7zKJ/oL9BDhaGevAF52mpkgjZphVZNROoa+DSdeOYxbyYtTgvCS7Zdrs8TLkwv
-         9mKZ0BKgb3rDdaRwB/FuAAe1TWvf1KxMW+A8osThw01RONyH1bzQvU8eHdC+h/oY23Fb
-         6Wg3Aq5i/Q37np/KNNg6Kg9nsd1myk9ehqxpsVPK1FCT7od3XDJxnoOGz161IFVmW/nG
-         w51l7fMwKLonoRzvOW8hgho0LHC06fhHiq1EpnAQDcVQyR649SiKNiyMpqmJkFDy0VnD
-         Sd9ITxbaerPsCiTEwLptDWoQHIMGo5+8n/8j+as9GW6VcxUeqAGxcaNFm6m+QB0pZqC3
-         sgQQ==
-X-Gm-Message-State: AO0yUKUUj5dVng+QR9ayKpnoTQ7M+eeuibkCgo8rfOzEpwIx7Kc+F/XM
-	zkzjmdgpklpl0tuDfwyDIAiDIN6IFFpl3weqfyKpm9nZtlwx9q+QuFOaHsd0nj31l4KcFuTcEf3
-	jFIWzSvsdk76w7A==
-X-Received: by 2002:a17:907:8e86:b0:8aa:33c4:87d5 with SMTP id tx6-20020a1709078e8600b008aa33c487d5mr14015956ejc.10.1676022920962;
-        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
-X-Google-Smtp-Source: AK7set8l6KUkKlyqNem1AZE2/KhW2JD0JqV9K6hSx1e0fgBDbFsSiIPL5QzIdySg4c0oOxOTyn5rmw==
-X-Received: by 2002:a17:907:8e86:b0:8aa:33c4:87d5 with SMTP id tx6-20020a1709078e8600b008aa33c487d5mr14015949ejc.10.1676022920808;
-        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id a18-20020a170906469200b007c0f217aadbsm2140397ejr.24.2023.02.10.01.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>
-Cc: Tom Rix <trix@redhat.com>, kvm@vger.kernel.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for
- CONFIG_HYPERV=n
-In-Reply-To: <Y+WaN8wW1EOvPbXe@google.com>
-References: <20230208205430.1424667-1-seanjc@google.com>
- <20230208205430.1424667-3-seanjc@google.com> <87mt5n6kx6.fsf@redhat.com>
- <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
- <Y+WaN8wW1EOvPbXe@google.com>
-Date: Fri, 10 Feb 2023 10:55:19 +0100
-Message-ID: <875yc97sl4.fsf@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF4129B2;
+	Fri, 10 Feb 2023 14:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676040399; x=1707576399;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=X3xev8+tskKaG0Dy2mAgphq3OnYsBs3TUzAemdfTQzk=;
+  b=J6m3hcPJjFGkVHgo9whHSe6vdytCRLxIOOfu66X3f1I5TiZXq4CNGeJb
+   +Wjhq+ooIl6DUG9sof6dr9gLPA3z+9lUfkVRQSvGBpnzyWxqdST6Bnhk6
+   B58qHU/bJOhAsWb76EjDR9S98fxoXVe+FDQGZdFU6pb94O5bsvLGLVpiP
+   SngalpK+VH+BiQ0NmvtUd3ZoMJ9fbFEFi7bgUsjlK7ClPOOikmI1KVrUe
+   fP4PXaUk01tu0CPfintNEBQQwlSSHo+R1lBZbzXPIWAD3oPJKFS3axsQm
+   6uBagRsq0/nx0pXIsy0THd++nYQZRI6J4SV08dQBRNsuFHpHglJdaEa8A
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="328122444"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="328122444"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 06:46:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="756808500"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="756808500"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Feb 2023 06:46:37 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pQUfd-0005qb-0Y;
+	Fri, 10 Feb 2023 14:46:37 +0000
+Date: Fri, 10 Feb 2023 22:46:15 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [peterz-queue:x86/core 6/6] vmlinux.o: warning: objtool:
+ __switch_to_asm+0x22: stack layout conflict in alternatives
+Message-ID: <202302102228.sghZkWJW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Sean Christopherson <seanjc@google.com> writes:
+TO: Peter Zijlstra <peterz@infradead.org>
 
-> On Thu, Feb 09, 2023, Paolo Bonzini wrote:
->> On 2/9/23 14:13, Vitaly Kuznetsov wrote:
->> > > +static __always_inline bool is_evmcs_enabled(void)
->> > > +{
->> > > +	return static_branch_unlikely(&enable_evmcs);
->> > > +}
->> > I have a suggestion. While 'is_evmcs_enabled' name is certainly not
->> > worse than 'enable_evmcs', it may still be confusing as it's not clear
->> > which eVMCS is meant: are we running a guest using eVMCS or using eVMCS
->> > ourselves? So what if we rename this to a very explicit 'is_kvm_on_hyperv()'
->> > and hide the implementation details (i.e. 'evmcs') inside?
->> 
->> I prefer keeping eVMCS in the name,
->
-> +1, IIUC KVM can run on Hyper-V without eVMCS being enabled.
->
->> but I agree a better name could be something like kvm_uses_evmcs()?
->
-> kvm_is_using_evmcs()?
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/core
+head:   cc1feb4e38be192cd99f7598777ff691f8a8a20e
+commit: cc1feb4e38be192cd99f7598777ff691f8a8a20e [6/6] x86: Tweak FILL_RETURN_BUFFER some more
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230210/202302102228.sghZkWJW-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=cc1feb4e38be192cd99f7598777ff691f8a8a20e
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/core
+        git checkout cc1feb4e38be192cd99f7598777ff691f8a8a20e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Sounds good to me!
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302102228.sghZkWJW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: __switch_to_asm+0x22: stack layout conflict in alternatives
+   vmlinux.o: warning: objtool: sync_regs+0x23: call to memcpy() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x25: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __ct_user_enter+0x76: call to __kasan_check_write() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __ct_user_exit+0x4b: call to __kasan_check_write() leaves .noinstr.text section
+
+
+objdump-func vmlinux.o __switch_to_asm:
+0000 0000000000002910 <__switch_to_asm>:
+0000     2910:	f3 0f 1e fa          	endbr64
+0004     2914:	55                   	push   %rbp
+0005     2915:	53                   	push   %rbx
+0006     2916:	41 54                	push   %r12
+0008     2918:	41 55                	push   %r13
+000a     291a:	41 56                	push   %r14
+000c     291c:	41 57                	push   %r15
+000e     291e:	48 89 a7 d8 23 00 00 	mov    %rsp,0x23d8(%rdi)
+0015     2925:	48 8b a6 d8 23 00 00 	mov    0x23d8(%rsi),%rsp
+001c     292c:	90                   	nop
+001d     292d:	90                   	nop
+001e     292e:	90                   	nop
+001f     292f:	90                   	nop
+0020     2930:	90                   	nop
+0021     2931:	90                   	nop
+0022     2932:	90                   	nop
+0023     2933:	90                   	nop
+0024     2934:	90                   	nop
+0025     2935:	90                   	nop
+0026     2936:	90                   	nop
+0027     2937:	90                   	nop
+0028     2938:	90                   	nop
+0029     2939:	90                   	nop
+002a     293a:	90                   	nop
+002b     293b:	90                   	nop
+002c     293c:	90                   	nop
+002d     293d:	90                   	nop
+002e     293e:	90                   	nop
+002f     293f:	90                   	nop
+0030     2940:	90                   	nop
+0031     2941:	90                   	nop
+0032     2942:	90                   	nop
+0033     2943:	90                   	nop
+0034     2944:	90                   	nop
+0035     2945:	90                   	nop
+0036     2946:	90                   	nop
+0037     2947:	90                   	nop
+0038     2948:	90                   	nop
+0039     2949:	90                   	nop
+003a     294a:	90                   	nop
+003b     294b:	41 5f                	pop    %r15
+003d     294d:	41 5e                	pop    %r14
+003f     294f:	41 5d                	pop    %r13
+0041     2951:	41 5c                	pop    %r12
+0043     2953:	5b                   	pop    %rbx
+0044     2954:	5d                   	pop    %rbp
+0045     2955:	e9 00 00 00 00       	jmp    295a <__switch_to_asm+0x4a>	2956: R_X86_64_PLT32	__switch_to-0x4
+004a     295a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
 -- 
-Vitaly
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
