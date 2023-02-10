@@ -1,85 +1,184 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A737763AB
-	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 17:39:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A102FC433EF;
-	Fri, 10 Feb 2023 17:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D370463AB
+	for <llvm@lists.linux.dev>; Fri, 10 Feb 2023 18:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9687C4339E;
+	Fri, 10 Feb 2023 18:18:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676050770;
-	bh=kiy2JiN2biw1ATOIFFLZuY+hz6dWKYNT6+5fl2JtzAU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MvkqdS/s0ZzVDElBVxJvXMgBEuwCJU1JDYZrEG5eE4Orc4oMfbDYzFWd7BU/zSCNn
-	 stkVs6qBmtqAuFtOUc98jCF58fnXRU4PPAIXMRgl1IyYbxAjOS7rVzt0cIdcrXz2Uv
-	 CGKn4Az9g/HfjBuEekre7sTRwM1FGcfSBhJk777YNRaIkXT2GT0x2m/TDRciQgKF1n
-	 szBTirfQ6IozKu8/5Ket22iu1FWwqs5cD9a/uBST7O7GfouoVdJojVxxs7m9aWx/uL
-	 /wEkMxD3Y/k0TBOLmkJuggcSO/NWayUHqQvR3EgaLV7SCf8gwNfhZr/B3uB9LN9/6L
-	 OpQXdVzO7V+bw==
-Date: Fri, 10 Feb 2023 10:39:27 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andrea Righi <andrea.righi@canonical.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	bjorn3_gh@protonmail.com,
+	s=k20201202; t=1676053118;
+	bh=OOnQiLtiUJOqoDdzJaP936hrThLt6/kh3l2/k+KX7a4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TcnPILo3ifUOzSjnjIJD8HddzLBYjFKyGJWT2qDyb8TEg3hHJZhrbyMm5CifS1SOi
+	 7wNojkMhvLvjxjNFQFCqrP/FsXzQ7X1JE3unugRnE6KNkRbXXLhgBx9SukXe0xNVSh
+	 YRRSa/KV40FwBltSA6l7JZCxOVIHyVPzBFW7uFy7tHEcC0UZWhqScxOkSOeLQIx6s1
+	 vM9oV1lQjvATqH35a5Q2OzKoLIegya7YhzHbOLQWubjS8v3Ho+1pduf7XwOCnEVRZF
+	 gcs537M8ATNLtaJ/geUJR97AUp5ZKM2fq2OkfAi35j+IKL9YwM2mrEe8+iz9GaIjaS
+	 auZQpo86cSaJA==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rust: allow to use INIT_STACK_ALL_ZERO
-Message-ID: <Y+aBT8AD9RXde24X@dev-arch.thelio-3990X>
-References: <20230210172203.101331-1-andrea.righi@canonical.com>
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Ben Hutchings <ben@decadent.org.uk>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH v5 2/7] kbuild: deb-pkg: create source package without cleaning
+Date: Sat, 11 Feb 2023 03:18:23 +0900
+Message-Id: <20230210181828.124765-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230210181828.124765-1-masahiroy@kernel.org>
+References: <20230210181828.124765-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210172203.101331-1-andrea.righi@canonical.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 10, 2023 at 06:22:03PM +0100, Andrea Righi wrote:
-> With CONFIG_INIT_STACK_ALL_ZERO enabled, bindgen is passing
-> -ftrivial-auto-var-init=zero to clang, that triggers the following:
-> 
->   error: '-ftrivial-auto-var-init=zero' hasn't been enabled; enable it at your own peril for benchmarking purpose only with '-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang'
-> 
-> This flag should be dropped in clang-17, but at the moment it seems more
-> reasonable to add it to the bindgen CFLAGS to prevent the error above.
-> 
-> In this way we can enable CONFIG_INIT_STACK_ALL_ZERO with CONFIG_RUST
-> without triggering any build error.
-> 
-> Link: https://reviews.llvm.org/D125142
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+If you run 'make deb-pkg', all objects are lost due to 'make clean',
+which makes the incremental builds impossible.
 
-If this went via the kbuild tree, would we be able to use
-$(CC_AUTO_VAR_INIT_ZERO_ENABLER)?
+Instead of cleaning, pass the exclude list to tar's --exclude-from
+option.
 
-https://git.kernel.org/masahiroy/linux-kbuild/c/4e3feaad6ff8a7a57e3bf3308a93c93e3a2e17a6
+Previously, *.diff.gz contained some check-in files such as
+.clang-format, .cocciconfig.
 
-Although, I suppose this could be a problem if the version of clang
-being used to build the kernel does not support this flag while the
-version of libclang in bindgen requires it?
+With this commit, *.diff.gz will only contain the .config and debian/.
+The other source files will go into the .orig tarball.
 
-> ---
->  rust/Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/rust/Makefile b/rust/Makefile
-> index ff70c4c916f8..5e26db07a1dc 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -267,7 +267,8 @@ BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
->  # All warnings are inhibited since GCC builds are very experimental,
->  # many GCC warnings are not supported by Clang, they may only appear in
->  # some configurations, with new GCC versions, etc.
-> -bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET)
-> +bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET) \
-> +			-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
->  
->  bindgen_c_flags = $(filter-out $(bindgen_skip_c_flags), $(c_flags)) \
->  	$(bindgen_extra_c_flags)
-> -- 
-> 2.37.2
-> 
+linux.tar.gz is rebuilt only when the source files that would go into
+the tarball are changed.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+Changes in v5:
+  - Avoid unneeded rebuild of the tarball when nothing in the source tree
+    is changed.
+
+Changes in v4:
+  - Fix a typo in comment
+
+Changes in v3:
+  - Add --extra-pattern='*.rej'
+  - Exclude symlinks at the toplevel
+  - Add --sort=name tar option
+
+ scripts/Makefile.package | 40 ++++++++++++++++++++++++++++++++++------
+ scripts/package/mkdebian | 24 ++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+), 6 deletions(-)
+
+diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+index dfbf40454a99..0dda909f87a9 100644
+--- a/scripts/Makefile.package
++++ b/scripts/Makefile.package
+@@ -80,13 +80,12 @@ binrpm-pkg:
+ 		$(UTS_MACHINE)-linux -bb $(objtree)/binkernel.spec
+ 
+ PHONY += deb-pkg
+-deb-pkg:
+-	$(MAKE) clean
++deb-pkg: linux.tar.gz
+ 	$(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
+-	$(call cmd,src_tar,$(KDEB_SOURCENAME))
+-	origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
+-		mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
+-	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
++	$(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
++		cp linux.tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
++	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
++		--build=source,binary --source-option=-sP -nc -us -uc
+ 
+ PHONY += bindeb-pkg
+ bindeb-pkg:
+@@ -120,6 +119,32 @@ $(tar-pkgs):
+ 	$(MAKE) -f $(srctree)/Makefile
+ 	+$(CONFIG_SHELL) $(srctree)/scripts/package/buildtar $@
+ 
++# Source Tarball
++# ---------------------------------------------------------------------------
++
++scripts/list-gitignored: FORCE
++	$(Q)$(MAKE) -f $(srctree)/Makefile scripts_package
++
++# 1f5d3a6b6532e25a5cdf1f311956b2b03d343a48 removed '*.rej' from .gitignore,
++# but it is definitely a generated file.
++filechk_filelist = \
++	$< --exclude='*.rej' --output=$@_exclude --prefix=./ --rootdir=$(srctree) --stat=-
++
++.tmp_filelist: scripts/list-gitignored FORCE
++	$(call filechk,filelist)
++
++quiet_cmd_tar = TAR     $@
++      cmd_tar = tar $(compress-opt) -c -f $@ \
++                --exclude=./$@ --exclude-from=$<_exclude \
++                --owner=0 --group=0 --sort=name \
++                --transform 's:^\.:$*:S' -C $(tar-rootdir) .
++
++tar-rootdir := $(srctree)
++
++%.tar.gz: compress-opt := -I $(KGZIP)
++%.tar.gz: .tmp_filelist
++	$(call cmd,tar)
++
+ # perf-pkg - generate a source tarball with perf source
+ # ---------------------------------------------------------------------------
+ 
+@@ -174,4 +199,7 @@ help:
+ 	@echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
+ 	@echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
+ 
++PHONY += FORCE
++FORCE:
++
+ .PHONY: $(PHONY)
+diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+index c3bbef7a6754..68b13ef590ba 100755
+--- a/scripts/package/mkdebian
++++ b/scripts/package/mkdebian
+@@ -84,6 +84,8 @@ set_debarch() {
+ 	fi
+ }
+ 
++rm -rf debian
++
+ # Some variables and settings used throughout the script
+ version=$KERNELRELEASE
+ if [ -n "$KDEB_PKGVERSION" ]; then
+@@ -135,6 +137,28 @@ fi
+ mkdir -p debian/source/
+ echo "1.0" > debian/source/format
+ 
++# Ugly: ignore anything except .config or debian/
++cat<<'EOF' > debian/source/local-options
++diff-ignore
++
++extend-diff-ignore = ^[^.d]
++
++extend-diff-ignore = ^\.[^c]
++extend-diff-ignore = ^\.c($|[^o])
++extend-diff-ignore = ^\.co($|[^n])
++extend-diff-ignore = ^\.con($|[^f])
++extend-diff-ignore = ^\.conf($|[^i])
++extend-diff-ignore = ^\.confi($|[^g])
++extend-diff-ignore = ^\.config.
++
++extend-diff-ignore = ^d($|[^e])
++extend-diff-ignore = ^de($|[^b])
++extend-diff-ignore = ^deb($|[^i])
++extend-diff-ignore = ^debi($|[^a])
++extend-diff-ignore = ^debia($|[^n])
++extend-diff-ignore = ^debian[^/]
++EOF
++
+ echo $debarch > debian/arch
+ extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
+ extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
+-- 
+2.34.1
+
