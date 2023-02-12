@@ -1,114 +1,156 @@
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A83F1C11;
-	Sun, 12 Feb 2023 12:53:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D742FAE;
+	Sun, 12 Feb 2023 17:40:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676206427; x=1707742427;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TUnLdQngEgMWvrkAudk6ufpyfmAnF3rSTSx+s3TYcnY=;
-  b=RkbYKOHhRfIizglX1uM6IpjjkpXJHVTDlsjFMzRRgtOCHRcbdEOivLFY
-   d51sy3HyygoFkHw/aQ/p6gkoV9Dx9L4vn3tuRfGvn3e+pOY4Ocug1COmn
-   VyC/3fwtw+/qYqI2c9pGgQXI7irJs4RfrPBt8ooutmT6iehvc9rAOIf/0
-   rK3TiWhBOi01GOUnqhg1FZOHmigH7grLdeHLaRF7Nns+kT/+JlXUqEvSE
-   mk+9EqA4WnMZLn6zg2SsOp+381bkDIkFyAqbhNVG56UcTSwKKnosoYbYG
-   pN33flH/eMdEFcvsFJpcSJBahmwuNt5aj0PMkzLoHb2cCLC5xx97XIqju
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="310346661"
+  t=1676223651; x=1707759651;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JalP5dtsNS/nATntKYEV0q2+m7k5PGCKfAM66VU2UzY=;
+  b=M+rjiHeOheXxYOigNOOJwVCRpC5aVbMP1NQFMm+qlQ1DSwcE4cKmKgz9
+   opA4rqsE+2HB8lsPqGfQkRm0X4cZtnZloMCodYB7d7Br+zWnE5G0XOqjz
+   ol6Rtiq+rBKsqoTCT8s4CXlddm8NGAlhkVJ4J45H7zy0tThMssXqQEXGy
+   Q5NqekN0vWIsRnHEtd5LteuZYpJqjtL9BTIdznB+HF+vZLRwghRtJYBhK
+   PCqUR71uJCHpEc7aD2V1H3+7nJlEJVs2XhZHbxU9tO9VDMZzpJA62FykK
+   WbRPPDcQBVHB1khRlj6O6hXGSJNnlZh7wjFo0xF6/0bVioQNGeVDXhbzl
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="310369755"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="310346661"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 04:53:46 -0800
+   d="scan'208";a="310369755"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 09:40:50 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="842494185"
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="661936353"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="842494185"
+   d="scan'208";a="661936353"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2023 04:53:44 -0800
+  by orsmga007.jf.intel.com with ESMTP; 12 Feb 2023 09:40:49 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pRBrT-0007DZ-2h;
-	Sun, 12 Feb 2023 12:53:43 +0000
-Date: Sun, 12 Feb 2023 20:52:49 +0800
+	id 1pRGLI-0007Kf-1N;
+	Sun, 12 Feb 2023 17:40:48 +0000
+Date: Mon, 13 Feb 2023 01:40:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
- unused variable 'mtk_mdp_comp_dt_ids'
-Message-ID: <202302122022.1CJ8CO2t-lkp@intel.com>
+To: Vincent Donnefort <vdonnefort@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 1/2] ring-buffer: Introducing ring-buffer mapping
+ functions
+Message-ID: <202302130151.k3aXQ5zK-lkp@intel.com>
+References: <20230212153250.1099136-2-vdonnefort@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230212153250.1099136-2-vdonnefort@google.com>
 
-Hi Mauro,
+Hi Vincent,
 
-First bad commit (maybe != root cause):
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on linus/master]
+[also build test WARNING on rostedt-trace/for-next]
+[cannot apply to rostedt-trace/for-next-urgent]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f339c2597ebb00e738f2b6328c14804ed19f5d57
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   11 months ago
-config: hexagon-randconfig-r022-20230212 (https://download.01.org/0day-ci/archive/20230212/202302122022.1CJ8CO2t-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Donnefort/ring-buffer-Introducing-ring-buffer-mapping-functions/20230212-233420
+patch link:    https://lore.kernel.org/r/20230212153250.1099136-2-vdonnefort%40google.com
+patch subject: [RFC PATCH 1/2] ring-buffer: Introducing ring-buffer mapping functions
+config: hexagon-randconfig-r045-20230212 (https://download.01.org/0day-ci/archive/20230213/202302130151.k3aXQ5zK-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
+        # https://github.com/intel-lab-lkp/linux/commit/96cfb7d92682fb5df39febc590fec75748b47e15
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vincent-Donnefort/ring-buffer-Introducing-ring-buffer-mapping-functions/20230212-233420
+        git checkout 96cfb7d92682fb5df39febc590fec75748b47e15
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302122022.1CJ8CO2t-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302130151.k3aXQ5zK-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-                                    ^
-   1 warning generated.
+   In file included from kernel/trace/ring_buffer.c:7:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/trace/ring_buffer.c:7:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/trace/ring_buffer.c:7:
+   In file included from include/linux/trace_recursion.h:5:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/trace/ring_buffer.c:6017:6: warning: no previous prototype for function 'rb_put_mapped_buffer' [-Wmissing-prototypes]
+   void rb_put_mapped_buffer(struct ring_buffer_per_cpu *cpu_buffer)
+        ^
+   kernel/trace/ring_buffer.c:6017:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void rb_put_mapped_buffer(struct ring_buffer_per_cpu *cpu_buffer)
+   ^
+   static 
+   7 warnings generated.
 
 
-vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+vim +/rb_put_mapped_buffer +6017 kernel/trace/ring_buffer.c
 
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
-
-:::::: The code at line 31 was first introduced by commit
-:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
-
-:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+  6016	
+> 6017	void rb_put_mapped_buffer(struct ring_buffer_per_cpu *cpu_buffer)
+  6018	{
+  6019		up_read(&cpu_buffer->mapping_lock);
+  6020	}
+  6021	
 
 -- 
 0-DAY CI Kernel Test Service
