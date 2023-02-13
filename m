@@ -1,44 +1,45 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAFF4A3C;
-	Sun, 12 Feb 2023 19:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8077E;
+	Mon, 13 Feb 2023 00:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676229232; x=1707765232;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EnVh+TMc/Kqhtg7XlE8FGgry+SLMyX7biBGsg3Vw90Q=;
-  b=nVsydrkkVaLLJRG71yaO6tXuF+KDGjeJ9ugGEKAw/ZbFqBWu8AKrJ39R
-   4EpL+QqTWtRz3Aqr3iZqKjY9XnGWI8SfImfx67O404sC6TsHNv47bSMq+
-   6EWhxikjvE2m1QLqJn1w62WXj4ErAB4Uj7rJzo/yecB8xyMDRKeaGyUQT
-   s0Oxzgt+B+b2HEnYh/Stcf1YTaOhfODYx4yuIuGoJ9pzhcPiLcHs9CxFC
-   iGhsoGQqLkdzU++iE6I5b3OXgXxOA70n24cTVL8PHeKx55S29NLuH5St0
-   GrlhsuWEwggCg2T9PQJNg3cZ0bS9knqhcx8HOpawLnL6sguCIkPoi1fNC
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="395359634"
+  t=1676249884; x=1707785884;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CURrrhcMF9Es3tTPm7Xob2bMUXQmeCWTB6KzxHKsK9c=;
+  b=AyvNbZGcWiSfN8SShpuq4T7/H+Hmeai7XnDyHIhYmANlZrnjD4v/IK01
+   oaATHTD/mZAA07GjxdXFCse+U60JWPNW+lw2MyxqhWzP7D8fsOvJlNkEo
+   PQCmuDTtZuQVyg5ZUFv+sbfaeYWYjJ4Ju1AIyfO+3q8a7oXhLye7LkIir
+   SAT/xfWXXxseTdHIB1xjfIwQ3V64dC0FWpaU7WInlfA8wQCAKLqUpaBd3
+   bpn3EUqGv679QEsL6IzbA4+p2I5Dlvq404ACYXEUcn/sLgt+tGxmi4dXf
+   4rgRNcICulJFvQayT21m9TI3AdOX7SvoRC8gxT8SyoZwg5n7SkbZOh+43
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="358190410"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="395359634"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 11:13:52 -0800
+   d="scan'208";a="358190410"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 16:58:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="701025425"
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="842597401"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="701025425"
+   d="scan'208";a="842597401"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 12 Feb 2023 11:13:51 -0800
+  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2023 16:58:00 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pRHnK-0007Mj-1c;
-	Sun, 12 Feb 2023 19:13:50 +0000
-Date: Mon, 13 Feb 2023 03:13:26 +0800
+	id 1pRNAN-0007T9-1C;
+	Mon, 13 Feb 2023 00:57:59 +0000
+Date: Mon, 13 Feb 2023 08:57:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vincent Donnefort <vdonnefort@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 1/2] ring-buffer: Introducing ring-buffer mapping
- functions
-Message-ID: <202302130237.SsIcHbaP-lkp@intel.com>
-References: <20230212153250.1099136-2-vdonnefort@google.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+	Steve French <stfrench@microsoft.com>
+Subject: [cifs:for-next 20/25] fs/netfs/iterator.c:65:9: error: call to
+ undeclared function 'iov_iter_extract_pages'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202302130853.kU76MQRK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,64 +48,103 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230212153250.1099136-2-vdonnefort@google.com>
 
-Hi Vincent,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on linus/master]
-[also build test ERROR on rostedt-trace/for-next v6.2-rc7 next-20230210]
-[cannot apply to rostedt-trace/for-next-urgent]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Donnefort/ring-buffer-Introducing-ring-buffer-mapping-functions/20230212-233420
-patch link:    https://lore.kernel.org/r/20230212153250.1099136-2-vdonnefort%40google.com
-patch subject: [RFC PATCH 1/2] ring-buffer: Introducing ring-buffer mapping functions
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230213/202302130237.SsIcHbaP-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+head:   2259206443e31ea6a266adcf0d900fbea17016ec
+commit: d1df0021a8275ef2e0d455b384e78e18e57cf9f2 [20/25] netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
+config: arm-buildonly-randconfig-r005-20230213 (https://download.01.org/0day-ci/archive/20230213/202302130853.kU76MQRK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/96cfb7d92682fb5df39febc590fec75748b47e15
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vincent-Donnefort/ring-buffer-Introducing-ring-buffer-mapping-functions/20230212-233420
-        git checkout 96cfb7d92682fb5df39febc590fec75748b47e15
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add cifs git://git.samba.org/sfrench/cifs-2.6.git
+        git fetch --no-tags cifs for-next
+        git checkout d1df0021a8275ef2e0d455b384e78e18e57cf9f2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/netfs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302130237.SsIcHbaP-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302130853.kU76MQRK-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/trace_mmap.h:5:2: error: unknown type name '__u64'
-           __u64           entries;
+   In file included from fs/netfs/iterator.c:11:
+   include/linux/netfs.h:302:5: error: unknown type name 'iov_iter_extraction_t'
+                                   iov_iter_extraction_t extraction_flags);
+                                   ^
+   fs/netfs/iterator.c:36:5: error: unknown type name 'iov_iter_extraction_t'
+                                   iov_iter_extraction_t extraction_flags)
+                                   ^
+>> fs/netfs/iterator.c:65:9: error: call to undeclared function 'iov_iter_extract_pages'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   ret = iov_iter_extract_pages(orig, &pages, count,
+                         ^
+   fs/netfs/iterator.c:65:9: note: did you mean 'iov_iter_get_pages'?
+   include/linux/uio.h:253:9: note: 'iov_iter_get_pages' declared here
+   ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
            ^
-   ./usr/include/linux/trace_mmap.h:6:2: error: unknown type name '__u64'
-           __u64           overrun;
-           ^
->> ./usr/include/linux/trace_mmap.h:7:2: error: unknown type name '__u32'
-           __u32           pages_touched;
-           ^
-   ./usr/include/linux/trace_mmap.h:8:2: error: unknown type name '__u32'
-           __u32           reader_page;
-           ^
-   ./usr/include/linux/trace_mmap.h:9:2: error: unknown type name '__u32'
-           __u32           nr_data_pages;
-           ^
-   ./usr/include/linux/trace_mmap.h:10:2: error: unknown type name '__u32'
-           __u32           data_page_head;
-           ^
-   ./usr/include/linux/trace_mmap.h:11:2: error: unknown type name '__u32'
-           __u32           data_pages[];
-           ^
-   7 errors generated.
+   3 errors generated.
+
+
+vim +/iov_iter_extract_pages +65 fs/netfs/iterator.c
+
+    13	
+    14	/**
+    15	 * netfs_extract_user_iter - Extract the pages from a user iterator into a bvec
+    16	 * @orig: The original iterator
+    17	 * @orig_len: The amount of iterator to copy
+    18	 * @new: The iterator to be set up
+    19	 * @extraction_flags: Flags to qualify the request
+    20	 *
+    21	 * Extract the page fragments from the given amount of the source iterator and
+    22	 * build up a second iterator that refers to all of those bits.  This allows
+    23	 * the original iterator to disposed of.
+    24	 *
+    25	 * @extraction_flags can have ITER_ALLOW_P2PDMA set to request peer-to-peer DMA be
+    26	 * allowed on the pages extracted.
+    27	 *
+    28	 * On success, the number of elements in the bvec is returned, the original
+    29	 * iterator will have been advanced by the amount extracted.
+    30	 *
+    31	 * The iov_iter_extract_mode() function should be used to query how cleanup
+    32	 * should be performed.
+    33	 */
+    34	ssize_t netfs_extract_user_iter(struct iov_iter *orig, size_t orig_len,
+    35					struct iov_iter *new,
+    36					iov_iter_extraction_t extraction_flags)
+    37	{
+    38		struct bio_vec *bv = NULL;
+    39		struct page **pages;
+    40		unsigned int cur_npages;
+    41		unsigned int max_pages;
+    42		unsigned int npages = 0;
+    43		unsigned int i;
+    44		ssize_t ret;
+    45		size_t count = orig_len, offset, len;
+    46		size_t bv_size, pg_size;
+    47	
+    48		if (WARN_ON_ONCE(!iter_is_ubuf(orig) && !iter_is_iovec(orig)))
+    49			return -EIO;
+    50	
+    51		max_pages = iov_iter_npages(orig, INT_MAX);
+    52		bv_size = array_size(max_pages, sizeof(*bv));
+    53		bv = kvmalloc(bv_size, GFP_KERNEL);
+    54		if (!bv)
+    55			return -ENOMEM;
+    56	
+    57		/* Put the page list at the end of the bvec list storage.  bvec
+    58		 * elements are larger than page pointers, so as long as we work
+    59		 * 0->last, we should be fine.
+    60		 */
+    61		pg_size = array_size(max_pages, sizeof(*pages));
+    62		pages = (void *)bv + bv_size - pg_size;
+    63	
+    64		while (count && npages < max_pages) {
+  > 65			ret = iov_iter_extract_pages(orig, &pages, count,
 
 -- 
 0-DAY CI Kernel Test Service
