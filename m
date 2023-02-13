@@ -1,169 +1,208 @@
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E6A8F5F
-	for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 15:56:47 +0000 (UTC)
-Received: by mail-il1-f208.google.com with SMTP id s12-20020a056e021a0c00b0030efd0ed890so9501808ild.7
-        for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 07:56:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gMO3sspk7P+Mq1nipJz9biyunW+h9MSd0H8isba1l8w=;
-        b=73gKUXnnkN8tCuEbLpkCFykgugBtHc19oLmUEhspFKhCK4QE3xPdswk4ciZxxklI9n
-         /9DZGpg4/Oias3q5UyWeqyiLLIqj6wZHNyk6q2yzcfzACTO/pALDsiWD2aBNnAgoSswK
-         TBKWLqtXVYYlZ/pIx5q8KBftMuO7C1HaAplfdzQ5fJJucTucB33UeQudY8Ddw3wGLDiG
-         u3zxUGxecaJFt7kDSDobM1C+Isk9NQWFlUmMex1cHNMEo5wSWNfbeSUXIRPc5k6NDo3G
-         wpfmWsfA+AcehIHkdMPuRrvogoEZG0wSLTcxh0PhhPXrrRXSGCOcYyXFh1YxxLI9QICN
-         uBxA==
-X-Gm-Message-State: AO0yUKV1yHbypIo3Vk1yvhUUbzJQHhL6Q/UaRv2LgxJHs50HHOjy5+HA
-	/3fqfZV7KwNRLAWM2KupPkMEY7cPEATwpr4hWrDWLaZY8D9x
-X-Google-Smtp-Source: AK7set8pPDCFvoxfzaoc+/l3Ansmw2opU4BSGcWSIiBnzk3W6ANAES7x+y/67tHoOkiOMpMr+oEjuTfevRf6TPONNzRRCU6elGkJ
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AC4AD2B;
+	Mon, 13 Feb 2023 18:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676312673; x=1707848673;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WaRGD3uwnJrl67JqYV1VcKv6T62YYZdcYDiAroF7eh8=;
+  b=PkisnabwO6vaLkRjdjSimW02nS8Rexk8Fjt6umEOUCjKFrDsYfJ7gPIA
+   qwNsJ26ecBUxEHlGTZYJHCsmTqzVpapS7ZB2DjhjFmjQJKEdFSsscnIta
+   Q9KtDouY5ZSEusIaVo0cXstxyUIc6kFa6jCpQ5+FBooG8imsWL5KTu61S
+   pHNW3f7pzeVePAitkdQRDu4kp9GFfHyqVlkak82QNqkVVhLSrcVpuGqo9
+   cjm57IIviiv3d77IVOrBWbeSErnw8hZpFX2qWOzfFY1GPncVFWLIdj8/N
+   BWvn71tPKkiru5FoKCm+sz6pCtXIwePHeHcEObR/SXcp32N6cjzTUDa5Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="314601012"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="314601012"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:24:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="670916354"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="670916354"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Feb 2023 10:24:31 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pRdV8-0007wR-2W;
+	Mon, 13 Feb 2023 18:24:30 +0000
+Date: Tue, 14 Feb 2023 02:23:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:afs-testing 1/1] net/rxrpc/sendmsg.c:606:23: warning:
+ format specifies type 'int' but the argument has type 'struct rxrpc_call *'
+Message-ID: <202302140231.MkZmcNiF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a92:3f04:0:b0:310:efc8:49bf with SMTP id
- m4-20020a923f04000000b00310efc849bfmr2572917ila.5.1676303806719; Mon, 13 Feb
- 2023 07:56:46 -0800 (PST)
-Date: Mon, 13 Feb 2023 07:56:46 -0800
-In-Reply-To: <000000000000ece18705f3b20934@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ef6cf905f496e40b@google.com>
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in ext4_group_desc_csum
-From: syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>
-To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-syzbot has found a reproducer for the following issue on:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git afs-testing
+head:   fa7f69da4a2210209299c01a778b068dc638a0b0
+commit: fa7f69da4a2210209299c01a778b068dc638a0b0 [1/1] rxrpc: Don't print kernel pointers in warning messages
+config: hexagon-randconfig-r016-20230212 (https://download.01.org/0day-ci/archive/20230214/202302140231.MkZmcNiF-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=fa7f69da4a2210209299c01a778b068dc638a0b0
+        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
+        git fetch --no-tags dhowells-fs afs-testing
+        git checkout fa7f69da4a2210209299c01a778b068dc638a0b0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/rxrpc/
 
-HEAD commit:    ceaa837f96ad Linux 6.2-rc8
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11727cc7480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
-dashboard link: https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14392a4f480000
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302140231.MkZmcNiF-lkp@intel.com/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/88042f9b5fc8/disk-ceaa837f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9945b57ec9ee/vmlinux-ceaa837f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/72ff118ed96b/bzImage-ceaa837f.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/dabec17b2679/mount_0.gz
+All warnings (new ones prefixed by >>):
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
+   In file included from net/rxrpc/sendmsg.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from net/rxrpc/sendmsg.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from net/rxrpc/sendmsg.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> net/rxrpc/sendmsg.c:606:23: warning: format specifies type 'int' but the argument has type 'struct rxrpc_call *' [-Wformat]
+           _leave(" = %c=%x\n", call);
+                      ~~        ^~~~
+   net/rxrpc/ar-internal.h:1339:63: note: expanded from macro '_leave'
+   #define _leave(FMT,...) no_printk("<== %s()"FMT"",__func__ ,##__VA_ARGS__)
+                                               ~~~               ^~~~~~~~~~~
+   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:457:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:429:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+>> net/rxrpc/sendmsg.c:606:17: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+           _leave(" = %c=%x\n", call);
+                         ~^
+   net/rxrpc/ar-internal.h:1339:45: note: expanded from macro '_leave'
+   #define _leave(FMT,...) no_printk("<== %s()"FMT"",__func__ ,##__VA_ARGS__)
+                                               ^~~
+   include/linux/printk.h:131:10: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ^~~
+   include/linux/printk.h:457:53: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ^~~
+   include/linux/printk.h:429:11: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ^~~~
+   8 warnings generated.
 
-==================================================================
-BUG: KASAN: use-after-free in crc16+0x1fb/0x280 lib/crc16.c:58
-Read of size 1 at addr ffff88807de00000 by task syz-executor.1/5339
 
-CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted 6.2.0-rc8-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x163/0x4f0 mm/kasan/report.c:417
- kasan_report+0x13a/0x170 mm/kasan/report.c:517
- crc16+0x1fb/0x280 lib/crc16.c:58
- ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
- ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
- ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
- ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
- ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
- ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
- ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
- ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
- ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
- ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
- evict+0x2a4/0x620 fs/inode.c:664
- do_unlinkat+0x4f1/0x930 fs/namei.c:4327
- __do_sys_unlink fs/namei.c:4368 [inline]
- __se_sys_unlink fs/namei.c:4366 [inline]
- __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbc85a8c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fbc86838168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
-RAX: ffffffffffffffda RBX: 00007fbc85babf80 RCX: 00007fbc85a8c0f9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
-RBP: 00007fbc85ae7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd5743beaf R14: 00007fbc86838300 R15: 0000000000022000
- </TASK>
+vim +606 net/rxrpc/sendmsg.c
 
-The buggy address belongs to the physical page:
-page:ffffea0001f78000 refcount:0 mapcount:-128 mapping:0000000000000000 index:0x0 pfn:0x7de00
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 ffffea0001f86008 ffffea0001db2a08 0000000000000000
-raw: 0000000000000000 0000000000000001 00000000ffffff7f 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, tgid 4855 (sshd), ts 43553490210, free_ts 58249059760
- prep_new_page mm/page_alloc.c:2531 [inline]
- get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
- __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
- alloc_slab_page+0x6a/0x160 mm/slub.c:1851
- allocate_slab mm/slub.c:1998 [inline]
- new_slab+0x84/0x2f0 mm/slub.c:2051
- ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
- __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
- kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
- mt_alloc_bulk lib/maple_tree.c:157 [inline]
- mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
- mas_node_count_gfp lib/maple_tree.c:1316 [inline]
- mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
- vma_expand+0x277/0x850 mm/mmap.c:541
- mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
- do_mmap+0x8c9/0xf70 mm/mmap.c:1411
- vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1446 [inline]
- free_pcp_prepare mm/page_alloc.c:1496 [inline]
- free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
- free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
- qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
- slab_alloc_node mm/slub.c:3452 [inline]
- kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
- __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
- alloc_skb include/linux/skbuff.h:1270 [inline]
- alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
- sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
- unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- __sys_sendto+0x475/0x5f0 net/socket.c:2117
- __do_sys_sendto net/socket.c:2129 [inline]
- __se_sys_sendto net/socket.c:2125 [inline]
- __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+   566	
+   567	/*
+   568	 * Create a new client call for sendmsg().
+   569	 * - Called with the socket lock held, which it must release.
+   570	 * - If it returns a call, the call's lock will need releasing by the caller.
+   571	 */
+   572	static struct rxrpc_call *
+   573	rxrpc_new_client_call_for_sendmsg(struct rxrpc_sock *rx, struct msghdr *msg,
+   574					  struct rxrpc_send_params *p)
+   575		__releases(&rx->sk.sk_lock.slock)
+   576		__acquires(&call->user_mutex)
+   577	{
+   578		struct rxrpc_conn_parameters cp;
+   579		struct rxrpc_call *call;
+   580		struct key *key;
+   581	
+   582		DECLARE_SOCKADDR(struct sockaddr_rxrpc *, srx, msg->msg_name);
+   583	
+   584		_enter("");
+   585	
+   586		if (!msg->msg_name) {
+   587			release_sock(&rx->sk);
+   588			return ERR_PTR(-EDESTADDRREQ);
+   589		}
+   590	
+   591		key = rx->key;
+   592		if (key && !rx->key->payload.data[0])
+   593			key = NULL;
+   594	
+   595		memset(&cp, 0, sizeof(cp));
+   596		cp.local		= rx->local;
+   597		cp.key			= rx->key;
+   598		cp.security_level	= rx->min_sec_level;
+   599		cp.exclusive		= rx->exclusive | p->exclusive;
+   600		cp.upgrade		= p->upgrade;
+   601		cp.service_id		= srx->srx_service;
+   602		call = rxrpc_new_client_call(rx, &cp, srx, &p->call, GFP_KERNEL,
+   603					     atomic_inc_return(&rxrpc_debug_id));
+   604		/* The socket is now unlocked */
+   605	
+ > 606		_leave(" = %c=%x\n", call);
+   607		return call;
+   608	}
+   609	
 
-Memory state around the buggy address:
- ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff88807de00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                   ^
- ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
