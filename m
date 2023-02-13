@@ -1,145 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1360223A5
-	for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 10:11:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C393C433EF;
-	Mon, 13 Feb 2023 10:11:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676283109;
-	bh=KmxhvE36dKCr6usX/7ZPMiQfVhwCpu/l1nVcDSJNzVg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=vFEH8VQx0gwz8O6w32Y7mPqoUOef5EXwTgpKcvPr/sSWKOkoItCNqUtz06UnpPy+h
-	 tWRE20WNoxM0IdmZtgBwuulPFLcPrDfh2yljc9z2iuD8mCAwEFCPF5FJJISJK0RLvh
-	 otZwqHIWi6KlQVw5hFBgAz/7lQ1nrAK2QJiZ5DGyXpJR0qsNOiJsM5WjKtJ1jdl3VV
-	 Qx5koUPoVnWhOUEwmdf9okt2s0y3ql7DyijE+2bk03kZJ7lfAlAMrtX2ZC1SYDpZFi
-	 boRgntwJwHIi39k2ilOj+00YIxJqwNOeJUyVoYVqRu6U4SXeTBJQLW+Minp2INbr95
-	 hGnYdQ4p9i08A==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Brian King <brking@us.ibm.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-	linux-scsi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] scsi: ipr: work around fortify-string warning
-Date: Mon, 13 Feb 2023 11:10:46 +0100
-Message-Id: <20230213101143.3821483-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1A28F4D;
+	Mon, 13 Feb 2023 14:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676298518; x=1707834518;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ca2fl++q9uqe9t4GFMtzFHHUL5BNwJ7uXeCoTeCy9bM=;
+  b=HaExuJsZd5swuL0d1GQqLx1+wsK6zZ9NkU8FszipdMd+zFTDteybSCV9
+   H0ZczQ2m55D3ksaLxT/3u90cPaLXXS6jF8JezYeyfHujrEp856h0btpd2
+   SzSEa9kM4R1XAQPqYxHPtksmZF9iDqrIWdRIFqhLdae9Fzbt2PClS69wq
+   5mxXVnfolqAvQdYYh1MEYOgUswg7nK3AKLxKi/g09KcGZExXGaUbIH8dN
+   Yge5oY2MPMWBHuk6AbuUoO4Rt7BA07MgsZyqWzUrdMEopresuwBQlfGdD
+   DPmSsGkj1KWAvpFDKETMOQURkENab/93ukMQNeoZKqjgvXnEAVAJ8gVuz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333036956"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="333036956"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 06:28:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="792744447"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="792744447"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 13 Feb 2023 06:28:20 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pRZoZ-0007mb-0w;
+	Mon, 13 Feb 2023 14:28:19 +0000
+Date: Mon, 13 Feb 2023 22:27:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ben Skeggs <bskeggs@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [skeggsb-nouveau:01.03-gsp-ada 185/193]
+ drivers/gpu/drm/nouveau/nvkm/engine/disp/r525.c:59:1: error: non-void
+ function does not return a value in all control paths
+Message-ID: <202302132206.uzzkoc7v-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Arnd Bergmann <arnd@arndb.de>
+tree:   https://gitlab.freedesktop.org/skeggsb/nouveau 01.03-gsp-ada
+head:   ab3448c2873e0fbcf1fd710cccb52dc548bdf449
+commit: c24815755c5c79d50fa9370ec1124fedd29743bb [185/193] disp
+config: arm64-randconfig-r021-20230212 (https://download.01.org/0day-ci/archive/20230213/202302132206.uzzkoc7v-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add skeggsb-nouveau https://gitlab.freedesktop.org/skeggsb/nouveau
+        git fetch --no-tags skeggsb-nouveau 01.03-gsp-ada
+        git checkout c24815755c5c79d50fa9370ec1124fedd29743bb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
 
-The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
-about a potential string overflow with all versions of clang:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302132206.uzzkoc7v-lkp@intel.com/
 
-In file included from drivers/scsi/ipr.c:43:
-In file included from include/linux/string.h:254:
-include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-                        __write_overflow_field(p_size_field, size);
-                        ^
-include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
-2 errors generated.
+All errors (new ones prefixed by >>):
 
-I don't see anything actually wrong with the function, but this is the
-only instance I can reproduce of the fortification going wrong in the
-kernel at the moment, so the easiest solution may be to rewrite the
-function into something that does not trigger the warning.
+>> drivers/gpu/drm/nouveau/nvkm/engine/disp/r525.c:59:1: error: non-void function does not return a value in all control paths [-Werror,-Wreturn-type]
+   }
+   ^
+   1 error generated.
 
-Instead of having a combined buffer for vendor/device/serial strings,
-use three separate local variables and just truncate the whitespace
-individually.
 
-Fixes: 8cf093e275d0 ("[SCSI] ipr: Improved dual adapter errors")
-Cc: Kees Cook <keescook@chromium.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-I did not try to bisect which commit introduced this behavior into
-the fortified memcpy(), the Fixes: commit is the one that introduced
-the ipr_log_vpd_compact() function but this predates the fortified
-string helpers.
----
- drivers/scsi/ipr.c | 38 ++++++++++++++++++--------------------
- 1 file changed, 18 insertions(+), 20 deletions(-)
+vim +59 drivers/gpu/drm/nouveau/nvkm/engine/disp/r525.c
 
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index 198d3f20d682..490fd81e7cfd 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -1516,23 +1516,19 @@ static void ipr_process_ccn(struct ipr_cmnd *ipr_cmd)
- }
- 
- /**
-- * strip_and_pad_whitespace - Strip and pad trailing whitespace.
-- * @i:		index into buffer
-- * @buf:		string to modify
-+ * strip_whitespace - Strip and pad trailing whitespace.
-+ * @i:		size of buffer
-+ * @buf:	string to modify
-  *
-- * This function will strip all trailing whitespace, pad the end
-- * of the string with a single space, and NULL terminate the string.
-+ * This function will strip all trailing whitespace and
-+ * NUL terminate the string.
-  *
-- * Return value:
-- * 	new length of string
-  **/
--static int strip_and_pad_whitespace(int i, char *buf)
-+static void strip_whitespace(int i, char *buf)
- {
- 	while (i && buf[i] == ' ')
- 		i--;
--	buf[i+1] = ' ';
--	buf[i+2] = '\0';
--	return i + 2;
-+	buf[i+1] = '\0';
- }
- 
- /**
-@@ -1547,19 +1543,21 @@ static int strip_and_pad_whitespace(int i, char *buf)
- static void ipr_log_vpd_compact(char *prefix, struct ipr_hostrcb *hostrcb,
- 				struct ipr_vpd *vpd)
- {
--	char buffer[IPR_VENDOR_ID_LEN + IPR_PROD_ID_LEN + IPR_SERIAL_NUM_LEN + 3];
--	int i = 0;
-+	char vendor_id[IPR_VENDOR_ID_LEN + 1];
-+	char product_id[IPR_PROD_ID_LEN + 1];
-+	char sn[IPR_SERIAL_NUM_LEN + 1];
- 
--	memcpy(buffer, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
--	i = strip_and_pad_whitespace(IPR_VENDOR_ID_LEN - 1, buffer);
-+	memcpy(vendor_id, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
-+	strip_whitespace(IPR_VENDOR_ID_LEN, vendor_id);
- 
--	memcpy(&buffer[i], vpd->vpids.product_id, IPR_PROD_ID_LEN);
--	i = strip_and_pad_whitespace(i + IPR_PROD_ID_LEN - 1, buffer);
-+	memcpy(product_id, vpd->vpids.product_id, IPR_PROD_ID_LEN);
-+	strip_whitespace(IPR_PROD_ID_LEN, product_id);
- 
--	memcpy(&buffer[i], vpd->sn, IPR_SERIAL_NUM_LEN);
--	buffer[IPR_SERIAL_NUM_LEN + i] = '\0';
-+	memcpy(sn, vpd->sn, IPR_SERIAL_NUM_LEN);
-+	strip_whitespace(IPR_SERIAL_NUM_LEN, sn);
- 
--	ipr_hcam_err(hostrcb, "%s VPID/SN: %s\n", prefix, buffer);
-+	ipr_hcam_err(hostrcb, "%s VPID/SN: %s %s %s\n", prefix,
-+		     vendor_id, product_id, sn);
- }
- 
- /**
+    46	
+    47	static u64
+    48	r525_chan_user(struct nvkm_disp_chan *chan, u64 *psize)
+    49	{
+    50		switch (chan->object.oclass & 0xff) {
+    51		case 0x7d: *psize = 0x10000; return 0x680000;
+    52		case 0x7e: *psize = 0x01000; return 0x690000 + (chan->head * *psize);
+    53		case 0x7b: *psize = 0x01000; return 0x6b0000 + (chan->head * *psize);
+    54		case 0x7a: *psize = 0x01000; return 0x6d8000 + (chan->head * *psize);
+    55		default:
+    56			BUG_ON(1);
+    57			break;
+    58		}
+  > 59	}
+    60	
+
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
