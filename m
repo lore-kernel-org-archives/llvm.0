@@ -1,45 +1,52 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8077E;
-	Mon, 13 Feb 2023 00:58:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674B21107;
+	Mon, 13 Feb 2023 01:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676249884; x=1707785884;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CURrrhcMF9Es3tTPm7Xob2bMUXQmeCWTB6KzxHKsK9c=;
-  b=AyvNbZGcWiSfN8SShpuq4T7/H+Hmeai7XnDyHIhYmANlZrnjD4v/IK01
-   oaATHTD/mZAA07GjxdXFCse+U60JWPNW+lw2MyxqhWzP7D8fsOvJlNkEo
-   PQCmuDTtZuQVyg5ZUFv+sbfaeYWYjJ4Ju1AIyfO+3q8a7oXhLye7LkIir
-   SAT/xfWXXxseTdHIB1xjfIwQ3V64dC0FWpaU7WInlfA8wQCAKLqUpaBd3
-   bpn3EUqGv679QEsL6IzbA4+p2I5Dlvq404ACYXEUcn/sLgt+tGxmi4dXf
-   4rgRNcICulJFvQayT21m9TI3AdOX7SvoRC8gxT8SyoZwg5n7SkbZOh+43
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="358190410"
+  t=1676250484; x=1707786484;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pA1qXJwO9D1if1KoXLjnfNNvdLy0H8+OnIFWl2Z64Zc=;
+  b=K7C69+ssRJeza/NgL22y0OUTGnV/xenxp9AuLpQ5pDTZtvJib9uo1Vj2
+   CJcDsLuEjGS2Oz7VyqKYI+7+JIqHnbLZySR3w/MtKcYA+DN2AeGVFqxyU
+   GuwnxpQLivwM3LUGzDXC7FXzcsSCnJkWMqD2r/dazokEasIk+db31gDoI
+   RJD7YbRgdju4Qu23/kRGpFpS2AIFTRVlb3v4yicRavf0BOHhYGlrjjh1H
+   +FVP1i8gaV+8Tx4ZBrmHk5w4DodIpMVSzTYRPpZV0k6250Pt/t07Zhhh1
+   pSILDXQ1h8/D0C34qJz9AdkmYl2chlFjr56m+0pThaLckPoBYth0i8B44
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="329408398"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="358190410"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 16:58:01 -0800
+   d="scan'208";a="329408398"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 17:08:03 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="842597401"
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="811418912"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="842597401"
+   d="scan'208";a="811418912"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2023 16:58:00 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 12 Feb 2023 17:08:00 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pRNAN-0007T9-1C;
-	Mon, 13 Feb 2023 00:57:59 +0000
-Date: Mon, 13 Feb 2023 08:57:13 +0800
+	id 1pRNK3-0007Tf-20;
+	Mon, 13 Feb 2023 01:07:59 +0000
+Date: Mon, 13 Feb 2023 09:07:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Heiner Kallweit <hkallweit1@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-	Steve French <stfrench@microsoft.com>
-Subject: [cifs:for-next 20/25] fs/netfs/iterator.c:65:9: error: call to
- undeclared function 'iov_iter_extract_pages'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202302130853.kU76MQRK-lkp@intel.com>
+	"linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+	Geraldo Nascimento <geraldogabriel@gmail.com>
+Subject: Re: [PATCH] mmc: meson-gx: fix SDIO mode if cap_sdio_irq isn't set
+Message-ID: <202302130924.CSStKyHP-lkp@intel.com>
+References: <9e296859-0363-ecc4-2d99-fd0239efceff@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,103 +55,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <9e296859-0363-ecc4-2d99-fd0239efceff@gmail.com>
 
-tree:   git://git.samba.org/sfrench/cifs-2.6.git for-next
-head:   2259206443e31ea6a266adcf0d900fbea17016ec
-commit: d1df0021a8275ef2e0d455b384e78e18e57cf9f2 [20/25] netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
-config: arm-buildonly-randconfig-r005-20230213 (https://download.01.org/0day-ci/archive/20230213/202302130853.kU76MQRK-lkp@intel.com/config)
+Hi Heiner,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc8 next-20230210]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiner-Kallweit/mmc-meson-gx-fix-SDIO-mode-if-cap_sdio_irq-isn-t-set/20230213-055650
+patch link:    https://lore.kernel.org/r/9e296859-0363-ecc4-2d99-fd0239efceff%40gmail.com
+patch subject: [PATCH] mmc: meson-gx: fix SDIO mode if cap_sdio_irq isn't set
+config: arm64-buildonly-randconfig-r006-20230213 (https://download.01.org/0day-ci/archive/20230213/202302130924.CSStKyHP-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add cifs git://git.samba.org/sfrench/cifs-2.6.git
-        git fetch --no-tags cifs for-next
-        git checkout d1df0021a8275ef2e0d455b384e78e18e57cf9f2
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/6aca20b626a6d75b5d74fc4441cdd99ff3252b23
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Heiner-Kallweit/mmc-meson-gx-fix-SDIO-mode-if-cap_sdio_irq-isn-t-set/20230213-055650
+        git checkout 6aca20b626a6d75b5d74fc4441cdd99ff3252b23
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/netfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/mmc/host/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302130853.kU76MQRK-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302130924.CSStKyHP-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/netfs/iterator.c:11:
-   include/linux/netfs.h:302:5: error: unknown type name 'iov_iter_extraction_t'
-                                   iov_iter_extraction_t extraction_flags);
-                                   ^
-   fs/netfs/iterator.c:36:5: error: unknown type name 'iov_iter_extraction_t'
-                                   iov_iter_extraction_t extraction_flags)
-                                   ^
->> fs/netfs/iterator.c:65:9: error: call to undeclared function 'iov_iter_extract_pages'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   ret = iov_iter_extract_pages(orig, &pages, count,
-                         ^
-   fs/netfs/iterator.c:65:9: note: did you mean 'iov_iter_get_pages'?
-   include/linux/uio.h:253:9: note: 'iov_iter_get_pages' declared here
-   ssize_t iov_iter_get_pages(struct iov_iter *i, struct page **pages,
-           ^
-   3 errors generated.
+>> drivers/mmc/host/meson-gx-mmc.c:963:5: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+                            irq_mask, raw_status);
+                            ^~~~~~~~
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+                                           ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/iov_iter_extract_pages +65 fs/netfs/iterator.c
+vim +963 drivers/mmc/host/meson-gx-mmc.c
 
-    13	
-    14	/**
-    15	 * netfs_extract_user_iter - Extract the pages from a user iterator into a bvec
-    16	 * @orig: The original iterator
-    17	 * @orig_len: The amount of iterator to copy
-    18	 * @new: The iterator to be set up
-    19	 * @extraction_flags: Flags to qualify the request
-    20	 *
-    21	 * Extract the page fragments from the given amount of the source iterator and
-    22	 * build up a second iterator that refers to all of those bits.  This allows
-    23	 * the original iterator to disposed of.
-    24	 *
-    25	 * @extraction_flags can have ITER_ALLOW_P2PDMA set to request peer-to-peer DMA be
-    26	 * allowed on the pages extracted.
-    27	 *
-    28	 * On success, the number of elements in the bvec is returned, the original
-    29	 * iterator will have been advanced by the amount extracted.
-    30	 *
-    31	 * The iov_iter_extract_mode() function should be used to query how cleanup
-    32	 * should be performed.
-    33	 */
-    34	ssize_t netfs_extract_user_iter(struct iov_iter *orig, size_t orig_len,
-    35					struct iov_iter *new,
-    36					iov_iter_extraction_t extraction_flags)
-    37	{
-    38		struct bio_vec *bv = NULL;
-    39		struct page **pages;
-    40		unsigned int cur_npages;
-    41		unsigned int max_pages;
-    42		unsigned int npages = 0;
-    43		unsigned int i;
-    44		ssize_t ret;
-    45		size_t count = orig_len, offset, len;
-    46		size_t bv_size, pg_size;
-    47	
-    48		if (WARN_ON_ONCE(!iter_is_ubuf(orig) && !iter_is_iovec(orig)))
-    49			return -EIO;
-    50	
-    51		max_pages = iov_iter_npages(orig, INT_MAX);
-    52		bv_size = array_size(max_pages, sizeof(*bv));
-    53		bv = kvmalloc(bv_size, GFP_KERNEL);
-    54		if (!bv)
-    55			return -ENOMEM;
-    56	
-    57		/* Put the page list at the end of the bvec list storage.  bvec
-    58		 * elements are larger than page pointers, so as long as we work
-    59		 * 0->last, we should be fine.
-    60		 */
-    61		pg_size = array_size(max_pages, sizeof(*pages));
-    62		pages = (void *)bv + bv_size - pg_size;
-    63	
-    64		while (count && npages < max_pages) {
-  > 65			ret = iov_iter_extract_pages(orig, &pages, count,
+   947	
+   948	static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
+   949	{
+   950		struct meson_host *host = dev_id;
+   951		struct mmc_command *cmd;
+   952		u32 status, raw_status, irq_mask = IRQ_EN_MASK;
+   953		irqreturn_t ret = IRQ_NONE;
+   954	
+   955		if (host->mmc->caps & MMC_CAP_SDIO_IRQ)
+   956			irq_mask |= IRQ_SDIO;
+   957		raw_status = readl(host->regs + SD_EMMC_STATUS);
+   958		status = raw_status & irq_mask;
+   959	
+   960		if (!status) {
+   961			dev_dbg(host->dev,
+   962				"Unexpected IRQ! irq_en 0x%08lx - status 0x%08x\n",
+ > 963				 irq_mask, raw_status);
+   964			return IRQ_NONE;
+   965		}
+   966	
+   967		if (WARN_ON(!host))
+   968			return IRQ_NONE;
+   969	
+   970		/* ack all raised interrupts */
+   971		writel(status, host->regs + SD_EMMC_STATUS);
+   972	
+   973		cmd = host->cmd;
+   974	
+   975		if (status & IRQ_SDIO) {
+   976			spin_lock(&host->lock);
+   977			__meson_mmc_enable_sdio_irq(host->mmc, 0);
+   978			sdio_signal_irq(host->mmc);
+   979			spin_unlock(&host->lock);
+   980			status &= ~IRQ_SDIO;
+   981			if (!status)
+   982				return IRQ_HANDLED;
+   983		}
+   984	
+   985		if (WARN_ON(!cmd))
+   986			return IRQ_NONE;
+   987	
+   988		cmd->error = 0;
+   989		if (status & IRQ_CRC_ERR) {
+   990			dev_dbg(host->dev, "CRC Error - status 0x%08x\n", status);
+   991			cmd->error = -EILSEQ;
+   992			ret = IRQ_WAKE_THREAD;
+   993			goto out;
+   994		}
+   995	
+   996		if (status & IRQ_TIMEOUTS) {
+   997			dev_dbg(host->dev, "Timeout - status 0x%08x\n", status);
+   998			cmd->error = -ETIMEDOUT;
+   999			ret = IRQ_WAKE_THREAD;
+  1000			goto out;
+  1001		}
+  1002	
+  1003		meson_mmc_read_resp(host->mmc, cmd);
+  1004	
+  1005		if (status & (IRQ_END_OF_CHAIN | IRQ_RESP_STATUS)) {
+  1006			struct mmc_data *data = cmd->data;
+  1007	
+  1008			if (data && !cmd->error)
+  1009				data->bytes_xfered = data->blksz * data->blocks;
+  1010			if (meson_mmc_bounce_buf_read(data) ||
+  1011			    meson_mmc_get_next_command(cmd))
+  1012				ret = IRQ_WAKE_THREAD;
+  1013			else
+  1014				ret = IRQ_HANDLED;
+  1015		}
+  1016	
+  1017	out:
+  1018		if (cmd->error) {
+  1019			/* Stop desc in case of errors */
+  1020			u32 start = readl(host->regs + SD_EMMC_START);
+  1021	
+  1022			start &= ~START_DESC_BUSY;
+  1023			writel(start, host->regs + SD_EMMC_START);
+  1024		}
+  1025	
+  1026		if (ret == IRQ_HANDLED)
+  1027			meson_mmc_request_done(host->mmc, cmd->mrq);
+  1028	
+  1029		return ret;
+  1030	}
+  1031	
 
 -- 
 0-DAY CI Kernel Test Service
