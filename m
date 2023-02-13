@@ -1,47 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39A61C26;
-	Mon, 13 Feb 2023 06:20:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D8C1FA8;
+	Mon, 13 Feb 2023 06:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676269221; x=1707805221;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W5ovj3A01rCwZrafuh/KA7yhCF+GMCLPpkHfJmH3y3k=;
-  b=PjQ1nRVUKmbtpsQ283TXUANN8uFkeQAyz4823DQkzxNrJtj837WxzurU
-   AHBkzUnflGgAnq/4BbuiazVWVSsHkKN+LHZmeyG2P+6sKVkq7XDUOGAwb
-   R9isjf80Rk1NGHUu6PjPddoc5BW8KoVsJ0n4VtXCb8EebTksINTDKG2h1
-   M2M2YsWpRkP70DL4T9IaHzDDWGNax19/Mq8DshDnfT3JAd0iqzrcccX+v
-   jsevHzWXT1nEkPfqwiA97oOlDhq56fa40xbyzg13op/kLWuD8bYmsq4yc
-   7sJdoOSPCjdf9HS5/6Lela+zNVZM1164kTP3wxYf82459M851GRT1MonT
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="332125086"
+  t=1676270412; x=1707806412;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=fpTEh47MWrCnHTuYV/OuOJkZXMaN2JuZHzWyWpUgP3c=;
+  b=I0MDPmNUQvyXWzA6tY2u0s9syUmT8rtKw+tUEU4rBjIb+USnMaNYTM3J
+   3BQx/ZMqFj5wl0erhaCw1v0dBKbbejJDuy0nEB3S4snkTOUWhBWujRgDx
+   RYpuZzJfqb30LDyawZcnSwsSFSxZbhik75zxu3qq5hwyl2GYqersGpCvw
+   +VRHfJT1P4mO16qKDbQjnW1iJ4rEq1ZrS9oQAFP86ewZvNv7QuuyErzWK
+   +mhzwxjBFN21z+4JDjjXPlxUC/3ZBM/7PpZknbNgwiVbMjs6hFACPK1cu
+   vpHjHPe7D9oDf8rOQ1rfv9w/491KQhDCGOH08fVDMrVf0i6sSb36QZcTV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="328529281"
 X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="332125086"
+   d="scan'208";a="328529281"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 22:20:12 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 22:40:11 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="701147179"
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="701155056"
 X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="701147179"
+   d="scan'208";a="701155056"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 12 Feb 2023 22:20:10 -0800
+  by orsmga001.jf.intel.com with ESMTP; 12 Feb 2023 22:40:10 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pRSC9-0007ar-25;
-	Mon, 13 Feb 2023 06:20:09 +0000
-Date: Mon, 13 Feb 2023 14:19:10 +0800
+	id 1pRSVV-0007b5-2e;
+	Mon, 13 Feb 2023 06:40:09 +0000
+Date: Mon, 13 Feb 2023 14:39:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: zhanchengbin <zhanchengbin1@huawei.com>, tytso@mit.edu, jack@suse.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-ext4@vger.kernel.org, yi.zhang@huawei.com,
-	linfeilong@huawei.com, liuzhiqiang26@huawei.com,
-	zhanchengbin <zhanchengbin1@huawei.com>
-Subject: Re: [PATCH v4 2/2] ext4: clear the verified flag of the modified
- leaf or idx if error
-Message-ID: <202302131407.XrieHNuN-lkp@intel.com>
-References: <20230213040522.3339406-3-zhanchengbin1@huawei.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [linux-next:master 10834/12440] ld.lld: error:
+ vmlinux.a(init/main.o):(function rcu_lock_acquire: .text+0x268): relocation
+ R_RISCV_HI20 out of range: 524289 is not in [-524288, 524287]; references
+ .Ltmp0
+Message-ID: <202302131438.5tUJP2Sy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,121 +46,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230213040522.3339406-3-zhanchengbin1@huawei.com>
 
-Hi zhanchengbin,
+CC: Linux Memory Management List <linux-mm@kvack.org>
+TO: Mustafa Ismail <mustafa.ismail@intel.com>
+CC: Leon Romanovsky <leon@kernel.org>
+CC: Shiraz Saleem <shiraz.saleem@intel.com>
+CC: Sindhu Devale <sindhu.devale@intel.com>
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on jack-fs/for_next linus/master v6.2-rc8 next-20230210]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/zhanchengbin/ext4-fix-inode-tree-inconsistency-caused-by-ENOMEM-in-ext4_split_extent_at/20230213-114334
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230213040522.3339406-3-zhanchengbin1%40huawei.com
-patch subject: [PATCH v4 2/2] ext4: clear the verified flag of the modified leaf or idx if error
-config: i386-randconfig-a004-20230213 (https://download.01.org/0day-ci/archive/20230213/202302131407.XrieHNuN-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   09e41676e35ab06e4bce8870ea3bf1f191c3cb90
+commit: 9cd9842c46996ef62173c36619c746f57416bcb0 [10834/12440] RDMA/irdma: Cap MSIX used to online CPUs + 1
+config: riscv-randconfig-r036-20230213 (https://download.01.org/0day-ci/archive/20230213/202302131438.5tUJP2Sy-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c6de5d67952addd5ffa288574ed55ebe7aeba755
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review zhanchengbin/ext4-fix-inode-tree-inconsistency-caused-by-ENOMEM-in-ext4_split_extent_at/20230213-114334
-        git checkout c6de5d67952addd5ffa288574ed55ebe7aeba755
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=9cd9842c46996ef62173c36619c746f57416bcb0
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 9cd9842c46996ef62173c36619c746f57416bcb0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/ext4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302131407.XrieHNuN-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302131438.5tUJP2Sy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/ext4/extents.c:1760:32: error: member reference type 'struct ext4_ext_path' is not a pointer; did you mean to use '.'?
-                   clear_buffer_verified(path[k]->p_bh);
-                                         ~~~~~~~^~
-                                                .
-   fs/ext4/extents.c:2352:36: error: member reference type 'struct ext4_ext_path' is not a pointer; did you mean to use '.'?
-                   clear_buffer_verified(path[depth]->p_bh);
-                                         ~~~~~~~~~~~^~
-                                                    .
-   2 errors generated.
-
-
-vim +1760 fs/ext4/extents.c
-
-  1699	
-  1700	/*
-  1701	 * ext4_ext_correct_indexes:
-  1702	 * if leaf gets modified and modified extent is first in the leaf,
-  1703	 * then we have to correct all indexes above.
-  1704	 * TODO: do we need to correct tree in all cases?
-  1705	 */
-  1706	static int ext4_ext_correct_indexes(handle_t *handle, struct inode *inode,
-  1707					struct ext4_ext_path *path)
-  1708	{
-  1709		struct ext4_extent_header *eh;
-  1710		int depth = ext_depth(inode);
-  1711		struct ext4_extent *ex;
-  1712		__le32 border;
-  1713		int k, err = 0;
-  1714	
-  1715		eh = path[depth].p_hdr;
-  1716		ex = path[depth].p_ext;
-  1717	
-  1718		if (unlikely(ex == NULL || eh == NULL)) {
-  1719			EXT4_ERROR_INODE(inode,
-  1720					 "ex %p == NULL or eh %p == NULL", ex, eh);
-  1721			return -EFSCORRUPTED;
-  1722		}
-  1723	
-  1724		if (depth == 0) {
-  1725			/* there is no tree at all */
-  1726			return 0;
-  1727		}
-  1728	
-  1729		if (ex != EXT_FIRST_EXTENT(eh)) {
-  1730			/* we correct tree if first leaf got modified only */
-  1731			return 0;
-  1732		}
-  1733	
-  1734		/*
-  1735		 * TODO: we need correction if border is smaller than current one
-  1736		 */
-  1737		k = depth - 1;
-  1738		border = path[depth].p_ext->ee_block;
-  1739		err = ext4_ext_get_access(handle, inode, path + k);
-  1740		if (err)
-  1741			return err;
-  1742		path[k].p_idx->ei_block = border;
-  1743		err = ext4_ext_dirty(handle, inode, path + k);
-  1744		if (err)
-  1745			return err;
-  1746	
-  1747		while (k--) {
-  1748			/* change all left-side indexes */
-  1749			if (path[k+1].p_idx != EXT_FIRST_INDEX(path[k+1].p_hdr))
-  1750				break;
-  1751			err = ext4_ext_get_access(handle, inode, path + k);
-  1752			if (err)
-  1753				break;
-  1754			path[k].p_idx->ei_block = border;
-  1755			err = ext4_ext_dirty(handle, inode, path + k);
-  1756			if (err)
-  1757				break;
-  1758		}
-  1759		while (!(k < 0) && k++ < depth)
-> 1760			clear_buffer_verified(path[k]->p_bh);
-  1761	
-  1762		return err;
-  1763	}
-  1764	
+>> ld.lld: error: vmlinux.a(init/main.o):(function rcu_lock_acquire: .text+0x268): relocation R_RISCV_HI20 out of range: 524289 is not in [-524288, 524287]; references .Ltmp0
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
+--
+>> ld.lld: error: vmlinux.a(init/main.o):(function rcu_lock_release: .text+0x2b0): relocation R_RISCV_HI20 out of range: 524289 is not in [-524288, 524287]; references .Ltmp1
+   >>> referenced by main.c
+   >>> defined in vmlinux.a(init/main.o)
 
 -- 
 0-DAY CI Kernel Test Service
