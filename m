@@ -1,111 +1,101 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677A2BA38
-	for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 23:31:59 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id s11so7392386edd.10
-        for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 15:31:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AdtOWowEtcNb0fBYdv2IT4vsABesICSFaMSOMAEIWRA=;
-        b=cMkCqggcOpdERZkrVimIABE58AgahEXS7SwagsUDcIRe0tNifo2rJfrWITLM84bj3K
-         VT5r6oGAIGSGGDmoZBcOwmMPCOvD3aq/FKOf9TwOedY7huCgbqUgCnQ6+X86crrWF7SZ
-         5VDY9yc3NpyZDyY9eqTyFXhi4MAyC4IRGt3fF3EF9LXiwuNUfJ7Vh1EP7wzHIAz+zeMk
-         LQNPZ+j+qikdWWBHXQ/JyifmHUPvaLcYGRYJaNsjunDi4EJQuNa/aJ+GqU2VMkfOvLMC
-         I1o6GsFdF+x/Zfx8Yi9iQHJMlpt4NzVFNMbxqcXxBCVg5Tpwb4V8B8nM7pNf0K89hzOU
-         M+ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AdtOWowEtcNb0fBYdv2IT4vsABesICSFaMSOMAEIWRA=;
-        b=wpGRbfkXC3S+Qq56LTOa7YnzYfKNG6oUSymjmlfu53mpO8VqTgXXXxSI5rJOjzcMUv
-         zsyuIVq5cvY4FQdWdZC3Qd7ut8Z9DxBHnaFB6pjEc+UJ50Ca3FemPHhVfcecdjkWBQxK
-         oWj7Gah/v6Bc1C8iwfh+2FDB6SsD8UYPvDyQUPPWyE6xyt5BTdy6yQqT42wc49Yd6w0n
-         XCSafOmCxuKZo4HBwnSWF5rl59rkeNYs+W/mPygro0tmf6gZBpIPoF3MOkE1QWREiKru
-         JKNJYsRNqIE9aZqEc9hvdWtF5kVbQvM34q+c9xRoEb/DB56yrhH9VSn7hTcJ23T+/vTv
-         jBkw==
-X-Gm-Message-State: AO0yUKWwZG13UQ6TeTx8qOUD2EUncymZja8pwFefvzE7NfEFJPjVo0xr
-	VbP1mNm//WieiUWHOmsFROfMhxKIl3oqpsDvAlNApQ==
-X-Google-Smtp-Source: AK7set+4DODG3YNHkQGmaxQz8GUJTeGHYRXYvtMPa+YrS0XW+8xHHLnTrKDEV48T4miR6kX7dk0P0b0Y8J5TeDE8q/A=
-X-Received: by 2002:a50:d513:0:b0:4ac:c720:207c with SMTP id
- u19-20020a50d513000000b004acc720207cmr198637edi.5.1676331117332; Mon, 13 Feb
- 2023 15:31:57 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D49BA31;
+	Mon, 13 Feb 2023 23:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676332002; x=1707868002;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=F0qj7f1msyi5nKRrJ/BDVZVo6JFDn7sVzbSyd0NsjAs=;
+  b=leNzUiN6VZZ3kVEtbwmL6zZCE8zGK82KHlpLAB9nLRda/b9oFPDoSawG
+   BpYYcLHmfgk2eJt66BO+MryY6LKAKS6hWmcF6RcKaBSNz9MBd6zlViGhE
+   RR0kSry/I7XOnCiTekNGPec097lTlks2HHAWc5H1qgxkUecaZVEcaQxDa
+   RK40leL5+UXLHtWWRQTebG2SNuB0LfLJJhSTIwvRUYmps+js2IMLeVpRz
+   o8z85ERICxV+5u0i0YJciqNkMKapIvh2NB7DhNABAFfhYS1gxRjggbDvZ
+   3kMWgVtugN9PkkjgmLrgmdOoWPPYjSQt1poWjWJL7Ab7wY8UjnUVuBAEO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="311389563"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="311389563"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:46:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="701455986"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="701455986"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Feb 2023 15:46:39 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pRiWs-00084n-2N;
+	Mon, 13 Feb 2023 23:46:38 +0000
+Date: Tue, 14 Feb 2023 07:45:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Duoming Zhou <duoming@zju.edu.cn>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [stable:linux-5.4.y 3529/7282] ld.lld: error: net/nfc/af_nfc.o:
+ contains a compressed section, but zlib is not available
+Message-ID: <202302140737.cfJ9BKI5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230212092715.1422619-4-davemarchevsky@fb.com>
- <202302121936.t36vlAFG-lkp@intel.com> <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
- <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com> <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
-In-Reply-To: <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 13 Feb 2023 15:31:21 -0800
-Message-ID: <CABCJKucDXNeGCdD6uT7phYhpm+OgYm19EkfCNMB9AJ66k4NcvQ@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first} kfuncs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Dave Marchevsky <davemarchevsky@meta.com>, 
-	kernel test robot <lkp@intel.com>, Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kernel Team <kernel-team@fb.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Joao Moreira <joao@overdrivepizza.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Feb 13, 2023 at 2:17 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Feb 13, 2023 at 12:49 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > I haven't looked at the series in question, but note that this compile
-> > time warning is meant to help us catch Control Flow Integrity runtime
-> > violations, which may result in a panic.
+Hi Duoming,
 
-Here's the tracking issue for the other warnings of this type in the
-kernel, nearly all the warnings are in one driver:
+FYI, the error/warning still remains.
 
-https://github.com/ClangBuiltLinux/linux/issues/1724
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+head:   59342376e8f0c704299dc7a2c14fed07ffb962e2
+commit: 85aecdef77f9c5b5c0d8988db6681960f0d46ab3 [3529/7282] nfc: replace improper check device_is_registered() in netlink related functions
+config: x86_64-randconfig-a003-20230213 (https://download.01.org/0day-ci/archive/20230214/202302140737.cfJ9BKI5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=85aecdef77f9c5b5c0d8988db6681960f0d46ab3
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.4.y
+        git checkout 85aecdef77f9c5b5c0d8988db6681960f0d46ab3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
 
-> It's a transition from kernel to bpf prog.
-> If CFI trips on it it will trip on all transitions.
-> All calls from kernel into bpf are more or less the same.
-> Not sure what it means for other archs, but on x86 JIT emits 'endbr'
-> insn to make IBT/CFI happy.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302140737.cfJ9BKI5-lkp@intel.com/
 
-While IBT allows indirect calls to any function that starts with
-endbr, CFI is more fine-grained and requires the function pointer type
-to match the function type, which further limits possible call
-targets. To actually enforce this, the compiler emits a type hash
-prefix for each function, and a check before each indirect call to
-ensure the call target has the expected prefix. The commit message
-here has an example of the code the compiler generates:
+All errors (new ones prefixed by >>):
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3c516f89e17e56b4738f05588e51267e295b5e63
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+   ld.lld: error: net/nfc/netlink.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: net/nfc/af_nfc.o: contains a compressed section, but zlib is not available
+   ld.lld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
 
-As calling a JIT compiled function would obviously trip CFI, indirect
-call checking is currently disabled in BPF dispatcher functions (using
-the __nocfi attribute). However, BPF trampolines still have the same
-problem, I believe. I wouldn't mind coming up with a solution for
-CFI+BPF JIT compatibility, but I haven't had much time to look into
-this. Basically, in places where we currently emit an endbr
-instruction, we should also emit a type hash prefix.
-
-Generating type prefixes for functions called through a dispatcher
-shouldn't be that hard because the function type is always the same,
-but figuring out the correct type for indirect calls that don't go
-through a dispatcher might not be entirely trivial, although I'm sure
-the BPF verifier/compiler must have this information. FineIBT also
-complicates matters a bit here as the actual prefix format differs
-from the basic KCFI prefix.
-
-I'm not sure if Peter or Joao have had time to look at this, but I
-would be happy to hear any suggestions you might have.
-
-Sami
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
