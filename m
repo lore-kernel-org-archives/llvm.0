@@ -1,100 +1,169 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1A28F4D;
-	Mon, 13 Feb 2023 14:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676298518; x=1707834518;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ca2fl++q9uqe9t4GFMtzFHHUL5BNwJ7uXeCoTeCy9bM=;
-  b=HaExuJsZd5swuL0d1GQqLx1+wsK6zZ9NkU8FszipdMd+zFTDteybSCV9
-   H0ZczQ2m55D3ksaLxT/3u90cPaLXXS6jF8JezYeyfHujrEp856h0btpd2
-   SzSEa9kM4R1XAQPqYxHPtksmZF9iDqrIWdRIFqhLdae9Fzbt2PClS69wq
-   5mxXVnfolqAvQdYYh1MEYOgUswg7nK3AKLxKi/g09KcGZExXGaUbIH8dN
-   Yge5oY2MPMWBHuk6AbuUoO4Rt7BA07MgsZyqWzUrdMEopresuwBQlfGdD
-   DPmSsGkj1KWAvpFDKETMOQURkENab/93ukMQNeoZKqjgvXnEAVAJ8gVuz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333036956"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="333036956"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 06:28:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="792744447"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="792744447"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Feb 2023 06:28:20 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pRZoZ-0007mb-0w;
-	Mon, 13 Feb 2023 14:28:19 +0000
-Date: Mon, 13 Feb 2023 22:27:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ben Skeggs <bskeggs@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [skeggsb-nouveau:01.03-gsp-ada 185/193]
- drivers/gpu/drm/nouveau/nvkm/engine/disp/r525.c:59:1: error: non-void
- function does not return a value in all control paths
-Message-ID: <202302132206.uzzkoc7v-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E6A8F5F
+	for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 15:56:47 +0000 (UTC)
+Received: by mail-il1-f208.google.com with SMTP id s12-20020a056e021a0c00b0030efd0ed890so9501808ild.7
+        for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 07:56:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gMO3sspk7P+Mq1nipJz9biyunW+h9MSd0H8isba1l8w=;
+        b=73gKUXnnkN8tCuEbLpkCFykgugBtHc19oLmUEhspFKhCK4QE3xPdswk4ciZxxklI9n
+         /9DZGpg4/Oias3q5UyWeqyiLLIqj6wZHNyk6q2yzcfzACTO/pALDsiWD2aBNnAgoSswK
+         TBKWLqtXVYYlZ/pIx5q8KBftMuO7C1HaAplfdzQ5fJJucTucB33UeQudY8Ddw3wGLDiG
+         u3zxUGxecaJFt7kDSDobM1C+Isk9NQWFlUmMex1cHNMEo5wSWNfbeSUXIRPc5k6NDo3G
+         wpfmWsfA+AcehIHkdMPuRrvogoEZG0wSLTcxh0PhhPXrrRXSGCOcYyXFh1YxxLI9QICN
+         uBxA==
+X-Gm-Message-State: AO0yUKV1yHbypIo3Vk1yvhUUbzJQHhL6Q/UaRv2LgxJHs50HHOjy5+HA
+	/3fqfZV7KwNRLAWM2KupPkMEY7cPEATwpr4hWrDWLaZY8D9x
+X-Google-Smtp-Source: AK7set8pPDCFvoxfzaoc+/l3Ansmw2opU4BSGcWSIiBnzk3W6ANAES7x+y/67tHoOkiOMpMr+oEjuTfevRf6TPONNzRRCU6elGkJ
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a92:3f04:0:b0:310:efc8:49bf with SMTP id
+ m4-20020a923f04000000b00310efc849bfmr2572917ila.5.1676303806719; Mon, 13 Feb
+ 2023 07:56:46 -0800 (PST)
+Date: Mon, 13 Feb 2023 07:56:46 -0800
+In-Reply-To: <000000000000ece18705f3b20934@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ef6cf905f496e40b@google.com>
+Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in ext4_group_desc_csum
+From: syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
+	tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://gitlab.freedesktop.org/skeggsb/nouveau 01.03-gsp-ada
-head:   ab3448c2873e0fbcf1fd710cccb52dc548bdf449
-commit: c24815755c5c79d50fa9370ec1124fedd29743bb [185/193] disp
-config: arm64-randconfig-r021-20230212 (https://download.01.org/0day-ci/archive/20230213/202302132206.uzzkoc7v-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add skeggsb-nouveau https://gitlab.freedesktop.org/skeggsb/nouveau
-        git fetch --no-tags skeggsb-nouveau 01.03-gsp-ada
-        git checkout c24815755c5c79d50fa9370ec1124fedd29743bb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
+syzbot has found a reproducer for the following issue on:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302132206.uzzkoc7v-lkp@intel.com/
+HEAD commit:    ceaa837f96ad Linux 6.2-rc8
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11727cc7480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
+dashboard link: https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14392a4f480000
 
-All errors (new ones prefixed by >>):
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/88042f9b5fc8/disk-ceaa837f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9945b57ec9ee/vmlinux-ceaa837f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/72ff118ed96b/bzImage-ceaa837f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/dabec17b2679/mount_0.gz
 
->> drivers/gpu/drm/nouveau/nvkm/engine/disp/r525.c:59:1: error: non-void function does not return a value in all control paths [-Werror,-Wreturn-type]
-   }
-   ^
-   1 error generated.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
 
+==================================================================
+BUG: KASAN: use-after-free in crc16+0x1fb/0x280 lib/crc16.c:58
+Read of size 1 at addr ffff88807de00000 by task syz-executor.1/5339
 
-vim +59 drivers/gpu/drm/nouveau/nvkm/engine/disp/r525.c
+CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted 6.2.0-rc8-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x163/0x4f0 mm/kasan/report.c:417
+ kasan_report+0x13a/0x170 mm/kasan/report.c:517
+ crc16+0x1fb/0x280 lib/crc16.c:58
+ ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
+ ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
+ ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
+ ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
+ ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
+ ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
+ ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
+ ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
+ ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
+ ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
+ evict+0x2a4/0x620 fs/inode.c:664
+ do_unlinkat+0x4f1/0x930 fs/namei.c:4327
+ __do_sys_unlink fs/namei.c:4368 [inline]
+ __se_sys_unlink fs/namei.c:4366 [inline]
+ __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fbc85a8c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fbc86838168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
+RAX: ffffffffffffffda RBX: 00007fbc85babf80 RCX: 00007fbc85a8c0f9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
+RBP: 00007fbc85ae7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd5743beaf R14: 00007fbc86838300 R15: 0000000000022000
+ </TASK>
 
-    46	
-    47	static u64
-    48	r525_chan_user(struct nvkm_disp_chan *chan, u64 *psize)
-    49	{
-    50		switch (chan->object.oclass & 0xff) {
-    51		case 0x7d: *psize = 0x10000; return 0x680000;
-    52		case 0x7e: *psize = 0x01000; return 0x690000 + (chan->head * *psize);
-    53		case 0x7b: *psize = 0x01000; return 0x6b0000 + (chan->head * *psize);
-    54		case 0x7a: *psize = 0x01000; return 0x6d8000 + (chan->head * *psize);
-    55		default:
-    56			BUG_ON(1);
-    57			break;
-    58		}
-  > 59	}
-    60	
+The buggy address belongs to the physical page:
+page:ffffea0001f78000 refcount:0 mapcount:-128 mapping:0000000000000000 index:0x0 pfn:0x7de00
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001f86008 ffffea0001db2a08 0000000000000000
+raw: 0000000000000000 0000000000000001 00000000ffffff7f 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, tgid 4855 (sshd), ts 43553490210, free_ts 58249059760
+ prep_new_page mm/page_alloc.c:2531 [inline]
+ get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
+ __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
+ alloc_slab_page+0x6a/0x160 mm/slub.c:1851
+ allocate_slab mm/slub.c:1998 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2051
+ ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
+ __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+ kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
+ mt_alloc_bulk lib/maple_tree.c:157 [inline]
+ mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
+ mas_node_count_gfp lib/maple_tree.c:1316 [inline]
+ mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
+ vma_expand+0x277/0x850 mm/mmap.c:541
+ mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
+ do_mmap+0x8c9/0xf70 mm/mmap.c:1411
+ vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1446 [inline]
+ free_pcp_prepare mm/page_alloc.c:1496 [inline]
+ free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
+ free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
+ qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
+ slab_alloc_node mm/slub.c:3452 [inline]
+ kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
+ __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
+ alloc_skb include/linux/skbuff.h:1270 [inline]
+ alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
+ sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
+ unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ __sys_sendto+0x475/0x5f0 net/socket.c:2117
+ __do_sys_sendto net/socket.c:2129 [inline]
+ __se_sys_sendto net/socket.c:2125 [inline]
+ __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Memory state around the buggy address:
+ ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff88807de00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                   ^
+ ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
