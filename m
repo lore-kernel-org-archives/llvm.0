@@ -1,171 +1,142 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1BFAD52;
-	Mon, 13 Feb 2023 21:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676325040; x=1707861040;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=v79E84a7qAMQPFswqfoVVKqD06DuvOQc5wsFTfybqtE=;
-  b=ObMNXKnqJq0LytuImRYlRAEJ6gP9I8UPIX47PhWGQw8mZGr+3TUoIX4H
-   if6pgI4LW1wLdyPx8VcE8zIqtx5Mqb/M7dCkmKIXuMf2nYPLCV2DWOWmB
-   8EpWAXoGcH5vuqoOKH01JBnMd8o976CRr2nqv0LCgvxOrxWM/fsO616TZ
-   O6oKEyq312cFimWiwJbbzA1X+Rxh5ecBIcaipxKXqYPi1CmFqAgmm/Ns/
-   THE0LOExP3d2x2OGOYGcCdLpcy0cB0K6Z0hP+lxN0Tujxz8urKJa0Nl2Y
-   GKwLr6MNN5yWQVnq51dzcgHpCgivDuCHi5mBoguKbOmk51a0UKSUxwQPJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="393410516"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="393410516"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 13:50:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="778028455"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="778028455"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Feb 2023 13:50:36 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pRgiZ-00081t-2U;
-	Mon, 13 Feb 2023 21:50:35 +0000
-Date: Tue, 14 Feb 2023 05:49:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, pavel@ucw.cz,
-	lee@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-	Eckert.Florian@googlemail.com
-Subject: Re: [PATCH 1/2] tty: new helper function tty_get_mget
-Message-ID: <202302140536.fks6kujh-lkp@intel.com>
-References: <20230213140638.620206-2-fe@dev.tdt.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBD8BA24;
+	Mon, 13 Feb 2023 22:17:14 +0000 (UTC)
+Received: by mail-ed1-f47.google.com with SMTP id d40so13678834eda.8;
+        Mon, 13 Feb 2023 14:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MQmeB4kZpNulzj3YC16Y/CF0abLsGxtOjZ7MLt0xH/w=;
+        b=eFoJqEoV3VCvNKpNthp82Sy73wkoN1jZZWbCYrDbj3xF/uyNj+eM7hIymnm91wIvDA
+         PkijAYnlZC1+uvJpx1+yY13Dud5RiQniJhQuPtuso7YYniD9H2RtE9n7NLO05sZGYhhA
+         gUwqByE/86eZ2mQfQpSpvq+RZD/LeKtrgReqeKFk5XT4ZiWV698OWYHdDr9uw1uVjRCQ
+         Hq5GsMUb5kwUG7qd8v8ViQJalzR3lcyHZ2ymC6V+b/cw9aCpmxLHcznRUO17S517eZQt
+         vF12MqojRl8tNE5gpVAdy+txSoMuqQ4GnVH0IQNhqhfko9oEqvSOWv3+TYkgk8yt5LLN
+         0DqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MQmeB4kZpNulzj3YC16Y/CF0abLsGxtOjZ7MLt0xH/w=;
+        b=znnjl3WH9QgISr8LtKFUaCVRbP8efduww/VDPwekySLbHw6Te7djHrbMM3J0XLSbcV
+         BWt58gLOYv16aqRkNi3eukCFP6QglX/i3QqFmSn1px+cxYbGlgSUxeI6D46p4fxg/7UC
+         mKFtP/Yugt5Iqz8wU5H9nV+eaJChKiV1eAV5KXMfucLPL+Z431QrU7YkuQq/j2fXHf09
+         VoeJLLb/6x+UUIhuPcNcN98j1O/TJct4nu6WIHRxQQvd2wGq6k8Pmc3WbtXfwUuOv7FB
+         Im/oKNrG/RUZlfbcAf1QJ++yWwMS6+brCYQZ+sIqB/a22lD8KQKhxvQSa09jptNTnQq5
+         DY+A==
+X-Gm-Message-State: AO0yUKWc3vju3cVpthdYYTytmveQDe+ygu9AjsPk1wrY+Zs4rKvCnGmO
+	5K1e1KBeousEHxFjkBQ3Hn+XX14h3vSK/d6KMss=
+X-Google-Smtp-Source: AK7set+vH3hXHMCSKGj2qjLl86EfDF8sx5n26760RcMoI9XRw99BnabTZooKRlfHYCqh9a6LWG2MmC4rLWHF5LnOC6o=
+X-Received: by 2002:a50:ba84:0:b0:4ac:b618:7fb1 with SMTP id
+ x4-20020a50ba84000000b004acb6187fb1mr113376ede.6.1676326632994; Mon, 13 Feb
+ 2023 14:17:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230213140638.620206-2-fe@dev.tdt.de>
+References: <20230212092715.1422619-4-davemarchevsky@fb.com>
+ <202302121936.t36vlAFG-lkp@intel.com> <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
+ <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
+In-Reply-To: <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 13 Feb 2023 14:17:01 -0800
+Message-ID: <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first} kfuncs
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Dave Marchevsky <davemarchevsky@meta.com>, kernel test robot <lkp@intel.com>, 
+	Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Kernel Team <kernel-team@fb.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Florian,
+On Mon, Feb 13, 2023 at 12:49 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Mon, Feb 13, 2023 at 12:45 PM Dave Marchevsky
+> <davemarchevsky@meta.com> wrote:
+> >
+> > On 2/12/23 6:21 AM, kernel test robot wrote:
+> > > Hi Dave,
+> > >
+> > >>> kernel/bpf/helpers.c:1901:9: warning: cast from 'bool (*)(struct bp=
+f_rb_node *, const struct bpf_rb_node *)' (aka '_Bool (*)(struct bpf_rb_nod=
+e *, const struct bpf_rb_node *)') to 'bool (*)(struct rb_node *, const str=
+uct rb_node *)' (aka '_Bool (*)(struct rb_node *, const struct rb_node *)')=
+ converts to incompatible function type [-Wcast-function-type-strict]
+> > >                          (bool (*)(struct rb_node *, const struct rb_=
+node *))less);
+> > >                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~
+> >
+> > This is the only new warning introduced by this series. A previous vers=
+ion had
+> > the same complaint by kernel test robot.
+> >
+> > struct bpf_rb_node is an opaque struct with the same size as struct rb_=
+node.
+> > It's not intended to be manipulated directly by any BPF program or bpf-=
+rbtree
+> > kernel code, but rather to be used as a struct rb_node by rbtree librar=
+y
+> > helpers.
+> >
+> > Here, the compiler complains that the less() callback taken by bpf_rbtr=
+ee_add
+> > is typed
+> >
+> > bool (*)(struct bpf_rb_node *, const struct bpf_rb_node *)
+> >
+> > while the actual rbtree lib helper rb_add's less() is typed
+> >
+> > bool (*)(struct rb_node *, const struct rb_node *)
+> >
+> > I'm not a C standard expert, but based on my googling, for C99 it's not=
+ valid
+> > to cast a function pointer to anything aside from void* and its origina=
+l type.
+> > Furthermore, since struct bpf_rb_node an opaque bitfield and struct rb_=
+node
+> > has actual members, C99 standard 6.2.7 paragraph 1 states that they're =
+not
+> > compatible:
+> >
+> >   Moreover, two structure,
+> >   union, or enumerated types declared in separate translation units are=
+ compatible if their
+> >   tags and members satisfy the following requirements: If one is declar=
+ed with a tag, the
+> >   other shall be declared with the same tag. If both are complete types=
+, then the following
+> >   additional requirements apply: there shall be a one-to-one correspond=
+ence between their
+> >   members such that each pair of corresponding members are declared wit=
+h compatible
+> >   types, and such that if one member of a corresponding pair is declare=
+d with a name, the
+> >   other member is declared with the same name. For two structures, corr=
+esponding
+> >   members shall be declared in the same order
+> >
+> > I'm not sure how to proceed here. We could change bpf_rbtree_add's less=
+() cb to
+>
+> I haven't looked at the series in question, but note that this compile
+> time warning is meant to help us catch Control Flow Integrity runtime
+> violations, which may result in a panic.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on tty/tty-next tty/tty-linus pavel-leds/for-next staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.2-rc8 next-20230213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Eckert/tty-new-helper-function-tty_get_mget/20230213-223413
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20230213140638.620206-2-fe%40dev.tdt.de
-patch subject: [PATCH 1/2] tty: new helper function tty_get_mget
-config: x86_64-randconfig-a005-20230213 (https://download.01.org/0day-ci/archive/20230214/202302140536.fks6kujh-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/096ca9c9428ec2a8ebab4af0798461e66585cdde
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Florian-Eckert/tty-new-helper-function-tty_get_mget/20230213-223413
-        git checkout 096ca9c9428ec2a8ebab4af0798461e66585cdde
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302140536.fks6kujh-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/leds/trigger/ledtrig-tty.c:7:
-   include/linux/tty.h:423:3: error: expected ')'
-                   struct serial_icounter_struct *icount);
-                   ^
-   include/linux/tty.h:422:19: note: to match this '('
-   int tty_get_icount(struct tty_struct *tty
-                     ^
->> drivers/leds/trigger/ledtrig-tty.c:116:42: error: too many arguments to function call, expected single argument 'tty', have 2 arguments
-           ret = tty_get_icount(trigger_data->tty, &icount);
-                 ~~~~~~~~~~~~~~                    ^~~~~~~
-   include/linux/tty.h:422:5: note: 'tty_get_icount' declared here
-   int tty_get_icount(struct tty_struct *tty
-       ^
-   2 errors generated.
-
-
-vim +/tty +116 drivers/leds/trigger/ledtrig-tty.c
-
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   78  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   79  static void ledtrig_tty_work(struct work_struct *work)
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   80  {
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   81  	struct ledtrig_tty_data *trigger_data =
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   82  		container_of(work, struct ledtrig_tty_data, dwork.work);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   83  	struct serial_icounter_struct icount;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   84  	int ret;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   85  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   86  	mutex_lock(&trigger_data->mutex);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   87  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   88  	if (!trigger_data->ttyname) {
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   89  		/* exit without rescheduling */
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   90  		mutex_unlock(&trigger_data->mutex);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   91  		return;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   92  	}
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   93  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   94  	/* try to get the tty corresponding to $ttyname */
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   95  	if (!trigger_data->tty) {
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   96  		dev_t devno;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   97  		struct tty_struct *tty;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   98  		int ret;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   99  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  100  		ret = tty_dev_name_to_number(trigger_data->ttyname, &devno);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  101  		if (ret < 0)
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  102  			/*
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  103  			 * A device with this name might appear later, so keep
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  104  			 * retrying.
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  105  			 */
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  106  			goto out;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  107  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  108  		tty = tty_kopen_shared(devno);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  109  		if (IS_ERR(tty) || !tty)
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  110  			/* What to do? retry or abort */
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  111  			goto out;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  112  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  113  		trigger_data->tty = tty;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  114  	}
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  115  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13 @116  	ret = tty_get_icount(trigger_data->tty, &icount);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  117  	if (ret) {
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  118  		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  119  		mutex_unlock(&trigger_data->mutex);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  120  		return;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  121  	}
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  122  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  123  	if (icount.rx != trigger_data->rx ||
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  124  	    icount.tx != trigger_data->tx) {
-ba8a86e4dadb33 Uwe Kleine-König 2021-02-19  125  		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  126  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  127  		trigger_data->rx = icount.rx;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  128  		trigger_data->tx = icount.tx;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  129  	} else {
-ba8a86e4dadb33 Uwe Kleine-König 2021-02-19  130  		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  131  	}
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  132  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  133  out:
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  134  	mutex_unlock(&trigger_data->mutex);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  135  	schedule_delayed_work(&trigger_data->dwork, msecs_to_jiffies(100));
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  136  }
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  137  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+It's a transition from kernel to bpf prog.
+If CFI trips on it it will trip on all transitions.
+All calls from kernel into bpf are more or less the same.
+Not sure what it means for other archs, but on x86 JIT emits 'endbr'
+insn to make IBT/CFI happy.
