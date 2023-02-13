@@ -1,173 +1,186 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2979E3239
-	for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 20:49:10 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id u75so8924205pgc.10
-        for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 12:49:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9/YkLIE4XGQUjdqUPXuJDlWxY/2OtliIXtuTo197q9Q=;
-        b=DfzWbn2QBe0qf/GJjnMcVYSARoRBt+wzlYGrxaDsKG277aSdaQxFXKPSfm6LMeLR27
-         9KyU+s8uzxpukNqROKBigdrxPLUTZuaeAZXkxC4naxeVzao2cEMZu40wdaNEI38LV4c4
-         cnAZuHUtGUXCwHuCaEtG+CP6CgstHL0WvJnK9ne2uWN3pLe7OmAmBomD0PiXix34gKkZ
-         O3xU6k33K8F4LagJf/SzWdP+IIoX6WiVQyRQLzLnQtgSGipcAv2znLvA2KTBf7vSsg67
-         yw+PYwXgqeDtlhDDoO7klIiDSCko2nPiQHx/OM2BaJA4jjj0Gai7zweQl+3u401jUFH6
-         GdCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9/YkLIE4XGQUjdqUPXuJDlWxY/2OtliIXtuTo197q9Q=;
-        b=FxpeowvCG5sPzwR1BHck6IPG5BsBIDEHnWKAvFe9aaOuOWMykRCvnxIYtzc1AhOnaB
-         U99h0eJuBcZm4sa5tNhE6sIReqUQCt3zBy6psqwOnQW5SQFdWtTUaBTpAcDgwNaLznMd
-         z+FebffnioFS2q+ufvItZDsEx1kwbyDsfkhyUnQEuT4sdwNHKQ+06kqnDcLuxuo2tTxj
-         ccZitSJfJHCln5gTXeOq2MQBaRhisvmZu5FuWHmyRkonMqGnFdSNRgza5BYl2QeJWSXb
-         OODTM4ZJXrUyaPg88uYnnLY9Qt2Z6+A3a1a/u10snKTwY8VeUC8eRoTqydgLLEQkgW90
-         KwDg==
-X-Gm-Message-State: AO0yUKWH4vKOZoUy04361hgi9u50vu+J6Q1CP5ppclfIDXErTkhduzC0
-	sxdvgVW0QI4d/HPfweXJYw8/EAoaD60kpObqF/YC9g==
-X-Google-Smtp-Source: AK7set+k5Bx/2yqbeHlo4rmmM63L4TxtGLphsL9pPw8AuG0rl7BxUz9zgLDZ/UgLz6kcY9paa/f1o8Rj/R97+MLb3/U=
-X-Received: by 2002:a62:154c:0:b0:5a8:925b:f68e with SMTP id
- 73-20020a62154c000000b005a8925bf68emr1442644pfv.28.1676321349183; Mon, 13 Feb
- 2023 12:49:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5560AD52;
+	Mon, 13 Feb 2023 21:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676323784; x=1707859784;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=F209uMdaTJjwNR4utw9uYPO01gO8UlW+GOrDssBEwJ0=;
+  b=UXzYmFDlr7J7BViev8UcxdLq8lXVAzbJN05xPIZ4EISD5KKKVYCoD2n5
+   PbY47WuQCys0yNc1vi/ayEHLx3pE4x56fi2rZ69fwXZsi6lo/XZqqkyh6
+   B/EywX2/FeAgPsZ+r0ZgFalny54HsY2TWD4vbAZEhEIJ1Eg331F0Zn/yw
+   M239Oj5k4tRerbjiQK1Q/Ovw0UdsZ7qFxt8ZhzBSvPdHvx9iC20DMS88z
+   As2FHoDz1VIbuSRcPeKMxFc5tYt6PgIBtoDzuc/tbR+DgV/HZ7KkTlYya
+   iHqmoL+OiVi9YYEUrywSjNreN4jSATLZCK4tXo6xwQPpoM8utctKL8oAk
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333142498"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="333142498"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 13:29:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="757743668"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="757743668"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Feb 2023 13:29:35 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pRgOE-000819-0Z;
+	Mon, 13 Feb 2023 21:29:34 +0000
+Date: Tue, 14 Feb 2023 05:28:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, pavel@ucw.cz,
+	lee@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	Eckert.Florian@googlemail.com
+Subject: Re: [PATCH 1/2] tty: new helper function tty_get_mget
+Message-ID: <202302140516.F9Riaass-lkp@intel.com>
+References: <20230213140638.620206-2-fe@dev.tdt.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230212092715.1422619-4-davemarchevsky@fb.com>
- <202302121936.t36vlAFG-lkp@intel.com> <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
-In-Reply-To: <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 13 Feb 2023 12:48:57 -0800
-Message-ID: <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first} kfuncs
-To: Dave Marchevsky <davemarchevsky@meta.com>
-Cc: kernel test robot <lkp@intel.com>, Dave Marchevsky <davemarchevsky@fb.com>, bpf@vger.kernel.org, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kernel Team <kernel-team@fb.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230213140638.620206-2-fe@dev.tdt.de>
 
-On Mon, Feb 13, 2023 at 12:45 PM Dave Marchevsky
-<davemarchevsky@meta.com> wrote:
->
-> On 2/12/23 6:21 AM, kernel test robot wrote:
-> > Hi Dave,
-> >
-> >>> kernel/bpf/helpers.c:1901:9: warning: cast from 'bool (*)(struct bpf_=
-rb_node *, const struct bpf_rb_node *)' (aka '_Bool (*)(struct bpf_rb_node =
-*, const struct bpf_rb_node *)') to 'bool (*)(struct rb_node *, const struc=
-t rb_node *)' (aka '_Bool (*)(struct rb_node *, const struct rb_node *)') c=
-onverts to incompatible function type [-Wcast-function-type-strict]
-> >                          (bool (*)(struct rb_node *, const struct rb_no=
-de *))less);
-> >                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~
->
-> This is the only new warning introduced by this series. A previous versio=
-n had
-> the same complaint by kernel test robot.
->
-> struct bpf_rb_node is an opaque struct with the same size as struct rb_no=
-de.
-> It's not intended to be manipulated directly by any BPF program or bpf-rb=
-tree
-> kernel code, but rather to be used as a struct rb_node by rbtree library
-> helpers.
->
-> Here, the compiler complains that the less() callback taken by bpf_rbtree=
-_add
-> is typed
->
-> bool (*)(struct bpf_rb_node *, const struct bpf_rb_node *)
->
-> while the actual rbtree lib helper rb_add's less() is typed
->
-> bool (*)(struct rb_node *, const struct rb_node *)
->
-> I'm not a C standard expert, but based on my googling, for C99 it's not v=
-alid
-> to cast a function pointer to anything aside from void* and its original =
-type.
-> Furthermore, since struct bpf_rb_node an opaque bitfield and struct rb_no=
-de
-> has actual members, C99 standard 6.2.7 paragraph 1 states that they're no=
-t
-> compatible:
->
->   Moreover, two structure,
->   union, or enumerated types declared in separate translation units are c=
-ompatible if their
->   tags and members satisfy the following requirements: If one is declared=
- with a tag, the
->   other shall be declared with the same tag. If both are complete types, =
-then the following
->   additional requirements apply: there shall be a one-to-one corresponden=
-ce between their
->   members such that each pair of corresponding members are declared with =
-compatible
->   types, and such that if one member of a corresponding pair is declared =
-with a name, the
->   other member is declared with the same name. For two structures, corres=
-ponding
->   members shall be declared in the same order
->
-> I'm not sure how to proceed here. We could change bpf_rbtree_add's less()=
- cb to
+Hi Florian,
 
-I haven't looked at the series in question, but note that this compile
-time warning is meant to help us catch Control Flow Integrity runtime
-violations, which may result in a panic.
+Thank you for the patch! Yet something to improve:
 
-> take two rb_node *'s, but then each such cb implementation would have to =
-cast
-> its parameters before doing anything useful with them. Furthermore this w=
-ould
-> require introducing non-opaque rb_node type into BPF programs. Other idea=
-s seem
-> similarly hacky.
->
-> Note that this flag was only recently introduced [0] and discussion in th=
-at
-> linked thread notes that ~1500 other places in the kernel raise same warn=
-ing.
->
->
->   [0]: https://reviews.llvm.org/D134831
->
->
->
-> >    7 warnings generated.
-> >
-> >
-> > vim +1901 kernel/bpf/helpers.c
-> >
-> >   1896
-> >   1897        void bpf_rbtree_add(struct bpf_rb_root *root, struct bpf_=
-rb_node *node,
-> >   1898                            bool (less)(struct bpf_rb_node *a, co=
-nst struct bpf_rb_node *b))
-> >   1899        {
-> >   1900                rb_add_cached((struct rb_node *)node, (struct rb_=
-root_cached *)root,
-> >> 1901                       (bool (*)(struct rb_node *, const struct rb=
-_node *))less);
-> >   1902        }
-> >   1903
-> >
->
+[auto build test ERROR on tty/tty-testing]
+[also build test ERROR on tty/tty-next tty/tty-linus staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.2-rc8 next-20230213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Eckert/tty-new-helper-function-tty_get_mget/20230213-223413
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20230213140638.620206-2-fe%40dev.tdt.de
+patch subject: [PATCH 1/2] tty: new helper function tty_get_mget
+config: riscv-buildonly-randconfig-r005-20230212 (https://download.01.org/0day-ci/archive/20230214/202302140516.F9Riaass-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/096ca9c9428ec2a8ebab4af0798461e66585cdde
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Florian-Eckert/tty-new-helper-function-tty_get_mget/20230213-223413
+        git checkout 096ca9c9428ec2a8ebab4af0798461e66585cdde
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/misc/bcm-vk/ drivers/tty/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302140516.F9Riaass-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/tty/tty_io.c:76:
+   include/linux/tty.h:423:3: error: expected ')'
+                   struct serial_icounter_struct *icount);
+                   ^
+   include/linux/tty.h:422:19: note: to match this '('
+   int tty_get_icount(struct tty_struct *tty
+                     ^
+>> drivers/tty/tty_io.c:2589:5: error: conflicting types for 'tty_get_icount'
+   int tty_get_icount(struct tty_struct *tty,
+       ^
+   include/linux/tty.h:422:5: note: previous declaration is here
+   int tty_get_icount(struct tty_struct *tty
+       ^
+>> drivers/tty/tty_io.c:2606:31: error: too many arguments to function call, expected 1, have 2
+           retval = tty_get_icount(tty, &icount);
+                    ~~~~~~~~~~~~~~      ^~~~~~~
+   drivers/tty/tty_io.c:2599:19: note: 'tty_get_icount' declared here
+   EXPORT_SYMBOL_GPL(tty_get_icount);
+                     ^
+   3 errors generated.
+--
+   In file included from drivers/tty/tty_port.c:8:
+   include/linux/tty.h:423:3: error: expected ')'
+                   struct serial_icounter_struct *icount);
+                   ^
+   include/linux/tty.h:422:19: note: to match this '('
+   int tty_get_icount(struct tty_struct *tty
+                     ^
+>> drivers/tty/tty_port.c:266:2: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+           INIT_KFIFO(port->xmit_fifo);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kfifo.h:130:69: note: expanded from macro 'INIT_KFIFO'
+           __kfifo->mask = __is_kfifo_ptr(__tmp) ? 0 : ARRAY_SIZE(__tmp->buf) - 1;\
+                         ~                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
+   1 warning and 1 error generated.
+--
+   In file included from drivers/misc/bcm-vk/bcm_vk_dev.c:20:
+   In file included from drivers/misc/bcm-vk/bcm_vk.h:18:
+   include/linux/tty.h:423:3: error: expected ')'
+                   struct serial_icounter_struct *icount);
+                   ^
+   include/linux/tty.h:422:19: note: to match this '('
+   int tty_get_icount(struct tty_struct *tty
+                     ^
+>> drivers/misc/bcm-vk/bcm_vk_dev.c:1320:6: warning: shift count >= width of type [-Wshift-count-overflow]
+                                           DMA_BIT_MASK(BCM_VK_DMA_BITS));
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   1 warning and 1 error generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/tty_get_icount +2589 drivers/tty/tty_io.c
+
+^1da177e4c3f41 drivers/char/tty_io.c Linus Torvalds   2005-04-16  2579  
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2580  /**
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2581   * tty_get_icount	-	get tty statistics
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2582   * @tty: tty device
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2583   * @icount: output parameter
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2584   *
+796a75a98762f1 drivers/tty/tty_io.c  Jiri Slaby       2021-11-26  2585   * Gets a copy of the @tty's icount statistics.
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2586   *
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2587   * Locking: none (up to the driver)
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2588   */
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18 @2589  int tty_get_icount(struct tty_struct *tty,
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2590  		   struct serial_icounter_struct *icount)
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2591  {
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2592  	memset(icount, 0, sizeof(*icount));
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2593  
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2594  	if (tty->ops->get_icount)
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2595  		return tty->ops->get_icount(tty, icount);
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2596  	else
+1b8b20868a6d64 drivers/tty/tty_io.c  Johan Hovold     2021-04-07  2597  		return -ENOTTY;
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2598  }
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2599  EXPORT_SYMBOL_GPL(tty_get_icount);
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2600  
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2601  static int tty_tiocgicount(struct tty_struct *tty, void __user *arg)
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2602  {
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2603  	struct serial_icounter_struct icount;
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2604  	int retval;
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2605  
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18 @2606  	retval = tty_get_icount(tty, &icount);
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2607  	if (retval != 0)
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2608  		return retval;
+d20c219c731784 drivers/tty/tty_io.c  Uwe Kleine-König 2020-12-18  2609  
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2610  	if (copy_to_user(arg, &icount, sizeof(icount)))
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2611  		return -EFAULT;
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2612  	return 0;
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2613  }
+d281da7ff6f70e drivers/char/tty_io.c Alan Cox         2010-09-16  2614  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
