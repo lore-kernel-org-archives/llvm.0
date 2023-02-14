@@ -1,88 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B10BC0A3
-	for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 21:53:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDC6C4339B;
-	Tue, 14 Feb 2023 21:53:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676411624;
-	bh=+Xm/IjO7zOYY3xtxffSO9GMqU3xo7Wj16H3ovl72Lag=;
-	h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-	b=TI5jfe0bqw1qT6byRbqj5cSofRTau19hgFr22yxIPJY6Yfb8R0kLlKMjarPC945uK
-	 zR1ZKU2cVLWITnO4sm7zjxhhHDTJOa+VYT4fuUtkwigTYhGlE21+L7jWCEyEP1steC
-	 rAUTkM0pGfOOl80bqRA3wehpV2hmzs+xV3sfsL0RoJFERlK2aLuGQQILpFXYOFr9Tr
-	 AQExbdXDr+8ilpjK7NfCYJbYnYRVoG+m6SZrxvp7AvvXDhimF7MVUvV3IMVenonYzZ
-	 9lL1Q1zN5R7KEcjt8U1iiEQkf47iLyiKrZnRZm+rsDNPIiCJN8ucF+QCP6CpadXCoZ
-	 FvV0x35H3XsIw==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailauth.nyi.internal (Postfix) with ESMTP id 59ED527C0054;
-	Tue, 14 Feb 2023 16:53:42 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 14 Feb 2023 16:53:42 -0500
-X-ME-Sender: <xms:5QLsYykLywU9a7QODpMhMK8rwDpxGAJjTlX2M37AvFOkv0D8yYC4ag>
-    <xme:5QLsY52yPANFM6sOHhhntpXOq-Og6G9wysQmbNNlgilqXuVe4Cmi2-xXjGbByzjbt
-    3kUu0a3j3qiKdkMw-8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeifedgudegiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugeskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpefgffejleeluddugfejueeiteefvddtgfeutefhvdfgudfhveekgeeh
-    gfevledvudenucffohhmrghinhepphgrshhtvggsihhnrdgtohhmnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguodhmvghsmhhtphgr
-    uhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedtvdegqddvkeejtddtvdeigedqrg
-    hrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5QLsYwpzba8Eln08MFe5Wu_FAeR8DIjIyLkAYgaKz4m2E_QkUyhrKw>
-    <xmx:5QLsY2ljEAW9qw1jcAe5ZMZsLUPAgiWJNQBTr_G9BV88JM5XzPCsrg>
-    <xmx:5QLsYw1uWtA_NKPTj_XoHwaV3BHigDL91Pj8iZcYNN60hZCUYpQy1w>
-    <xmx:5gLsY1tlKk1fX_LUbWv7R2B8S4Q9mjHS33JTDQSbHt9xC5SZ91BSmg>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id BAD14B60086; Tue, 14 Feb 2023 16:53:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA969CB80
+	for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 22:00:20 +0000 (UTC)
+Received: by mail-ej1-f54.google.com with SMTP id dr8so43480147ejc.12
+        for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 14:00:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AS/0qup7BcnqbUG2luaOwtrCXv59oK9htcoBV4r8xhk=;
+        b=CPFRjqqmsqDcbGjNXJl+hyJ3nJ1+gJwkgqLE/r9Oa0+2b/Pq6ryT+HzxwVrAjSC7tn
+         l8DOfFd2ns53htL/HteSdqvDWJSbs4ZqMGhxQQAstX5yomzt9oCirNOl8cckMGt+rOuU
+         ZFQnDyKFjjyiG104YyRQMcn+d8ae0PCBpFHFi3J0jcfuLupQLFmHgyyslq3XQ/AfEStI
+         DuVMzlDMtJiAdjhk8VMmOf+jhYU/B4I36Ald4qYjp4WRsp3KHniadgLoSMu4ufmXe4A5
+         QBBGfmU8YQEyLGp/AYn4jUl80Dja5RHhr5ZJhvoWzPqCaU/TWivqr3eZGCzX7V3zd2nZ
+         Q2Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AS/0qup7BcnqbUG2luaOwtrCXv59oK9htcoBV4r8xhk=;
+        b=XxgnwikoKv9BTZJV2dVv1y81biOJx8XyQ0vS9Mw+sytuVN3FJ1gwV+aULRzhjFgPRr
+         acC41863TmCOeW2oGKBepJpOjNYy7vphk3EJXtJtBZIHkTyMeFeohoVbkAeucrkSGZ57
+         nWlj6oQ3gnLwLGXApQk3R7jPflB136fGYqGt5LGnlxuelwp/bzDlFHJAX9U7dWZ5YmWX
+         kniQYp7po5YvA9IAZRdv6CQb/eWkOR15e1k7nKhSGC8P3ELoYrNR7hLcfCILm0GcyiO7
+         XjrNiWccqkga9iIaXJ2zFB34EKgPdQAP23L4LNjby9d3v3stLNBbikeHv6TOSIgnBvA6
+         5UXQ==
+X-Gm-Message-State: AO0yUKWA0PIbknt86LXnkzeYAIZDQAohkDYlhZOnA4YLGrUoM62g2l4K
+	Sl1iOtoq8sXtIL3AomVru4uAb++VcqTB1CuR7SybUA==
+X-Google-Smtp-Source: AK7set89M7AOPuCjBIeu+wc2JMUNVAVkDPYq97Ui/xG09ktGeDqyVQiNbMANXkSQy4uXVk9NH1q6GETMwj4pk/vF0GI=
+X-Received: by 2002:a17:907:2cd2:b0:895:58be:963 with SMTP id
+ hg18-20020a1709072cd200b0089558be0963mr4318ejc.3.1676412018747; Tue, 14 Feb
+ 2023 14:00:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <85de69eb-5d71-4b29-ba83-c0258d58b807@app.fastmail.com>
-In-Reply-To: <63ec01f0.170a0220.94c76.011e@mx.google.com>
-References: <20230214132831.2118392-1-arnd@kernel.org>
- <63ec01f0.170a0220.94c76.011e@mx.google.com>
-Date: Tue, 14 Feb 2023 22:53:14 +0100
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: "Kees Cook" <keescook@chromium.org>
-Cc: "Brian King" <brking@us.ibm.com>,
- "James E.J. Bottomley" <jejb@linux.ibm.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "James Bottomley" <James.Bottomley@steeleye.com>,
- "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
- "Arnd Bergmann" <arnd@arndb.de>, "Niklas Cassel" <niklas.cassel@wdc.com>,
- "John Garry" <john.g.garry@oracle.com>, linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [v2] scsi: ipr: work around fortify-string warning
-Content-Type: text/plain
+MIME-Version: 1.0
+References: <20230212092715.1422619-4-davemarchevsky@fb.com>
+ <202302121936.t36vlAFG-lkp@intel.com> <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
+ <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
+ <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
+ <CABCJKucDXNeGCdD6uT7phYhpm+OgYm19EkfCNMB9AJ66k4NcvQ@mail.gmail.com> <Y+tupCQ/X38AlvY0@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y+tupCQ/X38AlvY0@hirez.programming.kicks-ass.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Tue, 14 Feb 2023 13:59:41 -0800
+Message-ID: <CABCJKuc1iqHjg9ERVXMHO00rOqaNGM=d7xTvB4f6fTM4J4-nTA@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first} kfuncs
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Dave Marchevsky <davemarchevsky@meta.com>, 
+	kernel test robot <lkp@intel.com>, Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Kernel Team <kernel-team@fb.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Joao Moreira <joao@overdrivepizza.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Feb 14, 2023, at 22:49, Kees Cook wrote:
-> On Tue, Feb 14, 2023 at 02:28:08PM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
->> about a potential string overflow with all versions of clang:
+On Tue, Feb 14, 2023 at 7:36 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> Perhaps this is arch or config specific? I haven't been able to reproduce
-> this for some reason.
+> The other case, which you allude to I think, is control transfer to the
+> JIT'ed code which is currently __nocfi annotated. I've only briefly
+> thought about how to change this, but basically it would entail the JIT
+> emitting the correct prefix bytes and setting the entry point at +16.
+>
+> Given the JIT will only run after we've selected kCFI/FineIBT it knows
+> which form to pick from and can emit the right prefix. Then if we remove
+> the __nocfi annotation from the call into JIT'ed code, everything should
+> work.
+>
+> None of this should be exceptionally hard, but I've not had time to
+> actually do much about it yet.
 
-I saw it on three arm32 randconfig builds out
-of a few thousand, with clang-15, clang-16 and
-clang-17. See [1] for one config that triggered
-it with recent linux-next based tree.
+The dispatcher path shouldn't be terribly hard to fix, but when I
+looked into this briefly half a year ago and ran BPF self-tests with
+CFI enabled, I found a few more places that indirectly call jitted
+code (or trampolines) using a different function pointer type:
 
-     Arnd
+https://github.com/ClangBuiltLinux/linux/issues/1727
 
-[1] https://pastebin.com/c9FEjzKe
+For some of these, determining the correct type didn't look all that
+simple, but then again, I'm not super familiar with BPF internals.
+
+Sami
