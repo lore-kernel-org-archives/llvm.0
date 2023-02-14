@@ -1,209 +1,222 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D49D7E;
-	Tue, 14 Feb 2023 02:52:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676343172; x=1707879172;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IJlA/aUkDfwVflD02OPIMXlPGXO9ryDJZ9OJHFLiBYg=;
-  b=BSDg3VH50mAQvGmVNF/IRKGpW3s4H9eyss3GCLoW02QIw+HSlr4AXTao
-   K8ozS3ILKvGGJFtkrKCi72X4dimexLZEbPRVZC7TZQm3Krlg8GQaF6Lmg
-   UnxH1XGScT1f6OkyjAvquyViq4cFofnt/7DrKdPTmFHwbIQqpQUD2y6kf
-   4IMTl0Ruw+HR+XbCIef8nGgwPOVKWxiz111uuAsobr+9/En2NSQAxz6FA
-   MW5xVU8G7FFxWve6v56vKTSUaj0mupmCCDpkY87/Y01rZzY1QRnvE1jJ4
-   4LisjaTRPlaMrG1dUmtQiG7UQSmQ1WV3HViRCVwSfVLKLnkW04J6lIvkh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="311422840"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="311422840"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 18:52:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="732720649"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="732720649"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Feb 2023 18:52:50 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pRlR3-00089P-2b;
-	Tue, 14 Feb 2023 02:52:49 +0000
-Date: Tue, 14 Feb 2023 10:52:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:sched/rt-throttle.feb13.2023 7/7] kernel/sched/rt.c:1393:9:
- error: no member named 'rt_nr_cg_throttled' in 'struct rt_rq'; did you mean
- 'rt_cg_throttled'?
-Message-ID: <202302141059.9YYOTLpf-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1319D23D5
+	for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 04:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676347250; x=1707883250;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=puEmpB7TX9cmSCrEtb6a06wvTDoatGPLAyrjZN6yjlQ=;
+  b=fxnD5dTmG1yVB05BpuXTQ5QEADH0rZBffwNk6QXn61LJWwrx8AfItNTD
+   fnAyhlnCyrPLOACjcdWdqSRaUf7X+V/+g2rHKt45PZxclIyHcn31tmOm+
+   8glz0ZqSKe3UyKD+0g0ofY0v7KqbscDvkmmDff27dWJvDcxTkoiDk80vw
+   H/oKB7/F1uBdwxKZ4IUeuvoVBR/O8CbiqJhAiaM6SoO5/g/bPzYA5kVlS
+   FKdc6s/0ZIWfGpcsRtaLh1+pj51sAYQcUfVUalVmZ+ywNyafm651d3VDz
+   f3uviYdu51ow6ix9dFaLqmstMbo06PPzBQ1QYLa5Q8SKx5IctEHJDcF7Q
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,294,1669046400"; 
+   d="scan'208";a="335203283"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2023 11:59:42 +0800
+IronPort-SDR: QXeOY5Rcpq4aJA/zzSoBEaDv4z/hvn1DTMziOvvUdoKNXnuyz0AtJ8Zha5eD8z18BILI50rZVy
+ qbLiG1MsE2HxtJsdbKab3xhFIQX+TeiIPIHwb3AE85hTW4SPFeqKnLiFRQLArNBoP7Dssyw04T
+ ChZVMzgQy4ty5QVVOdvLipvw0DpEvi0bDv+zSu6bcvqvTH/bwon0b70ZQB15FHpB6ylTfYMpvO
+ M5lINtKAcd2jRcoAWGPOUQHo5t4jZVVohiMOnBcEfl0ek7nhPgKtgvJu5GwI+mCusnJCnqRd3r
+ 0vc=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 19:16:50 -0800
+IronPort-SDR: qVipSvQ4plHRgagtEuXajPwOQjDjtUOyajAGMIV5fApqdAuuHGV+8x5uGNi4FtEBkwbuinxv7h
+ NxDy1NjMXhbh3dng8KDPwppp7WyD1iyTWkKCsLiM+fAJpX2IOTfq1oX7woe1gWYGjGdh73U6uc
+ UhRxCbqOZcf4U/59zsw7HhJ/CfbvTvV9C3zrpWmEWsX1HdNHLKGz4NH8g5/95pBduVhw/gEm0F
+ 9LB59ciFaw22a9fLIF8ffdjqqn5fxw3diAOCjX4Fz9t6H8joWM2XitmhNrHtvPTEA6YncEKoQ/
+ AZM=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 19:59:42 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+	by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PG6sn6LK9z1RvTr
+	for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 19:59:41 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+	reason="pass (just generated, assumed good)"
+	header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+	opensource.wdc.com; h=content-transfer-encoding:content-type
+	:in-reply-to:organization:from:references:to:content-language
+	:subject:user-agent:mime-version:date:message-id; s=dkim; t=
+	1676347180; x=1678939181; bh=puEmpB7TX9cmSCrEtb6a06wvTDoatGPLAyr
+	jZN6yjlQ=; b=S0+ePlRHLReSz8TjXAQ2nFh4biOunvotoPtKS1TWLiuYO0sH5T1
+	UdWLIrfCLmp8z8JsTU7Vjn/K9D7SFmhXgz4Qyx3Aqm54O8Eqnj3zW6xdxVM1q6Jf
+	YJUnZ4E2dKXl5bebY5Bd1ywU6woKLQsRmaoeecI4QAUdV/ybrXlLPVTJAz/JGgQb
+	VHVYaueRPSovL5Rxw5eu/2xdFBdw9L08AsOaGLXsCYt3+kFAjlQPF6LoIVnE5WXv
+	tf+Olt/dRXpvSlvOwb0UwCYoM8RFWbm4aVVChRBrM+OttyJqGC8NMLMEbNT9cxiv
+	w19zaexGmU+v9PvPH3n90DWFH3iOQzHoodA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+	by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id FndIMVxiYRft for <llvm@lists.linux.dev>;
+	Mon, 13 Feb 2023 19:59:40 -0800 (PST)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+	by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PG6sl0PxDz1RvLy;
+	Mon, 13 Feb 2023 19:59:38 -0800 (PST)
+Message-ID: <3d94fc3f-fbe5-a56e-3713-4f0788ebc7f9@opensource.wdc.com>
+Date: Tue, 14 Feb 2023 12:59:37 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] scsi: ipr: work around fortify-string warning
+Content-Language: en-US
+To: Arnd Bergmann <arnd@kernel.org>, Brian King <brking@us.ibm.com>,
+ "James E.J. Bottomley" <jejb@linux.ibm.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230213101143.3821483-1-arnd@kernel.org>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230213101143.3821483-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git sched/rt-throttle.feb13.2023
-head:   76f3ee9a77cea5d6f5f04f3bbc620b863bb06e1e
-commit: 76f3ee9a77cea5d6f5f04f3bbc620b863bb06e1e [7/7] fixup! fixup! fixup! sched/rt: Keep throttled rt_rqs on the runqueue
-config: hexagon-randconfig-r041-20230212 (https://download.01.org/0day-ci/archive/20230214/202302141059.9YYOTLpf-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git/commit/?id=76f3ee9a77cea5d6f5f04f3bbc620b863bb06e1e
-        git remote add jfern https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git
-        git fetch --no-tags jfern sched/rt-throttle.feb13.2023
-        git checkout 76f3ee9a77cea5d6f5f04f3bbc620b863bb06e1e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/
+On 2/13/23 19:10, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
+> about a potential string overflow with all versions of clang:
+> 
+> In file included from drivers/scsi/ipr.c:43:
+> In file included from include/linux/string.h:254:
+> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+>                         __write_overflow_field(p_size_field, size);
+>                         ^
+> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+> 2 errors generated.
+> 
+> I don't see anything actually wrong with the function, but this is the
+> only instance I can reproduce of the fortification going wrong in the
+> kernel at the moment, so the easiest solution may be to rewrite the
+> function into something that does not trigger the warning.
+> 
+> Instead of having a combined buffer for vendor/device/serial strings,
+> use three separate local variables and just truncate the whitespace
+> individually.
+> 
+> Fixes: 8cf093e275d0 ("[SCSI] ipr: Improved dual adapter errors")
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I did not try to bisect which commit introduced this behavior into
+> the fortified memcpy(), the Fixes: commit is the one that introduced
+> the ipr_log_vpd_compact() function but this predates the fortified
+> string helpers.
+> ---
+>  drivers/scsi/ipr.c | 38 ++++++++++++++++++--------------------
+>  1 file changed, 18 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+> index 198d3f20d682..490fd81e7cfd 100644
+> --- a/drivers/scsi/ipr.c
+> +++ b/drivers/scsi/ipr.c
+> @@ -1516,23 +1516,19 @@ static void ipr_process_ccn(struct ipr_cmnd *ipr_cmd)
+>  }
+>  
+>  /**
+> - * strip_and_pad_whitespace - Strip and pad trailing whitespace.
+> - * @i:		index into buffer
+> - * @buf:		string to modify
+> + * strip_whitespace - Strip and pad trailing whitespace.
+> + * @i:		size of buffer
+> + * @buf:	string to modify
+>   *
+> - * This function will strip all trailing whitespace, pad the end
+> - * of the string with a single space, and NULL terminate the string.
+> + * This function will strip all trailing whitespace and
+> + * NUL terminate the string.
+>   *
+> - * Return value:
+> - * 	new length of string
+>   **/
+> -static int strip_and_pad_whitespace(int i, char *buf)
+> +static void strip_whitespace(int i, char *buf)
+>  {
+>  	while (i && buf[i] == ' ')
+>  		i--;
+> -	buf[i+1] = ' ';
+> -	buf[i+2] = '\0';
+> -	return i + 2;
+> +	buf[i+1] = '\0';
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302141059.9YYOTLpf-lkp@intel.com/
+If i is now the size of the buffer, this is a buffer overflow, no ? And
+the initial loop should start at "i - 1" I think...
 
-All errors (new ones prefixed by >>):
+>  }
+>  
+>  /**
+> @@ -1547,19 +1543,21 @@ static int strip_and_pad_whitespace(int i, char *buf)
+>  static void ipr_log_vpd_compact(char *prefix, struct ipr_hostrcb *hostrcb,
+>  				struct ipr_vpd *vpd)
+>  {
+> -	char buffer[IPR_VENDOR_ID_LEN + IPR_PROD_ID_LEN + IPR_SERIAL_NUM_LEN + 3];
+> -	int i = 0;
+> +	char vendor_id[IPR_VENDOR_ID_LEN + 1];
 
-   In file included from kernel/sched/build_policy.c:24:
-   In file included from include/linux/livepatch.h:13:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/sched/build_policy.c:24:
-   In file included from include/linux/livepatch.h:13:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/sched/build_policy.c:24:
-   In file included from include/linux/livepatch.h:13:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   In file included from kernel/sched/build_policy.c:45:
-   kernel/sched/rt.c:995:17: error: no member named 'tg' in 'struct rt_rq'
-                                           if (rt_rq->tg && rt_rq->tg->parent)
-                                               ~~~~~  ^
-   kernel/sched/rt.c:995:30: error: no member named 'tg' in 'struct rt_rq'
-                                           if (rt_rq->tg && rt_rq->tg->parent)
-                                                            ~~~~~  ^
-   kernel/sched/rt.c:996:29: error: no member named 'tg' in 'struct rt_rq'
-                                                   parent_rt_se = rt_rq->tg->parent->rt_se[i];
-                                                                  ~~~~~  ^
-   kernel/sched/rt.c:1133:28: error: no member named 'parent' in 'struct sched_rt_entity'
-                                   if (!tbefore && rt_se->parent)
-                                                   ~~~~~  ^
-   kernel/sched/rt.c:1134:36: error: no member named 'parent' in 'struct sched_rt_entity'
-                                           adjust_cg_throt_update(rt_se->parent, true);
-                                                                  ~~~~~  ^
-   kernel/sched/rt.c:1390:22: error: no member named 'parent' in 'struct sched_rt_entity'
-           if (!grq || !rt_se->parent || !rt_rq_throttled(grq))
-                        ~~~~~  ^
->> kernel/sched/rt.c:1393:9: error: no member named 'rt_nr_cg_throttled' in 'struct rt_rq'; did you mean 'rt_cg_throttled'?
-           rt_rq->rt_nr_cg_throttled += (dec ? -1 : 1);
-                  ^~~~~~~~~~~~~~~~~~
-                  rt_cg_throttled
-   kernel/sched/sched.h:687:8: note: 'rt_cg_throttled' declared here
-           int                     rt_cg_throttled;
-                                   ^
-   In file included from kernel/sched/build_policy.c:45:
-   kernel/sched/rt.c:1413:22: error: no member named 'parent' in 'struct sched_rt_entity'
-           WARN_ON_ONCE(rt_se->parent && tbefore && !rt_rq_throttled(rt_rq));
-                        ~~~~~  ^
-   include/asm-generic/bug.h:147:18: note: expanded from macro 'WARN_ON_ONCE'
-           DO_ONCE_LITE_IF(condition, WARN_ON, 1)
-                           ^~~~~~~~~
-   include/linux/once_lite.h:28:27: note: expanded from macro 'DO_ONCE_LITE_IF'
-                   bool __ret_do_once = !!(condition);                     \
-                                           ^~~~~~~~~
-   In file included from kernel/sched/build_policy.c:45:
-   kernel/sched/rt.c:1414:51: error: no member named 'parent' in 'struct sched_rt_entity'
-           if (!tbefore && rt_rq_throttled(rt_rq) && rt_se->parent)
-                                                     ~~~~~  ^
-   kernel/sched/rt.c:1415:33: error: no member named 'parent' in 'struct sched_rt_entity'
-                   adjust_cg_throt_update(rt_se->parent, true);
-                                          ~~~~~  ^
-   kernel/sched/rt.c:1560:23: error: no member named 'parent' in 'struct sched_rt_entity'
-                   WARN_ON_ONCE(rt_se->parent && !tbefore && rt_rq_throttled(rt_rq));
-                                ~~~~~  ^
-   include/asm-generic/bug.h:147:18: note: expanded from macro 'WARN_ON_ONCE'
-           DO_ONCE_LITE_IF(condition, WARN_ON, 1)
-                           ^~~~~~~~~
-   include/linux/once_lite.h:28:27: note: expanded from macro 'DO_ONCE_LITE_IF'
-                   bool __ret_do_once = !!(condition);                     \
-                                           ^~~~~~~~~
-   In file included from kernel/sched/build_policy.c:45:
-   kernel/sched/rt.c:1561:52: error: no member named 'parent' in 'struct sched_rt_entity'
-                   if (tbefore && !rt_rq_throttled(rt_rq) && rt_se->parent)
-                                                             ~~~~~  ^
-   kernel/sched/rt.c:1562:34: error: no member named 'parent' in 'struct sched_rt_entity'
-                           adjust_cg_throt_update(rt_se->parent, false);
-                                                  ~~~~~  ^
-   6 warnings and 13 errors generated.
+...but the size is in fact "i + 1"... So in strip_whitespace(), i is the
+index of the last possible character in the string, and given that the
+string may be much shorter, that function may not actually strip
+whitespaces after the string...
 
+> +	char product_id[IPR_PROD_ID_LEN + 1];
+> +	char sn[IPR_SERIAL_NUM_LEN + 1];
+>  
+> -	memcpy(buffer, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
+> -	i = strip_and_pad_whitespace(IPR_VENDOR_ID_LEN - 1, buffer);
+> +	memcpy(vendor_id, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
+> +	strip_whitespace(IPR_VENDOR_ID_LEN, vendor_id);
 
-vim +1393 kernel/sched/rt.c
+So this call should really be:
 
-  1384	
-  1385	static void update_nr_cg_throttled(struct sched_rt_entity *rt_se, bool dec)
-  1386	{
-  1387		struct rt_rq *grq = group_rt_rq(rt_se);
-  1388		struct rt_rq *rt_rq = rt_rq_of_se(rt_se);
-  1389	
-  1390		if (!grq || !rt_se->parent || !rt_rq_throttled(grq))
-  1391			return;
-  1392	
-> 1393		rt_rq->rt_nr_cg_throttled += (dec ? -1 : 1);
-  1394	}
-  1395	
+	strip_whitespace(strlen(vendor_id) - 1, vendor_id);
+
+Which means that this helper can be turned into:
+
+static void strip_whitespace(char *buf)
+{
+	int i = strlen(buf) - 1;
+
+	while (i > 0 && buf[i] == ' ')
+		i--;
+	buf[i+1] = '\0';
+}
+
+Unless I am missing something :)
+>  
+> -	memcpy(&buffer[i], vpd->vpids.product_id, IPR_PROD_ID_LEN);
+> -	i = strip_and_pad_whitespace(i + IPR_PROD_ID_LEN - 1, buffer);
+> +	memcpy(product_id, vpd->vpids.product_id, IPR_PROD_ID_LEN);
+> +	strip_whitespace(IPR_PROD_ID_LEN, product_id);
+>  
+> -	memcpy(&buffer[i], vpd->sn, IPR_SERIAL_NUM_LEN);
+> -	buffer[IPR_SERIAL_NUM_LEN + i] = '\0';
+> +	memcpy(sn, vpd->sn, IPR_SERIAL_NUM_LEN);
+> +	strip_whitespace(IPR_SERIAL_NUM_LEN, sn);
+>  
+> -	ipr_hcam_err(hostrcb, "%s VPID/SN: %s\n", prefix, buffer);
+> +	ipr_hcam_err(hostrcb, "%s VPID/SN: %s %s %s\n", prefix,
+> +		     vendor_id, product_id, sn);
+>  }
+>  
+>  /**
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Damien Le Moal
+Western Digital Research
+
