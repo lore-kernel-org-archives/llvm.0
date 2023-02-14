@@ -1,177 +1,118 @@
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0CD3C02
-	for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 07:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676359744; x=1707895744;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fKqsbgGPsuWCWt5qDLOSS1XjcnbLNzAiPOl9OxHQsLM=;
-  b=bg5FtFAJ5GAXS34KZsqGJFyoD67vNvUxZ9cmduR2VOKuPCbNlOjjIMhn
-   8unxtBvy1ro26chSJuD2loNT4cfJ5ch4GgdT0u1+nZmCPUg35ybjRSMWQ
-   SqCO0UHyIApK2LBw7Z17Jp8xT1zoxpcyuHTKIr8UoDmtglGAJAqPLncfe
-   qWLsnKzjzV7pKaDAJJ22EjmHsqoVDMARoaigm1AduT3xCCCwV5lMobmlQ
-   UNQyEzzSi6EOiin6BtXXDA7rPD1ic8LvmHDpMDmVmbNZ5VYhlLrQcb0ZL
-   8yzmRxi/+nx1gWTXtbECy20sSR0T/fyjeO1x76UsCHjL6TiPNgHTD9ekc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1263F7C;
+	Tue, 14 Feb 2023 09:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676366410; x=1707902410;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=36ankMROoiHIBFJltB6iuBfi/2ZprB2hArXdzmlRtVs=;
+  b=ci0lWF4pWpHaSTEXqoaJz4w33IHq0slsHDHW4l5G0NvsdlN/QpVVlyP5
+   vnV7bQh1IGUUTdSYSDtfRjTD8KVwBP6XFOlywSbuQdwsphOm0a+e0bEbS
+   aOfPIFRgNwHOzkBjahEwKTsbWUHnJ70pJ3bouA0a7xgY8+yiofMyLEbfb
+   eM7L8EMA0RXtuMQhB8E18ajlyBHcDiEkwY6MhhL7mVTztxgCdyXfP08uy
+   qALNrehiT9jDN71azgdZ0do9Gj93s1CFTuRbOe2CDbuRR50RY2IxbELKw
+   Ftd6WCPoHSL8uXBxe7VxKDIoLiMuczIwDdeCBP0abPNzHb8rcOmnfbync
    g==;
-X-IronPort-AV: E=Sophos;i="5.97,296,1669046400"; 
-   d="scan'208";a="327546067"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2023 15:27:54 +0800
-IronPort-SDR: iJVfZBSeAf05JihekD8TF8k+OyxhLhj18ZWit4k3PArpUYDBJfK4GsMDB6c9Ph7n5DWPj0Hgf+
- T+/tcRiWtD6cfA1TM/WSPW5VLGmB3BdCLCqoGou4lPnBtFbf+Q6VkB5SFcDq4YVYsOBvOeu6Rd
- f4IukaxamsOuRjrt+kSSNX7pG2izBibTtk4J9tU+BEwpgoW2FCqNAd3aI50MACSAQ0Xci8hx2n
- tHRj6CNWKSfGACTkdtH4hvRb6BYn3NTDcNlucuowvKs/xg1/olE2BObbv1Nx55M8zxomPzIIJE
- sx8=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 22:45:02 -0800
-IronPort-SDR: SHjZjS7QW6Pq+ay++aOIMqJ4w3EWBAGAm357+afdGu9IY9Od8dHL60Uut8nY4V54kO+Dcg4457
- /Ln/DjUrOChLCbrWqfQdSt3L/Yo0JduifA0cd1E/92jsy3Zorw/P1HfE+mRZ5g4FgVTUfR6cWh
- lJxSvoVFw0HMzIxKwtxsHqlKv3OnIaNz9Nk2V+9sR/ruEgaY3zUTilJn1AHNuPQNhPxAWTgFkW
- KEmbLgOADYygGL3edpZoMOhIGfE2GOFAhuaGyTk7grRzbjtx6XfyqClo+mDMXlHp6Ii4Vex7k1
- +oQ=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 23:27:55 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-	by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGCV22J9cz1Rwtm
-	for <llvm@lists.linux.dev>; Mon, 13 Feb 2023 23:27:54 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-	reason="pass (just generated, assumed good)"
-	header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-	opensource.wdc.com; h=content-transfer-encoding:content-type
-	:in-reply-to:organization:from:references:to:content-language
-	:subject:user-agent:mime-version:date:message-id; s=dkim; t=
-	1676359673; x=1678951674; bh=fKqsbgGPsuWCWt5qDLOSS1XjcnbLNzAiPOl
-	9OxHQsLM=; b=qLBsRkuvgw2X455pPBLbc9DStaa/OCukEQXQRY2Wz6jlqoGYX7l
-	Dk6XTYLcm5BasJgQgx5GFJBNLLDA6LdTYDBePk8N5yOvIKXXOyy8RhZMLezRyBOz
-	MTO2+tSH4IkEPkDd9vt9Sx+lvUwQd/QQTwkc9dBfv1gQCf9tEjnXjndxNltzc7W0
-	PcXbBjAJM50oznYEigYII42+YxgwGOuV4QOiolfQRTPmvnXZGbcjfQ1GFTeJ0EPe
-	Vla7PL3geXYrSgMwFEoRGwuWQl0b0t+slE71bNkB5EiQd+EJCWsEVRNmSnGs3SCA
-	rj/vgeD8DZFlzjPtu9/5bFqgSJ/cf2r015A==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-	by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id L_JG_nZWHy3S for <llvm@lists.linux.dev>;
-	Mon, 13 Feb 2023 23:27:53 -0800 (PST)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-	by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGCTz3h31z1RvLy;
-	Mon, 13 Feb 2023 23:27:51 -0800 (PST)
-Message-ID: <9b335f88-a20a-83da-3ce1-df409e05004a@opensource.wdc.com>
-Date: Tue, 14 Feb 2023 16:27:50 +0900
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="332431874"
+X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
+   d="scan'208";a="332431874"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 01:20:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="732825617"
+X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
+   d="scan'208";a="732825617"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Feb 2023 01:20:06 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pRrTl-0008MJ-0M;
+	Tue, 14 Feb 2023 09:20:01 +0000
+Date: Tue, 14 Feb 2023 17:19:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frieder Schrempf <frieder@fris.de>, Liam Girdwood <lgirdwood@gmail.com>,
+	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Marek Vasut <marex@denx.de>,
+	Frieder Schrempf <frieder.schrempf@kontron.de>,
+	ChiYuan Huang <cy_huang@richtek.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org
+Subject: Re: [PATCH 4/6] regulator: Add operation to let drivers select vsel
+ register
+Message-ID: <202302141754.N3CvO9lF-lkp@intel.com>
+References: <20230213155833.1644366-5-frieder@fris.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] scsi: ipr: work around fortify-string warning
-Content-Language: en-US
-To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
- Brian King <brking@us.ibm.com>, "James E.J. Bottomley" <jejb@linux.ibm.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230213101143.3821483-1-arnd@kernel.org>
- <3d94fc3f-fbe5-a56e-3713-4f0788ebc7f9@opensource.wdc.com>
- <94b362b4-a30d-4b69-8126-a64f5d025740@app.fastmail.com>
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <94b362b4-a30d-4b69-8126-a64f5d025740@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213155833.1644366-5-frieder@fris.de>
 
-On 2/14/23 16:14, Arnd Bergmann wrote:
-> On Tue, Feb 14, 2023, at 04:59, Damien Le Moal wrote:
->> On 2/13/23 19:10, Arnd Bergmann wrote:
->>> From: Arnd Bergmann <arnd@arndb.de>
-> 
->>>   **/
->>> -static int strip_and_pad_whitespace(int i, char *buf)
->>> +static void strip_whitespace(int i, char *buf)
->>>  {
->>>  	while (i && buf[i] == ' ')
->>>  		i--;
->>> -	buf[i+1] = ' ';
->>> -	buf[i+2] = '\0';
->>> -	return i + 2;
->>> +	buf[i+1] = '\0';
->>
->> If i is now the size of the buffer, this is a buffer overflow, no ? And
->> the initial loop should start at "i - 1" I think...
-> 
-> Right, I definitely have the wrong length here.
-> 
->>>  }
->>>  
->>>  /**
->>> @@ -1547,19 +1543,21 @@ static int strip_and_pad_whitespace(int i, char *buf)
->>>  static void ipr_log_vpd_compact(char *prefix, struct ipr_hostrcb *hostrcb,
->>>  				struct ipr_vpd *vpd)
->>>  {
->>> -	char buffer[IPR_VENDOR_ID_LEN + IPR_PROD_ID_LEN + IPR_SERIAL_NUM_LEN + 3];
->>> -	int i = 0;
->>> +	char vendor_id[IPR_VENDOR_ID_LEN + 1];
->>
->> ...but the size is in fact "i + 1"... So in strip_whitespace(), i is the
->> index of the last possible character in the string, and given that the
->> string may be much shorter, that function may not actually strip
->> whitespaces after the string...
-> 
-> I think aside from the off-by-one bug I introduced, this is not
-> a (new) problem as the old code already assumed that the input
-> is padded with spaces rather than nul-terminated.
+Hi Frieder,
 
-Yeah. The HW probably always give the same amount of chars with short
-strings completed by spaces...
+Thank you for the patch! Perhaps something to improve:
 
-> 
->>> +	char product_id[IPR_PROD_ID_LEN + 1];
->>> +	char sn[IPR_SERIAL_NUM_LEN + 1];
->>>  
->>> -	memcpy(buffer, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
->>> -	i = strip_and_pad_whitespace(IPR_VENDOR_ID_LEN - 1, buffer);
->>> +	memcpy(vendor_id, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
->>> +	strip_whitespace(IPR_VENDOR_ID_LEN, vendor_id);
->>
->> So this call should really be:
->>
->> 	strip_whitespace(strlen(vendor_id) - 1, vendor_id);
->>
->> Which means that this helper can be turned into:
->>
->> static void strip_whitespace(char *buf)
->> {
->> 	int i = strlen(buf) - 1;
->>
->> 	while (i > 0 && buf[i] == ' ')
->> 		i--;
->> 	buf[i+1] = '\0';
->> }
->>
->> Unless I am missing something :)
-> 
-> The strlen() here requires the input to be a properly terminated string,
-> so this would at least require adding a \0.
-> 
-> Also, if the input is a short nul-terminated string instead of
-> a space padded array, we probably don't need to strip the trailing
-> whitespace, or at least the original version didn't either.
-> 
-> Let me try to respin my patch with just the off-by-one error
-> fixed but otherwise keeping the output of ipr_log_vpd_compact()
-> unchanged.
-> 
->       Arnd
+[auto build test WARNING on broonie-regulator/for-next]
+[also build test WARNING on shawnguo/for-next arm/for-next arm/fixes arm64/for-next/core kvmarm/next rockchip/for-next soc/for-next xilinx-xlnx/master linus/master v6.2-rc8 next-20230214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Frieder-Schrempf/dt-bindings-regulator-pca9450-Document-new-usage-of-sd-vsel-gpios/20230214-013045
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+patch link:    https://lore.kernel.org/r/20230213155833.1644366-5-frieder%40fris.de
+patch subject: [PATCH 4/6] regulator: Add operation to let drivers select vsel register
+config: i386-randconfig-a003-20230213 (https://download.01.org/0day-ci/archive/20230214/202302141754.N3CvO9lF-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b76ab45ee4b60334c27d870b6d744a937ff94636
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Frieder-Schrempf/dt-bindings-regulator-pca9450-Document-new-usage-of-sd-vsel-gpios/20230214-013045
+        git checkout b76ab45ee4b60334c27d870b6d744a937ff94636
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/regulator/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302141754.N3CvO9lF-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/regulator/helpers.c:226:14: warning: no previous prototype for function 'regulator_get_hwreg_voltage_sel_regmap' [-Wmissing-prototypes]
+   unsigned int regulator_get_hwreg_voltage_sel_regmap(struct regulator_dev *rdev)
+                ^
+   drivers/regulator/helpers.c:226:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned int regulator_get_hwreg_voltage_sel_regmap(struct regulator_dev *rdev)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/regulator_get_hwreg_voltage_sel_regmap +226 drivers/regulator/helpers.c
+
+   225	
+ > 226	unsigned int regulator_get_hwreg_voltage_sel_regmap(struct regulator_dev *rdev)
+   227	{
+   228		const struct regulator_ops *ops = rdev->desc->ops;
+   229	
+   230		if (ops->get_reg_voltage_sel)
+   231			return ops->get_reg_voltage_sel(rdev);
+   232	
+   233		return rdev->desc->vsel_reg;
+   234	}
+   235	
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
