@@ -1,43 +1,57 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CD32CA5;
-	Tue, 14 Feb 2023 21:11:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676409085; x=1707945085;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=r4AM7ckaP70B8St8WQfZ9U/bBFFDLDkR4pdoP1oUdyE=;
-  b=N6EC3vypNURNqChW+jCNBFB5mjmgHhWbvQhOuMt6ZbYnOqk9KojXk5W3
-   3/icLewYLDgeftDdCV1TruNGgETxfO7YxuVnKXauR8kmw0OOvl5MfWYuv
-   /qXOIsxhb66SRN6IJ/dyogBtkmUoktDIOkC0aPhijEXowJHtfDG1LvYYp
-   wY05IxaQu9pDBpj3Ft4e72XVRRrRXfliWUtOM/t6CjHGYglWqHyb2fPTm
-   WYIzt4Dlt4D8UsCb92lZgu/ZzKW2ZNX4dV21CvGVjlpiPvCPfzApzfUSM
-   ZYhc4j27f1OOacWW3V2rw97eP6btRdCgDCTwCWIjoP6cCRoQEgFhh8+nv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="331268089"
-X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="331268089"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 13:11:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="701771865"
-X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="701771865"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 14 Feb 2023 13:11:22 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pS2a9-0008n7-2z;
-	Tue, 14 Feb 2023 21:11:21 +0000
-Date: Wed, 15 Feb 2023 05:10:55 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [android-common:android12-trusty-5.10 1480/7892] ld.lld: error:
- cannot open
- /opt/cross/clang-f28c006a58/lib/clang/14.0.6/lib/linux/libclang_rt.builtins-x86_64.a:
- No such file or directory
-Message-ID: <202302150556.yaucMdAE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D42C0A3
+	for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 21:49:37 +0000 (UTC)
+Received: by mail-pl1-f170.google.com with SMTP id k13so18475127plg.0
+        for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 13:49:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=K24hJmuuzDCWGJfa7cedDOeMiqAh7XOOikUOicrsYLk=;
+        b=Nop4t4j/Ezoqqr7Wxz59BFFcsJEksG49eS0wzKJYp0Ewg6CRR2Z56e7MIKXOcTQroZ
+         jmH+t/mxjQ/cE3U0i3+oUfIcqKyoLXqpDUBtpmA/0ewOc3LRubdiII7zMuWfo6pP5zs/
+         U1qsI3khO4ndqEQ+91O3IXBhxmHP6OccfJk/Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K24hJmuuzDCWGJfa7cedDOeMiqAh7XOOikUOicrsYLk=;
+        b=uO7HHW9lrIqG+LU7n10ZJv0wvWBxZ/QLg7KZv+5AqqW7kBFoq9UbFX7C7up6KrdH88
+         ZsEvt5+3/AuJaTobvTXGBIkiBh4dg3X/piVDW8pmH1Np9Je0bdFzGZeXyX9c0dVRPKQ1
+         YsgHDun/bIGA0pU/pGEMY4qVPzTQmiENnNINbBfL3+xf7tHXLpSATaAqMFJR5wj3bFq+
+         YR4N6uWZgWdgvtrjHRiyo5ORFJtJrMglBEqjEke9xWEEowbbPge2aRbnstgD9XvbmsbL
+         DGrIwzXL+KvwiuAz63aSq+SEYeaLk+xxPNGaZkaTGwanD0XIzbD630RJfpXyzP0JySUB
+         KKlw==
+X-Gm-Message-State: AO0yUKWF+Vx8NvxlEy0Mo+JqObcWhfsXVLZZDKdX9YhG90oVYD773fjO
+	xSX4K2gxfemNU6BxAxwLpZ7o9Q==
+X-Google-Smtp-Source: AK7set9ijZSYts9u+A6XDClyLfPMQi8mabb6Pc9oedy/Kth90eU0jMozxH4xbvCYUALbaqjcfNSilA==
+X-Received: by 2002:a17:90b:4b42:b0:234:5eb:2177 with SMTP id mi2-20020a17090b4b4200b0023405eb2177mr403521pjb.9.1676411376902;
+        Tue, 14 Feb 2023 13:49:36 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id q35-20020a17090a1b2600b002343bac52aesm30108pjq.7.2023.02.14.13.49.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 13:49:36 -0800 (PST)
+Message-ID: <63ec01f0.170a0220.94c76.011e@mx.google.com>
+X-Google-Original-Message-ID: <202302141348.@keescook>
+Date: Tue, 14 Feb 2023 13:49:35 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Brian King <brking@us.ibm.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	James Bottomley <James.Bottomley@steeleye.com>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Niklas Cassel <niklas.cassel@wdc.com>,
+	John Garry <john.g.garry@oracle.com>, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [v2] scsi: ipr: work around fortify-string warning
+References: <20230214132831.2118392-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,51 +60,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230214132831.2118392-1-arnd@kernel.org>
 
-TO: cros-kernel-buildreports@googlegroups.com
+On Tue, Feb 14, 2023 at 02:28:08PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
+> about a potential string overflow with all versions of clang:
 
-tree:   https://android.googlesource.com/kernel/common android12-trusty-5.10
-head:   e88b0fcae6db893ef5f2a45ad70499e02ee01a4e
-commit: f14e5bfb39b776318133e00b8c066ce8a870e9ab [1480/7892] ANDROID: Makefile: add compiler-rt dependency explicitly
-config: x86_64-buildonly-randconfig-r006-20230213 (attached as .config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add android-common https://android.googlesource.com/kernel/common
-        git fetch --no-tags android-common android12-trusty-5.10
-        git checkout f14e5bfb39b776318133e00b8c066ce8a870e9ab
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 distclean
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302150556.yaucMdAE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: cannot open /opt/cross/clang-f28c006a58/lib/clang/14.0.6/lib/linux/libclang_rt.builtins-x86_64.a: No such file or directory
->> ld.lld: error: cannot open /opt/cross/clang-f28c006a58/lib/clang/14.0.6/lib/linux/libclang_rt.builtins-x86_64.a: No such file or directory
->> clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
-   make[2]: *** [scripts/Makefile.host:95: scripts/basic/fixdep] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:540: scripts_basic] Error 2
-   make[1]: Target 'oldconfig' not remade because of errors.
-   make: *** [Makefile:185: __sub-make] Error 2
-   make: Target 'oldconfig' not remade because of errors.
---
->> ld.lld: error: cannot open /opt/cross/clang-f28c006a58/lib/clang/14.0.6/lib/linux/libclang_rt.builtins-x86_64.a: No such file or directory
->> ld.lld: error: cannot open /opt/cross/clang-f28c006a58/lib/clang/14.0.6/lib/linux/libclang_rt.builtins-x86_64.a: No such file or directory
->> clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
-   make[2]: *** [scripts/Makefile.host:95: scripts/basic/fixdep] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:540: scripts_basic] Error 2
-   make[1]: Target 'olddefconfig' not remade because of errors.
-   make: *** [Makefile:185: __sub-make] Error 2
-   make: Target 'olddefconfig' not remade because of errors.
+Perhaps this is arch or config specific? I haven't been able to reproduce
+this for some reason.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Kees Cook
