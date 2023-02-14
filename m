@@ -1,253 +1,142 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EBD92907
-	for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 15:29:04 +0000 (UTC)
-Received: by mail-pj1-f51.google.com with SMTP id bt4-20020a17090af00400b002341621377cso4883030pjb.2
-        for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 07:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AH28F6EvRrmywiD1UFCgKML+D/hgdDiHP7RyvKCIv6o=;
-        b=mszEtkZ23wN6ChBaQur90G5eacTgdRxgFreNZhq0JaehQZ+ilGRkH1uI2YMEt7+him
-         +qhVEc0BK2K4tB/0ZujTX7LAzH0pbU8X8MKXVKHQKtkW2oZOIJLeI7JIv6XgMWXEMmAJ
-         QSEaB9tcyn+YNNmbaPsbbM46pF/MwybZ+at3TzGptcA8Y2BGKAwGuBpfS6fhIaohaVL4
-         Lf8H9lFo56nxZ8fpo97UOCyo2NRNu+zBGjs+7CxKpxie5Rvsf22Cr738XX/CzijHGULT
-         +h/yDH+aLehjCDbOWJGCGuGc3UY22J62fsV2LEslhx+c8Y9UaMkdTaREVOIWL4svbnkb
-         TyTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AH28F6EvRrmywiD1UFCgKML+D/hgdDiHP7RyvKCIv6o=;
-        b=kfynb6z2ytZ+KMmOMVzFONCzy8HeU3uEX6dKWVQVIfjWlsxqsuLRdnHG8DOR0egQuT
-         EYBm+Ctjx6xUPljcRLcnHdYRIbmvOSHusoiDjRE+a3Ks4PhGQrcLciPttaOPOaat9SkJ
-         BjIbomwX0v136B9lqtYARl2SpNRgUHJSZffSN06UuwlzBCol8FLUu120yqvwkmtOeZWb
-         mz7to0mMIu0X179ZifOIi/AgxEyvw+FsphlXU7nBu+e3IeXz/KcTHslbxoMBohGt+Xh5
-         YAz5tXWqtSUGxuy4lUgTCQt2IXGsjYdn/k6XEXhj9k4AJTsP3ccpCrnNOJM8t9KBKTdY
-         zkeg==
-X-Gm-Message-State: AO0yUKWhwkHtt85x6w1PqNK32PSySdXtxUSUvvj8qQp9OoFQtg7y8QEa
-	BtIMsW2dnzdOet/8EPqg6qxaxUJJmy4=
-X-Google-Smtp-Source: AK7set/kfQcJ2vREWV4TZJILYW2ejomRx0Hkjx+WoxFlFaYZ76ocWF4naZkikrA93Luit6sEUzz6sw==
-X-Received: by 2002:a17:90b:1b0a:b0:234:190d:e655 with SMTP id nu10-20020a17090b1b0a00b00234190de655mr3025624pjb.44.1676388544071;
-        Tue, 14 Feb 2023 07:29:04 -0800 (PST)
-Received: from awkrail.localdomain.jp (p182177-ipngn200503kyoto.kyoto.ocn.ne.jp. [58.90.106.177])
-        by smtp.gmail.com with ESMTPSA id u4-20020a17090ae00400b00233ebab3770sm4248042pjy.23.2023.02.14.07.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 07:29:03 -0800 (PST)
-From: Taichi Nishimura <awkrail01@gmail.com>
-To: shuah@kernel.org,
-	andrii@kernel.org,
-	mykolal@fb.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yhs@fb.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	trix@redhat.com,
-	awkrail01@gmail.com,
-	ytcoode@gmail.com,
-	deso@posteo.net,
-	joannelkoong@gmail.com
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] fixed typos on selftests/bpf
-Date: Wed, 15 Feb 2023 00:28:50 +0900
-Message-Id: <20230214152850.389392-1-awkrail01@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454FE2569;
+	Tue, 14 Feb 2023 15:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=xDPWxkb1Dpl/Rsp18kmYjvpgSfwJsX8cvah/ksG9Rvk=; b=EWkh9thJQtSTNp2DxQKM6ZPiy+
+	2RpiNP0J7Yi0kuPipB4sWfAWJIYzNUXDfhZWmDlawtC1CbdQBUsVMbTZWbQ833S5jzaCDcNoz0/lF
+	RyM4bn1MTIxVMTSCAeYTkgV8Inw3o/iFXDfyNlcRRnT6+sOEoCJ6yuzgBOEaPvq/ei7glISZrJmX0
+	0i6WOOG/v63zLXFhE9oNYyN4ybnIqWYHdt214bP6RBgQltXFW+S8FachyDT7N/pWmBnazGS+S2Pqm
+	dSvBk5OuYkUFZXIYLBhGPlsV5NDaSC7Rjv2mazP5v7VflxWD3kjh0vazX1G7i08alnhchb2gHbwgA
+	aPjm7wpQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1pRxMO-006bVL-Py; Tue, 14 Feb 2023 15:36:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 18569300244;
+	Tue, 14 Feb 2023 12:21:09 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id F3EAC20B4E943; Tue, 14 Feb 2023 12:21:08 +0100 (CET)
+Date: Tue, 14 Feb 2023 12:21:08 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Dave Marchevsky <davemarchevsky@meta.com>,
+	kernel test robot <lkp@intel.com>,
+	Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>,
+	clang-built-linux <llvm@lists.linux.dev>,
+	oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Kernel Team <kernel-team@fb.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>,
+	Joao Moreira <joao@overdrivepizza.com>
+Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first}
+ kfuncs
+Message-ID: <Y+tupCQ/X38AlvY0@hirez.programming.kicks-ass.net>
+References: <20230212092715.1422619-4-davemarchevsky@fb.com>
+ <202302121936.t36vlAFG-lkp@intel.com>
+ <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
+ <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
+ <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
+ <CABCJKucDXNeGCdD6uT7phYhpm+OgYm19EkfCNMB9AJ66k4NcvQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKucDXNeGCdD6uT7phYhpm+OgYm19EkfCNMB9AJ66k4NcvQ@mail.gmail.com>
 
-I run spell checker and found typos in selftest/bpf/ files.
-Fixed all of the detected typos.
+On Mon, Feb 13, 2023 at 03:31:21PM -0800, Sami Tolvanen wrote:
+> On Mon, Feb 13, 2023 at 2:17 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Mon, Feb 13, 2023 at 12:49 PM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > >
+> > > I haven't looked at the series in question, but note that this compile
+> > > time warning is meant to help us catch Control Flow Integrity runtime
+> > > violations, which may result in a panic.
+> 
+> Here's the tracking issue for the other warnings of this type in the
+> kernel, nearly all the warnings are in one driver:
+> 
+> https://github.com/ClangBuiltLinux/linux/issues/1724
+> 
+> > It's a transition from kernel to bpf prog.
+> > If CFI trips on it it will trip on all transitions.
+> > All calls from kernel into bpf are more or less the same.
+> > Not sure what it means for other archs, but on x86 JIT emits 'endbr'
+> > insn to make IBT/CFI happy.
+> 
+> While IBT allows indirect calls to any function that starts with
+> endbr, CFI is more fine-grained and requires the function pointer type
+> to match the function type, which further limits possible call
+> targets. To actually enforce this, the compiler emits a type hash
+> prefix for each function, and a check before each indirect call to
+> ensure the call target has the expected prefix. The commit message
+> here has an example of the code the compiler generates:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3c516f89e17e56b4738f05588e51267e295b5e63
 
-This patch is an extra credit for kselftest task
-in the Linux kernel bug fixing spring unpaid 2023.
+Another good commit to look at is:
 
-Best regards,
-Taichi Nishimura
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=931ab63664f02b17d2213ef36b83e1e50190a0aa
 
-Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c    | 2 +-
- tools/testing/selftests/bpf/prog_tests/trampoline_count.c     | 2 +-
- tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
- tools/testing/selftests/bpf/progs/dynptr_fail.c               | 2 +-
- tools/testing/selftests/bpf/progs/strobemeta.h                | 2 +-
- tools/testing/selftests/bpf/progs/test_cls_redirect.c         | 4 ++--
- tools/testing/selftests/bpf/progs/test_subprogs.c             | 2 +-
- tools/testing/selftests/bpf/progs/test_xdp_vlan.c             | 2 +-
- tools/testing/selftests/bpf/test_cpp.cpp                      | 2 +-
- tools/testing/selftests/bpf/veristat.c                        | 4 ++--
- 10 files changed, 12 insertions(+), 12 deletions(-)
+That includes the FineIBT variant too.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
-index eb2feaac81fe..653b0a20fab9 100644
---- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
-+++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
-@@ -488,7 +488,7 @@ static void run_test(struct migrate_reuseport_test_case *test_case,
- 			goto close_servers;
- 	}
- 
--	/* Tie requests to the first four listners */
-+	/* Tie requests to the first four listeners */
- 	err = start_clients(test_case);
- 	if (!ASSERT_OK(err, "start_clients"))
- 		goto close_clients;
-diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-index 564b75bc087f..353451a0c88c 100644
---- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-@@ -74,7 +74,7 @@ void serial_test_trampoline_count(void)
- 	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
- 		goto cleanup;
- 
--	/* and finaly execute the probe */
-+	/* and finally execute the probe */
- 	prog_fd = bpf_program__fd(prog);
- 	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
- 		goto cleanup;
-diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-index 4ee4748133fe..daa8753bb171 100644
---- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-+++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-@@ -51,7 +51,7 @@ typedef void (*printf_fn_t)(const char *, ...);
-  *	typedef int (*fn_t)(int);
-  *	typedef char * const * (*fn_ptr2_t)(s_t, fn_t);
-  *
-- * - `fn_complext_t`: pointer to a function returning struct and accepting
-+ * - `fn_complex_t`: pointer to a function returning struct and accepting
-  *   union and struct. All structs and enum are anonymous and defined inline.
-  *
-  * - `signal_t: pointer to a function accepting a pointer to a function as an
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 78debc1b3820..b979ee9f5a37 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -623,7 +623,7 @@ static int release_twice_callback_fn(__u32 index, void *data)
- }
- 
- /* Test that releasing a dynptr twice, where one of the releases happens
-- * within a calback function, fails
-+ * within a callback function, fails
-  */
- SEC("?raw_tp")
- __failure __msg("arg 1 is an unacquired reference")
-diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
-index 753718595c26..e562be6356f3 100644
---- a/tools/testing/selftests/bpf/progs/strobemeta.h
-+++ b/tools/testing/selftests/bpf/progs/strobemeta.h
-@@ -135,7 +135,7 @@ struct strobe_value_loc {
- 	 * tpidr_el0 for aarch64).
- 	 * TLS_IMM_EXEC: absolute address of GOT entry containing offset
- 	 * from thread pointer;
--	 * TLS_GENERAL_DYN: absolute addres of double GOT entry
-+	 * TLS_GENERAL_DYN: absolute address of double GOT entry
- 	 * containing tls_index_t struct;
- 	 */
- 	int64_t offset;
-diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-index 2833ad722cb7..a8ba39848bbf 100644
---- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-+++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-@@ -600,7 +600,7 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
- 		return TC_ACT_SHOT;
- 	}
- 
--	/* Skip the remainig next hops (may be zero). */
-+	/* Skip the remaining next hops (may be zero). */
- 	return skip_next_hops(pkt, encap->unigue.hop_count -
- 					   encap->unigue.next_hop - 1);
- }
-@@ -610,7 +610,7 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
-  *
-  *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
-  *
-- * clang will substitue a costant for sizeof, which allows the verifier
-+ * clang will substitute a costant for sizeof, which allows the verifier
-  * to track it's value. Based on this, it can figure out the constant
-  * return value, and calling code works while still being "generic" to
-  * IPv4 and IPv6.
-diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/testing/selftests/bpf/progs/test_subprogs.c
-index f8e9256cf18d..a8d602d7c88a 100644
---- a/tools/testing/selftests/bpf/progs/test_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
-@@ -47,7 +47,7 @@ static __noinline int sub5(int v)
- 	return sub1(v) - 1; /* compensates sub1()'s + 1 */
- }
- 
--/* unfortunately verifier rejects `struct task_struct *t` as an unkown pointer
-+/* unfortunately verifier rejects `struct task_struct *t` as an unknown pointer
-  * type, so we need to accept pointer as integer and then cast it inside the
-  * function
-  */
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
-index 134768f6b788..c19324f228a3 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
-@@ -98,7 +98,7 @@ bool parse_eth_frame(struct ethhdr *eth, void *data_end, struct parse_pkt *pkt)
- 	return true;
- }
- 
--/* Hint, VLANs are choosen to hit network-byte-order issues */
-+/* Hint, VLANs are chosen to hit network-byte-order issues */
- #define TESTVLAN 4011 /* 0xFAB */
- // #define TO_VLAN  4000 /* 0xFA0 (hint 0xOA0 = 160) */
- 
-diff --git a/tools/testing/selftests/bpf/test_cpp.cpp b/tools/testing/selftests/bpf/test_cpp.cpp
-index 0bd9990e83fa..f4936834f76f 100644
---- a/tools/testing/selftests/bpf/test_cpp.cpp
-+++ b/tools/testing/selftests/bpf/test_cpp.cpp
-@@ -91,7 +91,7 @@ static void try_skeleton_template()
- 
- 	skel.detach();
- 
--	/* destructor will destory underlying skeleton */
-+	/* destructor will destroy underlying skeleton */
- }
- 
- int main(int argc, char *argv[])
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index f961b49b8ef4..83231456d3c5 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -144,7 +144,7 @@ static struct env {
- 	struct verif_stats *prog_stats;
- 	int prog_stat_cnt;
- 
--	/* baseline_stats is allocated and used only in comparsion mode */
-+	/* baseline_stats is allocated and used only in comparison mode */
- 	struct verif_stats *baseline_stats;
- 	int baseline_stat_cnt;
- 
-@@ -882,7 +882,7 @@ static int process_obj(const char *filename)
- 		 * that BPF object file is incomplete and has to be statically
- 		 * linked into a final BPF object file; instead of bailing
- 		 * out, report it into stderr, mark it as skipped, and
--		 * proceeed
-+		 * proceed
- 		 */
- 		fprintf(stderr, "Failed to open '%s': %d\n", filename, -errno);
- 		env.files_skipped++;
--- 
-2.25.1
+> As calling a JIT compiled function would obviously trip CFI, indirect
+> call checking is currently disabled in BPF dispatcher functions (using
+> the __nocfi attribute). However, BPF trampolines still have the same
+> problem, I believe. I wouldn't mind coming up with a solution for
+> CFI+BPF JIT compatibility, but I haven't had much time to look into
+> this. Basically, in places where we currently emit an endbr
+> instruction, we should also emit a type hash prefix.
+> 
+> Generating type prefixes for functions called through a dispatcher
+> shouldn't be that hard because the function type is always the same,
+> but figuring out the correct type for indirect calls that don't go
+> through a dispatcher might not be entirely trivial, although I'm sure
+> the BPF verifier/compiler must have this information. FineIBT also
+> complicates matters a bit here as the actual prefix format differs
+> from the basic KCFI prefix.
+> 
+> I'm not sure if Peter or Joao have had time to look at this, but I
+> would be happy to hear any suggestions you might have.
+
+I've not had time to look at this -- but afair BPF will only emit an
+indirect jump (tail-call even, irrc), it doesn't do indirect calls
+otherwise (this is also the only place we have RETPOLINE magic in the
+JIT).
+
+(ooh, also dispatcher thing)
+
+This generates an unadorned indirect jump, that is, it doesn't have any
+kCFI magic included, eg. traditional calling convention.
+
+The other case, which you allude to I think, is control transfer to the
+JIT'ed code which is currently __nocfi annotated. I've only briefly
+thought about how to change this, but basically it would entail the JIT
+emitting the correct prefix bytes and setting the entry point at +16.
+
+Given the JIT will only run after we've selected kCFI/FineIBT it knows
+which form to pick from and can emit the right prefix. Then if we remove
+the __nocfi annotation from the call into JIT'ed code, everything should
+work.
+
+None of this should be exceptionally hard, but I've not had time to
+actually do much about it yet.
+
 
