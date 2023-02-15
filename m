@@ -1,82 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92990C5D8
-	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 18:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9C0C4339C
-	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 18:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676487443;
-	bh=5sA/GkKB672YgfySlkTvpsgV6jFfW0ewXVzumpKClJ4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qUP0g1Y3vKUKJX2u/BfxIK1I2EFwOmujk3pcDIOzBlcbomaqFq/0Lr6C+tI9tXloW
-	 T22Dyf5Lzdq2jrIS3ujGaHB/oGxv3Ggl3BaAyLn4Nv5JXbC2eMvd66ybaWIkO9ZoHr
-	 BawRrDM91wmtng4Zg1nUl6RPp6kQSVmB7xW9dQdoV3vVZpmAZOKu26DxDjtu2DVn3c
-	 ZSCXXNraymAkpSZI2+047+OL9mH+qC7Gq+eVhvAT5E9dPcW6FwPo8U80Idig9XzRg9
-	 fIBvbtFCYTBi2s/BDO8HMoKuRp/5KabW83GlT655u9WBpYpcaC+KqrXPv3g9pM3PSF
-	 DJGdYrjtFKUCA==
-Received: by mail-lf1-f42.google.com with SMTP id bp15so28734386lfb.13
-        for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 10:57:23 -0800 (PST)
-X-Gm-Message-State: AO0yUKWL1sxN2tojaXaF0u22RlF72SYytaBnyvFDj3E44sNdKk3IqlDv
-	B6Q5ODa/pGITou03gr03EJTfDIBz6fSU0FBqK/8=
-X-Google-Smtp-Source: AK7set8D9UvcPF2NNMQcbWg4CZbyXd3FwtHrjDgfodVpnwH/PgU4hJiVgfzHdeZn0aI103wP3X5ft++Y5Ec496D4TYI=
-X-Received: by 2002:ac2:593a:0:b0:4db:4568:6fe9 with SMTP id
- v26-20020ac2593a000000b004db45686fe9mr871517lfi.3.1676487441367; Wed, 15 Feb
- 2023 10:57:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EE9D2F5
+	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 21:32:22 +0000 (UTC)
+Received: by mail-pl1-f174.google.com with SMTP id d8so23750plr.10
+        for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 13:32:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kfYEghNnaEjUfoOcnZ4G0+8zAvGSYgSt957kdbuuys4=;
+        b=d1rnikvOvf/SGy/v2+qrDhe4dbC1eCnXDz2MDCEFQFrQmdniFgCZOM0UH4WI+8mPwQ
+         rlJUw1nQQEmDoXRV0zbXQF6kb7rEpfJHHVQHdB3XjGdjohKrW7Iwhl5w5fjc/7y68clN
+         O0NbwwIz7iyeQ9gHUSU7DHnh/S+DprlGjeGqc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kfYEghNnaEjUfoOcnZ4G0+8zAvGSYgSt957kdbuuys4=;
+        b=2hWgOIgE5fSnb1HFBeZgRTs0tW8y9xuYNVoNfHXXY38Un4axTj2+2NUD54vY4r1FNW
+         oRrbpEL/n5nDoDXdDhgKPC26MC6pZDaGhI+cjLE3TD8UnAq7tv6xudCRDy3BVL/XNEhy
+         V1his0ugtTOOyrZtLebv3nSMpERC/CrIT0FlMpLwRyeVBKK8ODaSG2CCS8amw7V2fka5
+         eVTHQILENjTuHLXV8ILnqJ74UmeTZ1lbChYsHOBML7QGSlbfYWrJeceCDuN6e+Xgpk6H
+         A7JQyo+kKoFCWyOj6pV8CTTFIn+LsoIdJ+KPd+0pHu7hEvliDX1gkz4RVzmtImXd9UxV
+         cVBw==
+X-Gm-Message-State: AO0yUKUQoVWQ/rEWFgkbDetQGOj4hXnTpkS2HRAfeuM2HAdYjFfchSd4
+	pBJzKuYWqu68RM9hF1t+5rsHRA==
+X-Google-Smtp-Source: AK7set+wTlRh8SP7In9F+w0tsSMTRd836XZmLAJXyqYif3yvQ2ETEmZh7wyNqIPWtp3PhiL6eWURgA==
+X-Received: by 2002:a17:903:120e:b0:197:35fc:6a5d with SMTP id l14-20020a170903120e00b0019735fc6a5dmr4153057plh.30.1676496741565;
+        Wed, 15 Feb 2023 13:32:21 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a10-20020a170902b58a00b001991e4e0bdcsm12548670pls.233.2023.02.15.13.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 13:32:21 -0800 (PST)
+Message-ID: <63ed4f65.170a0220.b2f75.8a8f@mx.google.com>
+X-Google-Original-Message-ID: <202302151330.@keescook>
+Date: Wed, 15 Feb 2023 13:32:20 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Brian King <brking@us.ibm.com>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	James Bottomley <James.Bottomley@steeleye.com>,
+	Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Niklas Cassel <niklas.cassel@wdc.com>,
+	John Garry <john.g.garry@oracle.com>, linux-scsi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] [v2] scsi: ipr: work around fortify-string warning
+References: <20230214132831.2118392-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
- <Y+0MsMomkcDBdjNI@chrisdown.name> <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X> <Y+0VAr21hlIdrxyp@chrisdown.name>
-In-Reply-To: <Y+0VAr21hlIdrxyp@chrisdown.name>
-From: Song Liu <song@kernel.org>
-Date: Wed, 15 Feb 2023 10:57:09 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5U2qXa_O46_v-hzWqq5L7bRs6bQe5QGGnMOMzX3y4KgA@mail.gmail.com>
-Message-ID: <CAPhsuW5U2qXa_O46_v-hzWqq5L7bRs6bQe5QGGnMOMzX3y4KgA@mail.gmail.com>
-Subject: Re: [PATCH] module: Remove the unused function within
-To: Chris Down <chris@chrisdown.name>, mcgrof@kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
-	ndesaulniers@google.com, trix@redhat.com, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
-	Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214132831.2118392-1-arnd@kernel.org>
 
-Hi Chris,
+On Tue, Feb 14, 2023 at 02:28:08PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
+> about a potential string overflow with all versions of clang:
+> 
+> In file included from drivers/scsi/ipr.c:43:
+> In file included from include/linux/string.h:254:
+> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+>                         __write_overflow_field(p_size_field, size);
+>                         ^
+> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+> 2 errors generated.
+> 
+> I don't see anything actually wrong with the function, but this is the
+> only instance I can reproduce of the fortification going wrong in the
+> kernel at the moment, so the easiest solution may be to rewrite the
+> function into something that does not trigger the warning.
+> 
+> Instead of having a combined buffer for vendor/device/serial strings,
+> use three separate local variables and just truncate the whitespace
+> individually.
+> 
+> Fixes: 8cf093e275d0 ("[SCSI] ipr: Improved dual adapter errors")
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, Feb 15, 2023 at 9:23 AM Chris Down <chris@chrisdown.name> wrote:
->
-> +Cc: Song
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thanks for the CC!
+Reproduced this locally -- I agree your fix looks like the best
+approach. I think Clang was seeing the old "i + 2" return as potentially
+overflowing in the case where there was no space-padding on any strings.
 
->
-> Nathan Chancellor writes:
-> >On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
-> >> Jiapeng Chong writes:
-> >> > The function within is defined in the main.c file, but not called
-> >> > elsewhere, so remove this unused function.
-> >>
-> >> Huh? It's used by __module_text_address(), no?
-> >
-> >Not after commit 2ece476a2346 ("module: replace module_layout with
-> >module_memory") in -next. This patch should have a fixes tag, even if
-> >the warning is currently hidden behind W=1.
->
-> Huh, I thought I had checked out latest -next, but must have not done so
-> somehow :-) Mea culpa.
->
-> If it's only in -next then no Fixes needed, since there's no stable rev yet.
->
-> Jiapeng, in future, please make sure to cc the author of related commits when
-> reporting stuff like this :-) It helps people to update their patches.
->
-> Song, you probably want to update your patch.
-
-Luis, would you prefer a new patch with everything folded in? Or would
-you apply the patches on your end?
-
-Thanks,
-Song
+-- 
+Kees Cook
