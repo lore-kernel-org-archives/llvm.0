@@ -1,58 +1,44 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE363C1E;
-	Wed, 15 Feb 2023 09:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=aQDu1YFaKb5b0Kremz3dWSYLo+xqI+o4S2j4E0VWVh4=; b=d94kZGUDVH4uDIo9iqVLlz+ixy
-	NzLRG4R0E3gLp/01xQuv4Qf4bn4NdaB6xAxKUwi7W/jeVqIgyrY3OxcNVdzrMYhp11dvOCEKmFfr2
-	YsZGIW2YpdfulGr8BJz3RPjZLNtyWnz1QHw/EK0sbVlkM5Dd44eqqtW+fV94a7/AIDz8NmvUGAuW9
-	pU2TMzzk1tTGp0uDSL9IjP/O+dlbJIxdtoN6XBOvhINhDJR6JeIAW77kp9Xl7/WSyiEIfC/3rZljY
-	60s4Y0vcHYAz9dGJi9EDJtXgNNODh1O8UTRzNGJlHOc1OR+lF0pPOb8y0Ekbaepi1Vc9sjFtKy2KN
-	A6HrPWhQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1pSEJi-009uVG-2a;
-	Wed, 15 Feb 2023 09:43:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 201E83001E7;
-	Wed, 15 Feb 2023 10:43:52 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 07F1C233D4DE5; Wed, 15 Feb 2023 10:43:52 +0100 (CET)
-Date: Wed, 15 Feb 2023 10:43:51 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Dave Marchevsky <davemarchevsky@meta.com>,
-	kernel test robot <lkp@intel.com>,
-	Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Kernel Team <kernel-team@fb.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Joao Moreira <joao@overdrivepizza.com>
-Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first}
- kfuncs
-Message-ID: <Y+ypV+Ninap11QeX@hirez.programming.kicks-ass.net>
-References: <20230212092715.1422619-4-davemarchevsky@fb.com>
- <202302121936.t36vlAFG-lkp@intel.com>
- <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
- <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
- <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
- <CABCJKucDXNeGCdD6uT7phYhpm+OgYm19EkfCNMB9AJ66k4NcvQ@mail.gmail.com>
- <Y+tupCQ/X38AlvY0@hirez.programming.kicks-ass.net>
- <CABCJKuc1iqHjg9ERVXMHO00rOqaNGM=d7xTvB4f6fTM4J4-nTA@mail.gmail.com>
- <CAADnVQJz4uCWwLigFUXi-W=fnW-AencgNz52SwKBuDCkzNNMpQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDAC56109;
+	Wed, 15 Feb 2023 15:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676475713; x=1708011713;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ru+XvIDg3twgcFvIDSQOrc/i1HrC0wtgAsp5VcFWNkE=;
+  b=moilhzek56LTxlE+hRnKwYwFE1fS7+XWgtSlE/h/6IxLeYzRZVZM7gW7
+   CqSW/FMbUXaTDWwI0AYE+hwx45w8Dt6QdwUOvWdMnYoLxjxmMW5t4oTCS
+   bIJ6Pp6hN3AJDY175Vy/R/ZZAxpC3Hu9uyWMd+5gX4DX3JykjQUcTP9+f
+   +QuAyPJi5JcFVmov5lUm0Ha2r29ezWnNXC/ervc+qo5evT3nXJ4fooYeb
+   OPHob+VxVwCXTvioFNQM+e8djEBVe09Vnr/sPUO6ha+bzrQCQfGYRxJeh
+   fndRpVh9xhWMfVHa4vMEQvHbbM1IHIcOj6JCmi/TrbiT+K5DeWbRxBWAg
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="332762812"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="332762812"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 07:41:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="733323660"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="733323660"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Feb 2023 07:41:51 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pSJup-0009Vh-0d;
+	Wed, 15 Feb 2023 15:41:51 +0000
+Date: Wed, 15 Feb 2023 23:41:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 2/3] io_uring: enable io_uring to submit sqes located in
+ kernel
+Message-ID: <202302152315.W5hlZK5P-lkp@intel.com>
+References: <20230215004122.28917-3-xiaoguang.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,48 +47,114 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQJz4uCWwLigFUXi-W=fnW-AencgNz52SwKBuDCkzNNMpQ@mail.gmail.com>
+In-Reply-To: <20230215004122.28917-3-xiaoguang.wang@linux.alibaba.com>
 
-On Tue, Feb 14, 2023 at 03:59:57PM -0800, Alexei Starovoitov wrote:
-> How is 'kcfi' 32-bit hash computed?
-> Some kind of hash of type id-s?
+Hi Xiaoguang,
 
-Yes. Specifically I think a hash of the C++ name mangled function
-signature. (which is giving pain with eg. Rust because then the C++
-mangling isn't specific enough or somesuch, I'm sure Sami can easily
-find it if you want to know more)
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on bpf/master]
+[also build test WARNING on axboe-block/for-next linus/master v6.2-rc8]
+[cannot apply to bpf-next/master next-20230215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Here we'll be dealing with bpf side callbacks with its own types
-> that are called from the kernel side with its own types.
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaoguang-Wang/bpf-add-UBLK-program-type/20230215-084242
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20230215004122.28917-3-xiaoguang.wang%40linux.alibaba.com
+patch subject: [RFC 2/3] io_uring: enable io_uring to submit sqes located in kernel
+config: x86_64-randconfig-a002-20230213 (https://download.01.org/0day-ci/archive/20230215/202302152315.W5hlZK5P-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0d433a1cf7f666e5596514da7fab92f2691463ad
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xiaoguang-Wang/bpf-add-UBLK-program-type/20230215-084242
+        git checkout 0d433a1cf7f666e5596514da7fab92f2691463ad
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/unix/
 
-As long as there's a kernel side function declaration (definition not
-required) the compiler will generate you a usable __kcfi_typeid_##name
-symbol that contains the hash.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302152315.W5hlZK5P-lkp@intel.com/
 
-If it is a pure BPF internal (C never sees either the declaration of
-definition) then it doesn't matter and you can make up your own scheme
-as long as caller and callee agree on the magic number.
+All warnings (new ones prefixed by >>):
 
-> Also what to do with the situation when kernel is compiled with GCC
-> while bpf progs are with clang? and the other way around ?
-> gcc-bpf can compile all of selftests/bpf, but not yet run them.
+   In file included from net/unix/scm.c:11:
+>> include/linux/io_uring.h:107:5: warning: no previous prototype for function 'io_uring_submit_sqe' [-Wmissing-prototypes]
+   int io_uring_submit_sqe(int fd, const struct io_uring_sqe *sqe, u32 sqe_len,
+       ^
+   include/linux/io_uring.h:107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int io_uring_submit_sqe(int fd, const struct io_uring_sqe *sqe, u32 sqe_len,
+   ^
+   static 
+   1 warning generated.
 
-As of yet GCC doesn't support kCFI, so mixing is not possible at
-present. kCFI fundamentally changes the C ABI in incompatible ways.
 
-Ideally the GCC implementation of kCFI (when it happens) will use the
-same hashing scheme as LLVM so that mutual compatibility is possible.
+vim +/io_uring_submit_sqe +107 include/linux/io_uring.h
 
-> kcfi is addressing the case when endbr/ibt is not supported by cpu
-> or some other reason?
+    56	
+    57	static inline void io_uring_files_cancel(void)
+    58	{
+    59		if (current->io_uring) {
+    60			io_uring_unreg_ringfd();
+    61			__io_uring_cancel(false);
+    62		}
+    63	}
+    64	static inline void io_uring_task_cancel(void)
+    65	{
+    66		if (current->io_uring)
+    67			__io_uring_cancel(true);
+    68	}
+    69	static inline void io_uring_free(struct task_struct *tsk)
+    70	{
+    71		if (tsk->io_uring)
+    72			__io_uring_free(tsk);
+    73	}
+    74	int io_uring_submit_sqe(int fd, const struct io_uring_sqe *sqe, u32 sqe_len,
+    75				struct io_mapped_kbuf *kbuf);
+    76	#else
+    77	static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+    78				      struct iov_iter *iter, void *ioucmd)
+    79	{
+    80		return -EOPNOTSUPP;
+    81	}
+    82	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+    83			ssize_t ret2)
+    84	{
+    85	}
+    86	static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+    87				void (*task_work_cb)(struct io_uring_cmd *))
+    88	{
+    89	}
+    90	static inline struct sock *io_uring_get_socket(struct file *file)
+    91	{
+    92		return NULL;
+    93	}
+    94	static inline void io_uring_task_cancel(void)
+    95	{
+    96	}
+    97	static inline void io_uring_files_cancel(void)
+    98	{
+    99	}
+   100	static inline void io_uring_free(struct task_struct *tsk)
+   101	{
+   102	}
+   103	static inline const char *io_uring_get_opcode(u8 opcode)
+   104	{
+   105		return "";
+   106	}
+ > 107	int io_uring_submit_sqe(int fd, const struct io_uring_sqe *sqe, u32 sqe_len,
+   108				struct io_mapped_kbuf *kbuf)
+   109	{
+   110		return 0;
+   111	}
+   112	#endif
+   113	
 
-kCFI/FineIBT are supplementary to regular IBT. kCFI works regardless of
-hardware support, but the same infrastructure is employed with FineIBT
-to provide more fine-gained target control.
-
-Specifically, with bare IBT all that is required is the indirect target
-be an ENDBR instruction, *any* ENDBR instruction.
-
-The kCFI/FineIBT improvement over that is that caller and callee need to
-agree on the hash, thereby further limiting which functions can be
-called.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
