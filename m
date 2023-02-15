@@ -1,86 +1,109 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73177C
-	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 03:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=25j3Cvtb3jyrlYLarvQrJDhy0gbj6s2LEEygL5odKS0=; b=RiwKIz4S5XpRyhYA3uSNdol4ed
-	zlnyv4sG0dgDhSJSR4+aPGbR1wac3nx+20O/vaLfTiIi2np8Nk2eGq8TJf90fJt9mZ09+pcv+9Xu6
-	VrYnTbperpk7xYWw6W80mgDkZm3VUGrUk/tA6qtraS3J9MnxD52KBxIToMlhtD4vgHRSLanKHxLlq
-	y5zoaYzhkwEqc6WwyUyZcJm8xxgIIEAcXowoYkJhTJWGlVXPOvJOSrSe/fk4+gTAyptH7mOQHRVmY
-	aF7nAjL9Qi6KmMY4gI0Inyk2ra+RIVUuiFN/oqsI58HbDRKC5yr+T9xSVZ5k6XscnqrAXs8dRwwBH
-	vByOZhlQ==;
-Received: from [2601:1c2:980:9ec0::df2f]
-	by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1pS8QT-004Vwc-BZ; Wed, 15 Feb 2023 03:25:45 +0000
-Message-ID: <ca611ede-3797-b7b1-6261-80c7e8adde3f@infradead.org>
-Date: Tue, 14 Feb 2023 19:25:44 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB697C;
+	Wed, 15 Feb 2023 03:57:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676433453; x=1707969453;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uLhs6o2fCFxp26+sHW7UMl7L2vaPn8fl/naPN67gxnU=;
+  b=RNa/kiTOnj0YDolYSNU7ndrYRjfNGsJQfl74FKUEUl9Aim996UF1FUCf
+   QFVpGmoQrJFI0hzOIHC+VWLRQikgR+rF38pc4qoKcGFZP60hSW1WHT+EM
+   Q584aIdxhK12pP/31+BTPfqe0g7gWtxRHgSDRMRdzJ7iPEmTtUbQR7tFK
+   CxAnlVfCqQKZOodqVxW/hSn8LiSD7EK21goivIfNeNc+VR8FqVmLYvvc0
+   02OAN6EtxINTn4n3Qmfl+nK/7VugTpYHRQu/B/H5aNljtNxdsTe84fDqx
+   OWBJ7YcM67b5uRvY5+1nNTQQaXrmi1W2ymlpyWNioZkQp5aIkH74qU32m
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="393740588"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="393740588"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 19:57:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="812281074"
+X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
+   d="scan'208";a="812281074"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2023 19:57:31 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pS8vC-00090Y-2K;
+	Wed, 15 Feb 2023 03:57:30 +0000
+Date: Wed, 15 Feb 2023 11:56:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [stable:linux-4.19.y 2425/5220] ld.lld: error:
+ drivers/nvme/host/pci.o: contains a compressed section, but zlib is not
+ available
+Message-ID: <202302151140.0kk4LFIP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] fixed typos on selftests/bpf
-Content-Language: en-US
-To: Taichi Nishimura <awkrail01@gmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- davem@davemloft.net, deso@posteo.net, haoluo@google.com, hawk@kernel.org,
- joannelkoong@gmail.com, john.fastabend@gmail.com, jolsa@kernel.org,
- kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev,
- mykolal@fb.com, nathan@kernel.org, ndesaulniers@google.com,
- netdev@vger.kernel.org, sdf@google.com, shuah@kernel.org, song@kernel.org,
- trix@redhat.com, yhs@fb.com, ytcoode@gmail.com
-References: <f8f3e8df-f707-28f3-ab0f-eec21686c940@infradead.org>
- <20230215032122.417515-1-awkrail01@gmail.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230215032122.417515-1-awkrail01@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi Greg,
 
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-On 2/14/23 19:21, Taichi Nishimura wrote:
-> Hi Randy,
-> 
-> Thank you for your reviewing.
-> I fixed costant and it's to constant and its, respectively.
-> 
-> Best regards,
-> Taichi Nishimura
-> 
-> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+head:   53b696f0584acce2e90db69272a2a11aab138370
+commit: 455431805699e91c2fd66b7fe43db27643d9b3fd [2425/5220] lightnvm: disable the subsystem
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230215/202302151140.0kk4LFIP-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=455431805699e91c2fd66b7fe43db27643d9b3fd
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-4.19.y
+        git checkout 455431805699e91c2fd66b7fe43db27643d9b3fd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/
 
-Looks good. Thanks.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302151140.0kk4LFIP-lkp@intel.com/
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+All errors (new ones prefixed by >>):
 
-
-> ---
->  tools/testing/selftests/bpf/progs/test_cls_redirect.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-> index a8ba39848bbf..66b304982245 100644
-> --- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-> +++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-> @@ -610,8 +610,8 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
->   *
->   *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
->   *
-> - * clang will substitute a costant for sizeof, which allows the verifier
-> - * to track it's value. Based on this, it can figure out the constant
-> + * clang will substitute a constant for sizeof, which allows the verifier
-> + * to track its value. Based on this, it can figure out the constant
->   * return value, and calling code works while still being "generic" to
->   * IPv4 and IPv6.
->   */
+>> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
+--
+   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+   ld.lld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
