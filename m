@@ -1,108 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E707B;
-	Wed, 15 Feb 2023 17:12:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1323DC433D2;
-	Wed, 15 Feb 2023 17:12:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676481148;
-	bh=MnTXXCrHB8q0dm2TiMdq46pcPd1e+WyWRchO1UVIneM=;
-	h=From:Date:Subject:To:Cc:From;
-	b=gErMUGavKVhpeh61yCAbqALnRBmTxJvZ72Au68l86Fezdkm8wLEDM6pFITxISAz6o
-	 +zsH1JFWOB+tg3EYzrqltMaLmlXNXO3osAJ/3rMjEyJMVM/3rEpupBGxdN74ew63V2
-	 QQrljTw9WqaAzI+zfgxuIoIkF9gHWxApqBXJiOGp1xwwrWbCvN4m2R82zomqZ3W5Ur
-	 px0muhmpjRk7VUxr/IV84YfwU7kVU+1+QlcfVQrIe4C7Yv8wrZCVQ7cqLlEY6KzAK2
-	 SUDamUI0eJdFWKeNofWuJmd15TnCsX6x48PA/ElFHGmqmFDQJ+79FNU/+XPnrQO9F/
-	 VX30YfAM384iQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 15 Feb 2023 10:12:12 -0700
-Subject: [PATCH] macintosh: windfarm: Use unsigned type for 1-bit bitfields
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13707B
+	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 17:23:17 +0000 (UTC)
+Received: by mail-wr1-f54.google.com with SMTP id l2so3285862wry.0
+        for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 09:23:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QqtBdN+1ppp8e/CSn0vupSzwChby4224H0BfpXodQLA=;
+        b=KUjhCHq/IyaBxJIaBshTwK5EQy/ynz7jLapyf7e2pN9XEQE1moQhCOl/Mj+qbRrfSy
+         3q+6cXGQF/jwUKdmo8XEUZ4a+Eho+aCAZT0nMGYMZVwCmsArr96yhUZfmXcjOqgInGRt
+         eLPd7AuccY2D8L6b90YVy5eIQAO1JxPA82NVs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QqtBdN+1ppp8e/CSn0vupSzwChby4224H0BfpXodQLA=;
+        b=lVq4AwOrA9XY/HWRjUJ/LnP1bvmkwpWWB5X/HR1iHCFZhJfrnT0xygLOTpMOhvX25e
+         gC1v7IzAGxQ3upoYY18H8z5WRdcKVIzSlvX5wuqjoIgfg99vpWeYnpL55XXjFz6MVlek
+         yqUuJW6lTst7JtmN6oPFQuP3XhtfugtDFwHcy0sR62es5S1QvSm078wKuYZvoP8bi+2m
+         LF4nxDmGkl1bTGggCrrHfklZ1EpNTuYX+3EpB2h9MLE8nIhLDPEvTLw71AT3MknLB+9U
+         +nArx9swrvC/ZrCupzhWDsRmhA7Q7Fmo1A9IHBEIPN/jurHRIK7Pb9J5nbiuf8lyCAYP
+         X/eQ==
+X-Gm-Message-State: AO0yUKUyK6OcM++7KR2MQc5VnycxHpZtek3C/h8k733At02AysFSnhhI
+	VvlgktO0OK3kr+WlBwH8eaU/AA==
+X-Google-Smtp-Source: AK7set9OHudQqPkdfMrIhN61SvMXrhUrNNXk+iAP3BJDjiL/w2O5ZVFfBlp2c3m/PeRCYgaHEFmw1w==
+X-Received: by 2002:adf:f30d:0:b0:2c5:4cf1:a57b with SMTP id i13-20020adff30d000000b002c54cf1a57bmr2257952wro.35.1676481795981;
+        Wed, 15 Feb 2023 09:23:15 -0800 (PST)
+Received: from localhost ([2620:10d:c092:500::4:270c])
+        by smtp.gmail.com with ESMTPSA id n27-20020a05600c3b9b00b003e206cc7237sm1211706wms.24.2023.02.15.09.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 09:23:15 -0800 (PST)
+Date: Wed, 15 Feb 2023 17:23:14 +0000
+From: Chris Down <chris@chrisdown.name>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, mcgrof@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev,
+	Abaci Robot <abaci@linux.alibaba.com>, Song Liu <song@kernel.org>
+Subject: Re: [PATCH] module: Remove the unused function within
+Message-ID: <Y+0VAr21hlIdrxyp@chrisdown.name>
+References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
+ <Y+0MsMomkcDBdjNI@chrisdown.name>
+ <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230215-windfarm-wsingle-bit-bitfield-constant-conversion-v1-1-26415072e855@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAGsS7WMC/x2OwQqDMBBEf0X23AVNbA/9ldJDNBtd0LXsBi2I/
- 96kh4EZhnnMCUbKZPBsTlDa2XiTErpbA+McZCLkWDK41vnWdXc8WGIKuuJhLNNCOHCuSkxLxHE
- Ty0FyNTtppaF3faL4IOd7B4U7BCsrDTLOlbwGy6S1+Cgl/v7PvN7X9QO+MPwNnAAAAA==
-To: mpe@ellerman.id.au, benh@kernel.crashing.org
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2498; i=nathan@kernel.org;
- h=from:subject:message-id; bh=MnTXXCrHB8q0dm2TiMdq46pcPd1e+WyWRchO1UVIneM=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMlvhar1c1ZPa7g0ZXWNysufTnWLfOMOLJF790ivuTjgh
- 7/SzUmHO0pZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBETLgY/ik7v7EsmLOS0Xs7
- 14LFp7nnaDEoz2QUFSlrkt2ny3K2rI2R4ejNOSxll69yq7Srct7dmHH4S5hrlpzXz55D924E6d0
- 9zgsA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 
-Clang warns:
++Cc: Song
 
-  drivers/macintosh/windfarm_lm75_sensor.c:63:14: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-                  lm->inited = 1;
-                             ^ ~
+Nathan Chancellor writes:
+>On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
+>> Jiapeng Chong writes:
+>> > The function within is defined in the main.c file, but not called
+>> > elsewhere, so remove this unused function.
+>>
+>> Huh? It's used by __module_text_address(), no?
+>
+>Not after commit 2ece476a2346 ("module: replace module_layout with
+>module_memory") in -next. This patch should have a fixes tag, even if
+>the warning is currently hidden behind W=1.
 
-  drivers/macintosh/windfarm_smu_sensors.c:356:19: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-                  pow->fake_volts = 1;
-                                  ^ ~
-  drivers/macintosh/windfarm_smu_sensors.c:368:18: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-                  pow->quadratic = 1;
-                                 ^ ~
+Huh, I thought I had checked out latest -next, but must have not done so 
+somehow :-) Mea culpa.
 
-There is no bug here since no code checks the actual value of these
-fields, just whether or not they are zero (boolean context), but this
-can be easily fixed by switching to an unsigned type.
+If it's only in -next then no Fixes needed, since there's no stable rev yet.
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/macintosh/windfarm_lm75_sensor.c | 4 ++--
- drivers/macintosh/windfarm_smu_sensors.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Jiapeng, in future, please make sure to cc the author of related commits when 
+reporting stuff like this :-) It helps people to update their patches.
 
-diff --git a/drivers/macintosh/windfarm_lm75_sensor.c b/drivers/macintosh/windfarm_lm75_sensor.c
-index 24f0a444d312..9c6febce2376 100644
---- a/drivers/macintosh/windfarm_lm75_sensor.c
-+++ b/drivers/macintosh/windfarm_lm75_sensor.c
-@@ -33,8 +33,8 @@
- #endif
- 
- struct wf_lm75_sensor {
--	int			ds1775 : 1;
--	int			inited : 1;
-+	unsigned int		ds1775 : 1;
-+	unsigned int		inited : 1;
- 	struct i2c_client	*i2c;
- 	struct wf_sensor	sens;
- };
-diff --git a/drivers/macintosh/windfarm_smu_sensors.c b/drivers/macintosh/windfarm_smu_sensors.c
-index 00c6fe25fcba..2bdb73b34d29 100644
---- a/drivers/macintosh/windfarm_smu_sensors.c
-+++ b/drivers/macintosh/windfarm_smu_sensors.c
-@@ -274,8 +274,8 @@ struct smu_cpu_power_sensor {
- 	struct list_head	link;
- 	struct wf_sensor	*volts;
- 	struct wf_sensor	*amps;
--	int			fake_volts : 1;
--	int			quadratic : 1;
-+	unsigned int		fake_volts : 1;
-+	unsigned int		quadratic : 1;
- 	struct wf_sensor	sens;
- };
- #define to_smu_cpu_power(c) container_of(c, struct smu_cpu_power_sensor, sens)
-
----
-base-commit: ceaa837f96adb69c0df0397937cd74991d5d821a
-change-id: 20230215-windfarm-wsingle-bit-bitfield-constant-conversion-324fed6e2342
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Song, you probably want to update your patch.
