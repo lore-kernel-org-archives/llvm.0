@@ -1,94 +1,78 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6566FD7
-	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 16:56:53 +0000 (UTC)
-Received: by mail-ed1-f46.google.com with SMTP id n20so8296847edy.0
-        for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 08:56:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1cg1DRRz1JaMZzQz5gjyIGRehXA474aTNt2f/uRSJM=;
-        b=IF764ANRJyJU6rYoxIAVp600GErFsJFtOfOrweZTY0EZxhCMGg8kYMwmPB79DFXQX6
-         9ksZNgzzzHFUpgOhlMX6VtbAf8ro5CIEfRzIfDEzAVWqFAn/SeZm7jGolFrMEKOxLl0t
-         bhEqAp0flrWasbRkAgTP7MO+IBu2OSkWo6rmqVKLcMRz2LXBk8tlOEBtUQPLml9amAZA
-         ISxnQEY+DIzlJL0DWbbCDV0OoEnZ2h6nXcefvREEzUZILgTsTwRqiwM+thBauoc1oAUM
-         dJEhj+DbMefbj/i9Q87hzP6W+Epk31x8vQEenktbihmSrc1bG62OrLCMvC+/vczz2kVT
-         ZI8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p1cg1DRRz1JaMZzQz5gjyIGRehXA474aTNt2f/uRSJM=;
-        b=sV2PSHI9st9ZOhqHjzuXulDbNvcaKwikde71Z2TZY5u6LhnQXDA2APA1aeMnYxDhGy
-         MXsm/WaawJDkVc3V6IInv5+Fy4xX/aVFioJH+mczSsL0CYFwLK/aZlFToLdB4Rx1n50g
-         5fT4gUzCghhpGatTOtH1mvObDZoLZeD84yfT6mIcSbiGH76ceuecYE5skma9+jKiginV
-         cLWWja23TnkCjNP1lHWSXjJhXUeLzHWhy4qn7sthQiUJkJA8rt6ewkmu+yvF662Lo45U
-         OTSs+f0xJtlPdje1CbWf450glPS7eZ0GAof7XV5ciRa/l78rHjNa5YhWif1kDdT3rHZV
-         hPag==
-X-Gm-Message-State: AO0yUKUOlixrJjqidgK6RazuoeNrfG0wkJ4ASoYP4Ux/JUBwIMDaQTO4
-	vWZ0m/j7SGJmx0vHFFw9CgeLeV926UXOgElLWYVn0Q==
-X-Google-Smtp-Source: AK7set/orVNgERaoDcGFR7X5BTU7TYwffuscXH0ZtL+qYOwGEL8EdaONdtfrxp4hHOSVReHJAO1mKX38bhTMGemL9+M=
-X-Received: by 2002:a50:d51a:0:b0:4ac:be68:c0f8 with SMTP id
- u26-20020a50d51a000000b004acbe68c0f8mr1516714edi.5.1676480211799; Wed, 15 Feb
- 2023 08:56:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B247B
+	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 17:01:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F248C433D2;
+	Wed, 15 Feb 2023 17:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1676480465;
+	bh=7NDzIefEbXiIJCEib3sr7gh8/H2KcWsCHwSr/TU1F/Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a4CMP6ci0CdBOLo61RbH7msCByorysRMQT3XacNFmZxBVNn13P0YBA55+Me8718LR
+	 MjhlwFdtHhCSCp7P2mrAUoMjqq6+wFMMt+EB2LQ7rr7wo4PVq0YilbODEqJITiBV+z
+	 zXdi5HOpF7mTI1DXK+QeTWSIr2HUVQx83rASNGuK1DdkLLO+6zcIxcxPvyEbX8puD3
+	 cOvy9O5Yq4LdWQ1YMP4/CQ0KZgu16x4tgvy9hrUCS1xMr1JhO3SpJuWK1ZlmufGfNA
+	 YghVak6aTAD9SSZG/BiZnKEvJKt+QCIzDhCXsRdFBOJha++g9k6AIZlgRHWyFwNHkR
+	 N3Z4Ih9RVJPTA==
+Date: Wed, 15 Feb 2023 10:01:02 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Chris Down <chris@chrisdown.name>
+Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, mcgrof@kernel.org,
+	ndesaulniers@google.com, trix@redhat.com,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev,
+	Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] module: Remove the unused function within
+Message-ID: <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
+References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
+ <Y+0MsMomkcDBdjNI@chrisdown.name>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230212092715.1422619-4-davemarchevsky@fb.com>
- <202302121936.t36vlAFG-lkp@intel.com> <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
- <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
- <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
- <CABCJKucDXNeGCdD6uT7phYhpm+OgYm19EkfCNMB9AJ66k4NcvQ@mail.gmail.com>
- <Y+tupCQ/X38AlvY0@hirez.programming.kicks-ass.net> <CABCJKuc1iqHjg9ERVXMHO00rOqaNGM=d7xTvB4f6fTM4J4-nTA@mail.gmail.com>
- <CAADnVQJz4uCWwLigFUXi-W=fnW-AencgNz52SwKBuDCkzNNMpQ@mail.gmail.com> <Y+ypV+Ninap11QeX@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y+ypV+Ninap11QeX@hirez.programming.kicks-ass.net>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 15 Feb 2023 08:56:15 -0800
-Message-ID: <CABCJKufd8fnaLYH+Mujq2ijsA40+6+QjDahfFej0=gkEad+ikQ@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first} kfuncs
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Dave Marchevsky <davemarchevsky@meta.com>, 
-	kernel test robot <lkp@intel.com>, Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kernel Team <kernel-team@fb.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Joao Moreira <joao@overdrivepizza.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+0MsMomkcDBdjNI@chrisdown.name>
 
-On Wed, Feb 15, 2023 at 1:44 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Feb 14, 2023 at 03:59:57PM -0800, Alexei Starovoitov wrote:
-> > How is 'kcfi' 32-bit hash computed?
-> > Some kind of hash of type id-s?
->
-> Yes. Specifically I think a hash of the C++ name mangled function
-> signature. (which is giving pain with eg. Rust because then the C++
-> mangling isn't specific enough or somesuch, I'm sure Sami can easily
-> find it if you want to know more)
+On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
+> Jiapeng Chong writes:
+> > The function within is defined in the main.c file, but not called
+> > elsewhere, so remove this unused function.
+> 
+> Huh? It's used by __module_text_address(), no?
 
-The Rust pain is mostly about type system differences when it comes to
-integer types, but we're working on fixing that.
+Not after commit 2ece476a2346 ("module: replace module_layout with
+module_memory") in -next. This patch should have a fixes tag, even if
+the warning is currently hidden behind W=1.
 
-> > Also what to do with the situation when kernel is compiled with GCC
-> > while bpf progs are with clang? and the other way around ?
-> > gcc-bpf can compile all of selftests/bpf, but not yet run them.
->
-> As of yet GCC doesn't support kCFI, so mixing is not possible at
-> present. kCFI fundamentally changes the C ABI in incompatible ways.
-
-When it comes to the BPF programs themselves, it shouldn't matter
-which compiler you use to compile them as the BPF back-end doesn't
-emit CFI instrumentation. I'm also fairly sure that the function type
-in the BPF C program doesn't necessarily have to exactly match the
-function pointer type used to call the JIT compiled version of that
-function in the kernel, and the latter one is what actually matters.
-
-Sami
+> > kernel/module/main.c:3007:19: warning: unused function 'within'.
+> > 
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4035
+> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > ---
+> > kernel/module/main.c | 5 -----
+> > 1 file changed, 5 deletions(-)
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index c598f11e7016..062065568b40 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -3004,11 +3004,6 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+> > 	return load_module(&info, uargs, flags);
+> > }
+> > 
+> > -static inline int within(unsigned long addr, void *start, unsigned long size)
+> > -{
+> > -	return ((void *)addr >= start && (void *)addr < start + size);
+> > -}
+> > -
+> > /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
+> > char *module_flags(struct module *mod, char *buf, bool show_state)
+> > {
+> > -- 
+> > 2.20.1.7.g153144c
+> > 
