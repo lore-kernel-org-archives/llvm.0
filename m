@@ -1,109 +1,126 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB697C;
-	Wed, 15 Feb 2023 03:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676433453; x=1707969453;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uLhs6o2fCFxp26+sHW7UMl7L2vaPn8fl/naPN67gxnU=;
-  b=RNa/kiTOnj0YDolYSNU7ndrYRjfNGsJQfl74FKUEUl9Aim996UF1FUCf
-   QFVpGmoQrJFI0hzOIHC+VWLRQikgR+rF38pc4qoKcGFZP60hSW1WHT+EM
-   Q584aIdxhK12pP/31+BTPfqe0g7gWtxRHgSDRMRdzJ7iPEmTtUbQR7tFK
-   CxAnlVfCqQKZOodqVxW/hSn8LiSD7EK21goivIfNeNc+VR8FqVmLYvvc0
-   02OAN6EtxINTn4n3Qmfl+nK/7VugTpYHRQu/B/H5aNljtNxdsTe84fDqx
-   OWBJ7YcM67b5uRvY5+1nNTQQaXrmi1W2ymlpyWNioZkQp5aIkH74qU32m
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308DD193
+	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 04:44:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676436257; x=1707972257;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rllAuMPvoBr0L1lHfSbaKvi2l3urZy0SiU0ZdfBD6O0=;
+  b=Z1A0rUizC7yKfd2ft1PyKWnPSx32osaAdt1RvHavDkhTIMphejbZFPny
+   xXcJB1KXr0nzABDwVkHKWjtFqtDvXiZWplSZAJiJxqRgLya+bwLN5xVlp
+   9Z4ShgawYkeO09TOdugrsW1KMpRjR0jZ4zK29LQqDZfu1WWNjhcbn7yfU
+   ROAa6TvRgjErKJJ+IwSRYPNJ88Scfn8T0R0FEuWDbVm1yFv5DRU6JyCVm
+   5+gXtwoFS1s5oWfHDdWkJ4Tq03Vfan+ACcjITRSk808ICOe9jz06Xa7OP
+   +ndVCq6itQC841tf2PXq1Iwu9ijnGCdp2ZObGyRQdy2NAfPA0bTpckRuw
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="393740588"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="393740588"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 19:57:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="812281074"
-X-IronPort-AV: E=Sophos;i="5.97,298,1669104000"; 
-   d="scan'208";a="812281074"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Feb 2023 19:57:31 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pS8vC-00090Y-2K;
-	Wed, 15 Feb 2023 03:57:30 +0000
-Date: Wed, 15 Feb 2023 11:56:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [stable:linux-4.19.y 2425/5220] ld.lld: error:
- drivers/nvme/host/pci.o: contains a compressed section, but zlib is not
- available
-Message-ID: <202302151140.0kk4LFIP-lkp@intel.com>
+X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
+   d="scan'208";a="223129912"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 12:43:05 +0800
+IronPort-SDR: r+tT8S4WtajCI2SJYoTZ0Oh3xmsUVlTd9ByBsctmOdr9ExL9FE+bn5JpYEErkmWl69pb8GpGFI
+ Oicuxqlns9cWRArb7p4V7Cnqc3K686J5tP7uGkRRdu4VdUyssNyVE8SD37QnaQnv0PY0ojaMyR
+ F6hzLEKtuQINPX0qV+nAcSUqGLDhbZ0f0yzsOQPp+9hPOoJc5zp2pHBemVr+pt7JHd0TNjJBrG
+ tKDeCI6YrqDqXKjqJk8pCusQcONjFbLnHETRfQE+px9xYy813zga9/qEVPpMqCcVO0JDjjfEXA
+ 0FM=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 19:54:26 -0800
+IronPort-SDR: q0h6dvpA/9nq9IZsPINnhb/a57DpIjlIcqHHhFd9jpFp7fmiZPO1WArsB5iIwiAZMz5TMSmeDj
+ cELBviZT4/XzwI2M7RQa3wzdJ6apxI+CuNGUOpdCciVWBUMyqKd62ZVlWhcpUagPHOSh723LYQ
+ zRq0brhyUwICcn0vUoGtLM5teKTpCveUxKkM6xKujSaD97krnEEBxqOuKrOszNPiZaDDUdFEIr
+ 5s0EuGr5U2E1oLY3oCUSzHK76vxR2HUxvz7XbdSMiNidWXlOC+Dvsf9o1a/8Dtjmua7DeML1bz
+ AJY=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 20:43:04 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+	by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGlnM26gVz1Rwtm
+	for <llvm@lists.linux.dev>; Tue, 14 Feb 2023 20:43:03 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+	reason="pass (just generated, assumed good)"
+	header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+	opensource.wdc.com; h=content-transfer-encoding:content-type
+	:in-reply-to:organization:from:references:to:content-language
+	:subject:user-agent:mime-version:date:message-id; s=dkim; t=
+	1676436182; x=1679028183; bh=rllAuMPvoBr0L1lHfSbaKvi2l3urZy0SiU0
+	ZdfBD6O0=; b=dHQcYyajSSXM3vLe5O/aieZcOGHfjTcjzMVab0z7BQxFXU3AFt7
+	iBcfAg5kHGp/5Re1Suib2SfpNsfA4/wXnNbUEeMf+xcGJRae9VnnWCpttZnYHcJA
+	iF3CnB2ioq64V9Zsb88hVrkAUeWavmELQzeY9PylCte00lyxUXOiO0XvDYoSZtJA
+	KCML8nF4cHwSngLEW5vuVrKsFCakIfeQq3Df1QAEUBnZ/TL2faF2sIS0F05PGV79
+	ia3cjxFss3JRqxvvKkElS7ooNpl9zzv1ldvSZrBzqdPflMvhbUxhK9P+vF0YOkYB
+	SAeE0lIHOkiyeoYDOEqfDTBIGGrBL7qYxUA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+	by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id X6L2YSsiivV8 for <llvm@lists.linux.dev>;
+	Tue, 14 Feb 2023 20:43:02 -0800 (PST)
+Received: from [10.225.163.116] (unknown [10.225.163.116])
+	by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGlnJ0CZsz1RvLy;
+	Tue, 14 Feb 2023 20:42:59 -0800 (PST)
+Message-ID: <63b3aeca-d219-264c-c944-eb4e85f36f9f@opensource.wdc.com>
+Date: Wed, 15 Feb 2023 13:42:58 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] [v2] scsi: ipr: work around fortify-string warning
+Content-Language: en-US
+To: Arnd Bergmann <arnd@kernel.org>, Brian King <brking@us.ibm.com>,
+ "James E.J. Bottomley" <jejb@linux.ibm.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ James Bottomley <James.Bottomley@SteelEye.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+ Niklas Cassel <niklas.cassel@wdc.com>, John Garry <john.g.garry@oracle.com>,
+ linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230214132831.2118392-1-arnd@kernel.org>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230214132831.2118392-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Greg,
+On 2/14/23 22:28, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
+> about a potential string overflow with all versions of clang:
+> 
+> In file included from drivers/scsi/ipr.c:43:
+> In file included from include/linux/string.h:254:
+> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+>                         __write_overflow_field(p_size_field, size);
+>                         ^
+> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+> 2 errors generated.
+> 
+> I don't see anything actually wrong with the function, but this is the
+> only instance I can reproduce of the fortification going wrong in the
+> kernel at the moment, so the easiest solution may be to rewrite the
+> function into something that does not trigger the warning.
+> 
+> Instead of having a combined buffer for vendor/device/serial strings,
+> use three separate local variables and just truncate the whitespace
+> individually.
+> 
+> Fixes: 8cf093e275d0 ("[SCSI] ipr: Improved dual adapter errors")
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Looks good to me.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
-head:   53b696f0584acce2e90db69272a2a11aab138370
-commit: 455431805699e91c2fd66b7fe43db27643d9b3fd [2425/5220] lightnvm: disable the subsystem
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230215/202302151140.0kk4LFIP-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=455431805699e91c2fd66b7fe43db27643d9b3fd
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-4.19.y
-        git checkout 455431805699e91c2fd66b7fe43db27643d9b3fd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302151140.0kk4LFIP-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/pci.o: contains a compressed section, but zlib is not available
---
-   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
-   ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
-   ld.lld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Damien Le Moal
+Western Digital Research
+
