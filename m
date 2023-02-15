@@ -1,84 +1,74 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-245.mta1.migadu.com (out-245.mta1.migadu.com [95.215.58.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13707B
-	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 17:23:17 +0000 (UTC)
-Received: by mail-wr1-f54.google.com with SMTP id l2so3285862wry.0
-        for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 09:23:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QqtBdN+1ppp8e/CSn0vupSzwChby4224H0BfpXodQLA=;
-        b=KUjhCHq/IyaBxJIaBshTwK5EQy/ynz7jLapyf7e2pN9XEQE1moQhCOl/Mj+qbRrfSy
-         3q+6cXGQF/jwUKdmo8XEUZ4a+Eho+aCAZT0nMGYMZVwCmsArr96yhUZfmXcjOqgInGRt
-         eLPd7AuccY2D8L6b90YVy5eIQAO1JxPA82NVs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QqtBdN+1ppp8e/CSn0vupSzwChby4224H0BfpXodQLA=;
-        b=lVq4AwOrA9XY/HWRjUJ/LnP1bvmkwpWWB5X/HR1iHCFZhJfrnT0xygLOTpMOhvX25e
-         gC1v7IzAGxQ3upoYY18H8z5WRdcKVIzSlvX5wuqjoIgfg99vpWeYnpL55XXjFz6MVlek
-         yqUuJW6lTst7JtmN6oPFQuP3XhtfugtDFwHcy0sR62es5S1QvSm078wKuYZvoP8bi+2m
-         LF4nxDmGkl1bTGggCrrHfklZ1EpNTuYX+3EpB2h9MLE8nIhLDPEvTLw71AT3MknLB+9U
-         +nArx9swrvC/ZrCupzhWDsRmhA7Q7Fmo1A9IHBEIPN/jurHRIK7Pb9J5nbiuf8lyCAYP
-         X/eQ==
-X-Gm-Message-State: AO0yUKUyK6OcM++7KR2MQc5VnycxHpZtek3C/h8k733At02AysFSnhhI
-	VvlgktO0OK3kr+WlBwH8eaU/AA==
-X-Google-Smtp-Source: AK7set9OHudQqPkdfMrIhN61SvMXrhUrNNXk+iAP3BJDjiL/w2O5ZVFfBlp2c3m/PeRCYgaHEFmw1w==
-X-Received: by 2002:adf:f30d:0:b0:2c5:4cf1:a57b with SMTP id i13-20020adff30d000000b002c54cf1a57bmr2257952wro.35.1676481795981;
-        Wed, 15 Feb 2023 09:23:15 -0800 (PST)
-Received: from localhost ([2620:10d:c092:500::4:270c])
-        by smtp.gmail.com with ESMTPSA id n27-20020a05600c3b9b00b003e206cc7237sm1211706wms.24.2023.02.15.09.23.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Feb 2023 09:23:15 -0800 (PST)
-Date: Wed, 15 Feb 2023 17:23:14 +0000
-From: Chris Down <chris@chrisdown.name>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, mcgrof@kernel.org,
-	ndesaulniers@google.com, trix@redhat.com,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev,
-	Abaci Robot <abaci@linux.alibaba.com>, Song Liu <song@kernel.org>
-Subject: Re: [PATCH] module: Remove the unused function within
-Message-ID: <Y+0VAr21hlIdrxyp@chrisdown.name>
-References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
- <Y+0MsMomkcDBdjNI@chrisdown.name>
- <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC8B7B
+	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 18:21:58 +0000 (UTC)
+Message-ID: <c810373e-9fa5-9b2f-9425-af557c6dcbae@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1676485310;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P3EnbBpqpBBiBVNpqBNvmk9cmi5eIaCDPOxnBf2SQYo=;
+	b=V4bleHn3JDXgPGWdY7gd20mrrWGCwE6u/lAb/X5OH5sSdGE7+/j/jyF8PdwJpgGJk0975F
+	S170MERyKDdkhtOvybSt7M/43vJvodkyFJix0S50LhP42LCmQUU9o4vhMGKFoAoGK5V38g
+	vKPWc32vZlgxMjmDDfGBJXwjnXflDGI=
+Date: Wed, 15 Feb 2023 10:21:44 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+Subject: Re: [PATCH v2] fixed typos on selftests/bpf
+Content-Language: en-US
+To: Taichi Nishimura <awkrail01@gmail.com>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ davem@davemloft.net, deso@posteo.net, haoluo@google.com, hawk@kernel.org,
+ joannelkoong@gmail.com, john.fastabend@gmail.com, jolsa@kernel.org,
+ kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, mykolal@fb.com,
+ nathan@kernel.org, ndesaulniers@google.com, netdev@vger.kernel.org,
+ sdf@google.com, shuah@kernel.org, song@kernel.org, trix@redhat.com,
+ yhs@fb.com, ytcoode@gmail.com, rdunlap@infradead.org
+References: <f8f3e8df-f707-28f3-ab0f-eec21686c940@infradead.org>
+ <20230215032122.417515-1-awkrail01@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230215032122.417515-1-awkrail01@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-+Cc: Song
+On 2/14/23 7:21 PM, Taichi Nishimura wrote:
+> Hi Randy,
+> 
+> Thank you for your reviewing.
+> I fixed costant and it's to constant and its, respectively.
+> 
+> Best regards,
+> Taichi Nishimura
+> 
+> Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+> ---
+>   tools/testing/selftests/bpf/progs/test_cls_redirect.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> index a8ba39848bbf..66b304982245 100644
+> --- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> +++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+> @@ -610,8 +610,8 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+>    *
+>    *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
+>    *
+> - * clang will substitute a costant for sizeof, which allows the verifier
+> - * to track it's value. Based on this, it can figure out the constant
+> + * clang will substitute a constant for sizeof, which allows the verifier
+> + * to track its value. Based on this, it can figure out the constant
 
-Nathan Chancellor writes:
->On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
->> Jiapeng Chong writes:
->> > The function within is defined in the main.c file, but not called
->> > elsewhere, so remove this unused function.
->>
->> Huh? It's used by __module_text_address(), no?
->
->Not after commit 2ece476a2346 ("module: replace module_layout with
->module_memory") in -next. This patch should have a fixes tag, even if
->the warning is currently hidden behind W=1.
+This does not apply. Ensure the diff is generated by git, and against the 
+bpf-next tree. Please include everything in v1 also, resubmit and tag for 
+bpf-next in the subject.
 
-Huh, I thought I had checked out latest -next, but must have not done so 
-somehow :-) Mea culpa.
-
-If it's only in -next then no Fixes needed, since there's no stable rev yet.
-
-Jiapeng, in future, please make sure to cc the author of related commits when 
-reporting stuff like this :-) It helps people to update their patches.
-
-Song, you probably want to update your patch.
