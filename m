@@ -1,107 +1,202 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FB8CBA1;
-	Wed, 15 Feb 2023 00:00:10 +0000 (UTC)
-Received: by mail-ej1-f45.google.com with SMTP id hx15so44088409ejc.11;
-        Tue, 14 Feb 2023 16:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ml68Rjbm2jv1Pw4N7+/TMuVyATAVk8oCCsCtXQ5RxM8=;
-        b=Ya4uqE6kNEd5rMY17nxtM+tu14BYNuRSeFq63qe5JVAaBVMQViBJpy2nzF1Dw/im/1
-         zrj/dzS6/T/itDetn9FBabf3YEZ4MbftaFciX0a7J4KEiltPBMB0a8lWEzLknPHgkkJk
-         QOLxXVog6rvSp3tyM/e2giUGE6Losl+uXCr/RonfYNCoCgX2NA6F9twgI6GdWwgQwQhf
-         zW4LijQBw0nxI5y9zeCDRj1/SNb4cOMV/dva9NNZgks+RqW5AHHsDZrHiMgjAkQEiQU8
-         yJnVfxs+I0uKMp701h1Cjj5GUXne7NRTA2lVdbpxZF9xhxWet4C6I3LG9ena206NBwxQ
-         NxkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ml68Rjbm2jv1Pw4N7+/TMuVyATAVk8oCCsCtXQ5RxM8=;
-        b=WThZ/yaDyAUb5NG3Dazzd6kvWECKm1UhAN/I2u5t8sA4qmIVqLz8WJYSNRDFCEEW5C
-         wRJ0XB6/ARJo7+dHaU813+EzXujU9zblSDA1XUOJsXFEicrG30ZmxyAwW8CxIWNFtZpH
-         B8TR3n0M2ZxlLmogUYaeJddLX1zaoQ7dhZRfcPaxQmXC6zctVb2sf9piQhDEE3Ws2y4P
-         u8oaexlUeOXWc/+Srk/1XHyd1GhQdA8QlSH9hs4ZZJtwOeorEY08jxyeSwP6xkzZsW+U
-         fOHCgo6kwLYkfdOn0alNHmoZ2U52D2qh/lrtDTUYzRAzW7rQ4D2Js8H9WDumICEev4Ti
-         1x9w==
-X-Gm-Message-State: AO0yUKWcatb1KYw7GtIQ7CIoMj2z+tpsX2+jVScRUmcWTQqb1V21M+dM
-	YOrA3nOv4XByRrl8RdjY+xlK+xLSJWVa92WmMe0=
-X-Google-Smtp-Source: AK7set8EjNzUYXDJDFmmlD3ly12jkrDWUtB4am2pXmECRB4M5i8eCFl99Q061x5LZ0X8b9NtEjlnypWFEP6W28V+nI4=
-X-Received: by 2002:a17:906:f205:b0:8af:b63:b4ba with SMTP id
- gt5-20020a170906f20500b008af0b63b4bamr138421ejb.3.1676419208438; Tue, 14 Feb
- 2023 16:00:08 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1427715AD
+	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 01:21:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338DCC4339E;
+	Wed, 15 Feb 2023 01:21:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1676424095;
+	bh=x5ONHmD9axTWl2ROxj07e1ofChMPlgTyKLO4V4lNEIw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=XTGt8ux85AQXhQI319C7K8yqIoGEXDYu9nX2yHvUA3kMCxc0xwn+2KBT/VSPeehpK
+	 imtbeyEfToMP/dxPY6opYBcjvGYuUcgyAiOgJE2Qm+9aSJGT3FR06vCdZJIehTNmXu
+	 Y+UgH2vcwlcc5LW1Gkj4wOgG5F9MjoCFUtP7QkNf1e3qT1WVA//GuvYkz2w7O/X8KK
+	 yKJy2C2ejSyz/eN5gc2k4lbqUy9ugcRuV7GtPr0+e+P0TLE7DJ8uOXZFhRfIz5JTsQ
+	 j06LtRkgdntpRlocZwLdAERa9iH2ATX2S5ykLABTxqJH9H6cGwR+jwpqQS1/2pE3Un
+	 y4/KdXMnIvfQQ==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: linux-kbuild@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Ben Hutchings <ben@decadent.org.uk>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Tom Rix <trix@redhat.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH v6 02/12] kbuild: deb-pkg: create source package without cleaning
+Date: Wed, 15 Feb 2023 10:20:24 +0900
+Message-Id: <20230215012034.403356-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230215012034.403356-1-masahiroy@kernel.org>
+References: <20230215012034.403356-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230212092715.1422619-4-davemarchevsky@fb.com>
- <202302121936.t36vlAFG-lkp@intel.com> <d04d33ff-0f8f-2bbd-3a67-9b8b813a799b@meta.com>
- <CAKwvOdketskm5z25aPRY7OsBOZe2kzvXV-i9RDTbwcLpZSAT0A@mail.gmail.com>
- <CAADnVQ+qJMAugDDQXaerRbh0g4QdRygMZ_0UVmXViR2aJ4OLDQ@mail.gmail.com>
- <CABCJKucDXNeGCdD6uT7phYhpm+OgYm19EkfCNMB9AJ66k4NcvQ@mail.gmail.com>
- <Y+tupCQ/X38AlvY0@hirez.programming.kicks-ass.net> <CABCJKuc1iqHjg9ERVXMHO00rOqaNGM=d7xTvB4f6fTM4J4-nTA@mail.gmail.com>
-In-Reply-To: <CABCJKuc1iqHjg9ERVXMHO00rOqaNGM=d7xTvB4f6fTM4J4-nTA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 14 Feb 2023 15:59:57 -0800
-Message-ID: <CAADnVQJz4uCWwLigFUXi-W=fnW-AencgNz52SwKBuDCkzNNMpQ@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 3/9] bpf: Add bpf_rbtree_{add,remove,first} kfuncs
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Dave Marchevsky <davemarchevsky@meta.com>, kernel test robot <lkp@intel.com>, 
-	Dave Marchevsky <davemarchevsky@fb.com>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kernel Team <kernel-team@fb.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Tejun Heo <tj@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Joao Moreira <joao@overdrivepizza.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 14, 2023 at 2:00 PM Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> On Tue, Feb 14, 2023 at 7:36 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > The other case, which you allude to I think, is control transfer to the
-> > JIT'ed code which is currently __nocfi annotated. I've only briefly
-> > thought about how to change this, but basically it would entail the JIT
-> > emitting the correct prefix bytes and setting the entry point at +16.
-> >
-> > Given the JIT will only run after we've selected kCFI/FineIBT it knows
-> > which form to pick from and can emit the right prefix. Then if we remove
-> > the __nocfi annotation from the call into JIT'ed code, everything should
-> > work.
-> >
-> > None of this should be exceptionally hard, but I've not had time to
-> > actually do much about it yet.
->
-> The dispatcher path shouldn't be terribly hard to fix, but when I
-> looked into this briefly half a year ago and ran BPF self-tests with
-> CFI enabled, I found a few more places that indirectly call jitted
-> code (or trampolines) using a different function pointer type:
->
-> https://github.com/ClangBuiltLinux/linux/issues/1727
->
-> For some of these, determining the correct type didn't look all that
-> simple, but then again, I'm not super familiar with BPF internals.
+If you run 'make deb-pkg', all objects are lost due to 'make clean',
+which makes the incremental builds impossible.
 
-How is 'kcfi' 32-bit hash computed?
-Some kind of hash of type id-s?
-Here we'll be dealing with bpf side callbacks with its own types
-that are called from the kernel side with its own types.
-I don't quite see how clang can come up with the same hashing
-algorithm for both.
-Also what to do with the situation when kernel is compiled with GCC
-while bpf progs are with clang? and the other way around ?
-gcc-bpf can compile all of selftests/bpf, but not yet run them.
+Instead of cleaning, pass the exclude list to tar's --exclude-from
+option.
 
-kcfi is addressing the case when endbr/ibt is not supported by cpu
-or some other reason?
+Previously, *.diff.gz contained some check-in files such as
+.clang-format, .cocciconfig.
 
-btw even for bpf_tail_call we're using direct call most of the time.
-Even when bpf progs look like a callback through an indirect call we
-are using direct call whenever possible.
+With this commit, *.diff.gz will only contain the .config and debian/.
+The other source files will go into the .orig tarball.
+
+linux.tar.gz is rebuilt only when the source files that would go into
+the tarball are changed.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+Changes in v6:
+  - Add more stubs to cmd_tar so I can reuse it for the other rules
+
+Changes in v5:
+  - Avoid unneeded rebuild of the tarball when nothing in the source tree
+    is changed.
+
+Changes in v4:
+  - Fix a typo in comment
+
+Changes in v3:
+  - Add --extra-pattern='*.rej'
+  - Exclude symlinks at the toplevel
+  - Add --sort=name tar option
+
+ scripts/Makefile.package | 48 +++++++++++++++++++++++++++++++++++-----
+ scripts/package/mkdebian | 24 ++++++++++++++++++++
+ 2 files changed, 66 insertions(+), 6 deletions(-)
+
+diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+index dfbf40454a99..f0002ace4156 100644
+--- a/scripts/Makefile.package
++++ b/scripts/Makefile.package
+@@ -43,13 +43,47 @@ if test "$(objtree)" != "$(srctree)"; then \
+ 	echo >&2 "  ERROR:"; \
+ 	echo >&2 "  Building source tarball is not possible outside the"; \
+ 	echo >&2 "  kernel source tree. Don't set KBUILD_OUTPUT, or use the"; \
+-	echo >&2 "  binrpm-pkg or bindeb-pkg target instead."; \
++	echo >&2 "  binrpm-pkg target instead."; \
+ 	echo >&2; \
+ 	false; \
+ fi ; \
+ tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
+ 	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
+ 
++# .tmp_filelist .tmp_filelist_exclude
++# ---------------------------------------------------------------------------
++
++scripts/list-gitignored: FORCE
++	$(Q)$(MAKE) -f $(srctree)/Makefile scripts_package
++
++# 1f5d3a6b6532e25a5cdf1f311956b2b03d343a48 removed '*.rej' from .gitignore,
++# but it is definitely a generated file.
++filechk_filelist = \
++	$< --exclude='*.rej' --output=$@_exclude --prefix=./ --rootdir=$(srctree) --stat=-
++
++.tmp_filelist: scripts/list-gitignored FORCE
++	$(call filechk,filelist)
++
++# tarball
++# ---------------------------------------------------------------------------
++
++quiet_cmd_tar = TAR     $@
++      cmd_tar = tar -c -f $@ $(tar-compress-opt) $(tar-exclude-opt) \
++                --owner=0 --group=0 --sort=name \
++                --transform 's:^\.:$*:S' -C $(tar-rootdir) .
++
++tar-rootdir := $(srctree)
++
++%.tar.gz: private tar-compress-opt := -I $(KGZIP)
++%.tar.gz:
++	$(call cmd,tar)
++
++# Linux source tarball
++# ---------------------------------------------------------------------------
++
++linux.tar.gz: tar-exclude-opt = --exclude=./$@ --exclude-from=$<_exclude
++linux.tar.gz: .tmp_filelist
++
+ # rpm-pkg
+ # ---------------------------------------------------------------------------
+ PHONY += rpm-pkg
+@@ -80,13 +114,12 @@ binrpm-pkg:
+ 		$(UTS_MACHINE)-linux -bb $(objtree)/binkernel.spec
+ 
+ PHONY += deb-pkg
+-deb-pkg:
+-	$(MAKE) clean
++deb-pkg: linux.tar.gz
+ 	$(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
+-	$(call cmd,src_tar,$(KDEB_SOURCENAME))
+ 	origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
+-		mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
+-	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
++		cp linux.tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
++	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
++		--build=source,binary --source-option=-sP -nc -us -uc
+ 
+ PHONY += bindeb-pkg
+ bindeb-pkg:
+@@ -174,4 +207,7 @@ help:
+ 	@echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
+ 	@echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
+ 
++PHONY += FORCE
++FORCE:
++
+ .PHONY: $(PHONY)
+diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+index c3bbef7a6754..68b13ef590ba 100755
+--- a/scripts/package/mkdebian
++++ b/scripts/package/mkdebian
+@@ -84,6 +84,8 @@ set_debarch() {
+ 	fi
+ }
+ 
++rm -rf debian
++
+ # Some variables and settings used throughout the script
+ version=$KERNELRELEASE
+ if [ -n "$KDEB_PKGVERSION" ]; then
+@@ -135,6 +137,28 @@ fi
+ mkdir -p debian/source/
+ echo "1.0" > debian/source/format
+ 
++# Ugly: ignore anything except .config or debian/
++cat<<'EOF' > debian/source/local-options
++diff-ignore
++
++extend-diff-ignore = ^[^.d]
++
++extend-diff-ignore = ^\.[^c]
++extend-diff-ignore = ^\.c($|[^o])
++extend-diff-ignore = ^\.co($|[^n])
++extend-diff-ignore = ^\.con($|[^f])
++extend-diff-ignore = ^\.conf($|[^i])
++extend-diff-ignore = ^\.confi($|[^g])
++extend-diff-ignore = ^\.config.
++
++extend-diff-ignore = ^d($|[^e])
++extend-diff-ignore = ^de($|[^b])
++extend-diff-ignore = ^deb($|[^i])
++extend-diff-ignore = ^debi($|[^a])
++extend-diff-ignore = ^debia($|[^n])
++extend-diff-ignore = ^debian[^/]
++EOF
++
+ echo $debarch > debian/arch
+ extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
+ extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
+-- 
+2.34.1
+
