@@ -1,86 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830C810786;
-	Wed, 15 Feb 2023 18:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E63C4339E;
-	Wed, 15 Feb 2023 18:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92990C5D8
+	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 18:57:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9C0C4339C
+	for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 18:57:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676486488;
-	bh=fc+5seqhTO5BvvY3isnCsCZbytpHZYKbkp6X0pw+tz0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KwKxexKOjWpIM62ogFQODLQ1bQsNzLet37om+7MP+97xaJyIyy2vgnIwKvqGHgSum
-	 AK1HlTcMi+AvC332r/QIwE+/49lsjRtJJSV4BIXQMrnonWfh+22HtMsqqs7j8kwYyW
-	 w1EKs81R8h99F0BIHuSoZfDAmS6VE5JSMLdZ+IFrjA4FhQ/WlqFpzGOvDUzu4ZTqOq
-	 FYLfMowZLmq29qGViyPSz7myGFzjL33q7gGLhZfuv3GDwHSYvo80FQH+P2N8ItH8t1
-	 EkSsDc48uZakeV8iEsThXGc2ro9ZjG3icqKXOi2XHl4Nf9kwmXsGAq9DohtR+CUXdi
-	 ndi0MW4G87mvA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 15 Feb 2023 11:41:17 -0700
-Subject: [PATCH 3/3] powerpc: Allow CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 with
- ld.lld 15+
+	s=k20201202; t=1676487443;
+	bh=5sA/GkKB672YgfySlkTvpsgV6jFfW0ewXVzumpKClJ4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qUP0g1Y3vKUKJX2u/BfxIK1I2EFwOmujk3pcDIOzBlcbomaqFq/0Lr6C+tI9tXloW
+	 T22Dyf5Lzdq2jrIS3ujGaHB/oGxv3Ggl3BaAyLn4Nv5JXbC2eMvd66ybaWIkO9ZoHr
+	 BawRrDM91wmtng4Zg1nUl6RPp6kQSVmB7xW9dQdoV3vVZpmAZOKu26DxDjtu2DVn3c
+	 ZSCXXNraymAkpSZI2+047+OL9mH+qC7Gq+eVhvAT5E9dPcW6FwPo8U80Idig9XzRg9
+	 fIBvbtFCYTBi2s/BDO8HMoKuRp/5KabW83GlT655u9WBpYpcaC+KqrXPv3g9pM3PSF
+	 DJGdYrjtFKUCA==
+Received: by mail-lf1-f42.google.com with SMTP id bp15so28734386lfb.13
+        for <llvm@lists.linux.dev>; Wed, 15 Feb 2023 10:57:23 -0800 (PST)
+X-Gm-Message-State: AO0yUKWL1sxN2tojaXaF0u22RlF72SYytaBnyvFDj3E44sNdKk3IqlDv
+	B6Q5ODa/pGITou03gr03EJTfDIBz6fSU0FBqK/8=
+X-Google-Smtp-Source: AK7set8D9UvcPF2NNMQcbWg4CZbyXd3FwtHrjDgfodVpnwH/PgU4hJiVgfzHdeZn0aI103wP3X5ft++Y5Ec496D4TYI=
+X-Received: by 2002:ac2:593a:0:b0:4db:4568:6fe9 with SMTP id
+ v26-20020ac2593a000000b004db45686fe9mr871517lfi.3.1676487441367; Wed, 15 Feb
+ 2023 10:57:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230118-ppc64-elfv2-llvm-v1-3-b9e2ec9da11d@kernel.org>
-References: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
-In-Reply-To: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
-To: mpe@ellerman.id.au
-Cc: npiggin@gmail.com, christophe.leroy@csgroup.eu, erhard_f@mailbox.org, 
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1504; i=nathan@kernel.org;
- h=from:subject:message-id; bh=fc+5seqhTO5BvvY3isnCsCZbytpHZYKbkp6X0pw+tz0=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMlv1UPn3nmjdiU36FOT54YGk9jbwdOfzrpwQ4Lldo2jh
- aTmydrijlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjAR3mCG/xFvgraEdZq6CVXX
- CPptLaiNF2zQ335f/duS/6bbGRO9lRgZHkb0V30yMWtbK9nNreCq1Vi8e/3F+z8LMgqXK/R7Bzh
- zAwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+References: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
+ <Y+0MsMomkcDBdjNI@chrisdown.name> <Y+0PzlA0LijhfD8R@dev-arch.thelio-3990X> <Y+0VAr21hlIdrxyp@chrisdown.name>
+In-Reply-To: <Y+0VAr21hlIdrxyp@chrisdown.name>
+From: Song Liu <song@kernel.org>
+Date: Wed, 15 Feb 2023 10:57:09 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5U2qXa_O46_v-hzWqq5L7bRs6bQe5QGGnMOMzX3y4KgA@mail.gmail.com>
+Message-ID: <CAPhsuW5U2qXa_O46_v-hzWqq5L7bRs6bQe5QGGnMOMzX3y4KgA@mail.gmail.com>
+Subject: Re: [PATCH] module: Remove the unused function within
+To: Chris Down <chris@chrisdown.name>, mcgrof@kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>, Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, 
+	ndesaulniers@google.com, trix@redhat.com, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+	Abaci Robot <abaci@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Commit 5017b4594672 ("powerpc/64: Option to build big-endian with ELFv2
-ABI") restricted the ELFv2 ABI configuration such that it can only be
-selected when linking with ld.bfd, due to lack of testing with LLVM.
+Hi Chris,
 
-ld.lld can link ELFv2 kernels without any issues; in fact, it is the
-only ABI that ld.lld supports, as ELFv1 is not supported in ld.lld.
+On Wed, Feb 15, 2023 at 9:23 AM Chris Down <chris@chrisdown.name> wrote:
+>
+> +Cc: Song
 
-As this has not seen a ton of real world testing yet, be conservative
-and only allow this option to be selected with the latest stable release
-of LLVM (15.x) and newer.
+Thanks for the CC!
 
-While in the area, remove 'default n', as it is unnecessary to specify
-it explicitly since all boolean/tristate configuration symbols default
-to n.
+>
+> Nathan Chancellor writes:
+> >On Wed, Feb 15, 2023 at 04:47:44PM +0000, Chris Down wrote:
+> >> Jiapeng Chong writes:
+> >> > The function within is defined in the main.c file, but not called
+> >> > elsewhere, so remove this unused function.
+> >>
+> >> Huh? It's used by __module_text_address(), no?
+> >
+> >Not after commit 2ece476a2346 ("module: replace module_layout with
+> >module_memory") in -next. This patch should have a fixes tag, even if
+> >the warning is currently hidden behind W=1.
+>
+> Huh, I thought I had checked out latest -next, but must have not done so
+> somehow :-) Mea culpa.
+>
+> If it's only in -next then no Fixes needed, since there's no stable rev yet.
+>
+> Jiapeng, in future, please make sure to cc the author of related commits when
+> reporting stuff like this :-) It helps people to update their patches.
+>
+> Song, you probably want to update your patch.
 
-Tested-by: "Erhard F." <erhard_f@mailbox.org
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/powerpc/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Luis, would you prefer a new patch with everything folded in? Or would
+you apply the patches on your end?
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index b8c4ac56bddc..f9f13029c98a 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -603,8 +603,7 @@ config PPC64_BIG_ENDIAN_ELF_ABI_V2
- 	bool "Build big-endian kernel using ELF ABI V2 (EXPERIMENTAL)"
- 	depends on PPC64 && CPU_BIG_ENDIAN
- 	depends on CC_HAS_ELFV2
--	depends on LD_IS_BFD && LD_VERSION >= 22400
--	default n
-+	depends on LD_VERSION >= 22400 || LLD_VERSION >= 150000
- 	help
- 	  This builds the kernel image using the "Power Architecture 64-Bit ELF
- 	  V2 ABI Specification", which has a reduced stack overhead and faster
-
--- 
-2.39.2
-
+Thanks,
+Song
