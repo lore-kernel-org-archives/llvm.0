@@ -1,99 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD272F2F
-	for <llvm@lists.linux.dev>; Thu, 16 Feb 2023 14:41:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F613C433A1
-	for <llvm@lists.linux.dev>; Thu, 16 Feb 2023 14:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676558468;
-	bh=3T3iubz/OzIX0beQkVOfl0dMIVw8Iyg1LerT7YWobYA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bqQdIYUKwEG5ap8m+zzzPrf5h3r6C+0jf6sHYHwV190X0QtgalUXbdIi1Cy0aqc2N
-	 neV0HY0Zv5cIdOBDZXqVduO1QnfxoD3r/FgREYaZGYm91iUgBL++FTFFb1JPbb/0+S
-	 ypLbVoHZO8OwCCWzXp/vMD5UXLYPdjgKgdGAJjRALO+rMNbj7jmp0YVhUGCZz0HsFI
-	 /vnyh+V5LMoWqjqaQz+jk5TTtaDY2AEov4Q9fxoY7zVagneZ78U36boJMRgq1yoREB
-	 YLhiKa8SacNh2lQF3KRcTxx/BFfiSwxdvm71QEnDz1fAzg3EsezqCKchwOL7G6QsrB
-	 y2JQXCplly4hA==
-Received: by mail-yb1-f175.google.com with SMTP id x4so2413405ybp.1
-        for <llvm@lists.linux.dev>; Thu, 16 Feb 2023 06:41:07 -0800 (PST)
-X-Gm-Message-State: AO0yUKWDZ/cdX4IpwTpZZmyKpanxu9jjKqnkrki0pVvKEfnpn17/xUia
-	R6vlbFYGu9LFGrFcKsKdsVn9/MoZI995QEJMWug=
-X-Google-Smtp-Source: AK7set9fg7j+rXsB4sX4MXRApXhhmd2yEefhAqabXERggxwLpuEIZ/pW61+utdeRTgwKZDUiZuJjs+WKbjmhss3iYCE=
-X-Received: by 2002:a25:e906:0:b0:91f:507f:f261 with SMTP id
- n6-20020a25e906000000b0091f507ff261mr618556ybd.463.1676558467046; Thu, 16 Feb
- 2023 06:41:07 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C125C746E
+	for <llvm@lists.linux.dev>; Thu, 16 Feb 2023 14:52:17 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id r9-20020a17090a2e8900b00233ba727724so6069585pjd.1
+        for <llvm@lists.linux.dev>; Thu, 16 Feb 2023 06:52:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vwy/nvSACPs3saFn3MC2GpZOqXyVXmgpysdDNeISxL4=;
+        b=cwz68VlmDebluJTDd3kSMGJs+22jJVLh0Fv0bcrZcbxWMLknLTS+Tig93Lq9LNTuwY
+         V5SiifT7xi1tRId07N0GCnnM4k3LCV4L7xKXbW8uFDrmLNNXcErsIb8FkXig368+U8IB
+         gwH2+13ufQE7YAbNisWxG/gB4r1KN0MAw8jCMwuAkmZcpZ5SUmMOhPUUT4OizXTOOKUu
+         2c9a4jwgTkeHUBZ73M4rJWvghAt/bBReKj25J4ixRMSVPADaSpbbQL6/CBnR8+fpnv1N
+         kk77iJW7wxWjk6/XNHa1gBmb0yXMD6kiD2jinSUPkYeQ6Y2GPG5/5r4thQ7xTjtYro0k
+         tQ2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vwy/nvSACPs3saFn3MC2GpZOqXyVXmgpysdDNeISxL4=;
+        b=BwPVC/ampNjkYvt6BFFhehfusPJSw257EuVJ+PUVNn5/jLa7y7/yjw1wS+Bn6/Rfwi
+         P5oGcukV491ba3ADoup35/2hSiY/uBgZ5HCjzZL61mfzwB2h2PaRha9hjOztu2m+0bdp
+         s4f0BJLCa0D06yO1jdePQ/ciVwW+YDHht63SPjRbDvuONEagcD1GD/SL8WFv0FgGlVmD
+         O7XVICCWGw3/aBZWA0X7BQa4/ESM8rmPwzLo995C8I3WJAJpvjiAqemO1Y+ZLRvmU7n+
+         GeLdTcHLUKWefb+cQAa0luEUzj2+J1gQn8iiG1pfmD94XwwDlY9oWVmVtv+rC83G0mU3
+         JzuQ==
+X-Gm-Message-State: AO0yUKUUtIOktBMiWV7Ca1e4jZqujZ/czPYL44rwAVsTJ04wJmAuwfjz
+	RXuBxEFQL2lc8dt0LZVEk4s=
+X-Google-Smtp-Source: AK7set+7/LSgLUnPubFXxsFw4TXLoT5TlodOzauYcx+mvORzOE91ehJg5BdcehvsXAQ3G3HCcHMguA==
+X-Received: by 2002:a17:90a:c782:b0:233:ab9b:f86a with SMTP id gn2-20020a17090ac78200b00233ab9bf86amr7033557pjb.8.1676559137218;
+        Thu, 16 Feb 2023 06:52:17 -0800 (PST)
+Received: from awkrail.localdomain.jp (p182177-ipngn200503kyoto.kyoto.ocn.ne.jp. [58.90.106.177])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090abd1700b00233db0db3dfsm3388472pjr.7.2023.02.16.06.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 06:52:16 -0800 (PST)
+From: Taichi Nishimura <awkrail01@gmail.com>
+To: rdunlap@infradead.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	awkrail01@gmail.com,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	deso@posteo.net,
+	haoluo@google.com,
+	hawk@kernel.org,
+	iii@linux.ibm.com,
+	joannelkoong@gmail.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	mykolal@fb.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	netdev@vger.kernel.org,
+	sdf@google.com,
+	shuah@kernel.org,
+	song@kernel.org,
+	trix@redhat.com,
+	yhs@fb.com,
+	ytcoode@gmail.com,
+	gregkh@linuxfoundation.org
+Subject: [Re: PATCH bpf-next] Fix typos in selftest/bpf files
+Date: Thu, 16 Feb 2023 23:51:45 +0900
+Message-Id: <20230216145145.548183-1-awkrail01@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
+References: <4753a724-2fd4-3672-c7ce-0164fe759eea@infradead.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230208155450.1941608-1-trix@redhat.com> <20230213071241.GA2799422@linux.intel.com>
-In-Reply-To: <20230213071241.GA2799422@linux.intel.com>
-From: Oded Gabbay <ogabbay@kernel.org>
-Date: Thu, 16 Feb 2023 16:40:40 +0200
-X-Gmail-Original-Message-ID: <CAFCwf132HuNbXjQfLe9QjotE6FnwOxUKi99bytp0BbL5GyL0-g@mail.gmail.com>
-Message-ID: <CAFCwf132HuNbXjQfLe9QjotE6FnwOxUKi99bytp0BbL5GyL0-g@mail.gmail.com>
-Subject: Re: [PATCH] habanalabs: change unused extern decl of hdev to forward
- decl of hl_device
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: Tom Rix <trix@redhat.com>, nathan@kernel.org, ndesaulniers@google.com, 
-	kelbaz@habana.ai, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 13, 2023 at 9:12 AM Stanislaw Gruszka
-<stanislaw.gruszka@linux.intel.com> wrote:
->
-> On Wed, Feb 08, 2023 at 07:54:50AM -0800, Tom Rix wrote:
-> > Building with clang W=3D2 has several similar warnings
-> > drivers/accel/habanalabs/common/decoder.c:46:51: error: declaration sha=
-dows a variable in the global scope [-Werror,-Wshadow]
-> > static void dec_error_intr_work(struct hl_device *hdev, u32 base_addr, =
-u32 core_id)
-> >                                                   ^
-> > drivers/accel/habanalabs/common/security.h:13:26: note: previous declar=
-ation is here
-> > extern struct hl_device *hdev;
-> >                          ^
-> >
-> > There is no global definition of hdev, so the extern is not needed.
-> > Searched with
-> > grep -r '^struct' . | grep hl_dev
-> >
-> > Change to an forward decl to resolve these issues
-> > drivers/accel/habanalabs/common/mmu/../security.h:133:40: error: =E2=80=
-=98struct hl_device=E2=80=99 declared inside parameter list will not be vis=
-ible outside of this definition or declaration [-Werror]
-> >   133 |         bool (*skip_block_hook)(struct hl_device *hdev,
-> >       |                                        ^~~~~~~~~
-> >
-> > Signed-off-by: Tom Rix <trix@redhat.com>
-> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
->
-> > ---
-> >  drivers/accel/habanalabs/common/security.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/accel/habanalabs/common/security.h b/drivers/accel=
-/habanalabs/common/security.h
-> > index 234b4a6ed8bc..d7a3b3e82ea4 100644
-> > --- a/drivers/accel/habanalabs/common/security.h
-> > +++ b/drivers/accel/habanalabs/common/security.h
-> > @@ -10,7 +10,7 @@
-> >
-> >  #include <linux/io-64-nonatomic-lo-hi.h>
-> >
-> > -extern struct hl_device *hdev;
-> > +struct hl_device;
-> >
-> >  /* special blocks */
-> >  #define HL_MAX_NUM_OF_GLBL_ERR_CAUSE         10
-> > --
-> > 2.26.3
-> >
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Thanks, applied to -next.
-Oded
+> This text is not needed in the changelog for a patch, please read the
+> section entitled "The canonical patch format" in the kernel file,
+> Documentation/process/submitting-patches.rst for what is needed in order
+> to properly describe the change.
+
+> thanks,
+
+> greg k-h
+
+> Hi,
+> The corrections all look good.
+> Of course, you need to fix what Greg mentioned, then you can resubmit
+> the patch with this added:
+
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+> Thanks.
+
+Thank you for your reviewing and advices.
+I am a beginner so they are helpful.
+
+I read the docs and re-sent a patch.
+After sending it, I found forgetting to reply to this thread...
+Sorry in advance.
