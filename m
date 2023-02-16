@@ -1,259 +1,252 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF427B;
-	Thu, 16 Feb 2023 08:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676537306; x=1708073306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZI0M1gB6CVRszJ80drCePHEr/lyzccBHVgAyVK/t4rs=;
-  b=UbcROYRrW++2OONGOPG2SoRT9d8B8Ef+qd6i0gLPrZUa3h0PFm05xSBG
-   2W8wxTbLTIXAItzk03/b4zrknhY7aT+MxrdI0F0vPId63EiWdYpQSpdBN
-   1SH/HsyYC9Z69/FaKUntQs6rRVPNAFZ09w4zNkzQcJMLTOqjUO2gQUZ3A
-   unqWWCOxH14AUsRnZknXp1/EPbrEuXtEwLzCqi482vMi3CYAv9LBtHc5K
-   qdMS7ry5yTM0CE8k4UbB4gAwim9V4fRY6GnTbaUFSvlAw+l0TUeqmRr3B
-   FdP6YCFLcMeOL3vsRPko6ehuxvblE8T2+RqowKy0GuwlZsvVz6n2O5HhU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="396304978"
-X-IronPort-AV: E=Sophos;i="5.97,302,1669104000"; 
-   d="scan'208";a="396304978"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 00:48:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="670045415"
-X-IronPort-AV: E=Sophos;i="5.97,301,1669104000"; 
-   d="scan'208";a="670045415"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 16 Feb 2023 00:48:22 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pSZwE-000A9r-0P;
-	Thu, 16 Feb 2023 08:48:22 +0000
-Date: Thu, 16 Feb 2023 16:47:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: John.C.Harrison@intel.com, Intel-GFX@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-gfx@lists.freedesktop.org,
-	Chris Wilson <chris@chris-wilson.co.uk>,
-	DRI-Devel@lists.freedesktop.org,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, stable@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH v2 2/2] drm/i915: Don't use BAR mappings for
- ring buffers with LLC
-Message-ID: <202302161616.UKxjGXPv-lkp@intel.com>
-References: <20230216002248.1851966-3-John.C.Harrison@Intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C177B
+	for <llvm@lists.linux.dev>; Thu, 16 Feb 2023 08:56:00 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso5733697pju.0
+        for <llvm@lists.linux.dev>; Thu, 16 Feb 2023 00:56:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ypi8jQ7F2+zD7Ox/61oWOym5Eew8ohAKNg0g1aHiunk=;
+        b=jmBYNAyIxzvxr2+s7uIfnBlKzM3Kz3T57j6LAwRlPGFbMiFfzctEwMpN1BQCoUOnm+
+         v1RjH3c6GDudgpMRQk4veiluPqAqUWoUHZ4o9C4LJ7W+ci7McT1Y99WTz+HblLzpD+ap
+         NKhdGAJm2sN180PxiPiL2NO1/taUFef9APoAHMuGc27IXe447eg4mGD0y2gZpiKEIWK6
+         9yczPNTpDww8j/ATNnKS0oMRpBwsOsRs5IuXyN0H+3lZi8/3X5bCOQzeZWd9jVaCiPV/
+         xLUGRttLE+vjU+eDQNBJP3P4COnzBkMz8W2GMJyzh6nhCfYixAR/cWMHHwvnY+fkWB5w
+         jwhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ypi8jQ7F2+zD7Ox/61oWOym5Eew8ohAKNg0g1aHiunk=;
+        b=j7bmK9Mk9FPbs+N1omCpzkmNTCifuX2Dtfyqh77awT38XV/jU2tIkCDwutjMFKe/v3
+         NVoh2ODDspWBn+u0cOE+pDAeUDVwkz6dysfNUg4zUu2wRz1WF5+0/yq8/GEXJpn6x5Cy
+         uI6sTQRknJsMxzKEG9ey/bP/1LJOhU7yC5Fh/ZuABMjxJ2/b/gae1Ai9i7nGnL0qJAT2
+         8jQdc1B1bLnP1gqKeGqETeCgkq0R2GAOprb3SZbAZY03H56F/4hB9EW2OdA5e3wo6/zm
+         Wk+L3ZsPf5Te4tqmutVbBED0i+AKwYKImXYncTUnf9DhGPYZzU1QRGe6dtfSRrKVug9H
+         sdIg==
+X-Gm-Message-State: AO0yUKVLUVUCLzu8APofac/GYFNP7wsg5r75iIMxPS1NoYKzNTsFlJKe
+	HgNGnT1tVNdkmPBcmH21Qrc=
+X-Google-Smtp-Source: AK7set8JIRuzrIc0YG6+epfKd8EkZjZOU6eprUOONq+l5Y7ucy02vOt6JBegFr3roBLKx2DXJListA==
+X-Received: by 2002:a17:902:e84a:b0:19a:a267:f16c with SMTP id t10-20020a170902e84a00b0019aa267f16cmr7371554plg.31.1676537760249;
+        Thu, 16 Feb 2023 00:56:00 -0800 (PST)
+Received: from localhost.localdomain (arc.lsta.media.kyoto-u.ac.jp. [130.54.10.65])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902ee4d00b0019a88c1cf63sm754427plo.180.2023.02.16.00.55.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Feb 2023 00:55:59 -0800 (PST)
+From: Taichi Nishimura <awkrail01@gmail.com>
+To: andrii@kernel.org,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yhs@fb.com,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com,
+	awkrail01@gmail.com,
+	iii@linux.ibm.com,
+	ytcoode@gmail.com,
+	deso@posteo.net,
+	memxor@gmail.com,
+	joannelkoong@gmail.com,
+	rdunlap@infradead.org
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next] Fix typos in selftest/bpf files
+Date: Thu, 16 Feb 2023 17:55:37 +0900
+Message-Id: <20230216085537.519062-1-awkrail01@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230216002248.1851966-3-John.C.Harrison@Intel.com>
 
-Hi,
+Run spell checker on files in selftest/bpf and fixed typos.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Taichi Nishimura <awkrail01@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c  | 2 +-
+ tools/testing/selftests/bpf/prog_tests/trampoline_count.c   | 2 +-
+ .../testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+ tools/testing/selftests/bpf/progs/dynptr_fail.c             | 2 +-
+ tools/testing/selftests/bpf/progs/strobemeta.h              | 2 +-
+ tools/testing/selftests/bpf/progs/test_cls_redirect.c       | 6 +++---
+ tools/testing/selftests/bpf/progs/test_subprogs.c           | 2 +-
+ tools/testing/selftests/bpf/progs/test_xdp_vlan.c           | 2 +-
+ tools/testing/selftests/bpf/test_cpp.cpp                    | 2 +-
+ tools/testing/selftests/bpf/veristat.c                      | 4 ++--
+ 10 files changed, 13 insertions(+), 13 deletions(-)
 
-[auto build test ERROR on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-C-Harrison-Intel-com/drm-i915-Don-t-use-stolen-memory-for-ring-buffers-with-LLC/20230216-082552
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230216002248.1851966-3-John.C.Harrison%40Intel.com
-patch subject: [Intel-gfx] [PATCH v2 2/2] drm/i915: Don't use BAR mappings for ring buffers with LLC
-config: i386-randconfig-a005-20230213 (https://download.01.org/0day-ci/archive/20230216/202302161616.UKxjGXPv-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fa748ad303922e4138a246d4db247dfa96e45651
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review John-C-Harrison-Intel-com/drm-i915-Don-t-use-stolen-memory-for-ring-buffers-with-LLC/20230216-082552
-        git checkout fa748ad303922e4138a246d4db247dfa96e45651
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302161616.UKxjGXPv-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/gt/intel_ring.c:103:2: error: expected expression
-           else
-           ^
->> drivers/gpu/drm/i915/gt/intel_ring.c:111:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/i915/gt/intel_ring.c:146:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/i915/gt/intel_ring.c:184:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/i915/gt/intel_ring.c:195:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/i915/gt/intel_ring.c:230:1: error: function definition is not allowed here
-   {
-   ^
-   drivers/gpu/drm/i915/gt/intel_ring.c:312:1: error: function definition is not allowed here
-   {
-   ^
->> drivers/gpu/drm/i915/gt/intel_ring.c:336:7: error: expected '}'
-   #endif
-         ^
-   drivers/gpu/drm/i915/gt/intel_ring.c:94:1: note: to match this '{'
-   {
-   ^
-   8 errors generated.
-
-
-vim +103 drivers/gpu/drm/i915/gt/intel_ring.c
-
-2871ea85c119e6 Chris Wilson           2019-10-24   92  
-2871ea85c119e6 Chris Wilson           2019-10-24   93  void intel_ring_unpin(struct intel_ring *ring)
-2871ea85c119e6 Chris Wilson           2019-10-24   94  {
-2871ea85c119e6 Chris Wilson           2019-10-24   95  	struct i915_vma *vma = ring->vma;
-2871ea85c119e6 Chris Wilson           2019-10-24   96  
-2871ea85c119e6 Chris Wilson           2019-10-24   97  	if (!atomic_dec_and_test(&ring->pin_count))
-2871ea85c119e6 Chris Wilson           2019-10-24   98  		return;
-2871ea85c119e6 Chris Wilson           2019-10-24   99  
-2871ea85c119e6 Chris Wilson           2019-10-24  100  	i915_vma_unset_ggtt_write(vma);
-fa748ad303922e Daniele Ceraolo Spurio 2023-02-15  101  	if (i915_vma_is_map_and_fenceable(vma) && !HAS_LLC(vma->vm->i915)) {
-2871ea85c119e6 Chris Wilson           2019-10-24  102  		i915_vma_unpin_iomap(vma);
-2871ea85c119e6 Chris Wilson           2019-10-24 @103  	else
-2871ea85c119e6 Chris Wilson           2019-10-24  104  		i915_gem_object_unpin_map(vma->obj);
-2871ea85c119e6 Chris Wilson           2019-10-24  105  
-2871ea85c119e6 Chris Wilson           2019-10-24  106  	i915_vma_make_purgeable(vma);
-a266bf42006004 Chris Wilson           2019-11-18  107  	i915_vma_unpin(vma);
-2871ea85c119e6 Chris Wilson           2019-10-24  108  }
-2871ea85c119e6 Chris Wilson           2019-10-24  109  
-2871ea85c119e6 Chris Wilson           2019-10-24  110  static struct i915_vma *create_ring_vma(struct i915_ggtt *ggtt, int size)
-2871ea85c119e6 Chris Wilson           2019-10-24 @111  {
-2871ea85c119e6 Chris Wilson           2019-10-24  112  	struct i915_address_space *vm = &ggtt->vm;
-2871ea85c119e6 Chris Wilson           2019-10-24  113  	struct drm_i915_private *i915 = vm->i915;
-2871ea85c119e6 Chris Wilson           2019-10-24  114  	struct drm_i915_gem_object *obj;
-2871ea85c119e6 Chris Wilson           2019-10-24  115  	struct i915_vma *vma;
-2871ea85c119e6 Chris Wilson           2019-10-24  116  
-0d8ee5ba8db46c Thomas Hellström       2021-09-22  117  	obj = i915_gem_object_create_lmem(i915, size, I915_BO_ALLOC_VOLATILE |
-0d8ee5ba8db46c Thomas Hellström       2021-09-22  118  					  I915_BO_ALLOC_PM_VOLATILE);
-bb5623500723f7 John Harrison          2023-02-15  119  	if (IS_ERR(obj) && i915_ggtt_has_aperture(ggtt) && !HAS_LLC(i915))
-2871ea85c119e6 Chris Wilson           2019-10-24  120  		obj = i915_gem_object_create_stolen(i915, size);
-2871ea85c119e6 Chris Wilson           2019-10-24  121  	if (IS_ERR(obj))
-2871ea85c119e6 Chris Wilson           2019-10-24  122  		obj = i915_gem_object_create_internal(i915, size);
-2871ea85c119e6 Chris Wilson           2019-10-24  123  	if (IS_ERR(obj))
-2871ea85c119e6 Chris Wilson           2019-10-24  124  		return ERR_CAST(obj);
-2871ea85c119e6 Chris Wilson           2019-10-24  125  
-2871ea85c119e6 Chris Wilson           2019-10-24  126  	/*
-2871ea85c119e6 Chris Wilson           2019-10-24  127  	 * Mark ring buffers as read-only from GPU side (so no stray overwrites)
-2871ea85c119e6 Chris Wilson           2019-10-24  128  	 * if supported by the platform's GGTT.
-2871ea85c119e6 Chris Wilson           2019-10-24  129  	 */
-2871ea85c119e6 Chris Wilson           2019-10-24  130  	if (vm->has_read_only)
-2871ea85c119e6 Chris Wilson           2019-10-24  131  		i915_gem_object_set_readonly(obj);
-2871ea85c119e6 Chris Wilson           2019-10-24  132  
-2871ea85c119e6 Chris Wilson           2019-10-24  133  	vma = i915_vma_instance(obj, vm, NULL);
-2871ea85c119e6 Chris Wilson           2019-10-24  134  	if (IS_ERR(vma))
-2871ea85c119e6 Chris Wilson           2019-10-24  135  		goto err;
-2871ea85c119e6 Chris Wilson           2019-10-24  136  
-2871ea85c119e6 Chris Wilson           2019-10-24  137  	return vma;
-2871ea85c119e6 Chris Wilson           2019-10-24  138  
-2871ea85c119e6 Chris Wilson           2019-10-24  139  err:
-2871ea85c119e6 Chris Wilson           2019-10-24  140  	i915_gem_object_put(obj);
-2871ea85c119e6 Chris Wilson           2019-10-24  141  	return vma;
-2871ea85c119e6 Chris Wilson           2019-10-24  142  }
-2871ea85c119e6 Chris Wilson           2019-10-24  143  
-2871ea85c119e6 Chris Wilson           2019-10-24  144  struct intel_ring *
-2871ea85c119e6 Chris Wilson           2019-10-24  145  intel_engine_create_ring(struct intel_engine_cs *engine, int size)
-2871ea85c119e6 Chris Wilson           2019-10-24  146  {
-2871ea85c119e6 Chris Wilson           2019-10-24  147  	struct drm_i915_private *i915 = engine->i915;
-2871ea85c119e6 Chris Wilson           2019-10-24  148  	struct intel_ring *ring;
-2871ea85c119e6 Chris Wilson           2019-10-24  149  	struct i915_vma *vma;
-2871ea85c119e6 Chris Wilson           2019-10-24  150  
-2871ea85c119e6 Chris Wilson           2019-10-24  151  	GEM_BUG_ON(!is_power_of_2(size));
-2871ea85c119e6 Chris Wilson           2019-10-24  152  	GEM_BUG_ON(RING_CTL_SIZE(size) & ~RING_NR_PAGES);
-2871ea85c119e6 Chris Wilson           2019-10-24  153  
-2871ea85c119e6 Chris Wilson           2019-10-24  154  	ring = kzalloc(sizeof(*ring), GFP_KERNEL);
-2871ea85c119e6 Chris Wilson           2019-10-24  155  	if (!ring)
-2871ea85c119e6 Chris Wilson           2019-10-24  156  		return ERR_PTR(-ENOMEM);
-2871ea85c119e6 Chris Wilson           2019-10-24  157  
-2871ea85c119e6 Chris Wilson           2019-10-24  158  	kref_init(&ring->ref);
-2871ea85c119e6 Chris Wilson           2019-10-24  159  	ring->size = size;
-5ba32c7be81e53 Chris Wilson           2020-02-07  160  	ring->wrap = BITS_PER_TYPE(ring->size) - ilog2(size);
-2871ea85c119e6 Chris Wilson           2019-10-24  161  
-2871ea85c119e6 Chris Wilson           2019-10-24  162  	/*
-2871ea85c119e6 Chris Wilson           2019-10-24  163  	 * Workaround an erratum on the i830 which causes a hang if
-2871ea85c119e6 Chris Wilson           2019-10-24  164  	 * the TAIL pointer points to within the last 2 cachelines
-2871ea85c119e6 Chris Wilson           2019-10-24  165  	 * of the buffer.
-2871ea85c119e6 Chris Wilson           2019-10-24  166  	 */
-2871ea85c119e6 Chris Wilson           2019-10-24  167  	ring->effective_size = size;
-2871ea85c119e6 Chris Wilson           2019-10-24  168  	if (IS_I830(i915) || IS_I845G(i915))
-2871ea85c119e6 Chris Wilson           2019-10-24  169  		ring->effective_size -= 2 * CACHELINE_BYTES;
-2871ea85c119e6 Chris Wilson           2019-10-24  170  
-2871ea85c119e6 Chris Wilson           2019-10-24  171  	intel_ring_update_space(ring);
-2871ea85c119e6 Chris Wilson           2019-10-24  172  
-2871ea85c119e6 Chris Wilson           2019-10-24  173  	vma = create_ring_vma(engine->gt->ggtt, size);
-2871ea85c119e6 Chris Wilson           2019-10-24  174  	if (IS_ERR(vma)) {
-2871ea85c119e6 Chris Wilson           2019-10-24  175  		kfree(ring);
-2871ea85c119e6 Chris Wilson           2019-10-24  176  		return ERR_CAST(vma);
-2871ea85c119e6 Chris Wilson           2019-10-24  177  	}
-2871ea85c119e6 Chris Wilson           2019-10-24  178  	ring->vma = vma;
-2871ea85c119e6 Chris Wilson           2019-10-24  179  
-2871ea85c119e6 Chris Wilson           2019-10-24  180  	return ring;
-2871ea85c119e6 Chris Wilson           2019-10-24  181  }
-2871ea85c119e6 Chris Wilson           2019-10-24  182  
-2871ea85c119e6 Chris Wilson           2019-10-24  183  void intel_ring_free(struct kref *ref)
-2871ea85c119e6 Chris Wilson           2019-10-24  184  {
-2871ea85c119e6 Chris Wilson           2019-10-24  185  	struct intel_ring *ring = container_of(ref, typeof(*ring), ref);
-2871ea85c119e6 Chris Wilson           2019-10-24  186  
-2871ea85c119e6 Chris Wilson           2019-10-24  187  	i915_vma_put(ring->vma);
-2871ea85c119e6 Chris Wilson           2019-10-24  188  	kfree(ring);
-2871ea85c119e6 Chris Wilson           2019-10-24  189  }
-2871ea85c119e6 Chris Wilson           2019-10-24  190  
-2871ea85c119e6 Chris Wilson           2019-10-24  191  static noinline int
-2871ea85c119e6 Chris Wilson           2019-10-24  192  wait_for_space(struct intel_ring *ring,
-2871ea85c119e6 Chris Wilson           2019-10-24  193  	       struct intel_timeline *tl,
-2871ea85c119e6 Chris Wilson           2019-10-24  194  	       unsigned int bytes)
-2871ea85c119e6 Chris Wilson           2019-10-24 @195  {
-2871ea85c119e6 Chris Wilson           2019-10-24  196  	struct i915_request *target;
-2871ea85c119e6 Chris Wilson           2019-10-24  197  	long timeout;
-2871ea85c119e6 Chris Wilson           2019-10-24  198  
-2871ea85c119e6 Chris Wilson           2019-10-24  199  	if (intel_ring_update_space(ring) >= bytes)
-2871ea85c119e6 Chris Wilson           2019-10-24  200  		return 0;
-2871ea85c119e6 Chris Wilson           2019-10-24  201  
-2871ea85c119e6 Chris Wilson           2019-10-24  202  	GEM_BUG_ON(list_empty(&tl->requests));
-2871ea85c119e6 Chris Wilson           2019-10-24  203  	list_for_each_entry(target, &tl->requests, link) {
-2871ea85c119e6 Chris Wilson           2019-10-24  204  		if (target->ring != ring)
-2871ea85c119e6 Chris Wilson           2019-10-24  205  			continue;
-2871ea85c119e6 Chris Wilson           2019-10-24  206  
-2871ea85c119e6 Chris Wilson           2019-10-24  207  		/* Would completion of this request free enough space? */
-2871ea85c119e6 Chris Wilson           2019-10-24  208  		if (bytes <= __intel_ring_space(target->postfix,
-2871ea85c119e6 Chris Wilson           2019-10-24  209  						ring->emit, ring->size))
-2871ea85c119e6 Chris Wilson           2019-10-24  210  			break;
-2871ea85c119e6 Chris Wilson           2019-10-24  211  	}
-2871ea85c119e6 Chris Wilson           2019-10-24  212  
-2871ea85c119e6 Chris Wilson           2019-10-24  213  	if (GEM_WARN_ON(&target->link == &tl->requests))
-2871ea85c119e6 Chris Wilson           2019-10-24  214  		return -ENOSPC;
-2871ea85c119e6 Chris Wilson           2019-10-24  215  
-2871ea85c119e6 Chris Wilson           2019-10-24  216  	timeout = i915_request_wait(target,
-2871ea85c119e6 Chris Wilson           2019-10-24  217  				    I915_WAIT_INTERRUPTIBLE,
-2871ea85c119e6 Chris Wilson           2019-10-24  218  				    MAX_SCHEDULE_TIMEOUT);
-2871ea85c119e6 Chris Wilson           2019-10-24  219  	if (timeout < 0)
-2871ea85c119e6 Chris Wilson           2019-10-24  220  		return timeout;
-2871ea85c119e6 Chris Wilson           2019-10-24  221  
-2871ea85c119e6 Chris Wilson           2019-10-24  222  	i915_request_retire_upto(target);
-2871ea85c119e6 Chris Wilson           2019-10-24  223  
-2871ea85c119e6 Chris Wilson           2019-10-24  224  	intel_ring_update_space(ring);
-2871ea85c119e6 Chris Wilson           2019-10-24  225  	GEM_BUG_ON(ring->space < bytes);
-2871ea85c119e6 Chris Wilson           2019-10-24  226  	return 0;
-2871ea85c119e6 Chris Wilson           2019-10-24  227  }
-2871ea85c119e6 Chris Wilson           2019-10-24  228  
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+index eb2feaac81fe..653b0a20fab9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+@@ -488,7 +488,7 @@ static void run_test(struct migrate_reuseport_test_case *test_case,
+ 			goto close_servers;
+ 	}
+ 
+-	/* Tie requests to the first four listners */
++	/* Tie requests to the first four listeners */
+ 	err = start_clients(test_case);
+ 	if (!ASSERT_OK(err, "start_clients"))
+ 		goto close_clients;
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+index 8fd4c0d78089..e91d0d1769f1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+@@ -79,7 +79,7 @@ void serial_test_trampoline_count(void)
+ 	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
+ 		goto cleanup;
+ 
+-	/* and finaly execute the probe */
++	/* and finally execute the probe */
+ 	prog_fd = bpf_program__fd(prog);
+ 	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
+ 		goto cleanup;
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 26fffb02ed10..ad21ee8c7e23 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -84,7 +84,7 @@ typedef void (*printf_fn_t)(const char *, ...);
+  *	typedef int (*fn_t)(int);
+  *	typedef char * const * (*fn_ptr2_t)(s_t, fn_t);
+  *
+- * - `fn_complext_t`: pointer to a function returning struct and accepting
++ * - `fn_complex_t`: pointer to a function returning struct and accepting
+  *   union and struct. All structs and enum are anonymous and defined inline.
+  *
+  * - `signal_t: pointer to a function accepting a pointer to a function as an
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 5950ad6ec2e6..aa5b69354b91 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -630,7 +630,7 @@ static int release_twice_callback_fn(__u32 index, void *data)
+ }
+ 
+ /* Test that releasing a dynptr twice, where one of the releases happens
+- * within a calback function, fails
++ * within a callback function, fails
+  */
+ SEC("?raw_tp")
+ __failure __msg("arg 1 is an unacquired reference")
+diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
+index 753718595c26..e562be6356f3 100644
+--- a/tools/testing/selftests/bpf/progs/strobemeta.h
++++ b/tools/testing/selftests/bpf/progs/strobemeta.h
+@@ -135,7 +135,7 @@ struct strobe_value_loc {
+ 	 * tpidr_el0 for aarch64).
+ 	 * TLS_IMM_EXEC: absolute address of GOT entry containing offset
+ 	 * from thread pointer;
+-	 * TLS_GENERAL_DYN: absolute addres of double GOT entry
++	 * TLS_GENERAL_DYN: absolute address of double GOT entry
+ 	 * containing tls_index_t struct;
+ 	 */
+ 	int64_t offset;
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+index 2833ad722cb7..66b304982245 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+@@ -600,7 +600,7 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+ 		return TC_ACT_SHOT;
+ 	}
+ 
+-	/* Skip the remainig next hops (may be zero). */
++	/* Skip the remaining next hops (may be zero). */
+ 	return skip_next_hops(pkt, encap->unigue.hop_count -
+ 					   encap->unigue.next_hop - 1);
+ }
+@@ -610,8 +610,8 @@ static INLINING ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+  *
+  *    fill_tuple(&t, foo, sizeof(struct iphdr), 123, 321)
+  *
+- * clang will substitue a costant for sizeof, which allows the verifier
+- * to track it's value. Based on this, it can figure out the constant
++ * clang will substitute a constant for sizeof, which allows the verifier
++ * to track its value. Based on this, it can figure out the constant
+  * return value, and calling code works while still being "generic" to
+  * IPv4 and IPv6.
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/testing/selftests/bpf/progs/test_subprogs.c
+index f8e9256cf18d..a8d602d7c88a 100644
+--- a/tools/testing/selftests/bpf/progs/test_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
+@@ -47,7 +47,7 @@ static __noinline int sub5(int v)
+ 	return sub1(v) - 1; /* compensates sub1()'s + 1 */
+ }
+ 
+-/* unfortunately verifier rejects `struct task_struct *t` as an unkown pointer
++/* unfortunately verifier rejects `struct task_struct *t` as an unknown pointer
+  * type, so we need to accept pointer as integer and then cast it inside the
+  * function
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
+index cdf3c48d6cbb..4ddcb6dfe500 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_vlan.c
+@@ -98,7 +98,7 @@ bool parse_eth_frame(struct ethhdr *eth, void *data_end, struct parse_pkt *pkt)
+ 	return true;
+ }
+ 
+-/* Hint, VLANs are choosen to hit network-byte-order issues */
++/* Hint, VLANs are chosen to hit network-byte-order issues */
+ #define TESTVLAN 4011 /* 0xFAB */
+ // #define TO_VLAN  4000 /* 0xFA0 (hint 0xOA0 = 160) */
+ 
+diff --git a/tools/testing/selftests/bpf/test_cpp.cpp b/tools/testing/selftests/bpf/test_cpp.cpp
+index 0bd9990e83fa..f4936834f76f 100644
+--- a/tools/testing/selftests/bpf/test_cpp.cpp
++++ b/tools/testing/selftests/bpf/test_cpp.cpp
+@@ -91,7 +91,7 @@ static void try_skeleton_template()
+ 
+ 	skel.detach();
+ 
+-	/* destructor will destory underlying skeleton */
++	/* destructor will destroy underlying skeleton */
+ }
+ 
+ int main(int argc, char *argv[])
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index f961b49b8ef4..83231456d3c5 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -144,7 +144,7 @@ static struct env {
+ 	struct verif_stats *prog_stats;
+ 	int prog_stat_cnt;
+ 
+-	/* baseline_stats is allocated and used only in comparsion mode */
++	/* baseline_stats is allocated and used only in comparison mode */
+ 	struct verif_stats *baseline_stats;
+ 	int baseline_stat_cnt;
+ 
+@@ -882,7 +882,7 @@ static int process_obj(const char *filename)
+ 		 * that BPF object file is incomplete and has to be statically
+ 		 * linked into a final BPF object file; instead of bailing
+ 		 * out, report it into stderr, mark it as skipped, and
+-		 * proceeed
++		 * proceed
+ 		 */
+ 		fprintf(stderr, "Failed to open '%s': %d\n", filename, -errno);
+ 		env.files_skipped++;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
