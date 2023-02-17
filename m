@@ -1,82 +1,154 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBA4746A
-	for <llvm@lists.linux.dev>; Fri, 17 Feb 2023 15:27:48 +0000 (UTC)
-Received: by mail-pj1-f46.google.com with SMTP id o97-20020a17090a0a6a00b0023058bbd7b2so1590002pjo.0
-        for <llvm@lists.linux.dev>; Fri, 17 Feb 2023 07:27:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FjhxRmxnq7g/s7HTg3+kkGL/XHuH+Vbf1L6uY1gtdZo=;
-        b=FI/KCZOninl4pna7XqfUzhnxFpGIrbQeTbMujiTucgT+kYUmTkqKvpqrY0BBWfyGHl
-         kGVHGRvlZzrxQgBr1yfxol8SKtKTNnefzdaSMXohxCDU/zWuaKWZDs+j15osVIse5Jbs
-         pPrmNP9mEpEy35h4of6Aq3SVWil9eh91QVjrY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FjhxRmxnq7g/s7HTg3+kkGL/XHuH+Vbf1L6uY1gtdZo=;
-        b=zA3nQ5xvvQ3uw+1cPnI+IRmpySCogAZkjjx5PDRLpSqdNOqFza7s4hcP5VUSSCQ3Ha
-         CRbM//3fbHbzLL63F66CjUoRTMB6IqwTbTnZAevwbXhw7bsnmTf1PlJL51PbRurzTmom
-         WQvvv80YnXE/kcllV/rlNgivyM8WFpaV7xpTkFLVyMKXsXAJfUVKYntL5hcgYuSXpuxe
-         3q2yyNUYwSO7jEzJEpqlkmFzv2jLKaKwIUYk5MGzTy8lYqYckrXJ7N/5RJXGG3VyOi23
-         vt/nAL8HTx0XwUrirmDGd/TsPjNYVlaAHy1Ev3DTN3vBXwxRdR3UbnUu0ZLNRmm2MJEt
-         EsMg==
-X-Gm-Message-State: AO0yUKWXI6JilwkdkAXS2DvUQn/G1tn+aK7mnuriVb5BuOFsW3q1rWvj
-	O0th+0BAUpzwRloDnzGLcpDlIGcXszNEV4mv9RYIIA==
-X-Google-Smtp-Source: AK7set+MhY2O08saH1T5RViqTcHgqAmXt9TEW6+Qid0bDYcQBDwu1dbJU5pEbkggOuOqzWdO29LJIwiJ55IFIJYYaW8=
-X-Received: by 2002:a17:90b:3a8f:b0:234:117c:970f with SMTP id
- om15-20020a17090b3a8f00b00234117c970fmr1596590pjb.28.1676647667935; Fri, 17
- Feb 2023 07:27:47 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597647F;
+	Fri, 17 Feb 2023 16:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676652990; x=1708188990;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XL8RF89Vt4sfKwH09Rn3WfD+tQBzfRT6RHB2I/XIOMI=;
+  b=TlQ0qO0wu/eSSOt0tQQ9e+9+99Y40GLjf98bQyToldTvz4H3rDdh1zuB
+   yTUFp54GdqSZxFD2dgWHc27BalzoO/bbevWDIZ/ugwczhUbdsdQZIABDs
+   oOev/M6pI8Be3/pD+I6NOwueqoemSdoAz5xBQIWfAFEBKthTmbjv/yS+I
+   zDM6oTvVgKvKw94DCNbZMY7FEJXTnp36Uj6TbL6oqVHVyVMn6tEtq2R6o
+   YIN/0oUZEfByCNffKbXBxVQap1hcUM65xadip2gTLNm4AK/1Ac3eEGevR
+   yaHdordaDtJdXg4kAUderBpfXQo7j4hSCHLwczOQF2suFwDwSskUP1hfE
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="312399185"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="312399185"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 08:56:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="794450449"
+X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
+   d="scan'208";a="794450449"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 17 Feb 2023 08:56:28 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pT427-000Bev-1s;
+	Fri, 17 Feb 2023 16:56:27 +0000
+Date: Sat, 18 Feb 2023 00:56:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:n/audio-wsa884x-on-top-of-audio-wsa881x-gpio 70/76]
+ drivers/soundwire/qcom.c:843:20: warning: use of logical '&&' with constant
+ operand
+Message-ID: <202302180049.7cHPmZKq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230217151832.27784-1-revest@chromium.org>
-In-Reply-To: <20230217151832.27784-1-revest@chromium.org>
-From: Florent Revest <revest@chromium.org>
-Date: Fri, 17 Feb 2023 16:27:36 +0100
-Message-ID: <CABRcYmLpAt3R5_2r6AgpnYrSx+1GZ9=827EK0xByFJf=eROd1g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix cross compilation with CLANG_CROSS_FLAGS
-To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Cc: andrii@kernel.org, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net, 
-	kpsingh@kernel.org, masahiroy@kernel.org, nathan@kernel.org, 
-	ndesaulniers@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Feb 17, 2023 at 4:18 PM Florent Revest <revest@chromium.org> wrote:
->
-> I cross-compile my BPF selftests with the following command:
->
-> CLANG_CROSS_FLAGS="--target=aarch64-linux-gnu --sysroot=/sysroot/" \
->   make LLVM=1 CC=clang CROSS_COMPILE=aarch64-linux-gnu- SRCARCH=arm64
->
-> (Note the use of CLANG_CROSS_FLAGS to specify a custom sysroot instead
-> of letting clang use gcc's default sysroot)
->
-> However, CLANG_CROSS_FLAGS gets propagated to host tools builds (libbpf
-> and bpftool) and because they reference it directly in their Makefiles,
-> they end up cross-compiling host objects which results in linking
-> errors.
->
-> This patch ensures that CLANG_CROSS_FLAGS is reset if CROSS_COMPILE
-> isn't set (for example when reaching a BPF host tool build).
+tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-audio-wsa881x-gpio
+head:   04e5048badb91c86b22993d0d9fd1bf8b79c0d91
+commit: a9f731feabf401a6953a6446b8832a02916c6fbe [70/76] soundwire: sample interval 16 bit
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230218/202302180049.7cHPmZKq-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/krzk/linux/commit/a9f731feabf401a6953a6446b8832a02916c6fbe
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-audio-wsa881x-gpio
+        git checkout a9f731feabf401a6953a6446b8832a02916c6fbe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/soundwire/
 
-Note: I'm not entirely sure which tree should take that patch. I
-tagged this patch as "bpf-next" because 1- that's the tree I know best
-2- as far as I can tell, only BPF tools Makefiles reference
-CLANG_CROSS_FLAGS directly and are currently broken in this way 3- I
-figured this would be a simple enough patch that it's not too hard for
-another tree to take it.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302180049.7cHPmZKq-lkp@intel.com/
 
-Anyway, I tried to CC other relevant folks, I figured there could be
-different opinions on how this should get solved, for example the bpf
-Makefiles using CLANG_CROSS_FLAGS could check whether CROSS_COMPILE is
-set first. I'd be happy to adapt a v2 to any suggestion.
+All warnings (new ones prefixed by >>):
+
+   drivers/soundwire/qcom.c:331:6: warning: unused variable 'rd_fifo_outstanding_cmds' [-Wunused-variable]
+           u32 rd_fifo_outstanding_cmds;
+               ^
+>> drivers/soundwire/qcom.c:843:20: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
+           value |= pcfg->si && 0xff;
+                             ^  ~~~~
+   drivers/soundwire/qcom.c:843:20: note: use '&' for a bitwise operation
+           value |= pcfg->si && 0xff;
+                             ^~
+                             &
+   drivers/soundwire/qcom.c:843:20: note: remove constant to silence this warning
+           value |= pcfg->si && 0xff;
+                            ~^~~~~~~
+   2 warnings generated.
+
+
+vim +843 drivers/soundwire/qcom.c
+
+   828	
+   829	static int qcom_swrm_transport_params(struct sdw_bus *bus,
+   830					      struct sdw_transport_params *params,
+   831					      enum sdw_reg_bank bank)
+   832	{
+   833		struct qcom_swrm_ctrl *ctrl = to_qcom_sdw(bus);
+   834		struct qcom_swrm_port_config *pcfg;
+   835		u32 value;
+   836		int reg = SWRM_DP_PORT_CTRL_BANK((params->port_num), bank);
+   837		int ret;
+   838	
+   839		pcfg = &ctrl->pconfig[params->port_num];
+   840	
+   841		value = pcfg->off1 << SWRM_DP_PORT_CTRL_OFFSET1_SHFT;
+   842		value |= pcfg->off2 << SWRM_DP_PORT_CTRL_OFFSET2_SHFT;
+ > 843		value |= pcfg->si && 0xff;
+   844	
+   845		ret = ctrl->reg_write(ctrl, reg, value);
+   846		if (ret)
+   847			goto err;
+   848	
+   849		if (pcfg->lane_control != SWR_INVALID_PARAM) {
+   850			reg = SWRM_DP_PORT_CTRL_2_BANK(params->port_num, bank);
+   851			value = pcfg->lane_control;
+   852			ret = ctrl->reg_write(ctrl, reg, value);
+   853			if (ret)
+   854				goto err;
+   855		}
+   856	
+   857		if (pcfg->blk_group_count != SWR_INVALID_PARAM) {
+   858			reg = SWRM_DP_BLOCK_CTRL2_BANK(params->port_num, bank);
+   859			value = pcfg->blk_group_count;
+   860			ret = ctrl->reg_write(ctrl, reg, value);
+   861			if (ret)
+   862				goto err;
+   863		}
+   864	
+   865		if (pcfg->hstart != SWR_INVALID_PARAM
+   866				&& pcfg->hstop != SWR_INVALID_PARAM) {
+   867			reg = SWRM_DP_PORT_HCTRL_BANK(params->port_num, bank);
+   868			value = (pcfg->hstop << 4) | pcfg->hstart;
+   869			ret = ctrl->reg_write(ctrl, reg, value);
+   870		} else {
+   871			reg = SWRM_DP_PORT_HCTRL_BANK(params->port_num, bank);
+   872			value = (SWR_HSTOP_MAX_VAL << 4) | SWR_HSTART_MIN_VAL;
+   873			ret = ctrl->reg_write(ctrl, reg, value);
+   874		}
+   875	
+   876		if (ret)
+   877			goto err;
+   878	
+   879		if (pcfg->bp_mode != SWR_INVALID_PARAM) {
+   880			reg = SWRM_DP_BLOCK_CTRL3_BANK(params->port_num, bank);
+   881			ret = ctrl->reg_write(ctrl, reg, pcfg->bp_mode);
+   882		}
+   883	
+   884	err:
+   885		return ret;
+   886	}
+   887	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
