@@ -1,43 +1,43 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597647F;
-	Fri, 17 Feb 2023 16:56:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F41D7F;
+	Fri, 17 Feb 2023 16:56:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676652990; x=1708188990;
+  t=1676652992; x=1708188992;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XL8RF89Vt4sfKwH09Rn3WfD+tQBzfRT6RHB2I/XIOMI=;
-  b=TlQ0qO0wu/eSSOt0tQQ9e+9+99Y40GLjf98bQyToldTvz4H3rDdh1zuB
-   yTUFp54GdqSZxFD2dgWHc27BalzoO/bbevWDIZ/ugwczhUbdsdQZIABDs
-   oOev/M6pI8Be3/pD+I6NOwueqoemSdoAz5xBQIWfAFEBKthTmbjv/yS+I
-   zDM6oTvVgKvKw94DCNbZMY7FEJXTnp36Uj6TbL6oqVHVyVMn6tEtq2R6o
-   YIN/0oUZEfByCNffKbXBxVQap1hcUM65xadip2gTLNm4AK/1Ac3eEGevR
-   yaHdordaDtJdXg4kAUderBpfXQo7j4hSCHLwczOQF2suFwDwSskUP1hfE
+  bh=zUzqZHnZap0rlwfa1T1MAtGEVUjSeqORzMeIG9HuwUY=;
+  b=AqTwZHXemB9DjMd4ml4PVf8wHyeNf6KMwi0855a4Brwr1mJpzmFhR0+/
+   0yH2ps8SOzkaTO7rK/G8EjZf9C1lTQk69DMoyBSutvzXT2ssuz48Xx6G5
+   5kRkBwlYPesQrcdYCqDL2I24kFU2l8HWHjv6RfO9WZO6jRr8lUCRN0UzT
+   5Z/AHPQE1q+C1TiUj9vDPEFWPB+SJlEiAF+wo+1B2ixOgV4pWcgTP4FVY
+   JYMunbTxLQykAv411/2n2yG0zqlClJwhs7fAa3XacB2hSCDLVbJT6ZRPT
+   5R5naPsuN5jI9EBdUZewMRLZlaNcFwGtFwnpwoyM9j055pCf2RmAqi/xB
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="312399185"
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="312399187"
 X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="312399185"
+   d="scan'208";a="312399187"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 08:56:29 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="794450449"
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="794450452"
 X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="794450449"
+   d="scan'208";a="794450452"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
   by orsmga004.jf.intel.com with ESMTP; 17 Feb 2023 08:56:28 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pT427-000Bev-1s;
+	id 1pT427-000Bex-1z;
 	Fri, 17 Feb 2023 16:56:27 +0000
-Date: Sat, 18 Feb 2023 00:56:21 +0800
+Date: Sat, 18 Feb 2023 00:56:22 +0800
 From: kernel test robot <lkp@intel.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [krzk-github:n/audio-wsa884x-on-top-of-audio-wsa881x-gpio 70/76]
  drivers/soundwire/qcom.c:843:20: warning: use of logical '&&' with constant
  operand
-Message-ID: <202302180049.7cHPmZKq-lkp@intel.com>
+Message-ID: <202302180056.Rg8FKIwB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ Content-Disposition: inline
 tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-audio-wsa881x-gpio
 head:   04e5048badb91c86b22993d0d9fd1bf8b79c0d91
 commit: a9f731feabf401a6953a6446b8832a02916c6fbe [70/76] soundwire: sample interval 16 bit
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230218/202302180049.7cHPmZKq-lkp@intel.com/config)
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230218/202302180056.Rg8FKIwB-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -66,7 +66,7 @@ reproduce (this is a W=1 build):
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302180049.7cHPmZKq-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302180056.Rg8FKIwB-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
