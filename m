@@ -1,48 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C57641;
-	Sat, 18 Feb 2023 06:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D0B33C5;
+	Sat, 18 Feb 2023 14:24:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676701313; x=1708237313;
+  t=1676730245; x=1708266245;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wNb2PRAmHyDUNd3CJthc3fNM0QVLggOiq2Rkm3fz+XU=;
-  b=Z7k08/UP1ZVtONThpiU8lDGfbCRNbLjnTy5qIxRusNS9WH8uQHIU9kMC
-   Bo++RrgTry18rQx3FhlxBI94Fn1LVZ+yrRRvO1AqFTCz2zbQohbXuBPMG
-   d7rkrd61cNHyRpvkvFEGJA22xck0uVL5zx0AexIrkTz/HiaM1Dqinrh/C
-   SqK/l0wmRPZpi5nUAPAtSTvtmp2bzWULUYnOBMoVQ5gFuc54SQ1boKle+
-   FDA/EuA6eZUdy7R6ArzjlA+6Z4Mv+0Up0CIYlIzy6naG0lKBDQhB8pYAu
-   plzsB9mOGA5Gmo+ascWv8HP8blOb9xnNz+XF5fZu3Nw8/oDLGEQblEqPD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="334348587"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="334348587"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 22:21:53 -0800
+  bh=Wmk0yCQCTv9DA/H2zM5vOMZs4CT7qq1GRcze0vSqEr0=;
+  b=BKX3UAKpHvCIq/UUL9LV9NPZGgBn5BdSL61gaN8SySXJqk9LJtOnaAxQ
+   2Wl5R2z8qBFlXaGJhQrmjB9MohxgObzCiFXEth8h384GoQYtJuFDvIT30
+   gYkIbYzHa1hZ3+8GJ5DtOHXXUBN3v0huaE79GVxMISN4gRo3kkoQE3+xQ
+   kix5AAUtXTCGraAftYn/jcNev8pNDA1y4sSaS0jsGT7ghAE8kjumxIMpx
+   +CSChoV/VBYYBT1ygmO3zWBQwMnf2/nWckwW+IYZsxkw6lDCOQjGvnMjg
+   JBJ2lmk8oVyhCrZh1lQBv5X5IjVPoDGkYyFc12VsYX1nDCilHT/av2mIo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="312537724"
+X-IronPort-AV: E=Sophos;i="5.97,307,1669104000"; 
+   d="scan'208";a="312537724"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 06:24:04 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="844800503"
-X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="844800503"
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="916399081"
+X-IronPort-AV: E=Sophos;i="5.97,307,1669104000"; 
+   d="scan'208";a="916399081"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 17 Feb 2023 22:21:50 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 18 Feb 2023 06:24:03 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pTGbV-000CBB-2I;
-	Sat, 18 Feb 2023 06:21:49 +0000
-Date: Sat, 18 Feb 2023 14:21:44 +0800
+	id 1pTO8A-000CSj-28;
+	Sat, 18 Feb 2023 14:24:02 +0000
+Date: Sat, 18 Feb 2023 22:23:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: Nicolin Chen <nicolinc@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: arch/powerpc/platforms/83xx/suspend.c:210:3: error: call to
- undeclared function 'enable_kernel_fp'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202302181414.nAdxC08J-lkp@intel.com>
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: [jgunthorpe:iommufd_hwpt 23/30] drivers/iommu/iommu.c:2192:5:
+ warning: no previous prototype for function 'iommu_group_replace_domain'
+Message-ID: <202302182229.I3pZGr2U-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,112 +47,72 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   38f8ccde04a3fa317b51b05e63c3cb57e1641931
-commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
-date:   11 months ago
-config: powerpc-randconfig-r013-20230218 (https://download.01.org/0day-ci/archive/20230218/202302181414.nAdxC08J-lkp@intel.com/config)
+tree:   https://github.com/jgunthorpe/linux iommufd_hwpt
+head:   81e455ea8edf14c10d6c4db85d654bbbb3e0c387
+commit: 86076ff7edfa93947a9d97fd573e795cf3a0505f [23/30] iommu: Introduce a new iommu_group_replace_domain() API
+config: powerpc-randconfig-r004-20230217 (https://download.01.org/0day-ci/archive/20230218/202302182229.I3pZGr2U-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install powerpc cross compiling tool for clang build
         # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        # https://github.com/jgunthorpe/linux/commit/86076ff7edfa93947a9d97fd573e795cf3a0505f
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd_hwpt
+        git checkout 86076ff7edfa93947a9d97fd573e795cf3a0505f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/83xx/ drivers/android/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/iommu/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302181414.nAdxC08J-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302182229.I3pZGr2U-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/powerpc/platforms/83xx/suspend.c:210:3: error: call to undeclared function 'enable_kernel_fp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   enable_kernel_fp();
-                   ^
-   arch/powerpc/platforms/83xx/suspend.c:210:3: note: did you mean 'enable_kernel_vsx'?
-   arch/powerpc/include/asm/switch_to.h:75:20: note: 'enable_kernel_vsx' declared here
-   static inline void enable_kernel_vsx(void)
-                      ^
-   1 error generated.
+>> drivers/iommu/iommu.c:2192:5: warning: no previous prototype for function 'iommu_group_replace_domain' [-Wmissing-prototypes]
+   int iommu_group_replace_domain(struct iommu_group *group,
+       ^
+   drivers/iommu/iommu.c:2192:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int iommu_group_replace_domain(struct iommu_group *group,
+   ^
+   static 
+   1 warning generated.
 
 
-vim +/enable_kernel_fp +210 arch/powerpc/platforms/83xx/suspend.c
+vim +/iommu_group_replace_domain +2192 drivers/iommu/iommu.c
 
-87faaabb09d080 Anton Vorontsov 2009-12-10  173  
-d49747bdfb2dde Scott Wood      2007-10-09  174  static int mpc83xx_suspend_enter(suspend_state_t state)
-d49747bdfb2dde Scott Wood      2007-10-09  175  {
-d49747bdfb2dde Scott Wood      2007-10-09  176  	int ret = -EAGAIN;
-d49747bdfb2dde Scott Wood      2007-10-09  177  
-d49747bdfb2dde Scott Wood      2007-10-09  178  	/* Don't go to sleep if there's a race where pci_pm_state changes
-d49747bdfb2dde Scott Wood      2007-10-09  179  	 * between the agent thread checking it and the PM code disabling
-d49747bdfb2dde Scott Wood      2007-10-09  180  	 * interrupts.
-d49747bdfb2dde Scott Wood      2007-10-09  181  	 */
-d49747bdfb2dde Scott Wood      2007-10-09  182  	if (wake_from_pci) {
-d49747bdfb2dde Scott Wood      2007-10-09  183  		if (pci_pm_state != (deep_sleeping ? 3 : 2))
-d49747bdfb2dde Scott Wood      2007-10-09  184  			goto out;
-d49747bdfb2dde Scott Wood      2007-10-09  185  
-d49747bdfb2dde Scott Wood      2007-10-09  186  		out_be32(&pmc_regs->config1,
-d49747bdfb2dde Scott Wood      2007-10-09  187  		         in_be32(&pmc_regs->config1) | PMCCR1_PME_EN);
-d49747bdfb2dde Scott Wood      2007-10-09  188  	}
-d49747bdfb2dde Scott Wood      2007-10-09  189  
-d49747bdfb2dde Scott Wood      2007-10-09  190  	/* Put the system into low-power mode and the RAM
-d49747bdfb2dde Scott Wood      2007-10-09  191  	 * into self-refresh mode once the core goes to
-d49747bdfb2dde Scott Wood      2007-10-09  192  	 * sleep.
-d49747bdfb2dde Scott Wood      2007-10-09  193  	 */
-d49747bdfb2dde Scott Wood      2007-10-09  194  
-d49747bdfb2dde Scott Wood      2007-10-09  195  	out_be32(&pmc_regs->config, PMCCR_SLPEN | PMCCR_DLPEN);
-d49747bdfb2dde Scott Wood      2007-10-09  196  
-d49747bdfb2dde Scott Wood      2007-10-09  197  	/* If it has deep sleep (i.e. it's an 831x or compatible),
-d49747bdfb2dde Scott Wood      2007-10-09  198  	 * disable power to the core upon entering sleep mode.  This will
-d49747bdfb2dde Scott Wood      2007-10-09  199  	 * require going through the boot firmware upon a wakeup event.
-d49747bdfb2dde Scott Wood      2007-10-09  200  	 */
-d49747bdfb2dde Scott Wood      2007-10-09  201  
-d49747bdfb2dde Scott Wood      2007-10-09  202  	if (deep_sleeping) {
-87faaabb09d080 Anton Vorontsov 2009-12-10  203  		mpc83xx_suspend_save_regs();
-87faaabb09d080 Anton Vorontsov 2009-12-10  204  
-d49747bdfb2dde Scott Wood      2007-10-09  205  		out_be32(&pmc_regs->mask, PMCER_ALL);
-d49747bdfb2dde Scott Wood      2007-10-09  206  
-d49747bdfb2dde Scott Wood      2007-10-09  207  		out_be32(&pmc_regs->config1,
-d49747bdfb2dde Scott Wood      2007-10-09  208  		         in_be32(&pmc_regs->config1) | PMCCR1_POWER_OFF);
-d49747bdfb2dde Scott Wood      2007-10-09  209  
-d49747bdfb2dde Scott Wood      2007-10-09 @210  		enable_kernel_fp();
-d49747bdfb2dde Scott Wood      2007-10-09  211  
-d49747bdfb2dde Scott Wood      2007-10-09  212  		mpc83xx_enter_deep_sleep(immrbase);
-d49747bdfb2dde Scott Wood      2007-10-09  213  
-d49747bdfb2dde Scott Wood      2007-10-09  214  		out_be32(&pmc_regs->config1,
-d49747bdfb2dde Scott Wood      2007-10-09  215  		         in_be32(&pmc_regs->config1) & ~PMCCR1_POWER_OFF);
-d49747bdfb2dde Scott Wood      2007-10-09  216  
-d49747bdfb2dde Scott Wood      2007-10-09  217  		out_be32(&pmc_regs->mask, PMCER_PMCI);
-87faaabb09d080 Anton Vorontsov 2009-12-10  218  
-87faaabb09d080 Anton Vorontsov 2009-12-10  219  		mpc83xx_suspend_restore_regs();
-d49747bdfb2dde Scott Wood      2007-10-09  220  	} else {
-d49747bdfb2dde Scott Wood      2007-10-09  221  		out_be32(&pmc_regs->mask, PMCER_PMCI);
-d49747bdfb2dde Scott Wood      2007-10-09  222  
-d49747bdfb2dde Scott Wood      2007-10-09  223  		mpc6xx_enter_standby();
-d49747bdfb2dde Scott Wood      2007-10-09  224  	}
-d49747bdfb2dde Scott Wood      2007-10-09  225  
-d49747bdfb2dde Scott Wood      2007-10-09  226  	ret = 0;
-d49747bdfb2dde Scott Wood      2007-10-09  227  
-d49747bdfb2dde Scott Wood      2007-10-09  228  out:
-d49747bdfb2dde Scott Wood      2007-10-09  229  	out_be32(&pmc_regs->config1,
-d49747bdfb2dde Scott Wood      2007-10-09  230  	         in_be32(&pmc_regs->config1) & ~PMCCR1_PME_EN);
-d49747bdfb2dde Scott Wood      2007-10-09  231  
-d49747bdfb2dde Scott Wood      2007-10-09  232  	return ret;
-d49747bdfb2dde Scott Wood      2007-10-09  233  }
-d49747bdfb2dde Scott Wood      2007-10-09  234  
-
-:::::: The code at line 210 was first introduced by commit
-:::::: d49747bdfb2ddebea24d1580da55b79d093d48a9 powerpc/mpc83xx: Power Management support
-
-:::::: TO: Scott Wood <scottwood@freescale.com>
-:::::: CC: Kumar Gala <galak@kernel.crashing.org>
+  2180	
+  2181	/**
+  2182	 * iommu_group_replace_domain - replace the domain that a group is attached to
+  2183	 * @new_domain: new IOMMU domain to replace with
+  2184	 * @group: IOMMU group that will be attached to the new domain
+  2185	 *
+  2186	 * This API allows the group to switch domains without being forced to go to
+  2187	 * the blocking domain in-between.
+  2188	 *
+  2189	 * If the currently attached domain is a core domain (e.g. a default_domain),
+  2190	 * it will act just like the iommu_attach_group().
+  2191	 */
+> 2192	int iommu_group_replace_domain(struct iommu_group *group,
+  2193				       struct iommu_domain *new_domain)
+  2194	{
+  2195		int ret;
+  2196	
+  2197		if (!new_domain)
+  2198			return -EINVAL;
+  2199	
+  2200		mutex_lock(&group->mutex);
+  2201		ret = __iommu_group_set_domain(group, new_domain);
+  2202		if (ret)
+  2203			__iommu_group_set_domain(group, group->domain);
+  2204		mutex_unlock(&group->mutex);
+  2205		return ret;
+  2206	}
+  2207	EXPORT_SYMBOL_NS_GPL(iommu_group_replace_domain, IOMMUFD_INTERNAL);
+  2208	
 
 -- 
 0-DAY CI Kernel Test Service
