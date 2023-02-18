@@ -1,43 +1,44 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EBD946A;
-	Fri, 17 Feb 2023 20:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2187736F;
+	Sat, 18 Feb 2023 00:36:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676667160; x=1708203160;
+  t=1676680564; x=1708216564;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P9bjGsggXK6vBVKsFel909L2LGFlpL8PR8PhqWQ1rJg=;
-  b=nP8q82Re3fAuOtztKCbhh44azkeh7xioEqW1v0YRG/vN/Oyi2UuI5wdp
-   D1ZiCKRUsUPaS1N7C2AiY0VAHS1f2YUkd+GNtmWQVEW9lWXkpOoG2CZfS
-   VZXT6Qadpr4Dt85cl0bPOkG8O8rF3Ch9CYdJRt4wQFffIDA36u8DI9AB1
-   loqdRxVVfgo4Qp8OMYqcPFux15s3pxrZPDYRQQIpiRatAxRKWq1RVFS6+
-   mmuhC/uJlBMy/r1CPajLKKYnloWtY8AQ0UDffGr63I2iCcTNQxGDHm22L
-   Pn6Cz5rhOz34XzZjfdwJZfdy4ACwXDbGcZeYKBAWx/Mvc6Ok2edqa+uKX
+  bh=9fLuJ86ON+BO54+qy6eHlF7FUBiIE7Xz9CNdZfTRk80=;
+  b=GCJo98eAxG3T10Rv+7knBgf3K2sEBfkO+DCAzc8D0igddSDusoNAsIod
+   tXt251LKh5/7Ve3Coyk6wNtSAl8EZvTQTHx0bDT8LYJKNvPjE45XfOHxc
+   j0NMVeYbdUGZHHNSNtKq3DTSPm/B1yxsecsm/YICVosdivxfsg2TCSAZn
+   lr5LwtSkpcxQceQ9wmx6ubJkA5nVfhfa/4Sk5YzRGZyBfTuUVWwOjz0KB
+   IMVf8iti3pdIO91uDC8hk7rnoEh/wwuJAoeT5x8OJpYIb1DqkHwki2WzR
+   V+thqYKMHVMzZERBtTYVhkdMkRpeUdbVh8BQeIPUTh25owR6frFh4lwct
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="315801351"
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="332129916"
 X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="315801351"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 12:52:36 -0800
+   d="scan'208";a="332129916"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2023 16:36:00 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="916209601"
+X-IronPort-AV: E=McAfee;i="6500,9779,10624"; a="779954138"
 X-IronPort-AV: E=Sophos;i="5.97,306,1669104000"; 
-   d="scan'208";a="916209601"
+   d="scan'208";a="779954138"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Feb 2023 12:52:34 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 17 Feb 2023 16:35:39 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pT7ib-000BoN-2g;
-	Fri, 17 Feb 2023 20:52:33 +0000
-Date: Sat, 18 Feb 2023 04:51:43 +0800
+	id 1pTBCU-000BwL-2g;
+	Sat, 18 Feb 2023 00:35:38 +0000
+Date: Sat, 18 Feb 2023 08:35:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [krzk-github:wip/sm8450-hdmi-audio-on-qcomlt 35/584]
- drivers/hwtracing/coresight/coresight-etm4x-core.c:987:41: error: use of
- undeclared identifier 'dev'
-Message-ID: <202302180445.AiGhEfUc-lkp@intel.com>
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Guenter Roeck <groeck@chromium.org>
+Subject: drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning: stack
+ frame size (1040) exceeds limit (1024) in
+ 'cros_ec_proto_test_get_sensor_count_legacy'
+Message-ID: <202302180845.wuJUgQ2h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,85 +48,111 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/krzk/linux wip/sm8450-hdmi-audio-on-qcomlt
-head:   e1df0b14d2e3085d5ff5a1c7474b47840640da92
-commit: 08c5e3278b418c5a4f7f98e4357208deff68a8da [35/584] coresight: etm4x: Fix crash observed on Qcom ETM parts with 'Low power override'
-config: arm64-randconfig-r031-20230217 (https://download.01.org/0day-ci/archive/20230218/202302180445.AiGhEfUc-lkp@intel.com/config)
+Hi Tzung-Bi,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dbeed98d89ea91ae68ff6dce6060671726292e85
+commit: 33f0fdba6066b504ee0b5f1480b1f93b06050df6 platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
+date:   7 months ago
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230218/202302180845.wuJUgQ2h-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/krzk/linux/commit/08c5e3278b418c5a4f7f98e4357208deff68a8da
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github wip/sm8450-hdmi-audio-on-qcomlt
-        git checkout 08c5e3278b418c5a4f7f98e4357208deff68a8da
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=33f0fdba6066b504ee0b5f1480b1f93b06050df6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 33f0fdba6066b504ee0b5f1480b1f93b06050df6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/platform/chrome/ drivers/staging/media/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302180445.AiGhEfUc-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302180845.wuJUgQ2h-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/hwtracing/coresight/coresight-etm4x-core.c:987:41: error: use of undeclared identifier 'dev'
-           if (fwnode_property_present(dev_fwnode(dev), "qcom,skip-power-up"))
-                                                  ^
-   1 error generated.
+>> drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning: stack frame size (1040) exceeds limit (1024) in 'cros_ec_proto_test_get_sensor_count_legacy' [-Wframe-larger-than]
+   static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
+               ^
+   140/1040 (13.46%) spills, 900/1040 (86.54%) variables
+   1 warning generated.
 
 
-vim +/dev +987 drivers/hwtracing/coresight/coresight-etm4x-core.c
+vim +/cros_ec_proto_test_get_sensor_count_legacy +2530 drivers/platform/chrome/cros_ec_proto_test.c
 
-   971	
-   972	static bool etm4_init_sysreg_access(struct etmv4_drvdata *drvdata,
-   973					    struct csdev_access *csa)
-   974	{
-   975		u32 devarch;
-   976	
-   977		if (!cpu_supports_sysreg_trace())
-   978			return false;
-   979	
-   980		/*
-   981		 * Some Qualcomm implementations require skipping powering up the trace unit,
-   982		 * as the ETMs are in the same power domain as their CPU cores.
-   983		 *
-   984		 * Since the 'skip_power_up' flag is used inside 'etm4_init_arch_data' function,
-   985		 * initialize it before the function is called.
-   986		 */
- > 987		if (fwnode_property_present(dev_fwnode(dev), "qcom,skip-power-up"))
-   988			drvdata->skip_power_up = true;
-   989	
-   990		/*
-   991		 * ETMs implementing sysreg access must implement TRCDEVARCH.
-   992		 */
-   993		devarch = read_etm4x_sysreg_const_offset(TRCDEVARCH);
-   994		switch (devarch & ETM_DEVARCH_ID_MASK) {
-   995		case ETM_DEVARCH_ETMv4x_ARCH:
-   996			*csa = (struct csdev_access) {
-   997				.io_mem	= false,
-   998				.read	= etm4x_sysreg_read,
-   999				.write	= etm4x_sysreg_write,
-  1000			};
-  1001			break;
-  1002		case ETM_DEVARCH_ETE_ARCH:
-  1003			*csa = (struct csdev_access) {
-  1004				.io_mem	= false,
-  1005				.read	= ete_sysreg_read,
-  1006				.write	= ete_sysreg_write,
-  1007			};
-  1008			break;
-  1009		default:
-  1010			return false;
-  1011		}
-  1012	
-  1013		drvdata->arch = etm_devarch_to_arch(devarch);
-  1014		return true;
-  1015	}
-  1016	
+  2529	
+> 2530	static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
+  2531	{
+  2532		struct cros_ec_proto_test_priv *priv = test->priv;
+  2533		struct cros_ec_device *ec_dev = &priv->ec_dev;
+  2534		struct ec_xfer_mock *mock;
+  2535		int ret, i;
+  2536		struct cros_ec_dev ec;
+  2537		struct {
+  2538			u8 readmem_data;
+  2539			int expected_result;
+  2540		} test_data[] = {
+  2541			{ 0, 0 },
+  2542			{ EC_MEMMAP_ACC_STATUS_PRESENCE_BIT, 2 },
+  2543		};
+  2544	
+  2545		ec_dev->max_request = 0xff;
+  2546		ec_dev->max_response = 0xee;
+  2547		ec_dev->cmd_readmem = cros_kunit_readmem_mock;
+  2548		ec.ec_dev = ec_dev;
+  2549		ec.dev = ec_dev->dev;
+  2550		ec.cmd_offset = 0;
+  2551	
+  2552		for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
+  2553			/* For EC_CMD_MOTION_SENSE_CMD. */
+  2554			{
+  2555				mock = cros_kunit_ec_xfer_mock_addx(test, -EPROTO, EC_RES_SUCCESS, 0);
+  2556				KUNIT_ASSERT_PTR_NE(test, mock, NULL);
+  2557			}
+  2558	
+  2559			/* For readmem. */
+  2560			{
+  2561				cros_kunit_readmem_mock_data = kunit_kzalloc(test, 1, GFP_KERNEL);
+  2562				KUNIT_ASSERT_PTR_NE(test, cros_kunit_readmem_mock_data, NULL);
+  2563				cros_kunit_readmem_mock_data[0] = test_data[i].readmem_data;
+  2564	
+  2565				cros_kunit_ec_xfer_mock_default_ret = 1;
+  2566			}
+  2567	
+  2568			ret = cros_ec_get_sensor_count(&ec);
+  2569			KUNIT_EXPECT_EQ(test, ret, test_data[i].expected_result);
+  2570	
+  2571			/* For EC_CMD_MOTION_SENSE_CMD. */
+  2572			{
+  2573				struct ec_params_motion_sense *data;
+  2574	
+  2575				mock = cros_kunit_ec_xfer_mock_next();
+  2576				KUNIT_EXPECT_PTR_NE(test, mock, NULL);
+  2577	
+  2578				KUNIT_EXPECT_EQ(test, mock->msg.version, 1);
+  2579				KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MOTION_SENSE_CMD);
+  2580				KUNIT_EXPECT_EQ(test, mock->msg.insize,
+  2581						sizeof(struct ec_response_motion_sense));
+  2582				KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
+  2583	
+  2584				data = (struct ec_params_motion_sense *)mock->i_data;
+  2585				KUNIT_EXPECT_EQ(test, data->cmd, MOTIONSENSE_CMD_DUMP);
+  2586			}
+  2587	
+  2588			/* For readmem. */
+  2589			{
+  2590				KUNIT_EXPECT_EQ(test, cros_kunit_readmem_mock_offset, EC_MEMMAP_ACC_STATUS);
+  2591			}
+  2592		}
+  2593	}
+  2594	
 
 -- 
 0-DAY CI Kernel Test Service
