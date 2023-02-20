@@ -1,43 +1,32 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4462C6D39;
-	Mon, 20 Feb 2023 15:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676907563; x=1708443563;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PMCt83pZLxr12BMqPPOh/iHpUdrkv8wVpPR8CfRhDp8=;
-  b=eSlSoQBumHB2wm7q9A4cv5vznIG94560T4tB5DGrcaflH02ak9mRAqXF
-   37klIxIaiSeq6Jn0R8nRl+mG0ZpCudL8oDYB+N7tvE0BKcZz34SZo/p18
-   /2w/BqGZwqiMm9OlXEh0IxZOJ2DvfJXxpn8r75V1idlQ2CGcL1SFIALeF
-   0T5Zlw9f735QdoJXehHBmHjpA58WsnucB9KV08pVoZnh7bCc/p+1+uuDJ
-   j8YLKInruK+lueWkHy75ea97Vx+ebucViV9V3gtCu3AMISDoS3hT6bC8B
-   YssIzCIAPTJ29fhba5mqvaZOgbAaDbd+l6lpGK3JVa33vSzWdAPeIPAYu
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="331093298"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="331093298"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 07:39:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="760209795"
-X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
-   d="scan'208";a="760209795"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Feb 2023 07:39:21 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pU8G8-000E1f-2F;
-	Mon, 20 Feb 2023 15:39:20 +0000
-Date: Mon, 20 Feb 2023 23:38:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Berg <benjamin.berg@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Gregory Greenman <gregory.greenman@intel.com>
-Subject: [iwlwifi-next:pending 15/21] ld.lld: error: duplicate symbol:
- ieee80211_link_debugfs_add
-Message-ID: <202302202310.WDDrKxzM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989AC6D39;
+	Mon, 20 Feb 2023 15:51:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996B5C433D2;
+	Mon, 20 Feb 2023 15:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1676908269;
+	bh=wOTNmM/rz3jrTV1ds+AgaiAA4vZjdn8ItdA+1UsLrJw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IX7T7SfZfHgBLjetbffAQXt+9NN7ezi0KNeduFGeldn/T/vtz1g2Su9/Wi7bjPAbw
+	 KTZo5fECYY4Mo4rGRSdrbSoG1duju0nd3Go6FA9S7nRjcoud2BHiBXH0WS1POJxfpl
+	 pluLPBJD+VEWJIXp9l4yAWxQcHJftXjBMbCqjMWKmSBDqb4dxj1QKX94FgzDf63qSr
+	 k8wXWwdEAlW19pBHJli0Ek46N4YFCXE9liCaosUgOyk2N1VNKbn/FA5HXXttAZAChP
+	 /zWOVBCApciID7bjFxrlIjYSgOavfwtBo4Xblhv9DYDb0QS1cIV936kQ4GmDqk5TlO
+	 a0SViTeqjgLgQ==
+Date: Mon, 20 Feb 2023 08:51:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: npiggin@gmail.com, christophe.leroy@csgroup.eu, erhard_f@mailbox.org,
+	ndesaulniers@google.com, trix@redhat.com,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH 0/3] Allow CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 with ld.lld
+ 15+
+Message-ID: <Y/OW6mRi3qDpVQkc@dev-arch.thelio-3990X>
+References: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
+ <87wn4cyifp.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,109 +35,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <87wn4cyifp.fsf@mpe.ellerman.id.au>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git pending
-head:   b550c611e3d7418f1d2944f4bf0e0597044e377d
-commit: 976fdb8844a790ca65be62f06bdef4d8185004b7 [15/21] wifi: mac80211: add netdev per-link debugfs data and driver hook
-config: x86_64-randconfig-a015-20230220 (https://download.01.org/0day-ci/archive/20230220/202302202310.WDDrKxzM-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git/commit/?id=976fdb8844a790ca65be62f06bdef4d8185004b7
-        git remote add iwlwifi-next https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git
-        git fetch --no-tags iwlwifi-next pending
-        git checkout 976fdb8844a790ca65be62f06bdef4d8185004b7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
+On Mon, Feb 20, 2023 at 05:11:54PM +1100, Michael Ellerman wrote:
+> Nathan Chancellor <nathan@kernel.org> writes:
+> > Currently, CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 is not selectable with
+> > ld.lld because of an explicit dependency on GNU ld, due to lack of
+> > testing with LLVM.
+> >
+> > Erhard was kind enough to test this option on his hardware with LLVM 15,
+> > which ran without any issues. This should not be too surprising, as
+> > ld.lld does not have support for the ELFv1 ABI, only ELFv2, so it should
+> > have decent support. With this series, big endian kernels can be built
+> > with LLVM=1.
+> >
+> > This has seen our basic set of powerpc configurations with clang-15,
+> > clang-16, and clang-17 but I will never be opposed to more testing :)
+> >
+> > The first two patches fix a couple of issues I noticed while build
+> > testing and the final patch actually allows the option to be selected.
+> 
+> Thanks for this.
+> 
+> I thought about applying this last week but decided not to. I'll plan to
+> pick it up for 6.4.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302202310.WDDrKxzM-lkp@intel.com/
+No worries, I sent this much later in the development cycle than I had
+initially intended, so I figured that 6.3 was a long shot anyways. Plus
+more soak time is never a bad thing :)
 
-All error/warnings (new ones prefixed by >>):
-
-   In file included from net/mac80211/driver-ops.c:11:
->> net/mac80211/debugfs_netdev.h:30:6: warning: no previous prototype for function 'ieee80211_link_debugfs_add' [-Wmissing-prototypes]
-   void ieee80211_link_debugfs_add(struct ieee80211_link_data *link) {}
-        ^
-   net/mac80211/debugfs_netdev.h:30:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void ieee80211_link_debugfs_add(struct ieee80211_link_data *link) {}
-   ^
-   static 
->> net/mac80211/debugfs_netdev.h:31:6: warning: no previous prototype for function 'ieee80211_link_debugfs_remove' [-Wmissing-prototypes]
-   void ieee80211_link_debugfs_remove(struct ieee80211_link_data *link) {}
-        ^
-   net/mac80211/debugfs_netdev.h:31:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void ieee80211_link_debugfs_remove(struct ieee80211_link_data *link) {}
-   ^
-   static 
->> net/mac80211/debugfs_netdev.h:33:6: warning: no previous prototype for function 'ieee80211_link_debugfs_drv_add' [-Wmissing-prototypes]
-   void ieee80211_link_debugfs_drv_add(struct ieee80211_link_data *link) {}
-        ^
-   net/mac80211/debugfs_netdev.h:33:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void ieee80211_link_debugfs_drv_add(struct ieee80211_link_data *link) {}
-   ^
-   static 
->> net/mac80211/debugfs_netdev.h:34:6: warning: no previous prototype for function 'ieee80211_link_debugfs_drv_remove' [-Wmissing-prototypes]
-   void ieee80211_link_debugfs_drv_remove(struct ieee80211_link_data *link) {}
-        ^
-   net/mac80211/debugfs_netdev.h:34:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void ieee80211_link_debugfs_drv_remove(struct ieee80211_link_data *link) {}
-   ^
-   static 
-   4 warnings generated.
---
->> ld.lld: error: duplicate symbol: ieee80211_link_debugfs_add
-   >>> defined at debugfs_netdev.h:30 (net/mac80211/debugfs_netdev.h:30)
-   >>>            net/mac80211/driver-ops.o:(ieee80211_link_debugfs_add)
-   >>> defined at debugfs_netdev.h:30 (net/mac80211/debugfs_netdev.h:30)
-   >>>            net/mac80211/iface.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: ieee80211_link_debugfs_remove
-   >>> defined at debugfs_netdev.h:31 (net/mac80211/debugfs_netdev.h:31)
-   >>>            net/mac80211/driver-ops.o:(ieee80211_link_debugfs_remove)
-   >>> defined at debugfs_netdev.h:31 (net/mac80211/debugfs_netdev.h:31)
-   >>>            net/mac80211/iface.o:(.text+0x10)
---
->> ld.lld: error: duplicate symbol: ieee80211_link_debugfs_drv_add
-   >>> defined at debugfs_netdev.h:33 (net/mac80211/debugfs_netdev.h:33)
-   >>>            net/mac80211/driver-ops.o:(ieee80211_link_debugfs_drv_add)
-   >>> defined at debugfs_netdev.h:33 (net/mac80211/debugfs_netdev.h:33)
-   >>>            net/mac80211/iface.o:(.text+0x20)
---
->> ld.lld: error: duplicate symbol: ieee80211_link_debugfs_drv_remove
-   >>> defined at debugfs_netdev.h:34 (net/mac80211/debugfs_netdev.h:34)
-   >>>            net/mac80211/driver-ops.o:(ieee80211_link_debugfs_drv_remove)
-   >>> defined at debugfs_netdev.h:34 (net/mac80211/debugfs_netdev.h:34)
-   >>>            net/mac80211/iface.o:(.text+0x30)
---
->> ld.lld: error: duplicate symbol: ieee80211_link_debugfs_add
-   >>> defined at debugfs_netdev.h:30 (net/mac80211/debugfs_netdev.h:30)
-   >>>            net/mac80211/driver-ops.o:(ieee80211_link_debugfs_add)
-   >>> defined at debugfs_netdev.h:30 (net/mac80211/debugfs_netdev.h:30)
-   >>>            net/mac80211/link.o:(.text+0x0)
---
->> ld.lld: error: duplicate symbol: ieee80211_link_debugfs_remove
-   >>> defined at debugfs_netdev.h:31 (net/mac80211/debugfs_netdev.h:31)
-   >>>            net/mac80211/driver-ops.o:(ieee80211_link_debugfs_remove)
-   >>> defined at debugfs_netdev.h:31 (net/mac80211/debugfs_netdev.h:31)
-   >>>            net/mac80211/link.o:(.text+0x10)
---
->> ld.lld: error: duplicate symbol: ieee80211_link_debugfs_drv_add
-   >>> defined at debugfs_netdev.h:33 (net/mac80211/debugfs_netdev.h:33)
-   >>>            net/mac80211/driver-ops.o:(ieee80211_link_debugfs_drv_add)
-   >>> defined at debugfs_netdev.h:33 (net/mac80211/debugfs_netdev.h:33)
-   >>>            net/mac80211/link.o:(.text+0x20)
---
->> ld.lld: error: duplicate symbol: ieee80211_link_debugfs_drv_remove
-   >>> defined at debugfs_netdev.h:34 (net/mac80211/debugfs_netdev.h:34)
-   >>>            net/mac80211/driver-ops.o:(ieee80211_link_debugfs_drv_remove)
-   >>> defined at debugfs_netdev.h:34 (net/mac80211/debugfs_netdev.h:34)
-   >>>            net/mac80211/link.o:(.text+0x30)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks for taking the initial look, cheers!
+Nathan
