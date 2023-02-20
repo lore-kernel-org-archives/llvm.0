@@ -1,32 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989AC6D39;
-	Mon, 20 Feb 2023 15:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996B5C433D2;
-	Mon, 20 Feb 2023 15:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1676908269;
-	bh=wOTNmM/rz3jrTV1ds+AgaiAA4vZjdn8ItdA+1UsLrJw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IX7T7SfZfHgBLjetbffAQXt+9NN7ezi0KNeduFGeldn/T/vtz1g2Su9/Wi7bjPAbw
-	 KTZo5fECYY4Mo4rGRSdrbSoG1duju0nd3Go6FA9S7nRjcoud2BHiBXH0WS1POJxfpl
-	 pluLPBJD+VEWJIXp9l4yAWxQcHJftXjBMbCqjMWKmSBDqb4dxj1QKX94FgzDf63qSr
-	 k8wXWwdEAlW19pBHJli0Ek46N4YFCXE9liCaosUgOyk2N1VNKbn/FA5HXXttAZAChP
-	 /zWOVBCApciID7bjFxrlIjYSgOavfwtBo4Xblhv9DYDb0QS1cIV936kQ4GmDqk5TlO
-	 a0SViTeqjgLgQ==
-Date: Mon, 20 Feb 2023 08:51:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: npiggin@gmail.com, christophe.leroy@csgroup.eu, erhard_f@mailbox.org,
-	ndesaulniers@google.com, trix@redhat.com,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH 0/3] Allow CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 with ld.lld
- 15+
-Message-ID: <Y/OW6mRi3qDpVQkc@dev-arch.thelio-3990X>
-References: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
- <87wn4cyifp.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E617ED;
+	Mon, 20 Feb 2023 16:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676911228; x=1708447228;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DVpTGQ8FoPyLDs7k37yMqyyrS872DbF1vhla/C+g+MI=;
+  b=elWqJr8Oti0WtDIOM2BcY9lrKzws3VfSYRhnuYyFUHZOFO1ZU33BValr
+   59AYQMO33grTYV+rYzrUmBXsBnCF/CcTzh1ciLiOx/+X0BCpWq7RLDnCR
+   UWl/Dtv8656yA9ldTjg9XCQgTuiCD1e1jbZylNvcYd6HpLlUVmTHI1IAQ
+   RHeywpuWRXVtskzWWe/fatYzB2iLT/NgEICsQU3qHNavUzBTKktN8S9T2
+   ivVrIbrHtDbGs3CJMKOYZF9EB+ndsuC8T1W8ST5c/I1jUiPI+uL39gGG9
+   nhJFWwb7TmCNIpX7R7XSVWryjNVbGXV8Mhrx/pXlKsXaiJwQANQGFh0yX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="359909573"
+X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
+   d="scan'208";a="359909573"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 08:40:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="703749785"
+X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
+   d="scan'208";a="703749785"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Feb 2023 08:40:24 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pU9DD-000E3j-1N;
+	Mon, 20 Feb 2023 16:40:23 +0000
+Date: Tue, 21 Feb 2023 00:39:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Colin Cross <ccross@android.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>
+Subject: [jsarha:topic/chromeos-4.19-s0ix 6403/9999]
+ kernel/watchdog_buddy_cpu.c:89:6: warning: no previous prototype for
+ function 'watchdog_check_hardlockup'
+Message-ID: <202302210029.ezzrsZnI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,34 +49,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87wn4cyifp.fsf@mpe.ellerman.id.au>
 
-On Mon, Feb 20, 2023 at 05:11:54PM +1100, Michael Ellerman wrote:
-> Nathan Chancellor <nathan@kernel.org> writes:
-> > Currently, CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 is not selectable with
-> > ld.lld because of an explicit dependency on GNU ld, due to lack of
-> > testing with LLVM.
-> >
-> > Erhard was kind enough to test this option on his hardware with LLVM 15,
-> > which ran without any issues. This should not be too surprising, as
-> > ld.lld does not have support for the ELFv1 ABI, only ELFv2, so it should
-> > have decent support. With this series, big endian kernels can be built
-> > with LLVM=1.
-> >
-> > This has seen our basic set of powerpc configurations with clang-15,
-> > clang-16, and clang-17 but I will never be opposed to more testing :)
-> >
-> > The first two patches fix a couple of issues I noticed while build
-> > testing and the final patch actually allows the option to be selected.
-> 
-> Thanks for this.
-> 
-> I thought about applying this last week but decided not to. I'll plan to
-> pick it up for 6.4.
+tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
+head:   430bdaa0a8c38697780f45a148964d71951df11f
+commit: c257fa8632bb98df1fbc4e2ac46c91c938428be2 [6403/9999] CHROMIUM: hardlockup: detect hard lockups without NMIs using secondary cpus
+config: x86_64-randconfig-a013-20230220 (https://download.01.org/0day-ci/archive/20230221/202302210029.ezzrsZnI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jsarha/linux/commit/c257fa8632bb98df1fbc4e2ac46c91c938428be2
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
+        git checkout c257fa8632bb98df1fbc4e2ac46c91c938428be2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-No worries, I sent this much later in the development cycle than I had
-initially intended, so I figured that 6.3 was a long shot anyways. Plus
-more soak time is never a bad thing :)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302210029.ezzrsZnI-lkp@intel.com/
 
-Thanks for taking the initial look, cheers!
-Nathan
+All warnings (new ones prefixed by >>):
+
+>> kernel/watchdog_buddy_cpu.c:89:6: warning: no previous prototype for function 'watchdog_check_hardlockup' [-Wmissing-prototypes]
+   void watchdog_check_hardlockup(void)
+        ^
+   kernel/watchdog_buddy_cpu.c:89:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void watchdog_check_hardlockup(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/watchdog_check_hardlockup +89 kernel/watchdog_buddy_cpu.c
+
+    88	
+  > 89	void watchdog_check_hardlockup(void)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
