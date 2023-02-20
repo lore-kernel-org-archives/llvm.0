@@ -1,142 +1,179 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D4E2F4B
-	for <llvm@lists.linux.dev>; Mon, 20 Feb 2023 12:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1676897494;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KyfREdsHaMZsIcW0XtWU9/WPZGhQGbbgJLqbJYUh0NQ=;
-	b=ZYgQh5VxEtXHbpxgfDcFaFS3+Sxnpu6UZhodHrqs8/02YADKddtnbSBYetLqzg+vtcJdmf
-	QikyeSJjgFaQj/SL6DVjIF5gO8c7JBWAL1y1jW5UijYM1Ws1/y1O0vfzrf8rToRNtPnXM/
-	yE36ZCrTejnnKuHZmQ4IxbHHyTZidgg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-3yt-MVzLPrOhp85oc1SCCw-1; Mon, 20 Feb 2023 07:51:33 -0500
-X-MC-Unique: 3yt-MVzLPrOhp85oc1SCCw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 909FA80D0E2
-	for <llvm@lists.linux.dev>; Mon, 20 Feb 2023 12:51:33 +0000 (UTC)
-Received: from [172.64.15.15] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7901840C83B6;
-	Mon, 20 Feb 2023 12:51:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (105/383 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, c9c3395d)
-Date: Mon, 20 Feb 2023 12:51:33 -0000
-To: llvm@lists.linux.dev, xiawu@redhat.com, bhe@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197962F4B;
+	Mon, 20 Feb 2023 13:23:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676899402; x=1708435402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A6LhRpr42B3nwFfoj1JoUbQMjjWOTcLN6oT7PjbxPc8=;
+  b=jhwhg88L6s2M1eTCH5PQ5Sz+71CSclb/xyEhx96Q3doaqT4BuTjlIoXi
+   kLIMFmUfvkGm8qkel6qh2NR63dNIaDVW88RJ03rj0pRgY02TOjX/OY5Bf
+   89tQpqqQWhvM/OYsDlpcGU6ddDEpwUXZRxmxBZm8QsCELBrfGANu0ARkW
+   rSFh8M5ZISbQB9cE6VXlKg05BTm17wmy6V0XuR/fR8UxPwxJktHSc+lKJ
+   EcfXyPKQ9JqamJIJJHy4HX8qmVblNu8m2vNOdpaIoAxG47A9r1/F3qwZ1
+   iiaZAbCs/M348vjeZQ6MrZ8QvXU/GS9ITTg+jsLdTJ4k28KaRWFMFQTyO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="330112816"
+X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
+   d="scan'208";a="330112816"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 05:23:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="673361962"
+X-IronPort-AV: E=Sophos;i="5.97,312,1669104000"; 
+   d="scan'208";a="673361962"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Feb 2023 05:23:17 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pU68S-000Dw1-2K;
+	Mon, 20 Feb 2023 13:23:16 +0000
+Date: Mon, 20 Feb 2023 21:22:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+	hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
+	roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
+	shy828301@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tkhai@ya.ru,
+	sultan@kerneltoast.com, dave@stgolabs.net,
+	penguin-kernel@i-love.sakura.ne.jp, paulmck@kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH 3/5] mm: shrinkers: make count and scan in shrinker
+ debugfs lockless
+Message-ID: <202302202134.OFjSh3rl-lkp@intel.com>
+References: <20230220091637.64865-4-zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <77449.123022007513300915@us-mta-655.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220091637.64865-4-zhengqi.arch@bytedance.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Qi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on next-20230220]
+[cannot apply to device-mapper-dm/for-next linus/master v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Linux 6.2
+url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/mm-vmscan-make-global-slab-shrink-lockless/20230220-171954
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230220091637.64865-4-zhengqi.arch%40bytedance.com
+patch subject: [PATCH 3/5] mm: shrinkers: make count and scan in shrinker debugfs lockless
+config: riscv-randconfig-r036-20230219 (https://download.01.org/0day-ci/archive/20230220/202302202134.OFjSh3rl-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/b5b7259339a7a5cfae5a120356750c5a9e151d12
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Qi-Zheng/mm-vmscan-make-global-slab-shrink-lockless/20230220-171954
+        git checkout b5b7259339a7a5cfae5a120356750c5a9e151d12
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/72644
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302202134.OFjSh3rl-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-           s390x - kdump - sysrq-c
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7188004
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7187684
+All warnings (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2032094
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> mm/shrinker_debug.c:88:11: warning: variable 'ret' is used uninitialized whenever 'do' loop exits because its condition is false [-Wsometimes-uninitialized]
+           } while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   mm/shrinker_debug.c:93:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   mm/shrinker_debug.c:88:11: note: remove the condition if it is always true
+           } while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    1
+>> mm/shrinker_debug.c:78:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                   if (!memcg_aware) {
+                       ^~~~~~~~~~~~
+   mm/shrinker_debug.c:93:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   mm/shrinker_debug.c:78:3: note: remove the 'if' if its condition is always false
+                   if (!memcg_aware) {
+                   ^~~~~~~~~~~~~~~~~~~
+   mm/shrinker_debug.c:53:9: note: initialize the variable 'ret' to silence this warning
+           int ret, nid, srcu_idx;
+                  ^
+                   = 0
+   2 warnings generated.
 
 
+vim +88 mm/shrinker_debug.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+5035ebc644aec9 Roman Gushchin 2022-05-31  45  
+5035ebc644aec9 Roman Gushchin 2022-05-31  46  static int shrinker_debugfs_count_show(struct seq_file *m, void *v)
+5035ebc644aec9 Roman Gushchin 2022-05-31  47  {
+5035ebc644aec9 Roman Gushchin 2022-05-31  48  	struct shrinker *shrinker = m->private;
+5035ebc644aec9 Roman Gushchin 2022-05-31  49  	unsigned long *count_per_node;
+5035ebc644aec9 Roman Gushchin 2022-05-31  50  	struct mem_cgroup *memcg;
+5035ebc644aec9 Roman Gushchin 2022-05-31  51  	unsigned long total;
+5035ebc644aec9 Roman Gushchin 2022-05-31  52  	bool memcg_aware;
+b5b7259339a7a5 Qi Zheng       2023-02-20  53  	int ret, nid, srcu_idx;
+5035ebc644aec9 Roman Gushchin 2022-05-31  54  
+5035ebc644aec9 Roman Gushchin 2022-05-31  55  	count_per_node = kcalloc(nr_node_ids, sizeof(unsigned long), GFP_KERNEL);
+5035ebc644aec9 Roman Gushchin 2022-05-31  56  	if (!count_per_node)
+5035ebc644aec9 Roman Gushchin 2022-05-31  57  		return -ENOMEM;
+5035ebc644aec9 Roman Gushchin 2022-05-31  58  
+b5b7259339a7a5 Qi Zheng       2023-02-20  59  	srcu_idx = srcu_read_lock(&shrinker_srcu);
+5035ebc644aec9 Roman Gushchin 2022-05-31  60  
+5035ebc644aec9 Roman Gushchin 2022-05-31  61  	memcg_aware = shrinker->flags & SHRINKER_MEMCG_AWARE;
+5035ebc644aec9 Roman Gushchin 2022-05-31  62  
+5035ebc644aec9 Roman Gushchin 2022-05-31  63  	memcg = mem_cgroup_iter(NULL, NULL, NULL);
+5035ebc644aec9 Roman Gushchin 2022-05-31  64  	do {
+5035ebc644aec9 Roman Gushchin 2022-05-31  65  		if (memcg && !mem_cgroup_online(memcg))
+5035ebc644aec9 Roman Gushchin 2022-05-31  66  			continue;
+5035ebc644aec9 Roman Gushchin 2022-05-31  67  
+5035ebc644aec9 Roman Gushchin 2022-05-31  68  		total = shrinker_count_objects(shrinker,
+5035ebc644aec9 Roman Gushchin 2022-05-31  69  					       memcg_aware ? memcg : NULL,
+5035ebc644aec9 Roman Gushchin 2022-05-31  70  					       count_per_node);
+5035ebc644aec9 Roman Gushchin 2022-05-31  71  		if (total) {
+5035ebc644aec9 Roman Gushchin 2022-05-31  72  			seq_printf(m, "%lu", mem_cgroup_ino(memcg));
+5035ebc644aec9 Roman Gushchin 2022-05-31  73  			for_each_node(nid)
+5035ebc644aec9 Roman Gushchin 2022-05-31  74  				seq_printf(m, " %lu", count_per_node[nid]);
+5035ebc644aec9 Roman Gushchin 2022-05-31  75  			seq_putc(m, '\n');
+5035ebc644aec9 Roman Gushchin 2022-05-31  76  		}
+5035ebc644aec9 Roman Gushchin 2022-05-31  77  
+5035ebc644aec9 Roman Gushchin 2022-05-31 @78  		if (!memcg_aware) {
+5035ebc644aec9 Roman Gushchin 2022-05-31  79  			mem_cgroup_iter_break(NULL, memcg);
+5035ebc644aec9 Roman Gushchin 2022-05-31  80  			break;
+5035ebc644aec9 Roman Gushchin 2022-05-31  81  		}
+5035ebc644aec9 Roman Gushchin 2022-05-31  82  
+5035ebc644aec9 Roman Gushchin 2022-05-31  83  		if (signal_pending(current)) {
+5035ebc644aec9 Roman Gushchin 2022-05-31  84  			mem_cgroup_iter_break(NULL, memcg);
+5035ebc644aec9 Roman Gushchin 2022-05-31  85  			ret = -EINTR;
+5035ebc644aec9 Roman Gushchin 2022-05-31  86  			break;
+5035ebc644aec9 Roman Gushchin 2022-05-31  87  		}
+5035ebc644aec9 Roman Gushchin 2022-05-31 @88  	} while ((memcg = mem_cgroup_iter(NULL, memcg, NULL)) != NULL);
+5035ebc644aec9 Roman Gushchin 2022-05-31  89  
+b5b7259339a7a5 Qi Zheng       2023-02-20  90  	srcu_read_unlock(&shrinker_srcu, srcu_idx);
+5035ebc644aec9 Roman Gushchin 2022-05-31  91  
+5035ebc644aec9 Roman Gushchin 2022-05-31  92  	kfree(count_per_node);
+5035ebc644aec9 Roman Gushchin 2022-05-31 @93  	return ret;
+5035ebc644aec9 Roman Gushchin 2022-05-31  94  }
+5035ebc644aec9 Roman Gushchin 2022-05-31  95  DEFINE_SHOW_ATTRIBUTE(shrinker_debugfs_count);
+5035ebc644aec9 Roman Gushchin 2022-05-31  96  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
