@@ -1,43 +1,48 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B42C6FC4;
-	Tue, 21 Feb 2023 17:52:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC7A8C0B;
+	Tue, 21 Feb 2023 19:35:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677001954; x=1708537954;
+  t=1677008142; x=1708544142;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J8xilWvaJmR1xiHa1vfR9jgPRt6kr5Zfp++G4sQ6VXI=;
-  b=WOyPpisg2ZxvYR0uH1DCfzz4E2Cl7CrzAsYLvebvfTjDgVVlH0s16Fl9
-   2zqkf0YXC7+uBmgjxNgFLo38IrgGoxk6aVZkcZvWmKnHJcj+Z3iSgGD0z
-   L33m1vjMslmClMOlBwhanzEX46h4FT4U4hLAMvW/JkEszt0SHil4PP0r5
-   1VpuZu1FnRAI0wbPTKWzfkYyJxwwfaYBP9FaCIGpT6ytaePhh2s+x1926
-   Q2j2ZbxBaLmsOs1GAYtwG05nZkwkTxR5yGm8au1KpzSulHqRKbeOlSVLc
-   KAQJqw+GQ/H/Iuo66JbVE3vq6INmSlCVRy2RcoVQuuOmhdWQCRRfRRByy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="397394157"
+  bh=QJn1rF4pWC5og0M6rh5cqZjcldr1ptYh0tAPQL4Zk14=;
+  b=FPLLA8O3XeRQyxRcjIDPy7S7+6DMhLzG07I5tyh6E2XzQYuEnKBbsQPh
+   TkPFpOoZ6Sec+3JI6O2BG6jQD7IDvUhq0Ye9EA/eTt+oV9+1jNUaN1ULS
+   xdiiEAbB9VDGoc6LI8PPgsik1kosHbAF4jqhM0Mpf4CXaBBkS9ltklm62
+   0N3w5DpFvUeCxKuoXsVQMeY4n3EkYF7oyyx5ZuRWKvOYxlq2IpsXLtsQP
+   MGG0OWmv7M4xdBvSXtvSCpoZ1z7P5RCElG9qfnt1IQWwn8bmjPAmul/dG
+   R27gDoGXiCw/nTbo7UJqeqtxEPNj+w6Dk5Ce2F6T9BBt66fswy346cBlN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="418956043"
 X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="397394157"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 09:52:33 -0800
+   d="scan'208";a="418956043"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 11:35:41 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="917270931"
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="795633629"
 X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="917270931"
+   d="scan'208";a="795633629"
 Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2023 09:52:32 -0800
+  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2023 11:35:39 -0800
 Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pUWoZ-00006L-16;
-	Tue, 21 Feb 2023 17:52:31 +0000
-Date: Wed, 22 Feb 2023 01:52:22 +0800
+	id 1pUYQM-0000C9-0V;
+	Tue, 21 Feb 2023 19:35:38 +0000
+Date: Wed, 22 Feb 2023 03:34:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
- 344/620] drivers/clk/qcom/clk-cbf-8996.c:403:45: error: too many arguments
- to function call, expected single argument 'pdev', have 2 arguments
-Message-ID: <202302220137.V9Hhcxpy-lkp@intel.com>
+To: Steve French <stfrench@microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+	David Howells <dhowells@redhat.com>
+Subject: [ammarfaizi2-block:dhowells/linux-fs/iov-cifs-mm 1/2]
+ fs/gfs2/log.c:143:41: error: incompatible function pointer types passing
+ 'int (struct page *, struct writeback_control *, void *)' to parameter of
+ type 'writepage_t' (aka 'int (*)(struct folio *, struct writeback_control *,
+ void *)')
+Message-ID: <202302220331.y7RwxHvB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,148 +52,115 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
-head:   1f3ac4514a512e9f791badc3c6754a55a40a1492
-commit: e7fac1ad7827402e38be0fba7c195b93afa32f55 [344/620] clk: qcom: cbf-msm8996: scale CBF clock according to the CPUfreq
-config: arm64-randconfig-r011-20230220 (https://download.01.org/0day-ci/archive/20230222/202302220137.V9Hhcxpy-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/iov-cifs-mm
+head:   71ad4f67439e60fe04bbf7aed8870e6f83a5d15e
+commit: dfb379388e7d018fea286956f77228902c36b7c2 [1/2] Merge remote-tracking branch 'cifs/for-next' into iov-cifs-mm
+config: x86_64-randconfig-r013-20230220 (https://download.01.org/0day-ci/archive/20230222/202302220331.y7RwxHvB-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/krzk/linux/commit/e7fac1ad7827402e38be0fba7c195b93afa32f55
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
-        git checkout e7fac1ad7827402e38be0fba7c195b93afa32f55
+        # https://github.com/ammarfaizi2/linux-block/commit/dfb379388e7d018fea286956f77228902c36b7c2
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/iov-cifs-mm
+        git checkout dfb379388e7d018fea286956f77228902c36b7c2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/qcom/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/gfs2/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302220137.V9Hhcxpy-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302220331.y7RwxHvB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/clk/qcom/clk-cbf-8996.c:194:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case ABORT_RATE_CHANGE:
-                ^~~~~~~~~~~~~~~~~
-   include/linux/clk.h:41:28: note: expanded from macro 'ABORT_RATE_CHANGE'
-   #define ABORT_RATE_CHANGE               BIT(2)
-                                           ^~~~~~
-   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                   ^~~~~~~~~~~~~~~
-   drivers/clk/qcom/clk-cbf-8996.c:205:29: note: uninitialized use occurs here
-           return notifier_from_errno(ret);
-                                      ^~~
-   drivers/clk/qcom/clk-cbf-8996.c:181:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case PRE_RATE_CHANGE:
-                ^~~~~~~~~~~~~~~
-   include/linux/clk.h:39:27: note: expanded from macro 'PRE_RATE_CHANGE'
-   #define PRE_RATE_CHANGE                 BIT(0)
-                                           ^~~~~~
-   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                   ^~~~~~~~~~~~~~~
-   drivers/clk/qcom/clk-cbf-8996.c:205:29: note: uninitialized use occurs here
-           return notifier_from_errno(ret);
-                                      ^~~
-   drivers/clk/qcom/clk-cbf-8996.c:178:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> drivers/clk/qcom/clk-cbf-8996.c:403:45: error: too many arguments to function call, expected single argument 'pdev', have 2 arguments
-           return qcom_msm8996_cbf_icc_register(pdev, &cbf_mux.clkr.hw);
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       ^~~~~~~~~~~~~~~~
-   drivers/clk/qcom/clk-cbf-8996.c:344:12: note: 'qcom_msm8996_cbf_icc_register' declared here
-   static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev)
-              ^
->> drivers/clk/qcom/clk-cbf-8996.c:423:17: error: use of undeclared identifier 'icc_sync_state'
-                   .sync_state = icc_sync_state,
-                                 ^
-   2 warnings and 2 errors generated.
+>> fs/gfs2/log.c:143:41: error: incompatible function pointer types passing 'int (struct page *, struct writeback_control *, void *)' to parameter of type 'writepage_t' (aka 'int (*)(struct folio *, struct writeback_control *, void *)') [-Werror,-Wincompatible-function-pointer-types]
+                   ret = write_cache_pages(mapping, wbc, __gfs2_writepage, mapping);
+                                                         ^~~~~~~~~~~~~~~~
+   include/linux/writeback.h:375:52: note: passing argument to parameter 'writepage' here
+                         struct writeback_control *wbc, writepage_t writepage,
+                                                                    ^
+   1 error generated.
 
 
-vim +/pdev +403 drivers/clk/qcom/clk-cbf-8996.c
+vim +143 fs/gfs2/log.c
 
-   352	
-   353	static int qcom_msm8996_cbf_probe(struct platform_device *pdev)
-   354	{
-   355		void __iomem *base;
-   356		struct regmap *regmap;
-   357		struct device *dev = &pdev->dev;
-   358		int i, ret;
-   359	
-   360		base = devm_platform_ioremap_resource(pdev, 0);
-   361		if (IS_ERR(base))
-   362			return PTR_ERR(base);
-   363	
-   364		regmap = devm_regmap_init_mmio(dev, base, &cbf_msm8996_regmap_config);
-   365		if (IS_ERR(regmap))
-   366			return PTR_ERR(regmap);
-   367	
-   368		/* Select GPLL0 for 300MHz for the CBF clock */
-   369		regmap_write(regmap, CBF_MUX_OFFSET, 0x3);
-   370	
-   371		/* Ensure write goes through before PLLs are reconfigured */
-   372		udelay(5);
-   373	
-   374		clk_alpha_pll_configure(&cbf_pll, regmap, &cbfpll_config);
-   375	
-   376		/* Wait for PLL(s) to lock */
-   377	        udelay(50);
-   378	
-   379		/* Switch CBF to use the primary PLL */
-   380		regmap_update_bits(regmap, CBF_MUX_OFFSET,
-   381				   CBF_MUX_PARENT_MASK, 0x1);
-   382	
-   383		for (i = 0; i < ARRAY_SIZE(cbf_msm8996_hw_clks); i++) {
-   384			ret = devm_clk_hw_register(dev, cbf_msm8996_hw_clks[i]);
-   385			if (ret)
-   386				return ret;
-   387		}
-   388	
-   389		for (i = 0; i < ARRAY_SIZE(cbf_msm8996_clks); i++) {
-   390			ret = devm_clk_register_regmap(dev, cbf_msm8996_clks[i]);
-   391			if (ret)
-   392				return ret;
-   393		}
-   394	
-   395		ret = devm_clk_notifier_register(dev, cbf_mux.clkr.hw.clk, &cbf_mux.nb);
-   396		if (ret)
-   397			return ret;
-   398	
-   399		ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, &cbf_mux.clkr.hw);
-   400		if (ret)
-   401			return ret;
-   402	
- > 403		return qcom_msm8996_cbf_icc_register(pdev, &cbf_mux.clkr.hw);
-   404	}
-   405	
-   406	static int qcom_msm8996_cbf_remove(struct platform_device *pdev)
-   407	{
-   408		return qcom_msm8996_cbf_icc_remove(pdev);
-   409	}
-   410	
-   411	static const struct of_device_id qcom_msm8996_cbf_match_table[] = {
-   412		{ .compatible = "qcom,msm8996-cbf" },
-   413		{ /* sentinel */ },
-   414	};
-   415	MODULE_DEVICE_TABLE(of, qcom_msm8996_cbf_match_table);
-   416	
-   417	static struct platform_driver qcom_msm8996_cbf_driver = {
-   418		.probe = qcom_msm8996_cbf_probe,
-   419		.remove = qcom_msm8996_cbf_remove,
-   420		.driver = {
-   421			.name = "qcom-msm8996-cbf",
-   422			.of_match_table = qcom_msm8996_cbf_match_table,
- > 423			.sync_state = icc_sync_state,
-   424		},
-   425	};
-   426	
+95ecbd0f162fc0 Andreas Gruenbacher     2023-01-19   91  
+ddacfaf76dd620 Steven Whitehouse       2006-10-03   92  /**
+c551f66c5dfefd Lee Jones               2021-03-30   93   * gfs2_ail1_start_one - Start I/O on a transaction
+c551f66c5dfefd Lee Jones               2021-03-30   94   * @sdp: The superblock
+4667a0ec328678 Steven Whitehouse       2011-04-18   95   * @wbc: The writeback control structure
+c551f66c5dfefd Lee Jones               2021-03-30   96   * @tr: The transaction to start I/O on
+c551f66c5dfefd Lee Jones               2021-03-30   97   * @plug: The block plug currently active
+ddacfaf76dd620 Steven Whitehouse       2006-10-03   98   */
+ddacfaf76dd620 Steven Whitehouse       2006-10-03   99  
+4f1de018215fb5 Steven Whitehouse       2011-04-26  100  static int gfs2_ail1_start_one(struct gfs2_sbd *sdp,
+4667a0ec328678 Steven Whitehouse       2011-04-18  101  			       struct writeback_control *wbc,
+17d77684088510 Bob Peterson            2021-02-18  102  			       struct gfs2_trans *tr, struct blk_plug *plug)
+d6a079e82efd5f Dave Chinner            2011-03-11  103  __releases(&sdp->sd_ail_lock)
+d6a079e82efd5f Dave Chinner            2011-03-11  104  __acquires(&sdp->sd_ail_lock)
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  105  {
+5ac048bb7ea6e8 Steven Whitehouse       2011-03-30  106  	struct gfs2_glock *gl = NULL;
+4667a0ec328678 Steven Whitehouse       2011-04-18  107  	struct address_space *mapping;
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  108  	struct gfs2_bufdata *bd, *s;
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  109  	struct buffer_head *bh;
+b1676cbb11153b Bob Peterson            2019-11-13  110  	int ret = 0;
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  111  
+16ca9412d80181 Benjamin Marzinski      2013-04-05  112  	list_for_each_entry_safe_reverse(bd, s, &tr->tr_ail1_list, bd_ail_st_list) {
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  113  		bh = bd->bd_bh;
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  114  
+16ca9412d80181 Benjamin Marzinski      2013-04-05  115  		gfs2_assert(sdp, bd->bd_tr == tr);
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  116  
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  117  		if (!buffer_busy(bh)) {
+30fe70a85a909a Bob Peterson            2019-11-13  118  			if (buffer_uptodate(bh)) {
+30fe70a85a909a Bob Peterson            2019-11-13  119  				list_move(&bd->bd_ail_st_list,
+30fe70a85a909a Bob Peterson            2019-11-13  120  					  &tr->tr_ail2_list);
+30fe70a85a909a Bob Peterson            2019-11-13  121  				continue;
+30fe70a85a909a Bob Peterson            2019-11-13  122  			}
+036330c914365f Bob Peterson            2019-04-10  123  			if (!cmpxchg(&sdp->sd_log_error, 0, -EIO)) {
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  124  				gfs2_io_error_bh(sdp, bh);
+69511080bd6efd Bob Peterson            2019-02-12  125  				gfs2_withdraw_delayed(sdp);
+9e1a9ecd13b9bb Andreas Gruenbacher     2018-06-07  126  			}
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  127  		}
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  128  
+30fe70a85a909a Bob Peterson            2019-11-13  129  		if (gfs2_withdrawn(sdp)) {
+30fe70a85a909a Bob Peterson            2019-11-13  130  			gfs2_remove_from_ail(bd);
+30fe70a85a909a Bob Peterson            2019-11-13  131  			continue;
+30fe70a85a909a Bob Peterson            2019-11-13  132  		}
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  133  		if (!buffer_dirty(bh))
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  134  			continue;
+5ac048bb7ea6e8 Steven Whitehouse       2011-03-30  135  		if (gl == bd->bd_gl)
+5ac048bb7ea6e8 Steven Whitehouse       2011-03-30  136  			continue;
+5ac048bb7ea6e8 Steven Whitehouse       2011-03-30  137  		gl = bd->bd_gl;
+16ca9412d80181 Benjamin Marzinski      2013-04-05  138  		list_move(&bd->bd_ail_st_list, &tr->tr_ail1_list);
+11551cf15ecc17 Matthew Wilcox (Oracle  2022-12-15  139) 		mapping = bh->b_folio->mapping;
+4f1de018215fb5 Steven Whitehouse       2011-04-26  140  		if (!mapping)
+4f1de018215fb5 Steven Whitehouse       2011-04-26  141  			continue;
+d6a079e82efd5f Dave Chinner            2011-03-11  142  		spin_unlock(&sdp->sd_ail_lock);
+95ecbd0f162fc0 Andreas Gruenbacher     2023-01-19 @143  		ret = write_cache_pages(mapping, wbc, __gfs2_writepage, mapping);
+17d77684088510 Bob Peterson            2021-02-18  144  		if (need_resched()) {
+17d77684088510 Bob Peterson            2021-02-18  145  			blk_finish_plug(plug);
+17d77684088510 Bob Peterson            2021-02-18  146  			cond_resched();
+17d77684088510 Bob Peterson            2021-02-18  147  			blk_start_plug(plug);
+17d77684088510 Bob Peterson            2021-02-18  148  		}
+d6a079e82efd5f Dave Chinner            2011-03-11  149  		spin_lock(&sdp->sd_ail_lock);
+4e79e3f08e576a Bob Peterson            2020-11-12  150  		if (ret == -ENODATA) /* if a jdata write into a new hole */
+4e79e3f08e576a Bob Peterson            2020-11-12  151  			ret = 0; /* ignore it */
+b1676cbb11153b Bob Peterson            2019-11-13  152  		if (ret || wbc->nr_to_write <= 0)
+4667a0ec328678 Steven Whitehouse       2011-04-18  153  			break;
+b1676cbb11153b Bob Peterson            2019-11-13  154  		return -EBUSY;
+4667a0ec328678 Steven Whitehouse       2011-04-18  155  	}
+4f1de018215fb5 Steven Whitehouse       2011-04-26  156  
+b1676cbb11153b Bob Peterson            2019-11-13  157  	return ret;
+4667a0ec328678 Steven Whitehouse       2011-04-18  158  }
+ddacfaf76dd620 Steven Whitehouse       2006-10-03  159  
+
+:::::: The code at line 143 was first introduced by commit
+:::::: 95ecbd0f162fc06ef4c4045a66f653f47b62a2d3 Revert "gfs2: stop using generic_writepages in gfs2_ail1_start_one"
+
+:::::: TO: Andreas Gruenbacher <agruenba@redhat.com>
+:::::: CC: Andreas Gruenbacher <agruenba@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
