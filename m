@@ -1,106 +1,97 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEF28C0B;
-	Tue, 21 Feb 2023 20:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677009962; x=1708545962;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xgS7PVJCPZJ+//xyj4OSmQvPnD+TakDYc2ICsvn/8wM=;
-  b=O41J+hdkDbvSqVyvEAmLZXZ43PNGZ/G754AiarMkRM9K3QDY3Bkk8Yn5
-   xhbS8BPTxmcIFM7KAF7NjJdEunshPz7/oYT5efCjxQ0GFG474LXa9Jp8m
-   GqQb80JigDcVW8ATNFbPwH8t5AP7KGPoPHLNQDcDabJWtkd8Qki9OdHZc
-   S+OLXB8knAWOJbe3+lrzJeIzI2xqmtxfQiExMBbnqTx0+aUCw6wAiyIB8
-   1IJpwt2VM5fLnyehpD8fQ4HYVRsfB3TRkK1tkDAbuH9L5oJWXlbVs6d39
-   bfV6PT13Ai+l3GbdFFmEuWd4oGWN+ek5fx6GS/pPLxH0IsAgFsBgMH0nm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="334100046"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="334100046"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 12:05:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="917317158"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="917317158"
-Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2023 12:05:39 -0800
-Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pUYtO-0000Cr-2Q;
-	Tue, 21 Feb 2023 20:05:38 +0000
-Date: Wed, 22 Feb 2023 04:05:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: drivers/input/touchscreen/sun4i-ts.c:392:34: warning: unused
- variable 'sun4i_ts_of_match'
-Message-ID: <202302220342.AqAtycBB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D144A33C4
+	for <llvm@lists.linux.dev>; Tue, 21 Feb 2023 20:40:11 +0000 (UTC)
+Received: by mail-il1-f175.google.com with SMTP id e10so2343493ilu.4
+        for <llvm@lists.linux.dev>; Tue, 21 Feb 2023 12:40:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yhJ03HWaHgcQf5OOYhlL9i+S+dAZS2VRK1yIdsqmC7s=;
+        b=b6ktkeNj8WV1cTpi4ZZdby245M/K7jo3YcUSE0syTwjhuTI7mywNeTt//HMF69Mx9E
+         2YSGktOCxrRiJjbofyxPuH85woOah/dfpZTvUoTgEwvXC5MIwdUg/T/jocbAG9A5qUFa
+         JAgl32076dnrIx7tdF1gADyv3jbo6S9CvGd8YvsSPdem3Tt+ZZOWBq21rgNcSwdAMKnE
+         sSIyFrMeg1KHXavwRjQbFSRGt/Od4D0VkMU8kcknlTUkoP36pboBg6I1KAGAyCXI8yLm
+         yKmwsgyIyS3rvJCBYJ24/a7OC8H+SWakfZRON6Kkliz5dTEE0tGTSjctsLRBCFmhqIY1
+         akQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yhJ03HWaHgcQf5OOYhlL9i+S+dAZS2VRK1yIdsqmC7s=;
+        b=Q/B9jTV0RXjX4T3ARZLycDGrDxqIjyKvpjGx//3oUqk9ScMB1LJWVdW8uRymcyTskR
+         vkwAVR4r0BxdSjGz3ubFAJJHDScbZwB6gSi3hCw+AGXzplLkrH0E5yIYWGIT7wGO+EkW
+         BOcG0Xa1n3z+1eTSTQDd3tqJZ9RstK8tM4V392qZNqOTWDBq1CAznSaAvwij6BoaOrbQ
+         n5+CrwSSIa0GRAwqR3bH2mpgTD9P58QBJYTgyVXK1eXQAt7cz/nUzLgCyn91qlkOLi7q
+         JrVJKOZ0/BOv8RFQHBC2XudeIz7iUuKDRmAVOis06P7+qCq/dOdz8XAEkcI83Nr5rl4y
+         1aaQ==
+X-Gm-Message-State: AO0yUKXD4aH6xFPPbd3PhZJgojNEWmA2aB/9QcfLkOAOr9DtTlOQIVBm
+	o3IqlEeml8swI5oTCJK34pPszA==
+X-Google-Smtp-Source: AK7set88KnKoKx+kHGOs5DNe/wu/M+9pYE9ROIHJ7WN0WfN4v9J5xt/zSSCAbRWyJVWCa46eLmwPng==
+X-Received: by 2002:a92:cd8e:0:b0:315:459a:8bd with SMTP id r14-20020a92cd8e000000b00315459a08bdmr6555310ilb.25.1677012010889;
+        Tue, 21 Feb 2023 12:40:10 -0800 (PST)
+Received: from [172.16.32.78] ([198.232.126.202])
+        by smtp.gmail.com with ESMTPSA id r2-20020a922a02000000b00313ca4be5e1sm756486ile.12.2023.02.21.12.40.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Feb 2023 12:40:10 -0800 (PST)
+Message-ID: <b455394f-9faa-1f1a-f171-0b9d5e9ada35@landley.net>
+Date: Tue, 21 Feb 2023 14:53:30 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Content-Language: en-US
+To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc: Alexey Dobriyan <adobriyan@gmail.com>,
+ Andrew Halaney <ahalaney@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Dominik Brodowski <linux@dominikbrodowski.net>,
+ "Eric W. Biederman" <ebiederm@xmission.com>, "H. Peter Anvin"
+ <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>, linux-kbuild@vger.kernel.org,
+ Li Zhe <lizhe.67@bytedance.com>, llvm@lists.linux.dev,
+ Mark-PK Tsai <mark-pk.tsai@mediatek.com>, Mark Rutland
+ <mark.rutland@arm.com>, Masahiro Yamada <masahiroy@kernel.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Nicolas Schier <nicolas@fjasle.eu>, Peter Zijlstra <peterz@infradead.org>
+From: Rob Landley <rob@landley.net>
+Subject: [PATCH 0/5] Patches used to build mkroot.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Paul,
+The ~300 line bash script in toybox that builds bootable Linux systems
+for a dozen-ish targets can use a vanilla kernel, but the binaries I
+ship are built from a kernel with these patches:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
+https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9e58df973d2272e6e558965e7cb32453a4b380ff
-commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
-date:   2 years, 5 months ago
-config: mips-randconfig-c004-20230217 (https://download.01.org/0day-ci/archive/20230222/202302220342.AqAtycBB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        # save the config file
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross  olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
+I've posted each patch to the list already, but here they are together
+and updated for 6.2:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302220342.AqAtycBB-lkp@intel.com/
+1) let LLVM build normally without telling Linux on the command line
+This way I can mix CROSS_COMPILE=$ARCH-unknown-linux-cross- without
+having to care that some are llvm and some are gcc.
 
-All warnings (new ones prefixed by >>):
+2) don't require an extra dependency to build x86-64 no other target needs.
 
->> drivers/input/touchscreen/sun4i-ts.c:392:34: warning: unused variable 'sun4i_ts_of_match' [-Wunused-const-variable]
-   static const struct of_device_id sun4i_ts_of_match[] = {
-                                    ^
-   1 warning generated.
+3) Make CONFIG_DEVTMPFS_MOUNT work in initramfs. That way having
+the kernel build archive up a directory into a cpio.gz as a normal
+user doesn't leave me without a /dev/console and thus init running
+with stdin/stderr/stdout closed.
 
+4) Replace the only user of bc with c. (Another package dependency
+with only one user.)
 
-vim +/sun4i_ts_of_match +392 drivers/input/touchscreen/sun4i-ts.c
-
-f09f98d3240b7e Hans de Goede 2014-05-14  391  
-6decea7c5438e2 Hans de Goede 2014-05-14 @392  static const struct of_device_id sun4i_ts_of_match[] = {
-6decea7c5438e2 Hans de Goede 2014-05-14  393  	{ .compatible = "allwinner,sun4i-a10-ts", },
-91c68a7c1d92b4 Hans de Goede 2015-03-08  394  	{ .compatible = "allwinner,sun5i-a13-ts", },
-43c0e2234021d7 Chen-Yu Tsai  2015-01-26  395  	{ .compatible = "allwinner,sun6i-a31-ts", },
-6decea7c5438e2 Hans de Goede 2014-05-14  396  	{ /* sentinel */ }
-6decea7c5438e2 Hans de Goede 2014-05-14  397  };
-6decea7c5438e2 Hans de Goede 2014-05-14  398  MODULE_DEVICE_TABLE(of, sun4i_ts_of_match);
-6decea7c5438e2 Hans de Goede 2014-05-14  399  
-
-:::::: The code at line 392 was first introduced by commit
-:::::: 6decea7c5438e2955f64e2513ec9a2fac7602a7d Input: add driver for Allwinner sunxi SoC's rtp controller
-
-:::::: TO: Hans de Goede <hdegoede@redhat.com>
-:::::: CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+5) Fix rootfstype=tmpfs in initramfs. (A thinko I made in 2013 which
+nobody else has bothered to fix for a decade now.)
