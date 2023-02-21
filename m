@@ -1,179 +1,216 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17972A937
-	for <llvm@lists.linux.dev>; Tue, 21 Feb 2023 23:30:26 +0000 (UTC)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LMi4GC003985;
-	Tue, 21 Feb 2023 23:30:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=JnP3E28kJ5v/dsJkxP4x2knQKJUsVjQidWRpZDsYEO0=;
- b=Fvn8uRFzs1AcsSE7QUy6swNazuPwRKZ4S9mRgkYiJGVhvvpbDhQSNqI/7mHFx2AjLfGi
- kvBOjmvLx9xAXAxqOer/N9mqlGpvCstTcJXPnKMWYjKtP3P0xUHGN9pRF00Yn0JYP6Qb
- nqUhdwSPNPGeDb7DhCGnhSxByFv2Xz3fKP5nBPJNo5/iYdmKB6teXwK3UB+yuDCorc08
- B+Qc/xdpkZ2Zki2AFJ2+gUWjGKRHKGAm4Clb/LFfrLkGGTd2lCw2Z2FLMjxb6aKs1rL2
- 7VFR/kgVG4IwfE//kDlo/SWdNslQyYxnS72uriJ/3OQw+cA25VjE9N+zs1jDLfHdLVgX qA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ntp9tpn26-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 21 Feb 2023 23:30:18 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31LNFIC2023474;
-	Tue, 21 Feb 2023 23:30:17 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ntn45vpv0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 21 Feb 2023 23:30:17 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TogIPrD+ehmJyIZ86P/8aErr6QGB5zS1E3jH0Zl88na7q218CWXqPJqmWYmfGLD6pxYQEDuMYn2oeKSGGt1a6jRRjmyqaFTs3ujOOG5BioEaC2Ppf3sPFjYKk+/Ca1Ndo02XuU7gzi3PsjsmyTYMfFwfQTJ3jRs/7Cwn5+TE0OgKSs6jbhDJUkzoP/bHNNXmP+Q2XlC3ZMocfrC1vg41PAjbti8VkHs6m0rWqFExMaPzfYLrLMeWfIISIrEQV9WcyrmGi2P4QErabDKQy3Yd8z0gM+tNemCzyoAuQEeTgIi3wub3g+M9xLWuV94ycmFjgT9xuByh03fonKc0KgAcTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JnP3E28kJ5v/dsJkxP4x2knQKJUsVjQidWRpZDsYEO0=;
- b=NwQs1ZAMSppxwiKXxDH0g0AZh2tp7WYkXiaZuuFrD0rQhFtKA85ni3L+NsRQdTDfr8fZXgRzzo/zNTUSAhJzOox+Si8ZW0pi3fsd/CB1+U7uQz2DnXu+RXdndtV8o8lNzE11WtrMUQDUwl4EFHxKFSLqYCCZG5OWNn2eR73YDJ3nN1Fqg9VFE7QpdkywFcaGMcuWHpleiPPjveTDD8Ck00PGWIadMxWOvmiR4PPV1WbaUWIiJEH+sbCAM/+vqTWhCkm9GKvcFO3iSMg4LgqUw83IE33qXHa1X7v4fnRPmzuE/1mN2Pu1BRqlUhx8sAUB826W7wt67o+yH3h/Ww0aeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JnP3E28kJ5v/dsJkxP4x2knQKJUsVjQidWRpZDsYEO0=;
- b=C5p4Er7D9v59klicrIFjOM5IyNR9pCIZ2areoVDUMf5fEnTPw8zuKAYqlAUrC/YywtUf4CWblIaqi8ZqMVSjM4YhhvkjYufzpPIVgtqAHwe0HKHLw28DOViTKU3pPF0+kBY7VNcqoGB8/ueCqUXRLYXXSQ7mz582GB8/0v35Lwg=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by DM6PR10MB4236.namprd10.prod.outlook.com (2603:10b6:5:212::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.16; Tue, 21 Feb
- 2023 23:30:15 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::8ef9:5939:13aa:d6a2]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::8ef9:5939:13aa:d6a2%8]) with mapi id 15.20.6134.017; Tue, 21 Feb 2023
- 23:30:15 +0000
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Brian King <brking@us.ibm.com>,
-        "James E.J. Bottomley"
- <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers
- <ndesaulniers@google.com>,
-        James Bottomley
- <James.Bottomley@SteelEye.com>,
-        Damien Le Moal
- <damien.lemoal@opensource.wdc.com>,
-        Arnd Bergmann <arnd@arndb.de>, Kees
- Cook <keescook@chromium.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        John Garry <john.g.garry@oracle.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [v2] scsi: ipr: work around fortify-string warning
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1h6ver404.fsf@ca-mkp.ca.oracle.com>
-References: <20230214132831.2118392-1-arnd@kernel.org>
-Date: Tue, 21 Feb 2023 18:30:12 -0500
-In-Reply-To: <20230214132831.2118392-1-arnd@kernel.org> (Arnd Bergmann's
-	message of "Tue, 14 Feb 2023 14:28:08 +0100")
-Content-Type: text/plain
-X-ClientProxiedBy: DM6PR12CA0022.namprd12.prod.outlook.com
- (2603:10b6:5:1c0::35) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC1EA937;
+	Tue, 21 Feb 2023 23:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677023588; x=1708559588;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nQzPeA+j+XXlxZikjWKMvN3in0q6qkc4LZeAQ6b6oKk=;
+  b=OemwUF1QcF3mXEG9EJurMK933bQSL2vzZUoMHJ4qvRcrwlVUhQaXESQH
+   U4aqXPRNvC7SifFN6zr/8GSTYGIG93nNLDy0CJzBVsVo+SGco6FIvF05A
+   1sS/xozzvqTKIHWsrBJFQeOMyX3Q1GmB/Dv2EMeZvOTKD2GmAT2Efoofp
+   7GkntF6RjkUQE8PErHN+b2vm2A5mU/A6efTtl4jP7+E+r2SQqtlw1S1vN
+   QfFV/qTzi+gWgPx18AFWBVlbBjuevJ041lAHJFDtPbuUdJhJH1EF5J0LD
+   cX+N9GS0jqx4D4a+gL7RYnIvV2bHJdJxFYpNMCQOim8SsOe/+IOi9za8P
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="360265459"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="360265459"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 15:52:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="1000788659"
+X-IronPort-AV: E=Sophos;i="5.97,317,1669104000"; 
+   d="scan'208";a="1000788659"
+Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Feb 2023 15:52:49 -0800
+Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pUcRE-0000MT-2G;
+	Tue, 21 Feb 2023 23:52:48 +0000
+Date: Wed, 22 Feb 2023 07:51:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Subject: [jpoimboe:objtool-noreturn 9/29] arch/mips/include/asm/smp.h:28:40:
+ error: too many arguments provided to function-like macro invocation
+Message-ID: <202302220755.HM8J8GOR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DM6PR10MB4236:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06b39756-f7bc-4402-90ce-08db146395ba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	fzIR4X0E0ifWaqS/YbRuHU25LXQsrZD4noen/xkuwTYyjHlay49C0K8j8T271CVuSrfUrdKbh0Te55XoyAudjJHWDwkmr3BnfJkX7E7qmPh6pIkFd5gfOIxDMZqrVb4yShoihKwEUaCVx/u/2FYrj7s4UyZX195TQwf/+4liyzTrOthxc7B2Xhh704gpu9yAJTISnN4/26GfOMyF+yd2+jgXQMyUc6lW8gcr4p2ufvomfaUula59P4EgRvMYnX5Ri6mR+G8ikTOv2qca4xc0Ez/UWs3NQCzUSEKebM1DcgXt/LUEpm2k48ahq/bm6GM5+4v1QD9AavbuhJUxGksF0dAXhIxRRiQnQ2ctzBoQ5WD1i8xkwWcxJnMU0PV1BMoz6OXhIsNSqGGDqWNHUmGvFZiaOxCPl04QVoGjyPTF+/s+DSTlghAUYpZnHl/ZFUCdsW+9h1qaKhaxHKdF70uaOXt/pC6BKNYMYRBYELrQGh3rKfOL0ZWVN99uJz6jiljwl2iQ2PQp4czOEqIjKNiU5lb6QYfEFf3ph4NVH/hJRrzv+g1w8gKAaV1lSaUzmOMzVN5UrZXyJe3hImJ44HdOdR4y2sPoxR2SceCRgmT54f3gRI/fnWZWarqNzETmPg0uNJwxPoge/4hXBj8QtM1qMA==
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(136003)(346002)(366004)(376002)(451199018)(66946007)(66476007)(66556008)(6916009)(54906003)(8676002)(4326008)(38100700002)(316002)(83380400001)(86362001)(2906002)(26005)(186003)(41300700001)(6666004)(6506007)(5660300002)(7416002)(8936002)(478600001)(36916002)(6486002)(6512007)(558084003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?QLT+idgy5piXabXly2uSqp6uNY3fUyEkp/A0wnaf0SFCTPDwnlLCbpHc9Awc?=
- =?us-ascii?Q?psL1X4FKxPbNPdkJY1f8p0bqVr6oJdnX8JEYKlp4liVIKY/O1Ct5LpXWZla3?=
- =?us-ascii?Q?3+xI8nmdFuRym66lxwBCFlrDhIh4VsT1P5b/Lnhou2VM1N0d0TLW5W4vgKwF?=
- =?us-ascii?Q?Anc7OliIKJ+5jxaN65c7XOC0h/tmqj3AElquxxQv+hfyY/cKqcJlBmGrRC/z?=
- =?us-ascii?Q?lS77vdKSLW2aPYHIW37AlROGYPp7EJx+yE7OOXik7FWgjKJn5Qnx2gpAtBSQ?=
- =?us-ascii?Q?I7taJdKtJUn+KBujbhY8VEvY1JLImAgHcb4HC47lnXj80HAdsw8hGQk+SY5h?=
- =?us-ascii?Q?HFDZVmn/FFzA5WyRcJRjuFqAKZ4BBg4uNmpP+2AgVJkWv1IdBN9+DgFshPz8?=
- =?us-ascii?Q?D4OijHHdjXVuP66qJDe55GVvfrXcaIYlzlUVIYHIppMJ5lVBVUbzuvO7pCVx?=
- =?us-ascii?Q?gwe3WD6beJtQ/SZ+ONwGGtjix9qbtqDAewqw5EErD8J4hqHmyTkiu+swi3uB?=
- =?us-ascii?Q?sacvFBunyFEg6xjWmiuHGvx4Rt0BN8sGb8q+hkfFdctVdCP8cZc8esGU6VeA?=
- =?us-ascii?Q?J9ZEihh3HPj5Qo5cr++iWu+WG9C6GPI/Q8klGqTGe4lqT0vMns0Z7YHsskZp?=
- =?us-ascii?Q?a60jFcetaUEvnFAjxmAxSxHaXAo8B+TI8uV2dVE3agZo5uj6QTdjHdVV5tzZ?=
- =?us-ascii?Q?87h950AenKSmdk6QAoMF92zxuWlmIN4Hy7ULkLWVksQinUSIhWv9swMKB56A?=
- =?us-ascii?Q?rbp4rAH6A365czioy00JRrVz/MhYKibAH/2KrGzHNlM1Bst8AQ0fs6DB4NU4?=
- =?us-ascii?Q?6HTwliQfx5YIf2YYE+2Gc1jran/XgV0kEumwIm2KYbiaTH+DlEkdYwTXNZux?=
- =?us-ascii?Q?gMkOmHcd9m99GIw6PUisgFCUeYmARC4gS7fGb5XgdUZEiC2PLeEqU5nrvj+Q?=
- =?us-ascii?Q?b3mC29JdQ97U7ijGJmfv8wdrPOaa/l3ZEoDATVTWkgxGoLrszwiwHGH4dfWH?=
- =?us-ascii?Q?NyWyMqWSXd+/cD/Wa31i69uc8skX1NK+ok21hVYHI5YoJ9V1BBU9CgJBkeoA?=
- =?us-ascii?Q?x81xjVH9Un8f0UTbrsiqlQttuMrXPdbmtNqST/tr4gpWACYqr6zrZ3jHFRfT?=
- =?us-ascii?Q?sigycb+0zKf1fNr3bOwj+jIfw+5rgQav1O91kCBKD3AVFYNBwmL6X+MprPCa?=
- =?us-ascii?Q?LNcOMur4hN+EALK+rpX3KA7Keuq/H0ejjn1Q/TuGjxVYr1qC+qunTPvCJmei?=
- =?us-ascii?Q?ZFVgqgIefAXIqait/Zk1/xesN4jieyQBVxxYnqdEbxny6CxkYtrP78inZZb5?=
- =?us-ascii?Q?+3NqE+pGtRDnMiCdYb6sxf4omw0IY7g87N6iiJumdKQgg/ltXAv3Tk+U/y4Q?=
- =?us-ascii?Q?bvEDUx8lfx3WqqN8amw5bdmCTb5HtJKSbsi1rImrQ4YxRM7QrP9dYaKLwrFK?=
- =?us-ascii?Q?A6fBofb5iPcTKLJbTnL2wZ7IyPBghPCDOTyUb8JkIzU+wuNbgQyQw2n5jhhK?=
- =?us-ascii?Q?tOskcok5wm1hsCOqzo8QAy1uab0H7du22bUqAKNqCiAV7OUvIudj5FG4c/kA?=
- =?us-ascii?Q?CWIjQOJPPh9IP7AXIMB7FxMn/FiJsQsJdiheJfrOheVWs7Xo7mGvfw4NGvvL?=
- =?us-ascii?Q?Rw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	=?us-ascii?Q?8w04XA/s1tor8x049dX79O+j8e8OZFJ8wQ6+Q+6I+Qc2xX3we1mpRPdNxtoG?=
- =?us-ascii?Q?ndaZTESbIzsZNznupsxe+sCQbff+mx1ZljdNHRYcwFALIhn9r2jgaXp2TirN?=
- =?us-ascii?Q?Y1fEx/aEGCPuujnKyNth6+E+6/ky04zLLdtO59CA++/0LNKpvEYCUSMG7DNv?=
- =?us-ascii?Q?XCvK6ONx5s0AYI+V4GlPP+rq3yVatVo8eSpHaCcx2+5s2Y6jDEQ3xFcfSf3v?=
- =?us-ascii?Q?cG4aQ2ckKVOBdsF08q9GyHnhjHxBsyTODTHpiiYDWQ42JKDcSPk1RwW4U5o9?=
- =?us-ascii?Q?3XXq3RQEiTwgis6qLeeR4e2x3Zm0kx98vv0wG1ZM6+cpuTV3VnFsKo7dXxWP?=
- =?us-ascii?Q?9u7NDhA3wCX6kDon4kqFVC20rsBNxyUcjE10lc1Y5R4Mvzwd2wTBwoAC/PLt?=
- =?us-ascii?Q?qkqeRtYxRh5ZbOI9z4zr6A+LNDcRuIo/J/KFl7wxbto7yAvA0cUXz2lyaQ+i?=
- =?us-ascii?Q?cjoBPcavwyuJ1dSdCmDE0jWv8sjyR7zoVzSbRKO2JctVtB1stquca2JjDvGQ?=
- =?us-ascii?Q?OzSF+459EOBfG/v0HCJ1iAM2XUf6YeD+7vzqcrDvxHyeZJnurZ3i0P/MCGpH?=
- =?us-ascii?Q?ik1dNm747N6BK/oZa6UaIkg2WvSzDUfehADpTO3nWX/nnFYx1gQmFKhxpAwI?=
- =?us-ascii?Q?7V+rZuwdnuiVZl266QcMMyPCPRtwXSbqzqqxe2rkx0ruF7vSv/2C6uL6xhDw?=
- =?us-ascii?Q?Vm8AQfVcizCIJiC9W9dhhqfPr+KcpFk9tUuTSFOXGOSHT+HeLSja+OIrU1Vh?=
- =?us-ascii?Q?5Cpk8WednO4HdVHxarpyufR65ziFFR3RZYxQlQH1qyTVTz86p1p5eUsjXWYE?=
- =?us-ascii?Q?efSgYr7SZtHjK3pP2bBqcEzkJ/trw7bZpZAW1xbe6kcIcjUthFsr35kjVgV9?=
- =?us-ascii?Q?Nugc+2GsWCNbgYwxuUrzURwlje3+d35f1AE17OirHZvIL6fJfzpjNu4Fq9Fx?=
- =?us-ascii?Q?DSYJTzUOMQJ888dqlwV15Hc6bh1jv+NXKFZ3AE/2S7mkMG+umkJouXSxY/WF?=
- =?us-ascii?Q?+MY464Qmv1z/7xebnGrG4OeiD0s7JfFwrLPeCNCXahWLJ+ufqVQiXEEGmTmc?=
- =?us-ascii?Q?xgrHF7QtUsFWk1eq1DCdvHPsSjwAtA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06b39756-f7bc-4402-90ce-08db146395ba
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 23:30:15.7726
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vrDlG1piMEQqnzkkVJBzSHhP0oSCJtHPEXy1NR8fsqywLr7b9KOjU+XCNSG7TyV8O+o521wh1K0UJPTc2rnCtZH0GStV9q1mfnxDnMy7YSs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4236
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-21_12,2023-02-20_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=973 phishscore=0
- malwarescore=0 mlxscore=0 spamscore=0 adultscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302210201
-X-Proofpoint-GUID: p8ovzeRCma8zmih1IYmxkzvtilbKzuTB
-X-Proofpoint-ORIG-GUID: p8ovzeRCma8zmih1IYmxkzvtilbKzuTB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-noreturn
+head:   12e73cfc57b438df95663a3664420e0e0564ad95
+commit: ba2b054a29581e0ec0f23826524aa2c97b5efc96 [9/29] mips/cpu: Expose play_dead()'s prototype definition
+config: mips-randconfig-r014-20230219 (https://download.01.org/0day-ci/archive/20230222/202302220755.HM8J8GOR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=ba2b054a29581e0ec0f23826524aa2c97b5efc96
+        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
+        git fetch --no-tags jpoimboe objtool-noreturn
+        git checkout ba2b054a29581e0ec0f23826524aa2c97b5efc96
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302220755.HM8J8GOR-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+>> arch/mips/include/asm/smp.h:28:40: error: too many arguments provided to function-like macro invocation
+   static inline int raw_smp_processor_id(void)
+                                          ^
+   include/linux/smp.h:191:9: note: macro 'raw_smp_processor_id' defined here
+   #define raw_smp_processor_id()                  0
+           ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+>> arch/mips/include/asm/smp.h:28:8: error: 'inline' can only appear on functions
+   static inline int raw_smp_processor_id(void)
+          ^
+   include/linux/compiler_types.h:162:16: note: expanded from macro 'inline'
+   #define inline inline __gnu_inline __inline_maybe_unused notrace
+                  ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+>> arch/mips/include/asm/smp.h:28:8: warning: '__gnu_inline__' attribute only applies to functions [-Wignored-attributes]
+   include/linux/compiler_types.h:162:23: note: expanded from macro 'inline'
+   #define inline inline __gnu_inline __inline_maybe_unused notrace
+                         ^
+   include/linux/compiler_attributes.h:174:56: note: expanded from macro '__gnu_inline'
+   #define __gnu_inline                    __attribute__((__gnu_inline__))
+                                                          ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+>> arch/mips/include/asm/smp.h:28:8: warning: '__no_instrument_function__' attribute only applies to functions and Objective-C methods [-Wignored-attributes]
+   include/linux/compiler_types.h:162:58: note: expanded from macro 'inline'
+   #define inline inline __gnu_inline __inline_maybe_unused notrace
+                                                            ^
+   include/linux/compiler_types.h:144:34: note: expanded from macro 'notrace'
+   #define notrace                 __attribute__((__no_instrument_function__))
+                                                  ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+>> arch/mips/include/asm/smp.h:28:39: error: expected ';' after top level declarator
+   static inline int raw_smp_processor_id(void)
+                                         ^
+                                         ;
+>> arch/mips/include/asm/smp.h:38:9: warning: 'raw_smp_processor_id' macro redefined [-Wmacro-redefined]
+   #define raw_smp_processor_id raw_smp_processor_id
+           ^
+   include/linux/smp.h:191:9: note: previous definition is here
+   #define raw_smp_processor_id()                  0
+           ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+>> arch/mips/include/asm/smp.h:69:20: error: redefinition of 'smp_send_reschedule'
+   static inline void smp_send_reschedule(int cpu)
+                      ^
+   include/linux/smp.h:198:20: note: previous definition is here
+   static inline void smp_send_reschedule(int cpu) { }
+                      ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+>> arch/mips/include/asm/smp.h:73:8: error: incomplete definition of type 'struct plat_smp_ops'
+           mp_ops->send_ipi_single(cpu, SMP_RESCHEDULE_YOURSELF);
+           ~~~~~~^
+   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
+   struct plat_smp_ops;
+          ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+   arch/mips/include/asm/smp.h:128:8: error: incomplete definition of type 'struct plat_smp_ops'
+           mp_ops->send_ipi_single(cpu, SMP_CALL_FUNCTION);
+           ~~~~~~^
+   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
+   struct plat_smp_ops;
+          ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+   arch/mips/include/asm/smp.h:135:8: error: incomplete definition of type 'struct plat_smp_ops'
+           mp_ops->send_ipi_mask(mask, SMP_CALL_FUNCTION);
+           ~~~~~~^
+   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
+   struct plat_smp_ops;
+          ^
+>> arch/mips/kernel/smp-bmips.c:491:6: error: called object type 'int' is not a function or function pointer
+           if (smp_processor_id() > 0) {
+               ^~~~~~~~~~~~~~~~~~
+   include/linux/smp.h:264:29: note: expanded from macro 'smp_processor_id'
+   # define smp_processor_id() __smp_processor_id()
+                               ^~~~~~~~~~~~~~~~~~~~
+   include/linux/smp.h:257:51: note: expanded from macro '__smp_processor_id'
+   #define __smp_processor_id(x) raw_smp_processor_id(x)
+                                 ~~~~~~~~~~~~~~~~~~~~^
+   3 warnings and 8 errors generated.
 
 
-Arnd,
+vim +28 arch/mips/include/asm/smp.h
 
-> The ipr_log_vpd_compact() function triggers a fortified memcpy()
-> warning about a potential string overflow with all versions of clang:
+0ab7aefc4d43a6d include/asm-mips/smp.h      Ralf Baechle      2007-03-02  27  
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12 @28  static inline int raw_smp_processor_id(void)
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  29  {
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  30  #if defined(__VDSO__)
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  31  	extern int vdso_smp_processor_id(void)
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  32  		__compiletime_error("VDSO should not call smp_processor_id()");
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  33  	return vdso_smp_processor_id();
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  34  #else
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  35  	return current_thread_info()->cpu;
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  36  #endif
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12  37  }
+351fdddd366245c arch/mips/include/asm/smp.h Paul Burton       2017-12-12 @38  #define raw_smp_processor_id raw_smp_processor_id
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  39  
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  40  /* Map from cpu id to sequential logical cpu number.  This will only
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  41     not be idempotent when cpus failed to come on-line.	*/
+7820b84be844d8d arch/mips/include/asm/smp.h David Daney       2017-09-28  42  extern int __cpu_number_map[CONFIG_MIPS_NR_CPU_NR_MAP];
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  43  #define cpu_number_map(cpu)  __cpu_number_map[cpu]
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  44  
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  45  /* The reverse map from sequential logical cpu number to cpu id.  */
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  46  extern int __cpu_logical_map[NR_CPUS];
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  47  #define cpu_logical_map(cpu)  __cpu_logical_map[cpu]
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  48  
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  49  #define NO_PROC_ID	(-1)
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  50  
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  51  #define SMP_RESCHEDULE_YOURSELF 0x1	/* XXX braindead */
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  52  #define SMP_CALL_FUNCTION	0x2
+ddcdb1b4a46915b arch/mips/include/asm/smp.h David Daney       2008-12-11  53  /* Octeon - Tell another core to flush its icache */
+ddcdb1b4a46915b arch/mips/include/asm/smp.h David Daney       2008-12-11  54  #define SMP_ICACHE_FLUSH	0x4
+c83c2eed67e5785 arch/mips/include/asm/smp.h Marcin Nowakowski 2016-12-02  55  #define SMP_ASK_C0COUNT		0x8
+ddcdb1b4a46915b arch/mips/include/asm/smp.h David Daney       2008-12-11  56  
+76306f4272e036e arch/mips/include/asm/smp.h Paul Burton       2014-02-14  57  /* Mask of CPUs which are currently definitely operating coherently */
+76306f4272e036e arch/mips/include/asm/smp.h Paul Burton       2014-02-14  58  extern cpumask_t cpu_coherent_mask;
+76306f4272e036e arch/mips/include/asm/smp.h Paul Burton       2014-02-14  59  
+b745fcb949f9076 arch/mips/include/asm/smp.h Joe Perches       2017-07-12  60  extern asmlinkage void smp_bootstrap(void);
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  61  
+826e99be6ab5189 arch/mips/include/asm/smp.h James Hogan       2016-07-13  62  extern void calculate_cpu_foreign_map(void);
+826e99be6ab5189 arch/mips/include/asm/smp.h James Hogan       2016-07-13  63  
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  64  /*
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  65   * this function sends a 'reschedule' IPI to another CPU.
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  66   * it goes straight through and wastes no time serializing
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  67   * anything. Worst case is that we lose a reschedule ...
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  68   */
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16 @69  static inline void smp_send_reschedule(int cpu)
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  70  {
+ff2c8252bfbf069 arch/mips/include/asm/smp.h Matt Redfearn     2017-07-19  71  	extern const struct plat_smp_ops *mp_ops;	/* private */
+87353d8ac39c527 include/asm-mips/smp.h      Ralf Baechle      2007-11-19  72  
+87353d8ac39c527 include/asm-mips/smp.h      Ralf Baechle      2007-11-19 @73  	mp_ops->send_ipi_single(cpu, SMP_RESCHEDULE_YOURSELF);
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  74  }
+^1da177e4c3f415 include/asm-mips/smp.h      Linus Torvalds    2005-04-16  75  
 
-Applied to 6.3/scsi-staging, thanks!
+:::::: The code at line 28 was first introduced by commit
+:::::: 351fdddd366245c0fb4636f32edfb4198c8d6b8c MIPS: VDSO: Prevent use of smp_processor_id()
+
+:::::: TO: Paul Burton <paul.burton@mips.com>
+:::::: CC: Paul Burton <paul.burton@mips.com>
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
