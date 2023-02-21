@@ -1,96 +1,161 @@
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC8C23C4;
-	Tue, 21 Feb 2023 11:55:56 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R341e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VcCOdes_1676980547;
-Received: from 30.221.149.204(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0VcCOdes_1676980547)
-          by smtp.aliyun-inc.com;
-          Tue, 21 Feb 2023 19:55:48 +0800
-Message-ID: <7ff5ad40-7280-2060-4402-d3bada4ce200@linux.alibaba.com>
-Date: Tue, 21 Feb 2023 19:55:46 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAFF2F31;
+	Tue, 21 Feb 2023 14:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676990177; x=1708526177;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kKuauHEwCn/evaSwaiQiEBC/jkT5pSUJ75GMLBWCODE=;
+  b=n1Hw8T4/GAkIcC/uiztKysbsLR7HJlZQoXvliviGpqXr1dhs7RPPJyHC
+   IGlwbIQ+EB9tEimKOcjLoAZpWYZQxE56ofi6V60GR2To/11wZWoulX06v
+   2dWy19mvAO7XCGS4jR8HptdUUpA5YItEgOcYbCVSA7jV5YuOdNP/XOEem
+   J3eLWSI4+QrWl9BN/t04p7cCxu+nUKPmDaP/j1piaKIJQVzNzbAqYomqY
+   GMNOt41th5WpbWM8xbkj0GD848DKHZOGxqsxYTkGbCMzYJVglXlHRqZAJ
+   QqyqErHshVpnduWCvvGb+6XGCY1CHE/9b4Cuof34P2l+hswDbxRj62ise
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="316366282"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="316366282"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 06:36:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="845696962"
+X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
+   d="scan'208";a="845696962"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 21 Feb 2023 06:36:14 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pUTkb-000Er6-35;
+	Tue, 21 Feb 2023 14:36:13 +0000
+Date: Tue, 21 Feb 2023 22:35:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hangyu Hua <hbh25y@gmail.com>, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, ian.mcdonald@jandi.co.nz
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dccp@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
+Subject: Re: [PATCH] net: dccp: delete redundant ackvec record in
+ dccp_insert_options()
+Message-ID: <202302212209.2xKQbnhl-lkp@intel.com>
+References: <20230221092206.39741-1-hbh25y@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH bpf-next 1/2] net/smc: Introduce BPF injection capability
- for SMC
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, kgraul@linux.ibm.com,
- wenjia@linux.ibm.com, jaka@linux.ibm.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kuba@kernel.org,
- davem@davemloft.net, netdev@vger.kernel.org, linux-s390@vger.kernel.org,
- linux-rdma@vger.kernel.org, bpf@vger.kernel.org
-References: <1676966191-47736-2-git-send-email-alibuda@linux.alibaba.com>
- <202302211908.BgagxpRo-lkp@intel.com>
-From: "D. Wythe" <alibuda@linux.alibaba.com>
-In-Reply-To: <202302211908.BgagxpRo-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230221092206.39741-1-hbh25y@gmail.com>
+
+Hi Hangyu,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on net-next/master]
+[also build test WARNING on net/master horms-ipvs/master linus/master v6.2 next-20230221]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hangyu-Hua/net-dccp-delete-redundant-ackvec-record-in-dccp_insert_options/20230221-172448
+patch link:    https://lore.kernel.org/r/20230221092206.39741-1-hbh25y%40gmail.com
+patch subject: [PATCH] net: dccp: delete redundant ackvec record in dccp_insert_options()
+config: i386-randconfig-a013-20230220 (https://download.01.org/0day-ci/archive/20230221/202302212209.2xKQbnhl-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ea44b55ba82bbe3f35b51212bf839f507a30b70b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hangyu-Hua/net-dccp-delete-redundant-ackvec-record-in-dccp_insert_options/20230221-172448
+        git checkout ea44b55ba82bbe3f35b51212bf839f507a30b70b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/dccp/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302212209.2xKQbnhl-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   net/dccp/options.c:594:8: error: implicit declaration of function 'dccp_ackvec_lookup' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
+                 ^
+>> net/dccp/options.c:594:6: warning: incompatible integer to pointer conversion assigning to 'struct dccp_ackvec_record *' from 'int' [-Wint-conversion]
+           avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/dccp/options.c:596:18: error: use of undeclared identifier 'dccp_ackvec_record_slab'; did you mean 'dccp_ackvec_clear_state'?
+           kmem_cache_free(dccp_ackvec_record_slab, avr);
+                           ^~~~~~~~~~~~~~~~~~~~~~~
+                           dccp_ackvec_clear_state
+   net/dccp/ackvec.h:110:6: note: 'dccp_ackvec_clear_state' declared here
+   void dccp_ackvec_clear_state(struct dccp_ackvec *av, const u64 ackno);
+        ^
+   1 warning and 2 errors generated.
 
 
-Thanks! I will repost a fixed patch.
+vim +594 net/dccp/options.c
 
+   548	
+   549	int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
+   550	{
+   551		struct dccp_sock *dp = dccp_sk(sk);
+   552		struct dccp_ackvec *av = dp->dccps_hc_rx_ackvec;
+   553		struct dccp_ackvec_record *avr;
+   554	
+   555		DCCP_SKB_CB(skb)->dccpd_opt_len = 0;
+   556	
+   557		if (dp->dccps_send_ndp_count && dccp_insert_option_ndp(sk, skb))
+   558			return -1;
+   559	
+   560		if (DCCP_SKB_CB(skb)->dccpd_type != DCCP_PKT_DATA) {
+   561	
+   562			/* Feature Negotiation */
+   563			if (dccp_feat_insert_opts(dp, NULL, skb))
+   564				return -1;
+   565	
+   566			if (DCCP_SKB_CB(skb)->dccpd_type == DCCP_PKT_REQUEST) {
+   567				/*
+   568				 * Obtain RTT sample from Request/Response exchange.
+   569				 * This is currently used for TFRC initialisation.
+   570				 */
+   571				if (dccp_insert_option_timestamp(skb))
+   572					return -1;
+   573	
+   574			} else if (dccp_ackvec_pending(sk) &&
+   575				   dccp_insert_option_ackvec(sk, skb)) {
+   576					return -1;
+   577			}
+   578		}
+   579	
+   580		if (dp->dccps_hc_rx_insert_options) {
+   581			if (ccid_hc_rx_insert_options(dp->dccps_hc_rx_ccid, sk, skb))
+   582				goto delete_ackvec;
+   583			dp->dccps_hc_rx_insert_options = 0;
+   584		}
+   585	
+   586		if (dp->dccps_timestamp_echo != 0 &&
+   587		    dccp_insert_option_timestamp_echo(dp, NULL, skb))
+   588			goto delete_ackvec;
+   589	
+   590		dccp_insert_option_padding(skb);
+   591		return 0;
+   592	
+   593	delete_ackvec:
+ > 594		avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
+   595		list_del(&avr->avr_node);
+   596		kmem_cache_free(dccp_ackvec_record_slab, avr);
+   597		return -1;
+   598	}
+   599	
 
-On 2/21/23 7:30 PM, kernel test robot wrote:
-> Hi Wythe,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on bpf-next/master]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/D-Wythe/net-smc-Introduce-BPF-injection-capability-for-SMC/20230221-155712
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/1676966191-47736-2-git-send-email-alibuda%40linux.alibaba.com
-> patch subject: [PATCH bpf-next 1/2] net/smc: Introduce BPF injection capability for SMC
-> config: i386-randconfig-a013-20230220 (https://download.01.org/0day-ci/archive/20230221/202302211908.BgagxpRo-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/e2b31aece49068d7a07ca4bbd5fbdbd92f45a25e
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review D-Wythe/net-smc-Introduce-BPF-injection-capability-for-SMC/20230221-155712
->          git checkout e2b31aece49068d7a07ca4bbd5fbdbd92f45a25e
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202302211908.BgagxpRo-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> net/smc/bpf_smc_struct_ops.c:61:33: error: use of undeclared identifier 'BTF_SMC_TYPE_MAX'; did you mean 'BTF_SMC_TYPE_SOCK'?
->     BTF_ID_LIST_GLOBAL(btf_smc_ids, BTF_SMC_TYPE_MAX)
->                                     ^~~~~~~~~~~~~~~~
->                                     BTF_SMC_TYPE_SOCK
->     include/linux/btf_ids.h:211:61: note: expanded from macro 'BTF_ID_LIST_GLOBAL'
->     #define BTF_ID_LIST_GLOBAL(name, n) u32 __maybe_unused name[n];
->                                                                 ^
->     include/linux/btf_ids.h:275:1: note: 'BTF_SMC_TYPE_SOCK' declared here
->     BTF_SMC_TYPE_xxx
->     ^
->     include/linux/btf_ids.h:269:15: note: expanded from macro 'BTF_SMC_TYPE_xxx'
->             BTF_SMC_TYPE(BTF_SMC_TYPE_SOCK, smc_sock)               \
->                          ^
->     1 error generated.
-> 
-> 
-> vim +61 net/smc/bpf_smc_struct_ops.c
-> 
->      59	
->      60	/* define global smc ID for smc_struct_ops */
->    > 61	BTF_ID_LIST_GLOBAL(btf_smc_ids, BTF_SMC_TYPE_MAX)
->      62	#define BTF_SMC_TYPE(name, type) BTF_ID(struct, type)
->      63	BTF_SMC_TYPE_xxx
->      64	#undef BTF_SMC_TYPE
->      65	
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
