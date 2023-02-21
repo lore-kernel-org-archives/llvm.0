@@ -1,47 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1518F6FC4;
-	Tue, 21 Feb 2023 17:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B42C6FC4;
+	Tue, 21 Feb 2023 17:52:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677000094; x=1708536094;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cTKYMdw4X1Kqcxxevc6EKHs2f4mp07bWEgQQBjJ26Kg=;
-  b=GFHcLSMA080I8SFAopoOMfS42QM7JR+Ph+u5Bokiol4KDMwdq97LGWFP
-   AP2HPfFyg7QOs24c6CNRTJcSsFxnhxb7kjHT20gdThvfP9E9ffZuoOoB1
-   q/IK2GsGWbbMAXui97Ll6Cr/4E0tGX8W91meW3JU2BvOJOao95ofG9oj5
-   z40cd5TIvo3T+Ck+8Go5iK53Rfi1d2cd6hEoQozRGZdsFBDQ6CI1I6AbW
-   ryhvo4ImOySy6Rh7NG43nXPGld/PyJQu8DgyaNSIEeXMJSlB+9JxXiZm4
-   v1zx5P9OCBgJA2MMW/OLlaFLjNHhuo9BtLq7T3MqbrtqSn0SK/jNZ/F+D
+  t=1677001954; x=1708537954;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J8xilWvaJmR1xiHa1vfR9jgPRt6kr5Zfp++G4sQ6VXI=;
+  b=WOyPpisg2ZxvYR0uH1DCfzz4E2Cl7CrzAsYLvebvfTjDgVVlH0s16Fl9
+   2zqkf0YXC7+uBmgjxNgFLo38IrgGoxk6aVZkcZvWmKnHJcj+Z3iSgGD0z
+   L33m1vjMslmClMOlBwhanzEX46h4FT4U4hLAMvW/JkEszt0SHil4PP0r5
+   1VpuZu1FnRAI0wbPTKWzfkYyJxwwfaYBP9FaCIGpT6ytaePhh2s+x1926
+   Q2j2ZbxBaLmsOs1GAYtwG05nZkwkTxR5yGm8au1KpzSulHqRKbeOlSVLc
+   KAQJqw+GQ/H/Iuo66JbVE3vq6INmSlCVRy2RcoVQuuOmhdWQCRRfRRByy
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="313067657"
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="397394157"
 X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="313067657"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 09:21:33 -0800
+   d="scan'208";a="397394157"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 09:52:33 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="740475638"
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="917270931"
 X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="740475638"
+   d="scan'208";a="917270931"
 Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Feb 2023 09:21:30 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2023 09:52:32 -0800
 Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pUWKX-00004X-29;
-	Tue, 21 Feb 2023 17:21:29 +0000
-Date: Wed, 22 Feb 2023 01:20:44 +0800
+	id 1pUWoZ-00006L-16;
+	Tue, 21 Feb 2023 17:52:31 +0000
+Date: Wed, 22 Feb 2023 01:52:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hangyu Hua <hbh25y@gmail.com>, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, ian.mcdonald@jandi.co.nz
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dccp@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: Re: [PATCH] net: dccp: delete redundant ackvec record in
- dccp_insert_options()
-Message-ID: <202302220153.QeW2n6o4-lkp@intel.com>
-References: <20230221092206.39741-1-hbh25y@gmail.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+ 344/620] drivers/clk/qcom/clk-cbf-8996.c:403:45: error: too many arguments
+ to function call, expected single argument 'pdev', have 2 arguments
+Message-ID: <202302220137.V9Hhcxpy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,191 +46,149 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230221092206.39741-1-hbh25y@gmail.com>
 
-Hi Hangyu,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on net-next/master]
-[also build test ERROR on net/master horms-ipvs/master linus/master v6.2 next-20230221]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hangyu-Hua/net-dccp-delete-redundant-ackvec-record-in-dccp_insert_options/20230221-172448
-patch link:    https://lore.kernel.org/r/20230221092206.39741-1-hbh25y%40gmail.com
-patch subject: [PATCH] net: dccp: delete redundant ackvec record in dccp_insert_options()
-config: s390-randconfig-r011-20230220 (https://download.01.org/0day-ci/archive/20230222/202302220153.QeW2n6o4-lkp@intel.com/config)
+tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+head:   1f3ac4514a512e9f791badc3c6754a55a40a1492
+commit: e7fac1ad7827402e38be0fba7c195b93afa32f55 [344/620] clk: qcom: cbf-msm8996: scale CBF clock according to the CPUfreq
+config: arm64-randconfig-r011-20230220 (https://download.01.org/0day-ci/archive/20230222/202302220137.V9Hhcxpy-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ea44b55ba82bbe3f35b51212bf839f507a30b70b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hangyu-Hua/net-dccp-delete-redundant-ackvec-record-in-dccp_insert_options/20230221-172448
-        git checkout ea44b55ba82bbe3f35b51212bf839f507a30b70b
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/krzk/linux/commit/e7fac1ad7827402e38be0fba7c195b93afa32f55
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+        git checkout e7fac1ad7827402e38be0fba7c195b93afa32f55
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash net/dccp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/qcom/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302220153.QeW2n6o4-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302220137.V9Hhcxpy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from net/dccp/options.c:10:
-   In file included from include/linux/dccp.h:13:
-   In file included from include/net/inet_connection_sock.h:21:
-   In file included from include/net/inet_sock.h:19:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from net/dccp/options.c:10:
-   In file included from include/linux/dccp.h:13:
-   In file included from include/net/inet_connection_sock.h:21:
-   In file included from include/net/inet_sock.h:19:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from net/dccp/options.c:10:
-   In file included from include/linux/dccp.h:13:
-   In file included from include/net/inet_connection_sock.h:21:
-   In file included from include/net/inet_sock.h:19:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> net/dccp/options.c:594:8: error: call to undeclared function 'dccp_ackvec_lookup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
-                 ^
->> net/dccp/options.c:594:6: error: incompatible integer to pointer conversion assigning to 'struct dccp_ackvec_record *' from 'int' [-Wint-conversion]
-           avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
-               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/dccp/options.c:596:18: error: use of undeclared identifier 'dccp_ackvec_record_slab'; did you mean 'dccp_ackvec_clear_state'?
-           kmem_cache_free(dccp_ackvec_record_slab, avr);
-                           ^~~~~~~~~~~~~~~~~~~~~~~
-                           dccp_ackvec_clear_state
-   net/dccp/ackvec.h:110:6: note: 'dccp_ackvec_clear_state' declared here
-   void dccp_ackvec_clear_state(struct dccp_ackvec *av, const u64 ackno);
-        ^
-   12 warnings and 3 errors generated.
+   drivers/clk/qcom/clk-cbf-8996.c:194:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case ABORT_RATE_CHANGE:
+                ^~~~~~~~~~~~~~~~~
+   include/linux/clk.h:41:28: note: expanded from macro 'ABORT_RATE_CHANGE'
+   #define ABORT_RATE_CHANGE               BIT(2)
+                                           ^~~~~~
+   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
+   #define BIT(nr)                 (UL(1) << (nr))
+                                   ^~~~~~~~~~~~~~~
+   drivers/clk/qcom/clk-cbf-8996.c:205:29: note: uninitialized use occurs here
+           return notifier_from_errno(ret);
+                                      ^~~
+   drivers/clk/qcom/clk-cbf-8996.c:181:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case PRE_RATE_CHANGE:
+                ^~~~~~~~~~~~~~~
+   include/linux/clk.h:39:27: note: expanded from macro 'PRE_RATE_CHANGE'
+   #define PRE_RATE_CHANGE                 BIT(0)
+                                           ^~~~~~
+   include/vdso/bits.h:7:19: note: expanded from macro 'BIT'
+   #define BIT(nr)                 (UL(1) << (nr))
+                                   ^~~~~~~~~~~~~~~
+   drivers/clk/qcom/clk-cbf-8996.c:205:29: note: uninitialized use occurs here
+           return notifier_from_errno(ret);
+                                      ^~~
+   drivers/clk/qcom/clk-cbf-8996.c:178:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+>> drivers/clk/qcom/clk-cbf-8996.c:403:45: error: too many arguments to function call, expected single argument 'pdev', have 2 arguments
+           return qcom_msm8996_cbf_icc_register(pdev, &cbf_mux.clkr.hw);
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       ^~~~~~~~~~~~~~~~
+   drivers/clk/qcom/clk-cbf-8996.c:344:12: note: 'qcom_msm8996_cbf_icc_register' declared here
+   static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev)
+              ^
+>> drivers/clk/qcom/clk-cbf-8996.c:423:17: error: use of undeclared identifier 'icc_sync_state'
+                   .sync_state = icc_sync_state,
+                                 ^
+   2 warnings and 2 errors generated.
 
 
-vim +/dccp_ackvec_lookup +594 net/dccp/options.c
+vim +/pdev +403 drivers/clk/qcom/clk-cbf-8996.c
 
-   548	
-   549	int dccp_insert_options(struct sock *sk, struct sk_buff *skb)
-   550	{
-   551		struct dccp_sock *dp = dccp_sk(sk);
-   552		struct dccp_ackvec *av = dp->dccps_hc_rx_ackvec;
-   553		struct dccp_ackvec_record *avr;
-   554	
-   555		DCCP_SKB_CB(skb)->dccpd_opt_len = 0;
-   556	
-   557		if (dp->dccps_send_ndp_count && dccp_insert_option_ndp(sk, skb))
-   558			return -1;
-   559	
-   560		if (DCCP_SKB_CB(skb)->dccpd_type != DCCP_PKT_DATA) {
-   561	
-   562			/* Feature Negotiation */
-   563			if (dccp_feat_insert_opts(dp, NULL, skb))
-   564				return -1;
-   565	
-   566			if (DCCP_SKB_CB(skb)->dccpd_type == DCCP_PKT_REQUEST) {
-   567				/*
-   568				 * Obtain RTT sample from Request/Response exchange.
-   569				 * This is currently used for TFRC initialisation.
-   570				 */
-   571				if (dccp_insert_option_timestamp(skb))
-   572					return -1;
-   573	
-   574			} else if (dccp_ackvec_pending(sk) &&
-   575				   dccp_insert_option_ackvec(sk, skb)) {
-   576					return -1;
-   577			}
-   578		}
-   579	
-   580		if (dp->dccps_hc_rx_insert_options) {
-   581			if (ccid_hc_rx_insert_options(dp->dccps_hc_rx_ccid, sk, skb))
-   582				goto delete_ackvec;
-   583			dp->dccps_hc_rx_insert_options = 0;
-   584		}
-   585	
-   586		if (dp->dccps_timestamp_echo != 0 &&
-   587		    dccp_insert_option_timestamp_echo(dp, NULL, skb))
-   588			goto delete_ackvec;
-   589	
-   590		dccp_insert_option_padding(skb);
-   591		return 0;
-   592	
-   593	delete_ackvec:
- > 594		avr = dccp_ackvec_lookup(&av->av_records, DCCP_SKB_CB(skb)->dccpd_seq);
-   595		list_del(&avr->avr_node);
- > 596		kmem_cache_free(dccp_ackvec_record_slab, avr);
-   597		return -1;
-   598	}
-   599	
+   352	
+   353	static int qcom_msm8996_cbf_probe(struct platform_device *pdev)
+   354	{
+   355		void __iomem *base;
+   356		struct regmap *regmap;
+   357		struct device *dev = &pdev->dev;
+   358		int i, ret;
+   359	
+   360		base = devm_platform_ioremap_resource(pdev, 0);
+   361		if (IS_ERR(base))
+   362			return PTR_ERR(base);
+   363	
+   364		regmap = devm_regmap_init_mmio(dev, base, &cbf_msm8996_regmap_config);
+   365		if (IS_ERR(regmap))
+   366			return PTR_ERR(regmap);
+   367	
+   368		/* Select GPLL0 for 300MHz for the CBF clock */
+   369		regmap_write(regmap, CBF_MUX_OFFSET, 0x3);
+   370	
+   371		/* Ensure write goes through before PLLs are reconfigured */
+   372		udelay(5);
+   373	
+   374		clk_alpha_pll_configure(&cbf_pll, regmap, &cbfpll_config);
+   375	
+   376		/* Wait for PLL(s) to lock */
+   377	        udelay(50);
+   378	
+   379		/* Switch CBF to use the primary PLL */
+   380		regmap_update_bits(regmap, CBF_MUX_OFFSET,
+   381				   CBF_MUX_PARENT_MASK, 0x1);
+   382	
+   383		for (i = 0; i < ARRAY_SIZE(cbf_msm8996_hw_clks); i++) {
+   384			ret = devm_clk_hw_register(dev, cbf_msm8996_hw_clks[i]);
+   385			if (ret)
+   386				return ret;
+   387		}
+   388	
+   389		for (i = 0; i < ARRAY_SIZE(cbf_msm8996_clks); i++) {
+   390			ret = devm_clk_register_regmap(dev, cbf_msm8996_clks[i]);
+   391			if (ret)
+   392				return ret;
+   393		}
+   394	
+   395		ret = devm_clk_notifier_register(dev, cbf_mux.clkr.hw.clk, &cbf_mux.nb);
+   396		if (ret)
+   397			return ret;
+   398	
+   399		ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, &cbf_mux.clkr.hw);
+   400		if (ret)
+   401			return ret;
+   402	
+ > 403		return qcom_msm8996_cbf_icc_register(pdev, &cbf_mux.clkr.hw);
+   404	}
+   405	
+   406	static int qcom_msm8996_cbf_remove(struct platform_device *pdev)
+   407	{
+   408		return qcom_msm8996_cbf_icc_remove(pdev);
+   409	}
+   410	
+   411	static const struct of_device_id qcom_msm8996_cbf_match_table[] = {
+   412		{ .compatible = "qcom,msm8996-cbf" },
+   413		{ /* sentinel */ },
+   414	};
+   415	MODULE_DEVICE_TABLE(of, qcom_msm8996_cbf_match_table);
+   416	
+   417	static struct platform_driver qcom_msm8996_cbf_driver = {
+   418		.probe = qcom_msm8996_cbf_probe,
+   419		.remove = qcom_msm8996_cbf_remove,
+   420		.driver = {
+   421			.name = "qcom-msm8996-cbf",
+   422			.of_match_table = qcom_msm8996_cbf_match_table,
+ > 423			.sync_state = icc_sync_state,
+   424		},
+   425	};
+   426	
 
 -- 
 0-DAY CI Kernel Test Service
