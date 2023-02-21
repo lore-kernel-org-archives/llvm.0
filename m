@@ -1,167 +1,123 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC7A8C0B;
-	Tue, 21 Feb 2023 19:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677008142; x=1708544142;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QJn1rF4pWC5og0M6rh5cqZjcldr1ptYh0tAPQL4Zk14=;
-  b=FPLLA8O3XeRQyxRcjIDPy7S7+6DMhLzG07I5tyh6E2XzQYuEnKBbsQPh
-   TkPFpOoZ6Sec+3JI6O2BG6jQD7IDvUhq0Ye9EA/eTt+oV9+1jNUaN1ULS
-   xdiiEAbB9VDGoc6LI8PPgsik1kosHbAF4jqhM0Mpf4CXaBBkS9ltklm62
-   0N3w5DpFvUeCxKuoXsVQMeY4n3EkYF7oyyx5ZuRWKvOYxlq2IpsXLtsQP
-   MGG0OWmv7M4xdBvSXtvSCpoZ1z7P5RCElG9qfnt1IQWwn8bmjPAmul/dG
-   R27gDoGXiCw/nTbo7UJqeqtxEPNj+w6Dk5Ce2F6T9BBt66fswy346cBlN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="418956043"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="418956043"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 11:35:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="795633629"
-X-IronPort-AV: E=Sophos;i="5.97,315,1669104000"; 
-   d="scan'208";a="795633629"
-Received: from lkp-server01.sh.intel.com (HELO eac18b5d7d93) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2023 11:35:39 -0800
-Received: from kbuild by eac18b5d7d93 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pUYQM-0000C9-0V;
-	Tue, 21 Feb 2023 19:35:38 +0000
-Date: Wed, 22 Feb 2023 03:34:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steve French <stfrench@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	David Howells <dhowells@redhat.com>
-Subject: [ammarfaizi2-block:dhowells/linux-fs/iov-cifs-mm 1/2]
- fs/gfs2/log.c:143:41: error: incompatible function pointer types passing
- 'int (struct page *, struct writeback_control *, void *)' to parameter of
- type 'writepage_t' (aka 'int (*)(struct folio *, struct writeback_control *,
- void *)')
-Message-ID: <202302220331.y7RwxHvB-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EEDA8C0B
+	for <llvm@lists.linux.dev>; Tue, 21 Feb 2023 19:37:52 +0000 (UTC)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31LI2kmi017935;
+	Tue, 21 Feb 2023 19:37:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=XYU56Kw4GX6w5Ld+VM6f7XkbevWWfxD+rVrP4x9LPDg=;
+ b=RLqnMtJyBQEsV/kea30ZOZniMYmLvdfJv2E7y0d3GmelTG7U3Bii/Jd7WDylXRDG/GJJ
+ CxmxAZQd5xAtBlcnbXxNjmoxBhrJ3mEamTgW/UGXSvsuiSXBbWHqH2x5s2ChFjscGd/7
+ o17wKcjDg3OIJ58uBQdNnG1a0Mr08ZurgCR36PuDXq8jwfJvsjnx4lhvxcpSieCbUayQ
+ nhx10QbC9yWmB+QVYqX6u/jG8/IUMW2JGcNjfysnEbFbAxi+JmaG0phcUsNitIE99SbF
+ Mw7I5A4s2XBqysQcjpwqPGbdMUq6oSbYeZWkGS/wvvRdOLoCs4/hR1HUMUU0+VQ04UCt Jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nw2vxj1qj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Feb 2023 19:37:34 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31LJbXPk038202;
+	Tue, 21 Feb 2023 19:37:33 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nw2vxj1q3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Feb 2023 19:37:33 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+	by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31LIKxBB011404;
+	Tue, 21 Feb 2023 19:37:32 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+	by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ntpa7hehq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Feb 2023 19:37:32 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31LJbUIS52035934
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 21 Feb 2023 19:37:31 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A67F958057;
+	Tue, 21 Feb 2023 19:37:30 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B844758058;
+	Tue, 21 Feb 2023 19:37:29 +0000 (GMT)
+Received: from [9.163.50.38] (unknown [9.163.50.38])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 21 Feb 2023 19:37:29 +0000 (GMT)
+Message-ID: <2ee5da4d-7dc5-6624-6c87-133958df6478@linux.vnet.ibm.com>
+Date: Tue, 21 Feb 2023 13:37:29 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] [v2] scsi: ipr: work around fortify-string warning
+To: Arnd Bergmann <arnd@kernel.org>, Brian King <brking@us.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        James Bottomley <James.Bottomley@SteelEye.com>
+Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        John Garry <john.g.garry@oracle.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230214132831.2118392-1-arnd@kernel.org>
+Content-Language: en-US
+From: Brian King <brking@linux.vnet.ibm.com>
+In-Reply-To: <20230214132831.2118392-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vFbwMNoIzTZ_19hKyyCgSMTlGvGP4j3-
+X-Proofpoint-GUID: ttYwtpLHOxPqj7zQjo5bbBn2I-Ns0p-K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-21_12,2023-02-20_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=999 priorityscore=1501
+ impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302210168
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/iov-cifs-mm
-head:   71ad4f67439e60fe04bbf7aed8870e6f83a5d15e
-commit: dfb379388e7d018fea286956f77228902c36b7c2 [1/2] Merge remote-tracking branch 'cifs/for-next' into iov-cifs-mm
-config: x86_64-randconfig-r013-20230220 (https://download.01.org/0day-ci/archive/20230222/202302220331.y7RwxHvB-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/dfb379388e7d018fea286956f77228902c36b7c2
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/iov-cifs-mm
-        git checkout dfb379388e7d018fea286956f77228902c36b7c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/gfs2/
+On 2/14/23 7:28 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
+> about a potential string overflow with all versions of clang:
+> 
+> In file included from drivers/scsi/ipr.c:43:
+> In file included from include/linux/string.h:254:
+> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+>                         __write_overflow_field(p_size_field, size);
+>                         ^
+> include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+> 2 errors generated.
+> 
+> I don't see anything actually wrong with the function, but this is the
+> only instance I can reproduce of the fortification going wrong in the
+> kernel at the moment, so the easiest solution may be to rewrite the
+> function into something that does not trigger the warning.
+> 
+> Instead of having a combined buffer for vendor/device/serial strings,
+> use three separate local variables and just truncate the whitespace
+> individually.
+> 
+> Fixes: 8cf093e275d0 ("[SCSI] ipr: Improved dual adapter errors")
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302220331.y7RwxHvB-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/gfs2/log.c:143:41: error: incompatible function pointer types passing 'int (struct page *, struct writeback_control *, void *)' to parameter of type 'writepage_t' (aka 'int (*)(struct folio *, struct writeback_control *, void *)') [-Werror,-Wincompatible-function-pointer-types]
-                   ret = write_cache_pages(mapping, wbc, __gfs2_writepage, mapping);
-                                                         ^~~~~~~~~~~~~~~~
-   include/linux/writeback.h:375:52: note: passing argument to parameter 'writepage' here
-                         struct writeback_control *wbc, writepage_t writepage,
-                                                                    ^
-   1 error generated.
-
-
-vim +143 fs/gfs2/log.c
-
-95ecbd0f162fc0 Andreas Gruenbacher     2023-01-19   91  
-ddacfaf76dd620 Steven Whitehouse       2006-10-03   92  /**
-c551f66c5dfefd Lee Jones               2021-03-30   93   * gfs2_ail1_start_one - Start I/O on a transaction
-c551f66c5dfefd Lee Jones               2021-03-30   94   * @sdp: The superblock
-4667a0ec328678 Steven Whitehouse       2011-04-18   95   * @wbc: The writeback control structure
-c551f66c5dfefd Lee Jones               2021-03-30   96   * @tr: The transaction to start I/O on
-c551f66c5dfefd Lee Jones               2021-03-30   97   * @plug: The block plug currently active
-ddacfaf76dd620 Steven Whitehouse       2006-10-03   98   */
-ddacfaf76dd620 Steven Whitehouse       2006-10-03   99  
-4f1de018215fb5 Steven Whitehouse       2011-04-26  100  static int gfs2_ail1_start_one(struct gfs2_sbd *sdp,
-4667a0ec328678 Steven Whitehouse       2011-04-18  101  			       struct writeback_control *wbc,
-17d77684088510 Bob Peterson            2021-02-18  102  			       struct gfs2_trans *tr, struct blk_plug *plug)
-d6a079e82efd5f Dave Chinner            2011-03-11  103  __releases(&sdp->sd_ail_lock)
-d6a079e82efd5f Dave Chinner            2011-03-11  104  __acquires(&sdp->sd_ail_lock)
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  105  {
-5ac048bb7ea6e8 Steven Whitehouse       2011-03-30  106  	struct gfs2_glock *gl = NULL;
-4667a0ec328678 Steven Whitehouse       2011-04-18  107  	struct address_space *mapping;
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  108  	struct gfs2_bufdata *bd, *s;
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  109  	struct buffer_head *bh;
-b1676cbb11153b Bob Peterson            2019-11-13  110  	int ret = 0;
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  111  
-16ca9412d80181 Benjamin Marzinski      2013-04-05  112  	list_for_each_entry_safe_reverse(bd, s, &tr->tr_ail1_list, bd_ail_st_list) {
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  113  		bh = bd->bd_bh;
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  114  
-16ca9412d80181 Benjamin Marzinski      2013-04-05  115  		gfs2_assert(sdp, bd->bd_tr == tr);
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  116  
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  117  		if (!buffer_busy(bh)) {
-30fe70a85a909a Bob Peterson            2019-11-13  118  			if (buffer_uptodate(bh)) {
-30fe70a85a909a Bob Peterson            2019-11-13  119  				list_move(&bd->bd_ail_st_list,
-30fe70a85a909a Bob Peterson            2019-11-13  120  					  &tr->tr_ail2_list);
-30fe70a85a909a Bob Peterson            2019-11-13  121  				continue;
-30fe70a85a909a Bob Peterson            2019-11-13  122  			}
-036330c914365f Bob Peterson            2019-04-10  123  			if (!cmpxchg(&sdp->sd_log_error, 0, -EIO)) {
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  124  				gfs2_io_error_bh(sdp, bh);
-69511080bd6efd Bob Peterson            2019-02-12  125  				gfs2_withdraw_delayed(sdp);
-9e1a9ecd13b9bb Andreas Gruenbacher     2018-06-07  126  			}
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  127  		}
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  128  
-30fe70a85a909a Bob Peterson            2019-11-13  129  		if (gfs2_withdrawn(sdp)) {
-30fe70a85a909a Bob Peterson            2019-11-13  130  			gfs2_remove_from_ail(bd);
-30fe70a85a909a Bob Peterson            2019-11-13  131  			continue;
-30fe70a85a909a Bob Peterson            2019-11-13  132  		}
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  133  		if (!buffer_dirty(bh))
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  134  			continue;
-5ac048bb7ea6e8 Steven Whitehouse       2011-03-30  135  		if (gl == bd->bd_gl)
-5ac048bb7ea6e8 Steven Whitehouse       2011-03-30  136  			continue;
-5ac048bb7ea6e8 Steven Whitehouse       2011-03-30  137  		gl = bd->bd_gl;
-16ca9412d80181 Benjamin Marzinski      2013-04-05  138  		list_move(&bd->bd_ail_st_list, &tr->tr_ail1_list);
-11551cf15ecc17 Matthew Wilcox (Oracle  2022-12-15  139) 		mapping = bh->b_folio->mapping;
-4f1de018215fb5 Steven Whitehouse       2011-04-26  140  		if (!mapping)
-4f1de018215fb5 Steven Whitehouse       2011-04-26  141  			continue;
-d6a079e82efd5f Dave Chinner            2011-03-11  142  		spin_unlock(&sdp->sd_ail_lock);
-95ecbd0f162fc0 Andreas Gruenbacher     2023-01-19 @143  		ret = write_cache_pages(mapping, wbc, __gfs2_writepage, mapping);
-17d77684088510 Bob Peterson            2021-02-18  144  		if (need_resched()) {
-17d77684088510 Bob Peterson            2021-02-18  145  			blk_finish_plug(plug);
-17d77684088510 Bob Peterson            2021-02-18  146  			cond_resched();
-17d77684088510 Bob Peterson            2021-02-18  147  			blk_start_plug(plug);
-17d77684088510 Bob Peterson            2021-02-18  148  		}
-d6a079e82efd5f Dave Chinner            2011-03-11  149  		spin_lock(&sdp->sd_ail_lock);
-4e79e3f08e576a Bob Peterson            2020-11-12  150  		if (ret == -ENODATA) /* if a jdata write into a new hole */
-4e79e3f08e576a Bob Peterson            2020-11-12  151  			ret = 0; /* ignore it */
-b1676cbb11153b Bob Peterson            2019-11-13  152  		if (ret || wbc->nr_to_write <= 0)
-4667a0ec328678 Steven Whitehouse       2011-04-18  153  			break;
-b1676cbb11153b Bob Peterson            2019-11-13  154  		return -EBUSY;
-4667a0ec328678 Steven Whitehouse       2011-04-18  155  	}
-4f1de018215fb5 Steven Whitehouse       2011-04-26  156  
-b1676cbb11153b Bob Peterson            2019-11-13  157  	return ret;
-4667a0ec328678 Steven Whitehouse       2011-04-18  158  }
-ddacfaf76dd620 Steven Whitehouse       2006-10-03  159  
-
-:::::: The code at line 143 was first introduced by commit
-:::::: 95ecbd0f162fc06ef4c4045a66f653f47b62a2d3 Revert "gfs2: stop using generic_writepages in gfs2_ail1_start_one"
-
-:::::: TO: Andreas Gruenbacher <agruenba@redhat.com>
-:::::: CC: Andreas Gruenbacher <agruenba@redhat.com>
+Acked-by: Brian King <brking@linux.vnet.ibm.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Brian King
+Power Linux I/O
+IBM Linux Technology Center
+
+
