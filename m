@@ -1,156 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089BD10E7
-	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 17:41:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677087668;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5f3ldoxSCDjwSA5+4ELb6oeHbLurZrmVQRjSzmJ6OQU=;
-	b=Fwgh7EVP177PYiwhyD5tld1I0LJHwSgvqfgNJrXY5115FXv+UVHfFoxKMVAPB5ttF3YdR7
-	4Eszj75JP9aCGZPihzqFkzl1HNv/NMjKhD1nnsURc2KzdyhtTNmOTYmu3m+xGQdoELYOuC
-	7tJiN0RoL0kGT+yGD5luiGSGthbNqA4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-212-0NTWd5nIOnGt-q3qZRxneQ-1; Wed, 22 Feb 2023 12:41:07 -0500
-X-MC-Unique: 0NTWd5nIOnGt-q3qZRxneQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 315E085D183
-	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 17:41:07 +0000 (UTC)
-Received: from [172.64.9.48] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1942FC15BA0;
-	Wed, 22 Feb 2023 17:41:07 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (105/383 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, 1b72607d)
-Date: Wed, 22 Feb 2023 17:41:07 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12EAD8F59;
+	Wed, 22 Feb 2023 18:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677089444; x=1708625444;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nQOjVYMBsgFI9cFgbBVDrMGwomAo3wz3opH2REyUukQ=;
+  b=auu0y3pNV3kK/lMCqjvhTPVtPnJ3stXIXfnqGUvWnI8DZ0pQSRPBStN+
+   tem0b+6Up0Yp0fjkiJIiR7vwrSyHzjorYh27iQKKC7tBvZFdsPmmjVgdZ
+   FZgLf+SORh1Ma35voWIEjndslBIHAXUPWQS7+8HX9bvqNkERPv/An9EZG
+   o83EMW3JGxj7pLk3LFP3kSzL/XT8fVzG6lNaSTYZJ7IW4wj50UCWpl9r4
+   6VBQkoPkIdBunLt4mJRm/1noEIu6qxlDI16NCxqB+TOPLJzGgPAlfQUY9
+   m47XQWmb7KU2BR2LRapah7Qn1VtlNhYBMaq36e+X8hqlXr7gf8hej/ke8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="335199424"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="335199424"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 10:10:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="1001087703"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="1001087703"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Feb 2023 10:10:28 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pUtZT-0000dN-1Q;
+	Wed, 22 Feb 2023 18:10:27 +0000
+Date: Thu, 23 Feb 2023 02:10:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org
+Subject: [driver-core:class_cleanup 90/99] arch/mips/kernel/vpe-mt.c:320:3:
+ error: field designator 'owner' does not refer to any field in type 'struct
+ class'
+Message-ID: <202302230206.Ty3AABtm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <51911.123022212410700989@us-mta-212.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git class_cleanup
+head:   d695b889adbebf45a6187dccd33173dc9e58f356
+commit: dc9bedfbd8ab7885e0252663c6a1df8a2d8a1ea3 [90/99] driver core: class: remove struct module owner out of struct class
+config: mips-maltaaprp_defconfig (https://download.01.org/0day-ci/archive/20230223/202302230206.Ty3AABtm-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=dc9bedfbd8ab7885e0252663c6a1df8a2d8a1ea3
+        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+        git fetch --no-tags driver-core class_cleanup
+        git checkout dc9bedfbd8ab7885e0252663c6a1df8a2d8a1ea3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302230206.Ty3AABtm-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'thermal-6.3-rc1' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/rafael/linux-pm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/73192
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7207592
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7207700
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1584
-            Affected tests:
-                  x86_64 - Storage - block - storage fio numa
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+   arch/mips/kernel/vpe-mt.c:178:7: warning: no previous prototype for function 'vpe_alloc' [-Wmissing-prototypes]
+   void *vpe_alloc(void)
+         ^
+   arch/mips/kernel/vpe-mt.c:178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *vpe_alloc(void)
+   ^
+   static 
+   arch/mips/kernel/vpe-mt.c:196:5: warning: no previous prototype for function 'vpe_start' [-Wmissing-prototypes]
+   int vpe_start(void *vpe, unsigned long start)
+       ^
+   arch/mips/kernel/vpe-mt.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vpe_start(void *vpe, unsigned long start)
+   ^
+   static 
+   arch/mips/kernel/vpe-mt.c:206:5: warning: no previous prototype for function 'vpe_stop' [-Wmissing-prototypes]
+   int vpe_stop(void *vpe)
+       ^
+   arch/mips/kernel/vpe-mt.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vpe_stop(void *vpe)
+   ^
+   static 
+   arch/mips/kernel/vpe-mt.c:227:5: warning: no previous prototype for function 'vpe_free' [-Wmissing-prototypes]
+   int vpe_free(void *vpe)
+       ^
+   arch/mips/kernel/vpe-mt.c:227:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vpe_free(void *vpe)
+   ^
+   static 
+>> arch/mips/kernel/vpe-mt.c:320:3: error: field designator 'owner' does not refer to any field in type 'struct class'
+           .owner = THIS_MODULE,
+            ^
+   4 warnings and 1 error generated.
 
 
+vim +320 arch/mips/kernel/vpe-mt.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  317  
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  318  static struct class vpe_class = {
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  319  	.name = "vpe",
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30 @320  	.owner = THIS_MODULE,
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  321  	.dev_release = vpe_device_release,
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  322  	.dev_groups = vpe_groups,
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  323  };
+1a2a6d7e8816ed Dengcheng Zhu 2013-10-30  324  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 320 was first introduced by commit
+:::::: 1a2a6d7e8816ed2b2679a0c4f7ba4019cd31dd62 MIPS: APRP: Split VPE loader into separate files.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Deng-Cheng Zhu <dengcheng.zhu@imgtec.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
