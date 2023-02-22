@@ -1,113 +1,109 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610962F3F;
-	Wed, 22 Feb 2023 15:37:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677080276; x=1708616276;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lfkLtf5jtkBjJDFFtW5k1yPQC79CTUCrDVb1xySLDeQ=;
-  b=nr9TyN92ruCzw/sEQbk7ofqRI5AP3Ho6n/Y/npDIsI4PY881GaVzB6Kc
-   MD747zDqA5SFpOi9ZtdxoPrJr8jBZWll1/61yzTGuCndKvuujHWG4wo7Q
-   oAq70iubah7mKUAZLG9Ex8klmUpQKU8gM2nc6I7aDMRWioVYdBD+lpWIn
-   9UJslUEAbCRFQCl0rqLH2ok90vlmTtN5DY67iefvdCGTufEZeaxyaVgnF
-   ZRd3YvxB43ZG/TgaTAMsOPmgr8pR1zOfhywacRYqXBXKinWJW8/pD5Q8n
-   MD515u1/DdSrnUkT8tL2tz5PNUYyr2nI9gd2Z/84FedSB2w+28xPL7As4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="313328777"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="313328777"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 07:37:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="814976044"
-X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
-   d="scan'208";a="814976044"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Feb 2023 07:37:21 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pUrBI-0000VL-16;
-	Wed, 22 Feb 2023 15:37:20 +0000
-Date: Wed, 22 Feb 2023 23:37:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v5 1/1] riscv: Allow to downgrade paging mode from the
- command line
-Message-ID: <202302222359.LdNxjl1c-lkp@intel.com>
-References: <20230222104322.1197763-2-alexghiti@rivosinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9348D2F3F
+	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 15:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677081418;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GScpUkVmR1trk5NKo/KgCoCbwLxTQg040xij2n32R0k=;
+	b=TiweaSac5/24jQJUErKk+qsZBOndFFtL+AAKuFsc0FUP5WUdNFjo74BMmKEuIA1vBzow0H
+	4vlVChHd9e3UdBV/qM/VrY3WqQbgWx+G7W566qbknwSgfbtN6EdTbyveb44Lap/GRPVaDg
+	kt84dDglp5KGbMt/vNBXZMqWR+e6Vu8=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-65-PpKGANkyOFmMko8vYKzNWA-1; Wed, 22 Feb 2023 10:56:57 -0500
+X-MC-Unique: PpKGANkyOFmMko8vYKzNWA-1
+Received: by mail-qk1-f199.google.com with SMTP id bk15-20020a05620a1a0f00b00741d6880f38so3023215qkb.18
+        for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 07:56:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GScpUkVmR1trk5NKo/KgCoCbwLxTQg040xij2n32R0k=;
+        b=yLrnQjzsYCrk32NfSW/i9QfgaVHlgTL/b7nhtw6n7D6G97cD8NhNYjS9oeMMRlbKeO
+         vu4qRD4qso9ovm+fFcl1NPgGl4ai8+24gJBEgNMkjN+ItrWX6rhL/3AnhRQico/aKlKG
+         L1zbInr+B/jHihod8GMlz3aZdXothBLMysbEPUO6wVs5tUC57aZiKrwvVmRQXg2k9F7N
+         TmD+3TRtykk3702oUSOB+I1D9og5AAs4qHS1uUmF3nPa65+SzfkeCJFRloRXOaH4NvN4
+         +AetFRD6okgzdN0EtyhjwhV+ysgxEsx4CRaUOyqGug375jfcr7xmHcrWJXDw7aBuCYM3
+         iJFw==
+X-Gm-Message-State: AO0yUKVBQf7T4hjG4mJiJtBy3iAaVgK/OMzRy231OfpGCLi5Vh80p840
+	WZuznc85vg2Ad+quVeQAb3F91NcOgHZ0cFF1B0vHuCBnHtn/4R1/m/54dI0Q50t3sTWQig4gPko
+	X4t4dYwF02w3xYQ==
+X-Received: by 2002:ad4:5aa7:0:b0:53c:9354:9721 with SMTP id u7-20020ad45aa7000000b0053c93549721mr17269891qvg.21.1677081416442;
+        Wed, 22 Feb 2023 07:56:56 -0800 (PST)
+X-Google-Smtp-Source: AK7set+9amRNsc788f8Ah1EHOFjNZAoWEKdId2TpDxnPM1JRKz/kP2UH4h79UWQqmJg4CwTyIG4HZA==
+X-Received: by 2002:ad4:5aa7:0:b0:53c:9354:9721 with SMTP id u7-20020ad45aa7000000b0053c93549721mr17269856qvg.21.1677081416191;
+        Wed, 22 Feb 2023 07:56:56 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id t78-20020a37aa51000000b006f9f3c0c63csm589967qke.32.2023.02.22.07.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Feb 2023 07:56:55 -0800 (PST)
+From: Tom Rix <trix@redhat.com>
+To: robdclark@gmail.com,
+	quic_abhinavk@quicinc.com,
+	dmitry.baryshkov@linaro.org,
+	sean@poorly.run,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	tzimmermann@suse.de,
+	javierm@redhat.com
+Cc: linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/msm: return early when allocating fbdev fails
+Date: Wed, 22 Feb 2023 10:56:49 -0500
+Message-Id: <20230222155649.2001467-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230222104322.1197763-2-alexghiti@rivosinc.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Alexandre,
+building with clang and W=1 reports
+drivers/gpu/drm/msm/msm_fbdev.c:144:6: error: variable 'helper' is used
+  uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+  if (!fbdev)
+      ^~~~~~
 
-Thank you for the patch! Perhaps something to improve:
+helper is only initialized after fbdev succeeds, so is in a garbage state at
+the fail: label.  There is nothing to unwinded if fbdev alloaction fails,
+return NULL.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: 3fb1f62f80a1 ("drm/fb-helper: Remove drm_fb_helper_unprepare() from drm_fb_helper_fini()")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/msm/msm_fbdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Allow-to-downgrade-paging-mode-from-the-command-line/20230222-184549
-patch link:    https://lore.kernel.org/r/20230222104322.1197763-2-alexghiti%40rivosinc.com
-patch subject: [PATCH v5 1/1] riscv: Allow to downgrade paging mode from the command line
-config: riscv-randconfig-r042-20230222 (https://download.01.org/0day-ci/archive/20230222/202302222359.LdNxjl1c-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/f92dd2e351d9f51f678f2d7ac63cc3cf85effddd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Allow-to-downgrade-paging-mode-from-the-command-line/20230222-184549
-        git checkout f92dd2e351d9f51f678f2d7ac63cc3cf85effddd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/pi/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302222359.LdNxjl1c-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/riscv/kernel/pi/cmdline_early.c:50:12: warning: no previous prototype for function 'set_satp_mode_from_cmdline' [-Wmissing-prototypes]
-   u64 __init set_satp_mode_from_cmdline(uintptr_t dtb_pa)
-              ^
-   arch/riscv/kernel/pi/cmdline_early.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u64 __init set_satp_mode_from_cmdline(uintptr_t dtb_pa)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/set_satp_mode_from_cmdline +50 arch/riscv/kernel/pi/cmdline_early.c
-
-    49	
-  > 50	u64 __init set_satp_mode_from_cmdline(uintptr_t dtb_pa)
-
+diff --git a/drivers/gpu/drm/msm/msm_fbdev.c b/drivers/gpu/drm/msm/msm_fbdev.c
+index c804e5ba682a..c1356aff87da 100644
+--- a/drivers/gpu/drm/msm/msm_fbdev.c
++++ b/drivers/gpu/drm/msm/msm_fbdev.c
+@@ -142,7 +142,7 @@ struct drm_fb_helper *msm_fbdev_init(struct drm_device *dev)
+ 
+ 	fbdev = kzalloc(sizeof(*fbdev), GFP_KERNEL);
+ 	if (!fbdev)
+-		goto fail;
++		return NULL;
+ 
+ 	helper = &fbdev->base;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
