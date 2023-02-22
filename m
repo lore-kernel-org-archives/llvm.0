@@ -1,43 +1,43 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B6C2586
-	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 11:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5761346B3
+	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 12:11:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677064292;
+	s=mimecast20190719; t=1677067916;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=udfpf6homyrlvqE4ta5n7sUE+9JKxQHNaYGpfUXWD/Y=;
-	b=DOEgEUm+kjnhq+4C/ZwmEkYBe7aoT3LAaU3hULdVrCrFYuPK5ruZgVuIPrR6LWJ6GCvZoK
-	nJ0rFjdcqjvK1BO69iGqIFC7Q/1kHSf4sJHWmybbuYnRx2j0UFntaxl9rCoaqkdQJq5Cx2
-	bTI/uadpRH6GgofSQKkbW5TTVeGXjEQ=
+	bh=JtMow64uSKxdTq0fY1c0a8EBaicVK5wQjhWBbIpGCZw=;
+	b=B61ZgKUL0yughci1jmrvBK96BQVtajr/bgOTOZjtHoeit6Kv39tjEPkMtBmeIXuqT4dZtZ
+	F1Fu3LNFFsyC4kGcFBS49XviFmx4uINFKHn8LMcpNbmglbOYj53AtWEPuA7a54VMgpWVRc
+	MpjxdbQDTfHmMW+PxZ511KnjmX3tqxE=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-8gosGQFzPUGG3ZxSMDBlKQ-1; Wed, 22 Feb 2023 06:11:31 -0500
-X-MC-Unique: 8gosGQFzPUGG3ZxSMDBlKQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-675-2kLaSmVxM8WU_59q95QT8g-1; Wed, 22 Feb 2023 07:11:55 -0500
+X-MC-Unique: 2kLaSmVxM8WU_59q95QT8g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8C4B29ABA19
-	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 11:11:30 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B0DC229AB3FD
+	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 12:11:54 +0000 (UTC)
 Received: from [172.64.9.48] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D7857C15BA0;
-	Wed, 22 Feb 2023 11:11:30 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9B1ED492B00;
+	Wed, 22 Feb 2023 12:11:54 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (111/383 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, 3f0b0903)
-Date: Wed, 22 Feb 2023 11:11:30 -0000
-To: llvm@lists.linux.dev
+Subject: =?utf-8?b?4p2M?= FAIL (105/383 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, 9e58df97)
+Date: Wed, 22 Feb 2023 12:11:54 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <32988.123022206113100453@us-mta-587.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <86877.123022207115500186@us-mta-675.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,17 +52,20 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'x86_vdso_for_v6.3_rc1' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/tip/tip
+    Commit message: Merge tag 'irq-core-2023-02-20' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/tip/tip
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/73127
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73171
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 (debug) - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7202390
+7205814
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7206036
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -75,12 +78,6 @@ l-tests/-/issues/1525
                    s390x - CIFS Connectathon
                   x86_64 - CIFS Connectathon
                   x86_64 (debug) - CIFS Connectathon
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
         Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
 atus: 3
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -107,12 +104,13 @@ l-tests/-/issues/1418
             Affected tests:
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage block - storage fio numa: Performance comparison: mi=
-n:40535 * 1.15 < max:81259
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1584
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
-                  x86_64 - Storage - block - storage fio numa
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
             URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
             Affected tests:
