@@ -1,191 +1,146 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D8723DB;
-	Wed, 22 Feb 2023 10:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677061271; x=1708597271;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sEi1Fi/Tei/qpxQY5+15dlIa56v/nFH49uu7QNT+WT4=;
-  b=InzYdC7vGdTBlUv8BU+x75UUE8UI1aRaZzr/crDwgFpF8/EqUsct4vXT
-   3klU0bIz/kmCY8xHsAdcapoPMTALNEiwGatfIQVM/aXIxC9joeptocCvl
-   ZOOHzJAS4ejr84iQ5qu2pShD/AM475kvOavOefiuQSYNpHFy1Ph4Bu4b6
-   Ns1LsFrQRODXuVsDcf6SNfIAMA+ltsLMVYoVteCAuZ8yX49reYjHUPzCB
-   +ywDTuguWvPmq/NVXx4jZD8+XU+y0lwfM0qHoyrlHhaZ88byR7McYVTr8
-   avdneSpuLeOdSwwzOSrPBgT7E1xHPaDC7Rxd7jbii5bDON8Oxr1c5XLG4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="335085957"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="335085957"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 02:21:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="740755933"
-X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="740755933"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Feb 2023 02:21:08 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pUmFI-0000En-0c;
-	Wed, 22 Feb 2023 10:21:08 +0000
-Date: Wed, 22 Feb 2023 18:20:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qu Wenruo <wqu@suse.com>, linux-btrfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anand Jain <anand.jain@oracle.com>
-Subject: Re: [PATCH v4] btrfs: make dev-replace properly follow its read mode
-Message-ID: <202302221816.1fqvNytO-lkp@intel.com>
-References: <9abbfc83c08b2cea215f870f26c553b58fbabeab.1677048584.git.wqu@suse.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B6C2586
+	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 11:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677064292;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=udfpf6homyrlvqE4ta5n7sUE+9JKxQHNaYGpfUXWD/Y=;
+	b=DOEgEUm+kjnhq+4C/ZwmEkYBe7aoT3LAaU3hULdVrCrFYuPK5ruZgVuIPrR6LWJ6GCvZoK
+	nJ0rFjdcqjvK1BO69iGqIFC7Q/1kHSf4sJHWmybbuYnRx2j0UFntaxl9rCoaqkdQJq5Cx2
+	bTI/uadpRH6GgofSQKkbW5TTVeGXjEQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-8gosGQFzPUGG3ZxSMDBlKQ-1; Wed, 22 Feb 2023 06:11:31 -0500
+X-MC-Unique: 8gosGQFzPUGG3ZxSMDBlKQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8C4B29ABA19
+	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 11:11:30 +0000 (UTC)
+Received: from [172.64.9.48] (unknown [10.30.34.230])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D7857C15BA0;
+	Wed, 22 Feb 2023 11:11:30 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (111/383 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, 3f0b0903)
+Date: Wed, 22 Feb 2023 11:11:30 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9abbfc83c08b2cea215f870f26c553b58fbabeab.1677048584.git.wqu@suse.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <32988.123022206113100453@us-mta-587.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Qu,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on kdave/for-next]
-[also build test ERROR on linus/master v6.2 next-20230222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-make-dev-replace-properly-follow-its-read-mode/20230222-150629
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/9abbfc83c08b2cea215f870f26c553b58fbabeab.1677048584.git.wqu%40suse.com
-patch subject: [PATCH v4] btrfs: make dev-replace properly follow its read mode
-config: s390-randconfig-r013-20230222 (https://download.01.org/0day-ci/archive/20230222/202302221816.1fqvNytO-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/07c729ddc3a8f3074e5f61c4def8836bdfc37f73
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qu-Wenruo/btrfs-make-dev-replace-properly-follow-its-read-mode/20230222-150629
-        git checkout 07c729ddc3a8f3074e5f61c4def8836bdfc37f73
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302221816.1fqvNytO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/btrfs/scrub.c:2762:44: error: no member named 'replace_nr_stripes' in 'struct btrfs_io_context'
-           for (i = 0; i < bioc->num_stripes - bioc->replace_nr_stripes; i++) {
-                                               ~~~~  ^
-   fs/btrfs/scrub.c:2773:44: error: no member named 'replace_nr_stripes' in 'struct btrfs_io_context'
-           for (i = 0; i < bioc->num_stripes - bioc->replace_nr_stripes; i++) {
-                                               ~~~~  ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +2762 fs/btrfs/scrub.c
+Kernel information:
+    Commit message: Merge tag 'x86_vdso_for_v6.3_rc1' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
 
-  2704	
-  2705	static bool should_use_device(struct btrfs_fs_info *fs_info,
-  2706				      struct btrfs_device *dev,
-  2707				      bool follow_replace_read_mode)
-  2708	{
-  2709		struct btrfs_device *replace_srcdev = fs_info->dev_replace.srcdev;
-  2710		struct btrfs_device *replace_tgtdev = fs_info->dev_replace.tgtdev;
-  2711	
-  2712		if (!dev->bdev)
-  2713			return false;
-  2714	
-  2715		/*
-  2716		 * We're doing scrub/replace, if it's pure scrub, no tgtdev should be
-  2717		 * here.
-  2718		 * If it's replace, we're going to write data to tgtdev, thus the current
-  2719		 * data of the tgtdev is all garbage, thus we can not use it at all.
-  2720		 */
-  2721		if (dev == replace_tgtdev)
-  2722			return false;
-  2723	
-  2724		/* No need to follow replace read policy, any existing device is fine. */
-  2725		if (!follow_replace_read_mode)
-  2726			return true;
-  2727	
-  2728		/* Need to follow the policy. */
-  2729		if (fs_info->dev_replace.cont_reading_from_srcdev_mode ==
-  2730		    BTRFS_DEV_REPLACE_ITEM_CONT_READING_FROM_SRCDEV_MODE_AVOID)
-  2731			return dev != replace_srcdev;
-  2732		return true;
-  2733	}
-  2734	static int scrub_find_good_copy(struct btrfs_fs_info *fs_info,
-  2735					u64 extent_logical, u32 extent_len,
-  2736					u64 *extent_physical,
-  2737					struct btrfs_device **extent_dev,
-  2738					int *extent_mirror_num)
-  2739	{
-  2740		u64 mapped_length;
-  2741		struct btrfs_io_context *bioc = NULL;
-  2742		int ret;
-  2743		int i;
-  2744	
-  2745		mapped_length = extent_len;
-  2746		ret = btrfs_map_block(fs_info, BTRFS_MAP_GET_READ_MIRRORS,
-  2747				      extent_logical, &mapped_length, &bioc, 0);
-  2748		if (ret || !bioc || mapped_length < extent_len) {
-  2749			btrfs_put_bioc(bioc);
-  2750			btrfs_err_rl(fs_info, "btrfs_map_block() failed for logical %llu: %d",
-  2751					extent_logical, ret);
-  2752			return -EIO;
-  2753		}
-  2754	
-  2755		/*
-  2756		 * First loop to exclude all missing devices and the source
-  2757		 * device if needed.
-  2758		 * And we don't want to use target device as mirror either,
-  2759		 * as we're doing the replace, the target device range
-  2760		 * contains nothing.
-  2761		 */
-> 2762		for (i = 0; i < bioc->num_stripes - bioc->replace_nr_stripes; i++) {
-  2763			struct btrfs_io_stripe *stripe = &bioc->stripes[i];
-  2764	
-  2765			if (!should_use_device(fs_info, stripe->dev, true))
-  2766				continue;
-  2767			goto found;
-  2768		}
-  2769		/*
-  2770		 * We didn't find any alternative mirrors, we have to break our
-  2771		 * replace read mode, or we can not read at all.
-  2772		 */
-  2773		for (i = 0; i < bioc->num_stripes - bioc->replace_nr_stripes; i++) {
-  2774			struct btrfs_io_stripe *stripe = &bioc->stripes[i];
-  2775	
-  2776			if (!should_use_device(fs_info, stripe->dev, false))
-  2777				continue;
-  2778			goto found;
-  2779		}
-  2780	
-  2781		btrfs_err_rl(fs_info, "failed to find any live mirror for logical %llu",
-  2782				extent_logical);
-  2783		return -EIO;
-  2784	
-  2785	found:
-  2786		*extent_physical = bioc->stripes[i].physical;
-  2787		*extent_mirror_num = i + 1;
-  2788		*extent_dev = bioc->stripes[i].dev;
-  2789		btrfs_put_bioc(bioc);
-  2790		return 0;
-  2791	}
-  2792	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73127
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7202390
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
+machine
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1395
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
+.o: Permission denied
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1499
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1584
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
