@@ -1,43 +1,47 @@
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24ADD1FB5;
-	Wed, 22 Feb 2023 07:17:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58E51FB5;
+	Wed, 22 Feb 2023 08:09:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677050224; x=1708586224;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pVEp1PoQoB73sV3lchurCEEPk/szGoF5+p5XDHU7KYk=;
-  b=ib23W534g3sps6S6G5OAjuXv1oKAHruftLs/+9cZw1T+2Z1UJuAKoikP
-   1e8ZLEb4UmnRYieM2cGmBkfuhcVPIG/wiJe6GTJg3QMvaeTxG5pCXxPB8
-   3DTjFFIKaVWY2mh92+p1Lv9eJoxPQZOie65jH/Wpj6/1zxiHfRcp8znQT
-   vB5MinOKHmfgqFbTpm3VRq+glI5x1IFMNlaYhNLIlblFKoMg7r944aGag
-   pHCjqNXHs+uDulHYE/Zbc+vv3ySuVBzN+KtnGF//l2HHPYm7XYRfqESsJ
-   KGJFfIl7M26RxitlTFiloTBQ35JvmAzZ5hzGgV02doK4gWAqmIRuUJcLX
+  t=1677053387; x=1708589387;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gQfR21wEOq0Fuy+tIgU1Ij6yg4S+Gs30Ki52dG6cKsA=;
+  b=RscwV0CX9ty3f8mEKQU6SYiapiGn6NHmJswQuWUh874mfs2vTi+4cRIL
+   t74bU7rvyfQn67RdpaujUUTppA9vt0is10UjOqeb3ahuZ5sVXc0H9Ix1p
+   uNIc1x7j6M3t+ohlaGY4JiJdlZNYdxQCX/O18KJeEaXOsZNKf01YMjuMo
+   yYxKbYrX3XEoJx+1NG5lxRAShfcN0dGHNwF6TYKG/Ueatv2ROgr/9CmzZ
+   e4aewxCWli1J7WIfP7seLdI89Z45bopV3c7qt4kI1M65EiR2ZUK/KUfUV
+   DLtoERXPnAUdTwgTZWuoTbDut3YjfbsdqVPZ/jQXRZOf0hicPbkScf4bO
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="335051040"
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="335060528"
 X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="335051040"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2023 23:17:03 -0800
+   d="scan'208";a="335060528"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 00:08:06 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="665251890"
+X-IronPort-AV: E=McAfee;i="6500,9779,10628"; a="781338014"
 X-IronPort-AV: E=Sophos;i="5.97,318,1669104000"; 
-   d="scan'208";a="665251890"
+   d="scan'208";a="781338014"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2023 23:17:01 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 22 Feb 2023 00:08:03 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pUjN6-00006X-1u;
-	Wed, 22 Feb 2023 07:17:00 +0000
-Date: Wed, 22 Feb 2023 15:16:47 +0800
+	id 1pUkAU-00009H-2F;
+	Wed, 22 Feb 2023 08:08:02 +0000
+Date: Wed, 22 Feb 2023 16:07:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qu Wenruo <wqu@suse.com>, linux-btrfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] btrfs: scrub: fix an error in stripe offset calculation
-Message-ID: <202302221532.TzU0U9gm-lkp@intel.com>
-References: <c8f91363ab2e7ca24edbddf1feeca6c9fcf34f6e.1677033010.git.wqu@suse.com>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Steev Klimaszewski <steev@kali.org>,
+	Kuogee Hsieh <quic_khsieh@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [steev:lenovo-x13s-v6.2 9/188]
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1579:37: warning: unused
+ variable 'sc8280xp_regdma'
+Message-ID: <202302221531.xQ65NbuE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,82 +50,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c8f91363ab2e7ca24edbddf1feeca6c9fcf34f6e.1677033010.git.wqu@suse.com>
 
-Hi Qu,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on next-20230221]
-[cannot apply to kdave/for-next v6.2 v6.2-rc8 v6.2-rc7 linus/master v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qu-Wenruo/btrfs-scrub-fix-an-error-in-stripe-offset-calculation/20230222-103158
-patch link:    https://lore.kernel.org/r/c8f91363ab2e7ca24edbddf1feeca6c9fcf34f6e.1677033010.git.wqu%40suse.com
-patch subject: [PATCH] btrfs: scrub: fix an error in stripe offset calculation
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230222/202302221532.TzU0U9gm-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://github.com/steev/linux lenovo-x13s-v6.2
+head:   b9925baa3e5cf7919e9736257505a214b66dcdd2
+commit: 36c3ab5c7698d3e56ab26806a8512c3a8d22f1e1 [9/188] drm/msm/dpu: Introduce SC8280XP
+config: riscv-randconfig-r022-20230222 (https://download.01.org/0day-ci/archive/20230222/202302221531.xQ65NbuE-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ede724f4f7127f86931756949269770a7197339c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Qu-Wenruo/btrfs-scrub-fix-an-error-in-stripe-offset-calculation/20230222-103158
-        git checkout ede724f4f7127f86931756949269770a7197339c
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/steev/linux/commit/36c3ab5c7698d3e56ab26806a8512c3a8d22f1e1
+        git remote add steev https://github.com/steev/linux
+        git fetch --no-tags steev lenovo-x13s-v6.2
+        git checkout 36c3ab5c7698d3e56ab26806a8512c3a8d22f1e1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/msm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302221532.TzU0U9gm-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302221531.xQ65NbuE-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/btrfs/scrub.c:1456:6: error: use of undeclared identifier 'BTRFS_STRIPE_LEN_MASK'
-                                    BTRFS_STRIPE_LEN_MASK;
-                                    ^
-   1 error generated.
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1579:37: warning: unused variable 'sc8280xp_regdma' [-Wunused-const-variable]
+   static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
+                                       ^
+   1 warning generated.
 
 
-vim +/BTRFS_STRIPE_LEN_MASK +1456 fs/btrfs/scrub.c
+vim +/sc8280xp_regdma +1579 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
 
-  1431	
-  1432	static inline void scrub_stripe_index_and_offset(u64 logical, u64 map_type,
-  1433							 u64 full_stripe_logical,
-  1434							 int nstripes, int mirror,
-  1435							 int *stripe_index,
-  1436							 u64 *stripe_offset)
-  1437	{
-  1438		int i;
-  1439	
-  1440		if (map_type & BTRFS_BLOCK_GROUP_RAID56_MASK) {
-  1441			const int nr_data_stripes = (map_type & BTRFS_BLOCK_GROUP_RAID5) ?
-  1442						    nstripes - 1 : nstripes - 2;
-  1443	
-  1444			/* RAID5/6 */
-  1445			for (i = 0; i < nr_data_stripes; i++) {
-  1446				const u64 data_stripe_start = full_stripe_logical +
-  1447							(i * BTRFS_STRIPE_LEN);
-  1448	
-  1449				if (logical >= data_stripe_start &&
-  1450				    logical < data_stripe_start + BTRFS_STRIPE_LEN)
-  1451					break;
-  1452			}
-  1453	
-  1454			*stripe_index = i;
-  1455			*stripe_offset = (logical - full_stripe_logical) &
-> 1456					 BTRFS_STRIPE_LEN_MASK;
-  1457		} else {
-  1458			/* The other RAID type */
-  1459			*stripe_index = mirror;
-  1460			*stripe_offset = 0;
-  1461		}
-  1462	}
-  1463	
+  1578	
+> 1579	static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
+  1580		.base = 0x0,
+  1581		.version = 0x00020000,
+  1582		.trigger_sel_off = 0x119c,
+  1583		.xin_id = 7,
+  1584		.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
+  1585	};
+  1586	
 
 -- 
 0-DAY CI Kernel Test Service
