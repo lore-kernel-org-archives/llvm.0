@@ -1,43 +1,43 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57852F3F
-	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 16:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB6610E7
+	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 17:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677082292;
+	s=mimecast20190719; t=1677087636;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=tyXHpVjJEiCLsH27kPd4mFBfWHWDRteYP+AomcCe7Qs=;
-	b=E10OYGkSLYy+3xvJxf1OEi3WUvLLP7fMD4Rcml7oqa/AFiZlquhvac+a4Io2sg/szgGJ0u
-	1neM0XRP34syO7ttg8a7u+RaW7oeXZHt0Nk4iEjjh9IPcvDSGeCBQY4SU343Ref34TlGB3
-	XV2gkW67HfvuEG+IT97S9bGE103nLZw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=e3i6snJy06+WiRrAYos2oF+NRUc0Tdlavcwuat9ICFg=;
+	b=Elseb94QnUcpc9vryd0x/ydUreNeGpLgQY0uaHj307VPb6nvJqKeH1QUwE2MlyRzEEmLQR
+	e/KwXzn0Cd6ODWuzG2t5EyRYjd+bS8yXlKvWq828Sd3YERHIwJDBk3qPDV2lp3Mc7TOikx
+	lDxZePAOjOOTsc06OLbSfsjDqrKOPZ0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-50-wjxS28-yOGi1XO2dr5L6yg-1; Wed, 22 Feb 2023 11:11:31 -0500
-X-MC-Unique: wjxS28-yOGi1XO2dr5L6yg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-202-U0W48eB6OKyTEPr0BeK2yQ-1; Wed, 22 Feb 2023 12:40:35 -0500
+X-MC-Unique: U0W48eB6OKyTEPr0BeK2yQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 351B53C01DEE
-	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 16:11:31 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4867C811E6E
+	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 17:40:35 +0000 (UTC)
 Received: from [172.64.9.48] (unknown [10.30.34.230])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 21515C15BA0;
-	Wed, 22 Feb 2023 16:11:31 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 36E61140EBF6;
+	Wed, 22 Feb 2023 17:40:35 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL (105/383 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, 8bf1a529)
-Date: Wed, 22 Feb 2023 16:11:31 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+ (6.2.0, mainline.kernel.org-clang, 5b7c4cab)
+Date: Wed, 22 Feb 2023 17:40:35 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <57391.123022211113101747@us-mta-50.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <75673.123022212403501173@us-mta-202.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,23 +52,17 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'arm64-upstream' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/arm64/linux
+    Commit message: Merge tag 'net-next-6.3' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net-next
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/73205
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73253
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 (debug) - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7207975
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7208155
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7208163
+7210985
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -88,12 +82,6 @@ l-tests/-/issues/1543
             Affected tests:
                   x86_64 - Usex - version 1.9-29
                   x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: ./runtest.sh: line 182: ./nat6to4=
-.o: Permission denied
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1499
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
         Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
 oo big
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -114,6 +102,23 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage block - storage fio numa: Performance comparison: mi=
+n:40535 * 1.15 < max:81259
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1584
+            Affected tests:
+                  x86_64 - Storage - block - storage fio numa
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
         Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
             URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
             Affected tests:
