@@ -1,146 +1,78 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D039AD26
-	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 22:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677189748;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=9nyEn2NJYF4Q4f+k2ccX+deHZKFmCzQP0T2mQLI+MWU=;
-	b=BOZlLmYpxu/8yR29IS8B59XOf+bXMfCZozYVOz7H+Jy5DvKkxURSDECd/+FY8IqojCGG+G
-	JznAQ/DSge/CMQsPxNi3NT2iSgHyE2tjJkQ+JREj2Paj+gOCU+YNca/uIp3sa8X2ztmhR6
-	55gF9El1qAaUcy6zC2Be1mzqUDX/EvQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-84-bG6Uy3r7MXiHVtp-1Fzl1Q-1; Thu, 23 Feb 2023 17:02:23 -0500
-X-MC-Unique: bG6Uy3r7MXiHVtp-1Fzl1Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0268787A9F8
-	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 22:02:19 +0000 (UTC)
-Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 90C942166B29;
-	Thu, 23 Feb 2023 22:02:18 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (108/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, d8ca6dbb)
-Date: Thu, 23 Feb 2023 22:02:18 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D0EAD26
+	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 22:05:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5003C433EF;
+	Thu, 23 Feb 2023 22:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677189951;
+	bh=fYz5rIrd5JU5+RovoJams1gjh8QJtQxDO8e8HQED13k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OXLt9k56FMBL7+Tx8DTJWjJgrkrgqlfkF2NBR4wGb6BQwNS9Ou1n3faswnIWMwj9a
+	 DtdnqEUKUT//A3gIWah7Xyt8pGUgDCh97cZvPqcM+GLhOcpEV10AYvcS3KBN0XIUCi
+	 H3FztziA8S81HC3zpEyRcZZj1KOZyvmhSKV8uX2iDfCiYJ0uWM6D6kGrZhPQQ0F/i2
+	 Ah7oBhXHC6EIKAC6z2LQ6KTJFzBSUC9chnM0bXCyLVToSky9LpwQrJvTuMK7gt35FA
+	 N5+HjlQdL26X1PP9CFKLww8yewJm9uhlniN0YDepHYXlHQAp0ennwj9d26mCNvxQC1
+	 yZC+GnXYKAXhA==
+From: Conor Dooley <conor@kernel.org>
+To: palmer@dabbelt.com
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	nathan@kernel.org,
+	naresh.kamboju@linaro.org,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v1 0/2] RISC-V: avoid build issues for clang/llvm-17 with binutils 2.35
+Date: Thu, 23 Feb 2023 22:05:44 +0000
+Message-Id: <20230223220546.52879-1-conor@kernel.org>
+X-Mailer: git-send-email 2.39.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <10610.123022317022301309@us-mta-84.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1399; i=conor.dooley@microchip.com; h=from:subject; bh=Tu5ucbEE25sTwVSc9Il+0h6BckMJ3n6JBbt+V1iSKoQ=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMnfH5uyHbolse9Tyuu5B3+1f5mqnB8QHDF3zde0gPyule+1 OFMMOkpZGMQ4GGTFFFkSb/e1SK3/47LDuectzBxWJpAhDFycAjCRHdaMDJcCCkVYg+9ySHOLsMS9lX ngPIHl2cZTV6OCzl0/vCg9i4vhvy9j9JSLZzjO78+rkXTdsVePdW1tqv2R8uaWcjHxwxFvWAA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: Conor Dooley <conor.dooley@microchip.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Hey,
+Here's an attempted (interim?) fix for issues on v5.10 due to the
+presence of zifencei & zicsr in object files. I'm seeing another issue
+that only appears with ld from binutils-2.35 & not with ld from
+binutils-2.37 on riscv/for-next:
+/stuff/toolchains/binutils-2.35/bin/riscv64-linux-gnu-ld: .init.data has both ordered [`__patchable_function_entries' in init/main.o] and unordered [`.meminit.data' in mm/sparse.o] sections
+/stuff/toolchains/binutils-2.35/bin/riscv64-linux-gnu-ld: final link failed: bad value
+But that's far far further on in the build than we were getting before
+these patches.
 
+Even if we end up dealing with the emitted strings a different way [1],
+I think the first patch here has some value in moving the check to
+Kconfig so that it's far easier to tell if the toolchain does need/use
+these extensions from someone's build artifacts.
 
-Kernel information:
-    Commit message: Merge tag 'nfs-for-6.3-1' of git://git.linux-nfs.org/pr=
-ojects/anna/linux-nfs
+Cheers,
+Conor.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/73555
+1 - https://lore.kernel.org/linux-riscv/20230223195112.10489-1-palmer@rivosinc.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7227838
+cc: nathan@kernel.org
+cc: palmer@dabbelt.com
+cc: naresh.kamboju@linaro.org
+cc: linux-riscv@lists.infradead.org
+cc: llvm@lists.linux.dev
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
-            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
-PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+Conor Dooley (2):
+  RISC-V: move zicsr/zifencei spec version check to Kconfig
+  RISC-V: make TOOLCHAIN_NEEDS_SPEC_20191213 gas only
 
+ arch/riscv/Kconfig  | 9 +++++++++
+ arch/riscv/Makefile | 5 +----
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+-- 
+2.39.1
 
