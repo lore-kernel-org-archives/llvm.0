@@ -1,149 +1,160 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B941E2C9E
-	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 16:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677171136;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=e6n6eav5fH9kb0ipGLlj0dTrVxTm4id0yezpWI6wVq8=;
-	b=iFco/iz3riHHg6Fk/a6DGb8m3WXuGRXpPSE2OEjhpEo2Yg5/yswQJbvDBt10a/xArAyuty
-	E6pJi3u6JunWzAf0Vmbdig9gwBqIiCHSV/QEBipO9QnlN5MY46sN3giKA95LZoLaeHaLlL
-	QjWi8camTd4mByHjsKgcEfeXnX/h/+g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-IethWqLTPfq3dMX8qu3qvw-1; Thu, 23 Feb 2023 11:51:55 -0500
-X-MC-Unique: IethWqLTPfq3dMX8qu3qvw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E7BB3C1023B
-	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 16:51:44 +0000 (UTC)
-Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 368702166B29;
-	Thu, 23 Feb 2023 16:51:44 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (104/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, 307e14c0)
-Date: Thu, 23 Feb 2023 16:51:44 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A682F2A;
+	Thu, 23 Feb 2023 17:11:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677172307; x=1708708307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=g2+N/ijpF87DclH0xHXJiHc+8iwXjkiEjZT81BKl5PM=;
+  b=Wz9FEYpEfEBOG4ch+Ytd+jS1JWLn1hhFIMWbnMkaviWLlZ+DPgGfDIq7
+   IV4ogZFGBuyvRLFuTDsbDOdWLDHb+99d3voqy0W8No7HcxzxJrRydz0yR
+   LYURYIKAjaKmB606rHv/PnVuNeFDAItyccaYHanU6LbmjPCqAWu80njAD
+   5Oi9hNXsymOYHS/amu8NlL7mG+9IPXaTmYYS9gpXNNhnAFPetFwul36Q5
+   bU8Llhlh9MDlAcGGQnV27WKhw/ZtPiG9xUIV8UIu9I+BhuvzBq/JkMWXw
+   oATMgq1hCeoXy7zf8zbizn5UAYDqV2wQXcPzNtcdtxR9yR6cUH5Tv3Rms
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331943891"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="331943891"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 09:10:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="1001489033"
+X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
+   d="scan'208";a="1001489033"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2023 09:10:10 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pVF6g-0001XT-0I;
+	Thu, 23 Feb 2023 17:10:10 +0000
+Date: Fri, 24 Feb 2023 01:09:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:locking/core 5/6] kernel/locking/rwsem.c:1027:3:
+ error: call to undeclared function 'LOCKEVENT_waiter_type'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202302240131.eS42jjFi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <20847.123022311515502386@us-mta-645.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+head:   6c17797b554c635c394d7de0ceb49b705d182340
+commit: 425d19e8c6d9ec3d3f55b7497526947235cc8d77 [5/6] locking/rwsem: Unify wait loop
+config: s390-buildonly-randconfig-r003-20230222 (https://download.01.org/0day-ci/archive/20230224/202302240131.eS42jjFi-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=425d19e8c6d9ec3d3f55b7497526947235cc8d77
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue locking/core
+        git checkout 425d19e8c6d9ec3d3f55b7497526947235cc8d77
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/locking/
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302240131.eS42jjFi-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag '6.3-rc-smb3-client-fixes' of git://git.samba=
-.org/sfrench/cifs-2.6
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/73582
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7231856
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7231292
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7231987
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7231991
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> kernel/locking/rwsem.c:1027:3: error: call to undeclared function 'LOCKEVENT_waiter_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   lockevent_inc(waiter_type(waiter, rwsem_sleep_reader, rwsem_sleep_writer));
+                   ^
+   kernel/locking/lock_events.h:43:45: note: expanded from macro 'lockevent_inc'
+   #define lockevent_inc(ev)         __lockevent_inc(LOCKEVENT_ ##ev, true)
+                                                     ^
+   <scratch space>:59:1: note: expanded from here
+   LOCKEVENT_waiter_type
+   ^
+>> kernel/locking/rwsem.c:1027:37: error: use of undeclared identifier 'rwsem_sleep_reader'
+                   lockevent_inc(waiter_type(waiter, rwsem_sleep_reader, rwsem_sleep_writer));
+                                                     ^
+>> kernel/locking/rwsem.c:1027:57: error: use of undeclared identifier 'rwsem_sleep_writer'
+                   lockevent_inc(waiter_type(waiter, rwsem_sleep_reader, rwsem_sleep_writer));
+                                                                         ^
+   kernel/locking/rwsem.c:1031:2: error: call to undeclared function 'LOCKEVENT_waiter_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           lockevent_inc(waiter_type(waiter, rwsem_rlock, rwsem_wlock));
+           ^
+   kernel/locking/lock_events.h:43:45: note: expanded from macro 'lockevent_inc'
+   #define lockevent_inc(ev)         __lockevent_inc(LOCKEVENT_ ##ev, true)
+                                                     ^
+   <scratch space>:63:1: note: expanded from here
+   LOCKEVENT_waiter_type
+   ^
+>> kernel/locking/rwsem.c:1031:36: error: use of undeclared identifier 'rwsem_rlock'
+           lockevent_inc(waiter_type(waiter, rwsem_rlock, rwsem_wlock));
+                                             ^
+>> kernel/locking/rwsem.c:1031:49: error: use of undeclared identifier 'rwsem_wlock'
+           lockevent_inc(waiter_type(waiter, rwsem_rlock, rwsem_wlock));
+                                                          ^
+>> kernel/locking/rwsem.c:1038:36: error: use of undeclared identifier 'rwsem_rlock_fail'
+           lockevent_inc(waiter_type(waiter, rwsem_rlock_fail, rwsem_wlock_fail));
+                                             ^
+>> kernel/locking/rwsem.c:1038:54: error: use of undeclared identifier 'rwsem_wlock_fail'
+           lockevent_inc(waiter_type(waiter, rwsem_rlock_fail, rwsem_wlock_fail));
+                                                               ^
+   8 errors generated.
 
 
+vim +/LOCKEVENT_waiter_type +1027 kernel/locking/rwsem.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1002	
+  1003	#define waiter_type(_waiter, _r, _w)	\
+  1004		((_waiter)->type == RWSEM_WAITING_FOR_READ ? (_r) : (_w))
+  1005	
+  1006	static __always_inline struct rw_semaphore *
+  1007	rwsem_waiter_wait(struct rw_semaphore *sem, struct rwsem_waiter *waiter, int state)
+  1008	{
+  1009		trace_contention_begin(sem, waiter_type(waiter, LCB_F_READ, LCB_F_WRITE));
+  1010	
+  1011		/* wait to be given the lock */
+  1012		for (;;) {
+  1013			set_current_state(state);
+  1014			if (!smp_load_acquire(&waiter->task)) {
+  1015				/* Matches rwsem_waiter_wake()'s smp_store_release(). */
+  1016				break;
+  1017			}
+  1018			if (signal_pending_state(state, current)) {
+  1019				raw_spin_lock_irq(&sem->wait_lock);
+  1020				if (waiter->task)
+  1021					goto out_nolock;
+  1022				raw_spin_unlock_irq(&sem->wait_lock);
+  1023				/* Ordered by sem->wait_lock against rwsem_mark_wake(). */
+  1024				break;
+  1025			}
+  1026			schedule_preempt_disabled();
+> 1027			lockevent_inc(waiter_type(waiter, rwsem_sleep_reader, rwsem_sleep_writer));
+  1028		}
+  1029	
+  1030		__set_current_state(TASK_RUNNING);
+> 1031		lockevent_inc(waiter_type(waiter, rwsem_rlock, rwsem_wlock));
+  1032		trace_contention_end(sem, 0);
+  1033		return sem;
+  1034	
+  1035	out_nolock:
+  1036		rwsem_del_wake_waiter(sem, waiter);
+  1037		__set_current_state(TASK_RUNNING);
+> 1038		lockevent_inc(waiter_type(waiter, rwsem_rlock_fail, rwsem_wlock_fail));
+  1039		trace_contention_end(sem, -EINTR);
+  1040		return ERR_PTR(-EINTR);
+  1041	}
+  1042	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
