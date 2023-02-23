@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21E6AD26
-	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 22:05:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D00ECC4339E;
-	Thu, 23 Feb 2023 22:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11BFAD26
+	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 22:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5BFEC433A1;
+	Thu, 23 Feb 2023 22:05:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677189953;
-	bh=uoP7If85xrhFUVwIMAutLKfgxp8azS5/GvV/xcdBy84=;
+	s=k20201202; t=1677189955;
+	bh=slfG7arzy36WwKxB6a02WckmWCrxgVshZ9ipMm+MbAM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QkbMlcelSh8xlrM8WSUQkq6ijUNiQ9DkXjGlEtqI/IGwl0Kg3gxR4UPXrW2tjqvLh
-	 jXBMUp3psD0TjGEAmTU90mQsGT6pDPrX2Lryo3CzwmY+CGA2RuLUdNveS6qlygsOD6
-	 8P7BlQVKP+vUM/xAjOdI22n5Lqgfp5DgfsSs2iw8/wGnt+IdeNsMLjBWB3GtDimkab
-	 UKZfWQJxaf0iOI46NGFV9rW/1xHrav8yB5xTtIG+aO76D0mGn6d9v6xTK0NQRaaegn
-	 lG0ub7oFQPzidfKAT53IFAla80XSR/E4GJpf2F2n1EnMvpcIApt4TH0wKtB3HNjr6O
-	 izRJCKlLNiAWQ==
+	b=jjC9HaRMaE3mFXKEUaVULPc9m1iDc/hx95PCtiDqHc2cdBcfWmROw8ruIEZcRYMyO
+	 7EUUf0Kpt85PugWS3Uja5+2/x44+EN1obvP16C9MZJdVkM6TQKXsrnlo48v26GshYV
+	 3qm4Y1bCw0nXtjXU2YHpiQQ0wvQIkraKGPbgBWPR1LcDiKWXlirARtSth4aSjUz0JT
+	 uu/j5QQc22HuHZMfZvUQXoxAeqp902dtn8/0WVB+55ClF5bAlEK29w5Y/u4MrM6vZ/
+	 4mip6m8gBdB75d+0HANAALiL0IleLangMVtLXAe6jVJN13ca9g7ZVAdT3odrXyYNYA
+	 3Fdb3nw69CNbg==
 From: Conor Dooley <conor@kernel.org>
 To: palmer@dabbelt.com
 Cc: conor@kernel.org,
@@ -22,10 +22,11 @@ Cc: conor@kernel.org,
 	nathan@kernel.org,
 	naresh.kamboju@linaro.org,
 	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v1 1/2] RISC-V: move zicsr/zifencei spec version check to Kconfig
-Date: Thu, 23 Feb 2023 22:05:45 +0000
-Message-Id: <20230223220546.52879-2-conor@kernel.org>
+	llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH v1 2/2] RISC-V: make TOOLCHAIN_NEEDS_SPEC_20191213 gas only
+Date: Thu, 23 Feb 2023 22:05:46 +0000
+Message-Id: <20230223220546.52879-3-conor@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230223220546.52879-1-conor@kernel.org>
 References: <20230223220546.52879-1-conor@kernel.org>
@@ -35,63 +36,54 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2299; i=conor.dooley@microchip.com; h=from:subject; bh=SBOF4i24Cru2GMP/wwEijRPSm1WbmbnoGBuNbjlDPv4=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMnfH5u+l+ib03zkY3dL+uq9q/ZmVsa11+3fIeiWu3nhYxud MzEnOkpZGMQ4GGTFFFkSb/e1SK3/47LDuectzBxWJpAhDFycAjCRhTmMDJv6n949czWkNFUze1+Dpk rJCm/FbuW5T64L18+pvVx2SZeR4UuOu4qY38W8TMnPL2aVN/MbCTtNvrX8vIN6crL7hN2TuAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2084; i=conor.dooley@microchip.com; h=from:subject; bh=hciiU41cmccFKM8j8MWjmtv2w5WAHIGPZfhA69tDbBQ=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMnfH5veX95Re3Hn9dn7+b5fb9QQeHz+1EqG5+LnJueqWa1s ndhS0VHKwiDGwSArpsiSeLuvRWr9H5cdzj1vYeawMoEMYeDiFICJiM1iZDi5vSS4Qko08uzpx6kJ8k J3r1Ql/i++bMPEk7b+5tSfR84w/K/bUapSOGc6y3bx46IXtlkmlpTuEjdfJdJ7zfKXRo/eKRYA
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Checking whether binutils defaults to using a version of the spec
-requiring zicsr/zifencei being done in our Makefile is functionally
-sufficient at present, but makes it harder to tell after the fact
-which extensions are enabled.
-By moving it to Kconfig, it's easy to tell from standard build artifacts
-what has been done & the road is paved for dealing with this differently
-for both binutils and LLVM.
+Quoting the llvm docs:
+> Between versions 2.0 and 2.1 of the base I specification, a backwards
+> incompatible change was made to remove selected instructions and CSRs
+> from the base ISA. These instructions were grouped into a set of new
+> extensions, but were no longer required by the base ISA. (snip) LLVM
+> currently implements version 2.0 of the base specification. Thus,
+> instructions from these extensions are accepted as part of the base
+> ISA.
 
+There is therefore no need (at present!) to carry out a $cc-option
+check, and instead just gate presence of zicsr and zifencei in march
+on the version of binutils that commit 6df2a016c0c8 ("riscv: fix build
+with binutils 2.38") highlights as the introduction of the requirement.
+
+In fact, the status quo creates some issues with mixed llvm/binutils
+builds, specifically building with llvm-17 and ld from binutils-2.35.
+Odd combo you may think, but this is what tuxsuite's debian stable uses
+while testing 5.10 stable kernels as doesn't support LLD.
+
+CC: stable@vger.kernel.org # needs RISC-V: move zicsr/zifencei spec version check to Kconfi
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Link: https://lore.kernel.org/all/CA+G9fYt9T=ELCLaB9byxaLW2Qf4pZcDO=huCA0D8ug2V2+irJQ@mail.gmail.com/
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/Kconfig  | 10 ++++++++++
- arch/riscv/Makefile |  5 +----
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ arch/riscv/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index cebf0c5f8824..4eb0ef8314b3 100644
+index 4eb0ef8314b3..c6902f4c5650 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -288,6 +288,16 @@ config ARCH_RV64I
- 
- endchoice
- 
-+config TOOLCHAIN_NEEDS_SPEC_20191213
-+	bool
-+	default y
-+	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zicsr_zifencei)
-+	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zicsr_zifencei)
-+	help
-+	  Newer binutils versions default to ISA spec version 20191213 which
-+	  moves some instructions from the I extension to the Zicsr and Zifencei
-+	  extensions.
-+
- # We must be able to map all physical memory into the kernel, but the compiler
- # is still a bit more efficient when generating code if it's setup in a manner
- # such that it can only map 2GiB of memory.
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 12d91b0a73d8..7e1267b0e73f 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -53,10 +53,7 @@ riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
- riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
- riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
- 
--# Newer binutils versions default to ISA spec version 20191213 which moves some
--# instructions from the I extension to the Zicsr and Zifencei extensions.
--toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
--riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-+riscv-march-$(CONFIG_TOOLCHAIN_NEEDS_SPEC_20191213) := $(riscv-march-y)_zicsr_zifencei
- 
- # Check if the toolchain supports Zicbom extension
- riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZICBOM) := $(riscv-march-y)_zicbom
+@@ -291,8 +291,7 @@ endchoice
+ config TOOLCHAIN_NEEDS_SPEC_20191213
+ 	bool
+ 	default y
+-	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zicsr_zifencei)
+-	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zicsr_zifencei)
++	depends on AS_IS_GNU && AS_VERSION >= 23800
+ 	help
+ 	  Newer binutils versions default to ISA spec version 20191213 which
+ 	  moves some instructions from the I extension to the Zicsr and Zifencei
 -- 
 2.39.1
 
