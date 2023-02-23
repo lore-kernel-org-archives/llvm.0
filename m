@@ -1,65 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476FD28EF;
-	Thu, 23 Feb 2023 14:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98D62C433D2;
-	Thu, 23 Feb 2023 14:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1677161681;
-	bh=U424HFE2d9+blKr+2QZgF0GS4aFZVKNHKUFchfOFvzg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YA96T9m5qRIiZqUb/tb+ln+dVRbemOlI2bp9Rya7CdvodphnCJBVE3xurCyBoVu7X
-	 umWxdxUdDZ1vA/JM/0BAaLLGtCFgQc2w+qog/S6qma0PtL2OzW3xu7fBoeCnBilJuf
-	 cdE7MFtSyKmb78+6NO+oatXRfgcchZF/jWXA1qwg=
-Date: Thu, 23 Feb 2023 15:14:39 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [ammarfaizi2-block:stable/linux-stable-rc/queue/5.4 15/15]
- kernel/bpf/core.c:1570:3: error: implicit declaration of function
- 'barrier_nospec'
-Message-ID: <Y/d0zwDQmCJ33SFu@kroah.com>
-References: <202302232136.AWzwjCvb-lkp@intel.com>
- <Y/duzncICkBE4wSe@biznet-home.integral.gnuweeb.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8F328ED
+	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 15:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677164504;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VmBhRSAIAMTj64P5eQj7VF64F2xY1F+psS9HHxnGPkM=;
+	b=XSFTiPXIv3X5uhNnKn25rH0A9RKd9e+8DI66Z0SdGvxzB7gi8/LHtaF2fguwDd/jTdasSz
+	TKCOsf45B82kaBdBBCl/SlvYESBtV+qaebk9fyvsLrznnagz2OLXgjHE0dGs09X03/mEPS
+	7CJatNYOnBslkVUuNdGyYi+z+iYup5U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-259-h6OIjP3-NluQPXO-k43vOg-1; Thu, 23 Feb 2023 10:01:42 -0500
+X-MC-Unique: h6OIjP3-NluQPXO-k43vOg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 59791100F90E
+	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 15:01:37 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 433FC140EBF4;
+	Thu, 23 Feb 2023 15:01:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (108/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, 70756b49)
+Date: Thu, 23 Feb 2023 15:01:37 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/duzncICkBE4wSe@biznet-home.integral.gnuweeb.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <71532.123022310014202033@us-mta-259.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 23, 2023 at 08:49:02PM +0700, Ammar Faizi wrote:
-> On Thu, Feb 23, 2023 at 09:31:08PM +0800, kernel test robot wrote:
-> > tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/5.4
-> > commit: 3bb990ea37595b41a1f06a551e5dd35372ea404a [15/15] uaccess: Add speculation barrier to copy_from_user()
-> ...
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Link: https://lore.kernel.org/oe-kbuild-all/202302232136.AWzwjCvb-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > >> kernel/bpf/core.c:1570:3: error: implicit declaration of function 'barrier_nospec' [-Werror,-Wimplicit-function-declaration]
-> >                    barrier_nospec();
-> >                    ^
-> >    1 error generated.
-> 
-> It's missing #include <linux/nospec.h>. The fix for this is:
-> 
-> Upstream f3dd0c53370e70c0f9b7e931bbec12916f3bb8cc ("bpf: add missing header file include")
-> 
-> That one needs to get backported too. Or just fold that in to maintain
-> the bisectability (for stable kernels).
+Hi, we tested your kernel and here are the results:
 
-Thanks, now queued up, I missed that follow-on patch.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-greg k-h
+
+Kernel information:
+    Commit message: Merge tag 'docs-6.3' of git://git.lwn.net/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73517
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7223025
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
+machine
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1395
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
