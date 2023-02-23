@@ -1,69 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08ED3A92D
-	for <llvm@lists.linux.dev>; Wed, 22 Feb 2023 21:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A1FADC4339E;
-	Wed, 22 Feb 2023 21:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677100217;
-	bh=wCQQEMkM7Jx3pn9FFGosm1zRw8TdEwhVF5bmgBxG7Zw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YiGkRhzzZ6Y4QBYUP1zV2oy64eR6ubK7rULwLt0ayty2l01r2/S40q2dbINMjz+dp
-	 l5PJ/QkEWHWA9o54cMTdNAp68A4fk9PUJm9/NIv2DLqEk8v40w0n6w8sJkraXRP8O2
-	 YtfJP3C7Jw5LIgx4d/ucY1OTtBKVoBXPCkpLgT4R5eZb6yizRyrPjU8iYQdB/PGuiy
-	 N3ylqMUK21hpc0hi8yIg4VkLdigDDMLWQHVQIXafMGykroJrUyBQPjaS2s3FGbkfxd
-	 Hs3iqdoyvCMxvJNZ3Wwq1IuW/i+TqZF9cICWjer+BeWEJAlpAIBBDGLRZhDNcARQz3
-	 X2OiXYCWa3bzw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8460EC395DF;
-	Wed, 22 Feb 2023 21:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A783315B7;
+	Thu, 23 Feb 2023 01:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677115302; x=1708651302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=smk/IMr8tNuouT5RUgUfentVm9pFSJdZDRlFuo7i/I4=;
+  b=LcjkEO/EGCSlRcu25KpqL+Sncl7MmKkkoxJSRl1Dht5qeyRyvJDmuhhf
+   tCY57+R3nNdgEUWpzGcwM2U6axm2RExYoU31EX4nVBmsT9l+ynzGzR2Pu
+   JL18/PTCXpvD2LlckGNPR0I98Zeq4w+ls0VxY4875KSWB+JnU7wJzgZn1
+   gNQ8KLuKOQK8gOMF6w2Ou0cKd4cXqFh4pwY2MkuGLipPxeobZqyZYFwDa
+   MJ+kucgitV+vAhXasmjqMKXSjWthRttpGQpiJqcik9F/gziFPHH6Zv0o2
+   RCl4y9GthaAqrvE2ibKeaJ835tWtzukBNQ3XYUDoB0UYqrx6SPW0KZixI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="312712241"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="scan'208";a="312712241"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 17:21:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="674320414"
+X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
+   d="scan'208";a="674320414"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Feb 2023 17:21:40 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pV0Il-0000sT-2C;
+	Thu, 23 Feb 2023 01:21:39 +0000
+Date: Thu, 23 Feb 2023 09:21:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC v2 1/4] bpf: add UBLK program type
+Message-ID: <202302230957.cU6XDCTE-lkp@intel.com>
+References: <20230222132534.114574-2-xiaoguang.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix cross compilation with
- CLANG_CROSS_FLAGS
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <167710021753.10496.8520957116500555540.git-patchwork-notify@kernel.org>
-Date: Wed, 22 Feb 2023 21:10:17 +0000
-References: <20230217151832.27784-1-revest@chromium.org>
-In-Reply-To: <20230217151832.27784-1-revest@chromium.org>
-To: Florent Revest <revest@chromium.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-kbuild@vger.kernel.org, andrii@kernel.org, mykolal@fb.com,
- ast@kernel.org, daniel@iogearbox.net, kpsingh@kernel.org,
- masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230222132534.114574-2-xiaoguang.wang@linux.alibaba.com>
 
-Hello:
+Hi Xiaoguang,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on v6.2]
+[cannot apply to bpf-next/master bpf/master axboe-block/for-next linus/master next-20230222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-On Fri, 17 Feb 2023 16:18:32 +0100 you wrote:
-> I cross-compile my BPF selftests with the following command:
-> 
-> CLANG_CROSS_FLAGS="--target=aarch64-linux-gnu --sysroot=/sysroot/" \
->   make LLVM=1 CC=clang CROSS_COMPILE=aarch64-linux-gnu- SRCARCH=arm64
-> 
-> (Note the use of CLANG_CROSS_FLAGS to specify a custom sysroot instead
-> of letting clang use gcc's default sysroot)
-> 
-> [...]
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaoguang-Wang/bpf-add-UBLK-program-type/20230222-235148
+patch link:    https://lore.kernel.org/r/20230222132534.114574-2-xiaoguang.wang%40linux.alibaba.com
+patch subject: [RFC v2 1/4] bpf: add UBLK program type
+config: s390-randconfig-r024-20230222 (https://download.01.org/0day-ci/archive/20230223/202302230957.cU6XDCTE-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/29aa0e051b8dc06ecf3f2bf3ebd4131552988a7a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xiaoguang-Wang/bpf-add-UBLK-program-type/20230222-235148
+        git checkout 29aa0e051b8dc06ecf3f2bf3ebd4131552988a7a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix cross compilation with CLANG_CROSS_FLAGS
-    https://git.kernel.org/bpf/bpf-next/c/b539a287baaa
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302230957.cU6XDCTE-lkp@intel.com/
 
-You are awesome, thank you!
+All errors (new ones prefixed by >>):
+
+>> s390x-linux-ld: kernel/bpf/syscall.o:(.data.rel.ro+0x9c0): undefined reference to `bpf_ublk_prog_ops'
+>> s390x-linux-ld: kernel/bpf/verifier.o:(.data.rel.ro+0x160): undefined reference to `bpf_ublk_verifier_ops'
+   s390x-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
+   irq-al-fic.c:(.init.text+0x28): undefined reference to `of_iomap'
+   s390x-linux-ld: irq-al-fic.c:(.init.text+0x4a2): undefined reference to `iounmap'
+   s390x-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
+   fsl-edma.c:(.text+0x21e): undefined reference to `devm_ioremap_resource'
+   s390x-linux-ld: fsl-edma.c:(.text+0x376): undefined reference to `devm_ioremap_resource'
+   s390x-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
+   hidma.c:(.text+0x80): undefined reference to `devm_ioremap_resource'
+   s390x-linux-ld: hidma.c:(.text+0xd2): undefined reference to `devm_ioremap_resource'
+   s390x-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+   xillybus_of.c:(.text+0x66): undefined reference to `devm_platform_ioremap_resource'
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
