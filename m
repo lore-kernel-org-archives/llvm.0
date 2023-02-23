@@ -1,152 +1,146 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2D828ED
-	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 15:45:54 +0000 (UTC)
-Received: by mail-il1-f170.google.com with SMTP id h10so1140527ila.11
-        for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 07:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1677167153;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SvCT+N+hA/Qzqm3zOq0MLMVWGUsyfTWyXW5JOLtV5Sg=;
-        b=c/5Ih4PLsaj2HNNPbTcRkwNj/nqV3rgCiNXkgVd+VGNJBXKu4g6uMLS9lyrLd1Po7Z
-         tP7v22IBRm7e1SP3MnUNCH9cab9+p4H8aaGMaCUkk10dGMxGroLpBdO/TzSxhJAPmaUg
-         3AXV82imm3VOwQZMb1lZPNecc05/Exyn5Uumo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677167153;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SvCT+N+hA/Qzqm3zOq0MLMVWGUsyfTWyXW5JOLtV5Sg=;
-        b=gBg8lw41o3WJW3HApmWNltx5x6y9yr4k14WzcjaUHYO2XCib4QybhXTcukiE1fR5rY
-         0LxPL7VTghJwFR/mngmMLGbUgqhQt/XXrArX4T5M1Y5O5m7HYiydyJ5BOPoRF90/NzAv
-         kuaxbwyuy7YJNyykzSGjhoos7CbVTqaxEUOaGhilEg13n7nRIZU1JvjNiYjPO0kAicly
-         pTQwmA94tfQymfFXMaFuazFNx+6d+Syx8f17fwY+gauPihpVeu2zMqZwlsCUfnedY5RX
-         a86bu363V+2YzCIr1CnFqbGmxE0hNx2qz8cMK9Ax0GrcWJ26i/68UYasxIuCplfcXa1r
-         lWsg==
-X-Gm-Message-State: AO0yUKXLMyAA6G0L0Kkr+A5gx3mJIGUv+0o2/TN1uPGBcQReqg4iXw7G
-	KDplkBgR49F0Cl1QNqDxl/DsIQ==
-X-Google-Smtp-Source: AK7set9WceE7Mu9chNCfREQZpv8uKvzcBdPDrJJDyqXN/PQN7zOHvO5SCRh8g5drK4GSIw7Ljw4AVQ==
-X-Received: by 2002:a92:d186:0:b0:316:67be:1b99 with SMTP id z6-20020a92d186000000b0031667be1b99mr6922041ilz.0.1677167153647;
-        Thu, 23 Feb 2023 07:45:53 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id k9-20020a02c769000000b003c4f77e61d3sm2176386jao.64.2023.02.23.07.45.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 07:45:53 -0800 (PST)
-Message-ID: <d8032a63-64e2-0769-55d7-60f9b2f46a01@linuxfoundation.org>
-Date: Thu, 23 Feb 2023 08:45:51 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E6B28ED
+	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 16:03:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677168233;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7rEXbKnKWZC4dEJ0GianvQdS8cBPiGgJLVtSBwUkosQ=;
+	b=AeYdMZ1Z9YBzMcBR/RegVqta+tdpbWJwoMnWW4R1AbHAvoq1tJ59nEqYCX7Mpkmt7SDsOR
+	zV62QXNSlfKnKi96ixb+wZ9cQOzjZtMvT4vNopIHd8J3C8ujGy+OjFsffAzSSxqdJ15cqV
+	Yc6yzge+4x2SBPmJipUpQ2hdCcxfezI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-511-j04-XSGqMO62Q1UTH7bZ9Q-1; Thu, 23 Feb 2023 11:03:33 -0500
+X-MC-Unique: j04-XSGqMO62Q1UTH7bZ9Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2D9F38041DE
+	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 16:03:27 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8ED5A2166B29;
+	Thu, 23 Feb 2023 16:03:27 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (108/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, 23064dfe)
+Date: Thu, 23 Feb 2023 16:03:27 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.15 00/37] 5.15.96-rc2 review
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Chancellor <nathan@kernel.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev,
- linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
- akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
- patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
- jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
- srw@sladewatkins.net, rwarsow@gmx.de, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20230223141542.672463796@linuxfoundation.org>
- <CA+G9fYuhcaYO1m29-9vQr-HK7_xJYouAAkM=ouMYzOBk+otCVg@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CA+G9fYuhcaYO1m29-9vQr-HK7_xJYouAAkM=ouMYzOBk+otCVg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <77487.123022311033303517@us-mta-511.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/23/23 08:40, Naresh Kamboju wrote:
-> On Thu, 23 Feb 2023 at 19:46, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
->>
->> This is the start of the stable review cycle for the 5.15.96 release.
->> There are 37 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Sat, 25 Feb 2023 14:15:30 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>          https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.96-rc2.gz
->> or in the git tree and branch at:
->>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
-> 
-> Following build warnings / error notices on 5.15-rc2
-> anyone see these build issues ?
-> 
-> scripts/pahole-flags.sh: 10: scripts/pahole-version.sh: Permission denied
-> scripts/pahole-flags.sh: 12: [: Illegal number:
-> scripts/pahole-flags.sh: 16: [: Illegal number:
-> scripts/pahole-flags.sh: 20: [: Illegal number:
-> scripts/pahole-flags.sh: 10: scripts/pahole-version.sh: Permission denied
-> scripts/pahole-flags.sh: 12: [: Illegal number:
-> scripts/pahole-flags.sh: 16: [: Illegal number:
-> scripts/pahole-flags.sh: 20: [: Illegal number:
-> scripts/pahole-flags.sh: 10: scripts/pahole-version.sh: Permission denied
-> scripts/pahole-flags.sh: 12: [: Illegal number:
-> scripts/pahole-flags.sh: 16: [: Illegal number:
-> scripts/pahole-flags.sh: 20: [: Illegal number:
-> sh: 1: scripts/pahole-version.sh: Permission denied
-> init/Kconfig:97: syntax error
-> init/Kconfig:96: invalid statement
-> make[2]: *** [scripts/kconfig/Makefile:87: defconfig] Error 1
-> 
-> 
-> Need to bisect
-> --
-> 
-> commit 54fab3cc806aec70d7ce8440e511d56bd53a4081
-> Author: Nathan Chancellor <nathan@kernel.org>
-> Date:   Tue Feb 1 13:56:21 2022 -0700
-> 
->      kbuild: Add CONFIG_PAHOLE_VERSION
-> 
->      commit 613fe169237785a4bb1d06397b52606b2967da53 upstream.
-> 
->      There are a few different places where pahole's version is turned into a
->      three digit form with the exact same command. Move this command into
->      scripts/pahole-version.sh to reduce the amount of duplication across the
->      tree.
-> 
->      Create CONFIG_PAHOLE_VERSION so the version code can be used in Kconfig
->      to enable and disable configuration options based on the pahole version,
->      which is already done in a couple of places.
-> 
->      Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> --
-> ls -l   scripts/pahole*.sh
-> -rwxr-xr-x 1 naresh naresh 610 Feb 23 21:03 scripts/pahole-flags.sh
-> -rw-r--r-- 1 naresh naresh 269 Feb 23 21:03 scripts/pahole-version.sh
-> 
-> 
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-> 
-+1 seeing the same:
+Hi, we tested your kernel and here are the results:
 
-./scripts/pahole-flags.sh: 10: ./scripts/pahole-version.sh: Permission denied
-./scripts/pahole-flags.sh: 12: [: Illegal number:
-./scripts/pahole-flags.sh: 16: [: Illegal number:
-./scripts/pahole-flags.sh: 20: [: Illegal number:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-thanks,
--- Shuah
+Kernel information:
+    Commit message: Merge tag 'audit-pr-20230220' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/pcmoore/audit
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73520
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7223334
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
+machine
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1395
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
