@@ -1,52 +1,53 @@
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31482564;
-	Thu, 23 Feb 2023 12:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101552564;
+	Thu, 23 Feb 2023 12:10:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677154203; x=1708690203;
+  t=1677154205; x=1708690205;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oUIs1715u87//gfwLLW0GhlENC3l9IgHsK4JEDr3h2w=;
-  b=BOA1XCR0wWKEP9wknGfWlbJqAGtXqwJ6UWu5VWXnTzW1hOFisQT8ZKyQ
-   8ATcpZlFX8pCtJ4ZLSejRXv1t57vAozT7RzfSTtgfcKWV9qHwZn8T9BgT
-   s0pytp3W5FWVH76kKyG9nxZ9T02d3wzXEcstFKG9o8IHs5Tf1vGPGQVuF
-   ugVx1npMJV5mWnHEoXm72u+dDW6DSt8NteOr0BM/4xVmctNpaOmTv9AWk
-   fbOGtgwRpIdxNzc34UabayQmC0ewDxiIxMtv08AzEeZf4BlUmzVJKzndV
-   xTXDruSXh+J4BiERBBH4pXRenkSTWxDd3JDJCHwOVdy7g8JvTvo+EH5Yq
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="330921133"
+  bh=c3/6mmV17tShYWq3QB6unXyeKS83+JV/EnZRZDWCD5A=;
+  b=f+2LM4ZgHA9Z0G31ZiO0Y8mKQdrWJWehK1rwin6hiKTqO3LGWkAsDu+E
+   ETYMLhrBBWB4Q0fFFQXs1S0DiMZkn995mVhkHMDYaRc/HB9x6iGGV0VNE
+   m926Jimp/uooj+j6m+muzbVB22Y2c8FSY/Ce/KmVrwmaCFw+EKQ9PSRM1
+   W5aZEvWQrIZJZLzPQc6PClBpuAwRtgtPzc1UN5+Wus9MivtZiOiLz/8bt
+   Ji1PV4piGd0kndgNpdUITg6BEa6C87dOwRL7+liGimZ0Bn+H5hIsOO/ZK
+   sy967ONpTgEPhLVlZrRb2/ipZKk3ntcjlP4KPIYQM4sB188UD5/pfkYr2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="330921139"
 X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="330921133"
+   d="scan'208";a="330921139"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 04:10:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="781858047"
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="781858049"
 X-IronPort-AV: E=Sophos;i="5.97,320,1669104000"; 
-   d="scan'208";a="781858047"
+   d="scan'208";a="781858049"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
   by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2023 04:09:59 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pVAQA-0001JR-1P;
+	id 1pVAQA-0001JW-1a;
 	Thu, 23 Feb 2023 12:09:58 +0000
-Date: Thu, 23 Feb 2023 20:09:06 +0800
+Date: Thu, 23 Feb 2023 20:09:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Prashanth K <quic_prashk@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Jakob Koschel <jakobkoschel@gmail.com>,
-	=?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>,
-	Alan Stern <stern@rowland.harvard.edu>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pratham Pratap <quic_ppratap@quicinc.com>,
-	Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Prashanth K <quic_prashk@quicinc.com>
-Subject: Re: [PATCH v2 2/2] usb: gadget: composite: Draw 100mA current if not
- configured
-Message-ID: <202302231957.9Vfsa8ln-lkp@intel.com>
-References: <1677142665-8686-3-git-send-email-quic_prashk@quicinc.com>
+	Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: Re: [PATCH v6 1/1] riscv: Allow to downgrade paging mode from the
+ command line
+Message-ID: <202302231942.6C2mSFYv-lkp@intel.com>
+References: <20230223082434.1280957-2-alexghiti@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,104 +56,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1677142665-8686-3-git-send-email-quic_prashk@quicinc.com>
+In-Reply-To: <20230223082434.1280957-2-alexghiti@rivosinc.com>
 
-Hi Prashanth,
+Hi Alexandre,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.2 next-20230223]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.2]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prashanth-K/usb-dwc3-gadget-Change-condition-for-processing-suspend-event/20230223-165955
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/1677142665-8686-3-git-send-email-quic_prashk%40quicinc.com
-patch subject: [PATCH v2 2/2] usb: gadget: composite: Draw 100mA current if not configured
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230223/202302231957.9Vfsa8ln-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Allow-to-downgrade-paging-mode-from-the-command-line/20230223-162702
+patch link:    https://lore.kernel.org/r/20230223082434.1280957-2-alexghiti%40rivosinc.com
+patch subject: [PATCH v6 1/1] riscv: Allow to downgrade paging mode from the command line
+config: riscv-buildonly-randconfig-r002-20230222 (https://download.01.org/0day-ci/archive/20230223/202302231942.6C2mSFYv-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/19beaeb0554fc9c1556e8f7da85011f4267bd8fc
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/7e18f795579f897e63812ca9dcb5b48ef2b7b4d2
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Prashanth-K/usb-dwc3-gadget-Change-condition-for-processing-suspend-event/20230223-165955
-        git checkout 19beaeb0554fc9c1556e8f7da85011f4267bd8fc
+        git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Allow-to-downgrade-paging-mode-from-the-command-line/20230223-162702
+        git checkout 7e18f795579f897e63812ca9dcb5b48ef2b7b4d2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/usb/gadget/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/pi/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302231957.9Vfsa8ln-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302231942.6C2mSFYv-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/usb/gadget/composite.c:2535:14: warning: comparison of distinct pointer types ('typeof (2) *' (aka 'int *') and 'typeof (100U) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   maxpower = min(CONFIG_USB_GADGET_VBUS_DRAW, 100U)
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:67:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> drivers/usb/gadget/composite.c:2535:52: error: expected ';' after expression
-                   maxpower = min(CONFIG_USB_GADGET_VBUS_DRAW, 100U)
-                                                                    ^
-                                                                    ;
-   1 warning and 1 error generated.
+>> arch/riscv/kernel/pi/cmdline_early.c:50:10: error: use of undeclared identifier 'SATP_MODE_48'
+                   return SATP_MODE_48;
+                          ^
+>> arch/riscv/kernel/pi/cmdline_early.c:52:10: error: use of undeclared identifier 'SATP_MODE_57'
+                   return SATP_MODE_57;
+                          ^
+   2 errors generated.
 
 
-vim +2535 drivers/usb/gadget/composite.c
+vim +/SATP_MODE_48 +50 arch/riscv/kernel/pi/cmdline_early.c
 
-  2504	
-  2505	void composite_resume(struct usb_gadget *gadget)
-  2506	{
-  2507		struct usb_composite_dev	*cdev = get_gadget_data(gadget);
-  2508		struct usb_function		*f;
-  2509		unsigned			maxpower;
-  2510	
-  2511		/* REVISIT:  should we have config level
-  2512		 * suspend/resume callbacks?
-  2513		 */
-  2514		DBG(cdev, "resume\n");
-  2515		if (cdev->driver->resume)
-  2516			cdev->driver->resume(cdev);
-  2517		if (cdev->config) {
-  2518			list_for_each_entry(f, &cdev->config->functions, list) {
-  2519				if (f->resume)
-  2520					f->resume(f);
-  2521			}
-  2522	
-  2523			maxpower = cdev->config->MaxPower ?
-  2524				cdev->config->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
-  2525			if (gadget->speed < USB_SPEED_SUPER)
-  2526				maxpower = min(maxpower, 500U);
-  2527			else
-  2528				maxpower = min(maxpower, 900U);
-  2529	
-  2530			if (maxpower > USB_SELF_POWER_VBUS_MAX_DRAW)
-  2531				usb_gadget_clear_selfpowered(gadget);
-  2532	
-  2533			usb_gadget_vbus_draw(gadget, maxpower);
-  2534		} else {
-> 2535			maxpower = min(CONFIG_USB_GADGET_VBUS_DRAW, 100U)
-  2536			usb_gadget_vbus_draw(gadget, maxpower);
-  2537		}
-  2538	
-  2539		cdev->suspended = 0;
-  2540	}
-  2541	
+    46	
+    47	static u64 __init match_noXlvl(char *cmdline)
+    48	{
+    49		if (strstr(cmdline, "no4lvl"))
+  > 50			return SATP_MODE_48;
+    51		else if (strstr(cmdline, "no5lvl"))
+  > 52			return SATP_MODE_57;
+    53	
+    54		return 0;
+    55	}
+    56	
 
 -- 
 0-DAY CI Kernel Test Service
