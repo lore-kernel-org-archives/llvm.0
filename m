@@ -1,136 +1,146 @@
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17830258F
-	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 13:36:51 +0000 (UTC)
-Received: by mail-il1-f173.google.com with SMTP id b16so5249399iln.3
-        for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 05:36:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sP7OO7pY75acB3j8P2/QK5gFH3RzazXAttowMP569Uc=;
-        b=B0wEgD1OktVXylPcjRbi2nRQHBVhpToHa9Bs7dtRBLVtufrGjxxvz645NbsDMVbw6W
-         eeb7ylEzAaptkvUpmha7xX4qP7n+5d+skBXS5g0HN7ikUjDE+YZRZtW7s0OfIPXpN1+g
-         FdgoDBJp4S9TSdxJs7yNO3KVmb8bTDPdjYKDiHbgSeoHOqbXn4soJni7MIC+ZT8pRWC/
-         m4bGNyk3jL8QQYL3J1klGLbUjZfaauQNsSjr5lzbw0pcre8IXpOmCh8x682cnrtaYitG
-         MVeatK0sAVwWiV4ZiO346DNslIlpgywLwZxguNiylMUtoLHSF6q5lmoBM7zIRhaObwBS
-         jXJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sP7OO7pY75acB3j8P2/QK5gFH3RzazXAttowMP569Uc=;
-        b=1lAnfo50mrMFhNDBYtzQXz1aYJLJyN4L8VIzUJ/yNVH30teDASnO8fO8qoYIj3gnBN
-         QYcAu71FzFtzgS8Vc66cECj7yIEU/uLUDctCT4dncUS1jPgyAC5NIDPXThao+UnA9WeG
-         h0aJQywljB6N09IyBWKdwuUaH07esLygVpWBQtwg54rAfOxN/oZfKAAmjvvcbNi1DPtj
-         9oeOEdjpQltCX7BdNVlVmaRdfjXIn5bxbvucy1LbB2DOynzNwYC7ROyi92kcu4PPTpOI
-         2t0UuT1r7Fr592O1IgU94Z7WdXsm5X8y+HyY0yWC7ooKRhTZanrqz30OfvShxPLJMIDT
-         jUXA==
-X-Gm-Message-State: AO0yUKVdOtzUvf/6T1nxzMDIZY3QAHgp/tJO123cmurAqixwt35sAFrJ
-	pWgfT0EXgPFAsm6OSGAwZFhNIL9W3SW+g9ZNI1U=
-X-Google-Smtp-Source: AK7set8z948GTlC8szDcOc8/WvlQxm1HwvJ/L6g9lQOWBvpyyqSSClk3PfhXNX0GkRjSC03LuFlClA==
-X-Received: by 2002:a05:6e02:198a:b0:315:4a48:aaf with SMTP id g10-20020a056e02198a00b003154a480aafmr8322244ilf.14.1677159411062;
-        Thu, 23 Feb 2023 05:36:51 -0800 (PST)
-Received: from [172.16.32.78] ([198.232.126.202])
-        by smtp.gmail.com with ESMTPSA id p12-20020a0566380e8c00b003a2a167e7d9sm3547827jas.96.2023.02.23.05.36.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 05:36:50 -0800 (PST)
-Message-ID: <380c88ef-eb19-e73e-0ec9-805b8b90e957@landley.net>
-Date: Thu, 23 Feb 2023 07:50:14 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF329258F
+	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 13:41:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677159696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=e/fGCqsgqXFelLIM5ZeP5ZpykjsRL9sA5vInvYPrs7c=;
+	b=E1Or9w404Jj4OW2vI+gKCM65sd+YyYas0xoD7stk5S8vFz0nEk2X5Tm996LtuLYaphYXiM
+	vVQSwDwu2tAInSIxSkpwrEx1SunRHnF1UdGK4RzAIis642SQeQX8rIK+hwtrZ8I7WLNMoS
+	dx/vDuLVvrxb4/HLZcE8SNh0LZjCo7U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-570-dQRPmXaxPu2KiDVinxdAjQ-1; Thu, 23 Feb 2023 08:41:35 -0500
+X-MC-Unique: dQRPmXaxPu2KiDVinxdAjQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 54043101A521
+	for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 13:41:35 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3C74C2026D38;
+	Thu, 23 Feb 2023 13:41:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (108/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, bc009f93)
+Date: Thu, 23 Feb 2023 13:41:35 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/5] try generic compiler name "cc" before falling back to
- "gcc".
-Content-Language: en-US
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <b455394f-9faa-1f1a-f171-0b9d5e9ada35@landley.net>
- <63c2936e-6bc7-67e3-eaf3-0123333381f8@landley.net>
- <CAK7LNASA+Dpe9nv4afnueFeRj4BZDUccOFGJRPr7_rZQ7ZZKaA@mail.gmail.com>
-From: Rob Landley <rob@landley.net>
-In-Reply-To: <CAK7LNASA+Dpe9nv4afnueFeRj4BZDUccOFGJRPr7_rZQ7ZZKaA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <23902.123022308413500506@us-mta-570.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/22/23 23:31, Masahiro Yamada wrote:
-> On Wed, Feb 22, 2023 at 5:41 AM Rob Landley <rob@landley.net> wrote:
->>
->> Distros like debian install the generic "cc" name for both gcc and clang,
->> and the plumbing already does CC_VERSION_TEXT to include Makefile.clang.
->>
->> Previously: https://lkml.iu.edu/hypermail/linux/kernel/2202.0/01505.html
->> Signed-off-by: Rob Landley <rob@landley.net>
->> ---
->>  Makefile | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/Makefile b/Makefile
->> index 3f6628780eb2..0ac57ae3b45f 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -456,7 +456,7 @@ endif
->>  HOSTCC = $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
->>  HOSTCXX        = $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
->>  else
->> -HOSTCC = gcc
->> +HOSTCC := $(shell cc --version >/dev/null 2>&1 && echo cc || echo gcc)
-> 
-> 'cc' only makes sense for the host compiler,
+Hi, we tested your kernel and here are the results:
 
-It was the generic posix name for "C compiler" until posix decided to put an
-expiration date in the command name, which seems as widely honored as the
-tar->pax switch or the removal of cpio.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-The name "gcc" was like "gmake" and "gawk". (On macos homebrew there's "gsed".)
 
-> which is configured by 'update-alternative'.
+Kernel information:
+    Commit message: Merge tag 'for-linus-6.3-1' of https://github.com/cminy=
+ard/linux-ipmi
 
-Hexagon only has llvm support, not gcc, so I had to add an llvm cross compiler
-to my cross compiler set, prefixed hexagon-unknown-linux-musl-*, but the linux
-kernel wants to call it as hexagon-unknown-linux-musl-gcc.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73502
 
-The kernel builds find with a "gcc" symlink to clang, but there _is_ a generic
-name, which is widely installed.
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7221618
 
-> I tried it before, but LLVM folks preferred
-> using $(LLVM) to choose clang/gcc.
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
+machine
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1395
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
-So if we want generic behavior without having to specify, we should create a
-"gcc" symlink to clang?
 
->>  HOSTCXX        = g++
->>  endif
->>  HOSTRUSTC = rustc
->> @@ -503,7 +503,8 @@ OBJDUMP             = $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
->>  READELF                = $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
->>  STRIP          = $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
->>  else
->> -CC             = $(CROSS_COMPILE)gcc
->> +CC             := $(CROSS_COMPILE)$(shell $(CROSS_COMPILE)cc --version \
->> +                       >/dev/null 2>&1 && echo cc || echo gcc)
-> 
-> This hunk sets up GCC/binutils.
 
-This is the codepath that's taken when you don't explicitly specify "LLVM=1".
-The test there is falling back to (appropriately prefixed) gcc when it can't
-find a working (appropriately prefixed) cc.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-> So, cc does not make sense.  NACK.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Do you explicitly specify the "gold" linker vs the previous gnu one vs
-lld.llvm.org on the kernel build command line?
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-Rob
