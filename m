@@ -1,141 +1,100 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6279EBA40;
-	Fri, 24 Feb 2023 22:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677277032; x=1708813032;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1zn5LRVaEjUKXrDtSzrbPheNzGYbFT6PbXB8m5y5GgI=;
-  b=XCsAepgjDV3bHAtmVW1Qjdi9hdKDffZD/L2tMqFEaPLMs6xgXCuYSts5
-   ND98srkm89mWXMuAwPt9w5sthaL+XtC6j96nTFcG3WSieQpq1WBAup+yM
-   g8NKcxf2o2qvcWYIilFUbxcx4p7LrwphFD8n4n56OpuLzbu9mJyfTrRoS
-   DGdPQRiWY54dB8u5pWRht86RYopn23eP/HuITM/fWyMjH7Q3w7p0VMa9s
-   v0t9vSOzQnhNgJOQFvbw0hXMUcnYbVWAJEe6/XxLtHGpGpv8Juani0BSd
-   LM3Vt4Olj2wTKK/ygyLmh0mFq9nR98Kadf4ic3MIjoapJXvCXVWXgbraJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="317350130"
-X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
-   d="scan'208";a="317350130"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 14:17:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="703325953"
-X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
-   d="scan'208";a="703325953"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 Feb 2023 14:17:09 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pVgNI-0002lD-2s;
-	Fri, 24 Feb 2023 22:17:08 +0000
-Date: Sat, 25 Feb 2023 06:16:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chen Zhongjin <chenzhongjin@huawei.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	chenzhongjin@huawei.com, akpm@linux-foudation.org,
-	wuchi.zero@gmail.com, ben-linux@fluff.org, rusty@rustcorp.com.au
-Subject: Re: [PATCH] x86: profiling: Set prof_cpu_mask to NULL after free
-Message-ID: <202302250609.vmze90DB-lkp@intel.com>
-References: <20230224084945.134038-1-chenzhongjin@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57F0BA40
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 22:20:46 +0000 (UTC)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-53916ab0c6bso18143667b3.7
+        for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 14:20:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IqQPJNfK638HDk4ODq+fMB7JJcK2vXRJP7v56xO3S9k=;
+        b=HAJsEdyAG1cOY/j+Vs6v1Ro4klVsPX0l7htKPdL5rdyUoEkEXwc3EqGqF/31BqyoeR
+         8Gc70jiB86abn5T/EFSlzm0tBLZDe6nthy/OgbziasK9ExC9MssJnkYayGu/7y7MiZ6x
+         vLpLAmkBnQLWWxaG4HdTQW/iO+UoJzutbQCl7iyYup9ojoeDv3oB+BPX6w3NMnFlrvmF
+         B7v7bhSOYv9K5Go8X+0CQR3SM7rheJYcgwBzKyef9i+y0/2WLsP/SiEOJe2jpYGOKM8V
+         GGno0ZpW+yaMgPcdZajCU49icbCJhJim4ne8u8L16Ek/F5u7Tu8uMzMcwSCfFLS1wYqb
+         87tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IqQPJNfK638HDk4ODq+fMB7JJcK2vXRJP7v56xO3S9k=;
+        b=2tPEp3scfMkT+O5XXjc3oSQXW0HyBA+TBXNQxe46CJqEcpNyUHLIrNwcB8nxi5kNN4
+         JrdBkTjeTgFnQAxWpbhErC0Nkhxkq/DqZ0vfKyEV5V3Y86g05O+/pb9W+MavFGWYz3Xq
+         AGuGaSne8FI0KaqDadnG49xRPAFGl7Bch6KYna0hUFc79vKmcK0l1fxnUbKsrGOz6tdx
+         QZoHoRoup2D4LreOLr5qQF/yofuRw7riL8RiIWR+hmV7wvCM6fEm5AvWdBdhqNW7lRB2
+         7PC9eHDJuRyWdiLLpKnvAdQ0UQ15MtsB1CYGM9juiM9TCT/JnMeqNOiqT0eu1AmxC7Ko
+         1P4g==
+X-Gm-Message-State: AO0yUKVHsKx6ruE9KMqtRdECIIwTIlZq+M2LvZtRLoudB6zKTPDCczJ7
+	ZVOvKFRQs7m006gYKbsDDWa9pVFq8PsMX2a0mZo=
+X-Google-Smtp-Source: AK7set+BCO4mvxBMIls68YhyM4z+vOB5zPgpVOZ6T1wB6+em698PSXYG6gf/JzasjxCkItBDvJ2GBFZIoNFQhY4OKBw=
+X-Received: by 2002:a5b:ac8:0:b0:a06:538f:24b2 with SMTP id
+ a8-20020a5b0ac8000000b00a06538f24b2mr3802600ybr.2.1677277245871; Fri, 24 Feb
+ 2023 14:20:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224084945.134038-1-chenzhongjin@huawei.com>
+References: <20230224133609.2877396-1-conor.dooley@microchip.com>
+ <CANiq72=4ZhV=u2ZUr=x-iAS_iMnV8GSiq0tEn7Tj0NanO=D+xQ@mail.gmail.com> <Y/kldmYcl7+2FBRB@spud>
+In-Reply-To: <Y/kldmYcl7+2FBRB@spud>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 24 Feb 2023 23:20:34 +0100
+Message-ID: <CANiq72=btcBOmrz0=ib=2eZiiV1z4_3qm1cqyw1=jUFDiJ77bg@mail.gmail.com>
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+To: Conor Dooley <conor@kernel.org>
+Cc: Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Chen,
+On Fri, Feb 24, 2023 at 10:00 PM Conor Dooley <conor@kernel.org> wrote:
+>
+> The stuff that I have lifted here all had you as the sole author in the
+> "rust" branch downstream, which is why I gave you authorship. Namely:
+> afba78eacb9b ("rust: generate target specification files on the fly")
+> 732b3c386328 ("rust: target: remove `cpu`")
+>
+> I don't see anything from [1] in these commits, so I don't think that I
+> made a mistake here.
 
-Thank you for the patch! Yet something to improve:
+It is true that I converted the original target spec files into the
+script, so I added the final lines. However, in that first commit some
+of the deleted files (related to RISC-V) were created by Gary. Thus it
+still feels a bit wrong to not credit Gary or even mention him.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.2 next-20230224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+For instance, consider an even more extreme case: somebody moving a
+file or doing formatting/whitespace changes. Would they be the main
+and only author?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Zhongjin/x86-profiling-Set-prof_cpu_mask-to-NULL-after-free/20230224-165419
-patch link:    https://lore.kernel.org/r/20230224084945.134038-1-chenzhongjin%40huawei.com
-patch subject: [PATCH] x86: profiling: Set prof_cpu_mask to NULL after free
-config: arm-randconfig-r004-20230222 (https://download.01.org/0day-ci/archive/20230225/202302250609.vmze90DB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/ed9b4879e816862f4f6210b1c429bcbebac6d317
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chen-Zhongjin/x86-profiling-Set-prof_cpu_mask-to-NULL-after-free/20230224-165419
-        git checkout ed9b4879e816862f4f6210b1c429bcbebac6d317
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> It's RFC for a reason, I've had a poor track record with off-list emails
+> to people that do not know me so would rather do it this way :)
+> Probably should have noted that I wrote the ~placeholder commit messages
+> though, apologies. I'll sort that out for a potential v1.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302250609.vmze90DB-lkp@intel.com/
+No problem!
 
-All errors (new ones prefixed by >>):
+> That's what I did! Unless I missed something that was non-obvious, the
+> only name on the commits I lifted was you. Is there somewhere else I
+> should have looked for that information?
 
->> kernel/profile.c:136:16: error: array type 'cpumask_var_t' (aka 'struct cpumask[1]') is not assignable
-           prof_cpu_mask = NULL;
-           ~~~~~~~~~~~~~ ^
-   1 error generated.
+I would have traced the commits back a bit more. For instance, in the
+first commit you mention above, one may see the RISC-V target files
+were removed, so that means something was already there. Checking who
+added those files leads to a few commits from Gary (and one from
+Daniel). And then it is about making a judgement call trying to be
+fair :)
 
-
-vim +136 kernel/profile.c
-
-    98	
-    99	
-   100	int __ref profile_init(void)
-   101	{
-   102		int buffer_bytes;
-   103		if (!prof_on)
-   104			return 0;
-   105	
-   106		/* only text is profiled */
-   107		prof_len = (_etext - _stext) >> prof_shift;
-   108	
-   109		if (!prof_len) {
-   110			pr_warn("profiling shift: %u too large\n", prof_shift);
-   111			prof_on = 0;
-   112			return -EINVAL;
-   113		}
-   114	
-   115		buffer_bytes = prof_len*sizeof(atomic_t);
-   116	
-   117		if (!alloc_cpumask_var(&prof_cpu_mask, GFP_KERNEL))
-   118			return -ENOMEM;
-   119	
-   120		cpumask_copy(prof_cpu_mask, cpu_possible_mask);
-   121	
-   122		prof_buffer = kzalloc(buffer_bytes, GFP_KERNEL|__GFP_NOWARN);
-   123		if (prof_buffer)
-   124			return 0;
-   125	
-   126		prof_buffer = alloc_pages_exact(buffer_bytes,
-   127						GFP_KERNEL|__GFP_ZERO|__GFP_NOWARN);
-   128		if (prof_buffer)
-   129			return 0;
-   130	
-   131		prof_buffer = vzalloc(buffer_bytes);
-   132		if (prof_buffer)
-   133			return 0;
-   134	
-   135		free_cpumask_var(prof_cpu_mask);
- > 136		prof_cpu_mask = NULL;
-   137		return -ENOMEM;
-   138	}
-   139	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Cheers,
+Miguel
