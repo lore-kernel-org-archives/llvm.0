@@ -1,145 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC756FBB
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 16:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677255641;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rs3VTPdIlepW0cL7/EPlSmlNmFcWmrCtdza2q0EUgyM=;
-	b=TijuW5IDCkxn3E8mCAMm3lk82v4Jog3pCg6o/2nRAT6/Ajhmk5jtxevZ/F22Ysfh85w5Bl
-	9MybVaUiYpobdA38pR/ZLE0Z9H5TyR9l/CUM8obIEQptV5cYlSyF7pm73JRm5i/GaztYd+
-	lv0tcrWqAjuCQJRfYDk7iZ5WO7YqvLg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-160-vrdyJCC0Oty-OoS-LD6RtQ-1; Fri, 24 Feb 2023 11:20:40 -0500
-X-MC-Unique: vrdyJCC0Oty-OoS-LD6RtQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35E363C10241
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 16:20:40 +0000 (UTC)
-Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 194A3C15BA0;
-	Fri, 24 Feb 2023 16:20:40 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (104/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, f2b98d0a)
-Date: Fri, 24 Feb 2023 16:20:40 -0000
-To: ffan@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53547197
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 16:32:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C44C4339C;
+	Fri, 24 Feb 2023 16:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677256350;
+	bh=y4cwzKHY0rdTHSoLcGNukwvUgSVLhPLJhCFWCAL+0nA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HGMw2modbXaH+bULIX2yYhhekqM2zo3zzQehQx04dgqRH+qBMf1v0UCh6Vfdi/WxE
+	 diq19+GBoqYJ2D8/RaEknfd+XAx4Kr35xNmvMC1WsWj9yhcIpYVCXo8sehbSSemTQv
+	 iqcFYMLf8Rit6SiKMkKi4T1RPo7Fpq3xeR5crKlT3dEAtZzKLYBLc41tKN5OGgJx0/
+	 yPfQGg5YSmSpHfiC9GWxc6X2IuTVakse/LSiVTo/M1CMBjY2UC9ae6XkfAK9ewBLdP
+	 zyQS9YK/fFdYA2L2B8EJhhtA/CzS47IKuqW9ZRtDyGog8Zfam8lFkH6MR50B/jdCsv
+	 ekhqxZu5JnTAw==
+Date: Fri, 24 Feb 2023 09:32:27 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: palmer@dabbelt.com, Conor Dooley <conor.dooley@microchip.com>,
+	naresh.kamboju@linaro.org, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] RISC-V: make TOOLCHAIN_NEEDS_SPEC_20191213 gas
+ only
+Message-ID: <Y/jmm0Q7ypzkUaXw@dev-arch.thelio-3990X>
+References: <20230223220546.52879-1-conor@kernel.org>
+ <20230223220546.52879-3-conor@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <34603.123022411204000959@us-mta-160.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230223220546.52879-3-conor@kernel.org>
 
-Hi, we tested your kernel and here are the results:
+Hi Conor,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On Thu, Feb 23, 2023 at 10:05:46PM +0000, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Quoting the llvm docs:
+> > Between versions 2.0 and 2.1 of the base I specification, a backwards
+> > incompatible change was made to remove selected instructions and CSRs
+> > from the base ISA. These instructions were grouped into a set of new
+> > extensions, but were no longer required by the base ISA. (snip) LLVM
+> > currently implements version 2.0 of the base specification. Thus,
+> > instructions from these extensions are accepted as part of the base
+> > ISA.
+> 
+> There is therefore no need (at present!) to carry out a $cc-option
+> check, and instead just gate presence of zicsr and zifencei in march
+> on the version of binutils that commit 6df2a016c0c8 ("riscv: fix build
+> with binutils 2.38") highlights as the introduction of the requirement.
+> 
+> In fact, the status quo creates some issues with mixed llvm/binutils
+> builds, specifically building with llvm-17 and ld from binutils-2.35.
+> Odd combo you may think, but this is what tuxsuite's debian stable uses
+> while testing 5.10 stable kernels as doesn't support LLD.
+> 
+> CC: stable@vger.kernel.org # needs RISC-V: move zicsr/zifencei spec version check to Kconfi
 
+I think it would be better to drop this comment and just mark patch 1
+for stable directly. However, if it remains, 'Kconfi' -> 'Kconfig' :)
 
-Kernel information:
-    Commit message: Merge tag 'bootconfig-v6.3' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/trace/linux-trace
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Link: https://lore.kernel.org/all/CA+G9fYt9T=ELCLaB9byxaLW2Qf4pZcDO=huCA0D8ug2V2+irJQ@mail.gmail.com/
+> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/73886
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7250145
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7249542
-          x86_64 (debug) - Storage - software RAID testing
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7250278
+Thanks for helping getting down to the bottom of this!
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> ---
+>  arch/riscv/Kconfig | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 4eb0ef8314b3..c6902f4c5650 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -291,8 +291,7 @@ endchoice
+>  config TOOLCHAIN_NEEDS_SPEC_20191213
+>  	bool
+>  	default y
+> -	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zicsr_zifencei)
+> -	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zicsr_zifencei)
+> +	depends on AS_IS_GNU && AS_VERSION >= 23800
+>  	help
+>  	  Newer binutils versions default to ISA spec version 20191213 which
+>  	  moves some instructions from the I extension to the Zicsr and Zifencei
+> -- 
+> 2.39.1
+> 
