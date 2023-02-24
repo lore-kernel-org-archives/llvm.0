@@ -1,45 +1,45 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83842D2E3;
-	Fri, 24 Feb 2023 03:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE1619E;
+	Fri, 24 Feb 2023 05:00:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677208597; x=1708744597;
+  t=1677214840; x=1708750840;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kviqoXrzMaBFxzY/PLk4rLq7RoEXLaN/OBT9RBs+qDk=;
-  b=UyVRDD1qkXc1iVC05VMrQRrMVIv9JWSnAySsMcI9aEP+qbRt6mQRnPy5
-   1C04VXPZ7DJ1hgjdSA895yw34RK5hy/YXkepBBlaOlEfbdyrVTCgsjpYB
-   q5OkxFwWGz6YbZoPZrp08cB3O0EsBuurffeTWbUk2orXVNs8FXPf+dDSy
-   1gEN+QjkJ9Au1UfgejPqw5DksisrM4mU5UkEXgMQT06qfcnwhTGvkEhHh
-   w+dlnII2s4j6G56tINUsuZcNtINttHy0Mv/ahtCuUF+sc/CAn6yyl5y5w
-   uBbyd43LyEr+armj9Ep01O+wuZs2RwBkKEpdFombCnL0l2TPX/stESMMd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="334805229"
+  bh=tZQIvNF2fQT5ZTTmF4013c95rvzv4D1YYc0RCv0VrnQ=;
+  b=ZWQeb7IlPhBoQhC7gU4sRSii/TB0sYgz11dxDA5CxveulNxsuKnWdRH1
+   shG6r7tKg89XjYSL1qEr4vtkmaNyUWy+Fk3Ho5SNjnD6hjhKwuQNMAoHJ
+   VwTe313ZXHth7/nyufu+OAePZm5a5zv6Sgd+bBROwEAgIkVnIUcvuWWiV
+   I9c8IypP8+wqp3MnpiOa46egGCbmZuIVcMj7hCQV92pWfiVCd4gAWCt/I
+   03gJPNoyFaCepYC98XG7+fZg8qpSFXb4bE7ysH+PQJYCn0AlvRr+YVpTz
+   3y+yhwgpCMQomPj7FvUO+OSfRZWuH4D2ieLkaNIg0v6shL+IeV2S3O605
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="317156416"
 X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="334805229"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 19:16:36 -0800
+   d="scan'208";a="317156416"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 21:00:39 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="1001674782"
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="782206623"
 X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="1001674782"
+   d="scan'208";a="782206623"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2023 19:16:35 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2023 21:00:37 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pVOZW-00025J-1w;
-	Fri, 24 Feb 2023 03:16:34 +0000
-Date: Fri, 24 Feb 2023 11:16:19 +0800
+	id 1pVQCC-000290-36;
+	Fri, 24 Feb 2023 05:00:36 +0000
+Date: Fri, 24 Feb 2023 13:00:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: M Chetan Kumar <m.chetan.kumar@linux.intel.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/net/wwan/iosm/iosm_ipc_mux.h:369:17: warning: field
- adb_finish_timer within 'struct iosm_mux' is less aligned than 'struct
- hrtimer' and is usually due to 'struct iosm_mux' being packed, which can
- lead to unaligned accesses
-Message-ID: <202302241140.XzIRs2Td-lkp@intel.com>
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c:38:32:
+ warning: cast from 'mtk_vcodec_ipi_handler' (aka 'void (*)(void *, unsigned
+ int, void *)') to 'ipi_handler_t' (aka 'void (*)(const void *, unsigned int,
+ void *)') converts to incompatible f...
+Message-ID: <202302241258.Q3rgDf4M-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,120 +49,64 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+Hi Mauro,
+
+FYI, the error/warning still remains.
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   d2980d8d826554fa6981d621e569a453787472f8
-commit: 035e3befc191347331dd2530c3686e05a8acfbb2 net: wwan: iosm: fix driver not working with INTEL_IOMMU disabled
-date:   4 months ago
-config: arm-randconfig-r004-20230224 (https://download.01.org/0day-ci/archive/20230224/202302241140.XzIRs2Td-lkp@intel.com/config)
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+date:   11 months ago
+config: hexagon-randconfig-r041-20230224 (https://download.01.org/0day-ci/archive/20230224/202302241258.Q3rgDf4M-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=035e3befc191347331dd2530c3686e05a8acfbb2
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 035e3befc191347331dd2530c3686e05a8acfbb2
+        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/vcodec/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302241140.XzIRs2Td-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302241258.Q3rgDf4M-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/wwan/iosm/iosm_ipc_debugfs.c:10:
-   In file included from drivers/net/wwan/iosm/iosm_ipc_trace.h:12:
-   In file included from drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.h:9:
->> drivers/net/wwan/iosm/iosm_ipc_mux.h:369:17: warning: field adb_finish_timer within 'struct iosm_mux' is less aligned than 'struct hrtimer' and is usually due to 'struct iosm_mux' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           struct hrtimer adb_finish_timer;
-                          ^
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c:38:32: warning: cast from 'mtk_vcodec_ipi_handler' (aka 'void (*)(void *, unsigned int, void *)') to 'ipi_handler_t' (aka 'void (*)(const void *, unsigned int, void *)') converts to incompatible function type [-Wcast-function-type-strict]
+           ipi_handler_t handler_const = (ipi_handler_t)handler;
+                                         ^~~~~~~~~~~~~~~~~~~~~~
    1 warning generated.
 
 
-vim +369 drivers/net/wwan/iosm/iosm_ipc_mux.h
+vim +38 drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
 
-51c45fa95435c5 M Chetan Kumar 2021-06-13  309  
-51c45fa95435c5 M Chetan Kumar 2021-06-13  310  /**
-51c45fa95435c5 M Chetan Kumar 2021-06-13  311   * struct iosm_mux - Structure of the data multiplexing over an IP channel.
-51c45fa95435c5 M Chetan Kumar 2021-06-13  312   * @dev:		Pointer to device structure
-51c45fa95435c5 M Chetan Kumar 2021-06-13  313   * @session:		Array of the MUX sessions.
-51c45fa95435c5 M Chetan Kumar 2021-06-13  314   * @channel:		Reference to the IP MUX channel
-51c45fa95435c5 M Chetan Kumar 2021-06-13  315   * @pcie:		Pointer to iosm_pcie struct
-51c45fa95435c5 M Chetan Kumar 2021-06-13  316   * @imem:		Pointer to iosm_imem
-51c45fa95435c5 M Chetan Kumar 2021-06-13  317   * @wwan:		Poinetr to iosm_wwan
-51c45fa95435c5 M Chetan Kumar 2021-06-13  318   * @ipc_protocol:	Pointer to iosm_protocol
-51c45fa95435c5 M Chetan Kumar 2021-06-13  319   * @channel_id:		Channel ID for MUX
-51c45fa95435c5 M Chetan Kumar 2021-06-13  320   * @protocol:		Type of the MUX protocol
-51c45fa95435c5 M Chetan Kumar 2021-06-13  321   * @ul_flow:		UL Flow type
-51c45fa95435c5 M Chetan Kumar 2021-06-13  322   * @nr_sessions:	Number of sessions
-51c45fa95435c5 M Chetan Kumar 2021-06-13  323   * @instance_id:	Instance ID
-51c45fa95435c5 M Chetan Kumar 2021-06-13  324   * @state:		States of the MUX object
-51c45fa95435c5 M Chetan Kumar 2021-06-13  325   * @event:		Initiated actions to change the state of the MUX object
-51c45fa95435c5 M Chetan Kumar 2021-06-13  326   * @tx_transaction_id:	Transaction id for the ACB command.
-51c45fa95435c5 M Chetan Kumar 2021-06-13  327   * @rr_next_session:	Next session number for round robin.
-51c45fa95435c5 M Chetan Kumar 2021-06-13  328   * @ul_adb:		State of the UL ADB/ADGH.
-51c45fa95435c5 M Chetan Kumar 2021-06-13  329   * @size_needed:	Variable to store the size needed during ADB preparation
-51c45fa95435c5 M Chetan Kumar 2021-06-13  330   * @ul_data_pend_bytes:	Pending UL data to be processed in bytes
-51c45fa95435c5 M Chetan Kumar 2021-06-13  331   * @acb:		Temporary ACB state
-51c45fa95435c5 M Chetan Kumar 2021-06-13  332   * @wwan_q_offset:	This will hold the offset of the given instance
-51c45fa95435c5 M Chetan Kumar 2021-06-13  333   *			Useful while passing or receiving packets from
-51c45fa95435c5 M Chetan Kumar 2021-06-13  334   *			wwan/imem layer.
-1f52d7b622854b M Chetan Kumar 2022-02-10  335   * @adb_finish_timer:	Timer for forcefully finishing the ADB
-1f52d7b622854b M Chetan Kumar 2022-02-10  336   * @acb_tx_sequence_nr: Sequence number for the ACB header.
-1f52d7b622854b M Chetan Kumar 2022-02-10  337   * @params:		user configurable parameters
-1f52d7b622854b M Chetan Kumar 2022-02-10  338   * @adb_tx_sequence_nr: Sequence number for ADB header
-1f52d7b622854b M Chetan Kumar 2022-02-10  339   * @acc_adb_size:       Statistic data for logging
-1f52d7b622854b M Chetan Kumar 2022-02-10  340   * @acc_payload_size:   Statistic data for logging
-51c45fa95435c5 M Chetan Kumar 2021-06-13  341   * @initialized:	MUX object is initialized
-51c45fa95435c5 M Chetan Kumar 2021-06-13  342   * @ev_mux_net_transmit_pending:
-51c45fa95435c5 M Chetan Kumar 2021-06-13  343   *			0 means inform the IPC tasklet to pass the
-51c45fa95435c5 M Chetan Kumar 2021-06-13  344   *			accumulated uplink ADB to CP.
-51c45fa95435c5 M Chetan Kumar 2021-06-13  345   * @adb_prep_ongoing:	Flag for ADB preparation status
-51c45fa95435c5 M Chetan Kumar 2021-06-13  346   */
-51c45fa95435c5 M Chetan Kumar 2021-06-13  347  struct iosm_mux {
-51c45fa95435c5 M Chetan Kumar 2021-06-13  348  	struct device *dev;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  349  	struct mux_session session[IPC_MEM_MUX_IP_SESSION_ENTRIES];
-51c45fa95435c5 M Chetan Kumar 2021-06-13  350  	struct ipc_mem_channel *channel;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  351  	struct iosm_pcie *pcie;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  352  	struct iosm_imem *imem;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  353  	struct iosm_wwan *wwan;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  354  	struct iosm_protocol *ipc_protocol;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  355  	int channel_id;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  356  	enum ipc_mux_protocol protocol;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  357  	enum ipc_mux_ul_flow ul_flow;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  358  	int nr_sessions;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  359  	int instance_id;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  360  	enum mux_state state;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  361  	enum mux_event event;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  362  	u32 tx_transaction_id;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  363  	int rr_next_session;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  364  	struct mux_adb ul_adb;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  365  	int size_needed;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  366  	long long ul_data_pend_bytes;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  367  	struct mux_acb acb;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  368  	int wwan_q_offset;
-1f52d7b622854b M Chetan Kumar 2022-02-10 @369  	struct hrtimer adb_finish_timer;
-1f52d7b622854b M Chetan Kumar 2022-02-10  370  	u16 acb_tx_sequence_nr;
-1f52d7b622854b M Chetan Kumar 2022-02-10  371  	struct ipc_params *params;
-1f52d7b622854b M Chetan Kumar 2022-02-10  372  	u16 adb_tx_sequence_nr;
-1f52d7b622854b M Chetan Kumar 2022-02-10  373  	unsigned long long acc_adb_size;
-1f52d7b622854b M Chetan Kumar 2022-02-10  374  	unsigned long long acc_payload_size;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  375  	u8 initialized:1,
-51c45fa95435c5 M Chetan Kumar 2021-06-13  376  	   ev_mux_net_transmit_pending:1,
-1f52d7b622854b M Chetan Kumar 2022-02-10  377  	   adb_prep_ongoing;
-1f52d7b622854b M Chetan Kumar 2022-02-10  378  } __packed;
-51c45fa95435c5 M Chetan Kumar 2021-06-13  379  
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  27  
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  28  static int mtk_vcodec_vpu_set_ipi_register(struct mtk_vcodec_fw *fw, int id,
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  29  					   mtk_vcodec_ipi_handler handler,
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  30  					   const char *name, void *priv)
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  31  {
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  32  	/*
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  33  	 * The handler we receive takes a void * as its first argument. We
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  34  	 * cannot change this because it needs to be passed down to the rproc
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  35  	 * subsystem when SCP is used. VPU takes a const argument, which is
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  36  	 * more constrained, so the conversion below is safe.
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  37  	 */
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13 @38  	ipi_handler_t handler_const = (ipi_handler_t)handler;
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  39  
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  40  	return vpu_ipi_register(fw->pdev, id, handler_const, name, priv);
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  41  }
+46233e91fa24a9 drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c Alexandre Courbot 2020-10-13  42  
 
-:::::: The code at line 369 was first introduced by commit
-:::::: 1f52d7b622854b8bd7a1be3de095ca2e1f77098e net: wwan: iosm: Enable M.2 7360 WWAN card support
+:::::: The code at line 38 was first introduced by commit
+:::::: 46233e91fa24a91bffca0680b1c55282ba601918 media: mtk-vcodec: move firmware implementations into their own files
 
-:::::: TO: M Chetan Kumar <m.chetan.kumar@linux.intel.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+:::::: TO: Alexandre Courbot <acourbot@chromium.org>
+:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
