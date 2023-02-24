@@ -1,113 +1,155 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1224A53A0
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:31:56 +0000 (UTC)
-Received: by mail-pl1-f174.google.com with SMTP id ko13so813293plb.13
-        for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 13:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cvJN8dmrmNJu4tTYhdlBrzcRSinLAy+Jhaplp/kCRiA=;
-        b=wh807lSO9v29Yu6tO13IzDLOgiVo3Y9CLLlEMCaN5Bfph5SWKk/ief3r4cZyouTDq3
-         ekQ8BZiAaegZvDAKUQ41D41hsAmetgk6oRbzZgr5tZ8Ebv6rouEL0se6NNr8O8vuHMuA
-         Y9E1KcrrOfgbPedMh8QVliNBmDLSSk306iIqsN5Z3WjNY4Kf8EbTZS61IOkrrZWWRWux
-         SIrlqYQU9Ed7MRpv4GK6gK/n40iENTbOVq0sI7jnPIv4ay32p0xTWuzO+r4e3KUxS3Aw
-         mV9fpIWYF+zc1nWP6gzHkwKwUixXjTuaac3chNZcBChKKjLuR16rINK9a4ShFPJKhkRy
-         dJKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cvJN8dmrmNJu4tTYhdlBrzcRSinLAy+Jhaplp/kCRiA=;
-        b=D1j4x8rUrGY+QZ5Sl3rKPcrsQ1f+JaZjLDI+LbTmg9wh5+W97tst8+bgACZltGibek
-         7+wJXeMzYOfY3gdIfock27TY4IHoyfw4sc9wR5wRotlOeCnYyW8YYA/YDzosSgjyZ7Qk
-         dsUDFMwPIEUtgtjhDbtBeJfE4UQFDUSsgFOZKiZtM4kJ+fUbHFL4bEt9b8UxFqgFHLrY
-         S9dMdm0je1yKM9ZpgC52WBF6fhuSOsFJM6UTC7tqgcSnjqaIa163BCgqHaBn0fZQ2FNz
-         ZBB92TK697XZssquWpqeCrICKiUFjOiw2FXs+6u4gV3JFj6HeJaNPPaTi4qpQAWHzoDz
-         NTEA==
-X-Gm-Message-State: AO0yUKWFjXWv3I4l9hirUeWsqwaDceEyrcL3/7xC+jBQx3vOCOImYd2f
-	egPxR/CuygROIPsEb3oevqHWyw==
-X-Google-Smtp-Source: AK7set+inR9Bfe356VnjZRrkMmucPTHHx4QOqBABEwJbFOr2cvrtN9y1cnMB0g/q9qfmCnSJDZEm5g==
-X-Received: by 2002:a17:902:d506:b0:199:4d25:6a4d with SMTP id b6-20020a170902d50600b001994d256a4dmr997355plg.10.1677274316335;
-        Fri, 24 Feb 2023 13:31:56 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id jw9-20020a170903278900b0019a7d58e595sm6071070plb.143.2023.02.24.13.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 13:31:55 -0800 (PST)
-Date: Fri, 24 Feb 2023 13:31:55 -0800 (PST)
-X-Google-Original-Date: Fri, 24 Feb 2023 13:31:09 PST (-0800)
-Subject:     Re: [RFC 0/2] RISC-V: enable rust
-In-Reply-To: <20230224133609.2877396-1-conor.dooley@microchip.com>
-CC: linux-riscv@lists.infradead.org, Conor Dooley <conor.dooley@microchip.com>,
-  Conor Dooley <conor@kernel.org>, ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
-  boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, corbet@lwn.net,
-  Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-  rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Conor Dooley <conor.dooley@microchip.com>
-Message-ID: <mhng-f429a40f-1869-4c5b-ab4f-e7eec94489e8@palmer-ri-x1c9a>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05962BA32
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677274375;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2UMAUl1vVkQtA1lGoVLxYwKGY2uBZryjPEQNts1/Qkg=;
+	b=Zt2303gseSjRohEZDOF1z5iO3fJz+F6rhU7WKgrFtgS20DzLp3BtSNQKB/VEVzhu9l24D2
+	QCQ0iZdoHQxot2jb9t8H9DvAY3li6kCdkdwBl3aSSDIZXsUGVdKZK6gzDmj9wlF4/42D6P
+	Gv2ISsXEl/viXZnX+yzkZslL45tPU2I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-412-D_0HwKVdOnq--7vnMab6Ig-1; Fri, 24 Feb 2023 16:32:54 -0500
+X-MC-Unique: D_0HwKVdOnq--7vnMab6Ig-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3FE33C1023B
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:32:53 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9F278492B08;
+	Fri, 24 Feb 2023 21:32:53 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (104/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, 3822a7c4)
+Date: Fri, 24 Feb 2023 21:32:53 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <12430.123022416325400151@us-mta-412.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 24 Feb 2023 05:36:08 PST (-0800), Conor Dooley wrote:
-> This is a somewhat blind (and maybe foolish) attempt at enabling Rust
-> for RISC-V. I've tested this on Icicle, and the modules seem to work.
-> I'd like to play around with Rust on RISC-V, but I'm not interested in
-> using downstream kernels, so figured I should try and see what's
-> missing...
-> I've tagged this as RFC in case I've missed some "WAaaaa you can't do
-> this" somewhere :)
+Hi, we tested your kernel and here are the results:
 
-I'm fine with it, but IIRC the Rust support for most targets was pulled 
-out as they weren't deemed ready to go yet.  If the Rust folks are OK 
-turning on RISC-V support then it's fine with me, but I think it's 
-really more up to them at this point.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-So
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Kernel information:
+    Commit message: Merge tag 'mm-stable-2023-02-20-13-37' of git://git.ker=
+nel.org/pub/scm/linux/kernel/git/akpm/mm
 
-in case folks want to take it via some Rust-related tree, but I'm also 
-fine taking it via the RISC-V tree if that's easier.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73913
 
->
-> Thanks,
-> Conor.
->
-> CC: Miguel Ojeda <ojeda@kernel.org>
-> CC: Alex Gaynor <alex.gaynor@gmail.com>
-> CC: Wedson Almeida Filho <wedsonaf@gmail.com>
-> CC: Boqun Feng <boqun.feng@gmail.com>
-> CC: Gary Guo <gary@garyguo.net>
-> CC: Björn Roy Baron <bjorn3_gh@protonmail.com>
-> CC: Jonathan Corbet <corbet@lwn.net>
-> CC: Paul Walmsley <paul.walmsley@sifive.com>
-> CC: Palmer Dabbelt <palmer@dabbelt.com>
-> CC: Nathan Chancellor <nathan@kernel.org>
-> CC: Nick Desaulniers <ndesaulniers@google.com>
-> CC: Tom Rix <trix@redhat.com>
-> CC: rust-for-linux@vger.kernel.org
-> CC: linux-doc@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-riscv@lists.infradead.org
-> CC: llvm@lists.linux.dev
->
-> Miguel Ojeda (2):
->   scripts: generate_rust_target: enable building on RISC-V
->   RISC-V: enable building the 64-bit kernels with rust support
->
->  Documentation/rust/arch-support.rst |  2 ++
->  arch/riscv/Kconfig                  |  1 +
->  arch/riscv/Makefile                 |  3 ++-
->  scripts/generate_rust_target.rs     | 19 +++++++++++++++++++
->  4 files changed, 24 insertions(+), 1 deletion(-)
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7252206
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7252922
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
+machine
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1395
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1509
+            Affected tests:
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
