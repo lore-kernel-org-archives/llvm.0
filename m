@@ -1,128 +1,95 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF791AD58;
-	Fri, 24 Feb 2023 19:52:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677268329; x=1708804329;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5wJQQKJXhn0zDFMiXITO9NUG88kZkszeHGbyiK46HK0=;
-  b=Tc51mDyalR3/4RzGZAZfRn811Q6o9Rl+2Q9PfUDfcWs8wCpYFhQOCR5y
-   ir44OKIjBIC/MPJtSTcZwJqW1L6lP1+xX47MIw4lNjHWbnk7YtmhuGZeC
-   uyjDxgAHUhopQPumlzwhF0IkeeAeUXYbCPOloKAMtUqkPTm6Oa4WhwDU2
-   IkwnW3VPK00iHWlOQdPGrgNCjC+I41FHDdBdXKEv4tcTh3uH+JtaDnBb3
-   rcKdfYm6LawgSldaKCVy2AQ5JBLjaVNtk2mPhFdYYKyuQ81YVwnQO6tjS
-   eOS8k4gxnypr0fVmQwRQy2DnMSaKaLiIKziP8Vf6YRef9eI6ckz4Vi0iS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="361074002"
-X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
-   d="scan'208";a="361074002"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 11:52:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="847051864"
-X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
-   d="scan'208";a="847051864"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Feb 2023 11:52:06 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pVe6v-0002gx-21;
-	Fri, 24 Feb 2023 19:52:05 +0000
-Date: Sat, 25 Feb 2023 03:51:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split 29/30]
- arch/arm/kernel/entry-armv.S:271:23: error: cannot mix positional and
- keyword arguments
-Message-ID: <202302250306.elni46RL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBE73D92
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 20:42:20 +0000 (UTC)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-536bbef1c5eso11271737b3.9
+        for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 12:42:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ldkH3+tipVLOPM0MWXmtHwekgdqITx22yGZynxWxbI=;
+        b=dtF6STP7th/ajy1mC0vEUSVWlM9pVmOG3Gn6XA5sl3LA9B9wF3UHwni7+m64GxjbOR
+         VJ8YtDgIepMCXzo3IqidR6Cotkep2peyv5PLBE1o4qjySmPFQpBz1gTEVu5KwgHz/Avx
+         eYeoxs0AEnbKsW+Lwxf7bJsfpZIVDXS8zZWVLrJl03lvJ4GG2rCmVqfdsSFMTAvwZ9hp
+         Jvc/8QtR/Kx/MlWRP2gXnMW5ZZ1S0BWrIDDqfxxr2ZopFa9eZs9Inw++1fPcqsN9pfeu
+         HkTMFCZv5T8sYU5ua56Z/XQ4SqtIwDjglQCvQA22GnAvaT5WFS0PSBOy/wmaUJuWNFfX
+         HUOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ldkH3+tipVLOPM0MWXmtHwekgdqITx22yGZynxWxbI=;
+        b=B8lNoATNOWZegHv+6Pi8Pn95AW6RE4IlP65xb0McnHlk2ANIVyLZJDXdxPcmDCC0da
+         GJe/q7k/EnV7Um3cC2K6e6QIVmaFGfoE3p8yWOJI/QMnA5LKVOfKXC+OOfpcIv5MzqeT
+         2SNsQJHpNmLoBH0BRtbLEs5YC8sRg9kogw62ENi0+vhbjs8Fqpuk/9cHIZM6I+vapMdD
+         Uc/uReFUO6Ga2TiW51P3y2bYtmdbq8L2CyLjQkW5jqq+YjvOVmEANO+TuUUJdQW7VhAD
+         vHSrzHNYXgMdJY/URWp7Y7bQ6+pwYuAUulRNGQamYRfqQrAh+FcyoPioT9WAidanMiZB
+         vSEQ==
+X-Gm-Message-State: AO0yUKWl16bXl9XpMRIOfXFK/JrUOb7tQa54B/PXCbrLBBbOQ47sXSxW
+	w2h7dv3ZSBIeeei3hg3+G/GSsTQ2myqLFhlKfaA=
+X-Google-Smtp-Source: AK7set/+ywY8A6LUpNjag7/xfz0UOWYQ6RUky53j75FCT+hoIcIZqEDUzCcFtByz4LcO4y0MEBVqzL7jJFm3tgkYRFc=
+X-Received: by 2002:a05:6902:1602:b0:8a3:d147:280b with SMTP id
+ bw2-20020a056902160200b008a3d147280bmr810737ybb.3.1677271339810; Fri, 24 Feb
+ 2023 12:42:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230224133609.2877396-1-conor.dooley@microchip.com>
+In-Reply-To: <20230224133609.2877396-1-conor.dooley@microchip.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 24 Feb 2023 21:42:08 +0100
+Message-ID: <CANiq72=4ZhV=u2ZUr=x-iAS_iMnV8GSiq0tEn7Tj0NanO=D+xQ@mail.gmail.com>
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: linux-riscv@lists.infradead.org, conor@kernel.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split
-head:   35ac5a9a53d2554bda395cdfa3236d278715caac
-commit: 0bf7902c72bece7c368367ab29582834a7fff130 [29/30] switch PGD/TTBR0 in <asm/uaccess-asm.h>
-config: arm-randconfig-r035-20230222 (https://download.01.org/0day-ci/archive/20230225/202302250306.elni46RL-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=0bf7902c72bece7c368367ab29582834a7fff130
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split
-        git checkout 0bf7902c72bece7c368367ab29582834a7fff130
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hi Conor,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302250306.elni46RL-lkp@intel.com/
+On Fri, Feb 24, 2023 at 2:37 PM Conor Dooley <conor.dooley@microchip.com> wrote:
+>
+> This is a somewhat blind (and maybe foolish) attempt at enabling Rust
+> for RISC-V. I've tested this on Icicle, and the modules seem to work.
+> I'd like to play around with Rust on RISC-V, but I'm not interested in
+> using downstream kernels, so figured I should try and see what's
+> missing...
+> I've tagged this as RFC in case I've missed some "WAaaaa you can't do
+> this" somewhere :)
 
-All errors (new ones prefixed by >>):
+Thanks for sending this and taking the lead on RISC-V -- I appreciate
+you put me as the author, but in this case, it was actually Gary that
+started the RISC-V port [1], and then I sent three PRs on top later
+on.
 
->> arch/arm/kernel/entry-armv.S:271:23: error: cannot mix positional and keyword arguments
-    svc_entry uaccess=0, 64
-                         ^
+When submitting something on behalf of somebody else, I suggest being
+very careful and ideally contacting the authors beforehand. In
+particular, if there has been any modification (including to the
+commit message), then a note should be added explaining so.
 
+Therefore, please double-check everybody that contributed to the lines
+you are sending (e.g. via `git-blame`) and add them as
+`Co-developed-by`. Also, please add a note of what you changed/wrote
+e.g. square brackets, and `Link` tags to the original PRs/discussions.
 
-vim +271 arch/arm/kernel/entry-armv.S
+See, for instance, what Jamie did at [2] for arm64 or Lina at [3].
 
-   264	
-   265		.align	5
-   266	__und_svc:
-   267	#ifdef CONFIG_KPROBES
-   268		@ If a kprobe is about to simulate a "stmdb sp..." instruction,
-   269		@ it obviously needs free stack space which then will belong to
-   270		@ the saved context.
- > 271		svc_entry uaccess=0, MAX_STACK_SIZE
-   272	#else
-   273		svc_entry uaccess=0
-   274	#endif
-   275	
-   276		mov	r1, #4				@ PC correction to apply
-   277	 THUMB(	tst	r5, #PSR_T_BIT		)	@ exception taken in Thumb mode?
-   278	 THUMB(	movne	r1, #2			)	@ if so, fix up PC correction
-   279		mov	r0, sp				@ struct pt_regs *regs
-   280		bl	__und_fault
-   281	
-   282	__und_svc_finish:
-   283		get_thread_info tsk
-   284		ldr	r5, [sp, #S_PSR]		@ Get SVC cpsr
-   285		svc_exit rpsr=r5, uaccess=0		@ return from exception
-   286	 UNWIND(.fnend		)
-   287	ENDPROC(__und_svc)
-   288	
-   289		.align	5
-   290	__pabt_svc:
-   291		svc_entry uaccess=0
-   292		mov	r2, sp				@ regs
-   293		pabt_helper
-   294		svc_exit rpsr=r5, uaccess=0		@ return from exception
-   295	 UNWIND(.fnend		)
-   296	ENDPROC(__pabt_svc)
-   297	
-   298		.align	5
-   299	__fiq_svc:
-   300		svc_entry trace=0, uaccess=0
-   301		mov	r0, sp				@ struct pt_regs *regs
-   302		bl	handle_fiq_as_nmi
-   303		svc_exit_via_fiq uaccess=0
-   304	 UNWIND(.fnend		)
-   305	ENDPROC(__fiq_svc)
-   306	
+[1] https://github.com/Rust-for-Linux/linux/pull/225
+[2] https://lore.kernel.org/rust-for-linux/20230125163739.3798252-2-Jamie.Cunliffe@arm.com/
+[3] https://lore.kernel.org/rust-for-linux/20230224-rust-vec-v1-4-733b5b5a57c5@asahilina.net/
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Cheers,
+Miguel
