@@ -1,21 +1,21 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBD4524F
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:00:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5688BC433D2;
-	Fri, 24 Feb 2023 21:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F4D524F
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:03:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FD6C433EF;
+	Fri, 24 Feb 2023 21:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677272445;
-	bh=2hjpyvDNC/wSGd+1eQn8U57a8M+iEjURLEBCMQC9WCo=;
+	s=k20201202; t=1677272595;
+	bh=GOPRgmEm/tLlo164VtO08+QtLf9+r2oLkH7o65afRmY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rLJpIT7pDDaWlDn2FWpGiTm0l0Hf9NkJskpSVsWOVJierGI3/z/FGex58pkoLVVCv
-	 crERApewISnJR5PC5YcqPC49xNp2xSRvbVuTmo2pe6kGWjWNlgJeYsRTiJAGLL7tvm
-	 SZUU4dWGVeNXXodlhfHzBVSNW+4yEdR7ZHGvek4wEemqOYTLuREcikoaV0yrmBP9Bx
-	 LVEJlNGEUae0AvH8zjtmcy6fu7DtpBV4/DsMo3G6f9mRPxpUCC352meb0i4uAOQjbh
-	 qOIfH+BK6ruwCTCaylDCiwKm16UxCsYebsidWL00xsFT0hdoo4DgSDqKBtEJaTRXns
-	 TJMxhiffUXCVA==
-Date: Fri, 24 Feb 2023 21:00:38 +0000
+	b=Qt82xGw08+pWQPYenM8GbR0Qn4nQY7XCUDyzCsd556SIZ/mqaZKCxmuMq43nL5sM2
+	 YfIhiPwNX+MqauE34NbgOcdxgCE1VDhPmNmRe7Gw5I5NMbJcUjPVWG0rjzsUpEbFZu
+	 5wQVKGJY41UTW8GI/u19czDbFT9Hzx9F21e7LadYjUkzgvDjG/o4GMtd1JkoDsPlXE
+	 /TNvh8GXartMwOlt9911MkoCWLO1VmPnIe2TazBqh5zPwerPtSXHPlUO9vGvxTYkFw
+	 FSCDzkXMYBQXStWUeFQO6sufgUyGj5wxPA+E/iOmye4S57Zdix2f0paxXAu4DwWiaU
+	 aTuqaHZpN9kaQ==
+Date: Fri, 24 Feb 2023 21:03:09 +0000
 From: Conor Dooley <conor@kernel.org>
 To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
 Cc: Conor Dooley <conor.dooley@microchip.com>,
@@ -32,10 +32,12 @@ Cc: Conor Dooley <conor.dooley@microchip.com>,
 	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [RFC 0/2] RISC-V: enable rust
-Message-ID: <Y/kldmYcl7+2FBRB@spud>
-References: <20230224133609.2877396-1-conor.dooley@microchip.com>
- <CANiq72=4ZhV=u2ZUr=x-iAS_iMnV8GSiq0tEn7Tj0NanO=D+xQ@mail.gmail.com>
+Subject: Re: [RFC RESEND 2/2] RISC-V: enable building the 64-bit kernels with
+ rust support
+Message-ID: <Y/kmDcMBcZ2PzcKR@spud>
+References: <20230224135044.2882109-1-conor.dooley@microchip.com>
+ <20230224135044.2882109-3-conor.dooley@microchip.com>
+ <CANiq72m1bnHZEd1n+tzaTXYqk8kU83CEPSFO7TBMX44J3poKOw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,82 +45,61 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="EzgSW8I33ytRe36y"
+	protocol="application/pgp-signature"; boundary="WdAygoFJPXezUehP"
 Content-Disposition: inline
-In-Reply-To: <CANiq72=4ZhV=u2ZUr=x-iAS_iMnV8GSiq0tEn7Tj0NanO=D+xQ@mail.gmail.com>
+In-Reply-To: <CANiq72m1bnHZEd1n+tzaTXYqk8kU83CEPSFO7TBMX44J3poKOw@mail.gmail.com>
 
 
---EzgSW8I33ytRe36y
+--WdAygoFJPXezUehP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 24, 2023 at 09:42:08PM +0100, Miguel Ojeda wrote:
-> Hi Conor,
->=20
-> On Fri, Feb 24, 2023 at 2:37 PM Conor Dooley <conor.dooley@microchip.com>=
+On Fri, Feb 24, 2023 at 09:45:05PM +0100, Miguel Ojeda wrote:
+> On Fri, Feb 24, 2023 at 2:51 PM Conor Dooley <conor.dooley@microchip.com>=
  wrote:
-> >
-> > This is a somewhat blind (and maybe foolish) attempt at enabling Rust
-> > for RISC-V. I've tested this on Icicle, and the modules seem to work.
-> > I'd like to play around with Rust on RISC-V, but I'm not interested in
-> > using downstream kernels, so figured I should try and see what's
-> > missing...
-> > I've tagged this as RFC in case I've missed some "WAaaaa you can't do
-> > this" somewhere :)
+
+> > diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/a=
+rch-support.rst
+> > index 6982b63775da..197919158596 100644
+> > --- a/Documentation/rust/arch-support.rst
+> > +++ b/Documentation/rust/arch-support.rst
+> > @@ -15,5 +15,7 @@ support corresponds to ``S`` values in the ``MAINTAIN=
+ERS`` file.
+> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> >  Architecture  Level of support  Constraints
+> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> > +``riscv``     Maintained        ``rv64`` only.
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> >  ``x86``       Maintained        ``x86_64`` only.
 >=20
-> Thanks for sending this and taking the lead on RISC-V
+> I think this separator between rows should not be here (it is not in
+> `rust-for-linux/rust`). Please see
+> https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#simple=
+-tables.
 
-Meh, far from it. I'm just trying to get the ball rolling if it really
-is as trivial as this seems.
+That's what the "let the automation tell me if I messed up rst" approach
+gets you ;)
 
-> I appreciate
-> you put me as the author, but in this case, it was actually Gary that
-> started the RISC-V port [1], and then I sent three PRs on top later
-> on.
 
-The stuff that I have lifted here all had you as the sole author in the
-"rust" branch downstream, which is why I gave you authorship. Namely:
-afba78eacb9b ("rust: generate target specification files on the fly")
-732b3c386328 ("rust: target: remove `cpu`")
-
-I don't see anything from [1] in these commits, so I don't think that I
-made a mistake here.
-
-> When submitting something on behalf of somebody else, I suggest being
-> very careful and ideally contacting the authors beforehand. In
-> particular, if there has been any modification (including to the
-> commit message), then a note should be added explaining so.
-
-It's RFC for a reason, I've had a poor track record with off-list emails
-to people that do not know me so would rather do it this way :)
-Probably should have noted that I wrote the ~placeholder commit messages
-though, apologies. I'll sort that out for a potential v1.
-
-> Therefore, please double-check everybody that contributed to the lines
-> you are sending (e.g. via `git-blame`) and add them as
-
-That's what I did! Unless I missed something that was non-obvious, the
-only name on the commits I lifted was you. Is there somewhere else I
-should have looked for that information?
-
-> `Co-developed-by`. Also, please add a note of what you changed/wrote
-> e.g. square brackets, and `Link` tags to the original PRs/discussions.
-
-If this goes to v1, I will note that I wrote the commit messages.
-
-Apologies,
-Conor.
-
---EzgSW8I33ytRe36y
+--WdAygoFJPXezUehP
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/kldgAKCRB4tDGHoIJi
-0kRlAQCUtbv6hyB+QaKgek4dllhjR2OYkuSr5B2c1hLoO5iADAEAs0GElI0VA2QL
-tfv3Ync/lLJwVaPRbeh6/nBJInV17wU=
-=lKKs
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/kmDQAKCRB4tDGHoIJi
+0nPaAP4scKJyUoodTh1VeLDzWnq6wVMqx2ag5tPkur6OL8OPSwD+J4ShZHdTHo7f
+F5jmK7nrKyOomF7iNe21+bCUkCg/qAs=
+=fdgN
 -----END PGP SIGNATURE-----
 
---EzgSW8I33ytRe36y--
+--WdAygoFJPXezUehP--
