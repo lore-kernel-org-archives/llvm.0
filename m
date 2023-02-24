@@ -1,151 +1,148 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F0C6125
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 16:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677254500;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Et56MX6J37EUA8ANnq0aW90xcSh38SAQGMStlM6eEak=;
-	b=LN2NSJmo2ePJyBIm77bwfDnts49fgfNp4s43V8zLEfB2tf1gN9UJx0ztmZVuzt9U9umoFp
-	gO1nO7tfh7sTosBXq4TofU9UXevs+DQc76nGr3jSswBjw30ElKvaMapnlTeaEwt7YBl0+L
-	F2jK0QOBQ0zQegZBtrq/KSAXCqqzxiU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-362-t9lzdbWfPY6ja4Xc8DQ2Bg-1; Fri, 24 Feb 2023 11:01:38 -0500
-X-MC-Unique: t9lzdbWfPY6ja4Xc8DQ2Bg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31034100F90D
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 16:01:38 +0000 (UTC)
-Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 15A852026D3E;
-	Fri, 24 Feb 2023 16:01:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (104/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, e4bc1588)
-Date: Fri, 24 Feb 2023 16:01:38 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CDE6FBB;
+	Fri, 24 Feb 2023 16:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677255359; x=1708791359;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6ml9Rij3KBCXPLxf73qa6NWDty86Rof1kQKrXVrGBQ4=;
+  b=m7pNrDiXDn7DNrh6NmRgNHc5s9JgBgtE+mO82tvfrP4A1/vhFuadFS5A
+   OPdBfliLevPC+fFk7KeaBmEnH20ESVsy18YzIFNGnTu8R18yrTDb94OBq
+   mr3HAD39Cirrm2xneRlJuZo2rA31zUdT/88PoMe56mpZdeONrPc+OFWud
+   X4QFyj59A5qDk6VGKiXKOmyxvVFgN4iu/cW4/rgzT/FWJ3QM+Y0L3rtM5
+   s4Vy/Zu4YIqIS83yE2H1WCSwJ82n55v8ayQMu003vxGOH6WhBp6ldJicR
+   I0OQXrmr2cB3OcxALf/PhSUq2aMBbiP9QovQ6yzdSpmtRNrmx7P3Wgdlg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="396022752"
+X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
+   d="scan'208";a="396022752"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 08:15:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="1001873461"
+X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
+   d="scan'208";a="1001873461"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Feb 2023 08:15:57 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pVajk-0002Wv-1H;
+	Fri, 24 Feb 2023 16:15:56 +0000
+Date: Sat, 25 Feb 2023 00:15:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Javier Martinez Canillas <javierm@redhat.com>
+Subject: drivers/gpu/drm/omapdrm/omap_fbdev.c:235:6: warning: variable
+ 'helper' is used uninitialized whenever 'if' condition is true
+Message-ID: <202302250058.fYTe9aTP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <68022.123022411013801393@us-mta-362.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d2980d8d826554fa6981d621e569a453787472f8
+commit: 3fb1f62f80a1d249260db5ea9e22c51e52fab9ae drm/fb-helper: Remove drm_fb_helper_unprepare() from drm_fb_helper_fini()
+date:   3 days ago
+config: arm-randconfig-r033-20230222 (https://download.01.org/0day-ci/archive/20230225/202302250058.fYTe9aTP-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3fb1f62f80a1d249260db5ea9e22c51e52fab9ae
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3fb1f62f80a1d249260db5ea9e22c51e52fab9ae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/omapdrm/
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302250058.fYTe9aTP-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'leds-next-6.3' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/lee/leds
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/73893
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7251028
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7250334
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7250876
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> drivers/gpu/drm/omapdrm/omap_fbdev.c:235:6: warning: variable 'helper' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!fbdev)
+               ^~~~~~
+   drivers/gpu/drm/omapdrm/omap_fbdev.c:259:26: note: uninitialized use occurs here
+           drm_fb_helper_unprepare(helper);
+                                   ^~~~~~
+   drivers/gpu/drm/omapdrm/omap_fbdev.c:235:2: note: remove the 'if' if its condition is always false
+           if (!fbdev)
+           ^~~~~~~~~~~
+   drivers/gpu/drm/omapdrm/omap_fbdev.c:228:30: note: initialize the variable 'helper' to silence this warning
+           struct drm_fb_helper *helper;
+                                       ^
+                                        = NULL
+   1 warning generated.
 
 
+vim +235 drivers/gpu/drm/omapdrm/omap_fbdev.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  222  
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  223  /* initialize fbdev helper */
+efd1f06be004a6 drivers/gpu/drm/omapdrm/omap_fbdev.c Tomi Valkeinen    2018-02-09  224  void omap_fbdev_init(struct drm_device *dev)
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  225  {
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  226  	struct omap_drm_private *priv = dev->dev_private;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  227  	struct omap_fbdev *fbdev = NULL;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  228  	struct drm_fb_helper *helper;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  229  	int ret = 0;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  230  
+2ee767922e1bc7 drivers/gpu/drm/omapdrm/omap_fbdev.c Laurent Pinchart  2018-03-05  231  	if (!priv->num_pipes)
+da77772172059e drivers/gpu/drm/omapdrm/omap_fbdev.c Peter Ujfalusi    2017-12-15  232  		return;
+da77772172059e drivers/gpu/drm/omapdrm/omap_fbdev.c Peter Ujfalusi    2017-12-15  233  
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  234  	fbdev = kzalloc(sizeof(*fbdev), GFP_KERNEL);
+78110bb8dc4a7f drivers/staging/omapdrm/omap_fbdev.c Joe Perches       2013-02-11 @235  	if (!fbdev)
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  236  		goto fail;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  237  
+9b55b95a8eca1a drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2012-03-05  238  	INIT_WORK(&fbdev->work, pan_worker);
+9b55b95a8eca1a drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2012-03-05  239  
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  240  	helper = &fbdev->base;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  241  
+6c80a93be62d39 drivers/gpu/drm/omapdrm/omap_fbdev.c Thomas Zimmermann 2023-01-25  242  	drm_fb_helper_prepare(dev, helper, 32, &omap_fb_helper_funcs);
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  243  
+2dea2d1182179e drivers/gpu/drm/omapdrm/omap_fbdev.c Pankaj Bharadiya  2020-03-05  244  	ret = drm_fb_helper_init(dev, helper);
+efd1f06be004a6 drivers/gpu/drm/omapdrm/omap_fbdev.c Tomi Valkeinen    2018-02-09  245  	if (ret)
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  246  		goto fail;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  247  
+6c80a93be62d39 drivers/gpu/drm/omapdrm/omap_fbdev.c Thomas Zimmermann 2023-01-25  248  	ret = drm_fb_helper_initial_config(helper);
+01934c2a691882 drivers/gpu/drm/omapdrm/omap_fbdev.c Thierry Reding    2014-12-19  249  	if (ret)
+01934c2a691882 drivers/gpu/drm/omapdrm/omap_fbdev.c Thierry Reding    2014-12-19  250  		goto fini;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  251  
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  252  	priv->fbdev = helper;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  253  
+efd1f06be004a6 drivers/gpu/drm/omapdrm/omap_fbdev.c Tomi Valkeinen    2018-02-09  254  	return;
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  255  
+01934c2a691882 drivers/gpu/drm/omapdrm/omap_fbdev.c Thierry Reding    2014-12-19  256  fini:
+01934c2a691882 drivers/gpu/drm/omapdrm/omap_fbdev.c Thierry Reding    2014-12-19  257  	drm_fb_helper_fini(helper);
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  258  fail:
+3fb1f62f80a1d2 drivers/gpu/drm/omapdrm/omap_fbdev.c Thomas Zimmermann 2023-02-16  259  	drm_fb_helper_unprepare(helper);
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  260  	kfree(fbdev);
+e1c1174f8d5602 drivers/gpu/drm/omapdrm/omap_fbdev.c Laurent Pinchart  2015-12-14  261  
+e1c1174f8d5602 drivers/gpu/drm/omapdrm/omap_fbdev.c Laurent Pinchart  2015-12-14  262  	dev_warn(dev->dev, "omap_fbdev_init failed\n");
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  263  }
+cd5351f4d2b1b8 drivers/staging/omapdrm/omap_fbdev.c Rob Clark         2011-11-12  264  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 235 was first introduced by commit
+:::::: 78110bb8dc4a7ff331bfa3cfe7d4e287cfb3f22b staging: Remove unnecessary OOM messages
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Joe Perches <joe@perches.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
