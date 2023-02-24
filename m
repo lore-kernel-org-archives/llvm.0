@@ -1,165 +1,260 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17D76105
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 15:28:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677252497; x=1708788497;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=poxQTqgWSLciAThNe/zOfrINHkOB6ILahmpb3aOL6ts=;
-  b=SZl8yiBJwxYtSuB087VUyrSHa9U+WrEMcZgEjSUTvL+QgK5y+Oe+Gq3z
-   XgxlbClSGFzM1wFbqd80BZVdGiZ/3z2drPdEeM/5DyXkqPfhu6Geyn5oa
-   aGIUmpqLBkgi0cCfCrpHwFw6EOoOcI8akvtZgBHMpMSpPopo05weso0N+
-   QXAvv8+IiNkSS8u1qfwzgcYz5UR6kfrI/pWo4Lx/OK3JSUSAry/T9FH8v
-   EbrD9Zj0ltCKWnbjJ2GPRx8/rbaOfLevbbZvTf6xkrRMy6J5yOMj7KtPe
-   P+kTUcsyI5pOrT2DocNgvqN79x3IjzNrBImwIPPmkNUkW3K84fp/qelWE
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,325,1669100400"; 
-   d="asc'?scan'208";a="202114504"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2023 08:28:10 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 24 Feb 2023 08:28:09 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Fri, 24 Feb 2023 08:28:06 -0700
-Date: Fri, 24 Feb 2023 15:27:39 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Nathan Chancellor <nathan@kernel.org>
-CC: <linux-riscv@lists.infradead.org>, <conor@kernel.org>, Miguel Ojeda
-	<ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho
-	<wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
-	<gary@garyguo.net>, =?iso-8859-1?Q?Bj=F6rn?= Roy Baron
-	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nick
- Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-	<rust-for-linux@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: [RFC RESEND 2/2] RISC-V: enable building the 64-bit kernels with
- rust support
-Message-ID: <Y/jXayJucRFxzJGA@wendy>
-References: <20230224135044.2882109-1-conor.dooley@microchip.com>
- <20230224135044.2882109-3-conor.dooley@microchip.com>
- <Y/jQSUpXH5XwQTqg@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D166125
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 15:58:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118FDC433D2;
+	Fri, 24 Feb 2023 15:58:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677254335;
+	bh=rRfXjsGBMvvnDz60uwLB5dc9ju4oNbQeuN0GLhjFFZk=;
+	h=From:To:Subject:In-Reply-To:References:Date:From;
+	b=IV+x2SOKujlDxRkpOOclYLhRMxavxs2ZgAVNSvw7w90V9xvyuyFfsJCv80gYcOG2p
+	 A4TsrQ/qWG2iKNVl3avpevUIt5GA93ovI/qxOn7KRfjQxoOnikKjPiXeR7hhdclS6q
+	 dqmICBshEsrCnUZnXi2fTr77wbblb1vHL/rZvDQG8+JRWHjmvTQn465vrIBEOHJ7Iz
+	 OcdwuhdpCS1R/LJKz0LToyAjRK19HbZPcprjDc1e+B3ESMEvkoWdKClgQQu+6mliia
+	 B68A719Xz9UxYpvtgkDRGcfVlkhGZKsdVyehclJsK+pzSytz6pbulYjyBSnzYllZVj
+	 F5Yvnz7APGcSQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Alexandre Ghiti <alex@ghiti.fr>, Alexandre Ghiti
+ <alexghiti@rivosinc.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas
+ Piggin <npiggin@gmail.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, nathan@kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+ ndesaulniers@google.com
+Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
+In-Reply-To: <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
+References: <20230215143626.453491-1-alexghiti@rivosinc.com>
+ <20230215143626.453491-2-alexghiti@rivosinc.com>
+ <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
+Date: Fri, 24 Feb 2023 16:58:52 +0100
+Message-ID: <877cw7dphf.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="z2lFv5ndM+uKjjaZ"
-Content-Disposition: inline
-In-Reply-To: <Y/jQSUpXH5XwQTqg@dev-arch.thelio-3990X>
-
---z2lFv5ndM+uKjjaZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 24, 2023 at 07:57:13AM -0700, Nathan Chancellor wrote:
-> Hi Conor,
->=20
-> On Fri, Feb 24, 2023 at 01:50:44PM +0000, Conor Dooley wrote:
-> > From: Miguel Ojeda <ojeda@kernel.org>
-> >=20
-> > The rust modules work on 64-bit RISC-V, with no twiddling required.
-> > Select HAS_RUST and provide the required flags to kbuild so that the
-> > modules can be used.
-> > 32-bit is broken in core rust code, so support is limited to 64-bit
-> > only: ld.lld: error: undefined symbol: __udivdi3
-> >=20
-> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  Documentation/rust/arch-support.rst | 2 ++
-> >  arch/riscv/Kconfig                  | 1 +
-> >  arch/riscv/Makefile                 | 3 ++-
-> >  3 files changed, 5 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/a=
-rch-support.rst
-> > index 6982b63775da..197919158596 100644
-> > --- a/Documentation/rust/arch-support.rst
-> > +++ b/Documentation/rust/arch-support.rst
-> > @@ -15,5 +15,7 @@ support corresponds to ``S`` values in the ``MAINTAIN=
-ERS`` file.
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> >  Architecture  Level of support  Constraints
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> > +``riscv``     Maintained        ``rv64`` only.
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> >  ``x86``       Maintained        ``x86_64`` only.
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 81eb031887d2..73174157212d 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -115,6 +115,7 @@ config RISCV
-> >  	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
-> >  	select HAVE_REGS_AND_STACK_ACCESS_API
-> >  	select HAVE_RSEQ
-> > +	select HAVE_RUST if 64BIT
->=20
-> Just a small drive by comment, you have 'if 64BIT' here...
->=20
-> >  	select HAVE_STACKPROTECTOR
-> >  	select HAVE_SYSCALL_TRACEPOINTS
-> >  	select IRQ_DOMAIN
-> > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > index 76989561566b..0d6fc4e25221 100644
-> > --- a/arch/riscv/Makefile
-> > +++ b/arch/riscv/Makefile
-> > @@ -29,8 +29,8 @@ ifeq ($(CONFIG_ARCH_RV64I),y)
-> > =20
-> >  	KBUILD_CFLAGS +=3D -mabi=3Dlp64
-> >  	KBUILD_AFLAGS +=3D -mabi=3Dlp64
-> > -
-> >  	KBUILD_LDFLAGS +=3D -melf64lriscv
-> > +	KBUILD_RUSTFLAGS +=3D -Ctarget-cpu=3Dgeneric-rv64
-> >  else
-> >  	BITS :=3D 32
-> >  	UTS_MACHINE :=3D riscv32
-> > @@ -38,6 +38,7 @@ else
-> >  	KBUILD_CFLAGS +=3D -mabi=3Dilp32
-> >  	KBUILD_AFLAGS +=3D -mabi=3Dilp32
-> >  	KBUILD_LDFLAGS +=3D -melf32lriscv
-> > +	KBUILD_RUSTFLAGS +=3D -Ctarget-cpu=3Dgeneric-rv32
->=20
-> but also add KBUILD_RUSTFLAGS for the !64BIT case. Seems like one of
-> those can be removed.
+Alexandre Ghiti <alex@ghiti.fr> writes:
 
-Yeah & it's ditto for the rv32 handling in 1/2 as well. Ideally there
-wouldn't be implicit 64-bit division and the "if 64BIT" could go
-away. I just left things as-lifted, but I'll go drop anything 32-bit
-related if this series looses the RFC prefix ;)
+> +cc linux-kbuild, llvm, Nathan, Nick
+>
+> On 2/15/23 15:36, Alexandre Ghiti wrote:
+>> From: Alexandre Ghiti <alex@ghiti.fr>
+>>
+>> This config allows to compile 64b kernel as PIE and to relocate it at
+>> any virtual address at runtime: this paves the way to KASLR.
+>> Runtime relocation is possible since relocation metadata are embedded in=
+to
+>> the kernel.
+>>
+>> Note that relocating at runtime introduces an overhead even if the
+>> kernel is loaded at the same address it was linked at and that the compi=
+ler
+>> options are those used in arm64 which uses the same RELA relocation
+>> format.
+>>
+>> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+>> ---
+>>   arch/riscv/Kconfig              | 14 +++++++++
+>>   arch/riscv/Makefile             |  7 +++--
+>>   arch/riscv/kernel/efi-header.S  |  6 ++--
+>>   arch/riscv/kernel/vmlinux.lds.S | 10 ++++--
+>>   arch/riscv/mm/Makefile          |  4 +++
+>>   arch/riscv/mm/init.c            | 54 ++++++++++++++++++++++++++++++++-
+>>   6 files changed, 87 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index e2b656043abf..e0ee7ce4b2e3 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -544,6 +544,20 @@ config COMPAT
+>>=20=20=20
+>>   	  If you want to execute 32-bit userspace applications, say Y.
+>>=20=20=20
+>> +config RELOCATABLE
+>> +	bool "Build a relocatable kernel"
+>> +	depends on MMU && 64BIT && !XIP_KERNEL
+>> +	help
+>> +          This builds a kernel as a Position Independent Executable (PI=
+E),
+>> +          which retains all relocation metadata required to relocate the
+>> +          kernel binary at runtime to a different virtual address than =
+the
+>> +          address it was linked at.
+>> +          Since RISCV uses the RELA relocation format, this requires a
+>> +          relocation pass at runtime even if the kernel is loaded at the
+>> +          same address it was linked at.
+>> +
+>> +          If unsure, say N.
+>> +
+>>   endmenu # "Kernel features"
+>>=20=20=20
+>>   menu "Boot options"
+>> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+>> index 82153960ac00..97c34136b027 100644
+>> --- a/arch/riscv/Makefile
+>> +++ b/arch/riscv/Makefile
+>> @@ -7,9 +7,12 @@
+>>   #
+>>=20=20=20
+>>   OBJCOPYFLAGS    :=3D -O binary
+>> -LDFLAGS_vmlinux :=3D
+>> +ifeq ($(CONFIG_RELOCATABLE),y)
+>> +	LDFLAGS_vmlinux +=3D -shared -Bsymbolic -z notext -z norelro
+>> +	KBUILD_CFLAGS +=3D -fPIE
+>> +endif
+>>   ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+>> -	LDFLAGS_vmlinux :=3D --no-relax
+>> +	LDFLAGS_vmlinux +=3D --no-relax
+>>   	KBUILD_CPPFLAGS +=3D -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+>>   	CC_FLAGS_FTRACE :=3D -fpatchable-function-entry=3D8
+>>   endif
+>> diff --git a/arch/riscv/kernel/efi-header.S b/arch/riscv/kernel/efi-head=
+er.S
+>> index 8e733aa48ba6..f7ee09c4f12d 100644
+>> --- a/arch/riscv/kernel/efi-header.S
+>> +++ b/arch/riscv/kernel/efi-header.S
+>> @@ -33,7 +33,7 @@ optional_header:
+>>   	.byte	0x02					// MajorLinkerVersion
+>>   	.byte	0x14					// MinorLinkerVersion
+>>   	.long	__pecoff_text_end - efi_header_end	// SizeOfCode
+>> -	.long	__pecoff_data_virt_size			// SizeOfInitializedData
+>> +	.long	__pecoff_data_virt_end - __pecoff_text_end	// SizeOfInitializedD=
+ata
+>>   	.long	0					// SizeOfUninitializedData
+>>   	.long	__efistub_efi_pe_entry - _start		// AddressOfEntryPoint
+>>   	.long	efi_header_end - _start			// BaseOfCode
+>> @@ -91,9 +91,9 @@ section_table:
+>>   		IMAGE_SCN_MEM_EXECUTE			// Characteristics
+>>=20=20=20
+>>   	.ascii	".data\0\0\0"
+>> -	.long	__pecoff_data_virt_size			// VirtualSize
+>> +	.long	__pecoff_data_virt_end - __pecoff_text_end	// VirtualSize
+>>   	.long	__pecoff_text_end - _start		// VirtualAddress
+>> -	.long	__pecoff_data_raw_size			// SizeOfRawData
+>> +	.long	__pecoff_data_raw_end - __pecoff_text_end	// SizeOfRawData
+>>   	.long	__pecoff_text_end - _start		// PointerToRawData
+>>=20=20=20
+>>   	.long	0					// PointerToRelocations
+>> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux=
+.lds.S
+>> index 4e6c88aa4d87..8be2de3be08c 100644
+>> --- a/arch/riscv/kernel/vmlinux.lds.S
+>> +++ b/arch/riscv/kernel/vmlinux.lds.S
+>> @@ -122,9 +122,15 @@ SECTIONS
+>>   		*(.sdata*)
+>>   	}
+>>=20=20=20
+>> +	.rela.dyn : ALIGN(8) {
+>> +		__rela_dyn_start =3D .;
+>> +		*(.rela .rela*)
+>> +		__rela_dyn_end =3D .;
+>> +	}
+>> +
+>
+>
+> So I realized those relocations would be better in the init section so=20
+> we can get rid of them at some point. So I tried the following:
+>
+> diff --git a/arch/riscv/kernel/vmlinux.lds.S=20
+> b/arch/riscv/kernel/vmlinux.lds.S
+> index 7ac215467fd5..6111023a89ef 100644
+> --- a/arch/riscv/kernel/vmlinux.lds.S
+> +++ b/arch/riscv/kernel/vmlinux.lds.S
+> @@ -93,6 +93,12 @@ SECTIONS
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 *(.rel.dyn*)
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .rela.dyn : ALIGN(8) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 __rela_dyn_start =3D .;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 *(.rela .rela*)
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 __rela_dyn_end =3D .;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> +
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __init_data_end =3D .;
+>
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 . =3D ALIGN(8);
+> @@ -119,12 +125,6 @@ SECTIONS
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 *(.sdata*)
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .rela.dyn : ALIGN(8) {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 __rela_dyn_start =3D .;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 *(.rela .rela*)
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 __rela_dyn_end =3D .;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> -
+>  =C2=A0#ifdef CONFIG_EFI
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .pecoff_edata_padding : { BYT=
+E(0); . =3D=20
+> ALIGN(PECOFF_FILE_ALIGNMENT); }
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __pecoff_data_raw_end =3D ABS=
+OLUTE(.);
+>
+>
+> But then all the relocations in vmlinux end up being null:
+>
+> vmlinux:=C2=A0=C2=A0=C2=A0=C2=A0 file format elf64-littleriscv
+>
+> $ riscv64-linux-gnu-objdump -R vmlinux
+>
+> DYNAMIC RELOCATION RECORDS
+> OFFSET=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 TYPE=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 VALUE
+> 0000000000000000 R_RISCV_NONE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *ABS*
+> 0000000000000000 R_RISCV_NONE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *ABS*
+> ....
+>
+>  =C2=A0I also noticed that re-linking vmlinux with the same command right=
+=20
+> after works (ie, the relocations are now valid):
+>
+> $ riscv64-linux-gnu-objdump -R vmlinux
+>
+> vmlinux:=C2=A0=C2=A0=C2=A0=C2=A0 file format elf64-littleriscv
+>
+> DYNAMIC RELOCATION RECORDS
+> OFFSET=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 TYPE=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 VALUE
+> ffffffff82600718 R_RISCV_RELATIVE=C2=A0 *ABS*-0x000000007d9ff8e8
+> ffffffff82600720 R_RISCV_RELATIVE=C2=A0 *ABS*-0x000000007d9ff8e8
+> ...
+>
+> Below is the command used to generate this working vmlinux:
+>
+> riscv64-unknown-linux-gnu-ld -melf64lriscv -z noexecstack=20
+> --no-warn-rwx-segments -shared -Bsymbolic -z notext -z norelro=20
+> --no-relax --build-id=3Dsha1 --script=3D./arch/riscv/kernel/vmlinux.lds=20
+> -Map=3Dvmlinux.map -o vmlinux --whole-archive vmlinux.a .vmlinux.export.o=
+=20
+> init/version-timestamp.o --no-whole-archive --start-group=20
+> ./drivers/firmware/efi/libstub/lib.a --end-group .tmp_vmlinux.kallsyms3.o
+>
+> I tried a lot of things, but I struggle to understand, does anyone have=20
+> any idea? FYI, the same problem happens with LLVM.
 
---z2lFv5ndM+uKjjaZ
-Content-Type: application/pgp-signature; name="signature.asc"
+Don't ask me *why*, but adding --emit-relocs to your linker flags solves
+"the NULL .rela.dyn" both for GCC and LLVM.
 
------BEGIN PGP SIGNATURE-----
+The downside is that you end up with a bunch of .rela cruft in your
+vmlinux.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/jXawAKCRB4tDGHoIJi
-0pNGAP4zIxU9hWDGRLAc9v31P3IiCujj/BIkSl5SxfXQyqJseAD/VlqTDGyws2G0
-0Yvnyz+H9GhDgw8F2jUNxhK9REZOLgM=
-=Stuu
------END PGP SIGNATURE-----
 
---z2lFv5ndM+uKjjaZ--
+Bj=C3=B6rn
