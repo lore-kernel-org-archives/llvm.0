@@ -1,182 +1,169 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD5EAD42;
-	Thu, 23 Feb 2023 22:37:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677191846; x=1708727846;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e3t9z/jsq/R9VmCMpvzxJuOZA3CB1y3m1MAys+YiRFE=;
-  b=QED9MIuNI5X0FVuvm+5TAzriwN9hKH90UnJrVq7phVjRNzH0DYk6BRyn
-   oC8ph4wvIpx3VN4anD23qDh0PMZKdN9rwOtcVwV0YyKNhSegjCcFH0wtu
-   +TyQybQ13d0g+m1MZVcMHqt6QECwA0nmwnMiILHZ4SIv4Ckyp8LYXjv+r
-   J4fRrTmICmRkgltEyuE9ElZRniRZIelCus4g8lege4sLzSVE3PNcixBWe
-   XeD6BTpStfcCXbkuqHX+/NRJP1qERZBhAjog0S9poAcmq6XNjMJSO4RV7
-   R1fZu5WF8hYdELUB+9lzGJy6WKezh0iwzcCwDXWNdJqPKDYh+WEax9+hd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="332020143"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="332020143"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2023 14:37:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="918200639"
-X-IronPort-AV: E=Sophos;i="5.97,322,1669104000"; 
-   d="scan'208";a="918200639"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2023 14:37:24 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pVKDL-0001rN-2I;
-	Thu, 23 Feb 2023 22:37:23 +0000
-Date: Fri, 24 Feb 2023 06:36:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:rcu/rcutop 1/1] kernel/rcu/debug.h:135:5: warning: no
- previous prototype for function 'rcu_debug_func_add'
-Message-ID: <202302240630.BNuKC8xl-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70687C
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 00:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 467FEC433D2
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 00:27:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677198468;
+	bh=04HzNiXeZWVQUk21JLryWqtmb0X9RFU/gPUr0yis9Gs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=XbIPccfNIEdDHpKlCl5b4JTDQ5O4ni+Wyct/voolXYdrqAe9dZbMCjlmNVIh/Bfqf
+	 L6YU7iUgZSqCr+Zy9wc8d2zGdjwshN26FYvCkDWQhYfATXmP+coQI+y/KLzVFQvpVY
+	 tF31txnNjHnNPuaHx5xWYpnJMYAyVIqiIL41Npj7fZ/E/VWkNrB5pS3ZLdkIbAzbb6
+	 8THdVszjk7ZputT6Yj0OYlTWjbRv+Sj7mfWbCy90aZqUuemaEZpS5HomZTtwAjgVYP
+	 gLIriAC0uB7qQ6HsOLRwQiDlD/q4Dqt21tbj9E0Xn4pFkcNQMvkMPLUn031gQjGtII
+	 QWg0ODZCFAUew==
+Received: by mail-oi1-f169.google.com with SMTP id bg11so14472920oib.5
+        for <llvm@lists.linux.dev>; Thu, 23 Feb 2023 16:27:48 -0800 (PST)
+X-Gm-Message-State: AO0yUKXTkhrZoLJPvcDUS4xS8nxHVyYbDjPDeCOw+Udi2Vhv5zTUuOqR
+	uA6YN1s5RMNsRvfsI5sishn/xCS3pmZ1Lmi8OH8=
+X-Google-Smtp-Source: AK7set8U0qz7dTajr8wKMh2TbmDSLqhSeRhHSczTQAqxiE1PVudX5LoBI0kqCXZkQ1R+EqHAfrZnwvjxfDgH0iMiCcw=
+X-Received: by 2002:aca:1b04:0:b0:383:d3ae:2ef4 with SMTP id
+ b4-20020aca1b04000000b00383d3ae2ef4mr507233oib.8.1677198467541; Thu, 23 Feb
+ 2023 16:27:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <b455394f-9faa-1f1a-f171-0b9d5e9ada35@landley.net>
+ <63c2936e-6bc7-67e3-eaf3-0123333381f8@landley.net> <CAK7LNASA+Dpe9nv4afnueFeRj4BZDUccOFGJRPr7_rZQ7ZZKaA@mail.gmail.com>
+ <380c88ef-eb19-e73e-0ec9-805b8b90e957@landley.net>
+In-Reply-To: <380c88ef-eb19-e73e-0ec9-805b8b90e957@landley.net>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 24 Feb 2023 09:27:11 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATzPWoPpKNuZ8LOUw4j=LVsHn2ji-++8i3Cn_4fJGoQSg@mail.gmail.com>
+Message-ID: <CAK7LNATzPWoPpKNuZ8LOUw4j=LVsHn2ji-++8i3Cn_4fJGoQSg@mail.gmail.com>
+Subject: Re: [PATCH 1/5] try generic compiler name "cc" before falling back to "gcc".
+To: Rob Landley <rob@landley.net>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git rcu/rcutop
-head:   9617e0851ec17ab3ed416aa8d2aa17029cba7acd
-commit: 9617e0851ec17ab3ed416aa8d2aa17029cba7acd [1/1] debug: dynamic lazy wake debug
-config: hexagon-buildonly-randconfig-r003-20230222 (https://download.01.org/0day-ci/archive/20230224/202302240630.BNuKC8xl-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git/commit/?id=9617e0851ec17ab3ed416aa8d2aa17029cba7acd
-        git remote add jfern https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git
-        git fetch --no-tags jfern rcu/rcutop
-        git checkout 9617e0851ec17ab3ed416aa8d2aa17029cba7acd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302240630.BNuKC8xl-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/rcu/tree.c:26:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/rcu/tree.c:26:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/rcu/tree.c:26:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   In file included from kernel/rcu/tree.c:70:
->> kernel/rcu/debug.h:135:5: warning: no previous prototype for function 'rcu_debug_func_add' [-Wmissing-prototypes]
-   int rcu_debug_func_add(struct rcu_data *rdp, void* ip_ptr)
-       ^
-   kernel/rcu/debug.h:135:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int rcu_debug_func_add(struct rcu_data *rdp, void* ip_ptr)
-   ^
-   static 
->> kernel/rcu/debug.h:140:6: warning: no previous prototype for function 'rcu_debug_set_context' [-Wmissing-prototypes]
-   void rcu_debug_set_context(struct rcu_data *rdp, void *ip_ptr)
-        ^
-   kernel/rcu/debug.h:140:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void rcu_debug_set_context(struct rcu_data *rdp, void *ip_ptr)
-   ^
-   static 
->> kernel/rcu/debug.h:144:6: warning: no previous prototype for function 'rcu_debug_reset_context' [-Wmissing-prototypes]
-   void rcu_debug_reset_context(void)
-        ^
-   kernel/rcu/debug.h:144:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void rcu_debug_reset_context(void)
-   ^
-   static 
->> kernel/rcu/debug.h:148:6: warning: no previous prototype for function 'rcu_debug_init' [-Wmissing-prototypes]
-   void rcu_debug_init(void)
-        ^
-   kernel/rcu/debug.h:148:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void rcu_debug_init(void)
-   ^
-   static 
-   10 warnings generated.
+On Thu, Feb 23, 2023 at 10:36 PM Rob Landley <rob@landley.net> wrote:
+>
+> On 2/22/23 23:31, Masahiro Yamada wrote:
+> > On Wed, Feb 22, 2023 at 5:41 AM Rob Landley <rob@landley.net> wrote:
+> >>
+> >> Distros like debian install the generic "cc" name for both gcc and clang,
+> >> and the plumbing already does CC_VERSION_TEXT to include Makefile.clang.
+> >>
+> >> Previously: https://lkml.iu.edu/hypermail/linux/kernel/2202.0/01505.html
+> >> Signed-off-by: Rob Landley <rob@landley.net>
+> >> ---
+> >>  Makefile | 5 +++--
+> >>  1 file changed, 3 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/Makefile b/Makefile
+> >> index 3f6628780eb2..0ac57ae3b45f 100644
+> >> --- a/Makefile
+> >> +++ b/Makefile
+> >> @@ -456,7 +456,7 @@ endif
+> >>  HOSTCC = $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+> >>  HOSTCXX        = $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
+> >>  else
+> >> -HOSTCC = gcc
+> >> +HOSTCC := $(shell cc --version >/dev/null 2>&1 && echo cc || echo gcc)
+> >
+> > 'cc' only makes sense for the host compiler,
+>
+> It was the generic posix name for "C compiler" until posix decided to put an
+> expiration date in the command name, which seems as widely honored as the
+> tar->pax switch or the removal of cpio.
+>
+> The name "gcc" was like "gmake" and "gawk". (On macos homebrew there's "gsed".)
+>
+> > which is configured by 'update-alternative'.
+>
+> Hexagon only has llvm support, not gcc, so I had to add an llvm cross compiler
+> to my cross compiler set, prefixed hexagon-unknown-linux-musl-*, but the linux
+> kernel wants to call it as hexagon-unknown-linux-musl-gcc.
+>
+> The kernel builds find with a "gcc" symlink to clang, but there _is_ a generic
+> name, which is widely installed.
 
 
-vim +/rcu_debug_func_add +135 kernel/rcu/debug.h
 
-   124	
-   125	void rcu_debug_init(void)
-   126	{
-   127		int ret;
-   128		pr_info("RCU Lazy CB debugging is turned on, system may be slow.\n");
-   129	
-   130		ret = register_trace_sched_waking(probe_waking, NULL);
-   131		if (ret)
-   132			pr_info("RCU: Lazy debug ched_waking probe could not be registered.");
-   133	}
-   134	#else
- > 135	int rcu_debug_func_add(struct rcu_data *rdp, void* ip_ptr)
-   136	{
-   137		return -1;
-   138	}
-   139	
- > 140	void rcu_debug_set_context(struct rcu_data *rdp, void *ip_ptr)
-   141	{
-   142	}
-   143	
- > 144	void rcu_debug_reset_context(void)
-   145	{
-   146	}
-   147	
- > 148	void rcu_debug_init(void)
+In the discussion in the past [1], we decided to
+go with LLVM=1 switch rather than 'cc'.
+We do not need both.
+
+[1]: https://lkml.org/lkml/2020/3/28/494
+
+
+
+
+
+
+
+
+>
+> > I tried it before, but LLVM folks preferred
+> > using $(LLVM) to choose clang/gcc.
+>
+> So if we want generic behavior without having to specify, we should create a
+> "gcc" symlink to clang?
+
+
+If you mean "without LLVM=1 or HOSTCC=clang specified",
+I think the answer is yes.
+
+
+
+
+
+
+>
+> >>  HOSTCXX        = g++
+> >>  endif
+> >>  HOSTRUSTC = rustc
+> >> @@ -503,7 +503,8 @@ OBJDUMP             = $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+> >>  READELF                = $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+> >>  STRIP          = $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+> >>  else
+> >> -CC             = $(CROSS_COMPILE)gcc
+> >> +CC             := $(CROSS_COMPILE)$(shell $(CROSS_COMPILE)cc --version \
+> >> +                       >/dev/null 2>&1 && echo cc || echo gcc)
+> >
+> > This hunk sets up GCC/binutils.
+>
+> This is the codepath that's taken when you don't explicitly specify "LLVM=1".
+> The test there is falling back to (appropriately prefixed) gcc when it can't
+> find a working (appropriately prefixed) cc.
+
+
+Unless LLVM=1 is specified, the toolchain defaults to GCC/binutils,
+there is no need for such additional complexity.
+
+
+
+
+>
+> > So, cc does not make sense.  NACK.
+>
+> Do you explicitly specify the "gold" linker vs the previous gnu one vs
+> lld.llvm.org on the kernel build command line?
+
+
+gold is unsupported.
+See 75959d44f9dc8e44410667009724e4e238515502
+
+
+Yes, to override only LD, LD=ld.lld should be given in the command line.
+
+
+
+
+
+>
+> Rob
+
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best Regards
+Masahiro Yamada
