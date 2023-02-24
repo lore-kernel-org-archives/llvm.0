@@ -1,100 +1,174 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57F0BA40
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 22:20:46 +0000 (UTC)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-53916ab0c6bso18143667b3.7
-        for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 14:20:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IqQPJNfK638HDk4ODq+fMB7JJcK2vXRJP7v56xO3S9k=;
-        b=HAJsEdyAG1cOY/j+Vs6v1Ro4klVsPX0l7htKPdL5rdyUoEkEXwc3EqGqF/31BqyoeR
-         8Gc70jiB86abn5T/EFSlzm0tBLZDe6nthy/OgbziasK9ExC9MssJnkYayGu/7y7MiZ6x
-         vLpLAmkBnQLWWxaG4HdTQW/iO+UoJzutbQCl7iyYup9ojoeDv3oB+BPX6w3NMnFlrvmF
-         B7v7bhSOYv9K5Go8X+0CQR3SM7rheJYcgwBzKyef9i+y0/2WLsP/SiEOJe2jpYGOKM8V
-         GGno0ZpW+yaMgPcdZajCU49icbCJhJim4ne8u8L16Ek/F5u7Tu8uMzMcwSCfFLS1wYqb
-         87tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IqQPJNfK638HDk4ODq+fMB7JJcK2vXRJP7v56xO3S9k=;
-        b=2tPEp3scfMkT+O5XXjc3oSQXW0HyBA+TBXNQxe46CJqEcpNyUHLIrNwcB8nxi5kNN4
-         JrdBkTjeTgFnQAxWpbhErC0Nkhxkq/DqZ0vfKyEV5V3Y86g05O+/pb9W+MavFGWYz3Xq
-         AGuGaSne8FI0KaqDadnG49xRPAFGl7Bch6KYna0hUFc79vKmcK0l1fxnUbKsrGOz6tdx
-         QZoHoRoup2D4LreOLr5qQF/yofuRw7riL8RiIWR+hmV7wvCM6fEm5AvWdBdhqNW7lRB2
-         7PC9eHDJuRyWdiLLpKnvAdQ0UQ15MtsB1CYGM9juiM9TCT/JnMeqNOiqT0eu1AmxC7Ko
-         1P4g==
-X-Gm-Message-State: AO0yUKVHsKx6ruE9KMqtRdECIIwTIlZq+M2LvZtRLoudB6zKTPDCczJ7
-	ZVOvKFRQs7m006gYKbsDDWa9pVFq8PsMX2a0mZo=
-X-Google-Smtp-Source: AK7set+BCO4mvxBMIls68YhyM4z+vOB5zPgpVOZ6T1wB6+em698PSXYG6gf/JzasjxCkItBDvJ2GBFZIoNFQhY4OKBw=
-X-Received: by 2002:a5b:ac8:0:b0:a06:538f:24b2 with SMTP id
- a8-20020a5b0ac8000000b00a06538f24b2mr3802600ybr.2.1677277245871; Fri, 24 Feb
- 2023 14:20:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80E52BA40;
+	Fri, 24 Feb 2023 22:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677277631; x=1708813631;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=R8w2IOsdILlSyfVMyZ18sbro1uvr9geIWV3RPnumMno=;
+  b=U0AlDmhM2Uq5v3wyPKLfhTWrNI1SMwu2iXwERQny0A4X3YKdGgPn9y3R
+   0BI8Epzq6WC8EQMxkLNMbCd9JdMZy0HbkKbzdAq2u0S9hKeakMR1xsmRF
+   0XUQOGPo5JNgvPBppymIS7L9QSNUaAsFcxCFJtpsgYH7rY2F6xfv+XT24
+   kFTktZF6t3HN7p6eyGMXBXcMhkA+GOXrStbqWPX4sSyIc2yGtQcIdnOG3
+   2l9yoqW4GxP2GCpGFww0DvErCSA46cyO6nelBmKuha+lTiQPUAe5kqmGz
+   RpxCuzSsdhNi+dFlj7TUg57o4IrcOZYhixLD8cRmMu9k8gnNr0ZVTYQAJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="396104567"
+X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
+   d="scan'208";a="396104567"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 14:27:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="782527241"
+X-IronPort-AV: E=Sophos;i="5.97,326,1669104000"; 
+   d="scan'208";a="782527241"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Feb 2023 14:27:09 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pVgWy-0002lP-3D;
+	Fri, 24 Feb 2023 22:27:09 +0000
+Date: Sat, 25 Feb 2023 06:26:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jfern:rcu/rcutop 1/1] kernel/rcu/debug.h:162:5: warning: no
+ previous prototype for function 'rcu_debug_ptr_queue'
+Message-ID: <202302250607.p3sNFmDa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230224133609.2877396-1-conor.dooley@microchip.com>
- <CANiq72=4ZhV=u2ZUr=x-iAS_iMnV8GSiq0tEn7Tj0NanO=D+xQ@mail.gmail.com> <Y/kldmYcl7+2FBRB@spud>
-In-Reply-To: <Y/kldmYcl7+2FBRB@spud>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 24 Feb 2023 23:20:34 +0100
-Message-ID: <CANiq72=btcBOmrz0=ib=2eZiiV1z4_3qm1cqyw1=jUFDiJ77bg@mail.gmail.com>
-Subject: Re: [RFC 0/2] RISC-V: enable rust
-To: Conor Dooley <conor@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Feb 24, 2023 at 10:00 PM Conor Dooley <conor@kernel.org> wrote:
->
-> The stuff that I have lifted here all had you as the sole author in the
-> "rust" branch downstream, which is why I gave you authorship. Namely:
-> afba78eacb9b ("rust: generate target specification files on the fly")
-> 732b3c386328 ("rust: target: remove `cpu`")
->
-> I don't see anything from [1] in these commits, so I don't think that I
-> made a mistake here.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git rcu/rcutop
+head:   43245eb952b4ea3ac722e0b1cd3c9fcc4bc35a38
+commit: 561427c949299c3f6b3a42b5fa4b035aa5bb419a [1/1] debug: dynamic lazy wake debug
+config: mips-buildonly-randconfig-r003-20230222 (https://download.01.org/0day-ci/archive/20230225/202302250607.p3sNFmDa-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git/commit/?id=561427c949299c3f6b3a42b5fa4b035aa5bb419a
+        git remote add jfern https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git
+        git fetch --no-tags jfern rcu/rcutop
+        git checkout 561427c949299c3f6b3a42b5fa4b035aa5bb419a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/
 
-It is true that I converted the original target spec files into the
-script, so I added the final lines. However, in that first commit some
-of the deleted files (related to RISC-V) were created by Gary. Thus it
-still feels a bit wrong to not credit Gary or even mention him.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302250607.p3sNFmDa-lkp@intel.com/
 
-For instance, consider an even more extreme case: somebody moving a
-file or doing formatting/whitespace changes. Would they be the main
-and only author?
+All warnings (new ones prefixed by >>):
 
-> It's RFC for a reason, I've had a poor track record with off-list emails
-> to people that do not know me so would rather do it this way :)
-> Probably should have noted that I wrote the ~placeholder commit messages
-> though, apologies. I'll sort that out for a potential v1.
+   In file included from kernel/rcu/tree.c:70:
+>> kernel/rcu/debug.h:162:5: warning: no previous prototype for function 'rcu_debug_ptr_queue' [-Wmissing-prototypes]
+   int rcu_debug_ptr_queue(struct rcu_data *rdp, void* ip_ptr)
+       ^
+   kernel/rcu/debug.h:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int rcu_debug_ptr_queue(struct rcu_data *rdp, void* ip_ptr)
+   ^
+   static 
+   kernel/rcu/debug.h:167:6: warning: no previous prototype for function 'rcu_debug_set_context' [-Wmissing-prototypes]
+   void rcu_debug_set_context(struct rcu_data *rdp, void *ip_ptr)
+        ^
+   kernel/rcu/debug.h:167:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void rcu_debug_set_context(struct rcu_data *rdp, void *ip_ptr)
+   ^
+   static 
+   kernel/rcu/debug.h:171:6: warning: no previous prototype for function 'rcu_debug_reset_context' [-Wmissing-prototypes]
+   void rcu_debug_reset_context(void)
+        ^
+   kernel/rcu/debug.h:171:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void rcu_debug_reset_context(void)
+   ^
+   static 
+   kernel/rcu/debug.h:175:6: warning: no previous prototype for function 'rcu_debug_init' [-Wmissing-prototypes]
+   void rcu_debug_init(void)
+        ^
+   kernel/rcu/debug.h:175:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void rcu_debug_init(void)
+   ^
+   static 
+   kernel/rcu/tree.c:2204:8: error: call to undeclared function 'rcu_debug_ptr_unqueue'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = rcu_debug_ptr_unqueue(rdp, ip);
+                 ^
+   kernel/rcu/tree.c:2204:8: note: did you mean 'rcu_debug_ptr_queue'?
+   kernel/rcu/debug.h:162:5: note: 'rcu_debug_ptr_queue' declared here
+   int rcu_debug_ptr_queue(struct rcu_data *rdp, void* ip_ptr)
+       ^
+   kernel/rcu/tree.c:2204:6: error: assigning to 'rcu_debug_entry' from incompatible type 'int'
+           ret = rcu_debug_ptr_unqueue(rdp, ip);
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/rcu/tree.c:2198:17: warning: no previous prototype for function 'rcu_debug_ptr_unqueue_lock' [-Wmissing-prototypes]
+   rcu_debug_entry rcu_debug_ptr_unqueue_lock(struct rcu_data *rdp, void *ip)
+                   ^
+   kernel/rcu/tree.c:2198:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   rcu_debug_entry rcu_debug_ptr_unqueue_lock(struct rcu_data *rdp, void *ip)
+   ^
+   static 
+   kernel/rcu/tree.c:2220:44: error: too many arguments to function call, expected 2, have 3
+           WARN_ON_ONCE(rcu_debug_ptr_queue(rdp, ip, lazy));
+                        ~~~~~~~~~~~~~~~~~~~          ^~~~
+   include/asm-generic/bug.h:180:41: note: expanded from macro 'WARN_ON_ONCE'
+   #define WARN_ON_ONCE(condition) WARN_ON(condition)
+                                           ^~~~~~~~~
+   include/asm-generic/bug.h:167:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   kernel/rcu/debug.h:162:5: note: 'rcu_debug_ptr_queue' declared here
+   int rcu_debug_ptr_queue(struct rcu_data *rdp, void* ip_ptr)
+       ^
+   kernel/rcu/tree.c:4440:17: error: call to undeclared function 'rcu_debug_ptr_unqueue'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   WARN_ON_ONCE(!rcu_debug_ptr_unqueue(rdp, rh).valid);
+                                 ^
+   kernel/rcu/tree.c:4440:47: error: member reference base type 'int' is not a structure or union
+                   WARN_ON_ONCE(!rcu_debug_ptr_unqueue(rdp, rh).valid);
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+   include/asm-generic/bug.h:180:41: note: expanded from macro 'WARN_ON_ONCE'
+   #define WARN_ON_ONCE(condition) WARN_ON(condition)
+                                           ^~~~~~~~~
+   include/asm-generic/bug.h:167:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   kernel/rcu/tree.c:4912:8: error: no member named 'rcu_debug_ptrs' in 'struct rcu_data'
+                   rdp->rcu_debug_ptrs[i].valid = false;
+                   ~~~  ^
+   kernel/rcu/tree.c:4913:8: error: no member named 'rcu_debug_ptrs' in 'struct rcu_data'
+                   rdp->rcu_debug_ptrs[i].in_flight = false;
+                   ~~~  ^
+   5 warnings and 7 errors generated.
 
-No problem!
 
-> That's what I did! Unless I missed something that was non-obvious, the
-> only name on the commits I lifted was you. Is there somewhere else I
-> should have looked for that information?
+vim +/rcu_debug_ptr_queue +162 kernel/rcu/debug.h
 
-I would have traced the commits back a bit more. For instance, in the
-first commit you mention above, one may see the RISC-V target files
-were removed, so that means something was already there. Checking who
-added those files leads to a few commits from Gary (and one from
-Daniel). And then it is about making a judgement call trying to be
-fair :)
+   151	
+   152	void rcu_debug_init(void)
+   153	{
+   154		int ret;
+   155		pr_info("RCU Lazy CB debugging is turned on, system may be slow.\n");
+   156	
+   157		ret = register_trace_sched_waking(probe_waking, NULL);
+   158		if (ret)
+   159			pr_info("RCU: Lazy debug ched_waking probe could not be registered.");
+   160	}
+   161	#else
+ > 162	int rcu_debug_ptr_queue(struct rcu_data *rdp, void* ip_ptr)
+   163	{
+   164		return -1;
+   165	}
+   166	
 
-Cheers,
-Miguel
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
