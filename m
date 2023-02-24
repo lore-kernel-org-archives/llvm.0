@@ -1,132 +1,153 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0497A320C;
-	Fri, 24 Feb 2023 10:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677235670; x=1708771670;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1y/02aIYB6ZrAywwUWUe9q6N1leva9/NTzcE6ByZ6Xs=;
-  b=lowh+VIucjSw7aR1EtCNm8R8/jFbsCw0IyH+mQEH54YrvKj/gAIPU9yZ
-   GWUu0ueB0Nl+dB3baRWnPayBNzq1+Xwwidbi3u3i8y5DkI9t6WajRnq77
-   AQ2WH8z/+RDTvY+r6WueJIiTXYbM9pGda7FANVZUWJJw+IVP0ZaWfeqWW
-   wnLXc0okUUNKCrzRp3oZhkKM7U4C6/S25tjqgCrYYGqKVz1RPPrTsyR/4
-   QBfuzj9iNGpAPnhvzJRyaXKQ4+mmQfsSyfsyjqwH5PIWlPxSlTIXlbcaO
-   6hzvi3FXtD3yTsFSXKqPCzboOwxnQkXNFP1bpQSypH5wVkrtiIVvTPahR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="321649806"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="321649806"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 02:47:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="705228977"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="705228977"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 Feb 2023 02:47:47 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pVVcA-0002LV-1x;
-	Fri, 24 Feb 2023 10:47:46 +0000
-Date: Fri, 24 Feb 2023 18:47:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [ammarfaizi2-block:akpm/mm/mm-unstable 592/601]
- drivers/block/zram/zram_drv.c:1236:23: error: incompatible pointer types
- passing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const
- atomic64_t *'
-Message-ID: <202302241840.nwdXqE5r-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB320524F
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 11:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677237040;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KPF76zJwsH+y/JHEuhhLzDYJFlDqCdWhdvNZOPXHxu4=;
+	b=Le7vJEzFA47tAwUdUW86fynPdD55QjkWQ/JAFXhpjZUv86VsF5OKmjCkK9Ua0vx0JM2F9h
+	E+/4hfOty5z2VLMTfBTE67ErdsbeSzgh1SjZz2CweYhCekEvv7F3bQYR5gJIH6GHdhYR6E
+	Wb5bsIzi7LJEqrmYdlQQCtWViOkEbn8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-75-b_xUUoG4Pei9kf9jf5d8lw-1; Fri, 24 Feb 2023 06:10:39 -0500
+X-MC-Unique: b_xUUoG4Pei9kf9jf5d8lw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B7372932498
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 11:10:39 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 03FD11121314;
+	Fri, 24 Feb 2023 11:10:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (108/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, 0df82189)
+Date: Fri, 24 Feb 2023 11:10:38 -0000
+To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <54515.123022406103901133@us-mta-75.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/ammarfaizi2/linux-block akpm/mm/mm-unstable
-head:   9323c8b93d95807ac6be21e63514f5b6c6c4cbd8
-commit: b7d89654a988a2a4e6181397b8d05690b5758508 [592/601] zram: show zsmalloc objs_moved stat in mm_stat
-config: powerpc-buildonly-randconfig-r004-20230222 (https://download.01.org/0day-ci/archive/20230224/202302241840.nwdXqE5r-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/b7d89654a988a2a4e6181397b8d05690b5758508
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block akpm/mm/mm-unstable
-        git checkout b7d89654a988a2a4e6181397b8d05690b5758508
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/block/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302241840.nwdXqE5r-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/block/zram/zram_drv.c:1236:23: error: incompatible pointer types passing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_t *' [-Werror,-Wincompatible-pointer-types]
-                           (u64)atomic64_read(&pool_stats.objs_moved));
-                                              ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/atomic/atomic-instrumented.h:644:33: note: passing argument to parameter 'v' here
-   atomic64_read(const atomic64_t *v)
-                                   ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +1236 drivers/block/zram/zram_drv.c
+Kernel information:
+    Commit message: Merge tag 'perf-tools-for-v6.3-1-2023-02-22' of git://g=
+it.kernel.org/pub/scm/linux/kernel/git/acme/linux
 
-  1204	
-  1205	static ssize_t mm_stat_show(struct device *dev,
-  1206			struct device_attribute *attr, char *buf)
-  1207	{
-  1208		struct zram *zram = dev_to_zram(dev);
-  1209		struct zs_pool_stats pool_stats;
-  1210		u64 orig_size, mem_used = 0;
-  1211		long max_used;
-  1212		ssize_t ret;
-  1213	
-  1214		memset(&pool_stats, 0x00, sizeof(struct zs_pool_stats));
-  1215	
-  1216		down_read(&zram->init_lock);
-  1217		if (init_done(zram)) {
-  1218			mem_used = zs_get_total_pages(zram->mem_pool);
-  1219			zs_pool_stats(zram->mem_pool, &pool_stats);
-  1220		}
-  1221	
-  1222		orig_size = atomic64_read(&zram->stats.pages_stored);
-  1223		max_used = atomic_long_read(&zram->stats.max_used_pages);
-  1224	
-  1225		ret = scnprintf(buf, PAGE_SIZE,
-  1226				"%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu %8llu\n",
-  1227				orig_size << PAGE_SHIFT,
-  1228				(u64)atomic64_read(&zram->stats.compr_data_size),
-  1229				mem_used << PAGE_SHIFT,
-  1230				zram->limit_pages << PAGE_SHIFT,
-  1231				max_used << PAGE_SHIFT,
-  1232				(u64)atomic64_read(&zram->stats.same_pages),
-  1233				atomic_long_read(&pool_stats.pages_compacted),
-  1234				(u64)atomic64_read(&zram->stats.huge_pages),
-  1235				(u64)atomic64_read(&zram->stats.huge_pages_since),
-> 1236				(u64)atomic64_read(&pool_stats.objs_moved));
-  1237		up_read(&zram->init_lock);
-  1238	
-  1239		return ret;
-  1240	}
-  1241	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73828
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7245278
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7244812
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
+machine
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1395
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
