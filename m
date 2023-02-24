@@ -1,260 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D166125
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 15:58:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118FDC433D2;
-	Fri, 24 Feb 2023 15:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677254335;
-	bh=rRfXjsGBMvvnDz60uwLB5dc9ju4oNbQeuN0GLhjFFZk=;
-	h=From:To:Subject:In-Reply-To:References:Date:From;
-	b=IV+x2SOKujlDxRkpOOclYLhRMxavxs2ZgAVNSvw7w90V9xvyuyFfsJCv80gYcOG2p
-	 A4TsrQ/qWG2iKNVl3avpevUIt5GA93ovI/qxOn7KRfjQxoOnikKjPiXeR7hhdclS6q
-	 dqmICBshEsrCnUZnXi2fTr77wbblb1vHL/rZvDQG8+JRWHjmvTQn465vrIBEOHJ7Iz
-	 OcdwuhdpCS1R/LJKz0LToyAjRK19HbZPcprjDc1e+B3ESMEvkoWdKClgQQu+6mliia
-	 B68A719Xz9UxYpvtgkDRGcfVlkhGZKsdVyehclJsK+pzSytz6pbulYjyBSnzYllZVj
-	 F5Yvnz7APGcSQ==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Alexandre Ghiti <alex@ghiti.fr>, Alexandre Ghiti
- <alexghiti@rivosinc.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas
- Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, nathan@kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
- ndesaulniers@google.com
-Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
-In-Reply-To: <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
-References: <20230215143626.453491-1-alexghiti@rivosinc.com>
- <20230215143626.453491-2-alexghiti@rivosinc.com>
- <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
-Date: Fri, 24 Feb 2023 16:58:52 +0100
-Message-ID: <877cw7dphf.fsf@all.your.base.are.belong.to.us>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F0C6125
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 16:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677254500;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Et56MX6J37EUA8ANnq0aW90xcSh38SAQGMStlM6eEak=;
+	b=LN2NSJmo2ePJyBIm77bwfDnts49fgfNp4s43V8zLEfB2tf1gN9UJx0ztmZVuzt9U9umoFp
+	gO1nO7tfh7sTosBXq4TofU9UXevs+DQc76nGr3jSswBjw30ElKvaMapnlTeaEwt7YBl0+L
+	F2jK0QOBQ0zQegZBtrq/KSAXCqqzxiU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-362-t9lzdbWfPY6ja4Xc8DQ2Bg-1; Fri, 24 Feb 2023 11:01:38 -0500
+X-MC-Unique: t9lzdbWfPY6ja4Xc8DQ2Bg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31034100F90D
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 16:01:38 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 15A852026D3E;
+	Fri, 24 Feb 2023 16:01:38 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (104/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, e4bc1588)
+Date: Fri, 24 Feb 2023 16:01:38 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <68022.123022411013801393@us-mta-362.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Alexandre Ghiti <alex@ghiti.fr> writes:
+Hi, we tested your kernel and here are the results:
 
-> +cc linux-kbuild, llvm, Nathan, Nick
->
-> On 2/15/23 15:36, Alexandre Ghiti wrote:
->> From: Alexandre Ghiti <alex@ghiti.fr>
->>
->> This config allows to compile 64b kernel as PIE and to relocate it at
->> any virtual address at runtime: this paves the way to KASLR.
->> Runtime relocation is possible since relocation metadata are embedded in=
-to
->> the kernel.
->>
->> Note that relocating at runtime introduces an overhead even if the
->> kernel is loaded at the same address it was linked at and that the compi=
-ler
->> options are those used in arm64 which uses the same RELA relocation
->> format.
->>
->> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
->> ---
->>   arch/riscv/Kconfig              | 14 +++++++++
->>   arch/riscv/Makefile             |  7 +++--
->>   arch/riscv/kernel/efi-header.S  |  6 ++--
->>   arch/riscv/kernel/vmlinux.lds.S | 10 ++++--
->>   arch/riscv/mm/Makefile          |  4 +++
->>   arch/riscv/mm/init.c            | 54 ++++++++++++++++++++++++++++++++-
->>   6 files changed, 87 insertions(+), 8 deletions(-)
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index e2b656043abf..e0ee7ce4b2e3 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -544,6 +544,20 @@ config COMPAT
->>=20=20=20
->>   	  If you want to execute 32-bit userspace applications, say Y.
->>=20=20=20
->> +config RELOCATABLE
->> +	bool "Build a relocatable kernel"
->> +	depends on MMU && 64BIT && !XIP_KERNEL
->> +	help
->> +          This builds a kernel as a Position Independent Executable (PI=
-E),
->> +          which retains all relocation metadata required to relocate the
->> +          kernel binary at runtime to a different virtual address than =
-the
->> +          address it was linked at.
->> +          Since RISCV uses the RELA relocation format, this requires a
->> +          relocation pass at runtime even if the kernel is loaded at the
->> +          same address it was linked at.
->> +
->> +          If unsure, say N.
->> +
->>   endmenu # "Kernel features"
->>=20=20=20
->>   menu "Boot options"
->> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
->> index 82153960ac00..97c34136b027 100644
->> --- a/arch/riscv/Makefile
->> +++ b/arch/riscv/Makefile
->> @@ -7,9 +7,12 @@
->>   #
->>=20=20=20
->>   OBJCOPYFLAGS    :=3D -O binary
->> -LDFLAGS_vmlinux :=3D
->> +ifeq ($(CONFIG_RELOCATABLE),y)
->> +	LDFLAGS_vmlinux +=3D -shared -Bsymbolic -z notext -z norelro
->> +	KBUILD_CFLAGS +=3D -fPIE
->> +endif
->>   ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
->> -	LDFLAGS_vmlinux :=3D --no-relax
->> +	LDFLAGS_vmlinux +=3D --no-relax
->>   	KBUILD_CPPFLAGS +=3D -DCC_USING_PATCHABLE_FUNCTION_ENTRY
->>   	CC_FLAGS_FTRACE :=3D -fpatchable-function-entry=3D8
->>   endif
->> diff --git a/arch/riscv/kernel/efi-header.S b/arch/riscv/kernel/efi-head=
-er.S
->> index 8e733aa48ba6..f7ee09c4f12d 100644
->> --- a/arch/riscv/kernel/efi-header.S
->> +++ b/arch/riscv/kernel/efi-header.S
->> @@ -33,7 +33,7 @@ optional_header:
->>   	.byte	0x02					// MajorLinkerVersion
->>   	.byte	0x14					// MinorLinkerVersion
->>   	.long	__pecoff_text_end - efi_header_end	// SizeOfCode
->> -	.long	__pecoff_data_virt_size			// SizeOfInitializedData
->> +	.long	__pecoff_data_virt_end - __pecoff_text_end	// SizeOfInitializedD=
-ata
->>   	.long	0					// SizeOfUninitializedData
->>   	.long	__efistub_efi_pe_entry - _start		// AddressOfEntryPoint
->>   	.long	efi_header_end - _start			// BaseOfCode
->> @@ -91,9 +91,9 @@ section_table:
->>   		IMAGE_SCN_MEM_EXECUTE			// Characteristics
->>=20=20=20
->>   	.ascii	".data\0\0\0"
->> -	.long	__pecoff_data_virt_size			// VirtualSize
->> +	.long	__pecoff_data_virt_end - __pecoff_text_end	// VirtualSize
->>   	.long	__pecoff_text_end - _start		// VirtualAddress
->> -	.long	__pecoff_data_raw_size			// SizeOfRawData
->> +	.long	__pecoff_data_raw_end - __pecoff_text_end	// SizeOfRawData
->>   	.long	__pecoff_text_end - _start		// PointerToRawData
->>=20=20=20
->>   	.long	0					// PointerToRelocations
->> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux=
-.lds.S
->> index 4e6c88aa4d87..8be2de3be08c 100644
->> --- a/arch/riscv/kernel/vmlinux.lds.S
->> +++ b/arch/riscv/kernel/vmlinux.lds.S
->> @@ -122,9 +122,15 @@ SECTIONS
->>   		*(.sdata*)
->>   	}
->>=20=20=20
->> +	.rela.dyn : ALIGN(8) {
->> +		__rela_dyn_start =3D .;
->> +		*(.rela .rela*)
->> +		__rela_dyn_end =3D .;
->> +	}
->> +
->
->
-> So I realized those relocations would be better in the init section so=20
-> we can get rid of them at some point. So I tried the following:
->
-> diff --git a/arch/riscv/kernel/vmlinux.lds.S=20
-> b/arch/riscv/kernel/vmlinux.lds.S
-> index 7ac215467fd5..6111023a89ef 100644
-> --- a/arch/riscv/kernel/vmlinux.lds.S
-> +++ b/arch/riscv/kernel/vmlinux.lds.S
-> @@ -93,6 +93,12 @@ SECTIONS
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 *(.rel.dyn*)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .rela.dyn : ALIGN(8) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 __rela_dyn_start =3D .;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 *(.rela .rela*)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 __rela_dyn_end =3D .;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> +
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __init_data_end =3D .;
->
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 . =3D ALIGN(8);
-> @@ -119,12 +125,6 @@ SECTIONS
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 *(.sdata*)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .rela.dyn : ALIGN(8) {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 __rela_dyn_start =3D .;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 *(.rela .rela*)
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 __rela_dyn_end =3D .;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> -
->  =C2=A0#ifdef CONFIG_EFI
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .pecoff_edata_padding : { BYT=
-E(0); . =3D=20
-> ALIGN(PECOFF_FILE_ALIGNMENT); }
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __pecoff_data_raw_end =3D ABS=
-OLUTE(.);
->
->
-> But then all the relocations in vmlinux end up being null:
->
-> vmlinux:=C2=A0=C2=A0=C2=A0=C2=A0 file format elf64-littleriscv
->
-> $ riscv64-linux-gnu-objdump -R vmlinux
->
-> DYNAMIC RELOCATION RECORDS
-> OFFSET=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 TYPE=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 VALUE
-> 0000000000000000 R_RISCV_NONE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *ABS*
-> 0000000000000000 R_RISCV_NONE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *ABS*
-> ....
->
->  =C2=A0I also noticed that re-linking vmlinux with the same command right=
-=20
-> after works (ie, the relocations are now valid):
->
-> $ riscv64-linux-gnu-objdump -R vmlinux
->
-> vmlinux:=C2=A0=C2=A0=C2=A0=C2=A0 file format elf64-littleriscv
->
-> DYNAMIC RELOCATION RECORDS
-> OFFSET=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 TYPE=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 VALUE
-> ffffffff82600718 R_RISCV_RELATIVE=C2=A0 *ABS*-0x000000007d9ff8e8
-> ffffffff82600720 R_RISCV_RELATIVE=C2=A0 *ABS*-0x000000007d9ff8e8
-> ...
->
-> Below is the command used to generate this working vmlinux:
->
-> riscv64-unknown-linux-gnu-ld -melf64lriscv -z noexecstack=20
-> --no-warn-rwx-segments -shared -Bsymbolic -z notext -z norelro=20
-> --no-relax --build-id=3Dsha1 --script=3D./arch/riscv/kernel/vmlinux.lds=20
-> -Map=3Dvmlinux.map -o vmlinux --whole-archive vmlinux.a .vmlinux.export.o=
-=20
-> init/version-timestamp.o --no-whole-archive --start-group=20
-> ./drivers/firmware/efi/libstub/lib.a --end-group .tmp_vmlinux.kallsyms3.o
->
-> I tried a lot of things, but I struggle to understand, does anyone have=20
-> any idea? FYI, the same problem happens with LLVM.
-
-Don't ask me *why*, but adding --emit-relocs to your linker flags solves
-"the NULL .rela.dyn" both for GCC and LLVM.
-
-The downside is that you end up with a bunch of .rela cruft in your
-vmlinux.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-Bj=C3=B6rn
+Kernel information:
+    Commit message: Merge tag 'leds-next-6.3' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/lee/leds
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73893
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7251028
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7250334
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7250876
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
+machine
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1395
+            Affected tests:
+                  x86_64 (debug) - Libkcapi AF_ALG test
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
