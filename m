@@ -1,155 +1,279 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05962BA32
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677274375;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2UMAUl1vVkQtA1lGoVLxYwKGY2uBZryjPEQNts1/Qkg=;
-	b=Zt2303gseSjRohEZDOF1z5iO3fJz+F6rhU7WKgrFtgS20DzLp3BtSNQKB/VEVzhu9l24D2
-	QCQ0iZdoHQxot2jb9t8H9DvAY3li6kCdkdwBl3aSSDIZXsUGVdKZK6gzDmj9wlF4/42D6P
-	Gv2ISsXEl/viXZnX+yzkZslL45tPU2I=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-412-D_0HwKVdOnq--7vnMab6Ig-1; Fri, 24 Feb 2023 16:32:54 -0500
-X-MC-Unique: D_0HwKVdOnq--7vnMab6Ig-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3FE33C1023B
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:32:53 +0000 (UTC)
-Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9F278492B08;
-	Fri, 24 Feb 2023 21:32:53 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (104/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, 3822a7c4)
-Date: Fri, 24 Feb 2023 21:32:53 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06553BA32;
+	Fri, 24 Feb 2023 21:35:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677274513; x=1708810513;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ybeakOQi7yUmZ50PjhJ/OYDWkDV3kiv0r3J9mR6X2tU=;
+  b=fcVP5ikfaj3tjwc9RI8MCNy55IqPC21De0bDpg3KVhLH5jfOHqVJJp6v
+   DOuUHjPxLCzm+E6RgUFRL1SyAm74IBB1BlOO92xDF4gl71P4MHnI/k8rj
+   wUW6qEwDTduTBnQ7QKpaEw6FPjuVFoZIco5y6KLYZdmFqiDKyLRZVoJNm
+   pIijweIynJ9oYfovbqjZPx0LrKJ/dFeKATHg9C/thDfrHCua9+NAi6/gf
+   EwG35HpW4lE/XlImzkKV2acGiDbB2IMvqoNnLcUyVJLB+urbXypcE1xGS
+   GTXFBmwzrOy/DW/uvNg5a59XOELLnSB+6Eu+mr9CXgkKvhzCJyQqqdyVH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="313221937"
+X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
+   d="scan'208";a="313221937"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 13:35:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="650490411"
+X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
+   d="scan'208";a="650490411"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 24 Feb 2023 13:35:08 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pVfie-0002k2-0g;
+	Fri, 24 Feb 2023 21:35:08 +0000
+Date: Sat, 25 Feb 2023 05:35:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Chiu <andy.chiu@sifive.com>, linux-riscv@lists.infradead.org,
+	palmer@dabbelt.com, anup@brainfault.org, atishp@atishpatra.org,
+	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	vineetg@rivosinc.com, greentime.hu@sifive.com,
+	guoren@linux.alibaba.com, Andy Chiu <andy.chiu@sifive.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Subject: Re: [PATCH -next v14 19/19] riscv: Enable Vector code to be built
+Message-ID: <202302250511.yaHzCeR1-lkp@intel.com>
+References: <20230224170118.16766-20-andy.chiu@sifive.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <12430.123022416325400151@us-mta-412.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230224170118.16766-20-andy.chiu@sifive.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Andy,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on next-20230224]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Chiu/riscv-Rename-__switch_to_aux-fpu/20230225-011059
+patch link:    https://lore.kernel.org/r/20230224170118.16766-20-andy.chiu%40sifive.com
+patch subject: [PATCH -next v14 19/19] riscv: Enable Vector code to be built
+config: riscv-buildonly-randconfig-r002-20230222 (https://download.01.org/0day-ci/archive/20230225/202302250511.yaHzCeR1-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/cd0ad21a9ef9d63f1eef80fd3b09ae6e0d884ce3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Chiu/riscv-Rename-__switch_to_aux-fpu/20230225-011059
+        git checkout cd0ad21a9ef9d63f1eef80fd3b09ae6e0d884ce3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302250511.yaHzCeR1-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from arch/riscv/kernel/ptrace.c:10:
+>> arch/riscv/include/asm/vector.h:88:3: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+                   ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           vsetvli t4, x0, e8, m8, ta, ma
+           ^
+   In file included from arch/riscv/kernel/ptrace.c:10:
+   arch/riscv/include/asm/vector.h:88:36: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+                                                           ^
+   <inline asm>:2:2: note: instantiated into assembly here
+           vse8.v          v0, (a1)
+           ^
+   In file included from arch/riscv/kernel/ptrace.c:10:
+   arch/riscv/include/asm/vector.h:90:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:4:2: note: instantiated into assembly here
+           vse8.v          v8, (a1)
+           ^
+   In file included from arch/riscv/kernel/ptrace.c:10:
+   arch/riscv/include/asm/vector.h:92:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:6:2: note: instantiated into assembly here
+           vse8.v          v16, (a1)
+           ^
+   In file included from arch/riscv/kernel/ptrace.c:10:
+   arch/riscv/include/asm/vector.h:94:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:8:2: note: instantiated into assembly here
+           vse8.v          v24, (a1)
+           ^
+   5 errors generated.
+--
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:105:3: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+                   ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           vsetvli t4, x0, e8, m8, ta, ma
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:105:36: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+                                                           ^
+   <inline asm>:2:2: note: instantiated into assembly here
+           vle8.v          v0, (a1)
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:107:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:4:2: note: instantiated into assembly here
+           vle8.v          v8, (a1)
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:109:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:6:2: note: instantiated into assembly here
+           vle8.v          v16, (a1)
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:111:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:8:2: note: instantiated into assembly here
+           vle8.v          v24, (a1)
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:75:3: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "vsetvl  x0, %2, %1\n\t"
+                   ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           vsetvl   x0, a3, a2
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+>> arch/riscv/include/asm/vector.h:88:3: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+                   ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           vsetvli t4, x0, e8, m8, ta, ma
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:88:36: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "vsetvli        t4, x0, e8, m8, ta, ma\n\t"
+                                                           ^
+   <inline asm>:2:2: note: instantiated into assembly here
+           vse8.v          v0, (a1)
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:90:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:4:2: note: instantiated into assembly here
+           vse8.v          v8, (a1)
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:92:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:6:2: note: instantiated into assembly here
+           vse8.v          v16, (a1)
+           ^
+   In file included from arch/riscv/kernel/signal.c:20:
+   In file included from arch/riscv/include/asm/switch_to.h:11:
+   arch/riscv/include/asm/vector.h:94:21: error: instruction requires the following: 'V' (Vector Extension for Application Processors), 'Zve32x' or 'Zve64x' (Vector Extensions for Embedded Processors)
+                   "add            %0, %0, t4\n\t"
+                                               ^
+   <inline asm>:8:2: note: instantiated into assembly here
+           vse8.v          v24, (a1)
+           ^
+   11 errors generated.
+--
+>> arch/riscv/kernel/vector.c:50:3: error: expected expression
+                   u32 width = RVV_EXRACT_VL_VS_WIDTH(insn_buf);
+                   ^
+>> arch/riscv/kernel/vector.c:52:7: error: use of undeclared identifier 'width'
+                   if (width == RVV_VL_VS_WIDTH_8 || width == RVV_VL_VS_WIDTH_16 ||
+                       ^
+   arch/riscv/kernel/vector.c:52:37: error: use of undeclared identifier 'width'
+                   if (width == RVV_VL_VS_WIDTH_8 || width == RVV_VL_VS_WIDTH_16 ||
+                                                     ^
+   arch/riscv/kernel/vector.c:53:7: error: use of undeclared identifier 'width'
+                       width == RVV_VL_VS_WIDTH_32 || width == RVV_VL_VS_WIDTH_64)
+                       ^
+   arch/riscv/kernel/vector.c:53:38: error: use of undeclared identifier 'width'
+                       width == RVV_VL_VS_WIDTH_32 || width == RVV_VL_VS_WIDTH_64)
+                                                      ^
+   arch/riscv/kernel/vector.c:57:3: error: expected expression
+                   u32 csr = RVG_EXTRACT_SYSTEM_CSR(insn_buf);
+                   ^
+>> arch/riscv/kernel/vector.c:59:8: error: use of undeclared identifier 'csr'
+                   if ((csr >= CSR_VSTART && csr <= CSR_VCSR) ||
+                        ^
+   arch/riscv/kernel/vector.c:59:29: error: use of undeclared identifier 'csr'
+                   if ((csr >= CSR_VSTART && csr <= CSR_VCSR) ||
+                                             ^
+   arch/riscv/kernel/vector.c:60:8: error: use of undeclared identifier 'csr'
+                       (csr >= CSR_VL && csr <= CSR_VLENB))
+                        ^
+   arch/riscv/kernel/vector.c:60:25: error: use of undeclared identifier 'csr'
+                       (csr >= CSR_VL && csr <= CSR_VLENB))
+                                         ^
+>> arch/riscv/kernel/vector.c:67:5: warning: no previous prototype for function 'riscv_v_thread_zalloc' [-Wmissing-prototypes]
+   int riscv_v_thread_zalloc(void)
+       ^
+   arch/riscv/kernel/vector.c:67:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int riscv_v_thread_zalloc(void)
+   ^
+   static 
+   1 warning and 10 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'mm-stable-2023-02-20-13-37' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/akpm/mm
+vim +88 arch/riscv/include/asm/vector.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/73913
+27038c69020be5 Greentime Hu 2023-02-24  81  
+e296a266de6c10 Greentime Hu 2023-02-24  82  static inline void __riscv_v_vstate_save(struct __riscv_v_ext_state *save_to,
+e296a266de6c10 Greentime Hu 2023-02-24  83  					 void *datap)
+27038c69020be5 Greentime Hu 2023-02-24  84  {
+27038c69020be5 Greentime Hu 2023-02-24  85  	riscv_v_enable();
+27038c69020be5 Greentime Hu 2023-02-24  86  	__vstate_csr_save(save_to);
+27038c69020be5 Greentime Hu 2023-02-24  87  	asm volatile (
+27038c69020be5 Greentime Hu 2023-02-24 @88  		"vsetvli	t4, x0, e8, m8, ta, ma\n\t"
+27038c69020be5 Greentime Hu 2023-02-24  89  		"vse8.v		v0, (%0)\n\t"
+27038c69020be5 Greentime Hu 2023-02-24  90  		"add		%0, %0, t4\n\t"
+27038c69020be5 Greentime Hu 2023-02-24  91  		"vse8.v		v8, (%0)\n\t"
+27038c69020be5 Greentime Hu 2023-02-24  92  		"add		%0, %0, t4\n\t"
+27038c69020be5 Greentime Hu 2023-02-24  93  		"vse8.v		v16, (%0)\n\t"
+27038c69020be5 Greentime Hu 2023-02-24  94  		"add		%0, %0, t4\n\t"
+27038c69020be5 Greentime Hu 2023-02-24  95  		"vse8.v		v24, (%0)\n\t"
+27038c69020be5 Greentime Hu 2023-02-24  96  		: : "r" (datap) : "t4", "memory");
+27038c69020be5 Greentime Hu 2023-02-24  97  	riscv_v_disable();
+27038c69020be5 Greentime Hu 2023-02-24  98  }
+27038c69020be5 Greentime Hu 2023-02-24  99  
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7252206
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7252922
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1509
-            Affected tests:
-                  x86_64 - xfstests - cifsv3.11
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
