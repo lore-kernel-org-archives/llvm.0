@@ -1,105 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92F4D524F
-	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FD6C433EF;
-	Fri, 24 Feb 2023 21:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677272595;
-	bh=GOPRgmEm/tLlo164VtO08+QtLf9+r2oLkH7o65afRmY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Qt82xGw08+pWQPYenM8GbR0Qn4nQY7XCUDyzCsd556SIZ/mqaZKCxmuMq43nL5sM2
-	 YfIhiPwNX+MqauE34NbgOcdxgCE1VDhPmNmRe7Gw5I5NMbJcUjPVWG0rjzsUpEbFZu
-	 5wQVKGJY41UTW8GI/u19czDbFT9Hzx9F21e7LadYjUkzgvDjG/o4GMtd1JkoDsPlXE
-	 /TNvh8GXartMwOlt9911MkoCWLO1VmPnIe2TazBqh5zPwerPtSXHPlUO9vGvxTYkFw
-	 FSCDzkXMYBQXStWUeFQO6sufgUyGj5wxPA+E/iOmye4S57Zdix2f0paxXAu4DwWiaU
-	 aTuqaHZpN9kaQ==
-Date: Fri, 24 Feb 2023 21:03:09 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	linux-riscv@lists.infradead.org, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [RFC RESEND 2/2] RISC-V: enable building the 64-bit kernels with
- rust support
-Message-ID: <Y/kmDcMBcZ2PzcKR@spud>
-References: <20230224135044.2882109-1-conor.dooley@microchip.com>
- <20230224135044.2882109-3-conor.dooley@microchip.com>
- <CANiq72m1bnHZEd1n+tzaTXYqk8kU83CEPSFO7TBMX44J3poKOw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7564B53A0
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:31:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677274300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lgPIxh2IYLb/V1a74FdH2Zsa/132x1IIU9uIVubZZig=;
+	b=eRukyBhtlPIpMsBBYFpK0hj0VdHmTYwQ2IpMPKxv73PyYkJDAjKmHDc6iZURugWoqibPR5
+	NJPwKDCyTctQIFS6y8bVABCLEfpTpkuLln0uHGNQm4B2yREuBmJVTrEZhqxSvE1DiNgPGq
+	9ZF30gImPbxCiG2MXshyGbmHByL5BRw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-CW7tzjSnPjamNHNHUiUF9A-1; Fri, 24 Feb 2023 16:31:38 -0500
+X-MC-Unique: CW7tzjSnPjamNHNHUiUF9A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 95BDD85A588
+	for <llvm@lists.linux.dev>; Fri, 24 Feb 2023 21:31:38 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7C029140EBF6;
+	Fri, 24 Feb 2023 21:31:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (107/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, d2980d8d)
+Date: Fri, 24 Feb 2023 21:31:37 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="WdAygoFJPXezUehP"
-Content-Disposition: inline
-In-Reply-To: <CANiq72m1bnHZEd1n+tzaTXYqk8kU83CEPSFO7TBMX44J3poKOw@mail.gmail.com>
-
-
---WdAygoFJPXezUehP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <75102.123022416313801607@us-mta-112.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 24, 2023 at 09:45:05PM +0100, Miguel Ojeda wrote:
-> On Fri, Feb 24, 2023 at 2:51 PM Conor Dooley <conor.dooley@microchip.com>=
- wrote:
+Hi, we tested your kernel and here are the results:
 
-> > diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/a=
-rch-support.rst
-> > index 6982b63775da..197919158596 100644
-> > --- a/Documentation/rust/arch-support.rst
-> > +++ b/Documentation/rust/arch-support.rst
-> > @@ -15,5 +15,7 @@ support corresponds to ``S`` values in the ``MAINTAIN=
-ERS`` file.
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> >  Architecture  Level of support  Constraints
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> > +``riscv``     Maintained        ``rv64`` only.
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> >  ``x86``       Maintained        ``x86_64`` only.
->=20
-> I think this separator between rows should not be here (it is not in
-> `rust-for-linux/rust`). Please see
-> https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#simple=
--tables.
-
-That's what the "let the automation tell me if I messed up rst" approach
-gets you ;)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
---WdAygoFJPXezUehP
-Content-Type: application/pgp-signature; name="signature.asc"
+Kernel information:
+    Commit message: Merge tag 'mm-nonmm-stable-2023-02-20-15-29' of git://g=
+it.kernel.org/pub/scm/linux/kernel/git/akpm/mm
 
------BEGIN PGP SIGNATURE-----
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/73919
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/kmDQAKCRB4tDGHoIJi
-0nPaAP4scKJyUoodTh1VeLDzWnq6wVMqx2ag5tPkur6OL8OPSwD+J4ShZHdTHo7f
-F5jmK7nrKyOomF7iNe21+bCUkCg/qAs=
-=fdgN
------END PGP SIGNATURE-----
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7253514
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7253786
 
---WdAygoFJPXezUehP--
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1509
+            Affected tests:
+                  x86_64 - xfstests - cifsv3.11
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
