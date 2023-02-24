@@ -1,142 +1,105 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A347E197;
-	Fri, 24 Feb 2023 17:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677258561; x=1708794561;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xeaO1IniKr75/c4+/ZSkpy1ddVFlxyuf+WDd3rAkTAk=;
-  b=WFGJkCIa8Wb4fhnbrUys6oKzMU7vIRTkr8Ud4CZGD3tJvVUJgntYaTVl
-   piIy5AFMhG3KqoOzegUAcAx1VAyS4bFUO3RUi18lva7cnqPwIi+aNz6jp
-   3i6lHQkzKc+LvQYp+nPVjs1xQ1CI7Pg8gqye6xTdZDkD7aFGjXNmeitVi
-   xCviv68Z/YcCxiFZvnmR+FKPsMpVYeuq3oBevFlHVRYZs2+ytNw64Zz7l
-   R9pxbuE8stt6q6Jn6CGtUv5oVPhDJSyNfNqE9tE9BMgMbLCxW+q85MrEG
-   oX0M2XSUFrWUPfXAc7D2gQBDQk2DupF+R85dYmZYOfWUKQsu0FGhihjYR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="419760079"
-X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
-   d="scan'208";a="419760079"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 09:07:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="796803293"
-X-IronPort-AV: E=Sophos;i="5.97,325,1669104000"; 
-   d="scan'208";a="796803293"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Feb 2023 09:06:59 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pVbX8-0002Yr-2N;
-	Fri, 24 Feb 2023 17:06:58 +0000
-Date: Sat, 25 Feb 2023 01:06:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bob Pearson <rpearsonhpe@gmail.com>, jgg@nvidia.com,
-	zyjzyj2000@gmail.com, linux-rdma@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bob Pearson <rpearsonhpe@gmail.com>
-Subject: Re: [PATCH for-next v2 4/4] RDMA/rxe: Add error messages
-Message-ID: <202302250056.mgmG5a52-lkp@intel.com>
-References: <20230224032916.151490-5-rpearsonhpe@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBC4AD27;
+	Fri, 24 Feb 2023 17:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EECF0C433D2;
+	Fri, 24 Feb 2023 17:25:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677259544;
+	bh=1Jc9vNwUR+XMeD7GpSkEAOSGynbA0xd2bpZpKVdTI9Y=;
+	h=From:Date:Subject:To:Cc:From;
+	b=qEpRUW3Ilrs60YRelMRzQFPfBQ5k6v53s3ZljgkcdP7ijeleRN916L15HSgUJY7HC
+	 Xm6uFUg5fatX5FEPhFmCCh7rLp/apjRyghiiw+Dh65FSeeEkROKOlv7til8Q8g3K8X
+	 0/aXvXoaqYxk1gIzJ54VMMZ2hgNxdWKWbReQ7c0KH4/sy2JAPKncgBACw9GdRfhQl3
+	 38zHJ6SIZn9CYlyqGurK77IZTTYVs5x7cg/3i/xeoIFUku8FfH/BIXByjjPTF66rMZ
+	 CDjFY5v6FDMaX1H/mXFJGOogvx+eHrTTGSrHjY88WQZjHLPIYKacccif9gY1Dzygzm
+	 djBie254KO8QA==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 24 Feb 2023 10:25:12 -0700
+Subject: [PATCH] drm: omapdrm: Do not use helper unininitialized in
+ omap_fbdev_init()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224032916.151490-5-rpearsonhpe@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPfy+GMC/x2NSQrDMAwAvxJ0rsFRN9qvlBzsWG4EtR0kd6Ehf
+ 6/T4zAws4CSMClcuwWEXqxccoN+18E4uXwnw6ExoMW9RTyYktwcJJm3lkSVE6l5Zs5c2T34S8H
+ YHo/xfLpg9B5axjsl48XlcdpCyWkl2cQsFPnzf9+Gdf0Bz9WWKYsAAAA=
+To: tomba@kernel.org, airlied@gmail.com, daniel@ffwll.ch, 
+ javierm@redhat.com, tzimmermann@suse.de
+Cc: ndesaulniers@google.com, trix@redhat.com, 
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2255; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=1Jc9vNwUR+XMeD7GpSkEAOSGynbA0xd2bpZpKVdTI9Y=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDMk/PosrTJlsFrnQpEPC7cOEO8f8ivZavhKWy98hGiB3t
+ tJz5svujlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRo50MfyX8GIxNTdInH3/f
+ LaKV1S9d80X+RPpUP3nFPpuOK11s/Az/Myr/up88mLCb4Z8xZ8i/8lnvfrmrC/efXFfA2L9FVD2
+ JGQA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Bob,
+Clang warns (or errors with CONFIG_WERROR):
 
-Thank you for the patch! Perhaps something to improve:
+  ../drivers/gpu/drm/omapdrm/omap_fbdev.c:235:6: error: variable 'helper' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+          if (!fbdev)
+              ^~~~~~
+  ../drivers/gpu/drm/omapdrm/omap_fbdev.c:259:26: note: uninitialized use occurs here
+          drm_fb_helper_unprepare(helper);
+                                  ^~~~~~
+  ../drivers/gpu/drm/omapdrm/omap_fbdev.c:235:2: note: remove the 'if' if its condition is always false
+          if (!fbdev)
+          ^~~~~~~~~~~
+  ../drivers/gpu/drm/omapdrm/omap_fbdev.c:228:30: note: initialize the variable 'helper' to silence this warning
+          struct drm_fb_helper *helper;
+                                      ^
+                                       = NULL
+  1 error generated.
 
-[auto build test WARNING on 66fb1d5df6ace316a4a6e2c31e13fc123ea2b644]
+Return early, as there is nothing for the function to do if memory
+cannot be allocated. There is no point in adding another label to just
+emit the warning at the end of the function in this case, as memory
+allocation failures are already logged.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bob-Pearson/RDMA-rxe-Replace-exists-by-rxe-in-rxe-c/20230224-113206
-base:   66fb1d5df6ace316a4a6e2c31e13fc123ea2b644
-patch link:    https://lore.kernel.org/r/20230224032916.151490-5-rpearsonhpe%40gmail.com
-patch subject: [PATCH for-next v2 4/4] RDMA/rxe: Add error messages
-config: arm-randconfig-r004-20230222 (https://download.01.org/0day-ci/archive/20230225/202302250056.mgmG5a52-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/39493983f5f2a6f4c7d19ba3b28e2e0537a42247
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bob-Pearson/RDMA-rxe-Replace-exists-by-rxe-in-rxe-c/20230224-113206
-        git checkout 39493983f5f2a6f4c7d19ba3b28e2e0537a42247
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/infiniband/sw/rxe/
+Fixes: 3fb1f62f80a1 ("drm/fb-helper: Remove drm_fb_helper_unprepare() from drm_fb_helper_fini()")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1809
+Link: https://lore.kernel.org/oe-kbuild-all/202302250058.fYTe9aTP-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+This is currently showing in mainline so I believe this should go to
+drm-misc-next-fixes.
+---
+ drivers/gpu/drm/omapdrm/omap_fbdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302250056.mgmG5a52-lkp@intel.com/
+diff --git a/drivers/gpu/drm/omapdrm/omap_fbdev.c b/drivers/gpu/drm/omapdrm/omap_fbdev.c
+index 84429728347f..a6c8542087ec 100644
+--- a/drivers/gpu/drm/omapdrm/omap_fbdev.c
++++ b/drivers/gpu/drm/omapdrm/omap_fbdev.c
+@@ -233,7 +233,7 @@ void omap_fbdev_init(struct drm_device *dev)
+ 
+ 	fbdev = kzalloc(sizeof(*fbdev), GFP_KERNEL);
+ 	if (!fbdev)
+-		goto fail;
++		return;
+ 
+ 	INIT_WORK(&fbdev->work, pan_worker);
+ 
 
-All warnings (new ones prefixed by >>):
+---
+base-commit: e034b8a18d4badceecb672c58b488bad1e901d95
+change-id: 20230224-omapdrm-wsometimes-uninitialized-0125f7692fbb
 
->> drivers/infiniband/sw/rxe/rxe_verbs.c:600:13: warning: variable 'err' is uninitialized when used here [-Wuninitialized]
-                              mask, err);
-                                    ^~~
-   drivers/infiniband/sw/rxe/rxe.h:53:51: note: expanded from macro 'rxe_dbg_qp'
-                   "qp#%d %s: " fmt, (qp)->elem.index, __func__, ##__VA_ARGS__)
-                                                                   ^~~~~~~~~~~
-   drivers/infiniband/sw/rxe/rxe_verbs.c:596:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +/err +600 drivers/infiniband/sw/rxe/rxe_verbs.c
-
-   590	
-   591	static int rxe_modify_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
-   592				 int mask, struct ib_udata *udata)
-   593	{
-   594		struct rxe_dev *rxe = to_rdev(ibqp->device);
-   595		struct rxe_qp *qp = to_rqp(ibqp);
-   596		int err;
-   597	
-   598		if (mask & ~IB_QP_ATTR_STANDARD_BITS) {
-   599			rxe_dbg_qp(qp, "unsupported mask = 0x%x, err = %d",
- > 600				   mask, err);
-   601			err = -EOPNOTSUPP;
-   602			goto err_out;
-   603		}
-   604	
-   605		err = rxe_qp_chk_attr(rxe, qp, attr, mask);
-   606		if (err) {
-   607			rxe_dbg_qp(qp, "bad mask/attr, err = %d", err);
-   608			goto err_out;
-   609		}
-   610	
-   611		err = rxe_qp_from_attr(qp, attr, mask, udata);
-   612		if (err) {
-   613			rxe_dbg_qp(qp, "modify qp failed, err = %d", err);
-   614			goto err_out;
-   615		}
-   616	
-   617		if ((mask & IB_QP_AV) && (attr->ah_attr.ah_flags & IB_AH_GRH))
-   618			qp->src_port = rdma_get_udp_sport(attr->ah_attr.grh.flow_label,
-   619							  qp->ibqp.qp_num,
-   620							  qp->attr.dest_qp_num);
-   621	
-   622		return 0;
-   623	
-   624	err_out:
-   625		rxe_err_qp(qp, "returned err = %d", err);
-   626		return err;
-   627	}
-   628	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Nathan Chancellor <nathan@kernel.org>
+
