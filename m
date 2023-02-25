@@ -1,45 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D8D17F2;
-	Sat, 25 Feb 2023 07:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5578917FF;
+	Sat, 25 Feb 2023 07:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1677309864; x=1708845864;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YzAXIERXX3DHChf5jbOqlrdP6JuSIXd9dF3hP7ENI4o=;
-  b=OkzemWogks5QVfbotPxbgHdiv5lMdnBKE0lBrHMBOAQRKGMzmctFSQdZ
-   1RwY4vB+HaPUTorpcSYAtqhOuRXpBXmd9o2xq4TB4oLxLi1oA6/wGo9rf
-   45/NszrpezYAqIvYmcvYdyn7V6KXaQSkJeZlnDQTr01yCshCfAVR4r3dK
-   Qke/E8itd+qvGyXJs4fdcnlBOzyY4wuP+vn+soMRIr1XWnnnpkenwj16h
-   S+7el/PLVcC01yWM/TApP3d6AyeX+2BgX3RjWS+HGR7kYfkCPFKjalsjz
-   OkH34NABZB1s5vrGcJLSq2LPrteJVMQPyLYqiQsthFPigQ1z/6La9s5ib
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="361151728"
+  bh=rlRfeIorMW/gIm4Un0w8RFg6W644h7heCNV9l6bYn04=;
+  b=Qyp8xw/A3EIGS3UHdNuyb01AUcDxoxPKW7GmBgVT4wG4ZI6x2CTDaDnY
+   ECM4AgCirowhk5K8+ikFqlzan0EEdVWvMS70PJPzEGyETsyOmnNwP6qbp
+   RtlXXmbeXf3W7F9YhEIwssOduvTRit67BNnrQS7y9D9RuZz9tFoVuIFlG
+   o9Xn+g/+c5W+Ue5YLVBs4n1jyCiLVOG62sMSuhOQXEwAaAGsfSKSqRGV9
+   WwL25/JFKH4rvvH1gYF9dJLBtgi3n616NcY9Q4ESAdVylVyEE2OKxet8d
+   XtZXcHPW4RmWy5Hu5ZwiDWimzUx5dP0jWk6y/Ey+GBgdSmKJrTKmagiFi
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="314029200"
 X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="361151728"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 23:24:23 -0800
+   d="scan'208";a="314029200"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 23:24:23 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="762035494"
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="705537426"
 X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="762035494"
+   d="scan'208";a="705537426"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Feb 2023 23:24:21 -0800
+  by orsmga001.jf.intel.com with ESMTP; 24 Feb 2023 23:24:22 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pVour-00031L-0E;
+	id 1pVour-00031O-0g;
 	Sat, 25 Feb 2023 07:24:21 +0000
-Date: Sat, 25 Feb 2023 15:23:48 +0800
+Date: Sat, 25 Feb 2023 15:23:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [ammarfaizi2-block:af/dev.btrfs 10/11] fs/btrfs/super.c:352:19:
- error: array type 'cpumask_var_t' (aka 'struct cpumask[1]') is not
- assignable
-Message-ID: <202302251526.XdMJnuk0-lkp@intel.com>
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [intel-tdx:tdx-mig-wip 104/625]
+ drivers/firmware/efi/libstub/x86-stub.c:790:14: warning: implicit
+ declaration of function 'efi_is_64bit' is invalid in C99
+Message-ID: <202302251502.bVO1zf4T-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,80 +48,79 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ammarfaizi2/linux-block af/dev.btrfs
-head:   91361976f98a5766c0c00110ad28f6dd3b3a7de3
-commit: 3afc14e1a169a4643f51ebdcf743a8efdb7f78b2 [10/11] btrfs: Add wq_cpu_set mount option
-config: arm64-randconfig-r012-20230222 (https://download.01.org/0day-ci/archive/20230225/202302251526.XdMJnuk0-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+Hi Kirill,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/intel/tdx.git tdx-mig-wip
+head:   e3f471304eb15841af5c14108b05d05b5370095b
+commit: f9d9defcf521899d36fdc2577bb89a1bac32493d [104/625] x86/tdx: Add unaccepted memory support
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230225/202302251502.bVO1zf4T-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/3afc14e1a169a4643f51ebdcf743a8efdb7f78b2
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block af/dev.btrfs
-        git checkout 3afc14e1a169a4643f51ebdcf743a8efdb7f78b2
+        # https://github.com/intel/tdx/commit/f9d9defcf521899d36fdc2577bb89a1bac32493d
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx tdx-mig-wip
+        git checkout f9d9defcf521899d36fdc2577bb89a1bac32493d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/btrfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/ drivers/firmware/efi/libstub/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302251526.XdMJnuk0-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302251502.bVO1zf4T-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/btrfs/super.c:352:19: error: array type 'cpumask_var_t' (aka 'struct cpumask[1]') is not assignable
-           info->wq_cpu_set = mask;
-           ~~~~~~~~~~~~~~~~ ^
-   1 error generated.
+>> drivers/firmware/efi/libstub/x86-stub.c:790:14: warning: implicit declaration of function 'efi_is_64bit' is invalid in C99 [-Wimplicit-function-declaration]
+           signature = efi_is_64bit() ? EFI64_LOADER_SIGNATURE
+                       ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for EFI_STUB
+   Depends on [n]: EFI [=n]
+   Selected by [y]:
+   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
+   WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+   Depends on [n]: EFI [=n] && EFI_STUB [=y]
+   Selected by [y]:
+   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
 
 
-vim +352 fs/btrfs/super.c
+vim +/efi_is_64bit +790 drivers/firmware/efi/libstub/x86-stub.c
 
-   323	
-   324	static int parse_wq_cpu_set(struct btrfs_fs_info *info, const char *set)
-   325	{
-   326		cpumask_var_t mask;
-   327		char *set_copy;
-   328		int ret;
-   329	
-   330		set_copy = kstrdup(set, GFP_KERNEL);
-   331		if (!set_copy)
-   332			return -ENOMEM;
-   333	
-   334		if (!alloc_cpumask_var(&mask, GFP_KERNEL)) {
-   335			ret = -ENOMEM;
-   336			goto out_fail;
-   337		}
-   338	
-   339		wq_cpu_set_fix_cpulist(set_copy);
-   340		ret = cpulist_parse(set_copy, mask);
-   341		if (ret) {
-   342			btrfs_err(info, "failed to parse wq_cpu_set: %d", ret);
-   343			goto out_fail_cpu;
-   344		}
-   345	
-   346		if (cpumask_empty(mask)) {
-   347			ret = -EINVAL;
-   348			btrfs_err(info, "wq_cpu_set cannot be empty");
-   349			goto out_fail_cpu;
-   350		}
-   351	
- > 352		info->wq_cpu_set = mask;
-   353		info->wq_cpu_set_str = set_copy;
-   354		btrfs_set_and_info(info, WQ_CPU_SET, "using wq_cpu_set=%s", set_copy);
-   355		return 0;
-   356	
-   357	out_fail_cpu:
-   358		free_cpumask_var(mask);
-   359	out_fail:
-   360		kfree(set_copy);
-   361		return ret;
-   362	}
-   363	
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  783  
+cd33a5c1d53e43 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2019-12-24  784  static efi_status_t exit_boot_func(struct efi_boot_memmap *map,
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  785  				   void *priv)
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  786  {
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  787  	const char *signature;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  788  	struct exit_boot_struct *p = priv;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  789  
+aab9593c0cb445 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2018-07-20 @790  	signature = efi_is_64bit() ? EFI64_LOADER_SIGNATURE
+aab9593c0cb445 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2018-07-20  791  				   : EFI32_LOADER_SIGNATURE;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  792  	memcpy(&p->efi->efi_loader_signature, signature, sizeof(__u32));
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  793  
+eed4e0193ee7b0 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-30  794  	efi_set_u64_split((unsigned long)efi_system_table,
+eed4e0193ee7b0 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-30  795  			  &p->efi->efi_systab, &p->efi->efi_systab_hi);
+eab3126571ed1e drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-06-03  796  	p->efi->efi_memdesc_size	= map->desc_size;
+eab3126571ed1e drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-06-03  797  	p->efi->efi_memdesc_version	= map->desc_ver;
+eab3126571ed1e drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-06-03  798  	efi_set_u64_split((unsigned long)map->map,
+eed4e0193ee7b0 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-30  799  			  &p->efi->efi_memmap, &p->efi->efi_memmap_hi);
+eab3126571ed1e drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-06-03  800  	p->efi->efi_memmap_size		= map->map_size;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  801  
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  802  	return EFI_SUCCESS;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  803  }
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  804  
+
+:::::: The code at line 790 was first introduced by commit
+:::::: aab9593c0cb4454f9d261a8c87a3361f3186c4ec efi/x86: Replace references to efi_early->is64 with efi_is_64bit()
+
+:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
