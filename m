@@ -1,155 +1,146 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D4E19B
-	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 14:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677333700;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rAYs1STp2TT9NuwJOfO0FMysiPkPCctmO4CiVqHuDU8=;
-	b=gopQp+Yzq2WiZXZLbpDcELftdAKlOhYa8YUOdAvRXWbGf0eY5TG6v1TPbD+ZDf0Lj07kUM
-	h8/a+VGSXLBRfqBwqhkgSvzSQuYLBMZESgE5o1x+lq9CLDhvyDSl1e8ASIAM/dtLBsaEia
-	12SFXs2U2btRizDkSPQf4d2rL0Xj6K0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-74-fW8ha3pNPc6g-wuTaz_0zQ-1; Sat, 25 Feb 2023 09:01:39 -0500
-X-MC-Unique: fW8ha3pNPc6g-wuTaz_0zQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8FD6800B23
-	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 14:01:38 +0000 (UTC)
-Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 962151121314;
-	Sat, 25 Feb 2023 14:01:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (104/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, 595fa4e3)
-Date: Sat, 25 Feb 2023 14:01:38 -0000
-To: jbastian@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9740D33C8;
+	Sat, 25 Feb 2023 14:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677335377; x=1708871377;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yEkCgk0qdxam3842EPDUAaAEj9sbPPlM9MJlt5GSFu0=;
+  b=mbWX8+zQzdDOPCHPA7/omxNzHGIIKJvsGgQlxMAqzLHn0xUeWuGCfy1S
+   +ZQliRFcacWNtUTvIZHBrdRVMjVVtkttP1LqZEI+btutNdeAUveMefry3
+   l6QrYVD92ykxA4HNlX1K/Rj75NdoU3KiQPtvum3Jp6wBJ4tjRNPpggc/E
+   HvpCthKN7C50JNYSu7uYYl4VCpd7Q6nTH9SQfBu0KbzkECAFLuJr/Zqms
+   bUVX2nivujJMLdtS1ku5njYwNbvcNxUlvw3xSEbnplejZMcL2O/+GU0X1
+   aIGBDjm9UqVme2orwC4bujEwkexsD75mJSLtBYqb6zQfQCgKB+VYkpyW7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="335100415"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="335100415"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 06:29:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="705602975"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="705602975"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2023 06:29:33 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pVvYK-0003FR-0u;
+	Sat, 25 Feb 2023 14:29:32 +0000
+Date: Sat, 25 Feb 2023 22:29:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: arch/arm/mm/copypage-xsc3.c:64:6: warning: no previous prototype for
+ function 'xsc3_mc_copy_user_highpage'
+Message-ID: <202302252213.uGXXs6Lo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <70640.123022509013900175@us-mta-74.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Arnd,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+FYI, the error/warning still remains.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   489fa31ea873282b41046d412ec741f93946fc2d
+commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
+date:   10 months ago
+config: arm-randconfig-r046-20230225 (https://download.01.org/0day-ci/archive/20230225/202302252213.uGXXs6Lo-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
 
-Kernel information:
-    Commit message: Merge tag 'soundwire-6.3-rc1' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/vkoul/soundwire
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302252213.uGXXs6Lo-lkp@intel.com/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/74134
+All warnings (new ones prefixed by >>):
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - stress: stress-ng - memory
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7260888
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7260690
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7261255
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7261263
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7261311
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7261317
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+>> arch/arm/mm/copypage-xsc3.c:64:6: warning: no previous prototype for function 'xsc3_mc_copy_user_highpage' [-Wmissing-prototypes]
+   void xsc3_mc_copy_user_highpage(struct page *to, struct page *from,
+        ^
+   arch/arm/mm/copypage-xsc3.c:64:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xsc3_mc_copy_user_highpage(struct page *to, struct page *from,
+   ^
+   static 
+>> arch/arm/mm/copypage-xsc3.c:80:6: warning: no previous prototype for function 'xsc3_mc_clear_user_highpage' [-Wmissing-prototypes]
+   void xsc3_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
+        ^
+   arch/arm/mm/copypage-xsc3.c:80:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void xsc3_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
+   ^
+   static 
+   2 warnings generated.
 
 
+vim +/xsc3_mc_copy_user_highpage +64 arch/arm/mm/copypage-xsc3.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+d73e60b7144a86 Russell King  2008-10-31   63  
+063b0a4207e43a Russell King  2008-10-31  @64  void xsc3_mc_copy_user_highpage(struct page *to, struct page *from,
+f00a75c094c340 Russell King  2009-10-05   65  	unsigned long vaddr, struct vm_area_struct *vma)
+063b0a4207e43a Russell King  2008-10-31   66  {
+063b0a4207e43a Russell King  2008-10-31   67  	void *kto, *kfrom;
+063b0a4207e43a Russell King  2008-10-31   68  
+5472e862de2bc4 Cong Wang     2011-11-25   69  	kto = kmap_atomic(to);
+5472e862de2bc4 Cong Wang     2011-11-25   70  	kfrom = kmap_atomic(from);
+2725898fc9bb21 Russell King  2009-10-05   71  	flush_cache_page(vma, vaddr, page_to_pfn(from));
+063b0a4207e43a Russell King  2008-10-31   72  	xsc3_mc_copy_user_page(kto, kfrom);
+5472e862de2bc4 Cong Wang     2011-11-25   73  	kunmap_atomic(kfrom);
+5472e862de2bc4 Cong Wang     2011-11-25   74  	kunmap_atomic(kto);
+063b0a4207e43a Russell King  2008-10-31   75  }
+063b0a4207e43a Russell King  2008-10-31   76  
+d73e60b7144a86 Russell King  2008-10-31   77  /*
+d73e60b7144a86 Russell King  2008-10-31   78   * XScale optimised clear_user_page
+d73e60b7144a86 Russell King  2008-10-31   79   */
+303c6443659bc1 Russell King  2008-10-31  @80  void xsc3_mc_clear_user_highpage(struct page *page, unsigned long vaddr)
+d73e60b7144a86 Russell King  2008-10-31   81  {
+5472e862de2bc4 Cong Wang     2011-11-25   82  	void *ptr, *kaddr = kmap_atomic(page);
+43ae286b7d4d8c Nicolas Pitre 2008-11-04   83  	asm volatile ("\
+c8a91428941b91 Arnd Bergmann 2022-04-04   84  .arch xscale					\n\
+43ae286b7d4d8c Nicolas Pitre 2008-11-04   85  	mov	r1, %2				\n\
+d73e60b7144a86 Russell King  2008-10-31   86  	mov	r2, #0				\n\
+d73e60b7144a86 Russell King  2008-10-31   87  	mov	r3, #0				\n\
+303c6443659bc1 Russell King  2008-10-31   88  1:	mcr	p15, 0, %0, c7, c6, 1		@ invalidate line\n\
+bc2eca9a682881 Nicolas Pitre 2018-11-09   89  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre 2018-11-09   90  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre 2018-11-09   91  	strd	r2, r3, [%0], #8		\n\
+bc2eca9a682881 Nicolas Pitre 2018-11-09   92  	strd	r2, r3, [%0], #8		\n\
+d73e60b7144a86 Russell King  2008-10-31   93  	subs	r1, r1, #1			\n\
+303c6443659bc1 Russell King  2008-10-31   94  	bne	1b"
+43ae286b7d4d8c Nicolas Pitre 2008-11-04   95  	: "=r" (ptr)
+43ae286b7d4d8c Nicolas Pitre 2008-11-04   96  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
+303c6443659bc1 Russell King  2008-10-31   97  	: "r1", "r2", "r3");
+5472e862de2bc4 Cong Wang     2011-11-25   98  	kunmap_atomic(kaddr);
+d73e60b7144a86 Russell King  2008-10-31   99  }
+d73e60b7144a86 Russell King  2008-10-31  100  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 64 was first introduced by commit
+:::::: 063b0a4207e43acbeff3d4b09f43e750e0212b48 [ARM] copypage: provide our own copy_user_highpage()
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
