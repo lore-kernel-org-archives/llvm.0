@@ -1,78 +1,90 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284AE7C
-	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 08:37:41 +0000 (UTC)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-536bbef1c5eso42113937b3.9
-        for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 00:37:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cz98R7Ca78KCbduT2+9H7VwReVgB2OnNZzHlXdg3vPg=;
-        b=LslJvRDEXLo8YVQdMr+NYNiAU+2KWc+5HoLP4elf+87SnngnzsWjSRG3ZP1v2tH1Vc
-         ddgHtrk8mJCTJzMgbZ2BDxvt3sY5a75hxfx3qcqc/1WEUGJvZbYJnpDRFoeR2DEKm0L5
-         Tzb+OfXPYDgsLg2+4/K3Hz2vWBFMJ3LHj2ND+65Q6g+uSnn2eYN0Swb/k6kYCnON/D8Y
-         cW+cZyRn+cEVHWBsxQZQrYbsva1lI9AhJN6C6aB9wLPgdBtBNIXxMdcfdhONhY5HkI8X
-         pgDjKPr6YL6jopKLbCsYCzj0yxEY9juoLF/FG8v21O/vhddsBND+QmTbxxW3hvPz5tVl
-         3pew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cz98R7Ca78KCbduT2+9H7VwReVgB2OnNZzHlXdg3vPg=;
-        b=TeIofwbwM+r0G3+VtXsdSyuEa6CQNexTMWTJtdcNIjhImBG2evvTgWZlPo/kiQp1PE
-         6W95nAlZu1kixe1kERhnsiu1qoxVXtPHRUUmKsr+EiVFe3z9Fop4nJrB5GvZ/WWhV4uI
-         JI7vHff4Zg+dwoXEl/pkn0Ehy4Jto5QUiaeZqDz8gKCiJjQcrhMG4pIwLURVu11Z0A89
-         nFbx7k6CdMESPunCY5d9jDNrO57a9ytrhXn5rWSFWGRfb8R6exwVunGu5Q9awaw7pKqW
-         wAZx8xvQ062nwqVr2pC16k8ypRrCTkXGZEvL5+qKoN7oSa0LIvdTvsGOBVbbOSvJw9S8
-         QKNA==
-X-Gm-Message-State: AO0yUKWWzBc6yTKL5k3qKzBvEiAS6CUJXtqfCgu8TAKb/dc/pCAHzv7j
-	sJut8I6cLpSzwy46XRC0/M5wqh9y4JKzKd+WTF8=
-X-Google-Smtp-Source: AK7set+hqtmF+D+rwbu85iQ+EPP3JZXUmywWfrmNyRB+ZMfHnjDwseewKGZ/t0grf+BbEU4WY0+ueRg+zQ4rY2MteRw=
-X-Received: by 2002:a81:af50:0:b0:533:9ffb:cb12 with SMTP id
- x16-20020a81af50000000b005339ffbcb12mr6270206ywj.10.1677314260110; Sat, 25
- Feb 2023 00:37:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020367C;
+	Sat, 25 Feb 2023 09:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677315627; x=1708851627;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Znvyp+4Hl7nL8bb2ycKQ/IAnYu1hZT2zRX7E4beryPU=;
+  b=h/Tyr9mPWVFse5stFJ98s9cNymSrEcd9CJFwyyGZ7RwIDl107PoQu4AB
+   HjpXcYdytI2NOE+KCx+1ltxln3FTz8a+Oq/aA9L5mtG7f8ayySjPBlP0G
+   ToCD+FPm/WoEXjtReyCu4FFrzM2pOdjUKnM5cK2m8YQ/ZzbNNZIvy2R0F
+   vx7gcCzKMSdBnoCr2C+F350SR2P/OEsTie3xLRhO4jTVV7o9/2L45a2an
+   8f8TGFx5KMc+0M9EYdgC1q+x/LN2lsFC8yoGQ9QqwCzPQz3PBm7X6WdrR
+   OsNiwLnoJ1iR7xSxZ3ChI+UNnx4wIqse4NigpKwv2yKEutsv9Zx8mJBQz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="335079754"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="335079754"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 01:00:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="705553488"
+X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
+   d="scan'208";a="705553488"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 25 Feb 2023 01:00:25 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pVqPo-00034j-11;
+	Sat, 25 Feb 2023 09:00:24 +0000
+Date: Sat, 25 Feb 2023 16:59:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 96/371]
+ usr/include/asm/kvm.h:599:22: warning: field 'cpuid' with variable sized
+ type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU
+ extension
+Message-ID: <202302251624.OjWYzg5D-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CANiq72nfGfqnk4QyKsf3kmjgBVPG3WFLQqd7_+jLcYh9jG+fQw@mail.gmail.com>
- <mhng-b792c358-a678-4ab3-aba4-4bc38da55744@palmer-ri-x1c9a>
-In-Reply-To: <mhng-b792c358-a678-4ab3-aba4-4bc38da55744@palmer-ri-x1c9a>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 25 Feb 2023 09:37:29 +0100
-Message-ID: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
-Subject: Re: [RFC 0/2] RISC-V: enable rust
-To: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
-	Conor Dooley <conor@kernel.org>, ojeda@kernel.org, alex.gaynor@gmail.com, 
-	wedsonaf@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, corbet@lwn.net, 
-	Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org, ndesaulniers@google.com, 
-	trix@redhat.com, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Feb 25, 2023 at 12:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> Works for me.
->
-> I've got a few other things in the pipeline for this merge window so
-> this probably won't make it, but I'll dig in after that.  We've got a
-> bunch of Rust-types floating around Rivos as well, so with any luck
-> someone else will have some time to poke around.  Having a full cycle in
-> linux-next is probably the right way to go for this sort of thing
-> anyway, as it's likely to shake out some long-tail issues.
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   236af3da84d067f3af446ccf2211937cd9ddc42f
+commit: b50c9426e0960726923c64ee3c6ead344f6f2c76 [96/371] KVM: TDX: initialize VM with TDX specific parameters
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230225/202302251624.OjWYzg5D-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/b50c9426e0960726923c64ee3c6ead344f6f2c76
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout b50c9426e0960726923c64ee3c6ead344f6f2c76
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Thanks a lot! That would be great.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302251624.OjWYzg5D-lkp@intel.com/
 
-At least from our side, no rush. In fact, we are letting users (or
-arch maintainers) to request/submit the architectures themselves as
-they need/want them.
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Miguel
+   In file included from <built-in>:1:
+   In file included from ./usr/include/asm/kvm_perf.h:7:
+>> usr/include/asm/kvm.h:599:22: warning: field 'cpuid' with variable sized type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+                           struct kvm_cpuid2 cpuid;
+                                             ^
+   1 warning generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/asm/kvm.h:599:22: warning: field 'cpuid' with variable sized type 'struct kvm_cpuid2' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+                           struct kvm_cpuid2 cpuid;
+                                             ^
+   1 warning generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
