@@ -1,43 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF10728E2;
-	Sat, 25 Feb 2023 10:53:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492E628E2;
+	Sat, 25 Feb 2023 11:04:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677322410; x=1708858410;
+  t=1677323070; x=1708859070;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rd7RPhOXUD6kBL2olbEMUTmKckQZD9AWml1PToeRMq8=;
-  b=npC135OYsqD/LlwUxBgFsNPPdBFOTnUvAowBy66soKELcdcUQaRxHLCV
-   Xx/5+QSv599gNF2tNNdigCJLlp3bJ1KPQBR5gIQmyKKR3upXjm1tMx7ka
-   uCNNlK6Ff9x0wt+oSn/T2ajBTLLBIuxBAYfGGpxR/rSf+YBgqqDA7dypB
-   rssGmN417dEL5jcvwIm4Iu1aHx/KdoCXoYnDYykSCA9fXmzp2i7mQ9cE3
-   6Kg8OjavxSlrIqqXtR0oh2VRFzLp5fBduONtTICy4VD07IPeO3c172ENK
-   K3u4lcA3CzTD9oZ24GbWIU3zzr285W0WiIJu/zlrE22EG290jkzGw1Jig
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="333658385"
+  bh=SJ8d7/b+hm/w2Rgg1CF8/KUOveDmnjsrQ2mqW2c99HA=;
+  b=fZX5NUCGzgPgRhg8Ouc9FjsONhMtgy0bDU5a21zELgakipmDda8Ulanx
+   oOmFhXWtu+evHQxLi2cjjMOGd16MvOLFon3hSMbMkbQ9VWwa31/sCh+zg
+   q3deJCCplQspRl6U8OtFXrndyALGZBEIYaPDGT7zEgFaG+BFbhrKuFbse
+   XEshQfWP82pEbdKsf+tJzb1WoMZ+IaIZJnBYujZKRPYbqFs3qKj7JmxtA
+   vmZDbDaph+LiyvTMFICCfWjRhQwmzGvDKiy72nMbloOKzIfjGswbR9ndL
+   Q/TzNe8eZ9XguwAoQGTuhtEma2e82IX8BanpEPJQymJbnujYyYu9ZkOAW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="335086386"
 X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="333658385"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 02:53:29 -0800
+   d="scan'208";a="335086386"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 03:04:29 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="741922508"
+X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="703466849"
 X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="741922508"
+   d="scan'208";a="703466849"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Feb 2023 02:53:27 -0800
+  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2023 03:04:27 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pVsBC-00037r-1o;
-	Sat, 25 Feb 2023 10:53:26 +0000
-Date: Sat, 25 Feb 2023 18:53:25 +0800
+	id 1pVsLq-00038R-39;
+	Sat, 25 Feb 2023 11:04:26 +0000
+Date: Sat, 25 Feb 2023 19:03:56 +0800
 From: kernel test robot <lkp@intel.com>
 To: Armin Wolf <W_Armin@gmx.de>, rafael@kernel.org, lenb@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 3/4] ACPI: EC: Make query handlers private
-Message-ID: <202302251843.r0u8s41s-lkp@intel.com>
+Message-ID: <202302251803.g3ubvi2K-lkp@intel.com>
 References: <20230225080458.1342359-4-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,7 +63,7 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Armin-Wolf/ACPI-EC-Add-qu
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
 patch link:    https://lore.kernel.org/r/20230225080458.1342359-4-W_Armin%40gmx.de
 patch subject: [PATCH 3/4] ACPI: EC: Make query handlers private
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230225/202302251843.r0u8s41s-lkp@intel.com/config)
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230225/202302251803.g3ubvi2K-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -79,7 +79,7 @@ reproduce (this is a W=1 build):
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302251843.r0u8s41s-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302251803.g3ubvi2K-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
