@@ -1,113 +1,78 @@
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CC1210D;
-	Sat, 25 Feb 2023 08:27:53 +0000 (UTC)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.169])
-	by gnuweeb.org (Postfix) with ESMTPSA id DC1958312D;
-	Sat, 25 Feb 2023 08:27:44 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1677313666;
-	bh=b3cZpQdUYtD/r0SSm8xEnB9mBj7D0hdUK34PdKAk3YQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ox6G1JiF1O0FP1STDalE4z1JNdKVadOsqhu/GSaMX0LzNXJq0HV9QZF2G8m87P3f7
-	 AWkNPxxIe3wW2cGAetQGOAm/iVlbvAL4f0O9TR87JvQmDfJNikoND8PpIkhr4O3JMI
-	 8gIoyroIPOH6fFuG33RaVg1IjBQWsrx6sdSGQrBEFuxFwVQ3SlqDJUEhXpqKgL74et
-	 MlkeljyolZB40PRGR1OOdTXEQ7MLtEXm0mHg6Pqux/cyMOZRMbD/kmXSs+AO49w5wS
-	 KYaZpJa2j5kErMacGZ+UmqIaE/LTJ8r2Wl6o0V6HerZ4qCQHNEY/9AK50Kx1c5IHy6
-	 n5b1su7wnpEyw==
-Date: Sat, 25 Feb 2023 15:27:40 +0700
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [ammarfaizi2-block:af/dev.btrfs 10/11] fs/btrfs/super.c:352:19:
- error: array type 'cpumask_var_t' (aka 'struct cpumask[1]') is not
- assignable
-Message-ID: <Y/nGfGZEua3AE6h6@biznet-home.integral.gnuweeb.org>
-References: <202302251526.XdMJnuk0-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284AE7C
+	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 08:37:41 +0000 (UTC)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-536bbef1c5eso42113937b3.9
+        for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 00:37:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cz98R7Ca78KCbduT2+9H7VwReVgB2OnNZzHlXdg3vPg=;
+        b=LslJvRDEXLo8YVQdMr+NYNiAU+2KWc+5HoLP4elf+87SnngnzsWjSRG3ZP1v2tH1Vc
+         ddgHtrk8mJCTJzMgbZ2BDxvt3sY5a75hxfx3qcqc/1WEUGJvZbYJnpDRFoeR2DEKm0L5
+         Tzb+OfXPYDgsLg2+4/K3Hz2vWBFMJ3LHj2ND+65Q6g+uSnn2eYN0Swb/k6kYCnON/D8Y
+         cW+cZyRn+cEVHWBsxQZQrYbsva1lI9AhJN6C6aB9wLPgdBtBNIXxMdcfdhONhY5HkI8X
+         pgDjKPr6YL6jopKLbCsYCzj0yxEY9juoLF/FG8v21O/vhddsBND+QmTbxxW3hvPz5tVl
+         3pew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cz98R7Ca78KCbduT2+9H7VwReVgB2OnNZzHlXdg3vPg=;
+        b=TeIofwbwM+r0G3+VtXsdSyuEa6CQNexTMWTJtdcNIjhImBG2evvTgWZlPo/kiQp1PE
+         6W95nAlZu1kixe1kERhnsiu1qoxVXtPHRUUmKsr+EiVFe3z9Fop4nJrB5GvZ/WWhV4uI
+         JI7vHff4Zg+dwoXEl/pkn0Ehy4Jto5QUiaeZqDz8gKCiJjQcrhMG4pIwLURVu11Z0A89
+         nFbx7k6CdMESPunCY5d9jDNrO57a9ytrhXn5rWSFWGRfb8R6exwVunGu5Q9awaw7pKqW
+         wAZx8xvQ062nwqVr2pC16k8ypRrCTkXGZEvL5+qKoN7oSa0LIvdTvsGOBVbbOSvJw9S8
+         QKNA==
+X-Gm-Message-State: AO0yUKWWzBc6yTKL5k3qKzBvEiAS6CUJXtqfCgu8TAKb/dc/pCAHzv7j
+	sJut8I6cLpSzwy46XRC0/M5wqh9y4JKzKd+WTF8=
+X-Google-Smtp-Source: AK7set+hqtmF+D+rwbu85iQ+EPP3JZXUmywWfrmNyRB+ZMfHnjDwseewKGZ/t0grf+BbEU4WY0+ueRg+zQ4rY2MteRw=
+X-Received: by 2002:a81:af50:0:b0:533:9ffb:cb12 with SMTP id
+ x16-20020a81af50000000b005339ffbcb12mr6270206ywj.10.1677314260110; Sat, 25
+ Feb 2023 00:37:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202302251526.XdMJnuk0-lkp@intel.com>
-X-Bpl: hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
+References: <CANiq72nfGfqnk4QyKsf3kmjgBVPG3WFLQqd7_+jLcYh9jG+fQw@mail.gmail.com>
+ <mhng-b792c358-a678-4ab3-aba4-4bc38da55744@palmer-ri-x1c9a>
+In-Reply-To: <mhng-b792c358-a678-4ab3-aba4-4bc38da55744@palmer-ri-x1c9a>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sat, 25 Feb 2023 09:37:29 +0100
+Message-ID: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+To: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
+	Conor Dooley <conor@kernel.org>, ojeda@kernel.org, alex.gaynor@gmail.com, 
+	wedsonaf@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, corbet@lwn.net, 
+	Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org, ndesaulniers@google.com, 
+	trix@redhat.com, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Feb 25, 2023 at 03:23:48PM +0800, kernel test robot wrote: 
-> >> fs/btrfs/super.c:352:19: error: array type 'cpumask_var_t' (aka 'struct cpumask[1]') is not assignable
->            info->wq_cpu_set = mask;
->            ~~~~~~~~~~~~~~~~ ^
->    1 error generated.
+On Sat, Feb 25, 2023 at 12:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> Works for me.
+>
+> I've got a few other things in the pipeline for this merge window so
+> this probably won't make it, but I'll dig in after that.  We've got a
+> bunch of Rust-types floating around Rivos as well, so with any luck
+> someone else will have some time to poke around.  Having a full cycle in
+> linux-next is probably the right way to go for this sort of thing
+> anyway, as it's likely to shake out some long-tail issues.
 
-Oh, it is because cpumask_var_t is defined as a different type,
-depending on CONFIG_CPUMASK_OFFSTACK.
+Thanks a lot! That would be great.
 
-When CONFIG_CPUMASK_OFFSTACK=y
+At least from our side, no rush. In fact, we are letting users (or
+arch maintainers) to request/submit the architectures themselves as
+they need/want them.
 
-   typedef struct cpumask *cpumask_var_t;
-
-When CONFIG_CPUMASK_OFFSTACK is not set:
-
-   typedef struct cpumask cpumask_var_t[1];
-
-Let's avoid that temporary variable. The fix below...
-
----
-diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
-index 47b9e38d6a6313a1..f2e064ba0534a39c 100644
---- a/fs/btrfs/super.c
-+++ b/fs/btrfs/super.c
-@@ -323,7 +323,6 @@ static void wq_cpu_set_fix_cpulist(char *set)
- 
- static int parse_wq_cpu_set(struct btrfs_fs_info *info, const char *set)
- {
--	cpumask_var_t mask;
- 	char *set_copy;
- 	int ret;
- 
-@@ -331,31 +330,30 @@ static int parse_wq_cpu_set(struct btrfs_fs_info *info, const char *set)
- 	if (!set_copy)
- 		return -ENOMEM;
- 
--	if (!alloc_cpumask_var(&mask, GFP_KERNEL)) {
-+	if (!alloc_cpumask_var(&info->wq_cpu_set, GFP_KERNEL)) {
- 		ret = -ENOMEM;
- 		goto out_fail;
- 	}
- 
- 	wq_cpu_set_fix_cpulist(set_copy);
--	ret = cpulist_parse(set_copy, mask);
-+	ret = cpulist_parse(set_copy, info->wq_cpu_set);
- 	if (ret) {
- 		btrfs_err(info, "failed to parse wq_cpu_set: %d", ret);
- 		goto out_fail_cpu;
- 	}
- 
--	if (cpumask_empty(mask)) {
-+	if (cpumask_empty(info->wq_cpu_set)) {
- 		ret = -EINVAL;
- 		btrfs_err(info, "wq_cpu_set cannot be empty");
- 		goto out_fail_cpu;
- 	}
- 
--	info->wq_cpu_set = mask;
- 	info->wq_cpu_set_str = set_copy;
- 	btrfs_set_and_info(info, WQ_CPU_SET, "using wq_cpu_set=%s", set_copy);
- 	return 0;
- 
- out_fail_cpu:
--	free_cpumask_var(mask);
-+	free_cpumask_var(info->wq_cpu_set);
- out_fail:
- 	kfree(set_copy);
- 	return ret;
-
-
--- 
-Ammar Faizi
-
+Cheers,
+Miguel
