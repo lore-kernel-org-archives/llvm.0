@@ -1,106 +1,117 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D88433CF;
-	Sat, 25 Feb 2023 20:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677357406; x=1708893406;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mqSM0I91U6IAY9Cj5vU5OR9snlGfnxVyIBIv1dpHmOw=;
-  b=Bc8vDyffWPwoQvDr3+HaxLxEwgwvvp73oq1rKkNkPwR0ZJezF9FZWKYA
-   rvOKLAEyppZeYd2PMK0hxsaDpEjGzyUSDZnLO64fRr83NRiM5B/c032U9
-   C6feXIJNeJKGDAACjd1CWSUGxl4E6WZrvat/DVwADarGXiEnhD+8qg0kZ
-   OyhtlPbiOUfDQgkhYjODzi6YSLnmEFdgJAYJXojaC8AtmKHGOM8UxVLs3
-   WCCBXTRYk2Uuo9bcEKZLNtB1XJTg4ByYoBTOYfQVb+EMmldqsUkVRtpYs
-   A6P4xpVMJYljnbOuU7JP+72IkQuzvL3Ua7lW514Nm7OHz2s/Qh3plA991
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10632"; a="419927864"
-X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
-   d="scan'208";a="419927864"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 12:36:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10632"; a="1002204939"
-X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
-   d="scan'208";a="1002204939"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Feb 2023 12:36:42 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pW1He-0003Op-04;
-	Sat, 25 Feb 2023 20:36:42 +0000
-Date: Sun, 26 Feb 2023 04:36:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
-	lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
-	alexandre.belloni@bootlin.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-	jneanne@baylibre.com
-Subject: Re: [PATCH INTERNAL v1 2/3] pinctrl: tps6594: add for TPS6594 PMIC
-Message-ID: <202302260423.CycoSTtT-lkp@intel.com>
-References: <20230224133129.887203-3-eblanc@baylibre.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C44F33CF
+	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 21:45:15 +0000 (UTC)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.nyi.internal (Postfix) with ESMTP id 5E7995C0083;
+	Sat, 25 Feb 2023 16:45:14 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 25 Feb 2023 16:45:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:sender:subject:subject:to:to;
+	 s=fm2; t=1677361514; x=1677447914; bh=GYT2CsdMMXcJ1yaIvy1iewQsE
+	8LxiHHmFK+DggDoft4=; b=a0+EGpYsY16LdnT8kxFCWUlH84vg60lI338CYkCPW
+	ch4Fek/2j8l23E52DSXkDYzxhLmZK2iO9abT8/ieb6vfvcvHCW4YWkQtNnepW4dh
+	+U8luCwooY1dx74oCtnl+D9o6CQbmVkq5m3TJobTtDgnafkg1k1HH80ycp9/TKQY
+	jEH11F/ojt/xE7x4bgbDIxE9WTfYPXyUImDJ4yOfJtI3uB4twyUE65CmpJpFRRHX
+	U7TIie0/+lDg/bUDb5uGhuwUAu23uD31tY1q6d6lkU+62Gn3b54jbTWhF3PxwSkq
+	4OlifOcOP1E+Ev7QHIoG6g3LU0hneKZeTG7CFuisyy69g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1677361514; x=1677447914; bh=GYT2CsdMMXcJ1yaIvy1iewQsE8LxiHHmFK+
+	DggDoft4=; b=Co4nAQerZ43J5U+7ihF+lcTct1ZxhadTiMtL9K5cXKoVZiDk8vJ
+	jWZYwm+8dmAMTFlRRK0DA/vcXyP7852xVyE4okg6tcnAs0bi2ZjsFP0hE88yw/A2
+	TZMfMprQXArzWk2dRZNpstP5D3XOJhj6AnwzPTExlL37/MBcObgaRQjBzN9DtDfM
+	ipHnyXW1WTP8Zqvtyqxh62u37YyeYi6DIwBCBvCXHEYcCavA89Ngai1oOKR0gbk8
+	JiGAOdCHJ1gOkxQ7rqThhCv+p2Mw1gccEYReGmlQ2zqAEa9htZmSErG6Vf/MCYT5
+	N0cH76E8K6dOrZxqkLM6XkCcNkxm/AkI0Fg==
+X-ME-Sender: <xms:aYH6Y11L-mbd20fICSG6kebFOxG5z2-RPJUtfwZKKMNhs-AaJ8tAMQ>
+    <xme:aYH6Y8HA-R_KWW7A5AzUfrlUqk78cKjr_0qEmKu-XyRp-Rh1fO9f3lt6ZXPEi8QUe
+    q3nmePoQoP26uuCJ_A>
+X-ME-Received: <xmr:aYH6Y17Q0Ads1aCoUys1b__1szJS3BKa97Kh3oE02A_xI-YRuHVA_fj6iQ3_>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekiedgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:aYH6Yy2YqM4wFfPNaaTL7zV2EjbSwnltyF8w0enOCnlVIN9ZnxQyNQ>
+    <xmx:aYH6Y4H9QAK4lJqDHnHMqg5qLf14cVK-gxK6guQerRxruV1b2zPjqQ>
+    <xmx:aYH6Yz9yQGtiv5xt6yfg2n05HLrkSCgx366qH6BAHRqnFSMMG6icTg>
+    <xmx:aoH6Y8BAB2Rj6MvR-QwO1CVZqIRT6xEse_ppYD0ylPGe3NId8gKvUA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 25 Feb 2023 16:45:12 -0500 (EST)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+To: linux-mips@vger.kernel.org
+Cc: tsbogend@alpha.franken.de,
+	nathan@kernel.org,
+	llvm@lists.linux.dev,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH] MIPS: Workaround clang inline compat branch issue
+Date: Sat, 25 Feb 2023 21:45:00 +0000
+Message-Id: <20230225214500.7446-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230224133129.887203-3-eblanc@baylibre.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Esteban,
+Clang is unable to handle the situation that a chunk of inline
+assembly ends with a compat branch instruction and then compiler
+generates another control transfer instruction immediately after
+this compat branch. The later instruction will end up in forbidden
+slot and cause exception.
 
-Thank you for the patch! Perhaps something to improve:
+Workaround by add a option to control the use of compact branch.
+Currently it's selected by CC_IS_CLANG and hopefully we can change
+it to a version check in future if clang manages to fix it.
 
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on linusw-pinctrl/for-next broonie-regulator/for-next abelloni/rtc-next linus/master v6.2 next-20230225]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fix boot on boston board.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Esteban-Blanc/rtc-tps6594-add-driver-for-TPS6594-PMIC-RTC/20230224-213323
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20230224133129.887203-3-eblanc%40baylibre.com
-patch subject: [PATCH INTERNAL v1 2/3] pinctrl: tps6594: add for TPS6594 PMIC
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230226/202302260423.CycoSTtT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5abddc736234d1cd3e28ef7e205bc0bfef263c15
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Esteban-Blanc/rtc-tps6594-add-driver-for-TPS6594-PMIC-RTC/20230224-213323
-        git checkout 5abddc736234d1cd3e28ef7e205bc0bfef263c15
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pinctrl/
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/Kconfig           | 3 +++
+ arch/mips/include/asm/asm.h | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302260423.CycoSTtT-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pinctrl/pinctrl-tps6594.c:8:9: warning: 'DEBUG' macro redefined [-Wmacro-redefined]
-   #define DEBUG
-           ^
-   <command line>:6:9: note: previous definition is here
-   #define DEBUG 1
-           ^
-   1 warning generated.
-
-
-vim +/DEBUG +8 drivers/pinctrl/pinctrl-tps6594.c
-
-   > 8	#define DEBUG
-     9	
-
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 37072e15b263..adf2c5a0bdba 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3206,6 +3206,9 @@ config CC_HAS_MNO_BRANCH_LIKELY
+ 	def_bool y
+ 	depends on $(cc-option,-mno-branch-likely)
+ 
++config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
++	def_bool y if CC_IS_CLANG
++
+ menu "Power management options"
+ 
+ config ARCH_HIBERNATION_POSSIBLE
+diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
+index 336ac9b65235..2e99450f4228 100644
+--- a/arch/mips/include/asm/asm.h
++++ b/arch/mips/include/asm/asm.h
+@@ -336,7 +336,7 @@ symbol		=	value
+  */
+ #ifdef CONFIG_WAR_R10000_LLSC
+ # define SC_BEQZ	beqzl
+-#elif MIPS_ISA_REV >= 6
++#elif !defined(CONFIG_CC_HAS_BROKEN_INLINE_COMPAT_BRANCH) && MIPS_ISA_REV >= 6
+ # define SC_BEQZ	beqzc
+ #else
+ # define SC_BEQZ	beqz
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.37.1 (Apple Git-137.1)
+
