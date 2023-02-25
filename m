@@ -1,109 +1,168 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D90198;
-	Sat, 25 Feb 2023 15:41:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677339698; x=1708875698;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7TlSJBAv1JWgP8CG84HHh60dSmh6Utj+V6WWc5f2D80=;
-  b=eFuLfSuKFnD2v5vaIcSmUubPUHmXQAeCEdRCbcmzGeUEXNwrXwtw/LsL
-   W+xrDmWx0Ka0ehvnl/efN/xsO1n+hFSMT1im7/hNlENk2NUyozYUIssIr
-   gf38KRQtaq0hND7Hc99iK6Ca1j+oaOdygsI3y5SDiib91/yV8DG5AG0Km
-   lZmYePVL6iNRdZC+WKd6XRyGwLBrW1R9ZxcNTtRFMF2x3PhIZWWKEUZla
-   CBjHJpOUk3wnJCkkSN+eniORrMxNedkFZ3WevGrOnsEIOsZaVJToVSzyl
-   ZWsPdfLc02jhvKVuA7OQTGVxpMnUDsYhQCZtO56oIb3k3lKpDcZWq5bAm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="396182612"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="396182612"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 07:41:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="782728869"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="782728869"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 25 Feb 2023 07:41:34 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pVwg1-0003Hb-2Q;
-	Sat, 25 Feb 2023 15:41:33 +0000
-Date: Sat, 25 Feb 2023 23:40:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>,
-	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>,
-	"linux-imx@nxp.com" <linux-imx@nxp.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ARM64: dts: debix model-a: enable hdmi
-Message-ID: <202302252343.4lnZcpLX-lkp@intel.com>
-References: <MA0PR01MB7145D1E9382C7F91197B259FFFA99@MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2965566E
+	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 17:41:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677346901;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6zFqwFLazcbsZ6D4TElvFBNTFM9p6SOHDx2WREV5iBY=;
+	b=HlL8PF9TPKRlrHGxEniVo+vjbnmpdPtUtml9eDI0bJdqe0/f/HLsVxfmLZoSYR9fh+BMV0
+	Z4t1d1RRD68iUcHz9BiQ2VBpVc2i+Dy+535uVgLHvmdMHO52F3EgVByQ6xcVM6Tt1yOYrm
+	JvR0RYTqMRIUiD6kp4hdBuxz0kxKpbA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-63-ySrz_y4cP0-BRNIf3BaBqQ-1; Sat, 25 Feb 2023 12:41:40 -0500
+X-MC-Unique: ySrz_y4cP0-BRNIf3BaBqQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A12602A5954D
+	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 17:41:39 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 86A181121314;
+	Sat, 25 Feb 2023 17:41:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (105/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, 489fa31e)
+Date: Sat, 25 Feb 2023 17:41:39 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MA0PR01MB7145D1E9382C7F91197B259FFFA99@MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <35688.123022512414000107@us-mta-63.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hardevsinh,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Yet something to improve:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on linus/master next-20230225]
-[cannot apply to v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hardevsinh-Palaniya/ARM64-dts-debix-model-a-enable-hdmi/20230225-222532
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-patch link:    https://lore.kernel.org/r/MA0PR01MB7145D1E9382C7F91197B259FFFA99%40MA0PR01MB7145.INDPRD01.PROD.OUTLOOK.COM
-patch subject: [PATCH] ARM64: dts: debix model-a: enable hdmi
-config: arm64-randconfig-r014-20230222 (https://download.01.org/0day-ci/archive/20230225/202302252343.4lnZcpLX-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/169f8a9904944622235b3485702d64ac942af621
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hardevsinh-Palaniya/ARM64-dts-debix-model-a-enable-hdmi/20230225-222532
-        git checkout 169f8a9904944622235b3485702d64ac942af621
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Kernel information:
+    Commit message: Merge branch 'work.misc' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/viro/vfs
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302252343.4lnZcpLX-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/74148
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7261558
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7262109
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7262113
+          x86_64 (debug) - xfstests - ext4
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7262158
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7262163
 
->> Error: arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts:49.1-15 Label or path irqsteer_hdmi not found
->> Error: arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts:53.1-15 Label or path hdmi_blk_ctrl not found
->> Error: arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts:57.1-11 Label or path hdmi_pavi not found
->> Error: arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts:61.1-6 Label or path hdmi not found
->> Error: arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts:65.1-9 Label or path hdmiphy not found
->> Error: arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts:69.1-8 Label or path lcdif1 not found
->> Error: arch/arm64/boot/dts/freescale/imx8mp-debix-model-a.dts:77.1-8 Label or path lcdif3 not found
-   FATAL ERROR: Syntax error parsing input tree
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage nvme - rdma: nvme/014 - flush: Interrupted system ca=
+ll
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1980181
+            Affected tests:
+                  x86_64 - Storage - blktests - nvme-tcp
+        Issue: stress: stress-ng - memory: SELinux prevents pipefs
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1541
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: stress-ng invoked oom-killer: gf=
+p_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=3D0, o=
+om_score_adj=3D1000
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1214
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                   s390x - stress: stress-ng - memory
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
