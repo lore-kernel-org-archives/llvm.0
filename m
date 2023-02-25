@@ -1,119 +1,146 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492E628E2;
-	Sat, 25 Feb 2023 11:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677323070; x=1708859070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SJ8d7/b+hm/w2Rgg1CF8/KUOveDmnjsrQ2mqW2c99HA=;
-  b=fZX5NUCGzgPgRhg8Ouc9FjsONhMtgy0bDU5a21zELgakipmDda8Ulanx
-   oOmFhXWtu+evHQxLi2cjjMOGd16MvOLFon3hSMbMkbQ9VWwa31/sCh+zg
-   q3deJCCplQspRl6U8OtFXrndyALGZBEIYaPDGT7zEgFaG+BFbhrKuFbse
-   XEshQfWP82pEbdKsf+tJzb1WoMZ+IaIZJnBYujZKRPYbqFs3qKj7JmxtA
-   vmZDbDaph+LiyvTMFICCfWjRhQwmzGvDKiy72nMbloOKzIfjGswbR9ndL
-   Q/TzNe8eZ9XguwAoQGTuhtEma2e82IX8BanpEPJQymJbnujYyYu9ZkOAW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="335086386"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="335086386"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 03:04:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="703466849"
-X-IronPort-AV: E=Sophos;i="5.97,327,1669104000"; 
-   d="scan'208";a="703466849"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Feb 2023 03:04:27 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pVsLq-00038R-39;
-	Sat, 25 Feb 2023 11:04:26 +0000
-Date: Sat, 25 Feb 2023 19:03:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Armin Wolf <W_Armin@gmx.de>, rafael@kernel.org, lenb@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] ACPI: EC: Make query handlers private
-Message-ID: <202302251803.g3ubvi2K-lkp@intel.com>
-References: <20230225080458.1342359-4-W_Armin@gmx.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA9BA28E2
+	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 11:41:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677325301;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ns2xHZMCOrCtKQ39YMcObpo0f/07avuG2TxejYtV0hI=;
+	b=LiWYMzkSGUW9M4XFGok2MhEuNHYqf3zmCpjX2mhB6ZZiwpxVWyzp6tSDVfFcFwRtO5BItx
+	XY8v26pUYG3bEuLL/bs6tAoZ0irqw9syDhGZVCyMlCaKk+qxLckXlcvsmC9xRAEGMjcO+j
+	0r8E3OKaEyy/mVGc0c1UHF743t6EsIk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-19-QkpJLNWEPeCslWYohI4_Fg-1; Sat, 25 Feb 2023 06:41:40 -0500
+X-MC-Unique: QkpJLNWEPeCslWYohI4_Fg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C5B81800B23
+	for <llvm@lists.linux.dev>; Sat, 25 Feb 2023 11:41:39 +0000 (UTC)
+Received: from [172.64.14.61] (unknown [10.30.33.161])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A7B471121314;
+	Sat, 25 Feb 2023 11:41:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (104/381 SKIPPED): Test report for master
+ (6.2.0, mainline.kernel.org-clang, a93e884e)
+Date: Sat, 25 Feb 2023 11:41:39 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230225080458.1342359-4-W_Armin@gmx.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <18160.123022506414000243@us-mta-19.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Armin,
+Hi, we tested your kernel and here are the results:
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.2 next-20230225]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Armin-Wolf/ACPI-EC-Add-query-notifier-support/20230225-160641
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230225080458.1342359-4-W_Armin%40gmx.de
-patch subject: [PATCH 3/4] ACPI: EC: Make query handlers private
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230225/202302251803.g3ubvi2K-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a62cb9e29bf040af617070fa775758720d2de12e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Armin-Wolf/ACPI-EC-Add-query-notifier-support/20230225-160641
-        git checkout a62cb9e29bf040af617070fa775758720d2de12e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302251803.g3ubvi2K-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/ec.c:1083:5: warning: no previous prototype for function 'acpi_ec_add_query_handler' [-Wmissing-prototypes]
-   int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit, acpi_handle handle)
-       ^
-   drivers/acpi/ec.c:1083:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit, acpi_handle handle)
-   ^
-   static 
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/acpi_ec_add_query_handler +1083 drivers/acpi/ec.c
+Kernel information:
+    Commit message: Merge tag 'driver-core-6.3-rc1' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/gregkh/driver-core
 
-  1082	
-> 1083	int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit, acpi_handle handle)
-  1084	{
-  1085		struct acpi_ec_query_handler *handler =
-  1086		    kzalloc(sizeof(struct acpi_ec_query_handler), GFP_KERNEL);
-  1087	
-  1088		if (!handler)
-  1089			return -ENOMEM;
-  1090	
-  1091		handler->query_bit = query_bit;
-  1092		handler->handle = handle;
-  1093		mutex_lock(&ec->mutex);
-  1094		kref_init(&handler->kref);
-  1095		list_add(&handler->node, &ec->list);
-  1096		mutex_unlock(&ec->mutex);
-  1097		return 0;
-  1098	}
-  1099	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/74100
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 - xfstests - cifsv3.11
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7259272
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7258945
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7259687
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
