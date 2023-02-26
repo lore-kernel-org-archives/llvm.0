@@ -1,36 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65ED8385
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 14:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1378C433EF;
-	Sun, 26 Feb 2023 14:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7DE2913
+	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 14:45:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07C10C433D2;
+	Sun, 26 Feb 2023 14:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677422719;
-	bh=CIBDjaRJoMuMfExEyRgKQbnWA1vh/FpEjx1ld84jebs=;
+	s=k20201202; t=1677422738;
+	bh=EMReRnjEZ1rks1B504mit7FlnxMLCUFiF3SQGwR5mNI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ByVaD7+suux3+Roipg1g6VtFAZv/AUkxJ9a7gqEJXfP0Ys6/F5atDSkQairiUQLKU
-	 1NvwH9p5Qe+lMmHyRRPB5R3qgMWhZuwPfE9mn71x0PZzT6vh9QRfP5gXt/URrh0Amp
-	 f6Kh3FmoK83CrtfJvN380tzV2hs3OE+OkyPocLqZM751hqUij06ya1e5S4Ls02C1/p
-	 KMutW+PmjAetVA5mON31QNhfOsMGlutrZTFVi+2tUCe1AZdVCHjQ2nVi02jgyYYc5v
-	 aiLs9NJD+o9L9MdwFhlxtx0TmCU4LUbNK1MJ/irgI1oEh+kRipBwpjxEuZ3/8jfA0R
-	 wzIL1Wly4vfrw==
+	b=D3ok/42qWxzYimcdOcfWrtJJsBfBN/gzY+UzuxQpcGMXwCVGfOvxkroQ3iIM/faf5
+	 6CrliZ0TFUxnbNj/38dHkCgh9coG8TnALLPDOyH1gkN5n1MgyULSbM2g3qLwoyAm7/
+	 K7HbJ296HRwRsJ3ca/3j8KZlKdtMQLx1sJSHOqHS5QpWT7Kdw4oxFg6fAHS0MjERZm
+	 Q+yDlgK2Oa0WiT5fSQlWdavXGH0+jwzv4kZUAfyrqi0E4pCFp55oG49WsenZNnf37H
+	 CO1RqPvw9AMyf8PUfZ21hlQhpjNkWk51l6zTxcz4hzLmKsokqOd78Bi0Hg5fv1qHTI
+	 7SxqnSZi8uaqA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: =?UTF-8?q?Holger=20Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Quentin Monnet <quentin@isovalent.com>,
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Florent Revest <revest@chromium.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Will Deacon <will@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
 	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	andrii@kernel.org,
 	nathan@kernel.org,
-	ndesaulniers@google.com,
-	bpf@vger.kernel.org,
+	keescook@chromium.org,
+	ast@kernel.org,
+	akpm@linux-foundation.org,
+	yhs@fb.com,
+	haoluo@google.com,
+	samitolvanen@google.com,
+	linux@rasmusvillemoes.dk,
+	ebiederm@xmission.com,
+	mcgrof@kernel.org,
+	oleg@redhat.com,
+	npiggin@gmail.com,
+	jannh@google.com,
+	mingo@kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.2 13/53] bpftool: Always disable stack protection for BPF objects
-Date: Sun, 26 Feb 2023 09:44:05 -0500
-Message-Id: <20230226144446.824580-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.2 20/53] Compiler attributes: GCC cold function alignment workarounds
+Date: Sun, 26 Feb 2023 09:44:12 -0500
+Message-Id: <20230226144446.824580-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230226144446.824580-1-sashal@kernel.org>
 References: <20230226144446.824580-1-sashal@kernel.org>
@@ -40,66 +55,174 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
-From: Holger Hoffstätte <holger@applied-asynchrony.com>
+From: Mark Rutland <mark.rutland@arm.com>
 
-[ Upstream commit 878625e1c7a10dfbb1fdaaaae2c4d2a58fbce627 ]
+[ Upstream commit c27cd083cfb9d392f304657ed00fcde1136704e7 ]
 
-When the clang toolchain has stack protection enabled in order to be
-consistent with gcc - which just happens to be the case on Gentoo -
-the bpftool build fails:
+Contemporary versions of GCC (e.g. GCC 12.2.0) drop the alignment
+specified by '-falign-functions=N' for functions marked with the
+__cold__ attribute, and potentially for callees of __cold__ functions as
+these may be implicitly marked as __cold__ by the compiler. LLVM appears
+to respect '-falign-functions=N' in such cases.
 
-  [...]
-  clang \
-	-I. \
-	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/include/uapi/ \
-	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/bpf/bpftool/bootstrap/libbpf/include \
-	-g -O2 -Wall -target bpf -c skeleton/pid_iter.bpf.c -o pid_iter.bpf.o
-  clang \
-	-I. \
-	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/include/uapi/ \
-	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/bpf/bpftool/bootstrap/libbpf/include \
-	-g -O2 -Wall -target bpf -c skeleton/profiler.bpf.c -o profiler.bpf.o
-  skeleton/profiler.bpf.c:40:14: error: A call to built-in function '__stack_chk_fail' is not supported.
-  int BPF_PROG(fentry_XXX)
-                ^
-  skeleton/profiler.bpf.c:94:14: error: A call to built-in function '__stack_chk_fail' is not supported.
-  int BPF_PROG(fexit_XXX)
-                ^
-  2 errors generated.
-  [...]
+This has been reported to GCC in bug 88345:
 
-Since stack-protector makes no sense for the BPF bits just unconditionally
-disable it.
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345
 
-Bug: https://bugs.gentoo.org/890638
-Signed-off-by: Holger Hoffstätte <holger@applied-asynchrony.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Quentin Monnet <quentin@isovalent.com>
-Link: https://lore.kernel.org/bpf/74cd9d2e-6052-312a-241e-2b514a75c92c@applied-asynchrony.com
+... which also covers alignment being dropped when '-Os' is used, which
+will be addressed in a separate patch.
+
+Currently, use of '-falign-functions=N' is limited to
+CONFIG_FUNCTION_ALIGNMENT, which is largely used for performance and/or
+analysis reasons (e.g. with CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B), but
+isn't necessary for correct functionality. However, this dropped
+alignment isn't great for the performance and/or analysis cases.
+
+Subsequent patches will use CONFIG_FUNCTION_ALIGNMENT as part of arm64's
+ftrace implementation, which will require all instrumented functions to
+be aligned to at least 8-bytes.
+
+This patch works around the dropped alignment by avoiding the use of the
+__cold__ attribute when CONFIG_FUNCTION_ALIGNMENT is non-zero, and by
+specifically aligning abort(), which GCC implicitly marks as __cold__.
+As the __cold macro is now dependent upon config options (which is
+against the policy described at the top of compiler_attributes.h), it is
+moved into compiler_types.h.
+
+I've tested this by building and booting a kernel configured with
+defconfig + CONFIG_EXPERT=y + CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B=y,
+and looking for misaligned text symbols in /proc/kallsyms:
+
+* arm64:
+
+  Before:
+    # uname -rm
+    6.2.0-rc3 aarch64
+    # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
+    5009
+
+  After:
+    # uname -rm
+    6.2.0-rc3-00001-g2a2bedf8bfa9 aarch64
+    # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
+    919
+
+* x86_64:
+
+  Before:
+    # uname -rm
+    6.2.0-rc3 x86_64
+    # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
+    11537
+
+  After:
+    # uname -rm
+    6.2.0-rc3-00001-g2a2bedf8bfa9 x86_64
+    # grep ' [Tt] ' /proc/kallsyms | grep -iv '[048c]0 [Tt] ' | wc -l
+    2805
+
+There's clearly a substantial reduction in the number of misaligned
+symbols. From manual inspection, the remaining unaligned text labels are
+a combination of ACPICA functions (due to the use of '-Os'), static call
+trampolines, and non-function labels in assembly, which will be dealt
+with in subsequent patches.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Florent Revest <revest@chromium.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/r/20230123134603.1064407-3-mark.rutland@arm.com
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/compiler_attributes.h |  6 ------
+ include/linux/compiler_types.h      | 27 +++++++++++++++++++++++++++
+ kernel/exit.c                       |  9 ++++++++-
+ 3 files changed, 35 insertions(+), 7 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index f610e184ce02a..270066aff8bf1 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -215,7 +215,8 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
- 		-I$(or $(OUTPUT),.) \
- 		-I$(srctree)/tools/include/uapi/ \
- 		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
--		-g -O2 -Wall -target bpf -c $< -o $@
-+		-g -O2 -Wall -fno-stack-protector \
-+		-target bpf -c $< -o $@
- 	$(Q)$(LLVM_STRIP) -g $@
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index 898b3458b24a0..b83126452c651 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -75,12 +75,6 @@
+ # define __assume_aligned(a, ...)
+ #endif
  
- $(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o $(BPFTOOL_BOOTSTRAP)
+-/*
+- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-cold-function-attribute
+- *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#index-cold-label-attribute
+- */
+-#define __cold                          __attribute__((__cold__))
+-
+ /*
+  * Note the long name.
+  *
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 7c1afe0f4129c..aab34e30128e9 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -79,6 +79,33 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ /* Attributes */
+ #include <linux/compiler_attributes.h>
+ 
++#if CONFIG_FUNCTION_ALIGNMENT > 0
++#define __function_aligned		__aligned(CONFIG_FUNCTION_ALIGNMENT)
++#else
++#define __function_aligned
++#endif
++
++/*
++ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-cold-function-attribute
++ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Label-Attributes.html#index-cold-label-attribute
++ *
++ * When -falign-functions=N is in use, we must avoid the cold attribute as
++ * contemporary versions of GCC drop the alignment for cold functions. Worse,
++ * GCC can implicitly mark callees of cold functions as cold themselves, so
++ * it's not sufficient to add __function_aligned here as that will not ensure
++ * that callees are correctly aligned.
++ *
++ * See:
++ *
++ *   https://lore.kernel.org/lkml/Y77%2FqVgvaJidFpYt@FVFF77S0Q05N
++ *   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345#c9
++ */
++#if !defined(CONFIG_CC_IS_GCC) || (CONFIG_FUNCTION_ALIGNMENT == 0)
++#define __cold				__attribute__((__cold__))
++#else
++#define __cold
++#endif
++
+ /* Builtins */
+ 
+ /*
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 15dc2ec80c467..c8e0375705f48 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -1898,7 +1898,14 @@ bool thread_group_exited(struct pid *pid)
+ }
+ EXPORT_SYMBOL(thread_group_exited);
+ 
+-__weak void abort(void)
++/*
++ * This needs to be __function_aligned as GCC implicitly makes any
++ * implementation of abort() cold and drops alignment specified by
++ * -falign-functions=N.
++ *
++ * See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345#c11
++ */
++__weak __function_aligned void abort(void)
+ {
+ 	BUG();
+ 
 -- 
 2.39.0
 
