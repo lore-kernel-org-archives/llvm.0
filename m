@@ -1,130 +1,130 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A93290F
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 19:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677438098;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J70ELfeIOqgaHFVH2GsTKBKGves5T6sp+B7lr+iJS1Y=;
-	b=LUD9dZ0UBPxWRKwjSUX7zPDNc8ai9mcEqkE2mMcp+Ltq0xOfw7LOviubSraG3M+UHip3Vx
-	JBO913DoEwoPz3ON83ONZYQzwiulYFDZ9wtgtULcuw8zri7eDFCOqMtDaowEk85AN1iJWH
-	sWWz9+3h6VNQcwNgNBLsDYE+FITOu+8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-35-FGsLdbZTPae84K9W6Oqk-Q-1; Sun, 26 Feb 2023 14:01:36 -0500
-X-MC-Unique: FGsLdbZTPae84K9W6Oqk-Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7743E85A588
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 19:01:36 +0000 (UTC)
-Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5DB1AC15BAD;
-	Sun, 26 Feb 2023 19:01:35 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (100/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, 2fcd07b7)
-Date: Sun, 26 Feb 2023 19:01:35 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FC43D61;
+	Sun, 26 Feb 2023 19:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677438307; x=1708974307;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dFPb/YmrCXa1UzGOgyqUKWpPdEPR+OWJNAeRTsWyaq8=;
+  b=EwOSbrtlUMWLqTOhBZwRYPnnVl+pmDRixFCePDlOXf5uq5pKpa1XUcMz
+   MNDiApEXcOCxuElU3GBp9tckwL9XWlXcKK/WB/wT1XTUG5cPDrLrjngSZ
+   hBV5ju+0VDXPqjUNSmbBvrs50iFtJUZrwdGSqYdCrksK4AdsdZ0XnSHaG
+   zQ6XJmQyx8/VUl6RYGSWAgLX9zZ8ggDQhN/6J+r1wx1INDN5far1ctjQh
+   FF2ydhr6Var4LeqgkCjy83drZQXNIhIrdWw4VskVLLOH5V/FnZvtk4hP+
+   JvVSm7TEE3vE64W4jE4UA8pXH+3UN1ynX6ghEc2wf1XOPNYYRSiVpT946
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="314160418"
+X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
+   d="scan'208";a="314160418"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 11:05:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="1002454462"
+X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
+   d="scan'208";a="1002454462"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Feb 2023 11:05:03 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pWMKU-0003rD-2q;
+	Sun, 26 Feb 2023 19:05:02 +0000
+Date: Mon, 27 Feb 2023 03:04:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: drivers/gpio/gpio-mxc.c:341:50: warning: shift count >= width of type
+Message-ID: <202302270247.exJ9xqyM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <73381.123022614013600765@us-mta-35.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   2fcd07b7ccd5fd10b2120d298363e4e6c53ccf9c
+commit: 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e irqchip: Add IMX MU MSI controller driver
+date:   5 months ago
+config: i386-buildonly-randconfig-r006-20230227 (https://download.01.org/0day-ci/archive/20230227/202302270247.exJ9xqyM-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/ drivers/base/ drivers/gpio/ kernel/irq/
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302270247.exJ9xqyM-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: mm/mprotect: Fix successful vma_merge() of next in do_m=
-protect_pkey()
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/74322
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7267883
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7267289
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7268077
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+   In file included from drivers/gpio/gpio-mxc.c:22:
+   include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+           msi_alloc_info_t        msiinfo;
+                                   ^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+>> drivers/gpio/gpio-mxc.c:341:50: warning: shift count >= width of type [-Wshift-count-overflow]
+           rv = devm_irq_setup_generic_chip(port->dev, gc, IRQ_MSK(32),
+                                                           ^~~~~~~~~~~
+   include/linux/irq.h:1193:41: note: expanded from macro 'IRQ_MSK'
+   #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
+                                           ^  ~~~
+   1 warning and 1 error generated.
 
 
+vim +341 drivers/gpio/gpio-mxc.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+a3484ffd2acc19 arch/arm/plat-mxc/gpio.c Dinh Nguyen         2010-10-23  318  
+9e26b0b114adb3 drivers/gpio/gpio-mxc.c  Peng Fan            2015-08-23  319  static int mxc_gpio_init_gc(struct mxc_gpio_port *port, int irq_base)
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  320  {
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  321  	struct irq_chip_generic *gc;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  322  	struct irq_chip_type *ct;
+db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09  323  	int rv;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  324  
+db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09  325  	gc = devm_irq_alloc_generic_chip(port->dev, "gpio-mxc", 1, irq_base,
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  326  					 port->base, handle_level_irq);
+9e26b0b114adb3 drivers/gpio/gpio-mxc.c  Peng Fan            2015-08-23  327  	if (!gc)
+9e26b0b114adb3 drivers/gpio/gpio-mxc.c  Peng Fan            2015-08-23  328  		return -ENOMEM;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  329  	gc->private = port;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  330  
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  331  	ct = gc->chip_types;
+591567a5ea2585 drivers/gpio/gpio-mxc.c  Shawn Guo           2011-07-19  332  	ct->chip.irq_ack = irq_gc_ack_set_bit;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  333  	ct->chip.irq_mask = irq_gc_mask_clr_bit;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  334  	ct->chip.irq_unmask = irq_gc_mask_set_bit;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  335  	ct->chip.irq_set_type = gpio_set_irq_type;
+591567a5ea2585 drivers/gpio/gpio-mxc.c  Shawn Guo           2011-07-19  336  	ct->chip.irq_set_wake = gpio_set_wake_irq;
+3093e6cca3ba7d drivers/gpio/gpio-mxc.c  Loic Poulain        2021-06-17  337  	ct->chip.flags = IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  338  	ct->regs.ack = GPIO_ISR;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  339  	ct->regs.mask = GPIO_IMR;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  340  
+db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09 @341  	rv = devm_irq_setup_generic_chip(port->dev, gc, IRQ_MSK(32),
+db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09  342  					 IRQ_GC_INIT_NESTED_LOCK,
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  343  					 IRQ_NOREQUEST, 0);
+9e26b0b114adb3 drivers/gpio/gpio-mxc.c  Peng Fan            2015-08-23  344  
+db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09  345  	return rv;
+e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  346  }
+b5eee2fdefc89d arch/arm/plat-mxc/gpio.c Thomas Gleixner     2011-04-04  347  
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: The code at line 341 was first introduced by commit
+:::::: db5270acaae5b6d63ce1a6f053aeabc7a9c939bb gpio: mxc: use devres for irq generic chip
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+:::::: TO: Bartosz Golaszewski <brgl@bgdev.pl>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
