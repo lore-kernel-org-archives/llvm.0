@@ -1,42 +1,41 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FC43D61;
-	Sun, 26 Feb 2023 19:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4F65677;
+	Sun, 26 Feb 2023 20:27:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677438307; x=1708974307;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dFPb/YmrCXa1UzGOgyqUKWpPdEPR+OWJNAeRTsWyaq8=;
-  b=EwOSbrtlUMWLqTOhBZwRYPnnVl+pmDRixFCePDlOXf5uq5pKpa1XUcMz
-   MNDiApEXcOCxuElU3GBp9tckwL9XWlXcKK/WB/wT1XTUG5cPDrLrjngSZ
-   hBV5ju+0VDXPqjUNSmbBvrs50iFtJUZrwdGSqYdCrksK4AdsdZ0XnSHaG
-   zQ6XJmQyx8/VUl6RYGSWAgLX9zZ8ggDQhN/6J+r1wx1INDN5far1ctjQh
-   FF2ydhr6Var4LeqgkCjy83drZQXNIhIrdWw4VskVLLOH5V/FnZvtk4hP+
-   JvVSm7TEE3vE64W4jE4UA8pXH+3UN1ynX6ghEc2wf1XOPNYYRSiVpT946
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="314160418"
+  t=1677443227; x=1708979227;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=Evt3wy18pYZP5TFd6zlulVYqJy7saBtoOF4+VzRWukM=;
+  b=PYC71yiiABZZH6bsZjMhphtYXtTjlsIBPZZaGHvONP3BqMmo81Q69OGe
+   Shooc7nFMo8T2yMZGaQebaaimhKh3muFW58uYoGIf+Gf4HIzPEMYPPVnP
+   z+H+AP/sYYfJgMUhD+bnkPtMMy8Lk67g365ja1n1qxYzR5/9K4QCETftk
+   WdL7SHfQnmlX7vMbG/JozTKdDBi3Inlm4U28KAzEgEUE9XWMVhI+AJcng
+   RzNlhpCZr7bGFY/mMjfDS1eFMxHi70UmuB2QBQzOEwV46F4BE+IEG2bBW
+   2ubRwQLUd2estK2PBYNl+YXARUZxvLmi1TZCSpuG0kmnLoutsqJRkGn9f
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="332465064"
 X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="314160418"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 11:05:04 -0800
+   d="scan'208";a="332465064"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 12:27:07 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="1002454462"
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="919053966"
 X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="1002454462"
+   d="scan'208";a="919053966"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Feb 2023 11:05:03 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 26 Feb 2023 12:27:06 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pWMKU-0003rD-2q;
-	Sun, 26 Feb 2023 19:05:02 +0000
-Date: Mon, 27 Feb 2023 03:04:52 +0800
+	id 1pWNbt-0003sR-1Y;
+	Sun, 26 Feb 2023 20:27:05 +0000
+Date: Mon, 27 Feb 2023 04:26:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
-Subject: drivers/gpio/gpio-mxc.c:341:50: warning: shift count >= width of type
-Message-ID: <202302270247.exJ9xqyM-lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [stable:linux-5.10.y 3758/9999] drivers/md/bcache/sysfs.o: warning:
+ objtool: bch_cache_show() falls through to next function bch_cache_store()
+Message-ID: <202302270417.6ZBJPqn1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,84 +45,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2fcd07b7ccd5fd10b2120d298363e4e6c53ccf9c
-commit: 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e irqchip: Add IMX MU MSI controller driver
-date:   5 months ago
-config: i386-buildonly-randconfig-r006-20230227 (https://download.01.org/0day-ci/archive/20230227/202302270247.exJ9xqyM-lkp@intel.com/config)
+TO: Kees Cook <keescook@chromium.org>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Marco Elver <elver@google.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Memory Management List <linux-mm@kvack.org>
+CC: Tadeusz Struk <tadeusz.struk@linaro.org>
+
+Hi Kees,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+head:   22d269bb30db7f5a4e71a8a813a0f4df5255f7de
+commit: 58823a9b097cf36dd59c4d463396e15a5ec4efb7 [3758/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+config: x86_64-randconfig-a005-20230227 (https://download.01.org/0day-ci/archive/20230227/202302270417.6ZBJPqn1-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=58823a9b097cf36dd59c4d463396e15a5ec4efb7
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.10.y
+        git checkout 58823a9b097cf36dd59c4d463396e15a5ec4efb7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/ drivers/base/ drivers/gpio/ kernel/irq/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/md/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302270247.exJ9xqyM-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302270417.6ZBJPqn1-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpio/gpio-mxc.c:22:
-   include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-           msi_alloc_info_t        msiinfo;
-                                   ^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
->> drivers/gpio/gpio-mxc.c:341:50: warning: shift count >= width of type [-Wshift-count-overflow]
-           rv = devm_irq_setup_generic_chip(port->dev, gc, IRQ_MSK(32),
-                                                           ^~~~~~~~~~~
-   include/linux/irq.h:1193:41: note: expanded from macro 'IRQ_MSK'
-   #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
-                                           ^  ~~~
-   1 warning and 1 error generated.
-
-
-vim +341 drivers/gpio/gpio-mxc.c
-
-a3484ffd2acc19 arch/arm/plat-mxc/gpio.c Dinh Nguyen         2010-10-23  318  
-9e26b0b114adb3 drivers/gpio/gpio-mxc.c  Peng Fan            2015-08-23  319  static int mxc_gpio_init_gc(struct mxc_gpio_port *port, int irq_base)
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  320  {
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  321  	struct irq_chip_generic *gc;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  322  	struct irq_chip_type *ct;
-db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09  323  	int rv;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  324  
-db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09  325  	gc = devm_irq_alloc_generic_chip(port->dev, "gpio-mxc", 1, irq_base,
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  326  					 port->base, handle_level_irq);
-9e26b0b114adb3 drivers/gpio/gpio-mxc.c  Peng Fan            2015-08-23  327  	if (!gc)
-9e26b0b114adb3 drivers/gpio/gpio-mxc.c  Peng Fan            2015-08-23  328  		return -ENOMEM;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  329  	gc->private = port;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  330  
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  331  	ct = gc->chip_types;
-591567a5ea2585 drivers/gpio/gpio-mxc.c  Shawn Guo           2011-07-19  332  	ct->chip.irq_ack = irq_gc_ack_set_bit;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  333  	ct->chip.irq_mask = irq_gc_mask_clr_bit;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  334  	ct->chip.irq_unmask = irq_gc_mask_set_bit;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  335  	ct->chip.irq_set_type = gpio_set_irq_type;
-591567a5ea2585 drivers/gpio/gpio-mxc.c  Shawn Guo           2011-07-19  336  	ct->chip.irq_set_wake = gpio_set_wake_irq;
-3093e6cca3ba7d drivers/gpio/gpio-mxc.c  Loic Poulain        2021-06-17  337  	ct->chip.flags = IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  338  	ct->regs.ack = GPIO_ISR;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  339  	ct->regs.mask = GPIO_IMR;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  340  
-db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09 @341  	rv = devm_irq_setup_generic_chip(port->dev, gc, IRQ_MSK(32),
-db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09  342  					 IRQ_GC_INIT_NESTED_LOCK,
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  343  					 IRQ_NOREQUEST, 0);
-9e26b0b114adb3 drivers/gpio/gpio-mxc.c  Peng Fan            2015-08-23  344  
-db5270acaae5b6 drivers/gpio/gpio-mxc.c  Bartosz Golaszewski 2017-08-09  345  	return rv;
-e4ea933363d39b drivers/gpio/gpio-mxc.c  Shawn Guo           2011-06-07  346  }
-b5eee2fdefc89d arch/arm/plat-mxc/gpio.c Thomas Gleixner     2011-04-04  347  
-
-:::::: The code at line 341 was first introduced by commit
-:::::: db5270acaae5b6d63ce1a6f053aeabc7a9c939bb gpio: mxc: use devres for irq generic chip
-
-:::::: TO: Bartosz Golaszewski <brgl@bgdev.pl>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+>> drivers/md/bcache/sysfs.o: warning: objtool: bch_cache_show() falls through to next function bch_cache_store()
 
 -- 
 0-DAY CI Kernel Test Service
