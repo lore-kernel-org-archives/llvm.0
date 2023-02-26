@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893A329A9
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 14:47:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07865C4339B;
-	Sun, 26 Feb 2023 14:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFF22C80
+	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 14:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE50C433D2;
+	Sun, 26 Feb 2023 14:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677422865;
-	bh=uWz/X985SxdYJil3gvKDScsqPZntTshRERdo9etL7+Y=;
+	s=k20201202; t=1677422972;
+	bh=7Bc3iO8TG1DS9g7AMkTNU9+OVM8V9J21a4MnxY6Xc2M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CFUdKgC1Z3YG1eel8Z6HkrrFrPH4ai4mgEhT+CH8gjffKikgNAbtCzBVoDstuH/lt
-	 +udj4RZFqvp7/JAgDXkkOr1sat5ILbe1lvQIvxZq5TpRBquXHzKk9ueaNfv2JcWdC7
-	 PrZEWdnQCB3keBi4QvsBVqceiWUlEIsZ9NgRRJ5FbteXi7aV0erz4TgAG2a/XVug51
-	 GjUk3alaOMwYttZGOffFYy1mfi1vAghY861NIBMw2Dr2VdvHs8N0/rbV7fJTTRXo1C
-	 Aw+wY2pesFqsIUrkIZkDe5dB2oX1S/HM3AxJ3W8V45KswpU1IWf9Q8VfP9mCRmgPMh
-	 3Npk9JIhNJ/Ng==
+	b=qwq7OE9NgoDMr22scTJAJP+lQhG7+agTV+5tI6+t1GMEjiO8tT1OtxWZw79imX3GY
+	 b82HlZVIBhwj7rhjfuN7SM4kG1Tjz9fAKFh0xu+uq0yX1zQAVvE89usXnfk0YfKqEo
+	 KOgDe+a3xxDs93vQitswIdliSMulMqPbEbLxjvkdru+LjngNTQag8LcF94BNXx1goa
+	 xQif20yJXyIoJW7vUyMEur/YjYiIhaCaUtGqEE6Lbe9BiBZL8KoVTh8DcgYWCt0mp6
+	 5GCwYBrjzWC1PdDllawtBd0mXqJcqi11ZtjFkllxx2GVCg3PfKmqkoqbxY8nD5gXCQ
+	 S0HSSxMjoA/0Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -28,12 +28,12 @@ Cc: Kees Cook <keescook@chromium.org>,
 	Sasha Levin <sashal@kernel.org>,
 	ndesaulniers@google.com,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 23/49] crypto: hisilicon: Wipe entire pool on error
-Date: Sun, 26 Feb 2023 09:46:23 -0500
-Message-Id: <20230226144650.826470-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 18/36] crypto: hisilicon: Wipe entire pool on error
+Date: Sun, 26 Feb 2023 09:48:26 -0500
+Message-Id: <20230226144845.827893-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230226144650.826470-1-sashal@kernel.org>
-References: <20230226144650.826470-1-sashal@kernel.org>
+In-Reply-To: <20230226144845.827893-1-sashal@kernel.org>
+References: <20230226144845.827893-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
-index 2b6f2281cfd6c..0974b00414050 100644
+index 057273769f264..3dbe5405d17bc 100644
 --- a/drivers/crypto/hisilicon/sgl.c
 +++ b/drivers/crypto/hisilicon/sgl.c
-@@ -124,9 +124,8 @@ struct hisi_acc_sgl_pool *hisi_acc_create_sgl_pool(struct device *dev,
+@@ -122,9 +122,8 @@ struct hisi_acc_sgl_pool *hisi_acc_create_sgl_pool(struct device *dev,
  	for (j = 0; j < i; j++) {
  		dma_free_coherent(dev, block_size, block[j].sgl,
  				  block[j].sgl_dma);
