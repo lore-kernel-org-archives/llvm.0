@@ -1,134 +1,105 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A112560
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 13:31:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677418306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ap3DrcHlN3hzX0tRvHBhQ1F9O6x11H8v4rUctOAxyms=;
-	b=bf452++N2gdAlCPEU6OK1xTg3fpDyoKGcmBoTWKnL0/Mpm8KtGWGb0EKrsNtRUSdrqXAXQ
-	G8syZ9tQlbbLkQ23eLpDfBUwJR+6t84pv04CR6Agq/xKCh0MjP/arlBFTORLEMRwboC1uj
-	HINI5mukcvt+3zohEd91Q5NvwCIgqT0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-qkYVmRGiOL6ywHVPVQc1YA-1; Sun, 26 Feb 2023 08:31:45 -0500
-X-MC-Unique: qkYVmRGiOL6ywHVPVQc1YA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B75293C025BC
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 13:31:44 +0000 (UTC)
-Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A2E20140EBF6;
-	Sun, 26 Feb 2023 13:31:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (114/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, 116b4116)
-Date: Sun, 26 Feb 2023 13:31:38 -0000
-To: llvm@lists.linux.dev, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65ED8385
+	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 14:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1378C433EF;
+	Sun, 26 Feb 2023 14:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677422719;
+	bh=CIBDjaRJoMuMfExEyRgKQbnWA1vh/FpEjx1ld84jebs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ByVaD7+suux3+Roipg1g6VtFAZv/AUkxJ9a7gqEJXfP0Ys6/F5atDSkQairiUQLKU
+	 1NvwH9p5Qe+lMmHyRRPB5R3qgMWhZuwPfE9mn71x0PZzT6vh9QRfP5gXt/URrh0Amp
+	 f6Kh3FmoK83CrtfJvN380tzV2hs3OE+OkyPocLqZM751hqUij06ya1e5S4Ls02C1/p
+	 KMutW+PmjAetVA5mON31QNhfOsMGlutrZTFVi+2tUCe1AZdVCHjQ2nVi02jgyYYc5v
+	 aiLs9NJD+o9L9MdwFhlxtx0TmCU4LUbNK1MJ/irgI1oEh+kRipBwpjxEuZ3/8jfA0R
+	 wzIL1Wly4vfrw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: =?UTF-8?q?Holger=20Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
+	andrii@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.2 13/53] bpftool: Always disable stack protection for BPF objects
+Date: Sun, 26 Feb 2023 09:44:05 -0500
+Message-Id: <20230226144446.824580-13-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230226144446.824580-1-sashal@kernel.org>
+References: <20230226144446.824580-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <99815.123022608314500575@us-mta-623.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: Holger Hoffstätte <holger@applied-asynchrony.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+[ Upstream commit 878625e1c7a10dfbb1fdaaaae2c4d2a58fbce627 ]
 
+When the clang toolchain has stack protection enabled in order to be
+consistent with gcc - which just happens to be the case on Gentoo -
+the bpftool build fails:
 
-Kernel information:
-    Commit message: Merge tag 'probes-v6.3-2' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/trace/linux-trace
+  [...]
+  clang \
+	-I. \
+	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/include/uapi/ \
+	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/bpf/bpftool/bootstrap/libbpf/include \
+	-g -O2 -Wall -target bpf -c skeleton/pid_iter.bpf.c -o pid_iter.bpf.o
+  clang \
+	-I. \
+	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/include/uapi/ \
+	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/bpf/bpftool/bootstrap/libbpf/include \
+	-g -O2 -Wall -target bpf -c skeleton/profiler.bpf.c -o profiler.bpf.o
+  skeleton/profiler.bpf.c:40:14: error: A call to built-in function '__stack_chk_fail' is not supported.
+  int BPF_PROG(fentry_XXX)
+                ^
+  skeleton/profiler.bpf.c:94:14: error: A call to built-in function '__stack_chk_fail' is not supported.
+  int BPF_PROG(fexit_XXX)
+                ^
+  2 errors generated.
+  [...]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/74277
+Since stack-protector makes no sense for the BPF bits just unconditionally
+disable it.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - xfstests - cifsv3.11
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7265422
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7265117
+Bug: https://bugs.gentoo.org/890638
+Signed-off-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Quentin Monnet <quentin@isovalent.com>
+Link: https://lore.kernel.org/bpf/74cd9d2e-6052-312a-241e-2b514a75c92c@applied-asynchrony.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/bpf/bpftool/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index f610e184ce02a..270066aff8bf1 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -215,7 +215,8 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
+ 		-I$(or $(OUTPUT),.) \
+ 		-I$(srctree)/tools/include/uapi/ \
+ 		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
+-		-g -O2 -Wall -target bpf -c $< -o $@
++		-g -O2 -Wall -fno-stack-protector \
++		-target bpf -c $< -o $@
+ 	$(Q)$(LLVM_STRIP) -g $@
+ 
+ $(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o $(BPFTOOL_BOOTSTRAP)
+-- 
+2.39.0
 
