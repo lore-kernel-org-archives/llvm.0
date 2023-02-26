@@ -1,43 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DA53D6D;
-	Sun, 26 Feb 2023 22:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E674291F;
+	Sun, 26 Feb 2023 22:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677449411; x=1708985411;
+  t=1677451817; x=1708987817;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wbKrLmy+9YjdePBTNgg8YJEFe4zDewloqR82IM5gcno=;
-  b=SvaMZ2kX9jDMY1+VTsIiAs0ChhrbyZsFVVp7MTJPk95pD1rtBpwF08fX
-   ZgqUTQrU7iZnUNWvAKcttdXCFBZTLcx3TZkLsl21PMrkoeoY+RG6o2x4x
-   b+c3PfK7JCU7WQFcs/4zHlC0J0BuuklqpiNPYABA53wReQq/pUkiLNXGc
-   ocp97HW5jdocCcH/N2bB6MHgMmgU2ueOL9+U6ymECRa3BgjOY1bn2XC24
-   th4ClGwuzUwVxOC6Ip2U1Tu0MeF0tVsg2jWePxlgxCGigCTTV8jsRb0z+
-   FK2LntWex/9ibEeMUPFF6PWY0N0Yhn/zMjXqV8R8CcBopHObFiTdDu/3T
+  bh=b7/7ll+6fXDbtYJnvQOzYp9/l9Eir6KTCW7YVnt+DdI=;
+  b=PSYzQUGHJml8ivSjSh3iWPt3+hT4NRNwt6hsmV0Sjua/P7PFeB5f3db2
+   GOIBLAnEQpw12+Ah+OnJH55YnheI+UGTGJUgGVZTyQtcFanaGusLeFzKE
+   vsxjxA2+fdnl75Tn50/1LvvogJMoLyJn0utAO1OY1a7+cVmoRdYKoWhu5
+   xNJLuFjBWuM3d5Ju7BnLqXZ6UD8Gxz6L1QXXO30KDUBugrQ7XNUgV+U5e
+   4Pe3BkhZKWvBNCUZ/xWsoMcO3WfRFrl/eJZcRBVmrmxY55BF/HsvBKCXx
+   2q9+duhFEhlglrymqCp1Xn3kEj2/GP/b5qDiuW9nu2JRhSKq7mMzqOEEh
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="333786519"
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="335223076"
 X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="333786519"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 14:10:10 -0800
+   d="scan'208";a="335223076"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 14:50:16 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="816398683"
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="1002495359"
 X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="816398683"
+   d="scan'208";a="1002495359"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2023 14:10:08 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 26 Feb 2023 14:50:09 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pWPDb-0003uz-2k;
-	Sun, 26 Feb 2023 22:10:07 +0000
-Date: Mon, 27 Feb 2023 06:09:08 +0800
+	id 1pWPqK-0003wF-2E;
+	Sun, 26 Feb 2023 22:50:08 +0000
+Date: Mon, 27 Feb 2023 06:49:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph =?iso-8859-1?Q?B=F6hmwalder?= <christoph.boehmwalder@linbit.com>
+To: Frank Li <Frank.Li@nxp.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: drivers/block/drbd/drbd_bitmap.c:451:7: warning: expression result
- unused
-Message-ID: <202302270609.xV5AJnWY-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
+Subject: include/linux/gpio/driver.h:31:19: error: field has incomplete type
+ 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+Message-ID: <202302270633.RKhl0Tlx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,386 +47,179 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Christoph,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   f3a2439f20d918930cc4ae8f76fe1c1afd26958f
-commit: aa034695971124f673d4ccdd39cd7f269904ea86 drbd: introduce dynamic debug
-date:   3 months ago
-config: i386-randconfig-a005-20230227 (https://download.01.org/0day-ci/archive/20230227/202302270609.xV5AJnWY-lkp@intel.com/config)
+commit: 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e irqchip: Add IMX MU MSI controller driver
+date:   5 months ago
+config: i386-buildonly-randconfig-r006-20230227 (https://download.01.org/0day-ci/archive/20230227/202302270633.RKhl0Tlx-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aa034695971124f673d4ccdd39cd7f269904ea86
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout aa034695971124f673d4ccdd39cd7f269904ea86
+        git checkout 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/block/drbd/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302270609.xV5AJnWY-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302270633.RKhl0Tlx-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/block/drbd/drbd_bitmap.c:451:7: warning: expression result unused [-Wunused-value]
-           if (!expect(device->bitmap))
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   drivers/block/drbd/drbd_polymorph_printk.h:55:47: note: expanded from macro '__drbd_printk_if_same_type'
-           __drbd_printk_choose_cond(obj, struct_name), \
-                                                        ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/block/drbd/drbd_bitmap.c:451:7: warning: expression result unused [-Wunused-value]
-           if (!expect(device->bitmap))
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/block/drbd/drbd_bitmap.c:460:7: warning: expression result unused [-Wunused-value]
-           if (!expect(device->bitmap))
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   drivers/block/drbd/drbd_polymorph_printk.h:55:47: note: expanded from macro '__drbd_printk_if_same_type'
-           __drbd_printk_choose_cond(obj, struct_name), \
-                                                        ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/block/drbd/drbd_bitmap.c:460:7: warning: expression result unused [-Wunused-value]
-           if (!expect(device->bitmap))
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/block/drbd/drbd_bitmap.c:639:7: warning: expression result unused [-Wunused-value]
-           if (!expect(b))
-           ~~~~~^~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   drivers/block/drbd/drbd_polymorph_printk.h:55:47: note: expanded from macro '__drbd_printk_if_same_type'
-           __drbd_printk_choose_cond(obj, struct_name), \
-                                                        ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/block/drbd/drbd_bitmap.c:639:7: warning: expression result unused [-Wunused-value]
-           if (!expect(b))
-           ~~~~~^~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+   In file included from drivers/misc/hi6421v600-irq.c:14:
+   In file included from include/linux/of_gpio.h:14:
+>> include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+           msi_alloc_info_t        msiinfo;
+                                   ^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+   1 error generated.
 --
->> drivers/block/drbd/drbd_receiver.c:416:7: warning: expression result unused [-Wunused-value]
-           if (!expect(!(peer_req->flags & EE_CALL_AL_COMPLETE_IO))) {
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
+>> arch/x86/kernel/hpet.c:520:39: error: incomplete definition of type 'struct irq_alloc_info'
+           irq_domain_set_info(domain, virq, arg->hwirq, info->chip, NULL,
+                                             ~~~^
+   arch/x86/include/asm/io_apic.h:90:8: note: forward declaration of 'struct irq_alloc_info'
+   struct irq_alloc_info;
+          ^
+   arch/x86/kernel/hpet.c:521:28: error: incomplete definition of type 'struct irq_alloc_info'
+                               handle_edge_irq, arg->data, "edge");
+                                                ~~~^
+   arch/x86/include/asm/io_apic.h:90:8: note: forward declaration of 'struct irq_alloc_info'
+   struct irq_alloc_info;
+          ^
+>> arch/x86/kernel/hpet.c:550:6: error: use of undeclared identifier 'x86_vector_domain'
+           if (x86_vector_domain == NULL)
+               ^
+   arch/x86/kernel/hpet.c:577:16: error: use of undeclared identifier 'x86_vector_domain'
+           if (parent != x86_vector_domain)
+                         ^
+>> arch/x86/kernel/hpet.c:598:24: error: variable has incomplete type 'struct irq_alloc_info'
+           struct irq_alloc_info info;
+                                 ^
+   arch/x86/include/asm/io_apic.h:90:8: note: forward declaration of 'struct irq_alloc_info'
+   struct irq_alloc_info;
+          ^
+>> arch/x86/kernel/hpet.c:600:2: error: implicit declaration of function 'init_irq_alloc_info' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           init_irq_alloc_info(&info, NULL);
            ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   drivers/block/drbd/drbd_polymorph_printk.h:55:47: note: expanded from macro '__drbd_printk_if_same_type'
-           __drbd_printk_choose_cond(obj, struct_name), \
-                                                        ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/block/drbd/drbd_receiver.c:416:7: warning: expression result unused [-Wunused-value]
-           if (!expect(!(peer_req->flags & EE_CALL_AL_COMPLETE_IO))) {
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/block/drbd/drbd_receiver.c:1876:8: warning: expression result unused [-Wunused-value]
-                   if (!expect(data_size == 0))
-                   ~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   drivers/block/drbd/drbd_polymorph_printk.h:55:47: note: expanded from macro '__drbd_printk_if_same_type'
-           __drbd_printk_choose_cond(obj, struct_name), \
-                                                        ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/block/drbd/drbd_receiver.c:1876:8: warning: expression result unused [-Wunused-value]
-                   if (!expect(data_size == 0))
-                   ~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/block/drbd/drbd_receiver.c:1880:8: warning: expression result unused [-Wunused-value]
-                   if (!expect(data_size == 0))
-                   ~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   drivers/block/drbd/drbd_polymorph_printk.h:55:47: note: expanded from macro '__drbd_printk_if_same_type'
-           __drbd_printk_choose_cond(obj, struct_name), \
-                                                        ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/block/drbd/drbd_receiver.c:1880:8: warning: expression result unused [-Wunused-value]
-                   if (!expect(data_size == 0))
-                   ~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+>> arch/x86/kernel/hpet.c:601:14: error: use of undeclared identifier 'X86_IRQ_ALLOC_TYPE_HPET'
+           info.type = X86_IRQ_ALLOC_TYPE_HPET;
+                       ^
+   7 errors generated.
 --
->> drivers/block/drbd/drbd_actlog.c:871:7: warning: expression result unused [-Wunused-value]
-           if (!expect(sector < nr_sectors))
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   drivers/block/drbd/drbd_polymorph_printk.h:55:47: note: expanded from macro '__drbd_printk_if_same_type'
-           __drbd_printk_choose_cond(obj, struct_name), \
-                                                        ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/block/drbd/drbd_actlog.c:871:7: warning: expression result unused [-Wunused-value]
-           if (!expect(sector < nr_sectors))
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/block/drbd/drbd_actlog.c:873:7: warning: expression result unused [-Wunused-value]
-           if (!expect(esector < nr_sectors))
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   drivers/block/drbd/drbd_polymorph_printk.h:55:47: note: expanded from macro '__drbd_printk_if_same_type'
-           __drbd_printk_choose_cond(obj, struct_name), \
-                                                        ^
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/block/drbd/drbd_actlog.c:873:7: warning: expression result unused [-Wunused-value]
-           if (!expect(esector < nr_sectors))
-           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/block/drbd/drbd_polymorph_printk.h:128:4: note: expanded from macro 'expect'
-                           drbd_err(device, "ASSERTION %s FAILED in %s\n",         \
-                           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:104:2: note: expanded from macro 'drbd_err'
-           drbd_printk(KERN_ERR, device, fmt, ## args)
-           ^
-   drivers/block/drbd/drbd_polymorph_printk.h:65:4: note: expanded from macro 'drbd_printk'
-             __drbd_printk_if_same_type(obj, drbd_device, level, fmt, ## args), \
-             ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   4 warnings generated.
-..
+>> kernel/irq/msi.c:585:12: error: incomplete definition of type 'struct irq_alloc_info'
+           return arg->hwirq;
+                  ~~~^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+>> kernel/irq/msi.c:591:23: error: invalid application of 'sizeof' to an incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+           memset(arg, 0, sizeof(*arg));
+                                ^~~~~~
+   arch/x86/include/asm/string_32.h:195:52: note: expanded from macro 'memset'
+   #define memset(s, c, count) __builtin_memset(s, c, count)
+                                                      ^~~~~
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+   kernel/irq/msi.c:598:5: error: incomplete definition of type 'struct irq_alloc_info'
+           arg->desc = desc;
+           ~~~^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+>> kernel/irq/msi.c:858:19: error: variable has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+           msi_alloc_info_t arg = { };
+                            ^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+   4 errors generated.
+--
+>> drivers/base/platform-msi.c:26:20: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+           msi_alloc_info_t                arg;
+                                           ^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+   1 error generated.
+--
+   In file included from drivers/mmc/host/dw_mmc.c:38:
+   In file included from include/linux/of_gpio.h:14:
+>> include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+           msi_alloc_info_t        msiinfo;
+                                   ^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+   drivers/mmc/host/dw_mmc.c:3040:33: warning: shift count >= width of type [-Wshift-count-overflow]
+                           if (!dma_set_mask(host->dev, DMA_BIT_MASK(64)))
+                                                        ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   drivers/mmc/host/dw_mmc.c:3042:13: warning: shift count >= width of type [-Wshift-count-overflow]
+                                                         DMA_BIT_MASK(64));
+                                                         ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   2 warnings and 1 error generated.
+--
+   In file included from drivers/char/tpm/st33zp24/st33zp24.c:15:
+   In file included from include/linux/gpio.h:62:
+   In file included from include/asm-generic/gpio.h:11:
+>> include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+           msi_alloc_info_t        msiinfo;
+                                   ^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+   In file included from drivers/char/tpm/st33zp24/st33zp24.c:21:
+   In file included from drivers/char/tpm/st33zp24/../tpm.h:28:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+   1 warning and 1 error generated.
+--
+   In file included from drivers/gpio/gpio-mxc.c:22:
+>> include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
+           msi_alloc_info_t        msiinfo;
+                                   ^
+   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
+   typedef struct irq_alloc_info msi_alloc_info_t;
+                  ^
+   drivers/gpio/gpio-mxc.c:341:50: warning: shift count >= width of type [-Wshift-count-overflow]
+           rv = devm_irq_setup_generic_chip(port->dev, gc, IRQ_MSK(32),
+                                                           ^~~~~~~~~~~
+   include/linux/irq.h:1193:41: note: expanded from macro 'IRQ_MSK'
+   #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
+                                           ^  ~~~
+   1 warning and 1 error generated.
 
 
-vim +451 drivers/block/drbd/drbd_bitmap.c
+vim +31 include/linux/gpio/driver.h
 
-b411b3637fa71f Philipp Reisner     2009-09-25  448  
-b30ab7913b0a7b Andreas Gruenbacher 2011-07-03  449  sector_t drbd_bm_capacity(struct drbd_device *device)
-b411b3637fa71f Philipp Reisner     2009-09-25  450  {
-b30ab7913b0a7b Andreas Gruenbacher 2011-07-03 @451  	if (!expect(device->bitmap))
-841ce241fa3550 Andreas Gruenbacher 2010-12-15  452  		return 0;
-b30ab7913b0a7b Andreas Gruenbacher 2011-07-03  453  	return device->bitmap->bm_dev_capacity;
-b411b3637fa71f Philipp Reisner     2009-09-25  454  }
-b411b3637fa71f Philipp Reisner     2009-09-25  455  
+fdd61a013a24f2 Linus Walleij 2019-08-08  27  
+91a29af413def6 Marc Zyngier  2022-07-07  28  union gpio_irq_fwspec {
+91a29af413def6 Marc Zyngier  2022-07-07  29  	struct irq_fwspec	fwspec;
+91a29af413def6 Marc Zyngier  2022-07-07  30  #ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
+91a29af413def6 Marc Zyngier  2022-07-07 @31  	msi_alloc_info_t	msiinfo;
+91a29af413def6 Marc Zyngier  2022-07-07  32  #endif
+91a29af413def6 Marc Zyngier  2022-07-07  33  };
+91a29af413def6 Marc Zyngier  2022-07-07  34  
 
-:::::: The code at line 451 was first introduced by commit
-:::::: b30ab7913b0a7b1d3b1091c8cb3abb1a9f1e0824 drbd: Rename "mdev" to "device"
+:::::: The code at line 31 was first introduced by commit
+:::::: 91a29af413def677495e447fb9a06957ebc8bed5 gpio: Remove dynamic allocation from populate_parent_alloc_arg()
 
-:::::: TO: Andreas Gruenbacher <agruen@linbit.com>
-:::::: CC: Philipp Reisner <philipp.reisner@linbit.com>
+:::::: TO: Marc Zyngier <maz@kernel.org>
+:::::: CC: Marc Zyngier <maz@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
