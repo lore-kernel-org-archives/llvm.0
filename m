@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0976D2913
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 14:47:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B48C433A0;
-	Sun, 26 Feb 2023 14:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893A329A9
+	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 14:47:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07865C4339B;
+	Sun, 26 Feb 2023 14:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677422842;
-	bh=peWE7c6T0gkLD8MeXmVZAA+YvFj63HxBDgB6XDz+WgE=;
+	s=k20201202; t=1677422865;
+	bh=uWz/X985SxdYJil3gvKDScsqPZntTshRERdo9etL7+Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VAmIM5VLnJ+vPHd77YAV/xfd+LtXE5BjEMZ4mFI8llMgKet38aKKuCYWy0mhZz5GL
-	 48qg5WkCPmvbnw9n1CAsugXpSilMNWrjhfTKbNvJ82wVpxd+CXAWrpvvXHGuVFnmDM
-	 tBSZdvRXcb+7oP7mbsNYALtB659Et4kVlsHAsXmlBm2rG1vguQxAsrdk6HirgpseMP
-	 2MGpWM3t7u5iw4nGVlCC0aFDRHFrOWvuNNZfwVscThvKW0B6xopfGZuqWDwKsZD7KN
-	 CW+k5d9mA9+cPuENgB45ox4/sopevF1s/2i+bFQlWGDOKN52/Nd0gw6kIS7U95ez5d
-	 7aFgVex6eeSKg==
+	b=CFUdKgC1Z3YG1eel8Z6HkrrFrPH4ai4mgEhT+CH8gjffKikgNAbtCzBVoDstuH/lt
+	 +udj4RZFqvp7/JAgDXkkOr1sat5ILbe1lvQIvxZq5TpRBquXHzKk9ueaNfv2JcWdC7
+	 PrZEWdnQCB3keBi4QvsBVqceiWUlEIsZ9NgRRJ5FbteXi7aV0erz4TgAG2a/XVug51
+	 GjUk3alaOMwYttZGOffFYy1mfi1vAghY861NIBMw2Dr2VdvHs8N0/rbV7fJTTRXo1C
+	 Aw+wY2pesFqsIUrkIZkDe5dB2oX1S/HM3AxJ3W8V45KswpU1IWf9Q8VfP9mCRmgPMh
+	 3Npk9JIhNJ/Ng==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: =?UTF-8?q?Holger=20Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Quentin Monnet <quentin@isovalent.com>,
+Cc: Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Weili Qian <qianweili@huawei.com>,
+	Zhou Wang <wangzhou1@hisilicon.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	linux-crypto@vger.kernel.org,
 	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	andrii@kernel.org,
-	nathan@kernel.org,
 	ndesaulniers@google.com,
-	bpf@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 13/49] bpftool: Always disable stack protection for BPF objects
-Date: Sun, 26 Feb 2023 09:46:13 -0500
-Message-Id: <20230226144650.826470-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 23/49] crypto: hisilicon: Wipe entire pool on error
+Date: Sun, 26 Feb 2023 09:46:23 -0500
+Message-Id: <20230226144650.826470-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230226144650.826470-1-sashal@kernel.org>
 References: <20230226144650.826470-1-sashal@kernel.org>
@@ -40,66 +40,49 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 
-From: Holger Hoffstätte <holger@applied-asynchrony.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 878625e1c7a10dfbb1fdaaaae2c4d2a58fbce627 ]
+[ Upstream commit aa85923a954e7704bc9d3847dabeb8540aa98d13 ]
 
-When the clang toolchain has stack protection enabled in order to be
-consistent with gcc - which just happens to be the case on Gentoo -
-the bpftool build fails:
+To work around a Clang __builtin_object_size bug that shows up under
+CONFIG_FORTIFY_SOURCE and UBSAN_BOUNDS, move the per-loop-iteration
+mem_block wipe into a single wipe of the entire pool structure after
+the loop.
 
-  [...]
-  clang \
-	-I. \
-	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/include/uapi/ \
-	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/bpf/bpftool/bootstrap/libbpf/include \
-	-g -O2 -Wall -target bpf -c skeleton/pid_iter.bpf.c -o pid_iter.bpf.o
-  clang \
-	-I. \
-	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/include/uapi/ \
-	-I/tmp/portage/dev-util/bpftool-6.0.12/work/linux-6.0/tools/bpf/bpftool/bootstrap/libbpf/include \
-	-g -O2 -Wall -target bpf -c skeleton/profiler.bpf.c -o profiler.bpf.o
-  skeleton/profiler.bpf.c:40:14: error: A call to built-in function '__stack_chk_fail' is not supported.
-  int BPF_PROG(fentry_XXX)
-                ^
-  skeleton/profiler.bpf.c:94:14: error: A call to built-in function '__stack_chk_fail' is not supported.
-  int BPF_PROG(fexit_XXX)
-                ^
-  2 errors generated.
-  [...]
-
-Since stack-protector makes no sense for the BPF bits just unconditionally
-disable it.
-
-Bug: https://bugs.gentoo.org/890638
-Signed-off-by: Holger Hoffstätte <holger@applied-asynchrony.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Quentin Monnet <quentin@isovalent.com>
-Link: https://lore.kernel.org/bpf/74cd9d2e-6052-312a-241e-2b514a75c92c@applied-asynchrony.com
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1780
+Cc: Weili Qian <qianweili@huawei.com>
+Cc: Zhou Wang <wangzhou1@hisilicon.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: linux-crypto@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+Link: https://lore.kernel.org/r/20230106041945.never.831-kees@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/crypto/hisilicon/sgl.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 4a95c017ad4ce..a3794b3416014 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -187,7 +187,8 @@ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
- 		-I$(or $(OUTPUT),.) \
- 		-I$(srctree)/tools/include/uapi/ \
- 		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
--		-g -O2 -Wall -target bpf -c $< -o $@
-+		-g -O2 -Wall -fno-stack-protector \
-+		-target bpf -c $< -o $@
- 	$(Q)$(LLVM_STRIP) -g $@
- 
- $(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o $(BPFTOOL_BOOTSTRAP)
+diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
+index 2b6f2281cfd6c..0974b00414050 100644
+--- a/drivers/crypto/hisilicon/sgl.c
++++ b/drivers/crypto/hisilicon/sgl.c
+@@ -124,9 +124,8 @@ struct hisi_acc_sgl_pool *hisi_acc_create_sgl_pool(struct device *dev,
+ 	for (j = 0; j < i; j++) {
+ 		dma_free_coherent(dev, block_size, block[j].sgl,
+ 				  block[j].sgl_dma);
+-		memset(block + j, 0, sizeof(*block));
+ 	}
+-	kfree(pool);
++	kfree_sensitive(pool);
+ 	return ERR_PTR(-ENOMEM);
+ }
+ EXPORT_SYMBOL_GPL(hisi_acc_create_sgl_pool);
 -- 
 2.39.0
 
