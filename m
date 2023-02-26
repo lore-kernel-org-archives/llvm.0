@@ -1,43 +1,43 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9709E20EC
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 12:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F6E361
+	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 12:41:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677412902;
+	s=mimecast20190719; t=1677415301;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=wX/eWr5dGvj0jxZ1euaD9ZoqYBvb1ei6CGmkaWCz+FI=;
-	b=S9Atnvjub//hRzI7mikrrsOSXGI4MNBVzYeP48EMn4+GypK1pEown1NcQlLoWOf7SFn/ka
-	jCPnO/2cU7wnkAMI6HRAR3cSdaEjK9Aw+9+ULtuBOTpxB4Ov8KvyWIasZMcu260xI//Sq3
-	S/IIamIpO7tdC0JHOQKze3hBWTWCGHw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Z9sGGoK0ehrHWlmGts1cRVieZbsZiyG+YzB8NDYiWzo=;
+	b=CMfNoLHsr14by0veoaFSgIVjCSnqPSZoALtZOOOq2bCJtbLr0tF+8i/yYQgnbo4jDHstUT
+	NsJzcWFKHiax5g7YSgyV7oUrFoE1YbmAO1unMEhuH6SZJbMY9d/X7kNy2Wdd/UsWvxioPW
+	FPeWzLFOSo0fmyiiBR46tQY+cBdVEao=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-xUrwf31YOgyf7CN7Cu0tvA-1; Sun, 26 Feb 2023 07:01:40 -0500
-X-MC-Unique: xUrwf31YOgyf7CN7Cu0tvA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+ us-mta-153-MeqbLVwBMzSGCnuYWxobVg-1; Sun, 26 Feb 2023 07:41:39 -0500
+X-MC-Unique: MeqbLVwBMzSGCnuYWxobVg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DAB229AA3B7
-	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 12:01:40 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 668F7811E9C
+	for <llvm@lists.linux.dev>; Sun, 26 Feb 2023 12:41:39 +0000 (UTC)
 Received: from [172.64.14.61] (unknown [10.30.33.161])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 75F182166B2B;
-	Sun, 26 Feb 2023 12:01:40 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 450A4492B03;
+	Sun, 26 Feb 2023 12:41:39 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL (96/381 SKIPPED): Test report for master
- (6.2.0, mainline.kernel.org-clang, cac85e46)
-Date: Sun, 26 Feb 2023 12:01:40 -0000
-To: llvm@lists.linux.dev, xzhou@redhat.com
+ (6.2.0, mainline.kernel.org-clang, 1ec35ead)
+Date: Sun, 26 Feb 2023 12:41:39 -0000
+To: bgoncalv@redhat.com, ffan@redhat.com, llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <64417.123022607014001138@us-mta-441.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <39348.123022607413900477@us-mta-153.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,20 +52,32 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'vfio-v6.3-rc1' of https://github.com/awillia=
-m/linux-vfio
+    Commit message: Merge tag 'clk-for-linus' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/clk/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/74260
+    https://datawarehouse.cki-project.org/kcidb/checkouts/74288
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 - xfstests - cifsv3.11
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7263922
+7265658
           x86_64 (debug) - kselftest build - bpf
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7263628
+7265498
+          x86_64 (debug) - Storage - software RAID testing
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7265508
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7265510
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7265514
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7265550
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -78,12 +90,6 @@ l-tests/-/issues/1525
                    s390x - CIFS Connectathon
                   x86_64 - CIFS Connectathon
                   x86_64 (debug) - CIFS Connectathon
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
         Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
 atus: 3
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -109,7 +115,6 @@ d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
-                  x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
