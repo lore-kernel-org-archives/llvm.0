@@ -1,161 +1,115 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AD129A9
-	for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 12:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E03A33E0;
+	Mon, 27 Feb 2023 12:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1677501135; x=1709037135;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677502364; x=1709038364;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RO6aTFXermoMWjG0Tt8TtnTKM9NV8n7SoUu00FD0WU8=;
-  b=lxT02uTra9Xr9qTXW7nhMYavkTOsyizygVb3cYhY7RQ04l5Ar2m4u0Q7
-   rp9chwGAVXeC6ZglNIQraQ94+6wtYSI3zqwHFbdbhCvmypFPlPxMCTcKm
-   gUWvHg4YmFe9PFcjEp7E/oea8hqPquuwKUIpc4fD9UU96zJ49lqtfszSp
-   M0wpLkGO31/Mmz6c70NqSl4+yNdM1ga4PT7ER6CesKPzfyXHjgM2uNAgN
-   ppak1HOsBt+vZ7UpO7rYTbgLaHQWOBfaa/EATxviJCTF/A2tEHf4mROxl
-   469nSyid6I4RMY1y7bwcWLXZqoUUz9jbvNv+5qz4aPezPUe/tRDXa3xgz
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,332,1669100400"; 
-   d="asc'?scan'208";a="202701616"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Feb 2023 05:31:46 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 27 Feb 2023 05:31:45 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 27 Feb 2023 05:31:43 -0700
-Date: Mon, 27 Feb 2023 12:31:16 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-CC: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Ard Biesheuvel
-	<ardb@kernel.org>, =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, =?iso-8859-1?Q?Bj=F6rn_T=F6pel?=
-	<bjorn@rivosinc.com>, <nathan@kernel.org>, <llvm@lists.linux.dev>,
-	<ndesaulniers@google.com>
-Subject: Re: [PATCH v7 1/1] riscv: Allow to downgrade paging mode from the
- command line
-Message-ID: <Y/yilORflGv3vXjX@wendy>
-References: <20230224100218.1824569-1-alexghiti@rivosinc.com>
- <20230224100218.1824569-2-alexghiti@rivosinc.com>
+  bh=Iv/bxCByHyLM3mCXzFYfEn60BlnvydEZ5bn3eVyA41Q=;
+  b=h5zc4pSgsDbOoWaKNs/SD7hi1DtBB7OYKZE4Mx7mQM4TLWnwvVPbTsfg
+   GPo3JMcKd1F/YAnXvTQx3iNMGs0yy6PJ+0EJj7IR6e0bDCkgTdHMEkY5j
+   SEH0Lohsnpev5dzSiPH7b4xYa3G1BF8JkhY2OMHKXliFFm3lzlb/LIKBC
+   8GBFkrlxlVhQd2YqKzfmAxizJXEU6KTduqQDwHswh5Jx3JN2lAfHAedsm
+   WnEGfyhCjUtO7pWY3b/pPmKRdqfG8F6mHxNlGqW5ri2TvWtjJ75qZ4kcE
+   bmbkxLt4H8wRBodbczg3m7L+hJtolS2Myptfg5FOcFJ/tcHT3QRSov1eU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="322095431"
+X-IronPort-AV: E=Sophos;i="5.97,332,1669104000"; 
+   d="scan'208";a="322095431"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 04:52:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="667020416"
+X-IronPort-AV: E=Sophos;i="5.97,332,1669104000"; 
+   d="scan'208";a="667020416"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 27 Feb 2023 04:52:41 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pWczh-0004Ph-07;
+	Mon, 27 Feb 2023 12:52:41 +0000
+Date: Mon, 27 Feb 2023 20:51:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rodrigo.vivi@intel.com
+Subject: Re: [Intel-gfx] [PATCH] drm/i915/display: Communicate display power
+ demands to pcode more accurately
+Message-ID: <202302272052.ZvLMGyJl-lkp@intel.com>
+References: <20230227095253.22415-1-stanislav.lisovskiy@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="8ORzwRGnfaATysc6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230224100218.1824569-2-alexghiti@rivosinc.com>
+In-Reply-To: <20230227095253.22415-1-stanislav.lisovskiy@intel.com>
 
---8ORzwRGnfaATysc6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Stanislav,
 
-Hey Alex, clang/llvm folk,
+Thank you for the patch! Perhaps something to improve:
 
-On Fri, Feb 24, 2023 at 11:02:18AM +0100, Alexandre Ghiti wrote:
-> Add 2 early command line parameters that allow to downgrade satp mode
-> (using the same naming as x86):
-> - "no5lvl": use a 4-level page table (down from sv57 to sv48)
-> - "no4lvl": use a 3-level page table (down from sv57/sv48 to sv39)
->=20
-> Note that going through the device tree to get the kernel command line
-> works with ACPI too since the efi stub creates a device tree anyway with
-> the command line.
->=20
-> In KASAN kernels, we can't use the libfdt that early in the boot process
-> since we are not ready to execute instrumented functions. So instead of
-> using the "generic" libfdt, we compile our own versions of those functions
-> that are not instrumented and that are prefixed so that they do not
-> conflict with the generic ones. We also need the non-instrumented versions
-> of the string functions and the prefixed versions of memcpy/memmove.
->=20
-> This is largely inspired by commit aacd149b6238 ("arm64: head: avoid
-> relocating the kernel twice for KASLR") from which I removed compilation
-> flags that were not relevant to RISC-V at the moment (LTO, SCS, pie).
->=20
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Tested-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
-> Reviewed-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
-> ---
->  .../admin-guide/kernel-parameters.txt         |  5 +-
->  arch/riscv/kernel/Makefile                    |  2 +
->  arch/riscv/kernel/pi/Makefile                 | 37 +++++++++++
->  arch/riscv/kernel/pi/cmdline_early.c          | 62 +++++++++++++++++++
+[auto build test WARNING on drm-tip/drm-tip]
 
-+      4 ld.lld: warning: vmlinux.a(arch/riscv/kernel/pi/string.pi.o):(.ini=
-t.sdata) is being placed in '.init.sdata'
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Lisovskiy/drm-i915-display-Communicate-display-power-demands-to-pcode-more-accurately/20230227-175404
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230227095253.22415-1-stanislav.lisovskiy%40intel.com
+patch subject: [Intel-gfx] [PATCH] drm/i915/display: Communicate display power demands to pcode more accurately
+config: i386-randconfig-r033-20230227 (https://download.01.org/0day-ci/archive/20230227/202302272052.ZvLMGyJl-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/bc4de3b25bbf043f68ef862c45f975b79af938be
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stanislav-Lisovskiy/drm-i915-display-Communicate-display-power-demands-to-pcode-more-accurately/20230227-175404
+        git checkout bc4de3b25bbf043f68ef862c45f975b79af938be
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-I'm getting 4 new linker warnings with LLVM=3D1 clang-15 allmodconfig
-builds - but I don't really understand this issue.
-Is this spurious, and a just consequence of...
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302272052.ZvLMGyJl-lkp@intel.com/
 
-> diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
-> new file mode 100644
-> index 000000000000..4002ed94b6d3
-> --- /dev/null
-> +++ b/arch/riscv/kernel/pi/Makefile
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# This file was copied from arm64/kernel/pi/Makefile.
-> +
-> +KBUILD_CFLAGS	:=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> +		   -Os -DDISABLE_BRANCH_PROFILING $(DISABLE_STACKLEAK_PLUGIN) \
-> +		   $(call cc-option,-mbranch-protection=3Dnone) \
-> +		   -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
-> +		   -D__DISABLE_EXPORTS -ffreestanding \
-> +		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
-> +		   $(call cc-option,-fno-addrsig)
-> +
-> +CFLAGS_cmdline_early.o +=3D -D__NO_FORTIFY
-> +CFLAGS_lib-fdt_ro.o +=3D -D__NO_FORTIFY
-> +
-> +GCOV_PROFILE	:=3D n
-> +KASAN_SANITIZE	:=3D n
-> +KCSAN_SANITIZE	:=3D n
-> +UBSAN_SANITIZE	:=3D n
-> +KCOV_INSTRUMENT	:=3D n
-> +
-> +$(obj)/%.pi.o: OBJCOPYFLAGS :=3D --prefix-symbols=3D__pi_ \
-> +			       --remove-section=3D.note.gnu.property \
-> +			       --prefix-alloc-sections=3D.init
+All warnings (new ones prefixed by >>):
 
-=2E..this?
+>> drivers/gpu/drm/i915/display/intel_cdclk.c:3006:6: warning: no previous prototype for function 'intel_cdclk_need_serialize' [-Wmissing-prototypes]
+   bool intel_cdclk_need_serialize(struct drm_i915_private *i915,
+        ^
+   drivers/gpu/drm/i915/display/intel_cdclk.c:3006:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool intel_cdclk_need_serialize(struct drm_i915_private *i915,
+   ^
+   static 
+   1 warning generated.
 
-> +$(obj)/%.pi.o: $(obj)/%.o FORCE
-> +	$(call if_changed,objcopy)
-> +
-> +$(obj)/lib-%.o: $(srctree)/lib/%.c FORCE
-> +	$(call if_changed_rule,cc_o_c)
-> +
-> +$(obj)/string.o: $(srctree)/lib/string.c FORCE
-> +	$(call if_changed_rule,cc_o_c)
-> +
-> +$(obj)/ctype.o: $(srctree)/lib/ctype.c FORCE
-> +	$(call if_changed_rule,cc_o_c)
-> +
-> +obj-y		:=3D cmdline_early.pi.o string.pi.o ctype.pi.o lib-fdt.pi.o lib-f=
-dt_ro.pi.o
-> +extra-y		:=3D $(patsubst %.pi.o,%.o,$(obj-y))
 
---8ORzwRGnfaATysc6
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/intel_cdclk_need_serialize +3006 drivers/gpu/drm/i915/display/intel_cdclk.c
 
------BEGIN PGP SIGNATURE-----
+  3005	
+> 3006	bool intel_cdclk_need_serialize(struct drm_i915_private *i915,
+  3007					const struct intel_cdclk_state *old_cdclk_state,
+  3008					const struct intel_cdclk_state *new_cdclk_state)
+  3009	{
+  3010		/*
+  3011		 * We need to poke hw for gen >= 12, because we notify PCode if
+  3012		 * pipe power well count changes.
+  3013		 */
+  3014		return intel_cdclk_changed(&old_cdclk_state->actual,
+  3015					   &new_cdclk_state->actual) ||
+  3016		       ((DISPLAY_VER(i915) >= 12 &&
+  3017			 hweight8(old_cdclk_state->active_pipes) !=
+  3018			 hweight8(new_cdclk_state->active_pipes)));
+  3019	}
+  3020	
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/yilAAKCRB4tDGHoIJi
-0vndAQC4f+NCDSCyNXYj0njkGSVRxmlHAyLfwBzffl3veDQDTwD+Ll58OPQxpsri
-ApRUvSTvYGRl+S21vQH6TERahcXL2gI=
-=2KwQ
------END PGP SIGNATURE-----
-
---8ORzwRGnfaATysc6--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
