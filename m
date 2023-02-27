@@ -1,115 +1,141 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E03A33E0;
-	Mon, 27 Feb 2023 12:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677502364; x=1709038364;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Iv/bxCByHyLM3mCXzFYfEn60BlnvydEZ5bn3eVyA41Q=;
-  b=h5zc4pSgsDbOoWaKNs/SD7hi1DtBB7OYKZE4Mx7mQM4TLWnwvVPbTsfg
-   GPo3JMcKd1F/YAnXvTQx3iNMGs0yy6PJ+0EJj7IR6e0bDCkgTdHMEkY5j
-   SEH0Lohsnpev5dzSiPH7b4xYa3G1BF8JkhY2OMHKXliFFm3lzlb/LIKBC
-   8GBFkrlxlVhQd2YqKzfmAxizJXEU6KTduqQDwHswh5Jx3JN2lAfHAedsm
-   WnEGfyhCjUtO7pWY3b/pPmKRdqfG8F6mHxNlGqW5ri2TvWtjJ75qZ4kcE
-   bmbkxLt4H8wRBodbczg3m7L+hJtolS2Myptfg5FOcFJ/tcHT3QRSov1eU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="322095431"
-X-IronPort-AV: E=Sophos;i="5.97,332,1669104000"; 
-   d="scan'208";a="322095431"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 04:52:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="667020416"
-X-IronPort-AV: E=Sophos;i="5.97,332,1669104000"; 
-   d="scan'208";a="667020416"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 27 Feb 2023 04:52:41 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pWczh-0004Ph-07;
-	Mon, 27 Feb 2023 12:52:41 +0000
-Date: Mon, 27 Feb 2023 20:51:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rodrigo.vivi@intel.com
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/display: Communicate display power
- demands to pcode more accurately
-Message-ID: <202302272052.ZvLMGyJl-lkp@intel.com>
-References: <20230227095253.22415-1-stanislav.lisovskiy@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D538729A9
+	for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 12:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88140C433A1
+	for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 12:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677502628;
+	bh=zedX3PdU562c+Q1Gru7wIFDB2Pb4iAhIkFLPWy35NEU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sgKlU8T7UnCzCGpc2Ptin2Yo+usa0g1LIyoX6AHWNJX+cAeTVWPsCekMElbdRZTd7
+	 yVAuodfK5Yk9dM3GAv7cLT/0VnAMP2q/IQIBs4NE2iWBp59pO1k9yXRxxpq0N5iS7C
+	 rt3PXCYzUMbQqcfRjrfZZQa9FitCYgCft7Q6YEUgs/EXLC/lGv3h0wbs4cLNPIbfLf
+	 pVRJTJBrQdPFhAH8PTAqJoax84OVsNw6oXmhrM9gdYt/s8uXBWB7erR/+WyDocXkPm
+	 +nKIjmNwA/XTUezg1EVIp3ki9wyobdAwaq48s1YpJMRTj6JHTl9MTCLeZilzOT5J/Z
+	 TwuTLiafgIBcg==
+Received: by mail-lf1-f43.google.com with SMTP id r27so8377032lfe.10
+        for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 04:57:08 -0800 (PST)
+X-Gm-Message-State: AO0yUKWlV5gt+KD3mrkOWxHoDW5JvmciiOy4a3fqk4iTYNcZ14FIrFhj
+	04mgpWCjHORodQ0n598JCdO1vfshSDEDcS8iDfo=
+X-Google-Smtp-Source: AK7set9VVtyfreeHcNt3/ckrXOFuAsLW/BdgFHIDhxvPasrYVOh6UMsLhaVKKjKkGGJH2QPPePGPWvRpd3iC4i7i69A=
+X-Received: by 2002:ac2:44a8:0:b0:4d8:6fd3:b8bf with SMTP id
+ c8-20020ac244a8000000b004d86fd3b8bfmr7422782lfm.7.1677502626519; Mon, 27 Feb
+ 2023 04:57:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227095253.22415-1-stanislav.lisovskiy@intel.com>
+References: <20230224100218.1824569-1-alexghiti@rivosinc.com>
+ <20230224100218.1824569-2-alexghiti@rivosinc.com> <Y/yilORflGv3vXjX@wendy>
+In-Reply-To: <Y/yilORflGv3vXjX@wendy>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 27 Feb 2023 13:56:55 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGCkqpHY7rHZv0EFKhPNk6jpbh1OfG_Jm3vSW8c5Y+9_A@mail.gmail.com>
+Message-ID: <CAMj1kXGCkqpHY7rHZv0EFKhPNk6jpbh1OfG_Jm3vSW8c5Y+9_A@mail.gmail.com>
+Subject: Re: [PATCH v7 1/1] riscv: Allow to downgrade paging mode from the
+ command line
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, 
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
+	nathan@kernel.org, llvm@lists.linux.dev, ndesaulniers@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stanislav,
+On Mon, 27 Feb 2023 at 13:32, Conor Dooley <conor.dooley@microchip.com> wro=
+te:
+>
+> Hey Alex, clang/llvm folk,
+>
+> On Fri, Feb 24, 2023 at 11:02:18AM +0100, Alexandre Ghiti wrote:
+> > Add 2 early command line parameters that allow to downgrade satp mode
+> > (using the same naming as x86):
+> > - "no5lvl": use a 4-level page table (down from sv57 to sv48)
+> > - "no4lvl": use a 3-level page table (down from sv57/sv48 to sv39)
+> >
+> > Note that going through the device tree to get the kernel command line
+> > works with ACPI too since the efi stub creates a device tree anyway wit=
+h
+> > the command line.
+> >
+> > In KASAN kernels, we can't use the libfdt that early in the boot proces=
+s
+> > since we are not ready to execute instrumented functions. So instead of
+> > using the "generic" libfdt, we compile our own versions of those functi=
+ons
+> > that are not instrumented and that are prefixed so that they do not
+> > conflict with the generic ones. We also need the non-instrumented versi=
+ons
+> > of the string functions and the prefixed versions of memcpy/memmove.
+> >
+> > This is largely inspired by commit aacd149b6238 ("arm64: head: avoid
+> > relocating the kernel twice for KASLR") from which I removed compilatio=
+n
+> > flags that were not relevant to RISC-V at the moment (LTO, SCS, pie).
+> >
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > Tested-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> > Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> > ---
+> >  .../admin-guide/kernel-parameters.txt         |  5 +-
+> >  arch/riscv/kernel/Makefile                    |  2 +
+> >  arch/riscv/kernel/pi/Makefile                 | 37 +++++++++++
+> >  arch/riscv/kernel/pi/cmdline_early.c          | 62 +++++++++++++++++++
+>
+> +      4 ld.lld: warning: vmlinux.a(arch/riscv/kernel/pi/string.pi.o):(.i=
+nit.sdata) is being placed in '.init.sdata'
+>
+> I'm getting 4 new linker warnings with LLVM=3D1 clang-15 allmodconfig
+> builds - but I don't really understand this issue.
+> Is this spurious, and a just consequence of...
+>
+> > diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makef=
+ile
+> > new file mode 100644
+> > index 000000000000..4002ed94b6d3
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/pi/Makefile
+> > @@ -0,0 +1,37 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +# This file was copied from arm64/kernel/pi/Makefile.
+> > +
+> > +KBUILD_CFLAGS        :=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)=
+) \
+> > +                -Os -DDISABLE_BRANCH_PROFILING $(DISABLE_STACKLEAK_PLU=
+GIN) \
+> > +                $(call cc-option,-mbranch-protection=3Dnone) \
+> > +                -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
+> > +                -D__DISABLE_EXPORTS -ffreestanding \
+> > +                -fno-asynchronous-unwind-tables -fno-unwind-tables \
+> > +                $(call cc-option,-fno-addrsig)
+> > +
+> > +CFLAGS_cmdline_early.o +=3D -D__NO_FORTIFY
+> > +CFLAGS_lib-fdt_ro.o +=3D -D__NO_FORTIFY
+> > +
+> > +GCOV_PROFILE :=3D n
+> > +KASAN_SANITIZE       :=3D n
+> > +KCSAN_SANITIZE       :=3D n
+> > +UBSAN_SANITIZE       :=3D n
+> > +KCOV_INSTRUMENT      :=3D n
+> > +
+> > +$(obj)/%.pi.o: OBJCOPYFLAGS :=3D --prefix-symbols=3D__pi_ \
+> > +                            --remove-section=3D.note.gnu.property \
+> > +                            --prefix-alloc-sections=3D.init
+>
+> ...this?
+>
 
-Thank you for the patch! Perhaps something to improve:
+Yes. if the input object has a .sdata section, the output .pi.o object
+will have a .init.sdata section, and if the common linker script does
+not place it explicitly, you will get a warning. Note that we switched
+to --orphan-handling=3Derror on other arches, as the linker sometimes
+does unexpected things with sections it doesn't know about.
 
-[auto build test WARNING on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Lisovskiy/drm-i915-display-Communicate-display-power-demands-to-pcode-more-accurately/20230227-175404
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230227095253.22415-1-stanislav.lisovskiy%40intel.com
-patch subject: [Intel-gfx] [PATCH] drm/i915/display: Communicate display power demands to pcode more accurately
-config: i386-randconfig-r033-20230227 (https://download.01.org/0day-ci/archive/20230227/202302272052.ZvLMGyJl-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bc4de3b25bbf043f68ef862c45f975b79af938be
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Stanislav-Lisovskiy/drm-i915-display-Communicate-display-power-demands-to-pcode-more-accurately/20230227-175404
-        git checkout bc4de3b25bbf043f68ef862c45f975b79af938be
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302272052.ZvLMGyJl-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_cdclk.c:3006:6: warning: no previous prototype for function 'intel_cdclk_need_serialize' [-Wmissing-prototypes]
-   bool intel_cdclk_need_serialize(struct drm_i915_private *i915,
-        ^
-   drivers/gpu/drm/i915/display/intel_cdclk.c:3006:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool intel_cdclk_need_serialize(struct drm_i915_private *i915,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/intel_cdclk_need_serialize +3006 drivers/gpu/drm/i915/display/intel_cdclk.c
-
-  3005	
-> 3006	bool intel_cdclk_need_serialize(struct drm_i915_private *i915,
-  3007					const struct intel_cdclk_state *old_cdclk_state,
-  3008					const struct intel_cdclk_state *new_cdclk_state)
-  3009	{
-  3010		/*
-  3011		 * We need to poke hw for gen >= 12, because we notify PCode if
-  3012		 * pipe power well count changes.
-  3013		 */
-  3014		return intel_cdclk_changed(&old_cdclk_state->actual,
-  3015					   &new_cdclk_state->actual) ||
-  3016		       ((DISPLAY_VER(i915) >= 12 &&
-  3017			 hweight8(old_cdclk_state->active_pipes) !=
-  3018			 hweight8(new_cdclk_state->active_pipes)));
-  3019	}
-  3020	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I'd imagine this needs to be combined with .init.data
