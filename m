@@ -1,42 +1,49 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D802113;
-	Mon, 27 Feb 2023 11:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B042FB2;
+	Mon, 27 Feb 2023 12:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677496615; x=1709032615;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iJjoeRmeE9RWwYA9krCWyrlTlNdnFnOEWx0mnaDpuqA=;
-  b=Odg2WfzWaSqqVdpprd1W1vRPczZQ/I/osGvEuOfvx/2m+dhgaW5k5ALn
-   I585N+h1LtfQW92YYtK4GXMq+k4cGtihe4phGa5gdRSwS+M2OBlvAyXcY
-   Z45O5pfhVNlAAqqAIe1wjsYeHVwuSuo2h7ci53TAJvCIuwuFKgvSPTiab
-   imFZHocfZh9cRJ9ztk3cfPyjzGlUwm4Cc/gR0I2SLcV1IUV1S5j6C1la+
-   lHTDmvAbnek/unkP4efSdLWBKT2lxbp7dVk4t+NM3Gke8knvAcH3pUkdb
-   snDfzrz2SaWCEZMCgaZRVOgyJpBrSvm4QtVwCElwiVxUf1+sGR0JM4W6k
+  t=1677500326; x=1709036326;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KuX2ifj23XIiHvM0u+wPf0HERefBeu0ux+Zf9Ufg1CE=;
+  b=YQ1/jYSxs4q2oD3gRNXVVMBsx+IiI/2BxxyYKiTbp/9nblN41+lufbAo
+   NAGikj9EUGUVlMidQENgLXScPcJpT/dXl0M+FwZRdbT0aKSCyTvNi+61U
+   8EmyR5qrepAvsSXeZCHcX3ABsX0SahIoddC5KiuU1AI1wup2nZQuo87Er
+   ZXC5MS9iqc9AiOINxuZ6I3wv4H+gTPtAxHKqeHheK125iPRZfqttS4jZY
+   Lwmskh+JpwtgiZyt0HupBEQFbErGa4wtBXyOMcqdUwSit0xgHH1cbZwiY
+   zqZ5g4pq6u9ddqKu2jF2M9dsfpmpOm3mbaVCrXBJNTvsS2USc6wnHgG6L
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="314261389"
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="331319322"
 X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="314261389"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 03:16:54 -0800
+   d="scan'208";a="331319322"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 04:18:45 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="762668602"
+X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="623560454"
 X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="762668602"
+   d="scan'208";a="623560454"
 Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Feb 2023 03:16:38 -0800
+  by orsmga003.jf.intel.com with ESMTP; 27 Feb 2023 04:18:41 -0800
 Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pWbUj-0004Lr-1Y;
-	Mon, 27 Feb 2023 11:16:37 +0000
-Date: Mon, 27 Feb 2023 19:16:35 +0800
+	id 1pWcSm-0004OY-1T;
+	Mon, 27 Feb 2023 12:18:40 +0000
+Date: Mon, 27 Feb 2023 20:18:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:kvm-upstream-workaround 435/440]
- include/linux/mman.h:154:9: warning: division by zero is undefined
-Message-ID: <202302271913.0BlNhi6f-lkp@intel.com>
+To: Yuanzhi Wang <wangyuanzhi@uniontech.com>, alexander.deucher@amd.com,
+	christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+	daniel@ffwll.ch, mario.limonciello@amd.com, Bokun.Zhang@amd.com,
+	tzimmermann@suse.de, hdegoede@redhat.com, jingyuwang_vip@163.com,
+	rafael.j.wysocki@intel.com, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Yuanzhi Wang <wangyuanzhi@uniontech.com>
+Subject: Re: [PATCH] amdgpu: add a filter condition when set brightness
+Message-ID: <202302272051.KDJqRyl5-lkp@intel.com>
+References: <20230227073953.326-1-wangyuanzhi@uniontech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,190 +52,178 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230227073953.326-1-wangyuanzhi@uniontech.com>
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   6960696b1b5b8d8074bf2724321ff73782e42e6c
-commit: b7377b41927c4fa035228a4eb3fb6151d64bf749 [435/440] perf, KVM: introduce software event on enter/exit to/from guest
-config: riscv-randconfig-r042-20230226 (https://download.01.org/0day-ci/archive/20230227/202302271913.0BlNhi6f-lkp@intel.com/config)
+Hi Yuanzhi,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.2 next-20230227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230227073953.326-1-wangyuanzhi%40uniontech.com
+patch subject: [PATCH] amdgpu: add a filter condition when set brightness
+config: arm64-randconfig-r012-20230226 (https://download.01.org/0day-ci/archive/20230227/202302272051.KDJqRyl5-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/intel/tdx/commit/b7377b41927c4fa035228a4eb3fb6151d64bf749
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout b7377b41927c4fa035228a4eb3fb6151d64bf749
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/95d9579e31d0b601aa1422cf767ca5138d3efcee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
+        git checkout 95d9579e31d0b601aa1422cf767ca5138d3efcee
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302271913.0BlNhi6f-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302272051.KDJqRyl5-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from arch/riscv/kvm/../../../virt/kvm/kvm_main.c:18:
-   include/linux/kvm_host.h:429:2: error: call to undeclared function 'perf_event_guest_enter_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           perf_event_guest_enter_exit(true);
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:15: warning: missing terminating '"' character [-Winvalid-pp-token]
+                                           DRM_WARN("old brightness %d is greater than ACPI brightness
+                                                    ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:450:11: warning: missing terminating '"' character [-Winvalid-pp-token]
+                                                   %d\n", old_brightness, req.backlight_level);
+                                                       ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:6: error: unterminated function-like macro invocation
+                                           DRM_WARN("old brightness %d is greater than ACPI brightness
+                                           ^
+   include/drm/drm_print.h:543:9: note: macro 'DRM_WARN' defined here
+   #define DRM_WARN(fmt, ...)                                              \
            ^
-   include/linux/kvm_host.h:494:2: error: call to undeclared function 'perf_event_guest_enter_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           perf_event_guest_enter_exit(false);
-           ^
-   In file included from arch/riscv/kvm/../../../virt/kvm/kvm_main.c:41:
->> include/linux/mman.h:154:9: warning: division by zero is undefined [-Wdivision-by-zero]
-                  _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:132:21: note: expanded from macro '_calc_vm_trans'
-      : ((x) & (bit1)) / ((bit1) / (bit2))))
-                       ^ ~~~~~~~~~~~~~~~~~
-   In file included from arch/riscv/kvm/../../../virt/kvm/kvm_main.c:67:
-   In file included from include/trace/events/kvm.h:510:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:21:
-   In file included from include/linux/trace_events.h:10:
-   include/linux/perf_event.h:1666:20: error: static declaration of 'perf_event_guest_enter_exit' follows non-static declaration
-   static inline void perf_event_guest_enter_exit(bool enter) {}
-                      ^
-   include/linux/kvm_host.h:429:2: note: previous implicit declaration is here
-           perf_event_guest_enter_exit(true);
-           ^
-   1 warning and 3 errors generated.
---
-   In file included from arch/riscv/kvm/vcpu_insn.c:8:
-   include/linux/kvm_host.h:429:2: error: call to undeclared function 'perf_event_guest_enter_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           perf_event_guest_enter_exit(true);
-           ^
-   include/linux/kvm_host.h:494:2: error: call to undeclared function 'perf_event_guest_enter_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           perf_event_guest_enter_exit(false);
-           ^
->> arch/riscv/kvm/vcpu_insn.c:238:3: warning: shift count is negative [-Wshift-count-negative]
-                   SET_RD(insn, &vcpu->arch.guest_context,
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:129:35: note: expanded from macro 'SET_RD'
-   #define SET_RD(insn, regs, val) (*REG_PTR(insn, SH_RD, regs) = (val))
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:119:29: note: expanded from macro 'REG_PTR'
-           ((ulong *)((ulong)(regs) + REG_OFFSET(insn, pos)))
-                                      ^~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:116:3: note: expanded from macro 'REG_OFFSET'
-           (SHIFT_RIGHT((insn), (pos) - LOG_REGBYTES) & REG_MASK)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:110:18: note: expanded from macro 'SHIFT_RIGHT'
-           ((y) < 0 ? ((x) << -(y)) : ((x) >> (y)))
-                           ^  ~~~~
-   arch/riscv/kvm/vcpu_insn.c:252:18: warning: shift count is negative [-Wshift-count-negative]
-           ulong rs1_val = GET_RS1(insn, &vcpu->arch.guest_context);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:123:31: note: expanded from macro 'GET_RS1'
-   #define GET_RS1(insn, regs)     (*REG_PTR(insn, SH_RS1, regs))
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:119:29: note: expanded from macro 'REG_PTR'
-           ((ulong *)((ulong)(regs) + REG_OFFSET(insn, pos)))
-                                      ^~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:116:3: note: expanded from macro 'REG_OFFSET'
-           (SHIFT_RIGHT((insn), (pos) - LOG_REGBYTES) & REG_MASK)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:110:18: note: expanded from macro 'SHIFT_RIGHT'
-           ((y) < 0 ? ((x) << -(y)) : ((x) >> (y)))
-                           ^  ~~~~
-   arch/riscv/kvm/vcpu_insn.c:610:9: warning: shift count is negative [-Wshift-count-negative]
-           data = GET_RS2(insn, &vcpu->arch.guest_context);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:124:31: note: expanded from macro 'GET_RS2'
-   #define GET_RS2(insn, regs)     (*REG_PTR(insn, SH_RS2, regs))
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:119:29: note: expanded from macro 'REG_PTR'
-           ((ulong *)((ulong)(regs) + REG_OFFSET(insn, pos)))
-                                      ^~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:116:3: note: expanded from macro 'REG_OFFSET'
-           (SHIFT_RIGHT((insn), (pos) - LOG_REGBYTES) & REG_MASK)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:110:18: note: expanded from macro 'SHIFT_RIGHT'
-           ((y) < 0 ? ((x) << -(y)) : ((x) >> (y)))
-                           ^  ~~~~
-   arch/riscv/kvm/vcpu_insn.c:634:12: warning: shift count is negative [-Wshift-count-negative]
-                   data32 = GET_RS2S(insn, &vcpu->arch.guest_context);
-                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:126:32: note: expanded from macro 'GET_RS2S'
-   #define GET_RS2S(insn, regs)    (*REG_PTR(RVC_RS2S(insn), 0, regs))
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:119:29: note: expanded from macro 'REG_PTR'
-           ((ulong *)((ulong)(regs) + REG_OFFSET(insn, pos)))
-                                      ^~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:116:3: note: expanded from macro 'REG_OFFSET'
-           (SHIFT_RIGHT((insn), (pos) - LOG_REGBYTES) & REG_MASK)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:110:34: note: expanded from macro 'SHIFT_RIGHT'
-           ((y) < 0 ? ((x) << -(y)) : ((x) >> (y)))
-                                           ^  ~~~
-   arch/riscv/kvm/vcpu_insn.c:724:3: warning: shift count is negative [-Wshift-count-negative]
-                   SET_RD(insn, &vcpu->arch.guest_context,
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:129:35: note: expanded from macro 'SET_RD'
-   #define SET_RD(insn, regs, val) (*REG_PTR(insn, SH_RD, regs) = (val))
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:119:29: note: expanded from macro 'REG_PTR'
-           ((ulong *)((ulong)(regs) + REG_OFFSET(insn, pos)))
-                                      ^~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:116:3: note: expanded from macro 'REG_OFFSET'
-           (SHIFT_RIGHT((insn), (pos) - LOG_REGBYTES) & REG_MASK)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:110:18: note: expanded from macro 'SHIFT_RIGHT'
-           ((y) < 0 ? ((x) << -(y)) : ((x) >> (y)))
-                           ^  ~~~~
-   arch/riscv/kvm/vcpu_insn.c:729:3: warning: shift count is negative [-Wshift-count-negative]
-                   SET_RD(insn, &vcpu->arch.guest_context,
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:129:35: note: expanded from macro 'SET_RD'
-   #define SET_RD(insn, regs, val) (*REG_PTR(insn, SH_RD, regs) = (val))
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:119:29: note: expanded from macro 'REG_PTR'
-           ((ulong *)((ulong)(regs) + REG_OFFSET(insn, pos)))
-                                      ^~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:116:3: note: expanded from macro 'REG_OFFSET'
-           (SHIFT_RIGHT((insn), (pos) - LOG_REGBYTES) & REG_MASK)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:110:18: note: expanded from macro 'SHIFT_RIGHT'
-           ((y) < 0 ? ((x) << -(y)) : ((x) >> (y)))
-                           ^  ~~~~
-   arch/riscv/kvm/vcpu_insn.c:734:3: warning: shift count is negative [-Wshift-count-negative]
-                   SET_RD(insn, &vcpu->arch.guest_context,
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:129:35: note: expanded from macro 'SET_RD'
-   #define SET_RD(insn, regs, val) (*REG_PTR(insn, SH_RD, regs) = (val))
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:119:29: note: expanded from macro 'REG_PTR'
-           ((ulong *)((ulong)(regs) + REG_OFFSET(insn, pos)))
-                                      ^~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/vcpu_insn.c:116:3: note: expanded from macro 'REG_OFFSET'
-           (SHIFT_RIGHT((insn), (pos) - LOG_REGBYTES) & REG_MASK)
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected expression
+   #endif /* CONFIG_SUSPEND */
+                              ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:448:5: note: previous statement is here
+                                   if (old_brightness > req.backlight_level)
+                                   ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
+   #endif /* CONFIG_SUSPEND */
+                              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:439:18: note: to match this '{'
+                           if (atif->bd) {
+                                         ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
+   #endif /* CONFIG_SUSPEND */
+                              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:438:59: note: to match this '{'
+                   if (req.pending & ATIF_PANEL_BRIGHTNESS_CHANGE_REQUEST) {
+                                                                           ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
+   #endif /* CONFIG_SUSPEND */
+                              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:427:38: note: to match this '{'
+           if (atif->functions.sbios_requests) {
+                                               ^
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
+   #endif /* CONFIG_SUSPEND */
+                              ^
+   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:406:1: note: to match this '{'
+   {
+   ^
+   3 warnings and 6 errors generated.
 
 
-vim +154 include/linux/mman.h
+vim +449 drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
 
-^1da177e4c3f41 Linus Torvalds  2005-04-16  145  
-^1da177e4c3f41 Linus Torvalds  2005-04-16  146  /*
-^1da177e4c3f41 Linus Torvalds  2005-04-16  147   * Combine the mmap "flags" argument into "vm_flags" used internally.
-^1da177e4c3f41 Linus Torvalds  2005-04-16  148   */
-^1da177e4c3f41 Linus Torvalds  2005-04-16  149  static inline unsigned long
-^1da177e4c3f41 Linus Torvalds  2005-04-16  150  calc_vm_flag_bits(unsigned long flags)
-^1da177e4c3f41 Linus Torvalds  2005-04-16  151  {
-^1da177e4c3f41 Linus Torvalds  2005-04-16  152  	return _calc_vm_trans(flags, MAP_GROWSDOWN,  VM_GROWSDOWN ) |
-b6fb293f2497a9 Jan Kara        2017-11-01  153  	       _calc_vm_trans(flags, MAP_LOCKED,     VM_LOCKED    ) |
-b3fbbea4c00220 Kevin Brodsky   2019-11-25 @154  	       _calc_vm_trans(flags, MAP_SYNC,	     VM_SYNC      ) |
-b3fbbea4c00220 Kevin Brodsky   2019-11-25  155  	       arch_calc_vm_flag_bits(flags);
-^1da177e4c3f41 Linus Torvalds  2005-04-16  156  }
-00619bcc44d6b7 Jerome Marchand 2013-11-12  157  
-
-:::::: The code at line 154 was first introduced by commit
-:::::: b3fbbea4c00220f62e6f7e2514466e6ee81f7f60 mm: Introduce arch_calc_vm_flag_bits()
-
-:::::: TO: Kevin Brodsky <Kevin.Brodsky@arm.com>
-:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
+   391	
+   392	/**
+   393	 * amdgpu_atif_handler - handle ATIF notify requests
+   394	 *
+   395	 * @adev: amdgpu_device pointer
+   396	 * @event: atif sbios request struct
+   397	 *
+   398	 * Checks the acpi event and if it matches an atif event,
+   399	 * handles it.
+   400	 *
+   401	 * Returns:
+   402	 * NOTIFY_BAD or NOTIFY_DONE, depending on the event.
+   403	 */
+   404	static int amdgpu_atif_handler(struct amdgpu_device *adev,
+   405				       struct acpi_bus_event *event)
+   406	{
+   407		struct amdgpu_atif *atif = &amdgpu_acpi_priv.atif;
+   408		int count;
+   409		int old_brightness;
+   410	
+   411		DRM_DEBUG_DRIVER("event, device_class = %s, type = %#x\n",
+   412				event->device_class, event->type);
+   413	
+   414		if (strcmp(event->device_class, ACPI_VIDEO_CLASS) != 0)
+   415			return NOTIFY_DONE;
+   416	
+   417		/* Is this actually our event? */
+   418		if (!atif->notification_cfg.enabled ||
+   419		    event->type != atif->notification_cfg.command_code) {
+   420			/* These events will generate keypresses otherwise */
+   421			if (event->type == ACPI_VIDEO_NOTIFY_PROBE)
+   422				return NOTIFY_BAD;
+   423			else
+   424				return NOTIFY_DONE;
+   425		}
+   426	
+   427		if (atif->functions.sbios_requests) {
+   428			struct atif_sbios_requests req;
+   429	
+   430			/* Check pending SBIOS requests */
+   431			count = amdgpu_atif_get_sbios_requests(atif, &req);
+   432	
+   433			if (count <= 0)
+   434				return NOTIFY_BAD;
+   435	
+   436			DRM_DEBUG_DRIVER("ATIF: %d pending SBIOS requests\n", count);
+   437	
+   438			if (req.pending & ATIF_PANEL_BRIGHTNESS_CHANGE_REQUEST) {
+   439				if (atif->bd) {
+   440					DRM_DEBUG_DRIVER("Changing brightness to %d\n",
+   441							 req.backlight_level);
+   442					/*
+   443					 * XXX backlight_device_set_brightness() is
+   444					 * hardwired to post BACKLIGHT_UPDATE_SYSFS.
+   445					 * It probably should accept 'reason' parameter.
+   446					 */
+   447					old_brightness = backlight_get_brightness(atif->bd);
+   448					if (old_brightness > req.backlight_level)
+ > 449						DRM_WARN("old brightness %d is greater than ACPI brightness
+   450							%d\n", old_brightness, req.backlight_level);
+   451					else
+   452						backlight_device_set_brightness(atif->bd,
+   453							req.backlight_level);
+   454				}
+   455			}
+   456	
+   457			if (req.pending & ATIF_DGPU_DISPLAY_EVENT) {
+   458				if (adev->flags & AMD_IS_PX) {
+   459					pm_runtime_get_sync(adev_to_drm(adev)->dev);
+   460					/* Just fire off a uevent and let userspace tell us what to do */
+   461					drm_helper_hpd_irq_event(adev_to_drm(adev));
+   462					pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
+   463					pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
+   464				}
+   465			}
+   466			/* TODO: check other events */
+   467		}
+   468	
+   469		/* We've handled the event, stop the notifier chain. The ACPI interface
+   470		 * overloads ACPI_VIDEO_NOTIFY_PROBE, we don't want to send that to
+   471		 * userspace if the event was generated only to signal a SBIOS
+   472		 * request.
+   473		 */
+   474		return NOTIFY_BAD;
+   475	}
+   476	
 
 -- 
 0-DAY CI Kernel Test Service
