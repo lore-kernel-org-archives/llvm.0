@@ -1,226 +1,93 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E674291F;
-	Sun, 26 Feb 2023 22:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677451817; x=1708987817;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=b7/7ll+6fXDbtYJnvQOzYp9/l9Eir6KTCW7YVnt+DdI=;
-  b=PSYzQUGHJml8ivSjSh3iWPt3+hT4NRNwt6hsmV0Sjua/P7PFeB5f3db2
-   GOIBLAnEQpw12+Ah+OnJH55YnheI+UGTGJUgGVZTyQtcFanaGusLeFzKE
-   vsxjxA2+fdnl75Tn50/1LvvogJMoLyJn0utAO1OY1a7+cVmoRdYKoWhu5
-   xNJLuFjBWuM3d5Ju7BnLqXZ6UD8Gxz6L1QXXO30KDUBugrQ7XNUgV+U5e
-   4Pe3BkhZKWvBNCUZ/xWsoMcO3WfRFrl/eJZcRBVmrmxY55BF/HsvBKCXx
-   2q9+duhFEhlglrymqCp1Xn3kEj2/GP/b5qDiuW9nu2JRhSKq7mMzqOEEh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="335223076"
-X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="335223076"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2023 14:50:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="1002495359"
-X-IronPort-AV: E=Sophos;i="5.97,330,1669104000"; 
-   d="scan'208";a="1002495359"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Feb 2023 14:50:09 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pWPqK-0003wF-2E;
-	Sun, 26 Feb 2023 22:50:08 +0000
-Date: Mon, 27 Feb 2023 06:49:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>
-Subject: include/linux/gpio/driver.h:31:19: error: field has incomplete type
- 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-Message-ID: <202302270633.RKhl0Tlx-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0A7374;
+	Mon, 27 Feb 2023 00:41:23 +0000 (UTC)
+Received: by mail-pg1-f171.google.com with SMTP id 16so2575796pge.11;
+        Sun, 26 Feb 2023 16:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VbCPVQtiESRrldU5N97vl2jVTNR3CI+lTkLJPv/JlxY=;
+        b=FIhL7WvMTJJI0MvKC8BuE83lhEBcgqpFgltetQFkUhlFharmOUhsjX1gsyTSdrgqvf
+         gnb4RP6bIYIRXKe0E+ZVZ5IOVqkA2LE1FSRRm02NN3rVGpgjjKnLEjjOTUIEwBoy5JF8
+         +67Nap3EZcr6sqPx4V5JPbV2LjFrwBbOXG0vCbKIzStdQT5uh8ZWYzlrtW3rB15B5r9G
+         ytNrKbDYwLHLv8GcKsdfIaha3HJlcQ6m4BL/ndv5tFi1+u3YNOc/+163gnbgr0LjpFJy
+         KdecQpTvJ6H2r0ZlDGfibheaxRX2wRtYdiEH9FT8nOjqez4P8d0QJHCEaOQgb81s6BaK
+         jw/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VbCPVQtiESRrldU5N97vl2jVTNR3CI+lTkLJPv/JlxY=;
+        b=lbWV3unnXyEYGykss0X59FTPWEUS3PGFceaKYoNS4IgnM4bbT06KmA+bGZupnKPgHn
+         o00SfWexcOKYSueAiHDylEwx3+QLu+eusJ1bgD+0tqtgG8kwwI1P+gg0ZUinuLIi6aqw
+         Lwg4OLpVn4Jh6IAItV8hxNurjre1s5katReB3WVEWblcrED9PnMXGUKRf8isOIk+ekw6
+         5GxKvPz6fAtsx2NsDG2w7dQ9MG9fdBt6qacO3hVtLYbyCVpsR4bCtr6/h1rPm3JJC7B+
+         zOelHRWffiOVXoVpqO0U+6YOFDiLiTuBtS9HvRB7VxbgEpb/5gaZ6cOP1NeYV1wztla5
+         zWAw==
+X-Gm-Message-State: AO0yUKWQ9Eyk7qSfLh3aEzyhUfo2tzwqcxPmeMJcGMYa3dnxMj7Uxwty
+	M7QGPy1O/iFvX1tD9sejJ8z16+U/0Yd4J4Jw
+X-Google-Smtp-Source: AK7set/9dfT1kX/+D9/ExaK6VxhqfV4WwZG/fOXQiLyvCUAHB5NX4ks34kXfo7q0J0zbGORvDjXr5g==
+X-Received: by 2002:a62:1dd0:0:b0:5e0:316a:39ce with SMTP id d199-20020a621dd0000000b005e0316a39cemr9681985pfd.27.1677458483279;
+        Sun, 26 Feb 2023 16:41:23 -0800 (PST)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        by smtp.gmail.com with ESMTPSA id l12-20020a62be0c000000b005da23d8cbffsm2951023pff.158.2023.02.26.16.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 16:41:22 -0800 (PST)
+From: Kang Chen <void0red@gmail.com>
+To: lkp@intel.com
+Cc: agross@kernel.org,
+	andersson@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	konrad.dybcio@linaro.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	ohad@wizery.com,
+	void0red@gmail.com
+Subject: [PATCH v2] hwspinlock: add a check of devm_regmap_field_alloc in qcom_hwspinlock_probe
+Date: Mon, 27 Feb 2023 08:41:16 +0800
+Message-Id: <20230227004116.1273988-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <202302270034.DqtDwv49-lkp@intel.com>
+References: <202302270034.DqtDwv49-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f3a2439f20d918930cc4ae8f76fe1c1afd26958f
-commit: 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e irqchip: Add IMX MU MSI controller driver
-date:   5 months ago
-config: i386-buildonly-randconfig-r006-20230227 (https://download.01.org/0day-ci/archive/20230227/202302270633.RKhl0Tlx-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 70afdab904d2d1e68bffe75fe08e7e48e0b0ff8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+devm_regmap_field_alloc may fails, priv field might be error pointer and
+cause illegal address access later.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302270633.RKhl0Tlx-lkp@intel.com/
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+v2 -> v1: add missing parenthesis and switch to use PTR_ERR
 
-All errors (new ones prefixed by >>):
+ drivers/hwspinlock/qcom_hwspinlock.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-   In file included from drivers/misc/hi6421v600-irq.c:14:
-   In file included from include/linux/of_gpio.h:14:
->> include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-           msi_alloc_info_t        msiinfo;
-                                   ^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
-   1 error generated.
---
->> arch/x86/kernel/hpet.c:520:39: error: incomplete definition of type 'struct irq_alloc_info'
-           irq_domain_set_info(domain, virq, arg->hwirq, info->chip, NULL,
-                                             ~~~^
-   arch/x86/include/asm/io_apic.h:90:8: note: forward declaration of 'struct irq_alloc_info'
-   struct irq_alloc_info;
-          ^
-   arch/x86/kernel/hpet.c:521:28: error: incomplete definition of type 'struct irq_alloc_info'
-                               handle_edge_irq, arg->data, "edge");
-                                                ~~~^
-   arch/x86/include/asm/io_apic.h:90:8: note: forward declaration of 'struct irq_alloc_info'
-   struct irq_alloc_info;
-          ^
->> arch/x86/kernel/hpet.c:550:6: error: use of undeclared identifier 'x86_vector_domain'
-           if (x86_vector_domain == NULL)
-               ^
-   arch/x86/kernel/hpet.c:577:16: error: use of undeclared identifier 'x86_vector_domain'
-           if (parent != x86_vector_domain)
-                         ^
->> arch/x86/kernel/hpet.c:598:24: error: variable has incomplete type 'struct irq_alloc_info'
-           struct irq_alloc_info info;
-                                 ^
-   arch/x86/include/asm/io_apic.h:90:8: note: forward declaration of 'struct irq_alloc_info'
-   struct irq_alloc_info;
-          ^
->> arch/x86/kernel/hpet.c:600:2: error: implicit declaration of function 'init_irq_alloc_info' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           init_irq_alloc_info(&info, NULL);
-           ^
->> arch/x86/kernel/hpet.c:601:14: error: use of undeclared identifier 'X86_IRQ_ALLOC_TYPE_HPET'
-           info.type = X86_IRQ_ALLOC_TYPE_HPET;
-                       ^
-   7 errors generated.
---
->> kernel/irq/msi.c:585:12: error: incomplete definition of type 'struct irq_alloc_info'
-           return arg->hwirq;
-                  ~~~^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
->> kernel/irq/msi.c:591:23: error: invalid application of 'sizeof' to an incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-           memset(arg, 0, sizeof(*arg));
-                                ^~~~~~
-   arch/x86/include/asm/string_32.h:195:52: note: expanded from macro 'memset'
-   #define memset(s, c, count) __builtin_memset(s, c, count)
-                                                      ^~~~~
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
-   kernel/irq/msi.c:598:5: error: incomplete definition of type 'struct irq_alloc_info'
-           arg->desc = desc;
-           ~~~^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
->> kernel/irq/msi.c:858:19: error: variable has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-           msi_alloc_info_t arg = { };
-                            ^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
-   4 errors generated.
---
->> drivers/base/platform-msi.c:26:20: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-           msi_alloc_info_t                arg;
-                                           ^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
-   1 error generated.
---
-   In file included from drivers/mmc/host/dw_mmc.c:38:
-   In file included from include/linux/of_gpio.h:14:
->> include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-           msi_alloc_info_t        msiinfo;
-                                   ^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
-   drivers/mmc/host/dw_mmc.c:3040:33: warning: shift count >= width of type [-Wshift-count-overflow]
-                           if (!dma_set_mask(host->dev, DMA_BIT_MASK(64)))
-                                                        ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   drivers/mmc/host/dw_mmc.c:3042:13: warning: shift count >= width of type [-Wshift-count-overflow]
-                                                         DMA_BIT_MASK(64));
-                                                         ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   2 warnings and 1 error generated.
---
-   In file included from drivers/char/tpm/st33zp24/st33zp24.c:15:
-   In file included from include/linux/gpio.h:62:
-   In file included from include/asm-generic/gpio.h:11:
->> include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-           msi_alloc_info_t        msiinfo;
-                                   ^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
-   In file included from drivers/char/tpm/st33zp24/st33zp24.c:21:
-   In file included from drivers/char/tpm/st33zp24/../tpm.h:28:
-   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-           int mapping_size;
-               ^
-   1 warning and 1 error generated.
---
-   In file included from drivers/gpio/gpio-mxc.c:22:
->> include/linux/gpio/driver.h:31:19: error: field has incomplete type 'msi_alloc_info_t' (aka 'struct irq_alloc_info')
-           msi_alloc_info_t        msiinfo;
-                                   ^
-   arch/x86/include/asm/msi.h:7:16: note: forward declaration of 'struct irq_alloc_info'
-   typedef struct irq_alloc_info msi_alloc_info_t;
-                  ^
-   drivers/gpio/gpio-mxc.c:341:50: warning: shift count >= width of type [-Wshift-count-overflow]
-           rv = devm_irq_setup_generic_chip(port->dev, gc, IRQ_MSK(32),
-                                                           ^~~~~~~~~~~
-   include/linux/irq.h:1193:41: note: expanded from macro 'IRQ_MSK'
-   #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
-                                           ^  ~~~
-   1 warning and 1 error generated.
-
-
-vim +31 include/linux/gpio/driver.h
-
-fdd61a013a24f2 Linus Walleij 2019-08-08  27  
-91a29af413def6 Marc Zyngier  2022-07-07  28  union gpio_irq_fwspec {
-91a29af413def6 Marc Zyngier  2022-07-07  29  	struct irq_fwspec	fwspec;
-91a29af413def6 Marc Zyngier  2022-07-07  30  #ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-91a29af413def6 Marc Zyngier  2022-07-07 @31  	msi_alloc_info_t	msiinfo;
-91a29af413def6 Marc Zyngier  2022-07-07  32  #endif
-91a29af413def6 Marc Zyngier  2022-07-07  33  };
-91a29af413def6 Marc Zyngier  2022-07-07  34  
-
-:::::: The code at line 31 was first introduced by commit
-:::::: 91a29af413def677495e447fb9a06957ebc8bed5 gpio: Remove dynamic allocation from populate_parent_alloc_arg()
-
-:::::: TO: Marc Zyngier <maz@kernel.org>
-:::::: CC: Marc Zyngier <maz@kernel.org>
-
+diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
+index 9cf186362..dee7bb5ea 100644
+--- a/drivers/hwspinlock/qcom_hwspinlock.c
++++ b/drivers/hwspinlock/qcom_hwspinlock.c
+@@ -197,6 +197,8 @@ static int qcom_hwspinlock_probe(struct platform_device *pdev)
+ 
+ 		bank->lock[i].priv = devm_regmap_field_alloc(&pdev->dev,
+ 							     regmap, field);
++		if (IS_ERR(bank->lock[i].priv))
++			return PTR_ERR(bank->lock[i].priv);
+ 	}
+ 
+ 	return devm_hwspin_lock_register(&pdev->dev, bank, &qcom_hwspinlock_ops,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
