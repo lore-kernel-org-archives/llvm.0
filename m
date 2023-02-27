@@ -1,230 +1,161 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B042FB2;
-	Mon, 27 Feb 2023 12:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AD129A9
+	for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 12:32:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677500326; x=1709036326;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677501135; x=1709037135;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KuX2ifj23XIiHvM0u+wPf0HERefBeu0ux+Zf9Ufg1CE=;
-  b=YQ1/jYSxs4q2oD3gRNXVVMBsx+IiI/2BxxyYKiTbp/9nblN41+lufbAo
-   NAGikj9EUGUVlMidQENgLXScPcJpT/dXl0M+FwZRdbT0aKSCyTvNi+61U
-   8EmyR5qrepAvsSXeZCHcX3ABsX0SahIoddC5KiuU1AI1wup2nZQuo87Er
-   ZXC5MS9iqc9AiOINxuZ6I3wv4H+gTPtAxHKqeHheK125iPRZfqttS4jZY
-   Lwmskh+JpwtgiZyt0HupBEQFbErGa4wtBXyOMcqdUwSit0xgHH1cbZwiY
-   zqZ5g4pq6u9ddqKu2jF2M9dsfpmpOm3mbaVCrXBJNTvsS2USc6wnHgG6L
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="331319322"
-X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="331319322"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 04:18:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10633"; a="623560454"
-X-IronPort-AV: E=Sophos;i="5.97,331,1669104000"; 
-   d="scan'208";a="623560454"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Feb 2023 04:18:41 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pWcSm-0004OY-1T;
-	Mon, 27 Feb 2023 12:18:40 +0000
-Date: Mon, 27 Feb 2023 20:18:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yuanzhi Wang <wangyuanzhi@uniontech.com>, alexander.deucher@amd.com,
-	christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-	daniel@ffwll.ch, mario.limonciello@amd.com, Bokun.Zhang@amd.com,
-	tzimmermann@suse.de, hdegoede@redhat.com, jingyuwang_vip@163.com,
-	rafael.j.wysocki@intel.com, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Yuanzhi Wang <wangyuanzhi@uniontech.com>
-Subject: Re: [PATCH] amdgpu: add a filter condition when set brightness
-Message-ID: <202302272051.KDJqRyl5-lkp@intel.com>
-References: <20230227073953.326-1-wangyuanzhi@uniontech.com>
+  bh=RO6aTFXermoMWjG0Tt8TtnTKM9NV8n7SoUu00FD0WU8=;
+  b=lxT02uTra9Xr9qTXW7nhMYavkTOsyizygVb3cYhY7RQ04l5Ar2m4u0Q7
+   rp9chwGAVXeC6ZglNIQraQ94+6wtYSI3zqwHFbdbhCvmypFPlPxMCTcKm
+   gUWvHg4YmFe9PFcjEp7E/oea8hqPquuwKUIpc4fD9UU96zJ49lqtfszSp
+   M0wpLkGO31/Mmz6c70NqSl4+yNdM1ga4PT7ER6CesKPzfyXHjgM2uNAgN
+   ppak1HOsBt+vZ7UpO7rYTbgLaHQWOBfaa/EATxviJCTF/A2tEHf4mROxl
+   469nSyid6I4RMY1y7bwcWLXZqoUUz9jbvNv+5qz4aPezPUe/tRDXa3xgz
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,332,1669100400"; 
+   d="asc'?scan'208";a="202701616"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Feb 2023 05:31:46 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 27 Feb 2023 05:31:45 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Mon, 27 Feb 2023 05:31:43 -0700
+Date: Mon, 27 Feb 2023 12:31:16 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+CC: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+	<aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Ard Biesheuvel
+	<ardb@kernel.org>, =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, =?iso-8859-1?Q?Bj=F6rn_T=F6pel?=
+	<bjorn@rivosinc.com>, <nathan@kernel.org>, <llvm@lists.linux.dev>,
+	<ndesaulniers@google.com>
+Subject: Re: [PATCH v7 1/1] riscv: Allow to downgrade paging mode from the
+ command line
+Message-ID: <Y/yilORflGv3vXjX@wendy>
+References: <20230224100218.1824569-1-alexghiti@rivosinc.com>
+ <20230224100218.1824569-2-alexghiti@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="8ORzwRGnfaATysc6"
 Content-Disposition: inline
-In-Reply-To: <20230227073953.326-1-wangyuanzhi@uniontech.com>
+In-Reply-To: <20230224100218.1824569-2-alexghiti@rivosinc.com>
 
-Hi Yuanzhi,
+--8ORzwRGnfaATysc6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch! Yet something to improve:
+Hey Alex, clang/llvm folk,
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.2 next-20230227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Fri, Feb 24, 2023 at 11:02:18AM +0100, Alexandre Ghiti wrote:
+> Add 2 early command line parameters that allow to downgrade satp mode
+> (using the same naming as x86):
+> - "no5lvl": use a 4-level page table (down from sv57 to sv48)
+> - "no4lvl": use a 3-level page table (down from sv57/sv48 to sv39)
+>=20
+> Note that going through the device tree to get the kernel command line
+> works with ACPI too since the efi stub creates a device tree anyway with
+> the command line.
+>=20
+> In KASAN kernels, we can't use the libfdt that early in the boot process
+> since we are not ready to execute instrumented functions. So instead of
+> using the "generic" libfdt, we compile our own versions of those functions
+> that are not instrumented and that are prefixed so that they do not
+> conflict with the generic ones. We also need the non-instrumented versions
+> of the string functions and the prefixed versions of memcpy/memmove.
+>=20
+> This is largely inspired by commit aacd149b6238 ("arm64: head: avoid
+> relocating the kernel twice for KASLR") from which I removed compilation
+> flags that were not relevant to RISC-V at the moment (LTO, SCS, pie).
+>=20
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Tested-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+> Reviewed-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  5 +-
+>  arch/riscv/kernel/Makefile                    |  2 +
+>  arch/riscv/kernel/pi/Makefile                 | 37 +++++++++++
+>  arch/riscv/kernel/pi/cmdline_early.c          | 62 +++++++++++++++++++
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230227073953.326-1-wangyuanzhi%40uniontech.com
-patch subject: [PATCH] amdgpu: add a filter condition when set brightness
-config: arm64-randconfig-r012-20230226 (https://download.01.org/0day-ci/archive/20230227/202302272051.KDJqRyl5-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/95d9579e31d0b601aa1422cf767ca5138d3efcee
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yuanzhi-Wang/amdgpu-add-a-filter-condition-when-set-brightness/20230227-154108
-        git checkout 95d9579e31d0b601aa1422cf767ca5138d3efcee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
++      4 ld.lld: warning: vmlinux.a(arch/riscv/kernel/pi/string.pi.o):(.ini=
+t.sdata) is being placed in '.init.sdata'
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302272051.KDJqRyl5-lkp@intel.com/
+I'm getting 4 new linker warnings with LLVM=3D1 clang-15 allmodconfig
+builds - but I don't really understand this issue.
+Is this spurious, and a just consequence of...
 
-All error/warnings (new ones prefixed by >>):
+> diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
+> new file mode 100644
+> index 000000000000..4002ed94b6d3
+> --- /dev/null
+> +++ b/arch/riscv/kernel/pi/Makefile
+> @@ -0,0 +1,37 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# This file was copied from arm64/kernel/pi/Makefile.
+> +
+> +KBUILD_CFLAGS	:=3D $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> +		   -Os -DDISABLE_BRANCH_PROFILING $(DISABLE_STACKLEAK_PLUGIN) \
+> +		   $(call cc-option,-mbranch-protection=3Dnone) \
+> +		   -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
+> +		   -D__DISABLE_EXPORTS -ffreestanding \
+> +		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+> +		   $(call cc-option,-fno-addrsig)
+> +
+> +CFLAGS_cmdline_early.o +=3D -D__NO_FORTIFY
+> +CFLAGS_lib-fdt_ro.o +=3D -D__NO_FORTIFY
+> +
+> +GCOV_PROFILE	:=3D n
+> +KASAN_SANITIZE	:=3D n
+> +KCSAN_SANITIZE	:=3D n
+> +UBSAN_SANITIZE	:=3D n
+> +KCOV_INSTRUMENT	:=3D n
+> +
+> +$(obj)/%.pi.o: OBJCOPYFLAGS :=3D --prefix-symbols=3D__pi_ \
+> +			       --remove-section=3D.note.gnu.property \
+> +			       --prefix-alloc-sections=3D.init
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:15: warning: missing terminating '"' character [-Winvalid-pp-token]
-                                           DRM_WARN("old brightness %d is greater than ACPI brightness
-                                                    ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:450:11: warning: missing terminating '"' character [-Winvalid-pp-token]
-                                                   %d\n", old_brightness, req.backlight_level);
-                                                       ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:449:6: error: unterminated function-like macro invocation
-                                           DRM_WARN("old brightness %d is greater than ACPI brightness
-                                           ^
-   include/drm/drm_print.h:543:9: note: macro 'DRM_WARN' defined here
-   #define DRM_WARN(fmt, ...)                                              \
-           ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected expression
-   #endif /* CONFIG_SUSPEND */
-                              ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:448:5: note: previous statement is here
-                                   if (old_brightness > req.backlight_level)
-                                   ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
-   #endif /* CONFIG_SUSPEND */
-                              ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:439:18: note: to match this '{'
-                           if (atif->bd) {
-                                         ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
-   #endif /* CONFIG_SUSPEND */
-                              ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:438:59: note: to match this '{'
-                   if (req.pending & ATIF_PANEL_BRIGHTNESS_CHANGE_REQUEST) {
-                                                                           ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
-   #endif /* CONFIG_SUSPEND */
-                              ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:427:38: note: to match this '{'
-           if (atif->functions.sbios_requests) {
-                                               ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:1105:28: error: expected '}'
-   #endif /* CONFIG_SUSPEND */
-                              ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:406:1: note: to match this '{'
-   {
-   ^
-   3 warnings and 6 errors generated.
+=2E..this?
 
+> +$(obj)/%.pi.o: $(obj)/%.o FORCE
+> +	$(call if_changed,objcopy)
+> +
+> +$(obj)/lib-%.o: $(srctree)/lib/%.c FORCE
+> +	$(call if_changed_rule,cc_o_c)
+> +
+> +$(obj)/string.o: $(srctree)/lib/string.c FORCE
+> +	$(call if_changed_rule,cc_o_c)
+> +
+> +$(obj)/ctype.o: $(srctree)/lib/ctype.c FORCE
+> +	$(call if_changed_rule,cc_o_c)
+> +
+> +obj-y		:=3D cmdline_early.pi.o string.pi.o ctype.pi.o lib-fdt.pi.o lib-f=
+dt_ro.pi.o
+> +extra-y		:=3D $(patsubst %.pi.o,%.o,$(obj-y))
 
-vim +449 drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+--8ORzwRGnfaATysc6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-   391	
-   392	/**
-   393	 * amdgpu_atif_handler - handle ATIF notify requests
-   394	 *
-   395	 * @adev: amdgpu_device pointer
-   396	 * @event: atif sbios request struct
-   397	 *
-   398	 * Checks the acpi event and if it matches an atif event,
-   399	 * handles it.
-   400	 *
-   401	 * Returns:
-   402	 * NOTIFY_BAD or NOTIFY_DONE, depending on the event.
-   403	 */
-   404	static int amdgpu_atif_handler(struct amdgpu_device *adev,
-   405				       struct acpi_bus_event *event)
-   406	{
-   407		struct amdgpu_atif *atif = &amdgpu_acpi_priv.atif;
-   408		int count;
-   409		int old_brightness;
-   410	
-   411		DRM_DEBUG_DRIVER("event, device_class = %s, type = %#x\n",
-   412				event->device_class, event->type);
-   413	
-   414		if (strcmp(event->device_class, ACPI_VIDEO_CLASS) != 0)
-   415			return NOTIFY_DONE;
-   416	
-   417		/* Is this actually our event? */
-   418		if (!atif->notification_cfg.enabled ||
-   419		    event->type != atif->notification_cfg.command_code) {
-   420			/* These events will generate keypresses otherwise */
-   421			if (event->type == ACPI_VIDEO_NOTIFY_PROBE)
-   422				return NOTIFY_BAD;
-   423			else
-   424				return NOTIFY_DONE;
-   425		}
-   426	
-   427		if (atif->functions.sbios_requests) {
-   428			struct atif_sbios_requests req;
-   429	
-   430			/* Check pending SBIOS requests */
-   431			count = amdgpu_atif_get_sbios_requests(atif, &req);
-   432	
-   433			if (count <= 0)
-   434				return NOTIFY_BAD;
-   435	
-   436			DRM_DEBUG_DRIVER("ATIF: %d pending SBIOS requests\n", count);
-   437	
-   438			if (req.pending & ATIF_PANEL_BRIGHTNESS_CHANGE_REQUEST) {
-   439				if (atif->bd) {
-   440					DRM_DEBUG_DRIVER("Changing brightness to %d\n",
-   441							 req.backlight_level);
-   442					/*
-   443					 * XXX backlight_device_set_brightness() is
-   444					 * hardwired to post BACKLIGHT_UPDATE_SYSFS.
-   445					 * It probably should accept 'reason' parameter.
-   446					 */
-   447					old_brightness = backlight_get_brightness(atif->bd);
-   448					if (old_brightness > req.backlight_level)
- > 449						DRM_WARN("old brightness %d is greater than ACPI brightness
-   450							%d\n", old_brightness, req.backlight_level);
-   451					else
-   452						backlight_device_set_brightness(atif->bd,
-   453							req.backlight_level);
-   454				}
-   455			}
-   456	
-   457			if (req.pending & ATIF_DGPU_DISPLAY_EVENT) {
-   458				if (adev->flags & AMD_IS_PX) {
-   459					pm_runtime_get_sync(adev_to_drm(adev)->dev);
-   460					/* Just fire off a uevent and let userspace tell us what to do */
-   461					drm_helper_hpd_irq_event(adev_to_drm(adev));
-   462					pm_runtime_mark_last_busy(adev_to_drm(adev)->dev);
-   463					pm_runtime_put_autosuspend(adev_to_drm(adev)->dev);
-   464				}
-   465			}
-   466			/* TODO: check other events */
-   467		}
-   468	
-   469		/* We've handled the event, stop the notifier chain. The ACPI interface
-   470		 * overloads ACPI_VIDEO_NOTIFY_PROBE, we don't want to send that to
-   471		 * userspace if the event was generated only to signal a SBIOS
-   472		 * request.
-   473		 */
-   474		return NOTIFY_BAD;
-   475	}
-   476	
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/yilAAKCRB4tDGHoIJi
+0vndAQC4f+NCDSCyNXYj0njkGSVRxmlHAyLfwBzffl3veDQDTwD+Ll58OPQxpsri
+ApRUvSTvYGRl+S21vQH6TERahcXL2gI=
+=2KwQ
+-----END PGP SIGNATURE-----
+
+--8ORzwRGnfaATysc6--
