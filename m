@@ -1,123 +1,99 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2816C79E0
-	for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 18:19:55 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso204135pjr.5
-        for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 10:19:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qfnQo7L3hy6IE8pwdX9cAeSy43FJsV0FyB8x83SeQeM=;
-        b=rWPmP+vycZsUPGG7S35v7wB6cnRGrJy6xMe+/4D/SZEInlX72UXXfiai/N9K68G8yL
-         k2OUQjMGwAm0d6NrWdzUiGagK7tiqgeURmslTr7oFtxcqcs26pm5KFC0+/UNKdapjhOl
-         EPXvLc/JIvQJn0gvolK/KfbCBZsL6um/osDUiEzF7hV8lx80qTu6RNRnYlEAgGw2ks+4
-         p2raBH/CJha+U86cbwYAsVTrnqYq4hjSSiN11aycFLxDQryNokV7UCJ2+KDN9q5xHfTe
-         z0INCL4Ejx9YtFZwvZ8Pt9dwUACgMwEFZ8TmD95OO14MMA+55B/UB0rt7c0y8lWnwr/j
-         ipwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qfnQo7L3hy6IE8pwdX9cAeSy43FJsV0FyB8x83SeQeM=;
-        b=PdiacRUVoZ68JkK91WI8pPHcinwEHqM3yAm2+s7hRlP4Y1/g42zsMsI0q+mR6IbHs9
-         mGjxrEyimnaldcQi9amt4N/7GgEwz2qlOZmm+ikmVWJ1qKDuw6lSzsscNkFVCybiMo8r
-         zJl19lmXuknjTdOJGaX8i0lMbvb0ZX1BNzZHUF2pcYwF+itWsCm/S6BmCj1oYZYngqjw
-         8KNNgL9NfJgpTWb5sqT8SwTm+VDmg47W9GXX21FS3FX5+HT/aZmfxf4IlFpUWJxNriS+
-         mmmGryy47kKxh8EfohSkA5XORQ1LW9NioeYSL+mz42gRra/TGdj+6M3yu4fdOJJGE4aM
-         l6jg==
-X-Gm-Message-State: AO0yUKWpchyqge9lmQ1AnXBIuLPRfcgWArxwUsB+F0okNyQbB/mqigGf
-	uQxaFaZw4JiVa+d0rf50nnacG+AkefMet9D2lGUuoQ==
-X-Google-Smtp-Source: AK7set8fQkpeHF69hbC6AWofF1bMS6rWkmNS7WS1kGnH5uc5CNkUGJp0NZExeAiT3XS7mf85rfGg5OEqh2glTL/Wx7A=
-X-Received: by 2002:a17:902:ab0b:b0:19b:5233:51c6 with SMTP id
- ik11-20020a170902ab0b00b0019b523351c6mr6436096plb.0.1677521994138; Mon, 27
- Feb 2023 10:19:54 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D4279EF
+	for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 19:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677526210;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oVTj0zQIrq6koDoUK132/YU/eErtQ2YPrr83ENbYJGo=;
+	b=YgpJ5+7AEyxxv2ZDaonrVc3u969zoGQ5JWIxbHgvJHSpS8d4lsDak5DlfeJn4kMLjEKdzX
+	BM+bfsQe8kyIcUG8vNDrVDgfkZ6kQn2LKZ9Oc4nNbfNDnnumtEtsmO5jxgANpKlKAh5Dzf
+	F9J9lbOBN3mBmqyVFtgCPmiqaf5QcSY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-u_yGGOBnOC2bxQAeDDBDLA-1; Mon, 27 Feb 2023 14:30:05 -0500
+X-MC-Unique: u_yGGOBnOC2bxQAeDDBDLA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F112085A588
+	for <llvm@lists.linux.dev>; Mon, 27 Feb 2023 19:30:04 +0000 (UTC)
+Received: from [172.64.13.54] (unknown [10.30.33.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DDCF2140EBF4;
+	Mon, 27 Feb 2023 19:30:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (0/5 SKIPPED): Test report for master (6.2.0,
+ mainline.kernel.org-clang, 98281842)
+Date: Mon, 27 Feb 2023 19:30:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230225214500.7446-1-jiaxun.yang@flygoat.com>
-In-Reply-To: <20230225214500.7446-1-jiaxun.yang@flygoat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 27 Feb 2023 10:19:42 -0800
-Message-ID: <CAKwvOdk=AF2nGozsiG2T1FHsJXhLGcpk1kysQ4eko1OOBvnafw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Workaround clang inline compat branch issue
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org, tsbogend@alpha.franken.de, nathan@kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <54441.123022714300500673@us-mta-32.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 25, 2023 at 1:45=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.co=
-m> wrote:
->
-> Clang is unable to handle the situation that a chunk of inline
-> assembly ends with a compat branch instruction and then compiler
-> generates another control transfer instruction immediately after
-> this compat branch. The later instruction will end up in forbidden
-> slot and cause exception.
->
-> Workaround by add a option to control the use of compact branch.
-> Currently it's selected by CC_IS_CLANG and hopefully we can change
-> it to a version check in future if clang manages to fix it.
->
-> Fix boot on boston board.
+Hi, we tested your kernel and here are the results:
 
-Hi Jiaxun,
-Thanks for the patch. Have you filed (or found) a bug in LLVM's issue
-tracker with more information?
-
-https://github.com/llvm/llvm-project/issues
-
-Please do so, then send a v2 (or reply with) a Link: tag to the
-corresponding llvm issue report.
-
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  arch/mips/Kconfig           | 3 +++
->  arch/mips/include/asm/asm.h | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 37072e15b263..adf2c5a0bdba 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -3206,6 +3206,9 @@ config CC_HAS_MNO_BRANCH_LIKELY
->         def_bool y
->         depends on $(cc-option,-mno-branch-likely)
->
-> +config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
-> +       def_bool y if CC_IS_CLANG
-> +
->  menu "Power management options"
->
->  config ARCH_HIBERNATION_POSSIBLE
-> diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
-> index 336ac9b65235..2e99450f4228 100644
-> --- a/arch/mips/include/asm/asm.h
-> +++ b/arch/mips/include/asm/asm.h
-> @@ -336,7 +336,7 @@ symbol              =3D       value
->   */
->  #ifdef CONFIG_WAR_R10000_LLSC
->  # define SC_BEQZ       beqzl
-> -#elif MIPS_ISA_REV >=3D 6
-> +#elif !defined(CONFIG_CC_HAS_BROKEN_INLINE_COMPAT_BRANCH) && MIPS_ISA_RE=
-V >=3D 6
->  # define SC_BEQZ       beqzc
->  #else
->  # define SC_BEQZ       beqz
-> --
-> 2.37.1 (Apple Git-137.1)
->
->
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: FAILED
 
 
---=20
-Thanks,
-~Nick Desaulniers
+Kernel information:
+    Commit message: Merge tag 'arm-fixes-6.3-1' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/soc/soc
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/74644
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/31724=
+3
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/31724=
+4
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/31724=
+5
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/317247
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/31724=
+6
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7274670
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
