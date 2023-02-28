@@ -1,133 +1,98 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334C1623;
-	Tue, 28 Feb 2023 03:37:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677555438; x=1709091438;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=al/INyoNJ0XDfdnz7VHXZf5kkuMVxaCGXwtFpDxHwQY=;
-  b=VPnaE/GQ3b0TA9m6iWN0AMCvugISMYOEeTAioLF9C70G7lSgG1ynD2f+
-   uS+kFZzQzi8P6AxL9xdaMEAz4D031V2GdnwwSVBkix300XK/7eELyhN27
-   UOkIdZL/IAxABb/q279kQIRjfKl6Ij+KG6C9DD9FkqBDrZZI5twn99dQs
-   2tQ92x6t9ilDaM/6yLB6u99V2euRzMGUB71YzKN7NimwX5h3evOWhhVoh
-   nKNXsh8aOdv3hIsrwXOdYufVQ/M4PqJk+GWrCg44Kc6soEocvlhY7aA56
-   m3ZPPrSsVQAGR7VcogIZL1OLl+UAtJWL5JC2PmVrKH0gjueY/qSeP7gxR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="420298166"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="420298166"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 19:37:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="667293697"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="667293697"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 27 Feb 2023 19:37:15 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pWqni-00052r-15;
-	Tue, 28 Feb 2023 03:37:14 +0000
-Date: Tue, 28 Feb 2023 11:36:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aditya Srivastava <yashsri421@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org
-Subject: drivers/iommu/fsl_pamu.c:586: warning: This comment starts with
- '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202302281151.B1WtZvSC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8BB7E1
+	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 04:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677558008;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=y0g4kK64lReTB7X0ZdNmrYDrFwSS4m/NufqIhsgGKXQ=;
+	b=LCkqQY9RZMvbqbnaHH1dePOEmk0xJi5upl0HZeDK46ObKRl1+G9ejAtqr1H/QXGkLDdYYF
+	PQ7WwzyYjX3IJjEdHqdyq2oWvwRuT/mmR+3E/oSW+VMuXqOCIapMn+nQrgBQy44on8dEG7
+	eQOuy4nMkam9yGV41H183pSMdWSGQLE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-516-KQw4tI6IMbeCrNfN7nrS2A-1; Mon, 27 Feb 2023 23:20:04 -0500
+X-MC-Unique: KQw4tI6IMbeCrNfN7nrS2A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E9B03806710
+	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 04:20:04 +0000 (UTC)
+Received: from [172.64.13.54] (unknown [10.30.33.64])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 2E5A4140EBF4;
+	Tue, 28 Feb 2023 04:20:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (0/5 SKIPPED): Test report for master (6.2.0,
+ mainline.kernel.org-clang, ae3419fb)
+Date: Tue, 28 Feb 2023 04:20:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <67587.123022723200401356@us-mta-516.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Aditya,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ae3419fbac845b4d3f3a9fae4cc80c68d82cdf6e
-commit: 3e58e839150db0857dfcb3a0bb3d4af4c6ac1abf scripts: kernel-doc: add warning for comment not following kernel-doc syntax
-date:   1 year, 11 months ago
-config: powerpc-randconfig-r002-20230227 (https://download.01.org/0day-ci/archive/20230228/202302281151.B1WtZvSC-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db89896bbbd2251fff457699635acbbedeead27f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3e58e839150db0857dfcb3a0bb3d4af4c6ac1abf
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3e58e839150db0857dfcb3a0bb3d4af4c6ac1abf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/iommu/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302281151.B1WtZvSC-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/iommu/fsl_pamu.c:325: warning: Function parameter or member 'win_size' not described in 'pamu_config_ppaace'
-   drivers/iommu/fsl_pamu.c:325: warning: expecting prototype for pamu_config_paace(). Prototype was for pamu_config_ppaace() instead
-   drivers/iommu/fsl_pamu.c:493: warning: Function parameter or member 'omi_index' not described in 'get_ome_index'
-   drivers/iommu/fsl_pamu.c:493: warning: Function parameter or member 'dev' not described in 'get_ome_index'
->> drivers/iommu/fsl_pamu.c:586: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Setup operation mapping and stash destinations for QMAN and QMAN portal.
-   drivers/iommu/fsl_pamu.c:615: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Setup the operation mapping table for various devices. This is a static
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: FAILED
 
 
-vim +586 drivers/iommu/fsl_pamu.c
+Kernel information:
+    Commit message: vc_screen: don't clobber return value in vcs_read
 
-695093e38c3ef6 Varun Sethi 2013-07-15  584  
-695093e38c3ef6 Varun Sethi 2013-07-15  585  /**
-695093e38c3ef6 Varun Sethi 2013-07-15 @586   * Setup operation mapping and stash destinations for QMAN and QMAN portal.
-695093e38c3ef6 Varun Sethi 2013-07-15  587   * Memory accesses to QMAN and BMAN private memory need not be coherent, so
-695093e38c3ef6 Varun Sethi 2013-07-15  588   * clear the PAACE entry coherency attribute for them.
-695093e38c3ef6 Varun Sethi 2013-07-15  589   */
-57fb907da89977 Emil Medve  2015-03-25  590  static void setup_qbman_paace(struct paace *ppaace, int  paace_type)
-695093e38c3ef6 Varun Sethi 2013-07-15  591  {
-695093e38c3ef6 Varun Sethi 2013-07-15  592  	switch (paace_type) {
-695093e38c3ef6 Varun Sethi 2013-07-15  593  	case QMAN_PAACE:
-695093e38c3ef6 Varun Sethi 2013-07-15  594  		set_bf(ppaace->impl_attr, PAACE_IA_OTM, PAACE_OTM_INDEXED);
-695093e38c3ef6 Varun Sethi 2013-07-15  595  		ppaace->op_encode.index_ot.omi = OMI_QMAN_PRIV;
-695093e38c3ef6 Varun Sethi 2013-07-15  596  		/* setup QMAN Private data stashing for the L3 cache */
-695093e38c3ef6 Varun Sethi 2013-07-15  597  		set_bf(ppaace->impl_attr, PAACE_IA_CID, get_stash_id(PAMU_ATTR_CACHE_L3, 0));
-695093e38c3ef6 Varun Sethi 2013-07-15  598  		set_bf(ppaace->domain_attr.to_host.coherency_required, PAACE_DA_HOST_CR,
-695093e38c3ef6 Varun Sethi 2013-07-15  599  		       0);
-695093e38c3ef6 Varun Sethi 2013-07-15  600  		break;
-695093e38c3ef6 Varun Sethi 2013-07-15  601  	case QMAN_PORTAL_PAACE:
-695093e38c3ef6 Varun Sethi 2013-07-15  602  		set_bf(ppaace->impl_attr, PAACE_IA_OTM, PAACE_OTM_INDEXED);
-695093e38c3ef6 Varun Sethi 2013-07-15  603  		ppaace->op_encode.index_ot.omi = OMI_QMAN;
-695093e38c3ef6 Varun Sethi 2013-07-15  604  		/* Set DQRR and Frame stashing for the L3 cache */
-695093e38c3ef6 Varun Sethi 2013-07-15  605  		set_bf(ppaace->impl_attr, PAACE_IA_CID, get_stash_id(PAMU_ATTR_CACHE_L3, 0));
-695093e38c3ef6 Varun Sethi 2013-07-15  606  		break;
-695093e38c3ef6 Varun Sethi 2013-07-15  607  	case BMAN_PAACE:
-695093e38c3ef6 Varun Sethi 2013-07-15  608  		set_bf(ppaace->domain_attr.to_host.coherency_required, PAACE_DA_HOST_CR,
-695093e38c3ef6 Varun Sethi 2013-07-15  609  		       0);
-695093e38c3ef6 Varun Sethi 2013-07-15  610  		break;
-695093e38c3ef6 Varun Sethi 2013-07-15  611  	}
-695093e38c3ef6 Varun Sethi 2013-07-15  612  }
-695093e38c3ef6 Varun Sethi 2013-07-15  613  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/74751
 
-:::::: The code at line 586 was first introduced by commit
-:::::: 695093e38c3ef63fcb43a2840ed865efa20671d5 iommu/fsl: Freescale PAMU driver and iommu implementation.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/31741=
+8
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/31741=
+9
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/31742=
+0
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/317422
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/31742=
+1
 
-:::::: TO: Varun Sethi <Varun.Sethi@freescale.com>
-:::::: CC: Joerg Roedel <joro@8bytes.org>
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - kselftest build - bpf
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7277180
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
