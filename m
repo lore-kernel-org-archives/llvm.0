@@ -1,135 +1,109 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964C82CA2;
-	Tue, 28 Feb 2023 11:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677585397; x=1709121397;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8KXKh05zvvXmBiBlla6UAU9gMBZihB631H77fNyc5ms=;
-  b=alS9UAR+1HvtxV4anJMvNItKuxGuWtrkz2Hwu+6yQXC2FNS8JUHUt1Wp
-   KFHIhjibhUngL9nwlSzIM+K84TrfXS4EjharR4bHYSLz2IMeb0nvZEUyU
-   pq18Ryuesxh50bwQlr2Paw4l+2pFQkEcOr18QjS2lYl01ZRcTlnIWxuNj
-   MkUhQzrDdlJveV7LtnN/EgNflHTBgZWiJOb/ftnuqB4jcWS15kWP7itHc
-   +zYWt8mgyhh+pNZun0DRosgiWja/KWs8SHcp8vTkpDuvy2CGvkYapzz10
-   5+sqfXduO4b3fOMo0cv3+ljCtddcFmMkv8TDQ3qZ8lIztv9ElNEe8dg1q
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="314540207"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="314540207"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 03:56:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="676272332"
-X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
-   d="scan'208";a="676272332"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Feb 2023 03:56:31 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pWyat-0005N9-0F;
-	Tue, 28 Feb 2023 11:56:31 +0000
-Date: Tue, 28 Feb 2023 19:55:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yosry Ahmed <yosryahmed@google.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Christoph Lameter <cl@linux-foundation.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Miaohe Lin <linmiaohe@huawei.com>,
-	David Hildenbrand <david@redhat.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Peter Xu <peterx@redhat.com>,
-	NeilBrown <neilb@suse.de>, Shakeel Butt <shakeelb@google.com>,
-	Michal Hocko <mhocko@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-	Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH v1 2/2] mm: vmscan: ignore non-LRU-based reclaim in memcg
- reclaim
-Message-ID: <202302281933.vU1PHuZr-lkp@intel.com>
-References: <20230228085002.2592473-3-yosryahmed@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB1A3D74
+	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 14:19:47 +0000 (UTC)
+Received: by mail-io1-f71.google.com with SMTP id v4-20020a6b5b04000000b0074cb180c5e2so6282062ioh.6
+        for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 06:19:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J6I9nx2s7RTfWTlnagZt92XwoQkoLlEorV5GfVg0HLE=;
+        b=qlrDvwFme4XVF8Onxr/Fo2BLEdc/HSt/laVUMtKo7dVzH5Q+aeV+HijCDYcK3CcgBZ
+         hTMXftLygQ5+ArtAx8qY5tRBaWvTpMAgKxMnlQ0oT8W67eAb26fyEvKGRBzIMnniIliR
+         mthh/GNiaIIYiyBxUoNKAucYDJ2KPi2uHPoFlY20r5jqqPySu0isgeUx7pRupEy8McDk
+         3Dqq+v0ZWbv6/+/ENSb0o6KdB1LWZblqik08LEH5FSI6iatlar+Q5WtFk/YR2SixbHhK
+         uFvx+FhQPcvkxOCsw84BzZgbp1ZZFgAXtIaFC9g+9kp1UhTkn49lw99FXGgX50yBVRSA
+         ltYQ==
+X-Gm-Message-State: AO0yUKXd4CFJJ8r9SJTVvwl/5T1aCrrSMiV1pmg2aAf75gl+iLbTWrig
+	t7jZMsVjygw8xBz2Waipl7lkzGO7uhOZRt0KdQ6qz9N9KZO0
+X-Google-Smtp-Source: AK7set80BgvGPfY0VZVc50EMjNfjx1r+lpseH5pu22IzNmUTBUhber0fCBuJJHCdpw2t1xFRIPl0wI8XeLnKny7oPSOmITR6cbg3
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228085002.2592473-3-yosryahmed@google.com>
+X-Received: by 2002:a02:6244:0:b0:3ad:65e:e489 with SMTP id
+ d65-20020a026244000000b003ad065ee489mr1374385jac.1.1677593986353; Tue, 28 Feb
+ 2023 06:19:46 -0800 (PST)
+Date: Tue, 28 Feb 2023 06:19:46 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a24e7405f5c34912@google.com>
+Subject: [syzbot] [ntfs3?] UBSAN: shift-out-of-bounds in ntfs_fill_super (2)
+From: syzbot <syzbot+478c1bf0e6bf4a8f3a04@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Yosry,
+Hello,
 
-Thank you for the patch! Yet something to improve:
+syzbot found the following issue on:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master next-20230228]
-[cannot apply to vbabka-slab/for-next xfs-linux/for-next v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    2ebd1fbb946d Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17f0d518c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
+dashboard link: https://syzkaller.appspot.com/bug?extid=478c1bf0e6bf4a8f3a04
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165b7474c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c9de8cc80000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/mm-vmscan-refactor-updating-reclaimed-pages-in-reclaim_state/20230228-165214
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230228085002.2592473-3-yosryahmed%40google.com
-patch subject: [PATCH v1 2/2] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-config: i386-randconfig-a002-20230227 (https://download.01.org/0day-ci/archive/20230228/202302281933.vU1PHuZr-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f6d2b849f186a927925a29e289d60895048550f5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yosry-Ahmed/mm-vmscan-refactor-updating-reclaimed-pages-in-reclaim_state/20230228-165214
-        git checkout f6d2b849f186a927925a29e289d60895048550f5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/16985cc7a274/disk-2ebd1fbb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fd3452567115/vmlinux-2ebd1fbb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c75510922212/Image-2ebd1fbb.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/deffedf88bc5/mount_0.gz
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302281933.vU1PHuZr-lkp@intel.com/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+478c1bf0e6bf4a8f3a04@syzkaller.appspotmail.com
 
-All errors (new ones prefixed by >>):
+loop0: detected capacity change from 0 to 4096
+================================================================================
+UBSAN: shift-out-of-bounds in fs/ntfs3/super.c:777:25
+shift exponent 128 is too large for 32-bit type 'unsigned int'
+CPU: 0 PID: 5928 Comm: syz-executor258 Not tainted 6.2.0-syzkaller-18300-g2ebd1fbb946d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Call trace:
+ dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ dump_stack+0x1c/0x28 lib/dump_stack.c:113
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x2f4/0x36c lib/ubsan.c:321
+ ntfs_init_from_boot fs/ntfs3/super.c:777 [inline]
+ ntfs_fill_super+0x2544/0x3b9c fs/ntfs3/super.c:970
+ get_tree_bdev+0x360/0x54c fs/super.c:1282
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1408
+ vfs_get_tree+0x90/0x274 fs/super.c:1489
+ do_new_mount+0x25c/0x8c8 fs/namespace.c:3145
+ path_mount+0x590/0xe58 fs/namespace.c:3475
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount fs/namespace.c:3674 [inline]
+ __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3674
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+================================================================================
 
->> mm/vmscan.c:549:13: error: redefinition of 'cgroup_reclaim'
-   static bool cgroup_reclaim(struct scan_control *sc)
-               ^
-   mm/vmscan.c:191:13: note: previous definition is here
-   static bool cgroup_reclaim(struct scan_control *sc)
-               ^
->> mm/vmscan.c:554:13: error: redefinition of 'global_reclaim'
-   static bool global_reclaim(struct scan_control *sc)
-               ^
-   mm/vmscan.c:196:13: note: previous definition is here
-   static bool global_reclaim(struct scan_control *sc)
-               ^
-   2 errors generated.
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-vim +/cgroup_reclaim +549 mm/vmscan.c
-
-86750830468506 Yang Shi        2021-05-04  548  
-b5ead35e7e1d34 Johannes Weiner 2019-11-30 @549  static bool cgroup_reclaim(struct scan_control *sc)
-89b5fae5368f6a Johannes Weiner 2012-01-12  550  {
-b5ead35e7e1d34 Johannes Weiner 2019-11-30  551  	return false;
-89b5fae5368f6a Johannes Weiner 2012-01-12  552  }
-97c9341f727105 Tejun Heo       2015-05-22  553  
-a579086c99ed70 Yu Zhao         2022-12-21 @554  static bool global_reclaim(struct scan_control *sc)
-a579086c99ed70 Yu Zhao         2022-12-21  555  {
-a579086c99ed70 Yu Zhao         2022-12-21  556  	return true;
-a579086c99ed70 Yu Zhao         2022-12-21  557  }
-a579086c99ed70 Yu Zhao         2022-12-21  558  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
