@@ -1,109 +1,151 @@
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB1A3D74
-	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 14:19:47 +0000 (UTC)
-Received: by mail-io1-f71.google.com with SMTP id v4-20020a6b5b04000000b0074cb180c5e2so6282062ioh.6
-        for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 06:19:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J6I9nx2s7RTfWTlnagZt92XwoQkoLlEorV5GfVg0HLE=;
-        b=qlrDvwFme4XVF8Onxr/Fo2BLEdc/HSt/laVUMtKo7dVzH5Q+aeV+HijCDYcK3CcgBZ
-         hTMXftLygQ5+ArtAx8qY5tRBaWvTpMAgKxMnlQ0oT8W67eAb26fyEvKGRBzIMnniIliR
-         mthh/GNiaIIYiyBxUoNKAucYDJ2KPi2uHPoFlY20r5jqqPySu0isgeUx7pRupEy8McDk
-         3Dqq+v0ZWbv6/+/ENSb0o6KdB1LWZblqik08LEH5FSI6iatlar+Q5WtFk/YR2SixbHhK
-         uFvx+FhQPcvkxOCsw84BzZgbp1ZZFgAXtIaFC9g+9kp1UhTkn49lw99FXGgX50yBVRSA
-         ltYQ==
-X-Gm-Message-State: AO0yUKXd4CFJJ8r9SJTVvwl/5T1aCrrSMiV1pmg2aAf75gl+iLbTWrig
-	t7jZMsVjygw8xBz2Waipl7lkzGO7uhOZRt0KdQ6qz9N9KZO0
-X-Google-Smtp-Source: AK7set80BgvGPfY0VZVc50EMjNfjx1r+lpseH5pu22IzNmUTBUhber0fCBuJJHCdpw2t1xFRIPl0wI8XeLnKny7oPSOmITR6cbg3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD8E3D9F;
+	Tue, 28 Feb 2023 15:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677597527; x=1709133527;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qxGqKIJep1k+6TRT08D3JAL5H4OHtaAM0Bv9aWfUHfc=;
+  b=ArXTeaziGkWg7dCqMQKe/T6Ua9DKyJEnI5Z6bepXrRTLtAX5XHG1FtvD
+   SC0jYr8lTgFdTjB25pu+HIdjnILhHFI7om3R9dpBqp4Z8wUdcu2vreb9b
+   EtB63fanF2qE6EIAO2j2KvZPW4ecJ7hKCClAZWv7V6u0tFAiwEbMqA+CO
+   HnisHbO0Q9CFk4eU1tIAorE8CHwflD7x/aZII2biMffTpe8xKJ5SwR2cE
+   UUfdoXC/uqc64GMBmusaxtTq3ACH7zWdb56iJG57HhY7iUiFTFEBdJIoy
+   dz3N3c7eZg6qzL3aEwVzT7HusuhAzh1huqv0iFQYW56hxjOqAeZvHuSvw
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="317955771"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="317955771"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 07:10:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="919806108"
+X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
+   d="scan'208";a="919806108"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Feb 2023 07:10:38 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pX1cj-0005Tv-2e;
+	Tue, 28 Feb 2023 15:10:37 +0000
+Date: Tue, 28 Feb 2023 23:10:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	Rob Clark <robdclark@gmail.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 03/10] drm/i915/dsc: move DSC tables to DRM DSC helper
+Message-ID: <202302282241.qRMAjDx8-lkp@intel.com>
+References: <20230228113342.2051425-4-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6244:0:b0:3ad:65e:e489 with SMTP id
- d65-20020a026244000000b003ad065ee489mr1374385jac.1.1677593986353; Tue, 28 Feb
- 2023 06:19:46 -0800 (PST)
-Date: Tue, 28 Feb 2023 06:19:46 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a24e7405f5c34912@google.com>
-Subject: [syzbot] [ntfs3?] UBSAN: shift-out-of-bounds in ntfs_fill_super (2)
-From: syzbot <syzbot+478c1bf0e6bf4a8f3a04@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228113342.2051425-4-dmitry.baryshkov@linaro.org>
 
-Hello,
+Hi Dmitry,
 
-syzbot found the following issue on:
+I love your patch! Perhaps something to improve:
 
-HEAD commit:    2ebd1fbb946d Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f0d518c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
-dashboard link: https://syzkaller.appspot.com/bug?extid=478c1bf0e6bf4a8f3a04
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165b7474c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c9de8cc80000
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm/drm-next v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/16985cc7a274/disk-2ebd1fbb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fd3452567115/vmlinux-2ebd1fbb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c75510922212/Image-2ebd1fbb.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/deffedf88bc5/mount_0.gz
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/drm-i915-dsc-change-DSC-param-tables-to-follow-the-DSC-model/20230228-193505
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230228113342.2051425-4-dmitry.baryshkov%40linaro.org
+patch subject: [PATCH 03/10] drm/i915/dsc: move DSC tables to DRM DSC helper
+config: x86_64-randconfig-a002-20230227 (https://download.01.org/0day-ci/archive/20230228/202302282241.qRMAjDx8-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ee048cb6c2ec7f7f92bea6b72e8cd3ef9921993e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Baryshkov/drm-i915-dsc-change-DSC-param-tables-to-follow-the-DSC-model/20230228-193505
+        git checkout ee048cb6c2ec7f7f92bea6b72e8cd3ef9921993e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/display/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+478c1bf0e6bf4a8f3a04@syzkaller.appspotmail.com
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302282241.qRMAjDx8-lkp@intel.com/
 
-loop0: detected capacity change from 0 to 4096
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ntfs3/super.c:777:25
-shift exponent 128 is too large for 32-bit type 'unsigned int'
-CPU: 0 PID: 5928 Comm: syz-executor258 Not tainted 6.2.0-syzkaller-18300-g2ebd1fbb946d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Call trace:
- dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x2f4/0x36c lib/ubsan.c:321
- ntfs_init_from_boot fs/ntfs3/super.c:777 [inline]
- ntfs_fill_super+0x2544/0x3b9c fs/ntfs3/super.c:970
- get_tree_bdev+0x360/0x54c fs/super.c:1282
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1408
- vfs_get_tree+0x90/0x274 fs/super.c:1489
- do_new_mount+0x25c/0x8c8 fs/namespace.c:3145
- path_mount+0x590/0xe58 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount fs/namespace.c:3674 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3674
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-================================================================================
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/display/drm_dsc_helper.c:635: warning: expecting prototype for drm_dsc_compute_rc_parameters(). Prototype was for drm_dsc_setup_rc_params() instead
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +635 drivers/gpu/drm/display/drm_dsc_helper.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+   627	
+   628	/**
+   629	 * drm_dsc_compute_rc_parameters() - Set parameters and limits for RC model in
+   630	 * accordance with the DSC 1.1 or 1.2 specification and DSC C Model
+   631	 *
+   632	 * @vdsc_cfg: DSC Configuration data partially filled by driver
+   633	 */
+   634	int drm_dsc_setup_rc_params(struct drm_dsc_config *vdsc_cfg)
+ > 635	{
+   636		const struct rc_parameters *rc_params;
+   637		int i;
+   638	
+   639		/* fractional BPP is not supported */
+   640		if (vdsc_cfg->bits_per_pixel & 0xf)
+   641			return -EINVAL;
+   642	
+   643		rc_params = get_rc_params(vdsc_cfg->bits_per_pixel >> 4,
+   644					  vdsc_cfg->bits_per_component);
+   645		if (!rc_params)
+   646			return -EINVAL;
+   647	
+   648		vdsc_cfg->first_line_bpg_offset = rc_params->first_line_bpg_offset;
+   649		vdsc_cfg->initial_xmit_delay = rc_params->initial_xmit_delay;
+   650		vdsc_cfg->initial_offset = rc_params->initial_offset;
+   651		vdsc_cfg->flatness_min_qp = rc_params->flatness_min_qp;
+   652		vdsc_cfg->flatness_max_qp = rc_params->flatness_max_qp;
+   653		vdsc_cfg->rc_quant_incr_limit0 = rc_params->rc_quant_incr_limit0;
+   654		vdsc_cfg->rc_quant_incr_limit1 = rc_params->rc_quant_incr_limit1;
+   655	
+   656		for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
+   657			vdsc_cfg->rc_range_params[i].range_min_qp =
+   658				rc_params->rc_range_params[i].range_min_qp;
+   659			vdsc_cfg->rc_range_params[i].range_max_qp =
+   660				rc_params->rc_range_params[i].range_max_qp;
+   661			/*
+   662			 * Range BPG Offset uses 2's complement and is only a 6 bits. So
+   663			 * mask it to get only 6 bits.
+   664			 */
+   665			vdsc_cfg->rc_range_params[i].range_bpg_offset =
+   666				rc_params->rc_range_params[i].range_bpg_offset &
+   667				DSC_RANGE_BPG_OFFSET_MASK;
+   668		}
+   669	
+   670		return 0;
+   671	}
+   672	EXPORT_SYMBOL(drm_dsc_setup_rc_params);
+   673	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
