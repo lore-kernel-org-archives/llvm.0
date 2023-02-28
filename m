@@ -1,156 +1,121 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3273B2917;
-	Tue, 28 Feb 2023 09:14:31 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C724921A4B;
-	Tue, 28 Feb 2023 09:14:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1677575662; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L+WXaR+5eyD3SgnEUW2jbzu4G0EEJxEV/thZNIYGSNM=;
-	b=Bw419Sm4w+33lRx7yoKfEdxwlbNEdrUBgIJLRE3zlPgkwj2fGC7OgtX+NOAoS/oKGXTuoj
-	Le3kTf9+xfDBBCYyz05qVz8ob1+xG6I6X7tbI6Z9PpuvA/FtpBtxDNc64ocBqViVlfQylW
-	wpozC0MjvwPIcii2ZY/N2z+ImjHJRm0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1677575662;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L+WXaR+5eyD3SgnEUW2jbzu4G0EEJxEV/thZNIYGSNM=;
-	b=6+ad0VPicC+f26+tj+7Hpcz6fZWR9kmW9Wbd+v9+EUnqIMuuWRi+wwKJld/6Yc07S25Crm
-	h+sKmPIo3VQGFqBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8C38613440;
-	Tue, 28 Feb 2023 09:14:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id THNMIe7F/WM9LgAAMHmgww
-	(envelope-from <tzimmermann@suse.de>); Tue, 28 Feb 2023 09:14:22 +0000
-Message-ID: <9c8401c1-8a32-2b3a-5323-3c0f9dad0457@suse.de>
-Date: Tue, 28 Feb 2023 10:14:22 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431152CA2
+	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 11:19:27 +0000 (UTC)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.nyi.internal (Postfix) with ESMTP id 271FF5C023A;
+	Tue, 28 Feb 2023 06:19:26 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 28 Feb 2023 06:19:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+	:message-id:mime-version:reply-to:sender:subject:subject:to:to;
+	 s=fm2; t=1677583166; x=1677669566; bh=EezAPtQNSNumyRR+Ho1r1yoWA
+	Qa9DZCAQdxIRQbR60c=; b=kakaBwRjFVTZ++TuvMuMNb6GWxnJPhaiB29MwheRe
+	W8qv21mDyU7Wb5m122ZA7qiBEDg856sulPBKIpXFXm7axsIg/aNe07kS/0IlTic6
+	wsHwE9Eo0oLCfoFy/W5qL1N7EQ1Dglv02cfsshuXYEgD/VCZYv/mFmed0cWztmYJ
+	BIaB+y6gGPL8yTbi0a8cBc6WwEwVccBupMCqFVXQdjafCYK7hlkZS85IbRb0oWK/
+	zYPEWsWUwX/Sb3aFoYDSdKJ5oQNVzN4CHMIWx0z8nPHMfuEWzpeZscxCCYNWAOJq
+	onsBFgUXIQgEHmzUf3xFd8XDen0z+5LnJBxD68n4Gv7Fg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:message-id
+	:mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1677583166; x=1677669566; bh=EezAPtQNSNumyRR+Ho1r1yoWAQa9DZCAQdx
+	IRQbR60c=; b=owaFL/vPHiO56jMu9sENb4s7OIu3t11fKDIrC36Cv64RptM7JE6
+	ghvRjCwxC6vI/GSj5PngI6ldJWEQjlCqVjFRzGCg1RuH9ZDmzC5Dyd8qWRWgzixu
+	YTTqBwDXAuEnQiP8ObTfKbSq1c3e06/WSd1g03KHek/S+Ll/nGDkWszfgCY1c7uo
+	Axtj+H9APfSUx5aWaUG0THhK4uiwYrAyNTPv/2YYjXqsEOw5CVGqCVBnXRduXXJg
+	6vZBFl+Flmo7IjvC1ZENEc056T01v8TrXRqV6GVri2mhszR/zEVLDDEqhfvnZL99
+	sEOcc/vt19C00QJ8h3JWk5rXe7d9DbnqxRg==
+X-ME-Sender: <xms:PeP9Y--XQqA2VtYcOSRh77sL4KrBPI4FRad6bdxh6VoLDL9HJVIY2g>
+    <xme:PeP9Y-uGJav5cWo4BqzMp5CY0dcjNULgte5-IEh1-qkC-eS1tsN-j8_-RHCd50-DI
+    jZjp5w0Wblq0bS4ZAs>
+X-ME-Received: <xmr:PeP9Y0DsNbgTafI8aD0bbgwcAAvuY6KF9mTeobk0DXuAbZp1qNCzDYpZVBQmUwOewFCDqVN8QQwb3OXcD5n0IRS1UFPc9x65kohH6AQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelvddgvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepgfdtheehiedvgeduudduvd
+    duleegleffgeekjedttdfhhfefleetheevvefftefgnecuffhomhgrihhnpehgihhthhhu
+    sgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:PeP9Y2eDGnE4Ld-fQ1MghdIcwtJHLXMfXHzdy1oHxxe2yBZp2nAW1Q>
+    <xmx:PeP9YzNBkKtlijn63FKArEV3Beq-ytyJhqdQkjO5umoeRbjFeF5vpg>
+    <xmx:PeP9Ywkx6nw6c4FFdfiSB5CKvpk7JwJQe9OPBm-CTyepW-1kt7kpPw>
+    <xmx:PuP9Y4qnSJgY7rz_b8a_QIWkbB8ogkX4AXoDFs0afE6ZjgNCeji7ow>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Feb 2023 06:19:24 -0500 (EST)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+To: linux-mips@vger.kernel.org
+Cc: tsbogend@alpha.franken.de,
+	nathan@kernel.org,
+	llvm@lists.linux.dev,
+	ndesaulniers@google.com,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2] MIPS: Workaround clang inline compat branch issue
+Date: Tue, 28 Feb 2023 11:19:17 +0000
+Message-Id: <20230228111917.82910-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm: omapdrm: Do not use helper unininitialized in
- omap_fbdev_init()
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, tomba@kernel.org,
- airlied@gmail.com, daniel@ffwll.ch, javierm@redhat.com
-Cc: kernel test robot <lkp@intel.com>, trix@redhat.com, llvm@lists.linux.dev,
- ndesaulniers@google.com, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, patches@lists.linux.dev
-References: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
-From: Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------w0z6qTToscvskSOlLJqX5NRQ"
+Content-Transfer-Encoding: 8bit
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------w0z6qTToscvskSOlLJqX5NRQ
-Content-Type: multipart/mixed; boundary="------------PyeezaLySjTJbky6LHg1ebue";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Nathan Chancellor <nathan@kernel.org>, tomba@kernel.org,
- airlied@gmail.com, daniel@ffwll.ch, javierm@redhat.com
-Cc: kernel test robot <lkp@intel.com>, trix@redhat.com, llvm@lists.linux.dev,
- ndesaulniers@google.com, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, patches@lists.linux.dev
-Message-ID: <9c8401c1-8a32-2b3a-5323-3c0f9dad0457@suse.de>
-Subject: Re: [PATCH] drm: omapdrm: Do not use helper unininitialized in
- omap_fbdev_init()
-References: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
-In-Reply-To: <20230224-omapdrm-wsometimes-uninitialized-v1-1-3fec8906ee3a@kernel.org>
+Clang is unable to handle the situation that a chunk of inline
+assembly ends with a compat branch instruction and then compiler
+generates another control transfer instruction immediately after
+this compat branch. The later instruction will end up in forbidden
+slot and cause exception.
 
---------------PyeezaLySjTJbky6LHg1ebue
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Workaround by add a option to control the use of compact branch.
+Currently it's selected by CC_IS_CLANG and hopefully we can change
+it to a version check in future if clang manages to fix it.
 
-QWRkZWQgdG8gZHJtLW1pc2MtbmV4dC1maXhlcy4NCg0KQW0gMjQuMDIuMjMgdW0gMTg6MjUg
-c2NocmllYiBOYXRoYW4gQ2hhbmNlbGxvcjoNCj4gQ2xhbmcgd2FybnMgKG9yIGVycm9ycyB3
-aXRoIENPTkZJR19XRVJST1IpOg0KPiANCj4gICAgLi4vZHJpdmVycy9ncHUvZHJtL29tYXBk
-cm0vb21hcF9mYmRldi5jOjIzNTo2OiBlcnJvcjogdmFyaWFibGUgJ2hlbHBlcicgaXMgdXNl
-ZCB1bmluaXRpYWxpemVkIHdoZW5ldmVyICdpZicgY29uZGl0aW9uIGlzIHRydWUgWy1XZXJy
-b3IsLVdzb21ldGltZXMtdW5pbml0aWFsaXplZF0NCj4gICAgICAgICAgICBpZiAoIWZiZGV2
-KQ0KPiAgICAgICAgICAgICAgICBefn5+fn4NCj4gICAgLi4vZHJpdmVycy9ncHUvZHJtL29t
-YXBkcm0vb21hcF9mYmRldi5jOjI1OToyNjogbm90ZTogdW5pbml0aWFsaXplZCB1c2Ugb2Nj
-dXJzIGhlcmUNCj4gICAgICAgICAgICBkcm1fZmJfaGVscGVyX3VucHJlcGFyZShoZWxwZXIp
-Ow0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fg0KPiAgICAu
-Li9kcml2ZXJzL2dwdS9kcm0vb21hcGRybS9vbWFwX2ZiZGV2LmM6MjM1OjI6IG5vdGU6IHJl
-bW92ZSB0aGUgJ2lmJyBpZiBpdHMgY29uZGl0aW9uIGlzIGFsd2F5cyBmYWxzZQ0KPiAgICAg
-ICAgICAgIGlmICghZmJkZXYpDQo+ICAgICAgICAgICAgXn5+fn5+fn5+fn4NCj4gICAgLi4v
-ZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9mYmRldi5jOjIyODozMDogbm90ZTogaW5p
-dGlhbGl6ZSB0aGUgdmFyaWFibGUgJ2hlbHBlcicgdG8gc2lsZW5jZSB0aGlzIHdhcm5pbmcN
-Cj4gICAgICAgICAgICBzdHJ1Y3QgZHJtX2ZiX2hlbHBlciAqaGVscGVyOw0KPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeDQo+ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICA9IE5VTEwNCj4gICAgMSBlcnJvciBnZW5lcmF0ZWQu
-DQo+IA0KPiBSZXR1cm4gZWFybHksIGFzIHRoZXJlIGlzIG5vdGhpbmcgZm9yIHRoZSBmdW5j
-dGlvbiB0byBkbyBpZiBtZW1vcnkNCj4gY2Fubm90IGJlIGFsbG9jYXRlZC4gVGhlcmUgaXMg
-bm8gcG9pbnQgaW4gYWRkaW5nIGFub3RoZXIgbGFiZWwgdG8ganVzdA0KPiBlbWl0IHRoZSB3
-YXJuaW5nIGF0IHRoZSBlbmQgb2YgdGhlIGZ1bmN0aW9uIGluIHRoaXMgY2FzZSwgYXMgbWVt
-b3J5DQo+IGFsbG9jYXRpb24gZmFpbHVyZXMgYXJlIGFscmVhZHkgbG9nZ2VkLg0KPiANCj4g
-Rml4ZXM6IDNmYjFmNjJmODBhMSAoImRybS9mYi1oZWxwZXI6IFJlbW92ZSBkcm1fZmJfaGVs
-cGVyX3VucHJlcGFyZSgpIGZyb20gZHJtX2ZiX2hlbHBlcl9maW5pKCkiKQ0KPiBMaW5rOiBo
-dHRwczovL2dpdGh1Yi5jb20vQ2xhbmdCdWlsdExpbnV4L2xpbnV4L2lzc3Vlcy8xODA5DQo+
-IExpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAyMzAyMjUw
-MDU4LmZZVGU5YVRQLWxrcEBpbnRlbC5jb20vDQo+IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVz
-dCByb2JvdCA8bGtwQGludGVsLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogTmF0aGFuIENoYW5j
-ZWxsb3IgPG5hdGhhbkBrZXJuZWwub3JnPg0KPiAtLS0NCj4gVGhpcyBpcyBjdXJyZW50bHkg
-c2hvd2luZyBpbiBtYWlubGluZSBzbyBJIGJlbGlldmUgdGhpcyBzaG91bGQgZ28gdG8NCj4g
-ZHJtLW1pc2MtbmV4dC1maXhlcy4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL29tYXBk
-cm0vb21hcF9mYmRldi5jIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlv
-bigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2Ry
-bS9vbWFwZHJtL29tYXBfZmJkZXYuYyBiL2RyaXZlcnMvZ3B1L2RybS9vbWFwZHJtL29tYXBf
-ZmJkZXYuYw0KPiBpbmRleCA4NDQyOTcyODM0N2YuLmE2Yzg1NDIwODdlYyAxMDA2NDQNCj4g
-LS0tIGEvZHJpdmVycy9ncHUvZHJtL29tYXBkcm0vb21hcF9mYmRldi5jDQo+ICsrKyBiL2Ry
-aXZlcnMvZ3B1L2RybS9vbWFwZHJtL29tYXBfZmJkZXYuYw0KPiBAQCAtMjMzLDcgKzIzMyw3
-IEBAIHZvaWQgb21hcF9mYmRldl9pbml0KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpDQo+ICAg
-DQo+ICAgCWZiZGV2ID0ga3phbGxvYyhzaXplb2YoKmZiZGV2KSwgR0ZQX0tFUk5FTCk7DQo+
-ICAgCWlmICghZmJkZXYpDQo+IC0JCWdvdG8gZmFpbDsNCj4gKwkJcmV0dXJuOw0KPiAgIA0K
-PiAgIAlJTklUX1dPUksoJmZiZGV2LT53b3JrLCBwYW5fd29ya2VyKTsNCj4gICANCj4gDQo+
-IC0tLQ0KPiBiYXNlLWNvbW1pdDogZTAzNGI4YTE4ZDRiYWRjZWVjYjY3MmM1OGI0ODhiYWQx
-ZTkwMWQ5NQ0KPiBjaGFuZ2UtaWQ6IDIwMjMwMjI0LW9tYXBkcm0td3NvbWV0aW1lcy11bmlu
-aXRpYWxpemVkLTAxMjVmNzY5MmZiYg0KPiANCj4gQmVzdCByZWdhcmRzLA0KDQotLSANClRo
-b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
-YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
-YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
-vGhyZXI6IEl2byBUb3Rldg0K
+Fix boot on boston board.
 
---------------PyeezaLySjTJbky6LHg1ebue--
+Link: https://github.com/llvm/llvm-project/issues/61045
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+v2: Add Link tag to LLVM bug
+---
+ arch/mips/Kconfig           | 3 +++
+ arch/mips/include/asm/asm.h | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---------------w0z6qTToscvskSOlLJqX5NRQ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 37072e15b263..adf2c5a0bdba 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3206,6 +3206,9 @@ config CC_HAS_MNO_BRANCH_LIKELY
+ 	def_bool y
+ 	depends on $(cc-option,-mno-branch-likely)
+ 
++config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
++	def_bool y if CC_IS_CLANG
++
+ menu "Power management options"
+ 
+ config ARCH_HIBERNATION_POSSIBLE
+diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
+index 336ac9b65235..2e99450f4228 100644
+--- a/arch/mips/include/asm/asm.h
++++ b/arch/mips/include/asm/asm.h
+@@ -336,7 +336,7 @@ symbol		=	value
+  */
+ #ifdef CONFIG_WAR_R10000_LLSC
+ # define SC_BEQZ	beqzl
+-#elif MIPS_ISA_REV >= 6
++#elif !defined(CONFIG_CC_HAS_BROKEN_INLINE_COMPAT_BRANCH) && MIPS_ISA_REV >= 6
+ # define SC_BEQZ	beqzc
+ #else
+ # define SC_BEQZ	beqz
+-- 
+2.37.1 (Apple Git-137.1)
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmP9xe4FAwAAAAAACgkQlh/E3EQov+D/
-txAAjH/d4APMhjDTQWU+GhtyJgMQ5W8iYv4ZQNYL7O/wZKvi0GsY6gM+RVIzy0/OHGFVJI1hfQHl
-yvwjFrC2Uu161wJL1bMDifbSqfh5KZsR3NkXuODxcKtG+xXelw/McIXK9viAJvjDqDgcRRi88rIa
-VM0qfxCfsqW88p/EvbWQVfBljuMo7ON6v89S6q5IWb1QvvxvtGKJahUtUGc3/K7LxHgtotH7LJU6
-sz8EyRwudFZC7vko+zgwezVpgVNbbm7AzUGzNjq0CT5qtKWMUku5AtkPd3a8wEarvVGOjViC6Ez7
-S04sSutPWcy0J3TZ+rLRPhtCRiEr5pFc0mb5qSJasppL5/4SCzbPkTvg/06oUgSWAmRnm0A7cqt8
-DXwXsh2NU+oI58qPY33IWDLrwoemJod0cO7zYIXojoXccJZrLQPHcunqkrYqaBSm2FUSksAT8o0O
-M5WrEqFz7wsGvmAt0Y8OnHGBwRh+weyZz/7aFv2e8589RMwm/HnVjp9fgIrVedKLwQilGUj6MlQO
-RHotcxzWPkRtPQ4AdU0kiNM7L6Jgmc2zgc+mmxbMwaiOWWNOWymavynsdhSenqSicROHk1HJl3dP
-axUGVsdhYAyZDhaEwwpq+XmMYg4GnMjAF+8782rIy0T/wnq5DKjx323tCRRve+uOgAHou++uM9Xk
-jqE=
-=ZQmY
------END PGP SIGNATURE-----
-
---------------w0z6qTToscvskSOlLJqX5NRQ--
