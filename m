@@ -1,98 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8BB7E1
-	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 04:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677558008;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=y0g4kK64lReTB7X0ZdNmrYDrFwSS4m/NufqIhsgGKXQ=;
-	b=LCkqQY9RZMvbqbnaHH1dePOEmk0xJi5upl0HZeDK46ObKRl1+G9ejAtqr1H/QXGkLDdYYF
-	PQ7WwzyYjX3IJjEdHqdyq2oWvwRuT/mmR+3E/oSW+VMuXqOCIapMn+nQrgBQy44on8dEG7
-	eQOuy4nMkam9yGV41H183pSMdWSGQLE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-KQw4tI6IMbeCrNfN7nrS2A-1; Mon, 27 Feb 2023 23:20:04 -0500
-X-MC-Unique: KQw4tI6IMbeCrNfN7nrS2A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E9B03806710
-	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 04:20:04 +0000 (UTC)
-Received: from [172.64.13.54] (unknown [10.30.33.64])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 2E5A4140EBF4;
-	Tue, 28 Feb 2023 04:20:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (0/5 SKIPPED): Test report for master (6.2.0,
- mainline.kernel.org-clang, ae3419fb)
-Date: Tue, 28 Feb 2023 04:20:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59952A38;
+	Tue, 28 Feb 2023 07:35:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677569727; x=1709105727;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5DKTTTfE7aOaO2jXKu3LiEoHHcR0Zhj6K7jhlb2yClQ=;
+  b=MytDCpGfRXewIpU+BoLU8hKQN7adhwqyIP6Z7AQQPpWYs9+nuLVcqaY2
+   pCSUwkE6Zd4l0YcGz1Y5f77a4z6i4FfXkl4wy24URTzmStkkesXinkF1z
+   irXu9GLX4YQCdW5o97ne3g17kL8Zd4cg8N7hz2L+3n5ckJeKKhUGzb6YS
+   ycJU5t83Hw6lA8W9JkUmeQfEHTwD1QS+wYdjCxVAMHNO8yfZxYquxEdfi
+   2I11GUremB9ScKW6hW9BPYYTnd8W3ZDCNPxKEsxURRewsyYEac10gWe7X
+   oIWHEj4CiL15IN5uLQBcpzy7oprm/Yw9x+DaE5pLHLEjmrQpoma0DqaQ/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="332796139"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="332796139"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 23:35:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="848155546"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="848155546"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 Feb 2023 23:35:22 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pWuW9-0005Bn-2d;
+	Tue, 28 Feb 2023 07:35:21 +0000
+Date: Tue, 28 Feb 2023 15:34:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: lingfuyi <lingfuyi@126.com>, jhs@mojatatu.com, davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	lingfuyi <lingfuyi@kylinos.cn>, k2ci <kernel-bot@kylinos.cn>
+Subject: Re: [PATCH] sched: delete some api is not used
+Message-ID: <202302281531.3gOSrvTO-lkp@intel.com>
+References: <20230228031241.1675263-1-lingfuyi@126.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <67587.123022723200401356@us-mta-516.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228031241.1675263-1-lingfuyi@126.com>
 
-Hi, we tested your kernel and here are the results:
+Hi lingfuyi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: FAILED
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on horms-ipvs/master]
+[also build test ERROR on linus/master next-20230228]
+[cannot apply to v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/lingfuyi/sched-delete-some-api-is-not-used/20230228-124804
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
+patch link:    https://lore.kernel.org/r/20230228031241.1675263-1-lingfuyi%40126.com
+patch subject: [PATCH] sched: delete some api is not used
+config: x86_64-randconfig-a001-20230227 (https://download.01.org/0day-ci/archive/20230228/202302281531.3gOSrvTO-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6d9fd0340845396f9866b8a8c53ad65066de39ac
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review lingfuyi/sched-delete-some-api-is-not-used/20230228-124804
+        git checkout 6d9fd0340845396f9866b8a8c53ad65066de39ac
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302281531.3gOSrvTO-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/sched/cls_api.c:3242:2: error: implicit declaration of function 'tcf_exts_miss_cookie_base_destroy' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           tcf_exts_miss_cookie_base_destroy(exts);
+           ^
+   net/sched/cls_api.c:3242:2: note: did you mean 'tcf_exts_miss_cookie_base_alloc'?
+   net/sched/cls_api.c:135:1: note: 'tcf_exts_miss_cookie_base_alloc' declared here
+   tcf_exts_miss_cookie_base_alloc(struct tcf_exts *exts, struct tcf_proto *tp,
+   ^
+   1 error generated.
 
 
-Kernel information:
-    Commit message: vc_screen: don't clobber return value in vcs_read
+vim +/tcf_exts_miss_cookie_base_destroy +3242 net/sched/cls_api.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/74751
+80cd22c35c9001 Paul Blakey       2023-02-18  3238  
+18d0264f630e20 WANG Cong         2014-09-25  3239  void tcf_exts_destroy(struct tcf_exts *exts)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3240  {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3241  #ifdef CONFIG_NET_CLS_ACT
+80cd22c35c9001 Paul Blakey       2023-02-18 @3242  	tcf_exts_miss_cookie_base_destroy(exts);
+80cd22c35c9001 Paul Blakey       2023-02-18  3243  
+3d66b89c30f922 Eric Dumazet      2019-09-18  3244  	if (exts->actions) {
+90b73b77d08ec3 Vlad Buslov       2018-07-05  3245  		tcf_action_destroy(exts->actions, TCA_ACT_UNBIND);
+22dc13c837c332 WANG Cong         2016-08-13  3246  		kfree(exts->actions);
+3d66b89c30f922 Eric Dumazet      2019-09-18  3247  	}
+22dc13c837c332 WANG Cong         2016-08-13  3248  	exts->nr_actions = 0;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3249  #endif
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3250  }
+aa767bfea48289 Stephen Hemminger 2008-01-21  3251  EXPORT_SYMBOL(tcf_exts_destroy);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3252  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/31741=
-8
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/31741=
-9
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/31742=
-0
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/317422
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/31742=
-1
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - kselftest build - bpf
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7277180
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
