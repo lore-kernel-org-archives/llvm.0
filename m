@@ -1,121 +1,135 @@
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431152CA2
-	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 11:19:27 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.nyi.internal (Postfix) with ESMTP id 271FF5C023A;
-	Tue, 28 Feb 2023 06:19:26 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 28 Feb 2023 06:19:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:sender:subject:subject:to:to;
-	 s=fm2; t=1677583166; x=1677669566; bh=EezAPtQNSNumyRR+Ho1r1yoWA
-	Qa9DZCAQdxIRQbR60c=; b=kakaBwRjFVTZ++TuvMuMNb6GWxnJPhaiB29MwheRe
-	W8qv21mDyU7Wb5m122ZA7qiBEDg856sulPBKIpXFXm7axsIg/aNe07kS/0IlTic6
-	wsHwE9Eo0oLCfoFy/W5qL1N7EQ1Dglv02cfsshuXYEgD/VCZYv/mFmed0cWztmYJ
-	BIaB+y6gGPL8yTbi0a8cBc6WwEwVccBupMCqFVXQdjafCYK7hlkZS85IbRb0oWK/
-	zYPEWsWUwX/Sb3aFoYDSdKJ5oQNVzN4CHMIWx0z8nPHMfuEWzpeZscxCCYNWAOJq
-	onsBFgUXIQgEHmzUf3xFd8XDen0z+5LnJBxD68n4Gv7Fg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:message-id
-	:mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1677583166; x=1677669566; bh=EezAPtQNSNumyRR+Ho1r1yoWAQa9DZCAQdx
-	IRQbR60c=; b=owaFL/vPHiO56jMu9sENb4s7OIu3t11fKDIrC36Cv64RptM7JE6
-	ghvRjCwxC6vI/GSj5PngI6ldJWEQjlCqVjFRzGCg1RuH9ZDmzC5Dyd8qWRWgzixu
-	YTTqBwDXAuEnQiP8ObTfKbSq1c3e06/WSd1g03KHek/S+Ll/nGDkWszfgCY1c7uo
-	Axtj+H9APfSUx5aWaUG0THhK4uiwYrAyNTPv/2YYjXqsEOw5CVGqCVBnXRduXXJg
-	6vZBFl+Flmo7IjvC1ZENEc056T01v8TrXRqV6GVri2mhszR/zEVLDDEqhfvnZL99
-	sEOcc/vt19C00QJ8h3JWk5rXe7d9DbnqxRg==
-X-ME-Sender: <xms:PeP9Y--XQqA2VtYcOSRh77sL4KrBPI4FRad6bdxh6VoLDL9HJVIY2g>
-    <xme:PeP9Y-uGJav5cWo4BqzMp5CY0dcjNULgte5-IEh1-qkC-eS1tsN-j8_-RHCd50-DI
-    jZjp5w0Wblq0bS4ZAs>
-X-ME-Received: <xmr:PeP9Y0DsNbgTafI8aD0bbgwcAAvuY6KF9mTeobk0DXuAbZp1qNCzDYpZVBQmUwOewFCDqVN8QQwb3OXcD5n0IRS1UFPc9x65kohH6AQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelvddgvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepgfdtheehiedvgeduudduvd
-    duleegleffgeekjedttdfhhfefleetheevvefftefgnecuffhomhgrihhnpehgihhthhhu
-    sgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:PeP9Y2eDGnE4Ld-fQ1MghdIcwtJHLXMfXHzdy1oHxxe2yBZp2nAW1Q>
-    <xmx:PeP9YzNBkKtlijn63FKArEV3Beq-ytyJhqdQkjO5umoeRbjFeF5vpg>
-    <xmx:PeP9Ywkx6nw6c4FFdfiSB5CKvpk7JwJQe9OPBm-CTyepW-1kt7kpPw>
-    <xmx:PuP9Y4qnSJgY7rz_b8a_QIWkbB8ogkX4AXoDFs0afE6ZjgNCeji7ow>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Feb 2023 06:19:24 -0500 (EST)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-To: linux-mips@vger.kernel.org
-Cc: tsbogend@alpha.franken.de,
-	nathan@kernel.org,
-	llvm@lists.linux.dev,
-	ndesaulniers@google.com,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2] MIPS: Workaround clang inline compat branch issue
-Date: Tue, 28 Feb 2023 11:19:17 +0000
-Message-Id: <20230228111917.82910-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964C82CA2;
+	Tue, 28 Feb 2023 11:56:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677585397; x=1709121397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8KXKh05zvvXmBiBlla6UAU9gMBZihB631H77fNyc5ms=;
+  b=alS9UAR+1HvtxV4anJMvNItKuxGuWtrkz2Hwu+6yQXC2FNS8JUHUt1Wp
+   KFHIhjibhUngL9nwlSzIM+K84TrfXS4EjharR4bHYSLz2IMeb0nvZEUyU
+   pq18Ryuesxh50bwQlr2Paw4l+2pFQkEcOr18QjS2lYl01ZRcTlnIWxuNj
+   MkUhQzrDdlJveV7LtnN/EgNflHTBgZWiJOb/ftnuqB4jcWS15kWP7itHc
+   +zYWt8mgyhh+pNZun0DRosgiWja/KWs8SHcp8vTkpDuvy2CGvkYapzz10
+   5+sqfXduO4b3fOMo0cv3+ljCtddcFmMkv8TDQ3qZ8lIztv9ElNEe8dg1q
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="314540207"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="314540207"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 03:56:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="676272332"
+X-IronPort-AV: E=Sophos;i="5.98,221,1673942400"; 
+   d="scan'208";a="676272332"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Feb 2023 03:56:31 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pWyat-0005N9-0F;
+	Tue, 28 Feb 2023 11:56:31 +0000
+Date: Tue, 28 Feb 2023 19:55:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yosry Ahmed <yosryahmed@google.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	David Hildenbrand <david@redhat.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Peter Xu <peterx@redhat.com>,
+	NeilBrown <neilb@suse.de>, Shakeel Butt <shakeelb@google.com>,
+	Michal Hocko <mhocko@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+	Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH v1 2/2] mm: vmscan: ignore non-LRU-based reclaim in memcg
+ reclaim
+Message-ID: <202302281933.vU1PHuZr-lkp@intel.com>
+References: <20230228085002.2592473-3-yosryahmed@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228085002.2592473-3-yosryahmed@google.com>
 
-Clang is unable to handle the situation that a chunk of inline
-assembly ends with a compat branch instruction and then compiler
-generates another control transfer instruction immediately after
-this compat branch. The later instruction will end up in forbidden
-slot and cause exception.
+Hi Yosry,
 
-Workaround by add a option to control the use of compact branch.
-Currently it's selected by CC_IS_CLANG and hopefully we can change
-it to a version check in future if clang manages to fix it.
+Thank you for the patch! Yet something to improve:
 
-Fix boot on boston board.
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master next-20230228]
+[cannot apply to vbabka-slab/for-next xfs-linux/for-next v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Link: https://github.com/llvm/llvm-project/issues/61045
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
-v2: Add Link tag to LLVM bug
----
- arch/mips/Kconfig           | 3 +++
- arch/mips/include/asm/asm.h | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/mm-vmscan-refactor-updating-reclaimed-pages-in-reclaim_state/20230228-165214
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230228085002.2592473-3-yosryahmed%40google.com
+patch subject: [PATCH v1 2/2] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+config: i386-randconfig-a002-20230227 (https://download.01.org/0day-ci/archive/20230228/202302281933.vU1PHuZr-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f6d2b849f186a927925a29e289d60895048550f5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yosry-Ahmed/mm-vmscan-refactor-updating-reclaimed-pages-in-reclaim_state/20230228-165214
+        git checkout f6d2b849f186a927925a29e289d60895048550f5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 37072e15b263..adf2c5a0bdba 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3206,6 +3206,9 @@ config CC_HAS_MNO_BRANCH_LIKELY
- 	def_bool y
- 	depends on $(cc-option,-mno-branch-likely)
- 
-+config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
-+	def_bool y if CC_IS_CLANG
-+
- menu "Power management options"
- 
- config ARCH_HIBERNATION_POSSIBLE
-diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
-index 336ac9b65235..2e99450f4228 100644
---- a/arch/mips/include/asm/asm.h
-+++ b/arch/mips/include/asm/asm.h
-@@ -336,7 +336,7 @@ symbol		=	value
-  */
- #ifdef CONFIG_WAR_R10000_LLSC
- # define SC_BEQZ	beqzl
--#elif MIPS_ISA_REV >= 6
-+#elif !defined(CONFIG_CC_HAS_BROKEN_INLINE_COMPAT_BRANCH) && MIPS_ISA_REV >= 6
- # define SC_BEQZ	beqzc
- #else
- # define SC_BEQZ	beqz
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302281933.vU1PHuZr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/vmscan.c:549:13: error: redefinition of 'cgroup_reclaim'
+   static bool cgroup_reclaim(struct scan_control *sc)
+               ^
+   mm/vmscan.c:191:13: note: previous definition is here
+   static bool cgroup_reclaim(struct scan_control *sc)
+               ^
+>> mm/vmscan.c:554:13: error: redefinition of 'global_reclaim'
+   static bool global_reclaim(struct scan_control *sc)
+               ^
+   mm/vmscan.c:196:13: note: previous definition is here
+   static bool global_reclaim(struct scan_control *sc)
+               ^
+   2 errors generated.
+
+
+vim +/cgroup_reclaim +549 mm/vmscan.c
+
+86750830468506 Yang Shi        2021-05-04  548  
+b5ead35e7e1d34 Johannes Weiner 2019-11-30 @549  static bool cgroup_reclaim(struct scan_control *sc)
+89b5fae5368f6a Johannes Weiner 2012-01-12  550  {
+b5ead35e7e1d34 Johannes Weiner 2019-11-30  551  	return false;
+89b5fae5368f6a Johannes Weiner 2012-01-12  552  }
+97c9341f727105 Tejun Heo       2015-05-22  553  
+a579086c99ed70 Yu Zhao         2022-12-21 @554  static bool global_reclaim(struct scan_control *sc)
+a579086c99ed70 Yu Zhao         2022-12-21  555  {
+a579086c99ed70 Yu Zhao         2022-12-21  556  	return true;
+a579086c99ed70 Yu Zhao         2022-12-21  557  }
+a579086c99ed70 Yu Zhao         2022-12-21  558  
+
 -- 
-2.37.1 (Apple Git-137.1)
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
