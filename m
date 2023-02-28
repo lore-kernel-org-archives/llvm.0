@@ -1,123 +1,124 @@
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5FA9459
-	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 19:35:11 +0000 (UTC)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailout.west.internal (Postfix) with ESMTP id BC8E0320082A;
-	Tue, 28 Feb 2023 14:35:10 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 28 Feb 2023 14:35:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:sender:subject:subject:to:to;
-	 s=fm2; t=1677612910; x=1677699310; bh=mRzaLwyG1YQLWOxf7gui1lCJm
-	+Ein4jhyDqy5L9vL2Y=; b=d3hYcwBFWr3PPCxzrxvzOMgeM3Vz8pabN/cRxzmAT
-	9zFHJHYi6ECbz28jXeimHkOJtVRKA84lVghrLqcF/7ScX4szCgwEQb3K+92WFIJW
-	kAIRHRUbxa2F/ComEiLcFX+CsJBoLUVTsrWkq8l4ZCHfxVDCJirXNoc33KJXaff4
-	rcYmJtqQsaMOrNo0OkN8PhREshd7yhTEFLFZwLxdZxi+jM9sDIxu35v23XRwcONu
-	0sf3ptUao+B6AOYI7diw34YoDDxENaHIDDuhlVZSR+dUfgvhwFc+CE/t5ch+VdNY
-	Tw29MaAUNut/SYzb3n1SoGKSgTOmx2ANwb2idKYFQiSxg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:message-id
-	:mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1677612910; x=1677699310; bh=mRzaLwyG1YQLWOxf7gui1lCJm+Ein4jhyDq
-	y5L9vL2Y=; b=FqML0kfl3Io4FnYZz5bYT75+vSWH6tVf3wUoE3Ut0THl/KewUth
-	HPJnftIPTumJ/erUkeCvvBnMZFoWOiB6muRDjdlO3X3t+OzRK7aJdXbZNLGOIpPm
-	0KeJ3oGfsE6VA7aFakbqzIAyLyzkdP8PIphuh+NLEFLjA+SaEjLkx9CyUetiZ5xV
-	hhw8p29xjd6PYurLO3eaRq4R7+9G+aPRCmttHqhAJPkijKAi01GQm3BAeyCKdtDC
-	1Xyw/y0TJRQQWTVVitssNGXePDYDzNpKqyxGERNQtwgqSmi3Oga8Cv3hWxZSXUv/
-	1fJYRHf3VIqSdK8V+Jov7yW/lRYWtHtFKaA==
-X-ME-Sender: <xms:blf-Y9jXWzeCpyBTHdY62_DcI29RTkCWVfvadE1J4iML080KRgCnvg>
-    <xme:blf-YyATHakUUZCxYDkostcYGZr-gXveCGc503aOiz5htcH6BZCRlW4XP6QnVKMgN
-    vgtiG8DkLdsqnlvhRM>
-X-ME-Received: <xmr:blf-Y9E8cHmUE6aea9R8WjM8qWhnMJVvR-sIHlnDr679tm0F4I_2HIReH9yq>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelfedgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepgfdtheehiedvgeduudduvd
-    duleegleffgeekjedttdfhhfefleetheevvefftefgnecuffhomhgrihhnpehgihhthhhu
-    sgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:blf-YyQX_R7ewkP5IG392-x2kWZ__D0dYW4bg-Y4joKDFbmVKsYLFg>
-    <xmx:blf-Y6z2AF4FTeHXYUBLzD_OETOrJT3RBT7Y51yJ6Zu6k7fTRuwzgQ>
-    <xmx:blf-Y44rfvPdyc5iCwkhuGeqalqOb_XuZLXohZwkrRsg1nQBVCh9JQ>
-    <xmx:blf-Y-80fyMnrr6sMk_hPOpHV4o5Z1ZvRC1lPPb8YuGXM0-smMWNBQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Feb 2023 14:35:09 -0500 (EST)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-To: linux-mips@vger.kernel.org
-Cc: tsbogend@alpha.franken.de,
-	nathan@kernel.org,
-	llvm@lists.linux.dev,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v3] MIPS: Workaround clang inline compat branch issue
-Date: Tue, 28 Feb 2023 19:34:59 +0000
-Message-Id: <20230228193459.15365-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEC29459
+	for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 19:42:28 +0000 (UTC)
+Received: by mail-pf1-f175.google.com with SMTP id u20so6510247pfm.7
+        for <llvm@lists.linux.dev>; Tue, 28 Feb 2023 11:42:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677613348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B1+1Obj0n84DVZopavvNSOG4SsRgdMGD6WVHa50zJHI=;
+        b=TyCz/cmY+U/EUkQqnLksFu6c2Exip03sCm6cBbm6jE5hS77YAt+AsEHWR/XUSo0j6S
+         6yt5aSjr2gt9gUuLMIx82ZWNHfd2WgRS8PQZvu/SbNybCcUJB4I/5R9QeOhZaz2JSK6f
+         yBFhOiyyTXLaS6BZ/+ZelI1d722ZZjnUnNfo3o2E8L6ks4+xLaZQ8ARcW1xtoYUn2tX2
+         UvDLlDRMvzSnLPH7oyL442XscNIGnCnsz48KYj/0ZsWIAGIKr3lnJ+WWw98SPBfpmhhR
+         0l5/xlwDJuMo/cgTcX5QSijzkHuEyAx/ra+rCnPG5cc39PNNYCIsMCvvwMEZJv+1XvUp
+         mptA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677613348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B1+1Obj0n84DVZopavvNSOG4SsRgdMGD6WVHa50zJHI=;
+        b=uoD/6FBMtR4Kgvn/L5yaNTKMYKhUjvAnbXPqAtwsjXNibrousvQCnU3mAR/7rGFIL+
+         ys71H8x+V4aA9ZgHpq6cGxFHKrC1LRLIh3soI9s4LOrpFoh7+HrivLl0rVfdSUgVq0c8
+         0Qw0cVJzJeltKAUu5ksal5HGfoqKgMqq2aD2zyUS2hZk0zm8FJ5EL8Im3jFhS0mg7YLt
+         WGVdpE/h/3ll/AljtzMafr7aBZKMQZTSmXL2wDzszJZVwSB1bmGsnS0LBzUVTWhpHL8x
+         ZVBHQ2Ehi+Yfe+phzpp+/u0W2yDA3m/ZozQjgLPyDiNyZYliccQEXKQfGU4y+J1mrOHe
+         4uig==
+X-Gm-Message-State: AO0yUKVO1COTVCeNCirQhHhl1Bv32pVlQt8PpNpdZO/COipzEIFEMEtH
+	jIbiKWbOIgD/s7wD8i739ecXgCljijObE9OM4kWwKQ==
+X-Google-Smtp-Source: AK7set/VelgnWNTVSoSQ8B0CqE9bheG1PPFErdPpsNVtbPtXYLyL4kyCx5Ar7OZM++ldTyudw6+GINe9ZLR8bLbjc2c=
+X-Received: by 2002:a05:6a00:3247:b0:593:dcf6:acc2 with SMTP id
+ bn7-20020a056a00324700b00593dcf6acc2mr1496156pfb.1.1677613347408; Tue, 28 Feb
+ 2023 11:42:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230228193459.15365-1-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230228193459.15365-1-jiaxun.yang@flygoat.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 28 Feb 2023 11:42:15 -0800
+Message-ID: <CAKwvOdkxA0kgH3rafvZtQCuKq88ee8ur=BfEPaQvK6GmwV77kg@mail.gmail.com>
+Subject: Re: [PATCH v3] MIPS: Workaround clang inline compat branch issue
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-mips@vger.kernel.org, tsbogend@alpha.franken.de, nathan@kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Clang is unable to handle the situation that a chunk of inline
-assembly ends with a compat branch instruction and then compiler
-generates another control transfer instruction immediately after
-this compat branch. The later instruction will end up in forbidden
-slot and cause exception.
+On Tue, Feb 28, 2023 at 11:35=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.c=
+om> wrote:
+>
+> Clang is unable to handle the situation that a chunk of inline
+> assembly ends with a compat branch instruction and then compiler
+> generates another control transfer instruction immediately after
+> this compat branch. The later instruction will end up in forbidden
+> slot and cause exception.
+>
+> Workaround by add a option to control the use of compact branch.
+> Currently it's selected by CC_IS_CLANG and hopefully we can change
+> it to a version check in future if clang manages to fix it.
+>
+> Fix boot on boston board.
+>
+> Link: https://github.com/llvm/llvm-project/issues/61045
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-Workaround by add a option to control the use of compact branch.
-Currently it's selected by CC_IS_CLANG and hopefully we can change
-it to a version check in future if clang manages to fix it.
+Thanks for the patch!
 
-Fix boot on boston board.
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Link: https://github.com/llvm/llvm-project/issues/61045
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Acked-by: Nathan Chancellor <nathan@kernel.org>
----
-v2: Add Link tag to LLVM bug
-v3: Docuement issue link in Kconfig as well
----
- arch/mips/Kconfig           | 4 ++++
- arch/mips/include/asm/asm.h | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+> ---
+> v2: Add Link tag to LLVM bug
+> v3: Docuement issue link in Kconfig as well
+> ---
+>  arch/mips/Kconfig           | 4 ++++
+>  arch/mips/include/asm/asm.h | 2 +-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 37072e15b263..c8b878aa690f 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -3206,6 +3206,10 @@ config CC_HAS_MNO_BRANCH_LIKELY
+>         def_bool y
+>         depends on $(cc-option,-mno-branch-likely)
+>
+> +# https://github.com/llvm/llvm-project/issues/61045
+> +config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
+> +       def_bool y if CC_IS_CLANG
+> +
+>  menu "Power management options"
+>
+>  config ARCH_HIBERNATION_POSSIBLE
+> diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
+> index 336ac9b65235..2e99450f4228 100644
+> --- a/arch/mips/include/asm/asm.h
+> +++ b/arch/mips/include/asm/asm.h
+> @@ -336,7 +336,7 @@ symbol              =3D       value
+>   */
+>  #ifdef CONFIG_WAR_R10000_LLSC
+>  # define SC_BEQZ       beqzl
+> -#elif MIPS_ISA_REV >=3D 6
+> +#elif !defined(CONFIG_CC_HAS_BROKEN_INLINE_COMPAT_BRANCH) && MIPS_ISA_RE=
+V >=3D 6
+>  # define SC_BEQZ       beqzc
+>  #else
+>  # define SC_BEQZ       beqz
+> --
+> 2.37.1 (Apple Git-137.1)
+>
+>
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 37072e15b263..c8b878aa690f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3206,6 +3206,10 @@ config CC_HAS_MNO_BRANCH_LIKELY
- 	def_bool y
- 	depends on $(cc-option,-mno-branch-likely)
- 
-+# https://github.com/llvm/llvm-project/issues/61045
-+config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
-+	def_bool y if CC_IS_CLANG
-+
- menu "Power management options"
- 
- config ARCH_HIBERNATION_POSSIBLE
-diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
-index 336ac9b65235..2e99450f4228 100644
---- a/arch/mips/include/asm/asm.h
-+++ b/arch/mips/include/asm/asm.h
-@@ -336,7 +336,7 @@ symbol		=	value
-  */
- #ifdef CONFIG_WAR_R10000_LLSC
- # define SC_BEQZ	beqzl
--#elif MIPS_ISA_REV >= 6
-+#elif !defined(CONFIG_CC_HAS_BROKEN_INLINE_COMPAT_BRANCH) && MIPS_ISA_REV >= 6
- # define SC_BEQZ	beqzc
- #else
- # define SC_BEQZ	beqz
--- 
-2.37.1 (Apple Git-137.1)
 
+--=20
+Thanks,
+~Nick Desaulniers
