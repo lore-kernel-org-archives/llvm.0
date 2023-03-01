@@ -1,222 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B7123AF;
-	Wed,  1 Mar 2023 18:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02A5C433D2;
-	Wed,  1 Mar 2023 18:44:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677696284;
-	bh=G9AkJ6//uTGDoR5bgmBlp3xFgIA9EgvmfqcVSo26mbk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OS1tvCKYbiz/S4Uz2iYuT2o9tAIjNyG0HBO0Pd2OI7OWKiY2XHPDeNZWaq3SWxtbo
-	 LwM1I4E9MVY3tNvHv5gWLpJWf5zvRwfnWqnTYMdGrPL6SDcv4iD8mh/+ek3ys9zGe6
-	 dqwc7ioCprCARD8szCm8ulJG3481pnOlAIABaLay7UKgbvW0rAhxK1q41QdtyHSnab
-	 CWn9X1cxHAYPOy3zPVj0if/XuLwvSPLrQSmbX5wGnxpJGzFUUaAATgXYK824Q7Tmtz
-	 AZzevICGhsLX7/cjeymT1xMD28iB3Stfh/Z9SjyTs5vG6aq9CzU02Yqa4sBg+cRZo2
-	 Pl8FCepvDT2Ng==
-Date: Wed, 1 Mar 2023 18:44:38 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Andy Chiu <andy.chiu@sifive.com>, linux-riscv@lists.infradead.org,
-	palmer@dabbelt.com, anup@brainfault.org, atishp@atishpatra.org,
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	vineetg@rivosinc.com, greentime.hu@sifive.com,
-	guoren@linux.alibaba.com, Paul Walmsley <paul.walmsley@sifive.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH -next v14 19/19] riscv: Enable Vector code to be built
-Message-ID: <Y/+dFpdbOdLRUmY5@spud>
-References: <20230224170118.16766-20-andy.chiu@sifive.com>
- <202302250924.ukv4ZxOc-lkp@intel.com>
- <Y/+SoGfspjGwlH7g@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B27C881F;
+	Wed,  1 Mar 2023 19:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677698382; x=1709234382;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6Nte7zMIlqadmJQfWLuZoBsbHq55nTuYQZ0k4cPzoHo=;
+  b=CpIgu6dq6p0Ib7DtIhsjn//bqeQR+lCt/qQbAwIBLPyErNwzIW74pAxA
+   tNmsNT+wsLJqTVawE3Liwpdx8b38vUJhg0lsx6g7oQ9pnkha9MX14pyjl
+   hk/lNLLonfGiBIeOPtJiffWK7G6hJuMTL/z+gALbyxpblTD4o+xcFwdkJ
+   hOecmVc1YFgzq/CGxSwh4+AJTbEIPZu4TkA3fU7/HD4So9lW3FJxsbRy1
+   lhj+ZLY3hJfopvt/OzM403z+juJRc2Ig4Rax5MSeTEtpx2L/eU02KUYfK
+   +DI+2KgM5e1iCjP/FPEtVkfZKtlHXo+rcSU58vGzsuHORUuxApkfDShfD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="420762636"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="420762636"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2023 11:19:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10636"; a="848775944"
+X-IronPort-AV: E=Sophos;i="5.98,225,1673942400"; 
+   d="scan'208";a="848775944"
+Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 01 Mar 2023 11:19:35 -0800
+Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pXRzA-0006MR-08;
+	Wed, 01 Mar 2023 19:19:32 +0000
+Date: Thu, 2 Mar 2023 03:18:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Larysa Zaremba <larysa.zaremba@intel.com>,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+	Song Liu <song@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built
+ from XDP frames
+Message-ID: <202303020342.Wi2PRFFH-lkp@intel.com>
+References: <20230301160315.1022488-2-aleksander.lobakin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="3AJ2nIKwr1Cl4KTp"
-Content-Disposition: inline
-In-Reply-To: <Y/+SoGfspjGwlH7g@dev-arch.thelio-3990X>
-
-
---3AJ2nIKwr1Cl4KTp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230301160315.1022488-2-aleksander.lobakin@intel.com>
 
-On Wed, Mar 01, 2023 at 11:00:00AM -0700, Nathan Chancellor wrote:
-> Hi Andy,
->=20
-> On Sat, Feb 25, 2023 at 09:33:30AM +0800, kernel test robot wrote:
-> > Hi Andy,
-> >=20
-> > I love your patch! Perhaps something to improve:
-> >=20
-> > [auto build test WARNING on next-20230224]
-> >=20
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Chiu/riscv-=
-Rename-__switch_to_aux-fpu/20230225-011059
-> > patch link:    https://lore.kernel.org/r/20230224170118.16766-20-andy.c=
-hiu%40sifive.com
-> > patch subject: [PATCH -next v14 19/19] riscv: Enable Vector code to be =
-built
-> > config: riscv-randconfig-r014-20230222 (https://download.01.org/0day-ci=
-/archive/20230225/202302250924.ukv4ZxOc-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db=
-89896bbbd2251fff457699635acbbedeead27f)
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install riscv cross compiling tool for clang build
-> >         # apt-get install binutils-riscv64-linux-gnu
-> >         # https://github.com/intel-lab-lkp/linux/commit/cd0ad21a9ef9d63=
-f1eef80fd3b09ae6e0d884ce3
-> >         git remote add linux-review https://github.com/intel-lab-lkp/li=
-nux
-> >         git fetch --no-tags linux-review Andy-Chiu/riscv-Rename-__switc=
-h_to_aux-fpu/20230225-011059
-> >         git checkout cd0ad21a9ef9d63f1eef80fd3b09ae6e0d884ce3
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash lib/zstd/
-> >=20
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Link: https://lore.kernel.org/oe-kbuild-all/202302250924.ukv4ZxOc-lkp=
-@intel.com/
-> >=20
-> > All warnings (new ones prefixed by >>):
-> >=20
-> > >> warning: Invalid size request on a scalable vector; Cannot implicitl=
-y convert a scalable size to a fixed-width size in `TypeSize::operator Scal=
-arTy()`
->=20
-> Please consider adding the following diff to patch 19 to avoid this
-> issue (see the upstream bug report for more details):
->=20
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index eb691dd8ee4f..187cd6c1d8c9 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -423,6 +423,8 @@ config TOOLCHAIN_HAS_V
->  	depends on !64BIT || $(cc-option,-mabi=3Dlp64 -march=3Drv64iv)
->  	depends on !32BIT || $(cc-option,-mabi=3Dilp32 -march=3Drv32iv)
->  	depends on LLD_VERSION >=3D 140000 || LD_VERSION >=3D 23800
-> +	# https://github.com/llvm/llvm-project/issues/61096
-> +	depends on !(CC_IS_CLANG && CLANG_VERSION >=3D 160000 && KASAN)
+Hi Alexander,
 
-Please don't! As far as I can tell, this is what I was warning about in:
-https://lore.kernel.org/linux-riscv/20230224170118.16766-1-andy.chiu@sifive=
-=2Ecom/T/#m2c0e6128230d407c843e10406305da9ff5dca902
+Thank you for the patch! Yet something to improve:
 
-The randconfig has RISCV_ISA_C enabled, so you're getting an ISA string
-containing "fdcv" and `fdv,,$(riscv-march-y)` fails to remove either fd,
-or v.
+[auto build test ERROR on bpf-next/master]
 
-The below is very much valid though, please test v15 with clang/llvm
-Andy!
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Lobakin/xdp-recycle-Page-Pool-backed-skbs-built-from-XDP-frames/20230302-000635
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230301160315.1022488-2-aleksander.lobakin%40intel.com
+patch subject: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built from XDP frames
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230302/202303020342.Wi2PRFFH-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a5ca5578e9bd35220be091fd02df96d492120ee3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alexander-Lobakin/xdp-recycle-Page-Pool-backed-skbs-built-from-XDP-frames/20230302-000635
+        git checkout a5ca5578e9bd35220be091fd02df96d492120ee3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-> Additionally, with older versions of clang 15.x and older, I see:
->=20
->   arch/riscv/kernel/vector.c:50:3: error: expected expression
->                   u32 width =3D RVV_EXRACT_VL_VS_WIDTH(insn_buf);
->                   ^
->   arch/riscv/kernel/vector.c:52:7: error: use of undeclared identifier 'w=
-idth'
->                   if (width =3D=3D RVV_VL_VS_WIDTH_8 || width =3D=3D RVV_=
-VL_VS_WIDTH_16 ||
->                       ^
->   arch/riscv/kernel/vector.c:52:37: error: use of undeclared identifier '=
-width'
->                   if (width =3D=3D RVV_VL_VS_WIDTH_8 || width =3D=3D RVV_=
-VL_VS_WIDTH_16 ||
->                                                     ^
->   arch/riscv/kernel/vector.c:53:7: error: use of undeclared identifier 'w=
-idth'
->                       width =3D=3D RVV_VL_VS_WIDTH_32 || width =3D=3D RVV=
-_VL_VS_WIDTH_64)
->                       ^
->   arch/riscv/kernel/vector.c:53:38: error: use of undeclared identifier '=
-width'
->                       width =3D=3D RVV_VL_VS_WIDTH_32 || width =3D=3D RVV=
-_VL_VS_WIDTH_64)
->                                                      ^
->   arch/riscv/kernel/vector.c:57:3: error: expected expression
->                   u32 csr =3D RVG_EXTRACT_SYSTEM_CSR(insn_buf);
->                   ^
->   arch/riscv/kernel/vector.c:59:8: error: use of undeclared identifier 'c=
-sr'
->                   if ((csr >=3D CSR_VSTART && csr <=3D CSR_VCSR) ||
->                        ^
->   arch/riscv/kernel/vector.c:59:29: error: use of undeclared identifier '=
-csr'
->                   if ((csr >=3D CSR_VSTART && csr <=3D CSR_VCSR) ||
->                                             ^
->   arch/riscv/kernel/vector.c:60:8: error: use of undeclared identifier 'c=
-sr'
->                       (csr >=3D CSR_VL && csr <=3D CSR_VLENB))
->                        ^
->   arch/riscv/kernel/vector.c:60:25: error: use of undeclared identifier '=
-csr'
->                       (csr >=3D CSR_VL && csr <=3D CSR_VLENB))
->                                         ^
->   10 errors generated.
->=20
-> which is fixed by:
->=20
-> diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
-> index 585e2c51b28e..8c98db9c0ae1 100644
-> --- a/arch/riscv/kernel/vector.c
-> +++ b/arch/riscv/kernel/vector.c
-> @@ -46,14 +46,15 @@ static bool insn_is_vector(u32 insn_buf)
->  		is_vector =3D true;
->  		break;
->  	case RVV_OPCODE_VL:
-> -	case RVV_OPCODE_VS:
-> +	case RVV_OPCODE_VS: {
->  		u32 width =3D RVV_EXRACT_VL_VS_WIDTH(insn_buf);
-> =20
->  		if (width =3D=3D RVV_VL_VS_WIDTH_8 || width =3D=3D RVV_VL_VS_WIDTH_16 =
-||
->  		    width =3D=3D RVV_VL_VS_WIDTH_32 || width =3D=3D RVV_VL_VS_WIDTH_64)
->  			is_vector =3D true;
->  		break;
-> -	case RVG_OPCODE_SYSTEM:
-> +	}
-> +	case RVG_OPCODE_SYSTEM: {
->  		u32 csr =3D RVG_EXTRACT_SYSTEM_CSR(insn_buf);
-> =20
->  		if ((csr >=3D CSR_VSTART && csr <=3D CSR_VCSR) ||
-> @@ -61,6 +62,7 @@ static bool insn_is_vector(u32 insn_buf)
->  			is_vector =3D true;
->  		break;
->  	}
-> +	}
->  	return is_vector;
->  }
-> =20
-> ---
->=20
-> Cheers,
-> Nathan
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303020342.Wi2PRFFH-lkp@intel.com/
 
---3AJ2nIKwr1Cl4KTp
-Content-Type: application/pgp-signature; name="signature.asc"
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+>> net/core/xdp.c:662:3: error: implicit declaration of function 'skb_mark_for_recycle' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   skb_mark_for_recycle(skb);
+                   ^
+   1 error generated.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/+dFgAKCRB4tDGHoIJi
-0l+8AQDiMiLdgkWVTVkHqZiXBKBOneufFmTinIodVbJkus+2YQEA5fLZb8tDSC0L
-hcGpOcVINQsRdQCiAZWKkeL6WV5oQQ8=
-=Vdb2
------END PGP SIGNATURE-----
 
---3AJ2nIKwr1Cl4KTp--
+vim +/skb_mark_for_recycle +662 net/core/xdp.c
+
+   614	
+   615	struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+   616						   struct sk_buff *skb,
+   617						   struct net_device *dev)
+   618	{
+   619		struct skb_shared_info *sinfo = xdp_get_shared_info_from_frame(xdpf);
+   620		unsigned int headroom, frame_size;
+   621		void *hard_start;
+   622		u8 nr_frags;
+   623	
+   624		/* xdp frags frame */
+   625		if (unlikely(xdp_frame_has_frags(xdpf)))
+   626			nr_frags = sinfo->nr_frags;
+   627	
+   628		/* Part of headroom was reserved to xdpf */
+   629		headroom = sizeof(*xdpf) + xdpf->headroom;
+   630	
+   631		/* Memory size backing xdp_frame data already have reserved
+   632		 * room for build_skb to place skb_shared_info in tailroom.
+   633		 */
+   634		frame_size = xdpf->frame_sz;
+   635	
+   636		hard_start = xdpf->data - headroom;
+   637		skb = build_skb_around(skb, hard_start, frame_size);
+   638		if (unlikely(!skb))
+   639			return NULL;
+   640	
+   641		skb_reserve(skb, headroom);
+   642		__skb_put(skb, xdpf->len);
+   643		if (xdpf->metasize)
+   644			skb_metadata_set(skb, xdpf->metasize);
+   645	
+   646		if (unlikely(xdp_frame_has_frags(xdpf)))
+   647			xdp_update_skb_shared_info(skb, nr_frags,
+   648						   sinfo->xdp_frags_size,
+   649						   nr_frags * xdpf->frame_sz,
+   650						   xdp_frame_is_frag_pfmemalloc(xdpf));
+   651	
+   652		/* Essential SKB info: protocol and skb->dev */
+   653		skb->protocol = eth_type_trans(skb, dev);
+   654	
+   655		/* Optional SKB info, currently missing:
+   656		 * - HW checksum info		(skb->ip_summed)
+   657		 * - HW RX hash			(skb_set_hash)
+   658		 * - RX ring dev queue index	(skb_record_rx_queue)
+   659		 */
+   660	
+   661		if (xdpf->mem.type == MEM_TYPE_PAGE_POOL)
+ > 662			skb_mark_for_recycle(skb);
+   663	
+   664		/* Allow SKB to reuse area used by xdp_frame */
+   665		xdp_scrub_frame(xdpf);
+   666	
+   667		return skb;
+   668	}
+   669	EXPORT_SYMBOL_GPL(__xdp_build_skb_from_frame);
+   670	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
