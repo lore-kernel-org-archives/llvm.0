@@ -1,29 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 990788C10
-	for <llvm@lists.linux.dev>; Thu,  2 Mar 2023 16:43:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECDEFC4339B;
-	Thu,  2 Mar 2023 16:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677775406;
-	bh=/3EG9mCgYljy/AeNWULKubu7iLxYcPdrWpi0iqQTytY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C1V38pM6W0R0c4lmN/gk2Mx8h/SqlsjawPWMlCSIv8hZ9pB/m7y0UzuDUVuLP/OFe
-	 CExGzW77LyaF8WISi8o3nE7QTvY+XLe1fx22+jLoEMI9pBSE6a3xVBqcz3xIN7WTRy
-	 YycmUDrVoA73rZeiT8jdUoh7R02yjc421jVDD+c3vPumzHioshg/naG6t/75sTQmKQ
-	 XnHhugdZq143WrmcNLLjeTfpAVC75ISekxuGCzKaHQxUTEed3l+bD6q4ofU37hXO94
-	 4QFlZgzfncjEBLKT15uWJkU0v5OjaW+KkvjMVUgWOJGxhaQEjHUxrxvE/Z/55jNt6j
-	 EQdf9k+nbJybg==
-Date: Thu, 2 Mar 2023 09:43:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 2/2] powerpc/64: Use -mtune=pwr10/9/8 for clang
-Message-ID: <20230302164324.GB3010526@dev-arch.thelio-3990X>
-References: <20230302131656.50626-1-mpe@ellerman.id.au>
- <20230302131656.50626-2-mpe@ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88E510FA;
+	Thu,  2 Mar 2023 18:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677782791; x=1709318791;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eaoMyL7btXqQ/B5dDTOWgLMMsx+UCkbSOK8Ima8PDDk=;
+  b=Id0/1Oi3NAoiSybnJtF2sZutzc7k6A1WfW8tWrqA2pvNDj1B1SM1+6yT
+   KpiouVJuT7VlQhpw1+7mxFyUV+iys1mAXeNqWx/SP6cFX/1izPnKTZQFQ
+   cUDbg6xXgyAJA2fyrgZ1aNw4Wf5BNljKSijz2wgdbfnobaIA3nBID/ccc
+   AJF+fATI+CpkGQ4MYUOpH9ZWHZNNfagiQZN3ZGw+xN1Ivx0mf0pkYrggL
+   LPm1kPmrlM/1oTzOYAqdeVNOWe07oKbLKOXw0D/umJJL24z0jOHUk2yj+
+   FYIhMof2V4eS5GQ4SBfuaRw/ie71FFYBySrjXl9fgJuKmoEd9rNno105+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="314476147"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="314476147"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 10:46:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="798936242"
+X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
+   d="scan'208";a="798936242"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 02 Mar 2023 10:46:29 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pXnwi-0000n4-2V;
+	Thu, 02 Mar 2023 18:46:28 +0000
+Date: Fri, 3 Mar 2023 02:45:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+ 384/633] drivers/phy/qualcomm/phy-qcom-snps-eusb2.c:172:7: error: call to
+ undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202303030257.KkvlYwFb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,64 +47,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230302131656.50626-2-mpe@ellerman.id.au>
 
-Hi Michael,
+Hi Abel,
 
-Thanks for the workaround and sorry this has come to bite us :/
+First bad commit (maybe != root cause):
 
-On Fri, Mar 03, 2023 at 12:16:56AM +1100, Michael Ellerman wrote:
-> For the -mtune option clang doesn't accept power10/9/8, instead it
-> accepts pwr10/9/8. That will be fixed in future versions of clang, but
-> the kernel must support the clang versions in the wild.
-> 
-> So add support for the "pwr" spelling if clang is in use.
-> 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+head:   06abd4f3cf4c58289447483d11d566d20fd3f3db
+commit: defa91be85256bdf900fa2eb9709f74744a8fddf [384/633] Merge branch 'topic/sm8550/upstream/usb' into tracking-qcomlt-sm8550-drivers
+config: powerpc-buildonly-randconfig-r002-20230302 (https://download.01.org/0day-ci/archive/20230303/202303030257.KkvlYwFb-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/krzk/linux/commit/defa91be85256bdf900fa2eb9709f74744a8fddf
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+        git checkout defa91be85256bdf900fa2eb9709f74744a8fddf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/phy/qualcomm/
 
-I think that should actually be
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303030257.KkvlYwFb-lkp@intel.com/
 
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+All errors (new ones prefixed by >>):
 
-> BugLink: https://github.com/ClangBuiltLinux/linux/issues/1799
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+>> drivers/phy/qualcomm/phy-qcom-snps-eusb2.c:172:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                            FIELD_PREP(PHY_CFG_TX_PREEMP_TUNE_MASK, 0));
+                                            ^
+   drivers/phy/qualcomm/phy-qcom-snps-eusb2.c:203:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                                    FIELD_PREP(FSEL_MASK, FSEL_19_2_MHZ_VAL));
+                                                    ^
+   drivers/phy/qualcomm/phy-qcom-snps-eusb2.c:317:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                            FIELD_PREP(PHY_CFG_PLL_CPBIAS_CNTRL_MASK, 0x1));
+                                            ^
+   3 errors generated.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> ---
->  arch/powerpc/platforms/Kconfig.cputype | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> Need to confirm the clang <= 16 statement is correct.
+vim +/FIELD_PREP +172 drivers/phy/qualcomm/phy-qcom-snps-eusb2.c
 
-Currently, this is indeed the case. It is possible that Nemanja's patch
-will get applied to release/16.x before 16.0.0 final but it might not.
-We can always update it later. I think we do want to push to get that
-patch applied because I forgot that it is only in 16.0.0 that '-mtune'
-starts to do something on PowerPC:
+e237c1557077309 Abel Vesa 2022-10-25  166  
+e237c1557077309 Abel Vesa 2022-10-25  167  static void qcom_eusb2_default_parameters(struct qcom_snps_eusb2_hsphy *phy)
+e237c1557077309 Abel Vesa 2022-10-25  168  {
+e237c1557077309 Abel Vesa 2022-10-25  169  	/* default parameters: tx pre-emphasis */
+e237c1557077309 Abel Vesa 2022-10-25  170  	qcom_snps_eusb2_hsphy_write_mask(phy->base, USB_PHY_CFG_CTRL_9,
+e237c1557077309 Abel Vesa 2022-10-25  171  					 PHY_CFG_TX_PREEMP_TUNE_MASK,
+e237c1557077309 Abel Vesa 2022-10-25 @172  					 FIELD_PREP(PHY_CFG_TX_PREEMP_TUNE_MASK, 0));
+e237c1557077309 Abel Vesa 2022-10-25  173  
+e237c1557077309 Abel Vesa 2022-10-25  174  	/* tx rise/fall time */
+e237c1557077309 Abel Vesa 2022-10-25  175  	qcom_snps_eusb2_hsphy_write_mask(phy->base, USB_PHY_CFG_CTRL_9,
+e237c1557077309 Abel Vesa 2022-10-25  176  					 PHY_CFG_TX_RISE_TUNE_MASK,
+e237c1557077309 Abel Vesa 2022-10-25  177  					 FIELD_PREP(PHY_CFG_TX_RISE_TUNE_MASK, 0x2));
+e237c1557077309 Abel Vesa 2022-10-25  178  
+e237c1557077309 Abel Vesa 2022-10-25  179  	/* source impedance adjustment */
+e237c1557077309 Abel Vesa 2022-10-25  180  	qcom_snps_eusb2_hsphy_write_mask(phy->base, USB_PHY_CFG_CTRL_9,
+e237c1557077309 Abel Vesa 2022-10-25  181  					 PHY_CFG_TX_RES_TUNE_MASK,
+e237c1557077309 Abel Vesa 2022-10-25  182  					 FIELD_PREP(PHY_CFG_TX_RES_TUNE_MASK, 0x1));
+e237c1557077309 Abel Vesa 2022-10-25  183  
+e237c1557077309 Abel Vesa 2022-10-25  184  	/* dc voltage level adjustement */
+e237c1557077309 Abel Vesa 2022-10-25  185  	qcom_snps_eusb2_hsphy_write_mask(phy->base, USB_PHY_CFG_CTRL_8,
+e237c1557077309 Abel Vesa 2022-10-25  186  					 PHY_CFG_TX_HS_VREF_TUNE_MASK,
+e237c1557077309 Abel Vesa 2022-10-25  187  					 FIELD_PREP(PHY_CFG_TX_HS_VREF_TUNE_MASK, 0x3));
+e237c1557077309 Abel Vesa 2022-10-25  188  
+e237c1557077309 Abel Vesa 2022-10-25  189  	/* transmitter HS crossover adjustement */
+e237c1557077309 Abel Vesa 2022-10-25  190  	qcom_snps_eusb2_hsphy_write_mask(phy->base, USB_PHY_CFG_CTRL_8,
+e237c1557077309 Abel Vesa 2022-10-25  191  					 PHY_CFG_TX_HS_XV_TUNE_MASK,
+e237c1557077309 Abel Vesa 2022-10-25  192  					 FIELD_PREP(PHY_CFG_TX_HS_XV_TUNE_MASK, 0x0));
+e237c1557077309 Abel Vesa 2022-10-25  193  }
+e237c1557077309 Abel Vesa 2022-10-25  194  
 
-https://github.com/llvm/llvm-project/commit/1dc26b80b872a94c581549a21943756a8c3448a3
+:::::: The code at line 172 was first introduced by commit
+:::::: e237c15570773096c4d5e4a98b3390fc0f1e8d6b phy: qcom: Add QCOM SNPS eUSB2 driver
 
-Prior to that change, '-mtune' was accepted but did nothing. It is only
-once it was hooked up to the backend that we got the spew of warnings. I
-think that warrants us trying to get Nemanja's patch into 16.0.0, which
-may allow us to drop this workaround altogether...
+:::::: TO: Abel Vesa <abel.vesa@linaro.org>
+:::::: CC: Abel Vesa <abel.vesa@linaro.org>
 
-> diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
-> index 7d7477b73951..e4e0e81be7de 100644
-> --- a/arch/powerpc/platforms/Kconfig.cputype
-> +++ b/arch/powerpc/platforms/Kconfig.cputype
-> @@ -278,6 +278,10 @@ config TUNE_CPU
->  	default "-mtune=power10" if POWERPC64_CPU && CC_IS_GCC   && $(cc-option,-mtune=power10)
->  	default "-mtune=power9"  if POWERPC64_CPU && CC_IS_GCC   && $(cc-option,-mtune=power9)
->  	default "-mtune=power8"  if POWERPC64_CPU && CC_IS_GCC   && $(cc-option,-mtune=power8)
-> +	# clang <= 16 only supports the "pwr" names
-> +	default "-mtune=pwr10"   if POWERPC64_CPU && CC_IS_CLANG && $(cc-option,-mtune=pwr10)
-> +	default "-mtune=pwr9"    if POWERPC64_CPU && CC_IS_CLANG && $(cc-option,-mtune=pwr9)
-> +	default "-mtune=pwr8"    if POWERPC64_CPU && CC_IS_CLANG && $(cc-option,-mtune=pwr8)
->  
->  config PPC_BOOK3S
->  	def_bool y
-> -- 
-> 2.39.2
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
