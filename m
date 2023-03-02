@@ -1,87 +1,185 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4C9D524;
-	Thu,  2 Mar 2023 21:10:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677791439; x=1709327439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lZZMuTVM1RRanm/bSThQ5dfquthSDrIJ7mGhQXKjRMQ=;
-  b=IOCl7YDZrzsNiMndQ6iDHRI0QXi2TBHoBhUatbfOfXOLIkv60CiRvFBP
-   wie1vespEpRsyp0k0vAHx8h52q0E7hLURORv43AVYjSWGItP6828vPfpO
-   zEP/5VZK+DV4sHkrmAKBcXwCBbJcWyWXS5Ok4dy1VmmgFxwHTVmpwstvC
-   Uljk73/VElYNzV9p6oAuo2HTsC32HVFQgdkWPn6np+SuW9lnFbReYaggZ
-   ZRHMHYfySfrUj4DbuaulPCqM5ZjI0fRybRbim3T9sXQcuQErFI8aoY5J6
-   NbT1pSx3lhwH0u5J5Bbfx0Cxnx/+zWWAw5g3UoTBu0ey5E1Y9RgU22ioM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="315266356"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="315266356"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 13:10:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="849236477"
-X-IronPort-AV: E=Sophos;i="5.98,228,1673942400"; 
-   d="scan'208";a="849236477"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 02 Mar 2023 13:10:34 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pXqC9-0000t2-1x;
-	Thu, 02 Mar 2023 21:10:33 +0000
-Date: Fri, 3 Mar 2023 05:10:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Florian Westphal <fw@strlen.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC v2 bpf-next 1/3] bpf: add bpf_link support for
- BPF_NETFILTER programs
-Message-ID: <202303030501.plArM8Yu-lkp@intel.com>
-References: <20230302172757.9548-2-fw@strlen.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82008A28
+	for <llvm@lists.linux.dev>; Thu,  2 Mar 2023 22:54:48 +0000 (UTC)
+Received: by mail-pf1-f169.google.com with SMTP id z11so460162pfh.4
+        for <llvm@lists.linux.dev>; Thu, 02 Mar 2023 14:54:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1677797688;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u2JRIgyoI3LG7ExFh5qUTdxbB5N+rDjbtaVJKTM4FGg=;
+        b=ZRgJuMA/fQKk05iFza42jJH+7v8m6WLj7Y6PW2elWQDxLzrrB8AIr5lDRsP8VnuXVN
+         rJPiHHWN3O1ya1BQCMKJ+tbSlzVBhubn5U+J9Fcbwv19NLhaHehmctR4b/akjO/PJjh5
+         RdIPYeAhrbFnidkd+uGgbwkALes5aULSbkkBI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677797688;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u2JRIgyoI3LG7ExFh5qUTdxbB5N+rDjbtaVJKTM4FGg=;
+        b=ypTtzLQiSHn6VoUYrr1p+0ldmnPTcXHpTOpMztIRkzQ0qUGS6tFmc3v8vJrYopeD8R
+         eWv2gYRExfMdXSHrN4qw7eBWe5rhwqc6NOWhqw9oRoBaodzHJ2Eco+3JMQh8VKyDLiUp
+         5xrivGAs8dnpMTDCj1oR10mzWpb/C0bo2/cVWVmWzYgToF07mvC1oU/iM+FPqmoxMHb0
+         6ZQL95YOQjVimo9TAT72lBXew7EnebFYKHJVfRUl76Vb+CSz+BcWmtbu7FcI9y6sX43P
+         rLMDETeP5fQd52Hmpo6+rlCNkGCnDTogrPbjq044bx/VuOAL7hhitMBcdDFINvFnPwnP
+         g6FQ==
+X-Gm-Message-State: AO0yUKUehu9w+1yrZuV0rRr19QMb4S/+tA6Gai3BI5bZSK6BLfUukpD+
+	8trcuSV0Ep/xtJtt//VIuigK6g==
+X-Google-Smtp-Source: AK7set9WtD/j4O/ovPP1ZZjoBYPmLhyqfNrov+AFG7LCOlOoZCF1E5LcP7RwmFw+/RjghZHDnTH1Cw==
+X-Received: by 2002:a62:1c86:0:b0:5e3:a299:da83 with SMTP id c128-20020a621c86000000b005e3a299da83mr75169pfc.19.1677797687906;
+        Thu, 02 Mar 2023 14:54:47 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id v15-20020a62a50f000000b005b02ddd852dsm198884pfm.142.2023.03.02.14.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 14:54:47 -0800 (PST)
+From: Kees Cook <keescook@chromium.org>
+To: Marco Elver <elver@google.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Tom Rix <trix@redhat.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] ubsan: Tighten UBSAN_BOUNDS on GCC
+Date: Thu,  2 Mar 2023 14:54:45 -0800
+Message-Id: <20230302225444.never.053-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302172757.9548-2-fw@strlen.de>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4864; h=from:subject:message-id; bh=fiHZshvhhBKge+wRDtZOMOzuLFEr4J5rZ3Gf/YuSg5M=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkASk1DfXP5RuMcAAZwINXn4av0e/T7Lrav7dZ437c Q1HmfpSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZAEpNQAKCRCJcvTf3G3AJj31D/ 9BTfaAD5NLjFsFdk12+iIZ7uD1uZEcSbqdoJ7lGo7+gHmqfLYRh8NLk6aC+Y5XuNYLenexfMHd++iL 549RaiWK0GMjdrjruhZt2eCaYNzIf3IdiWiMD/MsLFFI9ZXv4TboLjnmaP0E/ZfcqmoHh4vYbevZrr vJ4gMJ+5PueShbCXZgmfyK2POQqJgNRdRvYlIotpMXRgJLXtSYpvYNXr/blNV9vKnkXFNSnxFkvU1z CZwFDlPDtoQNEomhI6iXD9K3Rft4CxC+viOjpGeQ3wB4aoWN59HyszKR7zN2bEn9snIBnQ08CRcBJl Enn79lEZcyVoHR8sKowxKnm8aRK74yLdShiilCj4/500Qzuz7mYYVC0UbhPQiEZx6gaI/E912x+UUP +bLVXqcBzQha7xRWV3LotWF1zyxOz/9nM5RYTArt1LLJLh+PovKta7kh7gxCMl6Abj9PUCRUwFoZBo ccy31dmawOpHfBmKjZi8lipwiZQ/SRs8I0d6q2Jgho8uYwU5S5uP0IQE1/XnjjQPm9tvdtC5Nwl98G qSjqqk+dtEBJb5gn5ogtJwMkqwlmd+AUTgBxGMoHrBfSVTZWG1ye4G9y99qaqP6ZwnuMIMihAGUbw2 Xq1FBo7M+pfLf/dmIk1FcwbOfVfZiWrh8xa7PQ+ndqYgGoX2zJwKzZoeZ8yg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi Florian,
+The use of -fsanitize=bounds on GCC will ignore some trailing arrays,
+leaving a gap in coverage. Switch to using -fsanitize=bounds-strict to
+match Clang's stricter behavior.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on bpf-next/master]
+Cc: Marco Elver <elver@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Tom Rix <trix@redhat.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ lib/Kconfig.ubsan      | 54 +++++++++++++++++++++++-------------------
+ scripts/Makefile.ubsan |  2 +-
+ 2 files changed, 30 insertions(+), 26 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Westphal/bpf-add-bpf_link-support-for-BPF_NETFILTER-programs/20230303-013022
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230302172757.9548-2-fw%40strlen.de
-patch subject: [PATCH RFC v2 bpf-next 1/3] bpf: add bpf_link support for BPF_NETFILTER programs
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230303/202303030501.plArM8Yu-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dafd9c7dce974be4bf60f89c8427a765acfcba77
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Florian-Westphal/bpf-add-bpf_link-support-for-BPF_NETFILTER-programs/20230303-013022
-        git checkout dafd9c7dce974be4bf60f89c8427a765acfcba77
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303030501.plArM8Yu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: bpf_nf_link_attach
-   >>> referenced by syscall.c:4641 (kernel/bpf/syscall.c:4641)
-   >>>               kernel/bpf/syscall.o:(link_create) in archive vmlinux.a
-
+diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+index fd15230a703b..9d3e87a0b6d1 100644
+--- a/lib/Kconfig.ubsan
++++ b/lib/Kconfig.ubsan
+@@ -27,16 +27,27 @@ config UBSAN_TRAP
+ 	  the system. For some system builders this is an acceptable
+ 	  trade-off.
+ 
+-config CC_HAS_UBSAN_BOUNDS
+-	def_bool $(cc-option,-fsanitize=bounds)
++config CC_HAS_UBSAN_BOUNDS_STRICT
++	def_bool $(cc-option,-fsanitize=bounds-strict)
++	help
++	  The -fsanitize=bounds-strict option is only available on GCC,
++	  but uses the more strict handling of arrays that includes knowledge
++	  of flexible arrays, which is comparable to Clang's regular
++	  -fsanitize=bounds.
+ 
+ config CC_HAS_UBSAN_ARRAY_BOUNDS
+ 	def_bool $(cc-option,-fsanitize=array-bounds)
++	help
++	  The -fsanitize=array-bounds option is only available on Clang,
++	  and is actually composed of two more specific options,
++	  -fsanitize=array-bounds and -fsanitize=local-bounds. However,
++	  -fsanitize=local-bounds can only be used when trap mode is
++	  enabled. (See also the help for CONFIG_LOCAL_BOUNDS.)
+ 
+ config UBSAN_BOUNDS
+ 	bool "Perform array index bounds checking"
+ 	default UBSAN
+-	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS
++	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS_STRICT
+ 	help
+ 	  This option enables detection of directly indexed out of bounds
+ 	  array accesses, where the array size is known at compile time.
+@@ -44,33 +55,26 @@ config UBSAN_BOUNDS
+ 	  to the {str,mem}*cpy() family of functions (that is addressed
+ 	  by CONFIG_FORTIFY_SOURCE).
+ 
+-config UBSAN_ONLY_BOUNDS
+-	def_bool CC_HAS_UBSAN_BOUNDS && !CC_HAS_UBSAN_ARRAY_BOUNDS
+-	depends on UBSAN_BOUNDS
++config UBSAN_BOUNDS_STRICT
++	def_bool UBSAN_BOUNDS && CC_HAS_UBSAN_BOUNDS_STRICT
+ 	help
+-	  This is a weird case: Clang's -fsanitize=bounds includes
+-	  -fsanitize=local-bounds, but it's trapping-only, so for
+-	  Clang, we must use -fsanitize=array-bounds when we want
+-	  traditional array bounds checking enabled. For GCC, we
+-	  want -fsanitize=bounds.
++	  GCC's bounds sanitizer. This option is used to select the
++	  correct options in Makefile.ubsan.
+ 
+ config UBSAN_ARRAY_BOUNDS
+-	def_bool CC_HAS_UBSAN_ARRAY_BOUNDS
+-	depends on UBSAN_BOUNDS
++	def_bool UBSAN_BOUNDS && CC_HAS_UBSAN_ARRAY_BOUNDS
++	help
++	  Clang's array bounds sanitizer. This option is used to select
++	  the correct options in Makefile.ubsan.
+ 
+ config UBSAN_LOCAL_BOUNDS
+-	bool "Perform array local bounds checking"
+-	depends on UBSAN_TRAP
+-	depends on $(cc-option,-fsanitize=local-bounds)
+-	help
+-	  This option enables -fsanitize=local-bounds which traps when an
+-	  exception/error is detected. Therefore, it may only be enabled
+-	  with CONFIG_UBSAN_TRAP.
+-
+-	  Enabling this option detects errors due to accesses through a
+-	  pointer that is derived from an object of a statically-known size,
+-	  where an added offset (which may not be known statically) is
+-	  out-of-bounds.
++	def_bool UBSAN_ARRAY_BOUNDS && UBSAN_TRAP
++	help
++	  This option enables Clang's -fsanitize=local-bounds which traps
++	  when an access through a pointer that is derived from an object
++	  of a statically-known size, where an added offset (which may not
++	  be known statically) is out-of-bounds. Since this option is
++	  trap-only, it depends on CONFIG_UBSAN_TRAP.
+ 
+ config UBSAN_SHIFT
+ 	bool "Perform checking for bit-shift overflows"
+diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+index 7099c603ff0a..4749865c1b2c 100644
+--- a/scripts/Makefile.ubsan
++++ b/scripts/Makefile.ubsan
+@@ -2,7 +2,7 @@
+ 
+ # Enable available and selected UBSAN features.
+ ubsan-cflags-$(CONFIG_UBSAN_ALIGNMENT)		+= -fsanitize=alignment
+-ubsan-cflags-$(CONFIG_UBSAN_ONLY_BOUNDS)	+= -fsanitize=bounds
++ubsan-cflags-$(CONFIG_UBSAN_BOUNDS_STRICT)	+= -fsanitize=bounds-strict
+ ubsan-cflags-$(CONFIG_UBSAN_ARRAY_BOUNDS)	+= -fsanitize=array-bounds
+ ubsan-cflags-$(CONFIG_UBSAN_LOCAL_BOUNDS)	+= -fsanitize=local-bounds
+ ubsan-cflags-$(CONFIG_UBSAN_SHIFT)		+= -fsanitize=shift
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
