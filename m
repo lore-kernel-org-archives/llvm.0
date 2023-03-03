@@ -1,49 +1,31 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A859779D8;
-	Fri,  3 Mar 2023 15:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677855619; x=1709391619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TMNP08vwbk1/xlZyyZJWhOWKVuIm24PIkc1+069668g=;
-  b=k7UXAo8ANQzf/qRfG6hRzQAUlzcDhzGyiEGMk6TgFehp8NeGweN0YZbK
-   DBKWeK+UJg9FpEUvVWEcvyCoOcDYjV5DP9D7kjeG6T6gKARpLeuUcPKhl
-   gmBAT6yIpK9W1UQshoTILqFQmpNvjWjcvzwe0ULHBRy9UPEK5qhOfXsfj
-   +0U7Sy6vRRN1zVoXa8bCy8Td6LA2nv03iRRqrTfy9SZxjgBe+sGDi+h3u
-   w5MP47MzmIvI5rA2nhUOwIEQp4CvA/vet1QkQi+7N5ccE2FwI9xZClc+G
-   3Ye/gqgBupmv9n5V29j3C281vcQJuRTREaaJEEVDUXaB9og5FwzxQq9DZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="332539991"
-X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="332539991"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 07:00:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="921142115"
-X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="921142115"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Mar 2023 07:00:16 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pY6tL-0001U8-2R;
-	Fri, 03 Mar 2023 15:00:15 +0000
-Date: Fri, 3 Mar 2023 22:59:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Taniya Das <quic_tdas@quicinc.com>, Andy Gross <agross@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>
-Subject: Re: [PATCH 2/2] clk: qcom: lpass: Initialize start_index
-Message-ID: <202303032224.tuvDnbbB-lkp@intel.com>
-References: <20230303092859.22094-3-quic_tdas@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5134A79D8
+	for <llvm@lists.linux.dev>; Fri,  3 Mar 2023 15:14:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00B9C433EF;
+	Fri,  3 Mar 2023 15:14:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1677856443;
+	bh=SY8yapFxxlbxxr+YImm1QNyDrMxq689GISGUK9dvGzM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XUBMaRMGAHRCenjd4RbPqV/bhxgnkH1olWU6j3dlWBghBnruGBN5UDe9zwKa/fyKb
+	 QHI0/euHioxKSC5BSqzq3ASq1njWsB+n17cjtNA+19sLHnRqfwteqnCCSte8OjneH9
+	 4RwJUm+5zpBUdUZRmVOA4308F9ALarlAACp/dqRo6eUbB19LqpD1tCQV68UsxOw0GO
+	 9QnmFWsrQ7csVOffJ8OAYY5A2zSAVjVjT7rAwY/iJ150pJ7wmGIyxhPiGnAU763VtE
+	 EaNqwxweAfIhs/Dv/1BWZTTmThYvrPact4rTfCX+ZCVxHZOAxAIK+XkE5evbh5RuIE
+	 WcKK8GEuU7MKw==
+Date: Fri, 3 Mar 2023 08:14:00 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: linuxppc-dev@lists.ozlabs.org, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH 2/2] powerpc/64: Use -mtune=pwr10/9/8 for clang
+Message-ID: <20230303151400.GA2665@dev-arch.thelio-3990X>
+References: <20230302131656.50626-1-mpe@ellerman.id.au>
+ <20230302131656.50626-2-mpe@ellerman.id.au>
+ <20230302164324.GB3010526@dev-arch.thelio-3990X>
+ <878rgelnhd.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,97 +34,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303092859.22094-3-quic_tdas@quicinc.com>
+In-Reply-To: <878rgelnhd.fsf@mpe.ellerman.id.au>
 
-Hi Taniya,
+On Fri, Mar 03, 2023 at 10:53:02AM +1100, Michael Ellerman wrote:
+> Nathan Chancellor <nathan@kernel.org> writes:
+> > Hi Michael,
+> >
+> > Thanks for the workaround and sorry this has come to bite us :/
+> >
+> > On Fri, Mar 03, 2023 at 12:16:56AM +1100, Michael Ellerman wrote:
+> >> For the -mtune option clang doesn't accept power10/9/8, instead it
+> >> accepts pwr10/9/8. That will be fixed in future versions of clang, but
+> >> the kernel must support the clang versions in the wild.
+> >> 
+> >> So add support for the "pwr" spelling if clang is in use.
+> >> 
+> >> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> > I think that should actually be
+> >
+> > Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> I guess yeah.
+> 
+> >> BugLink: https://github.com/ClangBuiltLinux/linux/issues/1799
+> >> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> >
+> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Thanks.
+> 
+> >> ---
+> >>  arch/powerpc/platforms/Kconfig.cputype | 4 ++++
+> >>  1 file changed, 4 insertions(+)
+> >> 
+> >> Need to confirm the clang <= 16 statement is correct.
+> >
+> > Currently, this is indeed the case. It is possible that Nemanja's patch
+> > will get applied to release/16.x before 16.0.0 final but it might not.
+> >
+> > We can always update it later. I think we do want to push to get that
+> > patch applied because I forgot that it is only in 16.0.0 that '-mtune'
+> > starts to do something on PowerPC:
+> >
+> > https://github.com/llvm/llvm-project/commit/1dc26b80b872a94c581549a21943756a8c3448a3
+> >
+> > Prior to that change, '-mtune' was accepted but did nothing. It is only
+> > once it was hooked up to the backend that we got the spew of warnings. I
+> > think that warrants us trying to get Nemanja's patch into 16.0.0, which
+> > may allow us to drop this workaround altogether...
+> 
+> Aha OK, I missed that the warning was new in 16.
+> 
+> I'll sit on this for now then until we know if that change will make it
+> into clang 16.
 
-Thank you for the patch! Yet something to improve:
+It was merged into release/16.x a few hours ago:
 
-[auto build test ERROR on clk/clk-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+https://github.com/llvm/llvm-project/issues/61128
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Taniya-Das/clk-qcom-common-Handle-invalid-index-error/20230303-173158
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230303092859.22094-3-quic_tdas%40quicinc.com
-patch subject: [PATCH 2/2] clk: qcom: lpass: Initialize start_index
-config: hexagon-randconfig-r021-20230302 (https://download.01.org/0day-ci/archive/20230303/202303032224.tuvDnbbB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d26ce274e7b0af8a6c6985630d1da8e257c9031d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Taniya-Das/clk-qcom-common-Handle-invalid-index-error/20230303-173158
-        git checkout d26ce274e7b0af8a6c6985630d1da8e257c9031d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/qcom/
+https://github.com/llvm/llvm-project/commit/9b2e09e9fb1aa3bbe3668d7cc585188a3014d1b9
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303032224.tuvDnbbB-lkp@intel.com/
+So I think this particular workaround is no longer needed :)
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/clk/qcom/lpassaudiocc-sc7280.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/clk/qcom/lpassaudiocc-sc7280.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/clk/qcom/lpassaudiocc-sc7280.c:13:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/clk/qcom/lpassaudiocc-sc7280.c:705:56: error: unexpected ';' before '}'
-           .start_index = LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC;
-                                                                 ^
-   6 warnings and 1 error generated.
-
-
-vim +705 drivers/clk/qcom/lpassaudiocc-sc7280.c
-
-   700	
-   701	static const struct qcom_cc_desc lpass_audio_cc_sc7280_desc = {
-   702		.config = &lpass_audio_cc_sc7280_regmap_config,
-   703		.clks = lpass_audio_cc_sc7280_clocks,
-   704		.num_clks = ARRAY_SIZE(lpass_audio_cc_sc7280_clocks),
- > 705		.start_index = LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC;
-   706	};
-   707	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Cheers,
+Nathan
