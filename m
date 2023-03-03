@@ -1,43 +1,43 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925B646AA;
-	Fri,  3 Mar 2023 14:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368905387;
+	Fri,  3 Mar 2023 15:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677853157; x=1709389157;
+  t=1677855618; x=1709391618;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5SIRbFmbtsxb0QIHUFoEk1mA+UZ+Qg9F7I1FTRRPknY=;
-  b=k3hN2/ZoaXJ0kHzkVh8ZRmU2nhoh/bnEMoM7lKD44JLKK+Vv2wHz892R
-   6bt126d4EQ2Nkascq5Rb7TtR1g8FCRYPOywzUUN0+Wkzk2I8AifGufrzn
-   untH75cqqclZqN6L1YdWJBoGNIn2GEZ2WleoRklXEM8WrdoEEooZGu+Te
-   uVUQBkYZ/6eP3W1jHw5WhDNkf80Q6Kic4SUdIc4so3dY1hEVzupGQagTF
-   4+lus0tw/2FD4FtomDesJAwcx5ljYprxseST1SZlVaXO+t41JuvFjjZ1v
-   g6cDnsj5GAgVFMNHARq94m/UM+HYoetCXPeq8KMVgXl88vIwIcK3GDTFF
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="336571848"
+  bh=1MUTRrGDXqO6HrPonqv7BZ9A54G8mcyVIPgQ+umB+pM=;
+  b=Fqrtd0xmB469TAfgq9qujQuybFGFlapdaWgb0JKO5La1AfOgWTrTyUlf
+   Sz1LGXsEzcvRPFBdN/p+GrYsrjXdqbQ3XX7ILS0ssLNZdzy2U3uRIf4vt
+   A9uO4hqw3x8GUwNfYdKz89r9QwqzSk1iyU6hIwQc5BV/9xfwkV9GCgqL3
+   w5cF6QuAjG4ujjQ04/s1QogFRhKUzaZw4m1MAEkkIN3GBVIG6TMtrqnY4
+   nRcRmXvcqPZe0QuDOifMC2q1Iazao2C4neklE9IM6erM6VnRTTKEZ20og
+   lL7JYr/7CzGmJWGi/7PTa27CYflX3SIY2q0TJNXd41WEv3BkH+POn0PSL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="332539967"
 X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="336571848"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 06:19:17 -0800
+   d="scan'208";a="332539967"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 07:00:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="705656747"
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="921142118"
 X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="705656747"
+   d="scan'208";a="921142118"
 Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 03 Mar 2023 06:19:16 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 03 Mar 2023 07:00:16 -0800
 Received: from kbuild by 776573491cc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pY6Ff-0001TU-19;
-	Fri, 03 Mar 2023 14:19:15 +0000
-Date: Fri, 3 Mar 2023 22:18:42 +0800
+	id 1pY6tL-0001UD-2g;
+	Fri, 03 Mar 2023 15:00:15 +0000
+Date: Fri, 3 Mar 2023 22:59:28 +0800
 From: kernel test robot <lkp@intel.com>
 To: Naohiro Aota <naohiro.aota@wdc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: Re: [RFC PATCH 1/2] btrfs: zoned: count fresh BG region as zone
  unusable
-Message-ID: <202303032259.R58viCRd-lkp@intel.com>
+Message-ID: <202303032228.io27sUWW-lkp@intel.com>
 References: <ae5d21d50546abaedd89d52cefdd1c61c9018ec2.1677831912.git.naohiro.aota@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -53,6 +53,7 @@ Hi Naohiro,
 
 [FYI, it's a private test report for your RFC patch.]
 [auto build test ERROR on kdave/for-next]
+[also build test ERROR on linus/master v6.2 next-20230303]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
@@ -61,8 +62,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Naohiro-Aota/btrfs-zoned-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
 patch link:    https://lore.kernel.org/r/ae5d21d50546abaedd89d52cefdd1c61c9018ec2.1677831912.git.naohiro.aota%40wdc.com
 patch subject: [RFC PATCH 1/2] btrfs: zoned: count fresh BG region as zone unusable
-config: hexagon-randconfig-r002-20230303 (https://download.01.org/0day-ci/archive/20230303/202303032259.R58viCRd-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230303/202303032228.io27sUWW-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -72,72 +73,28 @@ reproduce (this is a W=1 build):
         git checkout aef11808b70bc7a53270e26eef4c73ae8a1de4a8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303032259.R58viCRd-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303032228.io27sUWW-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/btrfs/free-space-cache.c:6:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/btrfs/free-space-cache.c:6:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/btrfs/free-space-cache.c:6:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
 >> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
                     test_bit(BTRFS_FS_ACTIVE_ZONE_TRACKING, &block_group->fs_info->flags) &&
                              ^
 >> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
 >> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
-   6 warnings and 3 errors generated.
+   3 errors generated.
+--
+>> fs/btrfs/zoned.c:1586:15: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+           if (test_bit(BTRFS_FS_ACTIVE_ZONE_TRACKING, &cache->fs_info->flags) &&
+                        ^
+>> fs/btrfs/zoned.c:1586:15: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+>> fs/btrfs/zoned.c:1586:15: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+   3 errors generated.
 
 
 vim +/BTRFS_FS_ACTIVE_ZONE_TRACKING +2700 fs/btrfs/free-space-cache.c
