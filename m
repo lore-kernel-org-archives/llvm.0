@@ -1,117 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1DD9446
-	for <llvm@lists.linux.dev>; Fri,  3 Mar 2023 21:45:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59B91C4339B;
-	Fri,  3 Mar 2023 21:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677879922;
-	bh=08JKqLomuqR8Z+WnXh9Rr9/MR0OoAsnToT9vuZiLzkg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mspy/E0ZzxK617jzB3y9Q9XOJS/zR5ao67YYwjTkdbAxxhh4+4pVtf+6QuedYcJ0S
-	 3rNbviRNCn6YDg1NkO2ynqzz21tpCeWa9Sqr6mpQWxta/AnfxMiTTsNWUHv82qHIFg
-	 Y6tP8bblA8XSQ8QHSgDE6XuzmMcOCDEhh7sPWymGovGzBjGuts2ZBkgUSxJmIYYhDA
-	 aJlDxFu3EeO9jSMI6BeEVoraPn8tYV6tHviz4kbvnw+sk/x8IrjtjRVC1hoyRXif5U
-	 Cg7Eom6KRU1F4Fv1XFlW9N+/1qF8l7BKJxFvWYPxOSXtLkwORXEok+iXGEP85TyAWB
-	 y3Q17anNDHhKw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Sasha Levin <sashal@kernel.org>,
-	ndesaulniers@google.com,
-	markzhang@nvidia.com,
-	Jason@zx2c4.com,
-	phaddad@nvidia.com,
-	haakon.bugge@oracle.com,
-	linux-rdma@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 57/60] RDMA/cma: Distinguish between sockaddr_in and sockaddr_in6 by size
-Date: Fri,  3 Mar 2023 16:43:11 -0500
-Message-Id: <20230303214315.1447666-57-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214315.1447666-1-sashal@kernel.org>
-References: <20230303214315.1447666-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B86BD139C;
+	Fri,  3 Mar 2023 22:39:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677883168; x=1709419168;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=UtbNUeHkdfnI7hK+rTZjXWYK3JN5Xw4FLO8Gz2rkiig=;
+  b=jERKgOkHWRV8+F7I7yxVAEVvRCJvICVB4ZRO+lrhsf+VsofQrebSbjwE
+   nffi/kGVUPlu2AbiCbS39yawWzGTFgSY+OMLJOVRQrGqReaa3I0UYkwXX
+   efUnkazQaQsEzrUtXvjGYJS+o8p7VfXwUFaJmjBrLNonEBckjQx3X7Ig1
+   bwONNzR9uAqvff3Z+8DN+ryYuymWu59YsAyYw++XEH8OFMEEFRDIuNFGi
+   wJB9kmvHZti/fzdlldM/yzxZkbp+y91oxPKdE9VRmP338BA726J4jKgzY
+   ZJt8ewOjYaT7tzVlyqJ7eeehXMNNv4e2kt7K1qBZfr3ut/L2+CrI/mfv4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="399990324"
+X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
+   d="scan'208";a="399990324"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 14:39:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="849640981"
+X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
+   d="scan'208";a="849640981"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 03 Mar 2023 14:39:27 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pYE3i-0001hM-2q;
+	Fri, 03 Mar 2023 22:39:26 +0000
+Date: Sat, 4 Mar 2023 06:39:05 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [driver-core:debugfs_cleanup 7/7] ld.lld: error:
+ vmlinux.a(fs/ext4/orphan.o):(function ext4_orphan_add: .text+0x110):
+ relocation R_RISCV_HI20 out of range: 541487 is not in [-524288, 524287];
+ references ext4_orphan_add.__if_trace.2.1
+Message-ID: <202303040632.lhWDtmIN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Kees Cook <keescook@chromium.org>
+CC: devel@driverdev.osuosl.org
+TO: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 
-[ Upstream commit 876e480da2f74715fc70e37723e77ca16a631e35 ]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git debugfs_cleanup
+head:   d6b1776e7d0ed5afabaf9c8ea8e4581bbeab3e60
+commit: d6b1776e7d0ed5afabaf9c8ea8e4581bbeab3e60 [7/7] soundwire: sysfs: remove unneeded ATTRIBUTE_GROUPS() comments
+config: riscv-randconfig-r002-20230303 (https://download.01.org/0day-ci/archive/20230304/202303040632.lhWDtmIN-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=d6b1776e7d0ed5afabaf9c8ea8e4581bbeab3e60
+        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+        git fetch --no-tags driver-core debugfs_cleanup
+        git checkout d6b1776e7d0ed5afabaf9c8ea8e4581bbeab3e60
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Clang can do some aggressive inlining, which provides it with greater
-visibility into the sizes of various objects that are passed into
-helpers. Specifically, compare_netdev_and_ip() can see through the type
-given to the "sa" argument, which means it can generate code for "struct
-sockaddr_in" that would have been passed to ipv6_addr_cmp() (that expects
-to operate on the larger "struct sockaddr_in6"), which would result in a
-compile-time buffer overflow condition detected by memcmp(). Logically,
-this state isn't reachable due to the sa_family assignment two callers
-above and the check in compare_netdev_and_ip(). Instead, provide a
-compile-time check on sizes so the size-mismatched code will be elided
-when inlining. Avoids the following warning from Clang:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303040632.lhWDtmIN-lkp@intel.com/
 
-../include/linux/fortify-string.h:652:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
-                        __read_overflow();
-                        ^
-note: In function 'cma_netevent_callback'
-note:   which inlined function 'node_from_ndev_ip'
-1 error generated.
+All errors (new ones prefixed by >>):
 
-When the underlying object size is not known (e.g. with GCC and older
-Clang), the result of __builtin_object_size() is SIZE_MAX, which will also
-compile away, leaving the code as it was originally.
+>> ld.lld: error: vmlinux.a(fs/ext4/orphan.o):(function ext4_orphan_add: .text+0x110): relocation R_RISCV_HI20 out of range: 541487 is not in [-524288, 524287]; references ext4_orphan_add.__if_trace.2.1
+   >>> referenced by orphan.c:101 (fs/ext4/orphan.c:101)
+   >>> defined in vmlinux.a(fs/ext4/orphan.o)
 
-Link: https://lore.kernel.org/r/20230208232549.never.139-kees@kernel.org
-Link: https://github.com/ClangBuiltLinux/linux/issues/1687
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/infiniband/core/cma.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index 26d1772179b8f..8730674ceb2e1 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -479,13 +479,20 @@ static int compare_netdev_and_ip(int ifindex_a, struct sockaddr *sa,
- 	if (sa->sa_family != sb->sa_family)
- 		return sa->sa_family - sb->sa_family;
- 
--	if (sa->sa_family == AF_INET)
--		return memcmp((char *)&((struct sockaddr_in *)sa)->sin_addr,
--			      (char *)&((struct sockaddr_in *)sb)->sin_addr,
-+	if (sa->sa_family == AF_INET &&
-+	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in)) {
-+		return memcmp(&((struct sockaddr_in *)sa)->sin_addr,
-+			      &((struct sockaddr_in *)sb)->sin_addr,
- 			      sizeof(((struct sockaddr_in *)sa)->sin_addr));
-+	}
-+
-+	if (sa->sa_family == AF_INET6 &&
-+	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in6)) {
-+		return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
-+				     &((struct sockaddr_in6 *)sb)->sin6_addr);
-+	}
- 
--	return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
--			     &((struct sockaddr_in6 *)sb)->sin6_addr);
-+	return -1;
- }
- 
- static int cma_add_id_to_tree(struct rdma_id_private *node_id_priv)
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
