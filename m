@@ -1,49 +1,44 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A69538C;
-	Fri,  3 Mar 2023 12:06:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925B646AA;
+	Fri,  3 Mar 2023 14:19:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677845177; x=1709381177;
+  t=1677853157; x=1709389157;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1ZhnkZvUx6/qDxwOmfHWY1TW6Ezr2JMQifRPtpqWpl8=;
-  b=Pv9c1kKM3LFOwOG9CR3aJ1aGUqPbHCN/MXr6d4YG1e56DKOE9CSQaaL+
-   louuYHBJ+IcRm6tv4Jsz8fnET/W3C6FmoCllNVP2pEn08kpyKTRdHYujt
-   +TUug1K3IwzW3By+jmRlel1ai/W9k0uStlmpQxRZNsC8mWx/QNuc+x7vh
-   S8cNuf1GLPtnSwwWseK2FCgxTB2fERL8RnvX+4M4UAq2/vM0xCVPUekU1
-   xbRRfYP6sWzlOtakJZ+mG8qLV6V1EoiYyEo9rzaWmtLYJSW+SQxjNgBSl
-   FZxvmuMQwVIMxGoIbj+RP/Jt15sPucyU2/Opjosr8j8/m1xTUOvW9XujV
+  bh=5SIRbFmbtsxb0QIHUFoEk1mA+UZ+Qg9F7I1FTRRPknY=;
+  b=k3hN2/ZoaXJ0kHzkVh8ZRmU2nhoh/bnEMoM7lKD44JLKK+Vv2wHz892R
+   6bt126d4EQ2Nkascq5Rb7TtR1g8FCRYPOywzUUN0+Wkzk2I8AifGufrzn
+   untH75cqqclZqN6L1YdWJBoGNIn2GEZ2WleoRklXEM8WrdoEEooZGu+Te
+   uVUQBkYZ/6eP3W1jHw5WhDNkf80Q6Kic4SUdIc4so3dY1hEVzupGQagTF
+   4+lus0tw/2FD4FtomDesJAwcx5ljYprxseST1SZlVaXO+t41JuvFjjZ1v
+   g6cDnsj5GAgVFMNHARq94m/UM+HYoetCXPeq8KMVgXl88vIwIcK3GDTFF
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="397618381"
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="336571848"
 X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="397618381"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 04:06:16 -0800
+   d="scan'208";a="336571848"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 06:19:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="849438018"
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="705656747"
 X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="849438018"
+   d="scan'208";a="705656747"
 Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 Mar 2023 04:06:14 -0800
+  by orsmga008.jf.intel.com with ESMTP; 03 Mar 2023 06:19:16 -0800
 Received: from kbuild by 776573491cc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pY4Av-0001Qe-0k;
-	Fri, 03 Mar 2023 12:06:13 +0000
-Date: Fri, 3 Mar 2023 20:05:22 +0800
+	id 1pY6Ff-0001TU-19;
+	Fri, 03 Mar 2023 14:19:15 +0000
+Date: Fri, 3 Mar 2023 22:18:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	"Darrick J . Wong" <djwong@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	Andreas Gruenbacher <agruenba@redhat.com>,
-	Gao Xiang <xiang@kernel.org>
-Subject: Re: [PATCH 1/2] filemap: Add folio_copy_tail()
-Message-ID: <202303031911.we6DjYXd-lkp@intel.com>
-References: <20230303064315.701090-2-willy@infradead.org>
+To: Naohiro Aota <naohiro.aota@wdc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 1/2] btrfs: zoned: count fresh BG region as zone
+ unusable
+Message-ID: <202303032259.R58viCRd-lkp@intel.com>
+References: <ae5d21d50546abaedd89d52cefdd1c61c9018ec2.1677831912.git.naohiro.aota@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,127 +47,165 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303064315.701090-2-willy@infradead.org>
+In-Reply-To: <ae5d21d50546abaedd89d52cefdd1c61c9018ec2.1677831912.git.naohiro.aota@wdc.com>
 
-Hi Matthew,
+Hi Naohiro,
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master next-20230303]
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on kdave/for-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/filemap-Add-folio_copy_tail/20230303-144359
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230303064315.701090-2-willy%40infradead.org
-patch subject: [PATCH 1/2] filemap: Add folio_copy_tail()
-config: arm-randconfig-r006-20230302 (https://download.01.org/0day-ci/archive/20230303/202303031911.we6DjYXd-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Naohiro-Aota/btrfs-zoned-count-fresh-BG-region-as-zone-unusable/20230303-163006
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/ae5d21d50546abaedd89d52cefdd1c61c9018ec2.1677831912.git.naohiro.aota%40wdc.com
+patch subject: [RFC PATCH 1/2] btrfs: zoned: count fresh BG region as zone unusable
+config: hexagon-randconfig-r002-20230303 (https://download.01.org/0day-ci/archive/20230303/202303032259.R58viCRd-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/a4ee841f30215e4f7c5dda2ab82007f590a6a62b
+        # https://github.com/intel-lab-lkp/linux/commit/aef11808b70bc7a53270e26eef4c73ae8a1de4a8
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthew-Wilcox-Oracle/filemap-Add-folio_copy_tail/20230303-144359
-        git checkout a4ee841f30215e4f7c5dda2ab82007f590a6a62b
+        git fetch --no-tags linux-review Naohiro-Aota/btrfs-zoned-count-fresh-BG-region-as-zone-unusable/20230303-163006
+        git checkout aef11808b70bc7a53270e26eef4c73ae8a1de4a8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303031911.we6DjYXd-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303032259.R58viCRd-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/filemap.c:4160:17: warning: comparison of distinct pointer types ('typeof (poff + len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                   size_t plen = min(poff + len, PAGE_SIZE) - poff;
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:67:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> mm/filemap.c:4172:11: warning: comparison of distinct pointer types ('typeof (len) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                           plen = min(len, PAGE_SIZE);
-                                  ^~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:67:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   2 warnings generated.
+   In file included from fs/btrfs/free-space-cache.c:6:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from fs/btrfs/free-space-cache.c:6:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from fs/btrfs/free-space-cache.c:6:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+                    test_bit(BTRFS_FS_ACTIVE_ZONE_TRACKING, &block_group->fs_info->flags) &&
+                             ^
+>> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+>> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+   6 warnings and 3 errors generated.
 
 
-vim +4160 mm/filemap.c
+vim +/BTRFS_FS_ACTIVE_ZONE_TRACKING +2700 fs/btrfs/free-space-cache.c
 
-  4125	
-  4126	/**
-  4127	 * folio_copy_tail - Copy an in-memory file tail into a page cache folio.
-  4128	 * @folio: The folio to copy into.
-  4129	 * @pos: The file position of the first byte of data in the tail.
-  4130	 * @src: The address of the tail data.
-  4131	 * @max: The size of the buffer used for the tail data.
-  4132	 *
-  4133	 * Supports file tails starting at @pos that are a maximum of @max
-  4134	 * bytes in size.  Zeroes the remainder of the folio.
-  4135	 */
-  4136	void folio_copy_tail(struct folio *folio, loff_t pos, void *src, size_t max)
-  4137	{
-  4138		loff_t isize = i_size_read(folio->mapping->host);
-  4139		size_t offset, len = isize - pos;
-  4140		char *dst;
-  4141	
-  4142		if (folio_pos(folio) > isize) {
-  4143			len = 0;
-  4144		} else if (folio_pos(folio) > pos) {
-  4145			len -= folio_pos(folio) - pos;
-  4146			src += folio_pos(folio) - pos;
-  4147			max -= folio_pos(folio) - pos;
-  4148			pos = folio_pos(folio);
-  4149		}
-  4150		/*
-  4151		 * i_size is larger than the number of bytes stored in the tail?
-  4152		 * Assume the remainder is zero-padded.
-  4153		 */
-  4154		if (WARN_ON_ONCE(len > max))
-  4155			len = max;
-  4156		offset = offset_in_folio(folio, pos);
-  4157		dst = kmap_local_folio(folio, offset);
-  4158		if (folio_test_highmem(folio) && folio_test_large(folio)) {
-  4159			size_t poff = offset_in_page(offset);
-> 4160			size_t plen = min(poff + len, PAGE_SIZE) - poff;
-  4161	
-  4162			for (;;) {
-  4163				memcpy(dst, src, plen);
-  4164				memset(dst + plen, 0, PAGE_SIZE - poff - plen);
-  4165				offset += PAGE_SIZE - poff;
-  4166				if (offset == folio_size(folio))
-  4167					break;
-  4168				kunmap_local(dst);
-  4169				dst = kmap_local_folio(folio, offset);
-  4170				len -= plen;
-  4171				poff = 0;
-> 4172				plen = min(len, PAGE_SIZE);
+  2678	
+  2679	static int __btrfs_add_free_space_zoned(struct btrfs_block_group *block_group,
+  2680						u64 bytenr, u64 size, bool used)
+  2681	{
+  2682		struct btrfs_space_info *sinfo = block_group->space_info;
+  2683		struct btrfs_free_space_ctl *ctl = block_group->free_space_ctl;
+  2684		u64 offset = bytenr - block_group->start;
+  2685		u64 to_free, to_unusable;
+  2686		int bg_reclaim_threshold = 0;
+  2687		bool initial = (size == block_group->length);
+  2688		u64 reclaimable_unusable;
+  2689	
+  2690		WARN_ON(!initial && offset + size > block_group->zone_capacity);
+  2691	
+  2692		if (!initial)
+  2693			bg_reclaim_threshold = READ_ONCE(sinfo->bg_reclaim_threshold);
+  2694	
+  2695		spin_lock(&ctl->tree_lock);
+  2696		/* Count initial region as zone_unusable until it gets activated. */
+  2697		if (!used)
+  2698			to_free = size;
+  2699		else if (initial &&
+> 2700			 test_bit(BTRFS_FS_ACTIVE_ZONE_TRACKING, &block_group->fs_info->flags) &&
+  2701			 block_group->flags & (BTRFS_BLOCK_GROUP_METADATA | BTRFS_BLOCK_GROUP_SYSTEM))
+  2702			to_free = 0;
+  2703		else if (initial)
+  2704			to_free = block_group->zone_capacity;
+  2705		else if (offset >= block_group->alloc_offset)
+  2706			to_free = size;
+  2707		else if (offset + size <= block_group->alloc_offset)
+  2708			to_free = 0;
+  2709		else
+  2710			to_free = offset + size - block_group->alloc_offset;
+  2711		to_unusable = size - to_free;
+  2712	
+  2713		ctl->free_space += to_free;
+  2714		/*
+  2715		 * If the block group is read-only, we should account freed space into
+  2716		 * bytes_readonly.
+  2717		 */
+  2718		if (!block_group->ro)
+  2719			block_group->zone_unusable += to_unusable;
+  2720		spin_unlock(&ctl->tree_lock);
+  2721		if (!used) {
+  2722			spin_lock(&block_group->lock);
+  2723			block_group->alloc_offset -= size;
+  2724			spin_unlock(&block_group->lock);
+  2725		}
+  2726	
+  2727		reclaimable_unusable = block_group->zone_unusable -
+  2728				       (block_group->length - block_group->zone_capacity);
+  2729		/* All the region is now unusable. Mark it as unused and reclaim */
+  2730		if (block_group->zone_unusable == block_group->length &&
+  2731		    block_group->alloc_offset) {
+  2732			btrfs_mark_bg_unused(block_group);
+  2733		} else if (bg_reclaim_threshold &&
+  2734			   reclaimable_unusable >=
+  2735			   mult_perc(block_group->zone_capacity, bg_reclaim_threshold)) {
+  2736			btrfs_mark_bg_to_reclaim(block_group);
+  2737		}
+  2738	
+  2739		return 0;
+  2740	}
+  2741	
 
 -- 
 0-DAY CI Kernel Test Service
