@@ -1,118 +1,182 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724C38F7B
-	for <llvm@lists.linux.dev>; Fri,  3 Mar 2023 21:43:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE00C4339B;
-	Fri,  3 Mar 2023 21:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677879789;
-	bh=JuKjRaZVkoaiQEQB+xyXbpZsFWy1BStMRXTHDE0ZbCM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qesu1KTdNqOPB2Qn5a5FUuvSeMCOHWmYLVoiGa8NXB1R2EipgDvs3ikSPPICzm0g6
-	 UL6pw7vaI+X3kMa5BdRs3/rHPdXuMk9V9cQPsUU4kjV4ioopVLanC051zuXFSVi/nu
-	 5pPfJ3Rjev594E35DMQB0CDzdiREEHn9tde5dSpHFmoTgv+TvAIaAR51DfCQEynAgM
-	 6mZtQ+22c+lSf8/JhtNEIC/p4g830ID3Pu8JDsT6GOz+2NSD1/jXcwzjAM08NNzh1w
-	 BYxL10LmWlmWm3gnuwI1uSYuxQUyM+MxeKigqBzEOsY3xwWTYjePWLHwXcldbLDysG
-	 47nRs1SX621Zw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Sasha Levin <sashal@kernel.org>,
-	ndesaulniers@google.com,
-	markzhang@nvidia.com,
-	phaddad@nvidia.com,
-	Jason@zx2c4.com,
-	lengchao@huawei.com,
-	michaelgur@nvidia.com,
-	linux-rdma@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.2 61/64] RDMA/cma: Distinguish between sockaddr_in and sockaddr_in6 by size
-Date: Fri,  3 Mar 2023 16:41:03 -0500
-Message-Id: <20230303214106.1446460-61-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214106.1446460-1-sashal@kernel.org>
-References: <20230303214106.1446460-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4318F7B
+	for <llvm@lists.linux.dev>; Fri,  3 Mar 2023 21:43:38 +0000 (UTC)
+Received: by mail-il1-f200.google.com with SMTP id 2-20020a056e020ca200b003033a763270so2020468ilg.19
+        for <llvm@lists.linux.dev>; Fri, 03 Mar 2023 13:43:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=imuLu9SO+D8i258J/SyTaA2l+06SMEdt81hfYPO+LcE=;
+        b=LJ5BfwwESImGZ8mvqCfqrrIErpIpDHviwZZHxSclDXIU/qMHikS4CPgyAMfTgNKKBD
+         w5fnFx3x909PkILr5rEBFzPsc0lhl1cdeWBQ7j9mDdeqHdeyzNlNlUXwlChXRVGVLPyj
+         YXrhegSvhWTDg95Tg9TTWkmJgj5DBYvxscHjM5Adqvh+8fA6PL6eIO1TG2tXhA/8i2EK
+         PGFwYByKUzIcpdN6gFibVj77moAQPuIV6HaZSz6f1MZsYQ+b2W7LjszBsb2pXplSiMX3
+         +i7zT0VMNjzC/arYcQXJdg/+AYJWbOuRbZLxuPDKQ9cm/0qTlaLidFZYpLwAVb7UIbIe
+         GpSw==
+X-Gm-Message-State: AO0yUKVkg8BNJUNmzsJTW25E0KTXsXVy7WwM0R2mzjz++kbiEy8QVM+S
+	SAUSF7H7PV5IEtWrqc1C/KbuOJw7rKI4gv3h9gVG7YxTLtlT
+X-Google-Smtp-Source: AK7set9YuSm2/pz0nTOVFSMkJevmjTlgfb6KKMvziPbawz4HeK5Hpw7Y6gGMGpvpG/znK7/nFAjJlsKSphU9NXAuvSj7Bi0zXBM0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:96c:b0:310:c810:44c0 with SMTP id
+ q12-20020a056e02096c00b00310c81044c0mr1520188ilt.5.1677879817645; Fri, 03 Mar
+ 2023 13:43:37 -0800 (PST)
+Date: Fri, 03 Mar 2023 13:43:37 -0800
+In-Reply-To: <000000000000ece18705f3b20934@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000081b83a05f605d613@google.com>
+Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in ext4_group_desc_csum
+From: syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, joneslee@google.com, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, tudor.ambarus@linaro.org, 
+	tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 
-From: Kees Cook <keescook@chromium.org>
+syzbot has found a reproducer for the following issue on:
 
-[ Upstream commit 876e480da2f74715fc70e37723e77ca16a631e35 ]
+HEAD commit:    596b6b709632 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1151054cc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
+dashboard link: https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ce3de4c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b02598c80000
 
-Clang can do some aggressive inlining, which provides it with greater
-visibility into the sizes of various objects that are passed into
-helpers. Specifically, compare_netdev_and_ip() can see through the type
-given to the "sa" argument, which means it can generate code for "struct
-sockaddr_in" that would have been passed to ipv6_addr_cmp() (that expects
-to operate on the larger "struct sockaddr_in6"), which would result in a
-compile-time buffer overflow condition detected by memcmp(). Logically,
-this state isn't reachable due to the sa_family assignment two callers
-above and the check in compare_netdev_and_ip(). Instead, provide a
-compile-time check on sizes so the size-mismatched code will be elided
-when inlining. Avoids the following warning from Clang:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/06e2210b88a3/disk-596b6b70.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/79e6930ab577/vmlinux-596b6b70.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/56b95e6bcb5c/Image-596b6b70.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a765d6554060/mount_0.gz
 
-../include/linux/fortify-string.h:652:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
-                        __read_overflow();
-                        ^
-note: In function 'cma_netevent_callback'
-note:   which inlined function 'node_from_ndev_ip'
-1 error generated.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
 
-When the underlying object size is not known (e.g. with GCC and older
-Clang), the result of __builtin_object_size() is SIZE_MAX, which will also
-compile away, leaving the code as it was originally.
+==================================================================
+BUG: KASAN: slab-out-of-bounds in crc16+0xc0/0x104 lib/crc16.c:58
+Read of size 1 at addr ffff0000d5eff0a8 by task syz-executor175/8245
 
-Link: https://lore.kernel.org/r/20230208232549.never.139-kees@kernel.org
-Link: https://github.com/ClangBuiltLinux/linux/issues/1687
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/infiniband/core/cma.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+CPU: 1 PID: 8245 Comm: syz-executor175 Not tainted 6.2.0-syzkaller-18302-g596b6b709632 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+Call trace:
+ dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x174/0x4c0 mm/kasan/report.c:417
+ kasan_report+0xd4/0x130 mm/kasan/report.c:517
+ __asan_report_load1_noabort+0x2c/0x38 mm/kasan/report_generic.c:348
+ crc16+0xc0/0x104 lib/crc16.c:58
+ ext4_group_desc_csum+0x6a8/0x99c fs/ext4/super.c:3187
+ ext4_group_desc_csum_set+0x17c/0x210 fs/ext4/super.c:3210
+ __ext4_new_inode+0x20dc/0x3acc fs/ext4/ialloc.c:1227
+ ext4_create+0x234/0x480 fs/ext4/namei.c:2809
+ lookup_open fs/namei.c:3413 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0xe6c/0x2578 fs/namei.c:3711
+ do_filp_open+0x1bc/0x3cc fs/namei.c:3741
+ do_sys_openat2+0x128/0x3d8 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __arm64_sys_openat+0x1f0/0x240 fs/open.c:1337
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
 
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index 68721ff10255e..7e508b15e7761 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -479,13 +479,20 @@ static int compare_netdev_and_ip(int ifindex_a, struct sockaddr *sa,
- 	if (sa->sa_family != sb->sa_family)
- 		return sa->sa_family - sb->sa_family;
- 
--	if (sa->sa_family == AF_INET)
--		return memcmp((char *)&((struct sockaddr_in *)sa)->sin_addr,
--			      (char *)&((struct sockaddr_in *)sb)->sin_addr,
-+	if (sa->sa_family == AF_INET &&
-+	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in)) {
-+		return memcmp(&((struct sockaddr_in *)sa)->sin_addr,
-+			      &((struct sockaddr_in *)sb)->sin_addr,
- 			      sizeof(((struct sockaddr_in *)sa)->sin_addr));
-+	}
-+
-+	if (sa->sa_family == AF_INET6 &&
-+	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in6)) {
-+		return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
-+				     &((struct sockaddr_in6 *)sb)->sin6_addr);
-+	}
- 
--	return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
--			     &((struct sockaddr_in6 *)sb)->sin6_addr);
-+	return -1;
- }
- 
- static int cma_add_id_to_tree(struct rdma_id_private *node_id_priv)
--- 
-2.39.2
+Allocated by task 5961:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4c/0x80 mm/kasan/common.c:52
+ kasan_save_alloc_info+0x24/0x30 mm/kasan/generic.c:512
+ __kasan_slab_alloc+0x74/0x8c mm/kasan/common.c:328
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook+0x80/0x478 mm/slab.h:761
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x288/0x37c mm/slub.c:3476
+ kmem_cache_zalloc include/linux/slab.h:710 [inline]
+ __kernfs_new_node+0xe4/0x66c fs/kernfs/dir.c:614
+ kernfs_new_node+0x98/0x184 fs/kernfs/dir.c:676
+ __kernfs_create_file+0x60/0x2d4 fs/kernfs/file.c:1047
+ sysfs_add_file_mode_ns+0x1dc/0x298 fs/sysfs/file.c:294
+ create_files fs/sysfs/group.c:64 [inline]
+ internal_create_group+0x428/0xbec fs/sysfs/group.c:148
+ internal_create_groups fs/sysfs/group.c:188 [inline]
+ sysfs_create_groups+0x60/0x130 fs/sysfs/group.c:214
+ create_dir lib/kobject.c:68 [inline]
+ kobject_add_internal+0x5d4/0xb14 lib/kobject.c:223
+ kobject_add_varg lib/kobject.c:358 [inline]
+ kobject_init_and_add+0x130/0x1a0 lib/kobject.c:441
+ netdev_queue_add_kobject net/core/net-sysfs.c:1666 [inline]
+ netdev_queue_update_kobjects+0x1d8/0x470 net/core/net-sysfs.c:1718
+ register_queue_kobjects net/core/net-sysfs.c:1779 [inline]
+ netdev_register_kobject+0x22c/0x2d8 net/core/net-sysfs.c:2019
+ register_netdevice+0xcb8/0x1270 net/core/dev.c:10037
+ bond_newlink+0x50/0xa8 drivers/net/bonding/bond_netlink.c:560
+ rtnl_newlink_create net/core/rtnetlink.c:3407 [inline]
+ __rtnl_newlink net/core/rtnetlink.c:3624 [inline]
+ rtnl_newlink+0x1174/0x1b1c net/core/rtnetlink.c:3637
+ rtnetlink_rcv_msg+0x6ec/0xc8c net/core/rtnetlink.c:6141
+ netlink_rcv_skb+0x214/0x3c4 net/netlink/af_netlink.c:2574
+ rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6159
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x660/0x8d4 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x800/0xae0 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ __sys_sendto+0x3b4/0x504 net/socket.c:2120
+ __do_sys_sendto net/socket.c:2132 [inline]
+ __se_sys_sendto net/socket.c:2128 [inline]
+ __arm64_sys_sendto+0xd8/0xf8 net/socket.c:2128
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+The buggy address belongs to the object at ffff0000d5eff000
+ which belongs to the cache kernfs_node_cache of size 168
+The buggy address is located 0 bytes to the right of
+ 168-byte region [ffff0000d5eff000, ffff0000d5eff0a8)
+
+The buggy address belongs to the physical page:
+page:0000000016584f53 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x115eff
+flags: 0x5ffc00000000200(slab|node=0|zone=2|lastcpupid=0x7ff)
+raw: 05ffc00000000200 ffff0000c0844c00 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000110011 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff0000d5efef80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff0000d5eff000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff0000d5eff080: 00 00 00 00 00 fc fc fc fc fc fc fc fc 00 00 00
+                                  ^
+ ffff0000d5eff100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff0000d5eff180: 00 00 fc fc fc fc fc fc fc fc 00 00 00 00 00 00
+==================================================================
+EXT4-fs error (device loop3): __ext4_get_inode_loc:4560: comm syz-executor175: Invalid inode table block 4 in block_group 0
+EXT4-fs error (device loop3) in ext4_reserve_inode_write:5906: Corrupt filesystem
+EXT4-fs error (device loop3): __ext4_get_inode_loc:4560: comm syz-executor175: Invalid inode table block 4 in block_group 0
+EXT4-fs error (device loop3) in ext4_reserve_inode_write:5906: Corrupt filesystem
+EXT4-fs error (device loop3): ext4_evict_inode:279: inode #18: comm syz-executor175: mark_inode_dirty error
+EXT4-fs warning (device loop3): ext4_evict_inode:282: couldn't mark inode dirty (err -117)
 
