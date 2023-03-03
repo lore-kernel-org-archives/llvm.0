@@ -1,93 +1,227 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0748A10780
-	for <llvm@lists.linux.dev>; Thu,  2 Mar 2023 23:53:10 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4PSSbL53c3z4x1R;
-	Fri,  3 Mar 2023 10:53:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1677801183;
-	bh=xuqUkcOcM+A60OFN+8mffp69qEpQc4jR8LVTswUzgd8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=o3WsOut0g4DzM8MBqXBE3rEuKste6e7hZgsYIRNyrWZTaa5U/M/AIDCigOzTyTP0h
-	 ZlkeLkC9WLYjpFBDAtW32+VXOA+aYExDouGbFHhcbqOOijhrQMKWLpF2UIN+rUtxx0
-	 myCFggwdzcDH80OlPSrdoaVdvpzdXHDiG4bVfN+lDtLApZah2hgTXJWngrLtBm/7XH
-	 G9W/KK7rFS1uCZ05p/EC0ZOebO8qyPJUD7af5cuNnia6846hNI6U+btvgGtgNcZrI6
-	 yoT3oUONElMQKUXzpktEreDjV7/jymv3fEtmhDaOlvLS9dE1xZSXQR3/pxKlgaMLDh
-	 X1t9k25cbIobg==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 2/2] powerpc/64: Use -mtune=pwr10/9/8 for clang
-In-Reply-To: <20230302164324.GB3010526@dev-arch.thelio-3990X>
-References: <20230302131656.50626-1-mpe@ellerman.id.au>
- <20230302131656.50626-2-mpe@ellerman.id.au>
- <20230302164324.GB3010526@dev-arch.thelio-3990X>
-Date: Fri, 03 Mar 2023 10:53:02 +1100
-Message-ID: <878rgelnhd.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20853399;
+	Fri,  3 Mar 2023 00:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677802193; x=1709338193;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KEO69e7t4SUCptDZHAye6J7VUmZunSOCkRUou3oEIcw=;
+  b=c4CBJkA+8VxVuJkt8pFVUw+gI6N/KehGVgJ+96TpG/wMBa3w2BDMAUrL
+   erDr44uxLKUPVddD2RDgzxgX/nq4zoMhBmzpE2rV8vZ9WQJNeUfyhkfHP
+   /yF5bzCJDyTDrUsOsQwLd6FDR6iA4sWq16Qi+KGyPcMlHiM37hhpR7QYt
+   Zp0EWTibvbwyS37HKD7diBvnGTn8EcLDJBovizJK3BWTVHKgPoqYebxIM
+   +Ak8DvE9P2hkCcSJUrebk0WVqMYsyWu8tqmVOndHX/FCHJQ2KfC5MZvwW
+   +29io88dv6a85Y71tRkbDczLJSKHwQuZz890SvHt3N41aYULu4I+H+uu4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="318720578"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="318720578"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 16:09:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="668451827"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="668451827"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 02 Mar 2023 16:08:42 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pXsyX-000110-1T;
+	Fri, 03 Mar 2023 00:08:41 +0000
+Date: Fri, 3 Mar 2023 08:08:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [stable:linux-5.15.y 1447/9999] <inline asm>:6:2: error: cpu
+ alternatives does not support instructions blocks > 254 bytes
+Message-ID: <202303030805.rRkU4bRr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Nathan Chancellor <nathan@kernel.org> writes:
-> Hi Michael,
->
-> Thanks for the workaround and sorry this has come to bite us :/
->
-> On Fri, Mar 03, 2023 at 12:16:56AM +1100, Michael Ellerman wrote:
->> For the -mtune option clang doesn't accept power10/9/8, instead it
->> accepts pwr10/9/8. That will be fixed in future versions of clang, but
->> the kernel must support the clang versions in the wild.
->> 
->> So add support for the "pwr" spelling if clang is in use.
->> 
->> Reported-by: Nathan Chancellor <nathan@kernel.org>
->
-> I think that should actually be
->
-> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   d383d0f28ecac0f3375bdfb9a0c4bfac979f6f8f
+commit: 33db9912ff7c491f839c89a08e98f755aa09598f [1447/9999] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+config: s390-randconfig-r034-20230303 (https://download.01.org/0day-ci/archive/20230303/202303030805.rRkU4bRr-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=33db9912ff7c491f839c89a08e98f755aa09598f
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout 33db9912ff7c491f839c89a08e98f755aa09598f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/jbd2/
 
-I guess yeah.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303030805.rRkU4bRr-lkp@intel.com/
 
->> BugLink: https://github.com/ClangBuiltLinux/linux/issues/1799
->> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+All errors (new ones prefixed by >>):
 
-Thanks.
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:94:
+   arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:83:2: note: expanded from macro 'OLDINSTR'
+           OLDINSTR_PADDING(oldinstr, num)                                 \
+           ^
+   arch/s390/include/asm/alternative.h:71:3: note: expanded from macro 'OLDINSTR_PADDING'
+           ".if " oldinstr_pad_len(num) " > 6\n"                           \
+            ^
+   <inline asm>:15:5: note: instantiated into assembly here
+   .if -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) > 6
+       ^
+   In file included from fs/jbd2/transaction.c:18:
+   In file included from include/linux/fs.h:6:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:94:
+   arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if " len " > 254\n"                                           \
+            ^
+   <inline asm>:25:5: note: instantiated into assembly here
+   .if 662b-661b > 254
+       ^
+   In file included from fs/jbd2/transaction.c:18:
+   In file included from include/linux/fs.h:6:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:94:
+   arch/s390/include/asm/spinlock.h:89:3: error: cpu alternatives does not support instructions blocks > 254 bytes
+                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:63:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives does not support instructions "    \
+            ^
+   <inline asm>:26:2: note: instantiated into assembly here
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   In file included from fs/jbd2/transaction.c:18:
+   In file included from include/linux/fs.h:6:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:94:
+   arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:66:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if (" len ") %% 2\n"                                          \
+            ^
+   <inline asm>:28:5: note: instantiated into assembly here
+   .if (662b-661b) % 2
+       ^
+   In file included from fs/jbd2/transaction.c:18:
+   In file included from include/linux/fs.h:6:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:94:
+   arch/s390/include/asm/spinlock.h:89:3: error: cpu alternatives instructions length is odd
+                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:113:2: note: expanded from macro 'ALTERNATIVE'
+           OLDINSTR(oldinstr, 1)                                           \
+           ^
+   arch/s390/include/asm/alternative.h:85:2: note: expanded from macro 'OLDINSTR'
+           INSTR_LEN_SANITY_CHECK(oldinstr_len)
+           ^
+   arch/s390/include/asm/alternative.h:67:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           "\t.error \"cpu alternatives instructions length is odd\"\n"    \
+            ^
+   <inline asm>:29:2: note: instantiated into assembly here
+           .error "cpu alternatives instructions length is odd"
+           ^
+   <inline asm>:5:5: error: expected absolute expression
+   .if 6651b-6641b > 254
+       ^
+>> <inline asm>:6:2: error: cpu alternatives does not support instructions blocks > 254 bytes
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   <inline asm>:8:5: error: expected absolute expression
+   .if (6651b-6641b) % 2
+       ^
+>> <inline asm>:9:2: error: cpu alternatives instructions length is odd
+           .error "cpu alternatives instructions length is odd"
+           ^
+   <inline asm>:15:5: error: expected absolute expression
+   .if -(((6651b-6641b)-(662b-661b)) > 0) * ((6651b-6641b)-(662b-661b)) > 6
+       ^
+   <inline asm>:25:5: error: expected absolute expression
+   .if 662b-661b > 254
+       ^
+   <inline asm>:26:2: error: cpu alternatives does not support instructions blocks > 254 bytes
+           .error "cpu alternatives does not support instructions blocks > 254 bytes"
+           ^
+   <inline asm>:28:5: error: expected absolute expression
+   .if (662b-661b) % 2
+       ^
+   <inline asm>:29:2: error: cpu alternatives instructions length is odd
+           .error "cpu alternatives instructions length is odd"
+           ^
+   In file included from fs/jbd2/transaction.c:18:
+   In file included from include/linux/fs.h:6:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:94:
+   arch/s390/include/asm/spinlock.h:89:3: error: expected absolute expression
+                   ALTERNATIVE("", ".long 0xb2fa0070", 49) /* NIAI 7 */
+                   ^
+   arch/s390/include/asm/alternative.h:111:2: note: expanded from macro 'ALTERNATIVE'
+           ALTINSTR_REPLACEMENT(altinstr, 1)                               \
+           ^
+   arch/s390/include/asm/alternative.h:106:2: note: expanded from macro 'ALTINSTR_REPLACEMENT'
+           INSTR_LEN_SANITY_CHECK(altinstr_len(num))
+           ^
+   arch/s390/include/asm/alternative.h:62:3: note: expanded from macro 'INSTR_LEN_SANITY_CHECK'
+           ".if " len " > 254\n"                                           \
+            ^
+   <inline asm>:5:5: note: instantiated into assembly here
+   .if 6651b-6641b > 254
+       ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   12 warnings and 20 errors generated.
 
->> ---
->>  arch/powerpc/platforms/Kconfig.cputype | 4 ++++
->>  1 file changed, 4 insertions(+)
->> 
->> Need to confirm the clang <= 16 statement is correct.
->
-> Currently, this is indeed the case. It is possible that Nemanja's patch
-> will get applied to release/16.x before 16.0.0 final but it might not.
->
-> We can always update it later. I think we do want to push to get that
-> patch applied because I forgot that it is only in 16.0.0 that '-mtune'
-> starts to do something on PowerPC:
->
-> https://github.com/llvm/llvm-project/commit/1dc26b80b872a94c581549a21943756a8c3448a3
->
-> Prior to that change, '-mtune' was accepted but did nothing. It is only
-> once it was hooked up to the backend that we got the spew of warnings. I
-> think that warrants us trying to get Nemanja's patch into 16.0.0, which
-> may allow us to drop this workaround altogether...
-
-Aha OK, I missed that the warning was new in 16.
-
-I'll sit on this for now then until we know if that change will make it
-into clang 16.
-
-cheers
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
