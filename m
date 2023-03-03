@@ -1,165 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F5279D8
-	for <llvm@lists.linux.dev>; Fri,  3 Mar 2023 15:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CC2C433EF;
-	Fri,  3 Mar 2023 15:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1677858275;
-	bh=gRQSCSeKjz+p/gTKsX4VQGXBkhVqiUPtVkOI5VJ/KkU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lIyNtfuCaVQE8kuwrCtrgL/25OM7dsH3g/myItJBu0kieB3tKEJmfcai2PNI58KgE
-	 uOFAWRx8LWdfT0OZBrZnIJ/3HT9XR/UgrI+rrV/qd5XzX76dqM+IT2z8eKqPEJHfuJ
-	 a3fSPOCunRXlaN5RpoED8+AGoaeh6w5hxMQr14Xw4tjr/V2kAbdrl7+Zmw+SzoNsfG
-	 /ZyKcO6Dr7tOZSzFxGNxk1+SThemVcLETPWT1s+HBD9F80GINXwkr3ZFDn5A5VTJx/
-	 IAh6bZD1jAulM2nmZjo71oeYBuRHzhnBqJIi6FYSnCn5R6cRN3y93i/uC4aQxWsAHf
-	 hV/ngW6ZnsIJg==
-Date: Fri, 3 Mar 2023 08:44:33 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Marco Elver <elver@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] ubsan: Tighten UBSAN_BOUNDS on GCC
-Message-ID: <20230303154433.GA3775@dev-arch.thelio-3990X>
-References: <20230302225444.never.053-kees@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655628F42
+	for <llvm@lists.linux.dev>; Fri,  3 Mar 2023 20:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677873663;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Kc3ywyCF2GS2J9smPU2geQkjQcu+Sy3BW7zDR/LuGuA=;
+	b=ESpz4NhSf/T3Qe+h17Y2Qx/N6nCjR0u0PXCimfTb9iMmhDwVlYBLhlgCy+bo6TLNO6ZPPw
+	aZc/wmr2nY+CKzM8xQY5MLwLR/OVlmMQ4emnUM5WURIGfafNczC3Frp4yA11qZ4JMLOqn8
+	YnMm6+sSCRpTl5mSU4hbAlVDuPW9rNQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-lumBMOWiNzuDKJciGi-U2A-1; Fri, 03 Mar 2023 15:01:02 -0500
+X-MC-Unique: lumBMOWiNzuDKJciGi-U2A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C3D185C70D
+	for <llvm@lists.linux.dev>; Fri,  3 Mar 2023 20:01:02 +0000 (UTC)
+Received: from [172.64.0.76] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id EBADF2166B26;
+	Fri,  3 Mar 2023 20:01:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (0/5 SKIPPED): Test report for master (6.2.0,
+ mainline.kernel.org-clang, 0a3f9a6b)
+Date: Fri, 03 Mar 2023 20:01:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302225444.never.053-kees@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <54302.123030315010202006@us-mta-589.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 02, 2023 at 02:54:45PM -0800, Kees Cook wrote:
-> The use of -fsanitize=bounds on GCC will ignore some trailing arrays,
-> leaving a gap in coverage. Switch to using -fsanitize=bounds-strict to
-> match Clang's stricter behavior.
-> 
-> Cc: Marco Elver <elver@google.com>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Nicolas Schier <nicolas@fjasle.eu>
-> Cc: Tom Rix <trix@redhat.com>
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> Cc: Miroslav Benes <mbenes@suse.cz>
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  lib/Kconfig.ubsan      | 54 +++++++++++++++++++++++-------------------
->  scripts/Makefile.ubsan |  2 +-
->  2 files changed, 30 insertions(+), 26 deletions(-)
-> 
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index fd15230a703b..9d3e87a0b6d1 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -27,16 +27,27 @@ config UBSAN_TRAP
->  	  the system. For some system builders this is an acceptable
->  	  trade-off.
->  
-> -config CC_HAS_UBSAN_BOUNDS
-> -	def_bool $(cc-option,-fsanitize=bounds)
-> +config CC_HAS_UBSAN_BOUNDS_STRICT
-> +	def_bool $(cc-option,-fsanitize=bounds-strict)
-> +	help
-> +	  The -fsanitize=bounds-strict option is only available on GCC,
-> +	  but uses the more strict handling of arrays that includes knowledge
-> +	  of flexible arrays, which is comparable to Clang's regular
-> +	  -fsanitize=bounds.
->  
->  config CC_HAS_UBSAN_ARRAY_BOUNDS
->  	def_bool $(cc-option,-fsanitize=array-bounds)
-> +	help
-> +	  The -fsanitize=array-bounds option is only available on Clang,
-> +	  and is actually composed of two more specific options,
-> +	  -fsanitize=array-bounds and -fsanitize=local-bounds. However,
-> +	  -fsanitize=local-bounds can only be used when trap mode is
-> +	  enabled. (See also the help for CONFIG_LOCAL_BOUNDS.)
+Hi, we tested your kernel and here are the results:
 
-The first sentence does not read right to me, you have array-bounds
-twice. I think the first one wants to be just bounds?
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: OK
 
->  config UBSAN_BOUNDS
->  	bool "Perform array index bounds checking"
->  	default UBSAN
-> -	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS
-> +	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS_STRICT
->  	help
->  	  This option enables detection of directly indexed out of bounds
->  	  array accesses, where the array size is known at compile time.
-> @@ -44,33 +55,26 @@ config UBSAN_BOUNDS
->  	  to the {str,mem}*cpy() family of functions (that is addressed
->  	  by CONFIG_FORTIFY_SOURCE).
->  
-> -config UBSAN_ONLY_BOUNDS
-> -	def_bool CC_HAS_UBSAN_BOUNDS && !CC_HAS_UBSAN_ARRAY_BOUNDS
-> -	depends on UBSAN_BOUNDS
-> +config UBSAN_BOUNDS_STRICT
-> +	def_bool UBSAN_BOUNDS && CC_HAS_UBSAN_BOUNDS_STRICT
->  	help
-> -	  This is a weird case: Clang's -fsanitize=bounds includes
-> -	  -fsanitize=local-bounds, but it's trapping-only, so for
-> -	  Clang, we must use -fsanitize=array-bounds when we want
-> -	  traditional array bounds checking enabled. For GCC, we
-> -	  want -fsanitize=bounds.
-> +	  GCC's bounds sanitizer. This option is used to select the
-> +	  correct options in Makefile.ubsan.
->  
->  config UBSAN_ARRAY_BOUNDS
-> -	def_bool CC_HAS_UBSAN_ARRAY_BOUNDS
-> -	depends on UBSAN_BOUNDS
-> +	def_bool UBSAN_BOUNDS && CC_HAS_UBSAN_ARRAY_BOUNDS
-> +	help
-> +	  Clang's array bounds sanitizer. This option is used to select
-> +	  the correct options in Makefile.ubsan.
->  
->  config UBSAN_LOCAL_BOUNDS
-> -	bool "Perform array local bounds checking"
-> -	depends on UBSAN_TRAP
-> -	depends on $(cc-option,-fsanitize=local-bounds)
-> -	help
-> -	  This option enables -fsanitize=local-bounds which traps when an
-> -	  exception/error is detected. Therefore, it may only be enabled
-> -	  with CONFIG_UBSAN_TRAP.
-> -
-> -	  Enabling this option detects errors due to accesses through a
-> -	  pointer that is derived from an object of a statically-known size,
-> -	  where an added offset (which may not be known statically) is
-> -	  out-of-bounds.
-> +	def_bool UBSAN_ARRAY_BOUNDS && UBSAN_TRAP
-> +	help
-> +	  This option enables Clang's -fsanitize=local-bounds which traps
-> +	  when an access through a pointer that is derived from an object
-> +	  of a statically-known size, where an added offset (which may not
-> +	  be known statically) is out-of-bounds. Since this option is
-> +	  trap-only, it depends on CONFIG_UBSAN_TRAP.
->  
->  config UBSAN_SHIFT
->  	bool "Perform checking for bit-shift overflows"
-> diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
-> index 7099c603ff0a..4749865c1b2c 100644
-> --- a/scripts/Makefile.ubsan
-> +++ b/scripts/Makefile.ubsan
-> @@ -2,7 +2,7 @@
->  
->  # Enable available and selected UBSAN features.
->  ubsan-cflags-$(CONFIG_UBSAN_ALIGNMENT)		+= -fsanitize=alignment
-> -ubsan-cflags-$(CONFIG_UBSAN_ONLY_BOUNDS)	+= -fsanitize=bounds
-> +ubsan-cflags-$(CONFIG_UBSAN_BOUNDS_STRICT)	+= -fsanitize=bounds-strict
->  ubsan-cflags-$(CONFIG_UBSAN_ARRAY_BOUNDS)	+= -fsanitize=array-bounds
->  ubsan-cflags-$(CONFIG_UBSAN_LOCAL_BOUNDS)	+= -fsanitize=local-bounds
->  ubsan-cflags-$(CONFIG_UBSAN_SHIFT)		+= -fsanitize=shift
-> -- 
-> 2.34.1
-> 
+
+Kernel information:
+    Commit message: Merge tag 'thermal-6.3-rc1-2' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/rafael/linux-pm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/75875
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/31907=
+4
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/31907=
+5
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/31907=
+6
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/319078
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/31907=
+7
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
