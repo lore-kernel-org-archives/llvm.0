@@ -1,47 +1,44 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956AA10F6;
-	Sat,  4 Mar 2023 08:53:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172A81FD1;
+	Sat,  4 Mar 2023 09:15:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677920029; x=1709456029;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h2N1Dsnuu4apfKa64luavxCyFxtbqkgn5Zef0gGSBzQ=;
-  b=b38kxVz90E5Zvqp0tYzARuf6DOw/Z+1iKMcsLFzQUmCHd1K6RB6xAufP
-   FauUHLtwLBv8ROIEaCqpXHGyFwSrVmKdlYvpoBToLYNw7AoSJq2oDVmyQ
-   XWl+0N28tlkcNtKldxxCghEYWGLIiJWdUWCnZafX7gt3x0doycdqMNjPZ
-   jawA9HohTvzK9gggf0RD9EVF6KusAWd2fIAf6bceDDv5QUQ3hHw1yixN7
-   bezT6pMmpnWfneIaQVC5GE9psXrvZl0JR0FdDR15OALt/DmQzx0yW2m6n
-   f72GT/M0VhebiTLHBvX31cbZX3GnIbzhucR6yFnmOVPfXtqYQuwGjCiNn
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="335267937"
+  t=1677921350; x=1709457350;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wlPn/riyahyhrfTjmrsHE82xI1qb7v+nPgACDf4jlhU=;
+  b=PCpLllYYXRVV2QkOAxWZdWnDBFIjOcRzl68fL898nAzofsj/9/vb6BFq
+   gKLIhJyiAl5JD4+bKxu58Das+y2xJP58yPGmz0Lay38aWyP/gy+lIsWiI
+   DzaVqKUnkfQttqwRCDjwL9bWoazMpB/KED1sgxk2AEeHNDcvF2hqTWNDh
+   iNNmMTIvI3FN+RmxWq1Kw42Lanv45Vdp0BmwgDywuYKK6bQaTscJvjFuT
+   0apO8UQ3T3Br1BFWQZOEt8wQ0hitsZ7dlvfZgkikoRt/NRrsIg7H5Na/w
+   SpXKMHk601yjBa4guA3B3nNXhOr8xwIC1dv6Ve86ySTs+l7sZiOL0djqS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="323549066"
 X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
-   d="scan'208";a="335267937"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 00:53:49 -0800
+   d="scan'208";a="323549066"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 01:15:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="818770868"
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="625615846"
 X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
-   d="scan'208";a="818770868"
+   d="scan'208";a="625615846"
 Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Mar 2023 00:53:47 -0800
+  by orsmga003.jf.intel.com with ESMTP; 04 Mar 2023 01:15:48 -0800
 Received: from kbuild by 776573491cc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pYNeE-00021i-1S;
-	Sat, 04 Mar 2023 08:53:46 +0000
-Date: Sat, 4 Mar 2023 16:53:41 +0800
+	id 1pYNzX-00022i-2t;
+	Sat, 04 Mar 2023 09:15:47 +0000
+Date: Sat, 4 Mar 2023 17:14:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Fangrui Song <maskray@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Chancellor <natechancellor@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [stable:linux-4.14.y 5132/9999] arch/mips/math-emu/cp1emu.c:2813:5:
- warning: stack frame size (1048) exceeds limit (1024) in
- 'fpu_emulator_cop1Handler'
-Message-ID: <202303041628.02DK6zpr-lkp@intel.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 1/1] mm/khugepaged: fix vm_lock/i_mmap_rwsem inversion in
+ retract_page_tables
+Message-ID: <202303041731.bKMGi6Dx-lkp@intel.com>
+References: <20230303213250.3555716-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,82 +47,172 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230303213250.3555716-1-surenb@google.com>
 
-Hi Fangrui,
+Hi Suren,
 
-First bad commit (maybe != root cause):
+I love your patch! Yet something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
-head:   7878a41b6cc1ada4bb804eee96beb2c54322806c
-commit: 71749b1181eca12af96654a781cabcd058c37c8f [5132/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
-config: mips-randconfig-r022-20230303 (https://download.01.org/0day-ci/archive/20230304/202303041628.02DK6zpr-lkp@intel.com/config)
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-khugepaged-fix-vm_lock-i_mmap_rwsem-inversion-in-retract_page_tables/20230304-053401
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230303213250.3555716-1-surenb%40google.com
+patch subject: [PATCH 1/1] mm/khugepaged: fix vm_lock/i_mmap_rwsem inversion in retract_page_tables
+config: s390-randconfig-r024-20230302 (https://download.01.org/0day-ci/archive/20230304/202303041731.bKMGi6Dx-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=71749b1181eca12af96654a781cabcd058c37c8f
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-4.14.y
-        git checkout 71749b1181eca12af96654a781cabcd058c37c8f
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/338d2ee433a0559b3c6c3966b8d4ffe55e8dc6c9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Suren-Baghdasaryan/mm-khugepaged-fix-vm_lock-i_mmap_rwsem-inversion-in-retract_page_tables/20230304-053401
+        git checkout 338d2ee433a0559b3c6c3966b8d4ffe55e8dc6c9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303041628.02DK6zpr-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303041731.bKMGi6Dx-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/mips/math-emu/cp1emu.c:2813:5: warning: stack frame size (1048) exceeds limit (1024) in 'fpu_emulator_cop1Handler' [-Wframe-larger-than]
-   int fpu_emulator_cop1Handler(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
-       ^
-   992/1048 (94.66%) spills, 56/1048 (5.34%) variables
-   1 warning generated.
+>> mm/khugepaged.c:1799:9: error: call to undeclared function 'vma_try_start_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           if (!vma_try_start_write(vma))
+                                ^
+   mm/khugepaged.c:1799:9: note: did you mean 'vma_start_write'?
+   include/linux/mm.h:742:20: note: 'vma_start_write' declared here
+   static inline void vma_start_write(struct vm_area_struct *vma) {}
+                      ^
+   1 error generated.
 
 
-vim +/fpu_emulator_cop1Handler +2813 arch/mips/math-emu/cp1emu.c
+vim +/vma_try_start_write +1799 mm/khugepaged.c
 
-^1da177e4c3f41 Linus Torvalds    2005-04-16  2783  
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2784  /*
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2785   * Emulate FPU instructions.
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2786   *
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2787   * If we use FPU hardware, then we have been typically called to handle
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2788   * an unimplemented operation, such as where an operand is a NaN or
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2789   * denormalized.  In that case exit the emulation loop after a single
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2790   * iteration so as to let hardware execute any subsequent instructions.
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2791   *
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2792   * If we have no FPU hardware or it has been disabled, then continue
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2793   * emulating floating-point instructions until one of these conditions
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2794   * has occurred:
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2795   *
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2796   * - a non-FPU instruction has been encountered,
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2797   *
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2798   * - an attempt to emulate has ended with a signal,
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2799   *
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2800   * - the ISA mode has been switched.
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2801   *
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2802   * We need to terminate the emulation loop if we got switched to the
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2803   * MIPS16 mode, whether supported or not, so that we do not attempt
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2804   * to emulate a MIPS16 instruction as a regular MIPS FPU instruction.
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2805   * Similarly if we got switched to the microMIPS mode and only the
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2806   * regular MIPS mode is supported, so that we do not attempt to emulate
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2807   * a microMIPS instruction as a regular MIPS FPU instruction.  Or if
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2808   * we got switched to the regular MIPS mode and only the microMIPS mode
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2809   * is supported, so that we do not attempt to emulate a regular MIPS
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2810   * instruction that should cause an Address Error exception instead.
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2811   * For simplicity we always terminate upon an ISA mode switch.
-13769ebad0c427 Maciej W. Rozycki 2017-06-16  2812   */
-e04582b7bc70b4 Atsushi Nemoto    2006-10-09 @2813  int fpu_emulator_cop1Handler(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
-
-:::::: The code at line 2813 was first introduced by commit
-:::::: e04582b7bc70b40c57287cdc24f81964ee88f565 [MIPS] Make sure cpu_has_fpu is used only in atomic context
-
-:::::: TO: Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+  1736	
+  1737	static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+  1738				       struct mm_struct *target_mm,
+  1739				       unsigned long target_addr, struct page *hpage,
+  1740				       struct collapse_control *cc)
+  1741	{
+  1742		struct vm_area_struct *vma;
+  1743		int target_result = SCAN_FAIL;
+  1744	
+  1745		i_mmap_lock_write(mapping);
+  1746		vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
+  1747			int result = SCAN_FAIL;
+  1748			struct mm_struct *mm = NULL;
+  1749			unsigned long addr = 0;
+  1750			pmd_t *pmd;
+  1751			bool is_target = false;
+  1752	
+  1753			/*
+  1754			 * Check vma->anon_vma to exclude MAP_PRIVATE mappings that
+  1755			 * got written to. These VMAs are likely not worth investing
+  1756			 * mmap_write_lock(mm) as PMD-mapping is likely to be split
+  1757			 * later.
+  1758			 *
+  1759			 * Note that vma->anon_vma check is racy: it can be set up after
+  1760			 * the check but before we took mmap_lock by the fault path.
+  1761			 * But page lock would prevent establishing any new ptes of the
+  1762			 * page, so we are safe.
+  1763			 *
+  1764			 * An alternative would be drop the check, but check that page
+  1765			 * table is clear before calling pmdp_collapse_flush() under
+  1766			 * ptl. It has higher chance to recover THP for the VMA, but
+  1767			 * has higher cost too. It would also probably require locking
+  1768			 * the anon_vma.
+  1769			 */
+  1770			if (READ_ONCE(vma->anon_vma)) {
+  1771				result = SCAN_PAGE_ANON;
+  1772				goto next;
+  1773			}
+  1774			addr = vma->vm_start + ((pgoff - vma->vm_pgoff) << PAGE_SHIFT);
+  1775			if (addr & ~HPAGE_PMD_MASK ||
+  1776			    vma->vm_end < addr + HPAGE_PMD_SIZE) {
+  1777				result = SCAN_VMA_CHECK;
+  1778				goto next;
+  1779			}
+  1780			mm = vma->vm_mm;
+  1781			is_target = mm == target_mm && addr == target_addr;
+  1782			result = find_pmd_or_thp_or_none(mm, addr, &pmd);
+  1783			if (result != SCAN_SUCCEED)
+  1784				goto next;
+  1785			/*
+  1786			 * We need exclusive mmap_lock to retract page table.
+  1787			 *
+  1788			 * We use trylock due to lock inversion: we need to acquire
+  1789			 * mmap_lock while holding page lock. Fault path does it in
+  1790			 * reverse order. Trylock is a way to avoid deadlock.
+  1791			 *
+  1792			 * Also, it's not MADV_COLLAPSE's job to collapse other
+  1793			 * mappings - let khugepaged take care of them later.
+  1794			 */
+  1795			result = SCAN_PTE_MAPPED_HUGEPAGE;
+  1796			if ((cc->is_khugepaged || is_target) &&
+  1797			    mmap_write_trylock(mm)) {
+  1798				/* trylock for the same lock inversion as above */
+> 1799				if (!vma_try_start_write(vma))
+  1800					goto unlock_next;
+  1801	
+  1802				/*
+  1803				 * Re-check whether we have an ->anon_vma, because
+  1804				 * collapse_and_free_pmd() requires that either no
+  1805				 * ->anon_vma exists or the anon_vma is locked.
+  1806				 * We already checked ->anon_vma above, but that check
+  1807				 * is racy because ->anon_vma can be populated under the
+  1808				 * mmap lock in read mode.
+  1809				 */
+  1810				if (vma->anon_vma) {
+  1811					result = SCAN_PAGE_ANON;
+  1812					goto unlock_next;
+  1813				}
+  1814				/*
+  1815				 * When a vma is registered with uffd-wp, we can't
+  1816				 * recycle the pmd pgtable because there can be pte
+  1817				 * markers installed.  Skip it only, so the rest mm/vma
+  1818				 * can still have the same file mapped hugely, however
+  1819				 * it'll always mapped in small page size for uffd-wp
+  1820				 * registered ranges.
+  1821				 */
+  1822				if (hpage_collapse_test_exit(mm)) {
+  1823					result = SCAN_ANY_PROCESS;
+  1824					goto unlock_next;
+  1825				}
+  1826				if (userfaultfd_wp(vma)) {
+  1827					result = SCAN_PTE_UFFD_WP;
+  1828					goto unlock_next;
+  1829				}
+  1830				collapse_and_free_pmd(mm, vma, addr, pmd);
+  1831				if (!cc->is_khugepaged && is_target)
+  1832					result = set_huge_pmd(vma, addr, pmd, hpage);
+  1833				else
+  1834					result = SCAN_SUCCEED;
+  1835	
+  1836	unlock_next:
+  1837				mmap_write_unlock(mm);
+  1838				goto next;
+  1839			}
+  1840			/*
+  1841			 * Calling context will handle target mm/addr. Otherwise, let
+  1842			 * khugepaged try again later.
+  1843			 */
+  1844			if (!is_target) {
+  1845				khugepaged_add_pte_mapped_thp(mm, addr);
+  1846				continue;
+  1847			}
+  1848	next:
+  1849			if (is_target)
+  1850				target_result = result;
+  1851		}
+  1852		i_mmap_unlock_write(mapping);
+  1853		return target_result;
+  1854	}
+  1855	
 
 -- 
 0-DAY CI Kernel Test Service
