@@ -1,84 +1,92 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B86BD139C;
-	Fri,  3 Mar 2023 22:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677883168; x=1709419168;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=UtbNUeHkdfnI7hK+rTZjXWYK3JN5Xw4FLO8Gz2rkiig=;
-  b=jERKgOkHWRV8+F7I7yxVAEVvRCJvICVB4ZRO+lrhsf+VsofQrebSbjwE
-   nffi/kGVUPlu2AbiCbS39yawWzGTFgSY+OMLJOVRQrGqReaa3I0UYkwXX
-   efUnkazQaQsEzrUtXvjGYJS+o8p7VfXwUFaJmjBrLNonEBckjQx3X7Ig1
-   bwONNzR9uAqvff3Z+8DN+ryYuymWu59YsAyYw++XEH8OFMEEFRDIuNFGi
-   wJB9kmvHZti/fzdlldM/yzxZkbp+y91oxPKdE9VRmP338BA726J4jKgzY
-   ZJt8ewOjYaT7tzVlyqJ7eeehXMNNv4e2kt7K1qBZfr3ut/L2+CrI/mfv4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="399990324"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="399990324"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 14:39:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="849640981"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="849640981"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 Mar 2023 14:39:27 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pYE3i-0001hM-2q;
-	Fri, 03 Mar 2023 22:39:26 +0000
-Date: Sat, 4 Mar 2023 06:39:05 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [driver-core:debugfs_cleanup 7/7] ld.lld: error:
- vmlinux.a(fs/ext4/orphan.o):(function ext4_orphan_add: .text+0x110):
- relocation R_RISCV_HI20 out of range: 541487 is not in [-524288, 524287];
- references ext4_orphan_add.__if_trace.2.1
-Message-ID: <202303040632.lhWDtmIN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD5F7E
+	for <llvm@lists.linux.dev>; Sat,  4 Mar 2023 00:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1677889208;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=avvlXCFZuIuT39xax3YyVKdjBDJwjMJNueulLXXt6Qk=;
+	b=iz1EoBPfBAtFwvuxb8neROJYoWuZEoTiiSBFxVrn3bH6ZB6qDzz8cqu2bPEvoUNz1fokte
+	llX7pdXbSopcUPsKdgOTWZyNZXKZpk+nHnO4m9Ra5sn1gsEHvxuWDIR6+dSZsEf3gLhHEe
+	MuAmzQYFotpfDYMVl9FKbYCZbdGliw0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-g96HfMRwNcu0GJ0MqGw4qA-1; Fri, 03 Mar 2023 19:20:06 -0500
+X-MC-Unique: g96HfMRwNcu0GJ0MqGw4qA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7753E3C02523
+	for <llvm@lists.linux.dev>; Sat,  4 Mar 2023 00:20:06 +0000 (UTC)
+Received: from [172.64.0.76] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5E074140EBF4;
+	Sat,  4 Mar 2023 00:20:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (0/5 SKIPPED): Test report for master (6.2.0,
+ mainline.kernel.org-clang, fb35342f)
+Date: Sat, 04 Mar 2023 00:20:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <10391.123030319200600131@us-mta-288.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: devel@driverdev.osuosl.org
-TO: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Hi, we tested your kernel and here are the results:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git debugfs_cleanup
-head:   d6b1776e7d0ed5afabaf9c8ea8e4581bbeab3e60
-commit: d6b1776e7d0ed5afabaf9c8ea8e4581bbeab3e60 [7/7] soundwire: sysfs: remove unneeded ATTRIBUTE_GROUPS() comments
-config: riscv-randconfig-r002-20230303 (https://download.01.org/0day-ci/archive/20230304/202303040632.lhWDtmIN-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=d6b1776e7d0ed5afabaf9c8ea8e4581bbeab3e60
-        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-        git fetch --no-tags driver-core debugfs_cleanup
-        git checkout d6b1776e7d0ed5afabaf9c8ea8e4581bbeab3e60
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: OK
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303040632.lhWDtmIN-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+Kernel information:
+    Commit message: Merge tag 'cocci-for-6.3' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/jlawall/linux
 
->> ld.lld: error: vmlinux.a(fs/ext4/orphan.o):(function ext4_orphan_add: .text+0x110): relocation R_RISCV_HI20 out of range: 541487 is not in [-524288, 524287]; references ext4_orphan_add.__if_trace.2.1
-   >>> referenced by orphan.c:101 (fs/ext4/orphan.c:101)
-   >>> defined in vmlinux.a(fs/ext4/orphan.o)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/75952
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/31921=
+5
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/31921=
+6
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/31921=
+7
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/319219
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/31921=
+8
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
