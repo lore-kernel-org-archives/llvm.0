@@ -1,44 +1,47 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101F123D1;
-	Sat,  4 Mar 2023 14:02:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7A27E;
+	Sat,  4 Mar 2023 14:33:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677938577; x=1709474577;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uOFv4OKBE54zZEDErhYTE0rWOKCJekwkXCpp2YrA4U4=;
-  b=ceOuO2v9z0CBJ/M8hs5I/VDt9A56QlAzd60e+d94YEJT4ZXICpSNwU3J
-   oFoPqn8TsWNhmCvdOMpUwX+oHycdv1pTPHt5WPz1TqNpMnZQrtGV8qcpz
-   BczE/WCP384luls0pl6sjRJxjIetph2AgJlEhOvnai5nxduMt3+YpyGuX
-   GV2UqYpB7l4V5wx7RB72DGgcM2p7VSfKxYG5NU9xd0CyO3crRhzo/U1CP
-   ThSj7N31dgLMbYVpQ2I89gvlm63tcmTR7MDXVXUHYHQXHqIV9TmXJkJbn
-   Kd3EXP2gmAbiGc8xGOwbOGxKfAfbO3UHOtQHGEOjhQir3MzAAvSMqTWH6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="362861717"
+  t=1677940439; x=1709476439;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qn9XLmmbBZgRIDTnrbrgrbSleKelw/x5svL1EAo9rTA=;
+  b=URENzbRMYfZHcSv0wOgiQGpyYIUZoyqygerlWNoNIQjNAiWlcpc6/BoG
+   RnPut3bHLcQiaP4kvcNbAglexxy10Iv5a0TxyDetQxraJ+1uzDRYZdmZ2
+   RQV5J6AB6iE5duscYjAGxWcb/o+Z9/ynHE6f71vh+j7QVc4faDr3XhrTU
+   d5YBgfdQ9BP5edbupXX6kaQq6BbNP/475GwVmoWZsNP2mHPRWRUnLnhk6
+   R6HO5UmyObuTj0qPqXbTeUleQNStj139bgtO50d58WqKmGUQPL8HUzXiT
+   lXMKYqyQcZAudnPmHO6RRHLeXtI1VM8lVzDywyiVqPbuqyDbn/ArkX25i
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="319089965"
 X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
-   d="scan'208";a="362861717"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 06:02:56 -0800
+   d="scan'208";a="319089965"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 06:33:58 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="677983648"
+X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="849799420"
 X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
-   d="scan'208";a="677983648"
+   d="scan'208";a="849799420"
 Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Mar 2023 06:02:54 -0800
+  by orsmga005.jf.intel.com with ESMTP; 04 Mar 2023 06:33:55 -0800
 Received: from kbuild by 776573491cc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pYSTO-0002CK-14;
-	Sat, 04 Mar 2023 14:02:54 +0000
-Date: Sat, 4 Mar 2023 22:02:51 +0800
+	id 1pYSxO-0002DT-36;
+	Sat, 04 Mar 2023 14:33:54 +0000
+Date: Sat, 4 Mar 2023 22:33:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Suren Baghdasaryan <surenb@google.com>
+To: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 83/143] mm/khugepaged.c:1704:9: error: implicit
- declaration of function 'vma_try_start_write' is invalid in C99
-Message-ID: <202303042159.qPwZsZsh-lkp@intel.com>
+	davem@davemloft.net, intel-wired-lan@lists.osuosl.org,
+	jesse.brandeburg@intel.com, khc@pm.waw.pl,
+	Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3] netdevice: use ifmap instead of plain fields
+Message-ID: <202303042238.bQFk2Esl-lkp@intel.com>
+References: <20230304115626.215026-1-vincenzopalazzodev@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,162 +50,237 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230304115626.215026-1-vincenzopalazzodev@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   df3ae4347aff9be1e9763ffa3b1015fca348bfbd
-commit: 92e3612279f925881e96dcc89acfb6bf96a2bb2a [83/143] mm/khugepaged: fix vm_lock/i_mmap_rwsem inversion in retract_page_tables
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230304/202303042159.qPwZsZsh-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Vincenzo,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on net/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincenzo-Palazzo/netdevice-use-ifmap-instead-of-plain-fields/20230304-195731
+patch link:    https://lore.kernel.org/r/20230304115626.215026-1-vincenzopalazzodev%40gmail.com
+patch subject: [PATCH v3] netdevice: use ifmap instead of plain fields
+config: arm64-randconfig-r026-20230302 (https://download.01.org/0day-ci/archive/20230304/202303042238.bQFk2Esl-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=92e3612279f925881e96dcc89acfb6bf96a2bb2a
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch --no-tags akpm-mm mm-unstable
-        git checkout 92e3612279f925881e96dcc89acfb6bf96a2bb2a
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/89e04810927e646944e5cdd83fb9bb5a41cc5a3d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vincenzo-Palazzo/netdevice-use-ifmap-instead-of-plain-fields/20230304-195731
+        git checkout 89e04810927e646944e5cdd83fb9bb5a41cc5a3d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/arcnet/ drivers/net/can/cc770/ drivers/net/can/sja1000/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303042159.qPwZsZsh-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303042238.bQFk2Esl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/khugepaged.c:1704:9: error: implicit declaration of function 'vma_try_start_write' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           if (!vma_try_start_write(vma))
-                                ^
-   mm/khugepaged.c:1704:9: note: did you mean 'vma_start_write'?
-   include/linux/mm.h:719:20: note: 'vma_start_write' declared here
-   static inline void vma_start_write(struct vm_area_struct *vma) {}
-                      ^
+>> drivers/net/arcnet/com20020-pci.c:199:8: error: no member named 'base_addr' in 'struct net_device'
+                   dev->base_addr = ioaddr;
+                   ~~~  ^
    1 error generated.
+--
+>> drivers/net/can/cc770/cc770_isa.c:204:8: error: no member named 'base_addr' in 'struct net_device'
+                   dev->base_addr = mem[idx];
+                   ~~~  ^
+   drivers/net/can/cc770/cc770_isa.c:209:8: error: no member named 'base_addr' in 'struct net_device'
+                   dev->base_addr = port[idx];
+                   ~~~  ^
+   2 errors generated.
+--
+>> drivers/net/can/sja1000/sja1000_isa.c:159:8: error: no member named 'base_addr' in 'struct net_device'
+                   dev->base_addr = mem[idx];
+                   ~~~  ^
+   drivers/net/can/sja1000/sja1000_isa.c:164:8: error: no member named 'base_addr' in 'struct net_device'
+                   dev->base_addr = port[idx];
+                   ~~~  ^
+   2 errors generated.
 
 
-vim +/vma_try_start_write +1704 mm/khugepaged.c
+vim +199 drivers/net/arcnet/com20020-pci.c
 
-  1641	
-  1642	static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
-  1643				       struct mm_struct *target_mm,
-  1644				       unsigned long target_addr, struct page *hpage,
-  1645				       struct collapse_control *cc)
-  1646	{
-  1647		struct vm_area_struct *vma;
-  1648		int target_result = SCAN_FAIL;
-  1649	
-  1650		i_mmap_lock_write(mapping);
-  1651		vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
-  1652			int result = SCAN_FAIL;
-  1653			struct mm_struct *mm = NULL;
-  1654			unsigned long addr = 0;
-  1655			pmd_t *pmd;
-  1656			bool is_target = false;
-  1657	
-  1658			/*
-  1659			 * Check vma->anon_vma to exclude MAP_PRIVATE mappings that
-  1660			 * got written to. These VMAs are likely not worth investing
-  1661			 * mmap_write_lock(mm) as PMD-mapping is likely to be split
-  1662			 * later.
-  1663			 *
-  1664			 * Note that vma->anon_vma check is racy: it can be set up after
-  1665			 * the check but before we took mmap_lock by the fault path.
-  1666			 * But page lock would prevent establishing any new ptes of the
-  1667			 * page, so we are safe.
-  1668			 *
-  1669			 * An alternative would be drop the check, but check that page
-  1670			 * table is clear before calling pmdp_collapse_flush() under
-  1671			 * ptl. It has higher chance to recover THP for the VMA, but
-  1672			 * has higher cost too. It would also probably require locking
-  1673			 * the anon_vma.
-  1674			 */
-  1675			if (READ_ONCE(vma->anon_vma)) {
-  1676				result = SCAN_PAGE_ANON;
-  1677				goto next;
-  1678			}
-  1679			addr = vma->vm_start + ((pgoff - vma->vm_pgoff) << PAGE_SHIFT);
-  1680			if (addr & ~HPAGE_PMD_MASK ||
-  1681			    vma->vm_end < addr + HPAGE_PMD_SIZE) {
-  1682				result = SCAN_VMA_CHECK;
-  1683				goto next;
-  1684			}
-  1685			mm = vma->vm_mm;
-  1686			is_target = mm == target_mm && addr == target_addr;
-  1687			result = find_pmd_or_thp_or_none(mm, addr, &pmd);
-  1688			if (result != SCAN_SUCCEED)
-  1689				goto next;
-  1690			/*
-  1691			 * We need exclusive mmap_lock to retract page table.
-  1692			 *
-  1693			 * We use trylock due to lock inversion: we need to acquire
-  1694			 * mmap_lock while holding page lock. Fault path does it in
-  1695			 * reverse order. Trylock is a way to avoid deadlock.
-  1696			 *
-  1697			 * Also, it's not MADV_COLLAPSE's job to collapse other
-  1698			 * mappings - let khugepaged take care of them later.
-  1699			 */
-  1700			result = SCAN_PTE_MAPPED_HUGEPAGE;
-  1701			if ((cc->is_khugepaged || is_target) &&
-  1702			    mmap_write_trylock(mm)) {
-  1703				/* trylock for the same lock inversion as above */
-> 1704				if (!vma_try_start_write(vma))
-  1705					goto unlock_next;
-  1706	
-  1707				/*
-  1708				 * Re-check whether we have an ->anon_vma, because
-  1709				 * collapse_and_free_pmd() requires that either no
-  1710				 * ->anon_vma exists or the anon_vma is locked.
-  1711				 * We already checked ->anon_vma above, but that check
-  1712				 * is racy because ->anon_vma can be populated under the
-  1713				 * mmap lock in read mode.
-  1714				 */
-  1715				if (vma->anon_vma) {
-  1716					result = SCAN_PAGE_ANON;
-  1717					goto unlock_next;
-  1718				}
-  1719				/*
-  1720				 * When a vma is registered with uffd-wp, we can't
-  1721				 * recycle the pmd pgtable because there can be pte
-  1722				 * markers installed.  Skip it only, so the rest mm/vma
-  1723				 * can still have the same file mapped hugely, however
-  1724				 * it'll always mapped in small page size for uffd-wp
-  1725				 * registered ranges.
-  1726				 */
-  1727				if (hpage_collapse_test_exit(mm)) {
-  1728					result = SCAN_ANY_PROCESS;
-  1729					goto unlock_next;
-  1730				}
-  1731				if (userfaultfd_wp(vma)) {
-  1732					result = SCAN_PTE_UFFD_WP;
-  1733					goto unlock_next;
-  1734				}
-  1735				collapse_and_free_pmd(mm, vma, addr, pmd);
-  1736				if (!cc->is_khugepaged && is_target)
-  1737					result = set_huge_pmd(vma, addr, pmd, hpage);
-  1738				else
-  1739					result = SCAN_SUCCEED;
-  1740	
-  1741	unlock_next:
-  1742				mmap_write_unlock(mm);
-  1743				goto next;
-  1744			}
-  1745			/*
-  1746			 * Calling context will handle target mm/addr. Otherwise, let
-  1747			 * khugepaged try again later.
-  1748			 */
-  1749			if (!is_target) {
-  1750				khugepaged_add_pte_mapped_thp(mm, addr);
-  1751				continue;
-  1752			}
-  1753	next:
-  1754			if (is_target)
-  1755				target_result = result;
-  1756		}
-  1757		i_mmap_unlock_write(mapping);
-  1758		return target_result;
-  1759	}
-  1760	
+c51da42a6346c0 Michael Grzeschik  2014-09-29  118  
+d6d7d3ed56e3bf Joe Perches        2015-05-05  119  static int com20020pci_probe(struct pci_dev *pdev,
+d6d7d3ed56e3bf Joe Perches        2015-05-05  120  			     const struct pci_device_id *id)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  121  {
+8c14f9c70327a6 Michael Grzeschik  2014-09-29  122  	struct com20020_pci_card_info *ci;
+5ef216c1f84825 Michael Grzeschik  2014-09-18  123  	struct com20020_pci_channel_map *mm;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  124  	struct net_device *dev;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  125  	struct arcnet_local *lp;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  126  	struct com20020_priv *priv;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  127  	int i, ioaddr, ret;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  128  	struct resource *r;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  129  
+6577b9a551aedb Tong Zhang         2021-03-14  130  	ret = 0;
+6577b9a551aedb Tong Zhang         2021-03-14  131  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  132  	if (pci_enable_device(pdev))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  133  		return -EIO;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  134  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  135  	priv = devm_kzalloc(&pdev->dev, sizeof(struct com20020_priv),
+c51da42a6346c0 Michael Grzeschik  2014-09-29  136  			    GFP_KERNEL);
+e8a308affcd79d Kiran Padwal       2015-02-05  137  	if (!priv)
+e8a308affcd79d Kiran Padwal       2015-02-05  138  		return -ENOMEM;
+e8a308affcd79d Kiran Padwal       2015-02-05  139  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  140  	ci = (struct com20020_pci_card_info *)id->driver_data;
+bd6f1fd5d33dfe Zheyu Ma           2022-03-02  141  	if (!ci)
+bd6f1fd5d33dfe Zheyu Ma           2022-03-02  142  		return -EINVAL;
+bd6f1fd5d33dfe Zheyu Ma           2022-03-02  143  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  144  	priv->ci = ci;
+5ef216c1f84825 Michael Grzeschik  2014-09-18  145  	mm = &ci->misc_map;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  146  
+6577b9a551aedb Tong Zhang         2021-03-14  147  	pci_set_drvdata(pdev, priv);
+6577b9a551aedb Tong Zhang         2021-03-14  148  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  149  	INIT_LIST_HEAD(&priv->list_dev);
+c51da42a6346c0 Michael Grzeschik  2014-09-29  150  
+5ef216c1f84825 Michael Grzeschik  2014-09-18  151  	if (mm->size) {
+5ef216c1f84825 Michael Grzeschik  2014-09-18  152  		ioaddr = pci_resource_start(pdev, mm->bar) + mm->offset;
+5ef216c1f84825 Michael Grzeschik  2014-09-18  153  		r = devm_request_region(&pdev->dev, ioaddr, mm->size,
+5ef216c1f84825 Michael Grzeschik  2014-09-18  154  					"com20020-pci");
+5ef216c1f84825 Michael Grzeschik  2014-09-18  155  		if (!r) {
+5ef216c1f84825 Michael Grzeschik  2014-09-18  156  			pr_err("IO region %xh-%xh already allocated.\n",
+5ef216c1f84825 Michael Grzeschik  2014-09-18  157  			       ioaddr, ioaddr + mm->size - 1);
+5ef216c1f84825 Michael Grzeschik  2014-09-18  158  			return -EBUSY;
+5ef216c1f84825 Michael Grzeschik  2014-09-18  159  		}
+5ef216c1f84825 Michael Grzeschik  2014-09-18  160  		priv->misc = ioaddr;
+5ef216c1f84825 Michael Grzeschik  2014-09-18  161  	}
+5ef216c1f84825 Michael Grzeschik  2014-09-18  162  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  163  	for (i = 0; i < ci->devcount; i++) {
+c51da42a6346c0 Michael Grzeschik  2014-09-29  164  		struct com20020_pci_channel_map *cm = &ci->chan_map_tbl[i];
+c51da42a6346c0 Michael Grzeschik  2014-09-29  165  		struct com20020_dev *card;
+cb108619f2fc77 Michael Grzeschik  2017-06-28  166  		int dev_id_mask = 0xf;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  167  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  168  		dev = alloc_arcdev(device);
+c51da42a6346c0 Michael Grzeschik  2014-09-29  169  		if (!dev) {
+c51da42a6346c0 Michael Grzeschik  2014-09-29  170  			ret = -ENOMEM;
+6577b9a551aedb Tong Zhang         2021-03-14  171  			break;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  172  		}
+ae8ede6a0cdcf3 Michael Grzeschik  2015-03-20  173  		dev->dev_port = i;
+a1799af4d7deef Stephen Hemminger  2009-01-09  174  
+a1799af4d7deef Stephen Hemminger  2009-01-09  175  		dev->netdev_ops = &com20020_netdev_ops;
+a1799af4d7deef Stephen Hemminger  2009-01-09  176  
+454d7c9b14e20f Wang Chen          2008-11-12  177  		lp = netdev_priv(dev);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  178  
+a34c0932c3b2f2 Joe Perches        2015-05-05  179  		arc_printk(D_NORMAL, dev, "%s Controls\n", ci->name);
+c51da42a6346c0 Michael Grzeschik  2014-09-29  180  		ioaddr = pci_resource_start(pdev, cm->bar) + cm->offset;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  181  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  182  		r = devm_request_region(&pdev->dev, ioaddr, cm->size,
+c51da42a6346c0 Michael Grzeschik  2014-09-29  183  					"com20020-pci");
+c51da42a6346c0 Michael Grzeschik  2014-09-29  184  		if (!r) {
+05a24b234b9dda Joe Perches        2015-05-05  185  			pr_err("IO region %xh-%xh already allocated\n",
+c51da42a6346c0 Michael Grzeschik  2014-09-29  186  			       ioaddr, ioaddr + cm->size - 1);
+c51da42a6346c0 Michael Grzeschik  2014-09-29  187  			ret = -EBUSY;
+6577b9a551aedb Tong Zhang         2021-03-14  188  			goto err_free_arcdev;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  189  		}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  190  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  191  		/* Dummy access after Reset
+c51da42a6346c0 Michael Grzeschik  2014-09-29  192  		 * ARCNET controller needs
+c51da42a6346c0 Michael Grzeschik  2014-09-29  193  		 * this access to detect bustype
+c51da42a6346c0 Michael Grzeschik  2014-09-29  194  		 */
+0fec65130b9f11 Joe Perches        2015-05-05  195  		arcnet_outb(0x00, ioaddr, COM20020_REG_W_COMMAND);
+0fec65130b9f11 Joe Perches        2015-05-05  196  		arcnet_inb(ioaddr, COM20020_REG_R_DIAGSTAT);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  197  
+2a0ea04c83ab82 Michael Grzeschik  2017-06-28  198  		SET_NETDEV_DEV(dev, &pdev->dev);
+^1da177e4c3f41 Linus Torvalds     2005-04-16 @199  		dev->base_addr = ioaddr;
+13b5ffa0e282f3 Jakub Kicinski     2021-10-12  200  		arcnet_set_addr(dev, node);
+ede07a1fc7d70a Michael Grzeschik  2017-06-28  201  		dev->sysfs_groups[0] = &com20020_state_group;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  202  		dev->irq = pdev->irq;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  203  		lp->card_name = "PCI COM20020";
+8c14f9c70327a6 Michael Grzeschik  2014-09-29  204  		lp->card_flags = ci->flags;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  205  		lp->backplane = backplane;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  206  		lp->clockp = clockp & 7;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  207  		lp->clockm = clockm & 3;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  208  		lp->timeout = timeout;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  209  		lp->hw.owner = THIS_MODULE;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  210  
+52ab12e4f99437 Michael Grzeschik  2017-06-28  211  		lp->backplane = (inb(priv->misc) >> (2 + i)) & 0x1;
+52ab12e4f99437 Michael Grzeschik  2017-06-28  212  
+a356ab1c3d4651 Michael Grzeschik  2017-06-28  213  		if (!strncmp(ci->name, "EAE PLX-PCI FB2", 15))
+a356ab1c3d4651 Michael Grzeschik  2017-06-28  214  			lp->backplane = 1;
+a356ab1c3d4651 Michael Grzeschik  2017-06-28  215  
+5ef216c1f84825 Michael Grzeschik  2014-09-18  216  		/* Get the dev_id from the PLX rotary coder */
+5ef216c1f84825 Michael Grzeschik  2014-09-18  217  		if (!strncmp(ci->name, "EAE PLX-PCI MA1", 15))
+cb108619f2fc77 Michael Grzeschik  2017-06-28  218  			dev_id_mask = 0x3;
+cb108619f2fc77 Michael Grzeschik  2017-06-28  219  		dev->dev_id = (inb(priv->misc + ci->rotary) >> 4) & dev_id_mask;
+5ef216c1f84825 Michael Grzeschik  2014-09-18  220  
+5ef216c1f84825 Michael Grzeschik  2014-09-18  221  		snprintf(dev->name, sizeof(dev->name), "arc%d-%d", dev->dev_id, i);
+5ef216c1f84825 Michael Grzeschik  2014-09-18  222  
+0fec65130b9f11 Joe Perches        2015-05-05  223  		if (arcnet_inb(ioaddr, COM20020_REG_R_STATUS) == 0xFF) {
+c51da42a6346c0 Michael Grzeschik  2014-09-29  224  			pr_err("IO address %Xh is empty!\n", ioaddr);
+c51da42a6346c0 Michael Grzeschik  2014-09-29  225  			ret = -EIO;
+6577b9a551aedb Tong Zhang         2021-03-14  226  			goto err_free_arcdev;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  227  		}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  228  		if (com20020_check(dev)) {
+c51da42a6346c0 Michael Grzeschik  2014-09-29  229  			ret = -EIO;
+6577b9a551aedb Tong Zhang         2021-03-14  230  			goto err_free_arcdev;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  231  		}
+^1da177e4c3f41 Linus Torvalds     2005-04-16  232  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  233  		card = devm_kzalloc(&pdev->dev, sizeof(struct com20020_dev),
+c51da42a6346c0 Michael Grzeschik  2014-09-29  234  				    GFP_KERNEL);
+01c3521f794ce9 Christophe Jaillet 2017-07-07  235  		if (!card) {
+01c3521f794ce9 Christophe Jaillet 2017-07-07  236  			ret = -ENOMEM;
+6577b9a551aedb Tong Zhang         2021-03-14  237  			goto err_free_arcdev;
+01c3521f794ce9 Christophe Jaillet 2017-07-07  238  		}
+c51da42a6346c0 Michael Grzeschik  2014-09-29  239  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  240  		card->index = i;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  241  		card->pci_priv = priv;
+8890624a4e8c2c Michael Grzeschik  2014-09-18  242  		card->tx_led.brightness_set = led_tx_set;
+8890624a4e8c2c Michael Grzeschik  2014-09-18  243  		card->tx_led.default_trigger = devm_kasprintf(&pdev->dev,
+8890624a4e8c2c Michael Grzeschik  2014-09-18  244  						GFP_KERNEL, "arc%d-%d-tx",
+8890624a4e8c2c Michael Grzeschik  2014-09-18  245  						dev->dev_id, i);
+8890624a4e8c2c Michael Grzeschik  2014-09-18  246  		card->tx_led.name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+8890624a4e8c2c Michael Grzeschik  2014-09-18  247  						"pci:green:tx:%d-%d",
+8890624a4e8c2c Michael Grzeschik  2014-09-18  248  						dev->dev_id, i);
+8890624a4e8c2c Michael Grzeschik  2014-09-18  249  
+8890624a4e8c2c Michael Grzeschik  2014-09-18  250  		card->tx_led.dev = &dev->dev;
+8890624a4e8c2c Michael Grzeschik  2014-09-18  251  		card->recon_led.brightness_set = led_recon_set;
+8890624a4e8c2c Michael Grzeschik  2014-09-18  252  		card->recon_led.default_trigger = devm_kasprintf(&pdev->dev,
+8890624a4e8c2c Michael Grzeschik  2014-09-18  253  						GFP_KERNEL, "arc%d-%d-recon",
+8890624a4e8c2c Michael Grzeschik  2014-09-18  254  						dev->dev_id, i);
+8890624a4e8c2c Michael Grzeschik  2014-09-18  255  		card->recon_led.name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+8890624a4e8c2c Michael Grzeschik  2014-09-18  256  						"pci:red:recon:%d-%d",
+8890624a4e8c2c Michael Grzeschik  2014-09-18  257  						dev->dev_id, i);
+8890624a4e8c2c Michael Grzeschik  2014-09-18  258  		card->recon_led.dev = &dev->dev;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  259  		card->dev = dev;
+c51da42a6346c0 Michael Grzeschik  2014-09-29  260  
+8890624a4e8c2c Michael Grzeschik  2014-09-18  261  		ret = devm_led_classdev_register(&pdev->dev, &card->tx_led);
+8890624a4e8c2c Michael Grzeschik  2014-09-18  262  		if (ret)
+6577b9a551aedb Tong Zhang         2021-03-14  263  			goto err_free_arcdev;
+8890624a4e8c2c Michael Grzeschik  2014-09-18  264  
+8890624a4e8c2c Michael Grzeschik  2014-09-18  265  		ret = devm_led_classdev_register(&pdev->dev, &card->recon_led);
+8890624a4e8c2c Michael Grzeschik  2014-09-18  266  		if (ret)
+6577b9a551aedb Tong Zhang         2021-03-14  267  			goto err_free_arcdev;
+8890624a4e8c2c Michael Grzeschik  2014-09-18  268  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  269  		dev_set_drvdata(&dev->dev, card);
+c51da42a6346c0 Michael Grzeschik  2014-09-29  270  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  271  		ret = com20020_found(dev, IRQF_SHARED);
+c51da42a6346c0 Michael Grzeschik  2014-09-29  272  		if (ret)
+6577b9a551aedb Tong Zhang         2021-03-14  273  			goto err_free_arcdev;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  274  
+8890624a4e8c2c Michael Grzeschik  2014-09-18  275  		devm_arcnet_led_init(dev, dev->dev_id, i);
+8890624a4e8c2c Michael Grzeschik  2014-09-18  276  
+c51da42a6346c0 Michael Grzeschik  2014-09-29  277  		list_add(&card->list, &priv->list_dev);
+6577b9a551aedb Tong Zhang         2021-03-14  278  		continue;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  279  
+6577b9a551aedb Tong Zhang         2021-03-14  280  err_free_arcdev:
+6577b9a551aedb Tong Zhang         2021-03-14  281  		free_arcdev(dev);
+6577b9a551aedb Tong Zhang         2021-03-14  282  		break;
+6577b9a551aedb Tong Zhang         2021-03-14  283  	}
+6577b9a551aedb Tong Zhang         2021-03-14  284  	if (ret)
+c51da42a6346c0 Michael Grzeschik  2014-09-29  285  		com20020pci_remove(pdev);
+c51da42a6346c0 Michael Grzeschik  2014-09-29  286  	return ret;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  287  }
+^1da177e4c3f41 Linus Torvalds     2005-04-16  288  
 
 -- 
 0-DAY CI Kernel Test Service
