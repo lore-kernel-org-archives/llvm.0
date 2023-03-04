@@ -1,92 +1,341 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5902815B8
-	for <llvm@lists.linux.dev>; Sat,  4 Mar 2023 02:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1677895208;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=O4BabruNAWav50zlwvWty8p/j2mchf9rkdMx1N7ZDTk=;
-	b=AaZ65aVds1KfTgQHK2Fg1zBBd2sndwtTgHP6xjdfhy4Uu7ImGxoFbB+cST0yHgnG8kU5xC
-	xkcQe3w5Uus9tlBI7itTF5FLWXJkXbkn/NGuiNhXIb4ELMGbFXrU1w7CqMLae8Pn7dLSon
-	T0Y5974oa2eHFLyJlGgIIDYUK6irBFs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-50-yQwWLYklONODBYxCsaSEpQ-1; Fri, 03 Mar 2023 21:00:06 -0500
-X-MC-Unique: yQwWLYklONODBYxCsaSEpQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 37CB029AB3E2
-	for <llvm@lists.linux.dev>; Sat,  4 Mar 2023 02:00:06 +0000 (UTC)
-Received: from [172.64.0.76] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1FF67440D8;
-	Sat,  4 Mar 2023 02:00:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (0/5 SKIPPED): Test report for master (6.2.0,
- mainline.kernel.org-clang, 0988a0ea)
-Date: Sat, 04 Mar 2023 02:00:06 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7D915B8;
+	Sat,  4 Mar 2023 02:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677895540; x=1709431540;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tnpt6y7F9bG9yZCGTWrcKkVIoZwOTmZiR2QBkCKqg8M=;
+  b=IXVB+7s4u7L3fnmXCzIkRl9bxNRtNVUPoaKnZ9k6PKpzMSOjftmyRM0J
+   EknWAH9ffMJRg4FR0jUSaAQAZwRh0ySBjCqMcYSK7B5dv2WL3ggwefkQI
+   rIfJlWM7y2x+VqThJrJZ0mcdXigCvAY/3oSSDt3qnBaB40TL2OIefDtSv
+   tgG4+NtI0BXW4mvqhwfPeG8iH1peaoEKRnjKj6mJOQdZugAVDcbpR5B+0
+   Izx34HeFa1rn7kzsbyO7XfL2mXHIFijn5OXTZ9no9si2RpN62a9qnnL/8
+   pqnu8PD05XwKl2N8NQjZjIy1e3xUzI2wuOX2skpyFCrbgZdSMGmUvNNml
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="323510866"
+X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
+   d="scan'208";a="323510866"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 18:05:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="668855503"
+X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
+   d="scan'208";a="668855503"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 03 Mar 2023 18:05:31 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pYHH9-0001nI-0C;
+	Sat, 04 Mar 2023 02:05:31 +0000
+Date: Sat, 4 Mar 2023 10:04:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, intel-wired-lan@lists.osuosl.org,
+	jesse.brandeburg@intel.com,
+	Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Subject: Re: [PATCH v1] netdevice: use ifmap isteand of plain fields
+Message-ID: <202303040937.SrzjrYMQ-lkp@intel.com>
+References: <20230303150818.132386-1-vincenzopalazzodev@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <82225.123030321000600447@us-mta-50.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303150818.132386-1-vincenzopalazzodev@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Vincenzo,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: OK
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on net/master]
+[also build test ERROR on net-next/master horms-ipvs/master linus/master v6.2 next-20230303]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincenzo-Palazzo/netdevice-use-ifmap-isteand-of-plain-fields/20230303-231003
+patch link:    https://lore.kernel.org/r/20230303150818.132386-1-vincenzopalazzodev%40gmail.com
+patch subject: [PATCH v1] netdevice: use ifmap isteand of plain fields
+config: hexagon-randconfig-r001-20230303 (https://download.01.org/0day-ci/archive/20230304/202303040937.SrzjrYMQ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4efa870f9b2112fdebe7d1fffe30f5626b8d5229
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vincenzo-Palazzo/netdevice-use-ifmap-isteand-of-plain-fields/20230303-231003
+        git checkout 4efa870f9b2112fdebe7d1fffe30f5626b8d5229
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/hamradio/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303040937.SrzjrYMQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/net/hamradio/baycom_ser_hdx.c:53:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/net/hamradio/baycom_ser_hdx.c:53:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/hamradio/baycom_ser_hdx.c:53:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/net/hamradio/baycom_ser_hdx.c:158:22: error: no member named 'base_addr' in 'struct net_device'
+           outb(0x81, LCR(dev->base_addr));        /* DLAB = 1 */
+                          ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:83:22: note: expanded from macro 'LCR'
+   #define LCR(iobase) (iobase+3)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:159:25: error: no member named 'base_addr' in 'struct net_device'
+           outb(divisor, DLL(dev->base_addr));
+                             ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:88:22: note: expanded from macro 'DLL'
+   #define DLL(iobase) (iobase+0)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:160:19: error: no member named 'base_addr' in 'struct net_device'
+           outb(0, DLM(dev->base_addr));
+                       ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:89:22: note: expanded from macro 'DLM'
+   #define DLM(iobase) (iobase+1)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:161:22: error: no member named 'base_addr' in 'struct net_device'
+           outb(0x01, LCR(dev->base_addr));        /* word length = 6 */
+                          ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:83:22: note: expanded from macro 'LCR'
+   #define LCR(iobase) (iobase+3)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:167:22: error: no member named 'base_addr' in 'struct net_device'
+           outb(0x00, THR(dev->base_addr));
+                          ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:79:22: note: expanded from macro 'THR'
+   #define THR(iobase) (iobase+0)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:193:51: error: no member named 'base_addr' in 'struct net_device'
+           outb(0x0e | (!!bc->modem.ser12.tx_bit), MCR(dev->base_addr));
+                                                       ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:84:22: note: expanded from macro 'MCR'
+   #define MCR(iobase) (iobase+4)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:209:23: error: no member named 'base_addr' in 'struct net_device'
+           cur_s = inb(MSR(dev->base_addr)) & 0x10;        /* the CTS line */
+                           ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:86:22: note: expanded from macro 'MSR'
+   #define MSR(iobase) (iobase+6)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:339:22: error: no member named 'base_addr' in 'struct net_device'
+           outb(0x0d, MCR(dev->base_addr));                /* transmitter off */
+                          ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:84:22: note: expanded from macro 'MCR'
+   #define MCR(iobase) (iobase+4)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:346:46: error: no member named 'base_addr' in 'struct net_device'
+                           hdlcdrv_setdcd(&bc->hdrv, !((inb(MSR(dev->base_addr)) ^ bc->opt_dcd) & 0x80));
+                                                                ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:86:22: note: expanded from macro 'MSR'
+   #define MSR(iobase) (iobase+6)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:371:26: error: no member named 'base_addr' in 'struct net_device'
+           if ((iir = inb(IIR(dev->base_addr))) & 1)
+                              ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:81:22: note: expanded from macro 'IIR'
+   #define IIR(iobase) (iobase+2)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:377:17: error: no member named 'base_addr' in 'struct net_device'
+                           inb(LSR(dev->base_addr));
+                                   ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:85:22: note: expanded from macro 'LSR'
+   #define LSR(iobase) (iobase+5)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:381:17: error: no member named 'base_addr' in 'struct net_device'
+                           inb(RBR(dev->base_addr));
+                                   ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:78:22: note: expanded from macro 'RBR'
+   #define RBR(iobase) (iobase+0)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:394:24: error: no member named 'base_addr' in 'struct net_device'
+                           outb(0x00, THR(dev->base_addr));
+                                          ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:79:22: note: expanded from macro 'THR'
+   #define THR(iobase) (iobase+0)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:398:17: error: no member named 'base_addr' in 'struct net_device'
+                           inb(MSR(dev->base_addr));
+                                   ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:86:22: note: expanded from macro 'MSR'
+   #define MSR(iobase) (iobase+6)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:401:22: error: no member named 'base_addr' in 'struct net_device'
+                   iir = inb(IIR(dev->base_addr));
+                                 ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:81:22: note: expanded from macro 'IIR'
+   #define IIR(iobase) (iobase+2)
+                        ^~~~~~
+   drivers/net/hamradio/baycom_ser_hdx.c:463:12: error: no member named 'base_addr' in 'struct net_device'
+           if (!dev->base_addr || dev->base_addr > 0x1000-SER12_EXTENT ||
+                ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:463:30: error: no member named 'base_addr' in 'struct net_device'
+           if (!dev->base_addr || dev->base_addr > 0x1000-SER12_EXTENT ||
+                                  ~~~  ^
+   drivers/net/hamradio/baycom_ser_hdx.c:466:27: error: no member named 'base_addr' in 'struct net_device'
+           if (!request_region(dev->base_addr, SER12_EXTENT, "baycom_ser12"))
+                               ~~~  ^
+   include/linux/ioport.h:268:75: note: expanded from macro 'request_region'
+   #define request_region(start,n,name)            __request_region(&ioport_resource, (start), (n), (name), 0)
+--
+   In file included from drivers/net/hamradio/hdlcdrv.c:43:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/net/hamradio/hdlcdrv.c:43:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/hamradio/hdlcdrv.c:43:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/net/hamradio/hdlcdrv.c:528:28: error: no member named 'base_addr' in 'struct net_device'
+                   bi.data.mp.iobase = dev->base_addr;
+                                       ~~~  ^
+   drivers/net/hamradio/hdlcdrv.c:540:8: error: no member named 'base_addr' in 'struct net_device'
+                   dev->base_addr = bi.data.mp.iobase;
+                   ~~~  ^
+   drivers/net/hamradio/hdlcdrv.c:706:7: error: no member named 'base_addr' in 'struct net_device'
+           dev->base_addr = baseaddr;
+           ~~~  ^
+   6 warnings and 3 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'for-v6.3-part2' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/sre/linux-power-supply
+vim +158 drivers/net/hamradio/baycom_ser_hdx.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/75971
+^1da177e4c3f41 Linus Torvalds 2005-04-16  149  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  150  /* --------------------------------------------------------------------- */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  151  /*
+^1da177e4c3f41 Linus Torvalds 2005-04-16  152   * ===================== SER12 specific routines =========================
+^1da177e4c3f41 Linus Torvalds 2005-04-16  153   */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  154  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  155  static inline void ser12_set_divisor(struct net_device *dev,
+^1da177e4c3f41 Linus Torvalds 2005-04-16  156  				     unsigned char divisor)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  157  {
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @158  	outb(0x81, LCR(dev->base_addr));	/* DLAB = 1 */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  159  	outb(divisor, DLL(dev->base_addr));
+^1da177e4c3f41 Linus Torvalds 2005-04-16  160  	outb(0, DLM(dev->base_addr));
+^1da177e4c3f41 Linus Torvalds 2005-04-16  161  	outb(0x01, LCR(dev->base_addr));	/* word length = 6 */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  162  	/*
+^1da177e4c3f41 Linus Torvalds 2005-04-16  163  	 * make sure the next interrupt is generated;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  164  	 * 0 must be used to power the modem; the modem draws its
+^1da177e4c3f41 Linus Torvalds 2005-04-16  165  	 * power from the TxD line
+^1da177e4c3f41 Linus Torvalds 2005-04-16  166  	 */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  167  	outb(0x00, THR(dev->base_addr));
+^1da177e4c3f41 Linus Torvalds 2005-04-16  168  	/*
+^1da177e4c3f41 Linus Torvalds 2005-04-16  169  	 * it is important not to set the divider while transmitting;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  170  	 * this reportedly makes some UARTs generating interrupts
+^1da177e4c3f41 Linus Torvalds 2005-04-16  171  	 * in the hundredthousands per second region
+^1da177e4c3f41 Linus Torvalds 2005-04-16  172  	 * Reported by: Ignacio.Arenaza@studi.epfl.ch (Ignacio Arenaza Nuno)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  173  	 */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  174  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  175  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/31924=
-6
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/31924=
-7
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/31924=
-8
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/319250
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/31924=
-9
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
