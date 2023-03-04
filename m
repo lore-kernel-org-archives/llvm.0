@@ -1,51 +1,49 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C4C1FAA;
-	Sat,  4 Mar 2023 06:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819957E;
+	Sat,  4 Mar 2023 08:23:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677912702; x=1709448702;
+  t=1677918230; x=1709454230;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JGi8y72DqKWL+R1ytY0Z+Y7NhTUceMCbtC1BVCCR8g0=;
-  b=PuDrtH/Fo2emD1ImMbK2g6r+vEP6kGHY5fx2NHjdKIjbfTqVweqLnH5L
-   zffpYE0F0PX35d3lgc7pbaMSgMofuD2b08TAASrCezhBtAxTc0u6SHOm1
-   qJTapbqp2yNKUHyJcTcfiCb+6oKiA/sdckKvWioke8rOO4FMlEefpkf1B
-   eHyrLKA+NyBBJr+rqygek36pGNb3XFJW2bLaJAfewrh1zzB9d3L4ARUry
-   ELKS4JkQX9YdiiZegi3yyKX170lpzfuQ6+mWyWagxD2pqtMr4eYuPQFuo
-   f2w3G8fdBHwmuFLHYCG65LU1Npe+qp8mFoSsZn21F9QJ3uaI1nkuzidXA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="332710343"
+  bh=qdLPi8iwJllL1WkDkxxfoFGQfyZMef9uxeduo00UepA=;
+  b=ekuWJkh/xwDYl2WYhpEWBe2AIQ1slCyFdYJHwAUhgHBZqgfNPX9Mm+Ho
+   jHllTSOcV7pw2ffiPJwmHgmy4SO06foKKGx+eu2pkqykGfKJWpEGCph8C
+   lTN0ywXBAxG1hUo4tiJOBCKJR2J451ZBh5VHEOpN1muxDtVd9Co6d4Mvo
+   J0y6i2qPkv7bo42T/Z8kNT88SaJhdC06SbHR8/FT1MMvFu3c5eFbPRtdy
+   crZ3WmIK7ZUUzaSWojvdSt6Sa9o7ISTjJ2Aye1VGjRgvUJnKDktDcBkAR
+   4tkdXnV9GbqHumO8DgcFHt9aeqWZujPBmxpkopcEMxEdAc6zSS9Hzzehw
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="336758167"
 X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
-   d="scan'208";a="332710343"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 22:51:41 -0800
+   d="scan'208";a="336758167"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 00:23:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="764666624"
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="705896953"
 X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
-   d="scan'208";a="764666624"
+   d="scan'208";a="705896953"
 Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Mar 2023 22:51:38 -0800
+  by orsmga008.jf.intel.com with ESMTP; 04 Mar 2023 00:23:46 -0800
 Received: from kbuild by 776573491cc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pYLk2-0001wG-0F;
-	Sat, 04 Mar 2023 06:51:38 +0000
-Date: Sat, 4 Mar 2023 14:51:07 +0800
+	id 1pYNBB-00020g-0r;
+	Sat, 04 Mar 2023 08:23:45 +0000
+Date: Sat, 4 Mar 2023 16:22:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cai Huoqing <cai.huoqing@linux.dev>, fancer.lancer@gmail.com
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-cxl@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Cai huoqing <cai.huoqing@linux.dev>,
-	Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-	Vinod Koul <vkoul@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-	linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 3/4] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <202303041444.2M7BzjRU-lkp@intel.com>
-References: <20230303124642.5519-4-cai.huoqing@linux.dev>
+	peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+	mark.rutland@arm.com, will@kernel.org, dan.j.williams@intel.com,
+	bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
+	alison.schofield@intel.com, linuxarm@huawei.com,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] cxl/pci: Find and register CXL PMU devices
+Message-ID: <202303041611.MbSDCPTb-lkp@intel.com>
+References: <20230303175022.10806-3-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,123 +52,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303124642.5519-4-cai.huoqing@linux.dev>
+In-Reply-To: <20230303175022.10806-3-Jonathan.Cameron@huawei.com>
 
-Hi Cai,
+Hi Jonathan,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on linus/master next-20230303]
-[cannot apply to vkoul-dmaengine/next pci/for-linus v6.2]
+[auto build test ERROR on cxl/next]
+[also build test ERROR on cxl/pending linus/master next-20230303]
+[cannot apply to v6.2]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cai-Huoqing/dmaengine-dw-edma-Rename-dw_edma_core_ops-structure-to-dw_edma_plat_ops/20230303-204905
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20230303124642.5519-4-cai.huoqing%40linux.dev
-patch subject: [PATCH v5 3/4] dmaengine: dw-edma: Add support for native HDMA
-config: arm-randconfig-r016-20230303 (https://download.01.org/0day-ci/archive/20230304/202303041444.2M7BzjRU-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230304-015342
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git next
+patch link:    https://lore.kernel.org/r/20230303175022.10806-3-Jonathan.Cameron%40huawei.com
+patch subject: [PATCH 2/4] cxl/pci: Find and register CXL PMU devices
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230304/202303041611.MbSDCPTb-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/061ed1e9b9bf70de12d7885880ee6302865a72d0
+        # https://github.com/intel-lab-lkp/linux/commit/0790ed82bb7adf04c834e8c03008b92c1b23945e
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Cai-Huoqing/dmaengine-dw-edma-Rename-dw_edma_core_ops-structure-to-dw_edma_plat_ops/20230303-204905
-        git checkout 061ed1e9b9bf70de12d7885880ee6302865a72d0
+        git fetch --no-tags linux-review Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230304-015342
+        git checkout 0790ed82bb7adf04c834e8c03008b92c1b23945e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303041444.2M7BzjRU-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303041611.MbSDCPTb-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/dma/dw-edma/dw-hdma-v0-core.c:12:
->> drivers/dma/dw-edma/dw-hdma-v0-regs.h:71:4: warning: field msi_stop within 'struct dw_hdma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-hdma-v0-regs.h:65:2)' and is usually due to 'struct dw_hdma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } msi_stop;
-             ^
->> drivers/dma/dw-edma/dw-hdma-v0-regs.h:78:4: warning: field msi_watermark within 'struct dw_hdma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-hdma-v0-regs.h:72:2)' and is usually due to 'struct dw_hdma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } msi_watermark;
-             ^
->> drivers/dma/dw-edma/dw-hdma-v0-regs.h:85:4: warning: field msi_abort within 'struct dw_hdma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-hdma-v0-regs.h:79:2)' and is usually due to 'struct dw_hdma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } msi_abort;
-             ^
-   3 warnings generated.
+>> drivers/cxl/core/port.c:60:20: error: use of undeclared identifier 'cxl_cpmu_type'; did you mean 'cxl_bus_type'?
+           if (dev->type == &cxl_cpmu_type)
+                             ^~~~~~~~~~~~~
+                             cxl_bus_type
+   drivers/cxl/cxl.h:732:24: note: 'cxl_bus_type' declared here
+   extern struct bus_type cxl_bus_type;
+                          ^
+   1 error generated.
+--
+>> drivers/cxl/core/regs.c:9:10: fatal error: 'cpmu.h' file not found
+   #include <cpmu.h>
+            ^~~~~~~~
+   1 error generated.
+--
+>> drivers/cxl/core/cpmu.c:8:10: fatal error: 'cpmu.h' file not found
+   #include <cpmu.h>
+            ^~~~~~~~
+   1 error generated.
 
 
-vim +71 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+vim +60 drivers/cxl/core/port.c
 
-    26	
-    27	struct dw_hdma_v0_ch_regs {
-    28		u32 ch_en;				/* 0x0000 */
-    29		u32 doorbell;				/* 0x0004 */
-    30		u32 prefetch;				/* 0x0008 */
-    31		u32 handshake;				/* 0x000c */
-    32		union {
-    33			u64 reg;			/* 0x0010..0x0014 */
-    34			struct {
-    35				u32 lsb;		/* 0x0010 */
-    36				u32 msb;		/* 0x0014 */
-    37			};
-    38		} llp;
-    39		u32 cycle_sync;				/* 0x0018 */
-    40		u32 transfer_size;			/* 0x001c */
-    41		union {
-    42			u64 reg;			/* 0x0020..0x0024 */
-    43			struct {
-    44				u32 lsb;		/* 0x0020 */
-    45				u32 msb;		/* 0x0024 */
-    46			};
-    47		} sar;
-    48		union {
-    49			u64 reg;			/* 0x0028..0x002c */
-    50			struct {
-    51				u32 lsb;		/* 0x0028 */
-    52				u32 msb;		/* 0x002c */
-    53			};
-    54		} dar;
-    55	
-    56		u32 watermark_en;			/* 0x0030 */
-    57		u32 control1;				/* 0x0034 */
-    58		u32 func_num;				/* 0x0038 */
-    59		u32 qos;				/* 0x003c */
-    60		u32 reserved;				/* 0x0040..0x007c */
-    61		u32 ch_stat;				/* 0x0080 */
-    62		u32 int_stat;				/* 0x0084 */
-    63		u32 int_setup;				/* 0x0088 */
-    64		u32 int_clear;				/* 0x008c */
-    65		union {
-    66			u64 reg;			/* 0x0090..0x0094 */
-    67			struct {
-    68				u32 lsb;		/* 0x0090 */
-    69				u32 msb;		/* 0x0094 */
-    70			};
-  > 71		} msi_stop;
-    72		union {
-    73			u64 reg;			/* 0x0098..0x009c */
-    74			struct {
-    75				u32 lsb;		/* 0x0098 */
-    76				u32 msb;		/* 0x009c */
-    77			};
-  > 78		} msi_watermark;
-    79		union {
-    80			u64 reg;			/* 0x00a0..0x00a4 */
-    81			struct {
-    82				u32 lsb;		/* 0x00a0 */
-    83				u32 msb;		/* 0x00a4 */
-    84			};
-  > 85		} msi_abort;
-    86		u32 msi_msgdata;			/* 0x00a8 */
-    87	} __packed;
-    88	
+    40	
+    41	static int cxl_device_id(struct device *dev)
+    42	{
+    43		if (dev->type == &cxl_nvdimm_bridge_type)
+    44			return CXL_DEVICE_NVDIMM_BRIDGE;
+    45		if (dev->type == &cxl_nvdimm_type)
+    46			return CXL_DEVICE_NVDIMM;
+    47		if (dev->type == CXL_PMEM_REGION_TYPE())
+    48			return CXL_DEVICE_PMEM_REGION;
+    49		if (dev->type == CXL_DAX_REGION_TYPE())
+    50			return CXL_DEVICE_DAX_REGION;
+    51		if (is_cxl_port(dev)) {
+    52			if (is_cxl_root(to_cxl_port(dev)))
+    53				return CXL_DEVICE_ROOT;
+    54			return CXL_DEVICE_PORT;
+    55		}
+    56		if (is_cxl_memdev(dev))
+    57			return CXL_DEVICE_MEMORY_EXPANDER;
+    58		if (dev->type == CXL_REGION_TYPE())
+    59			return CXL_DEVICE_REGION;
+  > 60		if (dev->type == &cxl_cpmu_type)
+    61			return CXL_DEVICE_CPMU;
+    62		return 0;
+    63	}
+    64	
 
 -- 
 0-DAY CI Kernel Test Service
