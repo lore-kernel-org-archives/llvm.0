@@ -1,42 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7329215B1;
-	Sat,  4 Mar 2023 03:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B6E7E;
+	Sat,  4 Mar 2023 06:51:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677899854; x=1709435854;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oatAEQ7vl8BoKmV6kkc6s2zJXLgO695Y2syAKAjumrU=;
-  b=k+8vYmq9DRmI6dTvlQwXZQMyfvWzY9TxcbYv89RQKDXgsXusmydK2Kvf
-   WmFGJfhMRjr3WIRkDQPNzyDEd20HIyc5xDc0NnM6D8swkD9vtNhI7TLRq
-   KwBJ2mYAMuIpm3BxIaUoBmSJVcfapVKwH4mnco3NdWK6UA8LbytGDovK5
-   ba458aQ+pf2LSsQkYcj/Ccct2tlSX/nrnVZ+B7AuNRkImCtBS06+Agk+B
-   rSXK4+NzLGMcIy7nqGRUp0lZmGecj5tXpMqNEiiYdCg45+s4HcuZr6wQY
-   zE2vSBAfMdbQwESeIeS5eQbRImq+rqrHerr8Mv14Eg4kiMR83on9a4ReO
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="421487336"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="421487336"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 19:17:33 -0800
+  t=1677912700; x=1709448700;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CvWK8M6rRr6nChyjRHtcahB04M1m7GKg+QhCdN8W3cc=;
+  b=YvUUOhytnUMRq6b2Zey8+oOC83VFrWu3FwX1QQtWfY2uamhPMyuNtWs7
+   Wz6iSr8fA6fCiP7qP3x8Cfj/J2nefXALYqQ6lkrhcnOvt6X91jw5UHsbR
+   frgITEY0wHiDw+611DzyHpdYc3Wfg+iI7vChtp3Wfu6+JiGF/nkrvjliy
+   6oaJVfqcAQsUO2H48JZ4znnXHnAHdQhuZXBNuRjN8rbOTSmXfvjR6bHhB
+   3C5KZOA6/R8Eh7BRscw2rO1/RWTHE1J/WBFRn97hWfxlhTrnrJxxzaUDv
+   j04l9qP3hQKvQN616IJB5Su0DShNVRqJA7HhdXN9bSTAjG8zklpBu9tY7
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="332710340"
+X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
+   d="scan'208";a="332710340"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 22:51:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="744452762"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="744452762"
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="785555132"
+X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
+   d="scan'208";a="785555132"
 Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Mar 2023 19:17:32 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 03 Mar 2023 22:51:38 -0800
 Received: from kbuild by 776573491cc5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pYIOp-0001oo-33;
-	Sat, 04 Mar 2023 03:17:31 +0000
-Date: Sat, 4 Mar 2023 11:17:06 +0800
+	id 1pYLk2-0001wI-0S;
+	Sat, 04 Mar 2023 06:51:38 +0000
+Date: Sat, 4 Mar 2023 14:51:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To: Jason Baron <jbaron@akamai.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [rmk-arm:net-queue 14/71] drivers/net/phy/sfp.c:2656:44: error: too
- many arguments to function call, expected 2, have 3
-Message-ID: <202303041125.wYVktEZl-lkp@intel.com>
+Subject: Re: [PATCH v3 2/2] dyndbg: use the module notifier callbacks
+Message-ID: <202303041420.W9FtaUDc-lkp@intel.com>
+References: <5884c688d10c9703fb0457f8839d6becc8657f8f.1677861177.git.jbaron@akamai.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,124 +46,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <5884c688d10c9703fb0457f8839d6becc8657f8f.1677861177.git.jbaron@akamai.com>
 
-tree:   git://git.armlinux.org.uk/~rmk/linux-arm net-queue
-head:   e61867cdc3bb4a8980784f3cafaa6c877ab6af0d
-commit: 9e4f66979a9751beb8ac23f928fe25a7a4617573 [14/71] net: sfp: add support for rate selection
-config: hexagon-randconfig-r033-20230302 (https://download.01.org/0day-ci/archive/20230304/202303041125.wYVktEZl-lkp@intel.com/config)
+Hi Jason,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on mcgrof/modules-next]
+[also build test WARNING on linus/master v6.2 next-20230303]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Baron/dyndbg-remove-unused-base-arg-from-__ddebug_add_module/20230304-005435
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+patch link:    https://lore.kernel.org/r/5884c688d10c9703fb0457f8839d6becc8657f8f.1677861177.git.jbaron%40akamai.com
+patch subject: [PATCH v3 2/2] dyndbg: use the module notifier callbacks
+config: arm-randconfig-r032-20230302 (https://download.01.org/0day-ci/archive/20230304/202303041420.W9FtaUDc-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
-        git fetch --no-tags rmk-arm net-queue
-        git checkout 9e4f66979a9751beb8ac23f928fe25a7a4617573
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/0505a1e5b9d22b48fe25399b8013a48cf7f42efb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jason-Baron/dyndbg-remove-unused-base-arg-from-__ddebug_add_module/20230304-005435
+        git checkout 0505a1e5b9d22b48fe25399b8013a48cf7f42efb
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/phy/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/infiniband/ulp/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303041125.wYVktEZl-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303041420.W9FtaUDc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/phy/sfp.c:6:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/net/phy/sfp.c:6:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/net/phy/sfp.c:6:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/net/phy/sfp.c:2656:44: error: too many arguments to function call, expected 2, have 3
-           sfp_set_state(sfp, SFP_F_RS0 | SFP_F_RS1, set);
-           ~~~~~~~~~~~~~                             ^~~
-   drivers/net/phy/sfp.c:762:13: note: 'sfp_set_state' declared here
-   static void sfp_set_state(struct sfp *sfp, unsigned int state)
-               ^
-   6 warnings and 1 error generated.
+>> drivers/infiniband/ulp/srp/ib_srp.c:66:9: warning: 'DEFINE_DYNAMIC_DEBUG_METADATA' macro redefined [-Wmacro-redefined]
+   #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
+           ^
+   include/linux/dynamic_debug.h:174:9: note: previous definition is here
+   #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)                \
+           ^
+>> drivers/infiniband/ulp/srp/ib_srp.c:67:9: warning: 'DYNAMIC_DEBUG_BRANCH' macro redefined [-Wmacro-redefined]
+   #define DYNAMIC_DEBUG_BRANCH(descriptor) false
+           ^
+   include/linux/dynamic_debug.h:188:9: note: previous definition is here
+   #define DYNAMIC_DEBUG_BRANCH(descriptor) \
+           ^
+   2 warnings generated.
 
 
-vim +2656 drivers/net/phy/sfp.c
+vim +/DEFINE_DYNAMIC_DEBUG_METADATA +66 drivers/infiniband/ulp/srp/ib_srp.c
 
-  2644	
-  2645	static void sfp_set_signal_rate(struct sfp *sfp, unsigned int rate_kbd)
-  2646	{
-  2647		unsigned int set;
-  2648	
-  2649		sfp->rate_kbd = rate_kbd;
-  2650	
-  2651		if (rate_kbd > sfp->rs_threshold_kbd)
-  2652			set = sfp->rs_state_mask;
-  2653		else
-  2654			set = 0;
-  2655	
-> 2656		sfp_set_state(sfp, SFP_F_RS0 | SFP_F_RS1, set);
-  2657	}
-  2658	
+aef9ec39c47f0c Roland Dreier   2005-11-02  64  
+1a1faf7a8a251d Bart Van Assche 2016-11-21  65  #if !defined(CONFIG_DYNAMIC_DEBUG)
+1a1faf7a8a251d Bart Van Assche 2016-11-21 @66  #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
+1a1faf7a8a251d Bart Van Assche 2016-11-21 @67  #define DYNAMIC_DEBUG_BRANCH(descriptor) false
+1a1faf7a8a251d Bart Van Assche 2016-11-21  68  #endif
+1a1faf7a8a251d Bart Van Assche 2016-11-21  69  
 
 -- 
 0-DAY CI Kernel Test Service
