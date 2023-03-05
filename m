@@ -1,111 +1,201 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E0D28EF
-	for <llvm@lists.linux.dev>; Sun,  5 Mar 2023 13:55:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C5FC4339B;
-	Sun,  5 Mar 2023 13:55:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678024538;
-	bh=k8j4Ag2hIvpd9IxO0K9Z0kAnKODQR72IX9Co3I4sKnw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=umvHA3ONsjcCflHIQlsk4KfxWMs0+N6B6yOZRweNYCJe2za4okE4Lvao3BZYLs5aS
-	 rsMY75UI2ACJB6ceRrPeMbE4fTZRwrKvHwn+qjGwFWiitx4VsdnTiG/9eU2WW8sl1n
-	 pyxzuKWGN8ScHgdKTBFesoJfcImCKM/Skw6o+JGmGHM5B4irp0zXQMbx0krhGKzuFI
-	 CYPy7JgeB4P9plB0Ng3qtC6vzkpXRWZXziSKnbXR6uSIdux5G1xA5t6rQWi6MNw2TZ
-	 TP32+L9yatseaWFAUeaa/2SORBrbh3b1GAS1FDrXuootYDrFccyRVATHj44wRIzvhs
-	 BGvOQE2SFsQSA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Sasha Levin <sashal@kernel.org>,
-	benh@kernel.crashing.org,
-	ndesaulniers@google.com,
-	u.kleine-koenig@pengutronix.de,
-	adrien.grassein@gmail.com,
-	ojeda@kernel.org,
-	kabel@kernel.org,
-	christophe.leroy@csgroup.eu,
-	linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.14 4/6] macintosh: windfarm: Use unsigned type for 1-bit bitfields
-Date: Sun,  5 Mar 2023 08:55:23 -0500
-Message-Id: <20230305135525.1794277-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230305135525.1794277-1-sashal@kernel.org>
-References: <20230305135525.1794277-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7002E28E8;
+	Sun,  5 Mar 2023 16:49:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678034980; x=1709570980;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CljzdqRvUeQhKMkS0HRvb4XZXT85tlScQiUIQ7+WbTg=;
+  b=ImyFANydoDWqYLNOQHP8h0T2TbtPKHiWK5ViRth/m2CATRni/fUhLXjc
+   dcw0ftjQ4f3wJcZdwr1y4Wau3cH1rYTDaxG4N7RrlOQ1bLsLpQ6MDAdzM
+   uaDhCpujnwI2BYq52e1zKpFQXuXoO3zhjW2j7byMGj89czeJVmmQez0ni
+   mjJIfJlxqvI1pO7ziEQ7Veffs/8wNPISA59OJFZCPDgx5dVxr3LHW0Sva
+   PclyA03YxAVNxCAvSWAXxVTejqHiuLeeyoQEhL6EIdYY1tEHOR90NZL3P
+   3R6F4Zl8kxzZru3reP9f56AJDLWcw43rfq4UNnBv7sYQTQ0RIe7lJMMY7
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="315794262"
+X-IronPort-AV: E=Sophos;i="5.98,235,1673942400"; 
+   d="scan'208";a="315794262"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 08:49:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="764983919"
+X-IronPort-AV: E=Sophos;i="5.98,235,1673942400"; 
+   d="scan'208";a="764983919"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Mar 2023 08:49:35 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pYrYE-0002uk-2Z;
+	Sun, 05 Mar 2023 16:49:34 +0000
+Date: Mon, 6 Mar 2023 00:48:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH bpf-next 1/2] bpf: add bound tracking for BPF_MOD
+Message-ID: <202303060036.zK05OC5M-lkp@intel.com>
+References: <20230306033119.2634976-2-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306033119.2634976-2-xukuohai@huaweicloud.com>
 
-From: Nathan Chancellor <nathan@kernel.org>
+Hi Xu,
 
-[ Upstream commit 748ea32d2dbd813d3bd958117bde5191182f909a ]
+Thank you for the patch! Perhaps something to improve:
 
-Clang warns:
+[auto build test WARNING on bpf-next/master]
 
-  drivers/macintosh/windfarm_lm75_sensor.c:63:14: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-                  lm->inited = 1;
-                             ^ ~
+url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Kuohai/bpf-add-bound-tracking-for-BPF_MOD/20230305-223257
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230306033119.2634976-2-xukuohai%40huaweicloud.com
+patch subject: [PATCH bpf-next 1/2] bpf: add bound tracking for BPF_MOD
+config: arm-randconfig-r025-20230305 (https://download.01.org/0day-ci/archive/20230306/202303060036.zK05OC5M-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/e66c7bbd32e375af92c776a2b9f51be4c515ad71
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xu-Kuohai/bpf-add-bound-tracking-for-BPF_MOD/20230305-223257
+        git checkout e66c7bbd32e375af92c776a2b9f51be4c515ad71
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/bpf/
 
-  drivers/macintosh/windfarm_smu_sensors.c:356:19: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-                  pow->fake_volts = 1;
-                                  ^ ~
-  drivers/macintosh/windfarm_smu_sensors.c:368:18: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
-                  pow->quadratic = 1;
-                                 ^ ~
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303060036.zK05OC5M-lkp@intel.com/
 
-There is no bug here since no code checks the actual value of these
-fields, just whether or not they are zero (boolean context), but this
-can be easily fixed by switching to an unsigned type.
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20230215-windfarm-wsingle-bit-bitfield-constant-conversion-v1-1-26415072e855@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/macintosh/windfarm_lm75_sensor.c | 4 ++--
- drivers/macintosh/windfarm_smu_sensors.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+   kernel/bpf/verifier.c:10298:24: warning: array index 16 is past the end of the array (that has type 'u32[16]' (aka 'unsigned int[16]')) [-Warray-bounds]
+                                      meta.func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
+                                                      ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared here
+   BTF_ID_LIST(special_kfunc_list)
+   ^
+   include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
+   #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
+                             ^
+>> kernel/bpf/verifier.c:11622:13: warning: comparison of distinct pointer types ('typeof ((umax)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+           umax_rem = do_div(umax, val);
+                      ^~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+   kernel/bpf/verifier.c:11622:13: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+           umax_rem = do_div(umax, val);
+                      ^~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+                   __rem = __div64_32(&(n), __base);       \
+                                      ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+                                               ^
+>> kernel/bpf/verifier.c:11623:13: warning: comparison of distinct pointer types ('typeof ((umin)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+           umin_rem = do_div(umin, val);
+                      ^~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
+           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+   kernel/bpf/verifier.c:11623:13: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+           umin_rem = do_div(umin, val);
+                      ^~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
+                   __rem = __div64_32(&(n), __base);       \
+                                      ^~~~
+   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+                                               ^
+>> kernel/bpf/verifier.c:11622:13: warning: shift count >= width of type [-Wshift-count-overflow]
+           umax_rem = do_div(umax, val);
+                      ^~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+           } else if (likely(((n) >> 32) == 0)) {          \
+                                  ^  ~~
+   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   kernel/bpf/verifier.c:11623:13: warning: shift count >= width of type [-Wshift-count-overflow]
+           umin_rem = do_div(umin, val);
+                      ^~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
+           } else if (likely(((n) >> 32) == 0)) {          \
+                                  ^  ~~
+   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
+   # define likely(x)      __builtin_expect(!!(x), 1)
+                                               ^
+   5 warnings and 2 errors generated.
 
-diff --git a/drivers/macintosh/windfarm_lm75_sensor.c b/drivers/macintosh/windfarm_lm75_sensor.c
-index 6cdfe714901d5..1332fc789056a 100644
---- a/drivers/macintosh/windfarm_lm75_sensor.c
-+++ b/drivers/macintosh/windfarm_lm75_sensor.c
-@@ -34,8 +34,8 @@
- #endif
- 
- struct wf_lm75_sensor {
--	int			ds1775 : 1;
--	int			inited : 1;
-+	unsigned int		ds1775 : 1;
-+	unsigned int		inited : 1;
- 	struct i2c_client	*i2c;
- 	struct wf_sensor	sens;
- };
-diff --git a/drivers/macintosh/windfarm_smu_sensors.c b/drivers/macintosh/windfarm_smu_sensors.c
-index 172fd267dcf60..0f4017a8189e5 100644
---- a/drivers/macintosh/windfarm_smu_sensors.c
-+++ b/drivers/macintosh/windfarm_smu_sensors.c
-@@ -275,8 +275,8 @@ struct smu_cpu_power_sensor {
- 	struct list_head	link;
- 	struct wf_sensor	*volts;
- 	struct wf_sensor	*amps;
--	int			fake_volts : 1;
--	int			quadratic : 1;
-+	unsigned int		fake_volts : 1;
-+	unsigned int		quadratic : 1;
- 	struct wf_sensor	sens;
- };
- #define to_smu_cpu_power(c) container_of(c, struct smu_cpu_power_sensor, sens)
+
+vim +11622 kernel/bpf/verifier.c
+
+ 11606	
+ 11607	static void scalar32_min_max_mod(struct bpf_reg_state *dst_reg,
+ 11608					 struct bpf_reg_state *src_reg)
+ 11609	{
+ 11610		u32 val = (u32)src_reg->var_off.value; /* src_reg is const */
+ 11611		u32 umax = dst_reg->u32_max_value;
+ 11612		u32 umin = dst_reg->u32_min_value;
+ 11613		u32 umax_rem, umin_rem;
+ 11614	
+ 11615		/* dst_reg is 32-bit truncated when mod32 zero, since
+ 11616		 * adjust_scalar_min_max_vals calls zext_32_to_64 to do truncation for
+ 11617		 * all alu32 ops, here we do nothing and just return.
+ 11618		 */
+ 11619		if (!val)
+ 11620			return;
+ 11621	
+ 11622		umax_rem = do_div(umax, val);
+ 11623		umin_rem = do_div(umin, val);
+ 11624	
+ 11625		/* no winding */
+ 11626		if (umax - umin < val && umin_rem <= umax_rem) {
+ 11627			dst_reg->var_off = tnum_range(umin_rem, umax_rem);
+ 11628			dst_reg->u32_min_value = umin_rem;
+ 11629			dst_reg->u32_max_value = umax_rem;
+ 11630		} else {
+ 11631			dst_reg->var_off = tnum_range(0, val - 1);
+ 11632			dst_reg->u32_min_value = 0;
+ 11633			dst_reg->u32_max_value = val - 1;
+ 11634		}
+ 11635	
+ 11636		/* cross the sign boundary */
+ 11637		if ((s32)dst_reg->u32_min_value > (s32)dst_reg->u32_max_value) {
+ 11638			dst_reg->s32_min_value = S32_MIN;
+ 11639			dst_reg->s32_max_value = S32_MAX;
+ 11640		} else {
+ 11641			dst_reg->s32_min_value = (s32)dst_reg->u32_min_value;
+ 11642			dst_reg->s32_max_value = (s32)dst_reg->u32_max_value;
+ 11643		}
+ 11644	
+ 11645		/* mark reg64 unbounded to deduce 64-bit bounds from var_off */
+ 11646		__mark_reg64_unbounded(dst_reg);
+ 11647	}
+ 11648	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
