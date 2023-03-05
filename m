@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E9F28EF
-	for <llvm@lists.linux.dev>; Sun,  5 Mar 2023 13:54:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79AA3C433EF;
-	Sun,  5 Mar 2023 13:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A53628EF
+	for <llvm@lists.linux.dev>; Sun,  5 Mar 2023 13:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C769AC433EF;
+	Sun,  5 Mar 2023 13:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678024462;
+	s=k20201202; t=1678024486;
 	bh=AHZxvroEmYIa6houU/IrOk4YXJYcirNChFLpMSlmgfM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q3JpGZYW09A2Tf6E8oplijmXxL9Tkpth8qQTsHvKF881BZCx+P+Do+i7kEVAK9O7d
-	 IGwK1kSk7H/Y3IOkqd2gXCXfwEzWlKzc5FD5M42pZ0cbTrEb9E7PGTRZHV+E53L5Lm
-	 XI32ctVVgzC4Ij7SHRYc6NTGUF5dKk4wGwfdvaK7E3YhVDSpwYwYweExdyVrW9g5Vg
-	 VrWY08LUhVa7aKe5q2/k3bv0ShoP8XaKLqpPQ8JtNKDY+DBsjl5z//ZniJqrBreiwl
-	 lFTjGGsHwJwhzTLWf+/R4d8pqIWWvM5+TtKhXcZp+zyNfIgyJHtOrU3YzxoLUsDqYE
-	 E51kqt2gKt4VA==
+	b=E3IZZ2g+UY49p/zArA8ROTPhk2s1OTR6oN0+iIA2B9UpqOxEo1mOz9E2mfwp4UXBU
+	 AWbOTk/zLU06yi65IgBDMnPXXknunqrgufsSOwLaOF//JWcofVllIa6JCT7n04VxbX
+	 qx3ltYihoUypU+s4ux4mBtNAUhyDaX8Jw+x2zwlD4fgSxQgaX+6mDbUucqw9ubHeK9
+	 wlP6z7GKev+IazZkGbRXFCn0luN55jiE5vaYjhRo4T5OAJyTlRHqoePQ1x0/yU0Qb0
+	 MdR3cx7iuB9QwbVq/x74T1Ni/qWWmsXMCf6fGPFmWNFBl17ISg9zKAT949JsnAE2R2
+	 +/ieW7niK1Uxg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -24,18 +24,18 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	benh@kernel.crashing.org,
 	ndesaulniers@google.com,
 	u.kleine-koenig@pengutronix.de,
+	sebastian.reichel@collabora.com,
+	ajayg@nvidia.com,
 	khalasa@piap.pl,
-	gregkh@linuxfoundation.org,
-	srinivas.pandruvada@linux.intel.com,
 	christophe.leroy@csgroup.eu,
 	linuxppc-dev@lists.ozlabs.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 7/9] macintosh: windfarm: Use unsigned type for 1-bit bitfields
-Date: Sun,  5 Mar 2023 08:53:57 -0500
-Message-Id: <20230305135359.1793830-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 6/8] macintosh: windfarm: Use unsigned type for 1-bit bitfields
+Date: Sun,  5 Mar 2023 08:54:23 -0500
+Message-Id: <20230305135425.1793964-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230305135359.1793830-1-sashal@kernel.org>
-References: <20230305135359.1793830-1-sashal@kernel.org>
+In-Reply-To: <20230305135425.1793964-1-sashal@kernel.org>
+References: <20230305135425.1793964-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
