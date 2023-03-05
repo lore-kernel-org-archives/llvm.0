@@ -1,207 +1,634 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97AB23CD;
-	Sun,  5 Mar 2023 11:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678015347; x=1709551347;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YspSz6HVobERfe6tNMqxvlJoMX2cvmnkOE7gTDTCvwc=;
-  b=hWy9tgX/YFwWU79t0lL5ivVoWxHJR6yXsTGPhEntx5uGF24GVndYUQUW
-   golAzVZKiPMHor92slTwEMZdDquFvss5RPMsyJPX+1aO5KfMngyvb70rm
-   4rTuJPXUqZvnPCeHp8dNgAKO8N8pm0MgoONmqCsEopQRxa30oWO2KZP3N
-   h/T1rAChrY9kC7px1KuMUp1pcI0gTer2FRQTB4T8mjB5isvrNyFHxDxTX
-   OtfmoiwvPPRbtVRGK+lD1vly+2n3/konGwbBaEKns+B2JVXps2+lWXiui
-   +CKrEYsXQZ++98eRX8zrfmBpaeiXfs5+m4+qIdhN7SrtOm+1bd8wYdugx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="336883398"
-X-IronPort-AV: E=Sophos;i="5.98,235,1673942400"; 
-   d="scan'208";a="336883398"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 03:22:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="764924029"
-X-IronPort-AV: E=Sophos;i="5.98,235,1673942400"; 
-   d="scan'208";a="764924029"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Mar 2023 03:22:24 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pYmRb-0002im-2h;
-	Sun, 05 Mar 2023 11:22:23 +0000
-Date: Sun, 5 Mar 2023 19:21:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stefano Garzarella <sgarzare@redhat.com>,
-	virtualization@lists.linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-	eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-	linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
-	Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v2 6/8] vdpa_sim: use kthread worker
-Message-ID: <202303051841.bPAIzJRy-lkp@intel.com>
-References: <20230302113421.174582-7-sgarzare@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C072564
+	for <llvm@lists.linux.dev>; Sun,  5 Mar 2023 12:19:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE7E1C433A0
+	for <llvm@lists.linux.dev>; Sun,  5 Mar 2023 12:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678018770;
+	bh=7tYpfigQjWcZkxDVsVR7lvwm9n0s0p51vUiui9RvZ+o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=koqW0mwSIckdxD4c6tOA/+0SCbpauY/IABoBHWJkMBbm82Y+xRWmcq5D2ZV/syr83
+	 vWnoVFrbJjAEF4jDrlbqTyydmGTuu6DBJUFnD1beX5r5XisemD3tLr/d0sMbfCQDua
+	 rYvUj42X0sCik8y3a//TvEZmqfBhMq25LZKaKAKcDqNs4pZEq2YLlcTkuDcDnZWYVM
+	 Z+PVhOaUiTUOHt44xIFQMrihfzpyfFcb7Do2uDYM+YTXcomwkOyImOsqAei7Q5ywp7
+	 6yxGUDQv/5/TLqLnBF75iK4N0sbB8JzpeUR5A48vrPZdJWNv6WA4IdlqW5PApUIxvQ
+	 p98Vp2A0djbdw==
+Received: by mail-oo1-f47.google.com with SMTP id c184-20020a4a4fc1000000b005250b2dc0easo1145410oob.2
+        for <llvm@lists.linux.dev>; Sun, 05 Mar 2023 04:19:30 -0800 (PST)
+X-Gm-Message-State: AO0yUKX+OTprBD7jp2tGaJJnjg7oxnwPixjtOIjvDMfcQk01LUkCNnxA
+	Djz4WvJegO2tJOgYJtn0AsXjA+WZeyC8D2bsuLI=
+X-Google-Smtp-Source: AK7set8pbcu/6GAI+YMsaQO7uEVJbOGh74eb3Qs7NWKKU6I1K/tcm+dCEtRcZE49UrhxUSUDMfGDDt0F5eWHfNsu7TU=
+X-Received: by 2002:a4a:928d:0:b0:51a:ac8f:b6f9 with SMTP id
+ i13-20020a4a928d000000b0051aac8fb6f9mr2695665ooh.1.1678018769931; Sun, 05 Mar
+ 2023 04:19:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302113421.174582-7-sgarzare@redhat.com>
+References: <20221016182349.49308-1-masahiroy@kernel.org>
+In-Reply-To: <20221016182349.49308-1-masahiroy@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 5 Mar 2023 21:18:52 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASQfrL2JnL2QDE_fBLV6KmMuJATpvRk2vaB0db49OysEA@mail.gmail.com>
+Message-ID: <CAK7LNASQfrL2JnL2QDE_fBLV6KmMuJATpvRk2vaB0db49OysEA@mail.gmail.com>
+Subject: Re: [PATCH v3] Remove Intel compiler support
+To: Linus Torvalds <torvalds@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Nick Terrell <terrelln@fb.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Robert Moore <robert.moore@intel.com>, Tom Rix <trix@redhat.com>, devel@acpica.org, 
+	linux-acpi@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stefano,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on mst-vhost/linux-next]
-[also build test WARNING on linus/master next-20230303]
-[cannot apply to v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stefano-Garzarella/vdpa-add-bind_mm-unbind_mm-callbacks/20230302-193850
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-patch link:    https://lore.kernel.org/r/20230302113421.174582-7-sgarzare%40redhat.com
-patch subject: [PATCH v2 6/8] vdpa_sim: use kthread worker
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230305/202303051841.bPAIzJRy-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5b2107457ac0e7b1bb0aa3635ebf13b02e82bb78
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Stefano-Garzarella/vdpa-add-bind_mm-unbind_mm-callbacks/20230302-193850
-        git checkout 5b2107457ac0e7b1bb0aa3635ebf13b02e82bb78
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wireless/ath/ath10k/ drivers/vdpa/vdpa_sim/ fs/erofs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303051841.bPAIzJRy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/vdpa/vdpa_sim/vdpa_sim.c:166:6: warning: variable 'dev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (IS_ERR(vdpasim->worker))
-               ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vdpa/vdpa_sim/vdpa_sim.c:213:13: note: uninitialized use occurs here
-           put_device(dev);
-                      ^~~
-   drivers/vdpa/vdpa_sim/vdpa_sim.c:166:2: note: remove the 'if' if its condition is always false
-           if (IS_ERR(vdpasim->worker))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vdpa/vdpa_sim/vdpa_sim.c:132:20: note: initialize the variable 'dev' to silence this warning
-           struct device *dev;
-                             ^
-                              = NULL
-   1 warning generated.
+Hi Linus
 
 
-vim +166 drivers/vdpa/vdpa_sim/vdpa_sim.c
+My expectation was this would be picked up by x86 maintainers,
+or otherwise, directly by you.
 
-   125	
-   126	struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
-   127				       const struct vdpa_dev_set_config *config)
-   128	{
-   129		const struct vdpa_config_ops *ops;
-   130		struct vdpa_device *vdpa;
-   131		struct vdpasim *vdpasim;
-   132		struct device *dev;
-   133		int i, ret = -ENOMEM;
-   134	
-   135		if (!dev_attr->alloc_size)
-   136			return ERR_PTR(-EINVAL);
-   137	
-   138		if (config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
-   139			if (config->device_features &
-   140			    ~dev_attr->supported_features)
-   141				return ERR_PTR(-EINVAL);
-   142			dev_attr->supported_features =
-   143				config->device_features;
-   144		}
-   145	
-   146		if (batch_mapping)
-   147			ops = &vdpasim_batch_config_ops;
-   148		else
-   149			ops = &vdpasim_config_ops;
-   150	
-   151		vdpa = __vdpa_alloc_device(NULL, ops,
-   152					   dev_attr->ngroups, dev_attr->nas,
-   153					   dev_attr->alloc_size,
-   154					   dev_attr->name, false);
-   155		if (IS_ERR(vdpa)) {
-   156			ret = PTR_ERR(vdpa);
-   157			goto err_alloc;
-   158		}
-   159	
-   160		vdpasim = vdpa_to_sim(vdpa);
-   161		vdpasim->dev_attr = *dev_attr;
-   162	
-   163		kthread_init_work(&vdpasim->work, vdpasim_work_fn);
-   164		vdpasim->worker = kthread_create_worker(0, "vDPA sim worker: %s",
-   165							dev_attr->name);
- > 166		if (IS_ERR(vdpasim->worker))
-   167			goto err_iommu;
-   168	
-   169		spin_lock_init(&vdpasim->lock);
-   170		spin_lock_init(&vdpasim->iommu_lock);
-   171	
-   172		dev = &vdpasim->vdpa.dev;
-   173		dev->dma_mask = &dev->coherent_dma_mask;
-   174		if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
-   175			goto err_iommu;
-   176		vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
-   177	
-   178		vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
-   179		if (!vdpasim->config)
-   180			goto err_iommu;
-   181	
-   182		vdpasim->vqs = kcalloc(dev_attr->nvqs, sizeof(struct vdpasim_virtqueue),
-   183				       GFP_KERNEL);
-   184		if (!vdpasim->vqs)
-   185			goto err_iommu;
-   186	
-   187		vdpasim->iommu = kmalloc_array(vdpasim->dev_attr.nas,
-   188					       sizeof(*vdpasim->iommu), GFP_KERNEL);
-   189		if (!vdpasim->iommu)
-   190			goto err_iommu;
-   191	
-   192		vdpasim->iommu_pt = kmalloc_array(vdpasim->dev_attr.nas,
-   193						  sizeof(*vdpasim->iommu_pt), GFP_KERNEL);
-   194		if (!vdpasim->iommu_pt)
-   195			goto err_iommu;
-   196	
-   197		for (i = 0; i < vdpasim->dev_attr.nas; i++)
-   198			vhost_iotlb_init(&vdpasim->iommu[i], max_iotlb_entries, 0);
-   199	
-   200		vdpasim->buffer = kvmalloc(dev_attr->buffer_size, GFP_KERNEL);
-   201		if (!vdpasim->buffer)
-   202			goto err_iommu;
-   203	
-   204		for (i = 0; i < dev_attr->nvqs; i++)
-   205			vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
-   206					 &vdpasim->iommu_lock);
-   207	
-   208		vdpasim->vdpa.dma_dev = dev;
-   209	
-   210		return vdpasim;
-   211	
-   212	err_iommu:
-   213		put_device(dev);
-   214	err_alloc:
-   215		return ERR_PTR(ret);
-   216	}
-   217	EXPORT_SYMBOL_GPL(vdpasim_create);
-   218	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+Are you happy with picking this up?
+https://lore.kernel.org/lkml/20221016182349.49308-1-masahiroy@kernel.org/
+
+It is still applicable to the mainline.
+(by passing -C<n> option to reduce the context)
+
+
+Masahiro
+
+
+
+
+
+
+
+On Mon, Oct 17, 2022 at 3:24=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> include/linux/compiler-intel.h had no update in the past 3 years.
+>
+> We often forget about the third C compiler to build the kernel.
+>
+> For example, commit a0a12c3ed057 ("asm goto: eradicate CC_HAS_ASM_GOTO")
+> only mentioned GCC and Clang.
+>
+> init/Kconfig defines CC_IS_GCC and CC_IS_CLANG but not CC_IS_ICC,
+> and nobody has reported any issue.
+>
+> I guess the Intel Compiler support is broken, and nobody is caring
+> about it.
+>
+> Harald Arnesen pointed out ICC (classic Intel C/C++ compiler) is
+> deprecated:
+>
+>     $ icc -v
+>     icc: remark #10441: The Intel(R) C++ Compiler Classic (ICC) is
+>     deprecated and will be removed from product release in the second hal=
+f
+>     of 2023. The Intel(R) oneAPI DPC++/C++ Compiler (ICX) is the recommen=
+ded
+>     compiler moving forward. Please transition to use this compiler. Use
+>     '-diag-disable=3D10441' to disable this message.
+>     icc version 2021.7.0 (gcc version 12.1.0 compatibility)
+>
+> Arnd Bergmann provided a link to the article, "Intel C/C++ compilers
+> complete adoption of LLVM".
+>
+> lib/zstd/common/compiler.h and lib/zstd/compress/zstd_fast.c were kept
+> untouched for better sync with https://github.com/facebook/zstd
+>
+> Link: https://www.intel.com/content/www/us/en/developer/articles/technica=
+l/adoption-of-llvm-complete-icx.html
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>
+> Changes in v3:
+>   - Do not change lib/zstd/
+>
+> Changes in v2:
+>   - Remove "not supported by icc." comments from compiler_attributes.h
+>   - Clean up __assume_aligned() macro
+>   - Add more info from Harald Arnesen and Arnd Bergmann
+>
+>  arch/ia64/include/uapi/asm/cmpxchg.h      |   6 +-
+>  arch/ia64/include/uapi/asm/intel_intrin.h | 162 ----------------------
+>  arch/ia64/include/uapi/asm/intrinsics.h   |   6 +-
+>  include/acpi/platform/acenv.h             |   5 +-
+>  include/acpi/platform/acenvex.h           |   2 +-
+>  include/acpi/platform/acintel.h           |  55 --------
+>  include/linux/compiler-intel.h            |  34 -----
+>  include/linux/compiler_attributes.h       |  14 +-
+>  include/linux/compiler_types.h            |   2 -
+>  scripts/cc-version.sh                     |   2 -
+>  scripts/min-tool-version.sh               |   4 -
+>  11 files changed, 5 insertions(+), 287 deletions(-)
+>  delete mode 100644 arch/ia64/include/uapi/asm/intel_intrin.h
+>  delete mode 100644 include/acpi/platform/acintel.h
+>  delete mode 100644 include/linux/compiler-intel.h
+>
+> diff --git a/arch/ia64/include/uapi/asm/cmpxchg.h b/arch/ia64/include/uap=
+i/asm/cmpxchg.h
+> index ca2e02685343..259ae57570bf 100644
+> --- a/arch/ia64/include/uapi/asm/cmpxchg.h
+> +++ b/arch/ia64/include/uapi/asm/cmpxchg.h
+> @@ -15,11 +15,7 @@
+>  #include <linux/types.h>
+>  /* include compiler specific intrinsics */
+>  #include <asm/ia64regs.h>
+> -#ifdef __INTEL_COMPILER
+> -# include <asm/intel_intrin.h>
+> -#else
+> -# include <asm/gcc_intrin.h>
+> -#endif
+> +#include <asm/gcc_intrin.h>
+>
+>  /*
+>   * This function doesn't exist, so you'll get a linker error if
+> diff --git a/arch/ia64/include/uapi/asm/intel_intrin.h b/arch/ia64/includ=
+e/uapi/asm/intel_intrin.h
+> deleted file mode 100644
+> index dc1884dc54b5..000000000000
+> --- a/arch/ia64/include/uapi/asm/intel_intrin.h
+> +++ /dev/null
+> @@ -1,162 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> -#ifndef _ASM_IA64_INTEL_INTRIN_H
+> -#define _ASM_IA64_INTEL_INTRIN_H
+> -/*
+> - * Intel Compiler Intrinsics
+> - *
+> - * Copyright (C) 2002,2003 Jun Nakajima <jun.nakajima@intel.com>
+> - * Copyright (C) 2002,2003 Suresh Siddha <suresh.b.siddha@intel.com>
+> - * Copyright (C) 2005,2006 Hongjiu Lu <hongjiu.lu@intel.com>
+> - *
+> - */
+> -#include <ia64intrin.h>
+> -
+> -#define ia64_barrier()         __memory_barrier()
+> -
+> -#define ia64_stop()    /* Nothing: As of now stop bit is generated for e=
+ach
+> -                        * intrinsic
+> -                        */
+> -
+> -#define ia64_getreg            __getReg
+> -#define ia64_setreg            __setReg
+> -
+> -#define ia64_hint              __hint
+> -#define ia64_hint_pause                __hint_pause
+> -
+> -#define ia64_mux1_brcst                _m64_mux1_brcst
+> -#define ia64_mux1_mix          _m64_mux1_mix
+> -#define ia64_mux1_shuf         _m64_mux1_shuf
+> -#define ia64_mux1_alt          _m64_mux1_alt
+> -#define ia64_mux1_rev          _m64_mux1_rev
+> -
+> -#define ia64_mux1(x,v)         _m_to_int64(_m64_mux1(_m_from_int64(x), (=
+v)))
+> -#define ia64_popcnt            _m64_popcnt
+> -#define ia64_getf_exp          __getf_exp
+> -#define ia64_shrp              _m64_shrp
+> -
+> -#define ia64_tpa               __tpa
+> -#define ia64_invala            __invala
+> -#define ia64_invala_gr         __invala_gr
+> -#define ia64_invala_fr         __invala_fr
+> -#define ia64_nop               __nop
+> -#define ia64_sum               __sum
+> -#define ia64_ssm               __ssm
+> -#define ia64_rum               __rum
+> -#define ia64_rsm               __rsm
+> -#define ia64_fc                        __fc
+> -
+> -#define ia64_ldfs              __ldfs
+> -#define ia64_ldfd              __ldfd
+> -#define ia64_ldfe              __ldfe
+> -#define ia64_ldf8              __ldf8
+> -#define ia64_ldf_fill          __ldf_fill
+> -
+> -#define ia64_stfs              __stfs
+> -#define ia64_stfd              __stfd
+> -#define ia64_stfe              __stfe
+> -#define ia64_stf8              __stf8
+> -#define ia64_stf_spill         __stf_spill
+> -
+> -#define ia64_mf                        __mf
+> -#define ia64_mfa               __mfa
+> -
+> -#define ia64_fetchadd4_acq     __fetchadd4_acq
+> -#define ia64_fetchadd4_rel     __fetchadd4_rel
+> -#define ia64_fetchadd8_acq     __fetchadd8_acq
+> -#define ia64_fetchadd8_rel     __fetchadd8_rel
+> -
+> -#define ia64_xchg1             _InterlockedExchange8
+> -#define ia64_xchg2             _InterlockedExchange16
+> -#define ia64_xchg4             _InterlockedExchange
+> -#define ia64_xchg8             _InterlockedExchange64
+> -
+> -#define ia64_cmpxchg1_rel      _InterlockedCompareExchange8_rel
+> -#define ia64_cmpxchg1_acq      _InterlockedCompareExchange8_acq
+> -#define ia64_cmpxchg2_rel      _InterlockedCompareExchange16_rel
+> -#define ia64_cmpxchg2_acq      _InterlockedCompareExchange16_acq
+> -#define ia64_cmpxchg4_rel      _InterlockedCompareExchange_rel
+> -#define ia64_cmpxchg4_acq      _InterlockedCompareExchange_acq
+> -#define ia64_cmpxchg8_rel      _InterlockedCompareExchange64_rel
+> -#define ia64_cmpxchg8_acq      _InterlockedCompareExchange64_acq
+> -
+> -#define __ia64_set_dbr(index, val)     \
+> -               __setIndReg(_IA64_REG_INDR_DBR, index, val)
+> -#define ia64_set_ibr(index, val)       \
+> -               __setIndReg(_IA64_REG_INDR_IBR, index, val)
+> -#define ia64_set_pkr(index, val)       \
+> -               __setIndReg(_IA64_REG_INDR_PKR, index, val)
+> -#define ia64_set_pmc(index, val)       \
+> -               __setIndReg(_IA64_REG_INDR_PMC, index, val)
+> -#define ia64_set_pmd(index, val)       \
+> -               __setIndReg(_IA64_REG_INDR_PMD, index, val)
+> -#define ia64_set_rr(index, val)                \
+> -               __setIndReg(_IA64_REG_INDR_RR, index, val)
+> -
+> -#define ia64_get_cpuid(index)  \
+> -               __getIndReg(_IA64_REG_INDR_CPUID, index)
+> -#define __ia64_get_dbr(index)          __getIndReg(_IA64_REG_INDR_DBR, i=
+ndex)
+> -#define ia64_get_ibr(index)            __getIndReg(_IA64_REG_INDR_IBR, i=
+ndex)
+> -#define ia64_get_pkr(index)            __getIndReg(_IA64_REG_INDR_PKR, i=
+ndex)
+> -#define ia64_get_pmc(index)            __getIndReg(_IA64_REG_INDR_PMC, i=
+ndex)
+> -#define ia64_get_pmd(index)            __getIndReg(_IA64_REG_INDR_PMD, i=
+ndex)
+> -#define ia64_get_rr(index)             __getIndReg(_IA64_REG_INDR_RR, in=
+dex)
+> -
+> -#define ia64_srlz_d            __dsrlz
+> -#define ia64_srlz_i            __isrlz
+> -
+> -#define ia64_dv_serialize_data()
+> -#define ia64_dv_serialize_instruction()
+> -
+> -#define ia64_st1_rel           __st1_rel
+> -#define ia64_st2_rel           __st2_rel
+> -#define ia64_st4_rel           __st4_rel
+> -#define ia64_st8_rel           __st8_rel
+> -
+> -/* FIXME: need st4.rel.nta intrinsic */
+> -#define ia64_st4_rel_nta       __st4_rel
+> -
+> -#define ia64_ld1_acq           __ld1_acq
+> -#define ia64_ld2_acq           __ld2_acq
+> -#define ia64_ld4_acq           __ld4_acq
+> -#define ia64_ld8_acq           __ld8_acq
+> -
+> -#define ia64_sync_i            __synci
+> -#define ia64_thash             __thash
+> -#define ia64_ttag              __ttag
+> -#define ia64_itcd              __itcd
+> -#define ia64_itci              __itci
+> -#define ia64_itrd              __itrd
+> -#define ia64_itri              __itri
+> -#define ia64_ptce              __ptce
+> -#define ia64_ptcl              __ptcl
+> -#define ia64_ptcg              __ptcg
+> -#define ia64_ptcga             __ptcga
+> -#define ia64_ptri              __ptri
+> -#define ia64_ptrd              __ptrd
+> -#define ia64_dep_mi            _m64_dep_mi
+> -
+> -/* Values for lfhint in __lfetch and __lfetch_fault */
+> -
+> -#define ia64_lfhint_none       __lfhint_none
+> -#define ia64_lfhint_nt1                __lfhint_nt1
+> -#define ia64_lfhint_nt2                __lfhint_nt2
+> -#define ia64_lfhint_nta                __lfhint_nta
+> -
+> -#define ia64_lfetch            __lfetch
+> -#define ia64_lfetch_excl       __lfetch_excl
+> -#define ia64_lfetch_fault      __lfetch_fault
+> -#define ia64_lfetch_fault_excl __lfetch_fault_excl
+> -
+> -#define ia64_intrin_local_irq_restore(x)               \
+> -do {                                                   \
+> -       if ((x) !=3D 0) {                                 \
+> -               ia64_ssm(IA64_PSR_I);                   \
+> -               ia64_srlz_d();                          \
+> -       } else {                                        \
+> -               ia64_rsm(IA64_PSR_I);                   \
+> -       }                                               \
+> -} while (0)
+> -
+> -#define __builtin_trap()       __break(0);
+> -
+> -#endif /* _ASM_IA64_INTEL_INTRIN_H */
+> diff --git a/arch/ia64/include/uapi/asm/intrinsics.h b/arch/ia64/include/=
+uapi/asm/intrinsics.h
+> index a0e0a064f5b1..63f27c4ec739 100644
+> --- a/arch/ia64/include/uapi/asm/intrinsics.h
+> +++ b/arch/ia64/include/uapi/asm/intrinsics.h
+> @@ -14,11 +14,7 @@
+>  #include <linux/types.h>
+>  /* include compiler specific intrinsics */
+>  #include <asm/ia64regs.h>
+> -#ifdef __INTEL_COMPILER
+> -# include <asm/intel_intrin.h>
+> -#else
+> -# include <asm/gcc_intrin.h>
+> -#endif
+> +#include <asm/gcc_intrin.h>
+>  #include <asm/cmpxchg.h>
+>
+>  #define ia64_set_rr0_to_rr4(val0, val1, val2, val3, val4)              \
+> diff --git a/include/acpi/platform/acenv.h b/include/acpi/platform/acenv.=
+h
+> index 03eb3d977075..9e4f7564201a 100644
+> --- a/include/acpi/platform/acenv.h
+> +++ b/include/acpi/platform/acenv.h
+> @@ -148,15 +148,12 @@
+>   *
+>   ***********************************************************************=
+******/
+>
+> -#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+> +#if defined(__GNUC__)
+>  #include <acpi/platform/acgcc.h>
+>
+>  #elif defined(_MSC_VER)
+>  #include "acmsvc.h"
+>
+> -#elif defined(__INTEL_COMPILER)
+> -#include <acpi/platform/acintel.h>
+> -
+>  #endif
+>
+>  #if defined(_LINUX) || defined(__linux__)
+> diff --git a/include/acpi/platform/acenvex.h b/include/acpi/platform/acen=
+vex.h
+> index 3a6b1db9a984..72cc7bab469e 100644
+> --- a/include/acpi/platform/acenvex.h
+> +++ b/include/acpi/platform/acenvex.h
+> @@ -35,7 +35,7 @@
+>
+>  #endif
+>
+> -#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+> +#if defined(__GNUC__)
+>  #include "acgccex.h"
+>
+>  #elif defined(_MSC_VER)
+> diff --git a/include/acpi/platform/acintel.h b/include/acpi/platform/acin=
+tel.h
+> deleted file mode 100644
+> index 85b1ae86ee63..000000000000
+> --- a/include/acpi/platform/acintel.h
+> +++ /dev/null
+> @@ -1,55 +0,0 @@
+> -/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
+> -/***********************************************************************=
+*******
+> - *
+> - * Name: acintel.h - VC specific defines, etc.
+> - *
+> - * Copyright (C) 2000 - 2022, Intel Corp.
+> - *
+> - ***********************************************************************=
+******/
+> -
+> -#ifndef __ACINTEL_H__
+> -#define __ACINTEL_H__
+> -
+> -/*
+> - * Use compiler specific <stdarg.h> is a good practice for even when
+> - * -nostdinc is specified (i.e., ACPI_USE_STANDARD_HEADERS undefined.
+> - */
+> -#ifndef va_arg
+> -#include <stdarg.h>
+> -#endif
+> -
+> -/* Configuration specific to Intel 64-bit C compiler */
+> -
+> -#define COMPILER_DEPENDENT_INT64    __int64
+> -#define COMPILER_DEPENDENT_UINT64   unsigned __int64
+> -#define ACPI_INLINE                 __inline
+> -
+> -/*
+> - * Calling conventions:
+> - *
+> - * ACPI_SYSTEM_XFACE        - Interfaces to host OS (handlers, threads)
+> - * ACPI_EXTERNAL_XFACE      - External ACPI interfaces
+> - * ACPI_INTERNAL_XFACE      - Internal ACPI interfaces
+> - * ACPI_INTERNAL_VAR_XFACE  - Internal variable-parameter list interface=
+s
+> - */
+> -#define ACPI_SYSTEM_XFACE
+> -#define ACPI_EXTERNAL_XFACE
+> -#define ACPI_INTERNAL_XFACE
+> -#define ACPI_INTERNAL_VAR_XFACE
+> -
+> -/* remark 981 - operands evaluated in no particular order */
+> -#pragma warning(disable:981)
+> -
+> -/* warn C4100: unreferenced formal parameter */
+> -#pragma warning(disable:4100)
+> -
+> -/* warn C4127: conditional expression is constant */
+> -#pragma warning(disable:4127)
+> -
+> -/* warn C4706: assignment within conditional expression */
+> -#pragma warning(disable:4706)
+> -
+> -/* warn C4214: bit field types other than int */
+> -#pragma warning(disable:4214)
+> -
+> -#endif                         /* __ACINTEL_H__ */
+> diff --git a/include/linux/compiler-intel.h b/include/linux/compiler-inte=
+l.h
+> deleted file mode 100644
+> index b17f3cd18334..000000000000
+> --- a/include/linux/compiler-intel.h
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -#ifndef __LINUX_COMPILER_TYPES_H
+> -#error "Please don't include <linux/compiler-intel.h> directly, include =
+<linux/compiler.h> instead."
+> -#endif
+> -
+> -#ifdef __ECC
+> -
+> -/* Compiler specific definitions for Intel ECC compiler */
+> -
+> -#include <asm/intrinsics.h>
+> -
+> -/* Intel ECC compiler doesn't support gcc specific asm stmts.
+> - * It uses intrinsics to do the equivalent things.
+> - */
+> -
+> -#define barrier() __memory_barrier()
+> -#define barrier_data(ptr) barrier()
+> -
+> -#define RELOC_HIDE(ptr, off)                                   \
+> -  ({ unsigned long __ptr;                                      \
+> -     __ptr =3D (unsigned long) (ptr);                            \
+> -    (typeof(ptr)) (__ptr + (off)); })
+> -
+> -/* This should act as an optimization barrier on var.
+> - * Given that this compiler does not have inline assembly, a compiler ba=
+rrier
+> - * is the best we can do.
+> - */
+> -#define OPTIMIZER_HIDE_VAR(var) barrier()
+> -
+> -#endif
+> -
+> -/* icc has this, but it's called _bswap16 */
+> -#define __HAVE_BUILTIN_BSWAP16__
+> -#define __builtin_bswap16 _bswap16
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler=
+_attributes.h
+> index 898b3458b24a..9221302f6ae8 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -64,16 +64,10 @@
+>   * compiler should see some alignment anyway, when the return value is
+>   * massaged by 'flags =3D ptr & 3; ptr &=3D ~3;').
+>   *
+> - * Optional: not supported by icc
+> - *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.=
+html#index-assume_005faligned-function-attribute
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#assume-ali=
+gned
+>   */
+> -#if __has_attribute(__assume_aligned__)
+> -# define __assume_aligned(a, ...)       __attribute__((__assume_aligned_=
+_(a, ## __VA_ARGS__)))
+> -#else
+> -# define __assume_aligned(a, ...)
+> -#endif
+> +#define __assume_aligned(a, ...)        __attribute__((__assume_aligned_=
+_(a, ## __VA_ARGS__)))
+>
+>  /*
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.=
+html#index-cold-function-attribute
+> @@ -91,7 +85,6 @@
+>  /*
+>   * Optional: only supported since gcc >=3D 9
+>   * Optional: not supported by clang
+> - * Optional: not supported by icc
+>   *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.=
+html#index-copy-function-attribute
+>   */
+> @@ -104,7 +97,6 @@
+>  /*
+>   * Optional: not supported by gcc
+>   * Optional: only supported since clang >=3D 14.0
+> - * Optional: not supported by icc
+>   *
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#diagnose_a=
+s_builtin
+>   */
+> @@ -128,7 +120,6 @@
+>
+>  /*
+>   * Optional: not supported by clang
+> - * Optional: not supported by icc
+>   *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html=
+#index-designated_005finit-type-attribute
+>   */
+> @@ -242,7 +233,6 @@
+>  /*
+>   * Optional: only supported since gcc >=3D 8
+>   * Optional: not supported by clang
+> - * Optional: not supported by icc
+>   *
+>   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.=
+html#index-nonstring-variable-attribute
+>   */
+> @@ -273,7 +263,6 @@
+>
+>  /*
+>   * Optional: not supported by gcc.
+> - * Optional: not supported by icc.
+>   *
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#overloadab=
+le
+>   */
+> @@ -293,7 +282,6 @@
+>   * Note: the "type" argument should match any __builtin_object_size(p, t=
+ype) usage.
+>   *
+>   * Optional: not supported by gcc.
+> - * Optional: not supported by icc.
+>   *
+>   * clang: https://clang.llvm.org/docs/AttributeReference.html#pass-objec=
+t-size-pass-dynamic-object-size
+>   */
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_type=
+s.h
+> index 74e04ecd4c89..0e06a1a79401 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -92,8 +92,6 @@ static inline void __chk_io_ptr(const volatile void __i=
+omem *ptr) { }
+>  /* Compiler specific macros. */
+>  #ifdef __clang__
+>  #include <linux/compiler-clang.h>
+> -#elif defined(__INTEL_COMPILER)
+> -#include <linux/compiler-intel.h>
+>  #elif defined(__GNUC__)
+>  /* The above compilers also define __GNUC__, so order is important here.=
+ */
+>  #include <linux/compiler-gcc.h>
+> diff --git a/scripts/cc-version.sh b/scripts/cc-version.sh
+> index 2401c86fcf53..0573c92e841d 100755
+> --- a/scripts/cc-version.sh
+> +++ b/scripts/cc-version.sh
+> @@ -12,8 +12,6 @@ get_c_compiler_info()
+>         cat <<- EOF | "$@" -E -P -x c - 2>/dev/null
+>         #if defined(__clang__)
+>         Clang   __clang_major__  __clang_minor__  __clang_patchlevel__
+> -       #elif defined(__INTEL_COMPILER)
+> -       ICC     __INTEL_COMPILER  __INTEL_COMPILER_UPDATE
+>         #elif defined(__GNUC__)
+>         GCC     __GNUC__  __GNUC_MINOR__  __GNUC_PATCHLEVEL__
+>         #else
+> diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+> index b6593eac5003..8766e248ffbb 100755
+> --- a/scripts/min-tool-version.sh
+> +++ b/scripts/min-tool-version.sh
+> @@ -19,10 +19,6 @@ binutils)
+>  gcc)
+>         echo 5.1.0
+>         ;;
+> -icc)
+> -       # temporary
+> -       echo 16.0.3
+> -       ;;
+>  llvm)
+>         if [ "$SRCARCH" =3D s390 ]; then
+>                 echo 14.0.0
+> --
+> 2.34.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
