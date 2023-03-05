@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A53628EF
-	for <llvm@lists.linux.dev>; Sun,  5 Mar 2023 13:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C769AC433EF;
-	Sun,  5 Mar 2023 13:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2AD728EF
+	for <llvm@lists.linux.dev>; Sun,  5 Mar 2023 13:55:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291C8C433AE;
+	Sun,  5 Mar 2023 13:55:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678024486;
-	bh=AHZxvroEmYIa6houU/IrOk4YXJYcirNChFLpMSlmgfM=;
+	s=k20201202; t=1678024506;
+	bh=MnCXLDMbFPBJ+LFdICtYzTOFAIkvEJYeUNnVVW7X8Qg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=E3IZZ2g+UY49p/zArA8ROTPhk2s1OTR6oN0+iIA2B9UpqOxEo1mOz9E2mfwp4UXBU
-	 AWbOTk/zLU06yi65IgBDMnPXXknunqrgufsSOwLaOF//JWcofVllIa6JCT7n04VxbX
-	 qx3ltYihoUypU+s4ux4mBtNAUhyDaX8Jw+x2zwlD4fgSxQgaX+6mDbUucqw9ubHeK9
-	 wlP6z7GKev+IazZkGbRXFCn0luN55jiE5vaYjhRo4T5OAJyTlRHqoePQ1x0/yU0Qb0
-	 MdR3cx7iuB9QwbVq/x74T1Ni/qWWmsXMCf6fGPFmWNFBl17ISg9zKAT949JsnAE2R2
-	 +/ieW7niK1Uxg==
+	b=vCTPI3PoYtn2BMPH5o8hSZrPvR84TS00Pl6NxbXsrCBlszZGnLvkcJEV5LnZaWxMY
+	 so0JCkL3mZv7Hs/vfCTVidAp69j2Ux9itZVukuEWlpoXnyTWbZrthQfd7SEyJORkOg
+	 whKLAmvBzPT4Q627e/REF1CvTcWsM2jkg3TohNlFihj7qvAS77a1+sdgH1B7TfpDob
+	 MGIrrhOov3ToeWDWa6H2jVdHKGOCjKRrmuOZAR9utW0Stbi/cS26egY6q7MBjzTzWg
+	 mNtyyuj0taY1XNJ07IBmfDEdzB8SbdfVVeflm/DT4b1P2y+I/nWUjdZc287XNoXgYj
+	 dUf59hVnEsbJw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -24,18 +24,17 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	benh@kernel.crashing.org,
 	ndesaulniers@google.com,
 	u.kleine-koenig@pengutronix.de,
-	sebastian.reichel@collabora.com,
-	ajayg@nvidia.com,
-	khalasa@piap.pl,
+	dmitry.torokhov@gmail.com,
+	srinivas.pandruvada@linux.intel.com,
 	christophe.leroy@csgroup.eu,
 	linuxppc-dev@lists.ozlabs.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 6/8] macintosh: windfarm: Use unsigned type for 1-bit bitfields
-Date: Sun,  5 Mar 2023 08:54:23 -0500
-Message-Id: <20230305135425.1793964-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 5/7] macintosh: windfarm: Use unsigned type for 1-bit bitfields
+Date: Sun,  5 Mar 2023 08:54:46 -0500
+Message-Id: <20230305135449.1794083-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230305135425.1793964-1-sashal@kernel.org>
-References: <20230305135425.1793964-1-sashal@kernel.org>
+In-Reply-To: <20230305135449.1794083-1-sashal@kernel.org>
+References: <20230305135449.1794083-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,7 +76,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/macintosh/windfarm_lm75_sensor.c b/drivers/macintosh/windfarm_lm75_sensor.c
-index 29f48c2028b6d..e90ad1b78e936 100644
+index 1e5fa09845e77..8713e80201c07 100644
 --- a/drivers/macintosh/windfarm_lm75_sensor.c
 +++ b/drivers/macintosh/windfarm_lm75_sensor.c
 @@ -34,8 +34,8 @@
@@ -92,7 +91,7 @@ index 29f48c2028b6d..e90ad1b78e936 100644
  	struct wf_sensor	sens;
  };
 diff --git a/drivers/macintosh/windfarm_smu_sensors.c b/drivers/macintosh/windfarm_smu_sensors.c
-index c8706cfb83fd8..714c1e14074ed 100644
+index 3e6059eaa1380..90823b4280259 100644
 --- a/drivers/macintosh/windfarm_smu_sensors.c
 +++ b/drivers/macintosh/windfarm_smu_sensors.c
 @@ -273,8 +273,8 @@ struct smu_cpu_power_sensor {
