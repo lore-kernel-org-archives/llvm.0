@@ -1,124 +1,83 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8968220F0;
-	Mon,  6 Mar 2023 16:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678120549; x=1709656549;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NGgKZfrfY47Yp6YFkhLMquYguvEs/8hVYsgBTj94qeA=;
-  b=eTVbfHED1whXdlEN4KyLiWiRgqALaijTHh+mexO8nh/B6HxUOon44MEL
-   utvAS8qxnAWzRH647siVHzjpfbV3kHH73KDbbAAAcRL0aQRIUs8K4OTVr
-   KUEENNMseh5nD3gVUZrJKsQO9U2JeiUYUJ7gVV4vaAPNe5lyf0j8FZlcx
-   ahNci9C69P7s4YY2CG8nZvbUEwQ/I6o+Q/bBodciCqoFWti6wmEg22gTh
-   KS1nYLfvlCQt06zHG/rX9rV9NS2N1sQRnbfYkXl++g8eeqlG5Ta11pgnk
-   sEJ5adj2liyEnuMHzL2SadKPctovyopP9X18QChtZ/u+DQlPuNJaGkR6v
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="315257701"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="315257701"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 08:35:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="922007835"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="922007835"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Mar 2023 08:35:27 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZDo6-0000TL-2L;
-	Mon, 06 Mar 2023 16:35:26 +0000
-Date: Tue, 7 Mar 2023 00:34:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nirmoy Das <nirmoy.das@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 3/3] drm/i915/display: Implement fb_mmap callback
- function
-Message-ID: <202303070027.DvK3SmXg-lkp@intel.com>
-References: <20230306102850.18299-3-nirmoy.das@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235546FC5
+	for <llvm@lists.linux.dev>; Mon,  6 Mar 2023 19:18:08 +0000 (UTC)
+Received: by mail-pl1-f180.google.com with SMTP id ky4so11602371plb.3
+        for <llvm@lists.linux.dev>; Mon, 06 Mar 2023 11:18:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1678130287;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PlfUVnMpAeqg74Kjt8UEOETBGNFFbOVFaXPZinB2uzA=;
+        b=t5crri0WcTaC4dbDeFT8B1Wf41RotuxLDoQ4au4TS14bhzVMaHsw9aHDiNZ/QgfigO
+         pIri5VdgzvPiiJjI1Fi6ly7z7LM/WBF4IOflr++3YI+qk3fjdDueo9IiFarU45YM93jy
+         InVglw2HcfH0SVosPwcOZVudDiaF8aEsAty9SKv60VRlOJ6dbXxRUnEfnuwuksQRL+oH
+         MjCDHAW0mtGh5caILOuIvpWpotLpNMICgWII/CmspOGryPGZRcLIX7VDlhmcKqnho09M
+         v3nqHeyXn7TJizhYBWel17Os2plRYUMcAagxx2fq7Xno7HV5B6AU7E+r1P+9n6NyddI7
+         /lAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678130287;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PlfUVnMpAeqg74Kjt8UEOETBGNFFbOVFaXPZinB2uzA=;
+        b=Wssx1aMi9p+vdYXSKx3qvUSDfK74eDzkDonxU6dzZwNOiAIIl4dusG19BkBxSvP5F5
+         wXopfi1cO/AqqgWvpOKqBVPQw3Ss/doNj5n8xLkPY3DP0wcRlQCR22NfjBed7FELTy7T
+         DlIrApHO941KVb7HS9KCF6tuCC/r+LoZAYZ7pComtHBK0NCwUQAqNiOEiNvO79Zlzxnb
+         ONa1jQoD5nBJ9pjXL2Y82INzAnwWtbrpn1YsY9AaZm/Lmn5aPBb+Wq+9ll/XICwqP4u8
+         wsR4Mvel7XsNmTfXPP4R+7RsW3l5va/2CAfDoHNOy9j8PcXEq5dKxmhjaxLNAbM5yH4Q
+         aRwA==
+X-Gm-Message-State: AO0yUKUiytyG0TQksTXXN2AuaR5cESp/8SAGARmCvpaOM/txAlZP/7zb
+	+OUKGTKUq2isb3ZObr6BFFdweg==
+X-Google-Smtp-Source: AK7set+iNoJZ2cxy5qRgIoHSJ0YdyIfw0jMkr21udOVpB5izRmx1RUdTQKZ9Owwbph8LjbeyohY5Ag==
+X-Received: by 2002:a05:6a20:5483:b0:cc:50de:a2be with SMTP id i3-20020a056a20548300b000cc50dea2bemr13625900pzk.14.1678130287404;
+        Mon, 06 Mar 2023 11:18:07 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id d23-20020aa78697000000b005afda149679sm6782709pfo.179.2023.03.06.11.18.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 11:18:06 -0800 (PST)
+Date: Mon, 06 Mar 2023 11:18:06 -0800 (PST)
+X-Google-Original-Date: Mon, 06 Mar 2023 11:17:18 PST (-0800)
+Subject:     Re: [RFC 0/2] RISC-V: enable rust
+In-Reply-To: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
+CC: Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org,
+  Conor Dooley <conor@kernel.org>, ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+  boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, corbet@lwn.net,
+  Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+  rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: miguel.ojeda.sandonis@gmail.com
+Message-ID: <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306102850.18299-3-nirmoy.das@intel.com>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Nirmoy,
+On Sat, 25 Feb 2023 00:37:29 PST (-0800), miguel.ojeda.sandonis@gmail.com wrote:
+> On Sat, Feb 25, 2023 at 12:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>>
+>> Works for me.
+>>
+>> I've got a few other things in the pipeline for this merge window so
+>> this probably won't make it, but I'll dig in after that.  We've got a
+>> bunch of Rust-types floating around Rivos as well, so with any luck
+>> someone else will have some time to poke around.  Having a full cycle in
+>> linux-next is probably the right way to go for this sort of thing
+>> anyway, as it's likely to shake out some long-tail issues.
+>
+> Thanks a lot! That would be great.
+>
+> At least from our side, no rush. In fact, we are letting users (or
+> arch maintainers) to request/submit the architectures themselves as
+> they need/want them.
 
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nirmoy-Das/drm-i915-Add-a-helper-func-for-gem-obj-mmap/20230306-183112
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230306102850.18299-3-nirmoy.das%40intel.com
-patch subject: [PATCH RFC 3/3] drm/i915/display: Implement fb_mmap callback function
-config: i386-randconfig-a012-20230306 (https://download.01.org/0day-ci/archive/20230307/202303070027.DvK3SmXg-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2c504ed19ce4930ccadb2e9060cc79056969c599
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nirmoy-Das/drm-i915-Add-a-helper-func-for-gem-obj-mmap/20230306-183112
-        git checkout 2c504ed19ce4930ccadb2e9060cc79056969c599
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303070027.DvK3SmXg-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_fbdev.c:131:21: warning: unused variable 'dev' [-Wunused-variable]
-           struct drm_device *dev = fbdev->helper.dev;
-                              ^
-   1 warning generated.
-
-
-vim +/dev +131 drivers/gpu/drm/i915/display/intel_fbdev.c
-
-   124	
-   125	#define to_intel_fbdev(x) container_of(x, struct intel_fbdev, helper)
-   126	static int intel_fbdev_mmap(struct fb_info *info, struct vm_area_struct *vma)
-   127	{
-   128		struct intel_fbdev *fbdev = to_intel_fbdev(info->par);
-   129		struct drm_gem_object *bo = drm_gem_fb_get_obj(&fbdev->fb->base, 0);
-   130		struct drm_i915_gem_object *obj = to_intel_bo(bo);
- > 131		struct drm_device *dev = fbdev->helper.dev;
-   132	
-   133		vma->vm_page_prot =
-   134				pgprot_writecombine(vm_get_page_prot(vma->vm_flags));
-   135	
-   136		if (obj->stolen)
-   137			return vm_iomap_memory(vma, info->fix.smem_start,
-   138					       info->fix.smem_len);
-   139	
-   140		return i915_gem_object_mmap(obj, vma);
-   141	}
-   142	static const struct fb_ops intelfb_ops = {
-   143		.owner = THIS_MODULE,
-   144		DRM_FB_HELPER_DEFAULT_OPS,
-   145		.fb_set_par = intel_fbdev_set_par,
-   146		.fb_read = drm_fb_helper_cfb_read,
-   147		.fb_write = drm_fb_helper_cfb_write,
-   148		.fb_fillrect = drm_fb_helper_cfb_fillrect,
-   149		.fb_copyarea = drm_fb_helper_cfb_copyarea,
-   150		.fb_imageblit = drm_fb_helper_cfb_imageblit,
-   151		.fb_pan_display = intel_fbdev_pan_display,
-   152		.fb_blank = intel_fbdev_blank,
-   153		.fb_mmap = intel_fbdev_mmap,
-   154	};
-   155	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+It's time for the next release.  IIUC there were some authorship issues 
+here, did you guys want to re-spin this with those sorted out?  I can 
+give it a shot if you want, but I'm probably as likely to screw it up as 
+anyone else...
