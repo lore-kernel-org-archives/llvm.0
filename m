@@ -1,43 +1,53 @@
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A362E33C1;
-	Mon,  6 Mar 2023 20:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F48B7473;
+	Mon,  6 Mar 2023 21:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678135956; x=1709671956;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=7mgCz/i/UvwQh9u3gWV0l1IMAbDaWnSX6gDXmYGflIA=;
-  b=AiOMp+zpxVaTtHMGsNJrIeo3l5kkMmw1axXf7P1xU99FpFP2IANWVuF6
-   ExEDWygSeSbvRLQOQO1Brd1A/PscpzLg8sWyYOvVxvpYKBt2ywMyCfwRN
-   CL2ex740/u3E866cEffJY2vpJ0PRSwvGM0BM12/h5wIiiaIMvDZNvotNQ
-   0IjojMzz+/l1hV/lu8oxyHCTXkH+XtN45l7DD5ZfyFIQzvtgiDQp+8PUo
-   KikOszLVtU5htWR6X2HdMXLAP2fNWIuS8+9T1oEmIuL3eB5r/sVxdgdYs
-   mW3SZCK4g0/V5J379nxu4qp6chIRcRPo8FHgFOKeydwJHZes82as/hpRp
+  t=1678137221; x=1709673221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W+pwkRjL2XU/wrlakyvjwEDMpoQqOshgjsZ9AhZ+GLE=;
+  b=g2mQZcBWSeddtWICKUIqFDyx7ielFT+haAHo3TyfYHXWXmzaoraMo6tP
+   Iex3njjViLXjUAseZ/dSj+eqytnKrwbn/bapN9ytZsewAZy7JUw6LJrig
+   wlegQH6HsDb171LpT0Odk3P36DYauIvQb6lAqxuP0WrwOxuPaNeesWY16
+   B++ojBhPWsVSqKQEAcaYiyFlnfrCzSGvP1biyPyYTE902Fu6uBLeYnL7Q
+   9ka6msERDEFRzU6CZtxJQHBuVAiF3NAq9oriaS3t7TzM8cTa8cGFWiv+e
+   FCh/JUmbFqbs5nl/3zzCn428lzquYLvbZMhxLXRVLb/dPAZ87csT+exn+
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="421946866"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="421952443"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="421946866"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 12:52:35 -0800
+   d="scan'208";a="421952443"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 13:13:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="676309735"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="740471266"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="676309735"
+   d="scan'208";a="740471266"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 06 Mar 2023 12:52:34 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 06 Mar 2023 13:13:35 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZHow-0000co-0Y;
-	Mon, 06 Mar 2023 20:52:34 +0000
-Date: Tue, 7 Mar 2023 04:52:04 +0800
+	id 1pZI9G-0000df-21;
+	Mon, 06 Mar 2023 21:13:34 +0000
+Date: Tue, 7 Mar 2023 05:12:35 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
- kallsyms_sym_address: .text+0x0): relocation R_RISCV_PCREL_HI20 out of
- range: -524399 is not in [-524288, 524287]; references
- kallsyms_relative_base
-Message-ID: <202303070453.K0lWioJT-lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
+	paulus@samba.org, benh@kernel.crashing.org, linux@armlinux.org.uk,
+	pjones@redhat.com, timur@kernel.org, adaplas@gmail.com,
+	s.hauer@pengutronix.de, shawnguo@kernel.org, mbroemme@libmpq.org,
+	thomas@winischhofer.net, James.Bottomley@hansenpartnership.com,
+	spock@gentoo.org, sudipm.mukherjee@gmail.com,
+	teddy.wang@siliconmotion.com, geert+renesas@glider.be,
+	corbet@lwn.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH 08/99] fbdev/arkfb: Duplicate video-mode option string
+Message-ID: <202303070537.699fZDEm-lkp@intel.com>
+References: <20230306160016.4459-9-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,48 +56,79 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230306160016.4459-9-tzimmermann@suse.de>
 
-CC: linux-kernel@vger.kernel.org
-TO: Zhen Lei <thunder.leizhen@huawei.com>
-CC: Luis Chamberlain <mcgrof@kernel.org>
+Hi Thomas,
 
-Hi Zhen,
+I love your patch! Yet something to improve:
 
-FYI, the error/warning still remains.
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.3-rc1 next-20230306]
+[cannot apply to deller-parisc/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-commit: 30f3bb09778de64ef9f23fb4bb5f868c4728a071 kallsyms: Add self-test facility
-date:   4 months ago
-config: riscv-buildonly-randconfig-r006-20230306 (https://download.01.org/0day-ci/archive/20230307/202303070453.K0lWioJT-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/lib-Add-option-iterator/20230307-000524
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230306160016.4459-9-tzimmermann%40suse.de
+patch subject: [PATCH 08/99] fbdev/arkfb: Duplicate video-mode option string
+config: x86_64-randconfig-a016-20230306 (https://download.01.org/0day-ci/archive/20230307/202303070537.699fZDEm-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=30f3bb09778de64ef9f23fb4bb5f868c4728a071
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 30f3bb09778de64ef9f23fb4bb5f868c4728a071
+        # https://github.com/intel-lab-lkp/linux/commit/f8a56fb51ff846d7daca02280ac0355e1a82264e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Zimmermann/lib-Add-option-iterator/20230307-000524
+        git checkout f8a56fb51ff846d7daca02280ac0355e1a82264e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303070453.K0lWioJT-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303070537.699fZDEm-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_sym_address: .text+0x0): relocation R_RISCV_PCREL_HI20 out of range: -524399 is not in [-524288, 524287]; references kallsyms_relative_base
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_sym_address: .text+0xc): relocation R_RISCV_PCREL_HI20 out of range: -524399 is not in [-524288, 524287]; references kallsyms_offsets
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
+>> drivers/video/fbdev/arkfb.c:1205:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   drivers/video/fbdev/arkfb.c:1207:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   2 errors generated.
+
+
+vim +/continue +1205 drivers/video/fbdev/arkfb.c
+
+  1191	
+  1192		if (fb_modesetting_disabled("arkfb"))
+  1193			return -ENODEV;
+  1194	
+  1195	#ifndef MODULE
+  1196		if (fb_get_options("arkfb", &option))
+  1197			return -ENODEV;
+  1198	
+  1199		if (option && *option) {
+  1200			static char mode_option_buf[256];
+  1201			int ret;
+  1202	
+  1203			ret = snprintf(mode_option_buf, sizeof(mode_option_buf), "%s", option);
+  1204			if (WARN(ret < 0, "arkfb: ignoring invalid option, ret=%d\n", ret))
+> 1205				continue;
+  1206			if (WARN(ret >= sizeof(mode_option_buf), "arkfb: option too long\n"))
+  1207				continue;
+  1208			mode_option = mode_option_buf;
+  1209		}
+  1210	#endif
+  1211	
+  1212		pr_debug("arkfb: initializing\n");
+  1213		return pci_register_driver(&arkfb_pci_driver);
+  1214	}
+  1215	
 
 -- 
 0-DAY CI Kernel Test Service
