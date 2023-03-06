@@ -1,77 +1,94 @@
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385726FC5
-	for <llvm@lists.linux.dev>; Mon,  6 Mar 2023 19:28:59 +0000 (UTC)
-Received: by mail-yb1-f169.google.com with SMTP id t39so9322936ybi.3
-        for <llvm@lists.linux.dev>; Mon, 06 Mar 2023 11:28:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678130938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ttfPrW0GRQ9nbvMrVtjoiB2Knz31FGcqjmMbmblOGw=;
-        b=SU2Xcpc8fy/jDn5Hq/sgA44RX6PMSz8Z/CGlbTyvJvLrVhvSx8x2b1d6eRLg5UuFBZ
-         9eVJz2MI5oZX+kbqnjMoreoLj9gtAXJEVmsGQH9WiYH5SIAaxVOwcUykaRPeUNNBY40Z
-         p6N5Gg6h45DIpjQLit8V41JA6snJWQUyo8I+WomncvbRMQ/Q1RKTSADQcVgXWYMWXW3U
-         BANkIPKJO9EOekb2ftXDbgdEMXarRb//A/+hqBYV49Ckk/3AGLVxvnH3CoiHh7ycyQEx
-         DZ0cS4Sn1p/f5m7wcYMPv3Iio7GI4kQP1JdUN7MUomAf4xMjU4WiVFbT47UReR3zYTHi
-         Sgsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678130938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ttfPrW0GRQ9nbvMrVtjoiB2Knz31FGcqjmMbmblOGw=;
-        b=f8r6ok4/qkYKdVLvSS2RC1Cgu20URt+p7DaOqWjDzbPv8l5FBnIJV//lu/k3ZJBYPn
-         qsz0IrzRbtH+hGcTGHpWZu67gIYixTBSJq0oDvfnd2l87sKBzKUHzf1jbjRKG7ab5HrY
-         KtRiWz9Jyw8Q6haj0N1iqM2VaAOd8Z7H/+jMubI2M+r6xe3vHIgOnEpQk+gzT/1wgofy
-         kER0HbHN6MH8grhsQHu2c55HaisV8dluwKqzvLD/eLm1V6JlnfFXKroT7EeneS2s6eMV
-         29NmC1TkL0znyHAh1ldYu7bhTQBQlMKiJM0kOnI4ZS3/Lo07DCMZjFpzl14aQ2FT4a4s
-         0BhQ==
-X-Gm-Message-State: AO0yUKWM6oFwHYgyWQTXRvBvG3b3N3TFnJY7Qu1pw6EElMETAe8hvVY/
-	y5wQXIfOJ35ZbkNx5cEc3bjvCPw5B7uq7DL6E84=
-X-Google-Smtp-Source: AK7set+Md8UTQSh/AP0LixVNnGi65tvY4YYP3IbXzgyvl8DJUVpm6e49kNmGaSXZTytFJEf4T12wESB3k1aIa0rjZuI=
-X-Received: by 2002:a5b:191:0:b0:a6f:b921:cded with SMTP id
- r17-20020a5b0191000000b00a6fb921cdedmr5516798ybl.2.1678130938238; Mon, 06 Mar
- 2023 11:28:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A362E33C1;
+	Mon,  6 Mar 2023 20:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678135956; x=1709671956;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=7mgCz/i/UvwQh9u3gWV0l1IMAbDaWnSX6gDXmYGflIA=;
+  b=AiOMp+zpxVaTtHMGsNJrIeo3l5kkMmw1axXf7P1xU99FpFP2IANWVuF6
+   ExEDWygSeSbvRLQOQO1Brd1A/PscpzLg8sWyYOvVxvpYKBt2ywMyCfwRN
+   CL2ex740/u3E866cEffJY2vpJ0PRSwvGM0BM12/h5wIiiaIMvDZNvotNQ
+   0IjojMzz+/l1hV/lu8oxyHCTXkH+XtN45l7DD5ZfyFIQzvtgiDQp+8PUo
+   KikOszLVtU5htWR6X2HdMXLAP2fNWIuS8+9T1oEmIuL3eB5r/sVxdgdYs
+   mW3SZCK4g0/V5J379nxu4qp6chIRcRPo8FHgFOKeydwJHZes82as/hpRp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="421946866"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="421946866"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 12:52:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="676309735"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="676309735"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Mar 2023 12:52:34 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZHow-0000co-0Y;
+	Mon, 06 Mar 2023 20:52:34 +0000
+Date: Tue, 7 Mar 2023 04:52:04 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
+ kallsyms_sym_address: .text+0x0): relocation R_RISCV_PCREL_HI20 out of
+ range: -524399 is not in [-524288, 524287]; references
+ kallsyms_relative_base
+Message-ID: <202303070453.K0lWioJT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
- <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
-In-Reply-To: <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 6 Mar 2023 20:28:47 +0100
-Message-ID: <CANiq72=hvS6KxxkLocFOrU4E4pNi=y4OuJLm3iSiPGmi5B178Q@mail.gmail.com>
-Subject: Re: [RFC 0/2] RISC-V: enable rust
-To: gary@garyguo.net, Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
-	Conor Dooley <conor@kernel.org>, ojeda@kernel.org, alex.gaynor@gmail.com, 
-	wedsonaf@gmail.com, boqun.feng@gmail.com, bjorn3_gh@protonmail.com, 
-	corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org, 
-	ndesaulniers@google.com, trix@redhat.com, rust-for-linux@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Mar 6, 2023 at 8:18=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com> =
-wrote:
->
-> It's time for the next release.  IIUC there were some authorship issues
-> here, did you guys want to re-spin this with those sorted out?  I can
-> give it a shot if you want, but I'm probably as likely to screw it up as
-> anyone else...
+CC: linux-kernel@vger.kernel.org
+TO: Zhen Lei <thunder.leizhen@huawei.com>
+CC: Luis Chamberlain <mcgrof@kernel.org>
 
-No problem on my side, and either way is fine! Thanks!
+Hi Zhen,
 
-I think what is important is that Gary is aware and agrees.
+FYI, the error/warning still remains.
 
-Gary: do you prefer to be the main author or the `Co-developed-by` author h=
-ere?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+commit: 30f3bb09778de64ef9f23fb4bb5f868c4728a071 kallsyms: Add self-test facility
+date:   4 months ago
+config: riscv-buildonly-randconfig-r006-20230306 (https://download.01.org/0day-ci/archive/20230307/202303070453.K0lWioJT-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=30f3bb09778de64ef9f23fb4bb5f868c4728a071
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 30f3bb09778de64ef9f23fb4bb5f868c4728a071
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Cheers,
-Miguel
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303070453.K0lWioJT-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_sym_address: .text+0x0): relocation R_RISCV_PCREL_HI20 out of range: -524399 is not in [-524288, 524287]; references kallsyms_relative_base
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+--
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_sym_address: .text+0xc): relocation R_RISCV_PCREL_HI20 out of range: -524399 is not in [-524288, 524287]; references kallsyms_offsets
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
