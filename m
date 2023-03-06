@@ -1,99 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DDF6FC5
-	for <llvm@lists.linux.dev>; Mon,  6 Mar 2023 19:26:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33DB7C433D2;
-	Mon,  6 Mar 2023 19:26:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678130815;
-	bh=qJZNuK31WcsEJiNza1huRTw6AstehkIf7XEiHaxQpRc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=evMW9Jw7+rFCbiPUyIffpCsSKySfnXOeDFIjsBW5Fk3mDSZcpzqM7Gd5VTD1JjEYO
-	 jX3bQa67lPhzW4mY/KQ3NLqtrwGc07oXNikGq0s9KqHrzy22vwP4FoFnCcbQpOn42/
-	 oaShy5iJLKwBE8386ZPLowLJoxWAv0fvOrnxTOGJp9l8yFBCyPBdgKP35bXa5YX3Qp
-	 bnHqPOIxhEzkWZCD+BYQUqNywK5c/+Vu/LNuJKH5J/GgkajAA0dXlV+Z5ZW6sw1ZwY
-	 cK0wY0ExeNC2REvxMki/R6Eou/7VghZxpht18BkclAHc+4/gapoSDZ+6KuC+z4b3vn
-	 vzLb7zRlegB8A==
-Date: Mon, 6 Mar 2023 19:26:49 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: miguel.ojeda.sandonis@gmail.com,
-	Conor Dooley <conor.dooley@microchip.com>,
-	linux-riscv@lists.infradead.org, ojeda@kernel.org,
-	alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com,
-	gary@garyguo.net, bjorn3_gh@protonmail.com, corbet@lwn.net,
-	Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org,
-	ndesaulniers@google.com, trix@redhat.com,
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC 0/2] RISC-V: enable rust
-Message-ID: <719ed82b-ffe5-4f2f-a21c-f32b9b4f867b@spud>
-References: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
- <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385726FC5
+	for <llvm@lists.linux.dev>; Mon,  6 Mar 2023 19:28:59 +0000 (UTC)
+Received: by mail-yb1-f169.google.com with SMTP id t39so9322936ybi.3
+        for <llvm@lists.linux.dev>; Mon, 06 Mar 2023 11:28:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678130938;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/ttfPrW0GRQ9nbvMrVtjoiB2Knz31FGcqjmMbmblOGw=;
+        b=SU2Xcpc8fy/jDn5Hq/sgA44RX6PMSz8Z/CGlbTyvJvLrVhvSx8x2b1d6eRLg5UuFBZ
+         9eVJz2MI5oZX+kbqnjMoreoLj9gtAXJEVmsGQH9WiYH5SIAaxVOwcUykaRPeUNNBY40Z
+         p6N5Gg6h45DIpjQLit8V41JA6snJWQUyo8I+WomncvbRMQ/Q1RKTSADQcVgXWYMWXW3U
+         BANkIPKJO9EOekb2ftXDbgdEMXarRb//A/+hqBYV49Ckk/3AGLVxvnH3CoiHh7ycyQEx
+         DZ0cS4Sn1p/f5m7wcYMPv3Iio7GI4kQP1JdUN7MUomAf4xMjU4WiVFbT47UReR3zYTHi
+         Sgsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678130938;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/ttfPrW0GRQ9nbvMrVtjoiB2Knz31FGcqjmMbmblOGw=;
+        b=f8r6ok4/qkYKdVLvSS2RC1Cgu20URt+p7DaOqWjDzbPv8l5FBnIJV//lu/k3ZJBYPn
+         qsz0IrzRbtH+hGcTGHpWZu67gIYixTBSJq0oDvfnd2l87sKBzKUHzf1jbjRKG7ab5HrY
+         KtRiWz9Jyw8Q6haj0N1iqM2VaAOd8Z7H/+jMubI2M+r6xe3vHIgOnEpQk+gzT/1wgofy
+         kER0HbHN6MH8grhsQHu2c55HaisV8dluwKqzvLD/eLm1V6JlnfFXKroT7EeneS2s6eMV
+         29NmC1TkL0znyHAh1ldYu7bhTQBQlMKiJM0kOnI4ZS3/Lo07DCMZjFpzl14aQ2FT4a4s
+         0BhQ==
+X-Gm-Message-State: AO0yUKWM6oFwHYgyWQTXRvBvG3b3N3TFnJY7Qu1pw6EElMETAe8hvVY/
+	y5wQXIfOJ35ZbkNx5cEc3bjvCPw5B7uq7DL6E84=
+X-Google-Smtp-Source: AK7set+Md8UTQSh/AP0LixVNnGi65tvY4YYP3IbXzgyvl8DJUVpm6e49kNmGaSXZTytFJEf4T12wESB3k1aIa0rjZuI=
+X-Received: by 2002:a5b:191:0:b0:a6f:b921:cded with SMTP id
+ r17-20020a5b0191000000b00a6fb921cdedmr5516798ybl.2.1678130938238; Mon, 06 Mar
+ 2023 11:28:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="bv6pgk4XOEP22YAx"
-Content-Disposition: inline
+References: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
+ <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
 In-Reply-To: <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
-
-
---bv6pgk4XOEP22YAx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 6 Mar 2023 20:28:47 +0100
+Message-ID: <CANiq72=hvS6KxxkLocFOrU4E4pNi=y4OuJLm3iSiPGmi5B178Q@mail.gmail.com>
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+To: gary@garyguo.net, Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, 
+	Conor Dooley <conor@kernel.org>, ojeda@kernel.org, alex.gaynor@gmail.com, 
+	wedsonaf@gmail.com, boqun.feng@gmail.com, bjorn3_gh@protonmail.com, 
+	corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org, 
+	ndesaulniers@google.com, trix@redhat.com, rust-for-linux@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 06, 2023 at 11:18:06AM -0800, Palmer Dabbelt wrote:
-> On Sat, 25 Feb 2023 00:37:29 PST (-0800), miguel.ojeda.sandonis@gmail.com=
- wrote:
-> > On Sat, Feb 25, 2023 at 12:18 AM Palmer Dabbelt <palmer@dabbelt.com> wr=
-ote:
-> > >=20
-> > > Works for me.
-> > >=20
-> > > I've got a few other things in the pipeline for this merge window so
-> > > this probably won't make it, but I'll dig in after that.  We've got a
-> > > bunch of Rust-types floating around Rivos as well, so with any luck
-> > > someone else will have some time to poke around.  Having a full cycle=
- in
-> > > linux-next is probably the right way to go for this sort of thing
-> > > anyway, as it's likely to shake out some long-tail issues.
-> >=20
-> > Thanks a lot! That would be great.
-> >=20
-> > At least from our side, no rush. In fact, we are letting users (or
-> > arch maintainers) to request/submit the architectures themselves as
-> > they need/want them.
->=20
+On Mon, Mar 6, 2023 at 8:18=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com> =
+wrote:
+>
 > It's time for the next release.  IIUC there were some authorship issues
-> here, did you guys want to re-spin this with those sorted out?  I can give
-> it a shot if you want, but I'm probably as likely to screw it up as anyone
-> else...
+> here, did you guys want to re-spin this with those sorted out?  I can
+> give it a shot if you want, but I'm probably as likely to screw it up as
+> anyone else...
 
-It's in my queue to respin, I wasn't bothered doing one until after -rc1.
-I'll try to get to it tomorrow since it's simpler than anything else I
-currently owe one for.
-Should be able to do something that satisfies everyone, or, at least,
-gives everyone the opportunity to be satisfied!
+No problem on my side, and either way is fine! Thanks!
+
+I think what is important is that Gary is aware and agrees.
+
+Gary: do you prefer to be the main author or the `Co-developed-by` author h=
+ere?
 
 Cheers,
-Conor.
-
-
---bv6pgk4XOEP22YAx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAY+QAAKCRB4tDGHoIJi
-0obrAP9X3eFi/wo3T5hY5jI6VcYOgDX5U9nhlmdJj6G1KUkFGgD9FSf22UcJPohT
-atZEWK7qWW8liEdc0PizSJE8mWeNrwY=
-=IHr0
------END PGP SIGNATURE-----
-
---bv6pgk4XOEP22YAx--
+Miguel
