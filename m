@@ -1,136 +1,108 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0D410792
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 21:58:51 +0000 (UTC)
-Received: by mail-pj1-f50.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so133883pjb.1
-        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 13:58:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678226331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8iOhf16yBRlTqpgU2xhQ0C0E2y1FmHsBFKjMtFiPcqY=;
-        b=jyPFABP0iq67dhiNelpg0gcKI68C81QtJN99IxQNCdbDw1Dl3mR6UglI4waySu+AaA
-         R9rYlKxcqmRFIXfVdWuH69JglgjnH/RHmZJQjtAT2ZUBCrzNQ5ZbYTLL5q3UxxYvWRBs
-         nq27YbkXIh9vZeARLzKdgy9kbQnpl58dz+rlcxQ79ZMIhNFikAnOIcVLU0hK1qClrwYT
-         Ukjy251AvVgXfN2YUpnGH5/o31KDq6yvlnqiryouGYrYlAlQt9YR0PfKj2cbQXdaFhDv
-         8XOkhsyoSUEyEtaTR8at7D3TdQ0MSdxuOrFDVNA2UXD2VzZ35GmKxxLLTFeuP8TDwxF9
-         an3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678226331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8iOhf16yBRlTqpgU2xhQ0C0E2y1FmHsBFKjMtFiPcqY=;
-        b=LrsYCbAe+hNGFjyXXVev4RO0PqYnGcziLIPpw6aBxEPCW6EJ7UeOA+V4mkE94/8kRZ
-         wl9MV2HW9Aw2fixBq3NdxOKPUNeoISGUYsn2/w77eRExeiyG83RUwVwKDJ4Yk2/NVooX
-         gdCTtPyBeejvCVSYNHmNz/zWG/hSSOkijzKMyas7K0ukDPxjh+/8L0w9oXXAy0gZBnAc
-         NyLH4+8V9ldONYqpkw06GqBKPBMdAe/NJtGHGQV0vpuaw7rk6pY8K91GWV3ENXZwZ3Vw
-         z3s3P+8jNNMQYvL99q4KepQLWZ065i1nRE8JhkVvZtK+OP9FmhqXByv0BNmD3VCZsy68
-         qrLA==
-X-Gm-Message-State: AO0yUKVctdR6SvpboXjSfxbLmcCSbwUVUb/9BBDhKU9rQOFO4GuyaMCq
-	t2CCs535HArtPrCXOI0NVelU4qdccTk5FWsBFRS1Dw==
-X-Google-Smtp-Source: AK7set+x/KTztFG24s7NOV/+Lsi388WnW3JQ8NmFTLQhBS7lZJKThP/yskEKi/aK81KfU8aOgZTY1nUa9FYCxuYANCg=
-X-Received: by 2002:a17:90a:f10b:b0:23a:6ed6:7817 with SMTP id
- cc11-20020a17090af10b00b0023a6ed67817mr6026857pjb.5.1678226331109; Tue, 07
- Mar 2023 13:58:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8598A107A5;
+	Tue,  7 Mar 2023 22:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678228587; x=1709764587;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rZ3c8+SfbUn5SnrzPXv/QMzk7aoCjx/eMAVVxoN89bM=;
+  b=fdxYFhQEgFqwV58r7imd9LA90qArT//X8nZhWvLx9iP00TNsjvQQRGaC
+   +ufsj7R7fvMFtdPi+zEoZUq34eOMKguwlgFveq/Un2fqg41w3e7fVWRuN
+   tsOHtM85PFtfIP+3H62NAQjBQLxmJmgpYInIDayh09wETgutgN274LqB8
+   dX/2X4apq7w+Uxv0hGlgAImtpFwdEL/V2uu1bPVHWky2xi3x0ySgkrmDJ
+   invfYw2ovAjKLNrdolRVRNeHSofJNyd3byS//CS6QYks91TAki+A/Ld7Z
+   SfNobqN1srkwetg1UTdtyAVzI2wF3vVYNnWmlyTH38NQf0yT2/Id8wSsO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="338314783"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="338314783"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 14:36:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="1006057151"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="1006057151"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Mar 2023 14:36:25 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZfuy-0001f3-2o;
+	Tue, 07 Mar 2023 22:36:24 +0000
+Date: Wed, 8 Mar 2023 06:35:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/cpufreq/davinci-cpufreq.c:151:12: warning: no previous
+ prototype for function 'davinci_cpufreq_init'
+Message-ID: <202303080649.fobTolG2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230303231133.1486085-1-eranian@google.com> <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
- <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
- <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
- <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
- <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
- <CAHk-=whCA4-uc5WV_-68Mpmu-TiSv6fxkSjZ19zzcW9jpSxDvA@mail.gmail.com> <SJ1PR11MB60835681E8FE389EC0A1825DFCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
-In-Reply-To: <SJ1PR11MB60835681E8FE389EC0A1825DFCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 7 Mar 2023 13:58:39 -0800
-Message-ID: <CAKwvOdn9cWJO96mpWAAUh4i37+ED=S5CFKPGP7jO0SdaRumgfA@mail.gmail.com>
-Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in __resctrl_sched_in
-To: "Torvalds, Linus" <torvalds@linux-foundation.org>
-Cc: Jakub Jelinek <jakub@redhat.com>, Segher Boessenkool <segher@kernel.crashing.org>, 
-	Peter Zijlstra <peterz@infradead.org>, "Eranian, Stephane" <eranian@google.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"Chatre, Reinette" <reinette.chatre@intel.com>, "Yu, Fenghua" <fenghua.yu@intel.com>, 
-	"peternewman@google.com" <peternewman@google.com>, "james.morse@arm.com" <james.morse@arm.com>, 
-	"babu.moger@amd.com" <babu.moger@amd.com>, "ananth.narayan@amd.com" <ananth.narayan@amd.com>, 
-	"vschneid@redhat.com" <vschneid@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>, 
-	"linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>, "Luck, Tony" <tony.luck@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Mar 7, 2023 at 1:35=E2=80=AFPM Luck, Tony <tony.luck@intel.com> wro=
-te:
->
-> > Ok, so here's a *ttoally* untested and mindless patch to maybe fix
-> > what I dislike about that resctl code.
-> >
-> > Does it fix the code generation issue? I have no idea. But this is
-> > what I would suggest is the right answer, without actually knowing the
-> > code any better, and just going on a mindless rampage.
-> >
-> > It seems to compile for me, fwiw.
->
-> Beyond compiling it boots and passes the tools/testing/selftests/resctrl =
-test suite.
->
-> Tested-by: Tony Luck <tony.luck@intel.com>
+Hi Arnd,
 
-LGTM; reloading of current becomes irrelevant now that we're reusing
-the existing variable `next_p`.
+First bad commit (maybe != root cause):
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8ca09d5fa3549d142c2080a72a4c70ce389163cd
+commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
+date:   10 months ago
+config: arm-randconfig-r046-20230307 (https://download.01.org/0day-ci/archive/20230308/202303080649.fobTolG2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/ drivers/cpufreq/
 
-Might be nice to tag this for stable.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303080649.fobTolG2-lkp@intel.com/
 
-Cc: <stable@vger.kernel.org>
+All warnings (new ones prefixed by >>):
 
-And credit Stephane who did a nice job tracking this down and having a
-concise reproducer.
+>> drivers/cpufreq/davinci-cpufreq.c:151:12: warning: no previous prototype for function 'davinci_cpufreq_init' [-Wmissing-prototypes]
+   int __init davinci_cpufreq_init(void)
+              ^
+   drivers/cpufreq/davinci-cpufreq.c:151:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init davinci_cpufreq_init(void)
+   ^
+   static 
+   1 warning generated.
 
-Reported-by: Stephane Eranian <eranian@google.com>
 
-Perhaps relevant links
+vim +/davinci_cpufreq_init +151 drivers/cpufreq/davinci-cpufreq.c
 
-Link: https://lore.kernel.org/lkml/20230303231133.1486085-1-eranian@google.=
-com/
-Link: https://lore.kernel.org/lkml/alpine.LFD.2.01.0908011214330.3304@local=
-host.localdomain/
+6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  150  
+3aa3e8407ae9023 arch/arm/mach-davinci/cpufreq.c Shawn Guo   2012-04-26 @151  int __init davinci_cpufreq_init(void)
+6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  152  {
+6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  153  	return platform_driver_probe(&davinci_cpufreq_driver,
+6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  154  							davinci_cpufreq_probe);
+6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  155  }
+6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  156  
 
-Consider reusing parts of Stephane's message from the initial Link above?
+:::::: The code at line 151 was first introduced by commit
+:::::: 3aa3e8407ae9023c5ff59bf5c81fc2553c31eb70 ARM: davinci: use machine specific hook for late init
 
-Thanks for the patch.
+:::::: TO: Shawn Guo <shawn.guo@linaro.org>
+:::::: CC: Shawn Guo <shawn.guo@linaro.org>
 
----
-
-While this issue was specific to the usage of `current` (implemented
-as a macro that uses `this_cpu_read_stable`, I wonder if we might hit
-issues again in the future (at least on x86 using the "p" constraint)
-in code that:
-1. uses this_cpu_read_stable to access a per cpu variable
-2. updates that per cpu variable
-3. uses this_cpu_read_stable to access the variable hoping to get the
-new value rather than the old.
-
-I guess that this_cpu_read should be used rather than
-this_cpu_read_stable? Maybe we can beef up the comment in
-arch/x86/include/asm/percpu.h to warn about this? The sentence about
-get_thread_info() being a user of this_cpu_read_stable() seems
-outdated/due for a refresh?
-
-Is __switch_to the only place that should be updating current?  Are
-there other variables other than current that might be afflicted by
-that 1,2,3 pattern I mention above?
-
-current_top_of_stack() uses this_cpu_read_stable() for instance.
-Perhaps there could be a caller that measures the stack depth, grows
-the stack, then rereads the wrong value?
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
