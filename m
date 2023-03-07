@@ -1,119 +1,205 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD2D10792;
-	Tue,  7 Mar 2023 21:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678223661; x=1709759661;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1lzRlaQAMQQ0iCsjKUrKyy4tLvLHrlsBCKN/XyjW0dU=;
-  b=A78Sb8HEgwzzPV6pkahzlXa5Df3+DzUlCWv5PO70g6IG9gis+aFoLMlR
-   ZemDA/xZSQ9mq6VdmDCdFvMrEgg3gaQ5bzY08zVaCaoQlZ57/wkEougoD
-   A+0A4OqxzSKbmoIJrSYz/P9UTYrWMYokzDLeCVDxKAWmo/WIPsFj2NPcM
-   EUsm4muDvYlnuo7IupR9j50XcPY1QMP/Y1W8HZwhe7KGt55HgggmUGSaa
-   Gnf40+XTg7HpC3JXOSlav2/poAPtNfTVZzx4c4N4r33GQjkxyWoHwAavN
-   FBNLD/4TCpNxH5gNYQ1wnrC0861aecd1tP8ufCpX0aXRNrJPWSd5tC1jH
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="337495422"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="337495422"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:14:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676708491"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="676708491"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2023 13:14:19 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZedX-0001bv-0J;
-	Tue, 07 Mar 2023 21:14:19 +0000
-Date: Wed, 8 Mar 2023 05:14:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [miquelraynal:nvmem-layouts-and-of-cleanup 20/57]
- drivers/nvmem/core.c:770:2: error: call to undeclared function
- 'of_device_node_request_module'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202303080509.4GBE41tL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2329410792
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 21:16:30 +0000 (UTC)
+Received: by mail-pg1-f182.google.com with SMTP id y19so8433370pgk.5
+        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 13:16:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678223789;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wq4KUb4AQDQDZAJfCHW99QkUDmJEUq6txcnU3C+LjQ4=;
+        b=gMSwBZTgJBJQ4w9QChpBrXq27XNV+GbgdQgzvZrW+Bz1Bps+xs/O1d1UVxqBcZDt+s
+         tljQnKT+33xxQWHlmGk5rCRrJ5eUoAuPvBW/hAdGFZs88ItPmGx9/cUpiKkwCt8n1K/5
+         avqg9h81nUgqFwMLraXM6fDRZ6o+CnIK7Tl1MP+/C89UvOnldPp5RpHTFDYne7TDr2dW
+         mOuiK8t8KZsXD6u4JSvudLe+VUIfV2FOi+6FhPpporVijAHYV+lY2mTkiViUY9/5tz0K
+         YBniOLB863c04B/w5VAWznk1GX7lm+Eb+AI6vVryRESFzcnBGRORMaR4J69T7g9YuARz
+         yQjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678223789;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wq4KUb4AQDQDZAJfCHW99QkUDmJEUq6txcnU3C+LjQ4=;
+        b=ujhRDqkb4nrWCyTYFxhT82rMeW/r6TWqKVzdNRbmPhli/5lFIHlCi3mxNcagJJOBys
+         DnWP5U2bPqWH9wBDsYdO4HsGWERSOazXcaGfByhpU4paMu5/AOR/K24nG9ebN5Z79WD8
+         fDtJg+rzUCF2/XygoaNHK8mCsd4f87SyskC5Sd1lt5fPBr7fs8ONJAU94vEFjn6N76oO
+         JVnPi9uro+9LmcTWmcNwQJBrwlisB3oy7cWL/eMjZkQ5gUjgoqnPrhURjhvj8aSFRtCy
+         jHCCW0ukC/jiaVXFu9TiS5k0rgAw1oDZuVQrDec2FAUCBbNUmOiK9D47/I9wN+g1RAAT
+         HJTA==
+X-Gm-Message-State: AO0yUKVqVpL+nLhUtwvQZKOIfIGFTByx/LlvdpGQj0Zw0b3A24woFNXB
+	5/pvUGSi/e9F8SQvhjWLyRV5AykC6UdUP+XM/NJ6Gg==
+X-Google-Smtp-Source: AK7set9swkPIU3+FmVnffWCutWKaDjtCc2F5Qzk3K1MmlefOTTgZZaa8Ns3PAoAD3GqD1PlRCrTqynicTSvsvXaeG0I=
+X-Received: by 2002:a63:d809:0:b0:503:354c:41ad with SMTP id
+ b9-20020a63d809000000b00503354c41admr5317120pgh.11.1678223789186; Tue, 07 Mar
+ 2023 13:16:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230303231133.1486085-1-eranian@google.com> <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
+ <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
+ <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
+ <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
+ <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com> <SJ1PR11MB6083CADB2B6E859915D456F7FCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB6083CADB2B6E859915D456F7FCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 7 Mar 2023 13:16:17 -0800
+Message-ID: <CAKwvOdna5NZ0ZTv0pXVVz15=4FLkw7pfFgr6KsRtXRmi2o1uEw@mail.gmail.com>
+Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in __resctrl_sched_in
+To: "Luck, Tony" <tony.luck@intel.com>, "Torvalds, Linus" <torvalds@linux-foundation.org>
+Cc: Jakub Jelinek <jakub@redhat.com>, Segher Boessenkool <segher@kernel.crashing.org>, 
+	Peter Zijlstra <peterz@infradead.org>, "Eranian, Stephane" <eranian@google.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"Chatre, Reinette" <reinette.chatre@intel.com>, "Yu, Fenghua" <fenghua.yu@intel.com>, 
+	"peternewman@google.com" <peternewman@google.com>, "james.morse@arm.com" <james.morse@arm.com>, 
+	"babu.moger@amd.com" <babu.moger@amd.com>, "ananth.narayan@amd.com" <ananth.narayan@amd.com>, 
+	"vschneid@redhat.com" <vschneid@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>, 
+	"linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/miquelraynal/linux-0day.git nvmem-layouts-and-of-cleanup
-head:   4dbec5e07ef322a0458183244c9a11e92eebd61d
-commit: b3a67512c995dbf8f71e14e7df1278ee7c6d26ca [20/57] nvmem: core: request layout modules loading
-config: hexagon-randconfig-r033-20230306 (https://download.01.org/0day-ci/archive/20230308/202303080509.4GBE41tL-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/miquelraynal/linux-0day/commit/b3a67512c995dbf8f71e14e7df1278ee7c6d26ca
-        git remote add miquelraynal https://github.com/miquelraynal/linux-0day.git
-        git fetch --no-tags miquelraynal nvmem-layouts-and-of-cleanup
-        git checkout b3a67512c995dbf8f71e14e7df1278ee7c6d26ca
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/nvmem/
+On Tue, Mar 7, 2023 at 1:11=E2=80=AFPM Luck, Tony <tony.luck@intel.com> wro=
+te:
+>
+> > (a) it shouldn't define and declare a static function in a header file
+> >
+> >  (b) the resctrl_sched_in() inline function is midesigned to begin with
+>
+> Fixing "b" would seem to be to just pass "next_p" to the function to
+> use instead of "current".
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303080509.4GBE41tL-lkp@intel.com/
+```
+diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.=
+h
+index 52788f79786f..f46c0b97334d 100644
+--- a/arch/x86/include/asm/resctrl.h
++++ b/arch/x86/include/asm/resctrl.h
+@@ -49,7 +49,7 @@ DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
+  *   simple as possible.
+  * Must be called with preemption disabled.
+  */
+-static void __resctrl_sched_in(void)
++static void __resctrl_sched_in(struct task_struct *next)
+ {
+  struct resctrl_pqr_state *state =3D this_cpu_ptr(&pqr_state);
+  u32 closid =3D state->default_closid;
+@@ -61,13 +61,13 @@ static void __resctrl_sched_in(void)
+  * Else use the closid/rmid assigned to this cpu.
+  */
+  if (static_branch_likely(&rdt_alloc_enable_key)) {
+- tmp =3D READ_ONCE(current->closid);
++ tmp =3D READ_ONCE(next->closid);
+  if (tmp)
+  closid =3D tmp;
+  }
 
-All errors (new ones prefixed by >>):
+  if (static_branch_likely(&rdt_mon_enable_key)) {
+- tmp =3D READ_ONCE(current->rmid);
++ tmp =3D READ_ONCE(next->rmid);
+  if (tmp)
+  rmid =3D tmp;
+  }
+@@ -88,17 +88,17 @@ static inline unsigned int
+resctrl_arch_round_mon_val(unsigned int val)
+  return val * scale;
+ }
 
->> drivers/nvmem/core.c:770:2: error: call to undeclared function 'of_device_node_request_module'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           of_device_node_request_module(layout_np);
-           ^
-   1 error generated.
+-static inline void resctrl_sched_in(void)
++static inline void resctrl_sched_in(struct task_struct *next)
+ {
+  if (static_branch_likely(&rdt_enable_key))
+- __resctrl_sched_in();
++ __resctrl_sched_in(next);
+ }
+
+ void resctrl_cpu_detect(struct cpuinfo_x86 *c);
+
+ #else
+
+-static inline void resctrl_sched_in(void) {}
++static inline void resctrl_sched_in(struct task_struct *next) {}
+ static inline void resctrl_cpu_detect(struct cpuinfo_x86 *c) {}
+
+ #endif /* CONFIG_X86_CPU_RESCTRL */
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e2c1599d1b37..d970347838a4 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -314,7 +314,7 @@ static void update_cpu_closid_rmid(void *info)
+  * executing task might have its own closid selected. Just reuse
+  * the context switch code.
+  */
+- resctrl_sched_in();
++ resctrl_sched_in(current);
+ }
+
+ /*
+@@ -530,7 +530,7 @@ static void _update_task_closid_rmid(void *task)
+  * Otherwise, the MSR is updated when the task is scheduled in.
+  */
+  if (task =3D=3D current)
+- resctrl_sched_in();
++ resctrl_sched_in(current);
+ }
+
+ static void update_task_closid_rmid(struct task_struct *t)
+diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
+index 470c128759ea..708c87b88cc1 100644
+--- a/arch/x86/kernel/process_32.c
++++ b/arch/x86/kernel/process_32.c
+@@ -212,7 +212,7 @@ __switch_to(struct task_struct *prev_p, struct
+task_struct *next_p)
+  switch_fpu_finish();
+
+  /* Load the Intel cache allocation PQR MSR. */
+- resctrl_sched_in();
++ resctrl_sched_in(next_p);
+
+  return prev_p;
+ }
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 4e34b3b68ebd..bb65a68b4b49 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -656,7 +656,7 @@ __switch_to(struct task_struct *prev_p, struct
+task_struct *next_p)
+  }
+
+  /* Load the Intel cache allocation PQR MSR. */
+- resctrl_sched_in();
++ resctrl_sched_in(next_p);
+
+  return prev_p;
+ }
+
+```
+?
+
+>
+> Can you expand about part "a" ... Linux has zillions of static inline fun=
+ctions
+> in header files to handle CONFIG options. One version is the real McCoy
+> while the other is just a stub for the CONFIG=3Dn case.
+
+Right, I had the same question.
+
+Perhaps it's more so that no one calls __resctrl_sched_in, only
+resctrl_sched_in, therefor they should be folded into one function?
+
+>
+> What's different about this one?
+>
+> -Tony
 
 
-vim +/of_device_node_request_module +770 drivers/nvmem/core.c
 
-   755	
-   756	static struct nvmem_layout *nvmem_layout_get(struct nvmem_device *nvmem)
-   757	{
-   758		struct device_node *layout_np, *np = nvmem->dev.of_node;
-   759		struct nvmem_layout *l, *layout = ERR_PTR(-EPROBE_DEFER);
-   760	
-   761		layout_np = of_get_child_by_name(np, "nvmem-layout");
-   762		if (!layout_np)
-   763			return NULL;
-   764	
-   765		/*
-   766		 * In case the nvmem device was built-in while the layout was built as a
-   767		 * module, we shall manually request the layout driver loading otherwise
-   768		 * we'll never have any match.
-   769		 */
- > 770		of_device_node_request_module(layout_np);
-   771	
-   772		spin_lock(&nvmem_layout_lock);
-   773	
-   774		list_for_each_entry(l, &nvmem_layouts, node) {
-   775			if (of_match_node(l->of_match_table, layout_np)) {
-   776				if (try_module_get(l->owner))
-   777					layout = l;
-   778	
-   779				break;
-   780			}
-   781		}
-   782	
-   783		spin_unlock(&nvmem_layout_lock);
-   784		of_node_put(layout_np);
-   785	
-   786		return layout;
-   787	}
-   788	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Thanks,
+~Nick Desaulniers
