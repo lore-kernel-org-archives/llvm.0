@@ -1,48 +1,42 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104DF36E;
-	Tue,  7 Mar 2023 02:41:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371FF36E;
+	Tue,  7 Mar 2023 04:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678156911; x=1709692911;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V5fpbuqmVWnry+7VIMU4yY/4WzxardrUF5CX33Br85U=;
-  b=RIGD+9N/+Ncs/NWt50me0JwcAxBArq6zBPz9FwXTLKUhA1C0U0+eu9IX
-   E61YNM7I4Lkg+2vcmRBJObXmL71+dSAOQ1ANj3RbljU5TDCf8sE3aiAra
-   FECJgwP0C+rF6G0HO0678HRRUNbnRSwPbWejWA9t9gsYUgfZNfKx0ILn8
-   98Z8jZUNVmS9mmgVvl0lpcA3MI6fTPvZb6yFDWrvAeEt8b+zGvVdRzDjw
-   g/ZbLGwazoOFpPnPq5UoVIeX8/spPruIKytyt2f6PMmzZFqPCq1g0auEc
-   bNXHca7PBszF/FBaqvosNRzYL8Sa/hsE/D6dWKtdzvTrk/dFd+XBYuQZx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="315401791"
+  t=1678162432; x=1709698432;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=+vsoqwoKRdT/80pF5ymjQBSvIegbvPfxXr40Z0h19Nc=;
+  b=PMjE3+BYutqXk3ODK2lFC8U+vC32jlKhAQsrkAg1d/pZ1HmAuyZ3niGG
+   9NHTaxYijHoi+3j/vVSdshiAcZ4bnT6zb4u9ZETzng/oRKOiG9QX5aHRy
+   P4lUtREW3BFPJSo/MaWbIgDSJex9KX3WXw3AZ5/5BHDM+IpiTDdZXgDup
+   B/oPQe9uCBXagGPQzgIlP9pne+5F/LKCYDVqLly8tMTYpGLIyMCJfmwFI
+   2mbxrNect17hyCclkBGwmeE/knSBQfYOwseQX7CmMQRydPp68d4yo9gAv
+   VYhpcKymJ8d8NfEnJKXT63sqWJBHRM6BujqzpRJEXXCRNjtY+xiuzdyjV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="335777311"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="315401791"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 18:41:50 -0800
+   d="scan'208";a="335777311"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 20:13:51 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="819557506"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="800267826"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="819557506"
+   d="scan'208";a="800267826"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Mar 2023 18:41:47 -0800
+  by orsmga004.jf.intel.com with ESMTP; 06 Mar 2023 20:13:50 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZNGs-0000sn-2e;
-	Tue, 07 Mar 2023 02:41:46 +0000
-Date: Tue, 7 Mar 2023 10:40:47 +0800
+	id 1pZOhx-0000wd-14;
+	Tue, 07 Mar 2023 04:13:49 +0000
+Date: Tue, 7 Mar 2023 12:12:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>, Jakub Kicinski <kuba@kernel.org>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andy Gospodarek <andrew.gospodarek@broadcom.com>,
-	Michael Chan <michael.chan@broadcom.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vadim Fedorenko <vadfed@meta.com>,
-	Richard Cochran <richardcochran@gmail.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH net] bnxt_en: reset PHC frequency in free-running mode
-Message-ID: <202303071016.BkAkCGA9-lkp@intel.com>
-References: <20230306165344.350387-1-vadfed@meta.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev.2023.02.27a 107/108]
+ vmlinux.o: warning: objtool: exc_nmi+0x124: call to __const_udelay() leaves
+ .noinstr.text section
+Message-ID: <202303071235.NvgrGJl5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,111 +45,171 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230306165344.350387-1-vadfed@meta.com>
 
-Hi Vadim,
+CC: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+CC: "GNU/Weeb Mailing List" <gwml@vger.gnuweeb.org>
+TO: "Paul E. McKenney" <paulmck@kernel.org>
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on net/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bnxt_en-reset-PHC-frequency-in-free-running-mode/20230307-005700
-patch link:    https://lore.kernel.org/r/20230306165344.350387-1-vadfed%40meta.com
-patch subject: [PATCH net] bnxt_en: reset PHC frequency in free-running mode
-config: riscv-randconfig-r042-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071016.BkAkCGA9-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2023.02.27a
+head:   b171cbcbbd8e5f5f2e0638c5b5b5c77e3cc79007
+commit: 80dd9f246f8a23a0fd0ed69e51dbdcb389806254 [107/108] x86/nmi: Add a set_nmi_torture() function to control NMI testing
+config: x86_64-randconfig-a015-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071235.NvgrGJl5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/26d7b40eb9dd69f66a477fab7cf51d98c3fe63de
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vadim-Fedorenko/bnxt_en-reset-PHC-frequency-in-free-running-mode/20230307-005700
-        git checkout 26d7b40eb9dd69f66a477fab7cf51d98c3fe63de
+        # https://github.com/ammarfaizi2/linux-block/commit/80dd9f246f8a23a0fd0ed69e51dbdcb389806254
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev.2023.02.27a
+        git checkout 80dd9f246f8a23a0fd0ed69e51dbdcb389806254
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/ethernet/broadcom/bnxt/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303071016.BkAkCGA9-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303071235.NvgrGJl5-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:948:4: error: call to undeclared function 'bnxt_ptp_adjfreq_rtc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           bnxt_ptp_adjfreq_rtc(bp, 0);
-                           ^
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:948:4: note: did you mean 'bnxt_ptp_adjfine_rtc'?
-   drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:208:12: note: 'bnxt_ptp_adjfine_rtc' declared here
-   static int bnxt_ptp_adjfine_rtc(struct bnxt *bp, long scaled_ppm)
-              ^
-   1 error generated.
+   vmlinux.o: warning: objtool: sync_regs+0x20: call to memcpy() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x1e: call to memset() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: exc_nmi+0x124: call to __const_udelay() leaves .noinstr.text section
 
 
-vim +/bnxt_ptp_adjfreq_rtc +948 drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
-
-   919	
-   920	int bnxt_ptp_init(struct bnxt *bp, bool phc_cfg)
-   921	{
-   922		struct bnxt_ptp_cfg *ptp = bp->ptp_cfg;
-   923		int rc;
-   924	
-   925		if (!ptp)
-   926			return 0;
-   927	
-   928		rc = bnxt_map_ptp_regs(bp);
-   929		if (rc)
-   930			return rc;
-   931	
-   932		if (ptp->ptp_clock && bnxt_pps_config_ok(bp))
-   933			return 0;
-   934	
-   935		bnxt_ptp_free(bp);
-   936	
-   937		atomic_set(&ptp->tx_avail, BNXT_MAX_TX_TS);
-   938		spin_lock_init(&ptp->ptp_lock);
-   939	
-   940		if (BNXT_PTP_RTC(ptp->bp)) {
-   941			bnxt_ptp_timecounter_init(bp, false);
-   942			rc = bnxt_ptp_init_rtc(bp, phc_cfg);
-   943			if (rc)
-   944				goto out;
-   945		} else {
-   946			bnxt_ptp_timecounter_init(bp, true);
-   947			if (bp->fw_cap & BNXT_FW_CAP_PTP_RTC)
- > 948				bnxt_ptp_adjfreq_rtc(bp, 0);
-   949		}
-   950	
-   951		ptp->ptp_info = bnxt_ptp_caps;
-   952		if ((bp->fw_cap & BNXT_FW_CAP_PTP_PPS)) {
-   953			if (bnxt_ptp_pps_init(bp))
-   954				netdev_err(bp->dev, "1pps not initialized, continuing without 1pps support\n");
-   955		}
-   956		ptp->ptp_clock = ptp_clock_register(&ptp->ptp_info, &bp->pdev->dev);
-   957		if (IS_ERR(ptp->ptp_clock)) {
-   958			int err = PTR_ERR(ptp->ptp_clock);
-   959	
-   960			ptp->ptp_clock = NULL;
-   961			rc = err;
-   962			goto out;
-   963		}
-   964		if (bp->flags & BNXT_FLAG_CHIP_P5) {
-   965			spin_lock_bh(&ptp->ptp_lock);
-   966			bnxt_refclk_read(bp, NULL, &ptp->current_time);
-   967			WRITE_ONCE(ptp->old_time, ptp->current_time);
-   968			spin_unlock_bh(&ptp->ptp_lock);
-   969			ptp_schedule_worker(ptp->ptp_clock, 0);
-   970		}
-   971		return 0;
-   972	
-   973	out:
-   974		bnxt_ptp_free(bp);
-   975		bnxt_unmap_ptp_regs(bp);
-   976		return rc;
-   977	}
-   978	
+objdump-func vmlinux.o exc_nmi:
+0000 0000000000001190 <exc_nmi>:
+0000     1190:	55                   	push   %rbp
+0001     1191:	41 57                	push   %r15
+0003     1193:	41 56                	push   %r14
+0005     1195:	41 54                	push   %r12
+0007     1197:	53                   	push   %rbx
+0008     1198:	49 89 fe             	mov    %rdi,%r14
+000b     119b:	49 c7 c7 00 00 00 00 	mov    $0x0,%r15	119e: R_X86_64_32S	nmi_stats
+0012     11a2:	65 4c 03 3d 00 00 00 00 	add    %gs:0x0(%rip),%r15        # 11aa <exc_nmi+0x1a>	11a6: R_X86_64_PC32	this_cpu_off-0x4
+001a     11aa:	80 3d 00 00 00 00 00 	cmpb   $0x0,0x0(%rip)        # 11b1 <exc_nmi+0x21>	11ac: R_X86_64_PC32	nmi_halt1-0x5
+0021     11b1:	75 05                	jne    11b8 <exc_nmi+0x28>
+0023     11b3:	f0 49 ff 47 30       	lock incq 0x30(%r15)
+0028     11b8:	80 3d 00 00 00 00 00 	cmpb   $0x0,0x0(%rip)        # 11bf <exc_nmi+0x2f>	11ba: R_X86_64_PC32	nmi_halt1-0x5
+002f     11bf:	0f 85 9e 01 00 00    	jne    1363 <exc_nmi+0x1d3>
+0035     11c5:	80 3d 00 00 00 00 00 	cmpb   $0x0,0x0(%rip)        # 11cc <exc_nmi+0x3c>	11c7: R_X86_64_PC32	nmi_halt2-0x5
+003c     11cc:	0f 85 91 01 00 00    	jne    1363 <exc_nmi+0x1d3>
+0042     11d2:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 11d9 <exc_nmi+0x49>	11d5: R_X86_64_PC32	pcpu_hot+0x8
+0049     11d9:	48 98                	cltq
+004b     11db:	48 0f a3 05 00 00 00 00 	bt     %rax,0x0(%rip)        # 11e3 <exc_nmi+0x53>	11df: R_X86_64_PC32	__cpu_online_mask-0x4
+0053     11e3:	0f 83 7a 01 00 00    	jae    1363 <exc_nmi+0x1d3>
+0059     11e9:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 11f0 <exc_nmi+0x60>	11ec: R_X86_64_PC32	nmi_state-0x4
+0060     11f0:	85 c0                	test   %eax,%eax
+0062     11f2:	74 10                	je     1204 <exc_nmi+0x74>
+0064     11f4:	65 c7 05 00 00 00 00 02 00 00 00 	movl   $0x2,%gs:0x0(%rip)        # 11ff <exc_nmi+0x6f>	11f7: R_X86_64_PC32	nmi_state-0x8
+006f     11ff:	e9 5f 01 00 00       	jmp    1363 <exc_nmi+0x1d3>
+0074     1204:	65 c7 05 00 00 00 00 01 00 00 00 	movl   $0x1,%gs:0x0(%rip)        # 120f <exc_nmi+0x7f>	1207: R_X86_64_PC32	nmi_state-0x8
+007f     120f:	0f 20 d0             	mov    %cr2,%rax
+0082     1212:	65 48 89 05 00 00 00 00 	mov    %rax,%gs:0x0(%rip)        # 121a <exc_nmi+0x8a>	1216: R_X86_64_PC32	nmi_cr2-0x4
+008a     121a:	49 8b 47 18          	mov    0x18(%r15),%rax
+008e     121e:	48 ff c0             	inc    %rax
+0091     1221:	49 89 47 18          	mov    %rax,0x18(%r15)
+0095     1225:	a8 01                	test   $0x1,%al
+0097     1227:	0f 84 3f 01 00 00    	je     136c <exc_nmi+0x1dc>
+009d     122d:	48 8b 05 00 00 00 00 	mov    0x0(%rip),%rax        # 1234 <exc_nmi+0xa4>	1230: R_X86_64_PC32	jiffies-0x4
+00a4     1234:	49 89 47 10          	mov    %rax,0x10(%r15)
+00a8     1238:	45 31 e4             	xor    %r12d,%r12d
+00ab     123b:	e9 00 00 00 00       	jmp    1240 <exc_nmi+0xb0>	123c: R_X86_64_PLT32	.altinstr_aux+0xc2
+00b0     1240:	65 48 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%rax        # 1248 <exc_nmi+0xb8>	1244: R_X86_64_PC32	cpu_dr7-0x4
+00b8     1248:	a8 aa                	test   $0xaa,%al
+00ba     124a:	74 11                	je     125d <exc_nmi+0xcd>
+00bc     124c:	0f 21 f8             	mov    %db7,%rax
+00bf     124f:	48 25 ff fb ff ff    	and    $0xfffffffffffffbff,%rax
+00c5     1255:	74 04                	je     125b <exc_nmi+0xcb>
+00c7     1257:	41 0f 23 fc          	mov    %r12,%db7
+00cb     125b:	eb 02                	jmp    125f <exc_nmi+0xcf>
+00cd     125d:	31 c0                	xor    %eax,%eax
+00cf     125f:	65 48 89 05 00 00 00 00 	mov    %rax,%gs:0x0(%rip)        # 1267 <exc_nmi+0xd7>	1263: R_X86_64_PC32	nmi_dr7-0x4
+00d7     1267:	4c 89 f7             	mov    %r14,%rdi
+00da     126a:	e8 00 00 00 00       	call   126f <exc_nmi+0xdf>	126b: R_X86_64_PLT32	irqentry_nmi_enter-0x4
+00df     126f:	89 c3                	mov    %eax,%ebx
+00e1     1271:	65 ff 05 00 00 00 00 	incl   %gs:0x0(%rip)        # 1278 <exc_nmi+0xe8>	1274: R_X86_64_PC32	irq_stat-0x4
+00e8     1278:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 127f <exc_nmi+0xef>	127a: R_X86_64_PC32	.data..read_mostly+0x52b
+00ef     127f:	74 06                	je     1287 <exc_nmi+0xf7>
+00f1     1281:	49 ff 47 28          	incq   0x28(%r15)
+00f5     1285:	eb 50                	jmp    12d7 <exc_nmi+0x147>
+00f7     1287:	80 3d 00 00 00 00 00 	cmpb   $0x0,0x0(%rip)        # 128e <exc_nmi+0xfe>	1289: R_X86_64_PC32	nmi_halt3-0x5
+00fe     128e:	75 47                	jne    12d7 <exc_nmi+0x147>
+0100     1290:	69 2d 00 00 00 00 e8 03 00 00 	imul   $0x3e8,0x0(%rip),%ebp        # 129a <exc_nmi+0x10a>	1292: R_X86_64_PC32	nmi_delay-0x8
+010a     129a:	49 8b 47 20          	mov    0x20(%r15),%rax
+010e     129e:	48 ff c0             	inc    %rax
+0111     12a1:	49 89 47 20          	mov    %rax,0x20(%r15)
+0115     12a5:	a8 01                	test   $0x1,%al
+0117     12a7:	74 7e                	je     1327 <exc_nmi+0x197>
+0119     12a9:	85 ed                	test   %ebp,%ebp
+011b     12ab:	7e 13                	jle    12c0 <exc_nmi+0x130>
+011d     12ad:	ff c5                	inc    %ebp
+011f     12af:	bf 58 89 41 00       	mov    $0x418958,%edi
+0124     12b4:	e8 00 00 00 00       	call   12b9 <exc_nmi+0x129>	12b5: R_X86_64_PLT32	__const_udelay-0x4
+0129     12b9:	ff cd                	dec    %ebp
+012b     12bb:	83 fd 01             	cmp    $0x1,%ebp
+012e     12be:	77 ef                	ja     12af <exc_nmi+0x11f>
+0130     12c0:	4c 89 f7             	mov    %r14,%rdi
+0133     12c3:	e8 b8 00 00 00       	call   1380 <default_do_nmi>
+0138     12c8:	49 8b 47 20          	mov    0x20(%r15),%rax
+013c     12cc:	48 ff c0             	inc    %rax
+013f     12cf:	49 89 47 20          	mov    %rax,0x20(%r15)
+0143     12d3:	a8 01                	test   $0x1,%al
+0145     12d5:	75 59                	jne    1330 <exc_nmi+0x1a0>
+0147     12d7:	0f b6 f3             	movzbl %bl,%esi
+014a     12da:	4c 89 f7             	mov    %r14,%rdi
+014d     12dd:	e8 00 00 00 00       	call   12e2 <exc_nmi+0x152>	12de: R_X86_64_PLT32	irqentry_nmi_exit-0x4
+0152     12e2:	65 48 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%rax        # 12ea <exc_nmi+0x15a>	12e6: R_X86_64_PC32	nmi_dr7-0x4
+015a     12ea:	48 85 c0             	test   %rax,%rax
+015d     12ed:	74 03                	je     12f2 <exc_nmi+0x162>
+015f     12ef:	0f 23 f8             	mov    %rax,%db7
+0162     12f2:	65 48 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%rax        # 12fa <exc_nmi+0x16a>	12f6: R_X86_64_PC32	nmi_cr2-0x4
+016a     12fa:	0f 20 d1             	mov    %cr2,%rcx
+016d     12fd:	48 39 c8             	cmp    %rcx,%rax
+0170     1300:	75 18                	jne    131a <exc_nmi+0x18a>
+0172     1302:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+0177     1307:	65 0f c1 05 00 00 00 00 	xadd   %eax,%gs:0x0(%rip)        # 130f <exc_nmi+0x17f>	130b: R_X86_64_PC32	nmi_state-0x4
+017f     130f:	83 f8 01             	cmp    $0x1,%eax
+0182     1312:	0f 85 23 ff ff ff    	jne    123b <exc_nmi+0xab>
+0188     1318:	eb 1c                	jmp    1336 <exc_nmi+0x1a6>
+018a     131a:	65 48 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%rax        # 1322 <exc_nmi+0x192>	131e: R_X86_64_PC32	nmi_cr2-0x4
+0192     1322:	0f 22 d0             	mov    %rax,%cr2
+0195     1325:	eb db                	jmp    1302 <exc_nmi+0x172>
+0197     1327:	90                   	nop
+0198     1328:	0f 0b                	ud2
+019a     132a:	90                   	nop
+019b     132b:	e9 79 ff ff ff       	jmp    12a9 <exc_nmi+0x119>
+01a0     1330:	90                   	nop
+01a1     1331:	0f 0b                	ud2
+01a3     1333:	90                   	nop
+01a4     1334:	eb a1                	jmp    12d7 <exc_nmi+0x147>
+01a6     1336:	41 f6 86 88 00 00 00 03 	testb  $0x3,0x88(%r14)
+01ae     133e:	74 09                	je     1349 <exc_nmi+0x1b9>
+01b0     1340:	eb 07                	jmp    1349 <exc_nmi+0x1b9>
+01b2     1342:	0f 00 2d 00 00 00 00 	verw   0x0(%rip)        # 1349 <exc_nmi+0x1b9>	1345: R_X86_64_PC32	.rodata+0xc31c
+01b9     1349:	49 8b 47 18          	mov    0x18(%r15),%rax
+01bd     134d:	48 ff c0             	inc    %rax
+01c0     1350:	49 89 47 18          	mov    %rax,0x18(%r15)
+01c4     1354:	a8 01                	test   $0x1,%al
+01c6     1356:	75 1d                	jne    1375 <exc_nmi+0x1e5>
+01c8     1358:	48 8b 05 00 00 00 00 	mov    0x0(%rip),%rax        # 135f <exc_nmi+0x1cf>	135b: R_X86_64_PC32	jiffies-0x4
+01cf     135f:	49 89 47 10          	mov    %rax,0x10(%r15)
+01d3     1363:	5b                   	pop    %rbx
+01d4     1364:	41 5c                	pop    %r12
+01d6     1366:	41 5e                	pop    %r14
+01d8     1368:	41 5f                	pop    %r15
+01da     136a:	5d                   	pop    %rbp
+01db     136b:	c3                   	ret
+01dc     136c:	90                   	nop
+01dd     136d:	0f 0b                	ud2
+01df     136f:	90                   	nop
+01e0     1370:	e9 b8 fe ff ff       	jmp    122d <exc_nmi+0x9d>
+01e5     1375:	90                   	nop
+01e6     1376:	0f 0b                	ud2
+01e8     1378:	90                   	nop
+01e9     1379:	eb dd                	jmp    1358 <exc_nmi+0x1c8>
+01eb     137b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
 -- 
 0-DAY CI Kernel Test Service
