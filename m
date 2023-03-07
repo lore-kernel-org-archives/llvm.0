@@ -1,132 +1,143 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2121.outbound.protection.outlook.com [40.107.10.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA149361;
-	Tue,  7 Mar 2023 01:29:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678152588; x=1709688588;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZPDaTzQoAuH42c4EspEn7uYowEPyADNCkorlukdT7Qc=;
-  b=ikkOeheqWU689LLZQ599nNYj/kolXl4rLt/x2WYbqp6B8lmYp0n9bCF9
-   I064ps8iDtBe4udMxRpAYZ7X5I4Jzx3THRMsLE5+MIdzGAzehyIBEJ+vd
-   kKptLZKMQ4W+ZaEP1NYZxr8N9vHuBwk5tWuZFwfOuJUzBZH0IoqA9AwD+
-   /ehcU19xNShKLUCHUPgX7LCahQ37bmDSDCwJWrIlswsCS7L5g4CYXy2QP
-   +aavrMG6QitmVTfVyuhFtd50JioTv7HCSIQoiUoBDqPSh7G2ZTfw5JW3g
-   ZrpnlqApD22v7wvF0dqu3714A0zIR9NTEkLz0uBygo8n4vsByUny6b6cR
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="363349302"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="363349302"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 17:29:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="653786476"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="653786476"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Mar 2023 17:29:46 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZM9B-0000qd-1Y;
-	Tue, 07 Mar 2023 01:29:45 +0000
-Date: Tue, 7 Mar 2023 09:28:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [groeck-staging:watchdog-next 36/38]
- drivers/watchdog/rn5t618_wdt.c:181:52: error: too few arguments to function
- call, expected 2, have 1
-Message-ID: <202303070927.HjANQYhS-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B743361
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 02:20:45 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kOketxlZtpXHpvlNl+zfmeDANmEqpozJPES8LxXyGTv+Ay5Ip4Hjt2AR3r918CTmuMqRFsGn8wdlGHNPrA5uiQ3v9oxSmxu0kn/KmOC33vp3ug53nHhCY9wAPerWC92MzYju4DXe5+6bTw8VScjMXlEj7+yRMVZWvu098Md1Ggf6xJ0GLMOrQNZpGNJKKrU/oy23AjU0uwOU/QBmnogg/LKHvcOoxgmANHmZZ0dOH9kAz94VPcCn+x0z2R/gitqNTY/kJncQecXf4WUMNuqpwjnwWgvKG1ce5/tfkVYfkc6jx1Y81NnamQ1gnHowhxWcE4fZxxFFjBeoLj3JbhekyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i9kyDDGk+WjooeEf9wvB+S9vY2ybLe/VzhMuFPYi7mQ=;
+ b=CCw70RXjfnW7CTpmka+qXnQA3+p9E3luxVUhnk6GJJdV0ytPW2AmL4O+hArDveVrMVimVyak5cEjlXnFysMUpf/bm8TsFJXcfvMa545wuCFbw5RekcUTzy9UuR8xfpvLbYBESNr8R3FTPHKpDBF4PI/uWhJ0/ITMvp29qPe0WRtr9hiL5/1aQS+jsFLHl74vMFM3FZaiScqP8vLSj6uPz554Ixn30kWMgmX5qvZ1WBGy7POcYh4QPYVdt19pZOoZmPeLh59yf4f7H1u7vLY2nNJT2dJ32xha1eNqKM/wrrpYpwWP7DMSnbfB/AjfY3eDpFBB9ThxLm8iqlf0Bb6o9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i9kyDDGk+WjooeEf9wvB+S9vY2ybLe/VzhMuFPYi7mQ=;
+ b=0HijC8az3QnJkBnMblysGH28ExVvwziQyRGfSRU/5f8bGF8CVQhWnK2xDEnCtZPoecC9bsAzUteeGcLx7oHLNEmgKAckUWOxSpLv5cB5RqzrgaJh+KeM1rMrGQvdG7Oaeu9hKSBWr71xLsIeZBcq74xV+s3rTo+x9Jj41+rMZ/c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO6P265MB5968.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2a3::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
+ 2023 02:20:43 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::2f2a:55d4:ea1d:dece%3]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
+ 02:20:43 +0000
+Date: Tue, 7 Mar 2023 02:20:37 +0000
+From: Gary Guo <gary@garyguo.net>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley
+ <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, Conor Dooley
+ <conor@kernel.org>, ojeda@kernel.org, alex.gaynor@gmail.com,
+ wedsonaf@gmail.com, boqun.feng@gmail.com, bjorn3_gh@protonmail.com,
+ corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+ nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+Message-ID: <20230307022037.6528b6d1.gary@garyguo.net>
+In-Reply-To: <CANiq72=hvS6KxxkLocFOrU4E4pNi=y4OuJLm3iSiPGmi5B178Q@mail.gmail.com>
+References: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
+	<mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
+	<CANiq72=hvS6KxxkLocFOrU4E4pNi=y4OuJLm3iSiPGmi5B178Q@mail.gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: LO4P265CA0127.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c6::18) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB5968:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46755232-f709-4f61-f0d3-08db1eb28d91
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	xioVLPyEpLqfMucbQKjAb4ufDM3OM8Bz6A97AUORbZFirRV4CZLxgIdpQtvhmYClTr2hdta2OP4ZdK1suANdwnetQ1lpO+8AolZkRKtyCCDxNLYWPs5H31VSku6XRHxIHyiFQ3+j+ls3iWZ/FD0BRhLwvRkm8aRJtvr7kRWdz/go42sUKlT+NTpH4iV14Jhh9scF4dy24uWJCU3LHCBcrEeGKIpQYkAIIRfcXzfysx8o34J+YCAPntAORe4ErBJonP4GBiTs0hE9dmrS9aL9z+n4dXxDqRWXkEdvNXKz9gKF1Jsp5uKbM4PYAItknwKchZQ4xEjkpEpmzbtmWs9DxP7n81D2+nsKSx6gCXXqRcjwbCC3ddEtCPBZYKZn4HucvbpJYgdCxgRMfAWBuVgB286Of6W0D47cONiIKEYxt/7mCR5UOWKcJfDCI9FAB8ZLU1t16VmPX+4LVb0OYNbEe7IGP7SeaTRJ2o65YRRHnJp9hYXH/mp5WVcXyceSdKTzL/2FnyXS6ewX39Bt0aXp/EyApoXZeH8p8Ph6F0tv7iaCPgbDWobZTJEXjr6zZ1YUHk87T4vLrpQsNXg/qQ5VK8fniih+NtmTFMZiWOVcnjLV5yS1mHVuUK+YmHTyuBmlEyggn9swS3b6uUQd4C1+7w==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(396003)(376002)(39830400003)(346002)(451199018)(38100700002)(86362001)(36756003)(5660300002)(6512007)(4744005)(2906002)(7416002)(4326008)(6916009)(8676002)(8936002)(66476007)(66556008)(41300700001)(66946007)(6666004)(186003)(2616005)(53546011)(26005)(316002)(478600001)(6506007)(1076003)(6486002)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?SWZXYlZTTUowUW9RQkV2bThGZkxqcWt3OVFOZGJJL2pCY0JJTVdXbktVcWtD?=
+ =?utf-8?B?VmZId0xjT2FJeVZPTG5IVVA2SFBBMytwTjRkNFgvQlE3TEhHS2xyMjZOUjRH?=
+ =?utf-8?B?VVRaZzM5RVRCaTBRRHkzNnhON0c5aWJwaFRSekdpOWFaTGJoTXVjL205Mk1z?=
+ =?utf-8?B?ZUVHd1RnSWtHMDNSd2tIL2pENmFZTnFNUXl4M2c0TVZSMm9wWW1TeVdHRWNO?=
+ =?utf-8?B?OFBUNytGV00xOTdvWEV6RWhRTHBDUS8vTlZ2VExZcU1nWUMwZkxNWmt4S3lk?=
+ =?utf-8?B?YnV3TzFaV2svRStnZXNGanFKNXZ1ODl3Q2tKSHNzTFNOclZldi82cnppMzE4?=
+ =?utf-8?B?TkFiTHdqVlRVcWl5SGJsUjZGak9uV0VLUFNScENyMzlYOGlUays2dG0wTS9j?=
+ =?utf-8?B?bUh4dldHSG9PanRPYUUzUkg2UDFaMWZxUWxSZjZKajZNRWxJcFFFWWJZUFBl?=
+ =?utf-8?B?QnhWU2gybFFrQlJrWkMrTHZVY3o3L1lxK3JiWno2am5QR0MyeUI4eWpYVjYx?=
+ =?utf-8?B?aWdiNk02d0RlR0I1ald1VDBuS3d5eE1ZVTJzNzBDNlVzdC9BejFtZUNUS2tS?=
+ =?utf-8?B?aDM3WlhGMmlrNmEzY1Q4cXA5YWpta3lwUzhVYWVrSmFON2dGbys2NTR4Ui84?=
+ =?utf-8?B?cXNzdUVVQWpzTnd6c3g2cUJVNnY4RGhvQXQ1eUVYaTVLY2pTdFZESGExOU9T?=
+ =?utf-8?B?MzNSZ0JNOUxyM0dhbWU3US8rbkd4bStVTmt0VTNURHhYaW5LNm92T0RPU2t6?=
+ =?utf-8?B?SlZLK3FEQ3VZNU83eVlhbE9Pa2tpYytiamM4UlJYZnJkYlRDSkVsNnhHNmRQ?=
+ =?utf-8?B?dnJPNTlia0JidnE2TmZnWDBNSnNJMjhDMThwL2lHSHZhSVRieU9rSmJtY3NY?=
+ =?utf-8?B?MjdkeklGK0VSYkhyY0xkVEprYjZ1QmE2MTUvTnprN2Erb2lwZnN0UjZRTUh2?=
+ =?utf-8?B?UE5uOHVxeTFiRVZML1psUGc3QWR3dXFkTFRhTWRvTW5KeVdScDRHeUVaTUY5?=
+ =?utf-8?B?SkNSV3g0ZjNWb1dnVGhYWUZlbTBySTNXQ1cwcVh5ejFRdk9lemdLM2hJTlhv?=
+ =?utf-8?B?OEtvMWpWaVBjeVBqcTl3bTZMRXg0WWphTS9SUWszcWV3anhEQm5FKy9uWVdn?=
+ =?utf-8?B?NWpsL2NUanZVL0Fhb2pqQjMrTlV1OGhFT2owQkxOWUJUSnkwZW82MlVLZUE0?=
+ =?utf-8?B?RVY2aFE1SGVocFk3emlUOVhiQXpjZzFJWDdXL3VSdnRNR1J5N1FpWm9sdkNx?=
+ =?utf-8?B?QmJIWTlMRUdDWmNDYjZUODZWVnJkUVhPOG1RSFl4VXhKNXUzbHFNWFl3UjVo?=
+ =?utf-8?B?OGN3K2UxUUFvZk9GNGVKbGt5NTJCMmw5V0VXTVFIckdUVS96bFpyWWRlQ2hS?=
+ =?utf-8?B?cmpwbnl4TE9uM3JZbmFnVTgyY3FjMDlONE5paUpZNVdEUjRldGVGK1dncm9v?=
+ =?utf-8?B?VVJ3T2FncHZrVmx4dmFvcjc0VDVxZWVQRUhHYkR6SDVtMjVJZWxLVmVLMEs0?=
+ =?utf-8?B?ZkxMZUZzekQvdE5ndmdEN0EyVmdEcHphMkptOUZ6L0UwcEpUcnFGUmRsQnRV?=
+ =?utf-8?B?dGU3QTUrdVJ6OExYZTZHODdzVjZFYURlYjBxT0RZcFh5OHZGSGFnNG9rRjRV?=
+ =?utf-8?B?UHBaa2J1Zk03SG1KQmVINjEzRjFXcjdwODUxL0dkcWFFNXYyQm1LUGNOcVF4?=
+ =?utf-8?B?Q2lnODBNVDhsL3Z3MHJRbko1Ui9lM0hMa3ZkWjNJS1RqbjdCdG9zTkdFUXcv?=
+ =?utf-8?B?eFptUEhaeXJzeWFZYlp1aUZBL0g5aWU2SmZuOWxFQjAwdCtJQm5DNTlIdWdQ?=
+ =?utf-8?B?WmxwcjBoNkF1TlNSdWQ1dVlydll3RTVmQ0ZTUDNJNzBLYmpmaGR1VUdSUTM1?=
+ =?utf-8?B?ZkJZUG9kL1BoZTNLWmNMR09vREVtYkpJTDRtWlJTK3BwaXZSWHlxWWpZTVFk?=
+ =?utf-8?B?aGlJN0NiVG02WVNEdWZlZGh3OEU3RGxkZTJXbVdQZVlsNHRvc2JRRi9WNHM5?=
+ =?utf-8?B?ZGlQRXFZWXpPZkpyb1ZnRzJsc2s1STI2YVMzb0UxSXlxOW5acVlBWnJCNmxj?=
+ =?utf-8?B?ODQ5OFk3MndwaCtRVjN6MUFjOVBYaGtSNVE3WnFhSTNZQXRKbXMvaVRRdVR1?=
+ =?utf-8?Q?+hYaVYJBNGtYobkKOxczIyLza?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46755232-f709-4f61-f0d3-08db1eb28d91
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 02:20:43.2939
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kfkXZvK9e/I4bkzYoUuMSVIIJkpFlo3fQGSxNcKOzrJQI4IVky241Y/Zm+WmN8DnCYhg78xJoi0hH+e/5RuCbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB5968
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
-head:   faaf9f98d1032c901d8e859e3b6883c7e67614b6
-commit: 5c9e1ad78758b851a9dc3a1adb0df3f8782c7450 [36/38] watchdog: rn5t618: Simplify using devm_watchdog_register_device()
-config: x86_64-randconfig-a014-20230306 (https://download.01.org/0day-ci/archive/20230307/202303070927.HjANQYhS-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=5c9e1ad78758b851a9dc3a1adb0df3f8782c7450
-        git remote add groeck-staging https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-        git fetch --no-tags groeck-staging watchdog-next
-        git checkout 5c9e1ad78758b851a9dc3a1adb0df3f8782c7450
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+On Mon, 6 Mar 2023 20:28:47 +0100
+Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303070927.HjANQYhS-lkp@intel.com/
+> On Mon, Mar 6, 2023 at 8:18=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com=
+> wrote:
+> >
+> > It's time for the next release.  IIUC there were some authorship issues
+> > here, did you guys want to re-spin this with those sorted out?  I can
+> > give it a shot if you want, but I'm probably as likely to screw it up a=
+s
+> > anyone else... =20
+>=20
+> No problem on my side, and either way is fine! Thanks!
+>=20
+> I think what is important is that Gary is aware and agrees.
+>=20
+> Gary: do you prefer to be the main author or the `Co-developed-by` author=
+ here?
 
-All errors (new ones prefixed by >>):
+Co-developed-by is fine.
 
->> drivers/watchdog/rn5t618_wdt.c:181:52: error: too few arguments to function call, expected 2, have 1
-           return devm_watchdog_register_device(&wdt->wdt_dev);
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              ^
-   include/linux/watchdog.h:226:5: note: 'devm_watchdog_register_device' declared here
-   int devm_watchdog_register_device(struct device *dev, struct watchdog_device *);
-       ^
-   1 error generated.
-
-
-vim +181 drivers/watchdog/rn5t618_wdt.c
-
-   140	
-   141	static int rn5t618_wdt_probe(struct platform_device *pdev)
-   142	{
-   143		struct device *dev = &pdev->dev;
-   144		struct rn5t618 *rn5t618 = dev_get_drvdata(dev->parent);
-   145		struct rn5t618_wdt *wdt;
-   146		int min_timeout, max_timeout;
-   147		int ret;
-   148		unsigned int val;
-   149	
-   150		wdt = devm_kzalloc(dev, sizeof(struct rn5t618_wdt), GFP_KERNEL);
-   151		if (!wdt)
-   152			return -ENOMEM;
-   153	
-   154		min_timeout = rn5t618_wdt_map[0].time;
-   155		max_timeout = rn5t618_wdt_map[ARRAY_SIZE(rn5t618_wdt_map) - 1].time;
-   156	
-   157		wdt->rn5t618 = rn5t618;
-   158		wdt->wdt_dev.info = &rn5t618_wdt_info;
-   159		wdt->wdt_dev.ops = &rn5t618_wdt_ops;
-   160		wdt->wdt_dev.min_timeout = min_timeout;
-   161		wdt->wdt_dev.max_timeout = max_timeout;
-   162		wdt->wdt_dev.timeout = max_timeout;
-   163		wdt->wdt_dev.parent = dev;
-   164	
-   165		/* Read out previous power-off factor */
-   166		ret = regmap_read(wdt->rn5t618->regmap, RN5T618_POFFHIS, &val);
-   167		if (ret)
-   168			return ret;
-   169	
-   170		if (val & RN5T618_POFFHIS_VINDET)
-   171			wdt->wdt_dev.bootstatus = WDIOF_POWERUNDER;
-   172		else if (val & RN5T618_POFFHIS_WDG)
-   173			wdt->wdt_dev.bootstatus = WDIOF_CARDRESET;
-   174	
-   175		watchdog_set_drvdata(&wdt->wdt_dev, wdt);
-   176		watchdog_init_timeout(&wdt->wdt_dev, timeout, dev);
-   177		watchdog_set_nowayout(&wdt->wdt_dev, nowayout);
-   178	
-   179		platform_set_drvdata(pdev, wdt);
-   180	
- > 181		return devm_watchdog_register_device(&wdt->wdt_dev);
-   182	}
-   183	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best,
+Gary
