@@ -1,106 +1,106 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03B6366;
-	Tue,  7 Mar 2023 05:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678168076; x=1709704076;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CHCTHz6JZ6sjXAf8kfzA5PwFDWPUeKmzsv0ZP88jjks=;
-  b=I2qeJ8o02XwbHM8k2VoOIHMNk6cQvX2zjbnGQa54//ybU9yNetFepNOz
-   g9MqC6H2ZZBC/w/HorpAUXkv+b+FRJCPGh8/jvfgZHvWXHfK9/dVqkL6t
-   0l6yH1mF2UQBEH4OHvCnHc9rdjS4NSrslK3niSMI2vuXrkdtIDPt2UCum
-   3TQnrayWZtIE7AHQ3tPHbZ+PMHmcBn4At4QeuzXkFF0VEMeKW8qybjTg6
-   UGqJprUqMtDupScw/oyYDEWUWAJ7ccLyQrh6wGwEozt7Ic0R7AtU1zey4
-   nFfudLXvyTLxmHcqmHyLOhTsU8wBQMSswo7ElwEN/5lQOZvjecDKI1adA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="422041746"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="422041746"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 21:47:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="800293860"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="800293860"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 Mar 2023 21:47:52 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZQAx-00010p-2b;
-	Tue, 07 Mar 2023 05:47:51 +0000
-Date: Tue, 7 Mar 2023 13:46:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Koby Elbaz <kelbaz@habana.ai>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oded Gabbay <ogabbay@kernel.org>
-Subject: [ogabbay:habanalabs-next-6.4 36/49]
- drivers/accel/habanalabs/gaudi2/gaudi2.c:7002:6: warning: no previous
- prototype for function 'gaudi2_is_device_idle'
-Message-ID: <202303071320.X5ouBlNY-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B940E63E
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 06:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF63C433D2;
+	Tue,  7 Mar 2023 06:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678169610;
+	bh=xf0x6cqpQmmfZLNlygDl/x3UlC8DENzrRv3kNRhpTTc=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=bgFYdTVrcrjW7ir3dhuVSDPLPmyjfBGF1o1lFWTz4SeyRWK7ZU3emLUBvv8kFE+kD
+	 WhvYY0xXn/KizUTQJJ/i5PQ9ZW11Pa2P6W4U69CtAIZtFgMSO70hJa078RAj9o6tQr
+	 KM9FDEJHmIys5arjV6eHobRMaNiKaf75TrW3vmMki47wrM/om+6WXFsl6FbIU3wfRP
+	 MVJ7yEDPLT5mz+j5krb2R47f4B/Ovu+3oJfcd+E1wb69yh7WNKNVZRQkEkYbgCvpmr
+	 IIeLptbdOSKsFGzsaxUIpUmdLaTwXTljxw98zGvqe8SbG1NejE6ETv5HfMxROaMW9T
+	 H0H30Rs+hEuZQ==
+Date: Tue, 07 Mar 2023 06:13:22 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Sunil V L <sunilvl@ventanamicro.com>
+CC: linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Jonathan Corbet <corbet@lwn.net>,
+ Anup Patel <apatel@ventanamicro.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Atish Patra <atishp@rivosinc.com>,
+ 'Conor Dooley ' <conor.dooley@microchip.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ZAbGSA6F0kfv9YYw@sunil-laptop>
+References: <20230303133647.845095-1-sunilvl@ventanamicro.com> <16007014-c5f2-4b07-baec-e19952236aa5@spud> <ZAbGSA6F0kfv9YYw@sunil-laptop>
+Message-ID: <E7FB4927-1FE6-435A-914E-9615C2AD9D34@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next-6.4
-head:   e174cf78642820ba623fd1786f6bfe9972732248
-commit: d287ea1c6a9af606462612214a61b0bb9aeda10a [36/49] habanalabs/gaudi2: break is_idle function into per-engine sub-routines
-config: x86_64-randconfig-a016-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071320.X5ouBlNY-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=d287ea1c6a9af606462612214a61b0bb9aeda10a
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay habanalabs-next-6.4
-        git checkout d287ea1c6a9af606462612214a61b0bb9aeda10a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/accel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303071320.X5ouBlNY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/accel/habanalabs/gaudi2/gaudi2.c:7002:6: warning: no previous prototype for function 'gaudi2_is_device_idle' [-Wmissing-prototypes]
-   bool gaudi2_is_device_idle(struct hl_device *hdev, u64 *mask_arr, u8 mask_len,
-        ^
-   drivers/accel/habanalabs/gaudi2/gaudi2.c:7002:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool gaudi2_is_device_idle(struct hl_device *hdev, u64 *mask_arr, u8 mask_len,
-   ^
-   static 
-   1 warning generated.
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +/gaudi2_is_device_idle +7002 drivers/accel/habanalabs/gaudi2/gaudi2.c
 
-  7001	
-> 7002	bool gaudi2_is_device_idle(struct hl_device *hdev, u64 *mask_arr, u8 mask_len,
-  7003						struct engines_data *e)
-  7004	{
-  7005		bool is_idle = true;
-  7006	
-  7007		is_idle &= gaudi2_get_edma_idle_status(hdev, mask_arr, mask_len, e);
-  7008		is_idle &= gaudi2_get_pdma_idle_status(hdev, mask_arr, mask_len, e);
-  7009		is_idle &= gaudi2_get_nic_idle_status(hdev, mask_arr, mask_len, e);
-  7010		is_idle &= gaudi2_get_mme_idle_status(hdev, mask_arr, mask_len, e);
-  7011		is_idle &= gaudi2_get_tpc_idle_status(hdev, mask_arr, mask_len, e);
-  7012		is_idle &= gaudi2_get_decoder_idle_status(hdev, mask_arr, mask_len, e);
-  7013		is_idle &= gaudi2_get_rotator_idle_status(hdev, mask_arr, mask_len, e);
-  7014	
-  7015		return is_idle;
-  7016	}
-  7017	
+On 7 March 2023 05:06:16 GMT, Sunil V L <sunilvl@ventanamicro=2Ecom> wrote=
+:
+>On Mon, Mar 06, 2023 at 09:51:09PM +0000, Conor Dooley wrote:
+>> Hey Sunil,
+>>=20
+>> On Fri, Mar 03, 2023 at 07:06:27PM +0530, Sunil V L wrote:
+>> > This patch series enables the basic ACPI infrastructure for RISC-V=2E
+>> > Supporting external interrupt controllers is in progress and hence it=
+ is
+>> > tested using poll based HVC SBI console and RAM disk=2E
+>> >=20
+>> > The first patch in this series is one of the patch from Jisheng's
+>> > series [1] which is not merged yet=2E This patch is required to suppo=
+rt
+>> > ACPI since efi_init() which gets called before sbi_init() can enable
+>> > static branches and hits a panic=2E
+>> >=20
+>> > Patch 2 and 3 are ACPICA patches which are not merged into acpica yet
+>> > but a PR is raised already=2E
+>> >=20
+>> > Below are two ECRs approved by ASWG=2E
+>> > RINTC - https://drive=2Egoogle=2Ecom/file/d/1R6k4MshhN3WTT-hwqAquu5nX=
+6xSEqK2l/view
+>> > RHCT - https://drive=2Egoogle=2Ecom/file/d/1nP3nFiH4jkPMp6COOxP6123DC=
+ZKR-tia/view
+>> >=20
+>> > The series depends on Anup's IPI improvement series [2]=2E
+>> >=20
+>> > [1] https://lore=2Ekernel=2Eorg/all/20220821140918=2E3613-1-jszhang@k=
+ernel=2Eorg/
+>> > [2] https://lore=2Ekernel=2Eorg/lkml/20230103141221=2E772261-7-apatel=
+@ventanamicro=2Ecom/T/
+>>=20
+>> Building a clang-15 allmodconfig (I didn't try gcc) with this series, a=
+nd
+>> Anup's IPI bits, results in a broken build, due to failings in cmpxchg:
+>>=20
+>> /stuff/linux/drivers/platform/surface/aggregator/controller=2Ec:61:25: =
+error: call to __compiletime_assert_335 declared with 'error' attribute: BU=
+ILD_BUG failed
+>>         while (unlikely((ret =3D cmpxchg(&c->value, old, new)) !=3D old=
+)) {
+>>                                ^
+>Hi Conor,
+>
+>I am able to build without any of these issues using clang-15=2E I am
+>wondering whether the base is proper=2E I had rebased on top of the maste=
+r
+>and couple of patches from IPI series were already merged in the master=
+=2E
+>
+>Do you mind verifying with my branch
+>https://github=2Ecom/vlsunil/linux/commits/acpi_b1_us_review_ipi17_V3?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I can check that later I suppose=2E
+
+>
+>Or if you could provide me your branch details, I can look further=2E
+
+6=2E3-rc1, with both series applied, sans Anups applied patches=2E
