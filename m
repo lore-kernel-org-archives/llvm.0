@@ -1,108 +1,91 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8598A107A5;
-	Tue,  7 Mar 2023 22:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678228587; x=1709764587;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rZ3c8+SfbUn5SnrzPXv/QMzk7aoCjx/eMAVVxoN89bM=;
-  b=fdxYFhQEgFqwV58r7imd9LA90qArT//X8nZhWvLx9iP00TNsjvQQRGaC
-   +ufsj7R7fvMFtdPi+zEoZUq34eOMKguwlgFveq/Un2fqg41w3e7fVWRuN
-   tsOHtM85PFtfIP+3H62NAQjBQLxmJmgpYInIDayh09wETgutgN274LqB8
-   dX/2X4apq7w+Uxv0hGlgAImtpFwdEL/V2uu1bPVHWky2xi3x0ySgkrmDJ
-   invfYw2ovAjKLNrdolRVRNeHSofJNyd3byS//CS6QYks91TAki+A/Ld7Z
-   SfNobqN1srkwetg1UTdtyAVzI2wF3vVYNnWmlyTH38NQf0yT2/Id8wSsO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="338314783"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="338314783"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 14:36:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="1006057151"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="1006057151"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Mar 2023 14:36:25 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZfuy-0001f3-2o;
-	Tue, 07 Mar 2023 22:36:24 +0000
-Date: Wed, 8 Mar 2023 06:35:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/cpufreq/davinci-cpufreq.c:151:12: warning: no previous
- prototype for function 'davinci_cpufreq_init'
-Message-ID: <202303080649.fobTolG2-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0337386
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 22:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1678228864;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HM1t/LESiZdLj96sPWnYhAC+VXHA55Mz7QgQS8ZJsLo=;
+	b=BYRXj/slgNxj/w74a6gvlVNhGFptdTOCuqhy3LW3kI6Q6nDv8jfd8kVOUS3Pg+9sge++6i
+	C5jkMR1fMV/O3d6qdRXSI0xcEK1pmQm2Gv3XwQk641rqVJLtjZaB8FAAEmTY3rCG2zWc//
+	WQqUf5EuikF68hiRfSIvULCsAaIE9gE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-628-M18ajWrEOVyZO7WYBqUYig-1; Tue, 07 Mar 2023 17:41:03 -0500
+X-MC-Unique: M18ajWrEOVyZO7WYBqUYig-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E3127101A5BA
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 22:41:02 +0000 (UTC)
+Received: from [172.64.2.76] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CCEBD492B00;
+	Tue,  7 Mar 2023 22:41:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (0/5 SKIPPED): Test report for master
+ (6.3.0-rc1, mainline.kernel.org-clang, 63355b98)
+Date: Tue, 07 Mar 2023 22:41:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <00603.123030717410301032@us-mta-628.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Arnd,
+Hi, we tested your kernel and here are the results:
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8ca09d5fa3549d142c2080a72a4c70ce389163cd
-commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
-date:   10 months ago
-config: arm-randconfig-r046-20230307 (https://download.01.org/0day-ci/archive/20230308/202303080649.fobTolG2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/ drivers/cpufreq/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303080649.fobTolG2-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/cpufreq/davinci-cpufreq.c:151:12: warning: no previous prototype for function 'davinci_cpufreq_init' [-Wmissing-prototypes]
-   int __init davinci_cpufreq_init(void)
-              ^
-   drivers/cpufreq/davinci-cpufreq.c:151:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init davinci_cpufreq_init(void)
-   ^
-   static 
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: OK
 
 
-vim +/davinci_cpufreq_init +151 drivers/cpufreq/davinci-cpufreq.c
+Kernel information:
+    Commit message: cpumask: be more careful with 'cpumask_setall()'
 
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  150  
-3aa3e8407ae9023 arch/arm/mach-davinci/cpufreq.c Shawn Guo   2012-04-26 @151  int __init davinci_cpufreq_init(void)
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  152  {
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  153  	return platform_driver_probe(&davinci_cpufreq_driver,
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  154  							davinci_cpufreq_probe);
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  155  }
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  156  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/76856
 
-:::::: The code at line 151 was first introduced by commit
-:::::: 3aa3e8407ae9023c5ff59bf5c81fc2553c31eb70 ARM: davinci: use machine specific hook for late init
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/32028=
+9
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/32029=
+0
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/32029=
+1
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/320293
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/32029=
+2
 
-:::::: TO: Shawn Guo <shawn.guo@linaro.org>
-:::::: CC: Shawn Guo <shawn.guo@linaro.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
