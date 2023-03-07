@@ -1,79 +1,117 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB29CAD49;
-	Tue,  7 Mar 2023 14:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678201032; x=1709737032;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UKnVa+oAyCOtXPpsMrvrgWUBvX7IFeHDC47EgpGWWh0=;
-  b=n8fjs8HNpUQR70ieckVqGl4cLPxfBCzJAePL6rSFsVbIa8pOKlcw3OlR
-   NmPUstA9/EVQ1q2XMHDA0qz2JvclZLkKkYtS0KaEKyWKhikFWQA8e2Qpj
-   EZl7sBOfw8VB82STFtqT2xmzFaWIjwTG70g6QfRAoETvXs07AbCHkmy6T
-   VCySDWLGKgOXa2OMFwE3AJKvqp4sYudbQfQ/cQM3NEOmF5idcPZT/SeMh
-   10fP50NDhKHtybLvLoWzYufvBSBmSafrlUkFeKBU0ZVmb+iZoB2Vw5U//
-   WtGsBWCO26KAGEWUhVd25M1meK+aNm2IL+km+MUVJfK60WKK+aStLjFWy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="315522010"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="315522010"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 06:57:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="669909278"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="669909278"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 07 Mar 2023 06:57:09 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZYkX-0001PP-09;
-	Tue, 07 Mar 2023 14:57:09 +0000
-Date: Tue, 7 Mar 2023 22:56:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:arm64-lpa2-v3c 40/61] ld.lld: error: undefined symbol:
- __kcfi_typeid_idmap_cpu_replace_ttbr1
-Message-ID: <202303072236.1ggcsKhF-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9D7AD49
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 15:13:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1678201998;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WvISTS/f4ZrOg4Qn5jDzcftulng+Jaj+2XVbo0ebuCg=;
+	b=gl4118t7XcZL/9Xrqkk0YAud0d+/qpufikK7gFBVAFax3d6yedUV+H7gEyqbVrmAzkJtBN
+	8vsA412ooxHTomjBR3ED5tUgVFcI7IgbbdoKrttPSqfIqslsWJ9cCP6VrlsV1sUy9DMYX0
+	Su4KnwWyn6LxBmE9/BJEzLl32P/JSM8=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-336-8PgRA24MOWuu58BvVOxOkQ-1; Tue, 07 Mar 2023 10:13:13 -0500
+X-MC-Unique: 8PgRA24MOWuu58BvVOxOkQ-1
+Received: by mail-qt1-f198.google.com with SMTP id i24-20020ac84f58000000b003bfe3358691so7234267qtw.21
+        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 07:13:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678201992;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WvISTS/f4ZrOg4Qn5jDzcftulng+Jaj+2XVbo0ebuCg=;
+        b=Cbasc9dsAJIMmx0O46Yu9fjbIc0/M65vHXFn+BUXQC4TCYHv6mod7XwBB6KgSyLkDv
+         FoYYpcsOdPStbzKjey40THd2zqw8c7nr5jatmhZlHJ79O2p1tUqY1aU3XPOyJQ15O9ob
+         3OTZg3HQyx/RB9VvR3TCzRCLLifyU27Aevue3e/zjdUu1mUO9CGENGlkZRvI4n+xu1Uh
+         SF9RXxSwB+U+H4N3LfXqYHpYV7cji4+XqBqXARShrpYIiF+Jp9zsWIXxz5+CjnUstdiS
+         xriUENXzRQBm/S3L/MePIPTVLQ1GGe/kneXDvjS+40DrWDfcPhDx+6bn3vJ1VTIz+hMN
+         x7YA==
+X-Gm-Message-State: AO0yUKUJd7tcK13P0Qp538RltMErz+/41NQqvQdCCBX6sLq+A4+c+wPX
+	SSM6qmOktmb92rZdrKZeElsNqqbfSzjy9f3ZHeqWKkvfGMvRcb1hOUud1QoF9jVT8TER5RdUjci
+	n9gI36ZGjc58Gqg==
+X-Received: by 2002:a05:622a:1443:b0:3bf:c994:c9b6 with SMTP id v3-20020a05622a144300b003bfc994c9b6mr23589679qtx.29.1678201992402;
+        Tue, 07 Mar 2023 07:13:12 -0800 (PST)
+X-Google-Smtp-Source: AK7set9TmvzsR4HqKIqb+BcjJiWtp9AaRyGnpSJemAFjbkf0yUgxhC8H5Nq/lMkoHAF+O/d53/mIuQ==
+X-Received: by 2002:a05:622a:1443:b0:3bf:c994:c9b6 with SMTP id v3-20020a05622a144300b003bfc994c9b6mr23589642qtx.29.1678201992132;
+        Tue, 07 Mar 2023 07:13:12 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id d79-20020ae9ef52000000b007296805f607sm9712804qkg.17.2023.03.07.07.13.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 07:13:11 -0800 (PST)
+From: Tom Rix <trix@redhat.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	song@kernel.org,
+	yhs@fb.com,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	joannelkoong@gmail.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] bpf: extend btf id list
+Date: Tue,  7 Mar 2023 10:12:39 -0500
+Message-Id: <20230307151239.1994179-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-lpa2-v3c
-head:   8a7d10afac67fee414b59638121860605f862e67
-commit: 9e8681178369900e6ae6e2de61cbe104ccde4580 [40/61] arm64: mm: omit redundant remap of kernel image
-config: arm64-randconfig-r006-20230305 (https://download.01.org/0day-ci/archive/20230307/202303072236.1ggcsKhF-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=9e8681178369900e6ae6e2de61cbe104ccde4580
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb arm64-lpa2-v3c
-        git checkout 9e8681178369900e6ae6e2de61cbe104ccde4580
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+With clang and W=1, there is this error
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303072236.1ggcsKhF-lkp@intel.com/
+kernel/bpf/verifier.c:10298:24: error: array index 16 is past
+ the end of the array (that has type 'u32[16]'
+ (aka 'unsigned int[16]')) [-Werror,-Warray-bounds]
+    meta.func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
+                    ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
+kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared here
+BTF_ID_LIST(special_kfunc_list)
+^
+./include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
+ #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
 
-All errors (new ones prefixed by >>):
+When KF_bpf_dynptr_slice_rdwr was added to the enum special_kfunc_type
+the total exceeded 16.  Increase the array size to 32.
 
->> ld.lld: error: undefined symbol: __kcfi_typeid_idmap_cpu_replace_ttbr1
-   >>> referenced by arch/arm64/mm/proc.o:(.idmap.text+0x0) in archive vmlinux.a
+Fixes: 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ include/linux/btf_ids.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 3a4f7cd882ca..166c387b48f7 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -204,7 +204,7 @@ extern struct btf_id_set8 name;
+ 
+ #else
+ 
+-#define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
++#define BTF_ID_LIST(name) static u32 __maybe_unused name[32];
+ #define BTF_ID(prefix, name)
+ #define BTF_ID_FLAGS(prefix, name, ...)
+ #define BTF_ID_UNUSED
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
