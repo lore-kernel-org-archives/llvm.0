@@ -1,137 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7D2BA49;
-	Tue,  7 Mar 2023 18:58:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC910C433D2;
-	Tue,  7 Mar 2023 18:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1678215484;
-	bh=JN+PH1NmuC42Ae/UZeVPJKaF8s2n1S6+4ls8J7Zf/iY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KC4FzVnwY3avFldOLdHjvL3pZL/CtHxnL+nFiGBRW3DrhxtiF0lWNO6o8fbblLj/I
-	 3jPFTDvrC73hYg4sQTB+0tCW8Ne35ZKHs1wP+Oc07/x1+6F2HEQBs2nF0ZSr6WxoHY
-	 iVUwR3BWel/v7h6deNvpsphaEKcn1a4sn0qkVnX8=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Ian Rogers <irogers@google.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	Ingo Molnar <mingo@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	llvm@lists.linux.dev,
-	Mark Rutland <mark.rutland@arm.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Tom Rix <trix@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 259/567] perf llvm: Fix inadvertent file creation
-Date: Tue,  7 Mar 2023 17:59:55 +0100
-Message-Id: <20230307165917.149823095@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307165905.838066027@linuxfoundation.org>
-References: <20230307165905.838066027@linuxfoundation.org>
-User-Agent: quilt/0.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D39BA4F;
+	Tue,  7 Mar 2023 19:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678215751; x=1709751751;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=R4Aswtna7Q6k4KcdpQ681CgnEtG6Wk89kjUpElYelUY=;
+  b=El1+QmR/FXf8a7D8OPUhGgUNXfm/1N+ia7tYWPXp58cixGLdpUByYVTj
+   HnAzSRrFeEyXPIfOscYGpRFyP+faIjki48zGZ2rGDxEt+PGPNFJXtTTt7
+   Nm9ki0yh7DbLjSmKtsy6ySwqIammbirO/4bWKJCCGyVLUdJ7xCdTDf8cL
+   SVET2wj5b8sWC73L/XK3k5Ox2gyFSArwnP4BD4y0PgUzGfaa2d7dREOHR
+   9ebnEBYc9envwp1N05I4gUdK/wfROPMEmynTQrpljLgYCLqJ9Dza8um58
+   rNiib6crfLHsaJ7MQlJQof4II7EtNjo21H0fz2AZ2pDqOyOpfOGxP7OxR
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="400767732"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="400767732"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 11:02:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676663268"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="676663268"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2023 11:02:16 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZcZj-0001XL-31;
+	Tue, 07 Mar 2023 19:02:15 +0000
+Date: Wed, 8 Mar 2023 03:01:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+ 488/639] drivers/pci/endpoint/functions/pci-epf-vntb.c:1432:20: error:
+ incompatible function pointer types initializing 'int (*)(struct pci_epf *,
+ const struct pci_epf_device_id *)' with an expression of type 'int (struct
+ pci_epf *)'
+Message-ID: <202303080252.b23GA3FL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Ian Rogers <irogers@google.com>
+tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+head:   bc291a97d070700f8a5b4504fe3de4c2cea6a888
+commit: 0a5791cface5a07c793b0192cbcc3e685f2e65a7 [488/639] PCI: endpoint: Pass EPF device ID to the probe function
+config: i386-randconfig-a012-20230306 (https://download.01.org/0day-ci/archive/20230308/202303080252.b23GA3FL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/krzk/linux/commit/0a5791cface5a07c793b0192cbcc3e685f2e65a7
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+        git checkout 0a5791cface5a07c793b0192cbcc3e685f2e65a7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/pci/endpoint/functions/
 
-[ Upstream commit 9f19aab47ced012eddef1e2bc96007efc7713b61 ]
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303080252.b23GA3FL-lkp@intel.com/
 
-The LLVM template is first echo-ed into command_out and then
-command_out executed. The echo surrounds the template with double
-quotes, however, the template itself may contain quotes. This is
-generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
-we see:
-...
-SEC("func=null_lseek file->f_mode offset orig")
-...
-where the first double quote ends the double quote of the echo, then
-the > redirects output into a file called f_mode.
+All errors (new ones prefixed by >>):
 
-To avoid this inadvertent behavior substitute redirects and similar
-characters to be ASCII control codes, then substitute the output in
-the echo back again.
+>> drivers/pci/endpoint/functions/pci-epf-vntb.c:1432:20: error: incompatible function pointer types initializing 'int (*)(struct pci_epf *, const struct pci_epf_device_id *)' with an expression of type 'int (struct pci_epf *)' [-Werror,-Wincompatible-function-pointer-types]
+           .probe          = epf_ntb_probe,
+                             ^~~~~~~~~~~~~
+   1 error generated.
 
-Fixes: 5eab5a7ee032acaa ("perf llvm: Display eBPF compiling command in debug output")
-Signed-off-by: Ian Rogers <irogers@google.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/r/20230105082609.344538-1-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-index 96c8ef60f4f84..8ee3a947b1599 100644
---- a/tools/perf/util/llvm-utils.c
-+++ b/tools/perf/util/llvm-utils.c
-@@ -531,14 +531,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
- 
- 	pr_debug("llvm compiling command template: %s\n", template);
- 
-+	/*
-+	 * Below, substitute control characters for values that can cause the
-+	 * echo to misbehave, then substitute the values back.
-+	 */
- 	err = -ENOMEM;
--	if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
-+	if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
- 		goto errout;
- 
-+#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
-+	for (char *p = command_echo; *p; p++) {
-+		SWAP_CHAR('<', '\001');
-+		SWAP_CHAR('>', '\002');
-+		SWAP_CHAR('"', '\003');
-+		SWAP_CHAR('\'', '\004');
-+		SWAP_CHAR('|', '\005');
-+		SWAP_CHAR('&', '\006');
-+		SWAP_CHAR('\a', '"');
-+	}
- 	err = read_from_pipe(command_echo, (void **) &command_out, NULL);
- 	if (err)
- 		goto errout;
- 
-+	for (char *p = command_out; *p; p++) {
-+		SWAP_CHAR('\001', '<');
-+		SWAP_CHAR('\002', '>');
-+		SWAP_CHAR('\003', '"');
-+		SWAP_CHAR('\004', '\'');
-+		SWAP_CHAR('\005', '|');
-+		SWAP_CHAR('\006', '&');
-+	}
-+#undef SWAP_CHAR
- 	pr_debug("llvm compiling command : %s\n", command_out);
- 
- 	err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
+vim +1432 drivers/pci/endpoint/functions/pci-epf-vntb.c
+
+e35f56bb03304a Frank Li 2022-02-22  1429  
+e35f56bb03304a Frank Li 2022-02-22  1430  static struct pci_epf_driver epf_ntb_driver = {
+e35f56bb03304a Frank Li 2022-02-22  1431  	.driver.name    = "pci_epf_vntb",
+e35f56bb03304a Frank Li 2022-02-22 @1432  	.probe          = epf_ntb_probe,
+e35f56bb03304a Frank Li 2022-02-22  1433  	.id_table       = epf_ntb_ids,
+e35f56bb03304a Frank Li 2022-02-22  1434  	.ops            = &epf_ntb_ops,
+e35f56bb03304a Frank Li 2022-02-22  1435  	.owner          = THIS_MODULE,
+e35f56bb03304a Frank Li 2022-02-22  1436  };
+e35f56bb03304a Frank Li 2022-02-22  1437  
+
+:::::: The code at line 1432 was first introduced by commit
+:::::: e35f56bb03304abc92c928b641af41ca372966bb PCI: endpoint: Support NTB transfer between RC and EP
+
+:::::: TO: Frank Li <Frank.Li@nxp.com>
+:::::: CC: Jon Mason <jdmason@kudzu.us>
+
 -- 
-2.39.2
-
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
