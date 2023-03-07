@@ -1,62 +1,44 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9AD366
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 05:06:25 +0000 (UTC)
-Received: by mail-pl1-f179.google.com with SMTP id i5so12914477pla.2
-        for <llvm@lists.linux.dev>; Mon, 06 Mar 2023 21:06:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1678165584;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ncIZQ84lksEd9kxqzUc4pmHzurSPn3jNUdkAVBVakM=;
-        b=ZDrVtKw9CQtz5i5Rktk/5VuDFClMgI+RB514CO50h6TX40umhQQXF+3Al7jnCCXMPJ
-         hrdzIs41xbHE6KDgEtj/FfBi18Vz5YkbagBEP6N1wmOxeuTjjivdwCKZh2RTzJE6loC/
-         lzhACyYDd0OCcrXkO/T81CHBNKACaz6nsAf6E15zew/yj3OMUhPwVatN5ZAb4hrVTWYV
-         PukVc2HJaWAVSRfl24P98E1EoRxJbXH9KoIQB96TlLPVCFVN7/vgZuRVwQuMwdfUf7zx
-         Es9WWh7t1O9vTOsoSAQUcyz/3cIxhnas9VN7Q9VWGaXwdBAaf6eSR7rTquhMN3wr/6YP
-         skLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678165584;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ncIZQ84lksEd9kxqzUc4pmHzurSPn3jNUdkAVBVakM=;
-        b=CG3RvF3R+ihrRPPhNlYzAXUuO/JGeVaPR0KQKSnpv923clgqk1t29fNlKaBBZgjeIG
-         9jn3o846JqIPVeUyTXRPNMrmnWz9qfP23KJN37qfWV+7lvMoVewgD3ApunaNNmxueIQJ
-         W52P8vmR+GmkGmSH4XI717MGfixWi152jzpH7d0erCoKsqu8I8R62D51JsCFbquT+syy
-         cbqLirEhS51BPPXHWFAVHdymRYTOsUR1PEr1VFTWuobpaGT4hjbAnfNkMPZr4U7QOcjx
-         bZQ24fmNAdYJCUS7sJ12ikhfJZlPR6Gcxk5LfRuKUovf9PeJCLly+IpbME/nXAOZleoL
-         5bnQ==
-X-Gm-Message-State: AO0yUKXIV5aQ+FpNGMHITm0VWyU8m/8elGBLMVDvDb6rp8Z3ufAxH4FZ
-	lXJFBWfKe6imy9wX3tX586TM4A==
-X-Google-Smtp-Source: AK7set+lsGeOZJEFKPysrv4y2Wbb94M1eNKlJPEGR3INGjRdcW5GKTB4n9YlJ3volc2UF6gUqL7yYQ==
-X-Received: by 2002:a17:902:f693:b0:19d:e11:32de with SMTP id l19-20020a170902f69300b0019d0e1132demr16517253plg.34.1678165584256;
-        Mon, 06 Mar 2023 21:06:24 -0800 (PST)
-Received: from sunil-laptop ([49.206.8.117])
-        by smtp.gmail.com with ESMTPSA id le3-20020a170902fb0300b0019edf582a95sm470363plb.20.2023.03.06.21.06.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 21:06:23 -0800 (PST)
-Date: Tue, 7 Mar 2023 10:36:16 +0530
-From: Sunil V L <sunilvl@ventanamicro.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Marc Zyngier <maz@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Atish Patra <atishp@rivosinc.com>,
-	'Conor Dooley ' <conor.dooley@microchip.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
-Message-ID: <ZAbGSA6F0kfv9YYw@sunil-laptop>
-References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
- <16007014-c5f2-4b07-baec-e19952236aa5@spud>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0993A631;
+	Tue,  7 Mar 2023 05:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678167355; x=1709703355;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1hyTNpqM2b9GKOMTFjlkPMZk5a/OZvmwp1oPgWKdMH4=;
+  b=CZ58xWYJjRGJuosxctv1HpirzWU+R5uQ7wTBRGTpFrJQmKvfxtcRP+jw
+   fKv/GG6vb8muW3qXDy3k19X/4/XqNBMk8ILyq3hluw/xg4Y6fmx0jo3KL
+   GmKwPXXt5gpgMIbtcjaghvfiOSoffPF6u/cBC7ZnMBKJFzMCbrk1Wr5uw
+   0mzkuG//sCj+dSPQkqL+F9ZhFjI30hpPSN3u6+0tkkE6VGQWJqpYehYZp
+   PdhAgb5eVWEB9gq/6JRzkVTLaX4aKEPjWqnLgA8cPd+AtftQaaEg4Gwe1
+   5FhLJLZrvJZeLrFjWH3s0Bjad0a/SDKzdrlFu+gZhpxRSMu1/SFDyXHZM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="335786354"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="335786354"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 21:35:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="653847090"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="653847090"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 06 Mar 2023 21:35:52 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZPzL-0000zf-0e;
+	Tue, 07 Mar 2023 05:35:51 +0000
+Date: Tue, 7 Mar 2023 13:35:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [ammarfaizi2-block:viro/vfs/work.minix 3/4] ld.lld: error: duplicate
+ symbol: dir_put_page
+Message-ID: <202303071321.hh3RmMw8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,49 +47,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <16007014-c5f2-4b07-baec-e19952236aa5@spud>
 
-On Mon, Mar 06, 2023 at 09:51:09PM +0000, Conor Dooley wrote:
-> Hey Sunil,
-> 
-> On Fri, Mar 03, 2023 at 07:06:27PM +0530, Sunil V L wrote:
-> > This patch series enables the basic ACPI infrastructure for RISC-V.
-> > Supporting external interrupt controllers is in progress and hence it is
-> > tested using poll based HVC SBI console and RAM disk.
-> > 
-> > The first patch in this series is one of the patch from Jisheng's
-> > series [1] which is not merged yet. This patch is required to support
-> > ACPI since efi_init() which gets called before sbi_init() can enable
-> > static branches and hits a panic.
-> > 
-> > Patch 2 and 3 are ACPICA patches which are not merged into acpica yet
-> > but a PR is raised already.
-> > 
-> > Below are two ECRs approved by ASWG.
-> > RINTC - https://drive.google.com/file/d/1R6k4MshhN3WTT-hwqAquu5nX6xSEqK2l/view
-> > RHCT - https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR-tia/view
-> > 
-> > The series depends on Anup's IPI improvement series [2].
-> > 
-> > [1] https://lore.kernel.org/all/20220821140918.3613-1-jszhang@kernel.org/
-> > [2] https://lore.kernel.org/lkml/20230103141221.772261-7-apatel@ventanamicro.com/T/
-> 
-> Building a clang-15 allmodconfig (I didn't try gcc) with this series, and
-> Anup's IPI bits, results in a broken build, due to failings in cmpxchg:
-> 
-> /stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error: call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BUG failed
->         while (unlikely((ret = cmpxchg(&c->value, old, new)) != old)) {
->                                ^
-Hi Conor,
+tree:   https://github.com/ammarfaizi2/linux-block viro/vfs/work.minix
+head:   39d0d7f9b65f1fe91c5ba6d375f1ddb0c34fe843
+commit: b7176563af9725b556c512d0fee2dbd051839147 [3/4] minixfs: Use dir_put_page() in minix_unlink() and minix_rename()
+config: i386-randconfig-a016-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071321.hh3RmMw8-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b7176563af9725b556c512d0fee2dbd051839147
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block viro/vfs/work.minix
+        git checkout b7176563af9725b556c512d0fee2dbd051839147
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I am able to build without any of these issues using clang-15. I am
-wondering whether the base is proper. I had rebased on top of the master
-and couple of patches from IPI series were already merged in the master.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303071321.hh3RmMw8-lkp@intel.com/
 
-Do you mind verifying with my branch
-https://github.com/vlsunil/linux/commits/acpi_b1_us_review_ipi17_V3?
+All errors (new ones prefixed by >>):
 
-Or if you could provide me your branch details, I can look further.
+>> ld.lld: error: duplicate symbol: dir_put_page
+   >>> defined at dir.c:30 (fs/minix/dir.c:30)
+   >>>            fs/minix/dir.o:(dir_put_page) in archive vmlinux.a
+   >>> defined at dir.c:32 (fs/sysv/dir.c:32)
+   >>>            fs/sysv/dir.o:(.text+0x200) in archive vmlinux.a
 
-Thanks!
-Sunil
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
