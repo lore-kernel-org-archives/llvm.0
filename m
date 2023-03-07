@@ -1,91 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0337386
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 22:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1678228864;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HM1t/LESiZdLj96sPWnYhAC+VXHA55Mz7QgQS8ZJsLo=;
-	b=BYRXj/slgNxj/w74a6gvlVNhGFptdTOCuqhy3LW3kI6Q6nDv8jfd8kVOUS3Pg+9sge++6i
-	C5jkMR1fMV/O3d6qdRXSI0xcEK1pmQm2Gv3XwQk641rqVJLtjZaB8FAAEmTY3rCG2zWc//
-	WQqUf5EuikF68hiRfSIvULCsAaIE9gE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-M18ajWrEOVyZO7WYBqUYig-1; Tue, 07 Mar 2023 17:41:03 -0500
-X-MC-Unique: M18ajWrEOVyZO7WYBqUYig-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E3127101A5BA
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 22:41:02 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CCEBD492B00;
-	Tue,  7 Mar 2023 22:41:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (0/5 SKIPPED): Test report for master
- (6.3.0-rc1, mainline.kernel.org-clang, 63355b98)
-Date: Tue, 07 Mar 2023 22:41:02 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F7C386;
+	Tue,  7 Mar 2023 22:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678229187; x=1709765187;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jTwZkvzzed97bMcN2aRK24nUPe7VKzMfzJafuNchpAk=;
+  b=kXwbBqSRDeHIBa18R5FuNEYfNIlGuy31j43Nx30PuqgOPue6La+XixO6
+   duY1IBnJejGiQAXA0gvY4KusoeoaCNMXSM1tGnT6eqcKHHqCukrBZ4bZA
+   i86rDEoGtXRsUdCnRIjQXVt/22Nz1QxmWrgt1HDovpCGy3Rqx9GEicIEY
+   qWUjGMcLWv9ovWA4f0mc4k3SmSDvvaPaV0ngjd6Y/PfXKucT03CD3WXvd
+   5Gs6YnOUXaxtojKftFZbpV8xhshujkpOfkGd6DU1w3CeG+RTb1r6xMi+R
+   XbzYLtGX24geUhIKM6kFwT2rQMgmNSTqwNMmYDkgYLOZmitzjfJQuS8sO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="334709371"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="334709371"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 14:46:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="626709218"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="626709218"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Mar 2023 14:46:25 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZg4f-0001fG-0G;
+	Tue, 07 Mar 2023 22:46:25 +0000
+Date: Wed, 8 Mar 2023 06:46:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [miquelraynal:nvmem-layouts-and-of-cleanup /35]
+ drivers/of/module.c:62:6: warning: incompatible integer to pointer
+ conversion assigning to 'char *' from 'int'
+Message-ID: <202303080602.l78Xfpcf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <00603.123030717410301032@us-mta-628.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/miquelraynal/linux-0day.git nvmem-layouts-and-of-cleanup
+head:   4dbec5e07ef322a0458183244c9a11e92eebd61d
+commit: 71414eadef0bb9ab9e3688498d0dc11f2739b5f2 [/35] of: Move the request module helper logic to module.c
+config: i386-randconfig-a013-20230306 (https://download.01.org/0day-ci/archive/20230308/202303080602.l78Xfpcf-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/miquelraynal/linux-0day/commit/71414eadef0bb9ab9e3688498d0dc11f2739b5f2
+        git remote add miquelraynal https://github.com/miquelraynal/linux-0day.git
+        git fetch --no-tags miquelraynal nvmem-layouts-and-of-cleanup
+        git checkout 71414eadef0bb9ab9e3688498d0dc11f2739b5f2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/nvmem/ drivers/of/
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303080602.l78Xfpcf-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/of/module.c:62:8: error: implicit declaration of function 'kmalloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           str = kmalloc(size, GFP_KERNEL);
+                 ^
+   drivers/of/module.c:62:8: note: did you mean 'mm_alloc'?
+   include/linux/sched/mm.h:16:26: note: 'mm_alloc' declared here
+   extern struct mm_struct *mm_alloc(void);
+                            ^
+>> drivers/of/module.c:62:6: warning: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
+           str = kmalloc(size, GFP_KERNEL);
+               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/of/module.c:69:2: error: implicit declaration of function 'kfree' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           kfree(str);
+           ^
+   drivers/of/module.c:69:2: note: did you mean 'kvfree'?
+   include/linux/rcutiny.h:99:13: note: 'kvfree' declared here
+   extern void kvfree(const void *addr);
+               ^
+   1 warning and 2 errors generated.
 
 
-Kernel information:
-    Commit message: cpumask: be more careful with 'cpumask_setall()'
+vim +62 drivers/of/module.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/76856
+    45	
+    46	int of_request_module(struct device_node *np)
+    47	{
+    48		char *str;
+    49		ssize_t size;
+    50		int ret;
+    51	
+    52		if (!np)
+    53			return -ENODEV;
+    54	
+    55		size = of_modalias(np, NULL, 0);
+    56		if (size < 0)
+    57			return size;
+    58	
+    59		/* Reserve an additional byte for the trailing '\0' */
+    60		size++;
+    61	
+  > 62		str = kmalloc(size, GFP_KERNEL);
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         aarch64 - https://datawarehouse.cki-project.org/kcidb/builds/32028=
-9
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/32029=
-0
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/32029=
-1
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/320293
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/32029=
-2
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
