@@ -1,89 +1,139 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D0553A6
-	for <llvm@lists.linux.dev>; Mon,  6 Mar 2023 23:52:28 +0000 (UTC)
-Received: by mail-pg1-f171.google.com with SMTP id d10so6606027pgt.12
-        for <llvm@lists.linux.dev>; Mon, 06 Mar 2023 15:52:28 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AEDA7C
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 00:17:05 +0000 (UTC)
+Received: by mail-pj1-f52.google.com with SMTP id x20-20020a17090a8a9400b00233ba727724so134344pjn.1
+        for <llvm@lists.linux.dev>; Mon, 06 Mar 2023 16:17:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1678146748;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jz3wFNkjF7LXABjUJBcGMj80WDbOlcRgJbsy9urZHOw=;
-        b=b1slkWsL9CSBhAfpckVrfNeYXsMtkTaqz4NO52rXSH/OP72Zd9YF6vN6QxjzWEoo43
-         1gGnFa3ahKVbaoxaseTz8kdfyHxT7P5tQa0/omoVpyarcWQJ0z40/mzu+pkkVfnTMpDr
-         RlB/IoWSLQqWc1cEpUJHMjb7sNkDYANC/z1VLcCJufzfDrsmrKrg+jLU005bRYNOtCd7
-         DpxdeYsKH32GMKLePVxbRzdxKIfNJRIyGVXbZBpjKoU1sE6U0QrE4NCAOa/HYjE712BE
-         L4Ciz1Nk193bQsfXPTzgkGS410MxUixGISg/9ldxVB1itm+iyHiAZ4k36ueB++IToWfc
-         JqFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678146748;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1678148224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Jz3wFNkjF7LXABjUJBcGMj80WDbOlcRgJbsy9urZHOw=;
-        b=QS3UvbrovHqWQNmfbY9mzBBMg1vg7yo8FkcEiKC1nPkU9hKg/ifFUWjgJB1e5axfqQ
-         0b8jEOLW0QE9jze4lbww7DZpKgw6NUZ9vi/I3fAPlXWaiBKuFCLGoef8wkFUAUvr/wQF
-         3brh8JQczk8I0WKCRqs9OGQc4q+gQlJZaTrJqXHm5Cc171nifMvRcTtKSc6K1b3f1eY4
-         hcszKEf/9XzjHws6jYRXuvks/DVwpOLC6/VZD3VvAfTazN/PckWmEll65x3TpeYOGVDW
-         spfQ7seV4BNyVbs+nuF18hP/YgoayQ5ajVJ9+IZlu39E/nB+wO211fvigvV9bfg4vkqL
-         Qtjw==
-X-Gm-Message-State: AO0yUKXT/uWrfNSOtuQWo0G5EmxUrhszBxU6UEO2tFfCYsII5fIJhkOd
-	cUBKxf2f9VxXECF69QWBMFRG1A==
-X-Google-Smtp-Source: AK7set8NzrQKsRckvFBxs/m0fs4f7x8C8j0v425ppkkJT8FxVnX6zFKiOuSesFUlDe6SQLGBehG/ew==
-X-Received: by 2002:a62:5253:0:b0:5a8:4bfb:6bee with SMTP id g80-20020a625253000000b005a84bfb6beemr9462483pfb.9.1678146748111;
-        Mon, 06 Mar 2023 15:52:28 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id j19-20020a62e913000000b005ae02dc5b94sm6794462pfh.219.2023.03.06.15.52.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 15:52:27 -0800 (PST)
-Date: Mon, 06 Mar 2023 15:52:27 -0800 (PST)
-X-Google-Original-Date: Mon, 06 Mar 2023 15:51:36 PST (-0800)
-Subject:     Re: [PATCH v1 1/2] RISC-V: move zicsr/zifencei spec version check to Kconfig
-In-Reply-To: <Y/jtGRrBfKxO6s0c@spud>
-CC: nathan@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-  naresh.kamboju@linaro.org, linux-riscv@lists.infradead.org, llvm@lists.linux.dev
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-5ec23642-a554-4e02-82bc-3a138a50d3ce@palmer-ri-x1c9a>
+        bh=+vkKpFoGZ+5lhaySQp4dtxoanu41mkOChhlNDvdqeo0=;
+        b=T9inNMKTJQ+PiMEjBeNsr0hD3vUy8au1y5CA8L3HVn4W2lW3ez/s8EewH0RswQ0SCp
+         kR0/13VWXzthjz4nRnXG9qXEwVhnO83kC+77sXOp96rEzfhBwbEbDuTBzoIQEYssSVLy
+         KonQxN2a823Ha1S1Uw5oYDUYYWcP2T8tNLNMYtKSUCj78DwYbspevgJbINJWjFLwKJKl
+         nvcA2YahedT8NI1l9AKWvO2iwiCiOUJKkPG3g+KuMlt1pNw+fvTyjaRQF2nOGtTBXR2h
+         jpD2HQXzvTfxYeW5XQrd8hUbl2UZuncJWnjEQ+Jzs3AwTtz8nzmRm3t4guh6POnwZyvc
+         twLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678148224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+vkKpFoGZ+5lhaySQp4dtxoanu41mkOChhlNDvdqeo0=;
+        b=XqAOjhHmszf2pb0VOIcG82kGhVsV8BNE3va8VJKJrDmjo9lHOcbJgDi7s/1YyGMU/B
+         +chqEWMWaEjgVZVu81nPAAjH3CfjyrkXYHKM5tMgPosMHg5KpEj1OrYfxPAvcSzPMug/
+         YNeMhQVmiehy1RbemHoloHXuVVnvMdi3KkL29KwEfdyvhsW+qs2MjWUyLcntoNvhuOTx
+         dkNshJXMMzfFjaidLACze1pE/ZT0UbpRFfpqgC2mWD4iouiXCQ95xchf7ooaYeMtzdg1
+         2ZjJ0AB3EmaLgLWx0eAyqr+5HHyTzL2ZIO48+fO8ufuN/jbGyVGakZB2L4ob9fDsbn2A
+         8F1Q==
+X-Gm-Message-State: AO0yUKUWyCdNga7EmooSuuIA51y8N5VWEqTZ5oe7zMWjbuBKY3e0Okqv
+	8wMib+hEZCpdniIpy5uKOvsfw9QgH0Ga7OPrS1p+DA==
+X-Google-Smtp-Source: AK7set+GtYDMQ7ycRITNAmRQeXNwwJCWTU5HqQKdv2jt8XcCpJs6QDostciaUhOxSlbV5IVUo32AuMDoLZbOdmhEpZU=
+X-Received: by 2002:a17:902:ab4f:b0:19b:5233:51c6 with SMTP id
+ ij15-20020a170902ab4f00b0019b523351c6mr4890025plb.0.1678148223882; Mon, 06
+ Mar 2023 16:17:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+References: <20230303231133.1486085-1-eranian@google.com> <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 6 Mar 2023 16:16:52 -0800
+Message-ID: <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
+Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in __resctrl_sched_in
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephane Eranian <eranian@google.com>, linux-kernel@vger.kernel.org, tony.luck@intel.com, 
+	reinette.chatre@intel.com, fenghua.yu@intel.com, peternewman@google.com, 
+	james.morse@arm.com, babu.moger@amd.com, ananth.narayan@amd.com, 
+	vschneid@redhat.com, Nathan Chancellor <nathan@kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 24 Feb 2023 09:00:09 PST (-0800), Conor Dooley wrote:
-> On Fri, Feb 24, 2023 at 09:37:28AM -0700, Nathan Chancellor wrote:
->> On Thu, Feb 23, 2023 at 10:05:45PM +0000, Conor Dooley wrote:
->
->> > ---
->> >  arch/riscv/Kconfig  | 10 ++++++++++
->> >  arch/riscv/Makefile |  5 +----
->> >  2 files changed, 11 insertions(+), 4 deletions(-)
->> > 
->> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> > index cebf0c5f8824..4eb0ef8314b3 100644
->> > --- a/arch/riscv/Kconfig
->> > +++ b/arch/riscv/Kconfig
->> > @@ -288,6 +288,16 @@ config ARCH_RV64I
->> >  
->> >  endchoice
->> >  
->> > +config TOOLCHAIN_NEEDS_SPEC_20191213
->> 
->> This symbol's name is a little confusing to me, how does the toolchain
->> need spec version 20191213. Maybe 'SPEC_20191213' should be something
->> like 'EXPLICIT_ZICSR_ZIFENCEI'? Otherwise, maybe it should be something
->> like 'TOOLCHAIN_HAS_DEFAULT_SPEC_20191213'? Sorry for the bikeshed but I
->> think most Kconfig symbols should be self describing.
->
-> Yah I can do that. I actually had this as the DEFAULT_SPEC variant
-> before and changed it - I'll switch it to the EXPLICIT one.
-> Thanks for taking a look Nathan :)
+Start of Lore thread:
+https://lore.kernel.org/lkml/20230303231133.1486085-1-eranian@google.com/
 
-Another option here would be to use the `-misa-spec` argument for GCC, 
-to make it match LLVM's spec version.
+On Mon, Mar 6, 2023 at 4:01=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> On Fri, Mar 03, 2023 at 03:11:33PM -0800, Stephane Eranian wrote:
+>
+> > The problem is located in the __resctrl_sched_in() routine which rewrit=
+es
+> > the active closid via the PQR_ASSOC register. Because this is an expens=
+ive
+> > operation, the kernel only does it when the context switch involves tas=
+ks
+> > with different CLOSID. And to check that, it needs to access the curren=
+t
+> > task's closid field using current->closid. current is actually a macro
+> > that reads the per-cpu variable pcpu_hot.current_task.
+> >
+> > After an investigation by compiler experts, the problem has been tracke=
+d down
+> > to the usage of the get_current() macro in the __resctrl_sched_in() cod=
+e and
+> > in particular the per-cpu macro:
+> >
+> > static __always_inline struct task_struct *get_current(void)
+> > {
+> >         return this_cpu_read_stable(pcpu_hot.current_task);
+> > }
+> >
+> > And as per percpu.h:
+> >
+> > /*
+> >  * this_cpu_read() makes gcc load the percpu variable every time it is
+> >  * accessed while this_cpu_read_stable() allows the value to be cached.
+> >  * this_cpu_read_stable() is more efficient and can be used if its valu=
+e
+> >  * is guaranteed to be valid across cpus.  The current users include
+> >  * get_current() and get_thread_info() both of which are actually
+> >  * per-thread variables implemented as per-cpu variables and thus
+> >  * stable for the duration of the respective task.
+> >  */
+> >
+> > The _stable version of the macro allows the value to be cached, meaning=
+ it
+> > does not force a reload.
+>
+> Right, so afaict the difference between this_cpu_read() and
+> this_cpu_read_stable() is the volatile qualifier.
+>
+> this_cpu_read() is asm volatile(), while this_cpu_read_stable() and
+> raw_cpu_read() are both an unqualified asm().
+>
+> Now, afaiu we're inlining all of this into __switch_to(), which has
+> raw_cpu_write(pcpu_hot.current_task, next_p).
+>
+> And I suppose what the compiler is doing is lifting the 'current' load
+> over that store, but how is it allowed that? I thought C was supposed to
+> have PO consistency, That raw_cpu_write() should be seen as a store to
+> to pcpu_hot.current_task, why can it lift a load over the store?
+>
+> Specifically, percpu_to_op() has a "+m" output constaint while
+> percpu_stable_op() has a "p" input constraint on the same address.
+
+I definitely think the issue is specific to "p" constraints.
+https://godbolt.org/z/34YeG6WbY is the test case I reduced which I
+think demonstrates the issue.
+
+https://reviews.llvm.org/D145416
+-> click "Show Older Changes" for the ongoing discussion.
+
+I don't have a satisfactory answer yet, but am looking into this.
+
+>
+> Compiler folks help?
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
