@@ -1,94 +1,78 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC77933D2
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 11:03:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678186985; x=1709722985;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=297I+f2QIP3fYjyaueh8DMg0UU/5q5ZcWqC31Xzuzco=;
-  b=MY4W9G3xaQo3dNwyD8TKMlj2DTdtBO7RddivFsie42s/LIDZPRqcbv/n
-   QH7NwewjRHjXci2c9ZnisUgcP5kXtC3ppzwXXTwMVPHbh+aStarzMwwZr
-   HAVVgmy29izQKboOXKapMHNZ/WTFkGUaC0YaDY6uHUVVGeHLEZ60OxT0z
-   RkAi5IQW7OEZ6I0edhQC/19paKhw/mN/+tgbPy4RU9GZUr6Ul0X8bjFoq
-   FkSfjQoTDktycGJBal3J7nj3SQDd8e651K7s5aby0SNHzYtjknqwIRF1Z
-   PAdFU/EEhkpw71jUAwigPfdpKunZVdV/9Nzwq5fKH7TStrKYdRpu8Dxzb
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
-   d="asc'?scan'208";a="203976780"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 04:01:54 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Mar 2023 04:01:46 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Tue, 7 Mar 2023 04:01:42 -0700
-Date: Tue, 7 Mar 2023 11:01:13 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC: <linux-riscv@lists.infradead.org>, <conor@kernel.org>, Miguel Ojeda
-	<ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho
-	<wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
-	<gary@garyguo.net>, =?iso-8859-1?Q?Bj=F6rn?= Roy Baron
-	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-Subject: Re: [PATCH v1 2/2] RISC-V: enable building 64-bit kernels with rust
- support
-Message-ID: <ZAcZeWYUU75BK5FO@wendy>
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <20230307102441.94417-3-conor.dooley@microchip.com>
- <CANiq72nLjBgMSUTtWuF7qU5vG9rA3v=ekWk1d6+SNiGkfcaS8Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8F433D2
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 11:07:40 +0000 (UTC)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-536bf92b55cso237278067b3.12
+        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 03:07:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678187260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ezWI+YqtGSWosoo4M5sZg2WqWcmUK1NfNwH+n8V7ZCM=;
+        b=LuDiyIoNJ4vTfsKW2ge6iUNxEd8mvXODtJaI+szTJxwEO66HxU/s4bmVVK9dcwXnm/
+         QWRZVbOXaDFcQX6RimoGoGiKuIIajLYc26PZAdg2UmAFnv/KaKOeURvisNCgZi+ESOA9
+         oPUkR4U14jLYUEa/RDk+t3dJMMMJCVlxth1Nko993D9oFNnePQksBikmXx7bPM+WpXOF
+         yiUveNKPhjRWZZiWN+G2Ir0L6M7AS3DJJ0NS6Xq6vQDyXHeN2icq9w7ifGGK8wOAfApj
+         OLcYmBP0kNbBpEvna/hpD13FRhHyIFOArYIjr9skWceDsiBLwkvUtQIGWRnfH6qZw+1+
+         lwLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678187260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ezWI+YqtGSWosoo4M5sZg2WqWcmUK1NfNwH+n8V7ZCM=;
+        b=DfkCWw042jyEHyI98LXLfccqxNN77/2SXkVPKkTqzQd/Ok99VvfjjD8SE9ZaIIzf9j
+         YzLxyM8xnyKtKmx11RSt0uHGuw2Zq59uj1HCYMzkPQgb8BoGrf/9TRSHwpimy0oCspME
+         JrNd4IOSW27iOWxTp5AgvG8OXSl/rJLnO3fRNdbzW1WufRor9a5uJvHCZN581Ri0Oi5z
+         FiXCVmWMTyPkWMxu/1kmc5YsCdkQM1v9CeFQsIXfRACliPUwvRdLAjx6FyIDzDftidWe
+         SGXObf/gq7gVdZE5U3bbZ3lO0hklBoKoKOwEr5vgpaFZxocz4hRj8O2hnVadYCHFHUpP
+         TRQw==
+X-Gm-Message-State: AO0yUKVANxJ/RgKxn06PVpXc9Q5QnB8Qg8/StR5JXhomEl08qzzl6me5
+	epri+WZpGW21gdPEGQc6ggatyZ8xHmMa9Y6YJBw=
+X-Google-Smtp-Source: AK7set9mt9UYnbLiU961T5A6R3gBGXlq8VmcrLo/C8E0ADEMyOzY+pN/ywBe+SU5kncac16bq8sQPDmSAjiKbFf3Oew=
+X-Received: by 2002:a81:ad24:0:b0:52e:bb2d:2841 with SMTP id
+ l36-20020a81ad24000000b0052ebb2d2841mr8435908ywh.10.1678187259869; Tue, 07
+ Mar 2023 03:07:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="FkEia1k7ZMsXTyfP"
-Content-Disposition: inline
-In-Reply-To: <CANiq72nLjBgMSUTtWuF7qU5vG9rA3v=ekWk1d6+SNiGkfcaS8Q@mail.gmail.com>
-
---FkEia1k7ZMsXTyfP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
+In-Reply-To: <20230307102441.94417-1-conor.dooley@microchip.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 7 Mar 2023 12:07:29 +0100
+Message-ID: <CANiq72=i9je2864iTvZBFnhVLhF7Cema7EPCcdWOJ3mr62SqDg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+To: Conor Dooley <conor.dooley@microchip.com>
+Cc: linux-riscv@lists.infradead.org, conor@kernel.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 07, 2023 at 11:56:30AM +0100, Miguel Ojeda wrote:
-> On Tue, Mar 7, 2023 at 11:25=E2=80=AFAM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
-> >
-> > While adding RISC-V to the table, I took the chance to re-sort it
-> > alphabetically.
->=20
-> For reference, there is a patch for this coming at:
->=20
->     https://lore.kernel.org/rust-for-linux/I0YeaNjTtc4Nh47ZLJfAs6rgfAc_QZ=
-xhynNfz-GQKssVZ1S2UI_cTScCkp9-oX-hPYVcP3EfF7N0HMB9iAlm1FcvOJagnQoLeHtiW3bGC=
-gM=3D@bamelis.dev/
+On Tue, Mar 7, 2023 at 11:25=E2=80=AFAM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
+>
+> I have added SoB's too, but if that is not okay Gary, then please scream
+> loudly.
 
-Cool. Git should resolve that, probably without even generating a
-conflict in -next, right?
+Note that `Co-developed-by`s always go with a `Signed-off-by`s, i.e.
+it is not possible to add just a `Co-developed-by`.
 
+By the way, like for the Arm patch set, if you end up doing a v2,
+could you please add the `BINDGEN_TARGET_*` in `rust/Makefile` (GCC
+builds are really experimental, but since they are there anyway, it is
+best to be consistent and add it).
 
---FkEia1k7ZMsXTyfP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAcZeQAKCRB4tDGHoIJi
-0iWbAP9z3UWgpmmPL9iCnUOvG6wdr7hbXIjO7rXRgnhbqt0fkwD9HQMjWbIh05Hm
-OgvH3JO4XhG7ZCQ2aWRBhDWQ86BUSAM=
-=cBqK
------END PGP SIGNATURE-----
-
---FkEia1k7ZMsXTyfP--
+Cheers,
+Miguel
