@@ -1,76 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68939AD49;
-	Tue,  7 Mar 2023 16:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EEBFBC433D2;
-	Tue,  7 Mar 2023 16:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678204819;
-	bh=gxm0l3mSjzr0MUO4bkvTPkm5kKjBdTIob0I0BBX1z/0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=PASVappLx5cSXEFAFKUaawNvcR52njMk/PY6qHm3yOFaEBWqUFVpROHx52TFhF8ck
-	 lY3tZc0gEqz37FjH1mfZZA3A/+8ZVLUTX3tHXlgDSkWUSORKaJ0IlMRPL8vPEIu/Eh
-	 /kPqS3riDhLTElrsQW9gUYAk2bR0SG/NADY1auYE+cHEFDlViO+wr5MnGYVij9Ubxm
-	 lu1LtkPEkaP3EWg8yGJNSqdVIb07XAOLPjzNwcSmCvvgxsum38c1mk/z3yOCgpvoyN
-	 GHi86CCep2vkqo6ND+oGrqkTDmHeUp/cUl5hRKb++5pRslx6+uEwpor9S2qwA98w7L
-	 ZbvWK4Wh/BaeA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF266E61B63;
-	Tue,  7 Mar 2023 16:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D2CBA34;
+	Tue,  7 Mar 2023 17:31:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC21C4339B;
+	Tue,  7 Mar 2023 17:31:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1678210279;
+	bh=seGOF3Ey4jyxVPGFZ7ajxxS3qtAbvi5Bg4U9MGA+pLc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Z+zRHx8QXzP9Q43K2BIE6RCja1ShsawgWmO4Hcju4yZocYajKihZfiADwwbBsp8mX
+	 QKgfBwLsRvLA4IRp1yb+EZ1XYWBuFDIQGGKgpe6Pjx4d5Po6BNu4SsaXUaD/zY6bBb
+	 Dhb2s7VreSl6euyUsRet60rKStpYa7YmEVT2Rj7E=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	llvm@lists.linux.dev,
+	Mark Rutland <mark.rutland@arm.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Tom Rix <trix@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.2 0461/1001] perf llvm: Fix inadvertent file creation
+Date: Tue,  7 Mar 2023 17:53:53 +0100
+Message-Id: <20230307170041.392707183@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
+References: <20230307170022.094103862@linuxfoundation.org>
+User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Increase size of BTF_ID_LIST without
- CONFIG_DEBUG_INFO_BTF again
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <167820481876.4140.8715511443190797476.git-patchwork-notify@kernel.org>
-Date: Tue, 07 Mar 2023 16:00:18 +0000
-References: <20230307-bpf-kfuncs-warray-bounds-v1-1-00ad3191f3a6@kernel.org>
-In-Reply-To: <20230307-bpf-kfuncs-warray-bounds-v1-1-00ad3191f3a6@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- ndesaulniers@google.com, trix@redhat.com, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
 
-Hello:
+From: Ian Rogers <irogers@google.com>
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+[ Upstream commit 9f19aab47ced012eddef1e2bc96007efc7713b61 ]
 
-On Tue, 07 Mar 2023 08:14:06 -0700 you wrote:
-> After commit 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and
-> bpf_dynptr_slice_rdwr"), clang builds without CONFIG_DEBUG_INFO_BTF
-> warn:
-> 
->   kernel/bpf/verifier.c:10298:24: warning: array index 16 is past the end of the array (that has type 'u32[16]' (aka 'unsigned int[16]')) [-Warray-bounds]
->                                      meta.func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
->                                                      ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
->   kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared here
->   BTF_ID_LIST(special_kfunc_list)
->   ^
->   include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
->   #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
->                             ^
->   1 warning generated.
-> 
-> [...]
+The LLVM template is first echo-ed into command_out and then
+command_out executed. The echo surrounds the template with double
+quotes, however, the template itself may contain quotes. This is
+generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
+we see:
+...
+SEC("func=null_lseek file->f_mode offset orig")
+...
+where the first double quote ends the double quote of the echo, then
+the > redirects output into a file called f_mode.
 
-Here is the summary with links:
-  - [bpf-next] bpf: Increase size of BTF_ID_LIST without CONFIG_DEBUG_INFO_BTF again
-    https://git.kernel.org/bpf/bpf-next/c/2d5bcdcda879
+To avoid this inadvertent behavior substitute redirects and similar
+characters to be ASCII control codes, then substitute the output in
+the echo back again.
 
-You are awesome, thank you!
+Fixes: 5eab5a7ee032acaa ("perf llvm: Display eBPF compiling command in debug output")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Tom Rix <trix@redhat.com>
+Link: https://lore.kernel.org/r/20230105082609.344538-1-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+index 650ffe336f3aa..4e8e243a6e4bd 100644
+--- a/tools/perf/util/llvm-utils.c
++++ b/tools/perf/util/llvm-utils.c
+@@ -531,14 +531,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+ 
+ 	pr_debug("llvm compiling command template: %s\n", template);
+ 
++	/*
++	 * Below, substitute control characters for values that can cause the
++	 * echo to misbehave, then substitute the values back.
++	 */
+ 	err = -ENOMEM;
+-	if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
++	if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
+ 		goto errout;
+ 
++#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
++	for (char *p = command_echo; *p; p++) {
++		SWAP_CHAR('<', '\001');
++		SWAP_CHAR('>', '\002');
++		SWAP_CHAR('"', '\003');
++		SWAP_CHAR('\'', '\004');
++		SWAP_CHAR('|', '\005');
++		SWAP_CHAR('&', '\006');
++		SWAP_CHAR('\a', '"');
++	}
+ 	err = read_from_pipe(command_echo, (void **) &command_out, NULL);
+ 	if (err)
+ 		goto errout;
+ 
++	for (char *p = command_out; *p; p++) {
++		SWAP_CHAR('\001', '<');
++		SWAP_CHAR('\002', '>');
++		SWAP_CHAR('\003', '"');
++		SWAP_CHAR('\004', '\'');
++		SWAP_CHAR('\005', '|');
++		SWAP_CHAR('\006', '&');
++	}
++#undef SWAP_CHAR
+ 	pr_debug("llvm compiling command : %s\n", command_out);
+ 
+ 	err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.39.2
+
 
 
