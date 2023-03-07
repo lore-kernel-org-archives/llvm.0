@@ -1,143 +1,140 @@
-Received: from GBR01-LO2-obe.outbound.protection.outlook.com (mail-lo2gbr01on2121.outbound.protection.outlook.com [40.107.10.121])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B743361
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 02:20:45 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kOketxlZtpXHpvlNl+zfmeDANmEqpozJPES8LxXyGTv+Ay5Ip4Hjt2AR3r918CTmuMqRFsGn8wdlGHNPrA5uiQ3v9oxSmxu0kn/KmOC33vp3ug53nHhCY9wAPerWC92MzYju4DXe5+6bTw8VScjMXlEj7+yRMVZWvu098Md1Ggf6xJ0GLMOrQNZpGNJKKrU/oy23AjU0uwOU/QBmnogg/LKHvcOoxgmANHmZZ0dOH9kAz94VPcCn+x0z2R/gitqNTY/kJncQecXf4WUMNuqpwjnwWgvKG1ce5/tfkVYfkc6jx1Y81NnamQ1gnHowhxWcE4fZxxFFjBeoLj3JbhekyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i9kyDDGk+WjooeEf9wvB+S9vY2ybLe/VzhMuFPYi7mQ=;
- b=CCw70RXjfnW7CTpmka+qXnQA3+p9E3luxVUhnk6GJJdV0ytPW2AmL4O+hArDveVrMVimVyak5cEjlXnFysMUpf/bm8TsFJXcfvMa545wuCFbw5RekcUTzy9UuR8xfpvLbYBESNr8R3FTPHKpDBF4PI/uWhJ0/ITMvp29qPe0WRtr9hiL5/1aQS+jsFLHl74vMFM3FZaiScqP8vLSj6uPz554Ixn30kWMgmX5qvZ1WBGy7POcYh4QPYVdt19pZOoZmPeLh59yf4f7H1u7vLY2nNJT2dJ32xha1eNqKM/wrrpYpwWP7DMSnbfB/AjfY3eDpFBB9ThxLm8iqlf0Bb6o9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i9kyDDGk+WjooeEf9wvB+S9vY2ybLe/VzhMuFPYi7mQ=;
- b=0HijC8az3QnJkBnMblysGH28ExVvwziQyRGfSRU/5f8bGF8CVQhWnK2xDEnCtZPoecC9bsAzUteeGcLx7oHLNEmgKAckUWOxSpLv5cB5RqzrgaJh+KeM1rMrGQvdG7Oaeu9hKSBWr71xLsIeZBcq74xV+s3rTo+x9Jj41+rMZ/c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO6P265MB5968.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:2a3::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 02:20:43 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece%3]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 02:20:43 +0000
-Date: Tue, 7 Mar 2023 02:20:37 +0000
-From: Gary Guo <gary@garyguo.net>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, Conor Dooley
- <conor.dooley@microchip.com>, linux-riscv@lists.infradead.org, Conor Dooley
- <conor@kernel.org>, ojeda@kernel.org, alex.gaynor@gmail.com,
- wedsonaf@gmail.com, boqun.feng@gmail.com, bjorn3_gh@protonmail.com,
- corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
- rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC 0/2] RISC-V: enable rust
-Message-ID: <20230307022037.6528b6d1.gary@garyguo.net>
-In-Reply-To: <CANiq72=hvS6KxxkLocFOrU4E4pNi=y4OuJLm3iSiPGmi5B178Q@mail.gmail.com>
-References: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
-	<mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
-	<CANiq72=hvS6KxxkLocFOrU4E4pNi=y4OuJLm3iSiPGmi5B178Q@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: LO4P265CA0127.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c6::18) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71AF190;
+	Tue,  7 Mar 2023 02:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678156249; x=1709692249;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=QUCMvGUOH3jdnpmlE6VVRlbzd7r1bvwa/k6CVZMpVg0=;
+  b=Zbkum9RJylR0/qw7nY5+REn16F5Q/tgCewO9pjDACOt79bhlrPaTDufH
+   NR7JzKpeFMB6x7SQIVeLviCirO92/8LW67p5JgGYPnShs4OC+WbLjBXFB
+   hwazwNWTBcxo8pAz5B084v0UV/0tEThSKTtNgu0vPEC68Z0gEvx0/yeDj
+   t6w0wvQPOcOvT0rWLNKHpXJZbQ3KxMrpDlYcqqn1lpgDVR+I8HU8ZtXF0
+   BkNr9TtcpCfRBV5rdT/SY2MLSM3McuktAY/Yn+pRd7NEt8LiIpyNA3rqG
+   zF4zSqjiv7OGC4kURImToo9tBjP4TUM9EIe5QYQm36IKmmYi1oOSDw3p5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="316145350"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="316145350"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 18:30:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="678752341"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="678752341"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Mar 2023 18:30:47 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZN6E-0000sX-2S;
+	Tue, 07 Mar 2023 02:30:46 +0000
+Date: Tue, 7 Mar 2023 10:30:25 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [intel-tdx:guest-debug 2/4] vmlinux.o: warning: objtool:
+ __halt+0x28: call to __trace_tdx_hypercall() leaves .noinstr.text section
+Message-ID: <202303071026.rc7Jg3je-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO6P265MB5968:EE_
-X-MS-Office365-Filtering-Correlation-Id: 46755232-f709-4f61-f0d3-08db1eb28d91
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	xioVLPyEpLqfMucbQKjAb4ufDM3OM8Bz6A97AUORbZFirRV4CZLxgIdpQtvhmYClTr2hdta2OP4ZdK1suANdwnetQ1lpO+8AolZkRKtyCCDxNLYWPs5H31VSku6XRHxIHyiFQ3+j+ls3iWZ/FD0BRhLwvRkm8aRJtvr7kRWdz/go42sUKlT+NTpH4iV14Jhh9scF4dy24uWJCU3LHCBcrEeGKIpQYkAIIRfcXzfysx8o34J+YCAPntAORe4ErBJonP4GBiTs0hE9dmrS9aL9z+n4dXxDqRWXkEdvNXKz9gKF1Jsp5uKbM4PYAItknwKchZQ4xEjkpEpmzbtmWs9DxP7n81D2+nsKSx6gCXXqRcjwbCC3ddEtCPBZYKZn4HucvbpJYgdCxgRMfAWBuVgB286Of6W0D47cONiIKEYxt/7mCR5UOWKcJfDCI9FAB8ZLU1t16VmPX+4LVb0OYNbEe7IGP7SeaTRJ2o65YRRHnJp9hYXH/mp5WVcXyceSdKTzL/2FnyXS6ewX39Bt0aXp/EyApoXZeH8p8Ph6F0tv7iaCPgbDWobZTJEXjr6zZ1YUHk87T4vLrpQsNXg/qQ5VK8fniih+NtmTFMZiWOVcnjLV5yS1mHVuUK+YmHTyuBmlEyggn9swS3b6uUQd4C1+7w==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(396003)(376002)(39830400003)(346002)(451199018)(38100700002)(86362001)(36756003)(5660300002)(6512007)(4744005)(2906002)(7416002)(4326008)(6916009)(8676002)(8936002)(66476007)(66556008)(41300700001)(66946007)(6666004)(186003)(2616005)(53546011)(26005)(316002)(478600001)(6506007)(1076003)(6486002)(54906003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SWZXYlZTTUowUW9RQkV2bThGZkxqcWt3OVFOZGJJL2pCY0JJTVdXbktVcWtD?=
- =?utf-8?B?VmZId0xjT2FJeVZPTG5IVVA2SFBBMytwTjRkNFgvQlE3TEhHS2xyMjZOUjRH?=
- =?utf-8?B?VVRaZzM5RVRCaTBRRHkzNnhON0c5aWJwaFRSekdpOWFaTGJoTXVjL205Mk1z?=
- =?utf-8?B?ZUVHd1RnSWtHMDNSd2tIL2pENmFZTnFNUXl4M2c0TVZSMm9wWW1TeVdHRWNO?=
- =?utf-8?B?OFBUNytGV00xOTdvWEV6RWhRTHBDUS8vTlZ2VExZcU1nWUMwZkxNWmt4S3lk?=
- =?utf-8?B?YnV3TzFaV2svRStnZXNGanFKNXZ1ODl3Q2tKSHNzTFNOclZldi82cnppMzE4?=
- =?utf-8?B?TkFiTHdqVlRVcWl5SGJsUjZGak9uV0VLUFNScENyMzlYOGlUays2dG0wTS9j?=
- =?utf-8?B?bUh4dldHSG9PanRPYUUzUkg2UDFaMWZxUWxSZjZKajZNRWxJcFFFWWJZUFBl?=
- =?utf-8?B?QnhWU2gybFFrQlJrWkMrTHZVY3o3L1lxK3JiWno2am5QR0MyeUI4eWpYVjYx?=
- =?utf-8?B?aWdiNk02d0RlR0I1ald1VDBuS3d5eE1ZVTJzNzBDNlVzdC9BejFtZUNUS2tS?=
- =?utf-8?B?aDM3WlhGMmlrNmEzY1Q4cXA5YWpta3lwUzhVYWVrSmFON2dGbys2NTR4Ui84?=
- =?utf-8?B?cXNzdUVVQWpzTnd6c3g2cUJVNnY4RGhvQXQ1eUVYaTVLY2pTdFZESGExOU9T?=
- =?utf-8?B?MzNSZ0JNOUxyM0dhbWU3US8rbkd4bStVTmt0VTNURHhYaW5LNm92T0RPU2t6?=
- =?utf-8?B?SlZLK3FEQ3VZNU83eVlhbE9Pa2tpYytiamM4UlJYZnJkYlRDSkVsNnhHNmRQ?=
- =?utf-8?B?dnJPNTlia0JidnE2TmZnWDBNSnNJMjhDMThwL2lHSHZhSVRieU9rSmJtY3NY?=
- =?utf-8?B?MjdkeklGK0VSYkhyY0xkVEprYjZ1QmE2MTUvTnprN2Erb2lwZnN0UjZRTUh2?=
- =?utf-8?B?UE5uOHVxeTFiRVZML1psUGc3QWR3dXFkTFRhTWRvTW5KeVdScDRHeUVaTUY5?=
- =?utf-8?B?SkNSV3g0ZjNWb1dnVGhYWUZlbTBySTNXQ1cwcVh5ejFRdk9lemdLM2hJTlhv?=
- =?utf-8?B?OEtvMWpWaVBjeVBqcTl3bTZMRXg0WWphTS9SUWszcWV3anhEQm5FKy9uWVdn?=
- =?utf-8?B?NWpsL2NUanZVL0Fhb2pqQjMrTlV1OGhFT2owQkxOWUJUSnkwZW82MlVLZUE0?=
- =?utf-8?B?RVY2aFE1SGVocFk3emlUOVhiQXpjZzFJWDdXL3VSdnRNR1J5N1FpWm9sdkNx?=
- =?utf-8?B?QmJIWTlMRUdDWmNDYjZUODZWVnJkUVhPOG1RSFl4VXhKNXUzbHFNWFl3UjVo?=
- =?utf-8?B?OGN3K2UxUUFvZk9GNGVKbGt5NTJCMmw5V0VXTVFIckdUVS96bFpyWWRlQ2hS?=
- =?utf-8?B?cmpwbnl4TE9uM3JZbmFnVTgyY3FjMDlONE5paUpZNVdEUjRldGVGK1dncm9v?=
- =?utf-8?B?VVJ3T2FncHZrVmx4dmFvcjc0VDVxZWVQRUhHYkR6SDVtMjVJZWxLVmVLMEs0?=
- =?utf-8?B?ZkxMZUZzekQvdE5ndmdEN0EyVmdEcHphMkptOUZ6L0UwcEpUcnFGUmRsQnRV?=
- =?utf-8?B?dGU3QTUrdVJ6OExYZTZHODdzVjZFYURlYjBxT0RZcFh5OHZGSGFnNG9rRjRV?=
- =?utf-8?B?UHBaa2J1Zk03SG1KQmVINjEzRjFXcjdwODUxL0dkcWFFNXYyQm1LUGNOcVF4?=
- =?utf-8?B?Q2lnODBNVDhsL3Z3MHJRbko1Ui9lM0hMa3ZkWjNJS1RqbjdCdG9zTkdFUXcv?=
- =?utf-8?B?eFptUEhaeXJzeWFZYlp1aUZBL0g5aWU2SmZuOWxFQjAwdCtJQm5DNTlIdWdQ?=
- =?utf-8?B?WmxwcjBoNkF1TlNSdWQ1dVlydll3RTVmQ0ZTUDNJNzBLYmpmaGR1VUdSUTM1?=
- =?utf-8?B?ZkJZUG9kL1BoZTNLWmNMR09vREVtYkpJTDRtWlJTK3BwaXZSWHlxWWpZTVFk?=
- =?utf-8?B?aGlJN0NiVG02WVNEdWZlZGh3OEU3RGxkZTJXbVdQZVlsNHRvc2JRRi9WNHM5?=
- =?utf-8?B?ZGlQRXFZWXpPZkpyb1ZnRzJsc2s1STI2YVMzb0UxSXlxOW5acVlBWnJCNmxj?=
- =?utf-8?B?ODQ5OFk3MndwaCtRVjN6MUFjOVBYaGtSNVE3WnFhSTNZQXRKbXMvaVRRdVR1?=
- =?utf-8?Q?+hYaVYJBNGtYobkKOxczIyLza?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46755232-f709-4f61-f0d3-08db1eb28d91
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 02:20:43.2939
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kfkXZvK9e/I4bkzYoUuMSVIIJkpFlo3fQGSxNcKOzrJQI4IVky241Y/Zm+WmN8DnCYhg78xJoi0hH+e/5RuCbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB5968
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 6 Mar 2023 20:28:47 +0100
-Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> wrote:
+TO: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+CC: Tony Luck <tony.luck@intel.com>
+CC: Andi Kleen <ak@linux.intel.com>
 
-> On Mon, Mar 6, 2023 at 8:18=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com=
-> wrote:
-> >
-> > It's time for the next release.  IIUC there were some authorship issues
-> > here, did you guys want to re-spin this with those sorted out?  I can
-> > give it a shot if you want, but I'm probably as likely to screw it up a=
-s
-> > anyone else... =20
->=20
-> No problem on my side, and either way is fine! Thanks!
->=20
-> I think what is important is that Gary is aware and agrees.
->=20
-> Gary: do you prefer to be the main author or the `Co-developed-by` author=
- here?
+tree:   https://github.com/intel/tdx.git guest-debug
+head:   cd4562557ed3eaea18d74d9521791d7889c696aa
+commit: 9499ad5bd6e897e4c11b974504973939f2d4730a [2/4] x86/tdx: Add TDCALL tracepoint
+config: x86_64-randconfig-a011-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071026.rc7Jg3je-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/9499ad5bd6e897e4c11b974504973939f2d4730a
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx guest-debug
+        git checkout 9499ad5bd6e897e4c11b974504973939f2d4730a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Co-developed-by is fine.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303071026.rc7Jg3je-lkp@intel.com/
 
-Best,
-Gary
+All warnings (new ones prefixed by >>):
+
+   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x33: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x37: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x89: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x45: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0x68: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: native_sched_clock+0x68: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_machine_check+0x54: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_machine_check+0x59: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x10: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: pvclock_clocksource_read_nowd+0x8c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: local_clock+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x48: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x51: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x48: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x48: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit+0x40: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x44: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x4d: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: tdx_safe_halt+0x2b: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: __halt+0x28: call to __trace_tdx_hypercall() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mwait_idle+0x2b: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_processor_ffh_cstate_enter+0x80: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle+0x78: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle_s2idle+0x84: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle_irq+0x79: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle_ibrs+0x7e: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle_xstate+0x7e: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poll_idle+0x49: call to ftrace_likely_update() leaves .noinstr.text section
+
+
+objdump-func vmlinux.o __halt:
+0000 00000000000000c0 <__halt>:
+0000   c0:	48 83 ec 60          	sub    $0x60,%rsp
+0004   c4:	89 fa                	mov    %edi,%edx
+0006   c6:	48 89 e6             	mov    %rsp,%rsi
+0009   c9:	b9 18 00 00 00       	mov    $0x18,%ecx
+000e   ce:	31 c0                	xor    %eax,%eax
+0010   d0:	48 89 f7             	mov    %rsi,%rdi
+0013   d3:	f3 ab                	rep stos %eax,%es:(%rdi)
+0015   d5:	48 c7 46 18 0c 00 00 00 	movq   $0xc,0x18(%rsi)
+001d   dd:	89 d0                	mov    %edx,%eax
+001f   df:	48 89 46 20          	mov    %rax,0x20(%rsi)
+0023   e3:	48 89 f7             	mov    %rsi,%rdi
+0026   e6:	31 f6                	xor    %esi,%esi
+0028   e8:	e8 00 00 00 00       	call   ed <__halt+0x2d>	e9: R_X86_64_PLT32	.text+0x51ac
+002d   ed:	48 83 c4 60          	add    $0x60,%rsp
+0031   f1:	c3                   	ret
+0032   f2:	cc                   	int3
+0033   f3:	cc                   	int3
+0034   f4:	cc                   	int3
+0035   f5:	cc                   	int3
+0036   f6:	cc                   	int3
+0037   f7:	cc                   	int3
+0038   f8:	cc                   	int3
+0039   f9:	cc                   	int3
+003a   fa:	cc                   	int3
+003b   fb:	cc                   	int3
+003c   fc:	cc                   	int3
+003d   fd:	cc                   	int3
+003e   fe:	cc                   	int3
+003f   ff:	cc                   	int3
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
