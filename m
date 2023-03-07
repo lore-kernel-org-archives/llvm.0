@@ -1,52 +1,54 @@
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751B333D2
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 11:21:58 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id 82so11016546ybn.6
-        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 03:21:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FACA3C00
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 11:56:41 +0000 (UTC)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-53852143afcso240309717b3.3
+        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 03:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678188117;
+        d=gmail.com; s=20210112; t=1678190201;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+6M7Rrz8d9sk58/G5zmHZtDU4PDW4DV0zcA0ptQ1Png=;
-        b=UvPobudrKein15cSeOXHadW3ZwXyETu9tdRk/e0W67OcmbQVHqprMAqPs5BFbtRInN
-         bMb0324eNAx+3ZRMjr0fYXKGBZ//61yIXN3o9Xz87LSxsjbWhsu+oDg0E6JsnjeENazR
-         CZgdgsEndyjCgUTVtXV4OXqJ9POmLz7IwIanvZ4YrF91nK5YWyZjnaIO32evJzdmPd07
-         pp4n5JdsJTv2tOXxrOaaZ4LdXFJwVLjcJV0mbdPq9cV385dnSujp9ht4BW9THOovXQO8
-         iU7s9FaQ4pw1yIkqdjsnDZvp3YOrtzvlEg0GrliwRMC8uHJ/W6ibcE2v4OG0RdrEAKyk
-         Rwvw==
+        bh=Fpzu6mM9TObEaWPqTRbV/lVIlKZNjyI+OGMeOTlpmmM=;
+        b=HlTlFZ6JpzfQr4iv30oIdQyWt5EKVG4KlPTb+CtXgnhcokg9agdArzRPjQaAhjClKC
+         ZdKh92km6nxWkT3uQOqDjCk/L1h0yTo3J3/U6pK8OkC1WlgHQdR+UJzqYNSNfKh56g1h
+         P6SjgUcedkQsE7840DprGK0z/3YIOuMtgwSwzxamhNMXCsjz/bOD5MvATFVETc5SR+UT
+         iBVMPMKPl2EtwWqT8Im+I1/eoqcIyrslwnxUhawQPD4rEIjHRjbkTYaGZlWu3279wo1m
+         o9hRTRw9GolZcvpByHOv1j8JCWQJ9mYMpP+s0DjAfQlcib7hjtoM8L2U5RyjFmGHJHtj
+         o/vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678188117;
+        d=1e100.net; s=20210112; t=1678190201;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+6M7Rrz8d9sk58/G5zmHZtDU4PDW4DV0zcA0ptQ1Png=;
-        b=gf9yawQu3+RRubeml3if4cmy+VwHncKwD70QT55H3BZ0FKosZ7dzF0oqnHRjqYKxxW
-         2mYwTK0lBha+lzspyG4uNfApcP4IK5MgSFE+DjrGZbyFzjOpGGNw1gtyyPELhneZRKBG
-         bF1frX2cSoVwY7obHkvI0Fb3mnodcAnwsI8IBbxgcgtzkR6GWYuCUChDGzHGHSRnqHbO
-         IbMhccWtft+OTpH3hZ9KJcJcFW+Pt2s+dVLp79sUWajUysLGv4ab72DggRj9Uo/uc9aI
-         JSV0unxAD21pJrtbzG39+JUPJPMhAljNWnn3Y+O9KrdYNRCi+S28oCEcbkERHZwYICkV
-         DsGA==
-X-Gm-Message-State: AO0yUKXpYy6y22cf1VsV6jQ2i1x8C5KEcTUlhcnjsq3nkKstCqKRM3Z1
-	2NfbgCDYjN0eUlIKZujHGjOu/K8/9XYtUA8D2UQ=
-X-Google-Smtp-Source: AK7set9Xm/+t4RsbYIh8ZTtsG14e7fG27l8U4WG+CAhTtfNoZ/TFjDRHLzJOC1Pb6hQWIxMo+D0M4xfhEHmOcmY6vLs=
-X-Received: by 2002:a5b:b03:0:b0:ad7:b81e:69bd with SMTP id
- z3-20020a5b0b03000000b00ad7b81e69bdmr6382804ybp.2.1678188117463; Tue, 07 Mar
- 2023 03:21:57 -0800 (PST)
+        bh=Fpzu6mM9TObEaWPqTRbV/lVIlKZNjyI+OGMeOTlpmmM=;
+        b=tyAMn8dCAkc07OFbwSJGu1BMUVwcXr5Bcs5hm0Ca9po03+aSQqzjvcwC09SSK53qIS
+         tX3Y7U5KrwM9aViNMvvt6EqowwssMdF4z4qVjlFqu74FnvsOk/q5yFKupa4JOKbLApNJ
+         2eLXrP4ktIuDfHK8PGFQkYmAJPBZzg+I5jpCTEHKd1/f+9N5VvxZYAvo1rYY8NvMdGC8
+         rIwpH0PsBkNN1WZUwbQPdngPHK/+WiX0cf7vzyh6tHGCdkd8lMSAKOMxH8ew7qe2g/pw
+         kUv33BqDLSxli40Mvfhx3mfJTrHTf2aCwmBgGL5ZFECjO3flxdW3Y+SalYZlYFBU6N2p
+         qnTA==
+X-Gm-Message-State: AO0yUKVKGevWHHIPcJSrBNNswlZejX8xExtYyfQda85CqNnHVTP5rO/l
+	KF33WKJV1LRR67GVihrDyQ1b3jvNu4G6zleDj/g=
+X-Google-Smtp-Source: AK7set+XuApmsHpeE59OAObEV85h6yLM1xkplSm7PT1n4hNgCYOTpCcCuw40R2D3CdnvscfMkze9+dwV/8bTBkxG6YU=
+X-Received: by 2002:a81:b61a:0:b0:52e:c79a:cda with SMTP id
+ u26-20020a81b61a000000b0052ec79a0cdamr9075327ywh.10.1678190201054; Tue, 07
+ Mar 2023 03:56:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230307102441.94417-1-conor.dooley@microchip.com> <20230307102441.94417-2-conor.dooley@microchip.com>
-In-Reply-To: <20230307102441.94417-2-conor.dooley@microchip.com>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
+ <20230307102441.94417-3-conor.dooley@microchip.com> <CANiq72nLjBgMSUTtWuF7qU5vG9rA3v=ekWk1d6+SNiGkfcaS8Q@mail.gmail.com>
+ <ZAcZeWYUU75BK5FO@wendy>
+In-Reply-To: <ZAcZeWYUU75BK5FO@wendy>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 7 Mar 2023 12:21:46 +0100
-Message-ID: <CANiq72mB5jXPuLy4mcYsa-q4yjHeryVWZrDf6wavvpj5FkwMOw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] scripts: generate_rust_target: enable building on RISC-V
+Date: Tue, 7 Mar 2023 12:56:30 +0100
+Message-ID: <CANiq72kz2qxsB9JG7OB02KMAfy-YvokCFWMuEj_bkaY8i5tdVg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] RISC-V: enable building 64-bit kernels with rust support
 To: Conor Dooley <conor.dooley@microchip.com>
 Cc: linux-riscv@lists.infradead.org, conor@kernel.org, 
 	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -60,22 +62,16 @@ Cc: linux-riscv@lists.infradead.org, conor@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 7, 2023 at 11:25=E2=80=AFAM Conor Dooley <conor.dooley@microchi=
+On Tue, Mar 7, 2023 at 12:01=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
 p.com> wrote:
 >
-> Despite removing 32-bit support, I kept the structure of the if
-> statement, despite early return being stylistically preferred, for
-> alignment with the Rust-for-Linux tree. I'm happy to respin to sort that
-> out of desired.
+> Cool. Git should resolve that, probably without even generating a
+> conflict in -next, right?
 
-This is a case of 2 "equal" sides to the branch (though at the moment
-an error), so it sounds good, and it will mean a smaller diff later.
+I think it will conflict.
 
-> +            panic!("32-bit RISC-V is an unsupported architecture")
-
-Nit: if there is a v2, please add a semicolon to be consistent with
-the others in the file (not sure which style we will go for, it looks
-like `rustfmt` accepts both ways).
+Since the cleanup is elsewhere and it may add work for the -next
+maintainer, it is probably best to take it out in v2.
 
 Cheers,
 Miguel
