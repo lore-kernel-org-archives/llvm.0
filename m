@@ -1,134 +1,98 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F82613D
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 12:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=BVGCRdlhXoJzmQdf8XCmE7+QIsrubV9w+1i9PXTee9Q=; b=AtCcCdOUx85ga5lHlCmY0z81qz
-	2tmPFeofVlDLYKOOg/L8sNg9UjNMazGTqOBNu1Wb/hnLZwth8w08sMGf9PKN/bsltVpCyiKZpsGkZ
-	01AdlAKXcSQAJtgmXrfbgE4cm1FkFd2EtIx6Do9mmhCPTl3/lvnIooUlaROXxvOLOiPSjPNKKDNaH
-	56j7TAwdl2hA28zqjHt/oyyHidVbLh2Pfz9Z3Hsk09SaJOMrVDX3wPx9UO2qBLIDsrNLKo6C5pVsu
-	Gqbm1k00C0tM5lvmzMb7rtadzTYT0ehEHEISdsDRwhNgCLmJ/zBQcsWZWQ57eKT4xGB4oQZrNJejc
-	UaRQxNLw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1pZVbf-00H1sR-25;
-	Tue, 07 Mar 2023 11:35:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8966830031E;
-	Tue,  7 Mar 2023 12:35:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 629FA23A1D2ED; Tue,  7 Mar 2023 12:35:45 +0100 (CET)
-Date: Tue, 7 Mar 2023 12:35:45 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Stephane Eranian <eranian@google.com>, linux-kernel@vger.kernel.org,
-	tony.luck@intel.com, reinette.chatre@intel.com,
-	fenghua.yu@intel.com, peternewman@google.com, james.morse@arm.com,
-	babu.moger@amd.com, ananth.narayan@amd.com, vschneid@redhat.com,
-	Nathan Chancellor <nathan@kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Borislav Petkov <bp@alien8.de>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in
- __resctrl_sched_in
-Message-ID: <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
-References: <20230303231133.1486085-1-eranian@google.com>
- <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
- <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8583613D
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 12:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678193552; x=1709729552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=db3CujOdnnk4JvHTbGCquQDaWmCdFrEeKYWPbrMS3TQ=;
+  b=crYrgKpw8RQDQY9Ms7Pf2vA5mztFXmP/OupoQMUIDxXjWmDPxWAHTNLn
+   R1Wrr+VZY72lnqaltv0wXE5b4fUJH24sWnkdqp7b0MnAYpujaG5GrcSm1
+   +6og5tCbKXr6qo2mZC2RUWxqBA/L5Inb0l2ktzMu1wc+ZiXmrhiaNO5oQ
+   ZPEBT4KlMXGBm3FSonhiAgb/xxGP9LbmdC1Y49D1aLD1JDM23PA8x4XMh
+   yqvbjsXSd5d3BF6Qwpgbk1Sfm3tUG5wShZKOPoILcvzPhCuAXNDqNiprK
+   i7/lqg4A7KhXFXb3AmuDeyjb4HQBnwL86IFbC9ZbPdtzrhXxkOX+/Mlj2
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
+   d="asc'?scan'208";a="200357617"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 05:52:27 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 7 Mar 2023 05:52:26 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Tue, 7 Mar 2023 05:52:23 -0700
+Date: Tue, 7 Mar 2023 12:51:55 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+CC: <linux-riscv@lists.infradead.org>, <conor@kernel.org>, Miguel Ojeda
+	<ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho
+	<wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
+	<gary@garyguo.net>, =?iso-8859-1?Q?Bj=F6rn?= Roy Baron
+	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+Subject: Re: [PATCH v1 2/2] RISC-V: enable building 64-bit kernels with rust
+ support
+Message-ID: <36af5bd6-883c-4968-8ace-2e31ec51907d@spud>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
+ <20230307102441.94417-3-conor.dooley@microchip.com>
+ <CANiq72nLjBgMSUTtWuF7qU5vG9rA3v=ekWk1d6+SNiGkfcaS8Q@mail.gmail.com>
+ <ZAcZeWYUU75BK5FO@wendy>
+ <CANiq72kz2qxsB9JG7OB02KMAfy-YvokCFWMuEj_bkaY8i5tdVg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="OghjveGlJgfPwijn"
+Content-Disposition: inline
+In-Reply-To: <CANiq72kz2qxsB9JG7OB02KMAfy-YvokCFWMuEj_bkaY8i5tdVg@mail.gmail.com>
+
+--OghjveGlJgfPwijn
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 06, 2023 at 04:16:52PM -0800, Nick Desaulniers wrote:
-> Start of Lore thread:
-> https://lore.kernel.org/lkml/20230303231133.1486085-1-eranian@google.com/
-> 
-> On Mon, Mar 6, 2023 at 4:01 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Tue, Mar 07, 2023 at 12:56:30PM +0100, Miguel Ojeda wrote:
+> On Tue, Mar 7, 2023 at 12:01=E2=80=AFPM Conor Dooley <conor.dooley@microc=
+hip.com> wrote:
 > >
-> > On Fri, Mar 03, 2023 at 03:11:33PM -0800, Stephane Eranian wrote:
-> >
-> > > The problem is located in the __resctrl_sched_in() routine which rewrites
-> > > the active closid via the PQR_ASSOC register. Because this is an expensive
-> > > operation, the kernel only does it when the context switch involves tasks
-> > > with different CLOSID. And to check that, it needs to access the current
-> > > task's closid field using current->closid. current is actually a macro
-> > > that reads the per-cpu variable pcpu_hot.current_task.
-> > >
-> > > After an investigation by compiler experts, the problem has been tracked down
-> > > to the usage of the get_current() macro in the __resctrl_sched_in() code and
-> > > in particular the per-cpu macro:
-> > >
-> > > static __always_inline struct task_struct *get_current(void)
-> > > {
-> > >         return this_cpu_read_stable(pcpu_hot.current_task);
-> > > }
-> > >
-> > > And as per percpu.h:
-> > >
-> > > /*
-> > >  * this_cpu_read() makes gcc load the percpu variable every time it is
-> > >  * accessed while this_cpu_read_stable() allows the value to be cached.
-> > >  * this_cpu_read_stable() is more efficient and can be used if its value
-> > >  * is guaranteed to be valid across cpus.  The current users include
-> > >  * get_current() and get_thread_info() both of which are actually
-> > >  * per-thread variables implemented as per-cpu variables and thus
-> > >  * stable for the duration of the respective task.
-> > >  */
-> > >
-> > > The _stable version of the macro allows the value to be cached, meaning it
-> > > does not force a reload.
-> >
-> > Right, so afaict the difference between this_cpu_read() and
-> > this_cpu_read_stable() is the volatile qualifier.
-> >
-> > this_cpu_read() is asm volatile(), while this_cpu_read_stable() and
-> > raw_cpu_read() are both an unqualified asm().
-> >
-> > Now, afaiu we're inlining all of this into __switch_to(), which has
-> > raw_cpu_write(pcpu_hot.current_task, next_p).
-> >
-> > And I suppose what the compiler is doing is lifting the 'current' load
-> > over that store, but how is it allowed that? I thought C was supposed to
-> > have PO consistency, That raw_cpu_write() should be seen as a store to
-> > to pcpu_hot.current_task, why can it lift a load over the store?
-> >
-> > Specifically, percpu_to_op() has a "+m" output constaint while
-> > percpu_stable_op() has a "p" input constraint on the same address.
-> 
-> I definitely think the issue is specific to "p" constraints.
-> https://godbolt.org/z/34YeG6WbY is the test case I reduced which I
-> think demonstrates the issue.
-> 
-> https://reviews.llvm.org/D145416
-> -> click "Show Older Changes" for the ongoing discussion.
+> > Cool. Git should resolve that, probably without even generating a
+> > conflict in -next, right?
+>=20
+> I think it will conflict.
+>=20
+> Since the cleanup is elsewhere and it may add work for the -next
+> maintainer, it is probably best to take it out in v2.
 
-So per that summary, I'm going to nit-pick and state we very much want
-CSE. CSE good. What we don't want it violating store-load ordering.
+If you think it will conflict as-is, it's probably gonna conflict either
+way.
+You've pointed out several small bits, I'll send a v2 in a few days.
 
-> I don't have a satisfactory answer yet, but am looking into this.
+Cheers,
+Conor.
 
-Oh, geez, what a twisty tale that... So Linus knew back in '09 that "p"
-was icky, but it sorta was the only thing and it 'worked' -- until now
-:/
+--OghjveGlJgfPwijn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Is there a way to explicitly order these things? barrier() obviously
-isn't going to help here.
+-----BEGIN PGP SIGNATURE-----
 
-So ideally we'd get something that respects the whole store-load
-ordering but still allows agressive CSE. And works for both toolchains.
-Small ask, I know :-)
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAczawAKCRB4tDGHoIJi
+0q2zAQCGrMXmp1otmx9KctfrHf1Ol5KJTxzDmuBtPfHgBLOgQAEA74Ce5Fhsb+MK
+1rRf0Dnx0FHgQLhpzxjlfV51kr0qUwc=
+=QvX9
+-----END PGP SIGNATURE-----
+
+--OghjveGlJgfPwijn--
