@@ -1,101 +1,106 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D39BA4F;
-	Tue,  7 Mar 2023 19:02:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678215751; x=1709751751;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R4Aswtna7Q6k4KcdpQ681CgnEtG6Wk89kjUpElYelUY=;
-  b=El1+QmR/FXf8a7D8OPUhGgUNXfm/1N+ia7tYWPXp58cixGLdpUByYVTj
-   HnAzSRrFeEyXPIfOscYGpRFyP+faIjki48zGZ2rGDxEt+PGPNFJXtTTt7
-   Nm9ki0yh7DbLjSmKtsy6ySwqIammbirO/4bWKJCCGyVLUdJ7xCdTDf8cL
-   SVET2wj5b8sWC73L/XK3k5Ox2gyFSArwnP4BD4y0PgUzGfaa2d7dREOHR
-   9ebnEBYc9envwp1N05I4gUdK/wfROPMEmynTQrpljLgYCLqJ9Dza8um58
-   rNiib6crfLHsaJ7MQlJQof4II7EtNjo21H0fz2AZ2pDqOyOpfOGxP7OxR
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="400767732"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="400767732"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 11:02:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676663268"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="676663268"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2023 11:02:16 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZcZj-0001XL-31;
-	Tue, 07 Mar 2023 19:02:15 +0000
-Date: Wed, 8 Mar 2023 03:01:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
- 488/639] drivers/pci/endpoint/functions/pci-epf-vntb.c:1432:20: error:
- incompatible function pointer types initializing 'int (*)(struct pci_epf *,
- const struct pci_epf_device_id *)' with an expression of type 'int (struct
- pci_epf *)'
-Message-ID: <202303080252.b23GA3FL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F14DBA4F
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 19:14:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C17C433EF;
+	Tue,  7 Mar 2023 19:14:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678216498;
+	bh=NBoYj03m/N/5JXP/eUAG+iOaCqvhQKVMr77J4rNfHlo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QSBKIWVtDGUKvDX1KW4nuwVauqFVidsbWphhPpmSxCnd7Kx9yMTpnI7ctnrhCYJ5u
+	 xph5vWf9YpUX6h60UkzXWaiieIp45uDW0Q+lHUlEECZNjTaFi1lU7GO6EW69VltYaR
+	 oPmQvSs16tF9pL0sK6t0NQ1UopU7oaq4rPrRypj56XNdqnUhAl2oBiHuv1ocZ5Jk62
+	 jJ70506CDO1wi+nz0yOwvZWeKaT2X8ACYlVBrKixWkJN9QliKWtC2aOCYlpV2AOf+x
+	 D/LGXPLtqJZ+hgrUNm4xa7ibblavYO1OfPpLaJG34LOB1YFu7FD+V3td/XwIOLZvMs
+	 MpLJvscBzTL2A==
+Date: Tue, 7 Mar 2023 19:14:54 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: nathan@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+	naresh.kamboju@linaro.org, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v1 1/2] RISC-V: move zicsr/zifencei spec version check to
+ Kconfig
+Message-ID: <299f2b9c-d72b-4b2c-9f42-f5b71a9d05e6@spud>
+References: <Y/jtGRrBfKxO6s0c@spud>
+ <mhng-5ec23642-a554-4e02-82bc-3a138a50d3ce@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="rExin57s/Ed36ADq"
+Content-Disposition: inline
+In-Reply-To: <mhng-5ec23642-a554-4e02-82bc-3a138a50d3ce@palmer-ri-x1c9a>
+
+
+--rExin57s/Ed36ADq
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
-head:   bc291a97d070700f8a5b4504fe3de4c2cea6a888
-commit: 0a5791cface5a07c793b0192cbcc3e685f2e65a7 [488/639] PCI: endpoint: Pass EPF device ID to the probe function
-config: i386-randconfig-a012-20230306 (https://download.01.org/0day-ci/archive/20230308/202303080252.b23GA3FL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/krzk/linux/commit/0a5791cface5a07c793b0192cbcc3e685f2e65a7
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
-        git checkout 0a5791cface5a07c793b0192cbcc3e685f2e65a7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/pci/endpoint/functions/
+On Mon, Mar 06, 2023 at 03:52:27PM -0800, Palmer Dabbelt wrote:
+> On Fri, 24 Feb 2023 09:00:09 PST (-0800), Conor Dooley wrote:
+> > On Fri, Feb 24, 2023 at 09:37:28AM -0700, Nathan Chancellor wrote:
+> > > On Thu, Feb 23, 2023 at 10:05:45PM +0000, Conor Dooley wrote:
+> >=20
+> > > > ---
+> > > >  arch/riscv/Kconfig  | 10 ++++++++++
+> > > >  arch/riscv/Makefile |  5 +----
+> > > >  2 files changed, 11 insertions(+), 4 deletions(-)
+> > > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > > index cebf0c5f8824..4eb0ef8314b3 100644
+> > > > --- a/arch/riscv/Kconfig
+> > > > +++ b/arch/riscv/Kconfig
+> > > > @@ -288,6 +288,16 @@ config ARCH_RV64I
+> > > >  >  endchoice
+> > > >  > +config TOOLCHAIN_NEEDS_SPEC_20191213
+> > >=20
+> > > This symbol's name is a little confusing to me, how does the toolchain
+> > > need spec version 20191213. Maybe 'SPEC_20191213' should be something
+> > > like 'EXPLICIT_ZICSR_ZIFENCEI'? Otherwise, maybe it should be somethi=
+ng
+> > > like 'TOOLCHAIN_HAS_DEFAULT_SPEC_20191213'? Sorry for the bikeshed bu=
+t I
+> > > think most Kconfig symbols should be self describing.
+> >=20
+> > Yah I can do that. I actually had this as the DEFAULT_SPEC variant
+> > before and changed it - I'll switch it to the EXPLICIT one.
+> > Thanks for taking a look Nathan :)
+>=20
+> Another option here would be to use the `-misa-spec` argument for GCC, to
+> make it match LLVM's spec version.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303080252.b23GA3FL-lkp@intel.com/
+I'm not entirely sure what you're getting at.
+You're the toolchain guy, but my understanding was that gas and gcc have
+that option, but not ld, which rules out my initial interpretation.=20
+Are you suggesting that we always pass -misa-spec=3D<pre-zicsr_zifencei> to
+gcc so that we are using the same misa-spec for both gnu and llvm
+toolchain bits?
 
-All errors (new ones prefixed by >>):
+My instinctive thought was that that is kinda fragile to things
+misaligning between gcc/llvm, but given I seem to end up looking at this
+every month, we're really fragile to changes in either camp anyway...
 
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:1432:20: error: incompatible function pointer types initializing 'int (*)(struct pci_epf *, const struct pci_epf_device_id *)' with an expression of type 'int (struct pci_epf *)' [-Werror,-Wincompatible-function-pointer-types]
-           .probe          = epf_ntb_probe,
-                             ^~~~~~~~~~~~~
-   1 error generated.
+I can go spin an alternative v2 of this up if I have understood you
+correctly.
 
+Thanks,
+Conor.
 
-vim +1432 drivers/pci/endpoint/functions/pci-epf-vntb.c
+--rExin57s/Ed36ADq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-e35f56bb03304a Frank Li 2022-02-22  1429  
-e35f56bb03304a Frank Li 2022-02-22  1430  static struct pci_epf_driver epf_ntb_driver = {
-e35f56bb03304a Frank Li 2022-02-22  1431  	.driver.name    = "pci_epf_vntb",
-e35f56bb03304a Frank Li 2022-02-22 @1432  	.probe          = epf_ntb_probe,
-e35f56bb03304a Frank Li 2022-02-22  1433  	.id_table       = epf_ntb_ids,
-e35f56bb03304a Frank Li 2022-02-22  1434  	.ops            = &epf_ntb_ops,
-e35f56bb03304a Frank Li 2022-02-22  1435  	.owner          = THIS_MODULE,
-e35f56bb03304a Frank Li 2022-02-22  1436  };
-e35f56bb03304a Frank Li 2022-02-22  1437  
+-----BEGIN PGP SIGNATURE-----
 
-:::::: The code at line 1432 was first introduced by commit
-:::::: e35f56bb03304abc92c928b641af41ca372966bb PCI: endpoint: Support NTB transfer between RC and EP
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAeNLgAKCRB4tDGHoIJi
+0hO9AQD1Jmahe2QH2Ut2VER3lj6scl0TUWfEGnTwb4k5nAOAJAD/cyA0B3Nr8Zbj
+eO538ug3fIfT+/1dSiMwHJCj4XRdIgw=
+=qp8l
+-----END PGP SIGNATURE-----
 
-:::::: TO: Frank Li <Frank.Li@nxp.com>
-:::::: CC: Jon Mason <jdmason@kudzu.us>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--rExin57s/Ed36ADq--
