@@ -1,32 +1,32 @@
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119DD33C9
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 10:25:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EF333C9
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 10:25:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678184730; x=1709720730;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OInxuMJtdIyDPn0imEFBCcfPVJWWAD2dQ/VhXFHBFuY=;
-  b=MLN8oRnGfAWcCig/Jf8KM16uyOgCDYPua2YPTaBY61TbXa1VIq1yxHHH
-   S8qRoW+SslFZlNYBEVXJJ11DHBDVOX22dpaZW3FKDx+v69rvY5j+Lyxth
-   ik8ITUyrda4fMleHbwKdFsa2UsnvQq8N/6nyDWZl0/k5UxN0q3vRJcQ4F
-   dfTOFWsqQXxqI5OMoIAAChCBeXkXnfvYfBWwqIA3B2Zc3YO00DZgsBEoQ
-   qA6nScBVQ9gobloF/x69bzVlybIm0iZohY81uDNSs3BvsnUsirKO3CwKn
-   mIqrRVja6xp5YtUK+pAzdhsTsWLU40Wx2Nge/y2rYJ+GZeCTs7IaaSB6p
+  t=1678184732; x=1709720732;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XVOGB1MKbCD9q0kwWf3Y939WJhlxGIP60HVW5R87Egg=;
+  b=o8sjaStMpT95Y3PPMIB1VZpgEEN0dTnB953r58fgdCMtkoD771LNTLZC
+   JVhjwFxSTgCDIXXOPauuPV33blt4z6uEhgCkPpaBQ/E4WMxHaWDLtS3IT
+   BIKPEKwA2ulgW+P+0uximj01lmMG14OqIdxX1ESlqeA1eQhQC/1K0aHTR
+   YxTrA/Es4W5UU/JKs4wQeB9OYa4aH53jJBY42WViz4T0Of7hglsYRzBG0
+   DzoX7dgN+d31HJnkeoZBxrtzECSeQq48dMTFmKwqusIvldDeuQAkHCEjA
+   h4SandCwDFh+BBrRIxNQCMmtwJDHWLECloT9rE0Sg+sOR//uJdiZlhsC5
    A==;
 X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
-   d="scan'208";a="140694248"
+   d="scan'208";a="140694259"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 03:25:18 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 03:25:19 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Mar 2023 03:25:15 -0700
+ 15.1.2507.16; Tue, 7 Mar 2023 03:25:19 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Tue, 7 Mar 2023 03:25:12 -0700
+ Transport; Tue, 7 Mar 2023 03:25:16 -0700
 From: Conor Dooley <conor.dooley@microchip.com>
 To: <linux-riscv@lists.infradead.org>
 CC: <conor@kernel.org>, <conor.dooley@microchip.com>, Miguel Ojeda
@@ -39,78 +39,69 @@ CC: <conor@kernel.org>, <conor.dooley@microchip.com>, Miguel Ojeda
 	Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
 	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<llvm@lists.linux.dev>
-Subject: [PATCH v1 0/2] RISC-V: enable rust
-Date: Tue, 7 Mar 2023 10:24:39 +0000
-Message-ID: <20230307102441.94417-1-conor.dooley@microchip.com>
+Subject: [PATCH v1 1/2] scripts: generate_rust_target: enable building on RISC-V
+Date: Tue, 7 Mar 2023 10:24:40 +0000
+Message-ID: <20230307102441.94417-2-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307102441.94417-1-conor.dooley@microchip.com>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2088; i=conor.dooley@microchip.com; h=from:subject; bh=OInxuMJtdIyDPn0imEFBCcfPVJWWAD2dQ/VhXFHBFuY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCnsAs8kPwY+WPDTW83kbZ7n9rULE84/3btU3L1pj9Su+gea apKSHaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZhIhAPDP9vQmtgpq6++Ptj9MuPKLd 5J942cmbL2szoy/Ciezv3hViXD//KFmxlmvp0gz2ITs0bPJ+dy7MGQD2/k7rwL1QlWf+3wgRcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1821; i=conor.dooley@microchip.com; h=from:subject; bh=pr00Ws4xP6t9YpK/ZLk9y5gdrCaL6G8nYnSeAmZhBfg=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCnsAs9qpdez1rj9zF+iHerL/93bMvKB8jeJviVJhybu/Gd6 68z8jlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzEZyUjw2KV9qAllV8z2ve1q2iqfm rlu9qzNcK9bYd+ztKJZU6ZjQz/ayUOsLFt2TB1drtIkkjf9F3xt/UNFiqeuT6LKXBXxOtGTgA=
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-After the authorship debacle on the RFC, I've tried to be even more
-careful this time around. Gary opted for a Co-developed-by in the replies
-of the RFC stuff, so I have given them one.
-I have added SoB's too, but if that is not okay Gary, then please scream
-loudly.
+From: Miguel Ojeda <ojeda@kernel.org>
 
-As this is lifted from the state of the Rust-for-Linux tree, the commit
-messages from there cannot be preserved, so these patches have commit
-messages that I wrote.
+Add the required bits from rust-for-linux to enable generating a RISC-V
+target for rust. The script, written by Miguel, was originally a
+config file contributed by Gary.
 
-I've tested this on Icicle, and the modules seem to work as expected.
-Unfortunately there appear to be implicit 32-bit divisions (or similar)
-in core Rust code, so, as in the downstream Rust-for-Linux tree, Rust is
-only enabled for 64-bit.
+Co-developed-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+Despite removing 32-bit support, I kept the structure of the if
+statement, despite early return being stylistically preferred, for
+alignment with the Rust-for-Linux tree. I'm happy to respin to sort that
+out of desired.
+---
+ scripts/generate_rust_target.rs | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Thanks,
-Conor.
-
-Changes in v1:
-- rebase on v6.3-rc1
-- resort the `um` entry in the arch-support table while adding RISC-V
-  to it
-- drop 32-bit bits
-- have another crack at assigning authorship
-
-Changes in RFC-RESEND:
-- fix the asymmetrical additions in the Makefile bits
-- add cc-cover to my git send-email command...
-
-CC: Miguel Ojeda <ojeda@kernel.org>
-CC: Alex Gaynor <alex.gaynor@gmail.com>
-CC: Wedson Almeida Filho <wedsonaf@gmail.com>
-CC: Boqun Feng <boqun.feng@gmail.com>
-CC: Gary Guo <gary@garyguo.net>
-CC: Björn Roy Baron <bjorn3_gh@protonmail.com>
-CC: Jonathan Corbet <corbet@lwn.net>
-CC: Paul Walmsley <paul.walmsley@sifive.com>
-CC: Palmer Dabbelt <palmer@dabbelt.com>
-CC: Nathan Chancellor <nathan@kernel.org>
-CC: Nick Desaulniers <ndesaulniers@google.com>
-CC: Tom Rix <trix@redhat.com>
-CC: rust-for-linux@vger.kernel.org
-CC: linux-doc@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: linux-riscv@lists.infradead.org
-CC: llvm@lists.linux.dev
-
-Miguel Ojeda (2):
-  scripts: generate_rust_target: enable building on RISC-V
-  RISC-V: enable building 64-bit kernels with rust support
-
- Documentation/rust/arch-support.rst |  3 ++-
- arch/riscv/Kconfig                  |  1 +
- arch/riscv/Makefile                 |  2 ++
- scripts/generate_rust_target.rs     | 16 ++++++++++++++++
- 4 files changed, 21 insertions(+), 1 deletion(-)
-
+diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
+index 3c6cbe2b278d3..85d690f764389 100644
+--- a/scripts/generate_rust_target.rs
++++ b/scripts/generate_rust_target.rs
+@@ -161,6 +161,22 @@ fn main() {
+         ts.push("features", features);
+         ts.push("llvm-target", "x86_64-linux-gnu");
+         ts.push("target-pointer-width", "64");
++    } else if cfg.has("RISCV") {
++        if cfg.has("64BIT") {
++            ts.push("arch", "riscv64");
++            ts.push("data-layout", "e-m:e-p:64:64-i64:64-i128:128-n64-S128");
++            ts.push("llvm-target", "riscv64-linux-gnu");
++            ts.push("target-pointer-width", "64");
++        } else {
++            panic!("32-bit RISC-V is an unsupported architecture")
++        }
++        ts.push("code-model", "medium");
++        ts.push("disable-redzone", true);
++        let mut features = "+m,+a".to_string();
++        if cfg.has("RISCV_ISA_C") {
++            features += ",+c";
++        }
++        ts.push("features", features);
+     } else {
+         panic!("Unsupported architecture");
+     }
 -- 
 2.39.2
 
