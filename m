@@ -1,173 +1,119 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878AF10792
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 21:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD2D10792;
+	Tue,  7 Mar 2023 21:14:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678223470; x=1709759470;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=lHpurijlkRoOT7X3Eup54t7gkwO9QmeTPSkdlYfwgiU=;
-  b=IU7fzBWlMENly5nn42996NXI2Uky9kSlj0+narYBIO9koSAg+0rhtjB1
-   K+Af+Le0uQ24K7hO+4vbJjI7hVBM3JxPpkD9VbxTagC1uNrzIdtRnxi1A
-   4GDxFmi4FuCGAjlSA5oLx+xIj5tI6oebM1HTNzcdAdcVvJMC6Alsk7b0Z
-   YSU7dvuJtiSlUB/FwrMm3S4gyI8bgKjYzf/p+EW/kzqhzfQaEtCOL2anj
-   8qqgZjsHXeDFTUZLnqM7nV2ibMbwuiKvgPEFRjVIYLircqRSetBQ+Kp/T
-   DIee7uBCij/5Sqr/VcH4TiBQERITVV/kA1wk/B6sAlxqgc8brWg8fxep8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="333446422"
+  t=1678223661; x=1709759661;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1lzRlaQAMQQ0iCsjKUrKyy4tLvLHrlsBCKN/XyjW0dU=;
+  b=A78Sb8HEgwzzPV6pkahzlXa5Df3+DzUlCWv5PO70g6IG9gis+aFoLMlR
+   ZemDA/xZSQ9mq6VdmDCdFvMrEgg3gaQ5bzY08zVaCaoQlZ57/wkEougoD
+   A+0A4OqxzSKbmoIJrSYz/P9UTYrWMYokzDLeCVDxKAWmo/WIPsFj2NPcM
+   EUsm4muDvYlnuo7IupR9j50XcPY1QMP/Y1W8HZwhe7KGt55HgggmUGSaa
+   Gnf40+XTg7HpC3JXOSlav2/poAPtNfTVZzx4c4N4r33GQjkxyWoHwAavN
+   FBNLD/4TCpNxH5gNYQ1wnrC0861aecd1tP8ufCpX0aXRNrJPWSd5tC1jH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="337495422"
 X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="333446422"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:11:09 -0800
+   d="scan'208";a="337495422"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:14:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="850836407"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676708491"
 X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="850836407"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 07 Mar 2023 13:11:09 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 7 Mar 2023 13:11:08 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 7 Mar 2023 13:11:08 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 7 Mar 2023 13:11:08 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.106)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 7 Mar 2023 13:11:08 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zk12SHLr2YsEG9wq1g8HbuF8aVnuLAXP21yWfN1GdTyPl/UYT3E+KrEPET1mvM/N2zWZEcwmDpECD3nTph+IYid7SVTRjGQ5Bgjs9fSvMpSWyMd9/gAbbGjujQjFDOQZO81sTBHb8re0ft859cvnPVsIsW7AMWyZXc8wsyTrE8lpns0WJvPZw4XOc3NUwg4SWZj5SOoF1Z2tYUf/wCUZ9QZmQ0GOlfFpZSs3beJrcrnz4SL4ddQEko0a8zRCGK6J1k/XoGKkJ52O+mMifIDRb6Ks7vWK3AOusELCBWxqYeuF75qlNDIKrtCCdXOzAYMptsT6CDCwOdYlJiZm0F/X3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lHpurijlkRoOT7X3Eup54t7gkwO9QmeTPSkdlYfwgiU=;
- b=i6bLtEX228tx87gtP2ebJjHBeugr2k1Ln36GYJTRZjhziJPHTlOttAw8oZeQ9Sm0r9OBZmpj0KCnXov9lVd18S08wh+illZa2HRHa5NHOq0kxiimx6ddXykESbk29LpW89a2TEEiKUZ6qzYzdL490Zea4IbiHUaNq+CFlbwTi0fDn0QBSccjXiAIHERq1Pb9jRCobx2fvU9exOYMJYp946KGs7ied22o32h8hV2nLuVM/V/8mQIh/8RL32JXT7QaZwKtGmD0dVaG/iX5l4zanqOYYqMqLEE7oKBg4AuBvuEWHEXUAwPZMBvSY6EPmTYDoVDiZK+8kjpA01hsE1GMow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by DS7PR11MB6176.namprd11.prod.outlook.com (2603:10b6:8:98::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.28; Tue, 7 Mar 2023 21:11:05 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::ee6a:b9b2:6f37:86a1]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::ee6a:b9b2:6f37:86a1%8]) with mapi id 15.20.6156.019; Tue, 7 Mar 2023
- 21:11:05 +0000
-From: "Luck, Tony" <tony.luck@intel.com>
-To: "Torvalds, Linus" <torvalds@linux-foundation.org>, Jakub Jelinek
-	<jakub@redhat.com>
-CC: Segher Boessenkool <segher@kernel.crashing.org>, Peter Zijlstra
-	<peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, "Eranian,
- Stephane" <eranian@google.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "Chatre, Reinette"
-	<reinette.chatre@intel.com>, "Yu, Fenghua" <fenghua.yu@intel.com>,
-	"peternewman@google.com" <peternewman@google.com>, "james.morse@arm.com"
-	<james.morse@arm.com>, "babu.moger@amd.com" <babu.moger@amd.com>,
-	"ananth.narayan@amd.com" <ananth.narayan@amd.com>, "vschneid@redhat.com"
-	<vschneid@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>, Borislav Petkov <bp@alien8.de>, "H.
- Peter Anvin" <hpa@zytor.com>, "linux-toolchains@vger.kernel.org"
-	<linux-toolchains@vger.kernel.org>
-Subject: RE: [PATCH] x86/resctrl: avoid compiler optimization in
- __resctrl_sched_in
-Thread-Topic: [PATCH] x86/resctrl: avoid compiler optimization in
- __resctrl_sched_in
-Thread-Index: AQHZTiWcwVo9jaQOt0u1ztY/yRpe/a7tql4AgADNkgCAAL2tgIAAd3MAgAAhmACAAAL3gIAAA5lA
-Date: Tue, 7 Mar 2023 21:11:04 +0000
-Message-ID: <SJ1PR11MB6083CADB2B6E859915D456F7FCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20230303231133.1486085-1-eranian@google.com>
- <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
- <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
- <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
- <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
- <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
-In-Reply-To: <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|DS7PR11MB6176:EE_
-x-ms-office365-filtering-correlation-id: 11c822d2-ebd7-4656-c874-08db1f50767c
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yE/LKq67CtDixO1zd1qVccAYUcPyiAN991gzsBTaSK7VRvNDCsNhy7GHaa8SRA+rXJKCESEZFZEAQRY/y9zxejRGV+DfIaX+hgh0jLAgGNGj8C8T3Y51aAA3WVJB1DiZnc73KD64c3CW0w3Drf8rLWraVo+aHTV7deDvU3GYSs6t9cEkRORlYF3LSJi2yRAhiZuRGSWH/kcALIxcuBDQ54NGUmZBb3GyWF3FZ7KmlG1zFTqDAgzi3rO0xfCJOTQhdHo4U4HSYF9LDe3/bRUJ9Wa/v6iTck+vsIHnryA/dHCKG8i6SRI9HEdaGj/bbkEUsNmHujKVRWPPnp5b7WXvHt4Un2ZIdAVJOsaITUSJ/+/idg6FPQD93S4RRUuN7Bo1njZ3EOkFSoa2t586yioIN2BhLHtP4a4J7HLtW2lIiZ+0cDuFVf5I5yWDbYkj1q+X9w7yVcdn8GiVPzR3y60az5wN3v3Gd/hyZ62qEuBqstcQ0kj7PcBIoceOsAcIqtSF20tqTVu4KayJMBgVOyZRKmOSqa6BbKVt/RA9S9qi0lhKjX7YFaLVKuR33UO5bRMCPZ8eWbD30rCsmMd243w144P6EfrweviFcGpSNaoaJ+I87jfHNv9iSiEVcKIaQXxPOw6lgDbrm8jChCCmKmM47hCAzNHhyqNrrk7Jze5MDkaTvgl7pL/y7NRflswxGjEd2sy5pOWqeUZeEr/b4sE7jg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199018)(33656002)(38070700005)(7416002)(41300700001)(66556008)(4326008)(64756008)(8936002)(8676002)(4744005)(66446008)(2906002)(71200400001)(76116006)(5660300002)(66946007)(122000001)(86362001)(82960400001)(66476007)(38100700002)(7696005)(55016003)(54906003)(478600001)(316002)(110136005)(52536014)(6506007)(186003)(9686003)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ck9zbVBmbEN2WHFCQUMvQlRrZmZKUk9BU2xsbENXL0ppRldPaCtJMzRuRW1p?=
- =?utf-8?B?SXpuVlJFbkpTRVhZbHFCOUlMZWFJQ3NhSlhQeDhmQW5GU3pJWVRYRmdqRHRG?=
- =?utf-8?B?UXl6Q2kxVks3SWVSVkdTak1wSzZlR3hBWmNqR25OTmJza3djbENNUkRUbjNh?=
- =?utf-8?B?SHZhT0VIQmZrMnpVRTIxcHNSb2dNTkV4RWY1V1A3UHBFK1NPcXNVaVc2RzIz?=
- =?utf-8?B?bmZXOThDNk9MQ29ubHNtcVUxcU02WWtCTzd1Mlg2eVZCK3R2WjkvOXMvVTBR?=
- =?utf-8?B?dy84STArQWorYVdHOFgzMmhKUlJvY24wSWZISktxbFZYL08vQWhjSG4rTUVP?=
- =?utf-8?B?UkF0Tm5NTlVIRzRjdTcwVnA0VFVLdFRlN1FabWY1alA3U25TdXFqYk9CaHBD?=
- =?utf-8?B?QnhJbUEvUHVobHFHemRpZk1HSldpc1BmUjR1LzhYZlc0SnNSMVVmMXRzZzc1?=
- =?utf-8?B?Y1pqcjB2S05hdDBnWW9JTFZNeXp2dnFpbjV4U0w5S3NVUmRkcUhxVUVSeS8y?=
- =?utf-8?B?U1diV21NdVVmRkhjQ3VJbXRxMnJMUTZjTis4TmE1OW1LYVEwdytRNjNqWDVn?=
- =?utf-8?B?SUFSTVFHZkhKOW9NNThDWEt3QjJGWGlmTU5vcEVDSm5HZGdTd2xobjdlc0xU?=
- =?utf-8?B?QXk4UGhzNzNwbHcvMVZqMThybHBtUER1N3FSTXVnSUZuaTM0UDljenlDR0ZT?=
- =?utf-8?B?Slp3TEFjSjR4MGNPMGo3WnVaQ1BMZlNoVG9OYXFXQnlBSUtSWjEwcHl0ZmNn?=
- =?utf-8?B?Z2lsVkM3UWljMDQ0RVZQazBFbnptd3ZrRjZVL3IvandlZHRBR1ExQkI1c0ZJ?=
- =?utf-8?B?eDFuTk1ITTBCZ0dJOWl2b2l4cjVaSUYwclFUU3lDaDZaWmtJKzhPT3FTRVYy?=
- =?utf-8?B?Q3RVNktmdmJ4NUJBdFJTUis3cFlmVFZBM3RCYUFNOVJvb2N2OEx6Y3lJaEtJ?=
- =?utf-8?B?QjdvLzhUdzd4NlFINzhMYTFEQUJGV1ovdnU1cUh4ZkJZRlBRTGRwL0FtZFZ1?=
- =?utf-8?B?d0wrZFc5bHVFWmdpSENxRGZRQ0hKdlFiVGNMOFlFL1lKTmhCQ0xmMlZpRGZw?=
- =?utf-8?B?R2lYeVJsdGNkZG1rVW5XMUlBUmJpQWxHOW1HM0lFeEdXYzRSem10d1hCMWZP?=
- =?utf-8?B?WXNOa081Rk1TSFpiSHBrSFM0bWFwNFlkWFJRM2NNZjYySkM4eTFXdVhxaEM2?=
- =?utf-8?B?THpOazB5a0RZdHFNL1BrUmp0R1JWUTFad1lKYWgvcVVUOTV1ejh5MURweVlX?=
- =?utf-8?B?VGtDcktleDZFbS9RTnZlRFZuNTVFem91elhpNUdDYks0YnpOZE90S3lDditu?=
- =?utf-8?B?VGpST0N1dWdzSEhyRDY4enF4L3UxTHBPUExRTWZmQnY4SUtvSDl4UjVqK2Vz?=
- =?utf-8?B?dnc1K3MwTng0N2JqRjlQQnpSY3J3SjQyYUIyWmwvM09FL2laMEVlM1JjRXRR?=
- =?utf-8?B?bUNPb3dZbEZaRTRiN2Y4WHJvSSt0dm1ReGhDNWtGcFc3cmNTV3RJWWcycmxV?=
- =?utf-8?B?UHRNQXhoUk84NUZwa2VNN3lrc3NYZ1hKSWdIS3JUQUpJTDFETlYyZUxkalNR?=
- =?utf-8?B?SmlLemRkbUU1VVNPbzVSWmFVNm1pYU1DMkhjV1FTRDVXckZUYVZ2QklsU0oz?=
- =?utf-8?B?ODJFQWN6dVBFbFl4SVI3TnNRTklpNWFIM1A1NjJsRklQNVBsTDRSOUN0N09E?=
- =?utf-8?B?d0Nwa3dTaE9xSEcraEhjQjV4WmxPQzFuQ2dCQ01mN2lsb3lBUjlaQ2RGV0JC?=
- =?utf-8?B?WlhpNFpBTzI3RW5yc2NhUytSZ3lFUTNCR05lVWVhWmdjWHpaNG5QWllZSnZk?=
- =?utf-8?B?Z0hxSVlVN1FiblN6T1FHUVpJc0tZZXdhSlorMjVOeXFCQXNPdEZWT2R5aTJp?=
- =?utf-8?B?WVpCR2FLRTg3am92UzhIN0NUYkZJVktKNGIzN0g5MHYrU2NmYndIM0NJQ25X?=
- =?utf-8?B?VU5GZHhjQm42dUtzVGNPZWh1c0lXZ04vNFFTTFNCVkJqeUprdWdlR25wMWt0?=
- =?utf-8?B?TzVEZmZRUncyeW4yWTlJb2pyMzdCZjA5dEhPTkpzbWZjWVJLbmd4K1pBamJw?=
- =?utf-8?B?cVRYQVJHQUs4QlN6dXd5WVRQS2U0YW15c0ordGJ0ai9pK0VMdjdINlR5bk9z?=
- =?utf-8?Q?JONpnakAY1oU1B4kWnXpkBWOb?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="676708491"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2023 13:14:19 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZedX-0001bv-0J;
+	Tue, 07 Mar 2023 21:14:19 +0000
+Date: Wed, 8 Mar 2023 05:14:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [miquelraynal:nvmem-layouts-and-of-cleanup 20/57]
+ drivers/nvmem/core.c:770:2: error: call to undeclared function
+ 'of_device_node_request_module'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202303080509.4GBE41tL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11c822d2-ebd7-4656-c874-08db1f50767c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2023 21:11:04.8166
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5H5dl1cp2qg+z8QJwtkleHsUkKCVu44GGgm5MKKVCEM5OeLbAUKkfa3ewh9lWJHBqDol9U84b9ggHJy0Cq2lkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6176
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-PiAoYSkgaXQgc2hvdWxkbid0IGRlZmluZSBhbmQgZGVjbGFyZSBhIHN0YXRpYyBmdW5jdGlvbiBp
-biBhIGhlYWRlciBmaWxlDQo+DQo+ICAoYikgdGhlIHJlc2N0cmxfc2NoZWRfaW4oKSBpbmxpbmUg
-ZnVuY3Rpb24gaXMgbWlkZXNpZ25lZCB0byBiZWdpbiB3aXRoDQoNCkZpeGluZyAiYiIgd291bGQg
-c2VlbSB0byBiZSB0byBqdXN0IHBhc3MgIm5leHRfcCIgdG8gdGhlIGZ1bmN0aW9uIHRvDQp1c2Ug
-aW5zdGVhZCBvZiAiY3VycmVudCIuDQoNCkNhbiB5b3UgZXhwYW5kIGFib3V0IHBhcnQgImEiIC4u
-LiBMaW51eCBoYXMgemlsbGlvbnMgb2Ygc3RhdGljIGlubGluZSBmdW5jdGlvbnMNCmluIGhlYWRl
-ciBmaWxlcyB0byBoYW5kbGUgQ09ORklHIG9wdGlvbnMuIE9uZSB2ZXJzaW9uIGlzIHRoZSByZWFs
-IE1jQ295DQp3aGlsZSB0aGUgb3RoZXIgaXMganVzdCBhIHN0dWIgZm9yIHRoZSBDT05GSUc9biBj
-YXNlLg0KDQpXaGF0J3MgZGlmZmVyZW50IGFib3V0IHRoaXMgb25lPw0KDQotVG9ueQ0K
+tree:   https://github.com/miquelraynal/linux-0day.git nvmem-layouts-and-of-cleanup
+head:   4dbec5e07ef322a0458183244c9a11e92eebd61d
+commit: b3a67512c995dbf8f71e14e7df1278ee7c6d26ca [20/57] nvmem: core: request layout modules loading
+config: hexagon-randconfig-r033-20230306 (https://download.01.org/0day-ci/archive/20230308/202303080509.4GBE41tL-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/miquelraynal/linux-0day/commit/b3a67512c995dbf8f71e14e7df1278ee7c6d26ca
+        git remote add miquelraynal https://github.com/miquelraynal/linux-0day.git
+        git fetch --no-tags miquelraynal nvmem-layouts-and-of-cleanup
+        git checkout b3a67512c995dbf8f71e14e7df1278ee7c6d26ca
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/nvmem/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303080509.4GBE41tL-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/nvmem/core.c:770:2: error: call to undeclared function 'of_device_node_request_module'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           of_device_node_request_module(layout_np);
+           ^
+   1 error generated.
+
+
+vim +/of_device_node_request_module +770 drivers/nvmem/core.c
+
+   755	
+   756	static struct nvmem_layout *nvmem_layout_get(struct nvmem_device *nvmem)
+   757	{
+   758		struct device_node *layout_np, *np = nvmem->dev.of_node;
+   759		struct nvmem_layout *l, *layout = ERR_PTR(-EPROBE_DEFER);
+   760	
+   761		layout_np = of_get_child_by_name(np, "nvmem-layout");
+   762		if (!layout_np)
+   763			return NULL;
+   764	
+   765		/*
+   766		 * In case the nvmem device was built-in while the layout was built as a
+   767		 * module, we shall manually request the layout driver loading otherwise
+   768		 * we'll never have any match.
+   769		 */
+ > 770		of_device_node_request_module(layout_np);
+   771	
+   772		spin_lock(&nvmem_layout_lock);
+   773	
+   774		list_for_each_entry(l, &nvmem_layouts, node) {
+   775			if (of_match_node(l->of_match_table, layout_np)) {
+   776				if (try_module_get(l->owner))
+   777					layout = l;
+   778	
+   779				break;
+   780			}
+   781		}
+   782	
+   783		spin_unlock(&nvmem_layout_lock);
+   784		of_node_put(layout_np);
+   785	
+   786		return layout;
+   787	}
+   788	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
