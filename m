@@ -1,103 +1,116 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0002733C9;
-	Tue,  7 Mar 2023 10:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119DD33C9
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 10:25:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678183202; x=1709719202;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=015y2ujYdWGC1jptcX88cpF523UTZEC1Lxt0JJo6IZA=;
-  b=TlR5Ab9D8MB82VZCcuA2SC5DLFwCJeExU9hEw70OUceO9jNYZpMxULVO
-   9DWTw6xqVgfTWXYn1o8rnr4A+bAfFqgvk0+eNjAh+vvoWpVOYAekqAM/l
-   ivFPOhAlay5SJlzvsCKGiyl7mDoeznvG71+Lkiz7c++2h0pfTaFL0B/ZJ
-   +gosx3uQPwxqaFmEqb6EYHw6sAB8Ylp5SU2vXfyc2NGgpKyzXk9KrTRkW
-   wtvyd3YRvMa3KNvt/eGWMQi4tZMB9E+f6dgb71JKqnUooII2FJZbVbUvn
-   BcE1FzH7gl41lQoKEGgBUnS8VHNNC6uH05JU838XC0wzFurRcTeQDCn/h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="335834282"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="335834282"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 02:00:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="922293536"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="922293536"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Mar 2023 01:59:59 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZU6x-0001CR-1F;
-	Tue, 07 Mar 2023 09:59:59 +0000
-Date: Tue, 7 Mar 2023 17:59:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev.2023.03.06a 112/116]
- arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function
- 'set_nmi_torture'
-Message-ID: <202303071727.8CfkaGXj-lkp@intel.com>
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678184730; x=1709720730;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OInxuMJtdIyDPn0imEFBCcfPVJWWAD2dQ/VhXFHBFuY=;
+  b=MLN8oRnGfAWcCig/Jf8KM16uyOgCDYPua2YPTaBY61TbXa1VIq1yxHHH
+   S8qRoW+SslFZlNYBEVXJJ11DHBDVOX22dpaZW3FKDx+v69rvY5j+Lyxth
+   ik8ITUyrda4fMleHbwKdFsa2UsnvQq8N/6nyDWZl0/k5UxN0q3vRJcQ4F
+   dfTOFWsqQXxqI5OMoIAAChCBeXkXnfvYfBWwqIA3B2Zc3YO00DZgsBEoQ
+   qA6nScBVQ9gobloF/x69bzVlybIm0iZohY81uDNSs3BvsnUsirKO3CwKn
+   mIqrRVja6xp5YtUK+pAzdhsTsWLU40Wx2Nge/y2rYJ+GZeCTs7IaaSB6p
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
+   d="scan'208";a="140694248"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 03:25:18 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 7 Mar 2023 03:25:15 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Tue, 7 Mar 2023 03:25:12 -0700
+From: Conor Dooley <conor.dooley@microchip.com>
+To: <linux-riscv@lists.infradead.org>
+CC: <conor@kernel.org>, <conor.dooley@microchip.com>, Miguel Ojeda
+	<ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho
+	<wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
+	<gary@garyguo.net>, =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=
+	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+Subject: [PATCH v1 0/2] RISC-V: enable rust
+Date: Tue, 7 Mar 2023 10:24:39 +0000
+Message-ID: <20230307102441.94417-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2088; i=conor.dooley@microchip.com; h=from:subject; bh=OInxuMJtdIyDPn0imEFBCcfPVJWWAD2dQ/VhXFHBFuY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCnsAs8kPwY+WPDTW83kbZ7n9rULE84/3btU3L1pj9Su+gea apKSHaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZhIhAPDP9vQmtgpq6++Ptj9MuPKLd 5J942cmbL2szoy/Ciezv3hViXD//KFmxlmvp0gz2ITs0bPJ+dy7MGQD2/k7rwL1QlWf+3wgRcA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2023.03.06a
-head:   b5f34f7f546f7746ed4ca21da873aea5f408f295
-commit: f8aba137fc5e5471910a5fcb5af74776b88d1070 [112/116] x86/nmi: Add a set_nmi_torture() function to control NMI testing
-config: x86_64-randconfig-r023-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071727.8CfkaGXj-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/f8aba137fc5e5471910a5fcb5af74776b88d1070
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev.2023.03.06a
-        git checkout f8aba137fc5e5471910a5fcb5af74776b88d1070
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+After the authorship debacle on the RFC, I've tried to be even more
+careful this time around. Gary opted for a Co-developed-by in the replies
+of the RFC stuff, so I have given them one.
+I have added SoB's too, but if that is not okay Gary, then please scream
+loudly.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303071727.8CfkaGXj-lkp@intel.com/
+As this is lifted from the state of the Rust-for-Linux tree, the commit
+messages from there cannot be preserved, so these patches have commit
+messages that I wrote.
 
-All warnings (new ones prefixed by >>):
+I've tested this on Icicle, and the modules seem to work as expected.
+Unfortunately there appear to be implicit 32-bit divisions (or similar)
+in core Rust code, so, as in the downstream Rust-for-Linux tree, Rust is
+only enabled for 64-bit.
 
->> arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function 'set_nmi_torture' [-Wmissing-prototypes]
-   void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-        ^
-   arch/x86/kernel/nmi.c:441:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-   ^
-   static 
-   1 warning generated.
+Thanks,
+Conor.
 
+Changes in v1:
+- rebase on v6.3-rc1
+- resort the `um` entry in the arch-support table while adding RISC-V
+  to it
+- drop 32-bit bits
+- have another crack at assigning authorship
 
-vim +/set_nmi_torture +441 arch/x86/kernel/nmi.c
+Changes in RFC-RESEND:
+- fix the asymmetrical additions in the Makefile bits
+- add cc-cover to my git send-email command...
 
-   439	
-   440	/* Set the test values as desired. */
- > 441	void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-   442	{
-   443		WRITE_ONCE(nmi_delay, nmi_delay_in);
-   444		WRITE_ONCE(nmi_halt1, nmi_halt1_in);
-   445		WRITE_ONCE(nmi_halt2, nmi_halt2_in);
-   446		WRITE_ONCE(nmi_halt3, nmi_halt3_in);
-   447		pr_info("%s: Set NMI test parameters nmi_delay=%d nmi_halt1=%d nmi_halt2=%d nmi_halt3=%d\n",
-   448			__func__, nmi_delay, nmi_halt1, nmi_halt2, nmi_halt3);
-   449	}
-   450	EXPORT_SYMBOL_GPL(set_nmi_torture);
-   451	
+CC: Miguel Ojeda <ojeda@kernel.org>
+CC: Alex Gaynor <alex.gaynor@gmail.com>
+CC: Wedson Almeida Filho <wedsonaf@gmail.com>
+CC: Boqun Feng <boqun.feng@gmail.com>
+CC: Gary Guo <gary@garyguo.net>
+CC: Björn Roy Baron <bjorn3_gh@protonmail.com>
+CC: Jonathan Corbet <corbet@lwn.net>
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Nathan Chancellor <nathan@kernel.org>
+CC: Nick Desaulniers <ndesaulniers@google.com>
+CC: Tom Rix <trix@redhat.com>
+CC: rust-for-linux@vger.kernel.org
+CC: linux-doc@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: linux-riscv@lists.infradead.org
+CC: llvm@lists.linux.dev
+
+Miguel Ojeda (2):
+  scripts: generate_rust_target: enable building on RISC-V
+  RISC-V: enable building 64-bit kernels with rust support
+
+ Documentation/rust/arch-support.rst |  3 ++-
+ arch/riscv/Kconfig                  |  1 +
+ arch/riscv/Makefile                 |  2 ++
+ scripts/generate_rust_target.rs     | 16 ++++++++++++++++
+ 4 files changed, 21 insertions(+), 1 deletion(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
