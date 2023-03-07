@@ -1,40 +1,46 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2329410792
-	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 21:16:30 +0000 (UTC)
-Received: by mail-pg1-f182.google.com with SMTP id y19so8433370pgk.5
-        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 13:16:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D1710792
+	for <llvm@lists.linux.dev>; Tue,  7 Mar 2023 21:19:27 +0000 (UTC)
+Received: by mail-ed1-f42.google.com with SMTP id g3so57990359eda.1
+        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 13:19:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678223789;
+        d=linux-foundation.org; s=google; t=1678223964;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wq4KUb4AQDQDZAJfCHW99QkUDmJEUq6txcnU3C+LjQ4=;
-        b=gMSwBZTgJBJQ4w9QChpBrXq27XNV+GbgdQgzvZrW+Bz1Bps+xs/O1d1UVxqBcZDt+s
-         tljQnKT+33xxQWHlmGk5rCRrJ5eUoAuPvBW/hAdGFZs88ItPmGx9/cUpiKkwCt8n1K/5
-         avqg9h81nUgqFwMLraXM6fDRZ6o+CnIK7Tl1MP+/C89UvOnldPp5RpHTFDYne7TDr2dW
-         mOuiK8t8KZsXD6u4JSvudLe+VUIfV2FOi+6FhPpporVijAHYV+lY2mTkiViUY9/5tz0K
-         YBniOLB863c04B/w5VAWznk1GX7lm+Eb+AI6vVryRESFzcnBGRORMaR4J69T7g9YuARz
-         yQjw==
+        bh=lRkOZ5wI6FwGaM4HgKKUX1s/pa2xIbKjX2uXD922yeA=;
+        b=chSxj0mpjqI9ZSrsguW7U9GOdTy4KEDIvukMgkc4YnzALeW9HrqOIacWOobYTCh3EX
+         B6wl1EmFC72B9L33/XjxCNazJTQ23/gG8du2/WtM6iUrzM170317QdCukLyDfdwZrDss
+         Kt+vda2NA7yyoAbWwjWP+EqCS93q0CkexZJeg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678223789;
+        d=1e100.net; s=20210112; t=1678223964;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wq4KUb4AQDQDZAJfCHW99QkUDmJEUq6txcnU3C+LjQ4=;
-        b=ujhRDqkb4nrWCyTYFxhT82rMeW/r6TWqKVzdNRbmPhli/5lFIHlCi3mxNcagJJOBys
-         DnWP5U2bPqWH9wBDsYdO4HsGWERSOazXcaGfByhpU4paMu5/AOR/K24nG9ebN5Z79WD8
-         fDtJg+rzUCF2/XygoaNHK8mCsd4f87SyskC5Sd1lt5fPBr7fs8ONJAU94vEFjn6N76oO
-         JVnPi9uro+9LmcTWmcNwQJBrwlisB3oy7cWL/eMjZkQ5gUjgoqnPrhURjhvj8aSFRtCy
-         jHCCW0ukC/jiaVXFu9TiS5k0rgAw1oDZuVQrDec2FAUCBbNUmOiK9D47/I9wN+g1RAAT
-         HJTA==
-X-Gm-Message-State: AO0yUKVqVpL+nLhUtwvQZKOIfIGFTByx/LlvdpGQj0Zw0b3A24woFNXB
-	5/pvUGSi/e9F8SQvhjWLyRV5AykC6UdUP+XM/NJ6Gg==
-X-Google-Smtp-Source: AK7set9swkPIU3+FmVnffWCutWKaDjtCc2F5Qzk3K1MmlefOTTgZZaa8Ns3PAoAD3GqD1PlRCrTqynicTSvsvXaeG0I=
-X-Received: by 2002:a63:d809:0:b0:503:354c:41ad with SMTP id
- b9-20020a63d809000000b00503354c41admr5317120pgh.11.1678223789186; Tue, 07 Mar
- 2023 13:16:29 -0800 (PST)
+        bh=lRkOZ5wI6FwGaM4HgKKUX1s/pa2xIbKjX2uXD922yeA=;
+        b=Wccz3l00iieSmqDnEuH+G+uUjj9IjiLROiVFSDntsUWUwyo4OkqPrVInxTq0DanEMA
+         xKtNhA6v1lssjPuq8OKvJGY7YOirflISe/QdlsD3BqjXxwsabPaNqyjkD14O5z21bs9l
+         7dHUTFFp59dmqokbU9jGBywdAa6jyQwlUNiAUYcNFrKBOjT35OKAQUKelO/ZVk36DSII
+         i9TMUDKHgITIr7f2A3tYhL5F3XEepPZyHvX7bO6ZpWKZURQgJB+7i3lsEbfG1rjkUKqa
+         Veyoh+y1n6/7o2HLe3WH2IC2d9zdl6j95/yaewBGE4xDADWjrjr/dmmVeGEbKcXvtE6z
+         hMoQ==
+X-Gm-Message-State: AO0yUKXnGUZRcBQKDYkd4nDt0AV0uCEIXiSD7tfHoPwQW5NXQ9zj4dcA
+	I08kENZ5VIqOMFjhz3RcAzN7v2s19MK0Qj9qkzCIedSG
+X-Google-Smtp-Source: AK7set8bFEGRwQTQ1hXOg3Zo3m0q7MSBv9iaMMgUs2tncGyR5O0Ior07XvI7Lr/lF+R//kzdF9z9iw==
+X-Received: by 2002:a17:906:6c9:b0:8b1:77bf:5b9f with SMTP id v9-20020a17090606c900b008b177bf5b9fmr15637441ejb.13.1678223964008;
+        Tue, 07 Mar 2023 13:19:24 -0800 (PST)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id p6-20020a170906498600b00914001c91fcsm2350694eju.86.2023.03.07.13.19.22
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 13:19:22 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id cy23so57729947edb.12
+        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 13:19:22 -0800 (PST)
+X-Received: by 2002:a17:906:a01a:b0:8f5:2e0e:6dc5 with SMTP id
+ p26-20020a170906a01a00b008f52e0e6dc5mr8132383ejy.0.1678223962342; Tue, 07 Mar
+ 2023 13:19:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,15 +51,19 @@ References: <20230303231133.1486085-1-eranian@google.com> <20230306120106.GE1267
  <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
  <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
  <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
- <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com> <SJ1PR11MB6083CADB2B6E859915D456F7FCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
-In-Reply-To: <SJ1PR11MB6083CADB2B6E859915D456F7FCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 7 Mar 2023 13:16:17 -0800
-Message-ID: <CAKwvOdna5NZ0ZTv0pXVVz15=4FLkw7pfFgr6KsRtXRmi2o1uEw@mail.gmail.com>
+ <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
+ <SJ1PR11MB6083CADB2B6E859915D456F7FCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAKwvOdna5NZ0ZTv0pXVVz15=4FLkw7pfFgr6KsRtXRmi2o1uEw@mail.gmail.com>
+In-Reply-To: <CAKwvOdna5NZ0ZTv0pXVVz15=4FLkw7pfFgr6KsRtXRmi2o1uEw@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 7 Mar 2023 13:19:05 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiVP8ezgCyBTq3GV-1ebiOf03Qo_iHnVAR08NJO0jOocg@mail.gmail.com>
+Message-ID: <CAHk-=wiVP8ezgCyBTq3GV-1ebiOf03Qo_iHnVAR08NJO0jOocg@mail.gmail.com>
 Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in __resctrl_sched_in
-To: "Luck, Tony" <tony.luck@intel.com>, "Torvalds, Linus" <torvalds@linux-foundation.org>
-Cc: Jakub Jelinek <jakub@redhat.com>, Segher Boessenkool <segher@kernel.crashing.org>, 
-	Peter Zijlstra <peterz@infradead.org>, "Eranian, Stephane" <eranian@google.com>, 
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: "Luck, Tony" <tony.luck@intel.com>, Jakub Jelinek <jakub@redhat.com>, 
+	Segher Boessenkool <segher@kernel.crashing.org>, Peter Zijlstra <peterz@infradead.org>, 
+	"Eranian, Stephane" <eranian@google.com>, 
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
 	"Chatre, Reinette" <reinette.chatre@intel.com>, "Yu, Fenghua" <fenghua.yu@intel.com>, 
 	"peternewman@google.com" <peternewman@google.com>, "james.morse@arm.com" <james.morse@arm.com>, 
@@ -64,142 +74,26 @@ Cc: Jakub Jelinek <jakub@redhat.com>, Segher Boessenkool <segher@kernel.crashing
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 7, 2023 at 1:11=E2=80=AFPM Luck, Tony <tony.luck@intel.com> wro=
-te:
+On Tue, Mar 7, 2023 at 1:16=E2=80=AFPM Nick Desaulniers <ndesaulniers@googl=
+e.com> wrote:
 >
-> > (a) it shouldn't define and declare a static function in a header file
 > >
-> >  (b) the resctrl_sched_in() inline function is midesigned to begin with
+> > Can you expand about part "a" ... Linux has zillions of static inline f=
+unctions
+> > in header files to handle CONFIG options. One version is the real McCoy
+> > while the other is just a stub for the CONFIG=3Dn case.
 >
-> Fixing "b" would seem to be to just pass "next_p" to the function to
-> use instead of "current".
-
-```
-diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.=
-h
-index 52788f79786f..f46c0b97334d 100644
---- a/arch/x86/include/asm/resctrl.h
-+++ b/arch/x86/include/asm/resctrl.h
-@@ -49,7 +49,7 @@ DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
-  *   simple as possible.
-  * Must be called with preemption disabled.
-  */
--static void __resctrl_sched_in(void)
-+static void __resctrl_sched_in(struct task_struct *next)
- {
-  struct resctrl_pqr_state *state =3D this_cpu_ptr(&pqr_state);
-  u32 closid =3D state->default_closid;
-@@ -61,13 +61,13 @@ static void __resctrl_sched_in(void)
-  * Else use the closid/rmid assigned to this cpu.
-  */
-  if (static_branch_likely(&rdt_alloc_enable_key)) {
-- tmp =3D READ_ONCE(current->closid);
-+ tmp =3D READ_ONCE(next->closid);
-  if (tmp)
-  closid =3D tmp;
-  }
-
-  if (static_branch_likely(&rdt_mon_enable_key)) {
-- tmp =3D READ_ONCE(current->rmid);
-+ tmp =3D READ_ONCE(next->rmid);
-  if (tmp)
-  rmid =3D tmp;
-  }
-@@ -88,17 +88,17 @@ static inline unsigned int
-resctrl_arch_round_mon_val(unsigned int val)
-  return val * scale;
- }
-
--static inline void resctrl_sched_in(void)
-+static inline void resctrl_sched_in(struct task_struct *next)
- {
-  if (static_branch_likely(&rdt_enable_key))
-- __resctrl_sched_in();
-+ __resctrl_sched_in(next);
- }
-
- void resctrl_cpu_detect(struct cpuinfo_x86 *c);
-
- #else
-
--static inline void resctrl_sched_in(void) {}
-+static inline void resctrl_sched_in(struct task_struct *next) {}
- static inline void resctrl_cpu_detect(struct cpuinfo_x86 *c) {}
-
- #endif /* CONFIG_X86_CPU_RESCTRL */
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index e2c1599d1b37..d970347838a4 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -314,7 +314,7 @@ static void update_cpu_closid_rmid(void *info)
-  * executing task might have its own closid selected. Just reuse
-  * the context switch code.
-  */
-- resctrl_sched_in();
-+ resctrl_sched_in(current);
- }
-
- /*
-@@ -530,7 +530,7 @@ static void _update_task_closid_rmid(void *task)
-  * Otherwise, the MSR is updated when the task is scheduled in.
-  */
-  if (task =3D=3D current)
-- resctrl_sched_in();
-+ resctrl_sched_in(current);
- }
-
- static void update_task_closid_rmid(struct task_struct *t)
-diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
-index 470c128759ea..708c87b88cc1 100644
---- a/arch/x86/kernel/process_32.c
-+++ b/arch/x86/kernel/process_32.c
-@@ -212,7 +212,7 @@ __switch_to(struct task_struct *prev_p, struct
-task_struct *next_p)
-  switch_fpu_finish();
-
-  /* Load the Intel cache allocation PQR MSR. */
-- resctrl_sched_in();
-+ resctrl_sched_in(next_p);
-
-  return prev_p;
- }
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 4e34b3b68ebd..bb65a68b4b49 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -656,7 +656,7 @@ __switch_to(struct task_struct *prev_p, struct
-task_struct *next_p)
-  }
-
-  /* Load the Intel cache allocation PQR MSR. */
-- resctrl_sched_in();
-+ resctrl_sched_in(next_p);
-
-  return prev_p;
- }
-
-```
-?
-
+> Right, I had the same question.
 >
-> Can you expand about part "a" ... Linux has zillions of static inline fun=
-ctions
-> in header files to handle CONFIG options. One version is the real McCoy
-> while the other is just a stub for the CONFIG=3Dn case.
+> Perhaps it's more so that no one calls __resctrl_sched_in, only
+> resctrl_sched_in, therefor they should be folded into one function?
 
-Right, I had the same question.
+If you think it should be inlined, it should be marked as such.
 
-Perhaps it's more so that no one calls __resctrl_sched_in, only
-resctrl_sched_in, therefor they should be folded into one function?
+And if you *don't* think it should be inlined - quite possibly the
+right answer here - the definition of that function damn well
+shouldn't be in a header file.
 
->
-> What's different about this one?
->
-> -Tony
+So either way, that __resctrl_sched_in() was wrong, wrong, wrong.
 
-
-
---=20
-Thanks,
-~Nick Desaulniers
+           Linus
