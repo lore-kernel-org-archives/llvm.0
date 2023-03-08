@@ -1,43 +1,59 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6838B7C;
-	Wed,  8 Mar 2023 09:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063F27C;
+	Wed,  8 Mar 2023 09:52:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678269164; x=1709805164;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PCPyHNgCxrQRG9x9QwjOIgUAU6Qtd8IovB+1/nsFOXo=;
-  b=i4QjIYYKZQ2Gegog8/tzKwZrPSIJEfNVWBGGg5Y8URnG3htP56UPSLoB
-   CsSHAtEn24Kzkv3kck3reIzT6ueCv1Wdk1xceET1qOmD1DrOk5LlIyGb7
-   8g/kIu0HenAsfBMdgtuywk0QB7hEHoC4SODTe19avtsK5kl/NIO3fM6e+
-   VBOFopu6raLHgn51j5BHpHk8hXw5GirSJFi7W0X0wxPpGlU8/XzE63Nbj
-   0F0ADEn+MpPug/toEr04L0bYED47HNIPRd6U8GoDuKny8GXFfuhzfP60D
-   Az4bQhMsVyY0sccXfdAB9sb/zqRueUrpJR6bwGiRzyXufRxgoJo83FgIZ
+  t=1678269167; x=1709805167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dxQJct6f43Jx0UnkB4zNZyJRb1ubXcUEMzADERU/HTo=;
+  b=i4qA8kB9wpNWkbradAv19TUkDihJzH+V4+5n2BZoEYHiAZ0etZT8kbTg
+   +GppTfBdDtTkVz7ZpKB5L2TfwfIzlXgzv81vNQYwGwL7+DKqvGlI4m51M
+   J6Rgo+V16I0+HbHOuIFeAhR6SGgeYnawsTEZcrsiAjj1mkytHWGBpCnJc
+   3SU+6KKIiea7qYsFzq6MUOrGomBemRVqi5TRdcpP/dRsxOaebIH9a3exD
+   9btRN3kMP4HmcwmiySNRbvYJR7YT0XCUQgGaxeucOY4jfluwFofC53Q8N
+   6kLoe3ZYo1SLZD6H2MRf5FGE85zjr4vRtv/WkUH0hg7mI9aVMpVm8Jqz0
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="398692113"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="333584670"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="398692113"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 01:52:43 -0800
+   d="scan'208";a="333584670"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 01:52:46 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="787059165"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="679277486"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="787059165"
+   d="scan'208";a="679277486"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Mar 2023 01:52:42 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Mar 2023 01:52:42 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZqTR-000222-1g;
+	id 1pZqTR-00021x-1W;
 	Wed, 08 Mar 2023 09:52:41 +0000
-Date: Wed, 8 Mar 2023 17:51:57 +0800
+Date: Wed, 8 Mar 2023 17:51:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dave Chinner <dchinner@redhat.com>
+To: Axel Rasmussen <axelrasmussen@google.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Mike Kravetz <mike.kravetz@oracle.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>, Nadav Amit <namit@vmware.com>,
+	Peter Xu <peterx@redhat.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Luis Chamberlain <mcgrof@kernel.org>
-Subject: [mcgrof:20230307-larger-bs-then-ps-xfs 7/11]
- fs/iomap/buffered-io.c:1424:8: warning: variable 'status' set but not used
-Message-ID: <202303081717.EQfvs6xM-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	James Houghton <jthoughton@google.com>,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Axel Rasmussen <axelrasmussen@google.com>
+Subject: Re: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len
+ arguments
+Message-ID: <202303081703.nwxAgIVH-lkp@intel.com>
+References: <20230306225024.264858-5-axelrasmussen@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,106 +62,221 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230306225024.264858-5-axelrasmussen@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230307-larger-bs-then-ps-xfs
-head:   e42ac7981c9cbcd80d1ffa2ad03c96574a320a62
-commit: 89e0dbe34eb365d865a0b459668e5abe17cf95c8 [7/11] iomap: zero-around in iomap_page_mkwrite
-config: i386-randconfig-a011-20230306 (https://download.01.org/0day-ci/archive/20230308/202303081717.EQfvs6xM-lkp@intel.com/config)
+Hi Axel,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.3-rc1]
+[cannot apply to akpm-mm/mm-everything next-20230308]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Axel-Rasmussen/mm-userfaultfd-rename-functions-for-clarity-consistency/20230307-065203
+patch link:    https://lore.kernel.org/r/20230306225024.264858-5-axelrasmussen%40google.com
+patch subject: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len arguments
+config: x86_64-randconfig-a011-20230306 (https://download.01.org/0day-ci/archive/20230308/202303081703.nwxAgIVH-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=89e0dbe34eb365d865a0b459668e5abe17cf95c8
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20230307-larger-bs-then-ps-xfs
-        git checkout 89e0dbe34eb365d865a0b459668e5abe17cf95c8
+        # https://github.com/intel-lab-lkp/linux/commit/cee642b93be3ae01c7cc737c0176cbc16074a25a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Axel-Rasmussen/mm-userfaultfd-rename-functions-for-clarity-consistency/20230307-065203
+        git checkout cee642b93be3ae01c7cc737c0176cbc16074a25a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/iomap/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303081717.EQfvs6xM-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303081703.nwxAgIVH-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/iomap/buffered-io.c:1424:8: warning: variable 'status' set but not used [-Wunused-but-set-variable]
-                   long status;
-                        ^
->> fs/iomap/buffered-io.c:1449:7: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-                   if (ret)
-                       ^~~
-   fs/iomap/buffered-io.c:1416:12: note: initialize the variable 'ret' to silence this warning
-           loff_t ret;
-                     ^
-                      = 0
-   2 warnings generated.
+>> mm/userfaultfd.c:577:52: error: passing 'const struct uffdio_range *' to parameter of incompatible type 'struct uffdio_range'
+                   return  mfill_atomic_hugetlb(dst_vma, src_start, dst, flags);
+                                                                    ^~~
+   mm/userfaultfd.c:463:29: note: passing argument to parameter 'dst' here
+                                       struct uffdio_range dst,
+                                                           ^
+   1 error generated.
 
 
-vim +/status +1424 fs/iomap/buffered-io.c
+vim +577 mm/userfaultfd.c
 
-  1411	
-  1412	static loff_t iomap_folio_mkwrite_iter(struct iomap_iter *iter,
-  1413			struct folio *folio, const struct iomap_ops *ops)
-  1414	{
-  1415		loff_t length = iomap_length(iter);
-  1416		loff_t ret;
-  1417	
-  1418		/*
-  1419		 * if we need to zero-around, we have to unlock the page we were given.
-  1420		 * No big deal, we just have to repeat the "is this page ours" checks
-  1421		 * after relocking it
-  1422		 */
-  1423		if (iomap_need_zero_around(iter)) {
-> 1424			long status;
-  1425			loff_t size;
-  1426	
-  1427			/*
-  1428			 * This only happens for block size > page size, so the file
-  1429			 * offset of a page fault should always be page aligned.
-  1430			 */
-  1431			WARN_ON(offset_in_folio(folio, iter->pos));
-  1432	
-  1433			folio_unlock(folio);
-  1434			status = iomap_zero_around(iter, iter->pos, length, ops);
-  1435			folio_lock(folio);
-  1436			size = i_size_read(iter->inode);
-  1437			if ((folio->mapping != iter->inode->i_mapping) ||
-  1438			    (folio_pos(folio) > size)) {
-  1439				/* We overload EFAULT to mean page got truncated */
-  1440				return -EFAULT;
-  1441			}
-  1442	
-  1443			if (folio_pos(folio) != iter->pos) {
-  1444				/* it moved in the file! */
-  1445				return -EFAULT;
-  1446			}
-  1447	
-  1448			/* return failure now if zeroing had an error */
-> 1449			if (ret)
-  1450				return ret;
-  1451	
-  1452			/* trim down the length is we straddle EOF. */
-  1453			if (((folio->index + 1) << PAGE_SHIFT) > size)
-  1454				length = offset_in_folio(folio, size);
-  1455	
-  1456		}
-  1457	
-  1458		if (iter->iomap.flags & IOMAP_F_BUFFER_HEAD) {
-  1459			ret = __block_write_begin_int(folio, iter->pos, length, NULL,
-  1460						      &iter->iomap);
-  1461			if (ret)
-  1462				return ret;
-  1463			block_commit_write(&folio->page, 0, length);
-  1464		} else {
-  1465			WARN_ON_ONCE(!folio_test_uptodate(folio));
-  1466			folio_mark_dirty(folio);
-  1467		}
-  1468	
-  1469		return length;
-  1470	}
-  1471	
+   508	
+   509	static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
+   510						    unsigned long src_start,
+   511						    const struct uffdio_range *dst,
+   512						    atomic_t *mmap_changing,
+   513						    uffd_flags_t flags)
+   514	{
+   515		struct vm_area_struct *dst_vma;
+   516		ssize_t err;
+   517		pmd_t *dst_pmd;
+   518		unsigned long src_addr, dst_addr;
+   519		long copied;
+   520		struct page *page;
+   521	
+   522		/*
+   523		 * Sanitize the command parameters:
+   524		 */
+   525		BUG_ON(dst->start & ~PAGE_MASK);
+   526		BUG_ON(dst->len & ~PAGE_MASK);
+   527	
+   528		/* Does the address range wrap, or is the span zero-sized? */
+   529		BUG_ON(src_start + dst->len <= src_start);
+   530		BUG_ON(dst->start + dst->len <= dst->start);
+   531	
+   532		src_addr = src_start;
+   533		dst_addr = dst->start;
+   534		copied = 0;
+   535		page = NULL;
+   536	retry:
+   537		mmap_read_lock(dst_mm);
+   538	
+   539		/*
+   540		 * If memory mappings are changing because of non-cooperative
+   541		 * operation (e.g. mremap) running in parallel, bail out and
+   542		 * request the user to retry later
+   543		 */
+   544		err = -EAGAIN;
+   545		if (mmap_changing && atomic_read(mmap_changing))
+   546			goto out_unlock;
+   547	
+   548		/*
+   549		 * Make sure the vma is not shared, that the dst range is
+   550		 * both valid and fully within a single existing vma.
+   551		 */
+   552		err = -ENOENT;
+   553		dst_vma = find_dst_vma(dst_mm, dst);
+   554		if (!dst_vma)
+   555			goto out_unlock;
+   556	
+   557		err = -EINVAL;
+   558		/*
+   559		 * shmem_zero_setup is invoked in mmap for MAP_ANONYMOUS|MAP_SHARED but
+   560		 * it will overwrite vm_ops, so vma_is_anonymous must return false.
+   561		 */
+   562		if (WARN_ON_ONCE(vma_is_anonymous(dst_vma) &&
+   563		    dst_vma->vm_flags & VM_SHARED))
+   564			goto out_unlock;
+   565	
+   566		/*
+   567		 * validate 'mode' now that we know the dst_vma: don't allow
+   568		 * a wrprotect copy if the userfaultfd didn't register as WP.
+   569		 */
+   570		if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM_UFFD_WP))
+   571			goto out_unlock;
+   572	
+   573		/*
+   574		 * If this is a HUGETLB vma, pass off to appropriate routine
+   575		 */
+   576		if (is_vm_hugetlb_page(dst_vma))
+ > 577			return  mfill_atomic_hugetlb(dst_vma, src_start, dst, flags);
+   578	
+   579		if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+   580			goto out_unlock;
+   581		if (!vma_is_shmem(dst_vma) &&
+   582		    (flags & MFILL_ATOMIC_MODE_MASK) == MFILL_ATOMIC_CONTINUE)
+   583			goto out_unlock;
+   584	
+   585		/*
+   586		 * Ensure the dst_vma has a anon_vma or this page
+   587		 * would get a NULL anon_vma when moved in the
+   588		 * dst_vma.
+   589		 */
+   590		err = -ENOMEM;
+   591		if (!(dst_vma->vm_flags & VM_SHARED) &&
+   592		    unlikely(anon_vma_prepare(dst_vma)))
+   593			goto out_unlock;
+   594	
+   595		while (src_addr < src_start + dst->len) {
+   596			pmd_t dst_pmdval;
+   597	
+   598			BUG_ON(dst_addr >= dst->start + dst->len);
+   599	
+   600			dst_pmd = mm_alloc_pmd(dst_mm, dst_addr);
+   601			if (unlikely(!dst_pmd)) {
+   602				err = -ENOMEM;
+   603				break;
+   604			}
+   605	
+   606			dst_pmdval = pmdp_get_lockless(dst_pmd);
+   607			/*
+   608			 * If the dst_pmd is mapped as THP don't
+   609			 * override it and just be strict.
+   610			 */
+   611			if (unlikely(pmd_trans_huge(dst_pmdval))) {
+   612				err = -EEXIST;
+   613				break;
+   614			}
+   615			if (unlikely(pmd_none(dst_pmdval)) &&
+   616			    unlikely(__pte_alloc(dst_mm, dst_pmd))) {
+   617				err = -ENOMEM;
+   618				break;
+   619			}
+   620			/* If an huge pmd materialized from under us fail */
+   621			if (unlikely(pmd_trans_huge(*dst_pmd))) {
+   622				err = -EFAULT;
+   623				break;
+   624			}
+   625	
+   626			BUG_ON(pmd_none(*dst_pmd));
+   627			BUG_ON(pmd_trans_huge(*dst_pmd));
+   628	
+   629			err = mfill_atomic_pte(dst_pmd, dst_vma, dst_addr,
+   630					       src_addr, &page, flags);
+   631			cond_resched();
+   632	
+   633			if (unlikely(err == -ENOENT)) {
+   634				void *page_kaddr;
+   635	
+   636				mmap_read_unlock(dst_mm);
+   637				BUG_ON(!page);
+   638	
+   639				page_kaddr = kmap_local_page(page);
+   640				err = copy_from_user(page_kaddr,
+   641						     (const void __user *) src_addr,
+   642						     PAGE_SIZE);
+   643				kunmap_local(page_kaddr);
+   644				if (unlikely(err)) {
+   645					err = -EFAULT;
+   646					goto out;
+   647				}
+   648				flush_dcache_page(page);
+   649				goto retry;
+   650			} else
+   651				BUG_ON(page);
+   652	
+   653			if (!err) {
+   654				dst_addr += PAGE_SIZE;
+   655				src_addr += PAGE_SIZE;
+   656				copied += PAGE_SIZE;
+   657	
+   658				if (fatal_signal_pending(current))
+   659					err = -EINTR;
+   660			}
+   661			if (err)
+   662				break;
+   663		}
+   664	
+   665	out_unlock:
+   666		mmap_read_unlock(dst_mm);
+   667	out:
+   668		if (page)
+   669			put_page(page);
+   670		BUG_ON(copied < 0);
+   671		BUG_ON(err > 0);
+   672		BUG_ON(!copied && !err);
+   673		return copied ? copied : err;
+   674	}
+   675	
 
 -- 
 0-DAY CI Kernel Test Service
