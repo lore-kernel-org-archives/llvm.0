@@ -1,397 +1,165 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668297C;
-	Wed,  8 Mar 2023 02:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678241014; x=1709777014;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OdfDnUPQDtOKrp01+rLrFGldS289cUYNY1OFHAZkUqk=;
-  b=SQ7Zw2RQaMIV0ToOeCx4BR5WU5kzIuVqnR88D5eVVblp9ydS32WjXjja
-   +UEIYRla8NZ9YI5UpI3Je9uXXcjcHVamOtgJNbsskdr/uVJBdLeEZL4Dt
-   GZdbvglwRmc7UBnWokV6bU28ZQVwfHSvlR/tLgPq6NGpYDKP1+QwCi61K
-   5wqunac3IOg798uboLc+rhUs11nB9tItwJJDdseKoV0+RdDC/IT+E+y80
-   zYeZDtwEzzHeLEhet4qik/Np9CCRAlYt3kaFdPeobvbkOGCoCa2fol8up
-   GpBC6fLzga4S66l+fEqquGHXPQjx3ZKn1WVm6vrO/GS045uI9z38D+dQb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="324342351"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="324342351"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 18:03:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="850913619"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="850913619"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 07 Mar 2023 18:03:32 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZj9P-0001mh-1a;
-	Wed, 08 Mar 2023 02:03:31 +0000
-Date: Wed, 8 Mar 2023 10:02:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [miquelraynal:nvmem-layouts-and-of-cleanup 33/35]
- include/linux/of_device.h:107:19: error: conflicting types for
- 'of_device_uevent'
-Message-ID: <202303080911.TfjjgiCK-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95E962B
+	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 03:14:23 +0000 (UTC)
+Received: by mail-ua1-f50.google.com with SMTP id f17so10374118uax.7
+        for <llvm@lists.linux.dev>; Tue, 07 Mar 2023 19:14:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678245262;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mVQyhGIjzGLxG0mBx3cK6dRChw0rYjuOJl9Yewk2Iic=;
+        b=k2gCpJqtOzFfNKBru2PISKZD5J7z/Yd8lvw5EmCazQhKxv951ImyV7L3NY94ZtyCnT
+         XlxiliDpvy4zQPN9gVWADWQP7tDBdwjJuNvCZ2+XAT45zuDKT240p7SrcdphGj1EG/sr
+         cHKErcHfCqD7beV+QhGxxEYMMsQv+D06LV22WwO1g1Vx3LNTgZKQP4N7ji8NstSt/Y5p
+         bG04eoOSnSHDdBczkNtcs10ldfpxmbt2EQdYgDccH2g/0B1UpADqUEuRKWW/KompCjBt
+         icToITfI5eqZpLmpR70MnQ0x3FSUxn181JvMG0/hqFQF0M3oBvV88UonpZOhrybYr/cp
+         5ldw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678245262;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mVQyhGIjzGLxG0mBx3cK6dRChw0rYjuOJl9Yewk2Iic=;
+        b=DQ7DQE1Gk6enm3uFp3e2Bs77FrxvnpF1ueuaA6qNNh5UD2hJEhcuGwPD9cXDngQN3h
+         ikwZJbY/T/MWccEcACDNRQV0ZO/lmKF3iLcQ/Ff3RdVnFDatqVXcwvtPmp45NbFnyX9X
+         igSb48Sihd1uRQ0rHntg3KCqXafS4jgGG3UibJFQlRG4NXM+Y1o96Xp5TIIds5xbXn68
+         mKZvJC4Pp6BBQVbAVrimpxTxGYL9gdPZT3qYyuHJQ45A8GWiotc9MLzcTvFnHAIg+G/e
+         fztFypHi6+/9KpHqiSmyCVdZK/41X4AqTJM2igBFCZwqGpcdByx40r1fy26omcLRwaVT
+         Qpqg==
+X-Gm-Message-State: AO0yUKWZbhEiGGLgL9Onb+8Ct6J0LIW+3MXFNtA5sVehPaBAJtH91xBK
+	+1ABxZvOW4XvSyIEn9WgdfveAUEzANwHTX+qz8Pi8Q==
+X-Google-Smtp-Source: AK7set/0/9etugk4EWZ98upUdsyc4nR6XB+TVtxbVyTOH/Lpo635BbFq4IcB7zz/qJzVU9FvaVcfJAH/EldwKai1paA=
+X-Received: by 2002:a9f:3149:0:b0:68b:923a:d6f4 with SMTP id
+ n9-20020a9f3149000000b0068b923ad6f4mr10765290uab.2.1678245262385; Tue, 07 Mar
+ 2023 19:14:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
+ <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com>
+In-Reply-To: <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 8 Mar 2023 08:44:11 +0530
+Message-ID: <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
+Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
+ sigaltstack - on clang build
+To: "Chang S. Bae" <chang.seok.bae@intel.com>, llvm@lists.linux.dev
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org, 
+	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Len Brown <len.brown@intel.com>, 
+	Borislav Petkov <bp@suse.de>, Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>, 
+	Anders Roxell <anders.roxell@linaro.org>, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/miquelraynal/linux-0day.git nvmem-layouts-and-of-cleanup
-head:   d8752324726fdde6bb205a5aa95ae8ff7d84eff7
-commit: 576fd27b398772cd60c431ee26e40051d7bbbce0 [33/35] of: module: Mutate of_device_uevent() into two helpers
-config: i386-randconfig-a016-20230306 (https://download.01.org/0day-ci/archive/20230308/202303080911.TfjjgiCK-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/miquelraynal/linux-0day/commit/576fd27b398772cd60c431ee26e40051d7bbbce0
-        git remote add miquelraynal https://github.com/miquelraynal/linux-0day.git
-        git fetch --no-tags miquelraynal nvmem-layouts-and-of-cleanup
-        git checkout 576fd27b398772cd60c431ee26e40051d7bbbce0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
++ LLVM
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303080911.TfjjgiCK-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/dma/qcom/hidma_mgmt.c:14:
-   In file included from include/linux/of_platform.h:12:
->> include/linux/of_device.h:107:19: error: conflicting types for 'of_device_uevent'
-   static inline int of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-                     ^
-   include/linux/of_device.h:81:20: note: previous definition is here
-   static inline void of_device_uevent(const struct device *dev,
-                      ^
-   1 error generated.
---
-   In file included from kernel/sched/fair.c:55:
-   In file included from kernel/sched/sched.h:31:
-   In file included from include/linux/cpufreq.h:18:
->> include/linux/of_device.h:107:19: error: conflicting types for 'of_device_uevent'
-   static inline int of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-                     ^
-   include/linux/of_device.h:81:20: note: previous definition is here
-   static inline void of_device_uevent(const struct device *dev,
-                      ^
-   kernel/sched/fair.c:6074:6: warning: no previous prototype for function 'init_cfs_bandwidth' [-Wmissing-prototypes]
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-        ^
-   kernel/sched/fair.c:6074:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-   ^
-   static 
-   kernel/sched/fair.c:12489:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
-   void free_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12489:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void free_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:12491:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-       ^
-   kernel/sched/fair.c:12491:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-   ^
-   static 
-   kernel/sched/fair.c:12496:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
-   void online_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12496:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void online_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:12498:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
-   void unregister_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12498:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   5 warnings and 1 error generated.
---
-   In file included from kernel/power/hibernate.c:34:
-   In file included from include/trace/events/power.h:8:
-   In file included from include/linux/cpufreq.h:18:
->> include/linux/of_device.h:107:19: error: conflicting types for 'of_device_uevent'
-   static inline int of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-                     ^
-   include/linux/of_device.h:81:20: note: previous definition is here
-   static inline void of_device_uevent(const struct device *dev,
-                      ^
-   kernel/power/hibernate.c:278:12: warning: no previous prototype for function 'arch_resume_nosmt' [-Wmissing-prototypes]
-   __weak int arch_resume_nosmt(void)
-              ^
-   kernel/power/hibernate.c:278:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   __weak int arch_resume_nosmt(void)
-          ^
-          static 
-   1 warning and 1 error generated.
---
-   In file included from arch/x86/kernel/tsc.c:11:
-   In file included from include/linux/cpufreq.h:18:
->> include/linux/of_device.h:107:19: error: conflicting types for 'of_device_uevent'
-   static inline int of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-                     ^
-   include/linux/of_device.h:81:20: note: previous definition is here
-   static inline void of_device_uevent(const struct device *dev,
-                      ^
-   In file included from arch/x86/kernel/tsc.c:25:
-   In file included from arch/x86/include/asm/nmi.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/tsc.c:25:
-   In file included from arch/x86/include/asm/nmi.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/tsc.c:25:
-   In file included from arch/x86/include/asm/nmi.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/tsc.c:25:
-   In file included from arch/x86/include/asm/nmi.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/tsc.c:25:
-   In file included from arch/x86/include/asm/nmi.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/tsc.c:25:
-   In file included from arch/x86/include/asm/nmi.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/tsc.c:25:
-   In file included from arch/x86/include/asm/nmi.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-                        ^      ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/tsc.c:25:
-   In file included from arch/x86/include/asm/nmi.h:5:
-   In file included from include/linux/irq_work.h:6:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-                                        ^      ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/x86/kernel/tsc.c:25:
---
-   In file included from drivers/char/tpm/tpm_tis.c:28:
->> include/linux/of_device.h:107:19: error: conflicting types for 'of_device_uevent'
-   static inline int of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-                     ^
-   include/linux/of_device.h:81:20: note: previous definition is here
-   static inline void of_device_uevent(const struct device *dev,
-                      ^
-   In file included from drivers/char/tpm/tpm_tis.c:31:
-   In file included from drivers/char/tpm/tpm.h:27:
-   In file included from include/linux/tpm.h:23:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/char/tpm/tpm_tis.c:31:
-   In file included from drivers/char/tpm/tpm.h:27:
-   In file included from include/linux/tpm.h:23:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/char/tpm/tpm_tis.c:31:
-   In file included from drivers/char/tpm/tpm.h:27:
-   In file included from include/linux/tpm.h:23:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/char/tpm/tpm_tis.c:31:
-   In file included from drivers/char/tpm/tpm.h:27:
-   In file included from include/linux/tpm.h:23:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/char/tpm/tpm_tis.c:31:
-   In file included from drivers/char/tpm/tpm.h:27:
-   In file included from include/linux/tpm.h:23:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/char/tpm/tpm_tis.c:31:
-   In file included from drivers/char/tpm/tpm.h:27:
-   In file included from include/linux/tpm.h:23:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/char/tpm/tpm_tis.c:31:
-   In file included from drivers/char/tpm/tpm.h:27:
-   In file included from include/linux/tpm.h:23:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-                        ^      ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/char/tpm/tpm_tis.c:31:
---
-   In file included from drivers/char/tpm/tpm_i2c_nuvoton.c:22:
->> include/linux/of_device.h:107:19: error: conflicting types for 'of_device_uevent'
-   static inline int of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-                     ^
-   include/linux/of_device.h:81:20: note: previous definition is here
-   static inline void of_device_uevent(const struct device *dev,
-                      ^
-   In file included from drivers/char/tpm/tpm_i2c_nuvoton.c:23:
-   In file included from drivers/char/tpm/tpm.h:28:
-   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-           int mapping_size;
-               ^
-   1 warning and 1 error generated.
---
-   In file included from drivers/ata/libahci_platform.c:23:
-   In file included from include/linux/of_platform.h:12:
->> include/linux/of_device.h:107:19: error: conflicting types for 'of_device_uevent'
-   static inline int of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-                     ^
-   include/linux/of_device.h:81:20: note: previous definition is here
-   static inline void of_device_uevent(const struct device *dev,
-                      ^
-   drivers/ata/libahci_platform.c:750:42: warning: shift count >= width of type [-Wshift-count-overflow]
-                   rc = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(64));
-                                                          ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   1 warning and 1 error generated.
-..
-
-
-vim +/of_device_uevent +107 include/linux/of_device.h
-
-   106	
- > 107	static inline int of_device_uevent(struct device *dev, struct kobj_uevent_env *env)
-   108	{
-   109		return -ENODEV;
-   110	}
-   111	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+On Wed, 8 Mar 2023 at 00:58, Chang S. Bae <chang.seok.bae@intel.com> wrote:
+>
+> On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
+> > kselftest: sigaltstack built with clang-16 getting failed but passed with
+> > gcc-12 build. Please find more details about test logs on clang-16 and
+> > gcc-12 and steps to reproduce locally on your machine by using tuxrun.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Test log:
+> > ----------
+> >
+> > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian clang
+> > version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.41),
+> > Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
+> > ...
+> > kselftest: Running tests in sigaltstack
+> > TAP version 13
+> > 1..1
+> > # selftests: sigaltstack: sas
+> > # # [NOTE] the stack size is 21104
+> > # TAP version 13
+> > # 1..3
+> > # ok 1 Initial sigaltstack state was SS_DISABLE
+> > # Bail out! SP is not on sigaltstack
+> > # # Planned tests != run tests (3 != 1)
+> > # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > not ok 1 selftests: sigaltstack: sas # exit=1
+> <snip>
+>
+> > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
+> > (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils
+> > for Debian) 2.40) #1 SMP PREEMPT @1678159736
+> > ...
+> > kselftest: Running tests in sigaltstack
+> > TAP version 13
+> > 1..1
+> > # selftests: sigaltstack: sas
+> > # # [NOTE] the stack size is 50080
+> > # TAP version 13
+> > # 1..3
+> > # ok 1 Initial sigaltstack state was SS_DISABLE
+> > # # [RUN] signal USR1
+> > # ok 2 sigaltstack is disabled in sighandler
+> > # # [RUN] switched to user ctx
+> > # # [RUN] signal USR2
+> > # # [OK] Stack preserved
+> > # ok 3 sigaltstack is still SS_AUTODISARM after signal
+> > # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > ok 1 selftests: sigaltstack: sas
+>
+> At glance, the log shows the altstack size difference between LLVM and GCC.
+>
+> But, when I tried with the LLVM that I have,
+>
+>      $ clang --version
+>      clang version 13.0.0 ...
+>
+> it failed only with this compiler:
+>
+>      $ rm sas;clang -o sas sas.c;./sas
+>      # [NOTE]        the stack size is 8192
+>      TAP version 13
+>      1..3
+>      ok 1 Initial sigaltstack state was SS_DISABLE
+>      Bail out! SP is not on sigaltstack
+>      # Planned tests != run tests (3 != 1)
+>      # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+>
+>      $ rm sas;gcc -o sas sas.c;./sas
+>      # [NOTE]        the stack size is 8192
+>      TAP version 13
+>      1..3
+>      ok 1 Initial sigaltstack state was SS_DISABLE
+>      # [RUN] signal USR1
+>      ok 2 sigaltstack is disabled in sighandler
+>      # [RUN] switched to user ctx
+>      # [RUN] signal USR2
+>      # [OK]  Stack preserved
+>      ok 3 sigaltstack is still SS_AUTODISARM after signal
+>      # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+>
+> The same is true with some old versions -- e.g. the one that came with
+> commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: improve
+> output of sigaltstack testcase"):
+>
+>      $ rm sas;clang -o sas sas.c;./sas
+>      [OK]    Initial sigaltstack state was SS_DISABLE
+>      [FAIL]  SP is not on sigaltstack
+>
+>      $ rm sas;gcc -o sas sas.c;./sas
+>      [OK]    Initial sigaltstack state was SS_DISABLE
+>      [RUN]   signal USR1
+>      [OK]    sigaltstack is disabled in sighandler
+>      [RUN]   switched to user ctx
+>      [RUN]   signal USR2
+>      [OK]    Stack preserved
+>      [OK]    sigaltstack is still SS_AUTODISARM after signal
+>      [OK]    Test passed
+>
+> So, this test failure appears to have been there for a while. I think
+> the LLVM folks need to take a look at it.
+>
+> Thanks,
+> Chang
