@@ -1,47 +1,45 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CED79CD;
-	Wed,  8 Mar 2023 15:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C7579DA;
+	Wed,  8 Mar 2023 15:52:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678289572; x=1709825572;
+  t=1678290772; x=1709826772;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NkR0W7o9uX/z8jZ3uUOg7UWWR+boKEcYvcbmJp3Otq4=;
-  b=ilGD3+qGXvYOBB8Z01uKUvyB8YCKXGCtweZE62+3zjsWyHw4WdwL1/Zk
-   DimkHAwz1KnoSNB9AAIS5y/rjWRTvno3ouU/eklvUJDzX8xq0A7ZCLAmy
-   n/4fICFCcYPWMmUoF1AzDTZR/4XicsXCTZaMIK47wxcSh7OXX/8d7GspR
-   jsnl8vg3I+Ph/wzbarC2in5pjLqOKw3u8Z4BItxldjBft2Jo28SKMzrJw
-   m/dt20xBS1lmDH8KPhheb0nIKoUU5AmoKFZVYphrxS8TTrrZ71secBMIY
-   9t722q44IPSwkJJO/g6nxfPD81GOH5cfdfOUv5Xdy68keirL1aolIzrsi
+  bh=ksZy6yBgs1wq/8pT/Ohy0X8X8VT76kvpenT/22U/R6U=;
+  b=DhkUNBXdcBkC+y/sbUGOho+1bbj/3NEZqlk9BmG52PfyT3N35ax/Dsq5
+   +Uh9pvWYESAOwXzdhSwgxq3u8kOBIJJWLltM5F2lnLm7aH/14NchA2NQr
+   J1hdnz7pjZ2UOec5TQ5mfWnqUnQK+vnWNbSCVbYCrLnd1fGNLjEDx5trt
+   rHmLoS1dS9RLMotd/9hxzJxWyqWutg1nVLX97F+PDqyaRusOT8GVXiGoP
+   5ri3rVgZiUBVnahISE0TXq8xq22b8zzo1ypjgDlOu8AnSTE+NwTDlGOSl
+   wXWNA9ECLH0rWPlwzb+9QSYVDvci+Dyu8hQkN3fkwH0Hcde3MCHlmUfer
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="320014597"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="336207671"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="320014597"
+   d="scan'208";a="336207671"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 07:32:51 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 07:52:51 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="766018491"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="766029013"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="766018491"
+   d="scan'208";a="766029013"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 07:32:49 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 07:52:49 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZvma-0002Dj-0j;
-	Wed, 08 Mar 2023 15:32:48 +0000
-Date: Wed, 8 Mar 2023 23:32:16 +0800
+	id 1pZw5w-0002Ej-2u;
+	Wed, 08 Mar 2023 15:52:48 +0000
+Date: Wed, 8 Mar 2023 23:52:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kui-Feng Lee <kuifeng@meta.com>, bpf@vger.kernel.org, ast@kernel.org,
-	martin.lau@linux.dev, song@kernel.org, kernel-team@meta.com,
-	andrii@kernel.org, sdf@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kui-Feng Lee <kuifeng@meta.com>
-Subject: Re: [PATCH bpf-next v5 3/8] bpf: Create links for BPF struct_ops
- maps.
-Message-ID: <202303082344.mxuydKat-lkp@intel.com>
-References: <20230308005050.255859-4-kuifeng@meta.com>
+To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
+	kernel-team@meta.com, Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v4 bpf-next 4/8] bpf: implement number iterator
+Message-ID: <202303082315.foifky6G-lkp@intel.com>
+References: <20230308035416.2591326-5-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,140 +48,102 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308005050.255859-4-kuifeng@meta.com>
+In-Reply-To: <20230308035416.2591326-5-andrii@kernel.org>
 
-Hi Kui-Feng,
+Hi Andrii,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kui-Feng-Lee/bpf-Retire-the-struct_ops-map-kvalue-refcnt/20230308-085434
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/bpf-factor-out-fetching-basic-kfunc-metadata/20230308-115539
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230308005050.255859-4-kuifeng%40meta.com
-patch subject: [PATCH bpf-next v5 3/8] bpf: Create links for BPF struct_ops maps.
-config: i386-randconfig-a012-20230306 (https://download.01.org/0day-ci/archive/20230308/202303082344.mxuydKat-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20230308035416.2591326-5-andrii%40kernel.org
+patch subject: [PATCH v4 bpf-next 4/8] bpf: implement number iterator
+config: i386-randconfig-a015-20230306 (https://download.01.org/0day-ci/archive/20230308/202303082315.foifky6G-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/de9e43a5ac82dde718d80d8347e867a8fc935e0a
+        # https://github.com/intel-lab-lkp/linux/commit/19acf9ca01e2927a29d3235b3aa73598430dcb70
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kui-Feng-Lee/bpf-Retire-the-struct_ops-map-kvalue-refcnt/20230308-085434
-        git checkout de9e43a5ac82dde718d80d8347e867a8fc935e0a
+        git fetch --no-tags linux-review Andrii-Nakryiko/bpf-factor-out-fetching-basic-kfunc-metadata/20230308-115539
+        git checkout 19acf9ca01e2927a29d3235b3aa73598430dcb70
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/fm10k/ drivers/net/ethernet/intel/ixgbe/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303082344.mxuydKat-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303082315.foifky6G-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/intel/fm10k/fm10k_main.c:8:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
-   include/linux/bpf.h:2388:19: error: redefinition of 'bpf_struct_ops_link_create'
-   static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
-                     ^
-   include/linux/bpf.h:1592:19: note: previous definition is here
-   static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
-                     ^
->> drivers/net/ethernet/intel/fm10k/fm10k_main.c:886:16: warning: division by zero is undefined [-Wdivision-by-zero]
-           desc_flags |= FM10K_SET_FLAG(tx_flags, FM10K_TX_FLAGS_CSUM,
-                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/fm10k/fm10k_main.c:878:26: note: expanded from macro 'FM10K_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
---
-   In file included from drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:27:
-   include/linux/bpf.h:2388:19: error: redefinition of 'bpf_struct_ops_link_create'
-   static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
-                     ^
-   include/linux/bpf.h:1592:19: note: previous definition is here
-   static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
-                     ^
->> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8223:14: warning: division by zero is undefined [-Wdivision-by-zero]
-           cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_HW_VLAN,
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8227:14: warning: division by zero is undefined [-Wdivision-by-zero]
-           cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_TSO,
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8231:14: warning: division by zero is undefined [-Wdivision-by-zero]
-           cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_TSTAMP,
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8235:14: warning: division by zero is undefined [-Wdivision-by-zero]
-           cmd_type ^= IXGBE_SET_FLAG(skb->no_fcs, 1, IXGBE_ADVTXD_DCMD_IFCS);
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8246:19: warning: division by zero is undefined [-Wdivision-by-zero]
-           olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8251:19: warning: division by zero is undefined [-Wdivision-by-zero]
-           olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8256:19: warning: division by zero is undefined [-Wdivision-by-zero]
-           olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8264:19: warning: division by zero is undefined [-Wdivision-by-zero]
-           olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
-            ((u32)(_input & _flag) / (_flag / _result)))
-                                   ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:10807:46: warning: shift count >= width of type [-Wshift-count-overflow]
-           err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-                                                       ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                                        ^ ~~~
-   9 warnings and 1 error generated.
+>> kernel/bpf/bpf_iter.c:794:2: error: call to __compiletime_assert_395 declared with 'error' attribute: BUILD_BUG_ON failed: __alignof__(struct bpf_iter_num_kern) != __alignof__(struct bpf_iter_num)
+           BUILD_BUG_ON(__alignof__(struct bpf_iter_num_kern) != __alignof__(struct bpf_iter_num));
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:399:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:387:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:380:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:74:1: note: expanded from here
+   __compiletime_assert_395
+   ^
+   1 error generated.
 
 
-vim +886 drivers/net/ethernet/intel/fm10k/fm10k_main.c
+vim +/error +794 kernel/bpf/bpf_iter.c
 
-76a540d4728a37 Alexander Duyck 2014-09-20  874  
-76a540d4728a37 Alexander Duyck 2014-09-20  875  #define FM10K_SET_FLAG(_input, _flag, _result) \
-76a540d4728a37 Alexander Duyck 2014-09-20  876  	((_flag <= _result) ? \
-76a540d4728a37 Alexander Duyck 2014-09-20  877  	 ((u32)(_input & _flag) * (_result / _flag)) : \
-76a540d4728a37 Alexander Duyck 2014-09-20  878  	 ((u32)(_input & _flag) / (_flag / _result)))
-76a540d4728a37 Alexander Duyck 2014-09-20  879  
-76a540d4728a37 Alexander Duyck 2014-09-20  880  static u8 fm10k_tx_desc_flags(struct sk_buff *skb, u32 tx_flags)
-76a540d4728a37 Alexander Duyck 2014-09-20  881  {
-76a540d4728a37 Alexander Duyck 2014-09-20  882  	/* set type for advanced descriptor with frame checksum insertion */
-76a540d4728a37 Alexander Duyck 2014-09-20  883  	u32 desc_flags = 0;
-76a540d4728a37 Alexander Duyck 2014-09-20  884  
-76a540d4728a37 Alexander Duyck 2014-09-20  885  	/* set checksum offload bits */
-76a540d4728a37 Alexander Duyck 2014-09-20 @886  	desc_flags |= FM10K_SET_FLAG(tx_flags, FM10K_TX_FLAGS_CSUM,
-76a540d4728a37 Alexander Duyck 2014-09-20  887  				     FM10K_TXD_FLAG_CSUM);
-76a540d4728a37 Alexander Duyck 2014-09-20  888  
-76a540d4728a37 Alexander Duyck 2014-09-20  889  	return desc_flags;
-76a540d4728a37 Alexander Duyck 2014-09-20  890  }
-76a540d4728a37 Alexander Duyck 2014-09-20  891  
+   784	
+   785	__diag_push();
+   786	__diag_ignore_all("-Wmissing-prototypes",
+   787			  "Global functions as their definitions will be in vmlinux BTF");
+   788	
+   789	__bpf_kfunc int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end)
+   790	{
+   791		struct bpf_iter_num_kern *s = (void *)it;
+   792	
+   793		BUILD_BUG_ON(sizeof(struct bpf_iter_num_kern) != sizeof(struct bpf_iter_num));
+ > 794		BUILD_BUG_ON(__alignof__(struct bpf_iter_num_kern) != __alignof__(struct bpf_iter_num));
+   795	
+   796		BTF_TYPE_EMIT(struct btf_iter_num);
+   797	
+   798		/* start == end is legit, it's an empty range and we'll just get NULL
+   799		 * on first (and any subsequent) bpf_iter_num_next() call
+   800		 */
+   801		if (start > end) {
+   802			s->cur = s->end = 0;
+   803			return -EINVAL;
+   804		}
+   805	
+   806		/* avoid overflows, e.g., if start == INT_MIN and end == INT_MAX */
+   807		if ((s64)end - (s64)start > BPF_MAX_LOOPS) {
+   808			s->cur = s->end = 0;
+   809			return -E2BIG;
+   810		}
+   811	
+   812		/* user will call bpf_iter_num_next() first,
+   813		 * which will set s->cur to exactly start value;
+   814		 * underflow shouldn't matter
+   815		 */
+   816		s->cur = start - 1;
+   817		s->end = end;
+   818	
+   819		return 0;
+   820	}
+   821	
 
 -- 
 0-DAY CI Kernel Test Service
