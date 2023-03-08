@@ -1,43 +1,46 @@
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5227C;
-	Wed,  8 Mar 2023 08:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BD67C;
+	Wed,  8 Mar 2023 08:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678264842; x=1709800842;
+  t=1678265442; x=1709801442;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gB7WDPIHJt5t/8v281bB3fITw5uht69zDV1c3D9xXos=;
-  b=YVh3BgEjyXPk2D7BM/zyWCash+0vSKMyAyJcytD3cCMGePu1Mr0Hpxa1
-   A5WchOL+4v/vk2mNTqL48K6bn7Q/Gyfu3xqSUbbPuh96t/3Ou3FCmx9dd
-   dgGn3uSLOWeFt39kjDGj4OgFqiTN9BC1j/DxTd2aghfoVMrkD+lE+RUMG
-   h+gT8wAAwpQ+DoXhXT7+kF+o7NG5/DLQ6eoRCcJEdnEhzUvsLvte/40Gk
-   GFfzsM789gAp78p6MFdwXqoEEuPSPhvgeJAdTQlb704tV4/us1er+SvO4
-   mQHtD7TImA/oTjLSVnG2dpSyNJCnDfIFenrooREMKWx6ll7fkgA5jB7KU
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422369799"
+  bh=pu/sJxTrASdMKUp5HI/2JBb5GB5rbO4KMULJcHaGzmw=;
+  b=HhoM8QxMVzVR/M7H8fdO+r/L5lfNsyTDyji99rPDSH0RxTkDee1Xk3Lc
+   Bs0dnGFtUytg6QXxkDh7pjPMPIkMaXmOeALxJXPZFYbGJc76eE82wNFnL
+   SLbqzVNf6/AB68gUXH5yk+5KgTjmlIPNHjf8u3Pi4ZwKaAp0v2e5GqBEg
+   sXx6zhImI8+xmyAmIfTD718uQhEOlgm0rWlz1xwrhnT1+CeX/UDEe3kgo
+   Jfq9Lt8ZC9mNKH0TZWE8LNkemur9bUWajxrg0xr+dY9qQzDddDKQa5Psv
+   JILJnr3bW0RF+YVkiGNZ4wKkYzdez/ixzmE6cYEdTVgk8yJRFDapu9bsH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422371399"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="422369799"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 00:40:41 -0800
+   d="scan'208";a="422371399"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 00:50:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="1006249531"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="765936658"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="1006249531"
+   d="scan'208";a="765936658"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Mar 2023 00:40:40 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 00:50:40 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZpLj-0001zP-28;
-	Wed, 08 Mar 2023 08:40:39 +0000
-Date: Wed, 8 Mar 2023 16:39:43 +0800
+	id 1pZpVP-0001zr-38;
+	Wed, 08 Mar 2023 08:50:39 +0000
+Date: Wed, 8 Mar 2023 16:50:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Lijo Lazar <lijo.lazar@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Subject: [jpoimboe:objtool/core 10/24] arch/mips/include/asm/smp.h:44:29:
- error: use of undeclared identifier 'CONFIG_MIPS_NR_CPU_NR_MAP'
-Message-ID: <202303081612.leLRNMzo-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: [linux-next:master 1761/1915]
+ drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:
+ warning: variable 'software_shutdown_temp' is uninitialized when used here
+Message-ID: <202303081657.6Ble80UY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,79 +50,85 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool/core
-head:   ed8d2d280a75ca9deb6d307e116acff4b8ef0782
-commit: 09b0d89f25b23d7ed2df68a6bf2fa1ec484a15c6 [10/24] mips/cpu: Expose play_dead()'s prototype definition
-config: mips-bcm63xx_defconfig (https://download.01.org/0day-ci/archive/20230308/202303081612.leLRNMzo-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   fc31900c948610e7b5c2f15fb7795832c8325327
+commit: 511a95552ec878fc59a294652ebbf73a0e8e0c76 [1761/1915] drm/amd/pm: Add SMU 13.0.6 support
+config: riscv-randconfig-r042-20230306 (https://download.01.org/0day-ci/archive/20230308/202303081657.6Ble80UY-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=09b0d89f25b23d7ed2df68a6bf2fa1ec484a15c6
-        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
-        git fetch --no-tags jpoimboe objtool/core
-        git checkout 09b0d89f25b23d7ed2df68a6bf2fa1ec484a15c6
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=511a95552ec878fc59a294652ebbf73a0e8e0c76
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 511a95552ec878fc59a294652ebbf73a0e8e0c76
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303081612.leLRNMzo-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303081657.6Ble80UY-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/mips/kernel/smp-bmips.c:41:
->> arch/mips/include/asm/smp.h:44:29: error: use of undeclared identifier 'CONFIG_MIPS_NR_CPU_NR_MAP'
-   extern int __cpu_number_map[CONFIG_MIPS_NR_CPU_NR_MAP];
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: warning: variable 'hotspotlimit' is uninitialized when used here [-Wuninitialized]
+                   hotspotlimit * SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
+                   ^~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22: note: initialize the variable 'hotspotlimit' to silence this warning
+           uint8_t hotspotlimit;
                                ^
-   arch/mips/include/asm/smp.h:71:20: error: redefinition of 'smp_send_reschedule'
-   static inline void smp_send_reschedule(int cpu)
-                      ^
-   include/linux/smp.h:198:20: note: previous definition is here
-   static inline void smp_send_reschedule(int cpu) { }
-                      ^
-   In file included from arch/mips/kernel/smp-bmips.c:41:
-   arch/mips/include/asm/smp.h:75:8: error: incomplete definition of type 'struct plat_smp_ops'
-           mp_ops->send_ipi_single(cpu, SMP_RESCHEDULE_YOURSELF);
-           ~~~~~~^
-   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
-   struct plat_smp_ops;
-          ^
-   In file included from arch/mips/kernel/smp-bmips.c:41:
-   arch/mips/include/asm/smp.h:130:8: error: incomplete definition of type 'struct plat_smp_ops'
-           mp_ops->send_ipi_single(cpu, SMP_CALL_FUNCTION);
-           ~~~~~~^
-   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
-   struct plat_smp_ops;
-          ^
-   In file included from arch/mips/kernel/smp-bmips.c:41:
-   arch/mips/include/asm/smp.h:137:8: error: incomplete definition of type 'struct plat_smp_ops'
-           mp_ops->send_ipi_mask(mask, SMP_CALL_FUNCTION);
-           ~~~~~~^
-   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
-   struct plat_smp_ops;
-          ^
-   5 errors generated.
+                                = '\0'
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24: warning: variable 'memlimit' is uninitialized when used here [-Wuninitialized]
+           range->mem_crit_max = memlimit * SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
+                                 ^~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18: note: initialize the variable 'memlimit' to silence this warning
+           uint8_t memlimit;
+                           ^
+                            = '\0'
+>> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34: warning: variable 'software_shutdown_temp' is uninitialized when used here [-Wuninitialized]
+           range->software_shutdown_temp = software_shutdown_temp;
+                                           ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32: note: initialize the variable 'software_shutdown_temp' to silence this warning
+           uint8_t software_shutdown_temp;
+                                         ^
+                                          = '\0'
+   3 warnings generated.
 
 
-vim +/CONFIG_MIPS_NR_CPU_NR_MAP +44 arch/mips/include/asm/smp.h
+vim +/software_shutdown_temp +1152 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c
 
-^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  41  
-^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  42  /* Map from cpu id to sequential logical cpu number.  This will only
-^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  43     not be idempotent when cpus failed to come on-line.	*/
-7820b84be844d8 arch/mips/include/asm/smp.h David Daney    2017-09-28 @44  extern int __cpu_number_map[CONFIG_MIPS_NR_CPU_NR_MAP];
-^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  45  #define cpu_number_map(cpu)  __cpu_number_map[cpu]
-^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  46  
-
-:::::: The code at line 44 was first introduced by commit
-:::::: 7820b84be844d8d863122b1323f2a4bc2441b783 MIPS: Allow __cpu_number_map to be larger than NR_CPUS
-
-:::::: TO: David Daney <david.daney@cavium.com>
-:::::: CC: James Hogan <jhogan@kernel.org>
+  1129	
+  1130	static int
+  1131	smu_v13_0_6_get_thermal_temperature_range(struct smu_context *smu,
+  1132						  struct smu_temperature_range *range)
+  1133	{
+  1134		uint8_t software_shutdown_temp;
+  1135		uint8_t hotspotlimit;
+  1136		uint8_t memlimit;
+  1137	
+  1138		if (!range)
+  1139			return -EINVAL;
+  1140	
+  1141		/* TODO: Find a way to get temperature limits */
+  1142		memcpy(range, &smu_v13_0_6_thermal_policy[0],
+  1143		       sizeof(struct smu_temperature_range));
+  1144	
+  1145		range->hotspot_crit_max =
+> 1146			hotspotlimit * SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
+  1147		range->hotspot_emergency_max = (hotspotlimit + CTF_OFFSET_HOTSPOT) *
+  1148					       SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
+> 1149		range->mem_crit_max = memlimit * SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
+  1150		range->mem_emergency_max = (memlimit + CTF_OFFSET_MEM) *
+  1151					   SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
+> 1152		range->software_shutdown_temp = software_shutdown_temp;
+  1153	
+  1154		return 0;
+  1155	}
+  1156	
 
 -- 
 0-DAY CI Kernel Test Service
