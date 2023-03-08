@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51D76D38
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 13:53:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C42E1C433A1;
-	Wed,  8 Mar 2023 13:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3B76D38
+	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 13:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67893C4339E;
+	Wed,  8 Mar 2023 13:53:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678283582;
-	bh=F7PSvEsj8583WT74j11i/ggrg+iKXSefTVUucPnnePM=;
+	s=k20201202; t=1678283592;
+	bh=scIBUCibkZ6ezqacbiLi2xkfwIP7lbG0QjO+CwNdsuI=;
 	h=From:To:Cc:Subject:Date:From;
-	b=LMOpFm57xTKxO0RCkeNN0BZx3vEwKk0TTfSozDD37aDopkOmlrOvPgovX1mzYMQYx
-	 AmDrRcDzgVxsaQ4dTJuWWhEUXLD1OP3yLpomoZMGqGWfV7JJyT2PU9gv2O7l9PRhAy
-	 etfCBQ+amPMMP+/K8Hn9LQ3UxbUSVO76pp73tZ+rWCvCDQaW9oQxg2i3z2xdedlIp6
-	 3/NnaKYEKQaSRKcrveaaD6ZuGDb8QDG2bzE0hhFeR/R3f2DnSy5YAIAGVL66kFLyTn
-	 4c7QXn+5L/wahr5OplNxE7pM5Dqh7mgv+3r2Hco0z/Z3qRraqEOz7nLVZdNDDTgTgy
-	 xpEP21wy8oNYA==
+	b=cWsn6VcLigVWXFE12TziUl2A+goLVmmqhaU8/hQ1WT38LkiXMswpG0+LJVQdVe0RT
+	 kq42+k3yNkY/6JKCq0AKCzo8xvw0tgnSoi5JA3TSQaN9jnWmUyjxyLA6F8bGgvaIxs
+	 xbHMXaGh8ogtYE3GZ+C33iPcfaZ40kpJxHhrkksqMAUiDxba4Pek7pI0qNX8GkYl6U
+	 eZfassxObD41O+SMSlPce1xhDBbIYECuANHGxVyja0vI17+Vtinc8cKvmwVgVDJAHR
+	 iKAiVStQF6U6YKT5KNYiI+9JWZ5jey0XJfg/bCHpsG+yf1fo1fduDnJuDwpEWhTELa
+	 qfNMziOjoMgIA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -24,9 +24,9 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	nathan@kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 1/3] scripts: handle BrokenPipeError for python scripts
-Date: Wed,  8 Mar 2023 08:52:54 -0500
-Message-Id: <20230308135300.2927409-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 1/3] scripts: handle BrokenPipeError for python scripts
+Date: Wed,  8 Mar 2023 08:53:04 -0500
+Message-Id: <20230308135309.2927462-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -131,10 +131,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 40 insertions(+), 10 deletions(-)
 
 diff --git a/scripts/checkkconfigsymbols.py b/scripts/checkkconfigsymbols.py
-index 217d21abc86e8..36c920e713137 100755
+index 1548f9ce46827..697972432bbe7 100755
 --- a/scripts/checkkconfigsymbols.py
 +++ b/scripts/checkkconfigsymbols.py
-@@ -115,7 +115,7 @@ def parse_options():
+@@ -113,7 +113,7 @@ def parse_options():
      return args
  
  
@@ -143,7 +143,7 @@ index 217d21abc86e8..36c920e713137 100755
      """Main function of this module."""
      args = parse_options()
  
-@@ -467,5 +467,16 @@ def parse_kconfig_file(kfile):
+@@ -472,5 +472,16 @@ def parse_kconfig_file(kfile):
      return defined, references
  
  
