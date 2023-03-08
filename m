@@ -1,173 +1,142 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A6F657;
-	Wed,  8 Mar 2023 21:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678311722; x=1709847722;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CYtLrclcsUPbmZzfRccyQP2tLDDi2ZL/pL8AHy1pWGs=;
-  b=mEOZIVsrA43gZU0F7mAEUp4sVoPp1761JA9BqjOVTknvTuAMtllGFyPI
-   0Bkc51eyjHTsX6IBVEeTYp7jvsHb92MThefKgzXbNUfZWSdKz5fk8B4F4
-   /WY6g4p5HBwM/DQDltah099qcWVwJ4LItbzsk1Icyf0n5zcJ3EzOITeFa
-   k+nSTCelp5W/SzHv+mHwpX/CCffja/nXnJ6j6bjnW5DlcuXtLK3+4X2oK
-   p2xR7AjC8Oxi7lLslJiokcPYX1ghyuQKb0r9Hyc1Covb4HVs4xGCxPZru
-   GhGAM7RKr+Q5fSsii5aieO1leVAn4AtbfYdS3B7DHKGr8sChybHnbzFk5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="324600132"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="324600132"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 13:42:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="709592466"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="709592466"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 08 Mar 2023 13:41:59 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pa1Xq-0002Pt-2A;
-	Wed, 08 Mar 2023 21:41:58 +0000
-Date: Thu, 9 Mar 2023 05:41:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused
- variable 'mmpcam_of_match'
-Message-ID: <202303090557.mLLxrNKE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4A0657
+	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 22:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27065C433EF;
+	Wed,  8 Mar 2023 22:09:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678313361;
+	bh=YjvsP3xGIY/OBQAOjH6ILlUgFSWUuguf/wwQlB08/I4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iIKyrvh24Sp1q+rzGLGhUtShBlWpH4yKtakn0yah+KrhBBVigUXGzDno4kYge1FLJ
+	 oc6J5smYtnYDkK4Rh4F/pwUW+iavBWLfvIHzfuQFjg2flhoQ9bAWEV5TXru/KhVUpV
+	 /nBBEDttzm+4WwDEX60wy2InRENdg5hDPggfjrMAavQd6tPJMLQBm+9MViorK3p6Fz
+	 DFGM+0FziPJgD2Rdtp3SUjvWowVsTjMSnLlkAc4gWT4D++xz24fgSuDvqnSTv7jocc
+	 m0eYCZgiI71B5YewaWPz1D6YkpTdIZ0sqXmaU5ksCU83o6kD0XXSkaUNpE4Vl0krNv
+	 bs7IgLI5B7d5A==
+From: Conor Dooley <conor@kernel.org>
+To: palmer@dabbelt.com
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	linux-riscv@lists.infradead.org,
+	nathan@kernel.org,
+	naresh.kamboju@linaro.org,
+	llvm@lists.linux.dev,
+	stable@vger.kernel.org,
+	aurelien@aurel32.net,
+	ndesaulniers@google.com,
+	Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH v2] RISC-V: remove I-extension ISA spec version dance
+Date: Wed,  8 Mar 2023 22:08:43 +0000
+Message-Id: <20230308220842.1231003-1-conor@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5181; i=conor.dooley@microchip.com; h=from:subject; bh=e8x5OC9RRLdlP4Bz9tlTw5oReRU3raEf7fvxO+/8Qqc=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCmc7JkT3F6dDJv+KJ9VbMrZ2wITfxak7d+kki7OoP/we fBJawadjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzk1HxGhjel8gVrmv8p/j1z pWhlp6tqiQ+/R+Fxi+u1qf7iDqF7FzEynMkMSfzrK+Eu7dZh/579XUjUi4l5Jya98KuV9u55dcm JGQA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-Hi Mauro,
+From: Conor Dooley <conor.dooley@microchip.com>
 
-FYI, the error/warning still remains.
+The spec folk, in their infinite wisdom, moved both control and status
+registers & the FENCE.I instructions out of the I extension into their
+own extensions (Zicsr, Zifencei) in the 20190608 version of the ISA
+spec [0].
+The GCC/binutils crew decided [1] to move their default version of the
+ISA spec to the 20191213 version of the ISA spec, which came into being
+for version 2.38 of binutils and GCC 12. Building with this toolchain
+configuration would result in assembler issues:
+  CC      arch/riscv/kernel/vdso/vgettimeofday.o
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+This was fixed in commit 6df2a016c0c8 ("riscv: fix build with binutils
+2.38") by Aurelien Jarno, but has proven fragile.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6a98c9cae232800c319ed69e1063480d31430887
-commit: dc7bbea90075b57772e9a28043061bf71d96f06f media: platform: rename marvell-ccic/ to marvell/
-date:   12 months ago
-config: s390-buildonly-randconfig-r003-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090557.mLLxrNKE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc7bbea90075b57772e9a28043061bf71d96f06f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dc7bbea90075b57772e9a28043061bf71d96f06f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
+Before LLVM 17, LLVM did not support these extensions and, as such, the
+cc-option check added by Aurelien worked. Since commit 22e199e6afb1
+("[RISCV] Accept zicsr and zifencei command line options") however, LLVM
+*does* support them and the cc-option check passes.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303090557.mLLxrNKE-lkp@intel.com/
+This surfaced as a problem while building the 5.10 stable kernel using
+the default Tuxmake Debian image [2], as 5.10 did not yet support ld.lld,
+and uses the Debian provided binutils 2.35.
+Versions of ld prior to 2.38 will refuse to link if they encounter
+unknown ISA extensions, and unfortunately Zifencei is not supported by
+bintuils 2.35.
 
-All warnings (new ones prefixed by >>):
+Instead of dancing around with adding these extensions to march, as we
+currently do, Palmer suggested locking GCC builds to the same version of
+the ISA spec that is used by LLVM. As far as I can tell, that is 2.2,
+with, apparently [3], a lack of interest in implementing a flag like
+GCC's -misa-spec at present.
 
-   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
-   In file included from include/media/v4l2-device.h:13:
-   In file included from include/media/v4l2-subdev.h:15:
-   In file included from include/media/v4l2-common.h:270:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
-   In file included from include/media/v4l2-device.h:13:
-   In file included from include/media/v4l2-subdev.h:15:
-   In file included from include/media/v4l2-common.h:270:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
-   In file included from include/media/v4l2-device.h:13:
-   In file included from include/media/v4l2-subdev.h:15:
-   In file included from include/media/v4l2-common.h:270:
-   In file included from include/linux/spi/spi.h:15:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused variable 'mmpcam_of_match' [-Wunused-const-variable]
-   static const struct of_device_id mmpcam_of_match[] = {
-                                    ^
-   13 warnings generated.
+Add {cc,as}-option checks to add -misa-spec to KBUILD_{A,C}FLAGS when
+GCC is used & remove the march dance.
 
+As clang does not accept this argument, I had expected to encounter
+issues with the assembler, as neither zicsr nor zifencei are present in
+the ISA string and the spec version *should* be defaulting to a version
+that requires them to be present. The build passed however and the
+resulting kernel worked perfectly fine for me on a PolarFire SoC...
 
-vim +/mmpcam_of_match +364 drivers/media/platform/marvell/mmp-driver.c
+Link: https://riscv.org/wp-content/uploads/2019/06/riscv-spec.pdf [0]
+Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHHCYf4 [1]
+Link: https://lore.kernel.org/all/CA+G9fYt9T=ELCLaB9byxaLW2Qf4pZcDO=huCA0D8ug2V2+irJQ@mail.gmail.com/ [2]
+Link: https://discourse.llvm.org/t/specifying-unpriviledge-spec-version-misa-spec-gcc-flag-equivalent/66935 [3]
+CC: stable@vger.kernel.org
+Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+I think Aurelien's original commit message might actually not be quite
+correct? I found, in my limited testing, that it is not the default
+behaviour of gas that matters, but rather the toolchain itself?
+My binutils versions (both those built using the clang-built-linux
+tc-build scripts which do not set an ISA spec version, and one built
+using the riscv-gnu-toolchain infra w/ an explicit 20191213 spec version
+set) do not encounter these issues.
+From *my* testing, I was only able to reproduce the above build failures
+because of *GCC* defaulting to a newer ISA spec version, and saw no
+issues with CC=clang builds, where -misa-spec is not (AFAICT) passed to
+gas.
+I'm far from a toolchain person, so I am very very happy to have the
+reason for that explained to me, as I've been scratching my head about
+it all evening.
 
-bb0a896e3d5083 drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-12-30  363  
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28 @364  static const struct of_device_id mmpcam_of_match[] = {
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  365  	{ .compatible = "marvell,mmp2-ccic", },
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  366  	{},
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  367  };
-08aac0e32fe44b drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-07-22  368  MODULE_DEVICE_TABLE(of, mmpcam_of_match);
-67a8dbbc4e04cd drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-06-11  369  
+I'm also not super confident in my "as-option"ing, but it worked for me,
+so it's gotta be perfect, right? riiight??
 
-:::::: The code at line 364 was first introduced by commit
-:::::: 83c40e6611ec1e548ece34f6940f516333abc16a media: marvell-ccic/mmp: add devicetree support
+Changes from v1:
+- entirely new approach to the issue
+---
+ arch/riscv/Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-:::::: TO: Lubomir Rintel <lkundrak@v3.sk>
-:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 6203c3378922..2df7a5dc071c 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -57,10 +57,8 @@ riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
+ riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
+ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
+ 
+-# Newer binutils versions default to ISA spec version 20191213 which moves some
+-# instructions from the I extension to the Zicsr and Zifencei extensions.
+-toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
+-riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
++KBUILD_CFLAGS += $(call cc-option,-misa-spec=2.2)
++KBUILD_AFLAGS += $(call as-option,-Wa$(comma)-misa-spec=2.2)
+ 
+ # Check if the toolchain supports Zihintpause extension
+ riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZIHINTPAUSE) := $(riscv-march-y)_zihintpause
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
