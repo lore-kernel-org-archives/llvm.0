@@ -1,50 +1,47 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D737B749F;
-	Wed,  8 Mar 2023 15:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CED79CD;
+	Wed,  8 Mar 2023 15:32:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678288381; x=1709824381;
+  t=1678289572; x=1709825572;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=z+JMzwKqixGLQcKdmkGtbWjoU86nAcEkdXfz2djooKI=;
-  b=IKGyGfww1cHrvlcfLh3xX9exxVMtarrsXoD6mywN41wKBvPRIxGHphpx
-   Ymr/QlccKIKVA4eLJihF41atd+8OnFZ7OonTw/9KOpD+MLJp/daHUoH+r
-   oaV8+hfFmNQCWdwTASeoY03aSc+b/iLSKc2Pqb2t5fEVXEBfehkJ+36Li
-   tvxbXE2nRmLb1umBs35sRsdTCc+1EA3IWccbZ7WD6HFtDGWjA9C3CuUAS
-   19j2ad2xGjTIjkTLI+VC3gpXy9jPwbBQFdiutuPoIT/xkh8WvlFtWXF1v
-   CHe11Dp68Jds4AkekAIKb970fgOhHwHFffoGXXcTNPJ7WvR4dmUn4J6fb
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="400997203"
+  bh=NkR0W7o9uX/z8jZ3uUOg7UWWR+boKEcYvcbmJp3Otq4=;
+  b=ilGD3+qGXvYOBB8Z01uKUvyB8YCKXGCtweZE62+3zjsWyHw4WdwL1/Zk
+   DimkHAwz1KnoSNB9AAIS5y/rjWRTvno3ouU/eklvUJDzX8xq0A7ZCLAmy
+   n/4fICFCcYPWMmUoF1AzDTZR/4XicsXCTZaMIK47wxcSh7OXX/8d7GspR
+   jsnl8vg3I+Ph/wzbarC2in5pjLqOKw3u8Z4BItxldjBft2Jo28SKMzrJw
+   m/dt20xBS1lmDH8KPhheb0nIKoUU5AmoKFZVYphrxS8TTrrZ71secBMIY
+   9t722q44IPSwkJJO/g6nxfPD81GOH5cfdfOUv5Xdy68keirL1aolIzrsi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="320014597"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="400997203"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 07:12:51 -0800
+   d="scan'208";a="320014597"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 07:32:51 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="707204795"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="766018491"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="707204795"
+   d="scan'208";a="766018491"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Mar 2023 07:12:48 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 07:32:49 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZvTD-0002Cp-2F;
-	Wed, 08 Mar 2023 15:12:47 +0000
-Date: Wed, 8 Mar 2023 23:11:47 +0800
+	id 1pZvma-0002Dj-0j;
+	Wed, 08 Mar 2023 15:32:48 +0000
+Date: Wed, 8 Mar 2023 23:32:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-	linux-arm-kernel@lists.infradead.org
+To: Kui-Feng Lee <kuifeng@meta.com>, bpf@vger.kernel.org, ast@kernel.org,
+	martin.lau@linux.dev, song@kernel.org, kernel-team@meta.com,
+	andrii@kernel.org, sdf@google.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>,
-	kernel@dh-electronics.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 3/3] regulator: da9062: Make the use of IRQ optional
-Message-ID: <202303082246.GuLdPL0t-lkp@intel.com>
-References: <20230307101813.77267-3-cniedermaier@dh-electronics.com>
+	Kui-Feng Lee <kuifeng@meta.com>
+Subject: Re: [PATCH bpf-next v5 3/8] bpf: Create links for BPF struct_ops
+ maps.
+Message-ID: <202303082344.mxuydKat-lkp@intel.com>
+References: <20230308005050.255859-4-kuifeng@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,167 +50,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307101813.77267-3-cniedermaier@dh-electronics.com>
+In-Reply-To: <20230308005050.255859-4-kuifeng@meta.com>
 
-Hi Christoph,
+Hi Kui-Feng,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on lee-mfd/for-mfd-fixes soc/for-next broonie-regulator/for-next linus/master v6.3-rc1 next-20230308]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Niedermaier/mfd-da9062-Remove-IRQ-requirement/20230307-190334
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20230307101813.77267-3-cniedermaier%40dh-electronics.com
-patch subject: [PATCH V3 3/3] regulator: da9062: Make the use of IRQ optional
-config: i386-randconfig-a013-20230306 (https://download.01.org/0day-ci/archive/20230308/202303082246.GuLdPL0t-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kui-Feng-Lee/bpf-Retire-the-struct_ops-map-kvalue-refcnt/20230308-085434
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230308005050.255859-4-kuifeng%40meta.com
+patch subject: [PATCH bpf-next v5 3/8] bpf: Create links for BPF struct_ops maps.
+config: i386-randconfig-a012-20230306 (https://download.01.org/0day-ci/archive/20230308/202303082344.mxuydKat-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/98b59e5759ae23dcd6d1d04089e513adf11e6376
+        # https://github.com/intel-lab-lkp/linux/commit/de9e43a5ac82dde718d80d8347e867a8fc935e0a
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christoph-Niedermaier/mfd-da9062-Remove-IRQ-requirement/20230307-190334
-        git checkout 98b59e5759ae23dcd6d1d04089e513adf11e6376
+        git fetch --no-tags linux-review Kui-Feng-Lee/bpf-Retire-the-struct_ops-map-kvalue-refcnt/20230308-085434
+        git checkout de9e43a5ac82dde718d80d8347e867a8fc935e0a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/regulator/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/fm10k/ drivers/net/ethernet/intel/ixgbe/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303082246.GuLdPL0t-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303082344.mxuydKat-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/regulator/da9062-regulator.c:1019:46: warning: variable 'irq' is uninitialized when used here [-Wuninitialized]
-           ret = devm_request_threaded_irq(&pdev->dev, irq,
-                                                       ^~~
-   drivers/regulator/da9062-regulator.c:927:9: note: initialize the variable 'irq' to silence this warning
-           int irq, n, ret;
-                  ^
-                   = 0
-   1 warning generated.
+   In file included from drivers/net/ethernet/intel/fm10k/fm10k_main.c:8:
+   In file included from include/net/tcp.h:35:
+   In file included from include/net/sock_reuseport.h:5:
+   In file included from include/linux/filter.h:9:
+   include/linux/bpf.h:2388:19: error: redefinition of 'bpf_struct_ops_link_create'
+   static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
+                     ^
+   include/linux/bpf.h:1592:19: note: previous definition is here
+   static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
+                     ^
+>> drivers/net/ethernet/intel/fm10k/fm10k_main.c:886:16: warning: division by zero is undefined [-Wdivision-by-zero]
+           desc_flags |= FM10K_SET_FLAG(tx_flags, FM10K_TX_FLAGS_CSUM,
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/fm10k/fm10k_main.c:878:26: note: expanded from macro 'FM10K_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+   In file included from drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:27:
+   include/linux/bpf.h:2388:19: error: redefinition of 'bpf_struct_ops_link_create'
+   static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
+                     ^
+   include/linux/bpf.h:1592:19: note: previous definition is here
+   static inline int bpf_struct_ops_link_create(union bpf_attr *attr)
+                     ^
+>> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8223:14: warning: division by zero is undefined [-Wdivision-by-zero]
+           cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_HW_VLAN,
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8227:14: warning: division by zero is undefined [-Wdivision-by-zero]
+           cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_TSO,
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8231:14: warning: division by zero is undefined [-Wdivision-by-zero]
+           cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_TSTAMP,
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8235:14: warning: division by zero is undefined [-Wdivision-by-zero]
+           cmd_type ^= IXGBE_SET_FLAG(skb->no_fcs, 1, IXGBE_ADVTXD_DCMD_IFCS);
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8246:19: warning: division by zero is undefined [-Wdivision-by-zero]
+           olinfo_status |= IXGBE_SET_FLAG(tx_flags,
+                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8251:19: warning: division by zero is undefined [-Wdivision-by-zero]
+           olinfo_status |= IXGBE_SET_FLAG(tx_flags,
+                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8256:19: warning: division by zero is undefined [-Wdivision-by-zero]
+           olinfo_status |= IXGBE_SET_FLAG(tx_flags,
+                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8264:19: warning: division by zero is undefined [-Wdivision-by-zero]
+           olinfo_status |= IXGBE_SET_FLAG(tx_flags,
+                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8213:26: note: expanded from macro 'IXGBE_SET_FLAG'
+            ((u32)(_input & _flag) / (_flag / _result)))
+                                   ^ ~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:10807:46: warning: shift count >= width of type [-Wshift-count-overflow]
+           err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+                                                       ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:76:54: note: expanded from macro 'DMA_BIT_MASK'
+   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+                                                        ^ ~~~
+   9 warnings and 1 error generated.
 
 
-vim +/irq +1019 drivers/regulator/da9062-regulator.c
+vim +886 drivers/net/ethernet/intel/fm10k/fm10k_main.c
 
-4068e5182ada26 S Twiss               2015-05-19   919  
-4068e5182ada26 S Twiss               2015-05-19   920  static int da9062_regulator_probe(struct platform_device *pdev)
-4068e5182ada26 S Twiss               2015-05-19   921  {
-4068e5182ada26 S Twiss               2015-05-19   922  	struct da9062 *chip = dev_get_drvdata(pdev->dev.parent);
-4068e5182ada26 S Twiss               2015-05-19   923  	struct da9062_regulators *regulators;
-4068e5182ada26 S Twiss               2015-05-19   924  	struct da9062_regulator *regl;
-4068e5182ada26 S Twiss               2015-05-19   925  	struct regulator_config config = { };
-4b7f4958a37e01 Steve Twiss           2017-06-07   926  	const struct da9062_regulator_info *rinfo;
-4068e5182ada26 S Twiss               2015-05-19   927  	int irq, n, ret;
-4b7f4958a37e01 Steve Twiss           2017-06-07   928  	int max_regulators;
-4b7f4958a37e01 Steve Twiss           2017-06-07   929  
-4b7f4958a37e01 Steve Twiss           2017-06-07   930  	switch (chip->chip_type) {
-4b7f4958a37e01 Steve Twiss           2017-06-07   931  	case COMPAT_TYPE_DA9061:
-4b7f4958a37e01 Steve Twiss           2017-06-07   932  		max_regulators = DA9061_MAX_REGULATORS;
-4b7f4958a37e01 Steve Twiss           2017-06-07   933  		rinfo = local_da9061_regulator_info;
-4b7f4958a37e01 Steve Twiss           2017-06-07   934  		break;
-4b7f4958a37e01 Steve Twiss           2017-06-07   935  	case COMPAT_TYPE_DA9062:
-4b7f4958a37e01 Steve Twiss           2017-06-07   936  		max_regulators = DA9062_MAX_REGULATORS;
-4b7f4958a37e01 Steve Twiss           2017-06-07   937  		rinfo = local_da9062_regulator_info;
-4b7f4958a37e01 Steve Twiss           2017-06-07   938  		break;
-4b7f4958a37e01 Steve Twiss           2017-06-07   939  	default:
-4b7f4958a37e01 Steve Twiss           2017-06-07   940  		dev_err(chip->dev, "Unrecognised chip type\n");
-4b7f4958a37e01 Steve Twiss           2017-06-07   941  		return -ENODEV;
-4b7f4958a37e01 Steve Twiss           2017-06-07   942  	}
-4068e5182ada26 S Twiss               2015-05-19   943  
-4068e5182ada26 S Twiss               2015-05-19   944  	/* Allocate memory required by usable regulators */
-97b047e72bd6e6 Gustavo A. R. Silva   2019-02-22   945  	regulators = devm_kzalloc(&pdev->dev, struct_size(regulators, regulator,
-97b047e72bd6e6 Gustavo A. R. Silva   2019-02-22   946  				  max_regulators), GFP_KERNEL);
-4068e5182ada26 S Twiss               2015-05-19   947  	if (!regulators)
-4068e5182ada26 S Twiss               2015-05-19   948  		return -ENOMEM;
-4068e5182ada26 S Twiss               2015-05-19   949  
-4b7f4958a37e01 Steve Twiss           2017-06-07   950  	regulators->n_regulators = max_regulators;
-4068e5182ada26 S Twiss               2015-05-19   951  	platform_set_drvdata(pdev, regulators);
-4068e5182ada26 S Twiss               2015-05-19   952  
-151b03791e4acb Axel Lin              2019-10-07   953  	for (n = 0; n < regulators->n_regulators; n++) {
-4068e5182ada26 S Twiss               2015-05-19   954  		/* Initialise regulator structure */
-4068e5182ada26 S Twiss               2015-05-19   955  		regl = &regulators->regulator[n];
-4068e5182ada26 S Twiss               2015-05-19   956  		regl->hw = chip;
-4b7f4958a37e01 Steve Twiss           2017-06-07   957  		regl->info = &rinfo[n];
-4068e5182ada26 S Twiss               2015-05-19   958  		regl->desc = regl->info->desc;
-4068e5182ada26 S Twiss               2015-05-19   959  		regl->desc.type = REGULATOR_VOLTAGE;
-4068e5182ada26 S Twiss               2015-05-19   960  		regl->desc.owner = THIS_MODULE;
-4068e5182ada26 S Twiss               2015-05-19   961  
-54129d641cac77 Axel Lin              2019-01-26   962  		if (regl->info->mode.reg) {
-4068e5182ada26 S Twiss               2015-05-19   963  			regl->mode = devm_regmap_field_alloc(
-4068e5182ada26 S Twiss               2015-05-19   964  					&pdev->dev,
-4068e5182ada26 S Twiss               2015-05-19   965  					chip->regmap,
-4068e5182ada26 S Twiss               2015-05-19   966  					regl->info->mode);
-54129d641cac77 Axel Lin              2019-01-26   967  			if (IS_ERR(regl->mode))
-54129d641cac77 Axel Lin              2019-01-26   968  				return PTR_ERR(regl->mode);
-54129d641cac77 Axel Lin              2019-01-26   969  		}
-54129d641cac77 Axel Lin              2019-01-26   970  
-54129d641cac77 Axel Lin              2019-01-26   971  		if (regl->info->suspend.reg) {
-4068e5182ada26 S Twiss               2015-05-19   972  			regl->suspend = devm_regmap_field_alloc(
-4068e5182ada26 S Twiss               2015-05-19   973  					&pdev->dev,
-4068e5182ada26 S Twiss               2015-05-19   974  					chip->regmap,
-4068e5182ada26 S Twiss               2015-05-19   975  					regl->info->suspend);
-54129d641cac77 Axel Lin              2019-01-26   976  			if (IS_ERR(regl->suspend))
-54129d641cac77 Axel Lin              2019-01-26   977  				return PTR_ERR(regl->suspend);
-54129d641cac77 Axel Lin              2019-01-26   978  		}
-54129d641cac77 Axel Lin              2019-01-26   979  
-54129d641cac77 Axel Lin              2019-01-26   980  		if (regl->info->sleep.reg) {
-4068e5182ada26 S Twiss               2015-05-19   981  			regl->sleep = devm_regmap_field_alloc(
-4068e5182ada26 S Twiss               2015-05-19   982  					&pdev->dev,
-4068e5182ada26 S Twiss               2015-05-19   983  					chip->regmap,
-4068e5182ada26 S Twiss               2015-05-19   984  					regl->info->sleep);
-54129d641cac77 Axel Lin              2019-01-26   985  			if (IS_ERR(regl->sleep))
-54129d641cac77 Axel Lin              2019-01-26   986  				return PTR_ERR(regl->sleep);
-54129d641cac77 Axel Lin              2019-01-26   987  		}
-54129d641cac77 Axel Lin              2019-01-26   988  
-54129d641cac77 Axel Lin              2019-01-26   989  		if (regl->info->suspend_sleep.reg) {
-4068e5182ada26 S Twiss               2015-05-19   990  			regl->suspend_sleep = devm_regmap_field_alloc(
-4068e5182ada26 S Twiss               2015-05-19   991  					&pdev->dev,
-4068e5182ada26 S Twiss               2015-05-19   992  					chip->regmap,
-4068e5182ada26 S Twiss               2015-05-19   993  					regl->info->suspend_sleep);
-54129d641cac77 Axel Lin              2019-01-26   994  			if (IS_ERR(regl->suspend_sleep))
-54129d641cac77 Axel Lin              2019-01-26   995  				return PTR_ERR(regl->suspend_sleep);
-54129d641cac77 Axel Lin              2019-01-26   996  		}
-54129d641cac77 Axel Lin              2019-01-26   997  
-4068e5182ada26 S Twiss               2015-05-19   998  		/* Register regulator */
-4068e5182ada26 S Twiss               2015-05-19   999  		memset(&config, 0, sizeof(config));
-4068e5182ada26 S Twiss               2015-05-19  1000  		config.dev = chip->dev;
-4068e5182ada26 S Twiss               2015-05-19  1001  		config.driver_data = regl;
-4068e5182ada26 S Twiss               2015-05-19  1002  		config.regmap = chip->regmap;
-4068e5182ada26 S Twiss               2015-05-19  1003  
-4068e5182ada26 S Twiss               2015-05-19  1004  		regl->rdev = devm_regulator_register(&pdev->dev, &regl->desc,
-4068e5182ada26 S Twiss               2015-05-19  1005  						     &config);
-4068e5182ada26 S Twiss               2015-05-19  1006  		if (IS_ERR(regl->rdev)) {
-4068e5182ada26 S Twiss               2015-05-19  1007  			dev_err(&pdev->dev,
-4068e5182ada26 S Twiss               2015-05-19  1008  				"Failed to register %s regulator\n",
-4068e5182ada26 S Twiss               2015-05-19  1009  				regl->desc.name);
-4068e5182ada26 S Twiss               2015-05-19  1010  			return PTR_ERR(regl->rdev);
-4068e5182ada26 S Twiss               2015-05-19  1011  		}
-4068e5182ada26 S Twiss               2015-05-19  1012  	}
-4068e5182ada26 S Twiss               2015-05-19  1013  
-4068e5182ada26 S Twiss               2015-05-19  1014  	/* LDOs overcurrent event support */
-98b59e5759ae23 Christoph Niedermaier 2023-03-07  1015  	regulators->irq_ldo_lim = platform_get_irq_byname_optional(pdev, "LDO_LIM");
-98b59e5759ae23 Christoph Niedermaier 2023-03-07  1016  	if (regulators->irq_ldo_lim < 0)
-98b59e5759ae23 Christoph Niedermaier 2023-03-07  1017  		return 0;
-4068e5182ada26 S Twiss               2015-05-19  1018  
-4068e5182ada26 S Twiss               2015-05-19 @1019  	ret = devm_request_threaded_irq(&pdev->dev, irq,
-4068e5182ada26 S Twiss               2015-05-19  1020  					NULL, da9062_ldo_lim_event,
-4068e5182ada26 S Twiss               2015-05-19  1021  					IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-4068e5182ada26 S Twiss               2015-05-19  1022  					"LDO_LIM", regulators);
-4068e5182ada26 S Twiss               2015-05-19  1023  	if (ret) {
-4068e5182ada26 S Twiss               2015-05-19  1024  		dev_warn(&pdev->dev,
-4068e5182ada26 S Twiss               2015-05-19  1025  			 "Failed to request LDO_LIM IRQ.\n");
-4068e5182ada26 S Twiss               2015-05-19  1026  		regulators->irq_ldo_lim = -ENXIO;
-4068e5182ada26 S Twiss               2015-05-19  1027  	}
-4068e5182ada26 S Twiss               2015-05-19  1028  
-4068e5182ada26 S Twiss               2015-05-19  1029  	return 0;
-4068e5182ada26 S Twiss               2015-05-19  1030  }
-4068e5182ada26 S Twiss               2015-05-19  1031  
+76a540d4728a37 Alexander Duyck 2014-09-20  874  
+76a540d4728a37 Alexander Duyck 2014-09-20  875  #define FM10K_SET_FLAG(_input, _flag, _result) \
+76a540d4728a37 Alexander Duyck 2014-09-20  876  	((_flag <= _result) ? \
+76a540d4728a37 Alexander Duyck 2014-09-20  877  	 ((u32)(_input & _flag) * (_result / _flag)) : \
+76a540d4728a37 Alexander Duyck 2014-09-20  878  	 ((u32)(_input & _flag) / (_flag / _result)))
+76a540d4728a37 Alexander Duyck 2014-09-20  879  
+76a540d4728a37 Alexander Duyck 2014-09-20  880  static u8 fm10k_tx_desc_flags(struct sk_buff *skb, u32 tx_flags)
+76a540d4728a37 Alexander Duyck 2014-09-20  881  {
+76a540d4728a37 Alexander Duyck 2014-09-20  882  	/* set type for advanced descriptor with frame checksum insertion */
+76a540d4728a37 Alexander Duyck 2014-09-20  883  	u32 desc_flags = 0;
+76a540d4728a37 Alexander Duyck 2014-09-20  884  
+76a540d4728a37 Alexander Duyck 2014-09-20  885  	/* set checksum offload bits */
+76a540d4728a37 Alexander Duyck 2014-09-20 @886  	desc_flags |= FM10K_SET_FLAG(tx_flags, FM10K_TX_FLAGS_CSUM,
+76a540d4728a37 Alexander Duyck 2014-09-20  887  				     FM10K_TXD_FLAG_CSUM);
+76a540d4728a37 Alexander Duyck 2014-09-20  888  
+76a540d4728a37 Alexander Duyck 2014-09-20  889  	return desc_flags;
+76a540d4728a37 Alexander Duyck 2014-09-20  890  }
+76a540d4728a37 Alexander Duyck 2014-09-20  891  
 
 -- 
 0-DAY CI Kernel Test Service
