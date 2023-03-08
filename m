@@ -1,43 +1,43 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F7C386;
-	Tue,  7 Mar 2023 22:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0667B;
+	Wed,  8 Mar 2023 00:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678229187; x=1709765187;
+  t=1678234709; x=1709770709;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jTwZkvzzed97bMcN2aRK24nUPe7VKzMfzJafuNchpAk=;
-  b=kXwbBqSRDeHIBa18R5FuNEYfNIlGuy31j43Nx30PuqgOPue6La+XixO6
-   duY1IBnJejGiQAXA0gvY4KusoeoaCNMXSM1tGnT6eqcKHHqCukrBZ4bZA
-   i86rDEoGtXRsUdCnRIjQXVt/22Nz1QxmWrgt1HDovpCGy3Rqx9GEicIEY
-   qWUjGMcLWv9ovWA4f0mc4k3SmSDvvaPaV0ngjd6Y/PfXKucT03CD3WXvd
-   5Gs6YnOUXaxtojKftFZbpV8xhshujkpOfkGd6DU1w3CeG+RTb1r6xMi+R
-   XbzYLtGX24geUhIKM6kFwT2rQMgmNSTqwNMmYDkgYLOZmitzjfJQuS8sO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="334709371"
+  bh=di/9HUnuj8uzO77E88cy0/RZwwC81iKn3Gh8NS9VTQA=;
+  b=ELDF4KBe6tsPdwLI5QFCXYLA0BnG59FneJyg7UacmvRWx4Ery77MMdDA
+   C301eR3TsOVZjRHFiXVXgifMC7Zw+J2hBfXs53fKFLIm660MRDcye4QhB
+   9DYDTdBSP1YeuLcfXwpy8CMc4Sw3wiPxbff7WPcuAJxfzRXsQauS/mpbG
+   gDGbRIxAD11kvjzw4FsMfi9E9UtmpviFG1uq11eOUy/aDN5qCHv1fXPOD
+   7iOzi7bWltsxwXAIeoW0Q+C0ybgfBSpn9gedAnsQA4vW/a8pkCd93uvBT
+   SZBsXlLsPAq82fFMKRoaVumi7+BcWs4owYuHh6uIx/bdx4odzMVS6ePzh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422283088"
 X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="334709371"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 14:46:27 -0800
+   d="scan'208";a="422283088"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 16:18:29 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="626709218"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="679141139"
 X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="626709218"
+   d="scan'208";a="679141139"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Mar 2023 14:46:25 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 07 Mar 2023 16:18:27 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZg4f-0001fG-0G;
-	Tue, 07 Mar 2023 22:46:25 +0000
-Date: Wed, 8 Mar 2023 06:46:07 +0800
+	id 1pZhVi-0001hf-2g;
+	Wed, 08 Mar 2023 00:18:26 +0000
+Date: Wed, 8 Mar 2023 08:18:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [miquelraynal:nvmem-layouts-and-of-cleanup /35]
- drivers/of/module.c:62:6: warning: incompatible integer to pointer
- conversion assigning to 'char *' from 'int'
-Message-ID: <202303080602.l78Xfpcf-lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
+Subject: drivers/clk/clk-asm9260.c:258:17: warning: variable 'hw' set but not
+ used
+Message-ID: <202303080821.z9JgOLfB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,69 +47,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/miquelraynal/linux-0day.git nvmem-layouts-and-of-cleanup
-head:   4dbec5e07ef322a0458183244c9a11e92eebd61d
-commit: 71414eadef0bb9ab9e3688498d0dc11f2739b5f2 [/35] of: Move the request module helper logic to module.c
-config: i386-randconfig-a013-20230306 (https://download.01.org/0day-ci/archive/20230308/202303080602.l78Xfpcf-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Dmitry,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   63355b9884b3d1677de6bd1517cd2b8a9bf53978
+commit: f5290d8e4f0caa81a491448a27dd70e726095d07 clk: asm9260: use parent index to link the reference clock
+date:   5 months ago
+config: arm-randconfig-r046-20230307 (https://download.01.org/0day-ci/archive/20230308/202303080821.z9JgOLfB-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/miquelraynal/linux-0day/commit/71414eadef0bb9ab9e3688498d0dc11f2739b5f2
-        git remote add miquelraynal https://github.com/miquelraynal/linux-0day.git
-        git fetch --no-tags miquelraynal nvmem-layouts-and-of-cleanup
-        git checkout 71414eadef0bb9ab9e3688498d0dc11f2739b5f2
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f5290d8e4f0caa81a491448a27dd70e726095d07
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f5290d8e4f0caa81a491448a27dd70e726095d07
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/nvmem/ drivers/of/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303080602.l78Xfpcf-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303080821.z9JgOLfB-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/of/module.c:62:8: error: implicit declaration of function 'kmalloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           str = kmalloc(size, GFP_KERNEL);
-                 ^
-   drivers/of/module.c:62:8: note: did you mean 'mm_alloc'?
-   include/linux/sched/mm.h:16:26: note: 'mm_alloc' declared here
-   extern struct mm_struct *mm_alloc(void);
-                            ^
->> drivers/of/module.c:62:6: warning: incompatible integer to pointer conversion assigning to 'char *' from 'int' [-Wint-conversion]
-           str = kmalloc(size, GFP_KERNEL);
-               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/of/module.c:69:2: error: implicit declaration of function 'kfree' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           kfree(str);
-           ^
-   drivers/of/module.c:69:2: note: did you mean 'kvfree'?
-   include/linux/rcutiny.h:99:13: note: 'kvfree' declared here
-   extern void kvfree(const void *addr);
-               ^
-   1 warning and 2 errors generated.
+>> drivers/clk/clk-asm9260.c:258:17: warning: variable 'hw' set but not used [-Wunused-but-set-variable]
+           struct clk_hw *hw, *pll_hw;
+                          ^
+   1 warning generated.
 
 
-vim +62 drivers/of/module.c
+vim +/hw +258 drivers/clk/clk-asm9260.c
 
-    45	
-    46	int of_request_module(struct device_node *np)
-    47	{
-    48		char *str;
-    49		ssize_t size;
-    50		int ret;
-    51	
-    52		if (!np)
-    53			return -ENODEV;
-    54	
-    55		size = of_modalias(np, NULL, 0);
-    56		if (size < 0)
-    57			return size;
-    58	
-    59		/* Reserve an additional byte for the trailing '\0' */
-    60		size++;
-    61	
-  > 62		str = kmalloc(size, GFP_KERNEL);
+   255	
+   256	static void __init asm9260_acc_init(struct device_node *np)
+   257	{
+ > 258		struct clk_hw *hw, *pll_hw;
 
 -- 
 0-DAY CI Kernel Test Service
