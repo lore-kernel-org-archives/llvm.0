@@ -1,46 +1,46 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BD67C;
-	Wed,  8 Mar 2023 08:50:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C82C7C;
+	Wed,  8 Mar 2023 09:41:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678265442; x=1709801442;
+  t=1678268504; x=1709804504;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pu/sJxTrASdMKUp5HI/2JBb5GB5rbO4KMULJcHaGzmw=;
-  b=HhoM8QxMVzVR/M7H8fdO+r/L5lfNsyTDyji99rPDSH0RxTkDee1Xk3Lc
-   Bs0dnGFtUytg6QXxkDh7pjPMPIkMaXmOeALxJXPZFYbGJc76eE82wNFnL
-   SLbqzVNf6/AB68gUXH5yk+5KgTjmlIPNHjf8u3Pi4ZwKaAp0v2e5GqBEg
-   sXx6zhImI8+xmyAmIfTD718uQhEOlgm0rWlz1xwrhnT1+CeX/UDEe3kgo
-   Jfq9Lt8ZC9mNKH0TZWE8LNkemur9bUWajxrg0xr+dY9qQzDddDKQa5Psv
-   JILJnr3bW0RF+YVkiGNZ4wKkYzdez/ixzmE6cYEdTVgk8yJRFDapu9bsH
+  bh=IblLpwxZIoJkhkBRlOiMaraXUkJJvz5IuZTuP/5Ke/M=;
+  b=ayBTTHeiXkdNUDoqaVpYtmCbHVrSJAUoLdAfPl8BFbk94A4UjCqGhZe4
+   S2ysEkx4pMfhaT8eDi+WWPEu3r5Q7ncQxmFw4u/YxAng565gRS9ONWlGr
+   QjTAKQk+MQ3WhIvzQ/zhRwZdrDgG/1I1/9RNcbgP/Zefd+krrCiQqEyEG
+   FdM1LJ2N7ztajQVYtMh8jH2M40mYZeL34dK1mVAMIZ9oJkc1kCsMERj69
+   JIBMWSrjT8Shma0tNpta2TOVw3at7t9FmndhSZ42D1F5cH/ZP1R0sUk6f
+   2aZX1Qh5c6SH6/xB6YslRuAoAzctGS/gHLyxomiXcFKCvYZLpFc2viez+
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422371399"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="324423508"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="422371399"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 00:50:42 -0800
+   d="scan'208";a="324423508"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 01:41:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="765936658"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="851017754"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="765936658"
+   d="scan'208";a="851017754"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 00:50:40 -0800
+  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2023 01:41:41 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZpVP-0001zr-38;
-	Wed, 08 Mar 2023 08:50:39 +0000
-Date: Wed, 8 Mar 2023 16:50:12 +0800
+	id 1pZqIn-00021T-0Z;
+	Wed, 08 Mar 2023 09:41:41 +0000
+Date: Wed, 8 Mar 2023 17:41:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lijo Lazar <lijo.lazar@amd.com>
+To: Fangrui Song <maskray@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: [linux-next:master 1761/1915]
- drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:
- warning: variable 'software_shutdown_temp' is uninitialized when used here
-Message-ID: <202303081657.6Ble80UY-lkp@intel.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nathan Chancellor <natechancellor@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [stable:linux-4.19.y 3083/9999] block/blk-iolatency.c:303:7:
+ warning: variable 'changed' set but not used
+Message-ID: <202303081732.fAIJixwH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,85 +50,86 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   fc31900c948610e7b5c2f15fb7795832c8325327
-commit: 511a95552ec878fc59a294652ebbf73a0e8e0c76 [1761/1915] drm/amd/pm: Add SMU 13.0.6 support
-config: riscv-randconfig-r042-20230306 (https://download.01.org/0day-ci/archive/20230308/202303081657.6Ble80UY-lkp@intel.com/config)
+Hi Fangrui,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+head:   5504146b2053f842426834d275002974109f39a6
+commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [3083/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
+config: mips-randconfig-c004-20230305 (https://download.01.org/0day-ci/archive/20230308/202303081732.fAIJixwH-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=511a95552ec878fc59a294652ebbf73a0e8e0c76
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 511a95552ec878fc59a294652ebbf73a0e8e0c76
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=69c122751164c3c343eea205fd5c3e1d5132f967
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-4.19.y
+        git checkout 69c122751164c3c343eea205fd5c3e1d5132f967
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303081657.6Ble80UY-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303081732.fAIJixwH-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: warning: variable 'hotspotlimit' is uninitialized when used here [-Wuninitialized]
-                   hotspotlimit * SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
-                   ^~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22: note: initialize the variable 'hotspotlimit' to silence this warning
-           uint8_t hotspotlimit;
-                               ^
-                                = '\0'
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24: warning: variable 'memlimit' is uninitialized when used here [-Wuninitialized]
-           range->mem_crit_max = memlimit * SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
-                                 ^~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18: note: initialize the variable 'memlimit' to silence this warning
-           uint8_t memlimit;
-                           ^
-                            = '\0'
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34: warning: variable 'software_shutdown_temp' is uninitialized when used here [-Wuninitialized]
-           range->software_shutdown_temp = software_shutdown_temp;
-                                           ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32: note: initialize the variable 'software_shutdown_temp' to silence this warning
-           uint8_t software_shutdown_temp;
-                                         ^
-                                          = '\0'
-   3 warnings generated.
+>> block/blk-iolatency.c:303:7: warning: variable 'changed' set but not used [-Wunused-but-set-variable]
+           bool changed = false;
+                ^
+>> block/blk-iolatency.c:758:24: warning: variable 'blkiolat' set but not used [-Wunused-but-set-variable]
+           struct blk_iolatency *blkiolat;
+                                 ^
+   2 warnings generated.
 
 
-vim +/software_shutdown_temp +1152 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c
+vim +/changed +303 block/blk-iolatency.c
 
-  1129	
-  1130	static int
-  1131	smu_v13_0_6_get_thermal_temperature_range(struct smu_context *smu,
-  1132						  struct smu_temperature_range *range)
-  1133	{
-  1134		uint8_t software_shutdown_temp;
-  1135		uint8_t hotspotlimit;
-  1136		uint8_t memlimit;
-  1137	
-  1138		if (!range)
-  1139			return -EINVAL;
-  1140	
-  1141		/* TODO: Find a way to get temperature limits */
-  1142		memcpy(range, &smu_v13_0_6_thermal_policy[0],
-  1143		       sizeof(struct smu_temperature_range));
-  1144	
-  1145		range->hotspot_crit_max =
-> 1146			hotspotlimit * SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
-  1147		range->hotspot_emergency_max = (hotspotlimit + CTF_OFFSET_HOTSPOT) *
-  1148					       SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
-> 1149		range->mem_crit_max = memlimit * SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
-  1150		range->mem_emergency_max = (memlimit + CTF_OFFSET_MEM) *
-  1151					   SMU_TEMPERATURE_UNITS_PER_CENTIGRADES;
-> 1152		range->software_shutdown_temp = software_shutdown_temp;
-  1153	
-  1154		return 0;
-  1155	}
-  1156	
+d70675121546c3 Josef Bacik 2018-07-03  292  
+d70675121546c3 Josef Bacik 2018-07-03  293  /*
+d70675121546c3 Josef Bacik 2018-07-03  294   * Change the queue depth of the iolatency_grp.  We add/subtract 1/16th of the
+d70675121546c3 Josef Bacik 2018-07-03  295   * queue depth at a time so we don't get wild swings and hopefully dial in to
+d70675121546c3 Josef Bacik 2018-07-03  296   * fairer distribution of the overall queue depth.
+d70675121546c3 Josef Bacik 2018-07-03  297   */
+d70675121546c3 Josef Bacik 2018-07-03  298  static void scale_change(struct iolatency_grp *iolat, bool up)
+d70675121546c3 Josef Bacik 2018-07-03  299  {
+d70675121546c3 Josef Bacik 2018-07-03  300  	unsigned long qd = blk_queue_depth(iolat->blkiolat->rqos.q);
+d70675121546c3 Josef Bacik 2018-07-03  301  	unsigned long scale = scale_amount(qd, up);
+d70675121546c3 Josef Bacik 2018-07-03  302  	unsigned long old = iolat->rq_depth.max_depth;
+d70675121546c3 Josef Bacik 2018-07-03 @303  	bool changed = false;
+d70675121546c3 Josef Bacik 2018-07-03  304  
+d70675121546c3 Josef Bacik 2018-07-03  305  	if (old > qd)
+d70675121546c3 Josef Bacik 2018-07-03  306  		old = qd;
+d70675121546c3 Josef Bacik 2018-07-03  307  
+d70675121546c3 Josef Bacik 2018-07-03  308  	if (up) {
+d70675121546c3 Josef Bacik 2018-07-03  309  		if (old == 1 && blkcg_unuse_delay(lat_to_blkg(iolat)))
+d70675121546c3 Josef Bacik 2018-07-03  310  			return;
+d70675121546c3 Josef Bacik 2018-07-03  311  
+d70675121546c3 Josef Bacik 2018-07-03  312  		if (old < qd) {
+d70675121546c3 Josef Bacik 2018-07-03  313  			changed = true;
+d70675121546c3 Josef Bacik 2018-07-03  314  			old += scale;
+d70675121546c3 Josef Bacik 2018-07-03  315  			old = min(old, qd);
+d70675121546c3 Josef Bacik 2018-07-03  316  			iolat->rq_depth.max_depth = old;
+d70675121546c3 Josef Bacik 2018-07-03  317  			wake_up_all(&iolat->rq_wait.wait);
+d70675121546c3 Josef Bacik 2018-07-03  318  		}
+d70675121546c3 Josef Bacik 2018-07-03  319  	} else if (old > 1) {
+d70675121546c3 Josef Bacik 2018-07-03  320  		old >>= 1;
+d70675121546c3 Josef Bacik 2018-07-03  321  		changed = true;
+d70675121546c3 Josef Bacik 2018-07-03  322  		iolat->rq_depth.max_depth = max(old, 1UL);
+d70675121546c3 Josef Bacik 2018-07-03  323  	}
+d70675121546c3 Josef Bacik 2018-07-03  324  }
+d70675121546c3 Josef Bacik 2018-07-03  325  
+
+:::::: The code at line 303 was first introduced by commit
+:::::: d70675121546c35feaceebf7ed9caed8716640f3 block: introduce blk-iolatency io controller
+
+:::::: TO: Josef Bacik <jbacik@fb.com>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
 
 -- 
 0-DAY CI Kernel Test Service
