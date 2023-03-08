@@ -1,107 +1,241 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E317279F5
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 16:56:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E1CC433D2;
-	Wed,  8 Mar 2023 16:56:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678294606;
-	bh=mSiziORV5JOTz/dmr0twQJK+pWs676MExklouuLQSu4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TJJX9gQkCIR0opXes4eHqs5uTOE9Y9L7OqpcXEXaCkzPlUyPcnFfIQgJlEiPCW3Lu
-	 PpZscyFSSKIlryX5jP9682maJ20mVnI9p8SzClO438O2QWCnSX+BQgty2R0+Hyv5jY
-	 /EoOdCdKUtQIB+W9lRqWjC4w/101WiLe9e57NLNbccfUz55fZBMS3avpuGodcfpkyi
-	 hak+5qcsgwfnTSjFTUOgmfblvACWaI7ETIoIUG9bcNysnHoJbadxLcVndj82JLs9tu
-	 0v1/keyeB2AvlGRn7HHU1CnXTRGLbSSmUv3lRIq2/JcCYc+17KJWsJiEBTmUQrC0v0
-	 T93cFl2467BdQ==
-Date: Wed, 8 Mar 2023 09:56:44 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thierry Reding <thierry.reding@gmail.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Mikko Perttunen <mperttunen@nvidia.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Robin Murphy <robin.murphy@arm.com>,
-	dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-Message-ID: <20230308165644.GA1181835@dev-arch.thelio-3990X>
-References: <20230127221418.2522612-1-arnd@kernel.org>
- <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBE679F5;
+	Wed,  8 Mar 2023 17:05:58 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id da10so68559594edb.3;
+        Wed, 08 Mar 2023 09:05:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678295157;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2dSIBHZShgDNyZL1npO1Q8csh+EoPik7yFTi46Ldsdk=;
+        b=Uo9E9VDh/xbP8rRjf097dL5laxKmBy2kRlhQIM3m3TcHfPOneGkRCZPhaeLrJuiMF4
+         c/rC0RHgABq2GuIPsj4hTSjdct9vjHOjzgXUZIViBzGMCSrLEWXGEcSL849EsQJd+pvG
+         NTiOlZNpSdzNG+O1hPQGxBrE2nmu6HW3xBUubdThBxzXhDMluOy1UDJfw75Cz7qFhhgf
+         /ji5RlsZn9rokIzbekEtxhQWcn3ys7y9miBV3xhHXgd5EP5ec1yKeavd83ozFOx+iwmu
+         MxI0OqcY2NvBh17xZ0fJFIqm0yZrXM0+YBzKTTnnnbv4zaIAdvgqLbVtZsFjGdhqRysE
+         sWiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678295157;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2dSIBHZShgDNyZL1npO1Q8csh+EoPik7yFTi46Ldsdk=;
+        b=7SR5hPXLazURNUzIBNjjlitRXUZ7qGOhB8FvfGrP1aEMCzPniocZoh3geXUlBgHSUd
+         sL7g/+xCTTN7vbVSpEMvm0HfpbtUQXiwHtjVuyxNBU0I/baL6FppwCHUTdSiUgLvbCjn
+         xcwah7rBPzgcK5R3QERdhv0UDSrxjnYsaUXCdjP++dwKsUHwlU70vuC5Osd3N6OOhtoP
+         VSfuaMHgU/vipjVv6UOxKMorv0rcaCdCOqsEZNEwb/6jtTspg0SQO9QEfM4Vxk+Mo54O
+         lDbWZNaXyLkKMFe8zZOjUf5V7M035Td/G7YLJNXfK1kiV/OY8WbqByOXSTVpFG6k1C24
+         mCkw==
+X-Gm-Message-State: AO0yUKUiOt2+Phidtc+fWhimu0Ie9qAA8HlVpmC+0LQgbukkBC7iQNko
+	o+1NStI3g80ScT9mPy2eEhiOR8Itq/2KV4O7cI0=
+X-Google-Smtp-Source: AK7set9MAA6a6ynFO+gDtutmyGvlPyt/4OzXqctsuhavf3gBNuMQnyPFgL6n6k0UoXXuy5mpHU9/Ab0EqCnH9V4GS08=
+X-Received: by 2002:a17:906:4bcb:b0:8b1:28f6:8ab3 with SMTP id
+ x11-20020a1709064bcb00b008b128f68ab3mr9586577ejv.15.1678295156815; Wed, 08
+ Mar 2023 09:05:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
+References: <20230308035416.2591326-4-andrii@kernel.org> <202303082209.VIxMyiGz-lkp@intel.com>
+In-Reply-To: <202303082209.VIxMyiGz-lkp@intel.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 8 Mar 2023 09:05:44 -0800
+Message-ID: <CAEf4BzbTsiFOQdCanh5DWwOg7dUZTtNBkUJDwg4jztw5dEWSdA@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 3/8] bpf: add support for open-coded iterator loops
+To: kernel test robot <lkp@intel.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	kernel-team@meta.com, Tejun Heo <tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ping? This warning is now in 6.3-rc1.
+On Wed, Mar 8, 2023 at 7:02=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> Hi Andrii,
+>
+> I love your patch! Perhaps something to improve:
+>
+> [auto build test WARNING on bpf-next/master]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/bp=
+f-factor-out-fetching-basic-kfunc-metadata/20230308-115539
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git =
+master
+> patch link:    https://lore.kernel.org/r/20230308035416.2591326-4-andrii%=
+40kernel.org
+> patch subject: [PATCH v4 bpf-next 3/8] bpf: add support for open-coded it=
+erator loops
+> config: hexagon-randconfig-r015-20230305 (https://download.01.org/0day-ci=
+/archive/20230308/202303082209.VIxMyiGz-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 6740=
+9911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/8f263e1296a91ff15=
+4a033d7cffbac3ee0ebf2ae
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review Andrii-Nakryiko/bpf-factor-out-f=
+etching-basic-kfunc-metadata/20230308-115539
+>         git checkout 8f263e1296a91ff154a033d7cffbac3ee0ebf2ae
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Dhexagon olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
+=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash kernel/bpf/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303082209.VIxMyiGz-lkp@i=
+ntel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    In file included from kernel/bpf/verifier.c:7:
+>    In file included from include/linux/bpf-cgroup.h:5:
+>    In file included from include/linux/bpf.h:31:
+>    In file included from include/linux/memcontrol.h:13:
+>    In file included from include/linux/cgroup.h:26:
+>    In file included from include/linux/kernel_stat.h:9:
+>    In file included from include/linux/interrupt.h:11:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
+:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val =3D __raw_readb(PCI_IOBASE + addr);
+>                              ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val =3D __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE +=
+ addr));
+>                                                            ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded fro=
+m macro '__le16_to_cpu'
+>    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>                                                      ^
+>    In file included from kernel/bpf/verifier.c:7:
+>    In file included from include/linux/bpf-cgroup.h:5:
+>    In file included from include/linux/bpf.h:31:
+>    In file included from include/linux/memcontrol.h:13:
+>    In file included from include/linux/cgroup.h:26:
+>    In file included from include/linux/kernel_stat.h:9:
+>    In file included from include/linux/interrupt.h:11:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
+:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            val =3D __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE +=
+ addr));
+>                                                            ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded fro=
+m macro '__le32_to_cpu'
+>    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>                                                      ^
+>    In file included from kernel/bpf/verifier.c:7:
+>    In file included from include/linux/bpf-cgroup.h:5:
+>    In file included from include/linux/bpf.h:31:
+>    In file included from include/linux/memcontrol.h:13:
+>    In file included from include/linux/cgroup.h:26:
+>    In file included from include/linux/kernel_stat.h:9:
+>    In file included from include/linux/interrupt.h:11:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1=
+:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:13:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writeb(value, PCI_IOBASE + addr);
+>                                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + add=
+r);
+>                                                          ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + add=
+r);
+>                                                          ~~~~~~~~~~ ^
+> >> kernel/bpf/verifier.c:1244:23: warning: variable 'j' is uninitialized =
+when used here [-Wuninitialized]
+>                    if (slot->slot_type[j] =3D=3D STACK_ITER)
+>                                        ^
+>    kernel/bpf/verifier.c:1229:15: note: initialize the variable 'j' to si=
+lence this warning
+>            int spi, i, j;
+>                         ^
+>                          =3D 0
+>    7 warnings generated.
+>
+>
+> vim +/j +1244 kernel/bpf/verifier.c
+>
+>   1224
+>   1225  static bool is_iter_reg_valid_uninit(struct bpf_verifier_env *env=
+,
+>   1226                                       struct bpf_reg_state *reg, i=
+nt nr_slots)
+>   1227  {
+>   1228          struct bpf_func_state *state =3D func(env, reg);
+>   1229          int spi, i, j;
+>   1230
+>   1231          /* For -ERANGE (i.e. spi not falling into allocated stack=
+ slots), we
+>   1232           * will do check_mem_access to check and update stack bou=
+nds later, so
+>   1233           * return true for that case.
+>   1234           */
+>   1235          spi =3D iter_get_spi(env, reg, nr_slots);
+>   1236          if (spi =3D=3D -ERANGE)
+>   1237                  return true;
+>   1238          if (spi < 0)
+>   1239                  return spi;
 
-On Thu, Feb 23, 2023 at 09:28:28AM -0700, Nathan Chancellor wrote:
-> Hi Thierry, Daniel, and David,
-> 
-> On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The error handling for platform_get_irq() failing no longer
-> > works after a recent change, clang now points this out with
-> > a warning:
-> > 
-> > drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
-> >         if (syncpt_irq < 0)
-> >             ^~~~~~~~~~
-> > 
-> > Fix this by removing the variable and checking the correct
-> > error status.
-> > 
-> > Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  drivers/gpu/host1x/dev.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-> > index 4872d183d860..aae2efeef503 100644
-> > --- a/drivers/gpu/host1x/dev.c
-> > +++ b/drivers/gpu/host1x/dev.c
-> > @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
-> >  static int host1x_probe(struct platform_device *pdev)
-> >  {
-> >  	struct host1x *host;
-> > -	int syncpt_irq;
-> >  	int err;
-> >  
-> >  	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
-> > @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
-> >  	}
-> >  
-> >  	host->syncpt_irq = platform_get_irq(pdev, 0);
-> > -	if (syncpt_irq < 0)
-> > -		return syncpt_irq;
-> > +	if (host->syncpt_irq < 0)
-> > +		return host->syncpt_irq;
-> >  
-> >  	mutex_init(&host->devices_lock);
-> >  	INIT_LIST_HEAD(&host->devices);
-> > -- 
-> > 2.39.0
-> > 
-> 
-> Apologies if this has been reported already or has a solution in
-> progress but mainline is now broken because this change got separated
-> from the change it is fixing:
-> 
-> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4249931209/jobs/7391912774
-> https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2M7y9HpiXB13qiC2mkHMyeZOcLW/build.log
-> 
-> I see this change sitting in the drm-tegra tree [1], which is getting
-> merged into -next, so it is fixed there, which is why we did not notice
-> any issues until the drm-next tree was merged into mainline. Can this be
-> fast tracked to Linus to unbreak clang builds with -Werror?
-> 
-> [1]: https://gitlab.freedesktop.org/drm/tegra/-/commit/b9930311641cf2ed905a84aabe27e8f3868aee4a
+also, this should be return false
+
+>   1240
+>   1241          for (i =3D 0; i < nr_slots; i++) {
+>   1242                  struct bpf_stack_state *slot =3D &state->stack[sp=
+i - i];
+>   1243
+
+for (j =3D 0; j < BPF_REG_SIZE; j++) got lost during rebasing, sigh. I
+have a test that's testing this exact condition to be checked
+properly, and it is passing (that is proper return false is returned
+here) consistently with the garbage value of j :(
+
+Anyways, restored for loop here.
+
+> > 1244                  if (slot->slot_type[j] =3D=3D STACK_ITER)
+>   1245                          return false;
+>   1246          }
+>   1247
+>   1248          return true;
+>   1249  }
+>   1250
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
