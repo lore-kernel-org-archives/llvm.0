@@ -1,163 +1,139 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4748BF3
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 19:59:39 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id 204-20020a2514d5000000b00a3637aea9e1so18889903ybu.17
-        for <llvm@lists.linux.dev>; Wed, 08 Mar 2023 11:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678305578;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=75JQmb/2KggtqnlZKQD+aSAFlbHw0CtgDC3x9xG3MXM=;
-        b=HWG0A+XkRq6twRJy5FCucxErakdKYN0oMAYvCCn3ZI1cCMvglOVMpDKuFql1Y0uh2Y
-         3cZXtdl0lp07vx/fXzb4LAOgt0Wg2ZCsfS9OrGBzLDap2FvKwx4bGac0GH/Oo9sF7a4b
-         pjL8PFTxK0XOY5Q9RDmx3kY4Lag/tgRAavcmBTwNImW/Icmgg958s96iCJr/74cKNOU5
-         tGTBOQ6ilN3is8O7jQ43CNPWYphf6mH7X9wnLgGCaKX0MhQujqjO/LX8cRBthq9oxnw3
-         qLMkl42AUsKC2XjS9KRCxVRJpAp1GrS/MQCYD3VQ4YrB7q4mGh222LMzISBw3vMoQBNT
-         LU+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678305578;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=75JQmb/2KggtqnlZKQD+aSAFlbHw0CtgDC3x9xG3MXM=;
-        b=kHJ+lyRv4SHyjobKpbWRa1ksvYYYwvFsBDOFF7amqXxY7atDnHpD06cvgTsEtDp+OG
-         mRAiRWU1/yIkCKvEy1kY7douQec37V8d9zneC7vQYDqfGXezUG1upDQs8su7By2PQjvL
-         43/Rpw6AhF8sw/RaQdKfcMjOwTbwtvLDxLZMJ6pR3u7lxX6zaeLq8yC+tMhMpbYutdRa
-         oC2IQ8KMF8bq+gb8a2DbijCS5TKlzcHTkzSP4ldBd0HqdVhUVn6d6+BZOiQ60+IABakw
-         52ocHmlfRoxfUcpInTesWWVNRspnwTGW8jrv1qM5vwH99fKiB5bMjvonUekFmtOKCfCb
-         KUYg==
-X-Gm-Message-State: AO0yUKVDJVb+mu3dsNa9xhMROeYFfLY5rcwdWOIHl/yplvwn/pxw0PxG
-	a4Fs5+CsqYMiib28vllQ8pXuOoNby4yPZugkPxA=
-X-Google-Smtp-Source: AK7set/W8YgrfqLqO2DsSDgmSbjC36iO7b3J9S+nBQeHpBWVIn+oyIeyu9lwEDVZBihPkIbBlvXfsXnEi0hMYdB09MM=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:a5cc:f0f5:1fc6:713])
- (user=ndesaulniers job=sendgmr) by 2002:a05:6902:10e:b0:98e:6280:74ca with
- SMTP id o14-20020a056902010e00b0098e628074camr9682385ybh.1.1678305578279;
- Wed, 08 Mar 2023 11:59:38 -0800 (PST)
-Date: Wed,  8 Mar 2023 11:59:33 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 033D1BA48;
+	Wed,  8 Mar 2023 20:00:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678305603; x=1709841603;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lujBnfyVjbSN3IX5eAFqoZfHIihIG2YLxxYAJnRFe48=;
+  b=Rpy6CtKtlEQzSoYJvby5DAN+bsj0iIPonhACgXWcDHESFrc8m3nQwMVU
+   vaPEmpKA7+Ky5ah4hhHP0jQtFTKMvCwHpoYmJPq6rUBcyXVqO3adOzh7n
+   exbT2EvSV103Fd0FdRG37noC7u2ZaVc8ezWTLdsSXBVjiTLY/jIKfvcaM
+   51ZpjkpNRa1Av2dtoeO8gSizpat3QoGNEIAC1mkgj3KD3VEhpxoASt81l
+   QmMEde7A71McuN8FflHSwW28W7FsRxq6azY5muNuaOZJz1NggwafNBhfQ
+   75xExVh4cNjKrBZSpkaDFj+MSXbiF2JGOjf3H8XjhmRcvmTaLjfr6EsHo
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="337783816"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="337783816"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 11:59:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="627061025"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="627061025"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2023 11:59:57 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZzx6-0002Nm-2f;
+	Wed, 08 Mar 2023 19:59:56 +0000
+Date: Thu, 9 Mar 2023 03:59:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: <instantiation>:99:2: error: Unable to parse register name $fp
+Message-ID: <202303090316.McwlaGBM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678305573; l=3674;
- i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=n/DgE8/iWvhcIDq6uHGKDuymOdplKVpBIQ1VLbggOSQ=;
- b=VAkvIJbJTkDeHd40DTYOHT9IKSmJn5AcgJ0BQGadPjGIhMhIcZ3SeyloIsJYdk4uQjG8ko5T6Rio
- az+Ic4RZBwaVxEdwoIlZhP4x65sC5M4iqJjuLYncBuv75eAO2qn/
-X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Message-ID: <20230308195933.806917-1-ndesaulniers@google.com>
-Subject: [PATCH] selftests: sigaltstack: fix -Wuninitialized
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, 
-	Linux Kernel Functional Testing <lkft@linaro.org>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, lkft-triage@lists.linaro.org, 
-	Thomas Gleixner <tglx@linutronix.de>, "Chang S. Bae" <chang.seok.bae@intel.com>, 
-	Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>, Stas Sergeev <stsp@list.ru>, 
-	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>, 
-	Andy Lutomirski <luto@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Building sigaltstack with clang via:
-$ ARCH=x86 make LLVM=1 -C tools/testing/selftests/sigaltstack/
+Hi Arnd,
 
-produces the following warning:
-  warning: variable 'sp' is uninitialized when used here [-Wuninitialized]
-  if (sp < (unsigned long)sstack ||
-      ^~
+FYI, the error/warning still remains.
 
-Clang expects these to be declared at global scope; we've fixed this in
-the kernel proper by using the macro `current_stack_pointer`. This is
-defined in different headers for different target architectures, so just
-create a new header that defines the arch-specific register names for
-the stack pointer register, and define it for more targets (at least the
-ones that support current_stack_pointer/ARCH_HAS_CURRENT_STACK_POINTER).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   63355b9884b3d1677de6bd1517cd2b8a9bf53978
+commit: 15f3d81a8c8a564cbc8642cf95c548d02db035a7 MIPS: use simpler access_ok()
+date:   1 year ago
+config: mips-randconfig-c004-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090316.McwlaGBM-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=15f3d81a8c8a564cbc8642cf95c548d02db035a7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 15f3d81a8c8a564cbc8642cf95c548d02db035a7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Link: https://lore.kernel.org/lkml/CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com/
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>
-Cc: linux-api@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: lkft-triage@lists.linaro.org
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Stas Sergeev <stsp@list.ru>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Anders Roxell <anders.roxell@linaro.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev
----
- .../sigaltstack/current_stack_pointer.h       | 23 +++++++++++++++++++
- tools/testing/selftests/sigaltstack/sas.c     |  7 +-----
- 2 files changed, 24 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/sigaltstack/current_stack_pointer.h
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303090316.McwlaGBM-lkp@intel.com/
 
-diff --git a/tools/testing/selftests/sigaltstack/current_stack_pointer.h b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
-new file mode 100644
-index 000000000000..ea9bdf3a90b1
---- /dev/null
-+++ b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#if __alpha__
-+register unsigned long sp asm("$30");
-+#elif __arm__ || __aarch64__ || __csky__ || __m68k__ || __mips__ || __riscv
-+register unsigned long sp asm("sp");
-+#elif __i386__
-+register unsigned long sp asm("esp");
-+#elif __loongarch64
-+register unsigned long sp asm("$sp");
-+#elif __ppc__
-+register unsigned long sp asm("r1");
-+#elif __s390x__
-+register unsigned long sp asm("%15");
-+#elif __sh__
-+register unsigned long sp asm("r15");
-+#elif __x86_64__
-+register unsigned long sp asm("rsp");
-+#elif __XTENSA__
-+register unsigned long sp asm("a1");
-+#else
-+#error "implement current_stack_pointer equivalent"
-+#endif
-diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
-index c53b070755b6..98d37cb744fb 100644
---- a/tools/testing/selftests/sigaltstack/sas.c
-+++ b/tools/testing/selftests/sigaltstack/sas.c
-@@ -20,6 +20,7 @@
- #include <sys/auxv.h>
- 
- #include "../kselftest.h"
-+#include "current_stack_pointer.h"
- 
- #ifndef SS_AUTODISARM
- #define SS_AUTODISARM  (1U << 31)
-@@ -46,12 +47,6 @@ void my_usr1(int sig, siginfo_t *si, void *u)
- 	stack_t stk;
- 	struct stk_data *p;
- 
--#if __s390x__
--	register unsigned long sp asm("%15");
--#else
--	register unsigned long sp asm("sp");
--#endif
--
- 	if (sp < (unsigned long)sstack ||
- 			sp >= (unsigned long)sstack + stack_size) {
- 		ksft_exit_fail_msg("SP is not on sigaltstack\n");
+All errors (new ones prefixed by >>):
+
+   arch/mips/kernel/signal.c:439:5: warning: no previous prototype for function 'setup_sigcontext' [-Wmissing-prototypes]
+   int setup_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
+       ^
+   arch/mips/kernel/signal.c:439:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int setup_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
+   ^
+   static 
+   arch/mips/kernel/signal.c:516:5: warning: no previous prototype for function 'restore_sigcontext' [-Wmissing-prototypes]
+   int restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
+       ^
+   arch/mips/kernel/signal.c:516:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
+   ^
+   static 
+   arch/mips/kernel/signal.c:637:17: warning: no previous prototype for function 'sys_sigreturn' [-Wmissing-prototypes]
+   asmlinkage void sys_sigreturn(void)
+                   ^
+   arch/mips/kernel/signal.c:637:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void sys_sigreturn(void)
+              ^
+              static 
+   arch/mips/kernel/signal.c:674:17: warning: no previous prototype for function 'sys_rt_sigreturn' [-Wmissing-prototypes]
+   asmlinkage void sys_rt_sigreturn(void)
+                   ^
+   arch/mips/kernel/signal.c:674:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void sys_rt_sigreturn(void)
+              ^
+              static 
+   arch/mips/kernel/signal.c:904:17: warning: no previous prototype for function 'do_notify_resume' [-Wmissing-prototypes]
+   asmlinkage void do_notify_resume(struct pt_regs *regs, void *unused,
+                   ^
+   arch/mips/kernel/signal.c:904:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void do_notify_resume(struct pt_regs *regs, void *unused,
+              ^
+              static 
+>> <instantiation>:99:2: error: Unable to parse register name $fp
+           .error  "Unable to parse register name $fp"
+           ^
+   <instantiation>:104:2: note: while in macro instantiation
+           parse_r __rs, $fp
+           ^
+   arch/mips/include/asm/msa.h:213:1: note: while in macro instantiation
+   __BUILD_MSA_CTL_REG(csr, 1)
+   ^
+   arch/mips/include/asm/msa.h:205:2: note: expanded from macro '__BUILD_MSA_CTL_REG'
+           _ASM_SET_CTCMSA                                         \
+           ^
+   arch/mips/include/asm/msa.h:172:2: note: expanded from macro '_ASM_SET_CTCMSA'
+           _ASM_MACRO_2R(ctcmsa, cd, rs,                                   \
+           ^
+   arch/mips/include/asm/mipsregs.h:1342:11: note: expanded from macro '_ASM_MACRO_2R'
+                   ".endm\n\t"
+                           ^
+   <inline asm>:111:3: note: instantiated into assembly here
+                   ctcmsa  $1, $fp
+                   ^
+   5 warnings and 1 error generated.
+
 -- 
-2.40.0.rc0.216.gc4246ad0f0-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
