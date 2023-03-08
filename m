@@ -1,42 +1,35 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978CD36A;
-	Wed,  8 Mar 2023 16:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678293294; x=1709829294;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S/CWG2Hj9kzJU1x0vGgsQg2iSQVU/Sy7dBK7o94pPYA=;
-  b=hxYonSU3W9KfiH4eWnNIbAyBM9CoYnquDXDo/cHVMfH3Eo6CXL+ozfXM
-   LqFikk1/7101UkKnjxm/6YO2gSaCyyGsmwAvBzxYiiMEaW44HrEl/C3z6
-   Ww/hZNQcC7lE5s0UbCYkaj6gn6S4ooZ57EYQekeTXVLVescPeW+y+sCqS
-   hdV9AkXDPD1OsJN5Jrz1VItNt2ImiHlzeZO/V5FUS1HVKhUPX4DgPDcXh
-   QWzQS8i8dU4n70IlrgImFI6pyxZFcjmRwHnutlX2hAtVtEJW8qutAc88W
-   NavUiwtwKoGaAsPbaQ+W91VQ8Wxvu9tuuS0FNo4oDhfHsG9JNNXWLRVwD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422474574"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="422474574"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 08:34:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="820292050"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="820292050"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Mar 2023 08:34:53 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pZwke-0002GN-0S;
-	Wed, 08 Mar 2023 16:34:52 +0000
-Date: Thu, 9 Mar 2023 00:33:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:mpam/snapshot/v6.2 136/139] fs/debugfs/file.c:959:9: warning:
- no previous prototype for function 'debugfs_read_file_cpumask'
-Message-ID: <202303090038.R0U1uPBw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E317279F5
+	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 16:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E1CC433D2;
+	Wed,  8 Mar 2023 16:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678294606;
+	bh=mSiziORV5JOTz/dmr0twQJK+pWs676MExklouuLQSu4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TJJX9gQkCIR0opXes4eHqs5uTOE9Y9L7OqpcXEXaCkzPlUyPcnFfIQgJlEiPCW3Lu
+	 PpZscyFSSKIlryX5jP9682maJ20mVnI9p8SzClO438O2QWCnSX+BQgty2R0+Hyv5jY
+	 /EoOdCdKUtQIB+W9lRqWjC4w/101WiLe9e57NLNbccfUz55fZBMS3avpuGodcfpkyi
+	 hak+5qcsgwfnTSjFTUOgmfblvACWaI7ETIoIUG9bcNysnHoJbadxLcVndj82JLs9tu
+	 0v1/keyeB2AvlGRn7HHU1CnXTRGLbSSmUv3lRIq2/JcCYc+17KJWsJiEBTmUQrC0v0
+	 T93cFl2467BdQ==
+Date: Wed, 8 Mar 2023 09:56:44 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thierry Reding <thierry.reding@gmail.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Mikko Perttunen <mperttunen@nvidia.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Robin Murphy <robin.murphy@arm.com>,
+	dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
+Message-ID: <20230308165644.GA1181835@dev-arch.thelio-3990X>
+References: <20230127221418.2522612-1-arnd@kernel.org>
+ <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,79 +38,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.2
-head:   b04a157f0da06d80607a04ca0c1f58b610ba4a44
-commit: eca824efb549effb3884515952c8587ee46cc8fb [136/139] debugfs: Add helpers for creating cpumask entries in debugfs
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230309/202303090038.R0U1uPBw-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=eca824efb549effb3884515952c8587ee46cc8fb
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v6.2
-        git checkout eca824efb549effb3884515952c8587ee46cc8fb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/debugfs/
+Ping? This warning is now in 6.3-rc1.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303090038.R0U1uPBw-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/debugfs/file.c:959:9: warning: no previous prototype for function 'debugfs_read_file_cpumask' [-Wmissing-prototypes]
-   ssize_t debugfs_read_file_cpumask(struct file *file, char __user *user_buf,
-           ^
-   fs/debugfs/file.c:959:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t debugfs_read_file_cpumask(struct file *file, char __user *user_buf,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/debugfs_read_file_cpumask +959 fs/debugfs/file.c
-
-   958	
- > 959	ssize_t debugfs_read_file_cpumask(struct file *file, char __user *user_buf,
-   960					   size_t count, loff_t *ppos)
-   961	{
-   962		struct dentry *dentry = F_DENTRY(file);
-   963		struct cpumask *cpumask;
-   964		char *kernel_buf;
-   965		ssize_t ret;
-   966		int len;
-   967	
-   968		ret = debugfs_file_get(dentry);
-   969		if (unlikely(ret))
-   970			return ret;
-   971	
-   972		/* How long is a piece of string? */
-   973		kernel_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
-   974		if (!kernel_buf) {
-   975			debugfs_file_put(dentry);
-   976			return -ENOMEM;
-   977		}
-   978	
-   979		cpumask = (struct cpumask *)file->private_data;
-   980		len = scnprintf(kernel_buf, PAGE_SIZE,
-   981				"%*pb\n", cpumask_pr_args(cpumask));
-   982		debugfs_file_put(dentry);
-   983		if (len + 1 >= PAGE_SIZE) {
-   984			kfree(kernel_buf);
-   985			return -EIO;
-   986		}
-   987	
-   988		ret = simple_read_from_buffer(user_buf, count, ppos, kernel_buf, len);
-   989		kfree(kernel_buf);
-   990	
-   991		return ret;
-   992	}
-   993	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+On Thu, Feb 23, 2023 at 09:28:28AM -0700, Nathan Chancellor wrote:
+> Hi Thierry, Daniel, and David,
+> 
+> On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > The error handling for platform_get_irq() failing no longer
+> > works after a recent change, clang now points this out with
+> > a warning:
+> > 
+> > drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+> >         if (syncpt_irq < 0)
+> >             ^~~~~~~~~~
+> > 
+> > Fix this by removing the variable and checking the correct
+> > error status.
+> > 
+> > Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  drivers/gpu/host1x/dev.c | 5 ++---
+> >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+> > index 4872d183d860..aae2efeef503 100644
+> > --- a/drivers/gpu/host1x/dev.c
+> > +++ b/drivers/gpu/host1x/dev.c
+> > @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
+> >  static int host1x_probe(struct platform_device *pdev)
+> >  {
+> >  	struct host1x *host;
+> > -	int syncpt_irq;
+> >  	int err;
+> >  
+> >  	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
+> > @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
+> >  	}
+> >  
+> >  	host->syncpt_irq = platform_get_irq(pdev, 0);
+> > -	if (syncpt_irq < 0)
+> > -		return syncpt_irq;
+> > +	if (host->syncpt_irq < 0)
+> > +		return host->syncpt_irq;
+> >  
+> >  	mutex_init(&host->devices_lock);
+> >  	INIT_LIST_HEAD(&host->devices);
+> > -- 
+> > 2.39.0
+> > 
+> 
+> Apologies if this has been reported already or has a solution in
+> progress but mainline is now broken because this change got separated
+> from the change it is fixing:
+> 
+> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4249931209/jobs/7391912774
+> https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2M7y9HpiXB13qiC2mkHMyeZOcLW/build.log
+> 
+> I see this change sitting in the drm-tegra tree [1], which is getting
+> merged into -next, so it is fixed there, which is why we did not notice
+> any issues until the drm-next tree was merged into mainline. Can this be
+> fast tracked to Linus to unbreak clang builds with -Werror?
+> 
+> [1]: https://gitlab.freedesktop.org/drm/tegra/-/commit/b9930311641cf2ed905a84aabe27e8f3868aee4a
