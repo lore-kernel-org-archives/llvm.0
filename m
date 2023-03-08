@@ -1,74 +1,126 @@
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8764CD31E
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 08:11:40 +0000 (UTC)
-Received: by mail-il1-f200.google.com with SMTP id v14-20020a92c80e000000b0031faea6493cso4887908iln.11
-        for <llvm@lists.linux.dev>; Wed, 08 Mar 2023 00:11:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678263099;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7RRpr/2enZpSN+Pqs5p0qwijporxRiSMR0agGaaar/U=;
-        b=F+RS2OOmtRRVDInqN9nOxao3fAACkOTheW/ujmUDDBFxV8/bmbtvPyjIbEADGL/GU1
-         BeyjVNrW7x0OyXwhu/7WtVRDiGLrd8MLJkufyTuSXIPmFmytBb27kzsZ63Y79SwNGP83
-         JbeAaaOj/Cecq262SXU2egHkuXdGOL67FtY606ndl+5dWs5s+9YkTbkRfeeYbYiMr4Og
-         y+c1smv5k9wpx9QmLLRMyVHZsUeNK16bd12352l+cLsIqJAyPGvm6scWffET61NF8ozz
-         ujKlYgcKv2ooUU8NbRTowsKIx2dX5FgJhLd31tvVY5Ung+CmzisOHea1L5q/4haFsENG
-         SU/w==
-X-Gm-Message-State: AO0yUKV+tRjM4l+ZxoKLk+WNlqVid7lIZOcOEt8CWSI6fobsoKR1yJnm
-	HVOkXqCDYxLuejFED5jS7DBjM6tk/6CsKYqShbHtfeSjbDLT
-X-Google-Smtp-Source: AK7set8ohvqpuNRL/JIS3vEqOiqVUfpwiOin574uHv80eNG3CnFwykdH8snjl4FxakBYbcLg+wDx8C0yoczKJ+W5O7OoK+osDiqq
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5227C;
+	Wed,  8 Mar 2023 08:40:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678264842; x=1709800842;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gB7WDPIHJt5t/8v281bB3fITw5uht69zDV1c3D9xXos=;
+  b=YVh3BgEjyXPk2D7BM/zyWCash+0vSKMyAyJcytD3cCMGePu1Mr0Hpxa1
+   A5WchOL+4v/vk2mNTqL48K6bn7Q/Gyfu3xqSUbbPuh96t/3Ou3FCmx9dd
+   dgGn3uSLOWeFt39kjDGj4OgFqiTN9BC1j/DxTd2aghfoVMrkD+lE+RUMG
+   h+gT8wAAwpQ+DoXhXT7+kF+o7NG5/DLQ6eoRCcJEdnEhzUvsLvte/40Gk
+   GFfzsM789gAp78p6MFdwXqoEEuPSPhvgeJAdTQlb704tV4/us1er+SvO4
+   mQHtD7TImA/oTjLSVnG2dpSyNJCnDfIFenrooREMKWx6ll7fkgA5jB7KU
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422369799"
+X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
+   d="scan'208";a="422369799"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 00:40:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="1006249531"
+X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
+   d="scan'208";a="1006249531"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Mar 2023 00:40:40 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZpLj-0001zP-28;
+	Wed, 08 Mar 2023 08:40:39 +0000
+Date: Wed, 8 Mar 2023 16:39:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Subject: [jpoimboe:objtool/core 10/24] arch/mips/include/asm/smp.h:44:29:
+ error: use of undeclared identifier 'CONFIG_MIPS_NR_CPU_NR_MAP'
+Message-ID: <202303081612.leLRNMzo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:13f4:b0:313:fa72:d9aa with SMTP id
- w20-20020a056e0213f400b00313fa72d9aamr8342532ilj.0.1678263099703; Wed, 08 Mar
- 2023 00:11:39 -0800 (PST)
-Date: Wed, 08 Mar 2023 00:11:39 -0800
-In-Reply-To: <000000000000ea3c3105ef377a12@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e5c94a05f65f130d@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_listxattr
-From: syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, dvyukov@google.com, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, zengheng4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This bug is marked as fixed by commit:
-ntfs: fix panic about slab-out-of-bounds caused by ntfs_listxattr()
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool/core
+head:   ed8d2d280a75ca9deb6d307e116acff4b8ef0782
+commit: 09b0d89f25b23d7ed2df68a6bf2fa1ec484a15c6 [10/24] mips/cpu: Expose play_dead()'s prototype definition
+config: mips-bcm63xx_defconfig (https://download.01.org/0day-ci/archive/20230308/202303081612.leLRNMzo-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=09b0d89f25b23d7ed2df68a6bf2fa1ec484a15c6
+        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
+        git fetch --no-tags jpoimboe objtool/core
+        git checkout 09b0d89f25b23d7ed2df68a6bf2fa1ec484a15c6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303081612.leLRNMzo-lkp@intel.com/
 
-#syz fix: exact-commit-title
+All errors (new ones prefixed by >>):
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+>> arch/mips/include/asm/smp.h:44:29: error: use of undeclared identifier 'CONFIG_MIPS_NR_CPU_NR_MAP'
+   extern int __cpu_number_map[CONFIG_MIPS_NR_CPU_NR_MAP];
+                               ^
+   arch/mips/include/asm/smp.h:71:20: error: redefinition of 'smp_send_reschedule'
+   static inline void smp_send_reschedule(int cpu)
+                      ^
+   include/linux/smp.h:198:20: note: previous definition is here
+   static inline void smp_send_reschedule(int cpu) { }
+                      ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+   arch/mips/include/asm/smp.h:75:8: error: incomplete definition of type 'struct plat_smp_ops'
+           mp_ops->send_ipi_single(cpu, SMP_RESCHEDULE_YOURSELF);
+           ~~~~~~^
+   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
+   struct plat_smp_ops;
+          ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+   arch/mips/include/asm/smp.h:130:8: error: incomplete definition of type 'struct plat_smp_ops'
+           mp_ops->send_ipi_single(cpu, SMP_CALL_FUNCTION);
+           ~~~~~~^
+   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
+   struct plat_smp_ops;
+          ^
+   In file included from arch/mips/kernel/smp-bmips.c:41:
+   arch/mips/include/asm/smp.h:137:8: error: incomplete definition of type 'struct plat_smp_ops'
+           mp_ops->send_ipi_mask(mask, SMP_CALL_FUNCTION);
+           ~~~~~~^
+   arch/mips/include/asm/smp-ops.h:57:8: note: forward declaration of 'struct plat_smp_ops'
+   struct plat_smp_ops;
+          ^
+   5 errors generated.
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
 
----
-[1] I expect the commit to be present in:
+vim +/CONFIG_MIPS_NR_CPU_NR_MAP +44 arch/mips/include/asm/smp.h
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  41  
+^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  42  /* Map from cpu id to sequential logical cpu number.  This will only
+^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  43     not be idempotent when cpus failed to come on-line.	*/
+7820b84be844d8 arch/mips/include/asm/smp.h David Daney    2017-09-28 @44  extern int __cpu_number_map[CONFIG_MIPS_NR_CPU_NR_MAP];
+^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  45  #define cpu_number_map(cpu)  __cpu_number_map[cpu]
+^1da177e4c3f41 include/asm-mips/smp.h      Linus Torvalds 2005-04-16  46  
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+:::::: The code at line 44 was first introduced by commit
+:::::: 7820b84be844d8d863122b1323f2a4bc2441b783 MIPS: Allow __cpu_number_map to be larger than NR_CPUS
 
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+:::::: TO: David Daney <david.daney@cavium.com>
+:::::: CC: James Hogan <jhogan@kernel.org>
 
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
