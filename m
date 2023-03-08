@@ -1,189 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3483D79DA
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 16:23:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA42C4339E
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 16:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678292591;
-	bh=wtbSZIjnuVouf3TNMqbx2fEORr7Wb2sFxFP0LJArqos=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HHMvccU6j87lRjL4E7fcoWtU43PEayhFPDixHhIYkN3HRzmGcR8WQR9+fxolKOQwX
-	 5CV8zsiRjp0VEXE4Yr/1JYS8DRKHi2dYfQVcNUm6o8SdBinkt+25yecIcPLi7lSktI
-	 CF997R8QMc4O4MDgOQ7F51vWFcF7sldDLCI85gsoa5jGkk5/6Jkjn69rXuVqrxB3PU
-	 HZF4CUJHSAU+OFsSvaMtl+6rsMxgia5YHivnasNjttbI8fgv4+FsNSvV5owJdm7Qs5
-	 kI5UfQ++ndCum/2do06Yiv0j0kBiVmGKWHqaKVGgL28P3H5B+Ftnlta+JgA9l0r7b3
-	 HHRyaCigHRj9Q==
-Received: by mail-ed1-f53.google.com with SMTP id ec29so37131784edb.6
-        for <llvm@lists.linux.dev>; Wed, 08 Mar 2023 08:23:10 -0800 (PST)
-X-Gm-Message-State: AO0yUKW1NMltCM5oRBGnRzpS9I2OVEewacN4fDFtK7Fx5DHTRJdHLqJm
-	znPEfu4xfHV+iSQYMZ3tQxGzAecu16/OJV7ZzgTOyw==
-X-Google-Smtp-Source: AK7set8xrdBJlgLKcZJ8Ls9Cykn3HUp+jJMyiUPKHEnnwDi6Pc1f0Gubr89vOkRYF6mpOiNQedaKihAX1ERLrU1kUOo=
-X-Received: by 2002:a17:906:b10d:b0:878:561c:6665 with SMTP id
- u13-20020a170906b10d00b00878561c6665mr9467953ejy.0.1678292589161; Wed, 08 Mar
- 2023 08:23:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978CD36A;
+	Wed,  8 Mar 2023 16:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678293294; x=1709829294;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S/CWG2Hj9kzJU1x0vGgsQg2iSQVU/Sy7dBK7o94pPYA=;
+  b=hxYonSU3W9KfiH4eWnNIbAyBM9CoYnquDXDo/cHVMfH3Eo6CXL+ozfXM
+   LqFikk1/7101UkKnjxm/6YO2gSaCyyGsmwAvBzxYiiMEaW44HrEl/C3z6
+   Ww/hZNQcC7lE5s0UbCYkaj6gn6S4ooZ57EYQekeTXVLVescPeW+y+sCqS
+   hdV9AkXDPD1OsJN5Jrz1VItNt2ImiHlzeZO/V5FUS1HVKhUPX4DgPDcXh
+   QWzQS8i8dU4n70IlrgImFI6pyxZFcjmRwHnutlX2hAtVtEJW8qutAc88W
+   NavUiwtwKoGaAsPbaQ+W91VQ8Wxvu9tuuS0FNo4oDhfHsG9JNNXWLRVwD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422474574"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="422474574"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 08:34:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="820292050"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="820292050"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Mar 2023 08:34:53 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZwke-0002GN-0S;
+	Wed, 08 Mar 2023 16:34:52 +0000
+Date: Thu, 9 Mar 2023 00:33:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot/v6.2 136/139] fs/debugfs/file.c:959:9: warning:
+ no previous prototype for function 'debugfs_read_file_cpumask'
+Message-ID: <202303090038.R0U1uPBw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
- <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com> <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
-In-Reply-To: <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
-From: Andy Lutomirski <luto@kernel.org>
-Date: Wed, 8 Mar 2023 08:22:57 -0800
-X-Gmail-Original-Message-ID: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
-Message-ID: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
-Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
- sigaltstack - on clang build
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: "Chang S. Bae" <chang.seok.bae@intel.com>, llvm@lists.linux.dev, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Len Brown <len.brown@intel.com>, 
-	Borislav Petkov <bp@suse.de>, Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>, 
-	Anders Roxell <anders.roxell@linaro.org>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Mar 7, 2023 at 7:14=E2=80=AFPM Naresh Kamboju <naresh.kamboju@linar=
-o.org> wrote:
->
-> + LLVM
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.2
+head:   b04a157f0da06d80607a04ca0c1f58b610ba4a44
+commit: eca824efb549effb3884515952c8587ee46cc8fb [136/139] debugfs: Add helpers for creating cpumask entries in debugfs
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230309/202303090038.R0U1uPBw-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=eca824efb549effb3884515952c8587ee46cc8fb
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v6.2
+        git checkout eca824efb549effb3884515952c8587ee46cc8fb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/debugfs/
 
-The offending code seems to be:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303090038.R0U1uPBw-lkp@intel.com/
 
-#if __s390x__
-        register unsigned long sp asm("%15");
-#else
-        register unsigned long sp asm("sp");
-#endif
+All warnings (new ones prefixed by >>):
 
-        if (sp < (unsigned long)sstack ||
-                        sp >=3D (unsigned long)sstack + stack_size) {
-                ksft_exit_fail_msg("SP is not on sigaltstack\n");
-        }
+>> fs/debugfs/file.c:959:9: warning: no previous prototype for function 'debugfs_read_file_cpumask' [-Wmissing-prototypes]
+   ssize_t debugfs_read_file_cpumask(struct file *file, char __user *user_buf,
+           ^
+   fs/debugfs/file.c:959:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   ssize_t debugfs_read_file_cpumask(struct file *file, char __user *user_buf,
+   ^
+   static 
+   1 warning generated.
 
-Is that actually expected to work?  asm("sp") is a horrible hack.  I
-would, maybe naively, expect a compiler to analyze this code, think
-"sp is unconditionally uninitialized", and treat the comparison as
-always-UB and thus generate whatever code seems convenient.
 
---Andy
+vim +/debugfs_read_file_cpumask +959 fs/debugfs/file.c
 
->
-> On Wed, 8 Mar 2023 at 00:58, Chang S. Bae <chang.seok.bae@intel.com> wrot=
-e:
-> >
-> > On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
-> > > kselftest: sigaltstack built with clang-16 getting failed but passed =
-with
-> > > gcc-12 build. Please find more details about test logs on clang-16 an=
-d
-> > > gcc-12 and steps to reproduce locally on your machine by using tuxrun=
-.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > Test log:
-> > > ----------
-> > >
-> > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian clang
-> > > version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.4=
-1),
-> > > Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
-> > > ...
-> > > kselftest: Running tests in sigaltstack
-> > > TAP version 13
-> > > 1..1
-> > > # selftests: sigaltstack: sas
-> > > # # [NOTE] the stack size is 21104
-> > > # TAP version 13
-> > > # 1..3
-> > > # ok 1 Initial sigaltstack state was SS_DISABLE
-> > > # Bail out! SP is not on sigaltstack
-> > > # # Planned tests !=3D run tests (3 !=3D 1)
-> > > # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > not ok 1 selftests: sigaltstack: sas # exit=3D1
-> > <snip>
-> >
-> > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
-> > > (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutil=
-s
-> > > for Debian) 2.40) #1 SMP PREEMPT @1678159736
-> > > ...
-> > > kselftest: Running tests in sigaltstack
-> > > TAP version 13
-> > > 1..1
-> > > # selftests: sigaltstack: sas
-> > > # # [NOTE] the stack size is 50080
-> > > # TAP version 13
-> > > # 1..3
-> > > # ok 1 Initial sigaltstack state was SS_DISABLE
-> > > # # [RUN] signal USR1
-> > > # ok 2 sigaltstack is disabled in sighandler
-> > > # # [RUN] switched to user ctx
-> > > # # [RUN] signal USR2
-> > > # # [OK] Stack preserved
-> > > # ok 3 sigaltstack is still SS_AUTODISARM after signal
-> > > # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > ok 1 selftests: sigaltstack: sas
-> >
-> > At glance, the log shows the altstack size difference between LLVM and =
-GCC.
-> >
-> > But, when I tried with the LLVM that I have,
-> >
-> >      $ clang --version
-> >      clang version 13.0.0 ...
-> >
-> > it failed only with this compiler:
-> >
-> >      $ rm sas;clang -o sas sas.c;./sas
-> >      # [NOTE]        the stack size is 8192
-> >      TAP version 13
-> >      1..3
-> >      ok 1 Initial sigaltstack state was SS_DISABLE
-> >      Bail out! SP is not on sigaltstack
-> >      # Planned tests !=3D run tests (3 !=3D 1)
-> >      # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >
-> >      $ rm sas;gcc -o sas sas.c;./sas
-> >      # [NOTE]        the stack size is 8192
-> >      TAP version 13
-> >      1..3
-> >      ok 1 Initial sigaltstack state was SS_DISABLE
-> >      # [RUN] signal USR1
-> >      ok 2 sigaltstack is disabled in sighandler
-> >      # [RUN] switched to user ctx
-> >      # [RUN] signal USR2
-> >      # [OK]  Stack preserved
-> >      ok 3 sigaltstack is still SS_AUTODISARM after signal
-> >      # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> >
-> > The same is true with some old versions -- e.g. the one that came with
-> > commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: improv=
-e
-> > output of sigaltstack testcase"):
-> >
-> >      $ rm sas;clang -o sas sas.c;./sas
-> >      [OK]    Initial sigaltstack state was SS_DISABLE
-> >      [FAIL]  SP is not on sigaltstack
-> >
-> >      $ rm sas;gcc -o sas sas.c;./sas
-> >      [OK]    Initial sigaltstack state was SS_DISABLE
-> >      [RUN]   signal USR1
-> >      [OK]    sigaltstack is disabled in sighandler
-> >      [RUN]   switched to user ctx
-> >      [RUN]   signal USR2
-> >      [OK]    Stack preserved
-> >      [OK]    sigaltstack is still SS_AUTODISARM after signal
-> >      [OK]    Test passed
-> >
-> > So, this test failure appears to have been there for a while. I think
-> > the LLVM folks need to take a look at it.
-> >
-> > Thanks,
-> > Chang
+   958	
+ > 959	ssize_t debugfs_read_file_cpumask(struct file *file, char __user *user_buf,
+   960					   size_t count, loff_t *ppos)
+   961	{
+   962		struct dentry *dentry = F_DENTRY(file);
+   963		struct cpumask *cpumask;
+   964		char *kernel_buf;
+   965		ssize_t ret;
+   966		int len;
+   967	
+   968		ret = debugfs_file_get(dentry);
+   969		if (unlikely(ret))
+   970			return ret;
+   971	
+   972		/* How long is a piece of string? */
+   973		kernel_buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
+   974		if (!kernel_buf) {
+   975			debugfs_file_put(dentry);
+   976			return -ENOMEM;
+   977		}
+   978	
+   979		cpumask = (struct cpumask *)file->private_data;
+   980		len = scnprintf(kernel_buf, PAGE_SIZE,
+   981				"%*pb\n", cpumask_pr_args(cpumask));
+   982		debugfs_file_put(dentry);
+   983		if (len + 1 >= PAGE_SIZE) {
+   984			kfree(kernel_buf);
+   985			return -EIO;
+   986		}
+   987	
+   988		ret = simple_read_from_buffer(user_buf, count, ppos, kernel_buf, len);
+   989		kfree(kernel_buf);
+   990	
+   991		return ret;
+   992	}
+   993	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
