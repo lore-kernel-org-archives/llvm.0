@@ -1,207 +1,127 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2045.outbound.protection.outlook.com [40.107.243.45])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAAE79F5
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 17:28:17 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ILtabLtdWBOCLVNWrMLYcTdhpFxZd794crdn0y6wVdwjzanUCV3W8yKK7UGmD/B7VN7z81tmCYuGR0+hZKhY4alZlgqSzF9HDpIlnAQwYJlO8qk2LMPDNfhZRKcC5HzUYNTQIsBnwWsrxlMv9ZD7hp+63eMzJkALpz2bkJZHOjlTkbXR43KEPwdkKFLKIKwIKm2fCOD+XXpWuAy5Gk8UDPoV2PfK+Sqo3XKJCbcQ+6p9uO8b1cOsu40ElraHdlsfoW/l336My0GfHjbz+udUqOd6VVe/m3A0jtDrjPcX9p+3znypCu4HDR+0mU/o+9ldlW/7RsdH0gSk9NkOhZNchg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b5DPdjFzSja952kNHzfQf1M6wM5x7JEJPqVnNbnyjq0=;
- b=BQE+vdWsiEX99DGWgx4jwsXjdgIcoi1Pc9ayYSPiTJ0Hv3GCYWp0Rry7AiHrQDEnHsa6OYD/42nAmygyM6oCWCjG8IcBVM/8t/c6uetz7b1WiKGQEVElTsvJZ+Q9fTdOQTF12UDVTANGfDWfRzzUerNoxG3lgCUvYXRnkOsXEgTwPj1gfBfUb75luOTEezDNTY+1vN4VcQ7PmRifjbC3hEfPN3a9oH0eRqqWtra1pxjJ0q2Guhzc7Aj9Id/80GK+qLUyaOBNbCmtsP6NK1+bsaR29sl1cm5vkhizDtglzVnd1t1r77Dozf666ssOs5X2mINzBcXbfqnbpS2HEA1SLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b5DPdjFzSja952kNHzfQf1M6wM5x7JEJPqVnNbnyjq0=;
- b=ozio1N5K/MRAfsv6Q69w4D9DxSaq6KZw+wEioxRKba3ljFyunpjfQYB6LHXlI0HfpA3/hgTbY4Rpz8Gg60xAHXj5QAKrBIReF9wjUOuDm8uyItV2UtzrKNDeoohX3sU8j8+rEXmFGwi+3i1INQ2Oh9ZsEn8BrFfDceDU6UqRBtAB7bJccpViP/qEfqjGPE5h+gVcrJMb2kUxRKhWFf/ilUYVQh9lrjbmHs+w6A/+lVp3jsgRhLn2qIwS5hYY+EXxcRFlk4Tu0jNJjfyYP3LfGJxRM7JhZWB3/F6jhjvEaAWOQil72Tpm2mmDGB0dopOzke/uK3Qt1O6JSufe1qpQ2Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MN0PR12MB6150.namprd12.prod.outlook.com (2603:10b6:208:3c6::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
- 2023 17:28:15 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::5464:997b:389:4b07]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::5464:997b:389:4b07%9]) with mapi id 15.20.6156.031; Wed, 8 Mar 2023
- 17:28:15 +0000
-Message-ID: <67f9fe7f-392a-9acd-1a4d-0a43da634367@nvidia.com>
-Date: Wed, 8 Mar 2023 17:28:06 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers
- <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Mikko Perttunen <mperttunen@nvidia.com>,
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
- Robin Murphy <robin.murphy@arm.com>, dri-devel@lists.freedesktop.org,
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230127221418.2522612-1-arnd@kernel.org>
- <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
- <20230308165644.GA1181835@dev-arch.thelio-3990X>
-From: Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20230308165644.GA1181835@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LNXP123CA0023.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:d2::35) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1617A8462;
+	Wed,  8 Mar 2023 17:35:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678296957; x=1709832957;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VOMowpisuT+Vu8Qd1JnOmOwSzbYzkLa2oKEzLeAm7eM=;
+  b=VcdMtYuaE/lnmCjkGikFYKqPolPDHAHZwyZBaqCWg6xC/N2HkDw3skMs
+   yObT0li1tzTVTdOtlrYE7xcYQ9vkstQcCP5pZxXLs5rIEE0N1AA7j6xqf
+   2B/J0vTv/Q6w9L6TynieiNSgMUaL2/1eB3OAoDtTeLSZ3Jq6L7yhZ5e+U
+   T1tdeprGfuVLFh11JCimxvTPf6VB6PSixbktbrCTAFNGe0VUZl6zmh0da
+   iNZWxAQKeSpFpXUtqHyF+kDS0/FnnvrN451U0JVIzYXSh7+EODu9n6orF
+   rk7r2iZhh26ud5zlSqKat1wiAc/hf+2D1T+I0rQmT1m00jzNY96GIE2e1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="398802387"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="398802387"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 09:35:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="820315270"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="820315270"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Mar 2023 09:35:54 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZxhh-0002Iz-2K;
+	Wed, 08 Mar 2023 17:35:53 +0000
+Date: Thu, 9 Mar 2023 01:34:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 1239/1915] security/security.c:3566: warning:
+ expecting prototype for security_sem_ctl(). Prototype was for
+ security_sem_semctl() instead
+Message-ID: <202303090143.xmmvxZYq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|MN0PR12MB6150:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54540a3a-eb07-49c5-3e95-08db1ffa7fc8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	YypRur4I0CBPyEn48ylWeWv+vf8Vyiej/qpgjz7hmUY+pPImCk8dzsaV/V+IxOINO0YjerueHkz9FHy06SrQzFiyLNGM5MJGOtwg0JXDBDhXLbFsXiRk9OkyHUnPPEEp+TMKwGftwsVZ4ZNyuoa8A7VkWe49FqhZ2xbSCp9wf+tK+B8liMUwYKtCHWHa5sBr2L4sQ7vu9va+Kkjk6Ol1lf42PlXCAp3E/4+s1CDEt7MCflZZU8HAN53vVJ1dHhhBxVrzoi0Z6dmZT4+PilyPYKGMFKpDB0tkUYlfgYhIIqM/P0Z/H5o95l/3bh3bRPTcjF9lU+0Qxysww1LAnBBMN6xNiogMgHuWmoa7Btm3+GxRjUz+WqfnXezB4VOuCg3ceXCCxpH0TlUy6nPoy+Yv6QQs9FG+JgUgEZprYV8AULx+OmuDVROpB0/Kl2qJkrGBWChwIIduvIVsceeKXos94S8WBKF+BdoRUqqZGw0SlZ4sMnU+GcHs47O3Q6RPuqQFreytIEcwZSePG/kVMua0ftvuJkfhWqE4VZg3uARR3SgcbKy8BxWnCDbA6/LKttd4qbagZxPp/OkHZQ/119wqx5wNnFCeBw4oBJznF/RsC34K1TygVoNO5u7tvYjnnp4EEwN0ApxE6P9xYFfGY8ZOdNfPLf5jCiwjCHalsIu9iD1e5G6KVC5l2BMEIIT9FBrXIxBIFnWLDebL7A4U6vxNCHEPUiQqcfDUg0l1mrB06bMAnMQIKRfWJ0R+ON69Sup4lIOxzccga6LVHDLUWG+fAgWK0e3I10+i4SqcRkTzSTTYqzX1M00H3mssh0wPs7y+PGkkLuIL+FQQyXfJjGAFCQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(346002)(376002)(396003)(451199018)(38100700002)(86362001)(31696002)(6666004)(66476007)(2906002)(36756003)(41300700001)(7416002)(8676002)(5660300002)(8936002)(66556008)(66946007)(4326008)(6506007)(53546011)(186003)(6512007)(83380400001)(2616005)(316002)(54906003)(478600001)(6486002)(966005)(110136005)(31686004)(32563001)(43740500002)(45980500001)(357404004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Vm9rNkV0S1dYREVDSGJaZjZadHFDbG41dGlVSVQrMklkdExOMDlWMEZzSU1z?=
- =?utf-8?B?bm9NUG5OT1A1M0U1ZVJBRlNxL2NXNytLNDlwaUVwTmZYbURkQjBCLzNxclJv?=
- =?utf-8?B?ZkYyVDc2R2dpMzRhSWhoaURTOStCNlMxazRnTEZFamtycU5LdHY1VHFSZmM4?=
- =?utf-8?B?SzFYa2ROeUY0UXAvKzVRekNrb281VDkrU2J4ZjVNVVdMNFVYZXRCam9ZSTFh?=
- =?utf-8?B?WEVqdTBRRFU0WmdpLzkvODBpSEkzRDlGSHNvRzM0MUJWdUcwUG5iMmVVMnJU?=
- =?utf-8?B?cHArNHU1MmppeGtWUFJKSDNsbnFOYVVZbTNDNWkwdEJQck0yWmplbVhaeTJh?=
- =?utf-8?B?WmFKRzRDRUdSS29zZUdTSTRjOW94SjVMVE9udU1pUkVUbmowU3k3VTFDUHFq?=
- =?utf-8?B?SjZuU0pGcm1BMnEvb1duU2o3LzMvUGIzWnlueGg3ajBnZWd2R1dDUno3YW5y?=
- =?utf-8?B?UDRpUHlpRXBpQVVwY01QMDArTHhaRFVtSlVqQ05iVzFjdU85OTI5YSt4Q09E?=
- =?utf-8?B?bmxkblBDVUJmVERHNXp0NDZuK1Bqd24yZHhpUGlDdHExU0o4L0dHWEFBSUpV?=
- =?utf-8?B?RHJzQzY5WGJZVEswYTJFSEdVYWJYczh3ZDFIbHVTRndrT1Q4UktMdGdUQksr?=
- =?utf-8?B?Sm0ySnNsTis5MklKUEIwN3hxSHFZYk1PTWkvSlNkaE91UDZtanBhZVE2VjNE?=
- =?utf-8?B?bFh1TldqZS95dEROV0hOUmdQbFB5VlFJWkJNbVBJNE1DamxxL2VVN1pGWmtU?=
- =?utf-8?B?Vnp4UWc0OG1kcTZWY3VsRUpDMjBlNzhzUE9mSFU4MVJJWG5Jc0N5UHNPZENn?=
- =?utf-8?B?ZndXMElkeG13cUE2ZUFjQ2E1dnpBeGpNRnRYZmNGekNxcUlsZnBSTHgvT2VN?=
- =?utf-8?B?NmthRFVqSlRkL0JzUDFXOUo2UmxpbG5sVDI4aThIUEZuUFkzaloyR3h5OHlL?=
- =?utf-8?B?cUVKeDBYTnA4VjVtMStwNDQ3MUppckVGeXlJKzZIQ3I3RTlJcm9WcGd0enNj?=
- =?utf-8?B?WEdOV2NTNzdMek9hR2JTSHl5Q3RUZE1pOERsYWl2ekVpb0NYZU5WclRvRU1q?=
- =?utf-8?B?MmpZVmFUcStIdE84b1pjcG1iZzgzMkVab3lQbWorcEFlL0thQ0MxcW54bnpC?=
- =?utf-8?B?UUFCMGN0eEVpOG5FWHhFNkZNcEJ6NnFvaGJ2Qm9aMmRoREdQMWdXMXIrRVRT?=
- =?utf-8?B?cFo5UmNhc2Q4MlkxRUpGcjd4ejhzUGJCSkVVNC9pR0Y1dDduYXFNb25sRUc5?=
- =?utf-8?B?NTVHMWEvVUhvRHRmVjQrb1JZSkpadU5LQnBRSnlid3J3OU1tSC81K3JFb29y?=
- =?utf-8?B?SnJPa1RaNmxDTFpGNnJ2U1l0eitkQlQwdkRNWDlkYkhJeW1WeEdXekRVa0wr?=
- =?utf-8?B?cWc3bzlDdHhIaWtqVTdvQUUyNlI0QmtOV3JOS0FJNWxWL1VGL2xNL01EUHdn?=
- =?utf-8?B?YjRPYWt3OUlEZHQ1d0p2aUZMME1aNlpDN05SUzNqYmNMNFg4Mm9Qc0lvQzJR?=
- =?utf-8?B?RURGaVQ0UWFOU3FvZFdXdGdCMUMzQ0E4NHdET2xmYTR2NmVqbUovNGoydjI4?=
- =?utf-8?B?REU1UFZNM2dRSGZNbGZ5OWs0b3RhWk0yc1NlVmR3eFFBdWZpd2YzVUczRGZW?=
- =?utf-8?B?MnhJSHV6OGZid0N5bjg3NlhSa2orSkVPOU1DN3hvSTNibnk3MTh1TVJSMmVW?=
- =?utf-8?B?MnZFRVJJRWdvY0ZEMGlVTzJMOTBEbzBKeUdHUGlnb3FvL2picHIrZCtHMGZr?=
- =?utf-8?B?czJxQlFxMFl0Ym5tdFBNZ0FLVmg2S0dpcDArTlFQWHFhSmp2ZUFYMElEbzdE?=
- =?utf-8?B?Y3hmNnd4bzVTcEx4aUZLbm1LTSswOFZEb0RDU04xcEFMOTBCN1RnNm1TdDRK?=
- =?utf-8?B?RE9abjgrSHhQbnhLTDE3TVlLbjJYNWdSUWpORFVZbmNjb1UxZ25BczJ1ZFFY?=
- =?utf-8?B?RUtxN2EyV1h4SUs1Sjl0NCs2UmwwbEpkMHk4Z3hPbm5MWWJkOEw1UWt6dEY0?=
- =?utf-8?B?czFKd0tPMjJiSklIanBucFF1cUphMjBPRTQxN0MxSU9wdFFOZmNOaGlmVFNa?=
- =?utf-8?B?U291QUZ1NW9yRi9TTDh5WnU5dm9pRkE3T0kvNE0vQXlPdVF2KzlQbENmK3VB?=
- =?utf-8?B?b2FMbk1sRE9ZNGZON3RQdFRvWGcxMFlCcHdQM3NBVUg4WG8yZUJ4ODVuR0NV?=
- =?utf-8?B?ZHgyaXFyNUNqUUNwQjZDRTFndWsxVnpBcjAwb0Zwa2l6YzVIS1FYUmpYOENP?=
- =?utf-8?B?clhxLzBRVUVCNDN2dzhrZHRkTU93PT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54540a3a-eb07-49c5-3e95-08db1ffa7fc8
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 17:28:15.2296
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bEUYBhOcoGAgpmHc6wdZN/lzmmwZd8nGdkoenm0PwE3uBH4/A30Br1p0sgBEXaCcfiMBGXt+Q9SrM57+rduoZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6150
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   fc31900c948610e7b5c2f15fb7795832c8325327
+commit: 43fad282187695e25c51425ee9f5f9f08fe5e15d [1239/1915] lsm: move the sysv hook comments to security/security.c
+config: x86_64-randconfig-a011-20230306 (https://download.01.org/0day-ci/archive/20230309/202303090143.xmmvxZYq-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=43fad282187695e25c51425ee9f5f9f08fe5e15d
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 43fad282187695e25c51425ee9f5f9f08fe5e15d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303090143.xmmvxZYq-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   security/security.c:1083: warning: Function parameter or member 'mnt_opts' not described in 'security_free_mnt_opts'
+   security/security.c:1083: warning: Excess function parameter 'mnt_ops' description in 'security_free_mnt_opts'
+   security/security.c:1101: warning: Function parameter or member 'mnt_opts' not described in 'security_sb_eat_lsm_opts'
+   security/security.c:1101: warning: Excess function parameter 'mnt_ops' description in 'security_sb_eat_lsm_opts'
+   security/security.c:1269: warning: Function parameter or member 'oldsb' not described in 'security_sb_clone_mnt_opts'
+   security/security.c:1269: warning: Function parameter or member 'newsb' not described in 'security_sb_clone_mnt_opts'
+   security/security.c:1269: warning: Excess function parameter 'olddb' description in 'security_sb_clone_mnt_opts'
+   security/security.c:1269: warning: Excess function parameter 'newdb' description in 'security_sb_clone_mnt_opts'
+   security/security.c:1760: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * security_inode_symlink() Check if creating a symbolic link is allowed
+   security/security.c:1976: warning: Function parameter or member 'size' not described in 'security_inode_setxattr'
+   security/security.c:2533: warning: Function parameter or member 'prot' not described in 'security_file_mprotect'
+   security/security.c:2533: warning: Excess function parameter 'prog' description in 'security_file_mprotect'
+   security/security.c:3267: warning: Function parameter or member 'flag' not described in 'security_ipc_permission'
+   security/security.c:3267: warning: Excess function parameter 'flags' description in 'security_ipc_permission'
+>> security/security.c:3566: warning: expecting prototype for security_sem_ctl(). Prototype was for security_sem_semctl() instead
+   security/security.c:3838: warning: expecting prototype for security_socket_create(). Prototype was for security_socket_post_create() instead
+   security/security.c:4100: warning: Function parameter or member 'priority' not described in 'security_sk_alloc'
+   security/security.c:4100: warning: Excess function parameter 'priotity' description in 'security_sk_alloc'
+   security/security.c:4157: warning: Function parameter or member 'parent' not described in 'security_sock_graft'
+   security/security.c:4157: warning: Excess function parameter 'sock' description in 'security_sock_graft'
+   security/security.c:4614: warning: Function parameter or member 'xp' not described in 'security_xfrm_state_pol_flow_match'
+   security/security.c:4720: warning: Function parameter or member '_buffer' not described in 'security_key_getsecurity'
+   security/security.c:4720: warning: Excess function parameter 'buffer' description in 'security_key_getsecurity'
 
 
+vim +3566 security/security.c
 
-On 08/03/2023 16:56, Nathan Chancellor wrote:
-> Ping? This warning is now in 6.3-rc1.
+20510f2f4e2dab James Morris      2007-10-16  3554  
+43fad282187695 Paul Moore        2023-02-16  3555  /**
+43fad282187695 Paul Moore        2023-02-16  3556   * security_sem_ctl() - Check if a sysv semaphore operation is allowed
+43fad282187695 Paul Moore        2023-02-16  3557   * @sma: sysv ipc permission structure
+43fad282187695 Paul Moore        2023-02-16  3558   * @cmd: operation
+43fad282187695 Paul Moore        2023-02-16  3559   *
+43fad282187695 Paul Moore        2023-02-16  3560   * Check permission when a semaphore operation specified by @cmd is to be
+43fad282187695 Paul Moore        2023-02-16  3561   * performed on the semaphore.
+43fad282187695 Paul Moore        2023-02-16  3562   *
+43fad282187695 Paul Moore        2023-02-16  3563   * Return: Returns 0 if permission is granted.
+43fad282187695 Paul Moore        2023-02-16  3564   */
+aefad9593ec5ad Eric W. Biederman 2018-03-22  3565  int security_sem_semctl(struct kern_ipc_perm *sma, int cmd)
+20510f2f4e2dab James Morris      2007-10-16 @3566  {
+f25fce3e8f1f15 Casey Schaufler   2015-05-02  3567  	return call_int_hook(sem_semctl, 0, sma, cmd);
+20510f2f4e2dab James Morris      2007-10-16  3568  }
+20510f2f4e2dab James Morris      2007-10-16  3569  
 
-Thierry is away at the moment.
+:::::: The code at line 3566 was first introduced by commit
+:::::: 20510f2f4e2dabb0ff6c13901807627ec9452f98 security: Convert LSM into a static interface
 
-David, Daniel, do you want to pick this up directly in the meantime as a 
-fix for 6.3? Mikko has already reviewed and FWIW ...
-
-Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-
-Thanks
-Jon
-
-
-> On Thu, Feb 23, 2023 at 09:28:28AM -0700, Nathan Chancellor wrote:
->> Hi Thierry, Daniel, and David,
->>
->> On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
->>> From: Arnd Bergmann <arnd@arndb.de>
->>>
->>> The error handling for platform_get_irq() failing no longer
->>> works after a recent change, clang now points this out with
->>> a warning:
->>>
->>> drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
->>>          if (syncpt_irq < 0)
->>>              ^~~~~~~~~~
->>>
->>> Fix this by removing the variable and checking the correct
->>> error status.
->>>
->>> Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
->>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->>> ---
->>>   drivers/gpu/host1x/dev.c | 5 ++---
->>>   1 file changed, 2 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
->>> index 4872d183d860..aae2efeef503 100644
->>> --- a/drivers/gpu/host1x/dev.c
->>> +++ b/drivers/gpu/host1x/dev.c
->>> @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
->>>   static int host1x_probe(struct platform_device *pdev)
->>>   {
->>>   	struct host1x *host;
->>> -	int syncpt_irq;
->>>   	int err;
->>>   
->>>   	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
->>> @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
->>>   	}
->>>   
->>>   	host->syncpt_irq = platform_get_irq(pdev, 0);
->>> -	if (syncpt_irq < 0)
->>> -		return syncpt_irq;
->>> +	if (host->syncpt_irq < 0)
->>> +		return host->syncpt_irq;
->>>   
->>>   	mutex_init(&host->devices_lock);
->>>   	INIT_LIST_HEAD(&host->devices);
->>> -- 
->>> 2.39.0
->>>
->>
->> Apologies if this has been reported already or has a solution in
->> progress but mainline is now broken because this change got separated
->> from the change it is fixing:
->>
->> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4249931209/jobs/7391912774
->> https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2M7y9HpiXB13qiC2mkHMyeZOcLW/build.log
->>
->> I see this change sitting in the drm-tegra tree [1], which is getting
->> merged into -next, so it is fixed there, which is why we did not notice
->> any issues until the drm-next tree was merged into mainline. Can this be
->> fast tracked to Linus to unbreak clang builds with -Werror?
->>
->> [1]: https://gitlab.freedesktop.org/drm/tegra/-/commit/b9930311641cf2ed905a84aabe27e8f3868aee4a
+:::::: TO: James Morris <jmorris@namei.org>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
 
 -- 
-nvpublic
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
