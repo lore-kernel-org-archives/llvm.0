@@ -1,221 +1,122 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E618BF3
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 18:49:53 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id i5so18610662pla.2
-        for <llvm@lists.linux.dev>; Wed, 08 Mar 2023 10:49:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678301393;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gDSGMnsH4iLzycmIWjYuFo4vdBUomtvXvRZ+aBAg2KM=;
-        b=FzogeeILd8HnwKeT2ZvFT2CYiOLNldXbC1nJeLKihK+Huxaq+nYiDMwlLcnYK/EEDo
-         kf2fTN+UR19AaMmOiyNMrdWHoNjxZbYJZRpVMep1Amx9brsHRlaldlqqkOd0aUQvK/Bi
-         WBLM4B7YHznpL3mU3fxdcRh46KOMOtlYXzoxTumMdkHS55+95OpqQFJO5mitOu5hMOjA
-         OqWLrRDNqNjAbzaAwo4x9B3ymuqbt0+l1h1F9d8iOuH8UWi6TyquaJJuxgTLMB4gorb3
-         qZrN5yi8fEEBhU2L91bYnb4cO2E+MCPDCJJ1R6IlUl5+h4FzBrLehLklDLE4Hk9+lJSn
-         8hdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678301393;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gDSGMnsH4iLzycmIWjYuFo4vdBUomtvXvRZ+aBAg2KM=;
-        b=imtpBKGsMnYCFSS89iucZvN9c2GUAYZwWei2MYE0p1IPfreJMFarjcINvGHq+oFqUb
-         Tpef8spak/Rbw5ep3unoAUHVBtddZT9lM/qCuDLyqkesbf2Jd00BYOmjLOaq1gZctEcS
-         m1ivdhY2/A/LIiPzievvlA57Ua09pIjvp4YOqGOvbIjTOUQUKfU7IApLmKkoP2AGScSP
-         vU3HPxfBNfdfaXF/cCZVurp7Q/PeFbIKkvAyNaepzti7jGNx/ioKIDGwxrsg3RgnolHJ
-         VACglJ11GMlzgkB87SCaIebPcct2fXOcAzocjvwQfi+4wtiMR8o2hzw9bZTTDfKlQu1m
-         eW2Q==
-X-Gm-Message-State: AO0yUKVvMZWzWI4JW39wdGmn0kUdMjB9hHInxIIMDLPIvlCtQlm+vAys
-	+IJxlWwEkedtYyjOvsdKtAojh2BguMMcc8reNHkJLQ==
-X-Google-Smtp-Source: AK7set+nFVT3xiGjx+/Yc43iwIrku80Ndj0a/ne77ymYRpAbVEvBr3ZASV5TY0s6WbACCk+/DGqIYFBDKboF6fgit5I=
-X-Received: by 2002:a17:903:280f:b0:19e:f660:81ee with SMTP id
- kp15-20020a170903280f00b0019ef66081eemr1301893plb.2.1678301392881; Wed, 08
- Mar 2023 10:49:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2297D8BF3;
+	Wed,  8 Mar 2023 19:17:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678303079; x=1709839079;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qO80AhO2kI+06ydQkDAoiL+qq7Q2OfJ6E5bvNX9iU58=;
+  b=O1QWwgPRhdK4lEatRN02fIpS5OSpBc9Ad5rh/Wa/fBdCs6dKuRh3o6ya
+   Fg8j2yxyNsXSl2HwFbQCFGPtyqyxuuUJt/RldTzZidVAPjF5BBAYl3la+
+   zRXLF2Z/6pu4O1vV+xCemnMQY2whWM9HWai6P33DMDnI1Jw6IJeTMZxDQ
+   c0r6ACcvA7ZJaCbTI8C+izWYV5AeM76FSCvwkDH9qjBfcqpy9ztjZxByb
+   v3yyw3I4DaujTgEhlEV+bFU3JzmKY5hWpTUK6x++8/pQihMfJP7BM8aqP
+   Mzb8c5r2de2M44Nrn04MzsjkjWEK8sAn6emxGRNJ+kXrvcvai14W1QLhM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="337776082"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="337776082"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 11:17:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="627051078"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="627051078"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 08 Mar 2023 11:17:56 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZzIR-0002MD-37;
+	Wed, 08 Mar 2023 19:17:55 +0000
+Date: Thu, 9 Mar 2023 03:17:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxime Ripard <maxime@cerno.tech>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [stable:linux-5.10.y 6169/9999]
+ drivers/gpu/drm/vc4/vc4_dsi.c:617:35: warning: unused variable 'dsi0_regs'
+Message-ID: <202303090324.xCkA2JRm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com>
- <50a96bb9-113a-cb06-919c-f544f6b59493@intel.com> <CA+G9fYtDtUbKr-Kf_ZVF0z_xLsP3_2MVsMrvHmvV1UemXbfe3g@mail.gmail.com>
- <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
-In-Reply-To: <CALCETrX56SGHMQFqKT2JWpkhnNDbmtB15-Kam5iYvZz3SD7ixg@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 8 Mar 2023 10:49:41 -0800
-Message-ID: <CAKwvOdnjtqOKDOpnL2nNOjGTvsoojpP--=TLhehjGTc0XckhcA@mail.gmail.com>
-Subject: Re: selftests: sigaltstack: sas # exit=1 - # Bail out! SP is not on
- sigaltstack - on clang build
-To: Andy Lutomirski <luto@kernel.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, "Chang S. Bae" <chang.seok.bae@intel.com>, 
-	llvm@lists.linux.dev, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Len Brown <len.brown@intel.com>, 
-	Borislav Petkov <bp@suse.de>, Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>, 
-	Anders Roxell <anders.roxell@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Mar 8, 2023 at 8:23=E2=80=AFAM Andy Lutomirski <luto@kernel.org> wr=
-ote:
->
-> On Tue, Mar 7, 2023 at 7:14=E2=80=AFPM Naresh Kamboju <naresh.kamboju@lin=
-aro.org> wrote:
-> >
-> > + LLVM
->
-> The offending code seems to be:
->
-> #if __s390x__
->         register unsigned long sp asm("%15");
-> #else
->         register unsigned long sp asm("sp");
-> #endif
->
->         if (sp < (unsigned long)sstack ||
->                         sp >=3D (unsigned long)sstack + stack_size) {
->                 ksft_exit_fail_msg("SP is not on sigaltstack\n");
->         }
->
-> Is that actually expected to work?  asm("sp") is a horrible hack.  I
-> would, maybe naively, expect a compiler to analyze this code, think
-> "sp is unconditionally uninitialized", and treat the comparison as
-> always-UB and thus generate whatever code seems convenient.
+Hi Maxime,
 
-Spot-on. -Wuninitialized should warn about that.
-https://godbolt.org/z/do9Kqa3cG
+FYI, the error/warning still remains.
 
-Kees mentioned we should be using `current_stack_pointer`. I'll whip
-up a patch using that.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+head:   9fd42770b50756c08f04b4070ab6572adb2d6e1b
+commit: 6cc1edddcf02f69664887ea7ed4b604481ae300e [6169/9999] drm/vc4: dsi: Introduce a variant structure
+config: hexagon-buildonly-randconfig-r004-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090324.xCkA2JRm-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=6cc1edddcf02f69664887ea7ed4b604481ae300e
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.10.y
+        git checkout 6cc1edddcf02f69664887ea7ed4b604481ae300e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/vc4/
 
->
-> --Andy
->
-> >
-> > On Wed, 8 Mar 2023 at 00:58, Chang S. Bae <chang.seok.bae@intel.com> wr=
-ote:
-> > >
-> > > On 3/6/2023 10:57 PM, Naresh Kamboju wrote:
-> > > > kselftest: sigaltstack built with clang-16 getting failed but passe=
-d with
-> > > > gcc-12 build. Please find more details about test logs on clang-16 =
-and
-> > > > gcc-12 and steps to reproduce locally on your machine by using tuxr=
-un.
-> > > >
-> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > >
-> > > > Test log:
-> > > > ----------
-> > > >
-> > > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake) (Debian cla=
-ng
-> > > > version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525=
-.41),
-> > > > Debian LLD 16.0.0) #1 SMP PREEMPT @1678159722
-> > > > ...
-> > > > kselftest: Running tests in sigaltstack
-> > > > TAP version 13
-> > > > 1..1
-> > > > # selftests: sigaltstack: sas
-> > > > # # [NOTE] the stack size is 21104
-> > > > # TAP version 13
-> > > > # 1..3
-> > > > # ok 1 Initial sigaltstack state was SS_DISABLE
-> > > > # Bail out! SP is not on sigaltstack
-> > > > # # Planned tests !=3D run tests (3 !=3D 1)
-> > > > # # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > > not ok 1 selftests: sigaltstack: sas # exit=3D1
-> > > <snip>
-> > >
-> > > > Linux version 6.3.0-rc1-next-20230307 (tuxmake@tuxmake)
-> > > > (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binut=
-ils
-> > > > for Debian) 2.40) #1 SMP PREEMPT @1678159736
-> > > > ...
-> > > > kselftest: Running tests in sigaltstack
-> > > > TAP version 13
-> > > > 1..1
-> > > > # selftests: sigaltstack: sas
-> > > > # # [NOTE] the stack size is 50080
-> > > > # TAP version 13
-> > > > # 1..3
-> > > > # ok 1 Initial sigaltstack state was SS_DISABLE
-> > > > # # [RUN] signal USR1
-> > > > # ok 2 sigaltstack is disabled in sighandler
-> > > > # # [RUN] switched to user ctx
-> > > > # # [RUN] signal USR2
-> > > > # # [OK] Stack preserved
-> > > > # ok 3 sigaltstack is still SS_AUTODISARM after signal
-> > > > # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > > > ok 1 selftests: sigaltstack: sas
-> > >
-> > > At glance, the log shows the altstack size difference between LLVM an=
-d GCC.
-> > >
-> > > But, when I tried with the LLVM that I have,
-> > >
-> > >      $ clang --version
-> > >      clang version 13.0.0 ...
-> > >
-> > > it failed only with this compiler:
-> > >
-> > >      $ rm sas;clang -o sas sas.c;./sas
-> > >      # [NOTE]        the stack size is 8192
-> > >      TAP version 13
-> > >      1..3
-> > >      ok 1 Initial sigaltstack state was SS_DISABLE
-> > >      Bail out! SP is not on sigaltstack
-> > >      # Planned tests !=3D run tests (3 !=3D 1)
-> > >      # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > >
-> > >      $ rm sas;gcc -o sas sas.c;./sas
-> > >      # [NOTE]        the stack size is 8192
-> > >      TAP version 13
-> > >      1..3
-> > >      ok 1 Initial sigaltstack state was SS_DISABLE
-> > >      # [RUN] signal USR1
-> > >      ok 2 sigaltstack is disabled in sighandler
-> > >      # [RUN] switched to user ctx
-> > >      # [RUN] signal USR2
-> > >      # [OK]  Stack preserved
-> > >      ok 3 sigaltstack is still SS_AUTODISARM after signal
-> > >      # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > >
-> > > The same is true with some old versions -- e.g. the one that came wit=
-h
-> > > commit 0c49ad415512 ("tools/testing/selftests/sigaltstack/sas.c: impr=
-ove
-> > > output of sigaltstack testcase"):
-> > >
-> > >      $ rm sas;clang -o sas sas.c;./sas
-> > >      [OK]    Initial sigaltstack state was SS_DISABLE
-> > >      [FAIL]  SP is not on sigaltstack
-> > >
-> > >      $ rm sas;gcc -o sas sas.c;./sas
-> > >      [OK]    Initial sigaltstack state was SS_DISABLE
-> > >      [RUN]   signal USR1
-> > >      [OK]    sigaltstack is disabled in sighandler
-> > >      [RUN]   switched to user ctx
-> > >      [RUN]   signal USR2
-> > >      [OK]    Stack preserved
-> > >      [OK]    sigaltstack is still SS_AUTODISARM after signal
-> > >      [OK]    Test passed
-> > >
-> > > So, this test failure appears to have been there for a while. I think
-> > > the LLVM folks need to take a look at it.
-> > >
-> > > Thanks,
-> > > Chang
->
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303090324.xCkA2JRm-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/vc4/vc4_dsi.c:617:35: warning: unused variable 'dsi0_regs' [-Wunused-const-variable]
+   static const struct debugfs_reg32 dsi0_regs[] = {
+                                     ^
+   1 warning generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +/dsi0_regs +617 drivers/gpu/drm/vc4/vc4_dsi.c
+
+4078f5757144234 Eric Anholt 2017-01-31  616  
+3051719af11eb48 Eric Anholt 2019-02-20 @617  static const struct debugfs_reg32 dsi0_regs[] = {
+3051719af11eb48 Eric Anholt 2019-02-20  618  	VC4_REG32(DSI0_CTRL),
+3051719af11eb48 Eric Anholt 2019-02-20  619  	VC4_REG32(DSI0_STAT),
+3051719af11eb48 Eric Anholt 2019-02-20  620  	VC4_REG32(DSI0_HSTX_TO_CNT),
+3051719af11eb48 Eric Anholt 2019-02-20  621  	VC4_REG32(DSI0_LPRX_TO_CNT),
+3051719af11eb48 Eric Anholt 2019-02-20  622  	VC4_REG32(DSI0_TA_TO_CNT),
+3051719af11eb48 Eric Anholt 2019-02-20  623  	VC4_REG32(DSI0_PR_TO_CNT),
+3051719af11eb48 Eric Anholt 2019-02-20  624  	VC4_REG32(DSI0_DISP0_CTRL),
+3051719af11eb48 Eric Anholt 2019-02-20  625  	VC4_REG32(DSI0_DISP1_CTRL),
+3051719af11eb48 Eric Anholt 2019-02-20  626  	VC4_REG32(DSI0_INT_STAT),
+3051719af11eb48 Eric Anholt 2019-02-20  627  	VC4_REG32(DSI0_INT_EN),
+3051719af11eb48 Eric Anholt 2019-02-20  628  	VC4_REG32(DSI0_PHYC),
+3051719af11eb48 Eric Anholt 2019-02-20  629  	VC4_REG32(DSI0_HS_CLT0),
+3051719af11eb48 Eric Anholt 2019-02-20  630  	VC4_REG32(DSI0_HS_CLT1),
+3051719af11eb48 Eric Anholt 2019-02-20  631  	VC4_REG32(DSI0_HS_CLT2),
+3051719af11eb48 Eric Anholt 2019-02-20  632  	VC4_REG32(DSI0_HS_DLT3),
+3051719af11eb48 Eric Anholt 2019-02-20  633  	VC4_REG32(DSI0_HS_DLT4),
+3051719af11eb48 Eric Anholt 2019-02-20  634  	VC4_REG32(DSI0_HS_DLT5),
+3051719af11eb48 Eric Anholt 2019-02-20  635  	VC4_REG32(DSI0_HS_DLT6),
+3051719af11eb48 Eric Anholt 2019-02-20  636  	VC4_REG32(DSI0_HS_DLT7),
+3051719af11eb48 Eric Anholt 2019-02-20  637  	VC4_REG32(DSI0_PHY_AFEC0),
+3051719af11eb48 Eric Anholt 2019-02-20  638  	VC4_REG32(DSI0_PHY_AFEC1),
+3051719af11eb48 Eric Anholt 2019-02-20  639  	VC4_REG32(DSI0_ID),
+4078f5757144234 Eric Anholt 2017-01-31  640  };
+4078f5757144234 Eric Anholt 2017-01-31  641  
+
+:::::: The code at line 617 was first introduced by commit
+:::::: 3051719af11eb48dc8947826cfb66dbe0f281c7d drm/vc4: Use drm_print_regset32() for our debug register dumping.
+
+:::::: TO: Eric Anholt <eric@anholt.net>
+:::::: CC: Eric Anholt <eric@anholt.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
