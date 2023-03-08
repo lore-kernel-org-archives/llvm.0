@@ -1,46 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C82C7C;
-	Wed,  8 Mar 2023 09:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6838B7C;
+	Wed,  8 Mar 2023 09:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678268504; x=1709804504;
+  t=1678269164; x=1709805164;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IblLpwxZIoJkhkBRlOiMaraXUkJJvz5IuZTuP/5Ke/M=;
-  b=ayBTTHeiXkdNUDoqaVpYtmCbHVrSJAUoLdAfPl8BFbk94A4UjCqGhZe4
-   S2ysEkx4pMfhaT8eDi+WWPEu3r5Q7ncQxmFw4u/YxAng565gRS9ONWlGr
-   QjTAKQk+MQ3WhIvzQ/zhRwZdrDgG/1I1/9RNcbgP/Zefd+krrCiQqEyEG
-   FdM1LJ2N7ztajQVYtMh8jH2M40mYZeL34dK1mVAMIZ9oJkc1kCsMERj69
-   JIBMWSrjT8Shma0tNpta2TOVw3at7t9FmndhSZ42D1F5cH/ZP1R0sUk6f
-   2aZX1Qh5c6SH6/xB6YslRuAoAzctGS/gHLyxomiXcFKCvYZLpFc2viez+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="324423508"
+  bh=PCPyHNgCxrQRG9x9QwjOIgUAU6Qtd8IovB+1/nsFOXo=;
+  b=i4QjIYYKZQ2Gegog8/tzKwZrPSIJEfNVWBGGg5Y8URnG3htP56UPSLoB
+   CsSHAtEn24Kzkv3kck3reIzT6ueCv1Wdk1xceET1qOmD1DrOk5LlIyGb7
+   8g/kIu0HenAsfBMdgtuywk0QB7hEHoC4SODTe19avtsK5kl/NIO3fM6e+
+   VBOFopu6raLHgn51j5BHpHk8hXw5GirSJFi7W0X0wxPpGlU8/XzE63Nbj
+   0F0ADEn+MpPug/toEr04L0bYED47HNIPRd6U8GoDuKny8GXFfuhzfP60D
+   Az4bQhMsVyY0sccXfdAB9sb/zqRueUrpJR6bwGiRzyXufRxgoJo83FgIZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="398692113"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="324423508"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 01:41:44 -0800
+   d="scan'208";a="398692113"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 01:52:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="851017754"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="787059165"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="851017754"
+   d="scan'208";a="787059165"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Mar 2023 01:41:41 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 08 Mar 2023 01:52:42 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZqIn-00021T-0Z;
-	Wed, 08 Mar 2023 09:41:41 +0000
-Date: Wed, 8 Mar 2023 17:41:29 +0800
+	id 1pZqTR-000222-1g;
+	Wed, 08 Mar 2023 09:52:41 +0000
+Date: Wed, 8 Mar 2023 17:51:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Fangrui Song <maskray@google.com>
+To: Dave Chinner <dchinner@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Chancellor <natechancellor@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [stable:linux-4.19.y 3083/9999] block/blk-iolatency.c:303:7:
- warning: variable 'changed' set but not used
-Message-ID: <202303081732.fAIJixwH-lkp@intel.com>
+	Luis Chamberlain <mcgrof@kernel.org>
+Subject: [mcgrof:20230307-larger-bs-then-ps-xfs 7/11]
+ fs/iomap/buffered-io.c:1424:8: warning: variable 'status' set but not used
+Message-ID: <202303081717.EQfvs6xM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,86 +47,105 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Fangrui,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
-head:   5504146b2053f842426834d275002974109f39a6
-commit: 69c122751164c3c343eea205fd5c3e1d5132f967 [3083/9999] Makefile: Fix GCC_TOOLCHAIN_DIR prefix for Clang cross compilation
-config: mips-randconfig-c004-20230305 (https://download.01.org/0day-ci/archive/20230308/202303081732.fAIJixwH-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230307-larger-bs-then-ps-xfs
+head:   e42ac7981c9cbcd80d1ffa2ad03c96574a320a62
+commit: 89e0dbe34eb365d865a0b459668e5abe17cf95c8 [7/11] iomap: zero-around in iomap_page_mkwrite
+config: i386-randconfig-a011-20230306 (https://download.01.org/0day-ci/archive/20230308/202303081717.EQfvs6xM-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=69c122751164c3c343eea205fd5c3e1d5132f967
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-4.19.y
-        git checkout 69c122751164c3c343eea205fd5c3e1d5132f967
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=89e0dbe34eb365d865a0b459668e5abe17cf95c8
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof 20230307-larger-bs-then-ps-xfs
+        git checkout 89e0dbe34eb365d865a0b459668e5abe17cf95c8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/iomap/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303081732.fAIJixwH-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303081717.EQfvs6xM-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> block/blk-iolatency.c:303:7: warning: variable 'changed' set but not used [-Wunused-but-set-variable]
-           bool changed = false;
-                ^
->> block/blk-iolatency.c:758:24: warning: variable 'blkiolat' set but not used [-Wunused-but-set-variable]
-           struct blk_iolatency *blkiolat;
-                                 ^
+>> fs/iomap/buffered-io.c:1424:8: warning: variable 'status' set but not used [-Wunused-but-set-variable]
+                   long status;
+                        ^
+>> fs/iomap/buffered-io.c:1449:7: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+                   if (ret)
+                       ^~~
+   fs/iomap/buffered-io.c:1416:12: note: initialize the variable 'ret' to silence this warning
+           loff_t ret;
+                     ^
+                      = 0
    2 warnings generated.
 
 
-vim +/changed +303 block/blk-iolatency.c
+vim +/status +1424 fs/iomap/buffered-io.c
 
-d70675121546c3 Josef Bacik 2018-07-03  292  
-d70675121546c3 Josef Bacik 2018-07-03  293  /*
-d70675121546c3 Josef Bacik 2018-07-03  294   * Change the queue depth of the iolatency_grp.  We add/subtract 1/16th of the
-d70675121546c3 Josef Bacik 2018-07-03  295   * queue depth at a time so we don't get wild swings and hopefully dial in to
-d70675121546c3 Josef Bacik 2018-07-03  296   * fairer distribution of the overall queue depth.
-d70675121546c3 Josef Bacik 2018-07-03  297   */
-d70675121546c3 Josef Bacik 2018-07-03  298  static void scale_change(struct iolatency_grp *iolat, bool up)
-d70675121546c3 Josef Bacik 2018-07-03  299  {
-d70675121546c3 Josef Bacik 2018-07-03  300  	unsigned long qd = blk_queue_depth(iolat->blkiolat->rqos.q);
-d70675121546c3 Josef Bacik 2018-07-03  301  	unsigned long scale = scale_amount(qd, up);
-d70675121546c3 Josef Bacik 2018-07-03  302  	unsigned long old = iolat->rq_depth.max_depth;
-d70675121546c3 Josef Bacik 2018-07-03 @303  	bool changed = false;
-d70675121546c3 Josef Bacik 2018-07-03  304  
-d70675121546c3 Josef Bacik 2018-07-03  305  	if (old > qd)
-d70675121546c3 Josef Bacik 2018-07-03  306  		old = qd;
-d70675121546c3 Josef Bacik 2018-07-03  307  
-d70675121546c3 Josef Bacik 2018-07-03  308  	if (up) {
-d70675121546c3 Josef Bacik 2018-07-03  309  		if (old == 1 && blkcg_unuse_delay(lat_to_blkg(iolat)))
-d70675121546c3 Josef Bacik 2018-07-03  310  			return;
-d70675121546c3 Josef Bacik 2018-07-03  311  
-d70675121546c3 Josef Bacik 2018-07-03  312  		if (old < qd) {
-d70675121546c3 Josef Bacik 2018-07-03  313  			changed = true;
-d70675121546c3 Josef Bacik 2018-07-03  314  			old += scale;
-d70675121546c3 Josef Bacik 2018-07-03  315  			old = min(old, qd);
-d70675121546c3 Josef Bacik 2018-07-03  316  			iolat->rq_depth.max_depth = old;
-d70675121546c3 Josef Bacik 2018-07-03  317  			wake_up_all(&iolat->rq_wait.wait);
-d70675121546c3 Josef Bacik 2018-07-03  318  		}
-d70675121546c3 Josef Bacik 2018-07-03  319  	} else if (old > 1) {
-d70675121546c3 Josef Bacik 2018-07-03  320  		old >>= 1;
-d70675121546c3 Josef Bacik 2018-07-03  321  		changed = true;
-d70675121546c3 Josef Bacik 2018-07-03  322  		iolat->rq_depth.max_depth = max(old, 1UL);
-d70675121546c3 Josef Bacik 2018-07-03  323  	}
-d70675121546c3 Josef Bacik 2018-07-03  324  }
-d70675121546c3 Josef Bacik 2018-07-03  325  
-
-:::::: The code at line 303 was first introduced by commit
-:::::: d70675121546c35feaceebf7ed9caed8716640f3 block: introduce blk-iolatency io controller
-
-:::::: TO: Josef Bacik <jbacik@fb.com>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+  1411	
+  1412	static loff_t iomap_folio_mkwrite_iter(struct iomap_iter *iter,
+  1413			struct folio *folio, const struct iomap_ops *ops)
+  1414	{
+  1415		loff_t length = iomap_length(iter);
+  1416		loff_t ret;
+  1417	
+  1418		/*
+  1419		 * if we need to zero-around, we have to unlock the page we were given.
+  1420		 * No big deal, we just have to repeat the "is this page ours" checks
+  1421		 * after relocking it
+  1422		 */
+  1423		if (iomap_need_zero_around(iter)) {
+> 1424			long status;
+  1425			loff_t size;
+  1426	
+  1427			/*
+  1428			 * This only happens for block size > page size, so the file
+  1429			 * offset of a page fault should always be page aligned.
+  1430			 */
+  1431			WARN_ON(offset_in_folio(folio, iter->pos));
+  1432	
+  1433			folio_unlock(folio);
+  1434			status = iomap_zero_around(iter, iter->pos, length, ops);
+  1435			folio_lock(folio);
+  1436			size = i_size_read(iter->inode);
+  1437			if ((folio->mapping != iter->inode->i_mapping) ||
+  1438			    (folio_pos(folio) > size)) {
+  1439				/* We overload EFAULT to mean page got truncated */
+  1440				return -EFAULT;
+  1441			}
+  1442	
+  1443			if (folio_pos(folio) != iter->pos) {
+  1444				/* it moved in the file! */
+  1445				return -EFAULT;
+  1446			}
+  1447	
+  1448			/* return failure now if zeroing had an error */
+> 1449			if (ret)
+  1450				return ret;
+  1451	
+  1452			/* trim down the length is we straddle EOF. */
+  1453			if (((folio->index + 1) << PAGE_SHIFT) > size)
+  1454				length = offset_in_folio(folio, size);
+  1455	
+  1456		}
+  1457	
+  1458		if (iter->iomap.flags & IOMAP_F_BUFFER_HEAD) {
+  1459			ret = __block_write_begin_int(folio, iter->pos, length, NULL,
+  1460						      &iter->iomap);
+  1461			if (ret)
+  1462				return ret;
+  1463			block_commit_write(&folio->page, 0, length);
+  1464		} else {
+  1465			WARN_ON_ONCE(!folio_test_uptodate(folio));
+  1466			folio_mark_dirty(folio);
+  1467		}
+  1468	
+  1469		return length;
+  1470	}
+  1471	
 
 -- 
 0-DAY CI Kernel Test Service
