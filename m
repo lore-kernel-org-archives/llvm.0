@@ -1,44 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82703657;
-	Wed,  8 Mar 2023 21:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A6F657;
+	Wed,  8 Mar 2023 21:42:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678310521; x=1709846521;
+  t=1678311722; x=1709847722;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=V98LN8loFn29XF/wcz6kwpjzwgGLqOZqS/Nxe7mb2+k=;
-  b=JK3zHwyA4MEqOQn+xMVhPbLK5s2R6R9N7HLrrWIVY9bs9rRpY9JymomT
-   Cnsry6pXx/NDVc2IzkspUrfVKthkMg7mzNLARwUheyWY9Atrpr7CsnOsD
-   nkn/7syAPli1Tj4ULH207c44Te3amYxIpGHvGPqtnk3j14AF8S2Ch7n1f
-   Ax6axfUFwqoQMb2Bt9koiF5rS6TsUbHXxYzeor3Dplw2VlAgAvlmo38BZ
-   VwE+GkVhsQT3nBiV5naC/2vc4nAOl4TLl7JdJgTo8vFy13XGtr5K6hmKr
-   bgfRm3uo8wg1JzMSEOyLBy+ICw7E7g+d9fuqujStMo9VkDXkOMEV2gKQa
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="338613572"
+  bh=CYtLrclcsUPbmZzfRccyQP2tLDDi2ZL/pL8AHy1pWGs=;
+  b=mEOZIVsrA43gZU0F7mAEUp4sVoPp1761JA9BqjOVTknvTuAMtllGFyPI
+   0Bkc51eyjHTsX6IBVEeTYp7jvsHb92MThefKgzXbNUfZWSdKz5fk8B4F4
+   /WY6g4p5HBwM/DQDltah099qcWVwJ4LItbzsk1Icyf0n5zcJ3EzOITeFa
+   k+nSTCelp5W/SzHv+mHwpX/CCffja/nXnJ6j6bjnW5DlcuXtLK3+4X2oK
+   p2xR7AjC8Oxi7lLslJiokcPYX1ghyuQKb0r9Hyc1Covb4HVs4xGCxPZru
+   GhGAM7RKr+Q5fSsii5aieO1leVAn4AtbfYdS3B7DHKGr8sChybHnbzFk5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="324600132"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="338613572"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 13:22:00 -0800
+   d="scan'208";a="324600132"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 13:42:01 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="741259659"
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="709592466"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="741259659"
+   d="scan'208";a="709592466"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Mar 2023 13:21:59 -0800
+  by orsmga001.jf.intel.com with ESMTP; 08 Mar 2023 13:41:59 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pa1EU-0002Pb-0k;
-	Wed, 08 Mar 2023 21:21:58 +0000
-Date: Thu, 9 Mar 2023 05:21:30 +0800
+	id 1pa1Xq-0002Pt-2A;
+	Wed, 08 Mar 2023 21:41:58 +0000
+Date: Thu, 9 Mar 2023 05:41:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chen Lin <chen45464546@163.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result
- of comparison of constant 262144 with expression of type 'u16' (aka
- 'unsigned short') is always true
-Message-ID: <202303090510.LBSDq3gw-lkp@intel.com>
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused
+ variable 'mmpcam_of_match'
+Message-ID: <202303090557.mLLxrNKE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,253 +47,126 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Chen,
+Hi Mauro,
 
 FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   6a98c9cae232800c319ed69e1063480d31430887
-commit: 2f2c0d2919a14002760f89f4e02960c735a316d2 net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
-date:   9 months ago
-config: hexagon-randconfig-r022-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090510.LBSDq3gw-lkp@intel.com/config)
+commit: dc7bbea90075b57772e9a28043061bf71d96f06f media: platform: rename marvell-ccic/ to marvell/
+date:   12 months ago
+config: s390-buildonly-randconfig-r003-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090557.mLLxrNKE-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2f2c0d2919a14002760f89f4e02960c735a316d2
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc7bbea90075b57772e9a28043061bf71d96f06f
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 2f2c0d2919a14002760f89f4e02960c735a316d2
+        git checkout dc7bbea90075b57772e9a28043061bf71d96f06f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/mediatek/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303090510.LBSDq3gw-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303090557.mLLxrNKE-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
->> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
->> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1931:23: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                                       ~~~~~~~~~~~~~~~~~^~~~~
-   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
-           (cond) ?                                        \
-            ^~~~
-   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1931:23: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1931:23: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
-                   if (ring->frag_size <= PAGE_SIZE)
-                   ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                               ^~~~
-   6 warnings generated.
+   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
+   In file included from include/media/v4l2-device.h:13:
+   In file included from include/media/v4l2-subdev.h:15:
+   In file included from include/media/v4l2-common.h:270:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
+   In file included from include/media/v4l2-device.h:13:
+   In file included from include/media/v4l2-subdev.h:15:
+   In file included from include/media/v4l2-common.h:270:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/marvell/mmp-driver.c:17:
+   In file included from include/media/v4l2-device.h:13:
+   In file included from include/media/v4l2-subdev.h:15:
+   In file included from include/media/v4l2-common.h:270:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused variable 'mmpcam_of_match' [-Wunused-const-variable]
+   static const struct of_device_id mmpcam_of_match[] = {
+                                    ^
+   13 warnings generated.
 
 
-vim +1481 drivers/net/ethernet/mediatek/mtk_eth_soc.c
+vim +/mmpcam_of_match +364 drivers/media/platform/marvell/mmp-driver.c
 
-  1434	
-  1435	static int mtk_poll_rx(struct napi_struct *napi, int budget,
-  1436			       struct mtk_eth *eth)
-  1437	{
-  1438		struct dim_sample dim_sample = {};
-  1439		struct mtk_rx_ring *ring;
-  1440		int idx;
-  1441		struct sk_buff *skb;
-  1442		u8 *data, *new_data;
-  1443		struct mtk_rx_dma_v2 *rxd, trxd;
-  1444		int done = 0, bytes = 0;
-  1445	
-  1446		while (done < budget) {
-  1447			struct net_device *netdev;
-  1448			unsigned int pktlen;
-  1449			dma_addr_t dma_addr;
-  1450			u32 hash, reason;
-  1451			int mac = 0;
-  1452	
-  1453			ring = mtk_get_rx_ring(eth);
-  1454			if (unlikely(!ring))
-  1455				goto rx_done;
-  1456	
-  1457			idx = NEXT_DESP_IDX(ring->calc_idx, ring->dma_size);
-  1458			rxd = ring->dma + idx * eth->soc->txrx.rxd_size;
-  1459			data = ring->data[idx];
-  1460	
-  1461			if (!mtk_rx_get_desc(eth, &trxd, rxd))
-  1462				break;
-  1463	
-  1464			/* find out which mac the packet come from. values start at 1 */
-  1465			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-  1466				mac = RX_DMA_GET_SPORT_V2(trxd.rxd5) - 1;
-  1467			else if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
-  1468				 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
-  1469				mac = RX_DMA_GET_SPORT(trxd.rxd4) - 1;
-  1470	
-  1471			if (unlikely(mac < 0 || mac >= MTK_MAC_COUNT ||
-  1472				     !eth->netdev[mac]))
-  1473				goto release_desc;
-  1474	
-  1475			netdev = eth->netdev[mac];
-  1476	
-  1477			if (unlikely(test_bit(MTK_RESETTING, &eth->state)))
-  1478				goto release_desc;
-  1479	
-  1480			/* alloc new buffer */
-> 1481			if (ring->frag_size <= PAGE_SIZE)
-  1482				new_data = napi_alloc_frag(ring->frag_size);
-  1483			else
-  1484				new_data = mtk_max_lro_buf_alloc(GFP_ATOMIC);
-  1485			if (unlikely(!new_data)) {
-  1486				netdev->stats.rx_dropped++;
-  1487				goto release_desc;
-  1488			}
-  1489			dma_addr = dma_map_single(eth->dma_dev,
-  1490						  new_data + NET_SKB_PAD +
-  1491						  eth->ip_align,
-  1492						  ring->buf_size,
-  1493						  DMA_FROM_DEVICE);
-  1494			if (unlikely(dma_mapping_error(eth->dma_dev, dma_addr))) {
-  1495				skb_free_frag(new_data);
-  1496				netdev->stats.rx_dropped++;
-  1497				goto release_desc;
-  1498			}
-  1499	
-  1500			dma_unmap_single(eth->dma_dev, trxd.rxd1,
-  1501					 ring->buf_size, DMA_FROM_DEVICE);
-  1502	
-  1503			/* receive data */
-  1504			skb = build_skb(data, ring->frag_size);
-  1505			if (unlikely(!skb)) {
-  1506				skb_free_frag(data);
-  1507				netdev->stats.rx_dropped++;
-  1508				goto skip_rx;
-  1509			}
-  1510			skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
-  1511	
-  1512			pktlen = RX_DMA_GET_PLEN0(trxd.rxd2);
-  1513			skb->dev = netdev;
-  1514			skb_put(skb, pktlen);
-  1515			if (trxd.rxd4 & eth->soc->txrx.rx_dma_l4_valid)
-  1516				skb->ip_summed = CHECKSUM_UNNECESSARY;
-  1517			else
-  1518				skb_checksum_none_assert(skb);
-  1519			skb->protocol = eth_type_trans(skb, netdev);
-  1520			bytes += pktlen;
-  1521	
-  1522			hash = trxd.rxd4 & MTK_RXD4_FOE_ENTRY;
-  1523			if (hash != MTK_RXD4_FOE_ENTRY) {
-  1524				hash = jhash_1word(hash, 0);
-  1525				skb_set_hash(skb, hash, PKT_HASH_TYPE_L4);
-  1526			}
-  1527	
-  1528			reason = FIELD_GET(MTK_RXD4_PPE_CPU_REASON, trxd.rxd4);
-  1529			if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
-  1530				mtk_ppe_check_skb(eth->ppe, skb,
-  1531						  trxd.rxd4 & MTK_RXD4_FOE_ENTRY);
-  1532	
-  1533			if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
-  1534				if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-  1535					if (trxd.rxd3 & RX_DMA_VTAG_V2)
-  1536						__vlan_hwaccel_put_tag(skb,
-  1537							htons(RX_DMA_VPID(trxd.rxd4)),
-  1538							RX_DMA_VID(trxd.rxd4));
-  1539				} else if (trxd.rxd2 & RX_DMA_VTAG) {
-  1540					__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
-  1541							       RX_DMA_VID(trxd.rxd3));
-  1542				}
-  1543	
-  1544				/* If the device is attached to a dsa switch, the special
-  1545				 * tag inserted in VLAN field by hw switch can * be offloaded
-  1546				 * by RX HW VLAN offload. Clear vlan info.
-  1547				 */
-  1548				if (netdev_uses_dsa(netdev))
-  1549					__vlan_hwaccel_clear_tag(skb);
-  1550			}
-  1551	
-  1552			skb_record_rx_queue(skb, 0);
-  1553			napi_gro_receive(napi, skb);
-  1554	
-  1555	skip_rx:
-  1556			ring->data[idx] = new_data;
-  1557			rxd->rxd1 = (unsigned int)dma_addr;
-  1558	
-  1559	release_desc:
-  1560			if (MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628))
-  1561				rxd->rxd2 = RX_DMA_LSO;
-  1562			else
-  1563				rxd->rxd2 = RX_DMA_PREP_PLEN0(ring->buf_size);
-  1564	
-  1565			ring->calc_idx = idx;
-  1566	
-  1567			done++;
-  1568		}
-  1569	
-  1570	rx_done:
-  1571		if (done) {
-  1572			/* make sure that all changes to the dma ring are flushed before
-  1573			 * we continue
-  1574			 */
-  1575			wmb();
-  1576			mtk_update_rx_cpu_idx(eth);
-  1577		}
-  1578	
-  1579		eth->rx_packets += done;
-  1580		eth->rx_bytes += bytes;
-  1581		dim_update_sample(eth->rx_events, eth->rx_packets, eth->rx_bytes,
-  1582				  &dim_sample);
-  1583		net_dim(&eth->rx_dim, dim_sample);
-  1584	
-  1585		return done;
-  1586	}
-  1587	
+bb0a896e3d5083 drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-12-30  363  
+83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28 @364  static const struct of_device_id mmpcam_of_match[] = {
+83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  365  	{ .compatible = "marvell,mmp2-ccic", },
+83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  366  	{},
+83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  367  };
+08aac0e32fe44b drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-07-22  368  MODULE_DEVICE_TABLE(of, mmpcam_of_match);
+67a8dbbc4e04cd drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-06-11  369  
+
+:::::: The code at line 364 was first introduced by commit
+:::::: 83c40e6611ec1e548ece34f6940f516333abc16a media: marvell-ccic/mmp: add devicetree support
+
+:::::: TO: Lubomir Rintel <lkundrak@v3.sk>
+:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
