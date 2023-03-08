@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAE36D38
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 13:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C12FC4339B;
-	Wed,  8 Mar 2023 13:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6376B6D38
+	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 13:52:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61650C433D2;
+	Wed,  8 Mar 2023 13:52:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678283564;
+	s=k20201202; t=1678283573;
 	bh=Z76MC6rTA6+vNVOx0L7tDrR2akkWAhfZ/via+yE/+ws=;
 	h=From:To:Cc:Subject:Date:From;
-	b=PbcsGYlYj4I6zQjTuJlp2CoynK+gM25VGS1dr90yGYOFTWdzMhoeaoby0YXOe1szH
-	 z0mAHRKI8RDC/RydDxoK8ofvl+aNMk/e6wAj1XRGatIsKThYI/3J+1EEwTrrFpfRRC
-	 X5+OUeVoNFNddWBwr7ZQN/F8jSqpWBQUfloNaD370W6L9KrEYrbc31q4bAH5ugVkdG
-	 +copVLy18ku0OEsd10VTqqsQ8vvhqiaMmzSjQoCIezbRxARk5RgCi5TUVD2EZJynvT
-	 Z3vM63jENVExkew+XBWRJu4iWk+khTaYcA7zitDkkY42j0HOGVwXoHDmH3HOay8ejp
-	 XEkbNEUPMhR9g==
+	b=achkbCe1iltNZwCsp7mykF9Q3r4wsypqDWdv4Qmk3EtUTRbP3yTeOQnmMrz8V7G6t
+	 R9xzTMf8K7E6PuuJr/5YV/6kSULO3RIJOdhQAmR5RSr7r1YoLBMp+gVlh6fEHMgc7M
+	 J4C5JUQLr48WgUH0SOmnQx3WmxmYodD1RRnPx7RuJZmx5KnIjTDBfbkDUicDpJagYU
+	 Nxkg3yPuhrjIE3pztaZ8EZTTHFC4fac2IRW8RIzafsnD0FAgaTIYNyLrRunLtF9FQN
+	 vOW4XZb1IFW5Rp3zZ7d+Elw3K7KTTR7bqHFyBG9zwMCmRf4TvqKbEWeYb0fixNAKcZ
+	 Vx1Nmk+0sKmVQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -24,9 +24,9 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	nathan@kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.2 1/3] scripts: handle BrokenPipeError for python scripts
-Date: Wed,  8 Mar 2023 08:52:35 -0500
-Message-Id: <20230308135241.2927306-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 1/3] scripts: handle BrokenPipeError for python scripts
+Date: Wed,  8 Mar 2023 08:52:45 -0500
+Message-Id: <20230308135250.2927358-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
