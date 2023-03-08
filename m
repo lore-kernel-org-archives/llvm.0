@@ -1,229 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3B76D38
-	for <llvm@lists.linux.dev>; Wed,  8 Mar 2023 13:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67893C4339E;
-	Wed,  8 Mar 2023 13:53:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678283592;
-	bh=scIBUCibkZ6ezqacbiLi2xkfwIP7lbG0QjO+CwNdsuI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=cWsn6VcLigVWXFE12TziUl2A+goLVmmqhaU8/hQ1WT38LkiXMswpG0+LJVQdVe0RT
-	 kq42+k3yNkY/6JKCq0AKCzo8xvw0tgnSoi5JA3TSQaN9jnWmUyjxyLA6F8bGgvaIxs
-	 xbHMXaGh8ogtYE3GZ+C33iPcfaZ40kpJxHhrkksqMAUiDxba4Pek7pI0qNX8GkYl6U
-	 eZfassxObD41O+SMSlPce1xhDBbIYECuANHGxVyja0vI17+Vtinc8cKvmwVgVDJAHR
-	 iKAiVStQF6U6YKT5KNYiI+9JWZ5jey0XJfg/bCHpsG+yf1fo1fduDnJuDwpEWhTELa
-	 qfNMziOjoMgIA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Sasha Levin <sashal@kernel.org>,
-	nathan@kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 1/3] scripts: handle BrokenPipeError for python scripts
-Date: Wed,  8 Mar 2023 08:53:04 -0500
-Message-Id: <20230308135309.2927462-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCAB6D38;
+	Wed,  8 Mar 2023 14:19:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678285191; x=1709821191;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MYKSRNhxw96IUQMCBazg68wJ6R+1e8wARf5Nz6MscDI=;
+  b=a2h69jSdL29wcxoVwSmyL3Ja+PGNY33cfbOqBnuAkZy9R76qwkZC2S5B
+   8PZBkUgd98DDA000hpaLurB9VzhOQvsvvehikxiPli1mJEhO39XjNsg1q
+   EGG2WYlZfwliZFCITwBw1T90KpMUj3VbYqZdoMvBtoXoxLollrtFmKqKU
+   7ST98f1PiAuQS1+fJsDiPACXdPWY0KslVHRjEXEC5GG26Y1gKU957TSMF
+   bERy1DYTXcDWlbuZlimRgct74bqkZtmk3AzWrTgAyyFLVpC+mvorjFj2x
+   zJsJpyP8acACJ5fnXu4tTPPzYNWG/+is2KB4FZsGlcayhqiLK2sFL7mMQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="337678359"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="337678359"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 06:19:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="745922247"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="745922247"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Mar 2023 06:19:47 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pZudu-0002Aj-1O;
+	Wed, 08 Mar 2023 14:19:46 +0000
+Date: Wed, 8 Mar 2023 22:19:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Evgeniy Baskov <baskov@ispras.ru>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: [ardb:efi-x86-nx 10/24] drivers/firmware/efi/libstub/mem.c:171:20:
+ warning: variable 'rounded_start' is uninitialized when used here
+Message-ID: <202303082221.muIbxFhj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-x86-nx
+head:   8171142f3e4c96f6be75a6195de59d1607f1bd4b
+commit: 6b4ae58e7147165ec019e3899a5d4d14e0396110 [10/24] efi/libstub: Move helper function to related file
+config: riscv-randconfig-r001-20230305 (https://download.01.org/0day-ci/archive/20230308/202303082221.muIbxFhj-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=6b4ae58e7147165ec019e3899a5d4d14e0396110
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb efi-x86-nx
+        git checkout 6b4ae58e7147165ec019e3899a5d4d14e0396110
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/
 
-[ Upstream commit 87c7ee67deb7fce9951a5f9d80641138694aad17 ]
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303082221.muIbxFhj-lkp@intel.com/
 
-In the follow-up of commit fb3041d61f68 ("kbuild: fix SIGPIPE error
-message for AR=gcc-ar and AR=llvm-ar"), Kees Cook pointed out that
-tools should _not_ catch their own SIGPIPEs [1] [2].
+All warnings (new ones prefixed by >>):
 
-Based on his feedback, LLVM was fixed [3].
+>> drivers/firmware/efi/libstub/mem.c:171:20: warning: variable 'rounded_start' is uninitialized when used here [-Wuninitialized]
+                            (unsigned long)rounded_start,
+                                           ^~~~~~~~~~~~~
+   drivers/firmware/efi/libstub/efistub.h:71:45: note: expanded from macro 'efi_warn'
+           efi_printk(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
+                                                      ^~~~~~~~~~~
+   drivers/firmware/efi/libstub/mem.c:150:35: note: initialize the variable 'rounded_start' to silence this warning
+           efi_physical_addr_t rounded_start, rounded_end;
+                                            ^
+                                             = 0
+>> drivers/firmware/efi/libstub/mem.c:172:20: warning: variable 'rounded_end' is uninitialized when used here [-Wuninitialized]
+                            (unsigned long)rounded_end);
+                                           ^~~~~~~~~~~
+   drivers/firmware/efi/libstub/efistub.h:71:45: note: expanded from macro 'efi_warn'
+           efi_printk(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
+                                                      ^~~~~~~~~~~
+   drivers/firmware/efi/libstub/mem.c:150:48: note: initialize the variable 'rounded_end' to silence this warning
+           efi_physical_addr_t rounded_start, rounded_end;
+                                                         ^
+                                                          = 0
+   2 warnings generated.
 
-However, Python's default behavior is to show noisy bracktrace when
-SIGPIPE is sent. So, scripts written in Python are basically in the
-same situation as the buggy llvm tools.
 
-Example:
+vim +/rounded_start +171 drivers/firmware/efi/libstub/mem.c
 
-  $ make -s allnoconfig
-  $ make -s allmodconfig
-  $ scripts/diffconfig .config.old .config | head -n1
-  -ALIX n
-  Traceback (most recent call last):
-    File "/home/masahiro/linux/scripts/diffconfig", line 132, in <module>
-      main()
-    File "/home/masahiro/linux/scripts/diffconfig", line 130, in main
-      print_config("+", config, None, b[config])
-    File "/home/masahiro/linux/scripts/diffconfig", line 64, in print_config
-      print("+%s %s" % (config, new_value))
-  BrokenPipeError: [Errno 32] Broken pipe
+   131	
+   132	/**
+   133	 * efi_adjust_memory_range_protection() - change memory range protection attributes
+   134	 * @start:	memory range start address
+   135	 * @size:	memory range size
+   136	 *
+   137	 * Actual memory range for which memory attributes are modified is
+   138	 * the smallest ranged with start address and size aligned to EFI_PAGE_SIZE
+   139	 * that includes [start, start + size].
+   140	 *
+   141	 * @return: status code
+   142	 */
+   143	efi_status_t efi_adjust_memory_range_protection(unsigned long start,
+   144							unsigned long size,
+   145							unsigned long attributes)
+   146	{
+   147		efi_status_t status;
+   148		efi_gcd_memory_space_desc_t desc;
+   149		efi_physical_addr_t end, next;
+   150		efi_physical_addr_t rounded_start, rounded_end;
+   151		efi_physical_addr_t unprotect_start, unprotect_size;
+   152	
+   153		if (efi_dxe_table == NULL)
+   154			return EFI_UNSUPPORTED;
+   155	
+   156		/*
+   157		 * This function should not be used to modify attributes
+   158		 * other than writable/executable.
+   159		 */
+   160	
+   161		if ((attributes & ~(EFI_MEMORY_RO | EFI_MEMORY_XP)) != 0)
+   162			return EFI_INVALID_PARAMETER;
+   163	
+   164		/*
+   165		 * Disallow simultaniously executable and writable memory
+   166		 * to inforce W^X policy if direct extraction code is enabled.
+   167		 */
+   168	
+   169		if ((attributes & (EFI_MEMORY_RO | EFI_MEMORY_XP)) == 0) {
+   170			efi_warn("W^X violation at [%08lx,%08lx]\n",
+ > 171				 (unsigned long)rounded_start,
+ > 172				 (unsigned long)rounded_end);
 
-Python documentation [4] notes how to make scripts die immediately and
-silently:
-
-  """
-  Piping output of your program to tools like head(1) will cause a
-  SIGPIPE signal to be sent to your process when the receiver of its
-  standard output closes early. This results in an exception like
-  BrokenPipeError: [Errno 32] Broken pipe. To handle this case,
-  wrap your entry point to catch this exception as follows:
-
-    import os
-    import sys
-
-    def main():
-        try:
-            # simulate large output (your code replaces this loop)
-            for x in range(10000):
-                print("y")
-            # flush output here to force SIGPIPE to be triggered
-            # while inside this try block.
-            sys.stdout.flush()
-        except BrokenPipeError:
-            # Python flushes standard streams on exit; redirect remaining output
-            # to devnull to avoid another BrokenPipeError at shutdown
-            devnull = os.open(os.devnull, os.O_WRONLY)
-            os.dup2(devnull, sys.stdout.fileno())
-            sys.exit(1)  # Python exits with error code 1 on EPIPE
-
-    if __name__ == '__main__':
-        main()
-
-  Do not set SIGPIPE’s disposition to SIG_DFL in order to avoid
-  BrokenPipeError. Doing that would cause your program to exit
-  unexpectedly whenever any socket connection is interrupted while
-  your program is still writing to it.
-  """
-
-Currently, tools/perf/scripts/python/intel-pt-events.py seems to be the
-only script that fixes the issue that way.
-
-tools/perf/scripts/python/compaction-times.py uses another approach
-signal.signal(signal.SIGPIPE, signal.SIG_DFL) but the Python
-documentation clearly says "Don't do it".
-
-I cannot fix all Python scripts since there are so many.
-I fixed some in the scripts/ directory.
-
-[1]: https://lore.kernel.org/all/202211161056.1B9611A@keescook/
-[2]: https://github.com/llvm/llvm-project/issues/59037
-[3]: https://github.com/llvm/llvm-project/commit/4787efa38066adb51e2c049499d25b3610c0877b
-[4]: https://docs.python.org/3/library/signal.html#note-on-sigpipe
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- scripts/checkkconfigsymbols.py         | 13 ++++++++++++-
- scripts/clang-tools/run-clang-tools.py | 21 ++++++++++++++-------
- scripts/diffconfig                     | 16 ++++++++++++++--
- 3 files changed, 40 insertions(+), 10 deletions(-)
-
-diff --git a/scripts/checkkconfigsymbols.py b/scripts/checkkconfigsymbols.py
-index 1548f9ce46827..697972432bbe7 100755
---- a/scripts/checkkconfigsymbols.py
-+++ b/scripts/checkkconfigsymbols.py
-@@ -113,7 +113,7 @@ def parse_options():
-     return args
- 
- 
--def main():
-+def print_undefined_symbols():
-     """Main function of this module."""
-     args = parse_options()
- 
-@@ -472,5 +472,16 @@ def parse_kconfig_file(kfile):
-     return defined, references
- 
- 
-+def main():
-+    try:
-+        print_undefined_symbols()
-+    except BrokenPipeError:
-+        # Python flushes standard streams on exit; redirect remaining output
-+        # to devnull to avoid another BrokenPipeError at shutdown
-+        devnull = os.open(os.devnull, os.O_WRONLY)
-+        os.dup2(devnull, sys.stdout.fileno())
-+        sys.exit(1)  # Python exits with error code 1 on EPIPE
-+
-+
- if __name__ == "__main__":
-     main()
-diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
-index f754415af398b..f42699134f1c0 100755
---- a/scripts/clang-tools/run-clang-tools.py
-+++ b/scripts/clang-tools/run-clang-tools.py
-@@ -60,14 +60,21 @@ def run_analysis(entry):
- 
- 
- def main():
--    args = parse_arguments()
-+    try:
-+        args = parse_arguments()
- 
--    lock = multiprocessing.Lock()
--    pool = multiprocessing.Pool(initializer=init, initargs=(lock, args))
--    # Read JSON data into the datastore variable
--    with open(args.path, "r") as f:
--        datastore = json.load(f)
--        pool.map(run_analysis, datastore)
-+        lock = multiprocessing.Lock()
-+        pool = multiprocessing.Pool(initializer=init, initargs=(lock, args))
-+        # Read JSON data into the datastore variable
-+        with open(args.path, "r") as f:
-+            datastore = json.load(f)
-+            pool.map(run_analysis, datastore)
-+    except BrokenPipeError:
-+        # Python flushes standard streams on exit; redirect remaining output
-+        # to devnull to avoid another BrokenPipeError at shutdown
-+        devnull = os.open(os.devnull, os.O_WRONLY)
-+        os.dup2(devnull, sys.stdout.fileno())
-+        sys.exit(1)  # Python exits with error code 1 on EPIPE
- 
- 
- if __name__ == "__main__":
-diff --git a/scripts/diffconfig b/scripts/diffconfig
-index d5da5fa05d1d3..43f0f3d273ae7 100755
---- a/scripts/diffconfig
-+++ b/scripts/diffconfig
-@@ -65,7 +65,7 @@ def print_config(op, config, value, new_value):
-         else:
-             print(" %s %s -> %s" % (config, value, new_value))
- 
--def main():
-+def show_diff():
-     global merge_style
- 
-     # parse command line args
-@@ -129,4 +129,16 @@ def main():
-     for config in new:
-         print_config("+", config, None, b[config])
- 
--main()
-+def main():
-+    try:
-+        show_diff()
-+    except BrokenPipeError:
-+        # Python flushes standard streams on exit; redirect remaining output
-+        # to devnull to avoid another BrokenPipeError at shutdown
-+        devnull = os.open(os.devnull, os.O_WRONLY)
-+        os.dup2(devnull, sys.stdout.fileno())
-+        sys.exit(1)  # Python exits with error code 1 on EPIPE
-+
-+
-+if __name__ == '__main__':
-+    main()
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
