@@ -1,43 +1,46 @@
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E71F747F;
-	Wed,  8 Mar 2023 14:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7DC7491;
+	Wed,  8 Mar 2023 15:02:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678287115; x=1709823115;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=82zHbdHA3LGTfEv2fShHor44/p6WhEM+7UrkyocdcPg=;
-  b=dK+0oexdukfyioyDCnvs7xBsxWY8sm8MyenuVtWdJXn24xt5XpSiBLhT
-   DWymhzbSVfRv7ofqMHxCHl56xaIkEcI/wUVLW19d/i9FZhoxIdhvUrZSg
-   yNUYfSpph4u5p+R3FT7H7xF8LTITKafzLJuz33JP2VxYvIPTPAsRIajDz
-   a7l8noqWeD1kN0V3Ney5rzkAc8Q9r1QQXYg0p8uWbNJru2p84DknQwT29
-   RbgW7gZQlz0NrqFOM9Ov6zN98ic3icAoKjit2FmW3nWax/F9xcYITv2lW
-   qMTG7Xh9o5lmbka+AGgOWdgJov+/FnBmPnU1gldg6idcgHZr84dF8CHhU
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="363806093"
+  t=1678287721; x=1709823721;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wPrvrdUYQzmt/wVjEj0+Xf/VXgPRFXKZ/VsoTy3dv3k=;
+  b=b/gjZfOzt9SW5ABzPNqB1sE3f6gMbsBhcRsZOZlnazZ6OHKb4u5JYvcG
+   bmJviluSyCXRVaduFp6yBMEk9SErvPwwRcmnwCJrmxPQ7h5ooHTClmzU7
+   lOe3YGtXrlh6P9HBw0qnTYXh8eJ8hylXyjyoqqmsP5RQkzhNeSg+Ca1IW
+   e4sMfI7B+faZ2yino7qPot824+kX8WExpqOtgUPhi41SZ5vHBeqglizdn
+   uQnNfjrFDlFl18nujXRf6fgWSeUHbPNpBK3S8eAu4KOuXHuGJ3u4HbP6b
+   EgVIP8OaYjRddAFD92PChTYG2QWTswH2gPY2pJqTLlcmcoaUtc2dw8EjU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="363809253"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="363806093"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 06:51:49 -0800
+   d="scan'208";a="363809253"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 07:01:50 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="766009451"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="679364571"
 X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="766009451"
+   d="scan'208";a="679364571"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 06:51:47 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 08 Mar 2023 07:01:48 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZv8t-0002Br-02;
-	Wed, 08 Mar 2023 14:51:47 +0000
-Date: Wed, 8 Mar 2023 22:50:51 +0800
+	id 1pZvIZ-0002CJ-15;
+	Wed, 08 Mar 2023 15:01:47 +0000
+Date: Wed, 8 Mar 2023 23:01:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Evgeniy Baskov <baskov@ispras.ru>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: [ardb:efi-x86-nx 5/24] arch/x86/mm/ident_map.c:19:8: warning: no
- previous prototype for function 'ident_split_large_pmd'
-Message-ID: <202303082219.1MyCkO2j-lkp@intel.com>
+To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	ast@kernel.org, daniel@iogearbox.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
+	kernel-team@meta.com, Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v4 bpf-next 3/8] bpf: add support for open-coded iterator
+ loops
+Message-ID: <202303082209.VIxMyiGz-lkp@intel.com>
+References: <20230308035416.2591326-4-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,153 +49,140 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230308035416.2591326-4-andrii@kernel.org>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-x86-nx
-head:   8171142f3e4c96f6be75a6195de59d1607f1bd4b
-commit: 26f02800cb89d842e554a5e030a40560adc7221b [5/24] x86/boot: Support 4KB pages for identity mapping
-config: x86_64-randconfig-a011-20230306 (https://download.01.org/0day-ci/archive/20230308/202303082219.1MyCkO2j-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Andrii,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/bpf-factor-out-fetching-basic-kfunc-metadata/20230308-115539
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230308035416.2591326-4-andrii%40kernel.org
+patch subject: [PATCH v4 bpf-next 3/8] bpf: add support for open-coded iterator loops
+config: hexagon-randconfig-r015-20230305 (https://download.01.org/0day-ci/archive/20230308/202303082209.VIxMyiGz-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=26f02800cb89d842e554a5e030a40560adc7221b
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb efi-x86-nx
-        git checkout 26f02800cb89d842e554a5e030a40560adc7221b
+        # https://github.com/intel-lab-lkp/linux/commit/8f263e1296a91ff154a033d7cffbac3ee0ebf2ae
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andrii-Nakryiko/bpf-factor-out-fetching-basic-kfunc-metadata/20230308-115539
+        git checkout 8f263e1296a91ff154a033d7cffbac3ee0ebf2ae
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/ kernel/bpf/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/bpf/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303082219.1MyCkO2j-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303082209.VIxMyiGz-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/mm/init_64.c:61:
->> arch/x86/mm/ident_map.c:19:8: warning: no previous prototype for function 'ident_split_large_pmd' [-Wmissing-prototypes]
-   pte_t *ident_split_large_pmd(struct x86_mapping_info *info,
-          ^
-   arch/x86/mm/ident_map.c:19:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   pte_t *ident_split_large_pmd(struct x86_mapping_info *info,
-   ^
-   static 
->> arch/x86/mm/ident_map.c:102:8: warning: no previous prototype for function 'ident_split_large_pud' [-Wmissing-prototypes]
-   pmd_t *ident_split_large_pud(struct x86_mapping_info *info,
-          ^
-   arch/x86/mm/ident_map.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   pmd_t *ident_split_large_pud(struct x86_mapping_info *info,
-   ^
-   static 
-   2 warnings generated.
+   In file included from kernel/bpf/verifier.c:7:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from kernel/bpf/verifier.c:7:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from kernel/bpf/verifier.c:7:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> kernel/bpf/verifier.c:1244:23: warning: variable 'j' is uninitialized when used here [-Wuninitialized]
+                   if (slot->slot_type[j] == STACK_ITER)
+                                       ^
+   kernel/bpf/verifier.c:1229:15: note: initialize the variable 'j' to silence this warning
+           int spi, i, j;
+                        ^
+                         = 0
+   7 warnings generated.
 
 
-vim +/ident_split_large_pmd +19 arch/x86/mm/ident_map.c
+vim +/j +1244 kernel/bpf/verifier.c
 
-    18	
-  > 19	pte_t *ident_split_large_pmd(struct x86_mapping_info *info,
-    20				     pmd_t *pmdp, unsigned long page_addr)
-    21	{
-    22		unsigned long pmd_addr, page_flags;
-    23		pte_t *pte;
-    24	
-    25		pte = (pte_t *)info->alloc_pgt_page(info->context);
-    26		if (!pte)
-    27			return NULL;
-    28	
-    29		pmd_addr = page_addr & PMD_MASK;
-    30	
-    31		/* Not a large page - clear PSE flag */
-    32		page_flags = pmd_flags(*pmdp) & ~_PSE;
-    33		ident_pte_init(info, pte, pmd_addr, pmd_addr + PMD_SIZE, page_flags);
-    34	
-    35		return pte;
-    36	}
-    37	
-    38	static int ident_pmd_init(struct x86_mapping_info *info, pmd_t *pmd_page,
-    39				  unsigned long addr, unsigned long end,
-    40				  unsigned long flags)
-    41	{
-    42		unsigned long next;
-    43		bool new_table = 0;
-    44	
-    45		for (; addr < end; addr = next) {
-    46			pmd_t *pmd = pmd_page + pmd_index(addr);
-    47			pte_t *pte;
-    48	
-    49			next = (addr & PMD_MASK) + PMD_SIZE;
-    50			if (next > end)
-    51				next = end;
-    52	
-    53			/*
-    54			 * Use 2M pages if 4k pages are not allowed or
-    55			 * we are not mapping extra, i.e. address and size are aligned.
-    56			 */
-    57	
-    58			if (!info->allow_4kpages ||
-    59			    (!(addr & ~PMD_MASK) && next == addr + PMD_SIZE)) {
-    60	
-    61				pmd_t pmdval;
-    62	
-    63				addr &= PMD_MASK;
-    64				pmdval = __pmd((addr - info->offset) | flags | _PSE);
-    65				set_pmd(pmd, pmdval);
-    66				continue;
-    67			}
-    68	
-    69			/*
-    70			 * If currently mapped page is large, we need to split it.
-    71			 * The case when we don't can remap 2M page to 2M page
-    72			 * with different flags is already covered above.
-    73			 *
-    74			 * If there's nothing mapped to desired address,
-    75			 * we need to allocate new page table.
-    76			 */
-    77	
-    78			if (pmd_large(*pmd)) {
-    79				pte = ident_split_large_pmd(info, pmd, addr);
-    80				new_table = 1;
-    81			} else if (!pmd_present(*pmd)) {
-    82				pte = (pte_t *)info->alloc_pgt_page(info->context);
-    83				new_table = 1;
-    84			} else {
-    85				pte = pte_offset_kernel(pmd, 0);
-    86				new_table = 0;
-    87			}
-    88	
-    89			if (!pte)
-    90				return -ENOMEM;
-    91	
-    92			ident_pte_init(info, pte, addr, next, flags);
-    93	
-    94			if (new_table)
-    95				set_pmd(pmd, __pmd(__pa(pte) | info->kernpg_flag));
-    96		}
-    97	
-    98		return 0;
-    99	}
-   100	
-   101	
- > 102	pmd_t *ident_split_large_pud(struct x86_mapping_info *info,
-   103				     pud_t *pudp, unsigned long page_addr)
-   104	{
-   105		unsigned long pud_addr, page_flags;
-   106		pmd_t *pmd;
-   107	
-   108		pmd = (pmd_t *)info->alloc_pgt_page(info->context);
-   109		if (!pmd)
-   110			return NULL;
-   111	
-   112		pud_addr = page_addr & PUD_MASK;
-   113	
-   114		/* Not a large page - clear PSE flag */
-   115		page_flags = pud_flags(*pudp) & ~_PSE;
-   116		ident_pmd_init(info, pmd, pud_addr, pud_addr + PUD_SIZE, page_flags);
-   117	
-   118		return pmd;
-   119	}
-   120	
+  1224	
+  1225	static bool is_iter_reg_valid_uninit(struct bpf_verifier_env *env,
+  1226					     struct bpf_reg_state *reg, int nr_slots)
+  1227	{
+  1228		struct bpf_func_state *state = func(env, reg);
+  1229		int spi, i, j;
+  1230	
+  1231		/* For -ERANGE (i.e. spi not falling into allocated stack slots), we
+  1232		 * will do check_mem_access to check and update stack bounds later, so
+  1233		 * return true for that case.
+  1234		 */
+  1235		spi = iter_get_spi(env, reg, nr_slots);
+  1236		if (spi == -ERANGE)
+  1237			return true;
+  1238		if (spi < 0)
+  1239			return spi;
+  1240	
+  1241		for (i = 0; i < nr_slots; i++) {
+  1242			struct bpf_stack_state *slot = &state->stack[spi - i];
+  1243	
+> 1244			if (slot->slot_type[j] == STACK_ITER)
+  1245				return false;
+  1246		}
+  1247	
+  1248		return true;
+  1249	}
+  1250	
 
 -- 
 0-DAY CI Kernel Test Service
