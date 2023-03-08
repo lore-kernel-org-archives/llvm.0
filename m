@@ -1,59 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063F27C;
-	Wed,  8 Mar 2023 09:52:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48FCA28F3;
+	Wed,  8 Mar 2023 10:43:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678269167; x=1709805167;
+  t=1678272225; x=1709808225;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dxQJct6f43Jx0UnkB4zNZyJRb1ubXcUEMzADERU/HTo=;
-  b=i4qA8kB9wpNWkbradAv19TUkDihJzH+V4+5n2BZoEYHiAZ0etZT8kbTg
-   +GppTfBdDtTkVz7ZpKB5L2TfwfIzlXgzv81vNQYwGwL7+DKqvGlI4m51M
-   J6Rgo+V16I0+HbHOuIFeAhR6SGgeYnawsTEZcrsiAjj1mkytHWGBpCnJc
-   3SU+6KKIiea7qYsFzq6MUOrGomBemRVqi5TRdcpP/dRsxOaebIH9a3exD
-   9btRN3kMP4HmcwmiySNRbvYJR7YT0XCUQgGaxeucOY4jfluwFofC53Q8N
-   6kLoe3ZYo1SLZD6H2MRf5FGE85zjr4vRtv/WkUH0hg7mI9aVMpVm8Jqz0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="333584670"
+  bh=6PAjEEH6aHboGRjcTHYeBaoka6VaI2t8EjBrN4Cmajg=;
+  b=c6ifvw1osigfFeAC8yD0jl8oeUqIb+hWPQzxd3h+8yi/n6oWuDB7i+AH
+   9/HqYxWuYoAueULFW9G3ji0j7r2iUSSAgUFLEkoP3Zrzv1mklj0wZWVoF
+   OY4qHKXz4VzbORgMz/iKnQ1j5NvgGemq/2jA7ilsjr4ylZSD8MDaVB8UJ
+   eg7GjezTzHjiSttiR1eh+TKckU1oEMyoUe5nps+6dWQe7aSphrYnosxCA
+   FpVWbQupNybX2qBlKkhN6j6fHKfrtfRuBpCgj5NBvjj9EotMhJMav3Nmg
+   75Mrg3F9gkz7u0UonyqHrKpvlxRuYHmdym/6wl5SsffBKNusuKMQuGYsb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="316522939"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="333584670"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 01:52:46 -0800
+   d="scan'208";a="316522939"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 02:43:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="679277486"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="765957661"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="679277486"
+   d="scan'208";a="765957661"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Mar 2023 01:52:42 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 02:43:43 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pZqTR-00021x-1W;
-	Wed, 08 Mar 2023 09:52:41 +0000
-Date: Wed, 8 Mar 2023 17:51:56 +0800
+	id 1pZrGo-00024f-2x;
+	Wed, 08 Mar 2023 10:43:42 +0000
+Date: Wed, 8 Mar 2023 18:43:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Axel Rasmussen <axelrasmussen@google.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Mike Kravetz <mike.kravetz@oracle.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Muchun Song <muchun.song@linux.dev>, Nadav Amit <namit@vmware.com>,
-	Peter Xu <peterx@redhat.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	James Houghton <jthoughton@google.com>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Axel Rasmussen <axelrasmussen@google.com>
-Subject: Re: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len
- arguments
-Message-ID: <202303081703.nwxAgIVH-lkp@intel.com>
-References: <20230306225024.264858-5-axelrasmussen@google.com>
+To: Chen Jun <chenjun102@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC] mm/slub: Reduce memory consumption in extreme scenarios
+Message-ID: <202303081804.A6mbhXOo-lkp@intel.com>
+References: <20230307082811.120774-1-chenjun102@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,221 +46,372 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230306225024.264858-5-axelrasmussen@google.com>
+In-Reply-To: <20230307082811.120774-1-chenjun102@huawei.com>
 
-Hi Axel,
+Hi Chen,
 
-Thank you for the patch! Yet something to improve:
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.3-rc1]
-[cannot apply to akpm-mm/mm-everything next-20230308]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Axel-Rasmussen/mm-userfaultfd-rename-functions-for-clarity-consistency/20230307-065203
-patch link:    https://lore.kernel.org/r/20230306225024.264858-5-axelrasmussen%40google.com
-patch subject: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len arguments
-config: x86_64-randconfig-a011-20230306 (https://download.01.org/0day-ci/archive/20230308/202303081703.nwxAgIVH-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Jun/mm-slub-Reduce-memory-consumption-in-extreme-scenarios/20230307-163216
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230307082811.120774-1-chenjun102%40huawei.com
+patch subject: [RFC] mm/slub: Reduce memory consumption in extreme scenarios
+config: i386-randconfig-a013-20230306 (https://download.01.org/0day-ci/archive/20230308/202303081804.A6mbhXOo-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cee642b93be3ae01c7cc737c0176cbc16074a25a
+        # https://github.com/intel-lab-lkp/linux/commit/d00decb3ccc45b514f25df0d3775153a933ffaa9
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Axel-Rasmussen/mm-userfaultfd-rename-functions-for-clarity-consistency/20230307-065203
-        git checkout cee642b93be3ae01c7cc737c0176cbc16074a25a
+        git fetch --no-tags linux-review Chen-Jun/mm-slub-Reduce-memory-consumption-in-extreme-scenarios/20230307-163216
+        git checkout d00decb3ccc45b514f25df0d3775153a933ffaa9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303081703.nwxAgIVH-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303081804.A6mbhXOo-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/userfaultfd.c:577:52: error: passing 'const struct uffdio_range *' to parameter of incompatible type 'struct uffdio_range'
-                   return  mfill_atomic_hugetlb(dst_vma, src_start, dst, flags);
-                                                                    ^~~
-   mm/userfaultfd.c:463:29: note: passing argument to parameter 'dst' here
-                                       struct uffdio_range dst,
-                                                           ^
-   1 error generated.
+>> mm/slub.c:3188:62: error: use of undeclared identifier 'try_thisnode'; did you mean 'try_thisndoe'?
+           if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
+                                                                       ^~~~~~~~~~~~
+                                                                       try_thisndoe
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^
+   mm/slub.c:3072:6: note: 'try_thisndoe' declared here
+           int try_thisndoe = 0;
+               ^
+>> mm/slub.c:3188:62: error: use of undeclared identifier 'try_thisnode'; did you mean 'try_thisndoe'?
+           if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
+                                                                       ^~~~~~~~~~~~
+                                                                       try_thisndoe
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^
+   mm/slub.c:3072:6: note: 'try_thisndoe' declared here
+           int try_thisndoe = 0;
+               ^
+>> mm/slub.c:3188:62: error: use of undeclared identifier 'try_thisnode'; did you mean 'try_thisndoe'?
+           if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
+                                                                       ^~~~~~~~~~~~
+                                                                       try_thisndoe
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^
+   mm/slub.c:3072:6: note: 'try_thisndoe' declared here
+           int try_thisndoe = 0;
+               ^
+   mm/slub.c:3203:63: error: use of undeclared identifier 'try_thisnode'; did you mean 'try_thisndoe'?
+                   if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode) {
+                                                                               ^~~~~~~~~~~~
+                                                                               try_thisndoe
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^
+   mm/slub.c:3072:6: note: 'try_thisndoe' declared here
+           int try_thisndoe = 0;
+               ^
+   mm/slub.c:3203:63: error: use of undeclared identifier 'try_thisnode'; did you mean 'try_thisndoe'?
+                   if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode) {
+                                                                               ^~~~~~~~~~~~
+                                                                               try_thisndoe
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^
+   mm/slub.c:3072:6: note: 'try_thisndoe' declared here
+           int try_thisndoe = 0;
+               ^
+   mm/slub.c:3203:63: error: use of undeclared identifier 'try_thisnode'; did you mean 'try_thisndoe'?
+                   if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode) {
+                                                                               ^~~~~~~~~~~~
+                                                                               try_thisndoe
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^
+   mm/slub.c:3072:6: note: 'try_thisndoe' declared here
+           int try_thisndoe = 0;
+               ^
+   mm/slub.c:3204:4: error: use of undeclared identifier 'try_thisnode'; did you mean 'try_thisndoe'?
+                           try_thisnode = 0;
+                           ^~~~~~~~~~~~
+                           try_thisndoe
+   mm/slub.c:3072:6: note: 'try_thisndoe' declared here
+           int try_thisndoe = 0;
+               ^
+   7 errors generated.
 
 
-vim +577 mm/userfaultfd.c
+vim +3188 mm/slub.c
 
-   508	
-   509	static __always_inline ssize_t mfill_atomic(struct mm_struct *dst_mm,
-   510						    unsigned long src_start,
-   511						    const struct uffdio_range *dst,
-   512						    atomic_t *mmap_changing,
-   513						    uffd_flags_t flags)
-   514	{
-   515		struct vm_area_struct *dst_vma;
-   516		ssize_t err;
-   517		pmd_t *dst_pmd;
-   518		unsigned long src_addr, dst_addr;
-   519		long copied;
-   520		struct page *page;
-   521	
-   522		/*
-   523		 * Sanitize the command parameters:
-   524		 */
-   525		BUG_ON(dst->start & ~PAGE_MASK);
-   526		BUG_ON(dst->len & ~PAGE_MASK);
-   527	
-   528		/* Does the address range wrap, or is the span zero-sized? */
-   529		BUG_ON(src_start + dst->len <= src_start);
-   530		BUG_ON(dst->start + dst->len <= dst->start);
-   531	
-   532		src_addr = src_start;
-   533		dst_addr = dst->start;
-   534		copied = 0;
-   535		page = NULL;
-   536	retry:
-   537		mmap_read_lock(dst_mm);
-   538	
-   539		/*
-   540		 * If memory mappings are changing because of non-cooperative
-   541		 * operation (e.g. mremap) running in parallel, bail out and
-   542		 * request the user to retry later
-   543		 */
-   544		err = -EAGAIN;
-   545		if (mmap_changing && atomic_read(mmap_changing))
-   546			goto out_unlock;
-   547	
-   548		/*
-   549		 * Make sure the vma is not shared, that the dst range is
-   550		 * both valid and fully within a single existing vma.
-   551		 */
-   552		err = -ENOENT;
-   553		dst_vma = find_dst_vma(dst_mm, dst);
-   554		if (!dst_vma)
-   555			goto out_unlock;
-   556	
-   557		err = -EINVAL;
-   558		/*
-   559		 * shmem_zero_setup is invoked in mmap for MAP_ANONYMOUS|MAP_SHARED but
-   560		 * it will overwrite vm_ops, so vma_is_anonymous must return false.
-   561		 */
-   562		if (WARN_ON_ONCE(vma_is_anonymous(dst_vma) &&
-   563		    dst_vma->vm_flags & VM_SHARED))
-   564			goto out_unlock;
-   565	
-   566		/*
-   567		 * validate 'mode' now that we know the dst_vma: don't allow
-   568		 * a wrprotect copy if the userfaultfd didn't register as WP.
-   569		 */
-   570		if ((flags & MFILL_ATOMIC_WP) && !(dst_vma->vm_flags & VM_UFFD_WP))
-   571			goto out_unlock;
-   572	
-   573		/*
-   574		 * If this is a HUGETLB vma, pass off to appropriate routine
-   575		 */
-   576		if (is_vm_hugetlb_page(dst_vma))
- > 577			return  mfill_atomic_hugetlb(dst_vma, src_start, dst, flags);
-   578	
-   579		if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
-   580			goto out_unlock;
-   581		if (!vma_is_shmem(dst_vma) &&
-   582		    (flags & MFILL_ATOMIC_MODE_MASK) == MFILL_ATOMIC_CONTINUE)
-   583			goto out_unlock;
-   584	
-   585		/*
-   586		 * Ensure the dst_vma has a anon_vma or this page
-   587		 * would get a NULL anon_vma when moved in the
-   588		 * dst_vma.
-   589		 */
-   590		err = -ENOMEM;
-   591		if (!(dst_vma->vm_flags & VM_SHARED) &&
-   592		    unlikely(anon_vma_prepare(dst_vma)))
-   593			goto out_unlock;
-   594	
-   595		while (src_addr < src_start + dst->len) {
-   596			pmd_t dst_pmdval;
-   597	
-   598			BUG_ON(dst_addr >= dst->start + dst->len);
-   599	
-   600			dst_pmd = mm_alloc_pmd(dst_mm, dst_addr);
-   601			if (unlikely(!dst_pmd)) {
-   602				err = -ENOMEM;
-   603				break;
-   604			}
-   605	
-   606			dst_pmdval = pmdp_get_lockless(dst_pmd);
-   607			/*
-   608			 * If the dst_pmd is mapped as THP don't
-   609			 * override it and just be strict.
-   610			 */
-   611			if (unlikely(pmd_trans_huge(dst_pmdval))) {
-   612				err = -EEXIST;
-   613				break;
-   614			}
-   615			if (unlikely(pmd_none(dst_pmdval)) &&
-   616			    unlikely(__pte_alloc(dst_mm, dst_pmd))) {
-   617				err = -ENOMEM;
-   618				break;
-   619			}
-   620			/* If an huge pmd materialized from under us fail */
-   621			if (unlikely(pmd_trans_huge(*dst_pmd))) {
-   622				err = -EFAULT;
-   623				break;
-   624			}
-   625	
-   626			BUG_ON(pmd_none(*dst_pmd));
-   627			BUG_ON(pmd_trans_huge(*dst_pmd));
-   628	
-   629			err = mfill_atomic_pte(dst_pmd, dst_vma, dst_addr,
-   630					       src_addr, &page, flags);
-   631			cond_resched();
-   632	
-   633			if (unlikely(err == -ENOENT)) {
-   634				void *page_kaddr;
-   635	
-   636				mmap_read_unlock(dst_mm);
-   637				BUG_ON(!page);
-   638	
-   639				page_kaddr = kmap_local_page(page);
-   640				err = copy_from_user(page_kaddr,
-   641						     (const void __user *) src_addr,
-   642						     PAGE_SIZE);
-   643				kunmap_local(page_kaddr);
-   644				if (unlikely(err)) {
-   645					err = -EFAULT;
-   646					goto out;
-   647				}
-   648				flush_dcache_page(page);
-   649				goto retry;
-   650			} else
-   651				BUG_ON(page);
-   652	
-   653			if (!err) {
-   654				dst_addr += PAGE_SIZE;
-   655				src_addr += PAGE_SIZE;
-   656				copied += PAGE_SIZE;
-   657	
-   658				if (fatal_signal_pending(current))
-   659					err = -EINTR;
-   660			}
-   661			if (err)
-   662				break;
-   663		}
-   664	
-   665	out_unlock:
-   666		mmap_read_unlock(dst_mm);
-   667	out:
-   668		if (page)
-   669			put_page(page);
-   670		BUG_ON(copied < 0);
-   671		BUG_ON(err > 0);
-   672		BUG_ON(!copied && !err);
-   673		return copied ? copied : err;
-   674	}
-   675	
+  3045	
+  3046	/*
+  3047	 * Slow path. The lockless freelist is empty or we need to perform
+  3048	 * debugging duties.
+  3049	 *
+  3050	 * Processing is still very fast if new objects have been freed to the
+  3051	 * regular freelist. In that case we simply take over the regular freelist
+  3052	 * as the lockless freelist and zap the regular freelist.
+  3053	 *
+  3054	 * If that is not working then we fall back to the partial lists. We take the
+  3055	 * first element of the freelist as the object to allocate now and move the
+  3056	 * rest of the freelist to the lockless freelist.
+  3057	 *
+  3058	 * And if we were unable to get a new slab from the partial slab lists then
+  3059	 * we need to allocate a new slab. This is the slowest path since it involves
+  3060	 * a call to the page allocator and the setup of a new slab.
+  3061	 *
+  3062	 * Version of __slab_alloc to use when we know that preemption is
+  3063	 * already disabled (which is the case for bulk allocation).
+  3064	 */
+  3065	static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+  3066				  unsigned long addr, struct kmem_cache_cpu *c, unsigned int orig_size)
+  3067	{
+  3068		void *freelist;
+  3069		struct slab *slab;
+  3070		unsigned long flags;
+  3071		struct partial_context pc;
+  3072		int try_thisndoe = 0;
+  3073	
+  3074		stat(s, ALLOC_SLOWPATH);
+  3075	
+  3076	reread_slab:
+  3077	
+  3078		slab = READ_ONCE(c->slab);
+  3079		if (!slab) {
+  3080			/*
+  3081			 * if the node is not online or has no normal memory, just
+  3082			 * ignore the node constraint
+  3083			 */
+  3084			if (unlikely(node != NUMA_NO_NODE &&
+  3085				     !node_isset(node, slab_nodes)))
+  3086				node = NUMA_NO_NODE;
+  3087			goto new_slab;
+  3088		}
+  3089	redo:
+  3090	
+  3091		if (unlikely(!node_match(slab, node))) {
+  3092			/*
+  3093			 * same as above but node_match() being false already
+  3094			 * implies node != NUMA_NO_NODE
+  3095			 */
+  3096			if (!node_isset(node, slab_nodes)) {
+  3097				node = NUMA_NO_NODE;
+  3098			} else {
+  3099				stat(s, ALLOC_NODE_MISMATCH);
+  3100				goto deactivate_slab;
+  3101			}
+  3102		}
+  3103	
+  3104		/*
+  3105		 * By rights, we should be searching for a slab page that was
+  3106		 * PFMEMALLOC but right now, we are losing the pfmemalloc
+  3107		 * information when the page leaves the per-cpu allocator
+  3108		 */
+  3109		if (unlikely(!pfmemalloc_match(slab, gfpflags)))
+  3110			goto deactivate_slab;
+  3111	
+  3112		/* must check again c->slab in case we got preempted and it changed */
+  3113		local_lock_irqsave(&s->cpu_slab->lock, flags);
+  3114		if (unlikely(slab != c->slab)) {
+  3115			local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3116			goto reread_slab;
+  3117		}
+  3118		freelist = c->freelist;
+  3119		if (freelist)
+  3120			goto load_freelist;
+  3121	
+  3122		freelist = get_freelist(s, slab);
+  3123	
+  3124		if (!freelist) {
+  3125			c->slab = NULL;
+  3126			c->tid = next_tid(c->tid);
+  3127			local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3128			stat(s, DEACTIVATE_BYPASS);
+  3129			goto new_slab;
+  3130		}
+  3131	
+  3132		stat(s, ALLOC_REFILL);
+  3133	
+  3134	load_freelist:
+  3135	
+  3136		lockdep_assert_held(this_cpu_ptr(&s->cpu_slab->lock));
+  3137	
+  3138		/*
+  3139		 * freelist is pointing to the list of objects to be used.
+  3140		 * slab is pointing to the slab from which the objects are obtained.
+  3141		 * That slab must be frozen for per cpu allocations to work.
+  3142		 */
+  3143		VM_BUG_ON(!c->slab->frozen);
+  3144		c->freelist = get_freepointer(s, freelist);
+  3145		c->tid = next_tid(c->tid);
+  3146		local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3147		return freelist;
+  3148	
+  3149	deactivate_slab:
+  3150	
+  3151		local_lock_irqsave(&s->cpu_slab->lock, flags);
+  3152		if (slab != c->slab) {
+  3153			local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3154			goto reread_slab;
+  3155		}
+  3156		freelist = c->freelist;
+  3157		c->slab = NULL;
+  3158		c->freelist = NULL;
+  3159		c->tid = next_tid(c->tid);
+  3160		local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3161		deactivate_slab(s, slab, freelist);
+  3162	
+  3163	new_slab:
+  3164	
+  3165		if (slub_percpu_partial(c)) {
+  3166			local_lock_irqsave(&s->cpu_slab->lock, flags);
+  3167			if (unlikely(c->slab)) {
+  3168				local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3169				goto reread_slab;
+  3170			}
+  3171			if (unlikely(!slub_percpu_partial(c))) {
+  3172				local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3173				/* we were preempted and partial list got empty */
+  3174				goto new_objects;
+  3175			}
+  3176	
+  3177			slab = c->slab = slub_percpu_partial(c);
+  3178			slub_set_percpu_partial(c, slab);
+  3179			local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3180			stat(s, CPU_PARTIAL_ALLOC);
+  3181			goto redo;
+  3182		}
+  3183	
+  3184	new_objects:
+  3185		pc.flags = gfpflags;
+  3186	
+  3187		/* Try to get page from specific node even if __GFP_THISNODE is not set */
+> 3188		if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
+  3189				pc.flags |= __GFP_THISNODE;
+  3190	
+  3191		pc.slab = &slab;
+  3192		pc.orig_size = orig_size;
+  3193		freelist = get_partial(s, node, &pc);
+  3194		if (freelist)
+  3195			goto check_new_slab;
+  3196	
+  3197		slub_put_cpu_ptr(s->cpu_slab);
+  3198		slab = new_slab(s, pc.flags, node);
+  3199		c = slub_get_cpu_ptr(s->cpu_slab);
+  3200	
+  3201		if (unlikely(!slab)) {
+  3202			/* Try to get page from any other node */
+  3203			if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode) {
+  3204				try_thisnode = 0;
+  3205				goto new_objects;
+  3206			}
+  3207	
+  3208			slab_out_of_memory(s, gfpflags, node);
+  3209			return NULL;
+  3210		}
+  3211	
+  3212		stat(s, ALLOC_SLAB);
+  3213	
+  3214		if (kmem_cache_debug(s)) {
+  3215			freelist = alloc_single_from_new_slab(s, slab, orig_size);
+  3216	
+  3217			if (unlikely(!freelist))
+  3218				goto new_objects;
+  3219	
+  3220			if (s->flags & SLAB_STORE_USER)
+  3221				set_track(s, freelist, TRACK_ALLOC, addr);
+  3222	
+  3223			return freelist;
+  3224		}
+  3225	
+  3226		/*
+  3227		 * No other reference to the slab yet so we can
+  3228		 * muck around with it freely without cmpxchg
+  3229		 */
+  3230		freelist = slab->freelist;
+  3231		slab->freelist = NULL;
+  3232		slab->inuse = slab->objects;
+  3233		slab->frozen = 1;
+  3234	
+  3235		inc_slabs_node(s, slab_nid(slab), slab->objects);
+  3236	
+  3237	check_new_slab:
+  3238	
+  3239		if (kmem_cache_debug(s)) {
+  3240			/*
+  3241			 * For debug caches here we had to go through
+  3242			 * alloc_single_from_partial() so just store the tracking info
+  3243			 * and return the object
+  3244			 */
+  3245			if (s->flags & SLAB_STORE_USER)
+  3246				set_track(s, freelist, TRACK_ALLOC, addr);
+  3247	
+  3248			return freelist;
+  3249		}
+  3250	
+  3251		if (unlikely(!pfmemalloc_match(slab, gfpflags))) {
+  3252			/*
+  3253			 * For !pfmemalloc_match() case we don't load freelist so that
+  3254			 * we don't make further mismatched allocations easier.
+  3255			 */
+  3256			deactivate_slab(s, slab, get_freepointer(s, freelist));
+  3257			return freelist;
+  3258		}
+  3259	
+  3260	retry_load_slab:
+  3261	
+  3262		local_lock_irqsave(&s->cpu_slab->lock, flags);
+  3263		if (unlikely(c->slab)) {
+  3264			void *flush_freelist = c->freelist;
+  3265			struct slab *flush_slab = c->slab;
+  3266	
+  3267			c->slab = NULL;
+  3268			c->freelist = NULL;
+  3269			c->tid = next_tid(c->tid);
+  3270	
+  3271			local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+  3272	
+  3273			deactivate_slab(s, flush_slab, flush_freelist);
+  3274	
+  3275			stat(s, CPUSLAB_FLUSH);
+  3276	
+  3277			goto retry_load_slab;
+  3278		}
+  3279		c->slab = slab;
+  3280	
+  3281		goto load_freelist;
+  3282	}
+  3283	
 
 -- 
 0-DAY CI Kernel Test Service
