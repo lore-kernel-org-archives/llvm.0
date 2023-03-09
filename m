@@ -1,43 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F30D7B;
-	Thu,  9 Mar 2023 04:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5B27E6;
+	Thu,  9 Mar 2023 04:41:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678334411; x=1709870411;
+  t=1678336872; x=1709872872;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=flisxBefrd9nYf5ZNXBbQ/CgdoNrmWID0rA5MsX3AiM=;
-  b=hNLqlqtFQw3iXgg07nqEimiF0Vc6IrS5MhKxVBQtABt4CJ2Vwp8AM78y
-   HQQXxEnVF5ag3BQLM1VQuCSbCh3PhPtVabBq65mOCBkl+tQXxeuDP4WX0
-   lXpQShn/JohtBh3cxkxHhfrL70XAUvOs3Wt1A0yXuA1iYnEDDjb7O6r2J
-   B1il6Z4us0t2UsfUopxZcWVtjOl2c4y2UduYyhFlcRW12m/PWXNnfRzkQ
-   cG7pvLaM8D710HwEYL6UpZ238rF9pYfAkPRuISs9RCxQ34kixvXktna6O
-   XXMqPGeHpe1PVevthUs8R0EkIWeRVRTHkXrIZwSEsWep47K0nxW7JNU1u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="320175328"
+  bh=r2EuAD5o6+IRIclx+b3yC26ZQYIGjePgka0GdA9tBdk=;
+  b=kjCccKvyI5DOjYlCJ5zc3pZIgbKHQDoTqHvg9K28K18njhNwb1wT/iFe
+   37r69MniQHaVWjOAp1L4fxA3aQoTgibXUwkd0gV2WL3vrP4NuNnNhQ6EZ
+   WHSSaRLqlysAw7KU0U5HWj3UeiOel9MSia6I3kmoCSbpH+Tb4oLZz3jYv
+   FPVkXrF91TWqlNsNZSgFiebgU5CYIPGyljMtrwZKcVlNCiRx/DFra8c8x
+   77VRRhyIHqlZeBDZeTwAZXxfDVJkcyaU48q5C1AVCSpy2Q21Gmhcaa9yF
+   128rkSyXvzTWIwhMq2lUUbAnlHnzZ1sRpjBjBCqGu5Qh6r8ncwNW9tdg8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="398929939"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="320175328"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 20:00:10 -0800
+   d="scan'208";a="398929939"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 20:41:11 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="766271920"
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="707447898"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="766271920"
+   d="scan'208";a="707447898"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Mar 2023 20:00:09 -0800
+  by orsmga008.jf.intel.com with ESMTP; 08 Mar 2023 20:41:10 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pa7Rn-0002bR-25;
-	Thu, 09 Mar 2023 04:00:07 +0000
-Date: Thu, 9 Mar 2023 11:59:47 +0800
+	id 1pa85V-0002eM-2m;
+	Thu, 09 Mar 2023 04:41:09 +0000
+Date: Thu, 9 Mar 2023 12:40:20 +0800
 From: kernel test robot <lkp@intel.com>
 To: Anup Patel <apatel@ventanamicro.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [avpatel:alexghiti_test 49/74] arch/riscv/kvm/aia_aplic.c:264:6:
- warning: variable 'inject' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <202303091140.QlzGjwqv-lkp@intel.com>
+Subject: [avpatel:alexghiti_test 62/74] arch/riscv/kvm/vcpu_switch.S:260:81:
+ error: invalid reassignment of non-absolute variable
+ '.L__sym_size___kvm_riscv_switch_to'
+Message-ID: <202303091254.BaNqtQJM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,18 +49,18 @@ Content-Disposition: inline
 
 tree:   https://github.com/avpatel/linux.git alexghiti_test
 head:   a66ce4f614559da376cae340d6012bf9a02e3c08
-commit: 1613bb11e44d1b5ab8313985a7497b1c1227d259 [49/74] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r042-20230308 (https://download.01.org/0day-ci/archive/20230309/202303091140.QlzGjwqv-lkp@intel.com/config)
+commit: 7ad279366783173ba3c1b92ded12a86bb34b288a [62/74] RISC-V: KVM: Use SBI sync SRET call when available
+config: riscv-randconfig-r042-20230308 (https://download.01.org/0day-ci/archive/20230309/202303091254.BaNqtQJM-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/avpatel/linux/commit/1613bb11e44d1b5ab8313985a7497b1c1227d259
+        # https://github.com/avpatel/linux/commit/7ad279366783173ba3c1b92ded12a86bb34b288a
         git remote add avpatel https://github.com/avpatel/linux.git
         git fetch --no-tags avpatel alexghiti_test
-        git checkout 1613bb11e44d1b5ab8313985a7497b1c1227d259
+        git checkout 7ad279366783173ba3c1b92ded12a86bb34b288a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
@@ -68,89 +68,55 @@ reproduce (this is a W=1 build):
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091140.QlzGjwqv-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303091254.BaNqtQJM-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+>> arch/riscv/kvm/vcpu_switch.S:260:81: error: invalid reassignment of non-absolute variable '.L__sym_size___kvm_riscv_switch_to'
+   .type __kvm_riscv_switch_to STT_FUNC ; .set .L__sym_size___kvm_riscv_switch_to, .-__kvm_riscv_switch_to ; .size __kvm_riscv_switch_to, .L__sym_size___kvm_riscv_switch_to
+                                                                                   ^
 
 
-vim +264 arch/riscv/kvm/aia_aplic.c
+vim +260 arch/riscv/kvm/vcpu_switch.S
 
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
+7ad27936678317 Anup Patel 2022-10-09  230  
+7ad27936678317 Anup Patel 2022-10-09  231  	/*
+7ad27936678317 Anup Patel 2022-10-09  232  	 * Parameters:
+7ad27936678317 Anup Patel 2022-10-09  233  	 * A0 <= Pointer to struct kvm_vcpu_arch
+7ad27936678317 Anup Patel 2022-10-09  234  	 * A1 <= SBI extension ID
+7ad27936678317 Anup Patel 2022-10-09  235  	 * A2 <= SBI function ID
+7ad27936678317 Anup Patel 2022-10-09  236  	 * A3 <= Flags for SBI sync SRET call
+7ad27936678317 Anup Patel 2022-10-09  237  	 */
+7ad27936678317 Anup Patel 2022-10-09  238  ENTRY(__kvm_riscv_nacl_switch_to)
+7ad27936678317 Anup Patel 2022-10-09  239  	SAVE_HOST_GPRS
+7ad27936678317 Anup Patel 2022-10-09  240  
+7ad27936678317 Anup Patel 2022-10-09  241  	SAVE_HOST_AND_RESTORE_GUEST_CSRS __kvm_riscv_nacl_switch_to_return
+7ad27936678317 Anup Patel 2022-10-09  242  
+7ad27936678317 Anup Patel 2022-10-09  243  	/* Resume Guest using SBI nested acceleration */
+7ad27936678317 Anup Patel 2022-10-09  244  	add	a0, a3, zero
+7ad27936678317 Anup Patel 2022-10-09  245  	add	a6, a2, zero
+7ad27936678317 Anup Patel 2022-10-09  246  	add	a7, a1, zero
+7ad27936678317 Anup Patel 2022-10-09  247  	ecall
+7ad27936678317 Anup Patel 2022-10-09  248  
+7ad27936678317 Anup Patel 2022-10-09  249  	/* Back to Host */
+7ad27936678317 Anup Patel 2022-10-09  250  	.align 2
+7ad27936678317 Anup Patel 2022-10-09  251  __kvm_riscv_nacl_switch_to_return:
+7ad27936678317 Anup Patel 2022-10-09  252  	SAVE_GUEST_GPRS
+7ad27936678317 Anup Patel 2022-10-09  253  
+7ad27936678317 Anup Patel 2022-10-09  254  	SAVE_GUEST_AND_RESTORE_HOST_CSRS
+7ad27936678317 Anup Patel 2022-10-09  255  
+7ad27936678317 Anup Patel 2022-10-09  256  	RESTORE_HOST_GPRS
+34bde9d8b9e6e5 Anup Patel 2021-09-27  257  
+34bde9d8b9e6e5 Anup Patel 2021-09-27  258  	/* Return to C code */
+34bde9d8b9e6e5 Anup Patel 2021-09-27  259  	ret
+34bde9d8b9e6e5 Anup Patel 2021-09-27 @260  ENDPROC(__kvm_riscv_switch_to)
+9f7013265112a9 Anup Patel 2021-09-27  261  
+
+:::::: The code at line 260 was first introduced by commit
+:::::: 34bde9d8b9e6e5249db3c07cf1ebfe75c23c671c RISC-V: KVM: Implement VCPU world-switch
+
+:::::: TO: Anup Patel <anup.patel@wdc.com>
+:::::: CC: Anup Patel <anup@brainfault.org>
 
 -- 
 0-DAY CI Kernel Test Service
