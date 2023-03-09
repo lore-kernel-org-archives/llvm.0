@@ -1,217 +1,168 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01B563A7
-	for <llvm@lists.linux.dev>; Thu,  9 Mar 2023 09:49:57 +0000 (UTC)
-Received: by mail-pg1-f180.google.com with SMTP id q23so675301pgt.7
-        for <llvm@lists.linux.dev>; Thu, 09 Mar 2023 01:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1678355397;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qBE8/bUIu8uFihmrZzb4200HkAzHyGtmvWgen2dzv4A=;
-        b=g5XJH9RMbvGRL0M1nzc0BV8j+g1ty2sHoWKvrWFJb92p4bNxZOppy7AAPQFykzl5iv
-         a5/UuW82JIWMhYbPvXdFaui7HqfXsqKqnf6kOgSWiSzPjpMgGf77VjlDlCfeZ9I9OmpY
-         z2Zwk0ffqda279lc0IYnTXRM1Db7tRd3elORYLtKgQQmlOi6IiowkwH4KXIArv5mnBzt
-         dU3G7tIU9l8gWjJaGiVXmvDcQTYmjTUqLT5qQzGssbbffQfKK90c2T4NEyjmdhqw+s5S
-         jHu95t8Gk+Kfn4lqOagRu1h2ZrLdNJCJlEp0I5ExJvAJqTM1BKGNjp06dcI48BZZ6C4I
-         DoqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678355397;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qBE8/bUIu8uFihmrZzb4200HkAzHyGtmvWgen2dzv4A=;
-        b=SMDlHZsF4BphskyrQzOxHCKtur9K+CfqW2GNnmwZEbyxmCEHbDV1ciRYNyqAIkjtJL
-         aXJTSkFkPR7bA/jQ2XjGWszfcJV4F1y2gOVbdkVQDcltFft0odt0QZcqnjNkV7lX2CAt
-         IEEICGhxoWrSeHWVf7zKN0oX0XCHeud9jVLUO4fjzRvh4jRhbqSimG/rgZP8I+mRdMZs
-         EukeDus0k10HdZhXk+0cQ/Jpkyuy5fyNIfpRys92FfyzSmHYG6FdM5hesyk5ho4DqCvR
-         9QaxjgXqopC7o/tvT39t5qqch0al7Q5p6Aqzs4/0DlIeoqiprUwec0fjGWA1B+dv0ett
-         2swA==
-X-Gm-Message-State: AO0yUKV83FCWDU9Sbqpiv0eov0mRgm27dJrr8oCITsD4R/fufxW0fAYi
-	HRBezFlLMCCqmnTbCmWtL+nkD6WmYWe8Sv4Xnx/NYX1B
-X-Google-Smtp-Source: AK7set/Y8jupzPrkUPhOz+ZEpqpTlvAaWdf5IWpDEupYDs/8wl5PIkRPFAVt3V/Ze4Za7a0PCvW6Hw==
-X-Received: by 2002:a62:8453:0:b0:60a:e919:51ef with SMTP id k80-20020a628453000000b0060ae91951efmr22197688pfd.9.1678355396696;
-        Thu, 09 Mar 2023 01:49:56 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g9-20020aa78189000000b0061a942c8b62sm7634734pfi.43.2023.03.09.01.49.56
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 01:49:56 -0800 (PST)
-Message-ID: <6409abc4.a70a0220.29c4.dadf@mx.google.com>
-Date: Thu, 09 Mar 2023 01:49:56 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9770E63C4;
+	Thu,  9 Mar 2023 10:33:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678358003; x=1709894003;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jgELmDwU4JTto3X3J1RMJ9Ze0a+CJPc+Pq9uH6p3Zvs=;
+  b=W2YY0M2+n5jcUozJKeemvbiI17GpXE0inTMiTM5bYGdH9AjakyXVxRCN
+   4dHjgOkBlgSFV9WwAgF3EcGLl2J/cpYEWDyo3o/z1gvJ/07DK6+CboXGU
+   npYbcedMaA6eePd544sF66tb4pNCBebsPIkDtq96mzoIiuPHsRo9OgP9x
+   Q3ocogFn3kbSV5IA2c3LPUABWVihFspZkKO2bXS7Rqk3lWpDYlAQX4fAI
+   17SGYUSujMYuyk7cjSoBNSFM1hIoAdpWC8t6HY60fBSMji7C9HBItx8/5
+   sr0cq0dYiy4EO0gLEHkUvj6co0K0t7eGsD1Byr1hD1oLRMPOB5Rszm3x6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="337938961"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="337938961"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 02:33:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="627305379"
+X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
+   d="scan'208";a="627305379"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 09 Mar 2023 02:33:22 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1paDaL-0002t9-18;
+	Thu, 09 Mar 2023 10:33:21 +0000
+Date: Thu, 9 Mar 2023 18:32:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Woodhouse <dwmw@amazon.co.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dwmw2:parallel-6.2-rc8-v12bis 12/12]
+ arch/x86/kernel/smpboot.c:1550:62: error: use of undeclared identifier
+ 'sev_es_enable_key'
+Message-ID: <202303091825.jctzG76s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230309
-X-Kernelci-Report-Type: build
-Subject: next/master build: 14 builds: 1 failed, 13 passed, 3 errors,
- 3 warnings (next-20230309)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-next/master build: 14 builds: 1 failed, 13 passed, 3 errors, 3 warnings (ne=
-xt-20230309)
+tree:   git://git.infradead.org/users/dwmw2/linux parallel-6.2-rc8-v12bis
+head:   8a53f16b29065ddbde40a73415dae32d2f4c82e5
+commit: 8a53f16b29065ddbde40a73415dae32d2f4c82e5 [12/12] x86/smpboot: Allow parallel bringup for SEV-ES
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230309/202303091825.jctzG76s-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add dwmw2 git://git.infradead.org/users/dwmw2/linux
+        git fetch --no-tags dwmw2 parallel-6.2-rc8-v12bis
+        git checkout 8a53f16b29065ddbde40a73415dae32d2f4c82e5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230309/
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303091825.jctzG76s-lkp@intel.com/
 
-Tree: next
-Branch: master
-Git Describe: next-20230309
-Git Commit: 2c6433e9294b6d0f4d8f08c3c70a3eac434d3ec8
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+All errors (new ones prefixed by >>):
 
-Build Failure Detected:
+>> arch/x86/kernel/smpboot.c:1550:62: error: use of undeclared identifier 'sev_es_enable_key'
+                   if (IS_ENABLED(AMD_MEM_ENCRYPT) && static_branch_unlikely(&sev_es_enable_key)) {
+                                                                              ^
+>> arch/x86/kernel/smpboot.c:1550:62: error: use of undeclared identifier 'sev_es_enable_key'
+>> arch/x86/kernel/smpboot.c:1550:62: error: use of undeclared identifier 'sev_es_enable_key'
+>> arch/x86/kernel/smpboot.c:1550:62: error: use of undeclared identifier 'sev_es_enable_key'
+>> arch/x86/kernel/smpboot.c:1550:38: error: invalid argument type 'void' to unary expression
+                   if (IS_ENABLED(AMD_MEM_ENCRYPT) && static_branch_unlikely(&sev_es_enable_key)) {
+                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/jump_label.h:509:35: note: expanded from macro 'static_branch_unlikely'
+   #define static_branch_unlikely(x)       unlikely_notrace(static_key_enabled(&(x)->key))
+                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:80:30: note: expanded from macro 'unlikely_notrace'
+   # define unlikely_notrace(x)    unlikely(x)
+                                   ^~~~~~~~~~~
+   include/linux/compiler.h:78:40: note: expanded from macro 'unlikely'
+   # define unlikely(x)    __builtin_expect(!!(x), 0)
+                                             ^~~~
+   5 errors generated.
+--
+>> arch/x86/kernel/head_64.S:274:2: error: invalid instruction mnemonic 'vmgexit'
+    vmgexit
+    ^~~~~~~
 
-x86_64:
-    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
--chromebook: (clang-13) FAIL
 
-Errors and Warnings Detected:
+vim +/sev_es_enable_key +1550 arch/x86/kernel/smpboot.c
 
-arm64:
+  1512	
+  1513	
+  1514	/*
+  1515	 * We can do 64-bit AP bringup in parallel if the CPU reports its APIC
+  1516	 * ID in CPUID (either leaf 0x0B if we need the full APIC ID in X2APIC
+  1517	 * mode, or leaf 0x01 if 8 bits are sufficient). Otherwise it's too
+  1518	 * hard. And not for SEV-ES guests because they can't use CPUID that
+  1519	 * early.
+  1520	 */
+  1521	static bool __init prepare_parallel_bringup(void)
+  1522	{
+  1523		if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 1)
+  1524			return false;
+  1525	
+  1526		if (x2apic_mode) {
+  1527			unsigned int eax, ebx, ecx, edx;
+  1528	
+  1529			if (boot_cpu_data.cpuid_level < 0xb)
+  1530				return false;
+  1531	
+  1532			/*
+  1533			 * To support parallel bringup in x2apic mode, the AP will need
+  1534			 * to obtain its APIC ID from CPUID 0x0B, since CPUID 0x01 has
+  1535			 * only 8 bits. Check that it is present and seems correct.
+  1536			 */
+  1537			cpuid_count(0xb, 0, &eax, &ebx, &ecx, &edx);
+  1538	
+  1539			/*
+  1540			 * AMD says that if executed with an umimplemented level in
+  1541			 * ECX, then it will return all zeroes in EAX. Intel says it
+  1542			 * will return zeroes in both EAX and EBX. Checking only EAX
+  1543			 * should be sufficient.
+  1544			 */
+  1545			if (!eax) {
+  1546				pr_info("Disabling parallel bringup because CPUID 0xb looks untrustworthy\n");
+  1547				return false;
+  1548			}
+  1549	
+> 1550			if (IS_ENABLED(AMD_MEM_ENCRYPT) && static_branch_unlikely(&sev_es_enable_key)) {
+  1551				pr_debug("Using SEV-ES CPUID 0xb for parallel CPU startup\n");
+  1552				smpboot_control = STARTUP_APICID_SEV_ES;
+  1553			} else if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
+  1554				/*
+  1555				 * Other forms of memory encryption need to implement a way of
+  1556				 * finding the APs' APIC IDs that early.
+  1557				 */
+  1558				return false;
+  1559			} else {
+  1560				pr_debug("Using CPUID 0xb for parallel CPU startup\n");
+  1561				smpboot_control = STARTUP_APICID_CPUID_0B;
+  1562			}
+  1563		} else {
+  1564			if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
+  1565				return false;
+  1566	
+  1567			/* Without X2APIC, what's in CPUID 0x01 should suffice. */
+  1568			pr_debug("Using CPUID 0x1 for parallel CPU startup\n");
+  1569			smpboot_control = STARTUP_APICID_CPUID_01;
+  1570		}
+  1571	
+  1572		cpuhp_setup_state_nocalls(CPUHP_BP_PARALLEL_DYN, "x86/cpu:kick",
+  1573					  native_cpu_kick, NULL);
+  1574	
+  1575		return true;
+  1576	}
+  1577	
 
-arm:
-
-x86_64:
-    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
--chromebook (clang-13): 3 errors, 3 warnings
-
-Errors summary:
-
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:115=
-2:34: error: variable 'software_shutdown_temp' is uninitialized when used h=
-ere [-Werror,-Wuninitialized]
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:114=
-9:24: error: variable 'memlimit' is uninitialized when used here [-Werror,-=
-Wuninitialized]
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:114=
-6:3: error: variable 'hotspotlimit' is uninitialized when used here [-Werro=
-r,-Wuninitialized]
-
-Warnings summary:
-
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
-6:18: note: initialize the variable 'memlimit' to silence this warning
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
-5:22: note: initialize the variable 'hotspotlimit' to silence this warning
-    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
-4:32: note: initialize the variable 'software_shutdown_temp' to silence thi=
-s warning
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 FAIL, 3 errors, 3 warnings, 0 section =
-mismatches
-
-Errors:
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: =
-error: variable 'hotspotlimit' is uninitialized when used here [-Werror,-Wu=
-ninitialized]
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24:=
- error: variable 'memlimit' is uninitialized when used here [-Werror,-Wunin=
-itialized]
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:=
- error: variable 'software_shutdown_temp' is uninitialized when used here [=
--Werror,-Wuninitialized]
-
-Warnings:
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22:=
- note: initialize the variable 'hotspotlimit' to silence this warning
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18:=
- note: initialize the variable 'memlimit' to silence this warning
-    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32:=
- note: initialize the variable 'software_shutdown_temp' to silence this war=
-ning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
