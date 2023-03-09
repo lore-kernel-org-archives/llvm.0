@@ -1,49 +1,49 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBCFC941;
-	Thu,  9 Mar 2023 21:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E9B367;
+	Thu,  9 Mar 2023 22:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678398168; x=1709934168;
+  t=1678401772; x=1709937772;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+W5mXRlASR1f5Mca9nZTtyECB+l2HEDka/TiDsd7FV4=;
-  b=GrY5Wt2hqMKEgxxdcFXfrbbiqzOw7ve4lEdvGuRoJLT58Nrhg6LGQOam
-   L813vVSQ1GN0QM0mK7EnePtT2T/PxHy+xDSv6UGNxdr4w7iTL4r0Erpb3
-   57xtZQENoUG8APT09WcPcbrCo86XhnrhRyvy0nfc0o663NOpNiGTBOTtj
-   ePt2p6zvkogV6770EFt7raDHuJ90Q9CZYi4oVypFQsPLeSsuXVzmIaJOW
-   QBVWfjok43TzmiLQqEd19LEKHsi8dWjiB3r80R49NqRTU7Tiump4EEwuS
-   rHgxjUUKukiOS+CsGWXCsLNWoIRkp6qMrVeFUDcHGgBeLDIGj61SJ7S8f
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="324926980"
+  bh=fBE1n3VDHKOa0my/fpWQs/hh4OEzhEHXYLpvjY/5Y0Q=;
+  b=WQHzz/H6UdbSGr6rDV4Za6zXnwOx+EOUj6kZbnZuTXXw5Rstvfcb6ds4
+   ATy2a0a8TGpCqbsER9SVUH72TVp40HfyI+LtAOGlxO1a/jal4QDyTxe9f
+   /0NuZ3gHWmidxuPxQs4f3aR/2RCtR+Q/ChWtDOmmtrvGjBqwE+YlbUvRQ
+   /BshDnbrG+B83pMJeFwQJhGohVcjJJ/f9rBAPFzdEhHq11h5OAHobCUAF
+   djULPZ3tDXTzkO9lC/mNcbxlhr7IgfLcvC6lSaFfFgbDWW1EAWuCgQlhN
+   SJ8Q9ieiswJgczKBqxFr9MkJ+bWBGHaCJjfyjMcYVbKHSd3injMkbDKqK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="335289367"
 X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="324926980"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 13:42:45 -0800
+   d="scan'208";a="335289367"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 14:42:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="746478750"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="654953046"
 X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
-   d="scan'208";a="746478750"
+   d="scan'208";a="654953046"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Mar 2023 13:42:41 -0800
+  by orsmga006.jf.intel.com with ESMTP; 09 Mar 2023 14:42:42 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1paO24-0003FF-1U;
-	Thu, 09 Mar 2023 21:42:40 +0000
-Date: Fri, 10 Mar 2023 05:41:49 +0800
+	id 1paOy9-0003H1-2U;
+	Thu, 09 Mar 2023 22:42:41 +0000
+Date: Fri, 10 Mar 2023 06:42:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zheng Wang <zyytlz.wz@163.com>, njavali@marvell.com
+To: Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
+	andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+	kishon@kernel.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-	jejb@linux.ibm.com, martin.petersen@oracle.com,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-	alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: Re: [PATCH] scsi: qla4xxx: Fix use after free bug in
- da9150_charger_remove due to race condition
-Message-ID: <202303100523.6OSGFoVE-lkp@intel.com>
-References: <20230309183812.299349-1-zyytlz.wz@163.com>
+	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	davidwronek@gmail.com, Danila Tikhonov <danila@jiaxyga.com>
+Subject: Re: [PATCH 2/2] phy: qcom-qmp-ufs: Add SM7150 support
+Message-ID: <202303100615.2vRPxq4R-lkp@intel.com>
+References: <20230309185049.170878-3-danila@jiaxyga.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,192 +52,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230309183812.299349-1-zyytlz.wz@163.com>
+In-Reply-To: <20230309185049.170878-3-danila@jiaxyga.com>
 
-Hi Zheng,
+Hi Danila,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on jejb-scsi/for-next linus/master v6.3-rc1 next-20230309]
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.3-rc1 next-20230309]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Wang/scsi-qla4xxx-Fix-use-after-free-bug-in-da9150_charger_remove-due-to-race-condition/20230310-024016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230309183812.299349-1-zyytlz.wz%40163.com
-patch subject: [PATCH] scsi: qla4xxx: Fix use after free bug in da9150_charger_remove due to race condition
-config: s390-randconfig-r044-20230308 (https://download.01.org/0day-ci/archive/20230310/202303100523.6OSGFoVE-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Danila-Tikhonov/dt-bindings-phy-Add-QMP-UFS-PHY-comptible-for-SM7150/20230310-025222
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230309185049.170878-3-danila%40jiaxyga.com
+patch subject: [PATCH 2/2] phy: qcom-qmp-ufs: Add SM7150 support
+config: arm64-randconfig-r023-20230308 (https://download.01.org/0day-ci/archive/20230310/202303100615.2vRPxq4R-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/f5410be5e51edb79365b3e0be8c80e4ff34e7e50
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/95e826acacaf3b5ba79c06b481199a17abed44ba
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zheng-Wang/scsi-qla4xxx-Fix-use-after-free-bug-in-da9150_charger_remove-due-to-race-condition/20230310-024016
-        git checkout f5410be5e51edb79365b3e0be8c80e4ff34e7e50
+        git fetch --no-tags linux-review Danila-Tikhonov/dt-bindings-phy-Add-QMP-UFS-PHY-comptible-for-SM7150/20230310-025222
+        git checkout 95e826acacaf3b5ba79c06b481199a17abed44ba
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/scsi/qla4xxx/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/phy/qualcomm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303100523.6OSGFoVE-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303100615.2vRPxq4R-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/scsi/qla4xxx/ql4_os.c:10:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/scsi/qla4xxx/ql4_os.c:10:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/scsi/qla4xxx/ql4_os.c:10:
-   In file included from include/linux/inet.h:42:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/scsi/qla4xxx/ql4_os.c:9004:20: warning: variable 'ha' is uninitialized when used here [-Wuninitialized]
-           cancel_work_sync(&ha->dpc_work);
-                             ^~
-   drivers/scsi/qla4xxx/ql4_os.c:8995:26: note: initialize the variable 'ha' to silence this warning
-           struct scsi_qla_host *ha;
-                                   ^
-                                    = NULL
-   13 warnings generated.
+>> drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:380:3: error: expected identifier or '('
+   };)
+     ^
+>> drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:972:14: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+                   .serdes         = sm8150_ufsphy_serdes,
+                                     ^
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+                   .serdes_num     = ARRAY_SIZE(sm8150_ufsphy_serdes),
+                                                ^
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:973:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1004:14: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+                   .serdes         = sm8150_ufsphy_serdes,
+                                     ^
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+                   .serdes_num     = ARRAY_SIZE(sm8150_ufsphy_serdes),
+                                                ^
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c:1005:28: error: use of undeclared identifier 'sm8150_ufsphy_serdes'
+   9 errors generated.
 
 
-vim +/ha +9004 drivers/scsi/qla4xxx/ql4_os.c
+vim +380 drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
 
-  8963	
-  8964	static void qla4xxx_destroy_fw_ddb_session(struct scsi_qla_host *ha)
-  8965	{
-  8966		struct ddb_entry *ddb_entry;
-  8967		int idx;
-  8968	
-  8969		for (idx = 0; idx < MAX_DDB_ENTRIES; idx++) {
-  8970	
-  8971			ddb_entry = qla4xxx_lookup_ddb_by_fw_index(ha, idx);
-  8972			if ((ddb_entry != NULL) &&
-  8973			    (ddb_entry->ddb_type == FLASH_DDB)) {
-  8974	
-  8975				qla4xxx_destroy_ddb(ha, ddb_entry);
-  8976				/*
-  8977				 * we have decremented the reference count of the driver
-  8978				 * when we setup the session to have the driver unload
-  8979				 * to be seamless without actually destroying the
-  8980				 * session
-  8981				 **/
-  8982				try_module_get(qla4xxx_iscsi_transport.owner);
-  8983				iscsi_destroy_endpoint(ddb_entry->conn->ep);
-  8984				qla4xxx_free_ddb(ha, ddb_entry);
-  8985				iscsi_session_teardown(ddb_entry->sess);
-  8986			}
-  8987		}
-  8988	}
-  8989	/**
-  8990	 * qla4xxx_remove_adapter - callback function to remove adapter.
-  8991	 * @pdev: PCI device pointer
-  8992	 **/
-  8993	static void qla4xxx_remove_adapter(struct pci_dev *pdev)
-  8994	{
-  8995		struct scsi_qla_host *ha;
-  8996	
-  8997		/*
-  8998		 * If the PCI device is disabled then it means probe_adapter had
-  8999		 * failed and resources already cleaned up on probe_adapter exit.
-  9000		 */
-  9001		if (!pci_is_enabled(pdev))
-  9002			return;
-  9003	
-> 9004		cancel_work_sync(&ha->dpc_work);
-  9005		ha = pci_get_drvdata(pdev);
-  9006	
-  9007		if (is_qla40XX(ha))
-  9008			qla4xxx_prevent_other_port_reinit(ha);
-  9009	
-  9010		/* destroy iface from sysfs */
-  9011		qla4xxx_destroy_ifaces(ha);
-  9012	
-  9013		if ((!ql4xdisablesysfsboot) && ha->boot_kset)
-  9014			iscsi_boot_destroy_kset(ha->boot_kset);
-  9015	
-  9016		qla4xxx_destroy_fw_ddb_session(ha);
-  9017		qla4_8xxx_free_sysfs_attr(ha);
-  9018	
-  9019		qla4xxx_sysfs_ddb_remove(ha);
-  9020		scsi_remove_host(ha->host);
-  9021	
-  9022		qla4xxx_free_adapter(ha);
-  9023	
-  9024		scsi_host_put(ha->host);
-  9025	
-  9026		pci_disable_pcie_error_reporting(pdev);
-  9027		pci_disable_device(pdev);
-  9028	}
-  9029	
+   370	
+   371	static const struct qmp_phy_init_tbl sm7150_ufsphy_pcs[] = {
+   372		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SIGDET_CTRL2, 0x6f),
+   373		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_LARGE_AMP_DRV_LVL, 0x0f),
+   374		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_SMALL_AMP_DRV_LVL, 0x02),
+   375		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SYM_RESYNC_CTRL, 0x03),
+   376		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_TX_MID_TERM_CTRL1, 0x43),
+   377		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_SIGDET_CTRL1, 0x0f),
+   378		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_RX_MIN_HIBERN8_TIME, 0xFF),
+   379		QMP_PHY_INIT_CFG(QPHY_V3_PCS_UFS_MULTI_LANE_CTRL1, 0x02),
+ > 380	};)
+   381	
 
 -- 
 0-DAY CI Kernel Test Service
