@@ -1,43 +1,49 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792542F59;
-	Thu,  9 Mar 2023 08:50:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B902F5B;
+	Thu,  9 Mar 2023 08:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678351819; x=1709887819;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5cZuMQtn0ta+55u3GSRsrGEk2AImvhqnZB18GOf2tjg=;
-  b=TR6/3m43QD+B8KyekST9omXBvcfZsfM9yatlU1/PdczHeXcj2bocuRX4
-   xoWuw/4gra7QGtGRBAXlDMqYPYv3NouhfzeuqhQv3383C7Bwq+pvWfqYW
-   TdbBjKJnOONTemRZF6fIFZ2V6cT46h5A47CuMjKgI27MriCSScMlyhTru
-   6P+O2aZNghv6euVu9s8+NCkNTeAgTBYpWkTG5hKOlS69HrCvxG3YYOuIo
-   Ye4QqADHDZXC5mCZVJZGXANJ6ASeSB7H2LUU+rm+B2wxzcDsIM+kXLuCM
-   XWekuo+T0Z+2q+YFQ6lKGuz8VO/sE4Kis0zZSdYhAXiSX/BYuyBRBnFzy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="364031700"
+  t=1678351820; x=1709887820;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hzJZZecRtLBuUUUYuZrjjCAOTv/teU3J5+ZEbs+0u74=;
+  b=abuvcZzHFEh3tPX20o+eHtwYZMrYd2XeyTfJfL17K7nHwE42erlZTJKr
+   Gz6+NIUf7vpzuLAH4n1Nbwy5vwxFpiGto44HUSwdaTrNOipsHDrZkR8d9
+   VhWXO8NIoUyCnpAoEUxqtKcMHSd5Nm7mdKyY8dW8Wm51zVcvlmUaFodFT
+   PkdH/SDs04Ps99WDnqNcMvPayVpULPC8WMk9A4aQDvRy9WMPTW7kRXSRw
+   p6cKi7hLcNikDc23NMeRbZE4Oxp4Rol5M6rnbty+4lEZwPDYsWYIwuD3x
+   C5GJvLM1Nxs04JH4ojtfAO9mLUYySIvtK8VTSPO9YIX5zcM/uQeAm6wm8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="320220094"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="364031700"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:50:18 -0800
+   d="scan'208";a="320220094"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:50:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="707525170"
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="627283830"
 X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="707525170"
+   d="scan'208";a="627283830"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2023 00:50:17 -0800
+  by orsmga003.jf.intel.com with ESMTP; 09 Mar 2023 00:50:17 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1paBya-0002op-2m;
+	id 1paBya-0002om-2Y;
 	Thu, 09 Mar 2023 08:50:16 +0000
-Date: Thu, 9 Mar 2023 16:49:49 +0800
+Date: Thu, 9 Mar 2023 16:49:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [goldwynr:lock-rearrange 11/21] fs/btrfs/inode.c:7803:11: error:
- call to undeclared function 'find_lock_delalloc_range'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202303091617.QqZprh7F-lkp@intel.com>
+To: Andrew Davis <afd@ti.com>, Peter Tyser <ptyser@xes-inc.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH v2 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to
+ simplify remove path
+Message-ID: <202303091640.6XjHNouG-lkp@intel.com>
+References: <20230307193346.8718-3-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,94 +52,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230307193346.8718-3-afd@ti.com>
 
-tree:   https://github.com/goldwynr/linux lock-rearrange
-head:   11ad35ece43be2868f38d830941cd55abc43449d
-commit: 68a6d531bf22dfa0e8f9ca79d7a9da2fa1db8185 [11/21] btrfs: locking extents for async writeback
-config: s390-randconfig-r044-20230308 (https://download.01.org/0day-ci/archive/20230309/202303091617.QqZprh7F-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+Hi Andrew,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on brgl/gpio/for-next]
+[also build test ERROR on linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/gpio-twl4030-Use-devm_gpiochip_add_data-to-simplify-remove-path/20230308-034717
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20230307193346.8718-3-afd%40ti.com
+patch subject: [PATCH v2 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to simplify remove path
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230309/202303091640.6XjHNouG-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/goldwynr/linux/commit/68a6d531bf22dfa0e8f9ca79d7a9da2fa1db8185
-        git remote add goldwynr https://github.com/goldwynr/linux
-        git fetch --no-tags goldwynr lock-rearrange
-        git checkout 68a6d531bf22dfa0e8f9ca79d7a9da2fa1db8185
+        # https://github.com/intel-lab-lkp/linux/commit/fcfc10c6817ac3ea88ced58cce2ae8568b0f2030
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andrew-Davis/gpio-twl4030-Use-devm_gpiochip_add_data-to-simplify-remove-path/20230308-034717
+        git checkout fcfc10c6817ac3ea88ced58cce2ae8568b0f2030
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash fs/btrfs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpio/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091617.QqZprh7F-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303091640.6XjHNouG-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/btrfs/inode.c:7803:11: error: call to undeclared function 'find_lock_delalloc_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   found = find_lock_delalloc_range(&inode->vfs_inode, NULL, &cur_start, &cur_end);
-                           ^
+>> drivers/gpio/gpio-sch311x.c:322:13: error: use of undeclared identifier 'sch311x_gpio_remove'
+           .remove         = sch311x_gpio_remove,
+                             ^
    1 error generated.
 
 
-vim +/find_lock_delalloc_range +7803 fs/btrfs/inode.c
+vim +/sch311x_gpio_remove +322 drivers/gpio/gpio-sch311x.c
 
-  7789	
-  7790	static int btrfs_writepages_async(struct btrfs_inode *inode, struct writeback_control *wbc, u64 start, u64 end)
-  7791	{
-  7792		u64 last_start, cur_start = start;
-  7793		u64 cur_end;
-  7794		int ret = 0;
-  7795	
-  7796		lock_extent(&inode->io_tree, start, end, NULL);
-  7797	
-  7798		while (cur_start < end) {
-  7799			bool found;
-  7800			last_start = cur_start;
-  7801			cur_end = end;
-  7802	
-> 7803			found = find_lock_delalloc_range(&inode->vfs_inode, NULL, &cur_start, &cur_end);
-  7804			/* Nothing to writeback */
-  7805			if (!found) {
-  7806				unlock_extent(&inode->io_tree, cur_start, cur_end, NULL);
-  7807				cur_start = cur_end + 1;
-  7808				continue;
-  7809			}
-  7810	
-  7811			/* A hole with no pages, unlock part therof */
-  7812			if (cur_start > last_start)
-  7813				unlock_extent(&inode->io_tree, last_start, cur_start - 1, NULL);
-  7814	
-  7815			/* Got more than we requested for */
-  7816			if (cur_end > end) {
-  7817				if (try_lock_extent(&inode->io_tree, end + 1, cur_end, NULL)) {
-  7818					/* Try writing the whole extent */
-  7819					end = cur_end;
-  7820				} else {
-  7821					/*
-  7822					 * Someone is holding the extent lock.
-  7823					 * Unlock pages from last part of extent, and
-  7824					 * write just as much writepage requested for
-  7825					 */
-  7826					__unlock_for_delalloc(&inode->vfs_inode, NULL, end + 1, cur_end);
-  7827					cur_end = end;
-  7828				}
-  7829			}
-  7830	
-  7831			ret = cow_file_range_async(inode, wbc, cur_start, cur_end);
-  7832			if (ret < 0) {
-  7833				unlock_extent(&inode->io_tree, cur_start, end, NULL);
-  7834				break;
-  7835			}
-  7836	
-  7837			cur_start = cur_end + 1;
-  7838		}
-  7839	
-  7840		return ret;
-  7841	}
-  7842	
+12262bef8f4614 Bruno Randolf 2013-12-04  318  
+12262bef8f4614 Bruno Randolf 2013-12-04  319  static struct platform_driver sch311x_gpio_driver = {
+12262bef8f4614 Bruno Randolf 2013-12-04  320  	.driver.name	= DRV_NAME,
+12262bef8f4614 Bruno Randolf 2013-12-04  321  	.probe		= sch311x_gpio_probe,
+12262bef8f4614 Bruno Randolf 2013-12-04 @322  	.remove		= sch311x_gpio_remove,
+12262bef8f4614 Bruno Randolf 2013-12-04  323  };
+12262bef8f4614 Bruno Randolf 2013-12-04  324  
+12262bef8f4614 Bruno Randolf 2013-12-04  325  
 
 -- 
 0-DAY CI Kernel Test Service
