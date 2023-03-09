@@ -1,110 +1,217 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B902F5B;
-	Thu,  9 Mar 2023 08:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678351820; x=1709887820;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hzJZZecRtLBuUUUYuZrjjCAOTv/teU3J5+ZEbs+0u74=;
-  b=abuvcZzHFEh3tPX20o+eHtwYZMrYd2XeyTfJfL17K7nHwE42erlZTJKr
-   Gz6+NIUf7vpzuLAH4n1Nbwy5vwxFpiGto44HUSwdaTrNOipsHDrZkR8d9
-   VhWXO8NIoUyCnpAoEUxqtKcMHSd5Nm7mdKyY8dW8Wm51zVcvlmUaFodFT
-   PkdH/SDs04Ps99WDnqNcMvPayVpULPC8WMk9A4aQDvRy9WMPTW7kRXSRw
-   p6cKi7hLcNikDc23NMeRbZE4Oxp4Rol5M6rnbty+4lEZwPDYsWYIwuD3x
-   C5GJvLM1Nxs04JH4ojtfAO9mLUYySIvtK8VTSPO9YIX5zcM/uQeAm6wm8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="320220094"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="320220094"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 00:50:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="627283830"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="627283830"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 Mar 2023 00:50:17 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1paBya-0002om-2Y;
-	Thu, 09 Mar 2023 08:50:16 +0000
-Date: Thu, 9 Mar 2023 16:49:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Davis <afd@ti.com>, Peter Tyser <ptyser@xes-inc.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH v2 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to
- simplify remove path
-Message-ID: <202303091640.6XjHNouG-lkp@intel.com>
-References: <20230307193346.8718-3-afd@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01B563A7
+	for <llvm@lists.linux.dev>; Thu,  9 Mar 2023 09:49:57 +0000 (UTC)
+Received: by mail-pg1-f180.google.com with SMTP id q23so675301pgt.7
+        for <llvm@lists.linux.dev>; Thu, 09 Mar 2023 01:49:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1678355397;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=qBE8/bUIu8uFihmrZzb4200HkAzHyGtmvWgen2dzv4A=;
+        b=g5XJH9RMbvGRL0M1nzc0BV8j+g1ty2sHoWKvrWFJb92p4bNxZOppy7AAPQFykzl5iv
+         a5/UuW82JIWMhYbPvXdFaui7HqfXsqKqnf6kOgSWiSzPjpMgGf77VjlDlCfeZ9I9OmpY
+         z2Zwk0ffqda279lc0IYnTXRM1Db7tRd3elORYLtKgQQmlOi6IiowkwH4KXIArv5mnBzt
+         dU3G7tIU9l8gWjJaGiVXmvDcQTYmjTUqLT5qQzGssbbffQfKK90c2T4NEyjmdhqw+s5S
+         jHu95t8Gk+Kfn4lqOagRu1h2ZrLdNJCJlEp0I5ExJvAJqTM1BKGNjp06dcI48BZZ6C4I
+         DoqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678355397;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qBE8/bUIu8uFihmrZzb4200HkAzHyGtmvWgen2dzv4A=;
+        b=SMDlHZsF4BphskyrQzOxHCKtur9K+CfqW2GNnmwZEbyxmCEHbDV1ciRYNyqAIkjtJL
+         aXJTSkFkPR7bA/jQ2XjGWszfcJV4F1y2gOVbdkVQDcltFft0odt0QZcqnjNkV7lX2CAt
+         IEEICGhxoWrSeHWVf7zKN0oX0XCHeud9jVLUO4fjzRvh4jRhbqSimG/rgZP8I+mRdMZs
+         EukeDus0k10HdZhXk+0cQ/Jpkyuy5fyNIfpRys92FfyzSmHYG6FdM5hesyk5ho4DqCvR
+         9QaxjgXqopC7o/tvT39t5qqch0al7Q5p6Aqzs4/0DlIeoqiprUwec0fjGWA1B+dv0ett
+         2swA==
+X-Gm-Message-State: AO0yUKV83FCWDU9Sbqpiv0eov0mRgm27dJrr8oCITsD4R/fufxW0fAYi
+	HRBezFlLMCCqmnTbCmWtL+nkD6WmYWe8Sv4Xnx/NYX1B
+X-Google-Smtp-Source: AK7set/Y8jupzPrkUPhOz+ZEpqpTlvAaWdf5IWpDEupYDs/8wl5PIkRPFAVt3V/Ze4Za7a0PCvW6Hw==
+X-Received: by 2002:a62:8453:0:b0:60a:e919:51ef with SMTP id k80-20020a628453000000b0060ae91951efmr22197688pfd.9.1678355396696;
+        Thu, 09 Mar 2023 01:49:56 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id g9-20020aa78189000000b0061a942c8b62sm7634734pfi.43.2023.03.09.01.49.56
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Mar 2023 01:49:56 -0800 (PST)
+Message-ID: <6409abc4.a70a0220.29c4.dadf@mx.google.com>
+Date: Thu, 09 Mar 2023 01:49:56 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307193346.8718-3-afd@ti.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20230309
+X-Kernelci-Report-Type: build
+Subject: next/master build: 14 builds: 1 failed, 13 passed, 3 errors,
+ 3 warnings (next-20230309)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Andrew,
+next/master build: 14 builds: 1 failed, 13 passed, 3 errors, 3 warnings (ne=
+xt-20230309)
 
-Thank you for the patch! Yet something to improve:
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230309/
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.3-rc1 next-20230309]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tree: next
+Branch: master
+Git Describe: next-20230309
+Git Commit: 2c6433e9294b6d0f4d8f08c3c70a3eac434d3ec8
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/gpio-twl4030-Use-devm_gpiochip_add_data-to-simplify-remove-path/20230308-034717
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20230307193346.8718-3-afd%40ti.com
-patch subject: [PATCH v2 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to simplify remove path
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230309/202303091640.6XjHNouG-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fcfc10c6817ac3ea88ced58cce2ae8568b0f2030
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andrew-Davis/gpio-twl4030-Use-devm_gpiochip_add_data-to-simplify-remove-path/20230308-034717
-        git checkout fcfc10c6817ac3ea88ced58cce2ae8568b0f2030
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpio/
+Build Failure Detected:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091640.6XjHNouG-lkp@intel.com/
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
 
-All errors (new ones prefixed by >>):
+Errors and Warnings Detected:
 
->> drivers/gpio/gpio-sch311x.c:322:13: error: use of undeclared identifier 'sch311x_gpio_remove'
-           .remove         = sch311x_gpio_remove,
-                             ^
-   1 error generated.
+arm64:
 
+arm:
 
-vim +/sch311x_gpio_remove +322 drivers/gpio/gpio-sch311x.c
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 3 errors, 3 warnings
 
-12262bef8f4614 Bruno Randolf 2013-12-04  318  
-12262bef8f4614 Bruno Randolf 2013-12-04  319  static struct platform_driver sch311x_gpio_driver = {
-12262bef8f4614 Bruno Randolf 2013-12-04  320  	.driver.name	= DRV_NAME,
-12262bef8f4614 Bruno Randolf 2013-12-04  321  	.probe		= sch311x_gpio_probe,
-12262bef8f4614 Bruno Randolf 2013-12-04 @322  	.remove		= sch311x_gpio_remove,
-12262bef8f4614 Bruno Randolf 2013-12-04  323  };
-12262bef8f4614 Bruno Randolf 2013-12-04  324  
-12262bef8f4614 Bruno Randolf 2013-12-04  325  
+Errors summary:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:115=
+2:34: error: variable 'software_shutdown_temp' is uninitialized when used h=
+ere [-Werror,-Wuninitialized]
+    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:114=
+9:24: error: variable 'memlimit' is uninitialized when used here [-Werror,-=
+Wuninitialized]
+    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:114=
+6:3: error: variable 'hotspotlimit' is uninitialized when used here [-Werro=
+r,-Wuninitialized]
+
+Warnings summary:
+
+    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
+6:18: note: initialize the variable 'memlimit' to silence this warning
+    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
+5:22: note: initialize the variable 'hotspotlimit' to silence this warning
+    1    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:113=
+4:32: note: initialize the variable 'software_shutdown_temp' to silence thi=
+s warning
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 3 errors, 3 warnings, 0 section =
+mismatches
+
+Errors:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: =
+error: variable 'hotspotlimit' is uninitialized when used here [-Werror,-Wu=
+ninitialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24:=
+ error: variable 'memlimit' is uninitialized when used here [-Werror,-Wunin=
+itialized]
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34:=
+ error: variable 'software_shutdown_temp' is uninitialized when used here [=
+-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1135:22:=
+ note: initialize the variable 'hotspotlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1136:18:=
+ note: initialize the variable 'memlimit' to silence this warning
+    drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1134:32:=
+ note: initialize the variable 'software_shutdown_temp' to silence this war=
+ning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
