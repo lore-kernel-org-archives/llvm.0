@@ -1,113 +1,93 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE84367;
-	Thu,  9 Mar 2023 00:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678321508; x=1709857508;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sIwwmAt7KlTF7l6Vrb1Y0LQqzYM6y30mcH8hZqFhyvQ=;
-  b=mFixVEcvnLxKectLVfKqmozv1XzQxweHQBPdKTbh9sAGot7RrJSY8b/j
-   sz2qpSJTK8ozfEx88ixAJIM39wHvQO4E53LDzC9+z5dW6BTeFf9Ssy3s+
-   IFq4FbiDsFprY4aGqsf7TJlaPxdjeUqWiMfByWc7tiIE4r2LfbXubAVS+
-   Rq/OD6GVCJcwMyQM9n81oRKA0pUTYzQ//Me7IU4WC6yDLfphPoSYF2qg1
-   YkZZkqETDnJJykvtWOnfCHuEqVHXdSUHJpuz4d+rLLcnwPTDmvDQDtkuC
-   Plh+icEGeD1E1yjC3N3eHxt52Hx23aWwrvlcZ+igUBcbNgkrz0JHH3ACA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="398895012"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="398895012"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 16:25:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="800967026"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="800967026"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2023 16:25:04 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pa45f-0002Vx-2F;
-	Thu, 09 Mar 2023 00:25:03 +0000
-Date: Thu, 9 Mar 2023 08:24:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>, Iskren Chernev <me@iskren.info>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Matheus Castello <matheus@castello.eng.br>,
-	Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/4] power: max17040: get thermal data from adc if
- available
-Message-ID: <202303090817.SuiCpxvy-lkp@intel.com>
-References: <20230308084419.11934-5-clamor95@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305D3628
+	for <llvm@lists.linux.dev>; Thu,  9 Mar 2023 01:10:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1678324254;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=40pzBjf7eG8i3JB8bPjLCUztMpReO4ypBZAJDN0S2C4=;
+	b=ib4IesjTfzi/gOev1FYu3E3dHim0kO1fqS/LroVpDHdhNdTMCHd+cDBw17+ZppwLk4HCSt
+	RwIwSR3y9tUIGhlnEgTPT1Vcav8gJzRwylaKYgkUXvu0KAfLpIMLPISUGPvhrrZOTaTYkl
+	1rT8Q+Xp3Ea3/wvk2M+eY4XAQZSNkWU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-539-lx7jxST4PwCppdVT_xfzcw-1; Wed, 08 Mar 2023 20:10:52 -0500
+X-MC-Unique: lx7jxST4PwCppdVT_xfzcw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B9A33850549
+	for <llvm@lists.linux.dev>; Thu,  9 Mar 2023 01:10:52 +0000 (UTC)
+Received: from [172.64.2.76] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5E68940C83B6;
+	Thu,  9 Mar 2023 01:10:52 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (308/381 SKIPPED): Test report for master
+ (6.3.0-rc1, mainline.kernel.org-clang, 6a98c9ca)
+Date: Thu, 09 Mar 2023 01:10:52 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308084419.11934-5-clamor95@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <11687.123030820105200585@us-mta-539.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Svyatoslav,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Yet something to improve:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on sre-power-supply/for-next]
-[also build test ERROR on krzk-dt/for-next linus/master v6.3-rc1 next-20230308]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230308-164538
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20230308084419.11934-5-clamor95%40gmail.com
-patch subject: [PATCH v1 4/4] power: max17040: get thermal data from adc if available
-config: hexagon-randconfig-r035-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090817.SuiCpxvy-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7b9bbf6f2b910ef4ffab18022223573e9094f007
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230308-164538
-        git checkout 7b9bbf6f2b910ef4ffab18022223573e9094f007
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+Kernel information:
+    Commit message: Merge tag 'fs_for_v6.3-rc2' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/jack/linux-fs
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303090817.SuiCpxvy-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/77132
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Boot test: Failed to extract kernel version from the package
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1002
+            Affected tests:
+                 ppc64le - Boot test
+                   s390x - Boot test
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
 
->> ld.lld: error: undefined symbol: iio_channel_release
-   >>> referenced by max17040_battery.c:586 (drivers/power/supply/max17040_battery.c:586)
-   >>>               drivers/power/supply/max17040_battery.o:(max17040_remove) in archive vmlinux.a
-   >>> referenced by max17040_battery.c:586 (drivers/power/supply/max17040_battery.c:586)
-   >>>               drivers/power/supply/max17040_battery.o:(max17040_remove) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: iio_channel_get
-   >>> referenced by max17040_battery.c:572 (drivers/power/supply/max17040_battery.c:572)
-   >>>               drivers/power/supply/max17040_battery.o:(max17040_probe) in archive vmlinux.a
-   >>> referenced by max17040_battery.c:572 (drivers/power/supply/max17040_battery.c:572)
-   >>>               drivers/power/supply/max17040_battery.o:(max17040_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: iio_read_channel_raw
-   >>> referenced by max17040_battery.c:422 (drivers/power/supply/max17040_battery.c:422)
-   >>>               drivers/power/supply/max17040_battery.o:(max17040_get_property) in archive vmlinux.a
-   >>> referenced by max17040_battery.c:422 (drivers/power/supply/max17040_battery.c:422)
-   >>>               drivers/power/supply/max17040_battery.o:(max17040_get_property) in archive vmlinux.a
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
