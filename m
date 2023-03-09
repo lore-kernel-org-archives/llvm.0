@@ -1,138 +1,189 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7057E6;
-	Thu,  9 Mar 2023 05:43:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678340594; x=1709876594;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sOkcArzsj+hqHpsD2FP0lGoNTDGk9VjHdgWHEWqSPnQ=;
-  b=hnjB+P7kWn0u93bn+hAiHxQSccuSUeB/Xg2oa4Mz2Jm4LnvF1XY9WkCv
-   MGbjy6HGqmQ92r0dgPmXowOMp6n4xhLumx1eKh0+27f9KMfFalOlq5IXS
-   LTaCjiRJ7P3qsI4td8/gyggvkV8MafC6m+wAd1lF1Evs4elkaEy0rG+54
-   oE9HosXsxTeYEMGptT+teM2TrIbAieszjk8PHXnaA4oFT04as1R7EJrFh
-   +FX0fLcRDnnFLXA8IfZL20lWhALCn3iLW3vFK0m6YJ4uinYZZhV9LSFFy
-   DWYc1KpoH0nnvs4Sj3GmKNwWj3qO6w+p2Kbm0/TIGjL7KVAcdkH/J5IeK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="337884466"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="337884466"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 21:43:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="670601915"
-X-IronPort-AV: E=Sophos;i="5.98,245,1673942400"; 
-   d="scan'208";a="670601915"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Mar 2023 21:43:12 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pa93X-0002gj-1L;
-	Thu, 09 Mar 2023 05:43:11 +0000
-Date: Thu, 9 Mar 2023 13:42:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paul M Stillwell Jr <paul.m.stillwell.jr@intel.com>,
-	intel-wired-lan@lists.osuosl.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Brett Creeley <brett.creeley@intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH net-next v10 3/5] ice: add ability to
- set FW log configuration
-Message-ID: <202303091324.Fz9iqJvc-lkp@intel.com>
-References: <20230308235102.170-4-paul.m.stillwell.jr@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3CC7E6
+	for <llvm@lists.linux.dev>; Thu,  9 Mar 2023 06:19:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379A1C433D2;
+	Thu,  9 Mar 2023 06:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678342747;
+	bh=LTk3JCHGRe+TyYuQNOCTiDP23OkmIB+aL1dSoQuWeMk=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=TY6vA2YsJQg0fllmqZUrI3ydXqchsea80kIMp4OlFQ36O3/hXTXn+bmKxey5p/uY1
+	 4CEWCY7lCrBnvoVTWNFY9mZoaWImUB/4IgT872Ou0bTEBXbFJNiuHgOco6hYbH6s5y
+	 EmjPOWV1MoQDF2tclgTGOt3YbWN/UDE15aBp2c6vAUgZ3+MICD/fO13Ov1yHMgm+qJ
+	 AfvEeRpDW191ZsgFEUQpnwquklZ5qJAbYT940K5xO+rPQLfH0Uii+M7dYpQ7w0Mf3i
+	 AmtRHY2TpjLT41EPCAsgA1qtlYHIi/DC+v3uv9cluKnwH+3QfX/4JXkGQidqeiWXto
+	 DQzTWVkV9lacQ==
+Date: Thu, 09 Mar 2023 06:19:00 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Jessica Clarke <jrtc27@jrtc27.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>,
+ Conor Dooley <conor.dooley@microchip.com>,
+ linux-riscv <linux-riscv@lists.infradead.org>,
+ Nathan Chancellor <nathan@kernel.org>, naresh.kamboju@linaro.org,
+ llvm@lists.linux.dev, stable@vger.kernel.org, aurelien@aurel32.net,
+ ndesaulniers@google.com, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v2] RISC-V: remove I-extension ISA spec version dance
+User-Agent: K-9 Mail for Android
+In-Reply-To: <3476D6EF-F7DD-4437-A71C-47EF05210AF3@jrtc27.com>
+References: <20230308220842.1231003-1-conor@kernel.org> <3476D6EF-F7DD-4437-A71C-47EF05210AF3@jrtc27.com>
+Message-ID: <DCDDEB71-B9CF-4F35-BFA6-CAD4F5B0ED74@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308235102.170-4-paul.m.stillwell.jr@intel.com>
-
-Hi Paul,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on tnguy-next-queue/dev-queue]
-[also build test WARNING on linus/master v6.3-rc1 next-20230309]
-[cannot apply to net-next/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-M-Stillwell-Jr/ice-remove-FW-logging-code/20230309-075355
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
-patch link:    https://lore.kernel.org/r/20230308235102.170-4-paul.m.stillwell.jr%40intel.com
-patch subject: [Intel-wired-lan] [PATCH net-next v10 3/5] ice: add ability to set FW log configuration
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230309/202303091324.Fz9iqJvc-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3b04c760aa44876f9b794246a3cf0f3c3bfcafe3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-M-Stillwell-Jr/ice-remove-FW-logging-code/20230309-075355
-        git checkout 3b04c760aa44876f9b794246a3cf0f3c3bfcafe3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/ice/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303091324.Fz9iqJvc-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/ice/ice_main.c:4574:13: warning: result of comparison of constant 4294967296 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-           if (events >= BIT_ULL(ICE_AQC_FW_LOG_ID_MAX)) {
-               ~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +4574 drivers/net/ethernet/intel/ice/ice_main.c
 
-  4554	
-  4555	/**
-  4556	 * ice_pf_fwlog_update_modules - update 1 or more modules via debugfs
-  4557	 * @pf: pointer to the PF struct
-  4558	 * @log_level: log_level to use for the @events
-  4559	 * @events: events to update
-  4560	 */
-  4561	int ice_pf_fwlog_update_modules(struct ice_pf *pf, u8 log_level,
-  4562					unsigned long events)
-  4563	{
-  4564		struct ice_fwlog_module_entry *entries;
-  4565		struct ice_hw *hw = &pf->hw;
-  4566		u16 module_id, max_bits;
-  4567	
-  4568		if (log_level >= ICE_FWLOG_LEVEL_INVALID) {
-  4569			dev_err(ice_pf_to_dev(pf), "Invalid FW log level %u, all level(s) >= %u are invalid\n",
-  4570				log_level, ICE_FWLOG_LEVEL_INVALID);
-  4571			return -EINVAL;
-  4572		}
-  4573	
-> 4574		if (events >= BIT_ULL(ICE_AQC_FW_LOG_ID_MAX)) {
-  4575			dev_err(ice_pf_to_dev(pf), "Invalid FW log events 0x%lx, all FW log event bits >= 0x%llx are invalid\n",
-  4576				events, BIT_ULL(ICE_AQC_FW_LOG_ID_MAX));
-  4577			return -EINVAL;
-  4578		}
-  4579	
-  4580		entries = (struct ice_fwlog_module_entry *)hw->fwlog_cfg.module_entries;
-  4581	
-  4582		max_bits = min_t(u16, BITS_PER_TYPE(unsigned long),
-  4583				 ICE_AQC_FW_LOG_ID_MAX);
-  4584	
-  4585		for_each_set_bit(module_id, &events, max_bits) {
-  4586			entries[module_id].log_level = log_level;
-  4587		}
-  4588	
-  4589		return 0;
-  4590	}
-  4591	
+On 9 March 2023 02:19:38 GMT, Jessica Clarke <jrtc27@jrtc27=2Ecom> wrote:
+>On 8 Mar 2023, at 22:08, Conor Dooley <conor@kernel=2Eorg> wrote:
+>>=20
+>> From: Conor Dooley <conor=2Edooley@microchip=2Ecom>
+>>=20
+>> The spec folk, in their infinite wisdom, moved both control and status
+>> registers & the FENCE=2EI instructions out of the I extension into thei=
+r
+>> own extensions (Zicsr, Zifencei) in the 20190608 version of the ISA
+>> spec [0]=2E
+>> The GCC/binutils crew decided [1] to move their default version of the
+>> ISA spec to the 20191213 version of the ISA spec, which came into being
+>> for version 2=2E38 of binutils and GCC 12=2E Building with this toolcha=
+in
+>> configuration would result in assembler issues:
+>>  CC      arch/riscv/kernel/vdso/vgettimeofday=2Eo
+>>  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday=2Eh: Assembler m=
+essages:
+>>  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday=2Eh:71: Error: u=
+nrecognized opcode `csrr a5,0xc01'
+>>  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday=2Eh:71: Error: u=
+nrecognized opcode `csrr a5,0xc01'
+>>  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday=2Eh:71: Error: u=
+nrecognized opcode `csrr a5,0xc01'
+>>  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday=2Eh:71: Error: u=
+nrecognized opcode `csrr a5,0xc01'
+>> This was fixed in commit 6df2a016c0c8 ("riscv: fix build with binutils
+>> 2=2E38") by Aurelien Jarno, but has proven fragile=2E
+>>=20
+>> Before LLVM 17, LLVM did not support these extensions and, as such, the
+>> cc-option check added by Aurelien worked=2E Since commit 22e199e6afb1
+>> ("[RISCV] Accept zicsr and zifencei command line options") however, LLV=
+M
+>> *does* support them and the cc-option check passes=2E
+>>=20
+>> This surfaced as a problem while building the 5=2E10 stable kernel usin=
+g
+>> the default Tuxmake Debian image [2], as 5=2E10 did not yet support ld=
+=2Elld,
+>> and uses the Debian provided binutils 2=2E35=2E
+>> Versions of ld prior to 2=2E38 will refuse to link if they encounter
+>> unknown ISA extensions, and unfortunately Zifencei is not supported by
+>> bintuils 2=2E35=2E
+>>=20
+>> Instead of dancing around with adding these extensions to march, as we
+>> currently do, Palmer suggested locking GCC builds to the same version o=
+f
+>> the ISA spec that is used by LLVM=2E As far as I can tell, that is 2=2E=
+2,
+>> with, apparently [3], a lack of interest in implementing a flag like
+>> GCC's -misa-spec at present=2E
+>>=20
+>> Add {cc,as}-option checks to add -misa-spec to KBUILD_{A,C}FLAGS when
+>> GCC is used & remove the march dance=2E
+>>=20
+>> As clang does not accept this argument, I had expected to encounter
+>> issues with the assembler, as neither zicsr nor zifencei are present in
+>> the ISA string and the spec version *should* be defaulting to a version
+>> that requires them to be present=2E The build passed however and the
+>> resulting kernel worked perfectly fine for me on a PolarFire SoC=2E=2E=
+=2E
+>
+>For what it=E2=80=99s worth, LLVM is likely to move from only supporting =
+the
+>old ratified spec to only supporting the latest one, with no ugly
+>-misa-spec like the GNU world=2E You may therefore wish to reconsider
+>this=2E=2E=2E
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Oh well, at least we tried=2E Back to the Kconfig way of doing it I suppos=
+e=2E=2E=2E
+
+>
+>Jess
+>
+>> Link: https://riscv=2Eorg/wp-content/uploads/2019/06/riscv-spec=2Epdf [=
+0]
+>> Link: https://groups=2Egoogle=2Ecom/a/groups=2Eriscv=2Eorg/g/sw-dev/c/a=
+E1ZeHHCYf4 [1]
+>> Link: https://lore=2Ekernel=2Eorg/all/CA+G9fYt9T=3DELCLaB9byxaLW2Qf4pZc=
+DO=3DhuCA0D8ug2V2+irJQ@mail=2Egmail=2Ecom/ [2]
+>> Link: https://discourse=2Ellvm=2Eorg/t/specifying-unpriviledge-spec-ver=
+sion-misa-spec-gcc-flag-equivalent/66935 [3]
+>> CC: stable@vger=2Ekernel=2Eorg
+>> Suggested-by: Palmer Dabbelt <palmer@rivosinc=2Ecom>
+>> Reported-by: Naresh Kamboju <naresh=2Ekamboju@linaro=2Eorg>
+>> Signed-off-by: Conor Dooley <conor=2Edooley@microchip=2Ecom>
+>> ---
+>> I think Aurelien's original commit message might actually not be quite
+>> correct? I found, in my limited testing, that it is not the default
+>> behaviour of gas that matters, but rather the toolchain itself?
+>> My binutils versions (both those built using the clang-built-linux
+>> tc-build scripts which do not set an ISA spec version, and one built
+>> using the riscv-gnu-toolchain infra w/ an explicit 20191213 spec versio=
+n
+>> set) do not encounter these issues=2E
+>> From *my* testing, I was only able to reproduce the above build failure=
+s
+>> because of *GCC* defaulting to a newer ISA spec version, and saw no
+>> issues with CC=3Dclang builds, where -misa-spec is not (AFAICT) passed =
+to
+>> gas=2E
+>> I'm far from a toolchain person, so I am very very happy to have the
+>> reason for that explained to me, as I've been scratching my head about
+>> it all evening=2E
+>>=20
+>> I'm also not super confident in my "as-option"ing, but it worked for me=
+,
+>> so it's gotta be perfect, right? riiight??
+>>=20
+>> Changes from v1:
+>> - entirely new approach to the issue
+>> ---
+>> arch/riscv/Makefile | 6 ++----
+>> 1 file changed, 2 insertions(+), 4 deletions(-)
+>>=20
+>> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+>> index 6203c3378922=2E=2E2df7a5dc071c 100644
+>> --- a/arch/riscv/Makefile
+>> +++ b/arch/riscv/Makefile
+>> @@ -57,10 +57,8 @@ riscv-march-$(CONFIG_ARCH_RV64I)	:=3D rv64ima
+>> riscv-march-$(CONFIG_FPU)		:=3D $(riscv-march-y)fd
+>> riscv-march-$(CONFIG_RISCV_ISA_C)	:=3D $(riscv-march-y)c
+>>=20
+>> -# Newer binutils versions default to ISA spec version 20191213 which m=
+oves some
+>> -# instructions from the I extension to the Zicsr and Zifencei extensio=
+ns=2E
+>> -toolchain-need-zicsr-zifencei :=3D $(call cc-option-yn, -march=3D$(ris=
+cv-march-y)_zicsr_zifencei)
+>> -riscv-march-$(toolchain-need-zicsr-zifencei) :=3D $(riscv-march-y)_zic=
+sr_zifencei
+>> +KBUILD_CFLAGS +=3D $(call cc-option,-misa-spec=3D2=2E2)
+>> +KBUILD_AFLAGS +=3D $(call as-option,-Wa$(comma)-misa-spec=3D2=2E2)
+>>=20
+>> # Check if the toolchain supports Zihintpause extension
+>> riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZIHINTPAUSE) :=3D $(riscv-march-y)_z=
+ihintpause
+>> --=20
+>> 2=2E39=2E2
+>>=20
+>>=20
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists=2Einfradead=2Eorg
+>> http://lists=2Einfradead=2Eorg/mailman/listinfo/linux-riscv
+>
