@@ -1,58 +1,51 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A742D36D
-	for <llvm@lists.linux.dev>; Thu,  9 Mar 2023 00:01:48 +0000 (UTC)
-Received: by mail-pj1-f51.google.com with SMTP id x34so555039pjj.0
-        for <llvm@lists.linux.dev>; Wed, 08 Mar 2023 16:01:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678320108;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=nTISrXpO300lpFWqqY1St1bGS5UZ70h7TsS28CdZuhA=;
-        b=OSHH/be/3Um8HQAHWPBTdCCQkmWHtcATgC8xhii7OXWNi7XnAxDWlso2vnezj1oCRR
-         5suxGvWvoS/Q68mCSQJ3vvc93sSz0jPiiYonwvsevz4GN0DlS4rpvw4AHXClpVG5f5RS
-         YspWn/WIXzmuMTSuJ5mnrymiR8ukn/CimiMBc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678320108;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nTISrXpO300lpFWqqY1St1bGS5UZ70h7TsS28CdZuhA=;
-        b=CaCbrKobxxtOAK+eYuXtydT+u7R2yN4YbhVBtS16KQ5ZYcRYVxxYpUUmgjGkC2Ylrc
-         SFZ7y1XfCh7xVC21B5O6qOrmw2V5qOv8jV20d1X+S+s2G0JcJVZbVdnB+cY+OgLYOik2
-         FWESDr2jUlDyz/4k+EgNxpxsnHAJX6tNz1SCEEVm71V1FSjZABJOpy1ZFEuxKU2KR7ZX
-         8bS4HPP91XRq5/mJyu16qBxQMGqGPvwJ8Xxkmq4fGIhahByNS+qNuTlu+nlumMP5IW32
-         6eycQhSco0ivsRdRuj0jHjojjCwT0Yd5TYcKhOTcvPrmciiczyhcKyyIC9a4UpJDxVoQ
-         skbw==
-X-Gm-Message-State: AO0yUKXtl34EFKgMQqY/gLTwrU50NpT7dkUZDA060AZYmxCVB7B7UIDb
-	cOuDRFf2AuEtc5FUhkfid7xB7w==
-X-Google-Smtp-Source: AK7set8ApWx6kr+SfAyfzkE3zoJmXnq6ygcwKo6GPYa61JZgMWxU/LDFmiGNI9zIm/KYlrc1vCUDPA==
-X-Received: by 2002:a17:903:18d:b0:19a:eb93:6165 with SMTP id z13-20020a170903018d00b0019aeb936165mr27011036plg.22.1678320108014;
-        Wed, 08 Mar 2023 16:01:48 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t18-20020a170902d21200b00185402cfedesm10299288ply.246.2023.03.08.16.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 16:01:47 -0800 (PST)
-Message-ID: <640921eb.170a0220.28e72.38c8@mx.google.com>
-X-Google-Original-Message-ID: <202303081601.@keescook>
-Date: Wed, 8 Mar 2023 16:01:46 -0800
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
-	linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-	lkft-triage@lists.linaro.org, Thomas Gleixner <tglx@linutronix.de>,
-	"Chang S. Bae" <chang.seok.bae@intel.com>,
-	Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
-	Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests: sigaltstack: fix -Wuninitialized
-References: <20230308195933.806917-1-ndesaulniers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE84367;
+	Thu,  9 Mar 2023 00:25:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678321508; x=1709857508;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sIwwmAt7KlTF7l6Vrb1Y0LQqzYM6y30mcH8hZqFhyvQ=;
+  b=mFixVEcvnLxKectLVfKqmozv1XzQxweHQBPdKTbh9sAGot7RrJSY8b/j
+   sz2qpSJTK8ozfEx88ixAJIM39wHvQO4E53LDzC9+z5dW6BTeFf9Ssy3s+
+   IFq4FbiDsFprY4aGqsf7TJlaPxdjeUqWiMfByWc7tiIE4r2LfbXubAVS+
+   Rq/OD6GVCJcwMyQM9n81oRKA0pUTYzQ//Me7IU4WC6yDLfphPoSYF2qg1
+   YkZZkqETDnJJykvtWOnfCHuEqVHXdSUHJpuz4d+rLLcnwPTDmvDQDtkuC
+   Plh+icEGeD1E1yjC3N3eHxt52Hx23aWwrvlcZ+igUBcbNgkrz0JHH3ACA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="398895012"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="398895012"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 16:25:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="800967026"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="800967026"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2023 16:25:04 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pa45f-0002Vx-2F;
+	Thu, 09 Mar 2023 00:25:03 +0000
+Date: Thu, 9 Mar 2023 08:24:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Iskren Chernev <me@iskren.info>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Matheus Castello <matheus@castello.eng.br>,
+	Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] power: max17040: get thermal data from adc if
+ available
+Message-ID: <202303090817.SuiCpxvy-lkp@intel.com>
+References: <20230308084419.11934-5-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,31 +54,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308195933.806917-1-ndesaulniers@google.com>
+In-Reply-To: <20230308084419.11934-5-clamor95@gmail.com>
 
-On Wed, Mar 08, 2023 at 11:59:33AM -0800, Nick Desaulniers wrote:
-> Building sigaltstack with clang via:
-> $ ARCH=x86 make LLVM=1 -C tools/testing/selftests/sigaltstack/
-> 
-> produces the following warning:
->   warning: variable 'sp' is uninitialized when used here [-Wuninitialized]
->   if (sp < (unsigned long)sstack ||
->       ^~
-> 
-> Clang expects these to be declared at global scope; we've fixed this in
-> the kernel proper by using the macro `current_stack_pointer`. This is
-> defined in different headers for different target architectures, so just
-> create a new header that defines the arch-specific register names for
-> the stack pointer register, and define it for more targets (at least the
-> ones that support current_stack_pointer/ARCH_HAS_CURRENT_STACK_POINTER).
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Link: https://lore.kernel.org/lkml/CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com/
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Hi Svyatoslav,
 
-Looks good!
+Thank you for the patch! Yet something to improve:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on krzk-dt/for-next linus/master v6.3-rc1 next-20230308]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230308-164538
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20230308084419.11934-5-clamor95%40gmail.com
+patch subject: [PATCH v1 4/4] power: max17040: get thermal data from adc if available
+config: hexagon-randconfig-r035-20230308 (https://download.01.org/0day-ci/archive/20230309/202303090817.SuiCpxvy-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7b9bbf6f2b910ef4ffab18022223573e9094f007
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Svyatoslav-Ryhel/dt-bindings-power-supply-maxim-max17040-update-properties/20230308-164538
+        git checkout 7b9bbf6f2b910ef4ffab18022223573e9094f007
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303090817.SuiCpxvy-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: iio_channel_release
+   >>> referenced by max17040_battery.c:586 (drivers/power/supply/max17040_battery.c:586)
+   >>>               drivers/power/supply/max17040_battery.o:(max17040_remove) in archive vmlinux.a
+   >>> referenced by max17040_battery.c:586 (drivers/power/supply/max17040_battery.c:586)
+   >>>               drivers/power/supply/max17040_battery.o:(max17040_remove) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: iio_channel_get
+   >>> referenced by max17040_battery.c:572 (drivers/power/supply/max17040_battery.c:572)
+   >>>               drivers/power/supply/max17040_battery.o:(max17040_probe) in archive vmlinux.a
+   >>> referenced by max17040_battery.c:572 (drivers/power/supply/max17040_battery.c:572)
+   >>>               drivers/power/supply/max17040_battery.o:(max17040_probe) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: iio_read_channel_raw
+   >>> referenced by max17040_battery.c:422 (drivers/power/supply/max17040_battery.c:422)
+   >>>               drivers/power/supply/max17040_battery.o:(max17040_get_property) in archive vmlinux.a
+   >>> referenced by max17040_battery.c:422 (drivers/power/supply/max17040_battery.c:422)
+   >>>               drivers/power/supply/max17040_battery.o:(max17040_get_property) in archive vmlinux.a
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
