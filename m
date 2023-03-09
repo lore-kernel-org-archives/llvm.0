@@ -1,326 +1,154 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDC2BA57;
-	Thu,  9 Mar 2023 14:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDC4C261;
+	Thu,  9 Mar 2023 17:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678370982; x=1709906982;
+  t=1678383223; x=1709919223;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u+pykYZUZpxPsPS/hM6Y6qEtHxrOdKaAHiaV1vJ64uA=;
-  b=iJxZUh6s1lBJ7pj1MKVGr59VpjdKeIMKRjjDJgNFIBLqhla8k0ZhMr2K
-   CaPwzkcXePd44qUB+KaQFo+voZazQzUSldf9dXXrTFACzPsJ7t3aI9ETq
-   Qwy9i7b/Yj9ujqTonO6FI2ABZtv4eIG5Y6ZeBWe0i+4gToP1YGTp9g4tS
-   eIhhjsUwr17j/KPgpn4mD/Za2AmIjEgbZZNhjL7uwAgyduvfYoaRvEWL3
-   LnEUsBtUFYhVyIZpyJ1wuncBcJOY1ydW9PDN6TLLsue0iTGfDY5uA67Dn
-   14ZJBALnWVIY6UY5ILMyex8nqDadwUiOm47VqGJYCrkNVT91mWPKyv416
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="333922480"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="333922480"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 06:09:29 -0800
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=kBuk/qbo+wS0XQ/dFeyx8JguJDt+9dG8zDXc8OBOCnk=;
+  b=Q6WZDTBGq8VnVY4zJsvKQiOJY539J9omDyD+BiKBKc5ZB+pZQQEOc7/X
+   ZQ4rlzkj83cIv5CvkL+1+O3vINGU/WZ9jsVkTp3mcuBguPtctOr9EpAjB
+   gSIqiVQuUxMpTQoqNscBqgSd2+oYZRh1qsE34kk3LMBVNaaQEOBy8ylBf
+   8h74ozU3DIgDumUTMxV/5ZaSH1yKUNLyVpur9pZOp2PqLF1UmdtMuvgHL
+   7yEs2T+BVMpRAgpoR4g/ub2nflgdFNylfvJGvIMqtFfjhFs0hf5IAPWa2
+   P0GUvpzBauC4pAxSGRMZdCi4vzpSu8MNeqIt+L/s0OJyaYxHd7+YGkebj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="364156741"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="364156741"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 09:33:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="820614347"
-X-IronPort-AV: E=Sophos;i="5.98,246,1673942400"; 
-   d="scan'208";a="820614347"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="707697340"
+X-IronPort-AV: E=Sophos;i="5.98,247,1673942400"; 
+   d="scan'208";a="707697340"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Mar 2023 06:09:26 -0800
+  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2023 09:33:36 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1paGxR-0002zs-2y;
-	Thu, 09 Mar 2023 14:09:25 +0000
-Date: Thu, 9 Mar 2023 22:08:27 +0800
+	id 1paK91-00037N-0T;
+	Thu, 09 Mar 2023 17:33:35 +0000
+Date: Fri, 10 Mar 2023 01:33:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, hannes@cmpxchg.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	bfoster@redhat.com, willy@infradead.org, arnd@arndb.de,
-	linux-api@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v11 2/3] cachestat: implement cachestat syscall
-Message-ID: <202303092105.82x0kEIp-lkp@intel.com>
-References: <20230308032748.609510-3-nphamcs@gmail.com>
+To: =?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-omap@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Michael Walle <michael@walle.cc>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Kory Maincent <kory.maincent@bootlin.com>,
+	thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jay Vosburgh <j.vosburgh@gmail.com>,
+	Veaceslav Falico <vfalico@gmail.com>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	Joakim Zhang <qiangqing.zhang@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	UNGLinuxDriver@microchip.com,
+	Grygorii Strashko <grygorii.strashko@ti.com>,
+	Minghao Chi <chi.minghao@zte.com.cn>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be
+ selectable.
+Message-ID: <202303100154.iqj4R4fL-lkp@intel.com>
+References: <20230308135936.761794-4-kory.maincent@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230308032748.609510-3-nphamcs@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230308135936.761794-4-kory.maincent@bootlin.com>
 
-Hi Nhat,
+Hi Köry,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on 1440f576022887004f719883acb094e7e0dd4944]
+[auto build test WARNING on v6.2]
+[cannot apply to robh/for-next horms-ipvs/master net/master net-next/master linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230308-112932
-base:   1440f576022887004f719883acb094e7e0dd4944
-patch link:    https://lore.kernel.org/r/20230308032748.609510-3-nphamcs%40gmail.com
-patch subject: [PATCH v11 2/3] cachestat: implement cachestat syscall
-config: hexagon-randconfig-r041-20230308 (https://download.01.org/0day-ci/archive/20230309/202303092105.82x0kEIp-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+url:    https://github.com/intel-lab-lkp/linux/commits/K-ry-Maincent/net-ethtool-Refactor-identical-get_ts_info-implementations/20230308-220453
+patch link:    https://lore.kernel.org/r/20230308135936.761794-4-kory.maincent%40bootlin.com
+patch subject: [PATCH v3 3/5] net: Let the active time stamping layer be selectable.
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230310/202303100154.iqj4R4fL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ca34a4daf11f6fbb9731205af7acd06fe620e447
+        # https://github.com/intel-lab-lkp/linux/commit/d81a36f239360e7e3b9ca2633e52b3cb12205590
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nhat-Pham/workingset-refactor-LRU-refault-to-expose-refault-recency-check/20230308-112932
-        git checkout ca34a4daf11f6fbb9731205af7acd06fe620e447
+        git fetch --no-tags linux-review K-ry-Maincent/net-ethtool-Refactor-identical-get_ts_info-implementations/20230308-220453
+        git checkout d81a36f239360e7e3b9ca2633e52b3cb12205590
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/phy/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303092105.82x0kEIp-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303100154.iqj4R4fL-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
->> include/linux/compat.h:821:31: warning: declaration of 'struct cachestat' will not be visible outside of this function [-Wvisibility]
-                   compat_arg_u64(off), struct cachestat __user *cstat,
-                                               ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   7 warnings generated.
---
-   In file included from mm/filemap.c:20:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from mm/filemap.c:20:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from mm/filemap.c:20:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> mm/filemap.c:4034:6: warning: no previous prototype for function 'ksys_cachestat' [-Wmissing-prototypes]
-   long ksys_cachestat(unsigned int fd, size_t len, loff_t off,
+>> drivers/net/phy/phy_device.c:1384:6: warning: no previous prototype for function 'of_set_timestamp' [-Wmissing-prototypes]
+   void of_set_timestamp(struct net_device *netdev, struct phy_device *phydev)
         ^
-   mm/filemap.c:4034:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   long ksys_cachestat(unsigned int fd, size_t len, loff_t off,
+   drivers/net/phy/phy_device.c:1384:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void of_set_timestamp(struct net_device *netdev, struct phy_device *phydev)
    ^
    static 
-   7 warnings generated.
---
-   In file included from security/keys/gc.c:11:
-   In file included from security/keys/internal.h:19:
->> include/linux/compat.h:821:31: warning: declaration of 'struct cachestat' will not be visible outside of this function [-Wvisibility]
-                   compat_arg_u64(off), struct cachestat __user *cstat,
-                                               ^
-   1 warning generated.
---
-   In file included from security/keys/key.c:16:
-   In file included from include/linux/ima.h:13:
-   In file included from include/linux/kexec.h:19:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from security/keys/key.c:16:
-   In file included from include/linux/ima.h:13:
-   In file included from include/linux/kexec.h:19:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from security/keys/key.c:16:
-   In file included from include/linux/ima.h:13:
-   In file included from include/linux/kexec.h:19:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   In file included from security/keys/key.c:18:
-   In file included from security/keys/internal.h:19:
->> include/linux/compat.h:821:31: warning: declaration of 'struct cachestat' will not be visible outside of this function [-Wvisibility]
-                   compat_arg_u64(off), struct cachestat __user *cstat,
-                                               ^
-   7 warnings generated.
---
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
->> include/linux/compat.h:821:31: warning: declaration of 'struct cachestat' will not be visible outside of this function [-Wvisibility]
-                   compat_arg_u64(off), struct cachestat __user *cstat,
-                                               ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:15:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   7 warnings generated.
-   <stdin>:1517:2: warning: syscall clone3 not implemented [-W#warnings]
-   #warning syscall clone3 not implemented
-    ^
    1 warning generated.
 
 
-vim +821 include/linux/compat.h
+vim +/of_set_timestamp +1384 drivers/net/phy/phy_device.c
 
-   809	
-   810	/* net/socket.c */
-   811	asmlinkage long compat_sys_recvfrom(int fd, void __user *buf, compat_size_t len,
-   812				    unsigned flags, struct sockaddr __user *addr,
-   813				    int __user *addrlen);
-   814	asmlinkage long compat_sys_sendmsg(int fd, struct compat_msghdr __user *msg,
-   815					   unsigned flags);
-   816	asmlinkage long compat_sys_recvmsg(int fd, struct compat_msghdr __user *msg,
-   817					   unsigned int flags);
-   818	
-   819	/* mm/filemap.c */
-   820	asmlinkage long compat_sys_cachestat(unsigned int fd, size_t len,
- > 821			compat_arg_u64(off), struct cachestat __user *cstat,
-   822			unsigned int flags);
-   823	
+  1383	
+> 1384	void of_set_timestamp(struct net_device *netdev, struct phy_device *phydev)
+  1385	{
+  1386		struct device_node *node = phydev->mdio.dev.of_node;
+  1387		const struct ethtool_ops *ops = netdev->ethtool_ops;
+  1388		const char *s;
+  1389		enum timestamping_layer ts_layer = 0;
+  1390	
+  1391		if (phy_has_hwtstamp(phydev))
+  1392			ts_layer = PHY_TIMESTAMPING;
+  1393		else if (ops->get_ts_info)
+  1394			ts_layer = MAC_TIMESTAMPING;
+  1395	
+  1396		if (of_property_read_string(node, "preferred-timestamp", &s))
+  1397			goto out;
+  1398	
+  1399		if (!s)
+  1400			goto out;
+  1401	
+  1402		if (phy_has_hwtstamp(phydev) && !strcmp(s, "phy"))
+  1403			ts_layer = PHY_TIMESTAMPING;
+  1404	
+  1405		if (ops->get_ts_info && !strcmp(s, "mac"))
+  1406			ts_layer = MAC_TIMESTAMPING;
+  1407	
+  1408	out:
+  1409		netdev->selected_timestamping_layer = ts_layer;
+  1410	}
+  1411	
 
 -- 
 0-DAY CI Kernel Test Service
