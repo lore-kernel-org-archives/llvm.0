@@ -1,17 +1,17 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5277846C;
-	Fri, 10 Mar 2023 14:33:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33FD7C433EF;
-	Fri, 10 Mar 2023 14:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2648820;
+	Fri, 10 Mar 2023 14:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F27C433EF;
+	Fri, 10 Mar 2023 14:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1678458783;
-	bh=yQJSZcfYXWTDUyGGmtHOLv8S1mP2iPgVwEZ5UYp+008=;
+	s=korg; t=1678460098;
+	bh=y8vhD0H4l+A/BrdyMJv0lkuYKZVA9CPQalpg7zyF57E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=s/kcfRgzt/O/ESEOhBn13h287+KB9MMp1z9OmuZOjteSq4JQnA8zE+FwxpMfDWXsY
-	 h5YAfhDXgzzlqGb+W376pZ+PnVTpRFlZpXLGDfLHUvn8KEZRi/IGyKLzqzo02aF1Lf
-	 QltaId+S7W1VSpArMtHIVdhGY5WVsHppUgcsN5Dc=
+	b=QK/mY8LFTwjsjEldIiVP3FFDfPpzSiOaZrf1lGXJ8RtuUb4FiFVJqlUIKVq/d8Rhz
+	 1b8SbXCXaYzCu8QVKsnugpE7OZAn9K9KY8lmaIZ449+ZM8N2LkfGMfA15dDKMzfQLZ
+	 XQEzfbTS4OssCaZ1O9rI7owCBA9T1pefukxvJwgo=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Tom Rix <trix@redhat.com>,
 	Arnaldo Carvalho de Melo <acme@redhat.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 143/357] perf llvm: Fix inadvertent file creation
-Date: Fri, 10 Mar 2023 14:37:12 +0100
-Message-Id: <20230310133741.006036179@linuxfoundation.org>
+Subject: [PATCH 5.10 223/529] perf llvm: Fix inadvertent file creation
+Date: Fri, 10 Mar 2023 14:36:06 +0100
+Message-Id: <20230310133815.336510503@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230310133733.973883071@linuxfoundation.org>
-References: <20230310133733.973883071@linuxfoundation.org>
+In-Reply-To: <20230310133804.978589368@linuxfoundation.org>
+References: <20230310133804.978589368@linuxfoundation.org>
 User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 24 insertions(+), 1 deletion(-)
 
 diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-index e7c7e3232fc5a..b275a1b297c30 100644
+index 0bf6b4d4c90a7..570cde4640d05 100644
 --- a/tools/perf/util/llvm-utils.c
 +++ b/tools/perf/util/llvm-utils.c
-@@ -523,14 +523,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+@@ -525,14 +525,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
  
  	pr_debug("llvm compiling command template: %s\n", template);
  
