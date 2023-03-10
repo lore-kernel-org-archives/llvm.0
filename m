@@ -1,52 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3063D8A;
-	Fri, 10 Mar 2023 12:48:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD296ADB;
+	Fri, 10 Mar 2023 12:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678452503; x=1709988503;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U81uRxesHe8eFauiEOy3i19Qhk4z3KVhUPplxSsaCUQ=;
-  b=MlUrGOSS/a+KtTjXq3mVmboMx/Ko1dznMhbA1s5mF0J+nZTeNoHEi9u1
-   l3QzYrEX91eiUpHSYaPHlwD3gVlilZi7PAoxMvsubwCY3xb+m/MPpgUSz
-   TSJ9ftNfsRdEKP4Sb7cc1h8ewog+nFdyTmV0ToFSqIQLP0ZFyNv0UlM2p
-   7Is++wIe/ynd05egDo91VZiyFtGBEs2oioZocWhxq+nGAPa7aEoGAwKo8
-   7eCM07r9Ge9V3UckBPkTHpDaSJzl/y8ZwifQ9xa2ypViVyRVQFPgPcGjl
-   DgW4iU3uDNo96HAnhQSRVq5kXy7s3ipSf2d8oQmI6R9PKMm9TOYtCFjAP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="334195760"
+  t=1678453118; x=1709989118;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MaBqVEaZcE32Jvoqf7DhB8Nxha1L58hQtwPzl972mow=;
+  b=CIxNtV0b8jEvbTKxXCDDSaCnLYQRAOYLXsSkY4qAX1S6Xt3UKmjOfHkP
+   WaiSYtKqpV4ySiOuOns9UvYQx44dCnxbYCuy0Ivp+39Vy+bJ6XteavNjP
+   cpwu9crzfmnwuZNz8vxYhUs3Ery5/kG6WdNG1KV78KhoS9FMsv6PsgfSd
+   xXkmgXX0SJhvfzsj+/S9itKksqlZ3cN6AW/uQEFEisTGcNL9daM9KPSmc
+   frXi390wbFo+g3v5L9RnHOiG6A4h33P49RQL+50cP/N3ZWfbsWjmJ6oVT
+   sOHiAGfPeagp9cN8rR3xlSWwJvbSyNcvqqp35xnneNed/p7wdzQ8A1rXA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="317110870"
 X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="334195760"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 04:48:22 -0800
+   d="scan'208";a="317110870"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 04:58:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="746700777"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="707996774"
 X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="746700777"
+   d="scan'208";a="707996774"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Mar 2023 04:48:19 -0800
+  by orsmga008.jf.intel.com with ESMTP; 10 Mar 2023 04:58:19 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pacAU-0003rj-2h;
-	Fri, 10 Mar 2023 12:48:18 +0000
-Date: Fri, 10 Mar 2023 20:47:47 +0800
+	id 1pacKB-0003s3-02;
+	Fri, 10 Mar 2023 12:58:19 +0000
+Date: Fri, 10 Mar 2023 20:58:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: "A. Sverdlin" <alexander.sverdlin@siemens.com>,
-	NXP Linux Team <linux-imx@nxp.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: lpi2c: cache peripheral clock rate
-Message-ID: <202303102026.xZsE7TNu-lkp@intel.com>
-References: <20230310112605.476922-1-alexander.sverdlin@siemens.com>
+	Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 172/432]
+ arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type
+Message-ID: <202303102004.RkRh1ndu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,91 +46,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310112605.476922-1-alexander.sverdlin@siemens.com>
 
-Hi Sverdlin,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v6.3-rc1 next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/A-Sverdlin/i2c-lpi2c-cache-peripheral-clock-rate/20230310-192720
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20230310112605.476922-1-alexander.sverdlin%40siemens.com
-patch subject: [PATCH v2] i2c: lpi2c: cache peripheral clock rate
-config: arm64-buildonly-randconfig-r002-20230310 (https://download.01.org/0day-ci/archive/20230310/202303102026.xZsE7TNu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   b4a08c4cd3ed29e3977509b24adc2c59e39825c1
+commit: e83792bfbe07a14fa2c616e2aad763434062b3c0 [172/432] KVM: TDX: Add C wrapper functions for SEAMCALLs to the TDX module
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230310/202303102004.RkRh1ndu-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/aa3870869fbb164ebdc12f412c07c66f1d7cdf2d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review A-Sverdlin/i2c-lpi2c-cache-peripheral-clock-rate/20230310-192720
-        git checkout aa3870869fbb164ebdc12f412c07c66f1d7cdf2d
+        # https://github.com/intel/tdx/commit/e83792bfbe07a14fa2c616e2aad763434062b3c0
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout e83792bfbe07a14fa2c616e2aad763434062b3c0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/i2c/busses/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303102026.xZsE7TNu-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303102004.RkRh1ndu-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-imx-lpi2c.c:209:10: error: no member named 'clk_per' in 'struct lpi2c_imx_struct'
-                                                             clk_per);
-                                                             ^~~~~~~~
-   include/linux/container_of.h:20:49: note: expanded from macro 'container_of'
-           static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:338:74: note: expanded from macro '__same_type'
-   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-                                                                            ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                                          ^~~~
->> drivers/i2c/busses/i2c-imx-lpi2c.c:207:39: error: no member named 'clk_per' in 'lpi2c_imx_struct'
-           struct lpi2c_imx_struct *lpi2c_imx = container_of(&ndata->clk,
-                                                ^
-   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
-           ((type *)(__mptr - offsetof(type, member))); })
-                              ^              ~~~~~~
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-   #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-                                   ^                        ~~~~~~
->> drivers/i2c/busses/i2c-imx-lpi2c.c:207:27: error: initializing 'struct lpi2c_imx_struct *' with an expression of incompatible type 'void'
-           struct lpi2c_imx_struct *lpi2c_imx = container_of(&ndata->clk,
-                                    ^           ~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+   In file included from arch/x86/kernel/asm-offsets.c:21:
+>> arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type [-Wshift-count-overflow]
+                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+                                                                        ^~~~~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:24:28: note: expanded from macro 'TDX_SEAMCALL_UD'
+   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
+                                            ^~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:20:25: note: expanded from macro 'TDX_SW_ERROR'
+   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
+                                            ^~~~~~~~~
+   arch/x86/include/asm/tdx.h:19:21: note: expanded from macro 'TDX_ERROR'
+   #define TDX_ERROR                       _BITUL(63)
+                                           ^~~~~~~~~~
+   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
+   #define _BITUL(x)       (_UL(1) << (x))
+                                   ^  ~~~
+   1 warning generated.
+--
+   In file included from arch/x86/platform/pvh/enlighten.c:7:
+   In file included from arch/x86/include/asm/hypervisor.h:37:
+   In file included from arch/x86/include/asm/kvm_para.h:10:
+>> arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type [-Wshift-count-overflow]
+                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+                                                                        ^~~~~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:24:28: note: expanded from macro 'TDX_SEAMCALL_UD'
+   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
+                                            ^~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:20:25: note: expanded from macro 'TDX_SW_ERROR'
+   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
+                                            ^~~~~~~~~
+   arch/x86/include/asm/tdx.h:19:21: note: expanded from macro 'TDX_ERROR'
+   #define TDX_ERROR                       _BITUL(63)
+                                           ^~~~~~~~~~
+   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
+   #define _BITUL(x)       (_UL(1) << (x))
+                                   ^  ~~~
+   arch/x86/platform/pvh/enlighten.c:120:13: warning: no previous prototype for function 'xen_prepare_pvh' [-Wmissing-prototypes]
+   void __init xen_prepare_pvh(void)
+               ^
+   arch/x86/platform/pvh/enlighten.c:120:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init xen_prepare_pvh(void)
+   ^
+   static 
+   2 warnings generated.
+--
+   In file included from arch/x86/kernel/asm-offsets.c:21:
+>> arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type [-Wshift-count-overflow]
+                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+                                                                        ^~~~~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:24:28: note: expanded from macro 'TDX_SEAMCALL_UD'
+   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
+                                            ^~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:20:25: note: expanded from macro 'TDX_SW_ERROR'
+   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
+                                            ^~~~~~~~~
+   arch/x86/include/asm/tdx.h:19:21: note: expanded from macro 'TDX_ERROR'
+   #define TDX_ERROR                       _BITUL(63)
+                                           ^~~~~~~~~~
+   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
+   #define _BITUL(x)       (_UL(1) << (x))
+                                   ^  ~~~
+   1 warning generated.
 
 
-vim +209 drivers/i2c/busses/i2c-imx-lpi2c.c
+vim +114 arch/x86/include/asm/tdx.h
 
-   202	
-   203	static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
-   204					   unsigned long action, void *data)
-   205	{
-   206		struct clk_notifier_data *ndata = data;
- > 207		struct lpi2c_imx_struct *lpi2c_imx = container_of(&ndata->clk,
-   208								  struct lpi2c_imx_struct,
- > 209								  clk_per);
-   210	
-   211		if (action & POST_RATE_CHANGE)
-   212			lpi2c_imx->rate_per = ndata->new_rate;
-   213	
-   214		return NOTIFY_OK;
-   215	}
-   216	
+   102	
+   103	#ifdef CONFIG_INTEL_TDX_HOST
+   104	bool platform_tdx_enabled(void);
+   105	int tdx_cpu_enable(void);
+   106	int tdx_enable(void);
+   107	u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
+   108		       struct tdx_module_output *out);
+   109	#else	/* !CONFIG_INTEL_TDX_HOST */
+   110	static inline bool platform_tdx_enabled(void) { return false; }
+   111	static inline int tdx_cpu_enable(void) { return -EINVAL; }
+   112	static inline int tdx_enable(void)  { return -EINVAL; }
+   113	static inline u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
+ > 114				     struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+   115	#endif	/* CONFIG_INTEL_TDX_HOST */
+   116	
 
 -- 
 0-DAY CI Kernel Test Service
