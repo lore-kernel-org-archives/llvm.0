@@ -1,43 +1,61 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7767E6;
-	Fri, 10 Mar 2023 02:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD16F7B;
+	Fri, 10 Mar 2023 02:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678414670; x=1709950670;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=a8tUgxwMUUusAh+tTV0J7aU8OBh0gR2gGK+YmcteLOA=;
-  b=XQIOMtKqq4zknAF/50h4z8zaoO8gRncG0dTItAQl4i2yKMAZ08YNEBTQ
-   ldnT7d+ppf+oEMqrYKqAhaLpyy48IuPkMMrSA9W8+vO8VjlN6JZuBwKq/
-   IbHTcmf4Y68uwpofcxejd8As0MibacXaIwSB0CJyAE754wAp+IsPoQqJN
-   nsfz1ZwJk4WieKZvZtppoSB3czNcbV5iYQVbdr0CkZ6BeHlU8Fxb3edjr
-   qK+FihEArueCNW/U6E2cXkuaNXg0O+xEFYRSsvSygD+2sOR3Okqv52avA
-   VMmDSZjXA17xYS4G9j7ZVuugT6B0Ozj3+aXGAsXwDL7/2ZV8AI/vR4clu
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="320481002"
+  t=1678415876; x=1709951876;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=a49MuUqY9uTekKka3fjSfGx7KEeZta0jUytQypcPsz4=;
+  b=NBMWznDdDXBUP28JrQIKgX39GTrDDLvDhmA2XxM3FfnD2y0m8LUX0SLW
+   yZH5e4cLS8HYxGq8neMC0Qi0I0nVKQHKJcUVUg/5kF1n5CEcwfypTIJ+I
+   dNOcexVjFX/17BTWuTJsZhpcyD34tyYR7d6k8hftlwvemjrP7LuU0dZii
+   k4wIwS7u+VzL98MgYKlOiwt+4De8E6r8cg+Lafu3kgsvr0BdYk05SFjOk
+   CVV8enYhTDZpeEZ6Qu2Y2nQ9uotNFahLL300I86s64HFJUML62Y0yiL24
+   yjrp54NT3C85teApsyJ8qXLMsglEEBHMbR/HjH6G9WzWVnGNH+hgW69XK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="335325564"
 X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="320481002"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 18:17:49 -0800
+   d="scan'208";a="335325564"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 18:37:55 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="680043667"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="801413998"
 X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="680043667"
+   d="scan'208";a="801413998"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Mar 2023 18:17:48 -0800
+  by orsmga004.jf.intel.com with ESMTP; 09 Mar 2023 18:37:50 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1paSKJ-0003NZ-1t;
-	Fri, 10 Mar 2023 02:17:47 +0000
-Date: Fri, 10 Mar 2023 10:16:58 +0800
+	id 1paSdh-0003OJ-03;
+	Fri, 10 Mar 2023 02:37:49 +0000
+Date: Fri, 10 Mar 2023 10:37:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stephen Smalley <stephen.smalley.work@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [selinuxproject-selinux:pr/64 2/2] security/selinux/ima.c:77:2:
- error: member reference type 'struct mutex' is not a pointer; did you mean
- to use '.'?
-Message-ID: <202303101057.mZ3Gv5fK-lkp@intel.com>
+To: Yosry Ahmed <yosryahmed@google.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Miaohe Lin <linmiaohe@huawei.com>,
+	David Hildenbrand <david@redhat.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, Peter Xu <peterx@redhat.com>,
+	NeilBrown <neilb@suse.de>, Shakeel Butt <shakeelb@google.com>,
+	Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+	Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH v2 2/3] mm: vmscan: refactor updating reclaimed pages in
+ reclaim_state
+Message-ID: <202303101037.13QFIjZH-lkp@intel.com>
+References: <20230309093109.3039327-3-yosryahmed@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,145 +64,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230309093109.3039327-3-yosryahmed@google.com>
 
-tree:   https://github.com/SELinuxProject/selinux-kernel pr/64
-head:   e619414065da38197e0148bb7b00d0a6997de5f1
-commit: e619414065da38197e0148bb7b00d0a6997de5f1 [2/2] selinux: stop passing selinux_state pointers and their offspring
-config: hexagon-randconfig-r045-20230308 (https://download.01.org/0day-ci/archive/20230310/202303101057.mZ3Gv5fK-lkp@intel.com/config)
+Hi Yosry,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on xfs-linux/for-next]
+[also build test ERROR on linus/master v6.3-rc1 next-20230309]
+[cannot apply to akpm-mm/mm-everything vbabka-slab/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/mm-vmscan-move-set_task_reclaim_state-after-cgroup_reclaim/20230309-173354
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+patch link:    https://lore.kernel.org/r/20230309093109.3039327-3-yosryahmed%40google.com
+patch subject: [PATCH v2 2/3] mm: vmscan: refactor updating reclaimed pages in reclaim_state
+config: powerpc-g5_defconfig (https://download.01.org/0day-ci/archive/20230310/202303101037.13QFIjZH-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/SELinuxProject/selinux-kernel/commit/e619414065da38197e0148bb7b00d0a6997de5f1
-        git remote add selinuxproject-selinux https://github.com/SELinuxProject/selinux-kernel
-        git fetch --no-tags selinuxproject-selinux pr/64
-        git checkout e619414065da38197e0148bb7b00d0a6997de5f1
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/63df60b27250f3f7a2892f99f27258b60a6e8e13
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yosry-Ahmed/mm-vmscan-move-set_task_reclaim_state-after-cgroup_reclaim/20230309-173354
+        git checkout 63df60b27250f3f7a2892f99f27258b60a6e8e13
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash security/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/ drivers/net/usb/ fs/xfs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303101057.mZ3Gv5fK-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303101037.13QFIjZH-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from security/selinux/ima.c:11:
-   In file included from include/linux/ima.h:13:
-   In file included from include/linux/kexec.h:19:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from security/selinux/ima.c:11:
-   In file included from include/linux/ima.h:13:
-   In file included from include/linux/kexec.h:19:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from security/selinux/ima.c:11:
-   In file included from include/linux/ima.h:13:
-   In file included from include/linux/kexec.h:19:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> security/selinux/ima.c:77:2: error: member reference type 'struct mutex' is not a pointer; did you mean to use '.'?
-           lockdep_assert_held(selinux_state.policy_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:319:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:286:52: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                               ^
-   include/linux/lockdep.h:313:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
->> security/selinux/ima.c:77:2: error: cannot take the address of an rvalue of type 'struct lockdep_map'
-           lockdep_assert_held(selinux_state.policy_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:319:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:286:45: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                        ^
-   include/linux/lockdep.h:313:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   6 warnings and 2 errors generated.
+>> fs/xfs/xfs_buf.c:289:2: error: call to undeclared function 'report_freed_pages'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           report_freed_pages(bp->b_page_count);
+           ^
+   fs/xfs/xfs_buf.c:289:2: note: did you mean 'mempool_free_pages'?
+   include/linux/mempool.h:102:6: note: 'mempool_free_pages' declared here
+   void mempool_free_pages(void *element, void *pool_data);
+        ^
+   1 error generated.
 
 
-vim +77 security/selinux/ima.c
+vim +/report_freed_pages +289 fs/xfs/xfs_buf.c
 
-    66	
-    67	/*
-    68	 * selinux_ima_measure_state_locked - Measure SELinux state and hash of policy
-    69	 */
-    70	void selinux_ima_measure_state_locked(void)
-    71	{
-    72		char *state_str = NULL;
-    73		void *policy = NULL;
-    74		size_t policy_len;
-    75		int rc = 0;
-    76	
-  > 77		lockdep_assert_held(selinux_state.policy_mutex);
-    78	
-    79		state_str = selinux_ima_collect_state();
-    80		if (!state_str) {
-    81			pr_err("SELinux: %s: failed to read state.\n", __func__);
-    82			return;
-    83		}
-    84	
-    85		ima_measure_critical_data("selinux", "selinux-state",
-    86					  state_str, strlen(state_str), false,
-    87					  NULL, 0);
-    88	
-    89		kfree(state_str);
-    90	
-    91		/*
-    92		 * Measure SELinux policy only after initialization is completed.
-    93		 */
-    94		if (!selinux_initialized())
-    95			return;
-    96	
-    97		rc = security_read_state_kernel(&policy, &policy_len);
-    98		if (rc) {
-    99			pr_err("SELinux: %s: failed to read policy %d.\n", __func__, rc);
-   100			return;
-   101		}
-   102	
-   103		ima_measure_critical_data("selinux", "selinux-policy-hash",
-   104					  policy, policy_len, true,
-   105					  NULL, 0);
-   106	
-   107		vfree(policy);
-   108	}
-   109	
+   273	
+   274	static void
+   275	xfs_buf_free_pages(
+   276		struct xfs_buf	*bp)
+   277	{
+   278		uint		i;
+   279	
+   280		ASSERT(bp->b_flags & _XBF_PAGES);
+   281	
+   282		if (xfs_buf_is_vmapped(bp))
+   283			vm_unmap_ram(bp->b_addr, bp->b_page_count);
+   284	
+   285		for (i = 0; i < bp->b_page_count; i++) {
+   286			if (bp->b_pages[i])
+   287				__free_page(bp->b_pages[i]);
+   288		}
+ > 289		report_freed_pages(bp->b_page_count);
+   290	
+   291		if (bp->b_pages != bp->b_page_array)
+   292			kmem_free(bp->b_pages);
+   293		bp->b_pages = NULL;
+   294		bp->b_flags &= ~_XBF_PAGES;
+   295	}
+   296	
 
 -- 
 0-DAY CI Kernel Test Service
