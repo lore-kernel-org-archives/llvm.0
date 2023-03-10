@@ -1,93 +1,137 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03DA8481;
-	Fri, 10 Mar 2023 14:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678456832; x=1709992832;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hZfmGDq9bhkBaKXX3SftuyJQhvp6qhbd6ftZNrD+R08=;
-  b=h0bgKXbRUR0aw4SrpxOIvBnv8j33kzeXio3MHUoD2KW4X7EHf4PYE89w
-   /a4tbNDzaKpMtsW84ZF8/cXXUPp+SxJrGK3REBGzHCrxhlcoSE3HGlW0D
-   pPlqBGJdE0L30ABTRiNkiq/ppcP72pippkLkEBKL50qUXBEvGKiZyWeNd
-   JNbW6P+2jPrPJf0J6Z7aZgYkNzvAg06gtKxJ6VAi+jMiVfAtem/JrxBXM
-   9saL+qjnnacgQdBSmqP1el958oF3JgrRqjuV0W2Rhv0gJeSL2+QuSJwWR
-   c6QAQs1yBeG0yXNS6PS91xP2RnORiHP3fqXtPseNodg8oRwIT2mjM69fi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="401590490"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="401590490"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 06:00:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="821055831"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="821055831"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Mar 2023 06:00:20 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1padIB-0003tl-31;
-	Fri, 10 Mar 2023 14:00:19 +0000
-Date: Fri, 10 Mar 2023 21:59:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chenyi Qiang <chenyi.qiang@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 306/432]
- arch/x86/include/asm/cpu.h:74:20: error: conflicting types for
- 'tsx_ctrl_clear'
-Message-ID: <202303102105.GQe7NH8s-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40548489;
+	Fri, 10 Mar 2023 14:19:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178A6C433EF;
+	Fri, 10 Mar 2023 14:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1678457982;
+	bh=PWCVTMAtb7lR3ibJwAzfRbnIR8hV1DXYUS5UqAvsxPk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=dNyVHj5A3AWwtcLCiPVGK9mypT/+kNOp5tjH8e2UD60CGQE3reBCbk49ODZi8ipZL
+	 b6K0oJDFBlm6S9fsWnmo4dCLU+LHuDj9iIX4cwlP+17NUVHaFRsic/927iJ5gQA5Fx
+	 auIIrWy9kyOExnqNOdUa6McyRmfdePdRAP5C+zgM=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	llvm@lists.linux.dev,
+	Mark Rutland <mark.rutland@arm.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Tom Rix <trix@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 094/252] perf llvm: Fix inadvertent file creation
+Date: Fri, 10 Mar 2023 14:37:44 +0100
+Message-Id: <20230310133721.663982365@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230310133718.803482157@linuxfoundation.org>
+References: <20230310133718.803482157@linuxfoundation.org>
+User-Agent: quilt/0.67
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   b4a08c4cd3ed29e3977509b24adc2c59e39825c1
-commit: ab8aab774d78dd59a15a665bbd8d549b367e280d [306/432] [REVERTME] x86/cpu/tsx: Add helper functions to save/restore IA32_TSX_CTRL MSR
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230310/202303102105.GQe7NH8s-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/ab8aab774d78dd59a15a665bbd8d549b367e280d
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout ab8aab774d78dd59a15a665bbd8d549b367e280d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+From: Ian Rogers <irogers@google.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303102105.GQe7NH8s-lkp@intel.com/
+[ Upstream commit 9f19aab47ced012eddef1e2bc96007efc7713b61 ]
 
-All errors (new ones prefixed by >>):
+The LLVM template is first echo-ed into command_out and then
+command_out executed. The echo surrounds the template with double
+quotes, however, the template itself may contain quotes. This is
+generally innocuous but in tools/perf/tests/bpf-script-test-prologue.c
+we see:
+...
+SEC("func=null_lseek file->f_mode offset orig")
+...
+where the first double quote ends the double quote of the echo, then
+the > redirects output into a file called f_mode.
 
-   In file included from arch/x86/lib/cpu.c:4:
->> arch/x86/include/asm/cpu.h:74:20: error: conflicting types for 'tsx_ctrl_clear'
-   static inline void tsx_ctrl_clear(u64 tsx_ctrl) {}
-                      ^
-   arch/x86/include/asm/cpu.h:73:19: note: previous definition is here
-   static inline u64 tsx_ctrl_clear(void) { return 0; }
-                     ^
-   1 error generated.
+To avoid this inadvertent behavior substitute redirects and similar
+characters to be ASCII control codes, then substitute the output in
+the echo back again.
 
+Fixes: 5eab5a7ee032acaa ("perf llvm: Display eBPF compiling command in debug output")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Tom Rix <trix@redhat.com>
+Link: https://lore.kernel.org/r/20230105082609.344538-1-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/llvm-utils.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-vim +/tsx_ctrl_clear +74 arch/x86/include/asm/cpu.h
-
-    72	
-    73	static inline u64 tsx_ctrl_clear(void) { return 0; }
-  > 74	static inline void tsx_ctrl_clear(u64 tsx_ctrl) {}
-    75	
-
+diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+index 46ec9a1bb94cc..1ff4788bcb4e5 100644
+--- a/tools/perf/util/llvm-utils.c
++++ b/tools/perf/util/llvm-utils.c
+@@ -521,14 +521,37 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
+ 
+ 	pr_debug("llvm compiling command template: %s\n", template);
+ 
++	/*
++	 * Below, substitute control characters for values that can cause the
++	 * echo to misbehave, then substitute the values back.
++	 */
+ 	err = -ENOMEM;
+-	if (asprintf(&command_echo, "echo -n \"%s\"", template) < 0)
++	if (asprintf(&command_echo, "echo -n \a%s\a", template) < 0)
+ 		goto errout;
+ 
++#define SWAP_CHAR(a, b) do { if (*p == a) *p = b; } while (0)
++	for (char *p = command_echo; *p; p++) {
++		SWAP_CHAR('<', '\001');
++		SWAP_CHAR('>', '\002');
++		SWAP_CHAR('"', '\003');
++		SWAP_CHAR('\'', '\004');
++		SWAP_CHAR('|', '\005');
++		SWAP_CHAR('&', '\006');
++		SWAP_CHAR('\a', '"');
++	}
+ 	err = read_from_pipe(command_echo, (void **) &command_out, NULL);
+ 	if (err)
+ 		goto errout;
+ 
++	for (char *p = command_out; *p; p++) {
++		SWAP_CHAR('\001', '<');
++		SWAP_CHAR('\002', '>');
++		SWAP_CHAR('\003', '"');
++		SWAP_CHAR('\004', '\'');
++		SWAP_CHAR('\005', '|');
++		SWAP_CHAR('\006', '&');
++	}
++#undef SWAP_CHAR
+ 	pr_debug("llvm compiling command : %s\n", command_out);
+ 
+ 	err = read_from_pipe(template, &obj_buf, &obj_buf_sz);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
+
+
