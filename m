@@ -1,169 +1,136 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012C2882C
-	for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 15:36:09 +0000 (UTC)
-Received: by mail-ed1-f50.google.com with SMTP id k10so21948378edk.13
-        for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 07:36:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678462568;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=weKFr6b+Imx1UMFHSantlURMbu8JW3pFLr8NL5fcask=;
-        b=JpSp2vXkZoNkXcoWbtVYoNF2LP1Cq/mZ6I62m4FjxEVqw3VJypVVeMlx6sIUH+w6CC
-         ESVlq8df2dzwgvb3VaLbBy5kNEele2I5uPjAPX+Ftg4frYbcPZl38Otmsv5xswWr5qEn
-         WFtN9Ujzvx7SBTnCisWWozXnwEnKxXEbMBUPDbNOlKwbf0a8bXOKQM6dQShMFxBE7iKG
-         oSB7PBS08nsutLnMqrgbJ5iEps8/zAktdZe5F6IrDLPh10fae/p4Ak7jOQhBgaoNPcCe
-         Vp8HrcccGV5ldx2sLNIUbZ1b/Ru45bT2OrmwxpiCTrLg2eLRhIuovUfhJR8/emq03W6y
-         dZ0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678462568;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=weKFr6b+Imx1UMFHSantlURMbu8JW3pFLr8NL5fcask=;
-        b=a2rFslK6IIY4Fvo86/TzrBqOgi6k+3YJm+jmI17A4vyG7qJAQ2PTUeTwKV4QREuras
-         rjqSyFvZWOlmEv3Atsx0ff59roFILKVYzceEJkwJf/81z1Bh2POpZqKa0BJzb39uio7v
-         Z0YTH3EpBo8XBSHeoru8SLxKIp5UnNn2eyY0IeK0IQ2237N3RWrJl41mTJ0Ja2Va7VtH
-         hVriJI4F99AeahsYCG8Ub2Nja4Cn2NnSKk1zJZD7b3T4ymsn/4ICKks1WwGHYcLblpQC
-         5nsPEw5iwqRVTtHFTmJ2qp8FTJTnfeuMZ8SHxOjnpVJ7A5uCgzHCz1jJxFcH52i+fjPJ
-         hjmg==
-X-Gm-Message-State: AO0yUKUCrBsrBr+7iWyRzWLqK77i8B2qsBaOAruQ1e6AT16XczUHFYhW
-	0ifKUqiIppY5skAlWM0173S4YAcasC8MTfEXY0M=
-X-Google-Smtp-Source: AK7set+3VgRTlg3enwJhmwOBXrMHaBkYBeyPLpDf/CCl5+yYhCf6IK0vmJW0eULNzyhX8cIAJuKiEaAw/ElDyYe8s7A=
-X-Received: by 2002:a17:907:1045:b0:8b1:30eb:9dba with SMTP id
- oy5-20020a170907104500b008b130eb9dbamr12292626ejb.6.1678462568073; Fri, 10
- Mar 2023 07:36:08 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177208838;
+	Fri, 10 Mar 2023 16:14:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678464866; x=1710000866;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z5E2AiPAcKmUYJ9sAxHNV60/63xTzAyPUkJDDPYWd7k=;
+  b=ZEJ1NiKedYK0uGKg1jJiN3+UhVWLmHUHWQ1m5Th0eIZxH9NtQl56+MEp
+   mdzxnZfk9DgfAvyMrbdAvndp3KDbJZcKjVp4HJaJuTNeXbqa7NdnWpDAr
+   SzkkGTJpG3moS/J3vMlaXx/fu4QS0dxi186P/bAHUiQ2oEBvaZh2rqsCU
+   IFIwJPX/q/YhtwUvVgVIrOM9BVx2SiM0zWkxiQxIVoLVAr7INduAUkk91
+   THaS5K7OO1wiTJULw9QoGuJwc43KaNygoJLe1Rgs/HkY8K1l7/NBTH+Bm
+   GZhxvkC26HHHU0pc2GVDV5miVSQD/jRc9MrUYsv9/2iHEbSyYzFSftzj5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="401623867"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="401623867"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 08:14:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="1007166194"
+X-IronPort-AV: E=Sophos;i="5.98,250,1673942400"; 
+   d="scan'208";a="1007166194"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Mar 2023 08:14:24 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pafNv-0003zD-1g;
+	Fri, 10 Mar 2023 16:14:23 +0000
+Date: Sat, 11 Mar 2023 00:13:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+ 334/652] drivers/clk/qcom/clk-cpu-8996.c:532:2: warning: unannotated
+ fall-through between switch labels
+Message-ID: <202303110055.TADpWl6c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230308220842.1231003-1-conor@kernel.org> <20230310150754.535425-1-bmeng.cn@gmail.com>
-In-Reply-To: <20230310150754.535425-1-bmeng.cn@gmail.com>
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Fri, 10 Mar 2023 23:35:57 +0800
-Message-ID: <CAEUhbmWcfcSmuU6VnbTdLoErT113RZPgHSK3c+3M5kU0Wsv1pg@mail.gmail.com>
-Subject: Re: [PATCH v2] RISC-V: remove I-extension ISA spec version dance
-To: conor@kernel.org
-Cc: aurelien@aurel32.net, conor.dooley@microchip.com, 
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
-	naresh.kamboju@linaro.org, nathan@kernel.org, ndesaulniers@google.com, 
-	palmer@dabbelt.com, palmer@rivosinc.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Mar 10, 2023 at 11:07=E2=80=AFPM Bin Meng <bmeng.cn@gmail.com> wrot=
-e:
->
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > The spec folk, in their infinite wisdom, moved both control and status
-> > registers & the FENCE.I instructions out of the I extension into their
-> > own extensions (Zicsr, Zifencei) in the 20190608 version of the ISA
-> > spec [0].
-> > The GCC/binutils crew decided [1] to move their default version of the
-> > ISA spec to the 20191213 version of the ISA spec, which came into being
-> > for version 2.38 of binutils and GCC 12. Building with this toolchain
-> > configuration would result in assembler issues:
-> >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler me=
-ssages:
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: un=
-recognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: un=
-recognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: un=
-recognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: un=
-recognized opcode `csrr a5,0xc01'
-> > This was fixed in commit 6df2a016c0c8 ("riscv: fix build with binutils
-> > 2.38") by Aurelien Jarno, but has proven fragile.
-> >
-> > Before LLVM 17, LLVM did not support these extensions and, as such, the
-> > cc-option check added by Aurelien worked. Since commit 22e199e6afb1
-> > ("[RISCV] Accept zicsr and zifencei command line options") however, LLV=
-M
-> > *does* support them and the cc-option check passes.
-> >
-> > This surfaced as a problem while building the 5.10 stable kernel using
-> > the default Tuxmake Debian image [2], as 5.10 did not yet support ld.ll=
-d,
-> > and uses the Debian provided binutils 2.35.
-> > Versions of ld prior to 2.38 will refuse to link if they encounter
-> > unknown ISA extensions, and unfortunately Zifencei is not supported by
-> > bintuils 2.35.
-> >
-> > Instead of dancing around with adding these extensions to march, as we
-> > currently do, Palmer suggested locking GCC builds to the same version o=
-f
-> > the ISA spec that is used by LLVM. As far as I can tell, that is 2.2,
-> > with, apparently [3], a lack of interest in implementing a flag like
-> > GCC's -misa-spec at present.
-> >
-> > Add {cc,as}-option checks to add -misa-spec to KBUILD_{A,C}FLAGS when
-> > GCC is used & remove the march dance.
-> >
-> > As clang does not accept this argument, I had expected to encounter
-> > issues with the assembler, as neither zicsr nor zifencei are present in
-> > the ISA string and the spec version *should* be defaulting to a version
-> > that requires them to be present. The build passed however and the
-> > resulting kernel worked perfectly fine for me on a PolarFire SoC...
-> >
-> > Link: https://riscv.org/wp-content/uploads/2019/06/riscv-spec.pdf [0]
-> > Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHHCY=
-f4 [1]
-> > Link: https://lore.kernel.org/all/CA+G9fYt9T=3DELCLaB9byxaLW2Qf4pZcDO=
-=3DhuCA0D8ug2V2+irJQ@mail.gmail.com/ [2]
-> > Link: https://discourse.llvm.org/t/specifying-unpriviledge-spec-version=
--misa-spec-gcc-flag-equivalent/66935 [3]
-> > CC: stable@vger.kernel.org
-> > Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> > I think Aurelien's original commit message might actually not be quite
-> > correct? I found, in my limited testing, that it is not the default
-> > behaviour of gas that matters, but rather the toolchain itself?
-> > My binutils versions (both those built using the clang-built-linux
-> > tc-build scripts which do not set an ISA spec version, and one built
-> > using the riscv-gnu-toolchain infra w/ an explicit 20191213 spec versio=
-n
-> > set) do not encounter these issues.
->
-> I am unable to reproduce the build failure as reported by commit 6df2a016=
-c0c8
-> ("riscv: fix build with binutils 2.38") by Aurelien Jarno using kernel.or=
-g
-> pre-built GCC 11.3.0 [1] which includes binutils 2.38.
->
-> [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/=
-11.3.0/x86_64-gcc-11.3.0-nolibc-x86_64-linux.tar.xz
->
-> The defconfig of v5.16 kernel (commit 6df2a016c0c8 lands in v5.17) builds=
- fine
-> for me. Anything I am missing?
->
+Hi Dmitry,
 
-Some further note:
+FYI, the error/warning still remains.
 
-After I switched to kernel.org pre-built GCC 12.2.0 [1] which includes
-binutils 2.39, I was able to reproduce the exact same build failure of
-v5.16 kernel as described in the commit 6df2a016c0c8 ("riscv: fix
-build with binutils 2.38") by Aurelien Jarno.
+tree:   https://github.com/krzk/linux n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+head:   eb6e11ca9bd3d6242c6afa7616b837ccd2a404b5
+commit: 27dbfad00558825ed04e50b4fc1cafb23192b3c1 [334/652] clk: qcom: cpu-8996: simplify the cpu_clk_notifier_cb
+config: arm64-randconfig-r032-20230310 (https://download.01.org/0day-ci/archive/20230311/202303110055.TADpWl6c-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/krzk/linux/commit/27dbfad00558825ed04e50b4fc1cafb23192b3c1
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/audio-wsa884x-on-top-of-wip-sm8450-hdmi-audio-on-qcomlt
+        git checkout 27dbfad00558825ed04e50b4fc1cafb23192b3c1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/qcom/
 
-To verify the commit message of 6df2a016c0c8 is accurate or not, I
-built a GAS from binutils 2.37 and replaced the GAS 2.39 in the
-kernel.org package, surprisingly kernel v5.16 did not build with the
-same build failure.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303110055.TADpWl6c-lkp@intel.com/
 
-So it seems that it's GCC that caused the build failure instead of GAS
-from binutils??
+All warnings (new ones prefixed by >>):
 
-[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/12=
-.2.0/x86_64-gcc-12.2.0-nolibc-riscv64-linux.tar.xz
+>> drivers/clk/qcom/clk-cpu-8996.c:532:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   drivers/clk/qcom/clk-cpu-8996.c:532:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   1 warning generated.
 
-Regards,
-Bin
+
+vim +532 drivers/clk/qcom/clk-cpu-8996.c
+
+03e342dc45c9ec Loic Poulain     2020-07-03  503  
+03e342dc45c9ec Loic Poulain     2020-07-03  504  static int cpu_clk_notifier_cb(struct notifier_block *nb, unsigned long event,
+03e342dc45c9ec Loic Poulain     2020-07-03  505  			       void *data)
+03e342dc45c9ec Loic Poulain     2020-07-03  506  {
+9a9f5f9a5a0ca3 Yassine Oudjana  2022-06-21  507  	struct clk_cpu_8996_pmux *cpuclk = to_clk_cpu_8996_pmux_nb(nb);
+03e342dc45c9ec Loic Poulain     2020-07-03  508  	struct clk_notifier_data *cnd = data;
+03e342dc45c9ec Loic Poulain     2020-07-03  509  
+03e342dc45c9ec Loic Poulain     2020-07-03  510  	switch (event) {
+03e342dc45c9ec Loic Poulain     2020-07-03  511  	case PRE_RATE_CHANGE:
+03e342dc45c9ec Loic Poulain     2020-07-03  512  		qcom_cpu_clk_msm8996_acd_init(base);
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  513  
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  514  		/*
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  515  		 * Avoid overvolting. clk_core_set_rate_nolock() walks from top
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  516  		 * to bottom, so it will change the rate of the PLL before
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  517  		 * chaging the parent of PMUX. This can result in pmux getting
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  518  		 * clocked twice the expected rate.
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  519  		 *
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  520  		 * Manually switch to PLL/2 here.
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  521  		 */
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  522  		if (cnd->new_rate < DIV_2_THRESHOLD &&
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  523  		    cnd->old_rate > DIV_2_THRESHOLD)
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  524  			clk_cpu_8996_pmux_set_parent(&cpuclk->clkr.hw, SMUX_INDEX);
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  525  
+03e342dc45c9ec Loic Poulain     2020-07-03  526  		break;
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  527  	case ABORT_RATE_CHANGE:
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  528  		/* Revert manual change */
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  529  		if (cnd->new_rate < DIV_2_THRESHOLD &&
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  530  		    cnd->old_rate > DIV_2_THRESHOLD)
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  531  			clk_cpu_8996_pmux_set_parent(&cpuclk->clkr.hw, ACD_INDEX);
+03e342dc45c9ec Loic Poulain     2020-07-03 @532  	default:
+03e342dc45c9ec Loic Poulain     2020-07-03  533  		break;
+03e342dc45c9ec Loic Poulain     2020-07-03  534  	}
+03e342dc45c9ec Loic Poulain     2020-07-03  535  
+27dbfad0055882 Dmitry Baryshkov 2022-07-28  536  	return NOTIFY_OK;
+03e342dc45c9ec Loic Poulain     2020-07-03  537  };
+03e342dc45c9ec Loic Poulain     2020-07-03  538  
+
+:::::: The code at line 532 was first introduced by commit
+:::::: 03e342dc45c9ec07303953d4e4af11879be36609 clk: qcom: Add CPU clock driver for msm8996
+
+:::::: TO: Loic Poulain <loic.poulain@linaro.org>
+:::::: CC: Stephen Boyd <sboyd@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
