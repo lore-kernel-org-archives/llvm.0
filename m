@@ -1,42 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884F523B1;
-	Fri, 10 Mar 2023 10:11:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E49E2582;
+	Fri, 10 Mar 2023 10:22:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678443075; x=1709979075;
+  t=1678443736; x=1709979736;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TDp6kXQrP9mffmLFBwkaWK09jb1W3c0xlzrHg5ndIWA=;
-  b=bnBvZ8w0M65TnqLMTEKw+Wkue1XfVGU15Kk443EFEHXQC2QFtQRAt2pv
-   s6ksUs4rqUL1qJQeXhwB1FkyjKAoZSbJMgIeAWVm09N7Qlbq2R80vbZmi
-   SMnWcU/2fl8sC7Tr1cepv3z7Ps6GouFyl7ap2znptaAa/6y9UZ7aNuSNM
-   NzzQXCrIRatLrScYgLJGsjTJ12VnwkBaM5YMtt1h4bZbHLZ1Mnfbb+Ahr
-   xoZCe8gkZBWqL1YweKWbq7lKPFMP5iRodmGsyhhyMVQ4dFgdwQdjq82RW
-   HcE9GH+u39fJZw7gjYquHjCATK7lSFyQw6BD3OphO3+p3KB8zh4f+PEAb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="399294991"
+  bh=hFC9pTwu5PZi7Br7ooyqOBFsKIiq4TZjUtPGFtZWhwI=;
+  b=OZ0isQU8yUKDhG6QhYuWP50JDc+0XQSWmFq+qwO3mFcExngkEasQzHEV
+   EmOECg++bEdabjRGJzF7NlKFs0nKAnuG6DawrmOx/ua5AXF0hBcq6Tk87
+   GruQ7R1Pr4PiWPRq/73UMrkDEfjzLtU6g5xo+daLUysyrIEirYEypJxru
+   FF6+YXyz1kC3ukbV1znnB+XNA0XSsb5zQ9QInyfNB4aiRMyflxLxf40rL
+   Nj/ViBurhwlFIoj8lcwCUU+iKUI4GV5AyjJbXKcvzaUP7JAFW46LWGv8s
+   EOTjcVMEMFYj0Ck8blpJQfshs9RzkyufKLW7n6rzcV3fz0qjdpmbL66QS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="364352212"
 X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="399294991"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 02:11:15 -0800
+   d="scan'208";a="364352212"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 02:22:15 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="820993645"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="851859585"
 X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="820993645"
+   d="scan'208";a="851859585"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Mar 2023 02:11:13 -0800
+  by orsmga005.jf.intel.com with ESMTP; 10 Mar 2023 02:22:13 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1paZiS-0003jz-2S;
-	Fri, 10 Mar 2023 10:11:12 +0000
-Date: Fri, 10 Mar 2023 18:10:31 +0800
+	id 1paZt7-0003kZ-0W;
+	Fri, 10 Mar 2023 10:22:13 +0000
+Date: Fri, 10 Mar 2023 18:21:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
+To: Faycal Benmlih <faycal.benmlih@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:dt/property-read 60/75] drivers/usb/misc/usb251xb.c:413:61:
- error: expected ';' after expression
-Message-ID: <202303101836.kncxR28Z-lkp@intel.com>
+Subject: [mchinth:socwatch_linux_6_3 25/89]
+ drivers/platform/x86/socperf/socperfdrv.c:203:13: warning: no previous
+ prototype for function 'SOCPERF_Read_Data3'
+Message-ID: <202303101836.eJUpUUhe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,274 +47,275 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/property-read
-head:   74493ede940cb21df9738396bb9dc7c33d1ecc37
-commit: 267fb6d23eaaeb7486efacc1dbe5eaf8a080862e [60/75] usb: Use of_property_read_bool() for boolean properties
-config: hexagon-randconfig-r045-20230310 (https://download.01.org/0day-ci/archive/20230310/202303101836.kncxR28Z-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+Hi Faycal,
+
+FYI, the error/warning still remains.
+
+tree:   https://github.com/mchinth/linux socwatch_linux_6_3
+head:   2bbe949bea3cbc139c5dd26decd5023b84779d86
+commit: e65547c5a9bb37e907edecece4da7cb12dadea96 [25/89] platform/x86: Use $(srctree) instead of $(src) to adapt to kbuild regression
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230310/202303101836.eJUpUUhe-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?id=267fb6d23eaaeb7486efacc1dbe5eaf8a080862e
-        git remote add robh https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
-        git fetch --no-tags robh dt/property-read
-        git checkout 267fb6d23eaaeb7486efacc1dbe5eaf8a080862e
+        # https://github.com/mchinth/linux/commit/e65547c5a9bb37e907edecece4da7cb12dadea96
+        git remote add mchinth https://github.com/mchinth/linux
+        git fetch --no-tags mchinth socwatch_linux_6_3
+        git checkout e65547c5a9bb37e907edecece4da7cb12dadea96
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/misc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/sepdk/pax/ drivers/platform/x86/socperf/ drivers/platform/x86/socwatch/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303101836.kncxR28Z-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303101836.eJUpUUhe-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/usb/misc/usb251xb.c:15:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/usb/misc/usb251xb.c:15:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/usb/misc/usb251xb.c:15:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/usb/misc/usb251xb.c:413:61: error: expected ';' after expression
-           hub->skip_config = of_property_read_bool(np, "skip-config"))
-                                                                      ^
-                                                                      ;
->> drivers/usb/misc/usb251xb.c:413:61: error: expected expression
-   6 warnings and 2 errors generated.
+>> drivers/platform/x86/socperf/socperfdrv.c:203:13: warning: no previous prototype for function 'SOCPERF_Read_Data3' [-Wmissing-prototypes]
+   extern VOID SOCPERF_Read_Data3(PVOID data_buffer)
+               ^
+   drivers/platform/x86/socperf/socperfdrv.c:203:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   extern VOID SOCPERF_Read_Data3(PVOID data_buffer)
+          ^
+>> drivers/platform/x86/socperf/socperfdrv.c:885:1: warning: no previous prototype for function 'SOCPERF_Switch_Group3' [-Wmissing-prototypes]
+   SOCPERF_Switch_Group3(VOID)
+   ^
+   drivers/platform/x86/socperf/socperfdrv.c:884:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   extern OS_STATUS
+          ^
+   drivers/platform/x86/socperf/include/lwpmudrv_defines.h:372:19: note: expanded from macro 'OS_STATUS'
+   #define OS_STATUS int
+                     ^
+>> drivers/platform/x86/socperf/socperfdrv.c:1070:6: warning: no previous prototype for function 'lwpmudrv_Stop_Mem' [-Wmissing-prototypes]
+   VOID lwpmudrv_Stop_Mem(VOID)
+        ^
+   drivers/platform/x86/socperf/socperfdrv.c:1070:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   VOID lwpmudrv_Stop_Mem(VOID)
+   ^
+   static 
+>> drivers/platform/x86/socperf/socperfdrv.c:1155:15: warning: no previous prototype for function 'socperf_Service_IOCTL' [-Wmissing-prototypes]
+   IOCTL_OP_TYPE socperf_Service_IOCTL(IOCTL_USE_INODE struct file *filp,
+                 ^
+   drivers/platform/x86/socperf/socperfdrv.c:1155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   IOCTL_OP_TYPE socperf_Service_IOCTL(IOCTL_USE_INODE struct file *filp,
+   ^
+   static 
+   drivers/platform/x86/socperf/inc/control.h:84:23: note: expanded from macro 'IOCTL_OP_TYPE'
+   #define IOCTL_OP_TYPE S32
+                         ^
+   drivers/platform/x86/socperf/socperfdrv.c:1299:33: error: expected expression
+           status = socperf_Service_IOCTL(IOCTL_USE_INODE filp, _IOC_NR(cmd),
+                                          ^
+   drivers/platform/x86/socperf/inc/control.h:85:25: note: expanded from macro 'IOCTL_USE_INODE'
+   #define IOCTL_USE_INODE struct inode *inode,
+                           ^
+>> drivers/platform/x86/socperf/socperfdrv.c:1274:6: warning: no previous prototype for function 'socperf_Device_Control' [-Wmissing-prototypes]
+   long socperf_Device_Control(IOCTL_USE_INODE struct file *filp,
+        ^
+   drivers/platform/x86/socperf/socperfdrv.c:1274:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long socperf_Device_Control(IOCTL_USE_INODE struct file *filp,
+   ^
+   static 
+   drivers/platform/x86/socperf/socperfdrv.c:1336:63: error: too few arguments to function call, expected 4, have 3
+           status = socperf_Service_IOCTL(filp, _IOC_NR(cmd), local_args);
+                    ~~~~~~~~~~~~~~~~~~~~~                               ^
+   drivers/platform/x86/socperf/socperfdrv.c:1155:15: note: 'socperf_Service_IOCTL' declared here
+   IOCTL_OP_TYPE socperf_Service_IOCTL(IOCTL_USE_INODE struct file *filp,
+                 ^
+>> drivers/platform/x86/socperf/socperfdrv.c:1307:6: warning: no previous prototype for function 'socperf_Device_Control_Compat' [-Wmissing-prototypes]
+   long socperf_Device_Control_Compat(struct file *filp, unsigned int cmd,
+        ^
+   drivers/platform/x86/socperf/socperfdrv.c:1307:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   long socperf_Device_Control_Compat(struct file *filp, unsigned int cmd,
+   ^
+   static 
+>> drivers/platform/x86/socperf/socperfdrv.c:1358:5: warning: no previous prototype for function 'SOCPERF_Abnormal_Terminate' [-Wmissing-prototypes]
+   int SOCPERF_Abnormal_Terminate(void)
+       ^
+   drivers/platform/x86/socperf/socperfdrv.c:1358:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int SOCPERF_Abnormal_Terminate(void)
+   ^
+   static 
+   drivers/platform/x86/socperf/socperfdrv.c:1389:2: error: field designator 'ioctl' does not refer to any field in type 'struct file_operations'
+           IOCTL_OP = socperf_Device_Control,
+           ^
+   drivers/platform/x86/socperf/inc/control.h:83:19: note: expanded from macro 'IOCTL_OP'
+   #define IOCTL_OP .ioctl
+                     ^
+   7 warnings and 3 errors generated.
+--
+   drivers/platform/x86/socwatch/sw_output_buffer.c:301:7: warning: variable 'wrapped' set but not used [-Wunused-but-set-variable]
+           bool wrapped = false;
+                ^
+   drivers/platform/x86/socwatch/sw_output_buffer.c:299:25: warning: variable 'write_index' set but not used [-Wunused-but-set-variable]
+           size_t read_index = 0, write_index = 0, dst_index = 0;
+                                  ^
+>> drivers/platform/x86/socwatch/sw_output_buffer.c:398:6: warning: no previous prototype for function 'reset_output_buffers' [-Wmissing-prototypes]
+   void reset_output_buffers(void)
+        ^
+   drivers/platform/x86/socwatch/sw_output_buffer.c:398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void reset_output_buffers(void)
+   ^
+   static 
+   3 warnings generated.
+--
+>> drivers/platform/x86/socwatch/sw_collector.c:86:1: warning: no previous prototype for function 'sw_copy_driver_interface_info_i' [-Wmissing-prototypes]
+   sw_copy_driver_interface_info_i(const struct sw_driver_interface_info *info)
+   ^
+   drivers/platform/x86/socwatch/sw_collector.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct sw_driver_interface_info *
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:116:5: warning: no previous prototype for function 'sw_init_driver_interface_info_i' [-Wmissing-prototypes]
+   int sw_init_driver_interface_info_i(struct sw_driver_interface_info *info)
+       ^
+   drivers/platform/x86/socwatch/sw_collector.c:116:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int sw_init_driver_interface_info_i(struct sw_driver_interface_info *info)
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:138:5: warning: no previous prototype for function 'sw_init_ops_i' [-Wmissing-prototypes]
+   int sw_init_ops_i(const struct sw_hw_ops **ops,
+       ^
+   drivers/platform/x86/socwatch/sw_collector.c:138:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int sw_init_ops_i(const struct sw_hw_ops **ops,
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:157:8: warning: no previous prototype for function 'sw_get_payload_size_i' [-Wmissing-prototypes]
+   size_t sw_get_payload_size_i(const struct sw_driver_interface_info *info)
+          ^
+   drivers/platform/x86/socwatch/sw_collector.c:157:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   size_t sw_get_payload_size_i(const struct sw_driver_interface_info *info)
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:175:1: warning: no previous prototype for function 'sw_alloc_collector_msg_i' [-Wmissing-prototypes]
+   sw_alloc_collector_msg_i(const struct sw_driver_interface_info *info,
+   ^
+   drivers/platform/x86/socwatch/sw_collector.c:174:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   sw_driver_msg_t *
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:211:26: warning: no previous prototype for function 'sw_alloc_ops_i' [-Wmissing-prototypes]
+   const struct sw_hw_ops **sw_alloc_ops_i(pw_u16_t num_io_descriptors)
+                            ^
+   drivers/platform/x86/socwatch/sw_collector.c:211:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   const struct sw_hw_ops **sw_alloc_ops_i(pw_u16_t num_io_descriptors)
+         ^
+         static 
+>> drivers/platform/x86/socwatch/sw_collector.c:323:6: warning: no previous prototype for function 'sw_free_driver_interface_info_i' [-Wmissing-prototypes]
+   void sw_free_driver_interface_info_i(struct sw_driver_interface_info *info)
+        ^
+   drivers/platform/x86/socwatch/sw_collector.c:323:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void sw_free_driver_interface_info_i(struct sw_driver_interface_info *info)
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:329:6: warning: no previous prototype for function 'sw_free_ops_i' [-Wmissing-prototypes]
+   void sw_free_ops_i(const struct sw_hw_ops **ops)
+        ^
+   drivers/platform/x86/socwatch/sw_collector.c:329:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void sw_free_ops_i(const struct sw_hw_ops **ops)
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:335:5: warning: no previous prototype for function 'sw_reset_driver_interface_info_i' [-Wmissing-prototypes]
+   int sw_reset_driver_interface_info_i(struct sw_driver_interface_info *info)
+       ^
+   drivers/platform/x86/socwatch/sw_collector.c:335:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int sw_reset_driver_interface_info_i(struct sw_driver_interface_info *info)
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:453:6: warning: no previous prototype for function 'sw_free_collector_msg_i' [-Wmissing-prototypes]
+   void sw_free_collector_msg_i(sw_driver_msg_t *msg)
+        ^
+   drivers/platform/x86/socwatch/sw_collector.c:453:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void sw_free_collector_msg_i(sw_driver_msg_t *msg)
+   ^
+   static 
+>> drivers/platform/x86/socwatch/sw_collector.c:459:6: warning: no previous prototype for function 'sw_handle_per_cpu_msg_i' [-Wmissing-prototypes]
+   void sw_handle_per_cpu_msg_i(void *info, enum sw_wakeup_action action)
+        ^
+   drivers/platform/x86/socwatch/sw_collector.c:459:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void sw_handle_per_cpu_msg_i(void *info, enum sw_wakeup_action action)
+   ^
+   static 
+   11 warnings generated.
+--
+   drivers/platform/x86/socwatch/sw_telem.c:239:32: error: implicit declaration of function 'ioremap_nocache' [-Werror,-Wimplicit-function-declaration]
+           s_punitInterfaceAddr = (u64 *)ioremap_nocache(
+                                         ^
+   drivers/platform/x86/socwatch/sw_telem.c:239:32: note: did you mean 'ioremap_cache'?
+   arch/x86/include/asm/io.h:185:22: note: 'ioremap_cache' declared here
+   extern void __iomem *ioremap_cache(resource_size_t offset, unsigned long size);
+                        ^
+   drivers/platform/x86/socwatch/sw_telem.c:239:25: warning: cast to 'u64 *' (aka 'unsigned long long *') from smaller integer type 'int' [-Wint-to-pointer-cast]
+           s_punitInterfaceAddr = (u64 *)ioremap_nocache(
+                                  ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/socwatch/sw_telem.c:242:20: warning: cast to 'u64 *' (aka 'unsigned long long *') from smaller integer type 'int' [-Wint-to-pointer-cast]
+           s_punitDataAddr = (u64 *)ioremap_nocache(
+                             ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/socwatch/sw_telem.c:245:50: warning: cast to 'u64 *' (aka 'unsigned long long *') from smaller integer type 'int' [-Wint-to-pointer-cast]
+           s_telemEventInfo[TELEM_PUNIT].ssram_virt_addr = (u64 *)ioremap_nocache(
+                                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/socwatch/sw_telem.c:280:27: error: implicit declaration of function 'ioremap_nocache' [-Werror,-Wimplicit-function-declaration]
+           s_pmcIPCCmdAddr = (u64 *)ioremap_nocache(
+                                    ^
+   drivers/platform/x86/socwatch/sw_telem.c:280:20: warning: cast to 'u64 *' (aka 'unsigned long long *') from smaller integer type 'int' [-Wint-to-pointer-cast]
+           s_pmcIPCCmdAddr = (u64 *)ioremap_nocache(
+                             ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/socwatch/sw_telem.c:283:20: warning: cast to 'u64 *' (aka 'unsigned long long *') from smaller integer type 'int' [-Wint-to-pointer-cast]
+           s_pmcIPCStsAddr = (u64 *)ioremap_nocache(
+                             ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/socwatch/sw_telem.c:286:21: warning: cast to 'u64 *' (aka 'unsigned long long *') from smaller integer type 'int' [-Wint-to-pointer-cast]
+           s_pmcIPCWBufAddr = (u64 *)ioremap_nocache(
+                              ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/socwatch/sw_telem.c:289:21: warning: cast to 'u64 *' (aka 'unsigned long long *') from smaller integer type 'int' [-Wint-to-pointer-cast]
+           s_pmcIPCRBufAddr = (u64 *)ioremap_nocache(
+                              ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/x86/socwatch/sw_telem.c:292:48: warning: cast to 'u64 *' (aka 'unsigned long long *') from smaller integer type 'int' [-Wint-to-pointer-cast]
+           s_telemEventInfo[TELEM_PMC].ssram_virt_addr = (u64 *)ioremap_nocache(
+                                                         ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/platform/x86/socwatch/sw_telem.c:671:5: warning: no previous prototype for function 'read_telem' [-Wmissing-prototypes]
+   int read_telem(u64 *dst, enum telemetry_unit unit, bool should_retry)
+       ^
+   drivers/platform/x86/socwatch/sw_telem.c:671:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int read_telem(u64 *dst, enum telemetry_unit unit, bool should_retry)
+   ^
+   static 
+   9 warnings and 2 errors generated.
 
 
-vim +413 drivers/usb/misc/usb251xb.c
+vim +/SOCPERF_Read_Data3 +203 drivers/platform/x86/socperf/socperfdrv.c
 
-   397	
-   398	static int usb251xb_get_ofdata(struct usb251xb *hub,
-   399				       const struct usb251xb_data *data)
-   400	{
-   401		struct device *dev = hub->dev;
-   402		struct device_node *np = dev->of_node;
-   403		int len;
-   404		u32 property_u32 = 0;
-   405		const char *cproperty_char;
-   406		char str[USB251XB_STRING_BUFSIZE / 2];
-   407	
-   408		if (!np) {
-   409			dev_err(dev, "failed to get ofdata\n");
-   410			return -ENODEV;
-   411		}
-   412	
- > 413		hub->skip_config = of_property_read_bool(np, "skip-config"))
-   414	
-   415		hub->gpio_reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-   416		if (IS_ERR(hub->gpio_reset))
-   417			return dev_err_probe(dev, PTR_ERR(hub->gpio_reset),
-   418					     "unable to request GPIO reset pin\n");
-   419	
-   420		if (of_property_read_u16_array(np, "vendor-id", &hub->vendor_id, 1))
-   421			hub->vendor_id = USB251XB_DEF_VENDOR_ID;
-   422	
-   423		if (of_property_read_u16_array(np, "product-id",
-   424					       &hub->product_id, 1))
-   425			hub->product_id = data->product_id;
-   426	
-   427		if (of_property_read_u16_array(np, "device-id", &hub->device_id, 1))
-   428			hub->device_id = USB251XB_DEF_DEVICE_ID;
-   429	
-   430		hub->conf_data1 = USB251XB_DEF_CONFIG_DATA_1;
-   431		if (of_property_read_bool(np, "self-powered")) {
-   432			hub->conf_data1 |= BIT(7);
-   433	
-   434			/* Configure Over-Current sens when self-powered */
-   435			hub->conf_data1 &= ~BIT(2);
-   436			if (of_property_read_bool(np, "ganged-sensing"))
-   437				hub->conf_data1 &= ~BIT(1);
-   438			else if (of_property_read_bool(np, "individual-sensing"))
-   439				hub->conf_data1 |= BIT(1);
-   440		} else if (of_property_read_bool(np, "bus-powered")) {
-   441			hub->conf_data1 &= ~BIT(7);
-   442	
-   443			/* Disable Over-Current sense when bus-powered */
-   444			hub->conf_data1 |= BIT(2);
-   445		}
-   446	
-   447		if (of_property_read_bool(np, "disable-hi-speed"))
-   448			hub->conf_data1 |= BIT(5);
-   449	
-   450		if (of_property_read_bool(np, "multi-tt"))
-   451			hub->conf_data1 |= BIT(4);
-   452		else if (of_property_read_bool(np, "single-tt"))
-   453			hub->conf_data1 &= ~BIT(4);
-   454	
-   455		if (of_property_read_bool(np, "disable-eop"))
-   456			hub->conf_data1 |= BIT(3);
-   457	
-   458		if (of_property_read_bool(np, "individual-port-switching"))
-   459			hub->conf_data1 |= BIT(0);
-   460		else if (of_property_read_bool(np, "ganged-port-switching"))
-   461			hub->conf_data1 &= ~BIT(0);
-   462	
-   463		hub->conf_data2 = USB251XB_DEF_CONFIG_DATA_2;
-   464		if (of_property_read_bool(np, "dynamic-power-switching"))
-   465			hub->conf_data2 |= BIT(7);
-   466	
-   467		if (!of_property_read_u32(np, "oc-delay-us", &property_u32)) {
-   468			if (property_u32 == 100) {
-   469				/* 100 us*/
-   470				hub->conf_data2 &= ~BIT(5);
-   471				hub->conf_data2 &= ~BIT(4);
-   472			} else if (property_u32 == 4000) {
-   473				/* 4 ms */
-   474				hub->conf_data2 &= ~BIT(5);
-   475				hub->conf_data2 |= BIT(4);
-   476			} else if (property_u32 == 16000) {
-   477				/* 16 ms */
-   478				hub->conf_data2 |= BIT(5);
-   479				hub->conf_data2 |= BIT(4);
-   480			} else {
-   481				/* 8 ms (DEFAULT) */
-   482				hub->conf_data2 |= BIT(5);
-   483				hub->conf_data2 &= ~BIT(4);
-   484			}
-   485		}
-   486	
-   487		if (of_property_read_bool(np, "compound-device"))
-   488			hub->conf_data2 |= BIT(3);
-   489	
-   490		hub->conf_data3 = USB251XB_DEF_CONFIG_DATA_3;
-   491		if (of_property_read_bool(np, "port-mapping-mode"))
-   492			hub->conf_data3 |= BIT(3);
-   493	
-   494		if (data->led_support && of_get_property(np, "led-usb-mode", NULL))
-   495			hub->conf_data3 &= ~BIT(1);
-   496	
-   497		if (of_property_read_bool(np, "string-support"))
-   498			hub->conf_data3 |= BIT(0);
-   499	
-   500		hub->non_rem_dev = USB251XB_DEF_NON_REMOVABLE_DEVICES;
-   501		usb251xb_get_ports_field(hub, "non-removable-ports", data->port_cnt,
-   502					 true, &hub->non_rem_dev);
-   503	
-   504		hub->port_disable_sp = USB251XB_DEF_PORT_DISABLE_SELF;
-   505		usb251xb_get_ports_field(hub, "sp-disabled-ports", data->port_cnt,
-   506					 true, &hub->port_disable_sp);
-   507	
-   508		hub->port_disable_bp = USB251XB_DEF_PORT_DISABLE_BUS;
-   509		usb251xb_get_ports_field(hub, "bp-disabled-ports", data->port_cnt,
-   510					 true, &hub->port_disable_bp);
-   511	
-   512		hub->max_power_sp = USB251XB_DEF_MAX_POWER_SELF;
-   513		if (!of_property_read_u32(np, "sp-max-total-current-microamp",
-   514		    &property_u32))
-   515			hub->max_power_sp = min_t(u8, property_u32 / 2000, 50);
-   516	
-   517		hub->max_power_bp = USB251XB_DEF_MAX_POWER_BUS;
-   518		if (!of_property_read_u32(np, "bp-max-total-current-microamp",
-   519		    &property_u32))
-   520			hub->max_power_bp = min_t(u8, property_u32 / 2000, 255);
-   521	
-   522		hub->max_current_sp = USB251XB_DEF_MAX_CURRENT_SELF;
-   523		if (!of_property_read_u32(np, "sp-max-removable-current-microamp",
-   524		    &property_u32))
-   525			hub->max_current_sp = min_t(u8, property_u32 / 2000, 50);
-   526	
-   527		hub->max_current_bp = USB251XB_DEF_MAX_CURRENT_BUS;
-   528		if (!of_property_read_u32(np, "bp-max-removable-current-microamp",
-   529		    &property_u32))
-   530			hub->max_current_bp = min_t(u8, property_u32 / 2000, 255);
-   531	
-   532		hub->power_on_time = USB251XB_DEF_POWER_ON_TIME;
-   533		if (!of_property_read_u32(np, "power-on-time-ms", &property_u32))
-   534			hub->power_on_time = min_t(u8, property_u32 / 2, 255);
-   535	
-   536		if (of_property_read_u16_array(np, "language-id", &hub->lang_id, 1))
-   537			hub->lang_id = USB251XB_DEF_LANGUAGE_ID;
-   538	
-   539		if (of_property_read_u8(np, "boost-up", &hub->boost_up))
-   540			hub->boost_up = USB251XB_DEF_BOOST_UP;
-   541	
-   542		cproperty_char = of_get_property(np, "manufacturer", NULL);
-   543		strscpy(str, cproperty_char ? : USB251XB_DEF_MANUFACTURER_STRING,
-   544			sizeof(str));
-   545		hub->manufacturer_len = strlen(str) & 0xFF;
-   546		memset(hub->manufacturer, 0, USB251XB_STRING_BUFSIZE);
-   547		len = min_t(size_t, USB251XB_STRING_BUFSIZE / 2, strlen(str));
-   548		len = utf8s_to_utf16s(str, len, UTF16_LITTLE_ENDIAN,
-   549				      (wchar_t *)hub->manufacturer,
-   550				      USB251XB_STRING_BUFSIZE);
-   551	
-   552		cproperty_char = of_get_property(np, "product", NULL);
-   553		strscpy(str, cproperty_char ? : data->product_str, sizeof(str));
-   554		hub->product_len = strlen(str) & 0xFF;
-   555		memset(hub->product, 0, USB251XB_STRING_BUFSIZE);
-   556		len = min_t(size_t, USB251XB_STRING_BUFSIZE / 2, strlen(str));
-   557		len = utf8s_to_utf16s(str, len, UTF16_LITTLE_ENDIAN,
-   558				      (wchar_t *)hub->product,
-   559				      USB251XB_STRING_BUFSIZE);
-   560	
-   561		cproperty_char = of_get_property(np, "serial", NULL);
-   562		strscpy(str, cproperty_char ? : USB251XB_DEF_SERIAL_STRING,
-   563			sizeof(str));
-   564		hub->serial_len = strlen(str) & 0xFF;
-   565		memset(hub->serial, 0, USB251XB_STRING_BUFSIZE);
-   566		len = min_t(size_t, USB251XB_STRING_BUFSIZE / 2, strlen(str));
-   567		len = utf8s_to_utf16s(str, len, UTF16_LITTLE_ENDIAN,
-   568				      (wchar_t *)hub->serial,
-   569				      USB251XB_STRING_BUFSIZE);
-   570	
-   571		/*
-   572		 * The datasheet documents the register as 'Port Swap' but in real the
-   573		 * register controls the USB DP/DM signal swapping for each port.
-   574		 */
-   575		hub->port_swap = USB251XB_DEF_PORT_SWAP;
-   576		usb251xb_get_ports_field(hub, "swap-dx-lanes", data->port_cnt,
-   577					 false, &hub->port_swap);
-   578	
-   579		/* The following parameters are currently not exposed to devicetree, but
-   580		 * may be as soon as needed.
-   581		 */
-   582		hub->bat_charge_en = USB251XB_DEF_BATTERY_CHARGING_ENABLE;
-   583		hub->boost_57 = USB251XB_DEF_BOOST_57;
-   584		hub->boost_14 = USB251XB_DEF_BOOST_14;
-   585		hub->port_map12 = USB251XB_DEF_PORT_MAP_12;
-   586		hub->port_map34 = USB251XB_DEF_PORT_MAP_34;
-   587		hub->port_map56 = USB251XB_DEF_PORT_MAP_56;
-   588		hub->port_map7  = USB251XB_DEF_PORT_MAP_7;
-   589	
-   590		return 0;
-   591	}
-   592	
+f57492d07625dd Manisha Chinthapally 2019-05-01  189  
+f57492d07625dd Manisha Chinthapally 2019-05-01  190  /* ------------------------------------------------------------------------- */
+f57492d07625dd Manisha Chinthapally 2019-05-01  191  /*!
+f57492d07625dd Manisha Chinthapally 2019-05-01  192   * @fn       VOID SOCPERF_Read_Data
+f57492d07625dd Manisha Chinthapally 2019-05-01  193   *
+f57492d07625dd Manisha Chinthapally 2019-05-01  194   * @brief    Reads counter data
+f57492d07625dd Manisha Chinthapally 2019-05-01  195   *
+f57492d07625dd Manisha Chinthapally 2019-05-01  196   * @param    param   data_buffer - buffer for reading counter data.
+f57492d07625dd Manisha Chinthapally 2019-05-01  197   *
+f57492d07625dd Manisha Chinthapally 2019-05-01  198   * @return  None
+f57492d07625dd Manisha Chinthapally 2019-05-01  199   *
+f57492d07625dd Manisha Chinthapally 2019-05-01  200   * <I>Special Notes:</I>
+f57492d07625dd Manisha Chinthapally 2019-05-01  201   *              <NONE>
+f57492d07625dd Manisha Chinthapally 2019-05-01  202   */
+f57492d07625dd Manisha Chinthapally 2019-05-01 @203  extern VOID SOCPERF_Read_Data3(PVOID data_buffer)
+f57492d07625dd Manisha Chinthapally 2019-05-01  204  {
+f57492d07625dd Manisha Chinthapally 2019-05-01  205  	if (dispatch_uncore && dispatch_uncore->read_current_data) {
+f57492d07625dd Manisha Chinthapally 2019-05-01  206  		dispatch_uncore->read_current_data(data_buffer);
+f57492d07625dd Manisha Chinthapally 2019-05-01  207  	}
+f57492d07625dd Manisha Chinthapally 2019-05-01  208  	SOCPERF_PRINT_DEBUG("%s called\n", __func__);
+f57492d07625dd Manisha Chinthapally 2019-05-01  209  }
+f57492d07625dd Manisha Chinthapally 2019-05-01  210  EXPORT_SYMBOL(SOCPERF_Read_Data3);
+f57492d07625dd Manisha Chinthapally 2019-05-01  211  
+
+:::::: The code at line 203 was first introduced by commit
+:::::: f57492d07625dddac7920eccdb5be08c55ee16fa platform/x86: SOCPERF3 support for sep & socwatch
+
+:::::: TO: Manisha Chinthapally <manisha.chinthapally@intel.com>
+:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
