@@ -1,93 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DD8C963
-	for <llvm@lists.linux.dev>; Thu,  9 Mar 2023 23:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1678405894;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lKy/IqZ49vyg9I4igSr323y4IrgPo11Nr7p1cj/vhsQ=;
-	b=YxPURXUcOTf5eg01MUDS/wOtlvBF7y81nL78qig3IT5X7vYIg+LgIwXdU7fpvnWHKz7lhE
-	Nbh2v8aIxWuLmJ9a2PQk4Lkxg8tCTAS98mCbNSsBoDiaqDxWpQey1gFgov7nt6TTGuLqdA
-	cltdUolUrK5rBvxul2STVk60eynMzc8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-90-vz7LxBhlMpuxhXOW9pRcpQ-1; Thu, 09 Mar 2023 18:51:32 -0500
-X-MC-Unique: vz7LxBhlMpuxhXOW9pRcpQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 484BE3806711
-	for <llvm@lists.linux.dev>; Thu,  9 Mar 2023 23:51:32 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 36DE3492C3E;
-	Thu,  9 Mar 2023 23:51:32 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (308/381 SKIPPED): Test report for master
- (6.3.0-rc1, mainline.kernel.org-clang, 44889ba5)
-Date: Thu, 09 Mar 2023 23:51:32 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079D77E6;
+	Fri, 10 Mar 2023 00:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678409749; x=1709945749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XJDOWmOut4ZXXjw7sNXN4UkiEOpV03u/nwp04SW+1Bc=;
+  b=VxENGKlszkbr0YK1BzAuAU7svG3kAu3XrjViF0qcC/qiCDt7ooBqP+DI
+   c/7CKNzZPVMx6sLJXXK2dYK+WshyhMai2ai1wAhXrAB66/G3a6uNVwgl9
+   AlPL8CCWCOCcJ+WGhKhSLybT5fQSlXkCMjX47sunMKjhZ1XiNorNiieMP
+   K6gIBNnQM9AtxpqLIWGm1Ft9n4zv8J5KLjMU231H5yTUKUKjs4JQqZqmL
+   bdEXXWZyV1/7h2Xh4urEO8jxYDQN1vfSWKz/rTw7sflSDuaZnioBWnffl
+   fs264ZUEEakglvsRJ5r76ofByfYaBibltOo3idX50lGQVbGZla++LIvpF
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="324963931"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="324963931"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 16:55:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="741766393"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="741766393"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Mar 2023 16:55:44 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1paR2t-0003KN-2t;
+	Fri, 10 Mar 2023 00:55:43 +0000
+Date: Fri, 10 Mar 2023 08:55:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tony Lindgren <tony@atomide.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Johan Hovold <johan@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-omap@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH v6 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <202303100833.lk1UVhcR-lkp@intel.com>
+References: <20230309085713.57700-1-tony@atomide.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <11084.123030918513200211@us-mta-90.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309085713.57700-1-tony@atomide.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Tony,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+I love your patch! Perhaps something to improve:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus rafael-pm/linux-next usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.3-rc1 next-20230309]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'net-6.3-rc2' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
+url:    https://github.com/intel-lab-lkp/linux/commits/Tony-Lindgren/serial-core-Start-managing-serial-controllers-to-enable-runtime-PM/20230309-170149
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20230309085713.57700-1-tony%40atomide.com
+patch subject: [PATCH v6 1/1] serial: core: Start managing serial controllers to enable runtime PM
+config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20230310/202303100833.lk1UVhcR-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/08f76f28e32bcd3c093e4af349b0e1b60328395e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tony-Lindgren/serial-core-Start-managing-serial-controllers-to-enable-runtime-PM/20230309-170149
+        git checkout 08f76f28e32bcd3c093e4af349b0e1b60328395e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/tty/serial/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/77437
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303100833.lk1UVhcR-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Boot test: Failed to extract kernel version from the package
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1002
-            Affected tests:
-                 ppc64le - Boot test
-                   s390x - Boot test
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
+All warnings (new ones prefixed by >>):
+
+>> drivers/tty/serial/serial_ctrl.c:17:34: warning: unused variable 'serial_ctrl_pm' [-Wunused-const-variable]
+   static DEFINE_RUNTIME_DEV_PM_OPS(serial_ctrl_pm, NULL, NULL, NULL);
+                                    ^
+   1 warning generated.
 
 
+vim +/serial_ctrl_pm +17 drivers/tty/serial/serial_ctrl.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+    16	
+  > 17	static DEFINE_RUNTIME_DEV_PM_OPS(serial_ctrl_pm, NULL, NULL, NULL);
+    18	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
