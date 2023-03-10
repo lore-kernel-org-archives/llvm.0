@@ -1,43 +1,52 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0D963B5;
-	Fri, 10 Mar 2023 12:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3063D8A;
+	Fri, 10 Mar 2023 12:48:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678450640; x=1709986640;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3Ad7ii7tyzRlxU/vh5cqDRQ4FCKOtByrnf3BkBgW9w8=;
-  b=DFRyiSQk44dNKP7ZU0xqHT0ear9BPFHnXCCveDvbuxdH9eK1i88sMd51
-   4NKe7HSEvPfMiSL861ZLyl2Khurnlqz84GVexitTOK6SaRTWqqPUvxWh2
-   y2hT3wsa816m8TavQHrPlkG9Ez4anw8LqLUBKOPrZHz4etgw2NbsJd418
-   Y4UaU8y8V5DPNdzSTD15b2pSbYjLN4K8dznK5yY4p8y+lFL+ZU3RyQpoR
-   G0Ggq8sEC/wug4RtPKA+S5HQSoM3zY12RRbGX+jeTrQPxBL/ThT0C+rtE
-   eO6Src9PLlg1yuBVvPzdLO9ZJl9SBuhEC5cWOfRRZs3Fs1L2ic9XMD+tn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="339079377"
+  t=1678452503; x=1709988503;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U81uRxesHe8eFauiEOy3i19Qhk4z3KVhUPplxSsaCUQ=;
+  b=MlUrGOSS/a+KtTjXq3mVmboMx/Ko1dznMhbA1s5mF0J+nZTeNoHEi9u1
+   l3QzYrEX91eiUpHSYaPHlwD3gVlilZi7PAoxMvsubwCY3xb+m/MPpgUSz
+   TSJ9ftNfsRdEKP4Sb7cc1h8ewog+nFdyTmV0ToFSqIQLP0ZFyNv0UlM2p
+   7Is++wIe/ynd05egDo91VZiyFtGBEs2oioZocWhxq+nGAPa7aEoGAwKo8
+   7eCM07r9Ge9V3UckBPkTHpDaSJzl/y8ZwifQ9xa2ypViVyRVQFPgPcGjl
+   DgW4iU3uDNo96HAnhQSRVq5kXy7s3ipSf2d8oQmI6R9PKMm9TOYtCFjAP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="334195760"
 X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="339079377"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 04:17:20 -0800
+   d="scan'208";a="334195760"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 04:48:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="821025625"
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="746700777"
 X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="821025625"
+   d="scan'208";a="746700777"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Mar 2023 04:17:18 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 10 Mar 2023 04:48:19 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pabgT-0003qB-2k;
-	Fri, 10 Mar 2023 12:17:17 +0000
-Date: Fri, 10 Mar 2023 20:16:47 +0800
+	id 1pacAU-0003rj-2h;
+	Fri, 10 Mar 2023 12:48:18 +0000
+Date: Fri, 10 Mar 2023 20:47:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [intel-tdx:kvm-upstream-workaround 425/432]
- arch/x86/kvm/mmu/mmu.c:701:5: warning: no previous prototype for function
- 'kvm_mmu_topup_memory_cache_for_split'
-Message-ID: <202303102045.OKoBkP89-lkp@intel.com>
+To: "A. Sverdlin" <alexander.sverdlin@siemens.com>,
+	NXP Linux Team <linux-imx@nxp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] i2c: lpi2c: cache peripheral clock rate
+Message-ID: <202303102026.xZsE7TNu-lkp@intel.com>
+References: <20230310112605.476922-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,63 +55,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230310112605.476922-1-alexander.sverdlin@siemens.com>
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   b4a08c4cd3ed29e3977509b24adc2c59e39825c1
-commit: 40b0194e911eba584f34f1ff407cb2abf1844656 [425/432] [REVERTME] KVM: TDX, x86/tdp_mmu: Protect Secure-EPT page
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230310/202303102045.OKoBkP89-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Sverdlin,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on wsa/i2c/for-next]
+[also build test ERROR on linus/master v6.3-rc1 next-20230310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/A-Sverdlin/i2c-lpi2c-cache-peripheral-clock-rate/20230310-192720
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
+patch link:    https://lore.kernel.org/r/20230310112605.476922-1-alexander.sverdlin%40siemens.com
+patch subject: [PATCH v2] i2c: lpi2c: cache peripheral clock rate
+config: arm64-buildonly-randconfig-r002-20230310 (https://download.01.org/0day-ci/archive/20230310/202303102026.xZsE7TNu-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/40b0194e911eba584f34f1ff407cb2abf1844656
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 40b0194e911eba584f34f1ff407cb2abf1844656
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/aa3870869fbb164ebdc12f412c07c66f1d7cdf2d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review A-Sverdlin/i2c-lpi2c-cache-peripheral-clock-rate/20230310-192720
+        git checkout aa3870869fbb164ebdc12f412c07c66f1d7cdf2d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/i2c/busses/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303102045.OKoBkP89-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303102026.xZsE7TNu-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/mmu/mmu.c:701:5: warning: no previous prototype for function 'kvm_mmu_topup_memory_cache_for_split' [-Wmissing-prototypes]
-   int kvm_mmu_topup_memory_cache_for_split(struct kvm *kvm)
-       ^
-   arch/x86/kvm/mmu/mmu.c:701:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int kvm_mmu_topup_memory_cache_for_split(struct kvm *kvm)
-   ^
-   static 
-   1 warning generated.
+>> drivers/i2c/busses/i2c-imx-lpi2c.c:209:10: error: no member named 'clk_per' in 'struct lpi2c_imx_struct'
+                                                             clk_per);
+                                                             ^~~~~~~~
+   include/linux/container_of.h:20:49: note: expanded from macro 'container_of'
+           static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:338:74: note: expanded from macro '__same_type'
+   #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+                                                                            ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^~~~
+>> drivers/i2c/busses/i2c-imx-lpi2c.c:207:39: error: no member named 'clk_per' in 'lpi2c_imx_struct'
+           struct lpi2c_imx_struct *lpi2c_imx = container_of(&ndata->clk,
+                                                ^
+   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
+           ((type *)(__mptr - offsetof(type, member))); })
+                              ^              ~~~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+   #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+                                   ^                        ~~~~~~
+>> drivers/i2c/busses/i2c-imx-lpi2c.c:207:27: error: initializing 'struct lpi2c_imx_struct *' with an expression of incompatible type 'void'
+           struct lpi2c_imx_struct *lpi2c_imx = container_of(&ndata->clk,
+                                    ^           ~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
-vim +/kvm_mmu_topup_memory_cache_for_split +701 arch/x86/kvm/mmu/mmu.c
+vim +209 drivers/i2c/busses/i2c-imx-lpi2c.c
 
-   700	
- > 701	int kvm_mmu_topup_memory_cache_for_split(struct kvm *kvm)
-   702	{
-   703		int r = 0;
-   704	#ifdef CONFIG_INTEL_TDX_HOST_DEBUG_MEMORY_CORRUPT
-   705		struct kvm_mmu_memory_cache *mc;
-   706		int start, end, i;
-   707	
-   708		mutex_lock(&kvm->arch.private_spt_for_split_lock);
-   709		mc = &kvm->arch.private_spt_for_split_cache;
-   710		start = kvm_mmu_memory_cache_nr_free_objects(mc);
-   711		r = kvm_mmu_topup_memory_cache(mc, KVM_MAX_HUGEPAGE_LEVEL *
-   712					       kvm->created_vcpus);
-   713		end = kvm_mmu_memory_cache_nr_free_objects(mc);
-   714		for (i = start; i < end; i++)
-   715			kvm_mmu_split_direct_map(virt_to_page(mc->objects[i]));
-   716		mutex_unlock(&kvm->arch.private_spt_for_split_lock);
-   717	#endif
-   718		return r;
-   719	}
-   720	
+   202	
+   203	static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
+   204					   unsigned long action, void *data)
+   205	{
+   206		struct clk_notifier_data *ndata = data;
+ > 207		struct lpi2c_imx_struct *lpi2c_imx = container_of(&ndata->clk,
+   208								  struct lpi2c_imx_struct,
+ > 209								  clk_per);
+   210	
+   211		if (action & POST_RATE_CHANGE)
+   212			lpi2c_imx->rate_per = ndata->new_rate;
+   213	
+   214		return NOTIFY_OK;
+   215	}
+   216	
 
 -- 
 0-DAY CI Kernel Test Service
