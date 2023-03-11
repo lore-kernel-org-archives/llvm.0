@@ -1,132 +1,145 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D227E5
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 22:31:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1678573894;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZOZt8mxWhE0wtw9xgseZKNCiQcca2KfslY1quZPiuC4=;
-	b=BteuYqRihdmb9SlmwmRzzrAMc8TWMxaJODonaJlbEiYjlN48axLkzWXxgOVHH5JzfiIdsE
-	3DjuOd+/RFtjo5a2hLM+OrsutMq/AhioZiK0kbZNH6lwNVVn1tY0e+dHJDKe0g+HBRO8tw
-	GwXpEL8ervi3mdPwSYR/eqX6n/+1gNU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-Mt1zNyN8PLeyh6p-EQ_cFQ-1; Sat, 11 Mar 2023 17:31:32 -0500
-X-MC-Unique: Mt1zNyN8PLeyh6p-EQ_cFQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 81ACD38041E2
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 22:31:32 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6AF02C16028;
-	Sat, 11 Mar 2023 22:31:32 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (273/381 SKIPPED): Test report for master
- (6.3.0-rc1, mainline.kernel.org-clang, e25c54d1)
-Date: Sat, 11 Mar 2023 22:31:32 -0000
-To: llvm@lists.linux.dev, ffan@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DE37E5;
+	Sat, 11 Mar 2023 22:55:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678575306; x=1710111306;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AgRZND8DnxbB12eVZQ0+z+9EbFyPOCskgMtOeOXjp+g=;
+  b=JcYiMB+/zaMdDGY1IGHP8n5+4gSrJMdjdvv1VMXaF0+kM6Z72q6G63op
+   Mr1/luPzDAgSJLgvS7fAUkcCdhGwP0eRJdAHCliiMr4nN5uwr6ATE3kYG
+   xFfSFzLbkdBdM7Pt2HskyJxuhbk6gV3hhzELsa4zpDO1yt7hFPlyLypw0
+   t+rSKw26f85M7tm++jXMNzzU5P+4P3g3OEkzES0vlKKGnuSn3QlAQLUfT
+   x9qIKPhSN/ou4heKWNsmW25O0sccGyFp4LUz44W8HX/nzJMWfeaydnsQQ
+   gPV3kIYin22tynfugSN+5K+BXGcMIRMz1byEVFkrOyp714OdJEhinoExX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="338500775"
+X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
+   d="scan'208";a="338500775"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 14:55:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="680579936"
+X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
+   d="scan'208";a="680579936"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Mar 2023 14:55:04 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pb87D-0004q1-20;
+	Sat, 11 Mar 2023 22:55:03 +0000
+Date: Sun, 12 Mar 2023 06:54:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mcgrof:sysctl-testing 43/44] net/sunrpc/sysctl.c:178:1: warning: no
+ previous prototype for function 'rpc_register_sysctl'
+Message-ID: <202303120608.ZC8CkGMw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <26204.123031117313201609@us-mta-651.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Luis,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-testing
+head:   f66d0fcc0d9164174c2e72045110f43557649cad
+commit: 95e20e8aa440148ec8eed523ecc683e4dad15644 [43/44] sunrpc: move sunrpc_table and proc routines above
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230312/202303120608.ZC8CkGMw-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=95e20e8aa440148ec8eed523ecc683e4dad15644
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof sysctl-testing
+        git checkout 95e20e8aa440148ec8eed523ecc683e4dad15644
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/sunrpc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303120608.ZC8CkGMw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from net/sunrpc/sysctl.c:20:
+   In file included from include/linux/sunrpc/sched.h:19:
+   include/linux/sunrpc/xdr.h:753:10: warning: result of comparison of constant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           if (len > SIZE_MAX / sizeof(*p))
+               ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
+   net/sunrpc/sysctl.c:135:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+                   .proc_handler   = proc_dodebug
+                                     ^~~~~~~~~~~~
+                                     rpc_debug
+   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
+   EXPORT_SYMBOL_GPL(rpc_debug);
+                     ^
+   net/sunrpc/sysctl.c:142:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+                   .proc_handler   = proc_dodebug
+                                     ^~~~~~~~~~~~
+                                     rpc_debug
+   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
+   EXPORT_SYMBOL_GPL(rpc_debug);
+                     ^
+   net/sunrpc/sysctl.c:149:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+                   .proc_handler   = proc_dodebug
+                                     ^~~~~~~~~~~~
+                                     rpc_debug
+   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
+   EXPORT_SYMBOL_GPL(rpc_debug);
+                     ^
+   net/sunrpc/sysctl.c:156:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+                   .proc_handler   = proc_dodebug
+                                     ^~~~~~~~~~~~
+                                     rpc_debug
+   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
+   EXPORT_SYMBOL_GPL(rpc_debug);
+                     ^
+   net/sunrpc/sysctl.c:162:19: error: use of undeclared identifier 'proc_do_xprt'
+                   .proc_handler   = proc_do_xprt,
+                                     ^
+>> net/sunrpc/sysctl.c:178:1: warning: no previous prototype for function 'rpc_register_sysctl' [-Wmissing-prototypes]
+   rpc_register_sysctl(void)
+   ^
+   net/sunrpc/sysctl.c:177:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+>> net/sunrpc/sysctl.c:185:1: warning: no previous prototype for function 'rpc_unregister_sysctl' [-Wmissing-prototypes]
+   rpc_unregister_sysctl(void)
+   ^
+   net/sunrpc/sysctl.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   3 warnings and 5 errors generated.
 
 
-Kernel information:
-    Commit message: ubi: block: Fix missing blk_mq_end_request
+vim +/rpc_register_sysctl +178 net/sunrpc/sysctl.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/77932
+   175	
+   176	
+   177	void
+ > 178	rpc_register_sysctl(void)
+   179	{
+   180		if (!sunrpc_table_header)
+   181			sunrpc_table_header = register_sysctl_table(sunrpc_table);
+   182	}
+   183	
+   184	void
+ > 185	rpc_unregister_sysctl(void)
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 - Storage - swraid simple_reshape
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7402353
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Boot test: Failed to extract kernel version from the package
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1002
-            Affected tests:
-                 ppc64le - Boot test
-                   s390x - Boot test
-                  x86_64 - Boot test
-                  x86_64 (debug) - Boot test
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1479
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
-. Expect to see newkerneloption in kernel boot options
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
-        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
- is not seen in kernel boot options
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1433
-            Affected tests:
-                  x86_64 - kdump - kexec-file-load
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
