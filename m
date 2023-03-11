@@ -1,137 +1,169 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992427B
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 06:59:56 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id i11-20020a256d0b000000b0086349255277so8155586ybc.8
-        for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 22:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678517995;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=suA+bwgJNWM1ViYRwliFKAa9dMDLpk9Qwp1WJkMdxcc=;
-        b=CQZt3tWjAs16t6INtGV8MfbsFPXnxShEd3XQr0Eg2M1Lq8aK2hi5j69UBZR4nZvzQk
-         s70YdoH35sqKBKPjWDpSYMFsqUFh0N/2F4nVGpQMSCBVJcFiDIavD87dGD04hX8KnzQO
-         872HqHIhAoE6Y39RvB4exu295r38ilJ6XdN22SVd+X4CzDldEZzpLwiDUDuJgFIXo2JB
-         DQ0r3g7RnmpHwriEWOT1iX4UDptqU27wyA0chat1UyI4L+vzaMegrBm+fA9mCexnzQb/
-         ProMYdMUTJIItTVUbMrA9mEo6o7msjnB11hVk/pqvLYWAGyciPvgRwd37MCBKBNz7Hbl
-         l1Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678517995;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=suA+bwgJNWM1ViYRwliFKAa9dMDLpk9Qwp1WJkMdxcc=;
-        b=sEbjbNdbn/ztaDBB5H0F/4gm9oQ5s0H2yM/a871HaCXdTQZdtt5kGIgqajZTLy8Xb5
-         tQ3vxL6DkjO3INTbXjoyMoPtCm2M5vgyHgDPu9p0LCy/t1wDaZ7fyizO7EG3LgfIBDKn
-         VmYZKj4GstKkWWnn7wlLwbYPlv4RetSh+jAQUyDPQz9dfqIwwDIlvT//s8FtxzENnSxa
-         0XcUm0c9f/SZz9rj4hDpWeROBmlf8RD80LshvJK65WQ1IR+6A1GIFHI/03IVhvHTArx/
-         +bfc8+pljktZRMpzOCLmj58nU4qAwTaD/phu9AGjscBP2tDiiX8fP988kCJtSvxk2JrM
-         W0dA==
-X-Gm-Message-State: AO0yUKXdUNrqCKrTDdXfkKpXUP+WnLqCaTfSw1MRfkSWctVNFz0t8iW5
-	9LpOGj/Py8FORCFkOEOxfQFrdfOdahZA
-X-Google-Smtp-Source: AK7set9XTSaarIquORnK+0yBheQDbBcFerJD4i+/DeqYN6jDbj3frYgSC1/aA5aOMWmcLWCqwpOpNALBFmcU
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a11d:a763:a328:f2d6])
- (user=irogers job=sendgmr) by 2002:a81:a983:0:b0:52e:e095:d840 with SMTP id
- g125-20020a81a983000000b0052ee095d840mr18667452ywh.0.1678517995660; Fri, 10
- Mar 2023 22:59:55 -0800 (PST)
-Date: Fri, 10 Mar 2023 22:57:53 -0800
-In-Reply-To: <20230311065753.3012826-1-irogers@google.com>
-Message-Id: <20230311065753.3012826-14-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EF27B
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 08:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=QsTBuE7gnkjhR2MUNnrttMd8TEsxslDanQchSVUkX+M=; b=Iq+gd6hmmqmUWnJtiGC/VtVxXP
+	LXrGgsdjdlIkcZliLGcTvqzQYG+/wFvXuDejKJBrz0QzAmV2nTauFKtmuJksd8auqgPXQ1ErVWDuV
+	xrUk2Mc0hSsfeWvrFPbEkEOY9YuQP559/iMVm+45318Gz4wu9Vm1YjTthy2kMoQ+Wz5N+vicd6lpf
+	5lZAmjEavKkddS2NOIl8Ub3MmkAslr6LCu0aJ8pmkOglOPH9e87jckB6qVAxmTgYQ8BmK06/T6y5V
+	n4oKR3tqnE3f1Y/Vmmzp6cgE4jXdyupY/Asm4Z2od6Aa/lve4Dam+6QqEME6D3Nwi/HIxhRgNCy/g
+	MpZoWEsw==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1pav0A-00BgbO-1k; Sat, 11 Mar 2023 09:54:54 +0100
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1pav09-009TwV-1X;
+	Sat, 11 Mar 2023 09:54:53 +0100
+Date: Sat, 11 Mar 2023 09:54:53 +0100
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: Bin Meng <bmeng.cn@gmail.com>
+Cc: conor@kernel.org, conor.dooley@microchip.com,
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+	naresh.kamboju@linaro.org, nathan@kernel.org,
+	ndesaulniers@google.com, palmer@dabbelt.com, palmer@rivosinc.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] RISC-V: remove I-extension ISA spec version dance
+Message-ID: <ZAxB3cfsobGggdRc@aurel32.net>
+References: <20230308220842.1231003-1-conor@kernel.org>
+ <20230310150754.535425-1-bmeng.cn@gmail.com>
+ <CAEUhbmWcfcSmuU6VnbTdLoErT113RZPgHSK3c+3M5kU0Wsv1pg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230311065753.3012826-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v1 13/13] perf build: Remove redundant NO_NEWT build option
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Quentin Monnet <quentin@isovalent.com>, 
-	Andres Freund <andres@anarazel.de>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Pavithra Gurushankar <gpavithrasha@gmail.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Leo Yan <leo.yan@linaro.org>, 
-	"=?UTF-8?q?Martin=20Li=C5=A1ka?=" <mliska@suse.cz>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Cc: Stephane Eranian <eranian@google.com>, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAEUhbmWcfcSmuU6VnbTdLoErT113RZPgHSK3c+3M5kU0Wsv1pg@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 
-The option controlled nothing and no code depends, conditional or
-otherwise, on libnewt.
+On 2023-03-10 23:35, Bin Meng wrote:
+> On Fri, Mar 10, 2023 at 11:07=E2=80=AFPM Bin Meng <bmeng.cn@gmail.com> wr=
+ote:
+> >
+> > > From: Conor Dooley <conor.dooley@microchip.com>
+> > >
+> > > The spec folk, in their infinite wisdom, moved both control and status
+> > > registers & the FENCE.I instructions out of the I extension into their
+> > > own extensions (Zicsr, Zifencei) in the 20190608 version of the ISA
+> > > spec [0].
+> > > The GCC/binutils crew decided [1] to move their default version of the
+> > > ISA spec to the 20191213 version of the ISA spec, which came into bei=
+ng
+> > > for version 2.38 of binutils and GCC 12. Building with this toolchain
+> > > configuration would result in assembler issues:
+> > >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler =
+messages:
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
+unrecognized opcode `csrr a5,0xc01'
+> > > This was fixed in commit 6df2a016c0c8 ("riscv: fix build with binutils
+> > > 2.38") by Aurelien Jarno, but has proven fragile.
+> > >
+> > > Before LLVM 17, LLVM did not support these extensions and, as such, t=
+he
+> > > cc-option check added by Aurelien worked. Since commit 22e199e6afb1
+> > > ("[RISCV] Accept zicsr and zifencei command line options") however, L=
+LVM
+> > > *does* support them and the cc-option check passes.
+> > >
+> > > This surfaced as a problem while building the 5.10 stable kernel using
+> > > the default Tuxmake Debian image [2], as 5.10 did not yet support ld.=
+lld,
+> > > and uses the Debian provided binutils 2.35.
+> > > Versions of ld prior to 2.38 will refuse to link if they encounter
+> > > unknown ISA extensions, and unfortunately Zifencei is not supported by
+> > > bintuils 2.35.
+> > >
+> > > Instead of dancing around with adding these extensions to march, as we
+> > > currently do, Palmer suggested locking GCC builds to the same version=
+ of
+> > > the ISA spec that is used by LLVM. As far as I can tell, that is 2.2,
+> > > with, apparently [3], a lack of interest in implementing a flag like
+> > > GCC's -misa-spec at present.
+> > >
+> > > Add {cc,as}-option checks to add -misa-spec to KBUILD_{A,C}FLAGS when
+> > > GCC is used & remove the march dance.
+> > >
+> > > As clang does not accept this argument, I had expected to encounter
+> > > issues with the assembler, as neither zicsr nor zifencei are present =
+in
+> > > the ISA string and the spec version *should* be defaulting to a versi=
+on
+> > > that requires them to be present. The build passed however and the
+> > > resulting kernel worked perfectly fine for me on a PolarFire SoC...
+> > >
+> > > Link: https://riscv.org/wp-content/uploads/2019/06/riscv-spec.pdf [0]
+> > > Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHH=
+CYf4 [1]
+> > > Link: https://lore.kernel.org/all/CA+G9fYt9T=3DELCLaB9byxaLW2Qf4pZcDO=
+=3DhuCA0D8ug2V2+irJQ@mail.gmail.com/ [2]
+> > > Link: https://discourse.llvm.org/t/specifying-unpriviledge-spec-versi=
+on-misa-spec-gcc-flag-equivalent/66935 [3]
+> > > CC: stable@vger.kernel.org
+> > > Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > ---
+> > > I think Aurelien's original commit message might actually not be quite
+> > > correct? I found, in my limited testing, that it is not the default
+> > > behaviour of gas that matters, but rather the toolchain itself?
+> > > My binutils versions (both those built using the clang-built-linux
+> > > tc-build scripts which do not set an ISA spec version, and one built
+> > > using the riscv-gnu-toolchain infra w/ an explicit 20191213 spec vers=
+ion
+> > > set) do not encounter these issues.
+> >
+> > I am unable to reproduce the build failure as reported by commit 6df2a0=
+16c0c8
+> > ("riscv: fix build with binutils 2.38") by Aurelien Jarno using kernel.=
+org
+> > pre-built GCC 11.3.0 [1] which includes binutils 2.38.
+> >
+> > [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_6=
+4/11.3.0/x86_64-gcc-11.3.0-nolibc-x86_64-linux.tar.xz
+> >
+> > The defconfig of v5.16 kernel (commit 6df2a016c0c8 lands in v5.17) buil=
+ds fine
+> > for me. Anything I am missing?
+> >
+>=20
+> Some further note:
+>=20
+> After I switched to kernel.org pre-built GCC 12.2.0 [1] which includes
+> binutils 2.39, I was able to reproduce the exact same build failure of
+> v5.16 kernel as described in the commit 6df2a016c0c8 ("riscv: fix
+> build with binutils 2.38") by Aurelien Jarno.
+>=20
+> To verify the commit message of 6df2a016c0c8 is accurate or not, I
+> built a GAS from binutils 2.37 and replaced the GAS 2.39 in the
+> kernel.org package, surprisingly kernel v5.16 did not build with the
+> same build failure.
+>=20
+> So it seems that it's GCC that caused the build failure instead of GAS
+> from binutils??
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config | 4 ----
- tools/perf/Makefile.perf   | 2 --
- tools/perf/tests/make      | 6 ++----
- 3 files changed, 2 insertions(+), 10 deletions(-)
+No, GCC 12 was not yet released as the time of the commit, and the issue
+was definitely due to binutils. That said GCC 12 also introduced some
+support of the new extensions, which made the situation even more
+complex.
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 1b598c5e68eb..b7a9cb4a3526 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -752,10 +752,6 @@ ifndef NO_LIBCRYPTO
-   endif
- endif
- 
--ifdef NO_NEWT
--  NO_SLANG=1
--endif
--
- ifndef NO_SLANG
-   ifneq ($(feature-libslang), 1)
-     ifneq ($(feature-libslang-include-subdir), 1)
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 3e06915f6bd0..dc9dda09b076 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -44,8 +44,6 @@ include ../scripts/utilities.mak
- #
- # Define WERROR=0 to disable treating any warnings as errors.
- #
--# Define NO_NEWT if you do not want TUI support. (deprecated)
--#
- # Define NO_SLANG if you do not want TUI support.
- #
- # Define GTK2 if you want GTK+ GUI support.
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index 47c665659022..a74b4be446c6 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -72,10 +72,9 @@ make_nondistro      := BUILD_NONDISTRO=1
- make_no_libperl     := NO_LIBPERL=1
- make_no_libpython   := NO_LIBPYTHON=1
- make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
--make_no_newt        := NO_NEWT=1
- make_no_slang       := NO_SLANG=1
- make_no_gtk2        := NO_GTK2=1
--make_no_ui          := NO_NEWT=1 NO_SLANG=1 NO_GTK2=1
-+make_no_ui          := NO_SLANG=1 NO_GTK2=1
- make_no_demangle    := NO_DEMANGLE=1
- make_no_libelf      := NO_LIBELF=1
- make_no_libunwind   := NO_LIBUNWIND=1
-@@ -115,7 +114,7 @@ make_install_prefix_slash := install prefix=/tmp/krava/
- make_static         := LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1
- 
- # all the NO_* variable combined
--make_minimal        := NO_LIBPERL=1 NO_LIBPYTHON=1 NO_NEWT=1 NO_GTK2=1
-+make_minimal        := NO_LIBPERL=1 NO_LIBPYTHON=1 NO_GTK2=1
- make_minimal        += NO_DEMANGLE=1 NO_LIBELF=1 NO_LIBUNWIND=1 NO_BACKTRACE=1
- make_minimal        += NO_LIBNUMA=1 NO_LIBAUDIT=1 NO_LIBBIONIC=1
- make_minimal        += NO_LIBDW_DWARF_UNWIND=1 NO_AUXTRACE=1 NO_LIBBPF=1
-@@ -139,7 +138,6 @@ run += make_nondistro
- run += make_no_libperl
- run += make_no_libpython
- run += make_no_scripts
--run += make_no_newt
- run += make_no_slang
- run += make_no_gtk2
- run += make_no_ui
--- 
-2.40.0.rc1.284.g88254d51c5-goog
-
+--=20
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                 http://www.aurel32.net
