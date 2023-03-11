@@ -1,131 +1,117 @@
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B797B
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 09:15:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=oGlz0x3waUETRxmcy9pz+bC50AW+Mj+vbt06v0RUcGI=; b=k8vkyBbcUPKoQCtzQ2jgVV/flg
-	sLhI9zILLXp4T/qCOsob3BNijz3pCsR6e6oUleRMvu2Agn+QG/HLjvmV+YX9BUaFKqPnLcsF/xsH+
-	yPH9U++3miVB5IjiCG6AkOE/lqGT5EMRoThhfRYRig66Aim1nRmjvPfr2tnIqtkLE+YmeCNL3yssH
-	EQN2MF74lntRkUavlczPBIBXX/iI8FrCJY6/oVTi5lFQYbU1R1vzNjdcVv5G2FE+jb4HeBXXuFDje
-	YjrRKmbHJvFF6S1+FdcRy43CrSXnx8bhUdkX73g0uoydBASnHc2F5Gii0x9WilfgKFlP/st6m91Vk
-	XwYrfmIw==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1pauy1-00Bga5-4p; Sat, 11 Mar 2023 09:52:41 +0100
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-	(envelope-from <aurelien@aurel32.net>)
-	id 1pauxz-009Tvm-1c;
-	Sat, 11 Mar 2023 09:52:39 +0100
-Date: Sat, 11 Mar 2023 09:52:39 +0100
-From: Aurelien Jarno <aurelien@aurel32.net>
-To: Bin Meng <bmeng.cn@gmail.com>
-Cc: conor@kernel.org, conor.dooley@microchip.com,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	naresh.kamboju@linaro.org, nathan@kernel.org,
-	ndesaulniers@google.com, palmer@dabbelt.com, palmer@rivosinc.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] RISC-V: remove I-extension ISA spec version dance
-Message-ID: <ZAxBVwLsUr1yQ4GZ@aurel32.net>
-References: <20230308220842.1231003-1-conor@kernel.org>
- <20230310150754.535425-1-bmeng.cn@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B170A7B
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 09:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1678527698;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NygTmjJSIU1cnvtHX2k5rpYjppDo11G63vHg3kxfjFg=;
+	b=G+9TeRv24JgBR+PH0y17QMYd87zjLKlgzKbhIYhFw3e15tt8EfPxKAr94v/9Kw8njxY8wr
+	Np73X2+SB/k+B4jfvpTqylEaxkglfXb1ojlnL/ccCgsqFYhsi4P3sYXPN0fS98isiDCAVw
+	TN0JT9bpqpQPjCW7pQlhJhu8tiR0FvY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-C1Qwe40EOPOhpJ5clUjmAA-1; Sat, 11 Mar 2023 04:41:36 -0500
+X-MC-Unique: C1Qwe40EOPOhpJ5clUjmAA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 461531C05EA1
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 09:41:36 +0000 (UTC)
+Received: from [172.64.2.76] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 306292026D4B;
+	Sat, 11 Mar 2023 09:41:36 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (285/381 SKIPPED): Test report for master
+ (6.3.0-rc1, mainline.kernel.org-clang, ef5f68cc)
+Date: Sat, 11 Mar 2023 09:41:36 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310150754.535425-1-bmeng.cn@gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <97553.123031104413601474@us-mta-661.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2023-03-10 23:07, Bin Meng wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> > 
-> > The spec folk, in their infinite wisdom, moved both control and status
-> > registers & the FENCE.I instructions out of the I extension into their
-> > own extensions (Zicsr, Zifencei) in the 20190608 version of the ISA
-> > spec [0].
-> > The GCC/binutils crew decided [1] to move their default version of the
-> > ISA spec to the 20191213 version of the ISA spec, which came into being
-> > for version 2.38 of binutils and GCC 12. Building with this toolchain
-> > configuration would result in assembler issues:
-> >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-> > This was fixed in commit 6df2a016c0c8 ("riscv: fix build with binutils
-> > 2.38") by Aurelien Jarno, but has proven fragile.
-> > 
-> > Before LLVM 17, LLVM did not support these extensions and, as such, the
-> > cc-option check added by Aurelien worked. Since commit 22e199e6afb1
-> > ("[RISCV] Accept zicsr and zifencei command line options") however, LLVM
-> > *does* support them and the cc-option check passes.
-> > 
-> > This surfaced as a problem while building the 5.10 stable kernel using
-> > the default Tuxmake Debian image [2], as 5.10 did not yet support ld.lld,
-> > and uses the Debian provided binutils 2.35.
-> > Versions of ld prior to 2.38 will refuse to link if they encounter
-> > unknown ISA extensions, and unfortunately Zifencei is not supported by
-> > bintuils 2.35.
-> > 
-> > Instead of dancing around with adding these extensions to march, as we
-> > currently do, Palmer suggested locking GCC builds to the same version of
-> > the ISA spec that is used by LLVM. As far as I can tell, that is 2.2,
-> > with, apparently [3], a lack of interest in implementing a flag like
-> > GCC's -misa-spec at present.
-> > 
-> > Add {cc,as}-option checks to add -misa-spec to KBUILD_{A,C}FLAGS when
-> > GCC is used & remove the march dance.
-> > 
-> > As clang does not accept this argument, I had expected to encounter
-> > issues with the assembler, as neither zicsr nor zifencei are present in
-> > the ISA string and the spec version *should* be defaulting to a version
-> > that requires them to be present. The build passed however and the
-> > resulting kernel worked perfectly fine for me on a PolarFire SoC...
-> > 
-> > Link: https://riscv.org/wp-content/uploads/2019/06/riscv-spec.pdf [0]
-> > Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHHCYf4 [1]
-> > Link: https://lore.kernel.org/all/CA+G9fYt9T=ELCLaB9byxaLW2Qf4pZcDO=huCA0D8ug2V2+irJQ@mail.gmail.com/ [2]
-> > Link: https://discourse.llvm.org/t/specifying-unpriviledge-spec-version-misa-spec-gcc-flag-equivalent/66935 [3]
-> > CC: stable@vger.kernel.org
-> > Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> > I think Aurelien's original commit message might actually not be quite
-> > correct? I found, in my limited testing, that it is not the default
-> > behaviour of gas that matters, but rather the toolchain itself?
-> > My binutils versions (both those built using the clang-built-linux
-> > tc-build scripts which do not set an ISA spec version, and one built
-> > using the riscv-gnu-toolchain infra w/ an explicit 20191213 spec version
-> > set) do not encounter these issues.
-> 
-> I am unable to reproduce the build failure as reported by commit 6df2a016c0c8
-> ("riscv: fix build with binutils 2.38") by Aurelien Jarno using kernel.org
-> pre-built GCC 11.3.0 [1] which includes binutils 2.38.
-> 
-> [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.3.0/x86_64-gcc-11.3.0-nolibc-x86_64-linux.tar.xz
+Hi, we tested your kernel and here are the results:
 
-I guess you mean https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.3.0/x86_64-gcc-11.3.0-nolibc-riscv64-linux.tar.gz
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-> The defconfig of v5.16 kernel (commit 6df2a016c0c8 lands in v5.17) builds fine
-> for me. Anything I am missing?
+Tested-by: CKI Project <cki-project@redhat.com>
 
-I can't find the corresponding source and unfortunately binutils doesn't
-record the configure options in the binaries, but my guess is that it
-has been configured with --with-isa-spec=2.2. This is not the
-recommended way to go, but given the mess many distribution went that
-road.
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                 http://www.aurel32.net
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/77812
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Boot test: Failed to extract kernel version from the package
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1002
+            Affected tests:
+                 ppc64le - Boot test
+                   s390x - Boot test
+                  x86_64 - Boot test
+                  x86_64 (debug) - Boot test
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: tls.13_sm4_gcm.sendfile
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1479
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
