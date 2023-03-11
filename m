@@ -1,42 +1,42 @@
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0A27B
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 06:59:41 +0000 (UTC)
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-540e3b152a3so19207267b3.2
-        for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 22:59:41 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775117B
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 06:59:49 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-538116920c3so76959137b3.15
+        for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 22:59:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678517980;
+        d=google.com; s=20210112; t=1678517988;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VwWoTjR86AKucZnLsGNUcUMK7gNda6D+/S/cfRQfBgg=;
-        b=eElZEpPqgYjQPT+2OgFJo3tJTboFaG9WiNPK5qqArvz4zn9dLkynGNEg6xMvjQpfsB
-         8VIgGN8gT1K2LA+1w7FACJ0oeu6GJzCk6x/Vt4K39kUe3JaWwQa4UIkDfsMp/3+5GeZD
-         POGSCqaKPVtzV1MJgMTx/ERlkg8AW6eJHa0x4KZ9NvMfRLGV/n6sIZSu/Rc1VFz/zCw2
-         RPvH3408SaVcFcAVh7ctiB/PTEKu9bWodiOA/MRIf7PQJt3QfR1SCsRAPLFDcGxQ1lZK
-         2+TirLZ0YCwlUl+CgZIoAF0cdAF0x2AJwBmMMewK3EFLb1duc+Sk7cL+Xd3VtmemShtt
-         1XNQ==
+        bh=FDZRiNR1kad/WxpM67261adKoiNeiwCkEjVOswz/Du8=;
+        b=Qar2HPMwoJnDCU1nMENaqbKWaIzPwEhzKCXuGu6xIXt7R10Hny8ebMx5xJuCo+0AaZ
+         5MxuFuGKLr5jurHhGyIOkCrTplilQ/NZC1Bfds0gFdQ8zg81J/w8nVud4/mZEnP37JlT
+         wFLa0XGYGh6wQX6gpN7fmSkrID8hxSCPRDWU/ZjiB97czpaFt+waeyO3tpLEcICsHNvU
+         Zn8J/FgSlcr/3/r8OvxY8B4MRvBl7PUjj25q1WfgLnZkKihw7Jb7qpcL3L0SilfdmFao
+         bQBB1c6SAivx9uEiJMkIk1rmHCOGEvavdUtFb/6PdevU9zZSgI3GJfm8ViMxA6K+KksY
+         cpHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678517980;
+        d=1e100.net; s=20210112; t=1678517988;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VwWoTjR86AKucZnLsGNUcUMK7gNda6D+/S/cfRQfBgg=;
-        b=HnNl3RC/E5h+cVz9pnJW67Z+UH20yODaFBBAhhA+uMePJIAHRqXRB+TLRdz/53PXD2
-         1sknrxzjcEEVUsWinesbSMpPO6ejd89hVIdCBHB6Zv2pS/SuMIoDdCDWqGZAgweGfv6W
-         8ew3bBtRxTPflVnL+vY88ZpOKuhyrzeRpAjFf0bqGFcnNAdIixLecVYJ6c5Yz5xsAtSi
-         RPSAcnysy0yeDPbTuiCDICeR8snCNUadhffErSBZAt7OgNFaHzUMlY5uzlGs6MDC6BjX
-         9QPAgOOR4+Dm4COcxmer/e/RXneq8dvUYC3LugWVrxe2BbztkUu/pLMFwVCqmAeSeDnG
-         EWSw==
-X-Gm-Message-State: AO0yUKWN/Y01L/Dom6kvJimXPR2yMbTCAFTaOGayzqFdP6T3xHY0Yspq
-	fAAva1FZ1kB+mpz0arWAhnqYEyHBM8Gq
-X-Google-Smtp-Source: AK7set8Vrv9NAbTX9LeVvPN5FFdwJH1Tgz4a3yXybmJZZZuxkA7pyjWm68DJOp93hT5QF5cnEQsir9bGAKm4
+        bh=FDZRiNR1kad/WxpM67261adKoiNeiwCkEjVOswz/Du8=;
+        b=yT9sdVZnJUcrznw+vKbPhgLQvSFnbe/FWo9d/b5CZNPuqKVjOX8ZDT3kHaNNUMf9fM
+         9W/Vuku82AiL3swGCCLgfm76M6n6xlwJGEVd7eR2tjJrrRcir4URg0KVdmLBhEPav4EU
+         RLuRnFbbETqQpzqnL3t86X119CWe0anrfxFXmJW7+nxkqsIAtuF9F2J5LqnjF87AfwVr
+         NCHbVj16KmK5aTie5dR9v1hACukNev9HIkuvUdB7YqOzqDVidi0kqADNxnP4eQT3QWfK
+         fNcs9Y2ZaWEOdvosY92ntpYpSNj2jhW6N352eVA0OETlXj22d88aVq6vXOkQqtr7K9MV
+         kE4Q==
+X-Gm-Message-State: AO0yUKXjWpe2GvJr/aiWlrePD5FQPTPoSC/gMzAxs8BhUo2QkygbBF6T
+	yrTSfsPEJDVOOx9AIp2xqiwrP85RQvZc
+X-Google-Smtp-Source: AK7set8KKtJzMrDa/KnaM5s2BCn70inzmhuSkD1+nv8GOxneFhveneuG+MuzGLlpwnYa/S52Gml26DPS8UJV
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a11d:a763:a328:f2d6])
- (user=irogers job=sendgmr) by 2002:a81:ed06:0:b0:540:e6c5:5118 with SMTP id
- k6-20020a81ed06000000b00540e6c55118mr1450560ywm.2.1678517980596; Fri, 10 Mar
- 2023 22:59:40 -0800 (PST)
-Date: Fri, 10 Mar 2023 22:57:51 -0800
+ (user=irogers job=sendgmr) by 2002:a81:b70c:0:b0:541:6881:be0b with SMTP id
+ v12-20020a81b70c000000b005416881be0bmr0ywh.188.1678517988166; Fri, 10 Mar
+ 2023 22:59:48 -0800 (PST)
+Date: Fri, 10 Mar 2023 22:57:52 -0800
 In-Reply-To: <20230311065753.3012826-1-irogers@google.com>
-Message-Id: <20230311065753.3012826-12-irogers@google.com>
+Message-Id: <20230311065753.3012826-13-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230311065753.3012826-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v1 11/13] perf build: If libtraceevent isn't present error the build
+Subject: [PATCH v1 12/13] tools headers: Make the difference output easier to read
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -61,29 +61,317 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Stephane Eranian <eranian@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-If libtraceevent isn't present, the build will warn and continue. This
-disables a number of features and so isn't desirable. This change
-makes the build error for this case. The build can still be made to
-happen by adding NO_LIBTRACEEVENT=1.
+Add failures to an array and display it before exiting. Before:
+
+```
+Warning: Kernel ABI header at 'tools/include/uapi/linux/fcntl.h' differs from latest version at 'include/uapi/linux/fcntl.h'
+diff -u tools/include/uapi/linux/fcntl.h include/uapi/linux/fcntl.h
+Warning: Kernel ABI header at 'tools/include/uapi/linux/kvm.h' differs from latest version at 'include/uapi/linux/kvm.h'
+diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+...
+```
+
+After:
+```
+Warning: Kernel ABI header differences:
+  tools/include/uapi/linux/fcntl.h include/uapi/linux/fcntl.h
+  tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+...
+```
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/check-headers.sh | 229 ++++++++++++++++++++----------------
+ 1 file changed, 125 insertions(+), 104 deletions(-)
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 9754218bd418..1b598c5e68eb 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -1156,7 +1156,7 @@ ifneq ($(NO_LIBTRACEEVENT),1)
-     CFLAGS += -DLIBTRACEEVENT_VERSION=$(LIBTRACEEVENT_VERSION_CPP)
-     $(call detected,CONFIG_LIBTRACEEVENT)
-   else
--    dummy := $(warning Warning: libtraceevent is missing limiting functionality, please install libtraceevent-dev/libtraceevent-devel)
-+    dummy := $(error ERROR: libtraceevent is missing. Please install libtraceevent-dev/libtraceevent-devel or build with NO_LIBTRACEEVENT=1)
-   endif
+diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
+index eacca9a874e2..f848b425d936 100755
+--- a/tools/perf/check-headers.sh
++++ b/tools/perf/check-headers.sh
+@@ -1,113 +1,121 @@
+-#!/bin/sh
++#!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
  
-   $(call feature_check,libtracefs)
+-FILES='
+-include/uapi/linux/const.h
+-include/uapi/drm/drm.h
+-include/uapi/drm/i915_drm.h
+-include/uapi/linux/fadvise.h
+-include/uapi/linux/fcntl.h
+-include/uapi/linux/fs.h
+-include/uapi/linux/fscrypt.h
+-include/uapi/linux/kcmp.h
+-include/uapi/linux/kvm.h
+-include/uapi/linux/in.h
+-include/uapi/linux/mount.h
+-include/uapi/linux/openat2.h
+-include/uapi/linux/perf_event.h
+-include/uapi/linux/prctl.h
+-include/uapi/linux/sched.h
+-include/uapi/linux/stat.h
+-include/uapi/linux/usbdevice_fs.h
+-include/uapi/linux/vhost.h
+-include/uapi/sound/asound.h
+-include/linux/bits.h
+-include/vdso/bits.h
+-include/linux/const.h
+-include/vdso/const.h
+-include/linux/hash.h
+-include/linux/list-sort.h
+-include/uapi/linux/hw_breakpoint.h
+-arch/x86/include/asm/disabled-features.h
+-arch/x86/include/asm/required-features.h
+-arch/x86/include/asm/cpufeatures.h
+-arch/x86/include/asm/inat_types.h
+-arch/x86/include/asm/emulate_prefix.h
+-arch/x86/include/asm/irq_vectors.h
+-arch/x86/include/asm/msr-index.h
+-arch/x86/include/uapi/asm/prctl.h
+-arch/x86/lib/x86-opcode-map.txt
+-arch/x86/tools/gen-insn-attr-x86.awk
+-arch/arm/include/uapi/asm/perf_regs.h
+-arch/arm64/include/uapi/asm/perf_regs.h
+-arch/mips/include/uapi/asm/perf_regs.h
+-arch/powerpc/include/uapi/asm/perf_regs.h
+-arch/s390/include/uapi/asm/perf_regs.h
+-arch/x86/include/uapi/asm/perf_regs.h
+-arch/x86/include/uapi/asm/kvm.h
+-arch/x86/include/uapi/asm/kvm_perf.h
+-arch/x86/include/uapi/asm/svm.h
+-arch/x86/include/uapi/asm/unistd.h
+-arch/x86/include/uapi/asm/vmx.h
+-arch/powerpc/include/uapi/asm/kvm.h
+-arch/s390/include/uapi/asm/kvm.h
+-arch/s390/include/uapi/asm/kvm_perf.h
+-arch/s390/include/uapi/asm/ptrace.h
+-arch/s390/include/uapi/asm/sie.h
+-arch/arm/include/uapi/asm/kvm.h
+-arch/arm64/include/uapi/asm/kvm.h
+-arch/arm64/include/uapi/asm/unistd.h
+-arch/alpha/include/uapi/asm/errno.h
+-arch/mips/include/asm/errno.h
+-arch/mips/include/uapi/asm/errno.h
+-arch/parisc/include/uapi/asm/errno.h
+-arch/powerpc/include/uapi/asm/errno.h
+-arch/sparc/include/uapi/asm/errno.h
+-arch/x86/include/uapi/asm/errno.h
+-include/asm-generic/bitops/arch_hweight.h
+-include/asm-generic/bitops/const_hweight.h
+-include/asm-generic/bitops/__fls.h
+-include/asm-generic/bitops/fls.h
+-include/asm-generic/bitops/fls64.h
+-include/linux/coresight-pmu.h
+-include/uapi/asm-generic/errno.h
+-include/uapi/asm-generic/errno-base.h
+-include/uapi/asm-generic/ioctls.h
+-include/uapi/asm-generic/mman-common.h
+-include/uapi/asm-generic/unistd.h
+-'
+-
+-SYNC_CHECK_FILES='
+-arch/x86/include/asm/inat.h
+-arch/x86/include/asm/insn.h
+-arch/x86/lib/inat.c
+-arch/x86/lib/insn.c
+-'
++YELLOW='\033[0;33m'
++NC='\033[0m' # No Color
++
++declare -a FILES
++FILES=(
++  "include/uapi/linux/const.h"
++  "include/uapi/drm/drm.h"
++  "include/uapi/drm/i915_drm.h"
++  "include/uapi/linux/fadvise.h"
++  "include/uapi/linux/fcntl.h"
++  "include/uapi/linux/fs.h"
++  "include/uapi/linux/fscrypt.h"
++  "include/uapi/linux/kcmp.h"
++  "include/uapi/linux/kvm.h"
++  "include/uapi/linux/in.h"
++  "include/uapi/linux/mount.h"
++  "include/uapi/linux/openat2.h"
++  "include/uapi/linux/perf_event.h"
++  "include/uapi/linux/prctl.h"
++  "include/uapi/linux/sched.h"
++  "include/uapi/linux/stat.h"
++  "include/uapi/linux/usbdevice_fs.h"
++  "include/uapi/linux/vhost.h"
++  "include/uapi/sound/asound.h"
++  "include/linux/bits.h"
++  "include/vdso/bits.h"
++  "include/linux/const.h"
++  "include/vdso/const.h"
++  "include/linux/hash.h"
++  "include/linux/list-sort.h"
++  "include/uapi/linux/hw_breakpoint.h"
++  "arch/x86/include/asm/disabled-features.h"
++  "arch/x86/include/asm/required-features.h"
++  "arch/x86/include/asm/cpufeatures.h"
++  "arch/x86/include/asm/inat_types.h"
++  "arch/x86/include/asm/emulate_prefix.h"
++  "arch/x86/include/asm/irq_vectors.h"
++  "arch/x86/include/asm/msr-index.h"
++  "arch/x86/include/uapi/asm/prctl.h"
++  "arch/x86/lib/x86-opcode-map.txt"
++  "arch/x86/tools/gen-insn-attr-x86.awk"
++  "arch/arm/include/uapi/asm/perf_regs.h"
++  "arch/arm64/include/uapi/asm/perf_regs.h"
++  "arch/mips/include/uapi/asm/perf_regs.h"
++  "arch/powerpc/include/uapi/asm/perf_regs.h"
++  "arch/s390/include/uapi/asm/perf_regs.h"
++  "arch/x86/include/uapi/asm/perf_regs.h"
++  "arch/x86/include/uapi/asm/kvm.h"
++  "arch/x86/include/uapi/asm/kvm_perf.h"
++  "arch/x86/include/uapi/asm/svm.h"
++  "arch/x86/include/uapi/asm/unistd.h"
++  "arch/x86/include/uapi/asm/vmx.h"
++  "arch/powerpc/include/uapi/asm/kvm.h"
++  "arch/s390/include/uapi/asm/kvm.h"
++  "arch/s390/include/uapi/asm/kvm_perf.h"
++  "arch/s390/include/uapi/asm/ptrace.h"
++  "arch/s390/include/uapi/asm/sie.h"
++  "arch/arm/include/uapi/asm/kvm.h"
++  "arch/arm64/include/uapi/asm/kvm.h"
++  "arch/arm64/include/uapi/asm/unistd.h"
++  "arch/alpha/include/uapi/asm/errno.h"
++  "arch/mips/include/asm/errno.h"
++  "arch/mips/include/uapi/asm/errno.h"
++  "arch/parisc/include/uapi/asm/errno.h"
++  "arch/powerpc/include/uapi/asm/errno.h"
++  "arch/sparc/include/uapi/asm/errno.h"
++  "arch/x86/include/uapi/asm/errno.h"
++  "include/asm-generic/bitops/arch_hweight.h"
++  "include/asm-generic/bitops/const_hweight.h"
++  "include/asm-generic/bitops/__fls.h"
++  "include/asm-generic/bitops/fls.h"
++  "include/asm-generic/bitops/fls64.h"
++  "include/linux/coresight-pmu.h"
++  "include/uapi/asm-generic/errno.h"
++  "include/uapi/asm-generic/errno-base.h"
++  "include/uapi/asm-generic/ioctls.h"
++  "include/uapi/asm-generic/mman-common.h"
++  "include/uapi/asm-generic/unistd.h"
++)
++
++declare -a SYNC_CHECK_FILES
++SYNC_CHECK_FILES=(
++  "arch/x86/include/asm/inat.h"
++  "arch/x86/include/asm/insn.h"
++  "arch/x86/lib/inat.c"
++  "arch/x86/lib/insn.c"
++)
+ 
+ # These copies are under tools/perf/trace/beauty/ as they are not used to in
+ # building object files only by scripts in tools/perf/trace/beauty/ to generate
+ # tables that then gets included in .c files for things like id->string syscall
+ # tables (and the reverse lookup as well: string -> id)
+ 
+-BEAUTY_FILES='
+-include/linux/socket.h
+-'
++declare -a BEAUTY_FILES
++BEAUTY_FILES=(
++  "include/linux/socket.h"
++)
++
++declare -a FAILURES
+ 
+ check_2 () {
+-  file1=$1
+-  file2=$2
++  tools_file=$1
++  orig_file=$2
+ 
+   shift
+   shift
+ 
+-  cmd="diff $* $file1 $file2 > /dev/null"
++  cmd="diff $* $tools_file $orig_file > /dev/null"
+ 
+-  test -f $file2 && {
+-    eval $cmd || {
+-      echo "Warning: Kernel ABI header at '$file1' differs from latest version at '$file2'" >&2
+-      echo diff -u $file1 $file2
+-    }
+-  }
++  if [ -f "$orig_file" ] && ! eval "$cmd"
++  then
++    FAILURES+=(
++      "$tools_file $orig_file"
++    )
++  fi
+ }
+ 
+ check () {
+@@ -115,7 +123,7 @@ check () {
+ 
+   shift
+ 
+-  check_2 tools/$file $file $*
++  check_2 "tools/$file" "$file" $*
+ }
+ 
+ beauty_check () {
+@@ -123,23 +131,29 @@ beauty_check () {
+ 
+   shift
+ 
+-  check_2 tools/perf/trace/beauty/$file $file $*
++  check_2 "tools/perf/trace/beauty/$file" "$file" $*
+ }
+ 
+ # Check if we have the kernel headers (tools/perf/../../include), else
+ # we're probably on a detached tarball, so no point in trying to check
+ # differences.
+-test -d ../../include || exit 0
++if ! [ -d ../../include ]
++then
++  echo -e "${YELLOW}Warning${NC}: Skipped check-headers due to missing ../../include"
++  exit 0
++fi
+ 
+ cd ../..
+ 
+ # simple diff check
+-for i in $FILES; do
+-  check $i -B
++for i in "${FILES[@]}"
++do
++  check "$i" -B
+ done
+ 
+-for i in $SYNC_CHECK_FILES; do
+-  check $i '-I "^.*\/\*.*__ignore_sync_check__.*\*\/.*$"'
++for i in "${SYNC_CHECK_FILES[@]}"
++do
++  check "$i" '-I "^.*\/\*.*__ignore_sync_check__.*\*\/.*$"'
+ done
+ 
+ # diff with extra ignore lines
+@@ -160,8 +174,9 @@ check_2 tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/s
+ check_2 tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
+ check_2 tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/kernel/syscalls/syscall_n64.tbl
+ 
+-for i in $BEAUTY_FILES; do
+-  beauty_check $i -B
++for i in "${BEAUTY_FILES[@]}"
++do
++  beauty_check "$i" -B
+ done
+ 
+ # check duplicated library files
+@@ -169,3 +184,9 @@ check_2 tools/perf/util/hashmap.h tools/lib/bpf/hashmap.h
+ check_2 tools/perf/util/hashmap.c tools/lib/bpf/hashmap.c
+ 
+ cd tools/perf
++
++echo -e "${YELLOW}Warning${NC}: Kernel ABI header differences:"
++for i in "${FAILURES[@]}"
++do
++  echo "  $i"
++done
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
