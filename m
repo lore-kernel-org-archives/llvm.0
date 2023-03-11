@@ -1,42 +1,42 @@
 Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F20C7B
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 06:58:28 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-536bbaeceeaso76936617b3.11
-        for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 22:58:28 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8027B
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 06:58:35 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-536cad819c7so76943117b3.6
+        for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 22:58:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678517907;
+        d=google.com; s=20210112; t=1678517914;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3NhwBTfmVglAZRqsQmhfe71Rzl22nzSJC9LqarCaKaI=;
-        b=fElNmip0BTpEUcUnQZTbwScWF+byjtbSTr1v+/fNKXShFigaOgNUsPUyepDifsXFRM
-         GjtYEjMaWAmilGB5L+qcsVGjEjSGMd/LeJ4G4PISm/Qcr6mSeFSRGXMwIFTXlqpoDxqx
-         uvOL6laMJmAF+1dp81n9lTMrmeOS29PZsukS94k2PzLInHyjjAn0Ikca29z18M4cqC9P
-         pDbHtcs1qt0NwF2biwm7j/d3u91cLM2DA31ZRrxK9fk59zZkHZNyQju0Itf0+jXrviS2
-         yX4IFl6BnsYqfYyCOaJ7WasvY5zSSdx4oLpfJ3YYqOWxo4POEGnix1tjSlJfAFmpqAK2
-         kvWw==
+        bh=PA482r9MJe7vZyw+QOZf0rTvnugvk46HQTM8cqZhnKs=;
+        b=tldDHr30uJ+HiUcXonL+iNvGzmn8jN/lqDwYD7A6znThCex6+p0hhXyH2E22r7ju24
+         AKhEubUuV2ehF+HSJjPO2WNGupZA5GO3JpYAXJpNraNPd7wa27oEdnCM+YdBFgcv5DKJ
+         AsIoeg13+loP7lUeb/pjdh0s/uGID0gWNy3wlLtGsAkG6jn5JPbZ92vQKHkCzzWl/2Za
+         3MiqRrVtE4tceeZZ4X9S4TCY0MIHrZZCPHVUrf6aejhC2/SbfwSHLPygjhbnhP0J4LCi
+         EKXq9nuSRtoMohBRC90vWQ8ldGj5RPu0mlDlZyx4M/gBKozzjbEps+beBWrfCdTGndQV
+         SKNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678517907;
+        d=1e100.net; s=20210112; t=1678517914;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3NhwBTfmVglAZRqsQmhfe71Rzl22nzSJC9LqarCaKaI=;
-        b=3qcJphnUcNgUQE/dmnS9/GCqdzP29qWg/IHB4RARUVnDhqnuPYENvtudP40CEOM+B+
-         /LWxYH+cdRcCL+1GF/BUVD7cDehFf/xt+j0WudaZ9nZy+rzz+yd/ZJeWmIuJU6x8ni9u
-         aRGYFke3oNo9uvaM5DEVPnlhn0swYW3X61Wf9Fq1bFgZBOmbSsPhaxj0VQaBy60vt11l
-         AlHJ0LWL03TI64A06eaaegW9ngY8/A4RauL/RpmpX9IVgKMTNlQ6pWJ1eEeF3nT5waiy
-         XnjbsWjeLM727C/YGlOC/fsY02Nv5fYu+TTFQFMRC/898xFwKJkROoZRALfVTTA3Aw0d
-         Ba6g==
-X-Gm-Message-State: AO0yUKWDy2ub5b96MfD+C5h0ICAi+5DnrqqkowtY7cu70aLKI88B+hRb
-	GMvpx97k7G/ePtkjyAMgeyEuerZVdJMd
-X-Google-Smtp-Source: AK7set/X4UK55tnSLb9uuZbddCfKNh6XVFOEDglMCEuZ2GT7wllVSHfNLypT6L+5C1w62Dki84zNDe5aQALx
+        bh=PA482r9MJe7vZyw+QOZf0rTvnugvk46HQTM8cqZhnKs=;
+        b=QD7IYX+nA0rcH61zl1SVFtyv/yNmGglcb4p/8n21Jo9xdicMD+2OJwsefePfbueFX0
+         pcsV7sALiCDbPW9hu2+DwH0U3v5Wdw2H/edFgq5/wseyFnVAWpGdFk843aDdF2jCyaDz
+         W2qKwMeXq2DswjG88U8eNpMJ5Np0/aG/yjzW4Si6qW8FezRwmobIZ3lvktrYs/cTEcXg
+         uHzHOrBFdJ5jYkiUvVjN8o/vrcAPS7HLtSUehI1cevMX9pV/0wkThAtA4EHU5g0LeVcM
+         reCvvvSt+qC2m6CPzq6z/8qotTIPsEQ850aclmJS6h32dTUhXYZdCaDA8Mv7j5VaF072
+         4/lQ==
+X-Gm-Message-State: AO0yUKVWLTW/yjyZCfdAoHlk9Na0P7QUEDekN8W3viXJdA988hiESrBq
+	Heg8hbbTbzepP6Nv3hcPCdAfwb0/dgFS
+X-Google-Smtp-Source: AK7set9RA8SRXgCLcrsgukIbaEmnGpzcWQbxU3olQ8XTZGn0+orP5MYTuo3BIQ/YJ5keXXYT5pRAQOa65JN9
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a11d:a763:a328:f2d6])
- (user=irogers job=sendgmr) by 2002:a81:ac1a:0:b0:533:cf4e:9a80 with SMTP id
- k26-20020a81ac1a000000b00533cf4e9a80mr17706404ywh.6.1678517907341; Fri, 10
- Mar 2023 22:58:27 -0800 (PST)
-Date: Fri, 10 Mar 2023 22:57:43 -0800
+ (user=irogers job=sendgmr) by 2002:a5b:ccf:0:b0:a6f:9156:5579 with SMTP id
+ e15-20020a5b0ccf000000b00a6f91565579mr14131802ybr.12.1678517914694; Fri, 10
+ Mar 2023 22:58:34 -0800 (PST)
+Date: Fri, 10 Mar 2023 22:57:44 -0800
 In-Reply-To: <20230311065753.3012826-1-irogers@google.com>
-Message-Id: <20230311065753.3012826-4-irogers@google.com>
+Message-Id: <20230311065753.3012826-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230311065753.3012826-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v1 03/13] perf build: Remove unused HAVE_GLIBC_SUPPORT
+Subject: [PATCH v1 04/13] perf build: Error if no libelf and NO_LIBELF isn't set
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -61,42 +61,36 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Stephane Eranian <eranian@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-HAVE_GLIBC_SUPPORT is only used in `perf version --build-options` but
-doesn't control any behavior. Remove from the build to simplify it.
+Building without libelf support is going disable a lot of
+functionality. Require that the NO_LIBELF=1 build option is passed if
+this is intentional.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config   | 4 ----
- tools/perf/builtin-version.c | 1 -
- 2 files changed, 5 deletions(-)
+ tools/perf/Makefile.config | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
 diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 33d62d542fd5..a68a3e9b47ae 100644
+index a68a3e9b47ae..5691e2ffb1b9 100644
 --- a/tools/perf/Makefile.config
 +++ b/tools/perf/Makefile.config
-@@ -476,10 +476,6 @@ else
-   endif # libelf support
- endif # NO_LIBELF
- 
--ifeq ($(feature-glibc), 1)
--  CFLAGS += -DHAVE_GLIBC_SUPPORT
--endif
+@@ -426,15 +426,7 @@ else
+       LIBC_SUPPORT := 1
+     endif
+     ifeq ($(LIBC_SUPPORT),1)
+-      msg := $(warning No libelf found. Disables 'probe' tool, jvmti and BPF support in 'perf record'. Please install libelf-dev, libelf-devel or elfutils-libelf-devel);
 -
- ifeq ($(feature-libaio), 1)
-   ifndef NO_AIO
-     CFLAGS += -DHAVE_AIO_SUPPORT
-diff --git a/tools/perf/builtin-version.c b/tools/perf/builtin-version.c
-index 0d9cda238c07..c5d03a11e565 100644
---- a/tools/perf/builtin-version.c
-+++ b/tools/perf/builtin-version.c
-@@ -59,7 +59,6 @@ static void library_status(void)
- {
- 	STATUS(HAVE_DWARF_SUPPORT, dwarf);
- 	STATUS(HAVE_DWARF_GETLOCATIONS_SUPPORT, dwarf_getlocations);
--	STATUS(HAVE_GLIBC_SUPPORT, glibc);
- #ifndef HAVE_SYSCALL_TABLE_SUPPORT
- 	STATUS(HAVE_LIBAUDIT_SUPPORT, libaudit);
- #endif
+-      NO_LIBELF := 1
+-      NO_DWARF := 1
+-      NO_DEMANGLE := 1
+-      NO_LIBUNWIND := 1
+-      NO_LIBDW_DWARF_UNWIND := 1
+-      NO_LIBBPF := 1
+-      NO_JVMTI := 1
++      msg := $(error ERROR: No libelf found. Disables 'probe' tool, jvmti and BPF support. Please install libelf-dev, libelf-devel, elfutils-libelf-devel or build with NO_LIBELF=1.)
+     else
+       ifneq ($(filter s% -fsanitize=address%,$(EXTRA_CFLAGS),),)
+         ifneq ($(shell ldconfig -p | grep libasan >/dev/null 2>&1; echo $$?), 0)
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
