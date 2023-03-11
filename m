@@ -1,48 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5207B;
-	Sat, 11 Mar 2023 18:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3FA7B;
+	Sat, 11 Mar 2023 19:30:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678559343; x=1710095343;
+  t=1678563003; x=1710099003;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7UriBZLzyKs6P5CQrv2KqGpLUYP3a8QnxHq74IZZg7Y=;
-  b=Cy9DPcZmYMyhveLduR6QswTpXiPBy66OgYI3FxiXEx+ruL0F5MOdNnvL
-   wEmyoeAMie2PPEVdojuVihW2Erbs65jPKls8Fal08JcuQh/BEAfG08h5L
-   e26BqF7yfCWglGPBDFm6Q14bxPe+C/bO1xIEjyaUUA35vF+eWPCVhnobn
-   odR74FTwQ1twpO0mEoNRotXjj9hgQu9wUxUvtVgdNiGCz6dksuA5Q2YuM
-   1JFKgqztLZAp06Ty0sl6n8hhgkKVcQvkiyM0P9ezcWJh/NN50XyMqhR2p
-   +h1qKTwt9xYirYgwtWAZAhZ5SJi0gzoLQ0nTfUdZ0Qji8W0v3rBsnEawn
+  bh=thUqKDv8/SJdaZqSV9mz+uhrAj488PPLdQpV0XaqzZo=;
+  b=UPCC5ltwq7j/bDcOnvPnoPYoknPFAmmz2HdTDy0CEiyJ/IoQBc7vc414
+   aTJZL+8R8fDItHeeorBpllP/soJwSLjQlDfF04rH+Xiaus/yihTvwJKNJ
+   Sa6oAsS0RWPO9zKL+MbSsvlXqKrfULeU7dnUphmzpjzUZaUGfCQ+1al7E
+   QvJDE0U+wCKmFH6P/Qtl1i5paltlUlEOkoxVXqlBQlqHzrPJG8eprqi66
+   KeKe8RCbJbEI+X27EJykgDJ40X5O+vRPzl6qpOQK3fSTpeeqKg917vi9w
+   ovt9QQZ39FbTGCpZwu6+c31dDZld7N2+1cLPwz1Vdv5L1tcukMHgdmkR0
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="423193502"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="339301290"
 X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
-   d="scan'208";a="423193502"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 10:29:02 -0800
+   d="scan'208";a="339301290"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 11:30:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="628168721"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="680552939"
 X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
-   d="scan'208";a="628168721"
+   d="scan'208";a="680552939"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2023 10:29:00 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 11 Mar 2023 11:30:00 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pb3xj-0004kn-16;
-	Sat, 11 Mar 2023 18:28:59 +0000
-Date: Sun, 12 Mar 2023 02:28:36 +0800
+	id 1pb4um-0004lp-0S;
+	Sat, 11 Mar 2023 19:30:00 +0000
+Date: Sun, 12 Mar 2023 03:29:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Moudy Ho <moudy.ho@mediatek.com>
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org,
-	Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-	daoyuan huang <daoyuan.huang@mediatek.com>,
-	Hans Verkuil <hverkuil@xs4all.nl>
-Subject: drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:607:34:
- warning: unused variable 'mdp_comp_dt_ids'
-Message-ID: <202303120236.ZykolTwn-lkp@intel.com>
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: arch/arm/mm/copypage-fa.c:38:6: warning: no previous prototype for
+ function 'fa_copy_user_highpage'
+Message-ID: <202303120327.m6pfGEGi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,77 +48,103 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Moudy,
+Hi Nathan,
 
-FYI, the error/warning still remains.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   ef5f68cc1f829b492b19cd4df5af4454aa816b93
-commit: 61890ccaefaff89f5babd2c8412fd222c3f5fe38 media: platform: mtk-mdp3: add MediaTek MDP3 driver
-date:   6 months ago
-config: hexagon-randconfig-r001-20230312 (https://download.01.org/0day-ci/archive/20230312/202303120236.ZykolTwn-lkp@intel.com/config)
+commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
+date:   6 weeks ago
+config: arm-randconfig-r014-20230312 (https://download.01.org/0day-ci/archive/20230312/202303120327.m6pfGEGi-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=61890ccaefaff89f5babd2c8412fd222c3f5fe38
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5eb6e280432ddc9b755193552f3a070da8d7455c
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 61890ccaefaff89f5babd2c8412fd222c3f5fe38
+        git checkout 5eb6e280432ddc9b755193552f3a070da8d7455c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp3/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303120236.ZykolTwn-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303120327.m6pfGEGi-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:607:34: warning: unused variable 'mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mdp_comp_dt_ids[] = {
-                                    ^
->> drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c:627:34: warning: unused variable 'mdp_sub_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mdp_sub_comp_dt_ids[] = {
-                                    ^
+>> arch/arm/mm/copypage-fa.c:38:6: warning: no previous prototype for function 'fa_copy_user_highpage' [-Wmissing-prototypes]
+   void fa_copy_user_highpage(struct page *to, struct page *from,
+        ^
+   arch/arm/mm/copypage-fa.c:38:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void fa_copy_user_highpage(struct page *to, struct page *from,
+   ^
+   static 
+>> arch/arm/mm/copypage-fa.c:55:6: warning: no previous prototype for function 'fa_clear_user_highpage' [-Wmissing-prototypes]
+   void fa_clear_user_highpage(struct page *page, unsigned long vaddr)
+        ^
+   arch/arm/mm/copypage-fa.c:55:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void fa_clear_user_highpage(struct page *page, unsigned long vaddr)
+   ^
+   static 
    2 warnings generated.
 
 
-vim +/mdp_comp_dt_ids +607 drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
+vim +/fa_copy_user_highpage +38 arch/arm/mm/copypage-fa.c
 
-   606	
- > 607	static const struct of_device_id mdp_comp_dt_ids[] = {
-   608		{
-   609			.compatible = "mediatek,mt8183-mdp3-rdma",
-   610			.data = (void *)MDP_COMP_TYPE_RDMA,
-   611		}, {
-   612			.compatible = "mediatek,mt8183-mdp3-ccorr",
-   613			.data = (void *)MDP_COMP_TYPE_CCORR,
-   614		}, {
-   615			.compatible = "mediatek,mt8183-mdp3-rsz",
-   616			.data = (void *)MDP_COMP_TYPE_RSZ,
-   617		}, {
-   618			.compatible = "mediatek,mt8183-mdp3-wrot",
-   619			.data = (void *)MDP_COMP_TYPE_WROT,
-   620		}, {
-   621			.compatible = "mediatek,mt8183-mdp3-wdma",
-   622			.data = (void *)MDP_COMP_TYPE_WDMA,
-   623		},
-   624		{}
-   625	};
-   626	
- > 627	static const struct of_device_id mdp_sub_comp_dt_ids[] = {
-   628		{
-   629			.compatible = "mediatek,mt8183-mdp3-wdma",
-   630			.data = (void *)MDP_COMP_TYPE_PATH,
-   631		}, {
-   632			.compatible = "mediatek,mt8183-mdp3-wrot",
-   633			.data = (void *)MDP_COMP_TYPE_PATH,
-   634		},
-   635		{}
-   636	};
-   637	
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  37  
+28853ac8fe5221 Paulius Zaleckas 2009-03-25 @38  void fa_copy_user_highpage(struct page *to, struct page *from,
+a3be6327163c22 Hans Ulli Kroll  2010-04-27  39  	unsigned long vaddr, struct vm_area_struct *vma)
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  40  {
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  41  	void *kto, *kfrom;
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  42  
+5472e862de2bc4 Cong Wang        2011-11-25  43  	kto = kmap_atomic(to);
+5472e862de2bc4 Cong Wang        2011-11-25  44  	kfrom = kmap_atomic(from);
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  45  	fa_copy_user_page(kto, kfrom);
+5472e862de2bc4 Cong Wang        2011-11-25  46  	kunmap_atomic(kfrom);
+5472e862de2bc4 Cong Wang        2011-11-25  47  	kunmap_atomic(kto);
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  48  }
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  49  
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  50  /*
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  51   * Faraday optimised clear_user_page
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  52   *
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  53   * Same story as above.
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  54   */
+28853ac8fe5221 Paulius Zaleckas 2009-03-25 @55  void fa_clear_user_highpage(struct page *page, unsigned long vaddr)
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  56  {
+5472e862de2bc4 Cong Wang        2011-11-25  57  	void *ptr, *kaddr = kmap_atomic(page);
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  58  	asm volatile("\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  59  	mov	r1, %2				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  60  	mov	r2, #0				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  61  	mov	r3, #0				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  62  	mov	ip, #0				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  63  	mov	lr, #0				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  64  1:	stmia	%0, {r2, r3, ip, lr}		@ 4\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  65  	mcr	p15, 0, %0, c7, c14, 1		@ 1   clean and invalidate D line\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  66  	add	%0, %0, #16			@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  67  	stmia	%0, {r2, r3, ip, lr}		@ 4\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  68  	mcr	p15, 0, %0, c7, c14, 1		@ 1   clean and invalidate D line\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  69  	add	%0, %0, #16			@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  70  	subs	r1, r1, #1			@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  71  	bne	1b				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  72  	mcr	p15, 0, r1, c7, c10, 4		@ 1   drain WB"
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  73  	: "=r" (ptr)
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  74  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  75  	: "r1", "r2", "r3", "ip", "lr");
+5472e862de2bc4 Cong Wang        2011-11-25  76  	kunmap_atomic(kaddr);
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  77  }
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  78  
+
+:::::: The code at line 38 was first introduced by commit
+:::::: 28853ac8fe5221de74a14f1182d7b2b383dfd85c ARM: Add support for FA526 v2
+
+:::::: TO: Paulius Zaleckas <paulius.zaleckas@teltonika.lt>
+:::::: CC: Paulius Zaleckas <paulius.zaleckas@teltonika.lt>
 
 -- 
 0-DAY CI Kernel Test Service
