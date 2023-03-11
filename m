@@ -1,54 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6197B
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 10:40:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5986C433EF;
-	Sat, 11 Mar 2023 10:40:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678531254;
-	bh=7zsjzpHaJ2URUrzqH21gfr7zcR06Vsq1WlYTpLGN67k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hz/QgQV+tol0QGs1uiyUVU1YmQC/AXzitZL+kbYA7GInRtmiVQFTEY2iVDRO3dg9W
-	 Dn+aohn+jBeSOIE/jhaWHFlmdrQSfM29KnKsXPxiQb+ErCGf7hJ0loT1671wCPg4qU
-	 YipOiQZ7PMrtj+RmT4g2gYZo0eKssfXShK1dKJeNS1Y1iyjI/PTio57fapGQZFt27J
-	 IB7DAaBhis1H3YM2RwmK+MKXMV2SXZbF3nXtb0RVv+SBYOReSerBiB+mmvdrTaW7fI
-	 sxx3EVlcjjn4d5TnL56sL+iQzholyCixL7ZEsZgFWalbgwSIRW02F92fkaoBbKpOiX
-	 SLQGUBS/XfmKA==
-Date: Sat, 11 Mar 2023 10:40:49 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Aurelien Jarno <aurelien@aurel32.net>
-Cc: Bin Meng <bmeng.cn@gmail.com>, conor.dooley@microchip.com,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F437B
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 10:49:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+	; s=202004.hall; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:Reply-To:
+	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+	bh=DZvC+QNj8PHK37bCOUI9RaMY9M3fMNUqgaN+cHoRwBo=; b=QLZf8Nm28yWNluwu6O/LOSHmnC
+	+r6/Fgip9cLuGax+yctzFZ3rokqNN9A7wOjFP+gnZTz606y/lG6nWV5AJ51N3DgX9uwmgQPkCuwhQ
+	7XQYwtIb0YGswLwhtkCexHGtI0ZK/O1dxXCKA3MmQhUh2SZVgJ9GF/Y3gQLBelYS+SyoQoA4ZIShH
+	bPqA+820AhxYqh2zjnQW9QOVz3/CQbXFY8AtG6SC3gXrGVmVolNAe1ZjJh7zfuXiar/EF47I/j3gX
+	7cwM9x2ou+GMaTwuCG3aBSoLsXPRPkexnaajzWbGpOrTSbCaenweq1LU8v7rXJHQOVb3SoMHn6U2n
+	dHdqL1pQ==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1pawmk-00Bk8D-A7; Sat, 11 Mar 2023 11:49:10 +0100
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+	(envelope-from <aurelien@aurel32.net>)
+	id 1pawmj-00AAIA-2G;
+	Sat, 11 Mar 2023 11:49:09 +0100
+Date: Sat, 11 Mar 2023 11:49:09 +0100
+From: Aurelien Jarno <aurelien@aurel32.net>
+To: Bin Meng <bmeng.cn@gmail.com>
+Cc: Conor Dooley <conor@kernel.org>, conor.dooley@microchip.com,
 	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
 	naresh.kamboju@linaro.org, nathan@kernel.org,
 	ndesaulniers@google.com, palmer@dabbelt.com, palmer@rivosinc.com,
 	stable@vger.kernel.org
 Subject: Re: [PATCH v2] RISC-V: remove I-extension ISA spec version dance
-Message-ID: <88fadde1-27eb-40c6-b90e-881ebf9690df@spud>
+Message-ID: <ZAxcpTolZ74MweEW@aurel32.net>
 References: <20230308220842.1231003-1-conor@kernel.org>
  <20230310150754.535425-1-bmeng.cn@gmail.com>
  <CAEUhbmWcfcSmuU6VnbTdLoErT113RZPgHSK3c+3M5kU0Wsv1pg@mail.gmail.com>
  <243c92f1-c1e0-428b-ab31-3d9c9088b2c2@spud>
- <ZAxT7T9Xy1Fo3d5W@aurel32.net>
+ <CAEUhbmUf+-a8u_qaC3weP1xBy8gjsbdV=29bM8gp6SWA5KqH5A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Uu0eTYwFSIAxBZgb"
-Content-Disposition: inline
-In-Reply-To: <ZAxT7T9Xy1Fo3d5W@aurel32.net>
-
-
---Uu0eTYwFSIAxBZgb
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAEUhbmUf+-a8u_qaC3weP1xBy8gjsbdV=29bM8gp6SWA5KqH5A@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 
-On Sat, Mar 11, 2023 at 11:11:57AM +0100, Aurelien Jarno wrote:
-> On 2023-03-10 16:40, Conor Dooley wrote:
+On 2023-03-11 13:41, Bin Meng wrote:
+> On Sat, Mar 11, 2023 at 12:40=E2=80=AFAM Conor Dooley <conor@kernel.org> =
+wrote:
+> >
 > > On Fri, Mar 10, 2023 at 11:35:57PM +0800, Bin Meng wrote:
 > > > On Fri, Mar 10, 2023 at 11:07=E2=80=AFPM Bin Meng <bmeng.cn@gmail.com=
 > wrote:
@@ -164,93 +168,64 @@ nel.org
 builds fine
 > > > > for me. Anything I am missing?
 > > > >
-> > >=20
+> > >
 > > > Some further note:
-> > >=20
+> > >
 > > > After I switched to kernel.org pre-built GCC 12.2.0 [1] which includes
 > > > binutils 2.39, I was able to reproduce the exact same build failure of
 > > > v5.16 kernel as described in the commit 6df2a016c0c8 ("riscv: fix
 > > > build with binutils 2.38") by Aurelien Jarno.
-> > >=20
+> > >
 > > > To verify the commit message of 6df2a016c0c8 is accurate or not, I
 > > > built a GAS from binutils 2.37 and replaced the GAS 2.39 in the
 > > > kernel.org package, surprisingly kernel v5.16 did not build with the
 > > > same build failure.
-> > >=20
+> > >
 > > > So it seems that it's GCC that caused the build failure instead of GAS
 > > > from binutils??
-> >=20
+> >
 > > Right, that's what I was getting at in the bit below the --- line in my
 > > patch. I think Aurelien was misled by the failure message and your email
 > > ([1] in my links above) which claimed that binutils would default to
 > > the 20191213 spec.
->=20
-> No I was not misled by that, at that time GCC 11.3 and GCC 12 were not
-> released.
->=20
-> binutils definitely defaults to 20191213 if you do not use the
-> --with-isa-spec with a different value when configuring it.
-
-I specifically built binutils without that flag, and had no issues
-building the kernel with clang, which is the source of my confusion here
-really.
-I'd have expected that to fail
-
 > > It appears (and I'm not a tc person) that GCC must call GAS with the
 > > --misa-spec argument, and in GCC 12 the value used is 20191213.
 > > Either GCC 11 must pass --misa-spec=3D2.2 to binutils, or it passes
 > > nothing, leading binutils to be permissive about what -march=3Drv64i
 > > means.
 >=20
-> GCC 11.1 and 11.2 pass nothing to binutils, hence the issue I reported
-> and the patch fixing that. Basic support for misa-spec has been
-> backported to GCC 11.3, with a default to --misa-spec=3D2.2, hence the
-> "permissive" behaviour you observe.
+> I verified that "-misa-spec" is a new option introduced in GCC 12 and
+> the default value is set to 20191213 which is unfortunately backward
+> incompatible.
 >=20
-> > The permissive option would "seem" to be correct, as building with clang
-> > (that to my knowledge doesn't pass --misa-spec to GAS) and with
-> > -march=3Drv64i has no issues assembling.
+> GCC 11 does not have the "-misa-spec" option, so I assume it produces
+> backward compatible codes.
 >=20
-> The "permissive" way only work if we drop support for GCC 11.1 and 11.2,
-> which sounds acceptable to me.
+> IOW, what commit 6df2a016c0c8 was trying to fix has nothing to do with
+> binutils 2.38+. It's the GCC changes that is the culprit.
 
-I don't think that we can do that.
+I disagree with that statement. Your tests seems to have been done using
+the toolchains from [1], which changes two parameters, i.e. both the GCC
+and binutils version.
 
-> > It'd appear to me that binutils is a *player* in this issue, but is not
-> > the culprit of the issue Aurelien sought to fix.
->=20
-> I *disagree*. At the time the commit has been merged, binutils was the
-> only culprit.
+The original issue can be demonstrated the following way:
 
-Okay, fair enough! I was only going off my observations with
-current-day, and clearly you remember well the situation that you
-encountered this with!
+- Revert commit 6df2a016c0c8
+- Get toolchain from:
+  https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.1=
+=2E0/x86_64-gcc-11.1.0-nolibc-riscv64-linux.tar.xz
+- Get toolchain from:
+  https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.3=
+=2E0/x86_64-gcc-11.3.0-nolibc-riscv64-linux.tar.xz
+- Replace the as version in the 11.1.0 toolchain (2.36.1) with the one
+  from the 1.3.0 one (2.38), for instance using:
+  ln -sf ../../../../gcc-11.3.0-nolibc/riscv64-linux/riscv64-linux/bin/as g=
+cc-11.1.0-nolibc/riscv64-linux/riscv64-linux/bin/as
+- Build a defconfig kernel using the 11.1.0 toolchain, so using GCC 11.1
+  with binutils 2.38
 
-> With more recent versions of GCC 11.3 and GCC 12 released
-> in the meantime, the situation is way more complex.
+[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/
 
-This patch is going to be problematic w/ versions of gcc that do not
-understand -misa-spec + binutils 2.38 then, isn't it.
-Based on what Jess has said, pursuing this approach seems ill-advised
-anyway.
-
-I'm inclined to go back to my approach in v1 & only apply your march
-addition when AS_IS_GNU. That still leaves a problem for a configuration
-where GAS is 2.38 and LD is 2.35, which I don't think can be handled.
-I feel the only option there is just erroring the build if someones
-tries it.
-Ditto for a future IAS + LD 2.35 combination, if IAS is using a 20190608
-or later of the ISA spec.
-
---Uu0eTYwFSIAxBZgb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAxargAKCRB4tDGHoIJi
-0swOAP9wQ/ggsW3fabpSO5xuN84Na5dj1CkvNR8szpLhZCpWogD+K74lvXnHb2AL
-8lDegQ+sy61FovaHwnUCC/f9X1O/8g8=
-=2vSF
------END PGP SIGNATURE-----
-
---Uu0eTYwFSIAxBZgb--
+--=20
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                 http://www.aurel32.net
