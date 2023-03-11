@@ -1,44 +1,44 @@
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AFC7B;
-	Sat, 11 Mar 2023 20:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA49B5395;
+	Sat, 11 Mar 2023 21:53:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678566068; x=1710102068;
+  t=1678571585; x=1710107585;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R4jOOpvL1F6T48/D/lE3/KCvZCzCNz8pmZKc/suVL8Y=;
-  b=UPHlhMUpABQi/rq5B01HT2HyXU7T4bKoj06Um+ITa2JCQo7qfPk036IB
-   rFVuedHYGIwARUZhFEUy3pew5QQW9HrZntDgsG7uKUEnMnejNfOU7HBp9
-   8NS2s/sBmTJOSW8xt1avsCqlDLkhH+la4M+mJUQnAr2eoaNqO2m1wDxdT
-   1N9FfU2KfFpEd+5+VCKoAJe7rSDyxe+F2tSUcKrS12Z1+8VD88EggnFA1
-   pJHlPr2tusSsBUgb2EvGZFL1065nSzl/OucbnSm0+4LQ09pkBmGL9pZDP
-   fR9VPiC0IL8vvhWYZswriV57Od7LPXjVWBCp3KttghPqAn2NmGrw9WMRp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="401803203"
+  bh=W6xXpESimLDsJp6EkDZApfqoZkKXknJkh5Rzj8shKJY=;
+  b=IoaO8ZI6KW6lwx76qYCABKTqyM2zDnY1UqtiAkfdOr4nBqF7Ip2v2uD4
+   KjigtCoFpSSJSzHBUyg9ZdVnKdNQLlza9wFzHl3rKLQq/D8du7m2CbTyO
+   Xipdf2ZjtTqsmzxf9vSAEt2CVPxcW0CRfdN6KannNa7kCpbCb4PVgB8g2
+   0K2SeZM3uTRwBV3z9ureDeZk21NLcIIaMsFBntbHiYtYmc8MNHEE9fD/6
+   MARTDqlv6aEv8vDdPi44AybXxQaZA7TIwxNHRCqKaedmtwoABhCWLgv3u
+   qowYDpJllK3BpQ4kbX5t/hWW4DQEYZSY31GpOC5HgeLCwQSc9YCLuW4tY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="401808915"
 X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
-   d="scan'208";a="401803203"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 12:21:06 -0800
+   d="scan'208";a="401808915"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 13:53:05 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="708396095"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="628197534"
 X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
-   d="scan'208";a="708396095"
+   d="scan'208";a="628197534"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 11 Mar 2023 12:21:01 -0800
+  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2023 13:53:03 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pb5i8-0004mz-38;
-	Sat, 11 Mar 2023 20:21:00 +0000
-Date: Sun, 12 Mar 2023 04:20:25 +0800
+	id 1pb79C-0004of-1X;
+	Sat, 11 Mar 2023 21:53:02 +0000
+Date: Sun, 12 Mar 2023 05:52:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [vsyrjala:dpt_debug 4/4]
- drivers/gpu/drm/i915/display/intel_dpt.c:92:14: warning: format specifies
- type 'unsigned long long' but the argument has type 'dma_addr_t' (aka
- 'unsigned int')
-Message-ID: <202303120405.hj8Locfa-lkp@intel.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: drivers/scsi/bfa/bfad.c:169:3: warning: cast from 'void (*)(struct
+ bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)')
+ converts to incompatible function type
+Message-ID: <202303120516.CraGyKvc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,65 +48,457 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/vsyrjala/linux.git dpt_debug
-head:   93b6968da31ee411cedc83b08b625e06525ca566
-commit: 93b6968da31ee411cedc83b08b625e06525ca566 [4/4] dpt debug
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230312/202303120405.hj8Locfa-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Gustavo,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   81ff855485a366a391dc3aed3942715e676ed132
+commit: 552a23a0e5d0a84cecd4687043d8030673981d30 Makefile: Enable -Wcast-function-type
+date:   1 year, 4 months ago
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230312/202303120516.CraGyKvc-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/vsyrjala/linux/commit/93b6968da31ee411cedc83b08b625e06525ca566
-        git remote add vsyrjala https://github.com/vsyrjala/linux.git
-        git fetch --no-tags vsyrjala dpt_debug
-        git checkout 93b6968da31ee411cedc83b08b625e06525ca566
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=552a23a0e5d0a84cecd4687043d8030673981d30
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 552a23a0e5d0a84cecd4687043d8030673981d30
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/scsi/bfa/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303120405.hj8Locfa-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303120516.CraGyKvc-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_dpt.c:92:14: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
-                           dpt, i++, page_to_phys(page));
-                                     ^~~~~~~~~~~~~~~~~~
-   include/drm/drm_print.h:469:46: note: expanded from macro 'drm_err'
-           __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
-                                                ~~~    ^~~~~~~~~~~
-   include/drm/drm_print.h:456:48: note: expanded from macro '__drm_printk'
-           dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-                                                  ~~~    ^~~~~~~~~~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   arch/x86/include/asm/io.h:159:31: note: expanded from macro 'page_to_phys'
-   #define page_to_phys(page)    ((dma_addr_t)page_to_pfn(page) << PAGE_SHIFT)
-                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/scsi/bfa/bfad.c:169:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_created);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:202:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_initializing);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:260:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_uninit);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:285:4: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                           bfa_sm_set_state(bfad, bfad_sm_failed);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:288:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_operational);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:292:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_uninit);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:300:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_failed);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:319:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_operational);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:323:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_fcs_exit);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:328:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_uninit);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:345:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_fcs_exit);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:361:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_stopping);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:377:3: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_sm_set_state(bfad, bfad_sm_uninit);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:1015:7: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   if (bfa_sm_cmp_state(bfad, bfad_sm_initializing))
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:193:53: note: expanded from macro 'bfa_sm_cmp_state'
+   #define bfa_sm_cmp_state(_sm, _state)   ((_sm)->sm == (bfa_sm_t)(_state))
+                                                         ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:1016:4: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                           bfa_sm_set_state(bfad, bfad_sm_failed);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:1342:2: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           bfa_sm_set_state(bfad, bfad_sm_uninit);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:190:52: note: expanded from macro 'bfa_sm_set_state'
+   #define bfa_sm_set_state(_sm, _state)   ((_sm)->sm = (bfa_sm_t)(_state))
+                                                        ^~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfad.c:1364:6: warning: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           if (bfa_sm_cmp_state(bfad, bfad_sm_uninit))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:193:53: note: expanded from macro 'bfa_sm_cmp_state'
+   #define bfa_sm_cmp_state(_sm, _state)   ((_sm)->sm == (bfa_sm_t)(_state))
+--
+>> drivers/scsi/bfa/bfad_bsg.c:2138:29: warning: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Wcast-function-type-strict]
+           bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa.h:434:25: note: expanded from macro 'bfa_pending_q_init'
+           (__qe)->hcb_qe.cbfn = (__cbfn);                         \
+                                  ^~~~~~
+   drivers/scsi/bfa/bfad_bsg.c:2162:29: warning: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Wcast-function-type-strict]
+           bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp, &fcomp, NULL);
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa.h:434:25: note: expanded from macro 'bfa_pending_q_init'
+           (__qe)->hcb_qe.cbfn = (__cbfn);                         \
+                                  ^~~~~~
+   drivers/scsi/bfa/bfad_bsg.c:2446:29: warning: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Wcast-function-type-strict]
+           bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa.h:434:25: note: expanded from macro 'bfa_pending_q_init'
+           (__qe)->hcb_qe.cbfn = (__cbfn);                         \
+                                  ^~~~~~
+   drivers/scsi/bfa/bfad_bsg.c:2477:29: warning: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Wcast-function-type-strict]
+           bfa_pending_q_init(&cb_qe, (bfa_cb_cbfn_t)bfad_hcb_comp,
+                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa.h:434:25: note: expanded from macro 'bfa_pending_q_init'
+           (__qe)->hcb_qe.cbfn = (__cbfn);                         \
+                                  ^~~~~~
+   4 warnings generated.
+--
+>> drivers/scsi/bfa/bfa_ioc.c:144:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_uninit), BFA_IOC_UNINIT},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:145:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_reset), BFA_IOC_RESET},
+            ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:146:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_enabling), BFA_IOC_ENABLING},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:147:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_getattr), BFA_IOC_GETATTR},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:148:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_op), BFA_IOC_OPERATIONAL},
+            ^~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:149:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_fail_retry), BFA_IOC_INITFAIL},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:150:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_fail), BFA_IOC_FAIL},
+            ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:151:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_disabling), BFA_IOC_DISABLING},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:152:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_disabled), BFA_IOC_DISABLED},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:153:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_ioc_sm_hwfail), BFA_IOC_HWFAIL},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+>> drivers/scsi/bfa/bfa_ioc.c:232:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_reset), BFA_IOCPF_RESET},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:233:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_fwcheck), BFA_IOCPF_FWMISMATCH},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:234:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_mismatch), BFA_IOCPF_FWMISMATCH},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:235:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_semwait), BFA_IOCPF_SEMWAIT},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:236:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_hwinit), BFA_IOCPF_HWINIT},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:237:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_enabling), BFA_IOCPF_HWINIT},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:238:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_ready), BFA_IOCPF_READY},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:239:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_initfail_sync), BFA_IOCPF_INITFAIL},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:240:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_initfail), BFA_IOCPF_INITFAIL},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:241:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_fail_sync), BFA_IOCPF_FAIL},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:242:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_fail), BFA_IOCPF_FAIL},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:243:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_disabling), BFA_IOCPF_DISABLING},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:244:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_disabling_sync), BFA_IOCPF_DISABLING},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:245:3: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           {BFA_SM(bfa_iocpf_sm_disabled), BFA_IOCPF_DISABLED},
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:203:22: note: expanded from macro 'BFA_SM'
+   #define BFA_SM(_sm)     ((bfa_sm_t)(_sm))
+                            ^~~~~~~~~~~~~~~
+>> drivers/scsi/bfa/bfa_ioc.c:271:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_reset);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+>> drivers/scsi/bfa/bfa_ioc.c:284:2: warning: cast from 'void (*)(struct bfa_iocpf_s *, enum iocpf_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           bfa_fsm_set_state(&ioc->iocpf, bfa_iocpf_sm_reset);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:297:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_enabling);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:305:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_uninit);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:331:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_getattr);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:338:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_fail);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:345:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_hwfail);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:349:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_disabling);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:353:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_uninit);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:384:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_op);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:393:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_fail);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:400:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_disabling);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:434:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_disabling);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:443:4: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                           bfa_fsm_set_state(ioc, bfa_ioc_sm_fail_retry);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:445:4: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                           bfa_fsm_set_state(ioc, bfa_ioc_sm_fail);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:478:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_disabled);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:491:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_hwfail);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+                         ^~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_ioc.c:516:3: warning: cast from 'void (*)(struct bfa_ioc_s *, enum ioc_event)' to 'bfa_fsm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   bfa_fsm_set_state(ioc, bfa_ioc_sm_enabling);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/scsi/bfa/bfa_cs.h:221:16: note: expanded from macro 'bfa_fsm_set_state'
+           (_fsm)->fsm = (bfa_fsm_t)(_state);      \
+..
 
 
-vim +92 drivers/gpu/drm/i915/display/intel_dpt.c
+vim +169 drivers/scsi/bfa/bfad.c
 
-    82	
-    83	static void intel_dpt_debug(struct i915_address_space *vm)
-    84	{
-    85		struct i915_dpt *dpt = i915_vm_to_dpt(vm);
-    86		struct page *page;
-    87		struct sgt_iter iter;
-    88		int i = 0;
-    89	
-    90		for_each_sgt_page(page, iter, dpt->obj->mm.pages)
-    91			drm_err(&vm->i915->drm, "dpt %p [%d] physical address 0x%llx\n",
-  > 92				dpt, i++, page_to_phys(page));
-    93	}
-    94	
+a36c61f9025b89 Krishna Gudipati 2010-09-15  158  
+5fbe25c7a66460 Jing Huang       2010-10-18  159  /*
+a36c61f9025b89 Krishna Gudipati 2010-09-15  160   * Beginning state for the driver instance, awaiting the pci_probe event
+7725ccfda59715 Jing Huang       2009-09-23  161   */
+a36c61f9025b89 Krishna Gudipati 2010-09-15  162  static void
+a36c61f9025b89 Krishna Gudipati 2010-09-15  163  bfad_sm_uninit(struct bfad_s *bfad, enum bfad_sm_event event)
+a36c61f9025b89 Krishna Gudipati 2010-09-15  164  {
+a36c61f9025b89 Krishna Gudipati 2010-09-15  165  	bfa_trc(bfad, event);
+a36c61f9025b89 Krishna Gudipati 2010-09-15  166  
+a36c61f9025b89 Krishna Gudipati 2010-09-15  167  	switch (event) {
+a36c61f9025b89 Krishna Gudipati 2010-09-15  168  	case BFAD_E_CREATE:
+a36c61f9025b89 Krishna Gudipati 2010-09-15 @169  		bfa_sm_set_state(bfad, bfad_sm_created);
+a36c61f9025b89 Krishna Gudipati 2010-09-15  170  		bfad->bfad_tsk = kthread_create(bfad_worker, (void *) bfad,
+a36c61f9025b89 Krishna Gudipati 2010-09-15  171  						"%s", "bfad_worker");
+a36c61f9025b89 Krishna Gudipati 2010-09-15  172  		if (IS_ERR(bfad->bfad_tsk)) {
+a36c61f9025b89 Krishna Gudipati 2010-09-15  173  			printk(KERN_INFO "bfad[%d]: Kernel thread "
+a36c61f9025b89 Krishna Gudipati 2010-09-15  174  				"creation failed!\n", bfad->inst_no);
+a36c61f9025b89 Krishna Gudipati 2010-09-15  175  			bfa_sm_send_event(bfad, BFAD_E_KTHREAD_CREATE_FAILED);
+a36c61f9025b89 Krishna Gudipati 2010-09-15  176  		}
+a36c61f9025b89 Krishna Gudipati 2010-09-15  177  		bfa_sm_send_event(bfad, BFAD_E_INIT);
+a36c61f9025b89 Krishna Gudipati 2010-09-15  178  		break;
+a36c61f9025b89 Krishna Gudipati 2010-09-15  179  
+a36c61f9025b89 Krishna Gudipati 2010-09-15  180  	case BFAD_E_STOP:
+a36c61f9025b89 Krishna Gudipati 2010-09-15  181  		/* Ignore stop; already in uninit */
+a36c61f9025b89 Krishna Gudipati 2010-09-15  182  		break;
+a36c61f9025b89 Krishna Gudipati 2010-09-15  183  
+a36c61f9025b89 Krishna Gudipati 2010-09-15  184  	default:
+a36c61f9025b89 Krishna Gudipati 2010-09-15  185  		bfa_sm_fault(bfad, event);
+a36c61f9025b89 Krishna Gudipati 2010-09-15  186  	}
+a36c61f9025b89 Krishna Gudipati 2010-09-15  187  }
+7725ccfda59715 Jing Huang       2009-09-23  188  
+
+:::::: The code at line 169 was first introduced by commit
+:::::: a36c61f9025b8924f99f54d518763bee7aa84085 [SCSI] bfa: cleanup driver
+
+:::::: TO: Krishna Gudipati <kgudipat@brocade.com>
+:::::: CC: James Bottomley <James.Bottomley@suse.de>
 
 -- 
 0-DAY CI Kernel Test Service
