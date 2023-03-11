@@ -1,28 +1,28 @@
 Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EF27B
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 08:54:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B797B
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 09:15:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-	; s=202004.hall; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:Reply-To:
+	; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+	Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
 	Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-	bh=QsTBuE7gnkjhR2MUNnrttMd8TEsxslDanQchSVUkX+M=; b=Iq+gd6hmmqmUWnJtiGC/VtVxXP
-	LXrGgsdjdlIkcZliLGcTvqzQYG+/wFvXuDejKJBrz0QzAmV2nTauFKtmuJksd8auqgPXQ1ErVWDuV
-	xrUk2Mc0hSsfeWvrFPbEkEOY9YuQP559/iMVm+45318Gz4wu9Vm1YjTthy2kMoQ+Wz5N+vicd6lpf
-	5lZAmjEavKkddS2NOIl8Ub3MmkAslr6LCu0aJ8pmkOglOPH9e87jckB6qVAxmTgYQ8BmK06/T6y5V
-	n4oKR3tqnE3f1Y/Vmmzp6cgE4jXdyupY/Asm4Z2od6Aa/lve4Dam+6QqEME6D3Nwi/HIxhRgNCy/g
-	MpZoWEsw==;
+	bh=oGlz0x3waUETRxmcy9pz+bC50AW+Mj+vbt06v0RUcGI=; b=k8vkyBbcUPKoQCtzQ2jgVV/flg
+	sLhI9zILLXp4T/qCOsob3BNijz3pCsR6e6oUleRMvu2Agn+QG/HLjvmV+YX9BUaFKqPnLcsF/xsH+
+	yPH9U++3miVB5IjiCG6AkOE/lqGT5EMRoThhfRYRig66Aim1nRmjvPfr2tnIqtkLE+YmeCNL3yssH
+	EQN2MF74lntRkUavlczPBIBXX/iI8FrCJY6/oVTi5lFQYbU1R1vzNjdcVv5G2FE+jb4HeBXXuFDje
+	YjrRKmbHJvFF6S1+FdcRy43CrSXnx8bhUdkX73g0uoydBASnHc2F5Gii0x9WilfgKFlP/st6m91Vk
+	XwYrfmIw==;
 Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
 	by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <aurelien@aurel32.net>)
-	id 1pav0A-00BgbO-1k; Sat, 11 Mar 2023 09:54:54 +0100
+	id 1pauy1-00Bga5-4p; Sat, 11 Mar 2023 09:52:41 +0100
 Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
 	(envelope-from <aurelien@aurel32.net>)
-	id 1pav09-009TwV-1X;
-	Sat, 11 Mar 2023 09:54:53 +0100
-Date: Sat, 11 Mar 2023 09:54:53 +0100
+	id 1pauxz-009Tvm-1c;
+	Sat, 11 Mar 2023 09:52:39 +0100
+Date: Sat, 11 Mar 2023 09:52:39 +0100
 From: Aurelien Jarno <aurelien@aurel32.net>
 To: Bin Meng <bmeng.cn@gmail.com>
 Cc: conor@kernel.org, conor.dooley@microchip.com,
@@ -31,139 +31,101 @@ Cc: conor@kernel.org, conor.dooley@microchip.com,
 	ndesaulniers@google.com, palmer@dabbelt.com, palmer@rivosinc.com,
 	stable@vger.kernel.org
 Subject: Re: [PATCH v2] RISC-V: remove I-extension ISA spec version dance
-Message-ID: <ZAxB3cfsobGggdRc@aurel32.net>
+Message-ID: <ZAxBVwLsUr1yQ4GZ@aurel32.net>
 References: <20230308220842.1231003-1-conor@kernel.org>
  <20230310150754.535425-1-bmeng.cn@gmail.com>
- <CAEUhbmWcfcSmuU6VnbTdLoErT113RZPgHSK3c+3M5kU0Wsv1pg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAEUhbmWcfcSmuU6VnbTdLoErT113RZPgHSK3c+3M5kU0Wsv1pg@mail.gmail.com>
+In-Reply-To: <20230310150754.535425-1-bmeng.cn@gmail.com>
 User-Agent: Mutt/2.2.7 (2022-08-07)
 
-On 2023-03-10 23:35, Bin Meng wrote:
-> On Fri, Mar 10, 2023 at 11:07=E2=80=AFPM Bin Meng <bmeng.cn@gmail.com> wr=
-ote:
-> >
-> > > From: Conor Dooley <conor.dooley@microchip.com>
-> > >
-> > > The spec folk, in their infinite wisdom, moved both control and status
-> > > registers & the FENCE.I instructions out of the I extension into their
-> > > own extensions (Zicsr, Zifencei) in the 20190608 version of the ISA
-> > > spec [0].
-> > > The GCC/binutils crew decided [1] to move their default version of the
-> > > ISA spec to the 20191213 version of the ISA spec, which came into bei=
-ng
-> > > for version 2.38 of binutils and GCC 12. Building with this toolchain
-> > > configuration would result in assembler issues:
-> > >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler =
-messages:
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
-unrecognized opcode `csrr a5,0xc01'
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
-unrecognized opcode `csrr a5,0xc01'
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
-unrecognized opcode `csrr a5,0xc01'
-> > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: =
-unrecognized opcode `csrr a5,0xc01'
-> > > This was fixed in commit 6df2a016c0c8 ("riscv: fix build with binutils
-> > > 2.38") by Aurelien Jarno, but has proven fragile.
-> > >
-> > > Before LLVM 17, LLVM did not support these extensions and, as such, t=
-he
-> > > cc-option check added by Aurelien worked. Since commit 22e199e6afb1
-> > > ("[RISCV] Accept zicsr and zifencei command line options") however, L=
-LVM
-> > > *does* support them and the cc-option check passes.
-> > >
-> > > This surfaced as a problem while building the 5.10 stable kernel using
-> > > the default Tuxmake Debian image [2], as 5.10 did not yet support ld.=
-lld,
-> > > and uses the Debian provided binutils 2.35.
-> > > Versions of ld prior to 2.38 will refuse to link if they encounter
-> > > unknown ISA extensions, and unfortunately Zifencei is not supported by
-> > > bintuils 2.35.
-> > >
-> > > Instead of dancing around with adding these extensions to march, as we
-> > > currently do, Palmer suggested locking GCC builds to the same version=
- of
-> > > the ISA spec that is used by LLVM. As far as I can tell, that is 2.2,
-> > > with, apparently [3], a lack of interest in implementing a flag like
-> > > GCC's -misa-spec at present.
-> > >
-> > > Add {cc,as}-option checks to add -misa-spec to KBUILD_{A,C}FLAGS when
-> > > GCC is used & remove the march dance.
-> > >
-> > > As clang does not accept this argument, I had expected to encounter
-> > > issues with the assembler, as neither zicsr nor zifencei are present =
-in
-> > > the ISA string and the spec version *should* be defaulting to a versi=
-on
-> > > that requires them to be present. The build passed however and the
-> > > resulting kernel worked perfectly fine for me on a PolarFire SoC...
-> > >
-> > > Link: https://riscv.org/wp-content/uploads/2019/06/riscv-spec.pdf [0]
-> > > Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHH=
-CYf4 [1]
-> > > Link: https://lore.kernel.org/all/CA+G9fYt9T=3DELCLaB9byxaLW2Qf4pZcDO=
-=3DhuCA0D8ug2V2+irJQ@mail.gmail.com/ [2]
-> > > Link: https://discourse.llvm.org/t/specifying-unpriviledge-spec-versi=
-on-misa-spec-gcc-flag-equivalent/66935 [3]
-> > > CC: stable@vger.kernel.org
-> > > Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > > ---
-> > > I think Aurelien's original commit message might actually not be quite
-> > > correct? I found, in my limited testing, that it is not the default
-> > > behaviour of gas that matters, but rather the toolchain itself?
-> > > My binutils versions (both those built using the clang-built-linux
-> > > tc-build scripts which do not set an ISA spec version, and one built
-> > > using the riscv-gnu-toolchain infra w/ an explicit 20191213 spec vers=
-ion
-> > > set) do not encounter these issues.
-> >
-> > I am unable to reproduce the build failure as reported by commit 6df2a0=
-16c0c8
-> > ("riscv: fix build with binutils 2.38") by Aurelien Jarno using kernel.=
-org
-> > pre-built GCC 11.3.0 [1] which includes binutils 2.38.
-> >
-> > [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_6=
-4/11.3.0/x86_64-gcc-11.3.0-nolibc-x86_64-linux.tar.xz
-> >
-> > The defconfig of v5.16 kernel (commit 6df2a016c0c8 lands in v5.17) buil=
-ds fine
-> > for me. Anything I am missing?
-> >
->=20
-> Some further note:
->=20
-> After I switched to kernel.org pre-built GCC 12.2.0 [1] which includes
-> binutils 2.39, I was able to reproduce the exact same build failure of
-> v5.16 kernel as described in the commit 6df2a016c0c8 ("riscv: fix
-> build with binutils 2.38") by Aurelien Jarno.
->=20
-> To verify the commit message of 6df2a016c0c8 is accurate or not, I
-> built a GAS from binutils 2.37 and replaced the GAS 2.39 in the
-> kernel.org package, surprisingly kernel v5.16 did not build with the
-> same build failure.
->=20
-> So it seems that it's GCC that caused the build failure instead of GAS
-> from binutils??
+On 2023-03-10 23:07, Bin Meng wrote:
+> > From: Conor Dooley <conor.dooley@microchip.com>
+> > 
+> > The spec folk, in their infinite wisdom, moved both control and status
+> > registers & the FENCE.I instructions out of the I extension into their
+> > own extensions (Zicsr, Zifencei) in the 20190608 version of the ISA
+> > spec [0].
+> > The GCC/binutils crew decided [1] to move their default version of the
+> > ISA spec to the 20191213 version of the ISA spec, which came into being
+> > for version 2.38 of binutils and GCC 12. Building with this toolchain
+> > configuration would result in assembler issues:
+> >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
+> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
+> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+> >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+> > This was fixed in commit 6df2a016c0c8 ("riscv: fix build with binutils
+> > 2.38") by Aurelien Jarno, but has proven fragile.
+> > 
+> > Before LLVM 17, LLVM did not support these extensions and, as such, the
+> > cc-option check added by Aurelien worked. Since commit 22e199e6afb1
+> > ("[RISCV] Accept zicsr and zifencei command line options") however, LLVM
+> > *does* support them and the cc-option check passes.
+> > 
+> > This surfaced as a problem while building the 5.10 stable kernel using
+> > the default Tuxmake Debian image [2], as 5.10 did not yet support ld.lld,
+> > and uses the Debian provided binutils 2.35.
+> > Versions of ld prior to 2.38 will refuse to link if they encounter
+> > unknown ISA extensions, and unfortunately Zifencei is not supported by
+> > bintuils 2.35.
+> > 
+> > Instead of dancing around with adding these extensions to march, as we
+> > currently do, Palmer suggested locking GCC builds to the same version of
+> > the ISA spec that is used by LLVM. As far as I can tell, that is 2.2,
+> > with, apparently [3], a lack of interest in implementing a flag like
+> > GCC's -misa-spec at present.
+> > 
+> > Add {cc,as}-option checks to add -misa-spec to KBUILD_{A,C}FLAGS when
+> > GCC is used & remove the march dance.
+> > 
+> > As clang does not accept this argument, I had expected to encounter
+> > issues with the assembler, as neither zicsr nor zifencei are present in
+> > the ISA string and the spec version *should* be defaulting to a version
+> > that requires them to be present. The build passed however and the
+> > resulting kernel worked perfectly fine for me on a PolarFire SoC...
+> > 
+> > Link: https://riscv.org/wp-content/uploads/2019/06/riscv-spec.pdf [0]
+> > Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/aE1ZeHHCYf4 [1]
+> > Link: https://lore.kernel.org/all/CA+G9fYt9T=ELCLaB9byxaLW2Qf4pZcDO=huCA0D8ug2V2+irJQ@mail.gmail.com/ [2]
+> > Link: https://discourse.llvm.org/t/specifying-unpriviledge-spec-version-misa-spec-gcc-flag-equivalent/66935 [3]
+> > CC: stable@vger.kernel.org
+> > Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> > I think Aurelien's original commit message might actually not be quite
+> > correct? I found, in my limited testing, that it is not the default
+> > behaviour of gas that matters, but rather the toolchain itself?
+> > My binutils versions (both those built using the clang-built-linux
+> > tc-build scripts which do not set an ISA spec version, and one built
+> > using the riscv-gnu-toolchain infra w/ an explicit 20191213 spec version
+> > set) do not encounter these issues.
+> 
+> I am unable to reproduce the build failure as reported by commit 6df2a016c0c8
+> ("riscv: fix build with binutils 2.38") by Aurelien Jarno using kernel.org
+> pre-built GCC 11.3.0 [1] which includes binutils 2.38.
+> 
+> [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.3.0/x86_64-gcc-11.3.0-nolibc-x86_64-linux.tar.xz
 
-No, GCC 12 was not yet released as the time of the commit, and the issue
-was definitely due to binutils. That said GCC 12 also introduced some
-support of the new extensions, which made the situation even more
-complex.
+I guess you mean https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.3.0/x86_64-gcc-11.3.0-nolibc-riscv64-linux.tar.gz
 
---=20
+> The defconfig of v5.16 kernel (commit 6df2a016c0c8 lands in v5.17) builds fine
+> for me. Anything I am missing?
+
+I can't find the corresponding source and unfortunately binutils doesn't
+record the configure options in the binaries, but my guess is that it
+has been configured with --with-isa-spec=2.2. This is not the
+recommended way to go, but given the mess many distribution went that
+road.
+
+-- 
 Aurelien Jarno                          GPG: 4096R/1DDD8C9B
 aurelien@aurel32.net                 http://www.aurel32.net
