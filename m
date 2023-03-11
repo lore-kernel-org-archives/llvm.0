@@ -1,157 +1,279 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05D97B;
-	Sat, 11 Mar 2023 12:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678537912; x=1710073912;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y52qohB/pnc+1t2throeu0yfL8L5May3+awBSvjpwXY=;
-  b=DF1ajck6wy5UmWEngpiBCsYUWO1r2ow4oVn0RM0B4Zhjw2T2xKa7URED
-   5DR6H9HFuK4OiA91nVXDo+NLc1GrHgmlRetZKlI/mYo4Akj31ZFS1faRe
-   b3CI2TCR4d+1ku9dCvXgSxPs5f+hK1MuwNZR6PH2C5VhbouEiXF0QzCPd
-   mcjqzQZnuRcCdJbUnRaotINpp6JAplz+h4CccgPMh1f8KA9zUtGRlVxuR
-   BGj+/JQlEPzUmHscyXgfMTbse37wPTMTWpruA6NipsyW0FQsC4Y08956g
-   MG9Mh6y9YLNFDLt9KFNphOrQSTBLSqD98zUPuQRo0rfbuLfPt5gLvalJ9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="336921797"
-X-IronPort-AV: E=Sophos;i="5.98,252,1673942400"; 
-   d="scan'208";a="336921797"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 04:31:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="788360843"
-X-IronPort-AV: E=Sophos;i="5.98,252,1673942400"; 
-   d="scan'208";a="788360843"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Mar 2023 04:31:51 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1payO6-0004Z5-0O;
-	Sat, 11 Mar 2023 12:31:50 +0000
-Date: Sat, 11 Mar 2023 20:31:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [avpatel:riscv_sbi_nested_v1 50/66]
- arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202303112028.3xzXqywh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D7C7B
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 13:09:20 +0000 (UTC)
+Received: by mail-ed1-f45.google.com with SMTP id cn21so1189015edb.0
+        for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 05:09:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678540159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DtoTxlABpXgN80Oy53eXVsPxiUYVB9iJEB+lzgUsW0Y=;
+        b=HFafK8FEdirvE3NoWAnomJcrIMcPknErqnC2eP56jRGFJEgvma5kihJNuhWXkhpTTF
+         Rph7ZtGmOYFW6MMXnHMP7zYngQ/yxoR3yFzTUQym7cxhVI9vouuMjKxxV2TcL8ugnKh1
+         pPnjBdjbdYFMsT1OdumClrUadzAGJgdZtlz5dmSMIa8z6H8427qdnjTR8iWnC5k1Q8/d
+         ITCcnp1aboWnfin9AzE6IlQ+h9uY7RXn5SPGfMKbAAmQhL2bTtiIa2MDo5Mr1jLEDcjc
+         JkwLOHBqDOfCYY1nOB68xbhwgbxuin5dxo+e2C7XXiMHCNqGjsabDmGqkjpX9FkJQtpw
+         umig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678540159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DtoTxlABpXgN80Oy53eXVsPxiUYVB9iJEB+lzgUsW0Y=;
+        b=mA2/+yq0Ixk3fAR1v17LI9m9zQ54soAv99oHUqlfpF/YH0vmw+oAM1sIPTD7+nkMOb
+         VeQBa0Ff5w8Q+5qtIqXl1W6FT3dB5fiFWl+Ydu/AIU8zs1PSlpd2VomvXOPC6pmjpwss
+         u5UCabHsY5UnsPztzRf9ByHaoPJmtTR1Y3WNN5NYqaW3zK2CSYZk7nCXHeq31iliWjks
+         94K6LLmiHdhGiec8k1nWFrLdBBq07ERvH7lLjwL9sbGXRhlmUClWlMztiC7qkzyibs0i
+         07AvSY8fpR2cx9OGkgskB2JItq55nc5jto+TqOK/8cRxorFATn64e2tNowTUtipifM3u
+         juGQ==
+X-Gm-Message-State: AO0yUKUd7qssnamWmCbAulIgBwV8v7RUvMho7EjsNzRuQm5oOYoMKzOF
+	z5pT0d6vskCA0G3BH3eyAz3z1q+iZuO1MSJBCeA=
+X-Google-Smtp-Source: AK7set+PCI94riQCj/eTKSat8hnM3VFgM9wwA3Lqj2CTO9g7UIC9U8FF3ByEuETC3TXfkeka+3mAkHluhlozsAqFlIo=
+X-Received: by 2002:a17:907:20d1:b0:8b1:7e1b:5ec1 with SMTP id
+ qq17-20020a17090720d100b008b17e1b5ec1mr14568963ejb.6.1678540158611; Sat, 11
+ Mar 2023 05:09:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230308220842.1231003-1-conor@kernel.org> <20230310150754.535425-1-bmeng.cn@gmail.com>
+ <CAEUhbmWcfcSmuU6VnbTdLoErT113RZPgHSK3c+3M5kU0Wsv1pg@mail.gmail.com>
+ <243c92f1-c1e0-428b-ab31-3d9c9088b2c2@spud> <CAEUhbmUf+-a8u_qaC3weP1xBy8gjsbdV=29bM8gp6SWA5KqH5A@mail.gmail.com>
+ <ZAxcpTolZ74MweEW@aurel32.net>
+In-Reply-To: <ZAxcpTolZ74MweEW@aurel32.net>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Sat, 11 Mar 2023 21:09:07 +0800
+Message-ID: <CAEUhbmX1O-E-coJN_3Vgh4=5Rcg1KRr6c_rAJ6pfa9TsY3WTmQ@mail.gmail.com>
+Subject: Re: [PATCH v2] RISC-V: remove I-extension ISA spec version dance
+To: Aurelien Jarno <aurelien@aurel32.net>
+Cc: Conor Dooley <conor@kernel.org>, conor.dooley@microchip.com, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
+	naresh.kamboju@linaro.org, nathan@kernel.org, ndesaulniers@google.com, 
+	palmer@dabbelt.com, palmer@rivosinc.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_nested_v1
-head:   40fabad953e9b049d3490f29e9c3eac00faf08b3
-commit: 08e8d5c1e7af3b2fca782aa78a75180ae3f448eb [50/66] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r003-20230310 (https://download.01.org/0day-ci/archive/20230311/202303112028.3xzXqywh-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/08e8d5c1e7af3b2fca782aa78a75180ae3f448eb
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_nested_v1
-        git checkout 08e8d5c1e7af3b2fca782aa78a75180ae3f448eb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+On Sat, Mar 11, 2023 at 6:49=E2=80=AFPM Aurelien Jarno <aurelien@aurel32.ne=
+t> wrote:
+>
+> On 2023-03-11 13:41, Bin Meng wrote:
+> > On Sat, Mar 11, 2023 at 12:40=E2=80=AFAM Conor Dooley <conor@kernel.org=
+> wrote:
+> > >
+> > > On Fri, Mar 10, 2023 at 11:35:57PM +0800, Bin Meng wrote:
+> > > > On Fri, Mar 10, 2023 at 11:07=E2=80=AFPM Bin Meng <bmeng.cn@gmail.c=
+om> wrote:
+> > > > >
+> > > > > > From: Conor Dooley <conor.dooley@microchip.com>
+> > > > > >
+> > > > > > The spec folk, in their infinite wisdom, moved both control and=
+ status
+> > > > > > registers & the FENCE.I instructions out of the I extension int=
+o their
+> > > > > > own extensions (Zicsr, Zifencei) in the 20190608 version of the=
+ ISA
+> > > > > > spec [0].
+> > > > > > The GCC/binutils crew decided [1] to move their default version=
+ of the
+> > > > > > ISA spec to the 20191213 version of the ISA spec, which came in=
+to being
+> > > > > > for version 2.38 of binutils and GCC 12. Building with this too=
+lchain
+> > > > > > configuration would result in assembler issues:
+> > > > > >   CC      arch/riscv/kernel/vdso/vgettimeofday.o
+> > > > > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Asse=
+mbler messages:
+> > > > > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: E=
+rror: unrecognized opcode `csrr a5,0xc01'
+> > > > > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: E=
+rror: unrecognized opcode `csrr a5,0xc01'
+> > > > > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: E=
+rror: unrecognized opcode `csrr a5,0xc01'
+> > > > > >   <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: E=
+rror: unrecognized opcode `csrr a5,0xc01'
+> > > > > > This was fixed in commit 6df2a016c0c8 ("riscv: fix build with b=
+inutils
+> > > > > > 2.38") by Aurelien Jarno, but has proven fragile.
+> > > > > >
+> > > > > > Before LLVM 17, LLVM did not support these extensions and, as s=
+uch, the
+> > > > > > cc-option check added by Aurelien worked. Since commit 22e199e6=
+afb1
+> > > > > > ("[RISCV] Accept zicsr and zifencei command line options") howe=
+ver, LLVM
+> > > > > > *does* support them and the cc-option check passes.
+> > > > > >
+> > > > > > This surfaced as a problem while building the 5.10 stable kerne=
+l using
+> > > > > > the default Tuxmake Debian image [2], as 5.10 did not yet suppo=
+rt ld.lld,
+> > > > > > and uses the Debian provided binutils 2.35.
+> > > > > > Versions of ld prior to 2.38 will refuse to link if they encoun=
+ter
+> > > > > > unknown ISA extensions, and unfortunately Zifencei is not suppo=
+rted by
+> > > > > > bintuils 2.35.
+> > > > > >
+> > > > > > Instead of dancing around with adding these extensions to march=
+, as we
+> > > > > > currently do, Palmer suggested locking GCC builds to the same v=
+ersion of
+> > > > > > the ISA spec that is used by LLVM. As far as I can tell, that i=
+s 2.2,
+> > > > > > with, apparently [3], a lack of interest in implementing a flag=
+ like
+> > > > > > GCC's -misa-spec at present.
+> > > > > >
+> > > > > > Add {cc,as}-option checks to add -misa-spec to KBUILD_{A,C}FLAG=
+S when
+> > > > > > GCC is used & remove the march dance.
+> > > > > >
+> > > > > > As clang does not accept this argument, I had expected to encou=
+nter
+> > > > > > issues with the assembler, as neither zicsr nor zifencei are pr=
+esent in
+> > > > > > the ISA string and the spec version *should* be defaulting to a=
+ version
+> > > > > > that requires them to be present. The build passed however and =
+the
+> > > > > > resulting kernel worked perfectly fine for me on a PolarFire So=
+C...
+> > > > > >
+> > > > > > Link: https://riscv.org/wp-content/uploads/2019/06/riscv-spec.p=
+df [0]
+> > > > > > Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/a=
+E1ZeHHCYf4 [1]
+> > > > > > Link: https://lore.kernel.org/all/CA+G9fYt9T=3DELCLaB9byxaLW2Qf=
+4pZcDO=3DhuCA0D8ug2V2+irJQ@mail.gmail.com/ [2]
+> > > > > > Link: https://discourse.llvm.org/t/specifying-unpriviledge-spec=
+-version-misa-spec-gcc-flag-equivalent/66935 [3]
+> > > > > > CC: stable@vger.kernel.org
+> > > > > > Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > > > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > > > > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > > > ---
+> > > > > > I think Aurelien's original commit message might actually not b=
+e quite
+> > > > > > correct? I found, in my limited testing, that it is not the def=
+ault
+> > > > > > behaviour of gas that matters, but rather the toolchain itself?
+> > > > > > My binutils versions (both those built using the clang-built-li=
+nux
+> > > > > > tc-build scripts which do not set an ISA spec version, and one =
+built
+> > > > > > using the riscv-gnu-toolchain infra w/ an explicit 20191213 spe=
+c version
+> > > > > > set) do not encounter these issues.
+> > > > >
+> > > > > I am unable to reproduce the build failure as reported by commit =
+6df2a016c0c8
+> > > > > ("riscv: fix build with binutils 2.38") by Aurelien Jarno using k=
+ernel.org
+> > > > > pre-built GCC 11.3.0 [1] which includes binutils 2.38.
+> > > > >
+> > > > > [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin=
+/x86_64/11.3.0/x86_64-gcc-11.3.0-nolibc-x86_64-linux.tar.xz
+> > > > >
+> > > > > The defconfig of v5.16 kernel (commit 6df2a016c0c8 lands in v5.17=
+) builds fine
+> > > > > for me. Anything I am missing?
+> > > > >
+> > > >
+> > > > Some further note:
+> > > >
+> > > > After I switched to kernel.org pre-built GCC 12.2.0 [1] which inclu=
+des
+> > > > binutils 2.39, I was able to reproduce the exact same build failure=
+ of
+> > > > v5.16 kernel as described in the commit 6df2a016c0c8 ("riscv: fix
+> > > > build with binutils 2.38") by Aurelien Jarno.
+> > > >
+> > > > To verify the commit message of 6df2a016c0c8 is accurate or not, I
+> > > > built a GAS from binutils 2.37 and replaced the GAS 2.39 in the
+> > > > kernel.org package, surprisingly kernel v5.16 did not build with th=
+e
+> > > > same build failure.
+> > > >
+> > > > So it seems that it's GCC that caused the build failure instead of =
+GAS
+> > > > from binutils??
+> > >
+> > > Right, that's what I was getting at in the bit below the --- line in =
+my
+> > > patch. I think Aurelien was misled by the failure message and your em=
+ail
+> > > ([1] in my links above) which claimed that binutils would default to
+> > > the 20191213 spec.
+> > > It appears (and I'm not a tc person) that GCC must call GAS with the
+> > > --misa-spec argument, and in GCC 12 the value used is 20191213.
+> > > Either GCC 11 must pass --misa-spec=3D2.2 to binutils, or it passes
+> > > nothing, leading binutils to be permissive about what -march=3Drv64i
+> > > means.
+> >
+> > I verified that "-misa-spec" is a new option introduced in GCC 12 and
+> > the default value is set to 20191213 which is unfortunately backward
+> > incompatible.
+> >
+> > GCC 11 does not have the "-misa-spec" option, so I assume it produces
+> > backward compatible codes.
+> >
+> > IOW, what commit 6df2a016c0c8 was trying to fix has nothing to do with
+> > binutils 2.38+. It's the GCC changes that is the culprit.
+>
+> I disagree with that statement. Your tests seems to have been done using
+> the toolchains from [1], which changes two parameters, i.e. both the GCC
+> and binutils version.
+>
+> The original issue can be demonstrated the following way:
+>
+> - Revert commit 6df2a016c0c8
+> - Get toolchain from:
+>   https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11=
+.1.0/x86_64-gcc-11.1.0-nolibc-riscv64-linux.tar.xz
+> - Get toolchain from:
+>   https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11=
+.3.0/x86_64-gcc-11.3.0-nolibc-riscv64-linux.tar.xz
+> - Replace the as version in the 11.1.0 toolchain (2.36.1) with the one
+>   from the 1.3.0 one (2.38), for instance using:
+>   ln -sf ../../../../gcc-11.3.0-nolibc/riscv64-linux/riscv64-linux/bin/as=
+ gcc-11.1.0-nolibc/riscv64-linux/riscv64-linux/bin/as
+> - Build a defconfig kernel using the 11.1.0 toolchain, so using GCC 11.1
+>   with binutils 2.38
+>
+> [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/
+>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303112028.3xzXqywh-lkp@intel.com/
+Okay, thanks for sharing the info of binutils's configuration of "-misa-spe=
+c".
 
-All warnings (new ones prefixed by >>):
+Indeed I checked the "-misa-spec" default value was changed from 2.2
+to 20191213 in binutils 2.38 via the following commit:
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+commit aed44286efa8ae8717a77d94b51ac3614e2ca6dc
+Author: Nelson Chu <nelson.chu@sifive.com>
+Date:   Thu Dec 30 23:23:46 2021 +0800
 
+    RISC-V: Updated the default ISA spec to 20191213.
 
-vim +264 arch/riscv/kvm/aia_aplic.c
+    Update the default ISA spec from 2.2 to 20191213 will change the defaul=
+t
+    version of i from 2.0 to 2.1.  Since zicsr and zifencei are separated
+    from i 2.1, users need to add them in the architecture string if they n=
+eed
+    fence.i and csr instructions.  Besides, we also allow old ISA spec can
+    recognize zicsr and zifencei, but we won't output them since they are
+    already included in the i extension when i's version is less than 2.1.
 
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
+So the original commit message of 6df2a016c0c8 was correct at the time
+of writing.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+As you mentioned, now GCC also brings the "-misa-spec" starting from
+GCC 12. This makes things complicated ...
+
+Regards,
+Bin
