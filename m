@@ -1,42 +1,42 @@
 Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159E47B
-	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 06:58:22 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5411f21f849so17342927b3.16
-        for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 22:58:21 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F20C7B
+	for <llvm@lists.linux.dev>; Sat, 11 Mar 2023 06:58:28 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-536bbaeceeaso76936617b3.11
+        for <llvm@lists.linux.dev>; Fri, 10 Mar 2023 22:58:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678517901;
+        d=google.com; s=20210112; t=1678517907;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBPfmbzctqVIG9gwCAzW6yooPI1omXt9V9PytRIeuNs=;
-        b=QIy+Zsx8m6qoDCdnldf0taLwai2+eVaQBBo50mkDUf1VKm2OpzfMRAtYZUfFENXA6z
-         thQnedSb9es+j5EYkRMqJ7s9vBI1/ZODxhOEnJ4xp5KtjpkgsVDyDOQq25CjNENVZmNF
-         U3c8y7gBp6qI97MFVXOehWtTzBmuZQCBXSxYoqydOH89iXMaTfJM0iKrdUBDT34L7U4D
-         7VV2rJYTEwBI6qR1ngadiisg3L/a5CPArbU3eygofpA+uxpus6gLBVVNQPj4E2yPx2k/
-         lC6FCcLswyZoOqX6gAGX62Tj3YutR7bIv4/aGAB1yC2qAAa8tFqxXbCnBLQSBe04+Foz
-         vT6Q==
+        bh=3NhwBTfmVglAZRqsQmhfe71Rzl22nzSJC9LqarCaKaI=;
+        b=fElNmip0BTpEUcUnQZTbwScWF+byjtbSTr1v+/fNKXShFigaOgNUsPUyepDifsXFRM
+         GjtYEjMaWAmilGB5L+qcsVGjEjSGMd/LeJ4G4PISm/Qcr6mSeFSRGXMwIFTXlqpoDxqx
+         uvOL6laMJmAF+1dp81n9lTMrmeOS29PZsukS94k2PzLInHyjjAn0Ikca29z18M4cqC9P
+         pDbHtcs1qt0NwF2biwm7j/d3u91cLM2DA31ZRrxK9fk59zZkHZNyQju0Itf0+jXrviS2
+         yX4IFl6BnsYqfYyCOaJ7WasvY5zSSdx4oLpfJ3YYqOWxo4POEGnix1tjSlJfAFmpqAK2
+         kvWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678517901;
+        d=1e100.net; s=20210112; t=1678517907;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBPfmbzctqVIG9gwCAzW6yooPI1omXt9V9PytRIeuNs=;
-        b=1GspF4RHH79osjPN1+jMK26uR15CxSqAMlbfSirf8sFR5AYrU327pGURpFZxGduEU0
-         eDNrVi6BbNslIGXr5OmKZ1Hi0QDYYpYUggKnn6UTqrZ91mbXnfngn63QzzVmvf0q/FkS
-         iK+c1I37fwu+2Q2wC4Fuws+7tBNNCjAxb6Da7vsONfIw0/J2RzI+/vohZysACocde9JL
-         ScjRwVQb1iLbCx+Hm6X/+lspCNEFGl80QUbcB0f6G3AEB1HA587tLuzoJ/iWxvR75j5w
-         bm5GNguMhxGIJyXhoBrYDBdGxys7C2wU/5I803tCtmTJxZt7Hew4gB9N1Tuc6beYgCHs
-         cKnw==
-X-Gm-Message-State: AO0yUKUHOaD3ysjo0O3oHJKzJ9qyx0hujNbpeE3PDrgsDrCmMZyNHpHS
-	woGW0LVROuMJ4Uphth+7D4iL0/lJoRvj
-X-Google-Smtp-Source: AK7set8nKWk1NpypLpltvL4S8pwGpmKJvYspdMoxC8WtqcM318/ZIatbP70iCt8VS2bf5Drd8d+q6hUyIxXV
+        bh=3NhwBTfmVglAZRqsQmhfe71Rzl22nzSJC9LqarCaKaI=;
+        b=3qcJphnUcNgUQE/dmnS9/GCqdzP29qWg/IHB4RARUVnDhqnuPYENvtudP40CEOM+B+
+         /LWxYH+cdRcCL+1GF/BUVD7cDehFf/xt+j0WudaZ9nZy+rzz+yd/ZJeWmIuJU6x8ni9u
+         aRGYFke3oNo9uvaM5DEVPnlhn0swYW3X61Wf9Fq1bFgZBOmbSsPhaxj0VQaBy60vt11l
+         AlHJ0LWL03TI64A06eaaegW9ngY8/A4RauL/RpmpX9IVgKMTNlQ6pWJ1eEeF3nT5waiy
+         XnjbsWjeLM727C/YGlOC/fsY02Nv5fYu+TTFQFMRC/898xFwKJkROoZRALfVTTA3Aw0d
+         Ba6g==
+X-Gm-Message-State: AO0yUKWDy2ub5b96MfD+C5h0ICAi+5DnrqqkowtY7cu70aLKI88B+hRb
+	GMvpx97k7G/ePtkjyAMgeyEuerZVdJMd
+X-Google-Smtp-Source: AK7set/X4UK55tnSLb9uuZbddCfKNh6XVFOEDglMCEuZ2GT7wllVSHfNLypT6L+5C1w62Dki84zNDe5aQALx
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a11d:a763:a328:f2d6])
- (user=irogers job=sendgmr) by 2002:a0d:ea0c:0:b0:4fd:56f3:fdad with SMTP id
- t12-20020a0dea0c000000b004fd56f3fdadmr9ywe.57.1678517900896; Fri, 10 Mar 2023
- 22:58:20 -0800 (PST)
-Date: Fri, 10 Mar 2023 22:57:42 -0800
+ (user=irogers job=sendgmr) by 2002:a81:ac1a:0:b0:533:cf4e:9a80 with SMTP id
+ k26-20020a81ac1a000000b00533cf4e9a80mr17706404ywh.6.1678517907341; Fri, 10
+ Mar 2023 22:58:27 -0800 (PST)
+Date: Fri, 10 Mar 2023 22:57:43 -0800
 In-Reply-To: <20230311065753.3012826-1-irogers@google.com>
-Message-Id: <20230311065753.3012826-3-irogers@google.com>
+Message-Id: <20230311065753.3012826-4-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230311065753.3012826-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v1 02/13] perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL
+Subject: [PATCH v1 03/13] perf build: Remove unused HAVE_GLIBC_SUPPORT
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -61,153 +61,42 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Cc: Stephane Eranian <eranian@google.com>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-BPF skeleton support is now key to a number of perf features. Rather
-than making it so that BPF support must be enabled for the build, make
-this the default and error if the build lacks a clang and libbpf that
-are sufficient. To avoid the error and build without BPF skeletons the
-NO_BPF_SKEL=1 flag can be used. Add a build-options flag to 'perf
-version' to enable detection of the BPF skeleton support and use this
-in the offcpu shell test.
+HAVE_GLIBC_SUPPORT is only used in `perf version --build-options` but
+doesn't control any behavior. Remove from the build to simplify it.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config              | 19 ++++++++++++-------
- tools/perf/Makefile.perf                |  8 ++++----
- tools/perf/builtin-lock.c               |  2 +-
- tools/perf/builtin-record.c             |  2 +-
- tools/perf/builtin-version.c            |  1 +
- tools/perf/tests/shell/record_offcpu.sh |  2 +-
- 6 files changed, 20 insertions(+), 14 deletions(-)
+ tools/perf/Makefile.config   | 4 ----
+ tools/perf/builtin-version.c | 1 -
+ 2 files changed, 5 deletions(-)
 
 diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 5f11834f189e..33d62d542fd5 100644
+index 33d62d542fd5..a68a3e9b47ae 100644
 --- a/tools/perf/Makefile.config
 +++ b/tools/perf/Makefile.config
-@@ -415,6 +415,7 @@ ifdef NO_LIBELF
-   NO_LIBUNWIND := 1
-   NO_LIBDW_DWARF_UNWIND := 1
-   NO_LIBBPF := 1
-+  NO_BPF_SKEL := 1
-   NO_JVMTI := 1
- else
-   ifeq ($(feature-libelf), 0)
-@@ -662,18 +663,22 @@ ifndef NO_LIBBPF
-     msg := $(warning BPF API too old. Please install recent kernel headers. BPF support in 'perf record' is disabled.)
-     NO_LIBBPF := 1
-   endif
-+else
-+  NO_BPF_SKEL := 1
- endif
+@@ -476,10 +476,6 @@ else
+   endif # libelf support
+ endif # NO_LIBELF
  
--ifdef BUILD_BPF_SKEL
-+ifndef NO_BPF_SKEL
-   $(call feature_check,clang-bpf-co-re)
-   ifeq ($(feature-clang-bpf-co-re), 0)
--    dummy := $(error Error: clang too old/not installed. Please install recent clang to build with BUILD_BPF_SKEL)
--  endif
--  ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
--    dummy := $(error Error: BPF skeleton support requires libbpf)
-+    dummy := $(error: ERROR: BPF skeletons unsupported. clang too old/not installed or build with NO_BPF_SKEL=1.)
-+  else
-+    ifeq ($(filter -DHAVE_LIBBPF_SUPPORT, $(CFLAGS)),)
-+      dummy := $(error: ERROR: BPF skeletons unsupported. BPF skeleton support requires libbpf or build with NO_BPF_SKEL=1.)
-+    else
-+      $(call detected,CONFIG_PERF_BPF_SKEL)
-+      CFLAGS += -DHAVE_BPF_SKEL
-+    endif
-   endif
--  $(call detected,CONFIG_PERF_BPF_SKEL)
--  CFLAGS += -DHAVE_BPF_SKEL
- endif
- 
- dwarf-post-unwind := 1
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 2fcee585b225..283ee4f56234 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -126,7 +126,7 @@ include ../scripts/utilities.mak
- #
- # Define NO_LIBDEBUGINFOD if you do not want support debuginfod
- #
--# Define BUILD_BPF_SKEL to enable BPF skeletons
-+# Define NO_BPF_SKEL to disable BPF skeletons
- #
- 
- # As per kernel Makefile, avoid funny character set dependencies
-@@ -1055,7 +1055,7 @@ SKELETONS += $(SKEL_OUT)/kwork_trace.skel.h
- $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_OUTPUT) $(LIBSYMBOL_OUTPUT):
- 	$(Q)$(MKDIR) -p $@
- 
--ifdef BUILD_BPF_SKEL
-+ifndef NO_BPF_SKEL
- BPFTOOL := $(SKEL_TMP_OUT)/bootstrap/bpftool
- BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. -I$(LIBBPF_INCLUDE)
- 
-@@ -1088,11 +1088,11 @@ bpf-skel: $(SKELETONS)
- 
- .PRECIOUS: $(SKEL_TMP_OUT)/%.bpf.o
- 
--else # BUILD_BPF_SKEL
-+else # NO_BPF_SKEL
- 
- bpf-skel:
- 
--endif # BUILD_BPF_SKEL
-+endif # NO_BPF_SKEL
- 
- bpf-skel-clean:
- 	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS)
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 054997edd98b..240d49a85524 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -2371,7 +2371,7 @@ int cmd_lock(int argc, const char **argv)
- 
- #ifndef HAVE_BPF_SKEL
- 		set_option_nobuild(contention_options, 'b', "use-bpf",
--				   "no BUILD_BPF_SKEL=1", false);
-+				   "NO_BPF_SKEL=1", false);
- #endif
- 		if (argc) {
- 			argc = parse_options(argc, argv, contention_options,
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 8374117e66f6..495627437f97 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -3971,7 +3971,7 @@ int cmd_record(int argc, const char **argv)
- 
- #ifndef HAVE_BPF_SKEL
- # define set_nobuild(s, l, m, c) set_option_nobuild(record_options, s, l, m, c)
--	set_nobuild('\0', "off-cpu", "no BUILD_BPF_SKEL=1", true);
-+	set_nobuild('\0', "off-cpu", "NO_BPF_SKEL=1", true);
- # undef set_nobuild
- #endif
- 
+-ifeq ($(feature-glibc), 1)
+-  CFLAGS += -DHAVE_GLIBC_SUPPORT
+-endif
+-
+ ifeq ($(feature-libaio), 1)
+   ifndef NO_AIO
+     CFLAGS += -DHAVE_AIO_SUPPORT
 diff --git a/tools/perf/builtin-version.c b/tools/perf/builtin-version.c
-index a886929ec6e5..0d9cda238c07 100644
+index 0d9cda238c07..c5d03a11e565 100644
 --- a/tools/perf/builtin-version.c
 +++ b/tools/perf/builtin-version.c
-@@ -83,6 +83,7 @@ static void library_status(void)
- 	STATUS(HAVE_ZSTD_SUPPORT, zstd);
- 	STATUS(HAVE_LIBPFM, libpfm4);
- 	STATUS(HAVE_LIBTRACEEVENT, libtraceevent);
-+	STATUS(HAVE_BPF_SKEL, BPF skeletons);
- }
- 
- int cmd_version(int argc, const char **argv)
-diff --git a/tools/perf/tests/shell/record_offcpu.sh b/tools/perf/tests/shell/record_offcpu.sh
-index e01973d4e0fb..24f81ff85793 100755
---- a/tools/perf/tests/shell/record_offcpu.sh
-+++ b/tools/perf/tests/shell/record_offcpu.sh
-@@ -28,7 +28,7 @@ test_offcpu_priv() {
-     err=2
-     return
-   fi
--  if perf record --off-cpu -o /dev/null --quiet true 2>&1 | grep BUILD_BPF_SKEL
-+  if perf version --build-options 2>&1 | grep HAVE_BPF_SKEL | grep -q OFF
-   then
-     echo "off-cpu test [Skipped missing BPF support]"
-     err=2
+@@ -59,7 +59,6 @@ static void library_status(void)
+ {
+ 	STATUS(HAVE_DWARF_SUPPORT, dwarf);
+ 	STATUS(HAVE_DWARF_GETLOCATIONS_SUPPORT, dwarf_getlocations);
+-	STATUS(HAVE_GLIBC_SUPPORT, glibc);
+ #ifndef HAVE_SYSCALL_TABLE_SUPPORT
+ 	STATUS(HAVE_LIBAUDIT_SUPPORT, libaudit);
+ #endif
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
