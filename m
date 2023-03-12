@@ -1,42 +1,42 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FC21103;
-	Sun, 12 Mar 2023 02:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C5510E6;
+	Sun, 12 Mar 2023 02:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678587551; x=1710123551;
+  t=1678588211; x=1710124211;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gQvrLwymSeUYUBXN6bfNtx+lGaa0mkDDp6THoXHHbC4=;
-  b=cSy3WMWnz3GgmRtACgSN8FrQ5UETamHQmuaq4uq8gB0GWFG76SlwXJ66
-   oFVMEMZiJTavhwBkyEvYbjT727cZ4VRLxL6Bf5yuy4SEnn7P0wUJQAsD3
-   K8N2+6L778ARohcb/DfBkPANn463f93q8MjZYlIAlhv67JpE7xWH0/pfM
-   kHJOLIBFGZ8XHzYEREKWbgvR+/767R36KBQMtfJ3WnoggT4TYU7IIiNUA
-   AdQMip76yEoWDgoiax2mu2Nn9B+X6uPsORhAKAOvxYoQRsDDGd2kSMbNn
-   SzP4IoBfU9wgQq+3ctM/qZ2oQnB8plYuWhmtyN9rkLoMH9q5KfbUeFzbQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="401820516"
+  bh=BpIM+JvJVv5NSuGCosv4966IIqr/qK30MXaD3aR1u24=;
+  b=Lg29NcTlSMV7WJL8Z+1NURTKZsDGwt47t8ImnkEvTh4VtgEDBincv2dI
+   coi9d/uxNxvWb6frkgbByUhh7hRiuMDymlSQr04mjj1XyzE7EiAtETWWL
+   7jt1ZLtxPq2OG6xYw9TkYxPD23OVnMGP7lEpxx2A5Da44doPTW1/nD83M
+   smfH+w4j7RPzdXl+7wsdnmREOVDXmelL7Hhr2VG8v399DzwbJWr4T8iQ3
+   D67U+/9NFC4PdIpQ+HvprflKWP5pJM2MfTJufkB/PfnzB6p4jtH4io2/0
+   gQQH0WfPfyCvS0kw2QPNFT+QOVPdkx/KgSrsmmM+Z14f42G1A1FkyF+XI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="320808549"
 X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
-   d="scan'208";a="401820516"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 18:19:10 -0800
+   d="scan'208";a="320808549"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 18:30:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="710713107"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="788492183"
 X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
-   d="scan'208";a="710713107"
+   d="scan'208";a="788492183"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2023 18:19:09 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 11 Mar 2023 18:30:09 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pbBIi-0004vj-1G;
-	Sun, 12 Mar 2023 02:19:08 +0000
-Date: Sun, 12 Mar 2023 10:18:58 +0800
+	id 1pbBTM-0004vx-1m;
+	Sun, 12 Mar 2023 02:30:08 +0000
+Date: Sun, 12 Mar 2023 10:29:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mcgrof:sysctl-testing 43/44] net/sunrpc/sysctl.c:135:19: error: use
- of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
-Message-ID: <202303121035.WHHXW9OR-lkp@intel.com>
+Subject: [jolsa-perf:uprobe_multi_4 1/10] kernel/trace/bpf_trace.c:3036:12:
+ warning: variable 'old_inode' is uninitialized when used here
+Message-ID: <202303121037.MNLHvyuj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,133 +46,157 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Luis,
-
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-testing
-head:   f66d0fcc0d9164174c2e72045110f43557649cad
-commit: 95e20e8aa440148ec8eed523ecc683e4dad15644 [43/44] sunrpc: move sunrpc_table and proc routines above
-config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230312/202303121035.WHHXW9OR-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git uprobe_multi_4
+head:   9d1680460291ce10458ce0adcd4859944fd7ada9
+commit: aefd3dc75e104d9b49c8fe971eea78fabd70809e [1/10] bpf: Add multi uprobe link
+config: arm64-randconfig-r004-20230312 (https://download.01.org/0day-ci/archive/20230312/202303121037.MNLHvyuj-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=95e20e8aa440148ec8eed523ecc683e4dad15644
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof sysctl-testing
-        git checkout 95e20e8aa440148ec8eed523ecc683e4dad15644
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=aefd3dc75e104d9b49c8fe971eea78fabd70809e
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf uprobe_multi_4
+        git checkout aefd3dc75e104d9b49c8fe971eea78fabd70809e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303121035.WHHXW9OR-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303121037.MNLHvyuj-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from net/sunrpc/sysctl.c:20:
-   In file included from include/linux/sunrpc/sched.h:19:
-   include/linux/sunrpc/xdr.h:753:10: warning: result of comparison of constant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           if (len > SIZE_MAX / sizeof(*p))
-               ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
->> net/sunrpc/sysctl.c:135:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
-                   .proc_handler   = proc_dodebug
-                                     ^~~~~~~~~~~~
-                                     rpc_debug
-   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
-   EXPORT_SYMBOL_GPL(rpc_debug);
-                     ^
-   net/sunrpc/sysctl.c:142:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
-                   .proc_handler   = proc_dodebug
-                                     ^~~~~~~~~~~~
-                                     rpc_debug
-   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
-   EXPORT_SYMBOL_GPL(rpc_debug);
-                     ^
-   net/sunrpc/sysctl.c:149:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
-                   .proc_handler   = proc_dodebug
-                                     ^~~~~~~~~~~~
-                                     rpc_debug
-   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
-   EXPORT_SYMBOL_GPL(rpc_debug);
-                     ^
-   net/sunrpc/sysctl.c:156:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
-                   .proc_handler   = proc_dodebug
-                                     ^~~~~~~~~~~~
-                                     rpc_debug
-   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
-   EXPORT_SYMBOL_GPL(rpc_debug);
-                     ^
->> net/sunrpc/sysctl.c:162:19: error: use of undeclared identifier 'proc_do_xprt'
-                   .proc_handler   = proc_do_xprt,
-                                     ^
-   net/sunrpc/sysctl.c:178:1: warning: no previous prototype for function 'rpc_register_sysctl' [-Wmissing-prototypes]
-   rpc_register_sysctl(void)
-   ^
-   net/sunrpc/sysctl.c:177:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
-   net/sunrpc/sysctl.c:185:1: warning: no previous prototype for function 'rpc_unregister_sysctl' [-Wmissing-prototypes]
-   rpc_unregister_sysctl(void)
-   ^
-   net/sunrpc/sysctl.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
-   3 warnings and 5 errors generated.
+   kernel/trace/bpf_trace.c:2998:18: warning: variable 'size' set but not used [-Wunused-but-set-variable]
+           u32 flags, cnt, size, i;
+                           ^
+>> kernel/trace/bpf_trace.c:3036:12: warning: variable 'old_inode' is uninitialized when used here [-Wuninitialized]
+                           inode = old_inode;
+                                   ^~~~~~~~~
+   kernel/trace/bpf_trace.c:2997:33: note: initialize the variable 'old_inode' to silence this warning
+           struct inode *inode, *old_inode;
+                                          ^
+                                           = NULL
+   2 warnings generated.
 
 
-vim +135 net/sunrpc/sysctl.c
+vim +/old_inode +3036 kernel/trace/bpf_trace.c
 
-a246b0105bbd9a Chuck Lever       2005-08-11  128  
-fe2c6338fd2c6f Joe Perches       2013-06-11  129  static struct ctl_table debug_table[] = {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  130  	{
-^1da177e4c3f41 Linus Torvalds    2005-04-16  131  		.procname	= "rpc_debug",
-^1da177e4c3f41 Linus Torvalds    2005-04-16  132  		.data		= &rpc_debug,
-^1da177e4c3f41 Linus Torvalds    2005-04-16  133  		.maxlen		= sizeof(int),
-^1da177e4c3f41 Linus Torvalds    2005-04-16  134  		.mode		= 0644,
-6d4561110a3e9f Eric W. Biederman 2009-11-16 @135  		.proc_handler	= proc_dodebug
-^1da177e4c3f41 Linus Torvalds    2005-04-16  136  	},
-^1da177e4c3f41 Linus Torvalds    2005-04-16  137  	{
-^1da177e4c3f41 Linus Torvalds    2005-04-16  138  		.procname	= "nfs_debug",
-^1da177e4c3f41 Linus Torvalds    2005-04-16  139  		.data		= &nfs_debug,
-^1da177e4c3f41 Linus Torvalds    2005-04-16  140  		.maxlen		= sizeof(int),
-^1da177e4c3f41 Linus Torvalds    2005-04-16  141  		.mode		= 0644,
-6d4561110a3e9f Eric W. Biederman 2009-11-16  142  		.proc_handler	= proc_dodebug
-^1da177e4c3f41 Linus Torvalds    2005-04-16  143  	},
-^1da177e4c3f41 Linus Torvalds    2005-04-16  144  	{
-^1da177e4c3f41 Linus Torvalds    2005-04-16  145  		.procname	= "nfsd_debug",
-^1da177e4c3f41 Linus Torvalds    2005-04-16  146  		.data		= &nfsd_debug,
-^1da177e4c3f41 Linus Torvalds    2005-04-16  147  		.maxlen		= sizeof(int),
-^1da177e4c3f41 Linus Torvalds    2005-04-16  148  		.mode		= 0644,
-6d4561110a3e9f Eric W. Biederman 2009-11-16  149  		.proc_handler	= proc_dodebug
-^1da177e4c3f41 Linus Torvalds    2005-04-16  150  	},
-^1da177e4c3f41 Linus Torvalds    2005-04-16  151  	{
-^1da177e4c3f41 Linus Torvalds    2005-04-16  152  		.procname	= "nlm_debug",
-^1da177e4c3f41 Linus Torvalds    2005-04-16  153  		.data		= &nlm_debug,
-^1da177e4c3f41 Linus Torvalds    2005-04-16  154  		.maxlen		= sizeof(int),
-^1da177e4c3f41 Linus Torvalds    2005-04-16  155  		.mode		= 0644,
-6d4561110a3e9f Eric W. Biederman 2009-11-16  156  		.proc_handler	= proc_dodebug
-^1da177e4c3f41 Linus Torvalds    2005-04-16  157  	},
-dc9a16e49dbba3 Tom Tucker        2007-12-30  158  	{
-dc9a16e49dbba3 Tom Tucker        2007-12-30  159  		.procname	= "transports",
-dc9a16e49dbba3 Tom Tucker        2007-12-30  160  		.maxlen		= 256,
-dc9a16e49dbba3 Tom Tucker        2007-12-30  161  		.mode		= 0444,
-6d4561110a3e9f Eric W. Biederman 2009-11-16 @162  		.proc_handler	= proc_do_xprt,
-dc9a16e49dbba3 Tom Tucker        2007-12-30  163  	},
-f8572d8f2a2ba7 Eric W. Biederman 2009-11-05  164  	{ }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  165  };
-^1da177e4c3f41 Linus Torvalds    2005-04-16  166  
-
-:::::: The code at line 135 was first introduced by commit
-:::::: 6d4561110a3e9fa742aeec6717248a491dfb1878 sysctl: Drop & in front of every proc_handler.
-
-:::::: TO: Eric W. Biederman <ebiederm@xmission.com>
-:::::: CC: Eric W. Biederman <ebiederm@xmission.com>
+  2989	
+  2990	int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+  2991	{
+  2992		void __user **upaths, __user *upath, __user *old_upath = NULL;
+  2993		unsigned long __user *uoffsets, offset;
+  2994		struct bpf_uprobe_multi_link *link = NULL;
+  2995		struct bpf_link_primer link_primer;
+  2996		struct bpf_uprobe *uprobes = NULL;
+  2997		struct inode *inode, *old_inode;
+> 2998		u32 flags, cnt, size, i;
+  2999		char *name;
+  3000		int err;
+  3001	
+  3002		/* no support for 32bit archs yet */
+  3003		if (sizeof(u64) != sizeof(void *))
+  3004			return -EOPNOTSUPP;
+  3005	
+  3006		if (prog->expected_attach_type != BPF_TRACE_UPROBE_MULTI)
+  3007			return -EINVAL;
+  3008	
+  3009		flags = attr->link_create.uprobe_multi.flags;
+  3010		if (flags & ~BPF_F_UPROBE_MULTI_RETURN)
+  3011			return -EINVAL;
+  3012	
+  3013		upaths = u64_to_user_ptr(attr->link_create.uprobe_multi.paths);
+  3014		uoffsets = u64_to_user_ptr(attr->link_create.uprobe_multi.offsets);
+  3015		if (!!upaths != !!uoffsets)
+  3016			return -EINVAL;
+  3017	
+  3018		cnt = attr->link_create.uprobe_multi.cnt;
+  3019		if (!cnt)
+  3020			return -EINVAL;
+  3021	
+  3022		uprobes = kvmalloc_array(cnt, sizeof(*uprobes), GFP_KERNEL);
+  3023		if (!uprobes)
+  3024			return -ENOMEM;
+  3025	
+  3026		for (i = 0; i < cnt; i++) {
+  3027			if (__get_user(offset, uoffsets + i)) {
+  3028				err = -EFAULT;
+  3029				goto error;
+  3030			}
+  3031			if (__get_user(upath, upaths + i)) {
+  3032				err = -EFAULT;
+  3033				goto error;
+  3034			}
+  3035			if (i && old_upath == upath) {
+> 3036				inode = old_inode;
+  3037			} else {
+  3038				struct path path;
+  3039	
+  3040				name = strndup_user(upath, PATH_MAX);
+  3041				if (IS_ERR(name)) {
+  3042					err = PTR_ERR(name);
+  3043					goto error;
+  3044				}
+  3045				err = kern_path(name, LOOKUP_FOLLOW, &path);
+  3046				if (err)
+  3047					goto error;
+  3048				if (!d_is_reg(path.dentry)) {
+  3049					err = -EINVAL;
+  3050					path_put(&path);
+  3051					goto error;
+  3052				}
+  3053				inode = d_real_inode(path.dentry);
+  3054				path_put(&path);
+  3055			}
+  3056			old_upath = upath;
+  3057			uprobes[i].inode = inode;
+  3058			uprobes[i].offset = offset;
+  3059		}
+  3060	
+  3061		size = sizeof(*link) + cnt * sizeof(link->consumer);
+  3062		link = kzalloc(sizeof(*link), GFP_KERNEL);
+  3063		if (!link) {
+  3064			err = -ENOMEM;
+  3065			goto error;
+  3066		}
+  3067	
+  3068		link->uprobes = uprobes;
+  3069		link->consumer.handler = uprobe_multi_link_handler;
+  3070	
+  3071		bpf_link_init(&link->link, BPF_LINK_TYPE_UPROBE_MULTI,
+  3072			      &bpf_uprobe_multi_link_lops, prog);
+  3073	
+  3074		err = bpf_link_prime(&link->link, &link_primer);
+  3075		if (err)
+  3076			goto error;
+  3077	
+  3078		for (i = 0; i < cnt; i++) {
+  3079			err = uprobe_register(uprobes[i].inode, uprobes[i].offset, &link->consumer);
+  3080			if (err) {
+  3081				bpf_link_cleanup(&link_primer);
+  3082				goto unregister;
+  3083			}
+  3084		}
+  3085	
+  3086		return bpf_link_settle(&link_primer);
+  3087	
+  3088	unregister:
+  3089		cnt = i;
+  3090		for (i = 0; i < cnt; i++) {
+  3091			uprobe_unregister(uprobes[i].inode, uprobes[i].offset,
+  3092					  &link->consumer);
+  3093		}
+  3094	error:
+  3095		kfree(uprobes);
+  3096		kfree(link);
+  3097		return err;
+  3098	}
+  3099	
 
 -- 
 0-DAY CI Kernel Test Service
