@@ -1,42 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1D11848;
-	Sun, 12 Mar 2023 05:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D872A1848;
+	Sun, 12 Mar 2023 06:05:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678600455; x=1710136455;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G2mqj4hqymbHqRfD6DPQ8pMEIwJ9vZaQcKQsUiA6wBg=;
-  b=n0Xrpxx+TN1knMSZngsFc4yIuFAgreu1Rg11AC/Cc4gbPBJ6LPfFmt/Z
-   V8aLfL2AAFTIJgt+1i4BtphYkNui3PLAJ0qTV4eDbJlK69pCxcqhpgGbR
-   ReUIn1DED6VE4uzwYi38FQrf1ZatseqEukW9BtuJaCY7OQmF/ypBXnl7n
-   IsrDvpYtXSuf8MbDZxfGmAaYD+wLXKJcnvWThMwJqcaWPeiCXmYp2SKg6
-   KnGDUsw55gMelhi5EzHn33nFZO3LkhxQTUBuLReDRTcw6df2pU4G07Q5Y
-   xh8L8RCcBpjT8gxgwdzabTn6LamUw9MeTEMCnWdVqCs6k4ACJPu4zPIIX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="336984598"
+  t=1678601115; x=1710137115;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GqM9SJXNTvruDHAagcebGs0pNAHJ4/ouP1lpaieiGDM=;
+  b=FS3ngrLTSpcb1zY+p5x+ZZ4ZzuN0NnJz/Dlu7S+8CIVcRV7PvAfYkQd6
+   xTjnvtEK6IYj/NxC+I4AASFsN/FnS2iTmJ048K4Rc8TOzMtG62/RD7zGL
+   rzfZC1uiePraAFqHZNUcXNdQCsN8vXSgVxSC6ydcBDRwTi+4yd/CE+yZz
+   jG4+MpJQ5iYcY7Q/C9JwivFcOEZiCptBL3XtbvUKM63txQHNqqjuhfjQB
+   bdExxU6i/yaKt5y9Q5Zz4g/RmJPGYgOD5d3CUFPg+WYbhLGnpp1DDoo3w
+   0UgKOg5NmUfRgVGVuB0uHU05WUVCqP0NJIGi/r8X7RFLfLiAQ1MuCMtaJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="364621812"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="336984598"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 21:54:14 -0800
+   d="scan'208";a="364621812"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 22:05:15 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="655619867"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="628264796"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="655619867"
+   d="scan'208";a="628264796"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 11 Mar 2023 21:54:13 -0800
+  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2023 22:05:13 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pbEeq-00051o-1T;
-	Sun, 12 Mar 2023 05:54:12 +0000
-Date: Sun, 12 Mar 2023 13:54:07 +0800
+	id 1pbEpU-00052J-2p;
+	Sun, 12 Mar 2023 06:05:12 +0000
+Date: Sun, 12 Mar 2023 14:04:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Vadim Fedorenko <vadfed@meta.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sre-misc:rk3588 21/24] drivers/cpufreq/rockchip-cpufreq.c:327:6:
- warning: variable 'np' is used uninitialized whenever 'if' condition is true
-Message-ID: <202303121347.420PxLKK-lkp@intel.com>
+Subject: Re: [PATCH RFC v6 5/6] ice: implement dpll interface to control cgu
+Message-ID: <202303121331.swxKROtl-lkp@intel.com>
+References: <20230312022807.278528-6-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,118 +46,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230312022807.278528-6-vadfed@meta.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git rk3588
-head:   33c1f355b9e3adddf69e0e86b504236e2b2f611e
-commit: 9318de1973da5b701d772c900b53062689b84d54 [21/24] cpufreq: rockchip: Fix functionality
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230312/202303121347.420PxLKK-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+Hi Vadim,
+
+[FYI, it's a private test report for your RFC patch.]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.3-rc1 next-20230310]
+[cannot apply to tnguy-next-queue/dev-queue]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/dpll-spec-Add-Netlink-spec-in-YAML/20230312-103056
+patch link:    https://lore.kernel.org/r/20230312022807.278528-6-vadfed%40meta.com
+patch subject: [PATCH RFC v6 5/6] ice: implement dpll interface to control cgu
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230312/202303121331.swxKROtl-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git/commit/?id=9318de1973da5b701d772c900b53062689b84d54
-        git remote add sre-misc https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git
-        git fetch --no-tags sre-misc rk3588
-        git checkout 9318de1973da5b701d772c900b53062689b84d54
+        # https://github.com/intel-lab-lkp/linux/commit/c4acb622eb0fd3120fc9cdcaf33fddfa7da04a50
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vadim-Fedorenko/dpll-spec-Add-Netlink-spec-in-YAML/20230312-103056
+        git checkout c4acb622eb0fd3120fc9cdcaf33fddfa7da04a50
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bus/fsl-mc/ drivers/cpufreq/ drivers/power/supply/ net/dsa/ sound/soc/codecs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303121347.420PxLKK-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303121331.swxKROtl-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/cpufreq/rockchip-cpufreq.c:327:6: warning: variable 'np' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (reg_table_token < 0) {
-               ^~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/rockchip-cpufreq.c:371:14: note: uninitialized use occurs here
-           of_node_put(np);
-                       ^~
-   drivers/cpufreq/rockchip-cpufreq.c:327:2: note: remove the 'if' if its condition is always false
-           if (reg_table_token < 0) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/cpufreq/rockchip-cpufreq.c:314:24: note: initialize the variable 'np' to silence this warning
-           struct device_node *np;
-                                 ^
-                                  = NULL
-   1 warning generated.
-
-
-vim +327 drivers/cpufreq/rockchip-cpufreq.c
-
-   308	
-   309	static int rockchip_cpufreq_cluster_init(int cpu, struct cluster_info *cluster)
-   310	{
-   311		struct rockchip_opp_info *opp_info = &cluster->opp_info;
-   312		int reg_table_token = -EINVAL;
-   313		int opp_table_token = -EINVAL;
-   314		struct device_node *np;
-   315		struct device *dev;
-   316		const char * const reg_names[] = { "cpu", "mem", NULL };
-   317		int ret = 0;
-   318	
-   319		dev = get_cpu_device(cpu);
-   320		if (!dev)
-   321			return -ENODEV;
-   322	
-   323		if (!of_find_property(dev->of_node, "cpu-supply", NULL))
-   324			return -ENOENT;
-   325	
-   326		reg_table_token = dev_pm_opp_set_regulators(dev, reg_names);
- > 327		if (reg_table_token < 0) {
-   328			ret = reg_table_token;
-   329			dev_err(dev, "Failed to set opp regulators\n");
-   330			goto np_err;
-   331		}
-   332	
-   333		np = of_parse_phandle(dev->of_node, "operating-points-v2", 0);
-   334		if (!np) {
-   335			dev_warn(dev, "OPP-v2 not supported\n");
-   336			return -ENOENT;
-   337		}
-   338	
-   339		ret = dev_pm_opp_of_get_sharing_cpus(dev, &cluster->cpus);
-   340		if (ret) {
-   341			dev_err(dev, "Failed to get sharing cpus\n");
-   342			goto np_err;
-   343		}
-   344	
-   345		rockchip_get_opp_data(rockchip_cpufreq_of_match, opp_info);
-   346		if (opp_info->data && opp_info->data->set_read_margin) {
-   347			opp_info->current_rm = UINT_MAX;
-   348			opp_info->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
-   349			if (IS_ERR(opp_info->grf))
-   350				opp_info->grf = NULL;
-   351			rockchip_get_volt_rm_table(dev, np, "rockchip,volt-mem-read-margin", &opp_info->volt_rm_tbl);
-   352	
-   353			of_property_read_u32(np, "rockchip,reboot-freq", &opp_info->reboot_freq);
-   354		}
-   355	
-   356		opp_table_token = dev_pm_opp_set_config_regulators(dev, rk_opp_config_regulators);
-   357		if (opp_table_token < 0) {
-   358			ret = opp_table_token;
-   359			dev_err(dev, "Failed to set opp config regulators\n");
-   360			goto reg_opp_table;
-   361		}
-   362	
-   363		of_node_put(np);
-   364	
-   365		return 0;
-   366	
-   367	reg_opp_table:
-   368		if (reg_table_token >= 0)
-   369			dev_pm_opp_put_regulators(reg_table_token);
-   370	np_err:
-   371		of_node_put(np);
-   372	
-   373		return ret;
-   374	}
-   375	
+>> drivers/net/ethernet/intel/ice/ice_dpll.c:155:7: warning: variable 'pin_num' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (pin == pf->dplls.rclk.pin)
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:161:18: note: uninitialized use occurs here
+           for (i = 0; i < pin_num; i++)
+                           ^~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:155:3: note: remove the 'if' if its condition is always true
+                   if (pin == pf->dplls.rclk.pin)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:143:13: note: initialize the variable 'pin_num' to silence this warning
+           int pin_num, i;
+                      ^
+                       = 0
+>> drivers/net/ethernet/intel/ice/ice_dpll.c:412:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:416:6: note: uninitialized use occurs here
+           if (ret)
+               ^~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:412:9: note: remove the 'if' if its condition is always true
+           } else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:407:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   drivers/net/ethernet/intel/ice/ice_dpll.c:449:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:453:6: note: uninitialized use occurs here
+           if (ret)
+               ^~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:449:9: note: remove the 'if' if its condition is always true
+           } else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:444:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+>> drivers/net/ethernet/intel/ice/ice_dpll.c:478:1: warning: no previous prototype for function 'ice_dpll_pin_state_update' [-Wmissing-prototypes]
+   ice_dpll_pin_state_update(struct ice_pf *pf, struct ice_dpll_pin *pin,
+   ^
+   drivers/net/ethernet/intel/ice/ice_dpll.c:477:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   drivers/net/ethernet/intel/ice/ice_dpll.c:499:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (pin_type == ICE_DPLL_PIN_TYPE_RCLK_SOURCE) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:519:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:499:9: note: remove the 'if' if its condition is always true
+           } else if (pin_type == ICE_DPLL_PIN_TYPE_RCLK_SOURCE) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/intel/ice/ice_dpll.c:481:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   5 warnings generated.
+--
+   ERROR: modpost: "__divdi3" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_is_phy_rclk_present" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_is_cgu_present" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_is_clock_mux_present_e810t" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_get_cgu_rclk_pin_info" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_get_cgu_state" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_cgu_get_pin_name" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_cgu_get_pin_type" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_cgu_get_pin_freq_mask" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
