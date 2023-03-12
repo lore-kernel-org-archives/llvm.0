@@ -1,43 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D872A1848;
-	Sun, 12 Mar 2023 06:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9018E185F;
+	Sun, 12 Mar 2023 07:26:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678601115; x=1710137115;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GqM9SJXNTvruDHAagcebGs0pNAHJ4/ouP1lpaieiGDM=;
-  b=FS3ngrLTSpcb1zY+p5x+ZZ4ZzuN0NnJz/Dlu7S+8CIVcRV7PvAfYkQd6
-   xTjnvtEK6IYj/NxC+I4AASFsN/FnS2iTmJ048K4Rc8TOzMtG62/RD7zGL
-   rzfZC1uiePraAFqHZNUcXNdQCsN8vXSgVxSC6ydcBDRwTi+4yd/CE+yZz
-   jG4+MpJQ5iYcY7Q/C9JwivFcOEZiCptBL3XtbvUKM63txQHNqqjuhfjQB
-   bdExxU6i/yaKt5y9Q5Zz4g/RmJPGYgOD5d3CUFPg+WYbhLGnpp1DDoo3w
-   0UgKOg5NmUfRgVGVuB0uHU05WUVCqP0NJIGi/r8X7RFLfLiAQ1MuCMtaJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="364621812"
+  t=1678605977; x=1710141977;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1ofVkJp9vgdN20m/Qa/Lmxn9tlv2r55W1dWO1u8kaJY=;
+  b=MsOUCdAzwNAAQ1VZAULc2rQ+nv9Uskut7MIyH+pMhWa4zUkl3jdVjBhd
+   GBuUwyztKt+ScUAZtEb7kLWJZA1Rf/jxab+hgo2O6WfoJaS6yCdhXPGAv
+   KbUYY8KugkV6M3TMl3TjD5Q5txhaEjersgyaNECwPngfw7t6t46uzZ6PZ
+   /BKk3vNfbmTANfUn6FT4b2OhegzQrmX5kXg/1kkgZA1eSlhiQxzgeT75Z
+   VSYaZxtmHa01qja1WmfwpBoE5j5+duXqeq8KdxoxbPzwTOwvZlsPGYPMj
+   4uoig6OO92SZng9+b5HYK2vVeP/4GraD97wv4mZq0w0IeyEsswv62KLbW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="335665563"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="364621812"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 22:05:15 -0800
+   d="scan'208";a="335665563"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 23:26:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="628264796"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="924137772"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="628264796"
+   d="scan'208";a="924137772"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2023 22:05:13 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 11 Mar 2023 23:26:15 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pbEpU-00052J-2p;
-	Sun, 12 Mar 2023 06:05:12 +0000
-Date: Sun, 12 Mar 2023 14:04:19 +0800
+	id 1pbG5v-000569-0p;
+	Sun, 12 Mar 2023 07:26:15 +0000
+Date: Sun, 12 Mar 2023 15:25:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>
+To: Jiri Olsa <jolsa@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC v6 5/6] ice: implement dpll interface to control cgu
-Message-ID: <202303121331.swxKROtl-lkp@intel.com>
-References: <20230312022807.278528-6-vadfed@meta.com>
+Subject: [jolsa-perf:uprobe_multi_4 1/10] ld.lld: error: duplicate symbol:
+ bpf_uprobe_multi_link_attach
+Message-ID: <202303121536.GCBiWy87-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,111 +45,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230312022807.278528-6-vadfed@meta.com>
 
-Hi Vadim,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.3-rc1 next-20230310]
-[cannot apply to tnguy-next-queue/dev-queue]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/dpll-spec-Add-Netlink-spec-in-YAML/20230312-103056
-patch link:    https://lore.kernel.org/r/20230312022807.278528-6-vadfed%40meta.com
-patch subject: [PATCH RFC v6 5/6] ice: implement dpll interface to control cgu
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230312/202303121331.swxKROtl-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git uprobe_multi_4
+head:   9d1680460291ce10458ce0adcd4859944fd7ada9
+commit: aefd3dc75e104d9b49c8fe971eea78fabd70809e [1/10] bpf: Add multi uprobe link
+config: hexagon-randconfig-r033-20230312 (https://download.01.org/0day-ci/archive/20230312/202303121536.GCBiWy87-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c4acb622eb0fd3120fc9cdcaf33fddfa7da04a50
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vadim-Fedorenko/dpll-spec-Add-Netlink-spec-in-YAML/20230312-103056
-        git checkout c4acb622eb0fd3120fc9cdcaf33fddfa7da04a50
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=aefd3dc75e104d9b49c8fe971eea78fabd70809e
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf uprobe_multi_4
+        git checkout aefd3dc75e104d9b49c8fe971eea78fabd70809e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303121331.swxKROtl-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303121536.GCBiWy87-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/intel/ice/ice_dpll.c:155:7: warning: variable 'pin_num' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (pin == pf->dplls.rclk.pin)
-                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:161:18: note: uninitialized use occurs here
-           for (i = 0; i < pin_num; i++)
-                           ^~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:155:3: note: remove the 'if' if its condition is always true
-                   if (pin == pf->dplls.rclk.pin)
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:143:13: note: initialize the variable 'pin_num' to silence this warning
-           int pin_num, i;
-                      ^
-                       = 0
->> drivers/net/ethernet/intel/ice/ice_dpll.c:412:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:416:6: note: uninitialized use occurs here
-           if (ret)
-               ^~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:412:9: note: remove the 'if' if its condition is always true
-           } else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:407:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   drivers/net/ethernet/intel/ice/ice_dpll.c:449:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:453:6: note: uninitialized use occurs here
-           if (ret)
-               ^~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:449:9: note: remove the 'if' if its condition is always true
-           } else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:444:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> drivers/net/ethernet/intel/ice/ice_dpll.c:478:1: warning: no previous prototype for function 'ice_dpll_pin_state_update' [-Wmissing-prototypes]
-   ice_dpll_pin_state_update(struct ice_pf *pf, struct ice_dpll_pin *pin,
-   ^
-   drivers/net/ethernet/intel/ice/ice_dpll.c:477:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   drivers/net/ethernet/intel/ice/ice_dpll.c:499:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (pin_type == ICE_DPLL_PIN_TYPE_RCLK_SOURCE) {
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:519:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:499:9: note: remove the 'if' if its condition is always true
-           } else if (pin_type == ICE_DPLL_PIN_TYPE_RCLK_SOURCE) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ice/ice_dpll.c:481:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   5 warnings generated.
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at do_mounts.c
+   >>>            init/do_mounts.o:(.text+0x0) in archive vmlinux.a
 --
-   ERROR: modpost: "__divdi3" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "ice_is_phy_rclk_present" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "ice_is_cgu_present" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "ice_is_clock_mux_present_e810t" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "ice_get_cgu_rclk_pin_info" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "ice_get_cgu_state" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "ice_cgu_get_pin_name" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "ice_cgu_get_pin_type" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
->> ERROR: modpost: "ice_cgu_get_pin_freq_mask" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at do_mounts_initrd.c
+   >>>            init/do_mounts_initrd.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at exec_domain.c
+   >>>            kernel/exec_domain.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at umh.c
+   >>>            kernel/umh.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at workqueue.c
+   >>>            kernel/workqueue.o:(.text+0xF4) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at pid.c
+   >>>            kernel/pid.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at exit.c
+   >>>            kernel/exit.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at softirq.c
+   >>>            kernel/softirq.o:(.text+0x130) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at sysctl.c
+   >>>            kernel/sysctl.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at mutex.c
+   >>>            kernel/locking/mutex.o:(.text+0x18C) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: bpf_uprobe_multi_link_attach
+   >>> defined at main.c
+   >>>            init/main.o:(bpf_uprobe_multi_link_attach) in archive vmlinux.a
+   >>> defined at fair.c
+   >>>            kernel/sched/fair.o:(.text+0x0) in archive vmlinux.a
+..
 
 -- 
 0-DAY CI Kernel Test Service
