@@ -1,44 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731D91854;
-	Sun, 12 Mar 2023 05:44:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1D11848;
+	Sun, 12 Mar 2023 05:54:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678599856; x=1710135856;
+  t=1678600455; x=1710136455;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jsiQ5463Plb0MX2lmmrZElqxKltDLBI8xEWfXPARVpE=;
-  b=ZhLSdJ52nnTviJ2kwFIfA8CqL8NDxn5uVKpVQ9Sl75IWCJlwRxjTMKp2
-   jFnL8eoL6GFjhrAMO1Q+BJ9aU66G4rhu96i+dFpnxGT4BJI2bqSQ0SGP8
-   t7hwAC9qgveCnJn+oVhXxf0Nf4cXDBTZDAucfvU0kgHzPAe3cBJFcRfLD
-   WF7FNjZ3cBaq333mXlBgLUFGHBR5ZsnpW0srdxm0cTl5Erub8Crdt/G9f
-   yPs5/WLpNWatcDlUmk3oTRjxr7DEqgSCZusLbhuzFNco47XrLmqgUV9fX
-   Y8TmcoxX8R/D2gWfcWkaZ3+I38IZV3olmp4KxCVFU615D0/rRRMXKF2Q9
+  bh=G2mqj4hqymbHqRfD6DPQ8pMEIwJ9vZaQcKQsUiA6wBg=;
+  b=n0Xrpxx+TN1knMSZngsFc4yIuFAgreu1Rg11AC/Cc4gbPBJ6LPfFmt/Z
+   V8aLfL2AAFTIJgt+1i4BtphYkNui3PLAJ0qTV4eDbJlK69pCxcqhpgGbR
+   ReUIn1DED6VE4uzwYi38FQrf1ZatseqEukW9BtuJaCY7OQmF/ypBXnl7n
+   IsrDvpYtXSuf8MbDZxfGmAaYD+wLXKJcnvWThMwJqcaWPeiCXmYp2SKg6
+   KnGDUsw55gMelhi5EzHn33nFZO3LkhxQTUBuLReDRTcw6df2pU4G07Q5Y
+   xh8L8RCcBpjT8gxgwdzabTn6LamUw9MeTEMCnWdVqCs6k4ACJPu4zPIIX
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="320815927"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="336984598"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="320815927"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 21:44:14 -0800
+   d="scan'208";a="336984598"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 21:54:14 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="924123762"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="655619867"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="924123762"
+   d="scan'208";a="655619867"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Mar 2023 21:44:12 -0800
+  by orsmga006.jf.intel.com with ESMTP; 11 Mar 2023 21:54:13 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pbEVA-00051F-0E;
-	Sun, 12 Mar 2023 05:44:12 +0000
-Date: Sun, 12 Mar 2023 13:43:40 +0800
+	id 1pbEeq-00051o-1T;
+	Sun, 12 Mar 2023 05:54:12 +0000
+Date: Sun, 12 Mar 2023 13:54:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [drm-tip:drm-tip 5/7]
- drivers/gpu/drm/i915/gt/intel_workarounds.c:1479:27: warning: unused
- variable 'i915'
-Message-ID: <202303121305.SUrb4Y2b-lkp@intel.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sre-misc:rk3588 21/24] drivers/cpufreq/rockchip-cpufreq.c:327:6:
+ warning: variable 'np' is used uninitialized whenever 'if' condition is true
+Message-ID: <202303121347.420PxLKK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,59 +46,117 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-head:   b21ced77ae1dbc3d8b01d3aef3c99bba7377a69b
-commit: 878ab630c6059f436bdf6bdef59f97eb5753a155 [5/7] Merge remote-tracking branch 'drm-intel/drm-intel-gt-next' into drm-tip
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230312/202303121305.SUrb4Y2b-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git rk3588
+head:   33c1f355b9e3adddf69e0e86b504236e2b2f611e
+commit: 9318de1973da5b701d772c900b53062689b84d54 [21/24] cpufreq: rockchip: Fix functionality
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230312/202303121347.420PxLKK-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add drm-tip git://anongit.freedesktop.org/drm/drm-tip
-        git fetch --no-tags drm-tip drm-tip
-        git checkout 878ab630c6059f436bdf6bdef59f97eb5753a155
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git/commit/?id=9318de1973da5b701d772c900b53062689b84d54
+        git remote add sre-misc https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git
+        git fetch --no-tags sre-misc rk3588
+        git checkout 9318de1973da5b701d772c900b53062689b84d54
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/bus/fsl-mc/ drivers/cpufreq/ drivers/power/supply/ net/dsa/ sound/soc/codecs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303121305.SUrb4Y2b-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303121347.420PxLKK-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/gt/intel_workarounds.c:1479:27: warning: unused variable 'i915' [-Wunused-variable]
-           struct drm_i915_private *i915 = gt->i915;
-                                    ^
+>> drivers/cpufreq/rockchip-cpufreq.c:327:6: warning: variable 'np' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (reg_table_token < 0) {
+               ^~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/rockchip-cpufreq.c:371:14: note: uninitialized use occurs here
+           of_node_put(np);
+                       ^~
+   drivers/cpufreq/rockchip-cpufreq.c:327:2: note: remove the 'if' if its condition is always false
+           if (reg_table_token < 0) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/cpufreq/rockchip-cpufreq.c:314:24: note: initialize the variable 'np' to silence this warning
+           struct device_node *np;
+                                 ^
+                                  = NULL
    1 warning generated.
 
 
-vim +/i915 +1479 drivers/gpu/drm/i915/gt/intel_workarounds.c
+vim +327 drivers/cpufreq/rockchip-cpufreq.c
 
-f52fa57ae70e2e Matt Roper                  2020-07-16  1475  
-da942750928a03 Stuart Summers              2020-10-14  1476  static void
-d0a652493abd86 Venkata Sandeep Dhanalakota 2021-09-17  1477  dg1_gt_workarounds_init(struct intel_gt *gt, struct i915_wa_list *wal)
-da942750928a03 Stuart Summers              2020-10-14  1478  {
-d0a652493abd86 Venkata Sandeep Dhanalakota 2021-09-17 @1479  	struct drm_i915_private *i915 = gt->i915;
-d0a652493abd86 Venkata Sandeep Dhanalakota 2021-09-17  1480  
-d0a652493abd86 Venkata Sandeep Dhanalakota 2021-09-17  1481  	gen12_gt_workarounds_init(gt, wal);
-da942750928a03 Stuart Summers              2020-10-14  1482  
-da942750928a03 Stuart Summers              2020-10-14  1483  	/* Wa_1409420604:dg1 */
-d1b3657fb5b66a Lucas De Marchi             2023-03-06  1484  	wa_mcr_write_or(wal, SUBSLICE_UNIT_LEVEL_CLKGATE2,
-da942750928a03 Stuart Summers              2020-10-14  1485  			CPSSUNIT_CLKGATE_DIS);
-da942750928a03 Stuart Summers              2020-10-14  1486  
-da942750928a03 Stuart Summers              2020-10-14  1487  	/* Wa_1408615072:dg1 */
-da942750928a03 Stuart Summers              2020-10-14  1488  	/* Empirical testing shows this register is unaffected by engine reset. */
-d1b3657fb5b66a Lucas De Marchi             2023-03-06  1489  	wa_write_or(wal, UNSLICE_UNIT_LEVEL_CLKGATE2, VSUNIT_CLKGATE_DIS_TGL);
-da942750928a03 Stuart Summers              2020-10-14  1490  }
-da942750928a03 Stuart Summers              2020-10-14  1491  
-
-:::::: The code at line 1479 was first introduced by commit
-:::::: d0a652493abd86180ad0cc0ed44427831d37fabe drm/i915: Make wa list per-gt
-
-:::::: TO: Venkata Sandeep Dhanalakota <venkata.s.dhanalakota@intel.com>
-:::::: CC: Matt Roper <matthew.d.roper@intel.com>
+   308	
+   309	static int rockchip_cpufreq_cluster_init(int cpu, struct cluster_info *cluster)
+   310	{
+   311		struct rockchip_opp_info *opp_info = &cluster->opp_info;
+   312		int reg_table_token = -EINVAL;
+   313		int opp_table_token = -EINVAL;
+   314		struct device_node *np;
+   315		struct device *dev;
+   316		const char * const reg_names[] = { "cpu", "mem", NULL };
+   317		int ret = 0;
+   318	
+   319		dev = get_cpu_device(cpu);
+   320		if (!dev)
+   321			return -ENODEV;
+   322	
+   323		if (!of_find_property(dev->of_node, "cpu-supply", NULL))
+   324			return -ENOENT;
+   325	
+   326		reg_table_token = dev_pm_opp_set_regulators(dev, reg_names);
+ > 327		if (reg_table_token < 0) {
+   328			ret = reg_table_token;
+   329			dev_err(dev, "Failed to set opp regulators\n");
+   330			goto np_err;
+   331		}
+   332	
+   333		np = of_parse_phandle(dev->of_node, "operating-points-v2", 0);
+   334		if (!np) {
+   335			dev_warn(dev, "OPP-v2 not supported\n");
+   336			return -ENOENT;
+   337		}
+   338	
+   339		ret = dev_pm_opp_of_get_sharing_cpus(dev, &cluster->cpus);
+   340		if (ret) {
+   341			dev_err(dev, "Failed to get sharing cpus\n");
+   342			goto np_err;
+   343		}
+   344	
+   345		rockchip_get_opp_data(rockchip_cpufreq_of_match, opp_info);
+   346		if (opp_info->data && opp_info->data->set_read_margin) {
+   347			opp_info->current_rm = UINT_MAX;
+   348			opp_info->grf = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
+   349			if (IS_ERR(opp_info->grf))
+   350				opp_info->grf = NULL;
+   351			rockchip_get_volt_rm_table(dev, np, "rockchip,volt-mem-read-margin", &opp_info->volt_rm_tbl);
+   352	
+   353			of_property_read_u32(np, "rockchip,reboot-freq", &opp_info->reboot_freq);
+   354		}
+   355	
+   356		opp_table_token = dev_pm_opp_set_config_regulators(dev, rk_opp_config_regulators);
+   357		if (opp_table_token < 0) {
+   358			ret = opp_table_token;
+   359			dev_err(dev, "Failed to set opp config regulators\n");
+   360			goto reg_opp_table;
+   361		}
+   362	
+   363		of_node_put(np);
+   364	
+   365		return 0;
+   366	
+   367	reg_opp_table:
+   368		if (reg_table_token >= 0)
+   369			dev_pm_opp_put_regulators(reg_table_token);
+   370	np_err:
+   371		of_node_put(np);
+   372	
+   373		return ret;
+   374	}
+   375	
 
 -- 
 0-DAY CI Kernel Test Service
