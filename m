@@ -1,43 +1,42 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB786FC4;
-	Sat, 11 Mar 2023 23:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FC21103;
+	Sun, 12 Mar 2023 02:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678578427; x=1710114427;
+  t=1678587551; x=1710123551;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=g4Gd1VHcjoQ8Wi+HbsdA9Avlt+VcH6wuNv2XVzqYwaE=;
-  b=ILrm7u6l/YTzo7atevhXQx6FlWXVO4IK6i7s+vSClUvGm3ZU1g6Ql48v
-   lHP/Kiphkj2HsZvSm9gM5F/WErAMV6tJG1/Gixf3o6IBkEk+2tUi+2+dC
-   tKQaa1/WGVtONv8MDVt/RvbOVfSLXOy1aDMjwgEkYoGHGIW31VA0kxG46
-   bZ9oKpX581+YcrhQELrY0U7rHnkgJd17X0V76zTEtdK8Q/IEt0Kc4kN+w
-   hjgWMHIxk/B5J8zDXm1PtCrotdG4PvpK8xa7eShUU/dNNrTf03E5Vz0x4
-   DOsptlW8SSIL25wYZ8DM2+AM+VtGJWa1DLsDIt5ErQdvpKXyuMkrEwhoa
+  bh=gQvrLwymSeUYUBXN6bfNtx+lGaa0mkDDp6THoXHHbC4=;
+  b=cSy3WMWnz3GgmRtACgSN8FrQ5UETamHQmuaq4uq8gB0GWFG76SlwXJ66
+   oFVMEMZiJTavhwBkyEvYbjT727cZ4VRLxL6Bf5yuy4SEnn7P0wUJQAsD3
+   K8N2+6L778ARohcb/DfBkPANn463f93q8MjZYlIAlhv67JpE7xWH0/pfM
+   kHJOLIBFGZ8XHzYEREKWbgvR+/767R36KBQMtfJ3WnoggT4TYU7IIiNUA
+   AdQMip76yEoWDgoiax2mu2Nn9B+X6uPsORhAKAOvxYoQRsDDGd2kSMbNn
+   SzP4IoBfU9wgQq+3ctM/qZ2oQnB8plYuWhmtyN9rkLoMH9q5KfbUeFzbQ
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="399545089"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="401820516"
 X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
-   d="scan'208";a="399545089"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 15:47:06 -0800
+   d="scan'208";a="401820516"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 18:19:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="1007538768"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="710713107"
 X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
-   d="scan'208";a="1007538768"
+   d="scan'208";a="710713107"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Mar 2023 15:47:05 -0800
+  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2023 18:19:09 -0800
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pb8vY-0004rF-27;
-	Sat, 11 Mar 2023 23:47:04 +0000
-Date: Sun, 12 Mar 2023 07:46:20 +0800
+	id 1pbBIi-0004vj-1G;
+	Sun, 12 Mar 2023 02:19:08 +0000
+Date: Sun, 12 Mar 2023 10:18:58 +0800
 From: kernel test robot <lkp@intel.com>
 To: Luis Chamberlain <mcgrof@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mcgrof:20230311-module-alloc-opts 14/21]
- kernel/module/main.c:2341:19: warning: variable 'mod' is uninitialized when
- used here
-Message-ID: <202303120745.57Vq9kr6-lkp@intel.com>
+Subject: [mcgrof:sysctl-testing 43/44] net/sunrpc/sysctl.c:135:19: error: use
+ of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+Message-ID: <202303121035.WHHXW9OR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,106 +46,133 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230311-module-alloc-opts
-head:   dbbc415a573a4afd4839c25c275926056d9df1a6
-commit: 028c62ebf2c4bc4b164b58b18d77e496d3bd9661 [14/21] module: add debugging alias parsing support
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230312/202303120745.57Vq9kr6-lkp@intel.com/config)
+Hi Luis,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-testing
+head:   f66d0fcc0d9164174c2e72045110f43557649cad
+commit: 95e20e8aa440148ec8eed523ecc683e4dad15644 [43/44] sunrpc: move sunrpc_table and proc routines above
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20230312/202303121035.WHHXW9OR-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=028c62ebf2c4bc4b164b58b18d77e496d3bd9661
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=95e20e8aa440148ec8eed523ecc683e4dad15644
         git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20230311-module-alloc-opts
-        git checkout 028c62ebf2c4bc4b164b58b18d77e496d3bd9661
+        git fetch --no-tags mcgrof sysctl-testing
+        git checkout 95e20e8aa440148ec8eed523ecc683e4dad15644
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/module/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303120745.57Vq9kr6-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303121035.WHHXW9OR-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/module/main.c:2341:19: warning: variable 'mod' is uninitialized when used here [-Wuninitialized]
-           free_mod_aliases(mod);
-                            ^~~
-   kernel/module/main.c:2283:20: note: initialize the variable 'mod' to silence this warning
-           struct module *mod;
-                             ^
-                              = NULL
-   1 warning generated.
+   In file included from net/sunrpc/sysctl.c:20:
+   In file included from include/linux/sunrpc/sched.h:19:
+   include/linux/sunrpc/xdr.h:753:10: warning: result of comparison of constant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           if (len > SIZE_MAX / sizeof(*p))
+               ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
+>> net/sunrpc/sysctl.c:135:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+                   .proc_handler   = proc_dodebug
+                                     ^~~~~~~~~~~~
+                                     rpc_debug
+   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
+   EXPORT_SYMBOL_GPL(rpc_debug);
+                     ^
+   net/sunrpc/sysctl.c:142:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+                   .proc_handler   = proc_dodebug
+                                     ^~~~~~~~~~~~
+                                     rpc_debug
+   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
+   EXPORT_SYMBOL_GPL(rpc_debug);
+                     ^
+   net/sunrpc/sysctl.c:149:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+                   .proc_handler   = proc_dodebug
+                                     ^~~~~~~~~~~~
+                                     rpc_debug
+   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
+   EXPORT_SYMBOL_GPL(rpc_debug);
+                     ^
+   net/sunrpc/sysctl.c:156:19: error: use of undeclared identifier 'proc_dodebug'; did you mean 'rpc_debug'?
+                   .proc_handler   = proc_dodebug
+                                     ^~~~~~~~~~~~
+                                     rpc_debug
+   net/sunrpc/sysctl.c:30:19: note: 'rpc_debug' declared here
+   EXPORT_SYMBOL_GPL(rpc_debug);
+                     ^
+>> net/sunrpc/sysctl.c:162:19: error: use of undeclared identifier 'proc_do_xprt'
+                   .proc_handler   = proc_do_xprt,
+                                     ^
+   net/sunrpc/sysctl.c:178:1: warning: no previous prototype for function 'rpc_register_sysctl' [-Wmissing-prototypes]
+   rpc_register_sysctl(void)
+   ^
+   net/sunrpc/sysctl.c:177:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   net/sunrpc/sysctl.c:185:1: warning: no previous prototype for function 'rpc_unregister_sysctl' [-Wmissing-prototypes]
+   rpc_unregister_sysctl(void)
+   ^
+   net/sunrpc/sysctl.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   3 warnings and 5 errors generated.
 
 
-vim +/mod +2341 kernel/module/main.c
+vim +135 net/sunrpc/sysctl.c
 
-  2280	
-  2281	static struct module *layout_and_allocate(struct load_info *info, int flags)
-  2282	{
-  2283		struct module *mod;
-  2284		unsigned int ndx;
-  2285		int err;
-  2286	
-  2287		err = check_modinfo(info->mod, info, flags);
-  2288		if (err)
-  2289			return ERR_PTR(err);
-  2290	
-  2291		/* Allow arches to frob section contents and sizes.  */
-  2292		err = module_frob_arch_sections(info->hdr, info->sechdrs,
-  2293						info->secstrings, info->mod);
-  2294		if (err < 0)
-  2295			goto err_out;
-  2296	
-  2297		err = module_enforce_rwx_sections(info->hdr, info->sechdrs,
-  2298						  info->secstrings, info->mod);
-  2299		if (err < 0)
-  2300			goto err_out;
-  2301	
-  2302		/* We will do a special allocation for per-cpu sections later. */
-  2303		info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
-  2304	
-  2305		/*
-  2306		 * Mark ro_after_init section with SHF_RO_AFTER_INIT so that
-  2307		 * layout_sections() can put it in the right place.
-  2308		 * Note: ro_after_init sections also have SHF_{WRITE,ALLOC} set.
-  2309		 */
-  2310		ndx = find_sec(info, ".data..ro_after_init");
-  2311		if (ndx)
-  2312			info->sechdrs[ndx].sh_flags |= SHF_RO_AFTER_INIT;
-  2313		/*
-  2314		 * Mark the __jump_table section as ro_after_init as well: these data
-  2315		 * structures are never modified, with the exception of entries that
-  2316		 * refer to code in the __init section, which are annotated as such
-  2317		 * at module load time.
-  2318		 */
-  2319		ndx = find_sec(info, "__jump_table");
-  2320		if (ndx)
-  2321			info->sechdrs[ndx].sh_flags |= SHF_RO_AFTER_INIT;
-  2322	
-  2323		/*
-  2324		 * Determine total sizes, and put offsets in sh_entsize.  For now
-  2325		 * this is done generically; there doesn't appear to be any
-  2326		 * special cases for the architectures.
-  2327		 */
-  2328		layout_sections(info->mod, info);
-  2329		layout_symtab(info->mod, info);
-  2330	
-  2331		/* Allocate and move to the final place */
-  2332		err = move_module(info->mod, info);
-  2333		if (err)
-  2334			goto err_out;
-  2335	
-  2336		/* Module has been copied to its final place now: return it. */
-  2337		mod = (void *)info->sechdrs[info->index.mod].sh_addr;
-  2338		kmemleak_load_module(mod, info);
-  2339		return mod;
-  2340	err_out:
-> 2341		free_mod_aliases(mod);
-  2342		return ERR_PTR(err);
-  2343	}
-  2344	
+a246b0105bbd9a Chuck Lever       2005-08-11  128  
+fe2c6338fd2c6f Joe Perches       2013-06-11  129  static struct ctl_table debug_table[] = {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  130  	{
+^1da177e4c3f41 Linus Torvalds    2005-04-16  131  		.procname	= "rpc_debug",
+^1da177e4c3f41 Linus Torvalds    2005-04-16  132  		.data		= &rpc_debug,
+^1da177e4c3f41 Linus Torvalds    2005-04-16  133  		.maxlen		= sizeof(int),
+^1da177e4c3f41 Linus Torvalds    2005-04-16  134  		.mode		= 0644,
+6d4561110a3e9f Eric W. Biederman 2009-11-16 @135  		.proc_handler	= proc_dodebug
+^1da177e4c3f41 Linus Torvalds    2005-04-16  136  	},
+^1da177e4c3f41 Linus Torvalds    2005-04-16  137  	{
+^1da177e4c3f41 Linus Torvalds    2005-04-16  138  		.procname	= "nfs_debug",
+^1da177e4c3f41 Linus Torvalds    2005-04-16  139  		.data		= &nfs_debug,
+^1da177e4c3f41 Linus Torvalds    2005-04-16  140  		.maxlen		= sizeof(int),
+^1da177e4c3f41 Linus Torvalds    2005-04-16  141  		.mode		= 0644,
+6d4561110a3e9f Eric W. Biederman 2009-11-16  142  		.proc_handler	= proc_dodebug
+^1da177e4c3f41 Linus Torvalds    2005-04-16  143  	},
+^1da177e4c3f41 Linus Torvalds    2005-04-16  144  	{
+^1da177e4c3f41 Linus Torvalds    2005-04-16  145  		.procname	= "nfsd_debug",
+^1da177e4c3f41 Linus Torvalds    2005-04-16  146  		.data		= &nfsd_debug,
+^1da177e4c3f41 Linus Torvalds    2005-04-16  147  		.maxlen		= sizeof(int),
+^1da177e4c3f41 Linus Torvalds    2005-04-16  148  		.mode		= 0644,
+6d4561110a3e9f Eric W. Biederman 2009-11-16  149  		.proc_handler	= proc_dodebug
+^1da177e4c3f41 Linus Torvalds    2005-04-16  150  	},
+^1da177e4c3f41 Linus Torvalds    2005-04-16  151  	{
+^1da177e4c3f41 Linus Torvalds    2005-04-16  152  		.procname	= "nlm_debug",
+^1da177e4c3f41 Linus Torvalds    2005-04-16  153  		.data		= &nlm_debug,
+^1da177e4c3f41 Linus Torvalds    2005-04-16  154  		.maxlen		= sizeof(int),
+^1da177e4c3f41 Linus Torvalds    2005-04-16  155  		.mode		= 0644,
+6d4561110a3e9f Eric W. Biederman 2009-11-16  156  		.proc_handler	= proc_dodebug
+^1da177e4c3f41 Linus Torvalds    2005-04-16  157  	},
+dc9a16e49dbba3 Tom Tucker        2007-12-30  158  	{
+dc9a16e49dbba3 Tom Tucker        2007-12-30  159  		.procname	= "transports",
+dc9a16e49dbba3 Tom Tucker        2007-12-30  160  		.maxlen		= 256,
+dc9a16e49dbba3 Tom Tucker        2007-12-30  161  		.mode		= 0444,
+6d4561110a3e9f Eric W. Biederman 2009-11-16 @162  		.proc_handler	= proc_do_xprt,
+dc9a16e49dbba3 Tom Tucker        2007-12-30  163  	},
+f8572d8f2a2ba7 Eric W. Biederman 2009-11-05  164  	{ }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  165  };
+^1da177e4c3f41 Linus Torvalds    2005-04-16  166  
+
+:::::: The code at line 135 was first introduced by commit
+:::::: 6d4561110a3e9fa742aeec6717248a491dfb1878 sysctl: Drop & in front of every proc_handler.
+
+:::::: TO: Eric W. Biederman <ebiederm@xmission.com>
+:::::: CC: Eric W. Biederman <ebiederm@xmission.com>
 
 -- 
 0-DAY CI Kernel Test Service
