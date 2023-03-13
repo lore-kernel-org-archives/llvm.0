@@ -1,321 +1,394 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F408723C5
-	for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 11:11:35 +0000 (UTC)
-Received: by mail-ed1-f53.google.com with SMTP id k10so46966209edk.13
-        for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 04:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678705894;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nnWH3nmAjBjhMLSuu7SobFiljmUDrCzxLAzSVXE7hEI=;
-        b=VobzVsCPVTIYltcV50FfUrlZN4umWFp43hypcW3tfE0PQ1Ro+fKVfkvhP7fKmaeCCU
-         iPlPTn9Qa0cJfgV891OBB5RFbArp4aBxtgDhErGwnM6JOwJNoloosSTcBFKtD2wQ3cij
-         52ypY6iy8eFn4LX+xBp3kCsYslz25TVaMeNGP9+i51WXDsaZqv6K3tfxeefYNyD6RSgf
-         y7xgZDE45O2rjksk3LOs3rbfweaM5dmxxuMVfi1qtXs6Y/Q3dX4735Iw2xEdCB7MsL4S
-         Fssn5gU+52VkG9hWUBaFhiaAmJcWvw0+fRVklfGJ2BwpthOuZh1bdR1A9iMH6b34TeRc
-         zguQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678705894;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nnWH3nmAjBjhMLSuu7SobFiljmUDrCzxLAzSVXE7hEI=;
-        b=Bf6MaTOZ2nn/WflF9ImFjsbYkVgZd96ouvBbNV/ZPGdi9InSCsPLmqH38T5uW9FMWf
-         ICvabzteFRwEXZvVhC9cRbEWJbqYLZ51pqvZQEwqaP9mDnAr6fqpbIvXFhQnV5MyhP2r
-         eoQSvPcYs9vRqCUXbij2OLohXYqghfj0aoaxWKnsYIFnEuhzva0JFv3d9fhLbyzxT/2n
-         LVDNqnuQe0MdqVA2TaG8/1GyYPcx6crhNWiGH8HMnNbuTUGzH8y8eb6BPGf03MCSmDsV
-         l6+a3LRo7Bj6OmcwwFCClNdIsge35pgvTHkKKtZyur9bAC1zM3Ww2J02anQNfCPLASig
-         11RA==
-X-Gm-Message-State: AO0yUKWZ0Djw7/FVitLjwKS2UxsT0CqSYlbg9J7BZsm2dFEzuw3VG6Wo
-	xfgdkTM8Qa6vmKzt8fEhoiUSdA==
-X-Google-Smtp-Source: AK7set+yfJsE2EIiircqB4KIesHcwMth8EDx+zpQOWowRjDN0+1MxeHfP8oFrKPEiyxkdZpVv/d58Q==
-X-Received: by 2002:a17:906:6897:b0:928:2419:de6e with SMTP id n23-20020a170906689700b009282419de6emr2954516ejr.51.1678705894033;
-        Mon, 13 Mar 2023 04:11:34 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id t17-20020a170906179100b008e724dfc44bsm3317748eje.78.2023.03.13.04.11.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 04:11:22 -0700 (PDT)
-Message-ID: <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
-Date: Mon, 13 Mar 2023 11:11:18 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D8323C5;
+	Mon, 13 Mar 2023 11:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678708099; x=1710244099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ei62QVvNfkW9rvFQlyNhZEignTx5xrlrK3O+6oUDAK0=;
+  b=FRkvvH+H0Kq3MEpjwSihB3jo5X7pABHtYqiLPIFw0dUY0muNbtazU77C
+   Di1F2OhuP4ezlB6RBPNXl4T+ncSYzK89C2Gp2WKMOobfdRYJL0I4nQ8mU
+   /ZLE02TdqK6wIoYgnamWRrFlZ3rhBTGN4z9RWdYcNoMaT1iIX+deTf/Wl
+   lE6EKyPop7PNrCeWV0AYRzz/kiReJlR1NiE1J2HXPrLsCeb3XXBbjj+Zj
+   ZZoaAuN0mumuLtfBK7XDvvT8Nfy11U+i0WOssDJvhuVTiTmm++EnWcrrn
+   NUtUTLhMKSfMMIIx2lk/3FbqrhCq0Qg36eL/1o+DsEV/Jtrd9DUxM8wAP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="334601600"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="334601600"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 04:48:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="788899946"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="788899946"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Mar 2023 04:48:13 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pbgey-0005di-2J;
+	Mon, 13 Mar 2023 11:48:12 +0000
+Date: Mon, 13 Mar 2023 19:47:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Looi Hong Aun <hong.aun.looi@intel.com>,
+	Voon Weifeng <weifeng.voon@intel.com>,
+	Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
+Subject: Re: [PATCH net 2/2] net: stmmac: move fixed-link support fixup code
+Message-ID: <202303131924.MkBmpkFK-lkp@intel.com>
+References: <20230313080135.2952774-3-michael.wei.hong.sit@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
- ext4_group_desc_csum
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: Jan Kara <jack@suse.cz>
-Cc: syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
- adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org,
- ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com,
- tytso@mit.edu, Lee Jones <joneslee@google.com>
-References: <000000000000ef6cf905f496e40b@google.com>
- <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3>
- <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
-In-Reply-To: <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313080135.2952774-3-michael.wei.hong.sit@intel.com>
 
-Hi, Jan,
+Hi Michael,
 
-On 3/7/23 11:02, Tudor Ambarus wrote:
-> 
-> 
-> On 3/7/23 10:39, Jan Kara wrote:
->> Hi!
-> 
-> Hi!
-> 
-> Thanks for taking the time to review the proposal!
-> 
->>
->> On Wed 01-03-23 12:13:51, Tudor Ambarus wrote:
->>> On 2/13/23 15:56, syzbot wrote:
->>>> syzbot has found a reproducer for the following issue on:
->>>>
->>>> HEAD commit:    ceaa837f96ad Linux 6.2-rc8
->>>> git tree:       upstream
->>>> console output:
->>>> https://syzkaller.appspot.com/x/log.txt?x=11727cc7480000
->>>> kernel config: 
->>>> https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
->>>> dashboard link:
->>>> https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
->>>> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils
->>>> for Debian) 2.35.2
->>>> syz repro:     
->>>> https://syzkaller.appspot.com/x/repro.syz?x=14392a4f480000
->>>>
->>>> Downloadable assets:
->>>> disk image:
->>>> https://storage.googleapis.com/syzbot-assets/88042f9b5fc8/disk-ceaa837f.raw.xz
->>>> vmlinux:
->>>> https://storage.googleapis.com/syzbot-assets/9945b57ec9ee/vmlinux-ceaa837f.xz
->>>> kernel image:
->>>> https://storage.googleapis.com/syzbot-assets/72ff118ed96b/bzImage-ceaa837f.xz
->>>> mounted in repro:
->>>> https://storage.googleapis.com/syzbot-assets/dabec17b2679/mount_0.gz
->>>>
->>>> IMPORTANT: if you fix the issue, please add the following tag to the
->>>> commit:
->>>> Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
->>>>
->>>> ==================================================================
->>>> BUG: KASAN: use-after-free in crc16+0x1fb/0x280 lib/crc16.c:58
->>>> Read of size 1 at addr ffff88807de00000 by task syz-executor.1/5339
->>>>
->>>> CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted
->>>> 6.2.0-rc8-syzkaller #0
->>>> Hardware name: Google Google Compute Engine/Google Compute Engine,
->>>> BIOS Google 01/21/2023
->>>> Call Trace:
->>>>    <TASK>
->>>>    __dump_stack lib/dump_stack.c:88 [inline]
->>>>    dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
->>>>    print_address_description mm/kasan/report.c:306 [inline]
->>>>    print_report+0x163/0x4f0 mm/kasan/report.c:417
->>>>    kasan_report+0x13a/0x170 mm/kasan/report.c:517
->>>>    crc16+0x1fb/0x280 lib/crc16.c:58
->>>>    ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
->>>>    ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
->>>>    ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
->>>>    ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
->>>>    ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
->>>>    ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
->>>>    ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
->>>>    ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
->>>>    ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
->>>>    ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
->>>>    evict+0x2a4/0x620 fs/inode.c:664
->>>>    do_unlinkat+0x4f1/0x930 fs/namei.c:4327
->>>>    __do_sys_unlink fs/namei.c:4368 [inline]
->>>>    __se_sys_unlink fs/namei.c:4366 [inline]
->>>>    __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
->>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>> RIP: 0033:0x7fbc85a8c0f9
->>>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48
->>>> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48>
->>>> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
->>>> RSP: 002b:00007fbc86838168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
->>>> RAX: ffffffffffffffda RBX: 00007fbc85babf80 RCX: 00007fbc85a8c0f9
->>>> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
->>>> RBP: 00007fbc85ae7ae9 R08: 0000000000000000 R09: 0000000000000000
->>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
->>>> R13: 00007ffd5743beaf R14: 00007fbc86838300 R15: 0000000000022000
->>>>    </TASK>
->>>>
->>>> The buggy address belongs to the physical page:
->>>> page:ffffea0001f78000 refcount:0 mapcount:-128
->>>> mapping:0000000000000000 index:0x0 pfn:0x7de00
->>>> flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
->>>> raw: 00fff00000000000 ffffea0001f86008 ffffea0001db2a08
->>>> 0000000000000000
->>>> raw: 0000000000000000 0000000000000001 00000000ffffff7f
->>>> 0000000000000000
->>>> page dumped because: kasan: bad access detected
->>>> page_owner tracks the page as freed
->>>> page last allocated via order 1, migratetype Unmovable, gfp_mask
->>>> 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, tgid 4855 (sshd), ts 43553490210, free_ts 58249059760
->>>>    prep_new_page mm/page_alloc.c:2531 [inline]
->>>>    get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
->>>>    __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
->>>>    alloc_slab_page+0x6a/0x160 mm/slub.c:1851
->>>>    allocate_slab mm/slub.c:1998 [inline]
->>>>    new_slab+0x84/0x2f0 mm/slub.c:2051
->>>>    ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
->>>>    __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
->>>>    kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
->>>>    mt_alloc_bulk lib/maple_tree.c:157 [inline]
->>>>    mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
->>>>    mas_node_count_gfp lib/maple_tree.c:1316 [inline]
->>>>    mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
->>>>    vma_expand+0x277/0x850 mm/mmap.c:541
->>>>    mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
->>>>    do_mmap+0x8c9/0xf70 mm/mmap.c:1411
->>>>    vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
->>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>> page last free stack trace:
->>>>    reset_page_owner include/linux/page_owner.h:24 [inline]
->>>>    free_pages_prepare mm/page_alloc.c:1446 [inline]
->>>>    free_pcp_prepare mm/page_alloc.c:1496 [inline]
->>>>    free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
->>>>    free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
->>>>    qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
->>>>    kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
->>>>    __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
->>>>    kasan_slab_alloc include/linux/kasan.h:201 [inline]
->>>>    slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
->>>>    slab_alloc_node mm/slub.c:3452 [inline]
->>>>    kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
->>>>    __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
->>>>    alloc_skb include/linux/skbuff.h:1270 [inline]
->>>>    alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
->>>>    sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
->>>>    unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
->>>>    sock_sendmsg_nosec net/socket.c:714 [inline]
->>>>    sock_sendmsg net/socket.c:734 [inline]
->>>>    __sys_sendto+0x475/0x5f0 net/socket.c:2117
->>>>    __do_sys_sendto net/socket.c:2129 [inline]
->>>>    __se_sys_sendto net/socket.c:2125 [inline]
->>>>    __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
->>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>>
->>>> Memory state around the buggy address:
->>>>    ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>>>    ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>>>> ffff88807de00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>                      ^
->>>>    ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>    ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>> ==================================================================
->>>>
->>>
->>>
->>> I think the patch from below should fix it.
->>>
->>> I printed le16_to_cpu(sbi->s_es->s_desc_size) and it was greater than
->>> EXT4_MAX_DESC_SIZE. What I think it happens is that the contents of the
->>> super block in the buffer get corrupted sometime after the .get_tree
->>> (which eventually calls __ext4_fill_super()) is called. So instead of
->>> relying on the contents of the buffer, we should instead rely on the
->>> s_desc_size initialized at the __ext4_fill_super() time.
->>>
->>> If someone finds this good (or bad), or has a more in depth explanation,
->>> please let me know, it will help me better understand the subsystem. In
->>> the meantime I'll continue to investigate this and prepare a patch for
->>> it.
->>
->> If there's something corrupting the superblock while the filesystem is
->> mounted, we need to find what is corrupting the SB and fix *that*. Not
->> try
->> to paper over the problem by not using the on-disk data... Maybe journal
->> replay is corrupting the value or something like that?
->>
->>                                 Honza
->>
-> 
-> Ok, I agree. First thing would be to understand the reproducer and to
-> simplify it if possible. I haven't yet decoded what the syz repro is
-> doing at
-> https://syzkaller.appspot.com/text?tag=ReproSyz&x=16ce3de4c80000
-> Will reply to this email thread once I understand what's happening. If
-> you or someone else can decode the syz repro faster than me, shoot.
-> 
+Thank you for the patch! Perhaps something to improve:
 
-I can now explain how the contents of the super block of the buffer get
-corrupted. After the ext4 fs is mounted to the target ("./bus"), the
-reproducer maps 6MB of data starting at offset 0 in the target's file
-("./bus"), then it starts overriding the data with something else, by
-using memcpy, memset, individual byte inits. Does that mean that we
-shouldn't rely on the contents of the super block in the buffer after we
-mount the file system? If so, then my patch stands. I'll be happy to
-extend it if needed. Below one may find a step by step interpretation of
-the reproducer.
+[auto build test WARNING on net/master]
 
-We have a strace log for the same bug, but on Android 5.15:
-https://syzkaller.appspot.com/text?tag=CrashLog&x=14ecec8cc80000
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Sit-Wei-Hong/net-stmmac-fix-PHY-handle-parsing/20230313-160802
+patch link:    https://lore.kernel.org/r/20230313080135.2952774-3-michael.wei.hong.sit%40intel.com
+patch subject: [PATCH net 2/2] net: stmmac: move fixed-link support fixup code
+config: x86_64-randconfig-a013-20230313 (https://download.01.org/0day-ci/archive/20230313/202303131924.MkBmpkFK-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e1abd092fb1e75931e37147152b274e0d3e6e655
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Michael-Sit-Wei-Hong/net-stmmac-fix-PHY-handle-parsing/20230313-160802
+        git checkout e1abd092fb1e75931e37147152b274e0d3e6e655
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/stmicro/stmmac/
 
-Look for pid 328. You notice that the bpf() syscalls return error, so I
-commented them out in the c repro to confirm that they are not the
-cause. The bug reproduced without the bpf() calls. One can find the c
-repro at:
-https://syzkaller.appspot.com/text?tag=ReproC&x=17c5fc50c80000
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303131924.MkBmpkFK-lkp@intel.com/
 
-Let's look at these calls, just before the bug was hit:
-[pid   328] open("./bus",
-O_RDWR|O_CREAT|O_TRUNC|O_NONBLOCK|O_SYNC|O_DIRECT|O_LARGEFILE|O_NOATIME,
-000) = 4
-[pid   328] mount("/dev/loop0", "./bus", NULL, MS_BIND, NULL) = 0
-[pid   328] open("./bus", O_RDWR|O_SYNC|O_NOATIME|0x3c) = 5
-[pid   328] mmap(0x20000000, 6291456,
-PROT_READ|PROT_WRITE|PROT_EXEC|PROT_SEM|0x47ffff0, MAP_SHARED|MAP_FIXED,
-5, 0) = 0x20000000
+All warnings (new ones prefixed by >>):
 
-- ./bus is created (if it does not exist), fd 4 is returned.
-- /dev/loop0 is mounted to ./bus
-- then it creates a new file descriptor (5) for the same ./bus
-- then it creates a mapping for ./bus starting at offset zero. The
-mapped area is at 0x20000000 and is of 0x600000ul length.
+>> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:7311:7: warning: variable 'fwnode' is uninitialized when used here [-Wuninitialized]
+           if (!fwnode)
+                ^~~~~~
+   drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:7067:30: note: initialize the variable 'fwnode' to silence this warning
+           struct fwnode_handle *fwnode;
+                                       ^
+                                        = NULL
+   1 warning generated.
 
-Now look again in the c reproducer. You'll see that after the mapping
-lots of bytes are overwritten starting with 0x20000300. If I comment out
-all those byte modifications after the mmap, the reproducer is silenced.
 
-Cheers,
-ta
-> 
->>> index 260c1b3e3ef2..91d41e84da32 100644
->>> --- a/fs/ext4/super.c
->>> +++ b/fs/ext4/super.c
->>> @@ -3182,11 +3182,9 @@ static __le16 ext4_group_desc_csum(struct
->>> super_block
->>> *sb, __u32 block_group,
->>>          crc = crc16(crc, (__u8 *)gdp, offset);
->>>          offset += sizeof(gdp->bg_checksum); /* skip checksum */
->>>          /* for checksum of struct ext4_group_desc do the rest...*/
->>> -       if (ext4_has_feature_64bit(sb) &&
->>> -           offset < le16_to_cpu(sbi->s_es->s_desc_size))
->>> +       if (ext4_has_feature_64bit(sb) && offset < sbi->s_desc_size)
->>>                  crc = crc16(crc, (__u8 *)gdp + offset,
->>> -                           le16_to_cpu(sbi->s_es->s_desc_size) -
->>> -                               offset);
->>> +                           sbi->s_desc_size - offset);
->>>
->>>   out:
->>>          return cpu_to_le16(crc);
+vim +/fwnode +7311 drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+
+  7051	
+  7052	/**
+  7053	 * stmmac_dvr_probe
+  7054	 * @device: device pointer
+  7055	 * @plat_dat: platform data pointer
+  7056	 * @res: stmmac resource pointer
+  7057	 * Description: this is the main probe function used to
+  7058	 * call the alloc_etherdev, allocate the priv structure.
+  7059	 * Return:
+  7060	 * returns 0 on success, otherwise errno.
+  7061	 */
+  7062	int stmmac_dvr_probe(struct device *device,
+  7063			     struct plat_stmmacenet_data *plat_dat,
+  7064			     struct stmmac_resources *res)
+  7065	{
+  7066		struct net_device *ndev = NULL;
+  7067		struct fwnode_handle *fwnode;
+  7068		struct stmmac_priv *priv;
+  7069		u32 rxq;
+  7070		int i, ret = 0;
+  7071	
+  7072		ndev = devm_alloc_etherdev_mqs(device, sizeof(struct stmmac_priv),
+  7073					       MTL_MAX_TX_QUEUES, MTL_MAX_RX_QUEUES);
+  7074		if (!ndev)
+  7075			return -ENOMEM;
+  7076	
+  7077		SET_NETDEV_DEV(ndev, device);
+  7078	
+  7079		priv = netdev_priv(ndev);
+  7080		priv->device = device;
+  7081		priv->dev = ndev;
+  7082	
+  7083		stmmac_set_ethtool_ops(ndev);
+  7084		priv->pause = pause;
+  7085		priv->plat = plat_dat;
+  7086		priv->ioaddr = res->addr;
+  7087		priv->dev->base_addr = (unsigned long)res->addr;
+  7088		priv->plat->dma_cfg->multi_msi_en = priv->plat->multi_msi_en;
+  7089	
+  7090		priv->dev->irq = res->irq;
+  7091		priv->wol_irq = res->wol_irq;
+  7092		priv->lpi_irq = res->lpi_irq;
+  7093		priv->sfty_ce_irq = res->sfty_ce_irq;
+  7094		priv->sfty_ue_irq = res->sfty_ue_irq;
+  7095		for (i = 0; i < MTL_MAX_RX_QUEUES; i++)
+  7096			priv->rx_irq[i] = res->rx_irq[i];
+  7097		for (i = 0; i < MTL_MAX_TX_QUEUES; i++)
+  7098			priv->tx_irq[i] = res->tx_irq[i];
+  7099	
+  7100		if (!is_zero_ether_addr(res->mac))
+  7101			eth_hw_addr_set(priv->dev, res->mac);
+  7102	
+  7103		dev_set_drvdata(device, priv->dev);
+  7104	
+  7105		/* Verify driver arguments */
+  7106		stmmac_verify_args();
+  7107	
+  7108		priv->af_xdp_zc_qps = bitmap_zalloc(MTL_MAX_TX_QUEUES, GFP_KERNEL);
+  7109		if (!priv->af_xdp_zc_qps)
+  7110			return -ENOMEM;
+  7111	
+  7112		/* Allocate workqueue */
+  7113		priv->wq = create_singlethread_workqueue("stmmac_wq");
+  7114		if (!priv->wq) {
+  7115			dev_err(priv->device, "failed to create workqueue\n");
+  7116			ret = -ENOMEM;
+  7117			goto error_wq_init;
+  7118		}
+  7119	
+  7120		INIT_WORK(&priv->service_task, stmmac_service_task);
+  7121	
+  7122		/* Initialize Link Partner FPE workqueue */
+  7123		INIT_WORK(&priv->fpe_task, stmmac_fpe_lp_task);
+  7124	
+  7125		/* Override with kernel parameters if supplied XXX CRS XXX
+  7126		 * this needs to have multiple instances
+  7127		 */
+  7128		if ((phyaddr >= 0) && (phyaddr <= 31))
+  7129			priv->plat->phy_addr = phyaddr;
+  7130	
+  7131		if (priv->plat->stmmac_rst) {
+  7132			ret = reset_control_assert(priv->plat->stmmac_rst);
+  7133			reset_control_deassert(priv->plat->stmmac_rst);
+  7134			/* Some reset controllers have only reset callback instead of
+  7135			 * assert + deassert callbacks pair.
+  7136			 */
+  7137			if (ret == -ENOTSUPP)
+  7138				reset_control_reset(priv->plat->stmmac_rst);
+  7139		}
+  7140	
+  7141		ret = reset_control_deassert(priv->plat->stmmac_ahb_rst);
+  7142		if (ret == -ENOTSUPP)
+  7143			dev_err(priv->device, "unable to bring out of ahb reset: %pe\n",
+  7144				ERR_PTR(ret));
+  7145	
+  7146		/* Init MAC and get the capabilities */
+  7147		ret = stmmac_hw_init(priv);
+  7148		if (ret)
+  7149			goto error_hw_init;
+  7150	
+  7151		/* Only DWMAC core version 5.20 onwards supports HW descriptor prefetch.
+  7152		 */
+  7153		if (priv->synopsys_id < DWMAC_CORE_5_20)
+  7154			priv->plat->dma_cfg->dche = false;
+  7155	
+  7156		stmmac_check_ether_addr(priv);
+  7157	
+  7158		ndev->netdev_ops = &stmmac_netdev_ops;
+  7159	
+  7160		ndev->hw_features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
+  7161				    NETIF_F_RXCSUM;
+  7162		ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
+  7163				     NETDEV_XDP_ACT_XSK_ZEROCOPY |
+  7164				     NETDEV_XDP_ACT_NDO_XMIT;
+  7165	
+  7166		ret = stmmac_tc_init(priv, priv);
+  7167		if (!ret) {
+  7168			ndev->hw_features |= NETIF_F_HW_TC;
+  7169		}
+  7170	
+  7171		if ((priv->plat->tso_en) && (priv->dma_cap.tsoen)) {
+  7172			ndev->hw_features |= NETIF_F_TSO | NETIF_F_TSO6;
+  7173			if (priv->plat->has_gmac4)
+  7174				ndev->hw_features |= NETIF_F_GSO_UDP_L4;
+  7175			priv->tso = true;
+  7176			dev_info(priv->device, "TSO feature enabled\n");
+  7177		}
+  7178	
+  7179		if (priv->dma_cap.sphen && !priv->plat->sph_disable) {
+  7180			ndev->hw_features |= NETIF_F_GRO;
+  7181			priv->sph_cap = true;
+  7182			priv->sph = priv->sph_cap;
+  7183			dev_info(priv->device, "SPH feature enabled\n");
+  7184		}
+  7185	
+  7186		/* The current IP register MAC_HW_Feature1[ADDR64] only define
+  7187		 * 32/40/64 bit width, but some SOC support others like i.MX8MP
+  7188		 * support 34 bits but it map to 40 bits width in MAC_HW_Feature1[ADDR64].
+  7189		 * So overwrite dma_cap.addr64 according to HW real design.
+  7190		 */
+  7191		if (priv->plat->addr64)
+  7192			priv->dma_cap.addr64 = priv->plat->addr64;
+  7193	
+  7194		if (priv->dma_cap.addr64) {
+  7195			ret = dma_set_mask_and_coherent(device,
+  7196					DMA_BIT_MASK(priv->dma_cap.addr64));
+  7197			if (!ret) {
+  7198				dev_info(priv->device, "Using %d bits DMA width\n",
+  7199					 priv->dma_cap.addr64);
+  7200	
+  7201				/*
+  7202				 * If more than 32 bits can be addressed, make sure to
+  7203				 * enable enhanced addressing mode.
+  7204				 */
+  7205				if (IS_ENABLED(CONFIG_ARCH_DMA_ADDR_T_64BIT))
+  7206					priv->plat->dma_cfg->eame = true;
+  7207			} else {
+  7208				ret = dma_set_mask_and_coherent(device, DMA_BIT_MASK(32));
+  7209				if (ret) {
+  7210					dev_err(priv->device, "Failed to set DMA Mask\n");
+  7211					goto error_hw_init;
+  7212				}
+  7213	
+  7214				priv->dma_cap.addr64 = 32;
+  7215			}
+  7216		}
+  7217	
+  7218		ndev->features |= ndev->hw_features | NETIF_F_HIGHDMA;
+  7219		ndev->watchdog_timeo = msecs_to_jiffies(watchdog);
+  7220	#ifdef STMMAC_VLAN_TAG_USED
+  7221		/* Both mac100 and gmac support receive VLAN tag detection */
+  7222		ndev->features |= NETIF_F_HW_VLAN_CTAG_RX | NETIF_F_HW_VLAN_STAG_RX;
+  7223		if (priv->dma_cap.vlhash) {
+  7224			ndev->features |= NETIF_F_HW_VLAN_CTAG_FILTER;
+  7225			ndev->features |= NETIF_F_HW_VLAN_STAG_FILTER;
+  7226		}
+  7227		if (priv->dma_cap.vlins) {
+  7228			ndev->features |= NETIF_F_HW_VLAN_CTAG_TX;
+  7229			if (priv->dma_cap.dvlan)
+  7230				ndev->features |= NETIF_F_HW_VLAN_STAG_TX;
+  7231		}
+  7232	#endif
+  7233		priv->msg_enable = netif_msg_init(debug, default_msg_level);
+  7234	
+  7235		/* Initialize RSS */
+  7236		rxq = priv->plat->rx_queues_to_use;
+  7237		netdev_rss_key_fill(priv->rss.key, sizeof(priv->rss.key));
+  7238		for (i = 0; i < ARRAY_SIZE(priv->rss.table); i++)
+  7239			priv->rss.table[i] = ethtool_rxfh_indir_default(i, rxq);
+  7240	
+  7241		if (priv->dma_cap.rssen && priv->plat->rss_en)
+  7242			ndev->features |= NETIF_F_RXHASH;
+  7243	
+  7244		/* MTU range: 46 - hw-specific max */
+  7245		ndev->min_mtu = ETH_ZLEN - ETH_HLEN;
+  7246		if (priv->plat->has_xgmac)
+  7247			ndev->max_mtu = XGMAC_JUMBO_LEN;
+  7248		else if ((priv->plat->enh_desc) || (priv->synopsys_id >= DWMAC_CORE_4_00))
+  7249			ndev->max_mtu = JUMBO_LEN;
+  7250		else
+  7251			ndev->max_mtu = SKB_MAX_HEAD(NET_SKB_PAD + NET_IP_ALIGN);
+  7252		/* Will not overwrite ndev->max_mtu if plat->maxmtu > ndev->max_mtu
+  7253		 * as well as plat->maxmtu < ndev->min_mtu which is a invalid range.
+  7254		 */
+  7255		if ((priv->plat->maxmtu < ndev->max_mtu) &&
+  7256		    (priv->plat->maxmtu >= ndev->min_mtu))
+  7257			ndev->max_mtu = priv->plat->maxmtu;
+  7258		else if (priv->plat->maxmtu < ndev->min_mtu)
+  7259			dev_warn(priv->device,
+  7260				 "%s: warning: maxmtu having invalid value (%d)\n",
+  7261				 __func__, priv->plat->maxmtu);
+  7262	
+  7263		if (flow_ctrl)
+  7264			priv->flow_ctrl = FLOW_AUTO;	/* RX/TX pause on */
+  7265	
+  7266		/* Setup channels NAPI */
+  7267		stmmac_napi_add(ndev);
+  7268	
+  7269		mutex_init(&priv->lock);
+  7270	
+  7271		/* If a specific clk_csr value is passed from the platform
+  7272		 * this means that the CSR Clock Range selection cannot be
+  7273		 * changed at run-time and it is fixed. Viceversa the driver'll try to
+  7274		 * set the MDC clock dynamically according to the csr actual
+  7275		 * clock input.
+  7276		 */
+  7277		if (priv->plat->clk_csr >= 0)
+  7278			priv->clk_csr = priv->plat->clk_csr;
+  7279		else
+  7280			stmmac_clk_csr_set(priv);
+  7281	
+  7282		stmmac_check_pcs_mode(priv);
+  7283	
+  7284		pm_runtime_get_noresume(device);
+  7285		pm_runtime_set_active(device);
+  7286		if (!pm_runtime_enabled(device))
+  7287			pm_runtime_enable(device);
+  7288	
+  7289		if (priv->hw->pcs != STMMAC_PCS_TBI &&
+  7290		    priv->hw->pcs != STMMAC_PCS_RTBI) {
+  7291			/* MDIO bus Registration */
+  7292			ret = stmmac_mdio_register(ndev);
+  7293			if (ret < 0) {
+  7294				dev_err_probe(priv->device, ret,
+  7295					      "%s: MDIO bus (id: %d) registration failed\n",
+  7296					      __func__, priv->plat->bus_id);
+  7297				goto error_mdio_register;
+  7298			}
+  7299		}
+  7300	
+  7301		if (priv->plat->speed_mode_2500)
+  7302			priv->plat->speed_mode_2500(ndev, priv->plat->bsp_priv);
+  7303	
+  7304		if (priv->plat->mdio_bus_data && priv->plat->mdio_bus_data->has_xpcs) {
+  7305			ret = stmmac_xpcs_setup(priv->mii);
+  7306			if (ret)
+  7307				goto error_xpcs_setup;
+  7308		}
+  7309	
+  7310		/* For fixed-link setup, we clear xpcs_an_inband */
+> 7311		if (!fwnode)
+  7312			fwnode = dev_fwnode(priv->device);
+  7313	
+  7314		if (fwnode) {
+  7315			struct fwnode_handle *fixed_node;
+  7316	
+  7317			fixed_node = fwnode_get_named_child_node(fwnode, "fixed-link");
+  7318			if (fixed_node)
+  7319				priv->plat->mdio_bus_data->xpcs_an_inband = false;
+  7320	
+  7321			fwnode_handle_put(fixed_node);
+  7322		}
+  7323	
+  7324		ret = stmmac_phy_setup(priv);
+  7325		if (ret) {
+  7326			netdev_err(ndev, "failed to setup phy (%d)\n", ret);
+  7327			goto error_phy_setup;
+  7328		}
+  7329	
+  7330		ret = register_netdev(ndev);
+  7331		if (ret) {
+  7332			dev_err(priv->device, "%s: ERROR %i registering the device\n",
+  7333				__func__, ret);
+  7334			goto error_netdev_register;
+  7335		}
+  7336	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
