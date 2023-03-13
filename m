@@ -1,44 +1,51 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB24322B;
-	Mon, 13 Mar 2023 17:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A703D7A;
+	Mon, 13 Mar 2023 18:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678729117; x=1710265117;
+  t=1678732847; x=1710268847;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qFbdBB38UXS7MxFTpRmyQ1RTtZxIblToMquyALsKQCA=;
-  b=X4axRvRBjRXqNDjiHFvg7C0Jd/MoZhmSriezo7jDgwyXNRxOnSlC7bDS
-   bUmJf719cn6H09GNH7htct3sKavE162LikiTUdCT5s7N0ewPUjDqp2B6U
-   mc3YtDdLeA05HyVjgP8Uc4QRNL4ACMQb54d/4yyZbLV2jfcPssja5bHX1
-   LqFx5KUmnn6q3OURsSGlSHo5oGX/lG2xHHF2/99/xtC9wOZQRHOKNMlCg
-   d1Jck/HvZNybaZEEsLQGE9ravw/VijFpQW1gtqxThvi1C7sgKgRnsEncs
-   NlFYv43wIWTAxRxp5FSDO8Y1C4Fs+O/GigIuCYV8K78MTKhpSALXFCcVE
+  bh=JHNQMG+SmEvryqcuY67cCs5r39GOh8n5At5NploTfC4=;
+  b=SkoKhQa/DUmb9aSr56VJLIlEEw7dAvZ6hCT4WzAM7eOXxUFIjNk8WstG
+   OjBZHgoqk27A2KQm0kd4F5yHRlvuu24jA8Pn+fCgJBTtWVIv5dSvIYMNm
+   AR2aMk1nI4zjtdIJECrk29zEvG0runyro7E2eVUZ7HkD+uB7JwX3xqbQw
+   4OveYrmlisiYxxXHCLkf7v9L428GzTq8Ltd3SH+YxeoJy5aaA32NH5f1X
+   ZSBTQZvPOrozajDqTFhYFPsJSRLkvSYd/pvQavykFTyHq5+TCU1bxoRbU
+   7YCu5CB6imaQsDViYspC/m/5cKQ5kHoCJcRhaWkcTUGnYxfvnb+QuH7c9
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="338759878"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399821604"
 X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="338759878"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 10:38:36 -0700
+   d="scan'208";a="399821604"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 11:40:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="1008073246"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="708978883"
 X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="1008073246"
+   d="scan'208";a="708978883"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Mar 2023 10:38:35 -0700
+  by orsmga008.jf.intel.com with ESMTP; 13 Mar 2023 11:40:38 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pbm82-0005x4-1r;
-	Mon, 13 Mar 2023 17:38:34 +0000
-Date: Tue, 14 Mar 2023 01:37:35 +0800
+	id 1pbn65-00060Q-27;
+	Mon, 13 Mar 2023 18:40:37 +0000
+Date: Tue, 14 Mar 2023 02:40:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yin Fengwei <fengwei.yin@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v4 1/5] rmap: move hugetlb try_to_unmap to dedicated
- function
-Message-ID: <202303140156.ZvGUC2dc-lkp@intel.com>
-References: <20230313124526.1207490-2-fengwei.yin@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [rft, PATCH v1 1/1] gpio: Drop unused inclusions from of_gpio.h
+Message-ID: <202303140220.FQmu9huZ-lkp@intel.com>
+References: <20230313144557.35856-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,148 +54,215 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313124526.1207490-2-fengwei.yin@intel.com>
+In-Reply-To: <20230313144557.35856-1-andriy.shevchenko@linux.intel.com>
 
-Hi Yin,
+Hi Andy,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test ERROR on brgl/gpio/for-next]
 [also build test ERROR on linus/master v6.3-rc2 next-20230310]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yin-Fengwei/rmap-move-hugetlb-try_to_unmap-to-dedicated-function/20230313-204656
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230313124526.1207490-2-fengwei.yin%40intel.com
-patch subject: [PATCH v4 1/5] rmap: move hugetlb try_to_unmap to dedicated function
-config: x86_64-randconfig-a012-20230313 (https://download.01.org/0day-ci/archive/20230314/202303140156.ZvGUC2dc-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpio-Drop-unused-inclusions-from-of_gpio-h/20230313-224656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20230313144557.35856-1-andriy.shevchenko%40linux.intel.com
+patch subject: [rft, PATCH v1 1/1] gpio: Drop unused inclusions from of_gpio.h
+config: arm-randconfig-r046-20230312 (https://download.01.org/0day-ci/archive/20230314/202303140220.FQmu9huZ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c43d03caaff9b0b9a869fd2a9b8beed7bc833f2a
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/b108d11788b6db9e37a6c4b3110c09cecf30a46c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yin-Fengwei/rmap-move-hugetlb-try_to_unmap-to-dedicated-function/20230313-204656
-        git checkout c43d03caaff9b0b9a869fd2a9b8beed7bc833f2a
+        git fetch --no-tags linux-review Andy-Shevchenko/gpio-Drop-unused-inclusions-from-of_gpio-h/20230313-224656
+        git checkout b108d11788b6db9e37a6c4b3110c09cecf30a46c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/video/backlight/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303140156.ZvGUC2dc-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303140220.FQmu9huZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/rmap.c:1513:6: error: implicit declaration of function 'huge_pte_dirty' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (huge_pte_dirty(pteval))
-               ^
-   1 error generated.
+>> drivers/video/backlight/hx8357.c:324:2: error: call to undeclared function 'gpio_set_value'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           gpio_set_value(lcd->reset, 1);
+           ^
+   drivers/video/backlight/hx8357.c:324:2: note: did you mean 'gpiod_set_value'?
+   include/linux/gpio/consumer.h:122:6: note: 'gpiod_set_value' declared here
+   void gpiod_set_value(struct gpio_desc *desc, int value);
+        ^
+>> drivers/video/backlight/hx8357.c:344:3: error: call to undeclared function 'gpio_set_value_cansleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   gpio_set_value_cansleep(lcd->im_pins[0], 1);
+                   ^
+   drivers/video/backlight/hx8357.c:344:3: note: did you mean 'gpiod_set_value_cansleep'?
+   include/linux/gpio/consumer.h:144:6: note: 'gpiod_set_value_cansleep' declared here
+   void gpiod_set_value_cansleep(struct gpio_desc *desc, int value);
+        ^
+>> drivers/video/backlight/hx8357.c:605:7: error: call to undeclared function 'gpio_is_valid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!gpio_is_valid(lcd->reset)) {
+                ^
+   drivers/video/backlight/hx8357.c:605:7: note: did you mean 'uuid_is_valid'?
+   include/linux/uuid.h:102:19: note: 'uuid_is_valid' declared here
+   bool __must_check uuid_is_valid(const char *uuid);
+                     ^
+>> drivers/video/backlight/hx8357.c:610:8: error: call to undeclared function 'devm_gpio_request_one'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = devm_gpio_request_one(&spi->dev, lcd->reset,
+                 ^
+>> drivers/video/backlight/hx8357.c:611:9: error: use of undeclared identifier 'GPIOF_OUT_INIT_HIGH'; did you mean 'GPIOD_OUT_HIGH'?
+                                       GPIOF_OUT_INIT_HIGH,
+                                       ^~~~~~~~~~~~~~~~~~~
+                                       GPIOD_OUT_HIGH
+   include/linux/gpio/consumer.h:51:2: note: 'GPIOD_OUT_HIGH' declared here
+           GPIOD_OUT_HIGH  = GPIOD_FLAGS_BIT_DIR_SET | GPIOD_FLAGS_BIT_DIR_OUT |
+           ^
+>> drivers/video/backlight/hx8357.c:636:11: error: use of undeclared identifier 'GPIOF_OUT_INIT_LOW'; did you mean 'GPIOD_OUT_LOW'?
+                                                       GPIOF_OUT_INIT_LOW,
+                                                       ^~~~~~~~~~~~~~~~~~
+                                                       GPIOD_OUT_LOW
+   include/linux/gpio/consumer.h:50:2: note: 'GPIOD_OUT_LOW' declared here
+           GPIOD_OUT_LOW   = GPIOD_FLAGS_BIT_DIR_SET | GPIOD_FLAGS_BIT_DIR_OUT,
+           ^
+   6 errors generated.
 
 
-vim +/huge_pte_dirty +1513 mm/rmap.c
+vim +/gpio_set_value +324 drivers/video/backlight/hx8357.c
 
-  1443	
-  1444	static bool try_to_unmap_one_hugetlb(struct folio *folio,
-  1445			struct vm_area_struct *vma, struct mmu_notifier_range range,
-  1446			struct page_vma_mapped_walk pvmw, unsigned long address,
-  1447			enum ttu_flags flags)
-  1448	{
-  1449		struct mm_struct *mm = vma->vm_mm;
-  1450		pte_t pteval;
-  1451		bool ret = true, anon = folio_test_anon(folio);
-  1452	
-  1453		/*
-  1454		 * The try_to_unmap() is only passed a hugetlb page
-  1455		 * in the case where the hugetlb page is poisoned.
-  1456		 */
-  1457		VM_BUG_ON_FOLIO(!folio_test_hwpoison(folio), folio);
-  1458		/*
-  1459		 * huge_pmd_unshare may unmap an entire PMD page.
-  1460		 * There is no way of knowing exactly which PMDs may
-  1461		 * be cached for this mm, so we must flush them all.
-  1462		 * start/end were already adjusted in caller
-  1463		 * (try_to_unmap_one) to cover this range.
-  1464		 */
-  1465		flush_cache_range(vma, range.start, range.end);
-  1466	
-  1467		/*
-  1468		 * To call huge_pmd_unshare, i_mmap_rwsem must be
-  1469		 * held in write mode.  Caller needs to explicitly
-  1470		 * do this outside rmap routines.
-  1471		 *
-  1472		 * We also must hold hugetlb vma_lock in write mode.
-  1473		 * Lock order dictates acquiring vma_lock BEFORE
-  1474		 * i_mmap_rwsem.  We can only try lock here and fail
-  1475		 * if unsuccessful.
-  1476		 */
-  1477		if (!anon) {
-  1478			VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
-  1479			if (!hugetlb_vma_trylock_write(vma)) {
-  1480				ret = false;
-  1481				goto out;
-  1482			}
-  1483			if (huge_pmd_unshare(mm, vma, address, pvmw.pte)) {
-  1484				hugetlb_vma_unlock_write(vma);
-  1485				flush_tlb_range(vma,
-  1486						range.start, range.end);
-  1487				mmu_notifier_invalidate_range(mm,
-  1488						range.start, range.end);
-  1489				/*
-  1490				 * The ref count of the PMD page was
-  1491				 * dropped which is part of the way map
-  1492				 * counting is done for shared PMDs.
-  1493				 * Return 'true' here.  When there is
-  1494				 * no other sharing, huge_pmd_unshare
-  1495				 * returns false and we will unmap the
-  1496				 * actual page and drop map count
-  1497				 * to zero.
-  1498				 */
-  1499				goto out;
-  1500			}
-  1501			hugetlb_vma_unlock_write(vma);
-  1502		}
-  1503		pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
-  1504	
-  1505		/*
-  1506		 * Now the pte is cleared. If this pte was uffd-wp armed,
-  1507		 * we may want to replace a none pte with a marker pte if
-  1508		 * it's file-backed, so we don't lose the tracking info.
-  1509		 */
-  1510		pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
-  1511	
-  1512		/* Set the dirty flag on the folio now the pte is gone. */
-> 1513		if (huge_pte_dirty(pteval))
-  1514			folio_mark_dirty(folio);
-  1515	
-  1516		/* Update high watermark before we lower rss */
-  1517		update_hiwater_rss(mm);
-  1518	
-  1519		/* Poisoned hugetlb folio with TTU_HWPOISON always cleared in flags */
-  1520		pteval = swp_entry_to_pte(make_hwpoison_entry(&folio->page));
-  1521		set_huge_pte_at(mm, address, pvmw.pte, pteval);
-  1522		hugetlb_count_sub(folio_nr_pages(folio), mm);
-  1523	
-  1524		/*
-  1525		 * No need to call mmu_notifier_invalidate_range() it has be
-  1526		 * done above for all cases requiring it to happen under page
-  1527		 * table lock before mmu_notifier_invalidate_range_end()
-  1528		 *
-  1529		 * See Documentation/mm/mmu_notifier.rst
-  1530		 */
-  1531		page_remove_rmap(&folio->page, vma, true);
-  1532		/* No VM_LOCKED set in vma->vm_flags for hugetlb. So not
-  1533		 * necessary to call mlock_drain_local().
-  1534		 */
-  1535		folio_put(folio);
-  1536	
-  1537	out:
-  1538		return ret;
-  1539	}
-  1540	
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  318  
+fb52566873ca8c Alexandre Belloni 2013-08-01  319  static void hx8357_lcd_reset(struct lcd_device *lcdev)
+fb52566873ca8c Alexandre Belloni 2013-08-01  320  {
+fb52566873ca8c Alexandre Belloni 2013-08-01  321  	struct hx8357_data *lcd = lcd_get_data(lcdev);
+fb52566873ca8c Alexandre Belloni 2013-08-01  322  
+fb52566873ca8c Alexandre Belloni 2013-08-01  323  	/* Reset the screen */
+fb52566873ca8c Alexandre Belloni 2013-08-01 @324  	gpio_set_value(lcd->reset, 1);
+fb52566873ca8c Alexandre Belloni 2013-08-01  325  	usleep_range(10000, 12000);
+fb52566873ca8c Alexandre Belloni 2013-08-01  326  	gpio_set_value(lcd->reset, 0);
+fb52566873ca8c Alexandre Belloni 2013-08-01  327  	usleep_range(10000, 12000);
+fb52566873ca8c Alexandre Belloni 2013-08-01  328  	gpio_set_value(lcd->reset, 1);
+fb52566873ca8c Alexandre Belloni 2013-08-01  329  
+fb52566873ca8c Alexandre Belloni 2013-08-01  330  	/* The controller needs 120ms to recover from reset */
+fb52566873ca8c Alexandre Belloni 2013-08-01  331  	msleep(120);
+fb52566873ca8c Alexandre Belloni 2013-08-01  332  }
+fb52566873ca8c Alexandre Belloni 2013-08-01  333  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  334  static int hx8357_lcd_init(struct lcd_device *lcdev)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  335  {
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  336  	struct hx8357_data *lcd = lcd_get_data(lcdev);
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  337  	int ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  338  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  339  	/*
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  340  	 * Set the interface selection pins to SPI mode, with three
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  341  	 * wires
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  342  	 */
+ccf9901ffec4b4 Maxime Ripard     2013-08-01  343  	if (lcd->use_im_pins) {
+8a6c1dd55168b5 Maxime Ripard     2013-02-21 @344  		gpio_set_value_cansleep(lcd->im_pins[0], 1);
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  345  		gpio_set_value_cansleep(lcd->im_pins[1], 0);
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  346  		gpio_set_value_cansleep(lcd->im_pins[2], 1);
+ccf9901ffec4b4 Maxime Ripard     2013-08-01  347  	}
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  348  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  349  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_power,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  350  				ARRAY_SIZE(hx8357_seq_power));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  351  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  352  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  353  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  354  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_vcom,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  355  				ARRAY_SIZE(hx8357_seq_vcom));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  356  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  357  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  358  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  359  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_power_normal,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  360  				ARRAY_SIZE(hx8357_seq_power_normal));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  361  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  362  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  363  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  364  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_panel_driving,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  365  				ARRAY_SIZE(hx8357_seq_panel_driving));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  366  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  367  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  368  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  369  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_display_frame,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  370  				ARRAY_SIZE(hx8357_seq_display_frame));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  371  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  372  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  373  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  374  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_panel_related,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  375  				ARRAY_SIZE(hx8357_seq_panel_related));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  376  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  377  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  378  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  379  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_undefined1,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  380  				ARRAY_SIZE(hx8357_seq_undefined1));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  381  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  382  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  383  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  384  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_undefined2,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  385  				ARRAY_SIZE(hx8357_seq_undefined2));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  386  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  387  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  388  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  389  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_gamma,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  390  				ARRAY_SIZE(hx8357_seq_gamma));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  391  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  392  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  393  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  394  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_address_mode,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  395  				ARRAY_SIZE(hx8357_seq_address_mode));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  396  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  397  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  398  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  399  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_pixel_format,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  400  				ARRAY_SIZE(hx8357_seq_pixel_format));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  401  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  402  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  403  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  404  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_column_address,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  405  				ARRAY_SIZE(hx8357_seq_column_address));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  406  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  407  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  408  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  409  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_page_address,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  410  				ARRAY_SIZE(hx8357_seq_page_address));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  411  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  412  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  413  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  414  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_rgb,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  415  				ARRAY_SIZE(hx8357_seq_rgb));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  416  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  417  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  418  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  419  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_display_mode,
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  420  				ARRAY_SIZE(hx8357_seq_display_mode));
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  421  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  422  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  423  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  424  	ret = hx8357_spi_write_byte(lcdev, HX8357_EXIT_SLEEP_MODE);
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  425  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  426  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  427  
+fb52566873ca8c Alexandre Belloni 2013-08-01  428  	/*
+fb52566873ca8c Alexandre Belloni 2013-08-01  429  	 * The controller needs 120ms to fully recover from exiting sleep mode
+fb52566873ca8c Alexandre Belloni 2013-08-01  430  	 */
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  431  	msleep(120);
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  432  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  433  	ret = hx8357_spi_write_byte(lcdev, HX8357_SET_DISPLAY_ON);
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  434  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  435  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  436  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  437  	usleep_range(5000, 7000);
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  438  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  439  	ret = hx8357_spi_write_byte(lcdev, HX8357_WRITE_MEMORY_START);
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  440  	if (ret < 0)
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  441  		return ret;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  442  
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  443  	return 0;
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  444  }
+8a6c1dd55168b5 Maxime Ripard     2013-02-21  445  
 
 -- 
 0-DAY CI Kernel Test Service
