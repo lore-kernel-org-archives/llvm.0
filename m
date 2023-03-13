@@ -1,304 +1,133 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860A328F2
-	for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 14:54:12 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id m4so3054413lfj.2
-        for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 07:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678719250;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W1FFMivaefFpHcElzOFKHQ0WXiSY9REoD+KQZ53ru4A=;
-        b=JXitAKjVZpVjcLFFkzQa/0qPlvOytBwPA9tg/dzl0VsDJNGOVrPOt8CCAH4Uke9kz1
-         5neDM3GA4rTxkwXgGD7P1L4V9JBD5iu9nmhtqQf8Sv1ffgEP71tmla7t55bLO+KuXvJr
-         HgoR/TCFiRthQ2zE4wboORSlRERn2HwUd3DdAgJ37QcdoeYntMAHgN+867FPgNoP0+c4
-         Kn6Qtm4WSH1Zq4oje5VwU23rt/aVLa3RAUoc4FlDRmyRqIT8bre3ilFUX80LCXA1yHAT
-         sLqnzaAo31lEx6WJAkNGApN5jfSu3RVIHa8hMXBR1NFS6t7+A6rfY9WS+e7O38aSrV6Q
-         5wgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678719250;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W1FFMivaefFpHcElzOFKHQ0WXiSY9REoD+KQZ53ru4A=;
-        b=5rCj7EW02qcYzxcJj21UaLxTV1hjknmcQvzFx3YU4DwToH105qfW0TvLaYhMUcdtsV
-         PKSmIzSvYg/Lm641/9O0GKI7/mPrl79CBQUMx3TO9SihmbZrhTZ5qO/XQH9EDxKEDlSc
-         hXA1zeILIiakBanrvmH4M0cTEC9rgr2kIhtqBPdHBulLL+wSLgx1Dz+t6hsynMClTIVr
-         nnT8hl+e/ScZRPZt4qp+da3xe1p9CmnEgreI5JiU1gVu/gtVDb60t6a1vCMCPiK+H6io
-         hMjSVXLwgF8pJ5/F9BWS0GDbuqj1zy/0vq3BoKzLIjDwGoVRVhnGRi+LVun9+OrIURfR
-         2jIQ==
-X-Gm-Message-State: AO0yUKXECwxuieRH1Oqk+J5JOs3rz918wuCKwMDouKh69BgRmtlLRb8w
-	AVcJXdZcLCynHNgt/IDyC3YauLrsVv/LCF5pjHJ85Q==
-X-Google-Smtp-Source: AK7set+jozwKuG7SlrbjoYh84n5RctSr21tiWQBnIq8Bd94clPAn8MdxzLcCqT/bkKR1PAiPqZ7yASpYJalDKdxitoM=
-X-Received: by 2002:ac2:5226:0:b0:4e8:46a1:21a7 with SMTP id
- i6-20020ac25226000000b004e846a121a7mr838499lfl.6.1678719250198; Mon, 13 Mar
- 2023 07:54:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDFD28F2;
+	Mon, 13 Mar 2023 15:54:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678722887; x=1710258887;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pk2pcgHvwszarrx8dyU/HQ5+yjNieIPrKsK2/87vmrw=;
+  b=nzM1OQBVtnP4YUD/XIkq3mNRIJ9L2kzLBV7Jg8Y8bNB2bwzk+BCJkaT0
+   nZ0gjaRrS3XbL/oGWHyuCSWiRJCKKF55vEgIJ+e2xN2vPdbibbK7Bhvrs
+   0KhRYxvfZqVoTp6+I9BijBP9a9KulOiwt0L4gxKR+iZNozK7RpYeLo1B9
+   oLpkjhs479+Xb+ipuyYFgEZa7nqFREktwYE8qxcHDJb4KAa6E+JoLjwsw
+   cIapEYAltwhnrrltgi8xfdU/7YsXHWDtNrZDkMZbNjegrXvI2O/UHjNk1
+   PrOxLzMDJjouBBDzv+gb5V+w6STa8u6RgTVzGR/g5Q2Os++QbCQPka4RJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="337207777"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="337207777"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 08:54:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="767755597"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="767755597"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Mar 2023 08:54:28 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pbkVH-0005qY-2b;
+	Mon, 13 Mar 2023 15:54:27 +0000
+Date: Mon, 13 Mar 2023 23:54:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Cochran <richardcochran@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/ptp/ptp_ines.c:837:34: warning: unused variable
+ 'ines_ptp_ctrl_of_match'
+Message-ID: <202303132337.r2XEl3lP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000ef6cf905f496e40b@google.com> <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3> <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
- <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org> <20230313115728.2wxy2qj4mqpwgrx7@quack3>
-In-Reply-To: <20230313115728.2wxy2qj4mqpwgrx7@quack3>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Mon, 13 Mar 2023 15:53:57 +0100
-Message-ID: <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in ext4_group_desc_csum
-To: Jan Kara <jack@suse.cz>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>, 
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	tytso@mit.edu, Lee Jones <joneslee@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 13 Mar 2023 at 12:57, Jan Kara <jack@suse.cz> wrote:
->
-> Hi Tudor!
->
-> On Mon 13-03-23 11:11:18, Tudor Ambarus wrote:
-> > On 3/7/23 11:02, Tudor Ambarus wrote:
-> > > On 3/7/23 10:39, Jan Kara wrote:
-> > >> On Wed 01-03-23 12:13:51, Tudor Ambarus wrote:
-> > >>> On 2/13/23 15:56, syzbot wrote:
-> > >>>> syzbot has found a reproducer for the following issue on:
-> > >>>>
-> > >>>> HEAD commit:    ceaa837f96ad Linux 6.2-rc8
-> > >>>> git tree:       upstream
-> > >>>> console output:
-> > >>>> https://syzkaller.appspot.com/x/log.txt?x=11727cc7480000
-> > >>>> kernel config:
-> > >>>> https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
-> > >>>> dashboard link:
-> > >>>> https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
-> > >>>> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils
-> > >>>> for Debian) 2.35.2
-> > >>>> syz repro:
-> > >>>> https://syzkaller.appspot.com/x/repro.syz?x=14392a4f480000
-> > >>>>
-> > >>>> Downloadable assets:
-> > >>>> disk image:
-> > >>>> https://storage.googleapis.com/syzbot-assets/88042f9b5fc8/disk-ceaa837f.raw.xz
-> > >>>> vmlinux:
-> > >>>> https://storage.googleapis.com/syzbot-assets/9945b57ec9ee/vmlinux-ceaa837f.xz
-> > >>>> kernel image:
-> > >>>> https://storage.googleapis.com/syzbot-assets/72ff118ed96b/bzImage-ceaa837f.xz
-> > >>>> mounted in repro:
-> > >>>> https://storage.googleapis.com/syzbot-assets/dabec17b2679/mount_0.gz
-> > >>>>
-> > >>>> IMPORTANT: if you fix the issue, please add the following tag to the
-> > >>>> commit:
-> > >>>> Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
-> > >>>>
-> > >>>> ==================================================================
-> > >>>> BUG: KASAN: use-after-free in crc16+0x1fb/0x280 lib/crc16.c:58
-> > >>>> Read of size 1 at addr ffff88807de00000 by task syz-executor.1/5339
-> > >>>>
-> > >>>> CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted
-> > >>>> 6.2.0-rc8-syzkaller #0
-> > >>>> Hardware name: Google Google Compute Engine/Google Compute Engine,
-> > >>>> BIOS Google 01/21/2023
-> > >>>> Call Trace:
-> > >>>>    <TASK>
-> > >>>>    __dump_stack lib/dump_stack.c:88 [inline]
-> > >>>>    dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
-> > >>>>    print_address_description mm/kasan/report.c:306 [inline]
-> > >>>>    print_report+0x163/0x4f0 mm/kasan/report.c:417
-> > >>>>    kasan_report+0x13a/0x170 mm/kasan/report.c:517
-> > >>>>    crc16+0x1fb/0x280 lib/crc16.c:58
-> > >>>>    ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
-> > >>>>    ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
-> > >>>>    ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
-> > >>>>    ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
-> > >>>>    ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
-> > >>>>    ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
-> > >>>>    ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
-> > >>>>    ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
-> > >>>>    ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
-> > >>>>    ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
-> > >>>>    evict+0x2a4/0x620 fs/inode.c:664
-> > >>>>    do_unlinkat+0x4f1/0x930 fs/namei.c:4327
-> > >>>>    __do_sys_unlink fs/namei.c:4368 [inline]
-> > >>>>    __se_sys_unlink fs/namei.c:4366 [inline]
-> > >>>>    __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
-> > >>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> > >>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > >>>> RIP: 0033:0x7fbc85a8c0f9
-> > >>>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48
-> > >>>> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48>
-> > >>>> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > >>>> RSP: 002b:00007fbc86838168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
-> > >>>> RAX: ffffffffffffffda RBX: 00007fbc85babf80 RCX: 00007fbc85a8c0f9
-> > >>>> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
-> > >>>> RBP: 00007fbc85ae7ae9 R08: 0000000000000000 R09: 0000000000000000
-> > >>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > >>>> R13: 00007ffd5743beaf R14: 00007fbc86838300 R15: 0000000000022000
-> > >>>>    </TASK>
-> > >>>>
-> > >>>> The buggy address belongs to the physical page:
-> > >>>> page:ffffea0001f78000 refcount:0 mapcount:-128
-> > >>>> mapping:0000000000000000 index:0x0 pfn:0x7de00
-> > >>>> flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-> > >>>> raw: 00fff00000000000 ffffea0001f86008 ffffea0001db2a08
-> > >>>> 0000000000000000
-> > >>>> raw: 0000000000000000 0000000000000001 00000000ffffff7f
-> > >>>> 0000000000000000
-> > >>>> page dumped because: kasan: bad access detected
-> > >>>> page_owner tracks the page as freed
-> > >>>> page last allocated via order 1, migratetype Unmovable, gfp_mask
-> > >>>> 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, tgid 4855 (sshd), ts 43553490210, free_ts 58249059760
-> > >>>>    prep_new_page mm/page_alloc.c:2531 [inline]
-> > >>>>    get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
-> > >>>>    __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
-> > >>>>    alloc_slab_page+0x6a/0x160 mm/slub.c:1851
-> > >>>>    allocate_slab mm/slub.c:1998 [inline]
-> > >>>>    new_slab+0x84/0x2f0 mm/slub.c:2051
-> > >>>>    ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
-> > >>>>    __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
-> > >>>>    kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
-> > >>>>    mt_alloc_bulk lib/maple_tree.c:157 [inline]
-> > >>>>    mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
-> > >>>>    mas_node_count_gfp lib/maple_tree.c:1316 [inline]
-> > >>>>    mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
-> > >>>>    vma_expand+0x277/0x850 mm/mmap.c:541
-> > >>>>    mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
-> > >>>>    do_mmap+0x8c9/0xf70 mm/mmap.c:1411
-> > >>>>    vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
-> > >>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> > >>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > >>>> page last free stack trace:
-> > >>>>    reset_page_owner include/linux/page_owner.h:24 [inline]
-> > >>>>    free_pages_prepare mm/page_alloc.c:1446 [inline]
-> > >>>>    free_pcp_prepare mm/page_alloc.c:1496 [inline]
-> > >>>>    free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
-> > >>>>    free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
-> > >>>>    qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
-> > >>>>    kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
-> > >>>>    __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
-> > >>>>    kasan_slab_alloc include/linux/kasan.h:201 [inline]
-> > >>>>    slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
-> > >>>>    slab_alloc_node mm/slub.c:3452 [inline]
-> > >>>>    kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
-> > >>>>    __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
-> > >>>>    alloc_skb include/linux/skbuff.h:1270 [inline]
-> > >>>>    alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
-> > >>>>    sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
-> > >>>>    unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
-> > >>>>    sock_sendmsg_nosec net/socket.c:714 [inline]
-> > >>>>    sock_sendmsg net/socket.c:734 [inline]
-> > >>>>    __sys_sendto+0x475/0x5f0 net/socket.c:2117
-> > >>>>    __do_sys_sendto net/socket.c:2129 [inline]
-> > >>>>    __se_sys_sendto net/socket.c:2125 [inline]
-> > >>>>    __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
-> > >>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> > >>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > >>>>
-> > >>>> Memory state around the buggy address:
-> > >>>>    ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >>>>    ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >>>>> ffff88807de00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> > >>>>                      ^
-> > >>>>    ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> > >>>>    ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> > >>>> ==================================================================
-> > >>>>
-> > >>>
-> > >>>
-> > >>> I think the patch from below should fix it.
-> > >>>
-> > >>> I printed le16_to_cpu(sbi->s_es->s_desc_size) and it was greater than
-> > >>> EXT4_MAX_DESC_SIZE. What I think it happens is that the contents of the
-> > >>> super block in the buffer get corrupted sometime after the .get_tree
-> > >>> (which eventually calls __ext4_fill_super()) is called. So instead of
-> > >>> relying on the contents of the buffer, we should instead rely on the
-> > >>> s_desc_size initialized at the __ext4_fill_super() time.
-> > >>>
-> > >>> If someone finds this good (or bad), or has a more in depth explanation,
-> > >>> please let me know, it will help me better understand the subsystem. In
-> > >>> the meantime I'll continue to investigate this and prepare a patch for
-> > >>> it.
-> > >>
-> > >> If there's something corrupting the superblock while the filesystem is
-> > >> mounted, we need to find what is corrupting the SB and fix *that*. Not
-> > >> try
-> > >> to paper over the problem by not using the on-disk data... Maybe journal
-> > >> replay is corrupting the value or something like that?
-> > >>
-> > >>                                 Honza
-> > >>
-> > >
-> > > Ok, I agree. First thing would be to understand the reproducer and to
-> > > simplify it if possible. I haven't yet decoded what the syz repro is
-> > > doing at
-> > > https://syzkaller.appspot.com/text?tag=ReproSyz&x=16ce3de4c80000
-> > > Will reply to this email thread once I understand what's happening. If
-> > > you or someone else can decode the syz repro faster than me, shoot.
-> > >
-> >
-> > I can now explain how the contents of the super block of the buffer get
-> > corrupted. After the ext4 fs is mounted to the target ("./bus"), the
-> > reproducer maps 6MB of data starting at offset 0 in the target's file
-> > ("./bus"), then it starts overriding the data with something else, by
-> > using memcpy, memset, individual byte inits. Does that mean that we
-> > shouldn't rely on the contents of the super block in the buffer after we
-> > mount the file system? If so, then my patch stands. I'll be happy to
-> > extend it if needed. Below one may find a step by step interpretation of
-> > the reproducer.
-> >
-> > We have a strace log for the same bug, but on Android 5.15:
-> > https://syzkaller.appspot.com/text?tag=CrashLog&x=14ecec8cc80000
-> >
-> > Look for pid 328. You notice that the bpf() syscalls return error, so I
-> > commented them out in the c repro to confirm that they are not the
-> > cause. The bug reproduced without the bpf() calls. One can find the c
-> > repro at:
-> > https://syzkaller.appspot.com/text?tag=ReproC&x=17c5fc50c80000
-> >
-> > Let's look at these calls, just before the bug was hit:
-> > [pid   328] open("./bus",
-> > O_RDWR|O_CREAT|O_TRUNC|O_NONBLOCK|O_SYNC|O_DIRECT|O_LARGEFILE|O_NOATIME,
-> > 000) = 4
-> > [pid   328] mount("/dev/loop0", "./bus", NULL, MS_BIND, NULL) = 0
-> > [pid   328] open("./bus", O_RDWR|O_SYNC|O_NOATIME|0x3c) = 5
-> > [pid   328] mmap(0x20000000, 6291456,
-> > PROT_READ|PROT_WRITE|PROT_EXEC|PROT_SEM|0x47ffff0, MAP_SHARED|MAP_FIXED,
-> > 5, 0) = 0x20000000
->
-> Yeah, looking at the reproducer, before this the reproducer also mounts
-> /dev/loop0 as ext4 filesystem.
->
-> > - ./bus is created (if it does not exist), fd 4 is returned.
-> > - /dev/loop0 is mounted to ./bus
-> > - then it creates a new file descriptor (5) for the same ./bus
-> > - then it creates a mapping for ./bus starting at offset zero. The
-> > mapped area is at 0x20000000 and is of 0x600000ul length.
->
-> So the result is that the reproducer modified the block device while it is
-> mounted by the filesystem. We know cases like this can crash the kernel and
-> it is inherently difficult to fix. We have to trust the buffer cache
-> contents as otherwise the performance will be unacceptable. For historical
-> reasons we also have to allow modifications of buffer cache while ext4 is
-> mounted because tune2fs uses this to e.g. update the label of a mounted
-> filesystem.
->
-> Long-term we are moving ext4 in a direction where we can disallow block
-> device modifications while the fs is mounted but we are not there yet. I've
-> discussed some shorter-term solution to avoid such known problems with syzbot
-> developers and what seems plausible would be a kconfig option to disallow
-> writing to a block device when it is exclusively open by someone else.
-> But so far I didn't get to trying whether this would reasonably work. Would
-> you be interested in having a look into this?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   eeac8ede17557680855031c6f305ece2378af326
+commit: bad1eaa6ac312ffd7aa46dd5a4d9843b824aa023 ptp: Add a driver for InES time stamping IP core.
+date:   3 years, 3 months ago
+config: x86_64-randconfig-a013-20230313 (https://download.01.org/0day-ci/archive/20230313/202303132337.r2XEl3lP-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bad1eaa6ac312ffd7aa46dd5a4d9843b824aa023
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bad1eaa6ac312ffd7aa46dd5a4d9843b824aa023
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/ptp/
 
-Hi Jan,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303132337.r2XEl3lP-lkp@intel.com/
 
-Does this affect only the loop device or also USB storage devices?
-Say, if the USB device returns different contents during mount and on
-subsequent reads?
+All warnings (new ones prefixed by >>):
+
+   drivers/ptp/ptp_ines.c:481:37: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+                             tag_to_msgtype(ts->tag & 0x7), *msgtype & 0xf);
+                                                            ^~~~~~~~~~~~~~
+   include/linux/device.h:1792:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   drivers/ptp/ptp_ines.c:491:19: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                             ts->portnum, ntohs(*portn));
+                                          ^~~~~~~~~~~~~
+   include/linux/device.h:1792:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:42:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:104:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/ptp/ptp_ines.c:496:17: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                             ts->seqid, ntohs(*seqid));
+                                        ^~~~~~~~~~~~~
+   include/linux/device.h:1792:47: note: expanded from macro 'dev_dbg'
+                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                                       ~~~     ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:42:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:104:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/ptp/ptp_ines.c:837:34: warning: unused variable 'ines_ptp_ctrl_of_match' [-Wunused-const-variable]
+   static const struct of_device_id ines_ptp_ctrl_of_match[] = {
+                                    ^
+   4 warnings generated.
+
+
+vim +/ines_ptp_ctrl_of_match +837 drivers/ptp/ptp_ines.c
+
+   836	
+ > 837	static const struct of_device_id ines_ptp_ctrl_of_match[] = {
+   838		{ .compatible = "ines,ptp-ctrl" },
+   839		{ }
+   840	};
+   841	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
