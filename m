@@ -1,51 +1,42 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A703D7A;
-	Mon, 13 Mar 2023 18:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A2D881E;
+	Mon, 13 Mar 2023 19:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678732847; x=1710268847;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JHNQMG+SmEvryqcuY67cCs5r39GOh8n5At5NploTfC4=;
-  b=SkoKhQa/DUmb9aSr56VJLIlEEw7dAvZ6hCT4WzAM7eOXxUFIjNk8WstG
-   OjBZHgoqk27A2KQm0kd4F5yHRlvuu24jA8Pn+fCgJBTtWVIv5dSvIYMNm
-   AR2aMk1nI4zjtdIJECrk29zEvG0runyro7E2eVUZ7HkD+uB7JwX3xqbQw
-   4OveYrmlisiYxxXHCLkf7v9L428GzTq8Ltd3SH+YxeoJy5aaA32NH5f1X
-   ZSBTQZvPOrozajDqTFhYFPsJSRLkvSYd/pvQavykFTyHq5+TCU1bxoRbU
-   7YCu5CB6imaQsDViYspC/m/5cKQ5kHoCJcRhaWkcTUGnYxfvnb+QuH7c9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399821604"
+  t=1678735301; x=1710271301;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=lSjmJQeRGnGTPyw0qM4AQ1aCsXMaONbghYyGyYC86nw=;
+  b=eIiy69cPI7Xe+TRMo8oc6VZ9xZjkGBy4W80Q1QDFPII8r8n6lCcSzOHm
+   inD0U8/EMsqefogLNv82CThjCUUBKcZsbeQOZ5VIcrHToh/Kt6ShicBl4
+   LKMb/3PN2QY3X8bWO75pNW4KhQGmZBaRmfw3/hBcRYxR9qe2ui5Q5xp3o
+   u+P52hWAJ/vLT43Pef7bqwLwMe3w/Rj5jAGsiGukc30jhhghZ82i7G0Tb
+   wTyf5P/vaNv6gXW6hAWBv13Jr/itRLK06l9QGtI/mHDBFd0dZkeziikiY
+   5k3f3xZTrYfzMkwAJVS7eQTmyDBWRMjtJxjaNKUEBDa4I2JhjR/pAN9ti
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="423511127"
 X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="399821604"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 11:40:41 -0700
+   d="scan'208";a="423511127"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 12:21:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="708978883"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="747719199"
 X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="708978883"
+   d="scan'208";a="747719199"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 13 Mar 2023 11:40:38 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 13 Mar 2023 12:21:39 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pbn65-00060Q-27;
-	Mon, 13 Mar 2023 18:40:37 +0000
-Date: Tue, 14 Mar 2023 02:40:00 +0800
+	id 1pbnjn-00062m-1A;
+	Mon, 13 Mar 2023 19:21:39 +0000
+Date: Tue, 14 Mar 2023 03:21:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [rft, PATCH v1 1/1] gpio: Drop unused inclusions from of_gpio.h
-Message-ID: <202303140220.FQmu9huZ-lkp@intel.com>
-References: <20230313144557.35856-1-andriy.shevchenko@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: net/mac80211/he.c:158:33: warning: taking address of packed member
+ 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value
+Message-ID: <202303140338.cK6wfgbh-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,215 +45,237 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313144557.35856-1-andriy.shevchenko@linux.intel.com>
+net/mac80211/he.c: 158:33: warning: taking address of packed member
+ 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 160:12: warning: taking address of packed member
+ 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 169:34: warning: taking address of packed member
+ 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 171:13: warning: taking address of packed member
+ 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
+ an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 186:34: warning: taking address of packed member
+ 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
+ in an unaligned pointer value [-Waddress-of-packed-member]
+net/mac80211/he.c: 188:13: warning: taking address of packed member
+ 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
+ in an unaligned pointer value [-Waddress-of-packed-member]
 
-Hi Andy,
+TO: Wen Gong <wgong@codeaurora.org>
+CC: Johannes Berg <johannes.berg@intel.com>
 
-I love your patch! Yet something to improve:
+Hi Wen,
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.3-rc2 next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+FYI, the error/warning still remains.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpio-Drop-unused-inclusions-from-of_gpio-h/20230313-224656
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20230313144557.35856-1-andriy.shevchenko%40linux.intel.com
-patch subject: [rft, PATCH v1 1/1] gpio: Drop unused inclusions from of_gpio.h
-config: arm-randconfig-r046-20230312 (https://download.01.org/0day-ci/archive/20230314/202303140220.FQmu9huZ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git linux-5.15.y
+head:   2ddbd0f967b34872290e0f98fae32b91b4de7b87
+commit: 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6 mac80211: reduce peer HE MCS/NSS to own capabilities
+date:   2 years, 2 months ago
+config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20230314/202303140338.cK6wfgbh-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/b108d11788b6db9e37a6c4b3110c09cecf30a46c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/gpio-Drop-unused-inclusions-from-of_gpio-h/20230313-224656
-        git checkout b108d11788b6db9e37a6c4b3110c09cecf30a46c
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64el-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus stable/linux-5.15.y
+        git checkout 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/video/backlight/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/ net/ipv6/ net/mac80211/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303140220.FQmu9huZ-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303140338.cK6wfgbh-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/video/backlight/hx8357.c:324:2: error: call to undeclared function 'gpio_set_value'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           gpio_set_value(lcd->reset, 1);
-           ^
-   drivers/video/backlight/hx8357.c:324:2: note: did you mean 'gpiod_set_value'?
-   include/linux/gpio/consumer.h:122:6: note: 'gpiod_set_value' declared here
-   void gpiod_set_value(struct gpio_desc *desc, int value);
-        ^
->> drivers/video/backlight/hx8357.c:344:3: error: call to undeclared function 'gpio_set_value_cansleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   gpio_set_value_cansleep(lcd->im_pins[0], 1);
-                   ^
-   drivers/video/backlight/hx8357.c:344:3: note: did you mean 'gpiod_set_value_cansleep'?
-   include/linux/gpio/consumer.h:144:6: note: 'gpiod_set_value_cansleep' declared here
-   void gpiod_set_value_cansleep(struct gpio_desc *desc, int value);
-        ^
->> drivers/video/backlight/hx8357.c:605:7: error: call to undeclared function 'gpio_is_valid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (!gpio_is_valid(lcd->reset)) {
-                ^
-   drivers/video/backlight/hx8357.c:605:7: note: did you mean 'uuid_is_valid'?
-   include/linux/uuid.h:102:19: note: 'uuid_is_valid' declared here
-   bool __must_check uuid_is_valid(const char *uuid);
-                     ^
->> drivers/video/backlight/hx8357.c:610:8: error: call to undeclared function 'devm_gpio_request_one'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = devm_gpio_request_one(&spi->dev, lcd->reset,
-                 ^
->> drivers/video/backlight/hx8357.c:611:9: error: use of undeclared identifier 'GPIOF_OUT_INIT_HIGH'; did you mean 'GPIOD_OUT_HIGH'?
-                                       GPIOF_OUT_INIT_HIGH,
-                                       ^~~~~~~~~~~~~~~~~~~
-                                       GPIOD_OUT_HIGH
-   include/linux/gpio/consumer.h:51:2: note: 'GPIOD_OUT_HIGH' declared here
-           GPIOD_OUT_HIGH  = GPIOD_FLAGS_BIT_DIR_SET | GPIOD_FLAGS_BIT_DIR_OUT |
-           ^
->> drivers/video/backlight/hx8357.c:636:11: error: use of undeclared identifier 'GPIOF_OUT_INIT_LOW'; did you mean 'GPIOD_OUT_LOW'?
-                                                       GPIOF_OUT_INIT_LOW,
-                                                       ^~~~~~~~~~~~~~~~~~
-                                                       GPIOD_OUT_LOW
-   include/linux/gpio/consumer.h:50:2: note: 'GPIOD_OUT_LOW' declared here
-           GPIOD_OUT_LOW   = GPIOD_FLAGS_BIT_DIR_SET | GPIOD_FLAGS_BIT_DIR_OUT,
-           ^
-   6 errors generated.
+   In file included from net/mac80211/he.c:9:
+   In file included from net/mac80211/ieee80211_i.h:16:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/net/checksum.h:22:
+   arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: input with type 'unsigned long' matching output with type '__wsum' (aka 'unsigned int')
+           : "0" ((__force unsigned long)daddr),
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/mac80211/he.c:9:
+   In file included from net/mac80211/ieee80211_i.h:30:
+   In file included from include/net/mac80211.h:22:
+   In file included from include/net/codel.h:48:
+   In file included from include/net/inet_ecn.h:9:
+   In file included from include/net/inet_sock.h:22:
+   In file included from include/net/sock.h:61:
+   include/linux/poll.h:142:27: warning: division by zero is undefined [-Wdivision-by-zero]
+                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+                                           ^~~~~~~~~
+   include/linux/poll.h:140:32: note: expanded from macro 'M'
+   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
+           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+                                                            ^ ~~~~~~~~~
+   include/linux/poll.h:142:39: warning: division by zero is undefined [-Wdivision-by-zero]
+                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+                                                       ^~~~~~~~~
+   include/linux/poll.h:140:32: note: expanded from macro 'M'
+   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
+           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+                                                            ^ ~~~~~~~~~
+>> net/mac80211/he.c:158:33: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+           ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:159:12: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &he_cap->he_mcs_nss_supp.rx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:160:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:161:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                         &he_cap->he_mcs_nss_supp.tx_mcs_80);
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:169:34: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:170:13: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.rx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:171:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:172:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.tx_mcs_160);
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:174:29: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:175:29: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:186:34: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:187:13: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/mac80211/he.c:188:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:189:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                                                 &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:191:29: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/mac80211/he.c:192:29: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   18 warnings and 1 error generated.
 
 
-vim +/gpio_set_value +324 drivers/video/backlight/hx8357.c
+vim +158 net/mac80211/he.c
 
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  318  
-fb52566873ca8c Alexandre Belloni 2013-08-01  319  static void hx8357_lcd_reset(struct lcd_device *lcdev)
-fb52566873ca8c Alexandre Belloni 2013-08-01  320  {
-fb52566873ca8c Alexandre Belloni 2013-08-01  321  	struct hx8357_data *lcd = lcd_get_data(lcdev);
-fb52566873ca8c Alexandre Belloni 2013-08-01  322  
-fb52566873ca8c Alexandre Belloni 2013-08-01  323  	/* Reset the screen */
-fb52566873ca8c Alexandre Belloni 2013-08-01 @324  	gpio_set_value(lcd->reset, 1);
-fb52566873ca8c Alexandre Belloni 2013-08-01  325  	usleep_range(10000, 12000);
-fb52566873ca8c Alexandre Belloni 2013-08-01  326  	gpio_set_value(lcd->reset, 0);
-fb52566873ca8c Alexandre Belloni 2013-08-01  327  	usleep_range(10000, 12000);
-fb52566873ca8c Alexandre Belloni 2013-08-01  328  	gpio_set_value(lcd->reset, 1);
-fb52566873ca8c Alexandre Belloni 2013-08-01  329  
-fb52566873ca8c Alexandre Belloni 2013-08-01  330  	/* The controller needs 120ms to recover from reset */
-fb52566873ca8c Alexandre Belloni 2013-08-01  331  	msleep(120);
-fb52566873ca8c Alexandre Belloni 2013-08-01  332  }
-fb52566873ca8c Alexandre Belloni 2013-08-01  333  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  334  static int hx8357_lcd_init(struct lcd_device *lcdev)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  335  {
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  336  	struct hx8357_data *lcd = lcd_get_data(lcdev);
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  337  	int ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  338  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  339  	/*
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  340  	 * Set the interface selection pins to SPI mode, with three
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  341  	 * wires
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  342  	 */
-ccf9901ffec4b4 Maxime Ripard     2013-08-01  343  	if (lcd->use_im_pins) {
-8a6c1dd55168b5 Maxime Ripard     2013-02-21 @344  		gpio_set_value_cansleep(lcd->im_pins[0], 1);
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  345  		gpio_set_value_cansleep(lcd->im_pins[1], 0);
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  346  		gpio_set_value_cansleep(lcd->im_pins[2], 1);
-ccf9901ffec4b4 Maxime Ripard     2013-08-01  347  	}
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  348  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  349  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_power,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  350  				ARRAY_SIZE(hx8357_seq_power));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  351  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  352  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  353  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  354  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_vcom,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  355  				ARRAY_SIZE(hx8357_seq_vcom));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  356  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  357  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  358  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  359  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_power_normal,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  360  				ARRAY_SIZE(hx8357_seq_power_normal));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  361  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  362  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  363  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  364  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_panel_driving,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  365  				ARRAY_SIZE(hx8357_seq_panel_driving));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  366  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  367  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  368  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  369  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_display_frame,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  370  				ARRAY_SIZE(hx8357_seq_display_frame));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  371  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  372  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  373  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  374  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_panel_related,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  375  				ARRAY_SIZE(hx8357_seq_panel_related));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  376  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  377  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  378  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  379  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_undefined1,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  380  				ARRAY_SIZE(hx8357_seq_undefined1));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  381  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  382  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  383  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  384  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_undefined2,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  385  				ARRAY_SIZE(hx8357_seq_undefined2));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  386  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  387  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  388  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  389  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_gamma,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  390  				ARRAY_SIZE(hx8357_seq_gamma));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  391  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  392  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  393  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  394  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_address_mode,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  395  				ARRAY_SIZE(hx8357_seq_address_mode));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  396  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  397  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  398  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  399  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_pixel_format,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  400  				ARRAY_SIZE(hx8357_seq_pixel_format));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  401  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  402  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  403  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  404  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_column_address,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  405  				ARRAY_SIZE(hx8357_seq_column_address));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  406  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  407  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  408  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  409  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_page_address,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  410  				ARRAY_SIZE(hx8357_seq_page_address));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  411  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  412  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  413  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  414  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_rgb,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  415  				ARRAY_SIZE(hx8357_seq_rgb));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  416  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  417  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  418  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  419  	ret = hx8357_spi_write_array(lcdev, hx8357_seq_display_mode,
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  420  				ARRAY_SIZE(hx8357_seq_display_mode));
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  421  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  422  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  423  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  424  	ret = hx8357_spi_write_byte(lcdev, HX8357_EXIT_SLEEP_MODE);
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  425  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  426  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  427  
-fb52566873ca8c Alexandre Belloni 2013-08-01  428  	/*
-fb52566873ca8c Alexandre Belloni 2013-08-01  429  	 * The controller needs 120ms to fully recover from exiting sleep mode
-fb52566873ca8c Alexandre Belloni 2013-08-01  430  	 */
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  431  	msleep(120);
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  432  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  433  	ret = hx8357_spi_write_byte(lcdev, HX8357_SET_DISPLAY_ON);
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  434  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  435  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  436  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  437  	usleep_range(5000, 7000);
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  438  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  439  	ret = hx8357_spi_write_byte(lcdev, HX8357_WRITE_MEMORY_START);
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  440  	if (ret < 0)
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  441  		return ret;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  442  
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  443  	return 0;
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  444  }
-8a6c1dd55168b5 Maxime Ripard     2013-02-21  445  
+   105	
+   106	void
+   107	ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
+   108					  struct ieee80211_supported_band *sband,
+   109					  const u8 *he_cap_ie, u8 he_cap_len,
+   110					  const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
+   111					  struct sta_info *sta)
+   112	{
+   113		struct ieee80211_sta_he_cap *he_cap = &sta->sta.he_cap;
+   114		struct ieee80211_sta_he_cap own_he_cap = sband->iftype_data->he_cap;
+   115		struct ieee80211_he_cap_elem *he_cap_ie_elem = (void *)he_cap_ie;
+   116		u8 he_ppe_size;
+   117		u8 mcs_nss_size;
+   118		u8 he_total_size;
+   119		bool own_160, peer_160, own_80p80, peer_80p80;
+   120	
+   121		memset(he_cap, 0, sizeof(*he_cap));
+   122	
+   123		if (!he_cap_ie || !ieee80211_get_he_sta_cap(sband))
+   124			return;
+   125	
+   126		/* Make sure size is OK */
+   127		mcs_nss_size = ieee80211_he_mcs_nss_size(he_cap_ie_elem);
+   128		he_ppe_size =
+   129			ieee80211_he_ppe_size(he_cap_ie[sizeof(he_cap->he_cap_elem) +
+   130							mcs_nss_size],
+   131					      he_cap_ie_elem->phy_cap_info);
+   132		he_total_size = sizeof(he_cap->he_cap_elem) + mcs_nss_size +
+   133				he_ppe_size;
+   134		if (he_cap_len < he_total_size)
+   135			return;
+   136	
+   137		memcpy(&he_cap->he_cap_elem, he_cap_ie, sizeof(he_cap->he_cap_elem));
+   138	
+   139		/* HE Tx/Rx HE MCS NSS Support Field */
+   140		memcpy(&he_cap->he_mcs_nss_supp,
+   141		       &he_cap_ie[sizeof(he_cap->he_cap_elem)], mcs_nss_size);
+   142	
+   143		/* Check if there are (optional) PPE Thresholds */
+   144		if (he_cap->he_cap_elem.phy_cap_info[6] &
+   145		    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT)
+   146			memcpy(he_cap->ppe_thres,
+   147			       &he_cap_ie[sizeof(he_cap->he_cap_elem) + mcs_nss_size],
+   148			       he_ppe_size);
+   149	
+   150		he_cap->has_he = true;
+   151	
+   152		sta->cur_max_bandwidth = ieee80211_sta_cap_rx_bw(sta);
+   153		sta->sta.bandwidth = ieee80211_sta_cur_vht_bw(sta);
+   154	
+   155		if (sband->band == NL80211_BAND_6GHZ && he_6ghz_capa)
+   156			ieee80211_update_from_he_6ghz_capa(he_6ghz_capa, sta);
+   157	
+ > 158		ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
+ > 159					      &he_cap->he_mcs_nss_supp.rx_mcs_80,
+ > 160					      &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
+ > 161					      &he_cap->he_mcs_nss_supp.tx_mcs_80);
+   162	
+   163		own_160 = own_he_cap.he_cap_elem.phy_cap_info[0] &
+   164			  IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   165		peer_160 = he_cap->he_cap_elem.phy_cap_info[0] &
+   166			   IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   167	
+   168		if (peer_160 && own_160) {
+ > 169			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
+   170						      &he_cap->he_mcs_nss_supp.rx_mcs_160,
+ > 171						      &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
+ > 172						      &he_cap->he_mcs_nss_supp.tx_mcs_160);
+   173		} else if (peer_160 && !own_160) {
+   174			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
+ > 175			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
+   176			he_cap->he_cap_elem.phy_cap_info[0] &=
+   177				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
+   178		}
+   179	
+   180		own_80p80 = own_he_cap.he_cap_elem.phy_cap_info[0] &
+   181			    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   182		peer_80p80 = he_cap->he_cap_elem.phy_cap_info[0] &
+   183			     IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   184	
+   185		if (peer_80p80 && own_80p80) {
+ > 186			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
+   187						      &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
+ > 188						      &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
+   189						      &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+   190		} else if (peer_80p80 && !own_80p80) {
+   191			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
+   192			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
+   193			he_cap->he_cap_elem.phy_cap_info[0] &=
+   194				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
+   195		}
+   196	}
+   197	
 
 -- 
 0-DAY CI Kernel Test Service
