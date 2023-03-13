@@ -1,43 +1,52 @@
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A662D23A7;
-	Mon, 13 Mar 2023 09:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB8523BF;
+	Mon, 13 Mar 2023 09:55:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678701310; x=1710237310;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3Lo0W/gQruyw6MIUumFx51URQ+ycLvofKkX4btabde4=;
-  b=bYl2x/+p5z5uh5d9LoSuclmXkf45W9Wh+t05D5v+rHkEYkk/7qyto7cQ
-   XZFBQAhZWRX+Qi55FlveyMcFY1zItsb6iYKC0tv5Qe0EppHTLzoI9S7s2
-   HaSHQbpnOdWNr3UzIKPPgL4b60kV9DjSqGUTKQFjYD4uDzi+aCDbjFMK2
-   CSX0R+C9R/WUQRfSnPwuTa4gQDWw5aqG4i5+iiHUd3c+bA+oqrnBwBZb4
-   9zRKxfxiDT1PhUVtwgtMFvBzX6HJ9poRgM6HltYGHUOvgpL1utau44Qre
-   4bHaOyuGBQyKPI/qIAUWOkLHsE3YTLgG1p4wscOvmUBsEXyzOEKuf85I3
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338655793"
+  t=1678701312; x=1710237312;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6MsZIZ9wXPpyDXI+vkAXY5STqCo+1yxkx3xmgRky9to=;
+  b=HKdhA0BmYD/gjRpi+DZC3fpsnRZO3Dco5w4Q0nvpaalfcMrXg7QTFRH2
+   tI8222FkcbqZ+zqNNljOn8f9FvLccPVuEHgnz4gvyv6aXvqDrCDByt8rV
+   rbmvYZR/gx/gznC8k+Wl8hvdbkF9iaegQhxaLZSWpJcyf9A7sgyqBDgUV
+   ZuL/kP4YVx22/dS52tqjbGW5DPq09MvYVT4wptiZNXL62kH0LdGC8BpSa
+   eI1o88PHg15oG9l1f/4/gw0/y9UVexAccI3FWyawgMNdVfSa5WIeYG1Li
+   u2M5PJKBMSlXms8hDPbgIP8D8FXqU/2ubeFq0MZ7hodapGryyrTNsII7h
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338655794"
 X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="338655793"
+   d="scan'208";a="338655794"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:55:10 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:55:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="671836652"
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="671836653"
 X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="671836652"
+   d="scan'208";a="671836653"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
   by orsmga007.jf.intel.com with ESMTP; 13 Mar 2023 02:55:08 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pbetY-0005Xa-0R;
+	id 1pbetY-0005Xc-0U;
 	Mon, 13 Mar 2023 09:55:08 +0000
-Date: Mon, 13 Mar 2023 17:54:46 +0800
+Date: Mon, 13 Mar 2023 17:54:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ben Skeggs <bskeggs@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [skeggsb-nouveau:01.03-gsp-ada 58/68]
- drivers/gpu/drm/nouveau/nvkm/engine/fifo/r525.c:287:1: warning: no previous
- prototype for function 'r525_fifo_runl_ctor'
-Message-ID: <202303131759.upyDcLQv-lkp@intel.com>
+To: Komal Bajaj <quic_kbajaj@quicinc.com>, Rob Herring <robh+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+	Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Andy Gross <agross@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Komal Bajaj <quic_kbajaj@quicinc.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 4/5] soc: qcom: Add LLCC support for multi channel DDR
+Message-ID: <202303131722.uo5Li701-lkp@intel.com>
+References: <20230313071325.21605-5-quic_kbajaj@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,102 +55,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230313071325.21605-5-quic_kbajaj@quicinc.com>
 
-tree:   https://gitlab.freedesktop.org/skeggsb/nouveau 01.03-gsp-ada
-head:   89da5e5109a92f4be025e40b80d1f1a6c1d6d8c7
-commit: 09e551038a5b001eb367789a28e56c5bca36af72 [58/68] fifo
-config: riscv-randconfig-r026-20230313 (https://download.01.org/0day-ci/archive/20230313/202303131759.upyDcLQv-lkp@intel.com/config)
+Hi Komal,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.3-rc2 next-20230310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Komal-Bajaj/soc-qcom-llcc-Refactor-llcc-driver-to-support-multiple-configuration/20230313-151543
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230313071325.21605-5-quic_kbajaj%40quicinc.com
+patch subject: [PATCH 4/5] soc: qcom: Add LLCC support for multi channel DDR
+config: hexagon-randconfig-r041-20230312 (https://download.01.org/0day-ci/archive/20230313/202303131722.uo5Li701-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        git remote add skeggsb-nouveau https://gitlab.freedesktop.org/skeggsb/nouveau
-        git fetch --no-tags skeggsb-nouveau 01.03-gsp-ada
-        git checkout 09e551038a5b001eb367789a28e56c5bca36af72
+        # https://github.com/intel-lab-lkp/linux/commit/ef96faadeb37bb94f77361aef72e2d863fe6e0f9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Komal-Bajaj/soc-qcom-llcc-Refactor-llcc-driver-to-support-multiple-configuration/20230313-151543
+        git checkout ef96faadeb37bb94f77361aef72e2d863fe6e0f9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/qcom/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303131759.upyDcLQv-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303131722.uo5Li701-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/nouveau/nvkm/engine/fifo/r525.c:287:1: warning: no previous prototype for function 'r525_fifo_runl_ctor' [-Wmissing-prototypes]
-   r525_fifo_runl_ctor(struct nvkm_fifo *fifo)
-   ^
-   drivers/gpu/drm/nouveau/nvkm/engine/fifo/r525.c:286:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   1 warning generated.
+   In file included from drivers/soc/qcom/llcc-qcom.c:11:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/soc/qcom/llcc-qcom.c:11:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/soc/qcom/llcc-qcom.c:11:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/soc/qcom/llcc-qcom.c:20:10: fatal error: 'linux/qcom_scm.h' file not found
+   #include <linux/qcom_scm.h>
+            ^~~~~~~~~~~~~~~~~~
+   6 warnings and 1 error generated.
 
 
-vim +/r525_fifo_runl_ctor +287 drivers/gpu/drm/nouveau/nvkm/engine/fifo/r525.c
+vim +20 drivers/soc/qcom/llcc-qcom.c
 
-   284	
-   285	
-   286	int
- > 287	r525_fifo_runl_ctor(struct nvkm_fifo *fifo)
-   288	{
-   289		struct nvkm_subdev *subdev = &fifo->engine.subdev;
-   290		struct nvkm_gsp *gsp = subdev->device->gsp;
-   291		struct nvkm_runl *runl;
-   292		int ret;
-   293		NV2080_CTRL_FIFO_GET_DEVICE_INFO_TABLE_PARAMS *ctrl;
-   294	
-   295		//XXX: chid<->userd + per-RL chid
-   296		if ((ret = nvkm_chid_new(&nvkm_chan_event, subdev, 2048, 0, 2048, &fifo->cgid)) ||
-   297		    (ret = nvkm_chid_new(&nvkm_chan_event, subdev, 2048, 0, 2048, &fifo->chid)))
-   298			return ret;
-   299	
-   300		ctrl = nvkm_gsp_rm_ctrl_get(gsp, gsp->client, gsp->subdevice,
-   301					    NV2080_CTRL_CMD_FIFO_GET_DEVICE_INFO_TABLE, sizeof(*ctrl));
-   302		if (WARN_ON(IS_ERR(ctrl)))
-   303			return PTR_ERR(ctrl);
-   304	
-   305		ctrl = nvkm_gsp_rm_ctrl_push(gsp, ctrl, sizeof(*ctrl));
-   306		if (WARN_ON(IS_ERR(ctrl)))
-   307			return PTR_ERR(ctrl);
-   308	
-   309		for (int i = 0; i < ctrl->numEntries; i++) {
-   310			const u32 addr = ctrl->entries[i].engineData[ENGINE_INFO_TYPE_RUNLIST_PRI_BASE];
-   311			const u32 engn = ctrl->entries[i].engineData[ENGINE_INFO_TYPE_RM_ENGINE_TYPE];
-   312			const u32 id = ctrl->entries[i].engineData[ENGINE_INFO_TYPE_RUNLIST];
-   313			enum nvkm_subdev_type type;
-   314			int inst, nv2080;
-   315	
-   316			runl = nvkm_runl_get(fifo, id, addr);
-   317			if (!runl) {
-   318				runl = nvkm_runl_new(fifo, id, addr, 0 /*XXX: chid<->userd + per-RL chid*/);
-   319				if (WARN_ON(IS_ERR(runl)))
-   320					continue;
-   321			}
-   322	
-   323			inst = r525_fifo_engn_type(engn, &type);
-   324			if (inst < 0) {
-   325				nvkm_warn(subdev, "RM_ENGINE_TYPE 0x%x\n", engn);
-   326				continue;
-   327			}
-   328	
-   329			nv2080 = r525_fifo_2080_type(type, inst);
-   330			if (nv2080 < 0)
-   331				continue;
-   332	
-   333			if (type == NVKM_ENGINE_CE)
-   334				nvkm_runl_add(runl, nv2080, fifo->func->engn_ce, type, inst);
-   335			else
-   336				nvkm_runl_add(runl, nv2080, fifo->func->engn, type, inst);
-   337		}
-   338	
-   339		nvkm_gsp_rm_ctrl_done(gsp, ctrl);
-   340		return 0;
-   341	}
-   342	
+  > 20	#include <linux/qcom_scm.h>
+    21	#include <linux/soc/qcom/llcc-qcom.h>
+    22	
 
 -- 
 0-DAY CI Kernel Test Service
