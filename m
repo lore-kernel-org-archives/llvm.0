@@ -1,51 +1,44 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDB9322B;
-	Mon, 13 Mar 2023 17:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB24322B;
+	Mon, 13 Mar 2023 17:38:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678728464; x=1710264464;
+  t=1678729117; x=1710265117;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LiRcsdvUcHjSjrHumuqBshpBcS2sbw2ceIjGZzEcC9E=;
-  b=k0P+ykISqbB6ccpM4h1ArYXLmGwk34D6J40GpLuOi1ASRIit6IStXt8b
-   UI+WvJUuoWL+CL2MzqQOXf3depgjtlCaF6JfESq7MYBXTHvOstHAQpjAI
-   /LmV2LQsDMY1E+1MNhIfUhMwOUaFSlhSGq/8+NIYZfvy4W2CGTg6FijBK
-   EthuovE9n33II3B24GNNZFdFhOHtNioufDVO0GndxQRGAUWd/B2axP/xa
-   seE2SjVkn+7tuWqsCpcpHEg7MmT6q+9KcZwmpykvCh+KLDUZVlj7GT1Pq
-   scMe1Gn/oMR9EiIOu5/9+L+TH8tZJTliLcT4wlqMa/CXrle20dxEPTyya
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="317598102"
+  bh=qFbdBB38UXS7MxFTpRmyQ1RTtZxIblToMquyALsKQCA=;
+  b=X4axRvRBjRXqNDjiHFvg7C0Jd/MoZhmSriezo7jDgwyXNRxOnSlC7bDS
+   bUmJf719cn6H09GNH7htct3sKavE162LikiTUdCT5s7N0ewPUjDqp2B6U
+   mc3YtDdLeA05HyVjgP8Uc4QRNL4ACMQb54d/4yyZbLV2jfcPssja5bHX1
+   LqFx5KUmnn6q3OURsSGlSHo5oGX/lG2xHHF2/99/xtC9wOZQRHOKNMlCg
+   d1Jck/HvZNybaZEEsLQGE9ravw/VijFpQW1gtqxThvi1C7sgKgRnsEncs
+   NlFYv43wIWTAxRxp5FSDO8Y1C4Fs+O/GigIuCYV8K78MTKhpSALXFCcVE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="338759878"
 X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="317598102"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 10:27:36 -0700
+   d="scan'208";a="338759878"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 10:38:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="802535313"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="1008073246"
 X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="802535313"
+   d="scan'208";a="1008073246"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Mar 2023 10:27:33 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 13 Mar 2023 10:38:35 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pblxM-0005vl-2I;
-	Mon, 13 Mar 2023 17:27:32 +0000
-Date: Tue, 14 Mar 2023 01:27:14 +0800
+	id 1pbm82-0005x4-1r;
+	Mon, 13 Mar 2023 17:38:34 +0000
+Date: Tue, 14 Mar 2023 01:37:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [rft, PATCH v1 1/1] gpio: Drop unused inclusions from of_gpio.h
-Message-ID: <202303140127.447rXq8p-lkp@intel.com>
-References: <20230313144557.35856-1-andriy.shevchenko@linux.intel.com>
+To: Yin Fengwei <fengwei.yin@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 1/5] rmap: move hugetlb try_to_unmap to dedicated
+ function
+Message-ID: <202303140156.ZvGUC2dc-lkp@intel.com>
+References: <20230313124526.1207490-2-fengwei.yin@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,298 +47,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313144557.35856-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230313124526.1207490-2-fengwei.yin@intel.com>
 
-Hi Andy,
+Hi Yin,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on brgl/gpio/for-next]
-[also build test WARNING on linus/master v6.3-rc2 next-20230310]
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.3-rc2 next-20230310]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpio-Drop-unused-inclusions-from-of_gpio-h/20230313-224656
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20230313144557.35856-1-andriy.shevchenko%40linux.intel.com
-patch subject: [rft, PATCH v1 1/1] gpio: Drop unused inclusions from of_gpio.h
-config: x86_64-randconfig-a016-20230313 (https://download.01.org/0day-ci/archive/20230314/202303140127.447rXq8p-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Yin-Fengwei/rmap-move-hugetlb-try_to_unmap-to-dedicated-function/20230313-204656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230313124526.1207490-2-fengwei.yin%40intel.com
+patch subject: [PATCH v4 1/5] rmap: move hugetlb try_to_unmap to dedicated function
+config: x86_64-randconfig-a012-20230313 (https://download.01.org/0day-ci/archive/20230314/202303140156.ZvGUC2dc-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b108d11788b6db9e37a6c4b3110c09cecf30a46c
+        # https://github.com/intel-lab-lkp/linux/commit/c43d03caaff9b0b9a869fd2a9b8beed7bc833f2a
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/gpio-Drop-unused-inclusions-from-of_gpio-h/20230313-224656
-        git checkout b108d11788b6db9e37a6c4b3110c09cecf30a46c
+        git fetch --no-tags linux-review Yin-Fengwei/rmap-move-hugetlb-try_to_unmap-to-dedicated-function/20230313-204656
+        git checkout c43d03caaff9b0b9a869fd2a9b8beed7bc833f2a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/regulator/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303140127.447rXq8p-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303140156.ZvGUC2dc-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/regulator/s5m8767.c:274:2: error: implicit declaration of function 'gpio_set_value' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           gpio_set_value(s5m8767->buck_gpios[0], (temp_index >> 2) & 0x1);
-           ^
-   drivers/regulator/s5m8767.c:274:2: note: did you mean 'gpiod_set_value'?
-   include/linux/gpio/consumer.h:122:6: note: 'gpiod_set_value' declared here
-   void gpiod_set_value(struct gpio_desc *desc, int value);
-        ^
-   drivers/regulator/s5m8767.c:285:2: error: implicit declaration of function 'gpio_set_value' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           gpio_set_value(s5m8767->buck_gpios[2], temp_index & 0x1);
-           ^
-   drivers/regulator/s5m8767.c:493:8: error: implicit declaration of function 'gpio_is_valid' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   if (!gpio_is_valid(gpio)) {
-                        ^
-   drivers/regulator/s5m8767.c:493:8: note: did you mean 'uuid_is_valid'?
-   include/linux/uuid.h:102:19: note: 'uuid_is_valid' declared here
-   bool __must_check uuid_is_valid(const char *uuid);
-                     ^
-   drivers/regulator/s5m8767.c:511:8: error: implicit declaration of function 'gpio_is_valid' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   if (!gpio_is_valid(gpio)) {
-                        ^
-   drivers/regulator/s5m8767.c:535:18: error: implicit declaration of function 'of_get_child_by_name' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           regulators_np = of_get_child_by_name(pmic_np, "regulators");
-                           ^
->> drivers/regulator/s5m8767.c:535:16: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
-           regulators_np = of_get_child_by_name(pmic_np, "regulators");
-                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/regulator/s5m8767.c:542:26: error: implicit declaration of function 'of_get_child_count' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           pdata->num_regulators = of_get_child_count(regulators_np);
-                                   ^
-   drivers/regulator/s5m8767.c:542:26: note: did you mean 'of_get_child_by_name'?
-   drivers/regulator/s5m8767.c:535:18: note: 'of_get_child_by_name' declared here
-           regulators_np = of_get_child_by_name(pmic_np, "regulators");
-                           ^
-   drivers/regulator/s5m8767.c:548:3: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   of_node_put(regulators_np);
-                   ^
-   drivers/regulator/s5m8767.c:556:3: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   of_node_put(regulators_np);
-                   ^
-   drivers/regulator/s5m8767.c:562:2: error: implicit declaration of function 'for_each_child_of_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           for_each_child_of_node(regulators_np, reg_np) {
-           ^
-   drivers/regulator/s5m8767.c:562:47: error: expected ';' after expression
-           for_each_child_of_node(regulators_np, reg_np) {
-                                                        ^
-                                                        ;
-   drivers/regulator/s5m8767.c:564:8: error: implicit declaration of function 'of_node_name_eq' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           if (of_node_name_eq(reg_np, regulators[i].name))
-                               ^
-   drivers/regulator/s5m8767.c:571:4: error: 'continue' statement not in loop statement
-                           continue;
-                           ^
-   drivers/regulator/s5m8767.c:576:4: error: implicit declaration of function 'of_fwnode_handle' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           of_fwnode_handle(reg_np),
-                           ^
->> drivers/regulator/s5m8767.c:576:4: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct fwnode_handle *' [-Wint-conversion]
-                           of_fwnode_handle(reg_np),
-                           ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/gpio/consumer.h:573:28: note: passing argument to parameter 'fwnode' here
-                                           struct fwnode_handle *fwnode,
-                                                                 ^
-   drivers/regulator/s5m8767.c:583:4: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           of_node_put(reg_np);
-                           ^
-   drivers/regulator/s5m8767.c:595:7: error: implicit declaration of function 'of_property_read_u32' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   if (of_property_read_u32(reg_np, "op_mode",
-                       ^
-   drivers/regulator/s5m8767.c:606:2: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           of_node_put(regulators_np);
-           ^
-   drivers/regulator/s5m8767.c:608:6: error: implicit declaration of function 'of_get_property' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           if (of_get_property(pmic_np, "s5m8767,pmic-buck2-uses-gpio-dvs", NULL)) {
+>> mm/rmap.c:1513:6: error: implicit declaration of function 'huge_pte_dirty' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (huge_pte_dirty(pteval))
                ^
-   drivers/regulator/s5m8767.c:611:7: error: implicit declaration of function 'of_property_read_u32_array' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   if (of_property_read_u32_array(pmic_np,
-                       ^
-   drivers/regulator/s5m8767.c:622:7: error: implicit declaration of function 'of_property_read_u32_array' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   if (of_property_read_u32_array(pmic_np,
-                       ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   2 warnings and 20 errors generated.
+   1 error generated.
 
 
-vim +535 drivers/regulator/s5m8767.c
+vim +/huge_pte_dirty +1513 mm/rmap.c
 
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  519  
-cbb0ed495ca165 Axel Lin                 2013-02-13  520  static int s5m8767_pmic_dt_parse_pdata(struct platform_device *pdev,
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  521  					struct sec_platform_data *pdata)
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  522  {
-cbb0ed495ca165 Axel Lin                 2013-02-13  523  	struct sec_pmic_dev *iodev = dev_get_drvdata(pdev->dev.parent);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  524  	struct device_node *pmic_np, *regulators_np, *reg_np;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  525  	struct sec_regulator_data *rdata;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  526  	struct sec_opmode_data *rmode;
-04f9f068a619cc Chanwoo Choi             2013-10-10  527  	unsigned int i, dvs_voltage_nr = 8, ret;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  528  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  529  	pmic_np = iodev->dev->of_node;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  530  	if (!pmic_np) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  531  		dev_err(iodev->dev, "could not find pmic sub-node\n");
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  532  		return -ENODEV;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  533  	}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  534  
-4e52c03dfcdef5 Sachin Kamat             2014-02-13 @535  	regulators_np = of_get_child_by_name(pmic_np, "regulators");
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  536  	if (!regulators_np) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  537  		dev_err(iodev->dev, "could not find regulators sub-node\n");
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  538  		return -EINVAL;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  539  	}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  540  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  541  	/* count the number of regulators to be supported in pmic */
-1f91b6f6c747d3 Axel Lin                 2013-02-06  542  	pdata->num_regulators = of_get_child_count(regulators_np);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  543  
-a86854d0c599b3 Kees Cook                2018-06-12  544  	rdata = devm_kcalloc(&pdev->dev,
-a86854d0c599b3 Kees Cook                2018-06-12  545  			     pdata->num_regulators, sizeof(*rdata),
-a86854d0c599b3 Kees Cook                2018-06-12  546  			     GFP_KERNEL);
-a5872bd3398d0f Krzysztof Kozlowski      2021-01-21  547  	if (!rdata) {
-a5872bd3398d0f Krzysztof Kozlowski      2021-01-21  548  		of_node_put(regulators_np);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  549  		return -ENOMEM;
-a5872bd3398d0f Krzysztof Kozlowski      2021-01-21  550  	}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  551  
-a86854d0c599b3 Kees Cook                2018-06-12  552  	rmode = devm_kcalloc(&pdev->dev,
-a86854d0c599b3 Kees Cook                2018-06-12  553  			     pdata->num_regulators, sizeof(*rmode),
-a86854d0c599b3 Kees Cook                2018-06-12  554  			     GFP_KERNEL);
-a5872bd3398d0f Krzysztof Kozlowski      2021-01-21  555  	if (!rmode) {
-a5872bd3398d0f Krzysztof Kozlowski      2021-01-21  556  		of_node_put(regulators_np);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  557  		return -ENOMEM;
-a5872bd3398d0f Krzysztof Kozlowski      2021-01-21  558  	}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  559  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  560  	pdata->regulators = rdata;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  561  	pdata->opmode = rmode;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  562  	for_each_child_of_node(regulators_np, reg_np) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  563  		for (i = 0; i < ARRAY_SIZE(regulators); i++)
-c32569e358adea Rob Herring              2018-12-05  564  			if (of_node_name_eq(reg_np, regulators[i].name))
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  565  				break;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  566  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  567  		if (i == ARRAY_SIZE(regulators)) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  568  			dev_warn(iodev->dev,
-0c9721a5d1dea7 Rob Herring              2018-08-27  569  			"don't know how to configure regulator %pOFn\n",
-0c9721a5d1dea7 Rob Herring              2018-08-27  570  			reg_np);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  571  			continue;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  572  		}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  573  
-5be0e549e18f8a Dmitry Torokhov          2019-10-04  574  		rdata->ext_control_gpiod = devm_fwnode_gpiod_get(
-63239e4bf7eff3 Linus Walleij            2018-10-15  575  			&pdev->dev,
-5be0e549e18f8a Dmitry Torokhov          2019-10-04 @576  			of_fwnode_handle(reg_np),
-5be0e549e18f8a Dmitry Torokhov          2019-10-04  577  			"s5m8767,pmic-ext-control",
-63239e4bf7eff3 Linus Walleij            2018-10-15  578  			GPIOD_OUT_HIGH | GPIOD_FLAGS_BIT_NONEXCLUSIVE,
-9ae5cc75ceaacf Linus Walleij            2018-05-14  579  			"s5m8767");
-dea6dd2ba63f8c Pan Bian                 2021-01-20  580  		if (PTR_ERR(rdata->ext_control_gpiod) == -ENOENT) {
-025bf37725f192 Waibel Georg             2019-06-20  581  			rdata->ext_control_gpiod = NULL;
-dea6dd2ba63f8c Pan Bian                 2021-01-20  582  		} else if (IS_ERR(rdata->ext_control_gpiod)) {
-dea6dd2ba63f8c Pan Bian                 2021-01-20  583  			of_node_put(reg_np);
-dea6dd2ba63f8c Pan Bian                 2021-01-20  584  			of_node_put(regulators_np);
-9ae5cc75ceaacf Linus Walleij            2018-05-14  585  			return PTR_ERR(rdata->ext_control_gpiod);
-dea6dd2ba63f8c Pan Bian                 2021-01-20  586  		}
-ee1e0994ab1bd3 Krzysztof Kozlowski      2014-01-24  587  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  588  		rdata->id = i;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  589  		rdata->initdata = of_get_regulator_init_data(
-072e78b12bf518 Javier Martinez Canillas 2014-11-10  590  						&pdev->dev, reg_np,
-072e78b12bf518 Javier Martinez Canillas 2014-11-10  591  						&regulators[i]);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  592  		rdata->reg_node = reg_np;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  593  		rdata++;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  594  		rmode->id = i;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  595  		if (of_property_read_u32(reg_np, "op_mode",
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  596  				&rmode->mode)) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  597  			dev_warn(iodev->dev,
-f3c7f7b636ef50 Christophe JAILLET       2019-12-03  598  				"no op_mode property at %pOF\n",
-7799167b7a14fe Rob Herring              2017-07-18  599  				reg_np);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  600  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  601  			rmode->mode = S5M8767_OPMODE_NORMAL_MODE;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  602  		}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  603  		rmode++;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  604  	}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  605  
-b7db01f3b3b86f Sachin Kamat             2014-02-13  606  	of_node_put(regulators_np);
-b7db01f3b3b86f Sachin Kamat             2014-02-13  607  
-04f9f068a619cc Chanwoo Choi             2013-10-10  608  	if (of_get_property(pmic_np, "s5m8767,pmic-buck2-uses-gpio-dvs", NULL)) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  609  		pdata->buck2_gpiodvs = true;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  610  
-04f9f068a619cc Chanwoo Choi             2013-10-10  611  		if (of_property_read_u32_array(pmic_np,
-04f9f068a619cc Chanwoo Choi             2013-10-10  612  				"s5m8767,pmic-buck2-dvs-voltage",
-04f9f068a619cc Chanwoo Choi             2013-10-10  613  				pdata->buck2_voltage, dvs_voltage_nr)) {
-04f9f068a619cc Chanwoo Choi             2013-10-10  614  			dev_err(iodev->dev, "buck2 voltages not specified\n");
-04f9f068a619cc Chanwoo Choi             2013-10-10  615  			return -EINVAL;
-04f9f068a619cc Chanwoo Choi             2013-10-10  616  		}
-04f9f068a619cc Chanwoo Choi             2013-10-10  617  	}
-04f9f068a619cc Chanwoo Choi             2013-10-10  618  
-04f9f068a619cc Chanwoo Choi             2013-10-10  619  	if (of_get_property(pmic_np, "s5m8767,pmic-buck3-uses-gpio-dvs", NULL)) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  620  		pdata->buck3_gpiodvs = true;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  621  
-04f9f068a619cc Chanwoo Choi             2013-10-10  622  		if (of_property_read_u32_array(pmic_np,
-04f9f068a619cc Chanwoo Choi             2013-10-10  623  				"s5m8767,pmic-buck3-dvs-voltage",
-04f9f068a619cc Chanwoo Choi             2013-10-10  624  				pdata->buck3_voltage, dvs_voltage_nr)) {
-04f9f068a619cc Chanwoo Choi             2013-10-10  625  			dev_err(iodev->dev, "buck3 voltages not specified\n");
-04f9f068a619cc Chanwoo Choi             2013-10-10  626  			return -EINVAL;
-04f9f068a619cc Chanwoo Choi             2013-10-10  627  		}
-04f9f068a619cc Chanwoo Choi             2013-10-10  628  	}
-04f9f068a619cc Chanwoo Choi             2013-10-10  629  
-04f9f068a619cc Chanwoo Choi             2013-10-10  630  	if (of_get_property(pmic_np, "s5m8767,pmic-buck4-uses-gpio-dvs", NULL)) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  631  		pdata->buck4_gpiodvs = true;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  632  
-04f9f068a619cc Chanwoo Choi             2013-10-10  633  		if (of_property_read_u32_array(pmic_np,
-04f9f068a619cc Chanwoo Choi             2013-10-10  634  				"s5m8767,pmic-buck4-dvs-voltage",
-04f9f068a619cc Chanwoo Choi             2013-10-10  635  				pdata->buck4_voltage, dvs_voltage_nr)) {
-04f9f068a619cc Chanwoo Choi             2013-10-10  636  			dev_err(iodev->dev, "buck4 voltages not specified\n");
-04f9f068a619cc Chanwoo Choi             2013-10-10  637  			return -EINVAL;
-04f9f068a619cc Chanwoo Choi             2013-10-10  638  		}
-04f9f068a619cc Chanwoo Choi             2013-10-10  639  	}
-04f9f068a619cc Chanwoo Choi             2013-10-10  640  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  641  	if (pdata->buck2_gpiodvs || pdata->buck3_gpiodvs ||
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  642  						pdata->buck4_gpiodvs) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  643  		ret = s5m8767_pmic_dt_parse_dvs_gpio(iodev, pdata, pmic_np);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  644  		if (ret)
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  645  			return -EINVAL;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  646  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  647  		if (of_property_read_u32(pmic_np,
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  648  				"s5m8767,pmic-buck-default-dvs-idx",
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  649  				&pdata->buck_default_idx)) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  650  			pdata->buck_default_idx = 0;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  651  		} else {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  652  			if (pdata->buck_default_idx >= 8) {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  653  				pdata->buck_default_idx = 0;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  654  				dev_info(iodev->dev,
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  655  				"invalid value for default dvs index, use 0\n");
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  656  			}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  657  		}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  658  	}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  659  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  660  	ret = s5m8767_pmic_dt_parse_ds_gpio(iodev, pdata, pmic_np);
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  661  	if (ret)
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  662  		return -EINVAL;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  663  
-033054e8603036 Chanwoo Choi             2013-10-10  664  	if (of_get_property(pmic_np, "s5m8767,pmic-buck2-ramp-enable", NULL))
-033054e8603036 Chanwoo Choi             2013-10-10  665  		pdata->buck2_ramp_enable = true;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  666  
-033054e8603036 Chanwoo Choi             2013-10-10  667  	if (of_get_property(pmic_np, "s5m8767,pmic-buck3-ramp-enable", NULL))
-033054e8603036 Chanwoo Choi             2013-10-10  668  		pdata->buck3_ramp_enable = true;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  669  
-033054e8603036 Chanwoo Choi             2013-10-10  670  	if (of_get_property(pmic_np, "s5m8767,pmic-buck4-ramp-enable", NULL))
-033054e8603036 Chanwoo Choi             2013-10-10  671  		pdata->buck4_ramp_enable = true;
-033054e8603036 Chanwoo Choi             2013-10-10  672  
-033054e8603036 Chanwoo Choi             2013-10-10  673  	if (pdata->buck2_ramp_enable || pdata->buck3_ramp_enable
-033054e8603036 Chanwoo Choi             2013-10-10  674  			|| pdata->buck4_ramp_enable) {
-033054e8603036 Chanwoo Choi             2013-10-10  675  		if (of_property_read_u32(pmic_np, "s5m8767,pmic-buck-ramp-delay",
-033054e8603036 Chanwoo Choi             2013-10-10  676  				&pdata->buck_ramp_delay))
-033054e8603036 Chanwoo Choi             2013-10-10  677  			pdata->buck_ramp_delay = 0;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  678  	}
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  679  
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  680  	return 0;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  681  }
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  682  #else
-cbb0ed495ca165 Axel Lin                 2013-02-13  683  static int s5m8767_pmic_dt_parse_pdata(struct platform_device *pdev,
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  684  					struct sec_platform_data *pdata)
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  685  {
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  686  	return 0;
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  687  }
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  688  #endif /* CONFIG_OF */
-26aec009f6b61c Amit Daniel Kachhap      2013-02-03  689  
+  1443	
+  1444	static bool try_to_unmap_one_hugetlb(struct folio *folio,
+  1445			struct vm_area_struct *vma, struct mmu_notifier_range range,
+  1446			struct page_vma_mapped_walk pvmw, unsigned long address,
+  1447			enum ttu_flags flags)
+  1448	{
+  1449		struct mm_struct *mm = vma->vm_mm;
+  1450		pte_t pteval;
+  1451		bool ret = true, anon = folio_test_anon(folio);
+  1452	
+  1453		/*
+  1454		 * The try_to_unmap() is only passed a hugetlb page
+  1455		 * in the case where the hugetlb page is poisoned.
+  1456		 */
+  1457		VM_BUG_ON_FOLIO(!folio_test_hwpoison(folio), folio);
+  1458		/*
+  1459		 * huge_pmd_unshare may unmap an entire PMD page.
+  1460		 * There is no way of knowing exactly which PMDs may
+  1461		 * be cached for this mm, so we must flush them all.
+  1462		 * start/end were already adjusted in caller
+  1463		 * (try_to_unmap_one) to cover this range.
+  1464		 */
+  1465		flush_cache_range(vma, range.start, range.end);
+  1466	
+  1467		/*
+  1468		 * To call huge_pmd_unshare, i_mmap_rwsem must be
+  1469		 * held in write mode.  Caller needs to explicitly
+  1470		 * do this outside rmap routines.
+  1471		 *
+  1472		 * We also must hold hugetlb vma_lock in write mode.
+  1473		 * Lock order dictates acquiring vma_lock BEFORE
+  1474		 * i_mmap_rwsem.  We can only try lock here and fail
+  1475		 * if unsuccessful.
+  1476		 */
+  1477		if (!anon) {
+  1478			VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
+  1479			if (!hugetlb_vma_trylock_write(vma)) {
+  1480				ret = false;
+  1481				goto out;
+  1482			}
+  1483			if (huge_pmd_unshare(mm, vma, address, pvmw.pte)) {
+  1484				hugetlb_vma_unlock_write(vma);
+  1485				flush_tlb_range(vma,
+  1486						range.start, range.end);
+  1487				mmu_notifier_invalidate_range(mm,
+  1488						range.start, range.end);
+  1489				/*
+  1490				 * The ref count of the PMD page was
+  1491				 * dropped which is part of the way map
+  1492				 * counting is done for shared PMDs.
+  1493				 * Return 'true' here.  When there is
+  1494				 * no other sharing, huge_pmd_unshare
+  1495				 * returns false and we will unmap the
+  1496				 * actual page and drop map count
+  1497				 * to zero.
+  1498				 */
+  1499				goto out;
+  1500			}
+  1501			hugetlb_vma_unlock_write(vma);
+  1502		}
+  1503		pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+  1504	
+  1505		/*
+  1506		 * Now the pte is cleared. If this pte was uffd-wp armed,
+  1507		 * we may want to replace a none pte with a marker pte if
+  1508		 * it's file-backed, so we don't lose the tracking info.
+  1509		 */
+  1510		pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
+  1511	
+  1512		/* Set the dirty flag on the folio now the pte is gone. */
+> 1513		if (huge_pte_dirty(pteval))
+  1514			folio_mark_dirty(folio);
+  1515	
+  1516		/* Update high watermark before we lower rss */
+  1517		update_hiwater_rss(mm);
+  1518	
+  1519		/* Poisoned hugetlb folio with TTU_HWPOISON always cleared in flags */
+  1520		pteval = swp_entry_to_pte(make_hwpoison_entry(&folio->page));
+  1521		set_huge_pte_at(mm, address, pvmw.pte, pteval);
+  1522		hugetlb_count_sub(folio_nr_pages(folio), mm);
+  1523	
+  1524		/*
+  1525		 * No need to call mmu_notifier_invalidate_range() it has be
+  1526		 * done above for all cases requiring it to happen under page
+  1527		 * table lock before mmu_notifier_invalidate_range_end()
+  1528		 *
+  1529		 * See Documentation/mm/mmu_notifier.rst
+  1530		 */
+  1531		page_remove_rmap(&folio->page, vma, true);
+  1532		/* No VM_LOCKED set in vma->vm_flags for hugetlb. So not
+  1533		 * necessary to call mlock_drain_local().
+  1534		 */
+  1535		folio_put(folio);
+  1536	
+  1537	out:
+  1538		return ret;
+  1539	}
+  1540	
 
 -- 
 0-DAY CI Kernel Test Service
