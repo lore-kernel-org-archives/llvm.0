@@ -1,18 +1,62 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646052569
-	for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 13:18:08 +0000 (UTC)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PZxyW19PdzrSrF;
-	Mon, 13 Mar 2023 21:17:07 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 21:17:58 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4161028F2
+	for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 14:43:43 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id cn21so19497834edb.0
+        for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 07:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678718621;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2h6sx1OZEM5O2Wj7lrFSv5VOGNWWsN079kjONBrmaTk=;
+        b=iBeP6qeAyEtBnJq8CBA8WjFWskFUyJF+jDz8+18kmpomP8HKAiALQMun2eIAMA7A6o
+         2D36RSpUKupuC5L1t+JbIpGwFFiODhVQ0YzfobXA22Rf/wk0i+5N2bBVL29YijtNz/15
+         J/v05oEzLsg3PtEOXyx8TH/Z7qQbEFKfNGjuV2xd8CgAwYQHfEzDpIQnqZn7bazQez2w
+         Oxmnd1irJjyv6GMj8BDSqildUeG8E8IXy016t64if2keFGV3aawchhpcERFe8WJwnrk+
+         JbR1ceXPLOv4YtSSd002CQOHrCWn99Eah60E05b32bQWTPraf0fWGMurVmTHSEzj+6Az
+         MHQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678718621;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2h6sx1OZEM5O2Wj7lrFSv5VOGNWWsN079kjONBrmaTk=;
+        b=avkuTStPqaDHB3H2uDuLqp1jISkSbiBDHUJZFsqeSNqaoRYCaXi/F2eJ0Zv++KuuZO
+         EHW/YOz0yMvOHV/kwbNfcMqmJdPAANBY909jDt1nu/WriXmhga7DxRlaDdYodIHMUpdr
+         sBJeZP9N0M84t2ZW1HZ1owZU/2VlYtF2KOFMMHbRt4WqAoTiNhPxfoLJ07Q+JjH3G4RF
+         z3nRjeHdjTBADdWVe81QrP1C0BhKIMvnaSVPy4eZkKOc2xIIVhlIIOvBw27fx18kHyKR
+         xhOqC1EDdnZK2btETAV0drr7aVGjDE6KutRGon1TlTcwbzHlVlAT0wlFdecZm8PYb8y/
+         ve7w==
+X-Gm-Message-State: AO0yUKWMH8mGUj9og338VA4qjIxxPcgR26FpBGTTLKZMisoA2Dlpb3kQ
+	ZMbAwbUg062yV+AJ8rZECw0REA==
+X-Google-Smtp-Source: AK7set8Itk1eWYQXLzYiaRpr9H89ftDQ8zfWody7n5GcqpqQdfu7Ax7XNP8erOCIWlNE7wRqouKc+Q==
+X-Received: by 2002:a17:907:3f90:b0:8de:acd1:90f0 with SMTP id hr16-20020a1709073f9000b008deacd190f0mr41798081ejc.3.1678718621376;
+        Mon, 13 Mar 2023 07:43:41 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.78])
+        by smtp.gmail.com with ESMTPSA id lg17-20020a170906f89100b008cd1f773754sm3521369ejb.5.2023.03.13.07.43.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 07:43:41 -0700 (PDT)
+Message-ID: <cfd49d97-613a-d18e-3a43-0d636ab20caf@linaro.org>
+Date: Mon, 13 Mar 2023 14:43:39 +0000
+Precedence: bulk
+X-Mailing-List: llvm@lists.linux.dev
+List-Id: <llvm.lists.linux.dev>
+List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
+List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
 Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
  ext4_group_desc_csum
+Content-Language: en-US
 To: Jan Kara <jack@suse.cz>, yebin <yebin@huaweicloud.com>
+Cc: syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
+ adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org,
+ ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com,
+ tytso@mit.edu, Lee Jones <joneslee@google.com>
 References: <000000000000ef6cf905f496e40b@google.com>
  <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
  <20230307103958.lo6ynoypgwreqmnq@quack3>
@@ -20,34 +64,14 @@ References: <000000000000ef6cf905f496e40b@google.com>
  <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
  <20230313115728.2wxy2qj4mqpwgrx7@quack3> <640F16B6.10100@huaweicloud.com>
  <20230313130151.bnarkjxx2u45bazf@quack3>
-CC: Tudor Ambarus <tudor.ambarus@linaro.org>, syzbot
-	<syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
-	<adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, <nathan@kernel.org>,
-	<ndesaulniers@google.com>, <syzkaller-bugs@googlegroups.com>,
-	<trix@redhat.com>, <tytso@mit.edu>, Lee Jones <joneslee@google.com>
-From: "yebin (H)" <yebin10@huawei.com>
-Message-ID: <640F2285.7060106@huawei.com>
-Date: Mon, 13 Mar 2023 21:17:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
-Precedence: bulk
-X-Mailing-List: llvm@lists.linux.dev
-List-Id: <llvm.lists.linux.dev>
-List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
-List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
 In-Reply-To: <20230313130151.bnarkjxx2u45bazf@quack3>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.185]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
 
+Hi, Jan, Ye,
 
-
-On 2023/3/13 21:01, Jan Kara wrote:
+On 3/13/23 13:01, Jan Kara wrote:
 > On Mon 13-03-23 20:27:34, yebin wrote:
 >> On 2023/3/13 19:57, Jan Kara wrote:
 >>> On Mon 13-03-23 11:11:18, Tudor Ambarus wrote:
@@ -93,31 +117,31 @@ On 2023/3/13 21:01, Jan Kara wrote:
 >>>>>>>> Hardware name: Google Google Compute Engine/Google Compute Engine,
 >>>>>>>> BIOS Google 01/21/2023
 >>>>>>>> Call Trace:
->>>>>>>>      <TASK>
->>>>>>>>      __dump_stack lib/dump_stack.c:88 [inline]
->>>>>>>>      dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
->>>>>>>>      print_address_description mm/kasan/report.c:306 [inline]
->>>>>>>>      print_report+0x163/0x4f0 mm/kasan/report.c:417
->>>>>>>>      kasan_report+0x13a/0x170 mm/kasan/report.c:517
->>>>>>>>      crc16+0x1fb/0x280 lib/crc16.c:58
->>>>>>>>      ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
->>>>>>>>      ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
->>>>>>>>      ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
->>>>>>>>      ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
->>>>>>>>      ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
->>>>>>>>      ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
->>>>>>>>      ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
->>>>>>>>      ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
->>>>>>>>      ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
->>>>>>>>      ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
->>>>>>>>      evict+0x2a4/0x620 fs/inode.c:664
->>>>>>>>      do_unlinkat+0x4f1/0x930 fs/namei.c:4327
->>>>>>>>      __do_sys_unlink fs/namei.c:4368 [inline]
->>>>>>>>      __se_sys_unlink fs/namei.c:4366 [inline]
->>>>>>>>      __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
->>>>>>>>      do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>>>>>      do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>>>>>      entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>>>>>     <TASK>
+>>>>>>>>     __dump_stack lib/dump_stack.c:88 [inline]
+>>>>>>>>     dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+>>>>>>>>     print_address_description mm/kasan/report.c:306 [inline]
+>>>>>>>>     print_report+0x163/0x4f0 mm/kasan/report.c:417
+>>>>>>>>     kasan_report+0x13a/0x170 mm/kasan/report.c:517
+>>>>>>>>     crc16+0x1fb/0x280 lib/crc16.c:58
+>>>>>>>>     ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
+>>>>>>>>     ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
+>>>>>>>>     ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
+>>>>>>>>     ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
+>>>>>>>>     ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
+>>>>>>>>     ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
+>>>>>>>>     ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
+>>>>>>>>     ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
+>>>>>>>>     ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
+>>>>>>>>     ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
+>>>>>>>>     evict+0x2a4/0x620 fs/inode.c:664
+>>>>>>>>     do_unlinkat+0x4f1/0x930 fs/namei.c:4327
+>>>>>>>>     __do_sys_unlink fs/namei.c:4368 [inline]
+>>>>>>>>     __se_sys_unlink fs/namei.c:4366 [inline]
+>>>>>>>>     __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
+>>>>>>>>     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>>>>>>>     do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>>>>>>>>     entry_SYSCALL_64_after_hwframe+0x63/0xcd
 >>>>>>>> RIP: 0033:0x7fbc85a8c0f9
 >>>>>>>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48
 >>>>>>>> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48>
@@ -128,7 +152,7 @@ On 2023/3/13 21:01, Jan Kara wrote:
 >>>>>>>> RBP: 00007fbc85ae7ae9 R08: 0000000000000000 R09: 0000000000000000
 >>>>>>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
 >>>>>>>> R13: 00007ffd5743beaf R14: 00007fbc86838300 R15: 0000000000022000
->>>>>>>>      </TASK>
+>>>>>>>>     </TASK>
 >>>>>>>>
 >>>>>>>> The buggy address belongs to the physical page:
 >>>>>>>> page:ffffea0001f78000 refcount:0 mapcount:-128
@@ -142,63 +166,64 @@ On 2023/3/13 21:01, Jan Kara wrote:
 >>>>>>>> page_owner tracks the page as freed
 >>>>>>>> page last allocated via order 1, migratetype Unmovable, gfp_mask
 >>>>>>>> 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, tgid 4855 (sshd), ts 43553490210, free_ts 58249059760
->>>>>>>>      prep_new_page mm/page_alloc.c:2531 [inline]
->>>>>>>>      get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
->>>>>>>>      __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
->>>>>>>>      alloc_slab_page+0x6a/0x160 mm/slub.c:1851
->>>>>>>>      allocate_slab mm/slub.c:1998 [inline]
->>>>>>>>      new_slab+0x84/0x2f0 mm/slub.c:2051
->>>>>>>>      ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
->>>>>>>>      __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
->>>>>>>>      kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
->>>>>>>>      mt_alloc_bulk lib/maple_tree.c:157 [inline]
->>>>>>>>      mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
->>>>>>>>      mas_node_count_gfp lib/maple_tree.c:1316 [inline]
->>>>>>>>      mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
->>>>>>>>      vma_expand+0x277/0x850 mm/mmap.c:541
->>>>>>>>      mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
->>>>>>>>      do_mmap+0x8c9/0xf70 mm/mmap.c:1411
->>>>>>>>      vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
->>>>>>>>      do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>>>>>      do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>>>>>      entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>>>>>     prep_new_page mm/page_alloc.c:2531 [inline]
+>>>>>>>>     get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
+>>>>>>>>     __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
+>>>>>>>>     alloc_slab_page+0x6a/0x160 mm/slub.c:1851
+>>>>>>>>     allocate_slab mm/slub.c:1998 [inline]
+>>>>>>>>     new_slab+0x84/0x2f0 mm/slub.c:2051
+>>>>>>>>     ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
+>>>>>>>>     __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+>>>>>>>>     kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
+>>>>>>>>     mt_alloc_bulk lib/maple_tree.c:157 [inline]
+>>>>>>>>     mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
+>>>>>>>>     mas_node_count_gfp lib/maple_tree.c:1316 [inline]
+>>>>>>>>     mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
+>>>>>>>>     vma_expand+0x277/0x850 mm/mmap.c:541
+>>>>>>>>     mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
+>>>>>>>>     do_mmap+0x8c9/0xf70 mm/mmap.c:1411
+>>>>>>>>     vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
+>>>>>>>>     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>>>>>>>     do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>>>>>>>>     entry_SYSCALL_64_after_hwframe+0x63/0xcd
 >>>>>>>> page last free stack trace:
->>>>>>>>      reset_page_owner include/linux/page_owner.h:24 [inline]
->>>>>>>>      free_pages_prepare mm/page_alloc.c:1446 [inline]
->>>>>>>>      free_pcp_prepare mm/page_alloc.c:1496 [inline]
->>>>>>>>      free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
->>>>>>>>      free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
->>>>>>>>      qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
->>>>>>>>      kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
->>>>>>>>      __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
->>>>>>>>      kasan_slab_alloc include/linux/kasan.h:201 [inline]
->>>>>>>>      slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
->>>>>>>>      slab_alloc_node mm/slub.c:3452 [inline]
->>>>>>>>      kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
->>>>>>>>      __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
->>>>>>>>      alloc_skb include/linux/skbuff.h:1270 [inline]
->>>>>>>>      alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
->>>>>>>>      sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
->>>>>>>>      unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
->>>>>>>>      sock_sendmsg_nosec net/socket.c:714 [inline]
->>>>>>>>      sock_sendmsg net/socket.c:734 [inline]
->>>>>>>>      __sys_sendto+0x475/0x5f0 net/socket.c:2117
->>>>>>>>      __do_sys_sendto net/socket.c:2129 [inline]
->>>>>>>>      __se_sys_sendto net/socket.c:2125 [inline]
->>>>>>>>      __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
->>>>>>>>      do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>>>>>      do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>>>>>      entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>>>>>     reset_page_owner include/linux/page_owner.h:24 [inline]
+>>>>>>>>     free_pages_prepare mm/page_alloc.c:1446 [inline]
+>>>>>>>>     free_pcp_prepare mm/page_alloc.c:1496 [inline]
+>>>>>>>>     free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
+>>>>>>>>     free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
+>>>>>>>>     qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
+>>>>>>>>     kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
+>>>>>>>>     __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
+>>>>>>>>     kasan_slab_alloc include/linux/kasan.h:201 [inline]
+>>>>>>>>     slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
+>>>>>>>>     slab_alloc_node mm/slub.c:3452 [inline]
+>>>>>>>>     kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
+>>>>>>>>     __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
+>>>>>>>>     alloc_skb include/linux/skbuff.h:1270 [inline]
+>>>>>>>>     alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
+>>>>>>>>     sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
+>>>>>>>>     unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
+>>>>>>>>     sock_sendmsg_nosec net/socket.c:714 [inline]
+>>>>>>>>     sock_sendmsg net/socket.c:734 [inline]
+>>>>>>>>     __sys_sendto+0x475/0x5f0 net/socket.c:2117
+>>>>>>>>     __do_sys_sendto net/socket.c:2129 [inline]
+>>>>>>>>     __se_sys_sendto net/socket.c:2125 [inline]
+>>>>>>>>     __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
+>>>>>>>>     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>>>>>>>     do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>>>>>>>>     entry_SYSCALL_64_after_hwframe+0x63/0xcd
 >>>>>>>>
 >>>>>>>> Memory state around the buggy address:
->>>>>>>>      ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>>>>>>>      ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>>>>>>>>     ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>>>>>>>>     ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 >>>>>>>>> ffff88807de00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>>>>>                        ^
->>>>>>>>      ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>>>>>      ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>>>>>>>>                       ^
+>>>>>>>>     ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>>>>>>>>     ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
 >>>>>>>> ==================================================================
 >>>>>>>>
+>>>>>>>
 >>>>>>> I think the patch from below should fix it.
 >>>>>>>
 >>>>>>> I printed le16_to_cpu(sbi->s_es->s_desc_size) and it was greater than
@@ -218,7 +243,7 @@ On 2023/3/13 21:01, Jan Kara wrote:
 >>>>>> to paper over the problem by not using the on-disk data... Maybe journal
 >>>>>> replay is corrupting the value or something like that?
 >>>>>>
->>>>>>                                   Honza
+>>>>>>                                  Honza
 >>>>>>
 >>>>> Ok, I agree. First thing would be to understand the reproducer and to
 >>>>> simplify it if possible. I haven't yet decoded what the syz repro is
@@ -273,12 +298,24 @@ On 2023/3/13 21:01, Jan Kara wrote:
 >>>
 >>> Long-term we are moving ext4 in a direction where we can disallow block
 >>> device modifications while the fs is mounted but we are not there yet. I've
+
+sounds good.
+
 >>> discussed some shorter-term solution to avoid such known problems with syzbot
 >>> developers and what seems plausible would be a kconfig option to disallow
 >>> writing to a block device when it is exclusively open by someone else.
+
+How do we determine when a block device is exclusively open by someone else?
+
 >>> But so far I didn't get to trying whether this would reasonably work. Would
 >>> you be interested in having a look into this?
+>>
 >> I am interested in this job. The file system is often damaged by writing
+
+I'm fine with Ye handling this. If that's not the case I can take a look
+too, but I need more pointers than the ones already provided, as I've
+recently started skimming over ext4.
+
 >> block devices, which is a headache. I have always wanted to eradicate
 >> this kind of problem.  A few months ago, I tried to add a mount parameter
 >> to prohibit modification after the block device is mounted.But I
@@ -286,21 +323,21 @@ On 2023/3/13 21:01, Jan Kara wrote:
 >> First of all, the 32-bit super block flags have been used up and need to
 >> be extended. Secondly, I don't know how to handle read-only flag in the
 >> case of multiple mount points.
->>   "disallow writing to a block device when it is exclusively open by someone
+>>  "disallow writing to a block device when it is exclusively open by someone
 >> else. "
 >> -> Perhaps we can add a new IOCTL command to control whether write
 >> operations are allowed after the block device has been exclusively
 >> opened. I don't know if this is feasible?  Do you have any good
 >> suggestions?
+> 
 > Well, ioctl() for syzbot would be possible as well but for start I'd try
 > whether the idea with kconfig option will work. Then it will be enough to
 > just make sure all kernels used for fuzzing are built with this option set.
-> Thanks for having a look into this!
-In fact, I also want to solve the problem of file system damage caused 
-by writing raw disks
-in the production environment. Use kconfig directly to control whether 
-it loses flexibility in
-the production environment.
->
-> 								Honza
 
+How should we treat such bugs until the kconfig option is introduced? Do
+we let them open, do we mark them as won't fix? The kconfig solution
+feels a bit as a workaround, the bugs will still be hit by someone not
+selecting that config option.
+
+Cheers,
+ta
