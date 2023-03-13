@@ -1,312 +1,163 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D526823C5
-	for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 11:57:30 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id ECAB91FD86;
-	Mon, 13 Mar 2023 11:57:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1678708648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=G1cC0bMrmZVZLiA8nJXBepwrUavPR7LOdyImYe7OjnM=;
-	b=0cddQY5AthfAgOo7njicDSs+9sgvmDvREMA8UkUfI9jabqIj4vWvlm7rAdzqbr2QEKYRrt
-	ERaITnpmluVtetWf2lqmmAdQvJhTxeRVLu8LEqmAMzttDd522y+ws7tV9e2rXxa4HSpaUo
-	u6XsGnPsmQePgiIH+r5rGCTBgaMieQI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1678708648;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=G1cC0bMrmZVZLiA8nJXBepwrUavPR7LOdyImYe7OjnM=;
-	b=Q4yyQgp8ylZzebuigFefg281IGzw6k2pW2saLJtF5lwp10sIJgHRYJ7R3UYlmuYcSv9Y4g
-	DNRWcdCY9KZ47YBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D7F2913517;
-	Mon, 13 Mar 2023 11:57:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id DZiwNKgPD2SHcgAAMHmgww
-	(envelope-from <jack@suse.cz>); Mon, 13 Mar 2023 11:57:28 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 6AB0BA06FD; Mon, 13 Mar 2023 12:57:28 +0100 (CET)
-Date: Mon, 13 Mar 2023 12:57:28 +0100
-From: Jan Kara <jack@suse.cz>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Jan Kara <jack@suse.cz>,
-	syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	nathan@kernel.org, ndesaulniers@google.com,
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu,
-	Lee Jones <joneslee@google.com>
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
- ext4_group_desc_csum
-Message-ID: <20230313115728.2wxy2qj4mqpwgrx7@quack3>
-References: <000000000000ef6cf905f496e40b@google.com>
- <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3>
- <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
- <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A7023C5;
+	Mon, 13 Mar 2023 12:09:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678709355; x=1710245355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lv+YmFQZdWbyw1qbfd55OBvvBnDoJKDY+8E3ElIHRyE=;
+  b=jj1PMM8wyu4zYe7uN5XLOZXIHjhSKEHI87AJry/w9/2SKdndAx+Rr1Fi
+   cK36lwq6UxzOXP27jDI4EU36HYxzuJ+QeuAk5wzrqu27AJnSC0BImvLjN
+   84T9o83nBWGOOWidSZWI2WUKBFxSysFP1HNe7mkvHecddbyh88QKVJTxE
+   OcdAjtlaWea3VojEcJQnYAfXokJ+Yp2qspSmX5nvMXqhQlmtZq5NR597h
+   yHHaIMW9wedQk3nqlJkLKQZPHIfT3ZrjMYV4O/n7qI1q7MZkqSNP+TUtG
+   +dfn1qlNCKkik617BhCV0JO6p/5bZsMOGYUDC/MUgao+R4EYhfBYIFFkQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="401999762"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="401999762"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 05:09:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="671878252"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="671878252"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 13 Mar 2023 05:09:13 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pbgzJ-0005e6-0i;
+	Mon, 13 Mar 2023 12:09:13 +0000
+Date: Mon, 13 Mar 2023 20:08:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Naohiro Aota <naohiro.aota@wdc.com>, linux-btrfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Naohiro Aota <naohiro.aota@wdc.com>
+Subject: Re: [PATCH 1/2] btrfs: zoned: count fresh BG region as zone unusable
+Message-ID: <202303131915.APpbxwaX-lkp@intel.com>
+References: <bdcc434abd271dfd2b75c1b018ed6dbe425f562e.1678689012.git.naohiro.aota@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
+In-Reply-To: <bdcc434abd271dfd2b75c1b018ed6dbe425f562e.1678689012.git.naohiro.aota@wdc.com>
 
-Hi Tudor!
+Hi Naohiro,
 
-On Mon 13-03-23 11:11:18, Tudor Ambarus wrote:
-> On 3/7/23 11:02, Tudor Ambarus wrote:
-> > On 3/7/23 10:39, Jan Kara wrote:
-> >> On Wed 01-03-23 12:13:51, Tudor Ambarus wrote:
-> >>> On 2/13/23 15:56, syzbot wrote:
-> >>>> syzbot has found a reproducer for the following issue on:
-> >>>>
-> >>>> HEAD commit:    ceaa837f96ad Linux 6.2-rc8
-> >>>> git tree:       upstream
-> >>>> console output:
-> >>>> https://syzkaller.appspot.com/x/log.txt?x=11727cc7480000
-> >>>> kernel config: 
-> >>>> https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
-> >>>> dashboard link:
-> >>>> https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
-> >>>> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils
-> >>>> for Debian) 2.35.2
-> >>>> syz repro:     
-> >>>> https://syzkaller.appspot.com/x/repro.syz?x=14392a4f480000
-> >>>>
-> >>>> Downloadable assets:
-> >>>> disk image:
-> >>>> https://storage.googleapis.com/syzbot-assets/88042f9b5fc8/disk-ceaa837f.raw.xz
-> >>>> vmlinux:
-> >>>> https://storage.googleapis.com/syzbot-assets/9945b57ec9ee/vmlinux-ceaa837f.xz
-> >>>> kernel image:
-> >>>> https://storage.googleapis.com/syzbot-assets/72ff118ed96b/bzImage-ceaa837f.xz
-> >>>> mounted in repro:
-> >>>> https://storage.googleapis.com/syzbot-assets/dabec17b2679/mount_0.gz
-> >>>>
-> >>>> IMPORTANT: if you fix the issue, please add the following tag to the
-> >>>> commit:
-> >>>> Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
-> >>>>
-> >>>> ==================================================================
-> >>>> BUG: KASAN: use-after-free in crc16+0x1fb/0x280 lib/crc16.c:58
-> >>>> Read of size 1 at addr ffff88807de00000 by task syz-executor.1/5339
-> >>>>
-> >>>> CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted
-> >>>> 6.2.0-rc8-syzkaller #0
-> >>>> Hardware name: Google Google Compute Engine/Google Compute Engine,
-> >>>> BIOS Google 01/21/2023
-> >>>> Call Trace:
-> >>>>    <TASK>
-> >>>>    __dump_stack lib/dump_stack.c:88 [inline]
-> >>>>    dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
-> >>>>    print_address_description mm/kasan/report.c:306 [inline]
-> >>>>    print_report+0x163/0x4f0 mm/kasan/report.c:417
-> >>>>    kasan_report+0x13a/0x170 mm/kasan/report.c:517
-> >>>>    crc16+0x1fb/0x280 lib/crc16.c:58
-> >>>>    ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
-> >>>>    ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
-> >>>>    ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
-> >>>>    ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
-> >>>>    ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
-> >>>>    ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
-> >>>>    ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
-> >>>>    ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
-> >>>>    ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
-> >>>>    ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
-> >>>>    evict+0x2a4/0x620 fs/inode.c:664
-> >>>>    do_unlinkat+0x4f1/0x930 fs/namei.c:4327
-> >>>>    __do_sys_unlink fs/namei.c:4368 [inline]
-> >>>>    __se_sys_unlink fs/namei.c:4366 [inline]
-> >>>>    __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
-> >>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >>>> RIP: 0033:0x7fbc85a8c0f9
-> >>>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48
-> >>>> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48>
-> >>>> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> >>>> RSP: 002b:00007fbc86838168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
-> >>>> RAX: ffffffffffffffda RBX: 00007fbc85babf80 RCX: 00007fbc85a8c0f9
-> >>>> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
-> >>>> RBP: 00007fbc85ae7ae9 R08: 0000000000000000 R09: 0000000000000000
-> >>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> >>>> R13: 00007ffd5743beaf R14: 00007fbc86838300 R15: 0000000000022000
-> >>>>    </TASK>
-> >>>>
-> >>>> The buggy address belongs to the physical page:
-> >>>> page:ffffea0001f78000 refcount:0 mapcount:-128
-> >>>> mapping:0000000000000000 index:0x0 pfn:0x7de00
-> >>>> flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-> >>>> raw: 00fff00000000000 ffffea0001f86008 ffffea0001db2a08
-> >>>> 0000000000000000
-> >>>> raw: 0000000000000000 0000000000000001 00000000ffffff7f
-> >>>> 0000000000000000
-> >>>> page dumped because: kasan: bad access detected
-> >>>> page_owner tracks the page as freed
-> >>>> page last allocated via order 1, migratetype Unmovable, gfp_mask
-> >>>> 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, tgid 4855 (sshd), ts 43553490210, free_ts 58249059760
-> >>>>    prep_new_page mm/page_alloc.c:2531 [inline]
-> >>>>    get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
-> >>>>    __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
-> >>>>    alloc_slab_page+0x6a/0x160 mm/slub.c:1851
-> >>>>    allocate_slab mm/slub.c:1998 [inline]
-> >>>>    new_slab+0x84/0x2f0 mm/slub.c:2051
-> >>>>    ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
-> >>>>    __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
-> >>>>    kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
-> >>>>    mt_alloc_bulk lib/maple_tree.c:157 [inline]
-> >>>>    mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
-> >>>>    mas_node_count_gfp lib/maple_tree.c:1316 [inline]
-> >>>>    mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
-> >>>>    vma_expand+0x277/0x850 mm/mmap.c:541
-> >>>>    mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
-> >>>>    do_mmap+0x8c9/0xf70 mm/mmap.c:1411
-> >>>>    vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
-> >>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >>>> page last free stack trace:
-> >>>>    reset_page_owner include/linux/page_owner.h:24 [inline]
-> >>>>    free_pages_prepare mm/page_alloc.c:1446 [inline]
-> >>>>    free_pcp_prepare mm/page_alloc.c:1496 [inline]
-> >>>>    free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
-> >>>>    free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
-> >>>>    qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
-> >>>>    kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
-> >>>>    __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
-> >>>>    kasan_slab_alloc include/linux/kasan.h:201 [inline]
-> >>>>    slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
-> >>>>    slab_alloc_node mm/slub.c:3452 [inline]
-> >>>>    kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
-> >>>>    __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
-> >>>>    alloc_skb include/linux/skbuff.h:1270 [inline]
-> >>>>    alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
-> >>>>    sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
-> >>>>    unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
-> >>>>    sock_sendmsg_nosec net/socket.c:714 [inline]
-> >>>>    sock_sendmsg net/socket.c:734 [inline]
-> >>>>    __sys_sendto+0x475/0x5f0 net/socket.c:2117
-> >>>>    __do_sys_sendto net/socket.c:2129 [inline]
-> >>>>    __se_sys_sendto net/socket.c:2125 [inline]
-> >>>>    __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
-> >>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >>>>    do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >>>>
-> >>>> Memory state around the buggy address:
-> >>>>    ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> >>>>    ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> >>>>> ffff88807de00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> >>>>                      ^
-> >>>>    ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> >>>>    ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-> >>>> ==================================================================
-> >>>>
-> >>>
-> >>>
-> >>> I think the patch from below should fix it.
-> >>>
-> >>> I printed le16_to_cpu(sbi->s_es->s_desc_size) and it was greater than
-> >>> EXT4_MAX_DESC_SIZE. What I think it happens is that the contents of the
-> >>> super block in the buffer get corrupted sometime after the .get_tree
-> >>> (which eventually calls __ext4_fill_super()) is called. So instead of
-> >>> relying on the contents of the buffer, we should instead rely on the
-> >>> s_desc_size initialized at the __ext4_fill_super() time.
-> >>>
-> >>> If someone finds this good (or bad), or has a more in depth explanation,
-> >>> please let me know, it will help me better understand the subsystem. In
-> >>> the meantime I'll continue to investigate this and prepare a patch for
-> >>> it.
-> >>
-> >> If there's something corrupting the superblock while the filesystem is
-> >> mounted, we need to find what is corrupting the SB and fix *that*. Not
-> >> try
-> >> to paper over the problem by not using the on-disk data... Maybe journal
-> >> replay is corrupting the value or something like that?
-> >>
-> >>                                 Honza
-> >>
-> > 
-> > Ok, I agree. First thing would be to understand the reproducer and to
-> > simplify it if possible. I haven't yet decoded what the syz repro is
-> > doing at
-> > https://syzkaller.appspot.com/text?tag=ReproSyz&x=16ce3de4c80000
-> > Will reply to this email thread once I understand what's happening. If
-> > you or someone else can decode the syz repro faster than me, shoot.
-> > 
-> 
-> I can now explain how the contents of the super block of the buffer get
-> corrupted. After the ext4 fs is mounted to the target ("./bus"), the
-> reproducer maps 6MB of data starting at offset 0 in the target's file
-> ("./bus"), then it starts overriding the data with something else, by
-> using memcpy, memset, individual byte inits. Does that mean that we
-> shouldn't rely on the contents of the super block in the buffer after we
-> mount the file system? If so, then my patch stands. I'll be happy to
-> extend it if needed. Below one may find a step by step interpretation of
-> the reproducer.
-> 
-> We have a strace log for the same bug, but on Android 5.15:
-> https://syzkaller.appspot.com/text?tag=CrashLog&x=14ecec8cc80000
-> 
-> Look for pid 328. You notice that the bpf() syscalls return error, so I
-> commented them out in the c repro to confirm that they are not the
-> cause. The bug reproduced without the bpf() calls. One can find the c
-> repro at:
-> https://syzkaller.appspot.com/text?tag=ReproC&x=17c5fc50c80000
-> 
-> Let's look at these calls, just before the bug was hit:
-> [pid   328] open("./bus",
-> O_RDWR|O_CREAT|O_TRUNC|O_NONBLOCK|O_SYNC|O_DIRECT|O_LARGEFILE|O_NOATIME,
-> 000) = 4
-> [pid   328] mount("/dev/loop0", "./bus", NULL, MS_BIND, NULL) = 0
-> [pid   328] open("./bus", O_RDWR|O_SYNC|O_NOATIME|0x3c) = 5
-> [pid   328] mmap(0x20000000, 6291456,
-> PROT_READ|PROT_WRITE|PROT_EXEC|PROT_SEM|0x47ffff0, MAP_SHARED|MAP_FIXED,
-> 5, 0) = 0x20000000
+I love your patch! Yet something to improve:
 
-Yeah, looking at the reproducer, before this the reproducer also mounts
-/dev/loop0 as ext4 filesystem.
+[auto build test ERROR on kdave/for-next]
+[also build test ERROR on linus/master v6.3-rc2 next-20230310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> - ./bus is created (if it does not exist), fd 4 is returned.
-> - /dev/loop0 is mounted to ./bus
-> - then it creates a new file descriptor (5) for the same ./bus
-> - then it creates a mapping for ./bus starting at offset zero. The
-> mapped area is at 0x20000000 and is of 0x600000ul length.
+url:    https://github.com/intel-lab-lkp/linux/commits/Naohiro-Aota/btrfs-zoned-count-fresh-BG-region-as-zone-unusable/20230313-150709
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/bdcc434abd271dfd2b75c1b018ed6dbe425f562e.1678689012.git.naohiro.aota%40wdc.com
+patch subject: [PATCH 1/2] btrfs: zoned: count fresh BG region as zone unusable
+config: x86_64-randconfig-r025-20230313 (https://download.01.org/0day-ci/archive/20230313/202303131915.APpbxwaX-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c266ae6ba937488d8339e586ebcc8c93d3389eb0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Naohiro-Aota/btrfs-zoned-count-fresh-BG-region-as-zone-unusable/20230313-150709
+        git checkout c266ae6ba937488d8339e586ebcc8c93d3389eb0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
-So the result is that the reproducer modified the block device while it is
-mounted by the filesystem. We know cases like this can crash the kernel and
-it is inherently difficult to fix. We have to trust the buffer cache
-contents as otherwise the performance will be unacceptable. For historical
-reasons we also have to allow modifications of buffer cache while ext4 is
-mounted because tune2fs uses this to e.g. update the label of a mounted
-filesystem.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303131915.APpbxwaX-lkp@intel.com/
 
-Long-term we are moving ext4 in a direction where we can disallow block
-device modifications while the fs is mounted but we are not there yet. I've
-discussed some shorter-term solution to avoid such known problems with syzbot
-developers and what seems plausible would be a kconfig option to disallow
-writing to a block device when it is exclusively open by someone else.
-But so far I didn't get to trying whether this would reasonably work. Would
-you be interested in having a look into this?
+All errors (new ones prefixed by >>):
 
-								Honza
+>> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+                    test_bit(BTRFS_FS_ACTIVE_ZONE_TRACKING, &block_group->fs_info->flags) &&
+                             ^
+>> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+>> fs/btrfs/free-space-cache.c:2700:13: error: use of undeclared identifier 'BTRFS_FS_ACTIVE_ZONE_TRACKING'
+   3 errors generated.
+
+
+vim +/BTRFS_FS_ACTIVE_ZONE_TRACKING +2700 fs/btrfs/free-space-cache.c
+
+  2678	
+  2679	static int __btrfs_add_free_space_zoned(struct btrfs_block_group *block_group,
+  2680						u64 bytenr, u64 size, bool used)
+  2681	{
+  2682		struct btrfs_space_info *sinfo = block_group->space_info;
+  2683		struct btrfs_free_space_ctl *ctl = block_group->free_space_ctl;
+  2684		u64 offset = bytenr - block_group->start;
+  2685		u64 to_free, to_unusable;
+  2686		int bg_reclaim_threshold = 0;
+  2687		bool initial = (size == block_group->length);
+  2688		u64 reclaimable_unusable;
+  2689	
+  2690		WARN_ON(!initial && offset + size > block_group->zone_capacity);
+  2691	
+  2692		if (!initial)
+  2693			bg_reclaim_threshold = READ_ONCE(sinfo->bg_reclaim_threshold);
+  2694	
+  2695		spin_lock(&ctl->tree_lock);
+  2696		/* Count initial region as zone_unusable until it gets activated. */
+  2697		if (!used)
+  2698			to_free = size;
+  2699		else if (initial &&
+> 2700			 test_bit(BTRFS_FS_ACTIVE_ZONE_TRACKING, &block_group->fs_info->flags) &&
+  2701			 block_group->flags & (BTRFS_BLOCK_GROUP_METADATA | BTRFS_BLOCK_GROUP_SYSTEM))
+  2702			to_free = 0;
+  2703		else if (initial)
+  2704			to_free = block_group->zone_capacity;
+  2705		else if (offset >= block_group->alloc_offset)
+  2706			to_free = size;
+  2707		else if (offset + size <= block_group->alloc_offset)
+  2708			to_free = 0;
+  2709		else
+  2710			to_free = offset + size - block_group->alloc_offset;
+  2711		to_unusable = size - to_free;
+  2712	
+  2713		ctl->free_space += to_free;
+  2714		/*
+  2715		 * If the block group is read-only, we should account freed space into
+  2716		 * bytes_readonly.
+  2717		 */
+  2718		if (!block_group->ro)
+  2719			block_group->zone_unusable += to_unusable;
+  2720		spin_unlock(&ctl->tree_lock);
+  2721		if (!used) {
+  2722			spin_lock(&block_group->lock);
+  2723			block_group->alloc_offset -= size;
+  2724			spin_unlock(&block_group->lock);
+  2725		}
+  2726	
+  2727		reclaimable_unusable = block_group->zone_unusable -
+  2728				       (block_group->length - block_group->zone_capacity);
+  2729		/* All the region is now unusable. Mark it as unused and reclaim */
+  2730		if (block_group->zone_unusable == block_group->length &&
+  2731		    block_group->alloc_offset) {
+  2732			btrfs_mark_bg_unused(block_group);
+  2733		} else if (bg_reclaim_threshold &&
+  2734			   reclaimable_unusable >=
+  2735			   mult_perc(block_group->zone_capacity, bg_reclaim_threshold)) {
+  2736			btrfs_mark_bg_to_reclaim(block_group);
+  2737		}
+  2738	
+  2739		return 0;
+  2740	}
+  2741	
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
