@@ -1,44 +1,51 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0333A2F45;
-	Mon, 13 Mar 2023 16:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F46322B;
+	Mon, 13 Mar 2023 17:17:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678726594; x=1710262594;
+  t=1678727857; x=1710263857;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zD13Ckz6EK9mreFo9v1e3TxNTwk0HugqznginmxynRg=;
-  b=EXM5IfYhl1kHVKzwrDA568lT53HkhwPpWWLc1bp6mBHog5irOfUJQd3I
-   eunXKMKrRVKDFrzcQbBTm4+OzxwFXE3lyed+258HTLBTC98xZpAfZU8ub
-   Mpg6yhMlXooKcZI4xbCH1x2aQHYmF305QVx/sdBan5zCR+u08UrQam0A3
-   0kEJCgZ3g+lI8Q2Siau5Sn7FD5yA9tWWKbmG50Lk9oArcQ+REZuVfNU5C
-   AXJEHzq8Rkevm+PCE6m/z7sAXY+PIFEc2kD1cSOyzsN2El0HAU7BvIdRO
-   CgPwDdXdOnQ4nBb/99HPA/iftKnffz5qheaaehueZC6R4Nf1p8+wNrzMM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399792966"
+  bh=H8a0NPFButprvGfKHEKIO3C4dhu9pBc/xoZ4jmbbjrg=;
+  b=B0J4XYDxuFh+6Ia1vce06DuB3zEFQYphnid3Fv+bBpvrHB83Fo7TiwD9
+   Fe0h/u5FJ4RtS4numutTJtS8NxslWMWV8YqLm09ITB8HO8YDLS7TqMSDz
+   XfF0CMUdSCI2ZVGQVR371MfDXFIzwdCznWXCg+BJ8vuZ3d1t6dkIRbDB1
+   aii63uSmVndZVAaGiVSc3i3anpY3pKbXEuSRwVJiaQodnT3LQlyUBKMze
+   KfqCxnIcbjfFjhwqOwGj85UBG23fY7f89aD+x9OW+MmS8SZsCyG2b0TQv
+   RpKeM42XqSaJDas5zaGMG/h7XS0ZFlGuHDUpdM2fP7UIeGcvw9oRGgGWY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325570856"
 X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="399792966"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:33 -0700
+   d="scan'208";a="325570856"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 10:17:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="924572275"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="789000428"
 X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="924572275"
+   d="scan'208";a="789000428"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Mar 2023 09:56:32 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 13 Mar 2023 10:17:33 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pblTL-0005uS-2V;
-	Mon, 13 Mar 2023 16:56:31 +0000
-Date: Tue, 14 Mar 2023 00:55:54 +0800
+	id 1pblng-0005vE-1L;
+	Mon, 13 Mar 2023 17:17:32 +0000
+Date: Tue, 14 Mar 2023 01:16:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yin Fengwei <fengwei.yin@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v4 1/5] rmap: move hugetlb try_to_unmap to dedicated
- function
-Message-ID: <202303140016.q8dVJMP2-lkp@intel.com>
-References: <20230313124526.1207490-2-fengwei.yin@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [rft, PATCH v1 1/1] gpio: Drop unused inclusions from of_gpio.h
+Message-ID: <202303140125.kHh8NLma-lkp@intel.com>
+References: <20230313144557.35856-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,150 +54,224 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313124526.1207490-2-fengwei.yin@intel.com>
+In-Reply-To: <20230313144557.35856-1-andriy.shevchenko@linux.intel.com>
 
-Hi Yin,
+Hi Andy,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test ERROR on brgl/gpio/for-next]
 [also build test ERROR on linus/master v6.3-rc2 next-20230310]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yin-Fengwei/rmap-move-hugetlb-try_to_unmap-to-dedicated-function/20230313-204656
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230313124526.1207490-2-fengwei.yin%40intel.com
-patch subject: [PATCH v4 1/5] rmap: move hugetlb try_to_unmap to dedicated function
-config: arm-buildonly-randconfig-r001-20230312 (https://download.01.org/0day-ci/archive/20230314/202303140016.q8dVJMP2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpio-Drop-unused-inclusions-from-of_gpio-h/20230313-224656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20230313144557.35856-1-andriy.shevchenko%40linux.intel.com
+patch subject: [rft, PATCH v1 1/1] gpio: Drop unused inclusions from of_gpio.h
+config: x86_64-randconfig-a012-20230313 (https://download.01.org/0day-ci/archive/20230314/202303140125.kHh8NLma-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/c43d03caaff9b0b9a869fd2a9b8beed7bc833f2a
+        # https://github.com/intel-lab-lkp/linux/commit/b108d11788b6db9e37a6c4b3110c09cecf30a46c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yin-Fengwei/rmap-move-hugetlb-try_to_unmap-to-dedicated-function/20230313-204656
-        git checkout c43d03caaff9b0b9a869fd2a9b8beed7bc833f2a
+        git fetch --no-tags linux-review Andy-Shevchenko/gpio-Drop-unused-inclusions-from-of_gpio-h/20230313-224656
+        git checkout b108d11788b6db9e37a6c4b3110c09cecf30a46c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/codecs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303140016.q8dVJMP2-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303140125.kHh8NLma-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/rmap.c:1513:6: error: call to undeclared function 'huge_pte_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (huge_pte_dirty(pteval))
+>> sound/soc/codecs/cs42l73.c:1316:9: error: implicit declaration of function 'devm_gpio_request_one' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ret = devm_gpio_request_one(&i2c_client->dev,
+                         ^
+>> sound/soc/codecs/cs42l73.c:1318:10: error: use of undeclared identifier 'GPIOF_OUT_INIT_HIGH'
+                                               GPIOF_OUT_INIT_HIGH,
+                                               ^
+>> sound/soc/codecs/cs42l73.c:1325:3: error: implicit declaration of function 'gpio_set_value_cansleep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   gpio_set_value_cansleep(cs42l73->pdata.reset_gpio, 0);
+                   ^
+   sound/soc/codecs/cs42l73.c:1363:2: error: implicit declaration of function 'gpio_set_value_cansleep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           gpio_set_value_cansleep(cs42l73->pdata.reset_gpio, 0);
+           ^
+   4 errors generated.
+--
+>> sound/soc/codecs/ak5386.c:114:6: error: implicit declaration of function 'gpio_is_valid' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (gpio_is_valid(priv->reset_gpio))
                ^
-   1 error generated.
+   sound/soc/codecs/ak5386.c:114:6: note: did you mean 'uuid_is_valid'?
+   include/linux/uuid.h:102:19: note: 'uuid_is_valid' declared here
+   bool __must_check uuid_is_valid(const char *uuid);
+                     ^
+>> sound/soc/codecs/ak5386.c:115:3: error: implicit declaration of function 'gpio_set_value' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   gpio_set_value(priv->reset_gpio, 1);
+                   ^
+   sound/soc/codecs/ak5386.c:126:6: error: implicit declaration of function 'gpio_is_valid' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (gpio_is_valid(priv->reset_gpio))
+               ^
+   sound/soc/codecs/ak5386.c:127:3: error: implicit declaration of function 'gpio_set_value' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   gpio_set_value(priv->reset_gpio, 0);
+                   ^
+   sound/soc/codecs/ak5386.c:186:6: error: implicit declaration of function 'gpio_is_valid' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (gpio_is_valid(priv->reset_gpio))
+               ^
+>> sound/soc/codecs/ak5386.c:187:7: error: implicit declaration of function 'devm_gpio_request_one' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   if (devm_gpio_request_one(dev, priv->reset_gpio,
+                       ^
+>> sound/soc/codecs/ak5386.c:188:8: error: use of undeclared identifier 'GPIOF_OUT_INIT_LOW'
+                                             GPIOF_OUT_INIT_LOW,
+                                             ^
+   7 errors generated.
+--
+>> sound/soc/codecs/aw88395/aw88395.c:458:3: error: implicit declaration of function 'gpiod_set_value_cansleep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   gpiod_set_value_cansleep(aw88395->reset_gpio, 0);
+                   ^
+>> sound/soc/codecs/aw88395/aw88395.c:527:24: error: implicit declaration of function 'devm_gpiod_get_optional' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           aw88395->reset_gpio = devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_LOW);
+                                 ^
+   sound/soc/codecs/aw88395/aw88395.c:527:24: note: did you mean 'devm_regulator_get_optional'?
+   include/linux/regulator/consumer.h:208:32: note: 'devm_regulator_get_optional' declared here
+   struct regulator *__must_check devm_regulator_get_optional(struct device *dev,
+                                  ^
+>> sound/soc/codecs/aw88395/aw88395.c:527:68: error: use of undeclared identifier 'GPIOD_OUT_LOW'
+           aw88395->reset_gpio = devm_gpiod_get_optional(&i2c->dev, "reset", GPIOD_OUT_LOW);
+                                                                             ^
+   3 errors generated.
+--
+>> sound/soc/codecs/cs42l52.c:1143:9: error: implicit declaration of function 'devm_gpio_request_one' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ret = devm_gpio_request_one(&i2c_client->dev,
+                         ^
+>> sound/soc/codecs/cs42l52.c:1145:10: error: use of undeclared identifier 'GPIOF_OUT_INIT_HIGH'
+                                               GPIOF_OUT_INIT_HIGH,
+                                               ^
+>> sound/soc/codecs/cs42l52.c:1152:3: error: implicit declaration of function 'gpio_set_value_cansleep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   gpio_set_value_cansleep(cs42l52->pdata.reset_gpio, 0);
+                   ^
+   3 errors generated.
+--
+>> sound/soc/codecs/cs42l56.c:1203:9: error: implicit declaration of function 'gpio_request_one' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ret = gpio_request_one(cs42l56->pdata.gpio_nreset,
+                         ^
+>> sound/soc/codecs/cs42l56.c:1204:12: error: use of undeclared identifier 'GPIOF_OUT_INIT_HIGH'
+                                          GPIOF_OUT_INIT_HIGH, "CS42L56 /RST");
+                                          ^
+>> sound/soc/codecs/cs42l56.c:1211:3: error: implicit declaration of function 'gpio_set_value_cansleep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   gpio_set_value_cansleep(cs42l56->pdata.gpio_nreset, 0);
+                   ^
+   3 errors generated.
+--
+>> sound/soc/codecs/wcd9335.c:5091:2: error: implicit declaration of function 'gpio_direction_output' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           gpio_direction_output(wcd->reset_gpio, 0);
+           ^
+>> sound/soc/codecs/wcd9335.c:5093:2: error: implicit declaration of function 'gpio_set_value' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           gpio_set_value(wcd->reset_gpio, 1);
+           ^
+   2 errors generated.
 
 
-vim +/huge_pte_dirty +1513 mm/rmap.c
+vim +/devm_gpio_request_one +1316 sound/soc/codecs/cs42l73.c
 
-  1443	
-  1444	static bool try_to_unmap_one_hugetlb(struct folio *folio,
-  1445			struct vm_area_struct *vma, struct mmu_notifier_range range,
-  1446			struct page_vma_mapped_walk pvmw, unsigned long address,
-  1447			enum ttu_flags flags)
-  1448	{
-  1449		struct mm_struct *mm = vma->vm_mm;
-  1450		pte_t pteval;
-  1451		bool ret = true, anon = folio_test_anon(folio);
-  1452	
-  1453		/*
-  1454		 * The try_to_unmap() is only passed a hugetlb page
-  1455		 * in the case where the hugetlb page is poisoned.
-  1456		 */
-  1457		VM_BUG_ON_FOLIO(!folio_test_hwpoison(folio), folio);
-  1458		/*
-  1459		 * huge_pmd_unshare may unmap an entire PMD page.
-  1460		 * There is no way of knowing exactly which PMDs may
-  1461		 * be cached for this mm, so we must flush them all.
-  1462		 * start/end were already adjusted in caller
-  1463		 * (try_to_unmap_one) to cover this range.
-  1464		 */
-  1465		flush_cache_range(vma, range.start, range.end);
-  1466	
-  1467		/*
-  1468		 * To call huge_pmd_unshare, i_mmap_rwsem must be
-  1469		 * held in write mode.  Caller needs to explicitly
-  1470		 * do this outside rmap routines.
-  1471		 *
-  1472		 * We also must hold hugetlb vma_lock in write mode.
-  1473		 * Lock order dictates acquiring vma_lock BEFORE
-  1474		 * i_mmap_rwsem.  We can only try lock here and fail
-  1475		 * if unsuccessful.
-  1476		 */
-  1477		if (!anon) {
-  1478			VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
-  1479			if (!hugetlb_vma_trylock_write(vma)) {
-  1480				ret = false;
-  1481				goto out;
-  1482			}
-  1483			if (huge_pmd_unshare(mm, vma, address, pvmw.pte)) {
-  1484				hugetlb_vma_unlock_write(vma);
-  1485				flush_tlb_range(vma,
-  1486						range.start, range.end);
-  1487				mmu_notifier_invalidate_range(mm,
-  1488						range.start, range.end);
-  1489				/*
-  1490				 * The ref count of the PMD page was
-  1491				 * dropped which is part of the way map
-  1492				 * counting is done for shared PMDs.
-  1493				 * Return 'true' here.  When there is
-  1494				 * no other sharing, huge_pmd_unshare
-  1495				 * returns false and we will unmap the
-  1496				 * actual page and drop map count
-  1497				 * to zero.
-  1498				 */
-  1499				goto out;
-  1500			}
-  1501			hugetlb_vma_unlock_write(vma);
-  1502		}
-  1503		pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
-  1504	
-  1505		/*
-  1506		 * Now the pte is cleared. If this pte was uffd-wp armed,
-  1507		 * we may want to replace a none pte with a marker pte if
-  1508		 * it's file-backed, so we don't lose the tracking info.
-  1509		 */
-  1510		pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
-  1511	
-  1512		/* Set the dirty flag on the folio now the pte is gone. */
-> 1513		if (huge_pte_dirty(pteval))
-  1514			folio_mark_dirty(folio);
-  1515	
-  1516		/* Update high watermark before we lower rss */
-  1517		update_hiwater_rss(mm);
-  1518	
-  1519		/* Poisoned hugetlb folio with TTU_HWPOISON always cleared in flags */
-  1520		pteval = swp_entry_to_pte(make_hwpoison_entry(&folio->page));
-  1521		set_huge_pte_at(mm, address, pvmw.pte, pteval);
-  1522		hugetlb_count_sub(folio_nr_pages(folio), mm);
-  1523	
-  1524		/*
-  1525		 * No need to call mmu_notifier_invalidate_range() it has be
-  1526		 * done above for all cases requiring it to happen under page
-  1527		 * table lock before mmu_notifier_invalidate_range_end()
-  1528		 *
-  1529		 * See Documentation/mm/mmu_notifier.rst
-  1530		 */
-  1531		page_remove_rmap(&folio->page, vma, true);
-  1532		/* No VM_LOCKED set in vma->vm_flags for hugetlb. So not
-  1533		 * necessary to call mlock_drain_local().
-  1534		 */
-  1535		folio_put(folio);
-  1536	
-  1537	out:
-  1538		return ret;
-  1539	}
-  1540	
+6d10c91493a0b3 Brian Austin      2011-11-16  1275  
+4a4043456cb82d Stephen Kitt      2022-03-25  1276  static int cs42l73_i2c_probe(struct i2c_client *i2c_client)
+6d10c91493a0b3 Brian Austin      2011-11-16  1277  {
+6d10c91493a0b3 Brian Austin      2011-11-16  1278  	struct cs42l73_private *cs42l73;
+3d8c8bc0250f7c Brian Austin      2013-10-17  1279  	struct cs42l73_platform_data *pdata = dev_get_platdata(&i2c_client->dev);
+26495252fe0d1e Charles Keepax    2021-05-10  1280  	int ret, devid;
+6d10c91493a0b3 Brian Austin      2011-11-16  1281  	unsigned int reg;
+7b09eea52939d2 Brian Austin      2013-10-18  1282  	u32 val32;
+6d10c91493a0b3 Brian Austin      2011-11-16  1283  
+68fa08c665e51b Markus Elfring    2017-11-22  1284  	cs42l73 = devm_kzalloc(&i2c_client->dev, sizeof(*cs42l73), GFP_KERNEL);
+10d95ad48b4bf4 Sachin Kamat      2014-06-20  1285  	if (!cs42l73)
+6d10c91493a0b3 Brian Austin      2011-11-16  1286  		return -ENOMEM;
+6d10c91493a0b3 Brian Austin      2011-11-16  1287  
+571f6a7f07e9dd Brian Austin      2012-06-04  1288  	cs42l73->regmap = devm_regmap_init_i2c(i2c_client, &cs42l73_regmap);
+6d10c91493a0b3 Brian Austin      2011-11-16  1289  	if (IS_ERR(cs42l73->regmap)) {
+6d10c91493a0b3 Brian Austin      2011-11-16  1290  		ret = PTR_ERR(cs42l73->regmap);
+6d10c91493a0b3 Brian Austin      2011-11-16  1291  		dev_err(&i2c_client->dev, "regmap_init() failed: %d\n", ret);
+571f6a7f07e9dd Brian Austin      2012-06-04  1292  		return ret;
+6d10c91493a0b3 Brian Austin      2011-11-16  1293  	}
+3d8c8bc0250f7c Brian Austin      2013-10-17  1294  
+7b09eea52939d2 Brian Austin      2013-10-18  1295  	if (pdata) {
+3d8c8bc0250f7c Brian Austin      2013-10-17  1296  		cs42l73->pdata = *pdata;
+7b09eea52939d2 Brian Austin      2013-10-18  1297  	} else {
+68fa08c665e51b Markus Elfring    2017-11-22  1298  		pdata = devm_kzalloc(&i2c_client->dev, sizeof(*pdata),
+7b09eea52939d2 Brian Austin      2013-10-18  1299  				     GFP_KERNEL);
+ddedd797943df2 Markus Elfring    2017-11-22  1300  		if (!pdata)
+7b09eea52939d2 Brian Austin      2013-10-18  1301  			return -ENOMEM;
+ddedd797943df2 Markus Elfring    2017-11-22  1302  
+7b09eea52939d2 Brian Austin      2013-10-18  1303  		if (i2c_client->dev.of_node) {
+7b09eea52939d2 Brian Austin      2013-10-18  1304  			if (of_property_read_u32(i2c_client->dev.of_node,
+7b09eea52939d2 Brian Austin      2013-10-18  1305  				"chgfreq", &val32) >= 0)
+7b09eea52939d2 Brian Austin      2013-10-18  1306  				pdata->chgfreq = val32;
+7b09eea52939d2 Brian Austin      2013-10-18  1307  		}
+7b09eea52939d2 Brian Austin      2013-10-18  1308  		pdata->reset_gpio = of_get_named_gpio(i2c_client->dev.of_node,
+7b09eea52939d2 Brian Austin      2013-10-18  1309  						"reset-gpio", 0);
+7b09eea52939d2 Brian Austin      2013-10-18  1310  		cs42l73->pdata = *pdata;
+7b09eea52939d2 Brian Austin      2013-10-18  1311  	}
+3d8c8bc0250f7c Brian Austin      2013-10-17  1312  
+3d8c8bc0250f7c Brian Austin      2013-10-17  1313  	i2c_set_clientdata(i2c_client, cs42l73);
+3d8c8bc0250f7c Brian Austin      2013-10-17  1314  
+3d8c8bc0250f7c Brian Austin      2013-10-17  1315  	if (cs42l73->pdata.reset_gpio) {
+2b21694f153a0d Axel Lin          2014-04-08 @1316  		ret = devm_gpio_request_one(&i2c_client->dev,
+2b21694f153a0d Axel Lin          2014-04-08  1317  					    cs42l73->pdata.reset_gpio,
+2b21694f153a0d Axel Lin          2014-04-08 @1318  					    GPIOF_OUT_INIT_HIGH,
+2b21694f153a0d Axel Lin          2014-04-08  1319  					    "CS42L73 /RST");
+3d8c8bc0250f7c Brian Austin      2013-10-17  1320  		if (ret < 0) {
+3d8c8bc0250f7c Brian Austin      2013-10-17  1321  			dev_err(&i2c_client->dev, "Failed to request /RST %d: %d\n",
+3d8c8bc0250f7c Brian Austin      2013-10-17  1322  				cs42l73->pdata.reset_gpio, ret);
+3d8c8bc0250f7c Brian Austin      2013-10-17  1323  			return ret;
+3d8c8bc0250f7c Brian Austin      2013-10-17  1324  		}
+3d8c8bc0250f7c Brian Austin      2013-10-17 @1325  		gpio_set_value_cansleep(cs42l73->pdata.reset_gpio, 0);
+3d8c8bc0250f7c Brian Austin      2013-10-17  1326  		gpio_set_value_cansleep(cs42l73->pdata.reset_gpio, 1);
+3d8c8bc0250f7c Brian Austin      2013-10-17  1327  	}
+3d8c8bc0250f7c Brian Austin      2013-10-17  1328  
+6d10c91493a0b3 Brian Austin      2011-11-16  1329  	/* initialize codec */
+26495252fe0d1e Charles Keepax    2021-05-10  1330  	devid = cirrus_read_device_id(cs42l73->regmap, CS42L73_DEVID_AB);
+26495252fe0d1e Charles Keepax    2021-05-10  1331  	if (devid < 0) {
+26495252fe0d1e Charles Keepax    2021-05-10  1332  		ret = devid;
+26495252fe0d1e Charles Keepax    2021-05-10  1333  		dev_err(&i2c_client->dev, "Failed to read device ID: %d\n", ret);
+26495252fe0d1e Charles Keepax    2021-05-10  1334  		goto err_reset;
+26495252fe0d1e Charles Keepax    2021-05-10  1335  	}
+6d10c91493a0b3 Brian Austin      2011-11-16  1336  
+6d10c91493a0b3 Brian Austin      2011-11-16  1337  	if (devid != CS42L73_DEVID) {
+ea0756158110fe Axel Lin          2011-11-19  1338  		ret = -ENODEV;
+6d10c91493a0b3 Brian Austin      2011-11-16  1339  		dev_err(&i2c_client->dev,
+6d10c91493a0b3 Brian Austin      2011-11-16  1340  			"CS42L73 Device ID (%X). Expected %X\n",
+6d10c91493a0b3 Brian Austin      2011-11-16  1341  			devid, CS42L73_DEVID);
+26495252fe0d1e Charles Keepax    2021-05-10  1342  		goto err_reset;
+6d10c91493a0b3 Brian Austin      2011-11-16  1343  	}
+6d10c91493a0b3 Brian Austin      2011-11-16  1344  
+6d10c91493a0b3 Brian Austin      2011-11-16  1345  	ret = regmap_read(cs42l73->regmap, CS42L73_REVID, &reg);
+6d10c91493a0b3 Brian Austin      2011-11-16  1346  	if (ret < 0) {
+6d10c91493a0b3 Brian Austin      2011-11-16  1347  		dev_err(&i2c_client->dev, "Get Revision ID failed\n");
+26495252fe0d1e Charles Keepax    2021-05-10  1348  		goto err_reset;
+6d10c91493a0b3 Brian Austin      2011-11-16  1349  	}
+6d10c91493a0b3 Brian Austin      2011-11-16  1350  
+6d10c91493a0b3 Brian Austin      2011-11-16  1351  	dev_info(&i2c_client->dev,
+8421f620da9717 Axel Lin          2011-11-19  1352  		 "Cirrus Logic CS42L73, Revision: %02X\n", reg & 0xFF);
+6d10c91493a0b3 Brian Austin      2011-11-16  1353  
+092631bf863d6c Kuninori Morimoto 2018-01-29  1354  	ret = devm_snd_soc_register_component(&i2c_client->dev,
+092631bf863d6c Kuninori Morimoto 2018-01-29  1355  			&soc_component_dev_cs42l73, cs42l73_dai,
+6d10c91493a0b3 Brian Austin      2011-11-16  1356  			ARRAY_SIZE(cs42l73_dai));
+6d10c91493a0b3 Brian Austin      2011-11-16  1357  	if (ret < 0)
+26495252fe0d1e Charles Keepax    2021-05-10  1358  		goto err_reset;
+26495252fe0d1e Charles Keepax    2021-05-10  1359  
+571f6a7f07e9dd Brian Austin      2012-06-04  1360  	return 0;
+26495252fe0d1e Charles Keepax    2021-05-10  1361  
+26495252fe0d1e Charles Keepax    2021-05-10  1362  err_reset:
+26495252fe0d1e Charles Keepax    2021-05-10  1363  	gpio_set_value_cansleep(cs42l73->pdata.reset_gpio, 0);
+26495252fe0d1e Charles Keepax    2021-05-10  1364  
+26495252fe0d1e Charles Keepax    2021-05-10  1365  	return ret;
+6d10c91493a0b3 Brian Austin      2011-11-16  1366  }
+6d10c91493a0b3 Brian Austin      2011-11-16  1367  
 
 -- 
 0-DAY CI Kernel Test Service
