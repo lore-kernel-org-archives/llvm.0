@@ -1,42 +1,47 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A2D881E;
-	Mon, 13 Mar 2023 19:21:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678735301; x=1710271301;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=lSjmJQeRGnGTPyw0qM4AQ1aCsXMaONbghYyGyYC86nw=;
-  b=eIiy69cPI7Xe+TRMo8oc6VZ9xZjkGBy4W80Q1QDFPII8r8n6lCcSzOHm
-   inD0U8/EMsqefogLNv82CThjCUUBKcZsbeQOZ5VIcrHToh/Kt6ShicBl4
-   LKMb/3PN2QY3X8bWO75pNW4KhQGmZBaRmfw3/hBcRYxR9qe2ui5Q5xp3o
-   u+P52hWAJ/vLT43Pef7bqwLwMe3w/Rj5jAGsiGukc30jhhghZ82i7G0Tb
-   wTyf5P/vaNv6gXW6hAWBv13Jr/itRLK06l9QGtI/mHDBFd0dZkeziikiY
-   5k3f3xZTrYfzMkwAJVS7eQTmyDBWRMjtJxjaNKUEBDa4I2JhjR/pAN9ti
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="423511127"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="423511127"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 12:21:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="747719199"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="747719199"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Mar 2023 12:21:39 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pbnjn-00062m-1A;
-	Mon, 13 Mar 2023 19:21:39 +0000
-Date: Tue, 14 Mar 2023 03:21:07 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: net/mac80211/he.c:158:33: warning: taking address of packed member
- 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value
-Message-ID: <202303140338.cK6wfgbh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DDA8838
+	for <llvm@lists.linux.dev>; Mon, 13 Mar 2023 19:35:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57CCAC433EF;
+	Mon, 13 Mar 2023 19:35:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678736144;
+	bh=pb3jqIowhbh7iEOOz6VvRnBRFRPGyvH7UTXrxnizsak=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=piMJkaptslG6cNRNg1uhcgBYPi1ZhcJoBzh/OpYd29e4SekP6qIu1/hhwrFUP/rKy
+	 8S+dj0o5E7P9kgUFG2WtdN/phvZr/c/IV0JS1LZt1+bCSMYUIDWTECz3M9fGNiSWsy
+	 4YyDkE4unpn6m7bMJ3LOrUdi77D6XvjgW5sc1U1AQwORLU0Gfypq6MMdTP+pDKDR5v
+	 zl6KroNDU0PO2l+NEk5iVloIVFBkB+uq+BkuJK+kO/LxHRIne05gZUr7jgxhLpN+gm
+	 WMV6BQfAc2V9il2oEtDOgsfUHOK409qyfYglWT9/I4XNueHsIV1UNmJU3AAD+UJxQw
+	 RlM3S27uTqAAA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 0F2134049F; Mon, 13 Mar 2023 16:35:42 -0300 (-03)
+Date: Mon, 13 Mar 2023 16:35:42 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Roberto Sassu <roberto.sassu@huawei.com>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Andres Freund <andres@anarazel.de>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Pavithra Gurushankar <gpavithrasha@gmail.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Leo Yan <leo.yan@linaro.org>,
+	Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 12/13] tools headers: Make the difference output
+ easier to read
+Message-ID: <ZA97DiLTzFyFpKVE@kernel.org>
+References: <20230311065753.3012826-1-irogers@google.com>
+ <20230311065753.3012826-13-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,238 +50,330 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-net/mac80211/he.c: 158:33: warning: taking address of packed member
- 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 160:12: warning: taking address of packed member
- 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 169:34: warning: taking address of packed member
- 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 171:13: warning: taking address of packed member
- 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in
- an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 186:34: warning: taking address of packed member
- 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
- in an unaligned pointer value [-Waddress-of-packed-member]
-net/mac80211/he.c: 188:13: warning: taking address of packed member
- 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result
- in an unaligned pointer value [-Waddress-of-packed-member]
+In-Reply-To: <20230311065753.3012826-13-irogers@google.com>
+X-Url: http://acmel.wordpress.com
 
-TO: Wen Gong <wgong@codeaurora.org>
-CC: Johannes Berg <johannes.berg@intel.com>
+Em Fri, Mar 10, 2023 at 10:57:52PM -0800, Ian Rogers escreveu:
+> Add failures to an array and display it before exiting. Before:
+> 
+> ```
+> Warning: Kernel ABI header at 'tools/include/uapi/linux/fcntl.h' differs from latest version at 'include/uapi/linux/fcntl.h'
+> diff -u tools/include/uapi/linux/fcntl.h include/uapi/linux/fcntl.h
+> Warning: Kernel ABI header at 'tools/include/uapi/linux/kvm.h' differs from latest version at 'include/uapi/linux/kvm.h'
+> diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+> ...
+> ```
+> 
+> After:
+> ```
+> Warning: Kernel ABI header differences:
+>   tools/include/uapi/linux/fcntl.h include/uapi/linux/fcntl.h
+>   tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
 
-Hi Wen,
+I use that diff line to cut and paste, check the errors, etc.
 
-FYI, the error/warning still remains.
+- Arnaldo
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git linux-5.15.y
-head:   2ddbd0f967b34872290e0f98fae32b91b4de7b87
-commit: 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6 mac80211: reduce peer HE MCS/NSS to own capabilities
-date:   2 years, 2 months ago
-config: mips-loongson2k_defconfig (https://download.01.org/0day-ci/archive/20230314/202303140338.cK6wfgbh-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64el-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus stable/linux-5.15.y
-        git checkout 7f7aa94bcaf03d0f18a6853d8f7dad6a4d25bbd6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/ipv4/ net/ipv6/ net/mac80211/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303140338.cK6wfgbh-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from net/mac80211/he.c:9:
-   In file included from net/mac80211/ieee80211_i.h:16:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/net/checksum.h:22:
-   arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: input with type 'unsigned long' matching output with type '__wsum' (aka 'unsigned int')
-           : "0" ((__force unsigned long)daddr),
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/mac80211/he.c:9:
-   In file included from net/mac80211/ieee80211_i.h:30:
-   In file included from include/net/mac80211.h:22:
-   In file included from include/net/codel.h:48:
-   In file included from include/net/inet_ecn.h:9:
-   In file included from include/net/inet_sock.h:22:
-   In file included from include/net/sock.h:61:
-   include/linux/poll.h:142:27: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                           ^~~~~~~~~
-   include/linux/poll.h:140:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
-   include/linux/poll.h:142:39: warning: division by zero is undefined [-Wdivision-by-zero]
-                   M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
-                                                       ^~~~~~~~~
-   include/linux/poll.h:140:32: note: expanded from macro 'M'
-   #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/poll.h:126:51: note: expanded from macro '__MAP'
-           (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
-                                                            ^ ~~~~~~~~~
->> net/mac80211/he.c:158:33: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-           ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:159:12: warning: taking address of packed member 'rx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &he_cap->he_mcs_nss_supp.rx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:160:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:161:12: warning: taking address of packed member 'tx_mcs_80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                         &he_cap->he_mcs_nss_supp.tx_mcs_80);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:169:34: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:170:13: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.rx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:171:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:172:13: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.tx_mcs_160);
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:174:29: warning: taking address of packed member 'rx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:175:29: warning: taking address of packed member 'tx_mcs_160' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:186:34: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:187:13: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/he.c:188:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:189:13: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                                                 &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:191:29: warning: taking address of packed member 'rx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/mac80211/he.c:192:29: warning: taking address of packed member 'tx_mcs_80p80' of class or structure 'ieee80211_he_mcs_nss_supp' may result in an unaligned pointer value [-Waddress-of-packed-member]
-                   ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   18 warnings and 1 error generated.
-
-
-vim +158 net/mac80211/he.c
-
-   105	
-   106	void
-   107	ieee80211_he_cap_ie_to_sta_he_cap(struct ieee80211_sub_if_data *sdata,
-   108					  struct ieee80211_supported_band *sband,
-   109					  const u8 *he_cap_ie, u8 he_cap_len,
-   110					  const struct ieee80211_he_6ghz_capa *he_6ghz_capa,
-   111					  struct sta_info *sta)
-   112	{
-   113		struct ieee80211_sta_he_cap *he_cap = &sta->sta.he_cap;
-   114		struct ieee80211_sta_he_cap own_he_cap = sband->iftype_data->he_cap;
-   115		struct ieee80211_he_cap_elem *he_cap_ie_elem = (void *)he_cap_ie;
-   116		u8 he_ppe_size;
-   117		u8 mcs_nss_size;
-   118		u8 he_total_size;
-   119		bool own_160, peer_160, own_80p80, peer_80p80;
-   120	
-   121		memset(he_cap, 0, sizeof(*he_cap));
-   122	
-   123		if (!he_cap_ie || !ieee80211_get_he_sta_cap(sband))
-   124			return;
-   125	
-   126		/* Make sure size is OK */
-   127		mcs_nss_size = ieee80211_he_mcs_nss_size(he_cap_ie_elem);
-   128		he_ppe_size =
-   129			ieee80211_he_ppe_size(he_cap_ie[sizeof(he_cap->he_cap_elem) +
-   130							mcs_nss_size],
-   131					      he_cap_ie_elem->phy_cap_info);
-   132		he_total_size = sizeof(he_cap->he_cap_elem) + mcs_nss_size +
-   133				he_ppe_size;
-   134		if (he_cap_len < he_total_size)
-   135			return;
-   136	
-   137		memcpy(&he_cap->he_cap_elem, he_cap_ie, sizeof(he_cap->he_cap_elem));
-   138	
-   139		/* HE Tx/Rx HE MCS NSS Support Field */
-   140		memcpy(&he_cap->he_mcs_nss_supp,
-   141		       &he_cap_ie[sizeof(he_cap->he_cap_elem)], mcs_nss_size);
-   142	
-   143		/* Check if there are (optional) PPE Thresholds */
-   144		if (he_cap->he_cap_elem.phy_cap_info[6] &
-   145		    IEEE80211_HE_PHY_CAP6_PPE_THRESHOLD_PRESENT)
-   146			memcpy(he_cap->ppe_thres,
-   147			       &he_cap_ie[sizeof(he_cap->he_cap_elem) + mcs_nss_size],
-   148			       he_ppe_size);
-   149	
-   150		he_cap->has_he = true;
-   151	
-   152		sta->cur_max_bandwidth = ieee80211_sta_cap_rx_bw(sta);
-   153		sta->sta.bandwidth = ieee80211_sta_cur_vht_bw(sta);
-   154	
-   155		if (sband->band == NL80211_BAND_6GHZ && he_6ghz_capa)
-   156			ieee80211_update_from_he_6ghz_capa(he_6ghz_capa, sta);
-   157	
- > 158		ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80,
- > 159					      &he_cap->he_mcs_nss_supp.rx_mcs_80,
- > 160					      &own_he_cap.he_mcs_nss_supp.tx_mcs_80,
- > 161					      &he_cap->he_mcs_nss_supp.tx_mcs_80);
-   162	
-   163		own_160 = own_he_cap.he_cap_elem.phy_cap_info[0] &
-   164			  IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   165		peer_160 = he_cap->he_cap_elem.phy_cap_info[0] &
-   166			   IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   167	
-   168		if (peer_160 && own_160) {
- > 169			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_160,
-   170						      &he_cap->he_mcs_nss_supp.rx_mcs_160,
- > 171						      &own_he_cap.he_mcs_nss_supp.tx_mcs_160,
- > 172						      &he_cap->he_mcs_nss_supp.tx_mcs_160);
-   173		} else if (peer_160 && !own_160) {
-   174			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_160);
- > 175			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_160);
-   176			he_cap->he_cap_elem.phy_cap_info[0] &=
-   177				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-   178		}
-   179	
-   180		own_80p80 = own_he_cap.he_cap_elem.phy_cap_info[0] &
-   181			    IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   182		peer_80p80 = he_cap->he_cap_elem.phy_cap_info[0] &
-   183			     IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   184	
-   185		if (peer_80p80 && own_80p80) {
- > 186			ieee80211_he_mcs_intersection(&own_he_cap.he_mcs_nss_supp.rx_mcs_80p80,
-   187						      &he_cap->he_mcs_nss_supp.rx_mcs_80p80,
- > 188						      &own_he_cap.he_mcs_nss_supp.tx_mcs_80p80,
-   189						      &he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-   190		} else if (peer_80p80 && !own_80p80) {
-   191			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.rx_mcs_80p80);
-   192			ieee80211_he_mcs_disable(&he_cap->he_mcs_nss_supp.tx_mcs_80p80);
-   193			he_cap->he_cap_elem.phy_cap_info[0] &=
-   194				~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-   195		}
-   196	}
-   197	
+> ...
+> ```
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/check-headers.sh | 229 ++++++++++++++++++++----------------
+>  1 file changed, 125 insertions(+), 104 deletions(-)
+> 
+> diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
+> index eacca9a874e2..f848b425d936 100755
+> --- a/tools/perf/check-headers.sh
+> +++ b/tools/perf/check-headers.sh
+> @@ -1,113 +1,121 @@
+> -#!/bin/sh
+> +#!/bin/bash
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -FILES='
+> -include/uapi/linux/const.h
+> -include/uapi/drm/drm.h
+> -include/uapi/drm/i915_drm.h
+> -include/uapi/linux/fadvise.h
+> -include/uapi/linux/fcntl.h
+> -include/uapi/linux/fs.h
+> -include/uapi/linux/fscrypt.h
+> -include/uapi/linux/kcmp.h
+> -include/uapi/linux/kvm.h
+> -include/uapi/linux/in.h
+> -include/uapi/linux/mount.h
+> -include/uapi/linux/openat2.h
+> -include/uapi/linux/perf_event.h
+> -include/uapi/linux/prctl.h
+> -include/uapi/linux/sched.h
+> -include/uapi/linux/stat.h
+> -include/uapi/linux/usbdevice_fs.h
+> -include/uapi/linux/vhost.h
+> -include/uapi/sound/asound.h
+> -include/linux/bits.h
+> -include/vdso/bits.h
+> -include/linux/const.h
+> -include/vdso/const.h
+> -include/linux/hash.h
+> -include/linux/list-sort.h
+> -include/uapi/linux/hw_breakpoint.h
+> -arch/x86/include/asm/disabled-features.h
+> -arch/x86/include/asm/required-features.h
+> -arch/x86/include/asm/cpufeatures.h
+> -arch/x86/include/asm/inat_types.h
+> -arch/x86/include/asm/emulate_prefix.h
+> -arch/x86/include/asm/irq_vectors.h
+> -arch/x86/include/asm/msr-index.h
+> -arch/x86/include/uapi/asm/prctl.h
+> -arch/x86/lib/x86-opcode-map.txt
+> -arch/x86/tools/gen-insn-attr-x86.awk
+> -arch/arm/include/uapi/asm/perf_regs.h
+> -arch/arm64/include/uapi/asm/perf_regs.h
+> -arch/mips/include/uapi/asm/perf_regs.h
+> -arch/powerpc/include/uapi/asm/perf_regs.h
+> -arch/s390/include/uapi/asm/perf_regs.h
+> -arch/x86/include/uapi/asm/perf_regs.h
+> -arch/x86/include/uapi/asm/kvm.h
+> -arch/x86/include/uapi/asm/kvm_perf.h
+> -arch/x86/include/uapi/asm/svm.h
+> -arch/x86/include/uapi/asm/unistd.h
+> -arch/x86/include/uapi/asm/vmx.h
+> -arch/powerpc/include/uapi/asm/kvm.h
+> -arch/s390/include/uapi/asm/kvm.h
+> -arch/s390/include/uapi/asm/kvm_perf.h
+> -arch/s390/include/uapi/asm/ptrace.h
+> -arch/s390/include/uapi/asm/sie.h
+> -arch/arm/include/uapi/asm/kvm.h
+> -arch/arm64/include/uapi/asm/kvm.h
+> -arch/arm64/include/uapi/asm/unistd.h
+> -arch/alpha/include/uapi/asm/errno.h
+> -arch/mips/include/asm/errno.h
+> -arch/mips/include/uapi/asm/errno.h
+> -arch/parisc/include/uapi/asm/errno.h
+> -arch/powerpc/include/uapi/asm/errno.h
+> -arch/sparc/include/uapi/asm/errno.h
+> -arch/x86/include/uapi/asm/errno.h
+> -include/asm-generic/bitops/arch_hweight.h
+> -include/asm-generic/bitops/const_hweight.h
+> -include/asm-generic/bitops/__fls.h
+> -include/asm-generic/bitops/fls.h
+> -include/asm-generic/bitops/fls64.h
+> -include/linux/coresight-pmu.h
+> -include/uapi/asm-generic/errno.h
+> -include/uapi/asm-generic/errno-base.h
+> -include/uapi/asm-generic/ioctls.h
+> -include/uapi/asm-generic/mman-common.h
+> -include/uapi/asm-generic/unistd.h
+> -'
+> -
+> -SYNC_CHECK_FILES='
+> -arch/x86/include/asm/inat.h
+> -arch/x86/include/asm/insn.h
+> -arch/x86/lib/inat.c
+> -arch/x86/lib/insn.c
+> -'
+> +YELLOW='\033[0;33m'
+> +NC='\033[0m' # No Color
+> +
+> +declare -a FILES
+> +FILES=(
+> +  "include/uapi/linux/const.h"
+> +  "include/uapi/drm/drm.h"
+> +  "include/uapi/drm/i915_drm.h"
+> +  "include/uapi/linux/fadvise.h"
+> +  "include/uapi/linux/fcntl.h"
+> +  "include/uapi/linux/fs.h"
+> +  "include/uapi/linux/fscrypt.h"
+> +  "include/uapi/linux/kcmp.h"
+> +  "include/uapi/linux/kvm.h"
+> +  "include/uapi/linux/in.h"
+> +  "include/uapi/linux/mount.h"
+> +  "include/uapi/linux/openat2.h"
+> +  "include/uapi/linux/perf_event.h"
+> +  "include/uapi/linux/prctl.h"
+> +  "include/uapi/linux/sched.h"
+> +  "include/uapi/linux/stat.h"
+> +  "include/uapi/linux/usbdevice_fs.h"
+> +  "include/uapi/linux/vhost.h"
+> +  "include/uapi/sound/asound.h"
+> +  "include/linux/bits.h"
+> +  "include/vdso/bits.h"
+> +  "include/linux/const.h"
+> +  "include/vdso/const.h"
+> +  "include/linux/hash.h"
+> +  "include/linux/list-sort.h"
+> +  "include/uapi/linux/hw_breakpoint.h"
+> +  "arch/x86/include/asm/disabled-features.h"
+> +  "arch/x86/include/asm/required-features.h"
+> +  "arch/x86/include/asm/cpufeatures.h"
+> +  "arch/x86/include/asm/inat_types.h"
+> +  "arch/x86/include/asm/emulate_prefix.h"
+> +  "arch/x86/include/asm/irq_vectors.h"
+> +  "arch/x86/include/asm/msr-index.h"
+> +  "arch/x86/include/uapi/asm/prctl.h"
+> +  "arch/x86/lib/x86-opcode-map.txt"
+> +  "arch/x86/tools/gen-insn-attr-x86.awk"
+> +  "arch/arm/include/uapi/asm/perf_regs.h"
+> +  "arch/arm64/include/uapi/asm/perf_regs.h"
+> +  "arch/mips/include/uapi/asm/perf_regs.h"
+> +  "arch/powerpc/include/uapi/asm/perf_regs.h"
+> +  "arch/s390/include/uapi/asm/perf_regs.h"
+> +  "arch/x86/include/uapi/asm/perf_regs.h"
+> +  "arch/x86/include/uapi/asm/kvm.h"
+> +  "arch/x86/include/uapi/asm/kvm_perf.h"
+> +  "arch/x86/include/uapi/asm/svm.h"
+> +  "arch/x86/include/uapi/asm/unistd.h"
+> +  "arch/x86/include/uapi/asm/vmx.h"
+> +  "arch/powerpc/include/uapi/asm/kvm.h"
+> +  "arch/s390/include/uapi/asm/kvm.h"
+> +  "arch/s390/include/uapi/asm/kvm_perf.h"
+> +  "arch/s390/include/uapi/asm/ptrace.h"
+> +  "arch/s390/include/uapi/asm/sie.h"
+> +  "arch/arm/include/uapi/asm/kvm.h"
+> +  "arch/arm64/include/uapi/asm/kvm.h"
+> +  "arch/arm64/include/uapi/asm/unistd.h"
+> +  "arch/alpha/include/uapi/asm/errno.h"
+> +  "arch/mips/include/asm/errno.h"
+> +  "arch/mips/include/uapi/asm/errno.h"
+> +  "arch/parisc/include/uapi/asm/errno.h"
+> +  "arch/powerpc/include/uapi/asm/errno.h"
+> +  "arch/sparc/include/uapi/asm/errno.h"
+> +  "arch/x86/include/uapi/asm/errno.h"
+> +  "include/asm-generic/bitops/arch_hweight.h"
+> +  "include/asm-generic/bitops/const_hweight.h"
+> +  "include/asm-generic/bitops/__fls.h"
+> +  "include/asm-generic/bitops/fls.h"
+> +  "include/asm-generic/bitops/fls64.h"
+> +  "include/linux/coresight-pmu.h"
+> +  "include/uapi/asm-generic/errno.h"
+> +  "include/uapi/asm-generic/errno-base.h"
+> +  "include/uapi/asm-generic/ioctls.h"
+> +  "include/uapi/asm-generic/mman-common.h"
+> +  "include/uapi/asm-generic/unistd.h"
+> +)
+> +
+> +declare -a SYNC_CHECK_FILES
+> +SYNC_CHECK_FILES=(
+> +  "arch/x86/include/asm/inat.h"
+> +  "arch/x86/include/asm/insn.h"
+> +  "arch/x86/lib/inat.c"
+> +  "arch/x86/lib/insn.c"
+> +)
+>  
+>  # These copies are under tools/perf/trace/beauty/ as they are not used to in
+>  # building object files only by scripts in tools/perf/trace/beauty/ to generate
+>  # tables that then gets included in .c files for things like id->string syscall
+>  # tables (and the reverse lookup as well: string -> id)
+>  
+> -BEAUTY_FILES='
+> -include/linux/socket.h
+> -'
+> +declare -a BEAUTY_FILES
+> +BEAUTY_FILES=(
+> +  "include/linux/socket.h"
+> +)
+> +
+> +declare -a FAILURES
+>  
+>  check_2 () {
+> -  file1=$1
+> -  file2=$2
+> +  tools_file=$1
+> +  orig_file=$2
+>  
+>    shift
+>    shift
+>  
+> -  cmd="diff $* $file1 $file2 > /dev/null"
+> +  cmd="diff $* $tools_file $orig_file > /dev/null"
+>  
+> -  test -f $file2 && {
+> -    eval $cmd || {
+> -      echo "Warning: Kernel ABI header at '$file1' differs from latest version at '$file2'" >&2
+> -      echo diff -u $file1 $file2
+> -    }
+> -  }
+> +  if [ -f "$orig_file" ] && ! eval "$cmd"
+> +  then
+> +    FAILURES+=(
+> +      "$tools_file $orig_file"
+> +    )
+> +  fi
+>  }
+>  
+>  check () {
+> @@ -115,7 +123,7 @@ check () {
+>  
+>    shift
+>  
+> -  check_2 tools/$file $file $*
+> +  check_2 "tools/$file" "$file" $*
+>  }
+>  
+>  beauty_check () {
+> @@ -123,23 +131,29 @@ beauty_check () {
+>  
+>    shift
+>  
+> -  check_2 tools/perf/trace/beauty/$file $file $*
+> +  check_2 "tools/perf/trace/beauty/$file" "$file" $*
+>  }
+>  
+>  # Check if we have the kernel headers (tools/perf/../../include), else
+>  # we're probably on a detached tarball, so no point in trying to check
+>  # differences.
+> -test -d ../../include || exit 0
+> +if ! [ -d ../../include ]
+> +then
+> +  echo -e "${YELLOW}Warning${NC}: Skipped check-headers due to missing ../../include"
+> +  exit 0
+> +fi
+>  
+>  cd ../..
+>  
+>  # simple diff check
+> -for i in $FILES; do
+> -  check $i -B
+> +for i in "${FILES[@]}"
+> +do
+> +  check "$i" -B
+>  done
+>  
+> -for i in $SYNC_CHECK_FILES; do
+> -  check $i '-I "^.*\/\*.*__ignore_sync_check__.*\*\/.*$"'
+> +for i in "${SYNC_CHECK_FILES[@]}"
+> +do
+> +  check "$i" '-I "^.*\/\*.*__ignore_sync_check__.*\*\/.*$"'
+>  done
+>  
+>  # diff with extra ignore lines
+> @@ -160,8 +174,9 @@ check_2 tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/s
+>  check_2 tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
+>  check_2 tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/kernel/syscalls/syscall_n64.tbl
+>  
+> -for i in $BEAUTY_FILES; do
+> -  beauty_check $i -B
+> +for i in "${BEAUTY_FILES[@]}"
+> +do
+> +  beauty_check "$i" -B
+>  done
+>  
+>  # check duplicated library files
+> @@ -169,3 +184,9 @@ check_2 tools/perf/util/hashmap.h tools/lib/bpf/hashmap.h
+>  check_2 tools/perf/util/hashmap.c tools/lib/bpf/hashmap.c
+>  
+>  cd tools/perf
+> +
+> +echo -e "${YELLOW}Warning${NC}: Kernel ABI header differences:"
+> +for i in "${FAILURES[@]}"
+> +do
+> +  echo "  $i"
+> +done
+> -- 
+> 2.40.0.rc1.284.g88254d51c5-goog
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+- Arnaldo
