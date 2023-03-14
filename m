@@ -1,167 +1,102 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662B52F29
-	for <llvm@lists.linux.dev>; Tue, 14 Mar 2023 10:05:37 +0000 (UTC)
-Received: by mail-lj1-f177.google.com with SMTP id f16so15384952ljq.10
-        for <llvm@lists.linux.dev>; Tue, 14 Mar 2023 03:05:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678788335;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zO8y7B6aNNm71Vx1n/Mc3i4WwfvOK3hLN8zL7R0hepg=;
-        b=iYkgyIxx/W533Pbt5pO8bplC1Ztg2LYUYPsFxDpH5mJO7q1DOHkK5eBT2saIsiZxX6
-         zLKNaxC0t6Z6WSxVFEOBPSalW8IpaDKqPrs8Q4WmVW9U8y6Q8SXPWb3hj8XUFMTPyYw6
-         4/joCgUAr4XSB/ExmylizneJf1wUHzgtmPVMWW+1NX7iuYZ3QgNLe2MOE8O8QNs1Ag1p
-         KFkV7TOHbrRB3Xq3Ndpl+CdRNY5xwh5ugQdA4lPak2jxmmP+HHsSu8/jeZ100/qdHa5y
-         wfqD2cwmYobpgPtWriDdfsJeD6wLLhuPdKQRLvOD63Dh3hnNpJKIyxKXNZsBWEULagXA
-         23rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678788335;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zO8y7B6aNNm71Vx1n/Mc3i4WwfvOK3hLN8zL7R0hepg=;
-        b=FxU7eqE52IXOp0lt1vAZvvD0u1gsetPMis/bsslZ59BFZTk9xKBYLz7Gj7FBg5K30W
-         FG4Liuy8jnw2apM1LE2tAohSRKYx+Rox3HQzJGSgDrOSQUnXVPpyNK1210HtHM7hrvqJ
-         ZO/eqy2902jB6nlE/rB7hN7/S5EHm2f8bYdsYcl7zSeuvdK8Np1Jn1wW0rGw3ZUs+RLB
-         NwAkan/I1cyUphzBbP1KhXgxID9XNXDxnV5MBzPsz9o7emgLKNWmsp8AlwF1c6YHv3Fg
-         anmdbSC8QlhBJjUmJhCBjeMcrxgCCWDJaQgP2srTcs+sQmDnvZfTFwWbu/XBqhgF4iww
-         I9Pw==
-X-Gm-Message-State: AO0yUKX7zKX6/RUYb5zaVz7AreIe3TGaWz7DeEvsmZYl/XkcFFK6Lu0G
-	NGbTJMF0S+Q/twfVkeIhQJeMxfEfyvRtsep8R6COFg==
-X-Google-Smtp-Source: AK7set+eRWxRGW+ukZViLWaQkRW6nN/uPusVQ5rSIjdKw8UTvpZtf5XsL5YROvgCGcMUymq8gMO7cEivMpCG7HLG3ro=
-X-Received: by 2002:a2e:b5cb:0:b0:298:a7be:4a8d with SMTP id
- g11-20020a2eb5cb000000b00298a7be4a8dmr130136ljn.8.1678788335243; Tue, 14 Mar
- 2023 03:05:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F8219E;
+	Tue, 14 Mar 2023 10:35:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678790133; x=1710326133;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JUQDA6TG6hIGar/jOmGUqSnBrRrJxJwAaYIdkBRf45o=;
+  b=Iz63XU6TLBT+D5wcJRxzUn5MipiOa9MpIbMwGyrza/jfBqQTJ3HqF0E6
+   ZReXq6VSIARyyPEA+/GKdcCvVIob+OyjDHAtf4Ng6h/EvsFqI7OVXB4mR
+   jqHHVVoZetuMmbbrBxPPqH8z57BG9Tzv6VXVfadjf5uTjanvWOu2AVUDJ
+   rn+uROLBo119KQ698C2KlWFoq2oIy+oDQbVHgTUyUDdWWZbwVB2T4jlBP
+   i9qn7PKPTCN3wFuiWoACR3odWuBuQl/CAG9um9g+h/Yix5XHGPyPq2nIs
+   BUmhiGK3gRda+w+MRUFlpe6byMpcMCy0iymHdYcBfqjQBonNxsIEFKNvo
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325751334"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="325751334"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 03:35:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="672283326"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="672283326"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 14 Mar 2023 03:35:30 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pc20A-0006pU-0o;
+	Tue, 14 Mar 2023 10:35:30 +0000
+Date: Tue, 14 Mar 2023 18:35:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-efi@vger.kernel.org
+Subject: [efi:urgent 5/5] ld.lld: error: undefined hidden symbol:
+ __efistub__text
+Message-ID: <202303141842.XIdIOihn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000ef6cf905f496e40b@google.com> <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3> <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
- <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org> <20230313115728.2wxy2qj4mqpwgrx7@quack3>
- <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com>
- <20230314022649.GM860405@mit.edu> <CACT4Y+b1vGfe0Uvp6YmKahK4GfCfvdBLCh0SAQzGgWN1s6A+0Q@mail.gmail.com>
-In-Reply-To: <CACT4Y+b1vGfe0Uvp6YmKahK4GfCfvdBLCh0SAQzGgWN1s6A+0Q@mail.gmail.com>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Tue, 14 Mar 2023 11:05:22 +0100
-Message-ID: <CACT4Y+YRVMtVXezKgRZm=p7EcRmc6Mt4Dnnn1MmoPqK06YicPw@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in ext4_group_desc_csum
-To: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Jan Kara <jack@suse.cz>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>, 
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	Lee Jones <joneslee@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 14 Mar 2023 at 10:45, Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Tue, 14 Mar 2023 at 03:26, Theodore Ts'o <tytso@mit.edu> wrote:
-> >
-> > On Mon, Mar 13, 2023 at 03:53:57PM +0100, Dmitry Vyukov wrote:
-> > > > Long-term we are moving ext4 in a direction where we can disallow block
-> > > > device modifications while the fs is mounted but we are not there yet. I've
-> > > > discussed some shorter-term solution to avoid such known problems with syzbot
-> > > > developers and what seems plausible would be a kconfig option to disallow
-> > > > writing to a block device when it is exclusively open by someone else.
-> > > > But so far I didn't get to trying whether this would reasonably work. Would
-> > > > you be interested in having a look into this?
-> > >
-> > > Does this affect only the loop device or also USB storage devices?
-> > > Say, if the USB device returns different contents during mount and on
-> > > subsequent reads?
-> >
-> > Modifying the block device while the file system is mounted is
-> > something that we have to allow for now because tune2fs uses it to
-> > modify the superblock.  It has historically also been used (rarely) by
-> > people who know what they are doing to do surgery on a mounted file
-> > system.  If we create a way for tune2fs to be able to update the
-> > superblock via some kind of ioctl, we could disallow modifying the
-> > block device while the file system is mounted.  Of course, it would
-> > require waiting at least 5-6 years since sometimes people will update
-> > the kernel without updating userspace.  We'd also need to check to
-> > make sure there aren't boot loader installer (such as grub-install)
-> > that depend on being able to modify the block device while the root
-> > file system is mounted, at least in some rare cases.
-> >
-> > The "how" to exclude mounted file systems is relatively easy.  The
-> > kernel already knows when the file system is mounted, and it is
-> > already a supported feature that a userspace application that wants to
-> > be careful can open a block device with O_EXCL, and if it is in use by
-> > the kernel --- mounted by a file system, being used by dm-thin, et. al
-> > -- the open(2) system call will fail.  From the open(2) man page.
-> >
-> >           In  general, the behavior of O_EXCL is undefined if it is used without
-> >           O_CREAT.  There is one exception: on Linux 2.6 and later,  O_EXCL  can
-> >           be  used without O_CREAT if pathname refers to a block device.  If the
-> >           block device is in use by the system  (e.g.,  mounted),  open()  fails
-> >           with the error EBUSY.
-> >
-> > Something which the syzbot could to do today is to simply use O_EXCL
-> > whenever trying to open a block device.  This would avoid a class of
-> > syzbot false positives, since normally it requires root privileges
-> > and/or an experienced sysadmin to try to modify a block device while
-> > it is mounted and/or in use by LVM.
-> >
-> >                                - Ted
-> >
-> > P.S.  Trivia note: Aproximately month after I started work at VA Linux
-> > Systems, a sysadmin intern which was given the root password to
-> > sourceforge.net, while trying to fix a disk-to-disk backup, ran
-> > mkfs.ext3 on /dev/hdXX, which was also being used as one-half of a
-> > RAID 0 setup on which open source code critical to the community
-> > (including, for example, OpenGL) was mounted and serving.  The intern
-> > got about 50% the way through zeroing the inode table on /dev/hdXX
-> > before the file system noticed and threw an error, at which point
-> > wiser heads stopped what the intern was doing and tried to clean up
-> > the mess.  Of course, there were no backups, since that was what the
-> > intern was trying to fix!
-> >
-> > There are a couple of things that we could learn from this incident.
-> > One was that giving the root password to an untrained intern not
-> > familiar with the setup on the serving system was... an unfortunate
-> > choice.  Another was that adding the above-mentioned O_EXCL feature
-> > and teaching mkfs to use it was an obvious post-mortem action item to
-> > prevent this kind of problem in the future...
->
-> I am struggling to make my mind re how to think about this case.
->
-> "root" is very overloaded, but generally it does not mean "randomly
-> corrupting memory". Normally it gives access to system-wide changes
-> but with the same protection/consistency guarantees as for
-> unprivileged system calls.
->
-> There are, of course, things like /dev/{mem,kmem}. But at the same
-> time there is also lockdown LSM and more distros today enable it.
->
-> Btw, should this "prohibit writes to mounted device" be part of
-> LOCKDOWN_INTEGRITY? It looks like it gives capabilities similar to
-> /dev/{mem,kmem}.
->
-> Disabling in testing something that's enabled in production is
-> generally not very useful.
-> So one option is to do nothing about this for now.
-> If it's a true recognized issue that is in the process of fixing,
-> syzbot will just show that it's still present. One of the goals of
-> syzbot is to show the current state of things in an objective manner.
-> If some kernel developers are aware of an issue, it does not mean that
-> most distros/users are aware.
->
-> It makes sense to disable in testing things that are also recommended
-> to be disabled in production settings.
-> And LOCKDOWN_INTEGRITY may play such a role: we include this
-> restriction into LOCKDOWN_INTEGRITY and enable it on syzbot.
-> Though, unfortunately, we still don't enable it because it prohibits
-> access to debugfs, which is required for fuzzing. Need to ask lockdown
-> maintainers what they think about
-> LOCKDOWN_TEST_ONLY_DONT_ENABLE_IN_PROD_INTEGRITY which would whitelist
-> debugfs.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git urgent
+head:   7949368e93e48a15ac5976405def16f8c84c837b
+commit: 7949368e93e48a15ac5976405def16f8c84c837b [5/5] efi: libstub: Use relocated version of kernel's struct screen_info
+config: arm64-randconfig-r001-20230312 (https://download.01.org/0day-ci/archive/20230314/202303141842.XIdIOihn-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git/commit/?id=7949368e93e48a15ac5976405def16f8c84c837b
+        git remote add efi https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git
+        git fetch --no-tags efi urgent
+        git checkout 7949368e93e48a15ac5976405def16f8c84c837b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Asked lockdown maintainers about adding this it lockdown and adding
-special mode for fuzzing:
-https://lore.kernel.org/all/CACT4Y+Z-9KCgKwkktvdJwNJZxxeA1f74zkP7KD6c=OmKXxXfjw@mail.gmail.com/
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303141842.XIdIOihn-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined hidden symbol: __efistub__text
+   >>> referenced by arm64-stub.c:88 (drivers/firmware/efi/libstub/arm64-stub.c:88)
+   >>>               arm64-stub.stub.o:(__efistub_handle_kernel_image) in archive drivers/firmware/efi/libstub/lib.a
+   >>> referenced by arm64-stub.c:88 (drivers/firmware/efi/libstub/arm64-stub.c:88)
+   >>>               arm64-stub.stub.o:(__efistub_handle_kernel_image) in archive drivers/firmware/efi/libstub/lib.a
+   >>> referenced by arm64-stub.c:158 (drivers/firmware/efi/libstub/arm64-stub.c:158)
+   >>>               arm64-stub.stub.o:(__efistub_primary_entry_offset) in archive drivers/firmware/efi/libstub/lib.a
+   >>> referenced 1 more times
+--
+>> ld.lld: error: undefined hidden symbol: __efistub___inittext_end
+   >>> referenced by arm64-stub.c:141 (drivers/firmware/efi/libstub/arm64-stub.c:141)
+   >>>               arm64-stub.stub.o:(__efistub_handle_kernel_image) in archive drivers/firmware/efi/libstub/lib.a
+   >>> referenced by arm64-stub.c:141 (drivers/firmware/efi/libstub/arm64-stub.c:141)
+   >>>               arm64-stub.stub.o:(__efistub_handle_kernel_image) in archive drivers/firmware/efi/libstub/lib.a
+--
+>> ld.lld: error: undefined hidden symbol: __efistub_caches_clean_inval_pou
+   >>> referenced by arm64-stub.c:141 (drivers/firmware/efi/libstub/arm64-stub.c:141)
+   >>>               arm64-stub.stub.o:(__efistub_handle_kernel_image) in archive drivers/firmware/efi/libstub/lib.a
+--
+>> ld.lld: error: undefined hidden symbol: __efistub_primary_entry
+   >>> referenced by arm64-stub.c:158 (drivers/firmware/efi/libstub/arm64-stub.c:158)
+   >>>               arm64-stub.stub.o:(__efistub_primary_entry_offset) in archive drivers/firmware/efi/libstub/lib.a
+   >>> referenced by arm64-stub.c:158 (drivers/firmware/efi/libstub/arm64-stub.c:158)
+   >>>               arm64-stub.stub.o:(__efistub_primary_entry_offset) in archive drivers/firmware/efi/libstub/lib.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
