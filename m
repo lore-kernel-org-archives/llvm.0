@@ -1,160 +1,204 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F7228EF
-	for <llvm@lists.linux.dev>; Tue, 14 Mar 2023 09:45:47 +0000 (UTC)
-Received: by mail-lf1-f45.google.com with SMTP id i28so19225656lfv.0
-        for <llvm@lists.linux.dev>; Tue, 14 Mar 2023 02:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678787145;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6pcqMq7ehIa6i1rtDr3wgfvzTOrNwTy03OqMiZgNpI=;
-        b=nXmm+uNaDPjCj0lX7JL+UbhoNrflVNvabuAFPSnzFyn68+uumCCA+TsBbI6hN6mqlP
-         DKpQHaqDrU796ImWM9FqHXmmbxVJS97M5vbjvw4TV81cr90J6MfISNGxHnKe1xzrkNGC
-         yQlZy8XMxuOiWkI/YLq4gbb5BakxLYLyv7idVohCB7uo4nn08axqxWjZkoY65WSb7vPV
-         LQ+RG3TB1e4g5GwwrrgisoPp4qCKd7HmdtxffNARJ+MBuWbDgmm3ZGlEdiZiebKHq58I
-         1nm3Ok53HBe//gIgo6jIHtEVNLBwcIxNvexx/V7MeEyFuN9mbJTWR9U4IbFikOTmCSRi
-         H3Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678787145;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f6pcqMq7ehIa6i1rtDr3wgfvzTOrNwTy03OqMiZgNpI=;
-        b=UC3BRCbeVQuaMYX0kljyrifP61x3tDt4HmdgArdYdo/K4iD0skXhIudEFPXvQ02CwJ
-         hm+hFnGZrc0yx+dqjPeVuS7OE+kgk1Y4Z5I98hKfldLTxXjw6qEGOMvW5/9JM0Px499X
-         CydL611OuKj0MsiqpoprEW35Fic2NtMZEt1vNSzDTMdiyCvQNPb41nmbVma6gZBGKtAY
-         Sf9O/IqUBUi1YrHvjm/e49ULGje8kslz/h5I85N8qRZazMBWiVO8UoIjPfSkVRgom2K3
-         SBTIwWUj5nYYPxYmaiMDfvj/Qg4eZ09jY4lhL1YkTaVJPa1JQOGAgcXgpKGvRBpq93nM
-         AQ9A==
-X-Gm-Message-State: AO0yUKUY90avJAaYaQFUVxeHs5lL3P3AfXO8yr84S6uyM2I0e064n3K8
-	LLEuGpaT6/AypiHo1SP8r+Ny2mLNhk/8cE+XEPHYaA==
-X-Google-Smtp-Source: AK7set8tToRs8Na1+lGjKxbLv779LnOQTM/dCJ4Z8OoF+9MU8pxhAeiex7h4PJ510k7hhOvFrUwul1sq+AH/MeOBkj4=
-X-Received: by 2002:ac2:484f:0:b0:4e8:1706:65af with SMTP id
- 15-20020ac2484f000000b004e8170665afmr532059lfy.6.1678787145083; Tue, 14 Mar
- 2023 02:45:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EA728EF;
+	Tue, 14 Mar 2023 10:04:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678788277; x=1710324277;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=DuyYrXX2r95sQ6uG4hkHhhoMI9GTEbdQx/DJbwGYTK8=;
+  b=bIviCExwJhD+1aeLdDeANrdIlPCrkSV0BtEMEkK35uEgSohleepGuf1B
+   LdSxuHL9hi9fjVPEhF0jAhOwA+WhZ9Dd3T0u31hb+SnRStzuqy1jK8D0F
+   p3NGR3LH8BBgQexDX2iAPEsXyKvYNl4W7h9fKQfxv7Ti1WSOU2JU9S3mN
+   tIrUI5Tp5LRa9lFfL4CRrOtQV9Y2JrmJmCC4x+eJxOhNi/ITXeQRzEjE8
+   8ggaMNcRxCcbk/kEF8OL5p1f0rxwaOcd98JBD3rs8/w4Y3l/oLRD1i3kj
+   Qv4u/XwBefJ5szuWLIgm0IVjhWmMAPzMTDvxCiMJ1koTYPgrwYcHFuOJH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334862330"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="334862330"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 03:04:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="679029799"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="679029799"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 14 Mar 2023 03:04:29 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pc1W9-0006nW-0U;
+	Tue, 14 Mar 2023 10:04:29 +0000
+Date: Tue, 14 Mar 2023 18:04:14 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: drivers/media/v4l2-core/v4l2-ioctl.c:302:28: warning: taking address
+ of packed member 'pixelformat' of class or structure
+ 'v4l2_pix_format_mplane' may result in an unaligned pointer value
+Message-ID: <202303141714.UxHEuotf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000ef6cf905f496e40b@google.com> <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3> <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
- <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org> <20230313115728.2wxy2qj4mqpwgrx7@quack3>
- <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com> <20230314022649.GM860405@mit.edu>
-In-Reply-To: <20230314022649.GM860405@mit.edu>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Tue, 14 Mar 2023 10:45:32 +0100
-Message-ID: <CACT4Y+b1vGfe0Uvp6YmKahK4GfCfvdBLCh0SAQzGgWN1s6A+0Q@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in ext4_group_desc_csum
-To: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Jan Kara <jack@suse.cz>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>, 
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	Lee Jones <joneslee@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+drivers/media/v4l2-core/v4l2-ioctl.c: 302:28: warning: taking address of
+ packed member 'pixelformat' of class or structure 'v4l2_pix_format_mplane'
+ may result in an unaligned pointer value [-Waddress-of-packed-member]
+drivers/media/v4l2-core/v4l2-ioctl.c: 346:37: warning: taking address of
+ packed member 'pixelformat' of class or structure 'v4l2_sdr_format' may
+ result in an unaligned pointer value [-Waddress-of-packed-member]
+drivers/media/v4l2-core/v4l2-ioctl.c: 352:5: warning: taking address of
+ packed member 'dataformat' of class or structure 'v4l2_meta_format' may
+ result in an unaligned pointer value [-Waddress-of-packed-member]
 
-On Tue, 14 Mar 2023 at 03:26, Theodore Ts'o <tytso@mit.edu> wrote:
->
-> On Mon, Mar 13, 2023 at 03:53:57PM +0100, Dmitry Vyukov wrote:
-> > > Long-term we are moving ext4 in a direction where we can disallow block
-> > > device modifications while the fs is mounted but we are not there yet. I've
-> > > discussed some shorter-term solution to avoid such known problems with syzbot
-> > > developers and what seems plausible would be a kconfig option to disallow
-> > > writing to a block device when it is exclusively open by someone else.
-> > > But so far I didn't get to trying whether this would reasonably work. Would
-> > > you be interested in having a look into this?
-> >
-> > Does this affect only the loop device or also USB storage devices?
-> > Say, if the USB device returns different contents during mount and on
-> > subsequent reads?
->
-> Modifying the block device while the file system is mounted is
-> something that we have to allow for now because tune2fs uses it to
-> modify the superblock.  It has historically also been used (rarely) by
-> people who know what they are doing to do surgery on a mounted file
-> system.  If we create a way for tune2fs to be able to update the
-> superblock via some kind of ioctl, we could disallow modifying the
-> block device while the file system is mounted.  Of course, it would
-> require waiting at least 5-6 years since sometimes people will update
-> the kernel without updating userspace.  We'd also need to check to
-> make sure there aren't boot loader installer (such as grub-install)
-> that depend on being able to modify the block device while the root
-> file system is mounted, at least in some rare cases.
->
-> The "how" to exclude mounted file systems is relatively easy.  The
-> kernel already knows when the file system is mounted, and it is
-> already a supported feature that a userspace application that wants to
-> be careful can open a block device with O_EXCL, and if it is in use by
-> the kernel --- mounted by a file system, being used by dm-thin, et. al
-> -- the open(2) system call will fail.  From the open(2) man page.
->
->           In  general, the behavior of O_EXCL is undefined if it is used without
->           O_CREAT.  There is one exception: on Linux 2.6 and later,  O_EXCL  can
->           be  used without O_CREAT if pathname refers to a block device.  If the
->           block device is in use by the system  (e.g.,  mounted),  open()  fails
->           with the error EBUSY.
->
-> Something which the syzbot could to do today is to simply use O_EXCL
-> whenever trying to open a block device.  This would avoid a class of
-> syzbot false positives, since normally it requires root privileges
-> and/or an experienced sysadmin to try to modify a block device while
-> it is mounted and/or in use by LVM.
->
->                                - Ted
->
-> P.S.  Trivia note: Aproximately month after I started work at VA Linux
-> Systems, a sysadmin intern which was given the root password to
-> sourceforge.net, while trying to fix a disk-to-disk backup, ran
-> mkfs.ext3 on /dev/hdXX, which was also being used as one-half of a
-> RAID 0 setup on which open source code critical to the community
-> (including, for example, OpenGL) was mounted and serving.  The intern
-> got about 50% the way through zeroing the inode table on /dev/hdXX
-> before the file system noticed and threw an error, at which point
-> wiser heads stopped what the intern was doing and tried to clean up
-> the mess.  Of course, there were no backups, since that was what the
-> intern was trying to fix!
->
-> There are a couple of things that we could learn from this incident.
-> One was that giving the root password to an untrained intern not
-> familiar with the setup on the serving system was... an unfortunate
-> choice.  Another was that adding the above-mentioned O_EXCL feature
-> and teaching mkfs to use it was an obvious post-mortem action item to
-> prevent this kind of problem in the future...
+TO: Luciano Coelho <luciano.coelho@intel.com>
+TO: Golan Ben Ami <golan.ben.ami@intel.com>
+TO: Michael Golant <michael.golant@intel.com>
+TO: Johannes Berg <johannes.berg@intel.com>
 
-I am struggling to make my mind re how to think about this case.
+Hi Sakari,
 
-"root" is very overloaded, but generally it does not mean "randomly
-corrupting memory". Normally it gives access to system-wide changes
-but with the same protection/consistency guarantees as for
-unprivileged system calls.
+FYI, the error/warning still remains.
 
-There are, of course, things like /dev/{mem,kmem}. But at the same
-time there is also lockdown LSM and more distros today enable it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/chromeos.git chromeos-5.10__release/core62-50-1
+head:   aa035fb1ea0a81817398b02a7ca3914558fe23a5
+commit: 8abcb9019ee52170db785200c4fbf321f7ea329f UPSTREAM: v4l: ioctl: Use %p4cc printk modifier to print FourCC codes
+date:   1 year, 10 months ago
+config: mips-randconfig-r001-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141714.UxHEuotf-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips64el-linux-gnuabi64
+        # https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/chromeos.git/commit/?id=8abcb9019ee52170db785200c4fbf321f7ea329f
+        git remote add iwlwifi-chromeos https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/chromeos.git
+        git fetch --no-tags iwlwifi-chromeos chromeos-5.10__release/core62-50-1
+        git checkout 8abcb9019ee52170db785200c4fbf321f7ea329f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/v4l2-core/
 
-Btw, should this "prohibit writes to mounted device" be part of
-LOCKDOWN_INTEGRITY? It looks like it gives capabilities similar to
-/dev/{mem,kmem}.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303141714.UxHEuotf-lkp@intel.com/
 
-Disabling in testing something that's enabled in production is
-generally not very useful.
-So one option is to do nothing about this for now.
-If it's a true recognized issue that is in the process of fixing,
-syzbot will just show that it's still present. One of the goals of
-syzbot is to show the current state of things in an objective manner.
-If some kernel developers are aware of an issue, it does not mean that
-most distros/users are aware.
+All warnings (new ones prefixed by >>):
 
-It makes sense to disable in testing things that are also recommended
-to be disabled in production settings.
-And LOCKDOWN_INTEGRITY may play such a role: we include this
-restriction into LOCKDOWN_INTEGRITY and enable it on syzbot.
-Though, unfortunately, we still don't enable it because it prohibits
-access to debugfs, which is required for fuzzing. Need to ask lockdown
-maintainers what they think about
-LOCKDOWN_TEST_ONLY_DONT_ENABLE_IN_PROD_INTEGRITY which would whitelist
-debugfs.
+>> drivers/media/v4l2-core/v4l2-ioctl.c:302:28: warning: taking address of packed member 'pixelformat' of class or structure 'v4l2_pix_format_mplane' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                           mp->width, mp->height, &mp->pixelformat,
+                                                   ^~~~~~~~~~~~~~~
+   include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+                                   ^~~~~~~~~~~
+>> drivers/media/v4l2-core/v4l2-ioctl.c:346:37: warning: taking address of packed member 'pixelformat' of class or structure 'v4l2_sdr_format' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                   pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
+                                                     ^~~~~~~~~~~~~~~~
+   include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+                                   ^~~~~~~~~~~
+>> drivers/media/v4l2-core/v4l2-ioctl.c:352:5: warning: taking address of packed member 'dataformat' of class or structure 'v4l2_meta_format' may result in an unaligned pointer value [-Waddress-of-packed-member]
+                           &meta->dataformat, meta->buffersize);
+                            ^~~~~~~~~~~~~~~~
+   include/linux/printk.h:385:26: note: expanded from macro 'pr_cont'
+           printk(KERN_CONT fmt, ##__VA_ARGS__)
+                                   ^~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +302 drivers/media/v4l2-core/v4l2-ioctl.c
+
+   272	
+   273	static void v4l_print_format(const void *arg, bool write_only)
+   274	{
+   275		const struct v4l2_format *p = arg;
+   276		const struct v4l2_pix_format *pix;
+   277		const struct v4l2_pix_format_mplane *mp;
+   278		const struct v4l2_vbi_format *vbi;
+   279		const struct v4l2_sliced_vbi_format *sliced;
+   280		const struct v4l2_window *win;
+   281		const struct v4l2_sdr_format *sdr;
+   282		const struct v4l2_meta_format *meta;
+   283		u32 planes;
+   284		unsigned i;
+   285	
+   286		pr_cont("type=%s", prt_names(p->type, v4l2_type_names));
+   287		switch (p->type) {
+   288		case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+   289		case V4L2_BUF_TYPE_VIDEO_OUTPUT:
+   290			pix = &p->fmt.pix;
+   291			pr_cont(", width=%u, height=%u, pixelformat=%p4cc, field=%s, bytesperline=%u, sizeimage=%u, colorspace=%d, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+   292				pix->width, pix->height, &pix->pixelformat,
+   293				prt_names(pix->field, v4l2_field_names),
+   294				pix->bytesperline, pix->sizeimage,
+   295				pix->colorspace, pix->flags, pix->ycbcr_enc,
+   296				pix->quantization, pix->xfer_func);
+   297			break;
+   298		case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+   299		case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+   300			mp = &p->fmt.pix_mp;
+   301			pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
+ > 302				mp->width, mp->height, &mp->pixelformat,
+   303				prt_names(mp->field, v4l2_field_names),
+   304				mp->colorspace, mp->num_planes, mp->flags,
+   305				mp->ycbcr_enc, mp->quantization, mp->xfer_func);
+   306			planes = min_t(u32, mp->num_planes, VIDEO_MAX_PLANES);
+   307			for (i = 0; i < planes; i++)
+   308				printk(KERN_DEBUG "plane %u: bytesperline=%u sizeimage=%u\n", i,
+   309						mp->plane_fmt[i].bytesperline,
+   310						mp->plane_fmt[i].sizeimage);
+   311			break;
+   312		case V4L2_BUF_TYPE_VIDEO_OVERLAY:
+   313		case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY:
+   314			win = &p->fmt.win;
+   315			/* Note: we can't print the clip list here since the clips
+   316			 * pointer is a userspace pointer, not a kernelspace
+   317			 * pointer. */
+   318			pr_cont(", wxh=%dx%d, x,y=%d,%d, field=%s, chromakey=0x%08x, clipcount=%u, clips=%p, bitmap=%p, global_alpha=0x%02x\n",
+   319				win->w.width, win->w.height, win->w.left, win->w.top,
+   320				prt_names(win->field, v4l2_field_names),
+   321				win->chromakey, win->clipcount, win->clips,
+   322				win->bitmap, win->global_alpha);
+   323			break;
+   324		case V4L2_BUF_TYPE_VBI_CAPTURE:
+   325		case V4L2_BUF_TYPE_VBI_OUTPUT:
+   326			vbi = &p->fmt.vbi;
+   327			pr_cont(", sampling_rate=%u, offset=%u, samples_per_line=%u, sample_format=%p4cc, start=%u,%u, count=%u,%u\n",
+   328				vbi->sampling_rate, vbi->offset,
+   329				vbi->samples_per_line, &vbi->sample_format,
+   330				vbi->start[0], vbi->start[1],
+   331				vbi->count[0], vbi->count[1]);
+   332			break;
+   333		case V4L2_BUF_TYPE_SLICED_VBI_CAPTURE:
+   334		case V4L2_BUF_TYPE_SLICED_VBI_OUTPUT:
+   335			sliced = &p->fmt.sliced;
+   336			pr_cont(", service_set=0x%08x, io_size=%d\n",
+   337					sliced->service_set, sliced->io_size);
+   338			for (i = 0; i < 24; i++)
+   339				printk(KERN_DEBUG "line[%02u]=0x%04x, 0x%04x\n", i,
+   340					sliced->service_lines[0][i],
+   341					sliced->service_lines[1][i]);
+   342			break;
+   343		case V4L2_BUF_TYPE_SDR_CAPTURE:
+   344		case V4L2_BUF_TYPE_SDR_OUTPUT:
+   345			sdr = &p->fmt.sdr;
+ > 346			pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
+   347			break;
+   348		case V4L2_BUF_TYPE_META_CAPTURE:
+   349		case V4L2_BUF_TYPE_META_OUTPUT:
+   350			meta = &p->fmt.meta;
+   351			pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+ > 352				&meta->dataformat, meta->buffersize);
+   353			break;
+   354		}
+   355	}
+   356	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
