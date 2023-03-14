@@ -1,189 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6A08F4E;
-	Mon, 13 Mar 2023 23:00:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0B3C433EF;
-	Mon, 13 Mar 2023 23:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678748448;
-	bh=JCeQvBY6bMqovbU34cXbJ4Zgnocr52q58fWGR8Okslg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=db8ONJnU3rzg0GkiT8U7ITxd6f/Pcpenykg1Q3Gh7uOGiQUfuKf+uowPWc92kRciM
-	 XClRrybnkrciyd9wLhE/RVuTmdPSSpoo7sk4Uu7cFGrpVokmkJWJOy7Hrynp5WTs1A
-	 tKssWkWDmsSGhK3ZFN2v3EDos4Sx/zcxpYCOHTvciNdA1uUZhLXT8xgvToT2/9EtRR
-	 eyHRXwwGypRwKKEKNAucW0swKGz8yjRYkcN5tV3YiY7srhFlfRiL7r9aGbsW3iv4AB
-	 bOT+ASwBhst36EDe6ab+VBcGUZgESIgn8UzP1gnHdQMCaarY5lvCF/UM1LOA2QscI7
-	 IAT03dPN/YTGw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 13 Mar 2023 16:00:23 -0700
-Subject: [PATCH] riscv: Handle zicsr/zifencei issues between clang and
- binutils
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4005E15AD
+	for <llvm@lists.linux.dev>; Tue, 14 Mar 2023 02:30:10 +0000 (UTC)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32E2QncK012949
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 13 Mar 2023 22:26:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1678760814; bh=8JqVxAMGDUDi2XIrrOmUQ1H1l2f992aiLDoCnA/d0IE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=OebhAS4L6gGEEt5NLSSgaHmEBRj+hXV7nDJr1Lerw48ZJpFOj1TGJgv8tdeDtAwZ2
+	 m6aEMLV+yw4ykpNRZqj/0rsyTjbvxWcXWlBA0BHjWTvgsxQHqSlRIjxLH0XxynYSx5
+	 2ZQ6ApErlSs3+K8O0vgJWi3Ko3rzQAdYmzGggNlTRPXfA7ZLfpSbfRLK7654Kh2fsW
+	 6aoU/4s2sC7iGvyA064uLWmo8x0RybsyK6QJSR/RgyOdvgp43dkZ0XYclrWI/Bjkgh
+	 j/PztTs/p0dapsX272uw8MpN4OOHC4ZUb4gYbh0OdFQImzHhUydInD3NIJC+dtojdZ
+	 zlTb13p8vplJg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id 8C4FF15C5830; Mon, 13 Mar 2023 22:26:49 -0400 (EDT)
+Date: Mon, 13 Mar 2023 22:26:49 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: Dmitry Vyukov <dvyukov@google.com>
+Cc: Jan Kara <jack@suse.cz>, Tudor Ambarus <tudor.ambarus@linaro.org>,
+        syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com, Lee Jones <joneslee@google.com>
+Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
+ ext4_group_desc_csum
+Message-ID: <20230314022649.GM860405@mit.edu>
+References: <000000000000ef6cf905f496e40b@google.com>
+ <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
+ <20230307103958.lo6ynoypgwreqmnq@quack3>
+ <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
+ <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
+ <20230313115728.2wxy2qj4mqpwgrx7@quack3>
+ <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230313-riscv-zicsr-zifencei-fiasco-v1-1-dd1b7840a551@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAarD2QC/x2NQQrDMAwEvxJ0riC2A6X9SulBVuRGhzpFKiE05
- O91clkYFmY2cDEVh3u3gcmirnNtEC4d8ET1JahjY4h9TH0KCU2dF/wpu7UtUlkUi5LzjPE2BCb
- Jch0ZmiGTC2ajytPheJN/xY7jY1J0PbOP577/AX8nSeKGAAAA
-To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
- conor.dooley@microchip.com
-Cc: nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6797; i=nathan@kernel.org;
- h=from:subject:message-id; bh=JCeQvBY6bMqovbU34cXbJ4Zgnocr52q58fWGR8Okslg=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCn8q+W/p6yaqjirarFIdECezW+de4YNOQ0aynImBz++m
- sKzSO9uRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhI53xGhu3M74vyHI/Vdh0N
- Fnbm+HaSU2tO389nYWqvr3sy9NQrrWFkaFCeGvwou9z2E8P1nR6KSVdWnPwXds6/6nW4bNjJte0
- XWQE=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com>
 
-There are two related issues that appear in certain combinations with
-clang and GNU binutils.
+On Mon, Mar 13, 2023 at 03:53:57PM +0100, Dmitry Vyukov wrote:
+> > Long-term we are moving ext4 in a direction where we can disallow block
+> > device modifications while the fs is mounted but we are not there yet. I've
+> > discussed some shorter-term solution to avoid such known problems with syzbot
+> > developers and what seems plausible would be a kconfig option to disallow
+> > writing to a block device when it is exclusively open by someone else.
+> > But so far I didn't get to trying whether this would reasonably work. Would
+> > you be interested in having a look into this?
+> 
+> Does this affect only the loop device or also USB storage devices?
+> Say, if the USB device returns different contents during mount and on
+> subsequent reads?
 
-The first occurs when a version of clang that supports zicsr or zifencei
-via '-march=' [1] (i.e, >= 17.x) is used in combination with a version
-of GNU binutils that do not recognize zicsr and zifencei in the
-'-march=' value (i.e., < 2.36):
+Modifying the block device while the file system is mounted is
+something that we have to allow for now because tune2fs uses it to
+modify the superblock.  It has historically also been used (rarely) by
+people who know what they are doing to do surgery on a mounted file
+system.  If we create a way for tune2fs to be able to update the
+superblock via some kind of ioctl, we could disallow modifying the
+block device while the file system is mounted.  Of course, it would
+require waiting at least 5-6 years since sometimes people will update
+the kernel without updating userspace.  We'd also need to check to
+make sure there aren't boot loader installer (such as grub-install)
+that depend on being able to modify the block device while the root
+file system is mounted, at least in some rare cases.
 
-  riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicsr2p0_zifencei2p0: Invalid or unknown z ISA extension: 'zifencei'
-  riscv64-linux-gnu-ld: failed to merge target specific data of file fs/efivarfs/file.o
-  riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicsr2p0_zifencei2p0: Invalid or unknown z ISA extension: 'zifencei'
-  riscv64-linux-gnu-ld: failed to merge target specific data of file fs/efivarfs/super.o
+The "how" to exclude mounted file systems is relatively easy.  The
+kernel already knows when the file system is mounted, and it is
+already a supported feature that a userspace application that wants to
+be careful can open a block device with O_EXCL, and if it is in use by
+the kernel --- mounted by a file system, being used by dm-thin, et. al
+-- the open(2) system call will fail.  From the open(2) man page.
 
-The second occurs when a version of clang that does not support zicsr or
-zifencei via '-march=' (i.e., <= 16.x) is used in combination with a
-version of GNU as that defaults to a newer ISA base spec, which requires
-specifying zicsr and zifencei in the '-march=' value explicitly (i.e, >=
-2.38):
+          In  general, the behavior of O_EXCL is undefined if it is used without
+          O_CREAT.  There is one exception: on Linux 2.6 and later,  O_EXCL  can
+          be  used without O_CREAT if pathname refers to a block device.  If the
+          block device is in use by the system  (e.g.,  mounted),  open()  fails
+          with the error EBUSY.
 
-  ../arch/riscv/kernel/kexec_relocate.S: Assembler messages:
-  ../arch/riscv/kernel/kexec_relocate.S:147: Error: unrecognized opcode `fence.i', extension `zifencei' required
-  clang-12: error: assembler command failed with exit code 1 (use -v to see invocation)
+Something which the syzbot could to do today is to simply use O_EXCL
+whenever trying to open a block device.  This would avoid a class of
+syzbot false positives, since normally it requires root privileges
+and/or an experienced sysadmin to try to modify a block device while
+it is mounted and/or in use by LVM.
 
-This is the same issue addressed by commit 6df2a016c0c8 ("riscv: fix
-build with binutils 2.38") (see [2] for additional information) but
-older versions of clang miss out on it because the cc-option check
-fails:
+      	      	     	       - Ted
 
-  clang-12: error: invalid arch name 'rv64imac_zicsr_zifencei', unsupported standard user-level extension 'zicsr'
-  clang-12: error: invalid arch name 'rv64imac_zicsr_zifencei', unsupported standard user-level extension 'zicsr'
+P.S.  Trivia note: Aproximately month after I started work at VA Linux
+Systems, a sysadmin intern which was given the root password to
+sourceforge.net, while trying to fix a disk-to-disk backup, ran
+mkfs.ext3 on /dev/hdXX, which was also being used as one-half of a
+RAID 0 setup on which open source code critical to the community
+(including, for example, OpenGL) was mounted and serving.  The intern
+got about 50% the way through zeroing the inode table on /dev/hdXX
+before the file system noticed and threw an error, at which point
+wiser heads stopped what the intern was doing and tried to clean up
+the mess.  Of course, there were no backups, since that was what the
+intern was trying to fix!
 
-To resolve the first issue, only attempt to add zicsr and zifencei to
-the march string when using the GNU assembler 2.38 or newer, which is
-when the default ISA spec was updated, requiring these extensions to be
-specified explicitly. LLVM implements an older version of the base
-specification for all currently released versions, so these instructions
-are available as part of the 'i' extension. If LLVM's implementation is
-updated in the future, a CONFIG_AS_IS_LLVM condition can be added to
-CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI.
-
-To resolve the second issue, use version 2.2 of the base ISA spec when
-using an older version of clang that does not support zicsr or zifencei
-via '-march=', as that is the spec version most compatible with the one
-clang/LLVM implements and avoids the need to specify zicsr and zifencei
-explicitly due to still being a part of 'i'.
-
-[1]: https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
-[2]: https://lore.kernel.org/ZAxT7T9Xy1Fo3d5W@aurel32.net/
-
-Cc: stable@vger.kernel.org
-Link: https://github.com/ClangBuiltLinux/linux/issues/1808
-Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-This is essentially a v3 of Conor's v1 and v2 but since I am sending the
-patch after finding a separate but related issue, I left it at v1:
-
-- v1: https://lore.kernel.org/20230223220546.52879-1-conor@kernel.org/
-- v2: https://lore.kernel.org/20230308220842.1231003-1-conor@kernel.org/
-
-I have built allmodconfig with the following toolchain combinations to
-confirm this problem is resolved:
-
-- clang 12/17 + GNU as and ld 2.35/2.39
-- clang 12/17 with the integrated assembler + GNU ld 2.35/2.39
-- clang 12/17 with the integrated assembler + ld.lld
-
-There are a couple of other incompatibilities between clang-17 and GNU
-binutils that I had to patch to get allmodconfig to build successfully
-but those are less likely to be hit in practice because the full LLVM
-stack can be used with LLVM versions 13.x and newer. I will follow up
-with separate issues and patches.
----
- arch/riscv/Kconfig  | 22 ++++++++++++++++++++++
- arch/riscv/Makefile | 10 ++++++----
- 2 files changed, 28 insertions(+), 4 deletions(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c5e42cc37604..5b182d1c196c 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -464,6 +464,28 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
- 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zihintpause)
- 	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23600
- 
-+config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
-+	def_bool y
-+	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
-+	depends on AS_IS_GNU && AS_VERSION >= 23800
-+	help
-+	  Newer binutils versions default to ISA spec version 20191213 which
-+	  moves some instructions from the I extension to the Zicsr and Zifencei
-+	  extensions.
-+
-+config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
-+	def_bool y
-+	depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
-+	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
-+	depends on CC_IS_CLANG && CLANG_VERSION < 170000
-+	help
-+	  Certain versions of clang do not support zicsr and zifencei via -march
-+	  but newer versions of binutils require it for the reasons noted in the
-+	  help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. This
-+	  option causes an older ISA spec compatible with these older versions
-+	  of clang to be passed to GAS, which has the same result as passing zicsr
-+	  and zifencei to -march.
-+
- config FPU
- 	bool "FPU support"
- 	default y
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 4de83b9b1772..b05e833a022d 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -57,10 +57,12 @@ riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
- riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
- riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
- 
--# Newer binutils versions default to ISA spec version 20191213 which moves some
--# instructions from the I extension to the Zicsr and Zifencei extensions.
--toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
--riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-+ifdef CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC
-+KBUILD_CFLAGS += -Wa,-misa-spec=2.2
-+KBUILD_AFLAGS += -Wa,-misa-spec=2.2
-+else
-+riscv-march-$(CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI) := $(riscv-march-y)_zicsr_zifencei
-+endif
- 
- # Check if the toolchain supports Zihintpause extension
- riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZIHINTPAUSE) := $(riscv-march-y)_zihintpause
-
----
-base-commit: eeac8ede17557680855031c6f305ece2378af326
-change-id: 20230313-riscv-zicsr-zifencei-fiasco-2941caebe7dc
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+There are a couple of things that we could learn from this incident.
+One was that giving the root password to an untrained intern not
+familiar with the setup on the serving system was... an unfortunate
+choice.  Another was that adding the above-mentioned O_EXCL feature
+and teaching mkfs to use it was an obvious post-mortem action item to
+prevent this kind of problem in the future...
