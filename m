@@ -1,44 +1,44 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4005E15AD
-	for <llvm@lists.linux.dev>; Tue, 14 Mar 2023 02:30:10 +0000 (UTC)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32E2QncK012949
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Mar 2023 22:26:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1678760814; bh=8JqVxAMGDUDi2XIrrOmUQ1H1l2f992aiLDoCnA/d0IE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OebhAS4L6gGEEt5NLSSgaHmEBRj+hXV7nDJr1Lerw48ZJpFOj1TGJgv8tdeDtAwZ2
-	 m6aEMLV+yw4ykpNRZqj/0rsyTjbvxWcXWlBA0BHjWTvgsxQHqSlRIjxLH0XxynYSx5
-	 2ZQ6ApErlSs3+K8O0vgJWi3Ko3rzQAdYmzGggNlTRPXfA7ZLfpSbfRLK7654Kh2fsW
-	 6aoU/4s2sC7iGvyA064uLWmo8x0RybsyK6QJSR/RgyOdvgp43dkZ0XYclrWI/Bjkgh
-	 j/PztTs/p0dapsX272uw8MpN4OOHC4ZUb4gYbh0OdFQImzHhUydInD3NIJC+dtojdZ
-	 zlTb13p8vplJg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id 8C4FF15C5830; Mon, 13 Mar 2023 22:26:49 -0400 (EDT)
-Date: Mon, 13 Mar 2023 22:26:49 -0400
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: Jan Kara <jack@suse.cz>, Tudor Ambarus <tudor.ambarus@linaro.org>,
-        syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org,
-        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com, Lee Jones <joneslee@google.com>
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
- ext4_group_desc_csum
-Message-ID: <20230314022649.GM860405@mit.edu>
-References: <000000000000ef6cf905f496e40b@google.com>
- <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3>
- <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
- <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
- <20230313115728.2wxy2qj4mqpwgrx7@quack3>
- <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF91E17C6;
+	Tue, 14 Mar 2023 02:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678761910; x=1710297910;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J+MvpizyMtottSJywiWH44TA6E5lhQ8gIaxjKzWp/Dg=;
+  b=D22pggF4x/INKyXZPPyLpImjZz92B0ut2I+0zM5vYHG/aEZ49bs57AEn
+   X+sFkiIxZS8kck9Bpn+v0yVLKSutOwckq3vVIJj0wB3N4kKEfuLyXFRsT
+   g0PFKtN3Ir70avtxSqejnvLNf+iPMIE7uAmp2If5KLZSzUTqGGXbqC0dt
+   ExOifqE6D6Wb9hkeoVa619ME8zgRg+Pef45zw6elxq0CNpgzY+fwJvR2H
+   3er2r5G28mRVV6xZesnfS8su/CMmUQWW37hjKht9fei0COy3xBG+LN9RW
+   Y21MFl0rldEXUw35HCtBUZ3LlhZmQgGXfXRcqsJVCCAiM/L5SZic0keWo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="339679200"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="339679200"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 19:45:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="681256703"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="681256703"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Mar 2023 19:45:08 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pbuey-0006QE-1K;
+	Tue, 14 Mar 2023 02:45:08 +0000
+Date: Tue, 14 Mar 2023 10:44:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org
+Subject: [driver-core:bus_cleanup 21/43]
+ arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:129:6: warning: variable 'ret'
+ is used uninitialized whenever 'if' condition is false
+Message-ID: <202303141045.1U4Clxw2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,70 +47,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com>
 
-On Mon, Mar 13, 2023 at 03:53:57PM +0100, Dmitry Vyukov wrote:
-> > Long-term we are moving ext4 in a direction where we can disallow block
-> > device modifications while the fs is mounted but we are not there yet. I've
-> > discussed some shorter-term solution to avoid such known problems with syzbot
-> > developers and what seems plausible would be a kconfig option to disallow
-> > writing to a block device when it is exclusively open by someone else.
-> > But so far I didn't get to trying whether this would reasonably work. Would
-> > you be interested in having a look into this?
-> 
-> Does this affect only the loop device or also USB storage devices?
-> Say, if the USB device returns different contents during mount and on
-> subsequent reads?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git bus_cleanup
+head:   93dbc63c47e682ba8a493cbfc09c2c4c8e88f17b
+commit: 5e5da678273d6d28c4665e48608747c6ed8270dd [21/43] powerpc/fsl: move to use bus_get_dev_root()
+config: powerpc-buildonly-randconfig-r004-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141045.1U4Clxw2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=5e5da678273d6d28c4665e48608747c6ed8270dd
+        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+        git fetch --no-tags driver-core bus_cleanup
+        git checkout 5e5da678273d6d28c4665e48608747c6ed8270dd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/sysdev/
 
-Modifying the block device while the file system is mounted is
-something that we have to allow for now because tune2fs uses it to
-modify the superblock.  It has historically also been used (rarely) by
-people who know what they are doing to do surgery on a mounted file
-system.  If we create a way for tune2fs to be able to update the
-superblock via some kind of ioctl, we could disallow modifying the
-block device while the file system is mounted.  Of course, it would
-require waiting at least 5-6 years since sometimes people will update
-the kernel without updating userspace.  We'd also need to check to
-make sure there aren't boot loader installer (such as grub-install)
-that depend on being able to modify the block device while the root
-file system is mounted, at least in some rare cases.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303141045.1U4Clxw2-lkp@intel.com/
 
-The "how" to exclude mounted file systems is relatively easy.  The
-kernel already knows when the file system is mounted, and it is
-already a supported feature that a userspace application that wants to
-be careful can open a block device with O_EXCL, and if it is in use by
-the kernel --- mounted by a file system, being used by dm-thin, et. al
--- the open(2) system call will fail.  From the open(2) man page.
+All warnings (new ones prefixed by >>):
 
-          In  general, the behavior of O_EXCL is undefined if it is used without
-          O_CREAT.  There is one exception: on Linux 2.6 and later,  O_EXCL  can
-          be  used without O_CREAT if pathname refers to a block device.  If the
-          block device is in use by the system  (e.g.,  mounted),  open()  fails
-          with the error EBUSY.
+>> arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:129:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (dev_root) {
+               ^~~~~~~~
+   arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:136:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:129:2: note: remove the 'if' if its condition is always true
+           if (dev_root) {
+           ^~~~~~~~~~~~~~
+   arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:120:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
-Something which the syzbot could to do today is to simply use O_EXCL
-whenever trying to open a block device.  This would avoid a class of
-syzbot false positives, since normally it requires root privileges
-and/or an experienced sysadmin to try to modify a block device while
-it is mounted and/or in use by LVM.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_SOC_MPC5200_AC97
+   Depends on [n]: SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC52xx [=y] && PPC_BESTCOMM [=n]
+   Selected by [m]:
+   - SND_MPC52xx_SOC_PCM030 [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC5200_SIMPLE [=y]
+   - SND_MPC52xx_SOC_EFIKA [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_EFIKA [=y]
 
-      	      	     	       - Ted
 
-P.S.  Trivia note: Aproximately month after I started work at VA Linux
-Systems, a sysadmin intern which was given the root password to
-sourceforge.net, while trying to fix a disk-to-disk backup, ran
-mkfs.ext3 on /dev/hdXX, which was also being used as one-half of a
-RAID 0 setup on which open source code critical to the community
-(including, for example, OpenGL) was mounted and serving.  The intern
-got about 50% the way through zeroing the inode table on /dev/hdXX
-before the file system noticed and threw an error, at which point
-wiser heads stopped what the intern was doing and tried to clean up
-the mess.  Of course, there were no backups, since that was what the
-intern was trying to fix!
+vim +129 arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c
 
-There are a couple of things that we could learn from this incident.
-One was that giving the root password to an untrained intern not
-familiar with the setup on the serving system was... an unfortunate
-choice.  Another was that adding the above-mentioned O_EXCL feature
-and teaching mkfs to use it was an obvious post-mortem action item to
-prevent this kind of problem in the future...
+   113	
+   114	static struct device_attribute mpic_attributes = __ATTR(timer_wakeup, 0644,
+   115				fsl_timer_wakeup_show, fsl_timer_wakeup_store);
+   116	
+   117	static int __init fsl_wakeup_sys_init(void)
+   118	{
+   119		struct device *dev_root;
+   120		int ret;
+   121	
+   122		fsl_wakeup = kzalloc(sizeof(struct fsl_mpic_timer_wakeup), GFP_KERNEL);
+   123		if (!fsl_wakeup)
+   124			return -ENOMEM;
+   125	
+   126		INIT_WORK(&fsl_wakeup->free_work, fsl_free_resource);
+   127	
+   128		dev_root = bus_get_dev_root(&mpic_subsys);
+ > 129		if (dev_root) {
+   130			ret = device_create_file(dev_root, &mpic_attributes);
+   131			put_device(dev_root);
+   132			if (ret)
+   133				kfree(fsl_wakeup);
+   134		}
+   135	
+   136		return ret;
+   137	}
+   138	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
