@@ -1,44 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52A419D;
-	Tue, 14 Mar 2023 12:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172A719D;
+	Tue, 14 Mar 2023 13:00:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678797045; x=1710333045;
+  t=1678798845; x=1710334845;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DVGSBcUgWIHBDY5IU2G/t68txTt4GZ8mM0D9/FGnXlM=;
-  b=X8RSxR9EJdxOAYz8Buih/CFeYBtAVSYYV1c+U+u9BcYYroYLcpV92He1
-   drK2T6VeW4OmAJ5GeQeymXSlpP4Klisayz+l/SkDyUDk8ZGLFzIe/hvqd
-   nJluFXPEmZxhv2BejGhyXpq/Mp0B0zPzxHrzQ3VxwH4ko98El6qYKgwo7
-   Wzgv1g4AFLV0PwWxuJjJHEqTQO45b5JUrf5S+uEm2I8A57RQv08vJPdH3
-   LLqhRrSZQxeCu/c/GTiCNzary/y0S2+YurbLBwV9MRL9meHoTyHLsosvp
-   toqX8iGR+72oCmjb+VTqp7tgKChzuFW6xc/Pf6M11YGu55B9phOjeHp76
+  bh=mmzdq10YVPP9Tk6g+46yn3lqFuTN6lr03IUdWhzJens=;
+  b=AT+t0BT7RxJL4SoxyIaOYwmH5AjyIDrHsFvOtD4JdQ25lSMGwaFTH+4M
+   UeMbNHPzHxtmlDfxsRRfD5bVIpoffxpHqm/fUY1JmOUs6qRkbPXfDILpv
+   M2Kw6z84djAHfrCRVTP/LUkaiKBU1sUnte1eXDWGqmdV9zV9H4IK5ixnE
+   jqmZLpujL/txw68oa69cdok5cwXdFBT1ZgOY5+M07UBM1amHYCSHj9/Wc
+   sTazRc6I/efEe7MtoefHhVNZdR/t5TsppLfuEIMV0asE0RQD/UO0RIykp
+   m7jRwhB5egVrAdGdtPdB3EXbifxPzoqK3BYkz4H/s/aoMX2Djj2J3uVjY
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334889677"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="337441601"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="334889677"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 05:30:43 -0700
+   d="scan'208";a="337441601"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 06:00:37 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="681406780"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="709275921"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="681406780"
+   d="scan'208";a="709275921"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Mar 2023 05:30:34 -0700
+  by orsmga008.jf.intel.com with ESMTP; 14 Mar 2023 06:00:36 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pc3nW-0006tg-0w;
-	Tue, 14 Mar 2023 12:30:34 +0000
-Date: Tue, 14 Mar 2023 20:29:34 +0800
+	id 1pc4GZ-0006uu-0S;
+	Tue, 14 Mar 2023 13:00:35 +0000
+Date: Tue, 14 Mar 2023 21:00:07 +0800
 From: kernel test robot <lkp@intel.com>
 To: Linus Walleij <linus.walleij@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
- 7/31] arch/arm64/kernel/vdso.c:293:38: error: incompatible integer to
- pointer conversion passing 'unsigned long' to parameter of type 'const void
- *'
-Message-ID: <202303142024.21QG0FVl-lkp@intel.com>
+ 15/31] arch/mips/include/asm/page.h:262:33: error: call to undeclared
+ function 'virt_to_phys'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202303142032.7aN9ep2c-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,86 +48,149 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+Hi Linus,
+
+FYI, the error/warning still remains.
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
 head:   961fd7e75191ae82383f80c1dfd97559f14965b8
-commit: 6e863d123cc67f8fb660aa54f971a01ddc56b5b2 [7/31] arm64: memory: Make virt_to_pfn() a static inline
-config: arm64-randconfig-r004-20230312 (https://download.01.org/0day-ci/archive/20230314/202303142024.21QG0FVl-lkp@intel.com/config)
+commit: 44341c79c6d4883399b157f99b4e78d207049f4d [15/31] MIPS: Make virt_to_pfn() a static inline
+config: mips-randconfig-r022-20230312 (https://download.01.org/0day-ci/archive/20230314/202303142032.7aN9ep2c-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=6e863d123cc67f8fb660aa54f971a01ddc56b5b2
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=44341c79c6d4883399b157f99b4e78d207049f4d
         git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
         git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
-        git checkout 6e863d123cc67f8fb660aa54f971a01ddc56b5b2
+        git checkout 44341c79c6d4883399b157f99b4e78d207049f4d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303142024.21QG0FVl-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303142032.7aN9ep2c-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/arm64/kernel/vdso.c:293:38: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-           aarch32_vectors_page = virt_to_page(vdso_page);
-                                               ^~~~~~~~~
-   arch/arm64/include/asm/memory.h:351:50: note: expanded from macro 'virt_to_page'
-   #define virt_to_page(x)         pfn_to_page(virt_to_pfn(x))
-                                                           ^
-   include/asm-generic/memory_model.h:25:40: note: expanded from macro '__pfn_to_page'
-   #define __pfn_to_page(pfn)      (vmemmap + (pfn))
-                                               ^~~
-   arch/arm64/include/asm/memory.h:324:53: note: passing argument to parameter 'kaddr' here
-   static inline unsigned long virt_to_pfn(const void *kaddr)
-                                                       ^
-   arch/arm64/kernel/vdso.c:321:2: warning: array index 1 is past the end of the array (that has type 'struct vdso_abi_info[1]') [-Warray-bounds]
-           vdso_info[VDSO_ABI_AA32].dm = &aarch32_vdso_maps[AA32_MAP_VVAR];
-           ^         ~~~~~~~~~~~~~
-   arch/arm64/kernel/vdso.c:54:1: note: array 'vdso_info' declared here
-   static struct vdso_abi_info vdso_info[] __ro_after_init = {
+   In file included from arch/mips/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:5:
+   In file included from include/linux/spinlock.h:65:
+   In file included from arch/mips/include/asm/mmiowb.h:5:
+   In file included from arch/mips/include/asm/io.h:29:
+>> arch/mips/include/asm/page.h:262:33: error: call to undeclared function 'virt_to_phys'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
+                                          ^
+   arch/mips/include/asm/page.h:262:33: note: did you mean 'virt_to_pfn'?
+   arch/mips/include/asm/page.h:255:29: note: 'virt_to_pfn' declared here
+   static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+                               ^
+   In file included from arch/mips/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:5:
+   In file included from include/linux/spinlock.h:65:
+   In file included from arch/mips/include/asm/mmiowb.h:5:
+>> arch/mips/include/asm/io.h:114:27: error: static declaration of 'virt_to_phys' follows non-static declaration
+   static inline phys_addr_t virt_to_phys(const volatile void *x)
+                             ^
+   arch/mips/include/asm/page.h:262:33: note: previous implicit declaration is here
+           return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
+                                          ^
+   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for function 'output_ptreg_defines' [-Wmissing-prototypes]
+   void output_ptreg_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:26:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_ptreg_defines(void)
    ^
-   arch/arm64/kernel/vdso.c:322:2: warning: array index 1 is past the end of the array (that has type 'struct vdso_abi_info[1]') [-Warray-bounds]
-           vdso_info[VDSO_ABI_AA32].cm = &aarch32_vdso_maps[AA32_MAP_VDSO];
-           ^         ~~~~~~~~~~~~~
-   arch/arm64/kernel/vdso.c:54:1: note: array 'vdso_info' declared here
-   static struct vdso_abi_info vdso_info[] __ro_after_init = {
+   static 
+   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for function 'output_task_defines' [-Wmissing-prototypes]
+   void output_task_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:78:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_task_defines(void)
    ^
-   2 warnings and 1 error generated.
+   static 
+   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for function 'output_thread_info_defines' [-Wmissing-prototypes]
+   void output_thread_info_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:92:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_thread_info_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for function 'output_thread_defines' [-Wmissing-prototypes]
+   void output_thread_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_thread_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for function 'output_thread_fpu_defines' [-Wmissing-prototypes]
+   void output_thread_fpu_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:136:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_thread_fpu_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for function 'output_mm_defines' [-Wmissing-prototypes]
+   void output_mm_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_mm_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:213:6: warning: no previous prototype for function 'output_sc_defines' [-Wmissing-prototypes]
+   void output_sc_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:213:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_sc_defines(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:248:6: warning: no previous prototype for function 'output_signal_defined' [-Wmissing-prototypes]
+   void output_signal_defined(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:248:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_signal_defined(void)
+   ^
+   static 
+   arch/mips/kernel/asm-offsets.c:341:6: warning: no previous prototype for function 'output_kvm_defines' [-Wmissing-prototypes]
+   void output_kvm_defines(void)
+        ^
+   arch/mips/kernel/asm-offsets.c:341:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void output_kvm_defines(void)
+   ^
+   static 
+   9 warnings and 2 errors generated.
+   make[2]: *** [scripts/Makefile.build:114: arch/mips/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1286: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:242: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +293 arch/arm64/kernel/vdso.c
+vim +/virt_to_phys +262 arch/mips/include/asm/page.h
 
-9031fefde6f2ac Will Deacon       2012-03-05  277  
-1255a7341bee6c Vincenzo Frascino 2019-04-15  278  static int aarch32_alloc_kuser_vdso_page(void)
-9031fefde6f2ac Will Deacon       2012-03-05  279  {
-9031fefde6f2ac Will Deacon       2012-03-05  280  	extern char __kuser_helper_start[], __kuser_helper_end[];
-9031fefde6f2ac Will Deacon       2012-03-05  281  	int kuser_sz = __kuser_helper_end - __kuser_helper_start;
-1255a7341bee6c Vincenzo Frascino 2019-04-15  282  	unsigned long vdso_page;
-9031fefde6f2ac Will Deacon       2012-03-05  283  
-af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  284  	if (!IS_ENABLED(CONFIG_KUSER_HELPERS))
-af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  285  		return 0;
-af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  286  
-7cd6ca1d790226 Will Deacon       2021-03-18  287  	vdso_page = get_zeroed_page(GFP_KERNEL);
-1255a7341bee6c Vincenzo Frascino 2019-04-15  288  	if (!vdso_page)
-0d747f6585954d Vincenzo Frascino 2019-04-15  289  		return -ENOMEM;
-9031fefde6f2ac Will Deacon       2012-03-05  290  
-1255a7341bee6c Vincenzo Frascino 2019-04-15  291  	memcpy((void *)(vdso_page + 0x1000 - kuser_sz), __kuser_helper_start,
-1255a7341bee6c Vincenzo Frascino 2019-04-15  292  	       kuser_sz);
-74fc72e77dc5c8 Mark Rutland      2020-04-28 @293  	aarch32_vectors_page = virt_to_page(vdso_page);
-1255a7341bee6c Vincenzo Frascino 2019-04-15  294  	return 0;
-0d747f6585954d Vincenzo Frascino 2019-04-15  295  }
-9031fefde6f2ac Will Deacon       2012-03-05  296  
-
-:::::: The code at line 293 was first introduced by commit
-:::::: 74fc72e77dc5c8033d1b47d2c8a7229b4b83a746 arm64: vdso: remove aarch32_vdso_pages[]
-
-:::::: TO: Mark Rutland <mark.rutland@arm.com>
-:::::: CC: Will Deacon <will@kernel.org>
+   254	
+   255	static inline unsigned long virt_to_pfn(const volatile void *kaddr)
+   256	{
+   257		/*
+   258		 * MIPS virt_to_phys() returns a phys_addr_t which is
+   259		 * an unsigned int on MIPS, but the interface expects
+   260		 * unsigned long.
+   261		 */
+ > 262		return (unsigned long)PFN_DOWN(virt_to_phys(kaddr));
+   263	}
+   264	#define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
+   265	
 
 -- 
 0-DAY CI Kernel Test Service
