@@ -1,103 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12EC98F69;
-	Tue, 14 Mar 2023 15:38:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9BDC433D2;
-	Tue, 14 Mar 2023 15:38:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41A88F69
+	for <llvm@lists.linux.dev>; Tue, 14 Mar 2023 16:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2D7C4339B;
+	Tue, 14 Mar 2023 16:08:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678808302;
-	bh=DLDxlhOLPnktraFE2/3JBXLe7fPvmLFetbLKdPk5yhE=;
-	h=From:Date:Subject:To:Cc:From;
-	b=VUmWcjQSkfaeLGd3H1VApOX/EjhlCYgjLY9cL3zf5/JdQYF6Wig7gcUAAaoZjqojZ
-	 cl2VWyWdk9SwdXaBarb6c1BhpfKHMBsjWT/IEUQNl+7bcXleFYeDhxIFOGem60newc
-	 7SHUya1Tu215vyBzQf6FNGT9hxq84PgO9IskiyZIhWRGcaLiMrQtqUXUZrGzoMmGZb
-	 MSPbblxu7s96n7kO0duZdubwSZgDwZl3RsaKdDD/wwWsIw1KSM6htD9NDcaBXzn4DF
-	 ZszZmBHzoTmkfbICCjc5FQ01+U4uGbQ6boEWMHhHhcAbeuP7ki9ck0YZE4GNe+EDSG
-	 iqvYTeTInJy4A==
+	s=k20201202; t=1678810104;
+	bh=wA9DCnSggZ7AMT9yojgtSsTiqRDWjhLpUyEUud8IvmE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dAbWryZpUw6TZWSzeXV/L6G7XErOuD5W4Xe6WLiyuLNeL5oEXrwhuvOWjDanp/69q
+	 hgoQeZ5BmogcMEB440DbybHqh9Egk7TDdok25Z9tVdHbNLFe3es76W8aPjqv6FZ0wq
+	 kUmqHRPOsl67nHr1DQqXGxnXQcqheiprkRAhmfm6xlwY6nN/6z4kGsPjPhaACjCjHk
+	 cbEtMPzPOssPONhgcuAWztD9X5JkNuK+AN/wX3wPmtVss/ayeNF1dBIqjd8YBZoe+k
+	 BdIy+OoFmSKUHA0dV4YWkvvGdkLgebsG+aJ8geyRfS4suXrOTRHAlII9BwhvPH6i+o
+	 sBBgS3bHSLV9g==
+Date: Tue, 14 Mar 2023 09:08:21 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 14 Mar 2023 08:38:08 -0700
-Subject: [PATCH] drm/vmwgfx: Fix uninitialized use of dst_pitch in
- vmw_stdu_bo_cpu_commit()
+To: Michael Riesch <michael.riesch@wolfvision.net>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>, Sandy Huang <hjc@rock-chips.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Sascha Hauer <sha@pengutronix.de>,
+	kernel test robot <lkp@intel.com>,
+	Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 1/6] drm/rockchip: vop2: initialize possible_crtcs
+ properly
+Message-ID: <20230314160821.GA13416@dev-arch.thelio-3990X>
+References: <20230124054706.3921383-1-michael.riesch@wolfvision.net>
+ <20230124054706.3921383-2-michael.riesch@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230314-vmware-wuninitialized-v1-1-1bb4b0989758@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAN+UEGQC/x2NQQqDQAwAvyI5N6CrXUq/UnrIaqyBmpbEalH8e
- 9ceh2GYDZxN2OFabGA8i8tLM1SnAtqB9MEoXWYIZajLumpwHhcyxuWjojIJPWXlDsMlxtinM8W
- QILeJnDEZaTsc9Ug+sR3ibdzL9z+83ff9B6yIDneAAAAA
-To: zackr@vmware.com
-Cc: linux-graphics-maintainer@vmware.com, ndesaulniers@google.com, 
- trix@redhat.com, krastevm@vmware.com, mombasawalam@vmware.com, 
- tzimmermann@suse.de, dri-devel@lists.freedesktop.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2281; i=nathan@kernel.org;
- h=from:subject:message-id; bh=DLDxlhOLPnktraFE2/3JBXLe7fPvmLFetbLKdPk5yhE=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkCU94aRb7dWmlQWy319OrGLGHeHW1r7yj+ez/9N2dUQ
- du5Os6qjlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARJWuG/+mT/jLIH9lZ8nVt
- cPCFkoOnCzfbpWwPf85lIDt929ef3zgZGeZnXdRUWT9n44H6PMP52uYh69b5l3Gy8H+W0LDr/PX
- TiR8A
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124054706.3921383-2-michael.riesch@wolfvision.net>
 
-Clang warns (or errors with CONFIG_WERROR):
+Hi Michael,
 
-  drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c:509:29: error: variable 'dst_pitch' is uninitialized when used here [-Werror,-Wuninitialized]
-          src_offset = ddirty->top * dst_pitch + ddirty->left * stdu->cpp;
-                                     ^~~~~~~~~
-  drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c:492:26: note: initialize the variable 'dst_pitch' to silence this warning
-          s32 src_pitch, dst_pitch;
-                                  ^
-                                   = 0
+On Tue, Jan 24, 2023 at 06:47:01AM +0100, Michael Riesch wrote:
+> The variable possible_crtcs is only initialized for primary and
+> overlay planes. Since the VOP2 driver only supports these plane
+> types at the moment, the current code is safe. However, in order
+> to provide a future-proof solution, fix the initialization of
+> the variable.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> ---
+> v3:
+>  - no changes
+> v2:
+>  - new patch
+> 
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> index 8cecf81a5ae0..374ef821b453 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> @@ -2322,10 +2322,11 @@ static int vop2_create_crtc(struct vop2 *vop2)
+>  				/* change the unused primary window to overlay window */
+>  				win->type = DRM_PLANE_TYPE_OVERLAY;
+>  			}
+> -		}
+> -
+> -		if (win->type == DRM_PLANE_TYPE_OVERLAY)
+> +		} else if (win->type == DRM_PLANE_TYPE_OVERLAY) {
+>  			possible_crtcs = (1 << nvps) - 1;
+> +		} else {
+> +			possible_crtcs = 0;
+> +		}
+>  
+>  		ret = vop2_plane_init(vop2, win, possible_crtcs);
+>  		if (ret) {
+> -- 
+> 2.30.2
+> 
+
+This patch is now in -next as commit 368419a2d429 ("drm/rockchip: vop2:
+initialize possible_crtcs properly") and it actually appears to
+introduce a path where possible_crtcs could be used uninitialized.
+
+  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2316:8: error: variable 'possible_crtcs' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+                          if (vp) {
+                              ^~
+  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2330:36: note: uninitialized use occurs here
+                  ret = vop2_plane_init(vop2, win, possible_crtcs);
+                                                   ^~~~~~~~~~~~~~
+  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2316:4: note: remove the 'if' if its condition is always true
+                          if (vp) {
+                          ^~~~~~~~
+  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2298:21: note: initialize the variable 'possible_crtcs' to silence this warning
+                  u32 possible_crtcs;
+                                    ^
+                                     = 0
   1 error generated.
 
-The assignments were switched around in such a way that dst_pitch was
-used before it was assigned. Swap the pitch assignments to fix the issue
-and make it clear which section they are used in.
+Prior to this change, if that else path was hit, clang recognized based on
+the assignment that the next if statement would always be true. Now, if
+the else path is taken, the possible_crtcs assignment will be missed. Is
+that intentional?
 
-Fixes: 39985eea5a6d ("drm/vmwgfx: Abstract placement selection")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1811
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I am not sure if this is the right fix, as it was not entirely clear to
-me that src_pitch and dst_pitch were being used in the right assignments
-but this is the obvious fix otherwise. Consider this a bug report if
-not :)
----
- drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c b/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-index d79a6eccfaa4..030e977c68e2 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_stdu.c
-@@ -504,11 +504,11 @@ static void vmw_stdu_bo_cpu_commit(struct vmw_kms_dirty *dirty)
- 		return;
- 
- 	/* Assume we are blitting from Guest (bo) to Host (display_srf) */
--	src_pitch = stdu->display_srf->metadata.base_size.width * stdu->cpp;
-+	dst_pitch = ddirty->pitch;
- 	src_bo = &stdu->display_srf->res.guest_memory_bo->tbo;
- 	src_offset = ddirty->top * dst_pitch + ddirty->left * stdu->cpp;
- 
--	dst_pitch = ddirty->pitch;
-+	src_pitch = stdu->display_srf->metadata.base_size.width * stdu->cpp;
- 	dst_bo = &ddirty->buf->tbo;
- 	dst_offset = ddirty->fb_top * src_pitch + ddirty->fb_left * stdu->cpp;
- 
-
----
-base-commit: c87e859cdeb5d106cb861326e3135c606d61f88d
-change-id: 20230314-vmware-wuninitialized-28666fb5a62b
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Cheers,
+Nathan
