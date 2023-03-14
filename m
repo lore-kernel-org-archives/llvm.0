@@ -1,44 +1,52 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB89D3C34;
-	Tue, 14 Mar 2023 13:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678800100; x=1710336100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vsl28reGcZzBseer8oqglhh+b2+IymNmlJUMZC8NwbA=;
-  b=BqYvTeJhEJn902fHHrWFSj3PVSBR9NT9iB5rlmhDZ+6EMqJPVsOCECct
-   IVjmfaWIcFN1EhOQM+TAEoFgX1kt30YgsPZG3X8W5HClAE1YPHeDNPjGM
-   KEFOkg4nwVN0rRkgYCfzBz8WAEz3a8d3DnZ4t9sdMhf9a/65WNKV5A1/9
-   CaJvTZOS09zeu7dcxh2orZG5OFJ019f7u+tEItbKODBHVYUVOeLFefV82
-   fV6wQVlQ5Hh42VwoYXRToXIogVN8YZEUo85qxva/61ykenv5YhdxcPc/Z
-   cW8/HZkFXhOXIilugtdXgxbAgwnO18i3+fdtPa1qRtqkC/sr6w2mPEfee
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="317809872"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="317809872"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 06:21:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="743311551"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="743311551"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Mar 2023 06:21:36 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pc4au-0006vi-07;
-	Tue, 14 Mar 2023 13:21:36 +0000
-Date: Tue, 14 Mar 2023 21:20:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
- 30/31] arch/arm/include/asm/uaccess.h:54:14: error: call to undeclared
- function 'current_user_ttbr'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202303142108.QyQYd0cH-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C824F3D8C;
+	Tue, 14 Mar 2023 14:08:36 +0000 (UTC)
+Received: by mail-ed1-f47.google.com with SMTP id eg48so3315296edb.13;
+        Tue, 14 Mar 2023 07:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678802915;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2fh50q0+/HEalk1h1oQC2pXaNeew6AKaitkp7RgML7Q=;
+        b=J1G5R1YnRKN2hzDDJInJdLGi2sJjFHgYNB/uDk3DMY1eqELgKvyT78qq1VUN3anRAY
+         7bQSxtcGc/J2RWnxz9XLdnE6L2mMC+St1n4XEuYo5fqdTxQqDTgiG32m1SHSOkSyf2Fx
+         N2tQmCPw42aVW6+WXa6j4dzCYdEFvXA/s0bwrCWY/vbjBJzILEPQU4YckdkJ1kc7zVpo
+         FOrPmSS5JHhOD0ddM3fuhoJHzS3RdXzs89cFbifyy/8R/Ah3f/Sf9HO99/WwuM0dSMPh
+         ucVk8oMa4kZ2wxA+wDl00F0MiojdNoiQlAa4SfM1Hg9a//XOuUbXMSIyGxdJCDCho1ZA
+         Ts2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678802915;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2fh50q0+/HEalk1h1oQC2pXaNeew6AKaitkp7RgML7Q=;
+        b=AKLduPtYFXIE0n7A6Rvs/lXmAwiKSDAyWZMla3ynllPI6fyrHy/C0yKr9MQvqk8ZYE
+         rpayoavfY29vfJgMUxIwPtgU974HLIl9lZqUJ2DUvuLUNychzSZSSCIPtfv4posSFrbe
+         PIoCpwOb20S72XB4tJHZ/cHKZVGmuqRduayXZbq8KstDrN2oDOjeq+0hoSMiCfh7gfaW
+         qzunDNGni959Hg4y/PBm/+nI4ZmTKcA558xQkiuIdPuAv3MupdfZl3bPVlzo6bzFT6QG
+         zmOcpCt+PQtK039Vk13eHicgKinKUE8fatULnzIzgb+bKk6MaD8nh7bAxIUsgaGdteIB
+         Y5+A==
+X-Gm-Message-State: AO0yUKWX6dLIV0WrAFhyJtfMrLL01C0W0zZPNwmd/OYnf9IRczlILnob
+	FQUQT7Tt3+U85ZcBtJQW/z4=
+X-Google-Smtp-Source: AK7set86cuDzNUeHz96tiWnCTlYRXr331XXgSySDYske0mghcxOZyatZQSOnYpKOjpb3zG7dWQVokw==
+X-Received: by 2002:a05:6402:516a:b0:4fc:c7c8:e78d with SMTP id d10-20020a056402516a00b004fcc7c8e78dmr6730921ede.31.1678802914820;
+        Tue, 14 Mar 2023 07:08:34 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.111.116])
+        by smtp.gmail.com with ESMTPSA id kk1-20020a170907766100b0092b8c1f41ebsm1198352ejc.24.2023.03.14.07.08.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 07:08:34 -0700 (PDT)
+Date: Tue, 14 Mar 2023 19:08:31 +0500
+From: Khadija Kamran <kamrankhadijadj@gmail.com>
+To: outreachy@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBB/30ZBW9EU1QfK@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <202303141159.6wN9HNP9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,118 +55,197 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202303141159.6wN9HNP9-lkp@intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
-head:   961fd7e75191ae82383f80c1dfd97559f14965b8
-commit: 10557ad0121060f8e047e962a08858c0e5652cb8 [30/31] switch PGD/TTBR0 in <asm/uaccess-asm.h>
-config: arm-randconfig-r006-20230313 (https://download.01.org/0day-ci/archive/20230314/202303142108.QyQYd0cH-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=10557ad0121060f8e047e962a08858c0e5652cb8
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
-        git checkout 10557ad0121060f8e047e962a08858c0e5652cb8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm prepare
+On Tue, Mar 14, 2023 at 11:45:51AM +0800, kernel test robot wrote:
+> Hi Khadija,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on staging/staging-testing]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230314-020827
+> patch link:    https://lore.kernel.org/r/ZA9mThZ7NyRrQAMX%40khadija-virtual-machine
+> patch subject: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+> config: arm64-randconfig-r012-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141159.6wN9HNP9-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/9d186f6c9f9bf467b48da3e28b0e9aa31fc3faf3
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230314-020827
+>         git checkout 9d186f6c9f9bf467b48da3e28b0e9aa31fc3faf3
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/staging/axis-fifo/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303141159.6wN9HNP9-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/staging/axis-fifo/axis-fifo.c:817:18: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
+>                    read_timeout = MAX_SCHEDULE_TIMEOUT;
+>                                 ~ ^~~~~~~~~~~~~~~~~~~~
+>    include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
+>    #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
+>                                            ^~~~~~~~
+>    include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
+>    #define LONG_MAX        ((long)(~0UL >> 1))
+>                             ^~~~~~~~~~~~~~~~~
+>    drivers/staging/axis-fifo/axis-fifo.c:822:19: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
+>                    write_timeout = MAX_SCHEDULE_TIMEOUT;
+>                                  ~ ^~~~~~~~~~~~~~~~~~~~
+>    include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
+>    #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
+>                                            ^~~~~~~~
+>    include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
+>    #define LONG_MAX        ((long)(~0UL >> 1))
+>                             ^~~~~~~~~~~~~~~~~
+>    2 warnings generated.
+>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303142108.QyQYd0cH-lkp@intel.com/
+Hi everyone!
+Kindly let me know if I should look into these warnings.
+Thank you!
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:29:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:25:
-   arch/arm/include/asm/pgtable-nommu.h:49:9: warning: 'ZERO_PAGE' macro redefined [-Wmacro-redefined]
-   #define ZERO_PAGE(vaddr)        (virt_to_page((const void *)0))
-           ^
-   arch/arm/include/asm/pgtable.h:19:9: note: previous definition is here
-   #define ZERO_PAGE(vaddr)        (empty_zero_page)
-           ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:740:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
->> arch/arm/include/asm/uaccess.h:54:14: error: call to undeclared function 'current_user_ttbr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           user_ttbr = current_user_ttbr();
-                       ^
->> arch/arm/include/asm/uaccess.h:55:16: error: call to undeclared function 'read_sysreg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           kernel_ttbr = read_sysreg(TTBR1);
-                         ^
->> arch/arm/include/asm/uaccess.h:55:28: error: use of undeclared identifier 'TTBR1'
-           kernel_ttbr = read_sysreg(TTBR1);
-                                     ^
->> arch/arm/include/asm/uaccess.h:56:2: error: call to undeclared function 'write_sysreg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           write_sysreg(user_ttbr, TTBR0);
-           ^
->> arch/arm/include/asm/uaccess.h:56:26: error: use of undeclared identifier 'TTBR0'
-           write_sysreg(user_ttbr, TTBR0);
-                                   ^
-   arch/arm/include/asm/uaccess.h:69:2: error: call to undeclared function 'write_sysreg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           write_sysreg(flags, TTBR0);
-           ^
-   arch/arm/include/asm/uaccess.h:69:22: error: use of undeclared identifier 'TTBR0'
-           write_sysreg(flags, TTBR0);
-                               ^
-   1 warning and 7 errors generated.
-   make[2]: *** [scripts/Makefile.build:114: arch/arm/kernel/asm-offsets.s] Error 1
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:1286: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:242: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Regards,
+Khadija
 
 
-vim +/current_user_ttbr +54 arch/arm/include/asm/uaccess.h
-
-    28	
-    29	/*
-    30	 * These two functions allow hooking accesses to userspace to increase
-    31	 * system integrity by ensuring that the kernel can not inadvertantly
-    32	 * perform such accesses (eg, via list poison values) which could then
-    33	 * be exploited for priviledge escalation.
-    34	 */
-    35	static __always_inline unsigned int uaccess_save_and_enable(void)
-    36	{
-    37	#ifdef CONFIG_CPU_SW_DOMAIN_PAN
-    38		unsigned int old_domain = get_domain();
-    39	
-    40		/* Set the current domain access to permit user accesses */
-    41		set_domain((old_domain & ~domain_mask(DOMAIN_USER)) |
-    42			   domain_val(DOMAIN_USER, DOMAIN_CLIENT));
-    43	
-    44		return old_domain;
-    45	#else
-    46		/*
-    47		 * Intended semantics: switch to the userspace MM context (enable
-    48		 * userspace), then return (save) the previous kernelspace TTBR0
-    49		 * value.
-    50		 */
-    51		/* FIXME: ifdef CONFIG_VMSPLIT_4G_4G */
-    52		u64 user_ttbr, kernel_ttbr;
-    53	
-  > 54		user_ttbr = current_user_ttbr();
-  > 55		kernel_ttbr = read_sysreg(TTBR1);
-  > 56		write_sysreg(user_ttbr, TTBR0);
-    57	
-    58		return kernel_ttbr;
-    59	#endif
-    60	}
-    61	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> vim +817 drivers/staging/axis-fifo/axis-fifo.c
+> 
+>    805	
+>    806	static int axis_fifo_probe(struct platform_device *pdev)
+>    807	{
+>    808		struct resource *r_mem; /* IO mem resources */
+>    809		struct device *dev = &pdev->dev; /* OS device (from device tree) */
+>    810		struct axis_fifo *fifo = NULL;
+>    811		char *device_name;
+>    812		int rc = 0; /* error return value */
+>    813	
+>    814		if (read_timeout >= 0)
+>    815			read_timeout = msecs_to_jiffies(read_timeout);
+>    816		else
+>  > 817			read_timeout = MAX_SCHEDULE_TIMEOUT;
+>    818	
+>    819		if (write_timeout >= 0)
+>    820			write_timeout = msecs_to_jiffies(write_timeout);
+>    821		else
+>    822			write_timeout = MAX_SCHEDULE_TIMEOUT;
+>    823	
+>    824		/* ----------------------------
+>    825		 *     init wrapper device
+>    826		 * ----------------------------
+>    827		 */
+>    828	
+>    829		device_name = devm_kzalloc(dev, 32, GFP_KERNEL);
+>    830		if (!device_name)
+>    831			return -ENOMEM;
+>    832	
+>    833		/* allocate device wrapper memory */
+>    834		fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
+>    835		if (!fifo)
+>    836			return -ENOMEM;
+>    837	
+>    838		dev_set_drvdata(dev, fifo);
+>    839		fifo->dt_device = dev;
+>    840	
+>    841		init_waitqueue_head(&fifo->read_queue);
+>    842		init_waitqueue_head(&fifo->write_queue);
+>    843	
+>    844		mutex_init(&fifo->read_lock);
+>    845		mutex_init(&fifo->write_lock);
+>    846	
+>    847		/* ----------------------------
+>    848		 *   init device memory space
+>    849		 * ----------------------------
+>    850		 */
+>    851	
+>    852		/* get iospace for the device */
+>    853		r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>    854		if (!r_mem) {
+>    855			dev_err(fifo->dt_device, "invalid address\n");
+>    856			rc = -ENODEV;
+>    857			goto err_initial;
+>    858		}
+>    859	
+>    860		/* request physical memory */
+>    861		fifo->base_addr = devm_ioremap_resource(fifo->dt_device, r_mem);
+>    862		if (IS_ERR(fifo->base_addr)) {
+>    863			rc = PTR_ERR(fifo->base_addr);
+>    864			goto err_initial;
+>    865		}
+>    866	
+>    867		dev_dbg(fifo->dt_device, "remapped memory to 0x%p\n", fifo->base_addr);
+>    868	
+>    869		/* create unique device name */
+>    870		snprintf(device_name, 32, "%s_%pa", DRIVER_NAME, &r_mem->start);
+>    871		dev_dbg(fifo->dt_device, "device name [%s]\n", device_name);
+>    872	
+>    873		/* ----------------------------
+>    874		 *          init IP
+>    875		 * ----------------------------
+>    876		 */
+>    877	
+>    878		rc = axis_fifo_parse_dt(fifo);
+>    879		if (rc)
+>    880			goto err_initial;
+>    881	
+>    882		reset_ip_core(fifo);
+>    883	
+>    884		/* ----------------------------
+>    885		 *    init device interrupts
+>    886		 * ----------------------------
+>    887		 */
+>    888	
+>    889		/* get IRQ resource */
+>    890		rc = platform_get_irq(pdev, 0);
+>    891		if (rc < 0)
+>    892			goto err_initial;
+>    893	
+>    894		/* request IRQ */
+>    895		fifo->irq = rc;
+>    896		rc = devm_request_irq(fifo->dt_device, fifo->irq, &axis_fifo_irq, 0,
+>    897				      DRIVER_NAME, fifo);
+>    898		if (rc) {
+>    899			dev_err(fifo->dt_device, "couldn't allocate interrupt %i\n",
+>    900				fifo->irq);
+>    901			goto err_initial;
+>    902		}
+>    903	
+>    904		/* ----------------------------
+>    905		 *      init char device
+>    906		 * ----------------------------
+>    907		 */
+>    908	
+>    909		/* create character device */
+>    910		fifo->miscdev.fops = &fops;
+>    911		fifo->miscdev.minor = MISC_DYNAMIC_MINOR;
+>    912		fifo->miscdev.name = device_name;
+>    913		fifo->miscdev.groups = axis_fifo_attrs_groups;
+>    914		fifo->miscdev.parent = dev;
+>    915		rc = misc_register(&fifo->miscdev);
+>    916		if (rc < 0)
+>    917			goto err_initial;
+>    918	
+>    919		dev_info(fifo->dt_device, "axis-fifo created at %pa mapped to 0x%pa, irq=%i\n",
+>    920			 &r_mem->start, &fifo->base_addr, fifo->irq);
+>    921	
+>    922		return 0;
+>    923	
+>    924	err_initial:
+>    925		dev_set_drvdata(dev, NULL);
+>    926		return rc;
+>    927	}
+>    928	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
