@@ -1,48 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA72C3C10
-	for <llvm@lists.linux.dev>; Tue, 14 Mar 2023 12:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BFC4C433D2;
-	Tue, 14 Mar 2023 12:29:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678796973;
-	bh=SsbRst9oxFmMKQIdzsFuNY1AB7aYjq84Cm828fhrEBE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=If6OgWeds5zIaEkgw4wbKWVhSxGhKPKTo0DD2PCEL337Mb3+ali2hJI7WZ0xLsjZc
-	 UQaLE5mTgoUZK4CaZ9xTY0rppc7A6unCm5NePjueDHTOzFQvhIdj6M4q5Ee6Ah7FoQ
-	 UC/zLkcetZqH2/NXZIaAA/QgA9BxVRBCNyFuRBdegQCo0e8F/3d0RNDzbKVnGKvVsL
-	 cluzN5NGGC2Q3fpl1VHvS0Hg5F+iU4Ic6EFoBVgfoVAWccTgNBmmRvJ7euhNpi32CR
-	 MccFwnxh9Goqffm1OHwjFdUu8zxq5c9YSoqVG0nW2G6eGMhFOLsjCG5KGwJ0XDNwu5
-	 vP4Zjx+8ZbC1w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id 35EDD4049F; Tue, 14 Mar 2023 09:29:31 -0300 (-03)
-Date: Tue, 14 Mar 2023 09:29:31 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Roberto Sassu <roberto.sassu@huawei.com>,
-	Quentin Monnet <quentin@isovalent.com>,
-	Andres Freund <andres@anarazel.de>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Pavithra Gurushankar <gpavithrasha@gmail.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Leo Yan <leo.yan@linaro.org>,
-	Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 00/13] Perf tool build improvements
-Message-ID: <ZBBoq1WRXJ0vcLn1@kernel.org>
-References: <20230311065753.3012826-1-irogers@google.com>
- <ZBBkWDFdBDC9Spt9@kernel.org>
- <ZBBkkye0TGP9EVYl@kernel.org>
- <ZBBoQggQI8Vcy7QL@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52A419D;
+	Tue, 14 Mar 2023 12:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678797045; x=1710333045;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DVGSBcUgWIHBDY5IU2G/t68txTt4GZ8mM0D9/FGnXlM=;
+  b=X8RSxR9EJdxOAYz8Buih/CFeYBtAVSYYV1c+U+u9BcYYroYLcpV92He1
+   drK2T6VeW4OmAJ5GeQeymXSlpP4Klisayz+l/SkDyUDk8ZGLFzIe/hvqd
+   nJluFXPEmZxhv2BejGhyXpq/Mp0B0zPzxHrzQ3VxwH4ko98El6qYKgwo7
+   Wzgv1g4AFLV0PwWxuJjJHEqTQO45b5JUrf5S+uEm2I8A57RQv08vJPdH3
+   LLqhRrSZQxeCu/c/GTiCNzary/y0S2+YurbLBwV9MRL9meHoTyHLsosvp
+   toqX8iGR+72oCmjb+VTqp7tgKChzuFW6xc/Pf6M11YGu55B9phOjeHp76
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334889677"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="334889677"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 05:30:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="681406780"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="681406780"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Mar 2023 05:30:34 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pc3nW-0006tg-0w;
+	Tue, 14 Mar 2023 12:30:34 +0000
+Date: Tue, 14 Mar 2023 20:29:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
+ 7/31] arch/arm64/kernel/vdso.c:293:38: error: incompatible integer to
+ pointer conversion passing 'unsigned long' to parameter of type 'const void
+ *'
+Message-ID: <202303142024.21QG0FVl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,50 +47,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZBBoQggQI8Vcy7QL@kernel.org>
-X-Url: http://acmel.wordpress.com
 
-Em Tue, Mar 14, 2023 at 09:27:46AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > >    3     4.57 alpine:3.15                   : FAIL gcc version 10.3.1 20211027 (Alpine 10.3.1_git20211027)
-> > >    4     4.27 alpine:3.16                   : FAIL gcc version 11.2.1 20220219 (Alpine 11.2.1_git20220219)
-> > >    5     4.27 alpine:3.17                   : FAIL gcc version 12.2.1 20220924 (Alpine 12.2.1_git20220924-r4)
-> > >    6     4.67 alpine:edge                   : FAIL gcc version 12.2.1 20220924 (Alpine 12.2.1_git20220924-r9)
-> > >    7     4.47 alt:p9                        : FAIL gcc version 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) (GCC)
-> > >    8     4.58 alt:p10                       : FAIL gcc version 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) (GCC)
-> > >    9     4.57 alt:sisyphus                  : FAIL gcc version 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt2) (GCC)
-> > >   10     3.97 amazonlinux:2                 : FAIL gcc version 7.3.1 20180712 (Red Hat 7.3.1-15) (GCC)
-> > >   11     5.77 amazonlinux:devel             : FAIL gcc version 11.3.1 20220421 (Red Hat 11.3.1-2) (GCC)
-> > >   12   160.30 archlinux:base                : Ok   gcc (GCC) 12.2.0 , clang version 14.0.6
-> > >   13     4.68 centos:8                      : FAIL gcc version 8.4.1 20200928 (Red Hat 8.4.1-1) (GCC)
-> > >   14     5.07 centos:stream                 : FAIL gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC)
-> > >   15     5.27 clearlinux:latest             : FAIL gcc version 12.2.1 20230202 releases/gcc-12.2.0-400-gd31bd71386 (Clear Linux OS for Intel Architecture)
-> > >   16     3.37 debian:10                     : FAIL gcc version 8.3.0 (Debian 8.3.0-6)
-> > >   17     3.57 debian:11                     : FAIL gcc version 10.2.1 20210110 (Debian 10.2.1-6)
-> > >   18     4.08 debian:experimental           : FAIL gcc version 12.2.0 (Debian 12.2.0-10)
-> > >   19     3.78 debian:experimental-x-arm64   : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
-> > >   20     2.77 debian:experimental-x-mips    : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
-> > >   21     3.47 debian:experimental-x-mips64  : FAIL gcc version 10.2.1 20210110 (Debian 10.2.1-6)
-> > >   22     3.47 debian:experimental-x-mipsel  : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
-> > >   23     4.37 fedora:26                     : FAIL gcc version 7.3.1 20180130 (Red Hat 7.3.1-2) (GCC)
-> > >   24     4.27 fedora:27                     : FAIL gcc version 7.3.1 20180712 (Red Hat 7.3.1-6) (GCC)
-> > >   25     4.27 fedora:28                     : FAIL gcc version 8.3.1 20190223 (Red Hat 8.3.1-2) (GCC)
-> > >   26     4.87 fedora:29                     : FAIL gcc version 8.3.1 20190223 (Red Hat 8.3.1-2) (GCC)
-> > >   27     4.97 fedora:30                     : FAIL gcc version 9.3.1 20200408 (Red Hat 9.3.1-2) (GCC)
-> > >   28     5.38 fedora:31                     : FAIL gcc version 9.3.1 20200408 (Red Hat 9.3.1-2) (GCC)
-> > >   29     5.48 fedora:32                     : FAIL gcc version 10.3.1 20210422 (Red Hat 10.3.1-1) (GCC)
-> > > 
-> > > 
-> > > Yeah, I'll take the opportunity and prune the older ones.
-> > 
-> > One more!
-> > 
-> >   30   181.19 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
+head:   961fd7e75191ae82383f80c1dfd97559f14965b8
+commit: 6e863d123cc67f8fb660aa54f971a01ddc56b5b2 [7/31] arm64: memory: Make virt_to_pfn() a static inline
+config: arm64-randconfig-r004-20230312 (https://download.01.org/0day-ci/archive/20230314/202303142024.21QG0FVl-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=6e863d123cc67f8fb660aa54f971a01ddc56b5b2
+        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
+        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
+        git checkout 6e863d123cc67f8fb660aa54f971a01ddc56b5b2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
- 31   222.81 fedora:34                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
-  32     3.07 fedora:34-x-ARC-glibc         : FAIL gcc version 8.3.1 20190225 (ARC HS GNU/Linux glibc toolchain 2019.03-rc1)
-  33     2.67 fedora:34-x-ARC-uClibc        : FAIL gcc version 8.3.1 20190225 (ARCv2 ISA Linux uClibc toolchain 2019.03-rc1)
-  34   182.17 fedora:35                     : Ok   gcc (GCC) 11.3.1 20220421 (Red Hat 11.3.1-3) , clang version 13.0.1 (Fedora 13.0.1-1.fc35)
-  35   180.73 fedora:36                     : Ok   gcc (GCC) 12.2.1 20221121 (Red Hat 12.2.1-4) , clang version 14.0.5 (Fedora 14.0.5-2.fc36)
-  36   179.27 fedora:37                     : Ok   gcc (GCC) 12.2.1 20221121 (Red Hat 12.2.1-4) , clang version 15.0.7 (Fedora 15.0.7-1.fc37)
-  37   169.45 fedora:38                     : Ok   gcc (GCC) 13.0.1 20230208 (Red Hat 13.0.1-0) , clang version 15.0.7 (Fedora 15.0.7-2.fc38)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303142024.21QG0FVl-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+>> arch/arm64/kernel/vdso.c:293:38: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
+           aarch32_vectors_page = virt_to_page(vdso_page);
+                                               ^~~~~~~~~
+   arch/arm64/include/asm/memory.h:351:50: note: expanded from macro 'virt_to_page'
+   #define virt_to_page(x)         pfn_to_page(virt_to_pfn(x))
+                                                           ^
+   include/asm-generic/memory_model.h:25:40: note: expanded from macro '__pfn_to_page'
+   #define __pfn_to_page(pfn)      (vmemmap + (pfn))
+                                               ^~~
+   arch/arm64/include/asm/memory.h:324:53: note: passing argument to parameter 'kaddr' here
+   static inline unsigned long virt_to_pfn(const void *kaddr)
+                                                       ^
+   arch/arm64/kernel/vdso.c:321:2: warning: array index 1 is past the end of the array (that has type 'struct vdso_abi_info[1]') [-Warray-bounds]
+           vdso_info[VDSO_ABI_AA32].dm = &aarch32_vdso_maps[AA32_MAP_VVAR];
+           ^         ~~~~~~~~~~~~~
+   arch/arm64/kernel/vdso.c:54:1: note: array 'vdso_info' declared here
+   static struct vdso_abi_info vdso_info[] __ro_after_init = {
+   ^
+   arch/arm64/kernel/vdso.c:322:2: warning: array index 1 is past the end of the array (that has type 'struct vdso_abi_info[1]') [-Warray-bounds]
+           vdso_info[VDSO_ABI_AA32].cm = &aarch32_vdso_maps[AA32_MAP_VDSO];
+           ^         ~~~~~~~~~~~~~
+   arch/arm64/kernel/vdso.c:54:1: note: array 'vdso_info' declared here
+   static struct vdso_abi_info vdso_info[] __ro_after_init = {
+   ^
+   2 warnings and 1 error generated.
+
+
+vim +293 arch/arm64/kernel/vdso.c
+
+9031fefde6f2ac Will Deacon       2012-03-05  277  
+1255a7341bee6c Vincenzo Frascino 2019-04-15  278  static int aarch32_alloc_kuser_vdso_page(void)
+9031fefde6f2ac Will Deacon       2012-03-05  279  {
+9031fefde6f2ac Will Deacon       2012-03-05  280  	extern char __kuser_helper_start[], __kuser_helper_end[];
+9031fefde6f2ac Will Deacon       2012-03-05  281  	int kuser_sz = __kuser_helper_end - __kuser_helper_start;
+1255a7341bee6c Vincenzo Frascino 2019-04-15  282  	unsigned long vdso_page;
+9031fefde6f2ac Will Deacon       2012-03-05  283  
+af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  284  	if (!IS_ENABLED(CONFIG_KUSER_HELPERS))
+af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  285  		return 0;
+af1b3cf2c2a3f4 Vincenzo Frascino 2019-04-15  286  
+7cd6ca1d790226 Will Deacon       2021-03-18  287  	vdso_page = get_zeroed_page(GFP_KERNEL);
+1255a7341bee6c Vincenzo Frascino 2019-04-15  288  	if (!vdso_page)
+0d747f6585954d Vincenzo Frascino 2019-04-15  289  		return -ENOMEM;
+9031fefde6f2ac Will Deacon       2012-03-05  290  
+1255a7341bee6c Vincenzo Frascino 2019-04-15  291  	memcpy((void *)(vdso_page + 0x1000 - kuser_sz), __kuser_helper_start,
+1255a7341bee6c Vincenzo Frascino 2019-04-15  292  	       kuser_sz);
+74fc72e77dc5c8 Mark Rutland      2020-04-28 @293  	aarch32_vectors_page = virt_to_page(vdso_page);
+1255a7341bee6c Vincenzo Frascino 2019-04-15  294  	return 0;
+0d747f6585954d Vincenzo Frascino 2019-04-15  295  }
+9031fefde6f2ac Will Deacon       2012-03-05  296  
+
+:::::: The code at line 293 was first introduced by commit
+:::::: 74fc72e77dc5c8033d1b47d2c8a7229b4b83a746 arm64: vdso: remove aarch32_vdso_pages[]
+
+:::::: TO: Mark Rutland <mark.rutland@arm.com>
+:::::: CC: Will Deacon <will@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
