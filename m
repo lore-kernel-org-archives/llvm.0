@@ -1,107 +1,113 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDBE3C02;
-	Wed, 15 Mar 2023 12:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678882441; x=1710418441;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lP0ntLj/eggGVFXcTENtJn493fDFl2BG9qwYUPuYyxs=;
-  b=JOZwaRJzmCE3hR5rQ/LCnGku6qcK5BlRxDHSVvuB711EXa2J6J3V1F/m
-   twhmOLY5oAvHGEZ4FwBGairoCwxr44itgXCJXwzpBOjFALdBk075RFTLL
-   5weLVZdEDwt5O7sUmPtWRlr5/vnxt/N5xd7NxxcxCXkdWoaqeGGpOyylB
-   oHqDDJc1q6wAAj7uH6TMR3MpipDMVRefO2/+JjSAeJdypQaKHUhhJPjQk
-   yVr5Rg0n7zfYL1UDDLLRY3dWRuAMj8bjD2STRa3fHsxqLcgknEMtVkTrG
-   nXarvugQEOx7+bj2G+uhWFh2FRT1QDgB41DEK+EynHk5YCvVPZ5L2cNmQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="335170384"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="335170384"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 05:13:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="803264961"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="803264961"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2023 05:13:45 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pcQ0m-0007eZ-35;
-	Wed, 15 Mar 2023 12:13:44 +0000
-Date: Wed, 15 Mar 2023 20:13:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qais Yousef <qais.yousef@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sasha Levin <sashal@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	"Qais Yousef (Google)" <qyousef@layalina.io>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:queue/5.10 96/108] kernel/sched/sched.h:2560:22:
- error: no member named 'cpu_capacity_inverted' in 'struct rq'
-Message-ID: <202303152040.QoTm3sJv-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9DD4431
+	for <llvm@lists.linux.dev>; Wed, 15 Mar 2023 12:53:04 +0000 (UTC)
+Received: by mail-wm1-f44.google.com with SMTP id m18-20020a05600c3b1200b003ed2a3d635eso1134353wms.4
+        for <llvm@lists.linux.dev>; Wed, 15 Mar 2023 05:53:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678884782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmyRdtH3qiSO5QWPBLWz/8v2lIwyybKSmrlaokl//yI=;
+        b=IKjEROzVMXRIH2jmXhG0/7c8b2IOHgUL6F+2j+hWDlKOJt/JE1CMxqsmVUaTSZ/ZII
+         dKxHynYor0Co5ohMyb3jBPd3zTrvQxj0esnBH5bKxoki7lGTb2Pkw+/vx901t66bJvUM
+         loxVftu+i7vhzZJi4xrspTeYOoe1S1Fms95gRioUAdgmxAhGxEFQQ3t2kw3Lox6vAFSR
+         NL9aWBYFpdcq5c/DpZbhv6wECLhIiyxvF0A1juR88OjXaQAM2DEcGIudZwH3c1pLWPCj
+         pTpj9gmfbneGj4wRu8aPNV6Kr5SIcTiI87VPALaqWD3/U818FxvX8qsZnfVBC/hs2hAE
+         AeEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678884782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OmyRdtH3qiSO5QWPBLWz/8v2lIwyybKSmrlaokl//yI=;
+        b=n7ovzNBYxGp6pihClzeREYpBX7QkgKQbJ3Z9H4b10QN7SxbIrApdg5F/3h2SCqyHgI
+         MseLltlBfI3Ml3MQ4Co+/GyY2q72wbUZNhSxte2bJtIxwKxbvoMb3YXd6kgNjig4otsm
+         /T41W+MhAzxrpZdmPmOPyamYReTpUxNUrcGnI9lFpR5XIkTs2NPeZzNgSJG5q51pfjXo
+         RFUoV7HjEabZb3G2QZ2zdnz6J2+hMG6eQG/JVmQ/18HUKcwsyaxFpxHWvEV3gfc3Qdbn
+         wT+AwXZbB69cNViLmfWEhaS/gfbK/cs5bAe5zZoiXQB1Po2xubo5KiTv7BlASAEtAoZA
+         DGng==
+X-Gm-Message-State: AO0yUKWiC0Nl429xKVtBRPb9ssk2kP0mVQ+rYsT3uT+MAgCav51aQ+0E
+	ZoQTCWOGO6nOeTYwGdpGjck=
+X-Google-Smtp-Source: AK7set99tKxZBFxqdMlw/6z3DNaJbvpo8WlRdBy5s/IULVxadkVRlZINUgSsb6joz/S+1AnBv0uW2g==
+X-Received: by 2002:a05:600c:198f:b0:3ea:f6c4:5f26 with SMTP id t15-20020a05600c198f00b003eaf6c45f26mr17240294wmq.17.1678884782269;
+        Wed, 15 Mar 2023 05:53:02 -0700 (PDT)
+Received: from localhost.localdomain (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc31a000000b003eb596cbc54sm1936761wmj.0.2023.03.15.05.52.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 05:53:01 -0700 (PDT)
+From: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Daniel Thompson <daniel.thompson@linaro.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Chris Down <chris@chrisdown.name>,
+	Nick Terrell <terrelln@fb.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kgdb-bugreport@lists.sourceforge.net,
+	live-patching@vger.kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+	Piotr Gorski <piotrgorski@cachyos.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] module/decompress: Never use kunmap() for local un-mappings
+Date: Wed, 15 Mar 2023 13:52:56 +0100
+Message-Id: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
-head:   e6a15a9d1bcf661f6bb79a1c2dce0c796234ac80
-commit: db4f76185823d00afb688cbd63fdf7200de209ea [96/108] sched/fair: Detect capacity inversion
-config: x86_64-randconfig-a012-20230313 (https://download.01.org/0day-ci/archive/20230315/202303152040.QoTm3sJv-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=db4f76185823d00afb688cbd63fdf7200de209ea
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.10
-        git checkout db4f76185823d00afb688cbd63fdf7200de209ea
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303152040.QoTm3sJv-lkp@intel.com/
+kunmap_local() must be called on the kernel virtual address returned by
+kmap_local_page(), differently from how we use kunmap() which instead
+expects the mapped page as its argument.
 
-All errors (new ones prefixed by >>):
+In module_zstd_decompress() we currently map with kmap_local_page() and
+unmap with kunmap(). This breaks the code and so it should be fixed.
 
-   In file included from kernel/sched/core.c:13:
->> kernel/sched/sched.h:2560:22: error: no member named 'cpu_capacity_inverted' in 'struct rq'
-           return cpu_rq(cpu)->cpu_capacity_inverted;
-                  ~~~~~~~~~~~  ^
-   1 error generated.
+Cc: Piotr Gorski <piotrgorski@cachyos.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Stephen Boyd <swboyd@chromium.org>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ kernel/module/decompress.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-vim +2560 kernel/sched/sched.h
-
-  2544	
-  2545	/*
-  2546	 * Returns inverted capacity if the CPU is in capacity inversion state.
-  2547	 * 0 otherwise.
-  2548	 *
-  2549	 * Capacity inversion detection only considers thermal impact where actual
-  2550	 * performance points (OPPs) gets dropped.
-  2551	 *
-  2552	 * Capacity inversion state happens when another performance domain that has
-  2553	 * equal or lower capacity_orig_of() becomes effectively larger than the perf
-  2554	 * domain this CPU belongs to due to thermal pressure throttling it hard.
-  2555	 *
-  2556	 * See comment in update_cpu_capacity().
-  2557	 */
-  2558	static inline unsigned long cpu_in_capacity_inversion(int cpu)
-  2559	{
-> 2560		return cpu_rq(cpu)->cpu_capacity_inverted;
-  2561	}
-  2562	
-
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index bb79ac1a6d8f..7ddc87bee274 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -267,7 +267,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+ 		zstd_dec.size = PAGE_SIZE;
+ 
+ 		ret = zstd_decompress_stream(dstream, &zstd_dec, &zstd_buf);
+-		kunmap(page);
++		kunmap_local(zstd_dec.dst);
+ 		retval = zstd_get_error_code(ret);
+ 		if (retval)
+ 			break;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
