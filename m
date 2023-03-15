@@ -1,50 +1,45 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5517028E2;
-	Wed, 15 Mar 2023 08:37:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0057F28E2;
+	Wed, 15 Mar 2023 08:47:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678869459; x=1710405459;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MGe+wu03SgVhyZX13WFZVMUGp4Eh/8ZQN9CHXaDvzYI=;
-  b=TJT4hDZpzNTEJx/QxHKqxy3nFQASXca43p18JIuc6e2yXRebr4FfcGLL
-   MRdff6DEQwfJDQ1Qj5i8kBwspTLORHvxmLAsg3COWYm6e7rMcGpZiXI19
-   b9OU7X1cZrbzVUFiLVlbITSpNlFQbdfRQX4uBGTPz6d80Ep32HjAC07iK
-   SDeax8NTuQGgEHy3jN3hwVxqOjxmqy2mSN/nIPrKrYO4zBeGpXmXXFfCG
-   slcY9yrV4g5pwqYPh1K1BnsAMx0fJI7XsJOJQmpwlPTYl2qdWUWT9USpi
-   XTNrJaLKY3bkgqXbYLrM9Ad7FKmyVtu/lDPn8cXiJG4x/AlJjXb08RdQd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="317299581"
+  t=1678870051; x=1710406051;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NUHbSZHWcNx+d5qlRKypZ6BXXeEQSP7K/sbSw7L66kU=;
+  b=Q27CXxXLT6ivnvkOw41sCUw8TDIT524mNGQKNAPdxIIRbiSSKewRJYGN
+   ll0ZBA5QwYXFz6NVaUzbj6TEwXvSWtME9qnm94lMeGnXSQlWknKuoU7kt
+   AMHXcwvtZ2YtoHIVscZM6tNW7QIy2Bq56XYnDuuFgjH9GjSkRPLqx/iSa
+   Bl5SzeeUTT6zxi46Xew3u8uCqZnlcjFFCfcoBfT8ePET1ZX/1jNtPSm8c
+   7880Qf9X4u//7wTubRXCQq2fdhYvGz00HrmMbjAhqsP9TYqPCcB0p7ROr
+   jz7nRGS02DcLbiknF73Vf5U3069OVqFNSIsmeZLzeyY0R2LO4FZz3pbJF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="340011041"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="317299581"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 01:37:30 -0700
+   d="scan'208";a="340011041"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 01:47:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="789713577"
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="803187228"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="789713577"
+   d="scan'208";a="803187228"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Mar 2023 01:37:26 -0700
+  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2023 01:47:27 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pcMdS-0007Xn-0o;
-	Wed, 15 Mar 2023 08:37:26 +0000
-Date: Wed, 15 Mar 2023 16:36:29 +0800
+	id 1pcMn8-0007YK-1b;
+	Wed, 15 Mar 2023 08:47:26 +0000
+Date: Wed, 15 Mar 2023 16:46:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Paul Cercueil <paul@crapouillou.net>, michael.hennerich@analog.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, nuno.sa@analog.com,
-	linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
-Message-ID: <202303151639.4xUPfzJD-lkp@intel.com>
-References: <20230314105257.17345-3-paul@crapouillou.net>
+	Sasha Levin <sashal@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>
+Subject: [linux-stable-rc:queue/5.10 77/85]
+ drivers/usb/host/ehci-ppc-of.c:122:13: error: use of undeclared identifier
+ 'NO_IRQ'; did you mean 'do_IRQ'?
+Message-ID: <202303151642.5GmrwAmy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,140 +48,167 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314105257.17345-3-paul@crapouillou.net>
 
-Hi Paul,
+Hi Christophe,
 
-I love your patch! Perhaps something to improve:
+First bad commit (maybe != root cause):
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20230314-185522
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230314105257.17345-3-paul%40crapouillou.net
-patch subject: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
-config: s390-randconfig-r002-20230312 (https://download.01.org/0day-ci/archive/20230315/202303151639.4xUPfzJD-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   bb0818a7908bae8863a2ea628dd3fc43a9cdd702
+commit: 4a3c7e913d4c3cdde0c38f5a51bf1bffa7aa2778 [77/85] powerpc: Check !irq instead of irq == NO_IRQ and remove NO_IRQ
+config: powerpc-randconfig-r015-20230313 (https://download.01.org/0day-ci/archive/20230315/202303151642.5GmrwAmy-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/4ee364ed5d112c4550344fd037f4e1ef7cc41878
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20230314-185522
-        git checkout 4ee364ed5d112c4550344fd037f4e1ef7cc41878
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=4a3c7e913d4c3cdde0c38f5a51bf1bffa7aa2778
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout 4a3c7e913d4c3cdde0c38f5a51bf1bffa7aa2778
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/ drivers/usb/gadget/function/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/usb/host/ drivers/video/fbdev/mb862xx/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303151639.4xUPfzJD-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303151642.5GmrwAmy-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/usb/gadget/function/f_fs.c:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/usb/gadget/function/f_fs.c:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/usb/gadget/function/f_fs.c:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/usb/gadget/function/f_fs.c:1401:5: warning: no previous prototype for function 'ffs_dma_resv_lock' [-Wmissing-prototypes]
-   int ffs_dma_resv_lock(struct dma_buf *dmabuf, bool nonblock)
-       ^
-   drivers/usb/gadget/function/f_fs.c:1401:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ffs_dma_resv_lock(struct dma_buf *dmabuf, bool nonblock)
-   ^
-   static 
-   13 warnings generated.
+   In file included from drivers/usb/host/ehci-hcd.c:1302:
+>> drivers/usb/host/ehci-ppc-of.c:122:13: error: use of undeclared identifier 'NO_IRQ'; did you mean 'do_IRQ'?
+           if (irq == NO_IRQ) {
+                      ^~~~~~
+                      do_IRQ
+   arch/powerpc/include/asm/irq.h:57:13: note: 'do_IRQ' declared here
+   extern void do_IRQ(struct pt_regs *regs);
+               ^
+   1 error generated.
+--
+>> drivers/usb/host/fhci-hcd.c:697:17: error: use of undeclared identifier 'NO_IRQ'; did you mean 'do_IRQ'?
+           if (usb_irq == NO_IRQ) {
+                          ^~~~~~
+                          do_IRQ
+   arch/powerpc/include/asm/irq.h:57:13: note: 'do_IRQ' declared here
+   extern void do_IRQ(struct pt_regs *regs);
+               ^
+   1 error generated.
+--
+>> drivers/video/fbdev/mb862xx/mb862xxfbdrv.c:693:18: error: use of undeclared identifier 'NO_IRQ'; did you mean 'do_IRQ'?
+           if (par->irq == NO_IRQ) {
+                           ^~~~~~
+                           do_IRQ
+   arch/powerpc/include/asm/irq.h:57:13: note: 'do_IRQ' declared here
+   extern void do_IRQ(struct pt_regs *regs);
+               ^
+   1 error generated.
 
 
-vim +/ffs_dma_resv_lock +1401 drivers/usb/gadget/function/f_fs.c
+vim +122 drivers/usb/host/ehci-ppc-of.c
 
-  1400	
-> 1401	int ffs_dma_resv_lock(struct dma_buf *dmabuf, bool nonblock)
-  1402	{
-  1403		int ret;
-  1404	
-  1405		ret = dma_resv_lock_interruptible(dmabuf->resv, NULL);
-  1406		if (ret) {
-  1407			if (ret != -EDEADLK)
-  1408				goto out;
-  1409			if (nonblock) {
-  1410				ret = -EBUSY;
-  1411				goto out;
-  1412			}
-  1413	
-  1414			ret = dma_resv_lock_slow_interruptible(dmabuf->resv, NULL);
-  1415		}
-  1416	
-  1417	out:
-  1418		return ret;
-  1419	}
-  1420	
+da0e8fb00b862a Valentine Barshak 2007-12-30   92  
+da0e8fb00b862a Valentine Barshak 2007-12-30   93  
+41ac7b3ab7fe1d Bill Pemberton    2012-11-19   94  static int ehci_hcd_ppc_of_probe(struct platform_device *op)
+da0e8fb00b862a Valentine Barshak 2007-12-30   95  {
+61c7a080a5a061 Grant Likely      2010-04-13   96  	struct device_node *dn = op->dev.of_node;
+da0e8fb00b862a Valentine Barshak 2007-12-30   97  	struct usb_hcd *hcd;
+796bcae7361c28 Vitaly Bordug     2008-11-09   98  	struct ehci_hcd	*ehci = NULL;
+da0e8fb00b862a Valentine Barshak 2007-12-30   99  	struct resource res;
+da0e8fb00b862a Valentine Barshak 2007-12-30  100  	int irq;
+da0e8fb00b862a Valentine Barshak 2007-12-30  101  	int rv;
+da0e8fb00b862a Valentine Barshak 2007-12-30  102  
+796bcae7361c28 Vitaly Bordug     2008-11-09  103  	struct device_node *np;
+796bcae7361c28 Vitaly Bordug     2008-11-09  104  
+da0e8fb00b862a Valentine Barshak 2007-12-30  105  	if (usb_disabled())
+da0e8fb00b862a Valentine Barshak 2007-12-30  106  		return -ENODEV;
+da0e8fb00b862a Valentine Barshak 2007-12-30  107  
+da0e8fb00b862a Valentine Barshak 2007-12-30  108  	dev_dbg(&op->dev, "initializing PPC-OF USB Controller\n");
+da0e8fb00b862a Valentine Barshak 2007-12-30  109  
+da0e8fb00b862a Valentine Barshak 2007-12-30  110  	rv = of_address_to_resource(dn, 0, &res);
+da0e8fb00b862a Valentine Barshak 2007-12-30  111  	if (rv)
+da0e8fb00b862a Valentine Barshak 2007-12-30  112  		return rv;
+da0e8fb00b862a Valentine Barshak 2007-12-30  113  
+da0e8fb00b862a Valentine Barshak 2007-12-30  114  	hcd = usb_create_hcd(&ehci_ppc_of_hc_driver, &op->dev, "PPC-OF USB");
+da0e8fb00b862a Valentine Barshak 2007-12-30  115  	if (!hcd)
+da0e8fb00b862a Valentine Barshak 2007-12-30  116  		return -ENOMEM;
+da0e8fb00b862a Valentine Barshak 2007-12-30  117  
+da0e8fb00b862a Valentine Barshak 2007-12-30  118  	hcd->rsrc_start = res.start;
+28f65c11f2ffb3 Joe Perches       2011-06-09  119  	hcd->rsrc_len = resource_size(&res);
+da0e8fb00b862a Valentine Barshak 2007-12-30  120  
+da0e8fb00b862a Valentine Barshak 2007-12-30  121  	irq = irq_of_parse_and_map(dn, 0);
+da0e8fb00b862a Valentine Barshak 2007-12-30 @122  	if (irq == NO_IRQ) {
+346c8b241cb1b9 Jingoo Han        2013-12-10  123  		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
+346c8b241cb1b9 Jingoo Han        2013-12-10  124  			__FILE__);
+da0e8fb00b862a Valentine Barshak 2007-12-30  125  		rv = -EBUSY;
+da0e8fb00b862a Valentine Barshak 2007-12-30  126  		goto err_irq;
+da0e8fb00b862a Valentine Barshak 2007-12-30  127  	}
+da0e8fb00b862a Valentine Barshak 2007-12-30  128  
+148e11349b0c9c Thierry Reding    2013-01-21  129  	hcd->regs = devm_ioremap_resource(&op->dev, &res);
+148e11349b0c9c Thierry Reding    2013-01-21  130  	if (IS_ERR(hcd->regs)) {
+148e11349b0c9c Thierry Reding    2013-01-21  131  		rv = PTR_ERR(hcd->regs);
+da0e8fb00b862a Valentine Barshak 2007-12-30  132  		goto err_ioremap;
+da0e8fb00b862a Valentine Barshak 2007-12-30  133  	}
+da0e8fb00b862a Valentine Barshak 2007-12-30  134  
+da0e8fb00b862a Valentine Barshak 2007-12-30  135  	ehci = hcd_to_ehci(hcd);
+796bcae7361c28 Vitaly Bordug     2008-11-09  136  	np = of_find_compatible_node(NULL, NULL, "ibm,usb-ohci-440epx");
+796bcae7361c28 Vitaly Bordug     2008-11-09  137  	if (np != NULL) {
+796bcae7361c28 Vitaly Bordug     2008-11-09  138  		/* claim we really affected by usb23 erratum */
+796bcae7361c28 Vitaly Bordug     2008-11-09  139  		if (!of_address_to_resource(np, 0, &res))
+1c5404f7abd250 Julia Lawall      2012-07-30  140  			ehci->ohci_hcctrl_reg =
+1c5404f7abd250 Julia Lawall      2012-07-30  141  				devm_ioremap(&op->dev,
+1c5404f7abd250 Julia Lawall      2012-07-30  142  					     res.start + OHCI_HCCTRL_OFFSET,
+1c5404f7abd250 Julia Lawall      2012-07-30  143  					     OHCI_HCCTRL_LEN);
+796bcae7361c28 Vitaly Bordug     2008-11-09  144  		else
+f45ba776da4fe6 Joe Perches       2010-02-05  145  			pr_debug("%s: no ohci offset in fdt\n", __FILE__);
+796bcae7361c28 Vitaly Bordug     2008-11-09  146  		if (!ehci->ohci_hcctrl_reg) {
+f45ba776da4fe6 Joe Perches       2010-02-05  147  			pr_debug("%s: ioremap for ohci hcctrl failed\n", __FILE__);
+796bcae7361c28 Vitaly Bordug     2008-11-09  148  		} else {
+796bcae7361c28 Vitaly Bordug     2008-11-09  149  			ehci->has_amcc_usb23 = 1;
+796bcae7361c28 Vitaly Bordug     2008-11-09  150  		}
+585d22a5624ef2 Miaoqian Lin      2022-06-02  151  		of_node_put(np);
+796bcae7361c28 Vitaly Bordug     2008-11-09  152  	}
+da0e8fb00b862a Valentine Barshak 2007-12-30  153  
+da0e8fb00b862a Valentine Barshak 2007-12-30  154  	if (of_get_property(dn, "big-endian", NULL)) {
+da0e8fb00b862a Valentine Barshak 2007-12-30  155  		ehci->big_endian_mmio = 1;
+da0e8fb00b862a Valentine Barshak 2007-12-30  156  		ehci->big_endian_desc = 1;
+da0e8fb00b862a Valentine Barshak 2007-12-30  157  	}
+da0e8fb00b862a Valentine Barshak 2007-12-30  158  	if (of_get_property(dn, "big-endian-regs", NULL))
+da0e8fb00b862a Valentine Barshak 2007-12-30  159  		ehci->big_endian_mmio = 1;
+da0e8fb00b862a Valentine Barshak 2007-12-30  160  	if (of_get_property(dn, "big-endian-desc", NULL))
+da0e8fb00b862a Valentine Barshak 2007-12-30  161  		ehci->big_endian_desc = 1;
+da0e8fb00b862a Valentine Barshak 2007-12-30  162  
+da0e8fb00b862a Valentine Barshak 2007-12-30  163  	ehci->caps = hcd->regs;
+da0e8fb00b862a Valentine Barshak 2007-12-30  164  
+da0e8fb00b862a Valentine Barshak 2007-12-30  165  	if (of_device_is_compatible(dn, "ibm,usb-ehci-440epx")) {
+da0e8fb00b862a Valentine Barshak 2007-12-30  166  		rv = ppc44x_enable_bmt(dn);
+da0e8fb00b862a Valentine Barshak 2007-12-30  167  		ehci_dbg(ehci, "Break Memory Transfer (BMT) is %senabled!\n",
+da0e8fb00b862a Valentine Barshak 2007-12-30  168  				rv ? "NOT ": "");
+da0e8fb00b862a Valentine Barshak 2007-12-30  169  	}
+da0e8fb00b862a Valentine Barshak 2007-12-30  170  
+da0e8fb00b862a Valentine Barshak 2007-12-30  171  	rv = usb_add_hcd(hcd, irq, 0);
+08a3b3b1c2e622 Dan Carpenter     2010-08-14  172  	if (rv)
+1c5404f7abd250 Julia Lawall      2012-07-30  173  		goto err_ioremap;
+08a3b3b1c2e622 Dan Carpenter     2010-08-14  174  
+3c9740a117d40a Peter Chen        2013-11-05  175  	device_wakeup_enable(hcd->self.controller);
+da0e8fb00b862a Valentine Barshak 2007-12-30  176  	return 0;
+da0e8fb00b862a Valentine Barshak 2007-12-30  177  
+da0e8fb00b862a Valentine Barshak 2007-12-30  178  err_ioremap:
+da0e8fb00b862a Valentine Barshak 2007-12-30  179  	irq_dispose_mapping(irq);
+da0e8fb00b862a Valentine Barshak 2007-12-30  180  err_irq:
+da0e8fb00b862a Valentine Barshak 2007-12-30  181  	usb_put_hcd(hcd);
+da0e8fb00b862a Valentine Barshak 2007-12-30  182  
+da0e8fb00b862a Valentine Barshak 2007-12-30  183  	return rv;
+da0e8fb00b862a Valentine Barshak 2007-12-30  184  }
+da0e8fb00b862a Valentine Barshak 2007-12-30  185  
+
+:::::: The code at line 122 was first introduced by commit
+:::::: da0e8fb00b862aa10265f0c64930b432cd44420b USB: add ehci-ppc-of bus glue (device-tree aware)
+
+:::::: TO: Valentine Barshak <vbarshak@ru.mvista.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
 
 -- 
 0-DAY CI Kernel Test Service
