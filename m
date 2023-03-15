@@ -1,46 +1,31 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538BB6FC3;
-	Wed, 15 Mar 2023 21:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678914975; x=1710450975;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3UXG2kNtVojFaZ42t7ZbC0xYesYIqTljgmL1BPd+M8Y=;
-  b=N1W7q5SOSy/mfeZalnv0oMu+yxiYGPO7RlwTwVe/+LwMAui46t9H1zgo
-   5TPNBF2ABf+p55X1DX69Ijxi4DPkU8iEl6TSdvj3i4ppwvSdIx/237S5k
-   d67YqCdqH4T8DoCEXGSa2Sue267RutVNUL6+00iX9dvbhHm1JB2DDkzBP
-   3FL+ePl8RRITM7KhA4zAn4UVid63YQV+CPtt27R4c8ueBv5BG827tAcyN
-   ZIwQMVef3+PivVmLypdnN0MJvaxqOOnXCEcRY/TXBhA0qietmmIILKMZG
-   Q+J2xApJlXh3U9pJxJbsavFi8jUR8ujV8Xm0AqodLzhxSu5rtklSpzkny
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424091449"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="424091449"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 14:16:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="743867521"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="743867521"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Mar 2023 14:16:08 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pcYTf-00082Z-1y;
-	Wed, 15 Mar 2023 21:16:07 +0000
-Date: Thu, 16 Mar 2023 05:15:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: phinex <phinex@realtek.com>, jdelvare@suse.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux@roeck-us.net,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	phinex@realtek.com
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-Message-ID: <202303160519.6Xosrf2g-lkp@intel.com>
-References: <20230315121606.GA71707@threadripper>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C146FC3;
+	Wed, 15 Mar 2023 21:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB03EC433EF;
+	Wed, 15 Mar 2023 21:21:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1678915283;
+	bh=+r8g2IkyoB0Jg/yBPsVxCgq59FdXhHEpS5HuzNqPCyI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lxwGNMYE7cqR7tg6g9uZLgugiWhhI3rx1IScWtPGrA94pW48dn3fbWSYnpkZXlKHT
+	 7q/vSCMOKSp1VEgDsDdX/fnWT4NulUHIrVegBWARuhsI6mXLfAfNc3s6ATcj7HK8uE
+	 eIwOHmxKyWaOfFtj6/MLpbubf6PKWyOg9gqZS37Dgfp+WrT/qkPja/ESy3uIDZySiE
+	 W3kjtl+B1bJFGc6Km6jINYlh9ypJZaoKEYDMeHWP8FE+XzGU0LaBpbQH78gvIxMHoD
+	 swQYoXCu/SwUiAVLnqHn2ss5Ds7/EqHwmBSlKPlOrGyoOvwty3gMILnzZ/kE8IQsHL
+	 aTDWJTUK73OAw==
+Date: Wed, 15 Mar 2023 14:21:22 -0700
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Dave Chinner <david@fromorbit.com>, linux-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-mm@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, yebin10@huawei.com
+Subject: Re: [PATCH 4/4] pcpcntr: remove percpu_counter_sum_all()
+Message-ID: <20230315212122.GH11376@frogsfrogsfrogs>
+References: <20230315084938.2544737-5-david@fromorbit.com>
+ <202303160421.bnmiVRCM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,166 +34,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230315121606.GA71707@threadripper>
+In-Reply-To: <202303160421.bnmiVRCM-lkp@intel.com>
 
-Hi phinex,
+On Thu, Mar 16, 2023 at 04:14:04AM +0800, kernel test robot wrote:
+> Hi Dave,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.3-rc2 next-20230315]
+> [cannot apply to dennis-percpu/for-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Chinner/cpumask-introduce-for_each_cpu_or/20230315-165202
+> patch link:    https://lore.kernel.org/r/20230315084938.2544737-5-david%40fromorbit.com
+> patch subject: [PATCH 4/4] pcpcntr: remove percpu_counter_sum_all()
+> config: riscv-randconfig-r042-20230313 (https://download.01.org/0day-ci/archive/20230316/202303160421.bnmiVRCM-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/8360dcb55f1eb08fe7a1f457f3b99bef8e306c8b
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Dave-Chinner/cpumask-introduce-for_each_cpu_or/20230315-165202
+>         git checkout 8360dcb55f1eb08fe7a1f457f3b99bef8e306c8b
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/xfs/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303160421.bnmiVRCM-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> fs/xfs/xfs_super.c:1079:9: error: call to undeclared function 'percpu_counter_sum_all'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                   percpu_counter_sum_all(&mp->m_delalloc_blks) == 0);
+>                   ^
+>    fs/xfs/xfs_super.c:1079:9: note: did you mean 'percpu_counter_sum'?
+>    include/linux/percpu_counter.h:193:19: note: 'percpu_counter_sum' declared here
+>    static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
+>                      ^
+>    1 error generated.
+> 
+> 
+> vim +/percpu_counter_sum_all +1079 fs/xfs/xfs_super.c
+> 
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1070  
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1071  static void
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1072  xfs_destroy_percpu_counters(
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1073  	struct xfs_mount	*mp)
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1074  {
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1075  	percpu_counter_destroy(&mp->m_icount);
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1076  	percpu_counter_destroy(&mp->m_ifree);
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1077  	percpu_counter_destroy(&mp->m_fdblocks);
+> 75c8c50fa16a23 Dave Chinner    2021-08-18  1078  	ASSERT(xfs_is_shutdown(mp) ||
+> c35278f526edf1 Ye Bin          2023-03-14 @1079  	       percpu_counter_sum_all(&mp->m_delalloc_blks) == 0);
 
-Thank you for the patch! Yet something to improve:
+Ah, yes, ChatGPT-4 hired someone via Mechanical Turk to log in to my
+kernel.org account, answer the CAPTCHA, and push Ye's patch into
+for-next.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+(No it didn't.  Is your bot merging random patches from the XFS list and
+whining when the result doesn't build?  WTH is going on here??)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/phinex/hwmon-drivetemp-support-to-be-a-platform-driver-for-thermal_of/20230315-201903
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230315121606.GA71707%40threadripper
-patch subject: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
-config: arm-randconfig-r012-20230312 (https://download.01.org/0day-ci/archive/20230316/202303160519.6Xosrf2g-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/1c53b683440a584685795fa8ff831379577081b0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review phinex/hwmon-drivetemp-support-to-be-a-platform-driver-for-thermal_of/20230315-201903
-        git checkout 1c53b683440a584685795fa8ff831379577081b0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwmon/ fs/xfs/
+--D
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303160519.6Xosrf2g-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/hwmon/drivetemp.c:551:6: warning: variable 'err' set but not used [-Wunused-but-set-variable]
-           int err;
-               ^
->> drivers/hwmon/drivetemp.c:575:48: error: variable has incomplete type 'const struct thermal_zone_of_device_ops'
-   static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
-                                                  ^
-   drivers/hwmon/drivetemp.c:575:21: note: forward declaration of 'struct thermal_zone_of_device_ops'
-   static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
-                       ^
->> drivers/hwmon/drivetemp.c:668:3: error: call to undeclared function 'devm_thermal_zone_of_sensor_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   devm_thermal_zone_of_sensor_register(
-                   ^
-   drivers/hwmon/drivetemp.c:668:3: note: did you mean 'devm_thermal_of_zone_register'?
-   include/linux/thermal.h:303:29: note: 'devm_thermal_of_zone_register' declared here
-   struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id, void *data,
-                               ^
-   1 warning and 2 errors generated.
-
-
-vim +575 drivers/hwmon/drivetemp.c
-
-   574	
- > 575	static const struct thermal_zone_of_device_ops hdd_sensor_ops = {
-   576		.get_temp = hdd_read_temp,
-   577	};
-   578	
-   579	static const struct of_device_id hdd_of_match[] = {
-   580		{
-   581			.compatible = "drivetemp,hdd-sensors",
-   582		},
-   583		{},
-   584	};
-   585	MODULE_DEVICE_TABLE(of, hdd_of_match);
-   586	#endif
-   587	
-   588	static const struct hwmon_ops drivetemp_ops = {
-   589		.is_visible = drivetemp_is_visible,
-   590		.read = drivetemp_read,
-   591	};
-   592	
-   593	static const struct hwmon_chip_info drivetemp_chip_info = {
-   594		.ops = &drivetemp_ops,
-   595		.info = drivetemp_info,
-   596	};
-   597	
-   598	/*
-   599	 * The device argument points to sdev->sdev_dev. Its parent is
-   600	 * sdev->sdev_gendev, which we can use to get the scsi_device pointer.
-   601	 */
-   602	static int drivetemp_add(struct device *dev, struct class_interface *intf)
-   603	{
-   604		struct scsi_device *sdev = to_scsi_device(dev->parent);
-   605		struct drivetemp_data *st;
-   606		int err;
-   607		struct ata_port *ap;
-   608	
-   609		st = kzalloc(sizeof(*st), GFP_KERNEL);
-   610		if (!st)
-   611			return -ENOMEM;
-   612	
-   613		ap = ata_shost_to_port(sdev->host);
-   614	
-   615		snprintf(st->drivename, MAX_NAME_LEN, "drivetemp_port%d", ap->port_no);
-   616	
-   617		st->sdev = sdev;
-   618		st->dev = dev;
-   619		mutex_init(&st->lock);
-   620	
-   621		if (drivetemp_identify(st)) {
-   622			err = -ENODEV;
-   623			goto abort;
-   624		}
-   625	
-   626		st->hwdev = hwmon_device_register_with_info(
-   627			dev->parent, st->drivename, st, &drivetemp_chip_info, NULL);
-   628	
-   629		if (IS_ERR(st->hwdev)) {
-   630			err = PTR_ERR(st->hwdev);
-   631			goto abort;
-   632		}
-   633	
-   634		list_add(&st->list, &drivetemp_devlist);
-   635		return 0;
-   636	
-   637	abort:
-   638		kfree(st);
-   639		return err;
-   640	}
-   641	
-   642	static void drivetemp_remove(struct device *dev, struct class_interface *intf)
-   643	{
-   644		struct drivetemp_data *st, *tmp;
-   645	
-   646		list_for_each_entry_safe(st, tmp, &drivetemp_devlist, list) {
-   647			if (st->dev == dev) {
-   648				list_del(&st->list);
-   649				hwmon_device_unregister(st->hwdev);
-   650				kfree(st);
-   651				break;
-   652			}
-   653		}
-   654	}
-   655	
-   656	static struct class_interface drivetemp_interface = {
-   657		.add_dev = drivetemp_add,
-   658		.remove_dev = drivetemp_remove,
-   659	};
-   660	
-   661	#if IS_ENABLED(CONFIG_THERMAL_OF)
-   662	static int hdd_hwmon_probe(struct platform_device *pdev)
-   663	{
-   664		if (list_empty(&drivetemp_devlist))
-   665			return -EPROBE_DEFER;
-   666	
-   667		if (!tz)
- > 668			devm_thermal_zone_of_sensor_register(
-   669				&pdev->dev, 0, &drivetemp_devlist, &hdd_sensor_ops);
-   670	
-   671		return 0;
-   672	}
-   673	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1080  	percpu_counter_destroy(&mp->m_delalloc_blks);
+> 2229276c528326 Darrick J. Wong 2022-04-12  1081  	percpu_counter_destroy(&mp->m_frextents);
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1082  }
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1083  
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
