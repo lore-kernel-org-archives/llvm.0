@@ -1,141 +1,137 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DFE2F31;
-	Wed, 15 Mar 2023 09:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678873128; x=1710409128;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=scbmdTSjDwKAAN2kg9jxBv2Clr+B4YQgmGTSocFNl/0=;
-  b=f1OkK2cljsNJVNgKE4AGjPwQoJLeHTU91OUP121HwZxgw1OS1SvayfZY
-   BTtt2oCuDpSDGGa0bPrbJxsnPCigOfKA3VjZXKBnf3R9Mq6+/5q7PczFN
-   ozfcYP8ioGPpm+cE3h20lMkH+djQXDRGund0G3O7UinYzxltZbKMo13S0
-   LBv9EtF8eNPEI+Y0y8ULgUcYlDlc3q0trumW4tA/kHZlbl9QU6kdRVE6M
-   /mBwpz+wMHdtG93ehYxzwV2zHYGNPZtSBQ5uFBamVAf9VW6TcPtAf2MJp
-   FAgEIQ7v5n3tiP5gjkliE9GBTxtXwEFzxW7WKLdVsp6sUQ3Vro9+jIlLh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="326017159"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="326017159"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:38:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="748352299"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="748352299"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Mar 2023 02:38:46 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pcNaj-0007ad-0e;
-	Wed, 15 Mar 2023 09:38:41 +0000
-Date: Wed, 15 Mar 2023 17:38:18 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: ct_kernel_exit_state+0x2e: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <202303151752.Mgdq7hev-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B962F25
+	for <llvm@lists.linux.dev>; Wed, 15 Mar 2023 09:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1678873300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PARVJr1hLcYom9dHxrOC9E/Xm2jR0cV/d9lNzIgVs3I=;
+	b=VSYVygIPCEYV1i3NlmWLUOLfNMJwYTve82TtklcjsZnmU2KTCpRgnsTX3pqEJb8SYOFI3Q
+	MPubixGNQur1FxB4MJMDsIU5OOXTo4rVEVrE8v9ShM5H8GHV/NPBESuDZZX0d3bUXGUgyj
+	DYO/tyWG4nfwM0ciMANBT3WxooSdCG4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-ipHb_YS3MViT2UOXMrzxuQ-1; Wed, 15 Mar 2023 05:41:39 -0400
+X-MC-Unique: ipHb_YS3MViT2UOXMrzxuQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 321323C0ED5F
+	for <llvm@lists.linux.dev>; Wed, 15 Mar 2023 09:41:39 +0000 (UTC)
+Received: from [172.64.1.113] (unknown [10.30.32.168])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 20B83140E95F;
+	Wed, 15 Mar 2023 09:41:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (96/381 SKIPPED): Test report for master
+ (6.3.0-rc2, mainline.kernel.org-clang, 4979bf86)
+Date: Wed, 15 Mar 2023 09:41:39 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <51256.123031505413901236@us-mta-556.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
-CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Hi, we tested your kernel and here are the results:
 
-Hi Frederic,
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-FYI, the error/warning still remains.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6015b1aca1a233379625385feb01dd014aca60b5
-commit: 171476775d32a40bfebf83250136c19b2e842672 context_tracking: Convert state to atomic_t
-date:   8 months ago
-config: x86_64-randconfig-k001-20230313 (https://download.01.org/0day-ci/archive/20230315/202303151752.Mgdq7hev-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=171476775d32a40bfebf83250136c19b2e842672
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 171476775d32a40bfebf83250136c19b2e842672
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Kernel information:
+    Commit message: Merge tag 'docs-6.3-fixes' of git://git.lwn.net/linux
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303151752.Mgdq7hev-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/78698
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage - blktests - blk: block/001: WARNING: CPU: 12 PID: 2=
+0625 at fs/proc/generic.c:718 remove_proc_entry+0x198/0x1c0
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1599
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
+ waiting the udev queue being empty
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1470
+            Affected tests:
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x87: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x4e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x2f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x4e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check+0x56: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_start+0x6b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check+0x4e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x28: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x55: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_kernel_exit_state+0x2e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_nmi_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_kernel_enter_state+0x31: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_idle_enter+0x38: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_kernel_exit+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_idle_exit+0x43: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_kernel_enter+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_irq_enter+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ct_irq_exit+0x35: call to ftrace_likely_update() leaves .noinstr.text section
 
 
-objdump-func vmlinux.o ct_kernel_exit_state:
-0000 000000000000438e <ct_kernel_exit_state>:
-0000     438e:	55                   	push   %rbp
-0001     438f:	53                   	push   %rbx
-0002     4390:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	4393: R_X86_64_32S	context_tracking
-0009     4397:	65 48 03 05 00 00 00 00 	add    %gs:0x0(%rip),%rax        # 439f <ct_kernel_exit_state+0x11>	439b: R_X86_64_PC32	this_cpu_off-0x4
-0011     439f:	89 fd                	mov    %edi,%ebp
-0013     43a1:	f0 0f c1 28          	lock xadd %ebp,(%rax)
-0017     43a5:	01 fd                	add    %edi,%ebp
-0019     43a7:	83 e5 04             	and    $0x4,%ebp
-001c     43aa:	89 eb                	mov    %ebp,%ebx
-001e     43ac:	c1 eb 02             	shr    $0x2,%ebx
-0021     43af:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	43b2: R_X86_64_32S	_ftrace_annotated_branch+0x477c0
-0028     43b6:	89 de                	mov    %ebx,%esi
-002a     43b8:	31 d2                	xor    %edx,%edx
-002c     43ba:	31 c9                	xor    %ecx,%ecx
-002e     43bc:	e8 00 00 00 00       	call   43c1 <ct_kernel_exit_state+0x33>	43bd: R_X86_64_PLT32	ftrace_likely_update-0x4
-0033     43c1:	85 ed                	test   %ebp,%ebp
-0035     43c3:	74 04                	je     43c9 <ct_kernel_exit_state+0x3b>
-0037     43c5:	90                   	nop
-0038     43c6:	0f 0b                	ud2
-003a     43c8:	90                   	nop
-003b     43c9:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	43cc: R_X86_64_32S	_ftrace_annotated_branch+0x477f0
-0042     43d0:	89 de                	mov    %ebx,%esi
-0044     43d2:	31 d2                	xor    %edx,%edx
-0046     43d4:	31 c9                	xor    %ecx,%ecx
-0048     43d6:	5b                   	pop    %rbx
-0049     43d7:	5d                   	pop    %rbp
-004a     43d8:	e9 00 00 00 00       	jmp    43dd <ct_nmi_enter>	43d9: R_X86_64_PLT32	ftrace_likely_update-0x4
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
