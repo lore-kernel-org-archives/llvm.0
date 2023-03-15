@@ -1,52 +1,50 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0A6D2F6;
-	Tue, 14 Mar 2023 23:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EE27E;
+	Wed, 15 Mar 2023 01:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678836238; x=1710372238;
+  t=1678842438; x=1710378438;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9JSluFsQgkYA1CSEXZw29hUEPKHlRuKNC1VLjY8g/5I=;
-  b=XPNranuZ1mISccNUwK/M1OIapBhPFta4we665n9K/S9Ju3T6u8ojIPkU
-   pqlJxDRxj2gVcyaFW4/yyHMy+6spSGLO86ccFmjYr41dlBiqYJ1UUbceC
-   4chcB4QkQKoRM+8UNyxGA3gYCT5RtcgVLY8zr7W62faNFzNppj3cOEDPU
-   EajgV7P/YwfMZBrRCkEHEdeGlN2KkvTCIr/OX6A7+qKg7nemiPKtrA9BM
-   N2bVXSDE9aoe9T+OktBj+jKL7a/zMe2Ty8M+pgU3DUGqFyzpJu62jFFAD
-   XByscWU2wrHfl/B0z7NoJKO6kyzFtUJWIXaNLzSQNteq1EcO1vXaEfchJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="321410898"
+  bh=bf0cITO4GwyotSgqh8OBywPfEL29aNWqkchlvVro+RA=;
+  b=Dtk3RsaFjmNNmddVJcqKY/VuXj7c+alKs2khZdw0yPiBz9YYmbjQxaU9
+   xLTLJ+NZ5FdNjr5BnDL4jx9Oe7ANjh/koPiILBKcXpXeXrLvR8fO0bAt3
+   BEXe0hvzHHmJ1A2ExMHX5orA+gDDNr7Q/wPmYYiJJfXqbZrF1TucXFhwy
+   GV5bUd9DjVUAh3yhWFhSJ+7diEfTYf15JFpc9fIUd/SuRLy6jhonzwbEa
+   APUvSHpKq4nbieEAP4naxfoDcUWSV0CM/WsndXNxuC0/VNtW+PAOyOimo
+   JxMAoRYSpiubs1Nra2Iw+sNhQGSrrIgjT2LFlTlOv21eAPZhDQ1Skl6aF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="337604594"
 X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="321410898"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 16:23:57 -0700
+   d="scan'208";a="337604594"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 18:06:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="789560177"
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="681641909"
 X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="789560177"
+   d="scan'208";a="681641909"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Mar 2023 16:23:54 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 14 Mar 2023 18:05:58 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pcDzm-0007GC-0h;
-	Tue, 14 Mar 2023 23:23:54 +0000
-Date: Wed, 15 Mar 2023 07:23:28 +0800
+	id 1pcFaX-0007J9-27;
+	Wed, 15 Mar 2023 01:05:57 +0000
+Date: Wed, 15 Mar 2023 09:05:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Komal Bajaj <quic_kbajaj@quicinc.com>, Rob Herring <robh+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-	Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Andy Gross <agross@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Komal Bajaj <quic_kbajaj@quicinc.com>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] soc: qcom: Add LLCC support for multi channel DDR
-Message-ID: <202303150713.cMgW2Qnu-lkp@intel.com>
-References: <20230313124040.9463-5-quic_kbajaj@quicinc.com>
+	Kurt Kanzenbach <kurt@linutronix.de>, Andrew Lunn <andrew@lunn.ch>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v6 1/1] net: dsa: hellcreek: Get rid of custom
+ led_init_default_state_get()
+Message-ID: <202303150831.vgyKe8FD-lkp@intel.com>
+References: <20230314181824.56881-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,45 +53,137 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313124040.9463-5-quic_kbajaj@quicinc.com>
+In-Reply-To: <20230314181824.56881-1-andriy.shevchenko@linux.intel.com>
 
-Hi Komal,
+Hi Andy,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.3-rc2 next-20230314]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Komal-Bajaj/soc-qcom-llcc-Refactor-llcc-driver-to-support-multiple-configuration/20230313-204310
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230313124040.9463-5-quic_kbajaj%40quicinc.com
-patch subject: [PATCH v2 4/5] soc: qcom: Add LLCC support for multi channel DDR
-config: mips-randconfig-r021-20230312 (https://download.01.org/0day-ci/archive/20230315/202303150713.cMgW2Qnu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/net-dsa-hellcreek-Get-rid-of-custom-led_init_default_state_get/20230315-021931
+patch link:    https://lore.kernel.org/r/20230314181824.56881-1-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH net-next v6 1/1] net: dsa: hellcreek: Get rid of custom led_init_default_state_get()
+config: i386-randconfig-a015-20230313 (https://download.01.org/0day-ci/archive/20230315/202303150831.vgyKe8FD-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/fe14182092383680f24bc88d81d199261453fa71
+        # https://github.com/intel-lab-lkp/linux/commit/fdd54417a75386e7ad47065c21403835b7fda94a
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Komal-Bajaj/soc-qcom-llcc-Refactor-llcc-driver-to-support-multiple-configuration/20230313-204310
-        git checkout fe14182092383680f24bc88d81d199261453fa71
+        git fetch --no-tags linux-review Andy-Shevchenko/net-dsa-hellcreek-Get-rid-of-custom-led_init_default_state_get/20230315-021931
+        git checkout fdd54417a75386e7ad47065c21403835b7fda94a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/hirschmann/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303150713.cMgW2Qnu-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303150831.vgyKe8FD-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "qcom_scm_io_readl" [drivers/soc/qcom/llcc-qcom.ko] undefined!
+>> drivers/net/dsa/hirschmann/hellcreek_ptp.c:322:10: error: implicit declaration of function 'led_init_default_state_get' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           state = led_init_default_state_get(of_fwnode_handle(led));
+                   ^
+   1 error generated.
+
+
+vim +/led_init_default_state_get +322 drivers/net/dsa/hirschmann/hellcreek_ptp.c
+
+   292	
+   293	/* There two available LEDs internally called sync_good and is_gm. However, the
+   294	 * user might want to use a different label and specify the default state. Take
+   295	 * those properties from device tree.
+   296	 */
+   297	static int hellcreek_led_setup(struct hellcreek *hellcreek)
+   298	{
+   299		struct device_node *leds, *led = NULL;
+   300		enum led_default_state state;
+   301		const char *label;
+   302		int ret = -EINVAL;
+   303	
+   304		of_node_get(hellcreek->dev->of_node);
+   305		leds = of_find_node_by_name(hellcreek->dev->of_node, "leds");
+   306		if (!leds) {
+   307			dev_err(hellcreek->dev, "No LEDs specified in device tree!\n");
+   308			return ret;
+   309		}
+   310	
+   311		hellcreek->status_out = 0;
+   312	
+   313		led = of_get_next_available_child(leds, led);
+   314		if (!led) {
+   315			dev_err(hellcreek->dev, "First LED not specified!\n");
+   316			goto out;
+   317		}
+   318	
+   319		ret = of_property_read_string(led, "label", &label);
+   320		hellcreek->led_sync_good.name = ret ? "sync_good" : label;
+   321	
+ > 322		state = led_init_default_state_get(of_fwnode_handle(led));
+   323		switch (state) {
+   324		case LEDS_DEFSTATE_ON:
+   325			hellcreek->led_sync_good.brightness = 1;
+   326			break;
+   327		case LEDS_DEFSTATE_KEEP:
+   328			hellcreek->led_sync_good.brightness =
+   329				hellcreek_get_brightness(hellcreek, STATUS_OUT_SYNC_GOOD);
+   330			break;
+   331		default:
+   332			hellcreek->led_sync_good.brightness = 0;
+   333		}
+   334	
+   335		hellcreek->led_sync_good.max_brightness = 1;
+   336		hellcreek->led_sync_good.brightness_set = hellcreek_led_sync_good_set;
+   337		hellcreek->led_sync_good.brightness_get = hellcreek_led_sync_good_get;
+   338	
+   339		led = of_get_next_available_child(leds, led);
+   340		if (!led) {
+   341			dev_err(hellcreek->dev, "Second LED not specified!\n");
+   342			ret = -EINVAL;
+   343			goto out;
+   344		}
+   345	
+   346		ret = of_property_read_string(led, "label", &label);
+   347		hellcreek->led_is_gm.name = ret ? "is_gm" : label;
+   348	
+   349		state = led_init_default_state_get(of_fwnode_handle(led));
+   350		switch (state) {
+   351		case LEDS_DEFSTATE_ON:
+   352			hellcreek->led_is_gm.brightness = 1;
+   353			break;
+   354		case LEDS_DEFSTATE_KEEP:
+   355			hellcreek->led_is_gm.brightness =
+   356				hellcreek_get_brightness(hellcreek, STATUS_OUT_IS_GM);
+   357			break;
+   358		default:
+   359			hellcreek->led_is_gm.brightness = 0;
+   360		}
+   361	
+   362		hellcreek->led_is_gm.max_brightness = 1;
+   363		hellcreek->led_is_gm.brightness_set = hellcreek_led_is_gm_set;
+   364		hellcreek->led_is_gm.brightness_get = hellcreek_led_is_gm_get;
+   365	
+   366		/* Set initial state */
+   367		if (hellcreek->led_sync_good.brightness == 1)
+   368			hellcreek_set_brightness(hellcreek, STATUS_OUT_SYNC_GOOD, 1);
+   369		if (hellcreek->led_is_gm.brightness == 1)
+   370			hellcreek_set_brightness(hellcreek, STATUS_OUT_IS_GM, 1);
+   371	
+   372		/* Register both leds */
+   373		led_classdev_register(hellcreek->dev, &hellcreek->led_sync_good);
+   374		led_classdev_register(hellcreek->dev, &hellcreek->led_is_gm);
+   375	
+   376		ret = 0;
+   377	
+   378	out:
+   379		of_node_put(leds);
+   380	
+   381		return ret;
+   382	}
+   383	
 
 -- 
 0-DAY CI Kernel Test Service
