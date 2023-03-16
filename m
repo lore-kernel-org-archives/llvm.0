@@ -1,167 +1,111 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE5F37C;
-	Thu, 16 Mar 2023 01:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F332337C;
+	Thu, 16 Mar 2023 02:24:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678931301; x=1710467301;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=sSx5NLG1J/FX90Md+UI0nZ6trrgL1G5RiqiBxBcAEkk=;
-  b=E6TvuNcRxs6q7fMGchUgiqHrqU7ZcJD/z3FdUrgXLPyeWT3bcxqtx62H
-   5UtZTppInPk29dSGk7XVOzAsV3Mo/fPq26SsZNHXP308uuCXz8/+/SB3L
-   8P0dDExkVr1uALFtQB43AmGWpKuCuovj10YSM5ByKcSDemnki2RZWJGLb
-   ez5JWluIOL4XoiOB//StXAYuXZcQy7ztU3hQ3WtgVsgMLE2G7j8boRWzx
-   NCaYP4PSvvFxJ34P9UqD4jFKhEQI754woax5YhOlvi8A6oK5TSk8Inx9D
-   mh1/NTlf2Z1frLcWD335DRwoi0bHh9q0257qvdnpS3e73jZzpiixUbo3F
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="365550637"
+  t=1678933459; x=1710469459;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=D0nY6BATEh+ajtPGqyCpQvrGLnMjiNv+AVMvsl1etDw=;
+  b=WOKzrLZ47pi59i/+srQc2Ru67SRShch/+vjOlUojMi0cVCTFibes2mHu
+   cyjj3mo2erYhImCVVQ0MheRCx1Mt71JQ228WkqJe9thWa/1uOsP2PDH9s
+   jvpI46CEl9r9T4Myfm7L1Q+JBOYJ3ThurMmFk1eKXDgbU8/u/ll8lAzJA
+   TjAIgvbZQGYxzQKahuNe5wfgThZ2R4cB1d+k9Om4flRqNVjSRC9uGGvH3
+   i7sYraUB1uiW1qZOXgq8SSG8YhW+shDMQv5QZNKTqN61s22QGebd1ZuIn
+   H4htVRpzjocqnxcOyj0rynEPPYVk+pvOfAv9SZcs8GikeVQE5ap22yFRs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="400446508"
 X-IronPort-AV: E=Sophos;i="5.98,264,1673942400"; 
-   d="scan'208";a="365550637"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 18:48:20 -0700
+   d="scan'208";a="400446508"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 19:24:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="853818046"
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="743932031"
 X-IronPort-AV: E=Sophos;i="5.98,264,1673942400"; 
-   d="scan'208";a="853818046"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga005.jf.intel.com with ESMTP; 15 Mar 2023 18:48:20 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 15 Mar 2023 18:48:20 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 15 Mar 2023 18:48:19 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 18:48:19 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Wed, 15 Mar 2023 18:48:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gxdls/th9m5Eq2NUS3OQQAyWBdtGXQGy4AOJA5py448kzrG0WTp33Zbby3WDmCOYtlY9e3oJYaBinCi3QI3DmmPVkuWVZIUgJVu3rQrv8N2S+wXsfRZ+SdOI95h+CfIRr5oCepwOr5ELbtUU/1Tm8tTGTkC09kr3Pa3LDQzN33RLLpNbv4yrDFFnEpcFD5M36E8Wj4aS6cKcrtxzRqipRy2125nMG/Om/dluNn+qSPUv2zb7TK1WDWipCu9ZkyuSpwX9P5jdLdbjYz3dJTeKnebk/cHA2zJDqfAzWm8F3DH2SafaYepCuSkk3GtQvz2VO3xTcC2LYNf4cBAq7yF/hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NGaEX0R6eXYlJn7tbGMJdMNuG8U+kv5CqMz1RZzmUeI=;
- b=C610vbJ8i61vW4mlCL2IV+H9aioEH/z/aRVMnY/TgF5mqTpaT+sXbe3LP+pAFabU8ym5mVVQVWgMnE7856dYETQDqLN83go+el6XJHWwhF0ediDLyQmsrkY7U81MQis9HZuwphAwV82lL6r2EHzdYKEVqMBUdAMIbeUvBNPYZ7mUuZIU0sOYvY1OyNMAXOgqFudrrxmKnSxLlbjHahFVKBiUQ94bYkAYk6MikapBF6VF50lSNh+Br6j8Cq6srWwtjPTLwJC4UgaQE8kMLSRv9slbOw9LtUTW6iEcoibpJEjlN8cWd4Rg4HvX94N7nrwAMejhPR/SbRcmRttz1KtvPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
- by MN6PR11MB8146.namprd11.prod.outlook.com (2603:10b6:208:470::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.22; Thu, 16 Mar
- 2023 01:48:17 +0000
-Received: from BL0PR11MB2995.namprd11.prod.outlook.com
- ([fe80::93fd:14c:bf9f:6d03]) by BL0PR11MB2995.namprd11.prod.outlook.com
- ([fe80::93fd:14c:bf9f:6d03%7]) with mapi id 15.20.6178.025; Thu, 16 Mar 2023
- 01:48:17 +0000
-Date: Thu, 16 Mar 2023 09:48:05 +0800
-From: Philip Li <philip.li@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Nathan Chancellor <nathan@kernel.org>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, kernel test robot <lkp@intel.com>,
-	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, Kurt Kanzenbach
-	<kurt@linutronix.de>, Andrew Lunn <andrew@lunn.ch>, Florian Fainelli
-	<f.fainelli@gmail.com>, Vladimir Oltean <olteanv@gmail.com>, Eric Dumazet
-	<edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v6 1/1] net: dsa: hellcreek: Get rid of custom
- led_init_default_state_get()
-Message-ID: <ZBJ1VV7cfASY4tW5@rli9-mobl>
-References: <20230314181824.56881-1-andriy.shevchenko@linux.intel.com>
- <202303150831.vgyKe8FD-lkp@intel.com>
- <ZBH7G+1RwX4VAKcz@smile.fi.intel.com>
- <20230315195154.GA1636193@dev-arch.thelio-3990X>
- <20230315141538.5a9f574c@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230315141538.5a9f574c@kernel.org>
-X-ClientProxiedBy: SG2PR04CA0157.apcprd04.prod.outlook.com (2603:1096:4::19)
- To BL0PR11MB2995.namprd11.prod.outlook.com (2603:10b6:208:7a::28)
+   d="scan'208";a="743932031"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Mar 2023 19:24:18 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pcdHt-0008FX-27;
+	Thu, 16 Mar 2023 02:24:17 +0000
+Date: Thu, 16 Mar 2023 10:23:30 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [stable:linux-5.15.y 9399/9999] arch/x86/kernel/smp.o: warning:
+ objtool: sysvec_reboot()+0x43: unreachable instruction
+Message-ID: <202303161024.sBg5z9uA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR11MB2995:EE_|MN6PR11MB8146:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4cd086f5-87b8-4bc1-69f1-08db25c08373
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VHV/QLXKiVDCaaCaS2wYjzgH3dX9LGvAZXg2E/rq0re6uhu4F8wugFw6VKeFasGT2aMAuLVouPUpdjDMIo+fZU6krHZC09TzlHmYZwgpRc2MZOIpoy3OhvbBWNUM1DY/ow+PIKsMd5+JUZN5ChLuN0T1Dr6k2dC/UaR6X8cMrB+EdQd+Jx+Gwm9fxjJMBVOObfX/lgQT2C86gpMuUb0wJJfNahHMgBZdOoBPbSNalavXYVDaRwTihIxRRxEjg6BDBeG8dFl6RcvuRNCTSp4x7KWnvZQiNozBW2IiTYngqUmsH6gyKgoXEqJV1ZTM/K1wdrdEU+cMrydS7x/7yohbZy1AMWc+XlWdvHyIzWMi+fssW+0owl7X1O8yziXqHO3fq4/AhajQWwaMl6Q2UyTtnIoWue6u5IrMvEx+J5aM+9ThDb8+nw3kMqRcpupmH6N+euoTZpwrO/yuf428VdpLjFja76LtNtnPDCmrNmtPJ+Pw64hD1V5f58r1bdd67Vdo7MOOnkdsEkHlBwd3QW69wKOV4uQHjDaFm89bWWWuOlVRYo48MLHPLjE4nkWK8LxBd1r+jb33Ne20zBH7bt2sbgTdHQbZD+oSoyFCJJGBqNFXr98YDf/jm6HhXZoWXqOH7+gFW3n5GeH7jz06y7hie6Z03RpXrZ8GFqnqUj1yj8J75DJfFD/XM07ScJzUfo+s
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB2995.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(39860400002)(376002)(346002)(366004)(396003)(136003)(451199018)(83380400001)(4326008)(66556008)(66476007)(66946007)(33716001)(38100700002)(82960400001)(316002)(44832011)(41300700001)(6916009)(8676002)(6486002)(186003)(26005)(54906003)(6506007)(9686003)(6512007)(8936002)(5660300002)(7416002)(478600001)(6666004)(2906002)(86362001)(26583001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?B60Cj59hFDWWn5hbcOrMLrq64/NEZAniDzoH2DycZRRLxEckGXoQRarNDwiM?=
- =?us-ascii?Q?ECUmcmFUI+l84SXEV6wKmbV3Dw5x9Vku6oOWFrNLleS7eFjEm/swuVWOq5wL?=
- =?us-ascii?Q?CdUv7XG6HazCfPqc3C4sI9FleRUo1uk7dy3VpFFaWuB6LqMjcqWSJqgsl24a?=
- =?us-ascii?Q?sR7l2t1DESRbHhi086IjrY7uOaqq7tlEB2B3aW3Vp+ahfont94eVcWWugpNd?=
- =?us-ascii?Q?XL2LM7A48V+Pt1y7Vll+oluJEqIy8ITceoOYOXgDEDRAtv3FTxvc8eJ2mwaR?=
- =?us-ascii?Q?axSYEFdxcqYqNC+rkYs40eQqT/HgTQKNRYbl9F1QZ4NWSjTBnumxBOqazfic?=
- =?us-ascii?Q?Dfla2P/J3tSDL1fkBVb9qQFaWLbvNR5tfqNOl43F0niE375QbcYL724RNa0s?=
- =?us-ascii?Q?4WK5Kv2+IOIw5cjlHdPfRxP/33SDaFQOOdooYkJpLPBSpzCGueC3yjpkr9mO?=
- =?us-ascii?Q?NupAn4eeQZNh9iPUdrsmBKP0V0ruWldnuWNKQoeyj6IEdC4H8fMW8CSGgOkZ?=
- =?us-ascii?Q?Ake+kcz+4SXABa+rJca4qh4uReCkW9edsqVa8fegdO8gKmQkmSatEdt+IXaN?=
- =?us-ascii?Q?nonzCoTWqkGaAzBedP73711HPaJzCJF7wzaVu251sLTxe0GQmRhkZh6zs32K?=
- =?us-ascii?Q?BXAxHt22AIFQK3KgPx232CttPmwp2pZBHm4WBLlEKKPMwuC9CSOcC0G7kzO6?=
- =?us-ascii?Q?7/wx/6Q2TGlZ+VLuugvfzMjfj/fGQmM+LLtH8SIF+5XyJ1qZLUkxSYkbkizk?=
- =?us-ascii?Q?Lo7PzrTz2PurS/aMaPetHx5E8Z/Hf28a4SSBcFEIIGYfsDM6lPzF3iGnV7Wv?=
- =?us-ascii?Q?mJ0g25fDG6sbgoHzNAsxTvgyzP/sTVO8h8w/SXjcgVl2pSongpFFNnCeWEOk?=
- =?us-ascii?Q?1lwARoVw6H+0IoqSIvxz6QpOBSWjfjzn0Q8Mj7MDe5KVm9VHojlmes9j1TA1?=
- =?us-ascii?Q?1ozdq1Eg47XyKGdYWh7ztq/Jvb8hdHTkxh4BRkeKgHfy88DW0iwgtav+qZez?=
- =?us-ascii?Q?mluh/QglcZFVGx/W8BlQ2YpYtSUi/YAYo4KFGa7oGnezmoeUP7HtY0ovnDx2?=
- =?us-ascii?Q?001oXxIq0GMsgXmUMaoN10rWcqUy1uXFJzFjtRrkVfjJXSN9P0jvGzI4sREt?=
- =?us-ascii?Q?7usnztgOga27DnVDVTwOViYmsTUKaIWQffK00aOGPywe7oixcDSMlG4/zvWg?=
- =?us-ascii?Q?P110l9pcHzf673xYhda/o6/HUwgBzJU7sPWnHem+zsSfrmWkG+7tWpgclTSf?=
- =?us-ascii?Q?Gv03dxoFII9+ihIBtJd/QkV6kNueqciZpQrpIQV44OVE45+h94O2XO8GIP3x?=
- =?us-ascii?Q?all9DU4josL0KxgyLKJlh72hsmhyns3lP6KnZKFrFJNv8XzVe5PelolLjCcE?=
- =?us-ascii?Q?UD7xHRtNO//YuFqv8onzHPuU1nx2T6I2ka5Drn2yLUlKNhXN6iIaNSB8ihBt?=
- =?us-ascii?Q?86ZS6dtxnvkLk140nsMvKbSWyMP7JADOmJAYTuaTNTTrxrjKnpZprTMT4V5x?=
- =?us-ascii?Q?Gas2NBmKRwOi/15QZhhez6esBC6eb2x61XDKhDl0P+QmqWCLu0wQY3zXDqvO?=
- =?us-ascii?Q?I8wJezxmRwpHWj7RhilDDXSXpBXm/vJKoklg7DutvdhPRy8R8GpUNbIoI/pC?=
- =?us-ascii?Q?OA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cd086f5-87b8-4bc1-69f1-08db25c08373
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR11MB2995.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 01:48:17.6447
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pu/bNBkkV46eXyIL1HzWWsjXWp9arBJH+ReInimlFiTZKvchxzY94V3bhPPPnWlJZt7bjs0vDgzmBICrIC1fzw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8146
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Mar 15, 2023 at 02:15:38PM -0700, Jakub Kicinski wrote:
-> On Wed, 15 Mar 2023 12:51:54 -0700 Nathan Chancellor wrote:
-> > If you modify the GitHub link above the 'git remote' command above from
-> > 'commit' to 'commits', you can see that your patch was applied on top of
-> > mainline commit 5b7c4cabbb65 ("Merge tag 'net-next-6.3' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next"), which
-> > was before the pull that moved led_init_default_state_get() into
-> > include/linux/leds.h, commit e4bc15889506 ("Merge tag 'leds-next-6.3' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/lee/leds"). Not sure why
-> > that was the base that was chosen but it explains the error.
-> 
-> Because they still haven't moved to using the main branch of netdev
-> trees, they try to pull master :| I'll email them directly, I think
-> they don't see the in-reply messages.
+TO: Peter Zijlstra <peterz@infradead.org>
+CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+CC: Sasha Levin <sashal@kernel.org>
 
-Sorry for missing the early information, we didn't notice it and still
-apply to the wrong branch. We will resolve this asap to use main branch
-instead.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   2ddbd0f967b34872290e0f98fae32b91b4de7b87
+commit: 54aa76ad5f0148ad54fc7ad42ad5a079bc12efee [9399/9999] x86: Mark stop_this_cpu() __noreturn
+config: x86_64-randconfig-a014-20230313 (https://download.01.org/0day-ci/archive/20230316/202303161024.sBg5z9uA-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=54aa76ad5f0148ad54fc7ad42ad5a079bc12efee
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout 54aa76ad5f0148ad54fc7ad42ad5a079bc12efee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-Thanks
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303161024.sBg5z9uA-lkp@intel.com/
 
-> 
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/smp.o: warning: objtool: sysvec_reboot()+0x43: unreachable instruction
+
+
+objdump-func vmlinux.o sysvec_reboot:
+0000 0000000000001f7f <sysvec_reboot>:
+0000     1f7f:	55                   	push   %rbp
+0001     1f80:	53                   	push   %rbx
+0002     1f81:	48 89 fb             	mov    %rdi,%rbx
+0005     1f84:	e8 00 00 00 00       	call   1f89 <sysvec_reboot+0xa>	1f85: R_X86_64_PLT32	irqentry_enter-0x4
+000a     1f89:	f6 83 88 00 00 00 03 	testb  $0x3,0x88(%rbx)
+0011     1f90:	75 4c                	jne    1fde <sysvec_reboot+0x5f>
+0013     1f92:	89 c5                	mov    %eax,%ebp
+0015     1f94:	65 8a 05 00 00 00 00 	mov    %gs:0x0(%rip),%al        # 1f9b <sysvec_reboot+0x1c>	1f97: R_X86_64_PC32	hardirq_stack_inuse-0x4
+001c     1f9b:	84 c0                	test   %al,%al
+001e     1f9d:	75 3f                	jne    1fde <sysvec_reboot+0x5f>
+0020     1f9f:	65 c6 05 00 00 00 00 01 	movb   $0x1,%gs:0x0(%rip)        # 1fa7 <sysvec_reboot+0x28>	1fa2: R_X86_64_PC32	hardirq_stack_inuse-0x5
+0028     1fa7:	65 4c 8b 1d 00 00 00 00 	mov    %gs:0x0(%rip),%r11        # 1faf <sysvec_reboot+0x30>	1fab: R_X86_64_PC32	hardirq_stack_ptr-0x4
+0030     1faf:	49 89 23             	mov    %rsp,(%r11)
+0033     1fb2:	4c 89 dc             	mov    %r11,%rsp
+0036     1fb5:	e8 00 00 00 00       	call   1fba <sysvec_reboot+0x3b>	1fb6: R_X86_64_PLT32	irq_enter_rcu-0x4
+003b     1fba:	48 89 df             	mov    %rbx,%rdi
+003e     1fbd:	e8 00 00 00 00       	call   1fc2 <sysvec_reboot+0x43>	1fbe: R_X86_64_PLT32	.text+0xb0154
+0043     1fc2:	e8 00 00 00 00       	call   1fc7 <sysvec_reboot+0x48>	1fc3: R_X86_64_PLT32	irq_exit_rcu-0x4
+0048     1fc7:	5c                   	pop    %rsp
+0049     1fc8:	65 c6 05 00 00 00 00 00 	movb   $0x0,%gs:0x0(%rip)        # 1fd0 <sysvec_reboot+0x51>	1fcb: R_X86_64_PC32	hardirq_stack_inuse-0x5
+0051     1fd0:	40 0f b6 f5          	movzbl %bpl,%esi
+0055     1fd4:	48 89 df             	mov    %rbx,%rdi
+0058     1fd7:	5b                   	pop    %rbx
+0059     1fd8:	5d                   	pop    %rbp
+005a     1fd9:	e9 00 00 00 00       	jmp    1fde <sysvec_reboot+0x5f>	1fda: R_X86_64_PLT32	irqentry_exit-0x4
+005f     1fde:	e8 00 00 00 00       	call   1fe3 <sysvec_reboot+0x64>	1fdf: R_X86_64_PLT32	irq_enter_rcu-0x4
+0064     1fe3:	48 89 df             	mov    %rbx,%rdi
+0067     1fe6:	e8 00 00 00 00       	call   1feb <sysvec_reschedule_ipi>	1fe7: R_X86_64_PLT32	.text+0xb0154
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
