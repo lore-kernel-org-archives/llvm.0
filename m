@@ -1,103 +1,174 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A03A20EE
-	for <llvm@lists.linux.dev>; Thu, 16 Mar 2023 07:38:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1678952279;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iVY81PmIkLhnMcZY8bxi+8If5ywAumxCAv/0i9PQtGA=;
-	b=H0MrgifnOu9FbUQmjZ0RwebeE21n8yb67WJebOmr5XUn+mFbs1D+HmR+PKCvgCGazLKRnD
-	mGGUCgbydw6/ZCJh2Qt6lHIojncMH9OZUMSMX/XYuhdITWJZyGEvgUk3Kp0YvNcOY2Vkk2
-	/od+k5YAUIgY0vLpyO/xctcGVqHdnjY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-136-l6qCO59UOSGWNIUV5UdBig-1; Thu, 16 Mar 2023 03:37:57 -0400
-X-MC-Unique: l6qCO59UOSGWNIUV5UdBig-1
-Received: by mail-ed1-f72.google.com with SMTP id k12-20020a50c8cc000000b004accf30f6d3so1731544edh.14
-        for <llvm@lists.linux.dev>; Thu, 16 Mar 2023 00:37:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678952276;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iVY81PmIkLhnMcZY8bxi+8If5ywAumxCAv/0i9PQtGA=;
-        b=B656nGewjMPMKgAlR6pW/vOhD5Pin0EaIORDefJ86mxtQ8QJbrjnw2nxEpZwmlKpqr
-         7leK97+9hu/vHTsWUf5SrbHQw1qZER0PzQZMqCYv6WDnuYyQ8E7fSnDy5hShQO308bWl
-         7bA8iXYXDoTxlnE1OrGhnIxoSkkCXqchnDjxzAS/q0iOb4Q1mllj3aSVqPaKEtHKTPPM
-         af6aZebcRFMRqLiT1O7XvtCDWneqC6vgkUFvGx3LQJ7pY/6w6K/OAsjThH2hoyxExNRo
-         8HG2Ii+yJavklq6JZInl6F7qGHKqCQiPvx+s+/JwpQZrXxvJFQb8etglIQC0qDjNCmoq
-         m0Aw==
-X-Gm-Message-State: AO0yUKUlYfyDvLSvwtcPAQwh9bJbFMdoDIZ1dmQM039nuwaXflMtKe+g
-	14IsU6Ep4rC1ppzYjvDpHyrRefji1Ip3CBQGZ107HhafECtyE9aEgkW2x7tmjGeXjkNdEP9ajif
-	TNIcsctmDuZOc
-X-Received: by 2002:a17:907:1c27:b0:92f:bef6:7843 with SMTP id nc39-20020a1709071c2700b0092fbef67843mr4183712ejc.22.1678952276706;
-        Thu, 16 Mar 2023 00:37:56 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+K7+j0zOimzl4B3ORDf6GGQvsgdfe9Nsc+8RAXvdyrJiTosutBWT06KzKUC0ktZqJTfcE4hA==
-X-Received: by 2002:a17:907:1c27:b0:92f:bef6:7843 with SMTP id nc39-20020a1709071c2700b0092fbef67843mr4183681ejc.22.1678952276433;
-        Thu, 16 Mar 2023 00:37:56 -0700 (PDT)
-Received: from [10.43.17.73] (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id q19-20020a17090676d300b00922f76decefsm3512243ejn.99.2023.03.16.00.37.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:37:55 -0700 (PDT)
-Message-ID: <6c8f828c-3995-a9b0-3bdd-37724e96a4ce@redhat.com>
-Date: Thu, 16 Mar 2023 08:37:55 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239DB20EE;
+	Thu, 16 Mar 2023 07:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678953151; x=1710489151;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P4uR5lQsRhLn/DGWaZn3xLL2/0YV/DoJRKZ+9nv3mMM=;
+  b=Kj+0uRzrqooX086ZefLC5c6cp9S1Rvj2CSZDsqYxYy9p1AmpEwFUlMFf
+   Ruyle8VfCoYRxjE95BRlAYnW9LHY5jJsUT2kdyKkTzvw29lPyH/RI3xm5
+   ZKXUbQS+ywyHpTDkmNuhfXDW3wUQlUY0NULsWqG8dH/wrI5198vWCJ6fk
+   PRuJR6kT4pGNAt/b0OZ08Qdq+FX4MPrpg8AX7AAY+eiwqP+/Jox+CZdub
+   pU5Kxt8ui/f+iykGOC6eXmLY03n5Xb33qt68xqbuoEvwBBw4rN1s7eZ2n
+   0dACzgMzHUnSk3uX/9fA36I45vRerr3NPWmMZ97mdjJ0FBo9aVfZH5l+/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337935006"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="337935006"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 00:52:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="673046044"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="673046044"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Mar 2023 00:52:25 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pciPR-0008Pm-0H;
+	Thu, 16 Mar 2023 07:52:25 +0000
+Date: Thu, 16 Mar 2023 15:51:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>, davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	zbr@ioremap.net, brauner@kernel.org, johannes@sipsolutions.net,
+	ecree.xilinx@gmail.com, leon@kernel.org, keescook@chromium.org,
+	socketcan@hartkopp.net, petrm@nvidia.com,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	anjali.k.kulkarni@oracle.com
+Subject: Re: [PATCH v2 2/5] connector/cn_proc: Add filtering to fix some bugs
+Message-ID: <202303161507.MJc3Twl0-lkp@intel.com>
+References: <20230315021850.2788946-3-anjali.k.kulkarni@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH bpf-next v10 1/2] bpf: Fix attaching
- fentry/fexit/fmod_ret/lsm to modules
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- kernel test robot <lkp@intel.com>
-Cc: bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
- oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>
-References: <3f6a9d8ae850532b5ef864ef16327b0f7a669063.1678432753.git.vmalik@redhat.com>
- <202303160919.SGyfD0uE-lkp@intel.com>
- <CAADnVQJ+-ThSUMzEgWu6OtkWB-bdqZKPiRxWUEbL5L=cPjeezg@mail.gmail.com>
- <CAADnVQKWtWZg+zHfA2AOwwMKipWog-MpeR88AcXN=bJuuQu6_g@mail.gmail.com>
-From: Viktor Malik <vmalik@redhat.com>
-In-Reply-To: <CAADnVQKWtWZg+zHfA2AOwwMKipWog-MpeR88AcXN=bJuuQu6_g@mail.gmail.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315021850.2788946-3-anjali.k.kulkarni@oracle.com>
 
-On 3/16/23 02:39, Alexei Starovoitov wrote:
-> On Wed, Mar 15, 2023 at 6:34 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Wed, Mar 15, 2023 at 6:32 PM kernel test robot <lkp@intel.com> wrote:
->>>
->>> Hi Viktor,
->>>
->>> Thank you for the patch! Yet something to improve:
->>
->> Argh. Comma is missing.
->> Viktor,
->> please send a fix asap.
-> 
-> Actually, since it was at the top of bpf-next
-> I fixed it myself and force pushed bpf-next.
-> 
+Hi Anjali,
 
-Ah, I'm sorry, I completely missed that. Thanks for fixing it, Alexei!
+Thank you for the patch! Perhaps something to improve:
 
-Viktor
+[auto build test WARNING on net-next/master]
+[also build test WARNING on net/master vfs-idmapping/for-next linus/master v6.3-rc2]
+[cannot apply to next-20230316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Anjali-Kulkarni/netlink-Reverse-the-patch-which-removed-filtering/20230315-102137
+patch link:    https://lore.kernel.org/r/20230315021850.2788946-3-anjali.k.kulkarni%40oracle.com
+patch subject: [PATCH v2 2/5] connector/cn_proc: Add filtering to fix some bugs
+config: hexagon-randconfig-r045-20230313 (https://download.01.org/0day-ci/archive/20230316/202303161507.MJc3Twl0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3d67dd0fedbcbd247d8a8f925547dc57c5ad83e4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anjali-Kulkarni/netlink-Reverse-the-patch-which-removed-filtering/20230315-102137
+        git checkout 3d67dd0fedbcbd247d8a8f925547dc57c5ad83e4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/connector/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303161507.MJc3Twl0-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/connector/cn_proc.c:14:
+   In file included from include/linux/connector.h:17:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/connector/cn_proc.c:14:
+   In file included from include/linux/connector.h:17:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/connector/cn_proc.c:14:
+   In file included from include/linux/connector.h:17:
+   In file included from include/net/sock.h:38:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/connector/cn_proc.c:51:5: warning: no previous prototype for function 'cn_filter' [-Wmissing-prototypes]
+   int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
+       ^
+   drivers/connector/cn_proc.c:51:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
+   ^
+   static 
+   7 warnings generated.
+
+
+vim +/cn_filter +51 drivers/connector/cn_proc.c
+
+    50	
+  > 51	int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
+    52	{
+    53		enum proc_cn_mcast_op mc_op;
+    54	
+    55		if (!dsk)
+    56			return 0;
+    57	
+    58		mc_op = ((struct proc_input *)(dsk->sk_user_data))->mcast_op;
+    59	
+    60		if (mc_op == PROC_CN_MCAST_IGNORE)
+    61			return 1;
+    62	
+    63		return 0;
+    64	}
+    65	EXPORT_SYMBOL_GPL(cn_filter);
+    66	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
