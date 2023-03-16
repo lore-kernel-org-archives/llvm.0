@@ -1,48 +1,48 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BA4AD4E;
-	Thu, 16 Mar 2023 23:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67CDAD4E;
+	Thu, 16 Mar 2023 23:19:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679008197; x=1710544197;
+  t=1679008797; x=1710544797;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=UH68FltZn58LYhbziPJqYiYePEpTo7vpEi3kwULtdnI=;
-  b=IpCfJlO7iGkSTBscvzUlUI/Z+YW4WNPAvSgyd0IAY21q7gQU4quMRiGk
-   vQJHjKgPjB1oGe+sK0y3Gj7iwINchFXUlIPGFawIoEvzaeQ5u7xM63UHp
-   unsOLNfJkreYtx+gMM0tSQjNZcCg1shCjkbJUYAhQ4JmulcdX7k3xxraz
-   pToaIktPeE3e+FCyxZy7WTxUTo/Kjv+DI6WkE8PYGN4btXC843tzxEeMU
-   mimuaxyK0LPUbqWbPrWGBQcbDxP7vhV64elmC3FVt4aydr4WcMUWO1B+U
-   cIyT2+e/BYYZreVSc4rufrfi2v2VZrMvRKaJW2Mag+uMqE9BKdK2boEXP
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="400717991"
+  bh=w27aUi7It9h8nbGZhrTxFUQlsPX0IjHEaDxbMAWRWjM=;
+  b=MMX0P0HY2PuSJCOFpdb5Zlz0/s46FTInL92uxt60KzJtWqvHnRQYK0sk
+   Wj4OamShk7crhi3l5DRGvMW/csCeA3UzWVSVlNvdEmVMD3+IiDhv/cU6Z
+   4brjcPjIKuY/0lMIKFVhyAkKikIpkNQ/72kCwO874Fj/2zbXq8/GzilDN
+   IuoBlb4gkNNvU8v3Cgejn82XPOWhgUS6tWqwAEP32r/H95KebnPBSp59/
+   QzGt4PmKdl7ZE3Z0TRZkuDmSNQFMh6EDte5c5scLvQXSMWvF0EK+7agrd
+   j9YRa8gLRaqGiDBFM2EWuAFtP69k6iSPbp+Adf6J9dKIkShXLAiZoADlL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="326501735"
 X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
-   d="scan'208";a="400717991"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 16:09:49 -0700
+   d="scan'208";a="326501735"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 16:19:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="925933479"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="744351234"
 X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
-   d="scan'208";a="925933479"
+   d="scan'208";a="744351234"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 16:09:46 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 16 Mar 2023 16:19:47 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pcwjB-0008sY-2t;
-	Thu, 16 Mar 2023 23:09:45 +0000
-Date: Fri, 17 Mar 2023 07:08:50 +0800
+	id 1pcwss-0008sg-0H;
+	Thu, 16 Mar 2023 23:19:46 +0000
+Date: Fri, 17 Mar 2023 07:19:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com
+To: Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-	1395428693sheep@gmail.com, alex000young@gmail.com,
-	skhan@linuxfoundation.org, Zheng Wang <zyytlz.wz@163.com>
-Subject: Re: [PATCH v2] usbip: vudc: Fix use after free bug in vudc_remove
- due to race condition
-Message-ID: <202303170604.MoMGMPvW-lkp@intel.com>
-References: <20230316180940.1601515-1-zyytlz.wz@163.com>
+	yung-chuan.liao@linux.intel.com,
+	pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+	patches@opensource.cirrus.com
+Subject: Re: [PATCH 2/2] soundwire: bus: Update sdw_nread/nwrite_no_pm to
+ handle page boundaries
+Message-ID: <202303170724.NdbQwtQo-lkp@intel.com>
+References: <20230316155734.3191577-2-ckeepax@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,56 +51,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316180940.1601515-1-zyytlz.wz@163.com>
+In-Reply-To: <20230316155734.3191577-2-ckeepax@opensource.cirrus.com>
 
-Hi Zheng,
+Hi Charles,
 
-Thank you for the patch! Yet something to improve:
+I love your patch! Perhaps something to improve:
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3-rc2 next-20230316]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc2 next-20230316]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Wang/usbip-vudc-Fix-use-after-free-bug-in-vudc_remove-due-to-race-condition/20230317-021228
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230316180940.1601515-1-zyytlz.wz%40163.com
-patch subject: [PATCH v2] usbip: vudc: Fix use after free bug in vudc_remove due to race condition
-config: i386-randconfig-a015-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170604.MoMGMPvW-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Keepax/soundwire-bus-Update-sdw_nread-nwrite_no_pm-to-handle-page-boundaries/20230317-000005
+patch link:    https://lore.kernel.org/r/20230316155734.3191577-2-ckeepax%40opensource.cirrus.com
+patch subject: [PATCH 2/2] soundwire: bus: Update sdw_nread/nwrite_no_pm to handle page boundaries
+config: mips-randconfig-r022-20230312 (https://download.01.org/0day-ci/archive/20230317/202303170724.NdbQwtQo-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/46cc0947344ed93f7f1f4639209c5c6cce16fad3
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/6944d7175bd15a9a16a411c57f200d3bcecd3c00
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zheng-Wang/usbip-vudc-Fix-use-after-free-bug-in-vudc_remove-due-to-race-condition/20230317-021228
-        git checkout 46cc0947344ed93f7f1f4639209c5c6cce16fad3
+        git fetch --no-tags linux-review Charles-Keepax/soundwire-bus-Update-sdw_nread-nwrite_no_pm-to-handle-page-boundaries/20230317-000005
+        git checkout 6944d7175bd15a9a16a411c57f200d3bcecd3c00
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/usbip/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/soundwire/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303170604.MoMGMPvW-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170724.NdbQwtQo-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/usb/usbip/vudc_dev.c:636:28: error: no member named 'timer' in 'struct vudc'
-           timer_shutdown_sync(&udc->timer);
-                                ~~~  ^
-   1 error generated.
+>> drivers/soundwire/bus.c:398:10: warning: comparison of distinct pointer types ('typeof (count) *' (aka 'unsigned int *') and 'typeof ((((((int)(sizeof(struct (unnamed struct at drivers/soundwire/bus.c:398:10))))) + (((~(((0UL)))) - ((((1UL))) << (0)) + 1) & (~(((0UL))) >> (32 - 1 - (14))))) + 1) - (addr & ((((int)(sizeof(struct (unnamed struct at drivers/soundwire/bus.c:398:10))))) + (((~(((0UL)))) - ((((1UL))) << (0)) + 1) & (~(((0UL))) >> (32 - 1 - (14))))))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   size = min(count, (SDW_REGADDR + 1) - (addr & SDW_REGADDR));
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:67:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +636 drivers/usb/usbip/vudc_dev.c
+vim +398 drivers/soundwire/bus.c
 
-   631	
-   632	int vudc_remove(struct platform_device *pdev)
-   633	{
-   634		struct vudc *udc = platform_get_drvdata(pdev);
-   635	
- > 636		timer_shutdown_sync(&udc->timer);
+   384	
+   385	/*
+   386	 * Read/Write IO functions.
+   387	 */
+   388	
+   389	static int sdw_ntransfer_no_pm(struct sdw_slave *slave, u32 addr, u8 flags,
+   390				       size_t count, u8 *val)
+   391	{
+   392		struct sdw_msg msg;
+   393		size_t size;
+   394		int ret;
+   395	
+   396		while (count) {
+   397			// Only handle bytes up to next page boundary
+ > 398			size = min(count, (SDW_REGADDR + 1) - (addr & SDW_REGADDR));
+   399	
+   400			ret = sdw_fill_msg(&msg, slave, addr, size, slave->dev_num, flags, val);
+   401			if (ret < 0)
+   402				return ret;
+   403	
+   404			ret = sdw_transfer(slave->bus, &msg);
+   405			if (ret < 0 && !slave->is_mockup_device)
+   406				return ret;
+   407	
+   408			addr += size;
+   409			val += size;
+   410			count -= size;
+   411		}
+   412	
+   413		return 0;
+   414	}
+   415	
 
 -- 
 0-DAY CI Kernel Test Service
