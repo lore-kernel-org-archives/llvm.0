@@ -1,50 +1,65 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7E4569E;
-	Thu, 16 Mar 2023 16:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4C629A2;
+	Thu, 16 Mar 2023 19:03:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678984373; x=1710520373;
+  t=1678993428; x=1710529428;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=f3CiC2QaSsYUVd8b13hI0y9f5nq5N4yNeInHX5rBGGY=;
-  b=b6oOL3cbnG4UwLdjDTb2nr0/hKZ7e8fA5oU2IJA5Dbl99wFWmV4Jesuz
-   xM6xEwwUW7S4rFauZv4KbPIAY8wfeTnAv8NXwMyvllIGlz37ZnflG7S1Q
-   wNGfVILPsncMIZqJvcZyiLFkP97bo8Lb8VDHgMkXVu7ohOQYBtl56tWi3
-   MZUQsbgA6rztqUEnXmmA5jjWl4K7p2FdSn4D/piAOD3B1zU8Z3cnkc0u8
-   aG1pv+N7SfrpunjSKP1mvn1SlEdhWmy6mshPVdTwtBVKiB3ESivuQywEM
-   sKbf9n/qNvNU3fE61ZVBLd+Eaeu5D5ShcBf/ZZurQzHirK/StLvwRuckB
+  bh=zUzkGxrqKDPR6SroJseKwSx7MVAGnpL/Grdhlw6b7UE=;
+  b=GGGcwcWFhVNUPqlV5cS7jhSo++oAJJeSo+qf8YGM9dLprFCOO90c7NMm
+   e8AhBjSiTxfCcsA0O81ZpHm5F4j+gpsUAI9H1C81Sv7zAKj5/fHr1lai4
+   hEbgqNKOh6T2ENt2DM/sliOpWhZNXF1cX+UNrAZYnmO59Wa+ehb4oCZJd
+   bQ6irRFzgXO/MfQ1FFy326yiwnl/C2t1daZQ4tx/KhKcHBV7DzcLjin0g
+   3ddESbDNI/pjbsLY+8U2qN/0vrXedmDzmX7lS/nykk7GfmB6WVFfSiZmh
+   zoOpHKx6VD5zBdoQp5tLxiS4ZMFiN3xNtXzlWPkv8RD4F3aXnH27TcJ5N
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="338060656"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="321944551"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="338060656"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 09:31:40 -0700
+   d="scan'208";a="321944551"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 12:03:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="854117073"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="925864625"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="854117073"
+   d="scan'208";a="925864625"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2023 09:31:35 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 12:03:40 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pcqVr-0008d0-15;
-	Thu, 16 Mar 2023 16:31:35 +0000
-Date: Fri, 17 Mar 2023 00:30:58 +0800
+	id 1pcst1-0008hW-1B;
+	Thu, 16 Mar 2023 19:03:39 +0000
+Date: Fri, 17 Mar 2023 03:03:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: hildawu@realtek.com, marcel@holtmann.org
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Randy Dunlap <rdunlap@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Juergen Gross <jgross@suse.com>,
+	Dominik Brodowski <linux@dominikbrodowski.net>,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, apusaka@chromium.org,
-	mmandlik@google.com, yinghsu@chromium.org, max.chou@realtek.com,
-	alex_lu@realsil.com.cn, kidman@realtek.com
-Subject: Re: [PATCH] Bluetooth: msft: Extended monitor tracking by address
- filter
-Message-ID: <202303170056.UsZ6RDV4-lkp@intel.com>
-References: <20230316090729.14572-1-hildawu@realtek.com>
+	Miguel Ojeda <ojeda@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v5 1/4] PCI: Introduce pci_dev_for_each_resource()
+Message-ID: <202303170223.V0xQhs1V-lkp@intel.com>
+References: <20230314192634.63531-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,127 +68,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316090729.14572-1-hildawu@realtek.com>
+In-Reply-To: <20230314192634.63531-2-andriy.shevchenko@linux.intel.com>
 
-Hi,
+Hi Andy,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on bluetooth/master]
-[also build test WARNING on bluetooth-next/master net-next/main net/main linus/master v6.3-rc2 next-20230316]
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus powerpc/next powerpc/fixes linus/master v6.3-rc2 next-20230316]
+[cannot apply to soc/for-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hildawu-realtek-com/Bluetooth-msft-Extended-monitor-tracking-by-address-filter/20230316-170950
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20230316090729.14572-1-hildawu%40realtek.com
-patch subject: [PATCH] Bluetooth: msft: Extended monitor tracking by address filter
-config: i386-randconfig-a016-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170056.UsZ6RDV4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/PCI-Introduce-pci_dev_for_each_resource/20230315-032821
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20230314192634.63531-2-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v5 1/4] PCI: Introduce pci_dev_for_each_resource()
+config: powerpc-randconfig-r032-20230312 (https://download.01.org/0day-ci/archive/20230317/202303170223.V0xQhs1V-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cee47af4605a9e5cba61be1ab1d92e8748d92e1e
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/85cdf4746b716f7b6c14d7dc5cd907c3c2a1fb0c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review hildawu-realtek-com/Bluetooth-msft-Extended-monitor-tracking-by-address-filter/20230316-170950
-        git checkout cee47af4605a9e5cba61be1ab1d92e8748d92e1e
+        git fetch --no-tags linux-review Andy-Shevchenko/PCI-Introduce-pci_dev_for_each_resource/20230315-032821
+        git checkout 85cdf4746b716f7b6c14d7dc5cd907c3c2a1fb0c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/bluetooth/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303170056.UsZ6RDV4-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170223.V0xQhs1V-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/bluetooth/msft.c:521:43: warning: variable 'rp' set but not used [-Wunused-but-set-variable]
-           struct msft_rp_le_monitor_advertisement *rp;
-                                                    ^
-   1 warning generated.
+>> arch/powerpc/platforms/52xx/mpc52xx_pci.c:331:6: error: unused variable 'i' [-Werror,-Wunused-variable]
+           int i;
+               ^
+   1 error generated.
 
 
-vim +/rp +521 net/bluetooth/msft.c
+vim +/i +331 arch/powerpc/platforms/52xx/mpc52xx_pci.c
 
-   507	
-   508	static int msft_add_monitor_sync(struct hci_dev *hdev,
-   509					 struct adv_monitor *monitor)
-   510	{
-   511		struct msft_cp_le_monitor_advertisement *cp;
-   512		struct msft_le_monitor_advertisement_pattern_data *pattern_data;
-   513		struct msft_le_monitor_advertisement_pattern *pattern;
-   514		struct adv_pattern *entry;
-   515		size_t total_size = sizeof(*cp) + sizeof(*pattern_data);
-   516		ptrdiff_t offset = 0;
-   517		u8 pattern_count = 0;
-   518		struct sk_buff *skb;
-   519		int err;
-   520		struct msft_monitor_advertisement_handle_data *handle_data;
- > 521		struct msft_rp_le_monitor_advertisement *rp;
-   522	
-   523		if (!msft_monitor_pattern_valid(monitor))
-   524			return -EINVAL;
-   525	
-   526		list_for_each_entry(entry, &monitor->patterns, list) {
-   527			pattern_count++;
-   528			total_size += sizeof(*pattern) + entry->length;
-   529		}
-   530	
-   531		cp = kmalloc(total_size, GFP_KERNEL);
-   532		if (!cp)
-   533			return -ENOMEM;
-   534	
-   535		cp->sub_opcode = MSFT_OP_LE_MONITOR_ADVERTISEMENT;
-   536		cp->rssi_high = monitor->rssi.high_threshold;
-   537		cp->rssi_low = monitor->rssi.low_threshold;
-   538		cp->rssi_low_interval = (u8)monitor->rssi.low_threshold_timeout;
-   539		cp->rssi_sampling_period = monitor->rssi.sampling_period;
-   540	
-   541		cp->cond_type = MSFT_MONITOR_ADVERTISEMENT_TYPE_PATTERN;
-   542	
-   543		pattern_data = (void *)cp->data;
-   544		pattern_data->count = pattern_count;
-   545	
-   546		list_for_each_entry(entry, &monitor->patterns, list) {
-   547			pattern = (void *)(pattern_data->data + offset);
-   548			/* the length also includes data_type and offset */
-   549			pattern->length = entry->length + 2;
-   550			pattern->data_type = entry->ad_type;
-   551			pattern->start_byte = entry->offset;
-   552			memcpy(pattern->pattern, entry->value, entry->length);
-   553			offset += sizeof(*pattern) + entry->length;
-   554		}
-   555	
-   556		skb = __hci_cmd_sync(hdev, hdev->msft_opcode, total_size, cp,
-   557				     HCI_CMD_TIMEOUT);
-   558	
-   559		if (IS_ERR_OR_NULL(skb)) {
-   560			kfree(cp);
-   561			return PTR_ERR(skb);
-   562		}
-   563	
-   564		err = msft_le_monitor_advertisement_cb(hdev, hdev->msft_opcode,
-   565						       monitor, skb);
-   566		if (!err) {
-   567			rp = (struct msft_rp_le_monitor_advertisement *)skb->data;
-   568			handle_data = msft_find_handle_data(hdev, monitor->handle,
-   569							    true);
-   570			if (handle_data) {
-   571				handle_data->rssi_high   = cp->rssi_high;
-   572				handle_data->rssi_low    = cp->rssi_low;
-   573				handle_data->rssi_low_interval    =
-   574							cp->rssi_low_interval;
-   575				handle_data->rssi_sampling_period =
-   576							cp->rssi_sampling_period;
-   577			}
-   578		}
-   579		kfree(cp);
-   580	
-   581		return err;
-   582	}
-   583	
+f42963f8646540 Grant Likely    2006-12-12  326  
+f42963f8646540 Grant Likely    2006-12-12  327  static void
+f42963f8646540 Grant Likely    2006-12-12  328  mpc52xx_pci_fixup_resources(struct pci_dev *dev)
+f42963f8646540 Grant Likely    2006-12-12  329  {
+85cdf4746b716f Mika Westerberg 2023-03-14  330  	struct resource *res;
+f42963f8646540 Grant Likely    2006-12-12 @331  	int i;
+f42963f8646540 Grant Likely    2006-12-12  332  
+59510820fff76f Randy Dunlap    2021-04-28  333  	pr_debug("%s() %.4x:%.4x\n", __func__, dev->vendor, dev->device);
+f42963f8646540 Grant Likely    2006-12-12  334  
+f42963f8646540 Grant Likely    2006-12-12  335  	/* We don't rely on boot loader for PCI and resets all
+f42963f8646540 Grant Likely    2006-12-12  336  	   devices */
+85cdf4746b716f Mika Westerberg 2023-03-14  337  	pci_dev_for_each_resource_p(dev, res) {
+f42963f8646540 Grant Likely    2006-12-12  338  		if (res->end > res->start) {	/* Only valid resources */
+f42963f8646540 Grant Likely    2006-12-12  339  			res->end -= res->start;
+f42963f8646540 Grant Likely    2006-12-12  340  			res->start = 0;
+f42963f8646540 Grant Likely    2006-12-12  341  			res->flags |= IORESOURCE_UNSET;
+f42963f8646540 Grant Likely    2006-12-12  342  		}
+f42963f8646540 Grant Likely    2006-12-12  343  	}
+f42963f8646540 Grant Likely    2006-12-12  344  
+f42963f8646540 Grant Likely    2006-12-12  345  	/* The PCI Host bridge of MPC52xx has a prefetch memory resource
+f42963f8646540 Grant Likely    2006-12-12  346  	   fixed to 1Gb. Doesn't fit in the resource system so we remove it */
+f42963f8646540 Grant Likely    2006-12-12  347  	if ( (dev->vendor == PCI_VENDOR_ID_MOTOROLA) &&
+f42963f8646540 Grant Likely    2006-12-12  348  	     (   dev->device == PCI_DEVICE_ID_MOTOROLA_MPC5200
+f42963f8646540 Grant Likely    2006-12-12  349  	      || dev->device == PCI_DEVICE_ID_MOTOROLA_MPC5200B) ) {
+f42963f8646540 Grant Likely    2006-12-12  350  		struct resource *res = &dev->resource[1];
+f42963f8646540 Grant Likely    2006-12-12  351  		res->start = res->end = res->flags = 0;
+f42963f8646540 Grant Likely    2006-12-12  352  	}
+f42963f8646540 Grant Likely    2006-12-12  353  }
+f42963f8646540 Grant Likely    2006-12-12  354  
 
 -- 
 0-DAY CI Kernel Test Service
