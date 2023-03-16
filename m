@@ -1,37 +1,37 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67CDAD4E;
-	Thu, 16 Mar 2023 23:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603CDAD4E;
+	Thu, 16 Mar 2023 23:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679008797; x=1710544797;
+  t=1679009390; x=1710545390;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=w27aUi7It9h8nbGZhrTxFUQlsPX0IjHEaDxbMAWRWjM=;
-  b=MMX0P0HY2PuSJCOFpdb5Zlz0/s46FTInL92uxt60KzJtWqvHnRQYK0sk
-   Wj4OamShk7crhi3l5DRGvMW/csCeA3UzWVSVlNvdEmVMD3+IiDhv/cU6Z
-   4brjcPjIKuY/0lMIKFVhyAkKikIpkNQ/72kCwO874Fj/2zbXq8/GzilDN
-   IuoBlb4gkNNvU8v3Cgejn82XPOWhgUS6tWqwAEP32r/H95KebnPBSp59/
-   QzGt4PmKdl7ZE3Z0TRZkuDmSNQFMh6EDte5c5scLvQXSMWvF0EK+7agrd
-   j9YRa8gLRaqGiDBFM2EWuAFtP69k6iSPbp+Adf6J9dKIkShXLAiZoADlL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="326501735"
+  bh=Rbr/g7dQDAdpmJSSKnIlY6nrlZaM5+D6RZogNiDirpg=;
+  b=gQjnWktty25ryLEaUk71GIpEH38F2AUx1BS2MLFPNDnl0XqtNB3NtFN7
+   ptpYB++JvnF14lH1bJ9rsv7yWEQETVK8ittQ0gkwG2AEVQRWdrTJu912r
+   wyxYrgVl3oJlbEe48ayudrby3i9ksb45Poqt3X9nrhr7R/bY/zsCEt/ZB
+   CG8M5+v2tx4fkXKD8p1K6CYEnbqN5kVbgr2ajTiXGSu8044Q0DFiSwqe5
+   HvvbXHinhDFBOpq2rscZjY+bZczEB+iU6pfi5EJGkB/+NVY1KU1xRA4rx
+   4DMVZeAUo6PdkgvsG0EF6nnj8aJ9Fztr40KJ3GZOSowf2KANmkBMidcln
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="326502865"
 X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
-   d="scan'208";a="326501735"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 16:19:49 -0700
+   d="scan'208";a="326502865"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 16:29:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="744351234"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="1009437979"
 X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
-   d="scan'208";a="744351234"
+   d="scan'208";a="1009437979"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Mar 2023 16:19:47 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 16 Mar 2023 16:29:46 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pcwss-0008sg-0H;
-	Thu, 16 Mar 2023 23:19:46 +0000
-Date: Fri, 17 Mar 2023 07:19:11 +0800
+	id 1pcx2Y-0008so-0Y;
+	Thu, 16 Mar 2023 23:29:46 +0000
+Date: Fri, 17 Mar 2023 07:29:34 +0800
 From: kernel test robot <lkp@intel.com>
 To: Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -41,7 +41,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	patches@opensource.cirrus.com
 Subject: Re: [PATCH 2/2] soundwire: bus: Update sdw_nread/nwrite_no_pm to
  handle page boundaries
-Message-ID: <202303170724.NdbQwtQo-lkp@intel.com>
+Message-ID: <202303170749.83Yd8Oh0-lkp@intel.com>
 References: <20230316155734.3191577-2-ckeepax@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -66,25 +66,23 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Keepax/soundwire-bus-Update-sdw_nread-nwrite_no_pm-to-handle-page-boundaries/20230317-000005
 patch link:    https://lore.kernel.org/r/20230316155734.3191577-2-ckeepax%40opensource.cirrus.com
 patch subject: [PATCH 2/2] soundwire: bus: Update sdw_nread/nwrite_no_pm to handle page boundaries
-config: mips-randconfig-r022-20230312 (https://download.01.org/0day-ci/archive/20230317/202303170724.NdbQwtQo-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+config: i386-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170749.83Yd8Oh0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/6944d7175bd15a9a16a411c57f200d3bcecd3c00
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Charles-Keepax/soundwire-bus-Update-sdw_nread-nwrite_no_pm-to-handle-page-boundaries/20230317-000005
         git checkout 6944d7175bd15a9a16a411c57f200d3bcecd3c00
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/soundwire/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/soundwire/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303170724.NdbQwtQo-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170749.83Yd8Oh0-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
