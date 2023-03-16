@@ -1,45 +1,48 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F0FAD32;
-	Thu, 16 Mar 2023 21:06:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BA4AD4E;
+	Thu, 16 Mar 2023 23:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679000808; x=1710536808;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6mE4pCdOhtBNBY6oqJoafqJJU8ImsF0HTPAumdxJVaQ=;
-  b=GjF15+thvhrougIwSkPThS1vHk4P0DIUsSc39hwKgtvarZG3K7ZTRUZZ
-   rFlU+rfd1AxlnLGS5d2ehtoAnfMHcqELvsnyJNaf5kNqAK5/S3sQmyLGp
-   yJYnEuadbRDFQqX0QNPX9Gaqxc+By8UpLDb82LS151ogDH9pi3/IFiOak
-   JK487pL0hnJuCqQiy3EuLMQd3Js04vBRgEdimDcwHwDN729iD9CS5SKBh
-   Dpfu8TG7TuQTpk1XasZvNnujomtrlsLs0MJQWIhumC0M61pJsn4p/WRVz
-   pt+XjXZVmqagWOHIgmrK/AU7ATxz3le6UkY10sKIkeprYFcZo3SZ03MmZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="424383523"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="424383523"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 14:06:47 -0700
+  t=1679008197; x=1710544197;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UH68FltZn58LYhbziPJqYiYePEpTo7vpEi3kwULtdnI=;
+  b=IpCfJlO7iGkSTBscvzUlUI/Z+YW4WNPAvSgyd0IAY21q7gQU4quMRiGk
+   vQJHjKgPjB1oGe+sK0y3Gj7iwINchFXUlIPGFawIoEvzaeQ5u7xM63UHp
+   unsOLNfJkreYtx+gMM0tSQjNZcCg1shCjkbJUYAhQ4JmulcdX7k3xxraz
+   pToaIktPeE3e+FCyxZy7WTxUTo/Kjv+DI6WkE8PYGN4btXC843tzxEeMU
+   mimuaxyK0LPUbqWbPrWGBQcbDxP7vhV64elmC3FVt4aydr4WcMUWO1B+U
+   cIyT2+e/BYYZreVSc4rufrfi2v2VZrMvRKaJW2Mag+uMqE9BKdK2boEXP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="400717991"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="400717991"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 16:09:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="673308621"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="673308621"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="925933479"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="925933479"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 16 Mar 2023 14:06:45 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 16:09:46 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pcuo8-0008qc-0u;
-	Thu, 16 Mar 2023 21:06:44 +0000
-Date: Fri, 17 Mar 2023 05:06:05 +0800
+	id 1pcwjB-0008sY-2t;
+	Thu, 16 Mar 2023 23:09:45 +0000
+Date: Fri, 17 Mar 2023 07:08:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Jason A. Donenfeld" <zx2c4@kernel.org>
+To: Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Theodore Ts'o <tytso@mit.edu>, Eric Biggers <ebiggers@google.com>,
-	Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: [stable:linux-5.4.y 4197/7834] ERROR: "sha_transform"
- [crypto/sha1_generic.ko] undefined!
-Message-ID: <202303170515.Ls4W3urG-lkp@intel.com>
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+	1395428693sheep@gmail.com, alex000young@gmail.com,
+	skhan@linuxfoundation.org, Zheng Wang <zyytlz.wz@163.com>
+Subject: Re: [PATCH v2] usbip: vudc: Fix use after free bug in vudc_remove
+ due to race condition
+Message-ID: <202303170604.MoMGMPvW-lkp@intel.com>
+References: <20230316180940.1601515-1-zyytlz.wz@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,33 +51,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230316180940.1601515-1-zyytlz.wz@163.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
-head:   b829e8b6e1a7bb8cd3042b927113a22fed0b0d47
-commit: c2f0a89cd1d5a00c5bf48060987cf53ada93d4b0 [4197/7834] random: use BLAKE2s instead of SHA1 in extraction
-config: mips-randconfig-r003-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170515.Ls4W3urG-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+Hi Zheng,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3-rc2 next-20230316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Wang/usbip-vudc-Fix-use-after-free-bug-in-vudc_remove-due-to-race-condition/20230317-021228
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230316180940.1601515-1-zyytlz.wz%40163.com
+patch subject: [PATCH v2] usbip: vudc: Fix use after free bug in vudc_remove due to race condition
+config: i386-randconfig-a015-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170604.MoMGMPvW-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c2f0a89cd1d5a00c5bf48060987cf53ada93d4b0
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.4.y
-        git checkout c2f0a89cd1d5a00c5bf48060987cf53ada93d4b0
+        # https://github.com/intel-lab-lkp/linux/commit/46cc0947344ed93f7f1f4639209c5c6cce16fad3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zheng-Wang/usbip-vudc-Fix-use-after-free-bug-in-vudc_remove-due-to-race-condition/20230317-021228
+        git checkout 46cc0947344ed93f7f1f4639209c5c6cce16fad3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/usbip/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303170515.Ls4W3urG-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170604.MoMGMPvW-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ERROR: "sha_transform" [crypto/sha1_generic.ko] undefined!
+>> drivers/usb/usbip/vudc_dev.c:636:28: error: no member named 'timer' in 'struct vudc'
+           timer_shutdown_sync(&udc->timer);
+                                ~~~  ^
+   1 error generated.
+
+
+vim +636 drivers/usb/usbip/vudc_dev.c
+
+   631	
+   632	int vudc_remove(struct platform_device *pdev)
+   633	{
+   634		struct vudc *udc = platform_get_drvdata(pdev);
+   635	
+ > 636		timer_shutdown_sync(&udc->timer);
 
 -- 
 0-DAY CI Kernel Test Service
