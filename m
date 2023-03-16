@@ -1,130 +1,72 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA651381;
-	Thu, 16 Mar 2023 01:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678930342; x=1710466342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hgNs+2LCIw1VdcWJgnaEyGtYI9oIxF1N3ox9qlRdiJ4=;
-  b=A/gEWbPnacX6kvm2qsLidpyin7vhPjtLLWwPNzNiVmEG9om6StRfIgPw
-   mo8ae6mgQxeG3CeWcBF8We6c3Vm1DXdyo/rLHFVvL7zJGZagHVQeYK1gZ
-   8Xhua5VVky+ZPO0/M9xVgmq0sANknWYqujVmPdlejyymuGFGQCZ2fa9xl
-   Qm8/NlwgktBZHl8l6DTqjTIFPLyZpgT7kiTmzxek0901ou5yXWwRW7eri
-   Sm/4fKjXCFs/1+50+DUe/T/E9UyG84h+naF3Unj0GNWzXC5kAf7n16WwU
-   G2VLf8kuN2+tb1GPodzVgv6B1S1b9Np/EGsTnrYHegS2rkXa9DDILXvWW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="336552648"
-X-IronPort-AV: E=Sophos;i="5.98,264,1673942400"; 
-   d="scan'208";a="336552648"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 18:32:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="672954468"
-X-IronPort-AV: E=Sophos;i="5.98,264,1673942400"; 
-   d="scan'208";a="672954468"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 15 Mar 2023 18:32:16 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pccTX-0008Ct-0x;
-	Thu, 16 Mar 2023 01:32:15 +0000
-Date: Thu, 16 Mar 2023 09:32:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Viktor Malik <vmalik@redhat.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
-	Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH bpf-next v10 1/2] bpf: Fix attaching
- fentry/fexit/fmod_ret/lsm to modules
-Message-ID: <202303160919.SGyfD0uE-lkp@intel.com>
-References: <3f6a9d8ae850532b5ef864ef16327b0f7a669063.1678432753.git.vmalik@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13B837C;
+	Thu, 16 Mar 2023 01:34:48 +0000 (UTC)
+Received: by mail-ed1-f41.google.com with SMTP id cy23so1615996edb.12;
+        Wed, 15 Mar 2023 18:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678930486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jHPrPlhQMXvVIx5yQs1BZudV0Tq662a5tALQ28pCnKM=;
+        b=mAqtdeca2p22E35wvY1/4iKixCVK07hdLBG5Ugy4zEY1s9ggOUYObNQVdjHof6MmmH
+         9ojw0wblcE/A5lWVrWGiTxJTUUbSS2djzAGPStxpwhI+dfW9B1gvfdcN2dZp3n9a0IXp
+         V/kMor6QFxSa2muVrsF3fkRTlTitH57vr2nymhNG29FS7xVEtPmmGNfzIzWCMVlhh9s8
+         CP/74Z2X+k0fEaU3bhb7DnVG4TKktcSmanSCGpPRIjxQx/NPHu9oYZWBURK+LDDi51W2
+         2DdO2l29KyH53y0jv8q5GYnTIb/pHkuhjhYYZ+BiWGudR12y3+508v9bU8VwkmBB3AgK
+         1uLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678930486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jHPrPlhQMXvVIx5yQs1BZudV0Tq662a5tALQ28pCnKM=;
+        b=ZREy3sBR7dJ8fJeDiXt3deJpuuz19WEK8oTBqAwRyEOk6ky7RjVhQ/JYba9kp1UDsY
+         7Mjx4zVIFOv59aPnGCCTAkYiGyQ2fNeFXxYdrVtKOo1qs7gPWzUfVd0cRy01Foz3uNjq
+         od6CYXGhDgxkzPnJt1jO8rYrGQ67fRuMRHw4yPSArm1aJ7etsfJ3uLsaTRLmkwDKCisV
+         E6EBhhtu8njArWoeq+s5d+rq79gj+KaSfrJ8MxzD2ESCWo3oelVAB+Nv5kYtF4TU68cR
+         Hrw+tqpi+8FgKrb/NLNrZovEiaZ3nzHK2gK41aJohIKBUUyo/AX1QoN5kPjysoJoKy63
+         ioqA==
+X-Gm-Message-State: AO0yUKXZ0stLpT1LQuWLG7Fg1zew8zfUtBR3zHdQxY4oQqUHv9DzB6XX
+	odTxEjJ4aU+asCoH93aQzV6Qil9cH7V3X2UtOOc=
+X-Google-Smtp-Source: AK7set+GdpQkZvRck3sX6DqrZU+6C/wb0RTcQ9tapzMOkgKwb84TtZVCTcKq3dFfkpnYyJekTiBEd5RJMwq8IdTYdig=
+X-Received: by 2002:a50:874e:0:b0:4fb:2593:846 with SMTP id
+ 14-20020a50874e000000b004fb25930846mr2512325edv.3.1678930485757; Wed, 15 Mar
+ 2023 18:34:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f6a9d8ae850532b5ef864ef16327b0f7a669063.1678432753.git.vmalik@redhat.com>
+References: <3f6a9d8ae850532b5ef864ef16327b0f7a669063.1678432753.git.vmalik@redhat.com>
+ <202303160919.SGyfD0uE-lkp@intel.com>
+In-Reply-To: <202303160919.SGyfD0uE-lkp@intel.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 15 Mar 2023 18:34:34 -0700
+Message-ID: <CAADnVQJ+-ThSUMzEgWu6OtkWB-bdqZKPiRxWUEbL5L=cPjeezg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v10 1/2] bpf: Fix attaching fentry/fexit/fmod_ret/lsm
+ to modules
+To: kernel test robot <lkp@intel.com>
+Cc: Viktor Malik <vmalik@redhat.com>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, oe-kbuild-all@lists.linux.dev, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Viktor,
+On Wed, Mar 15, 2023 at 6:32=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Viktor,
+>
+> Thank you for the patch! Yet something to improve:
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Viktor-Malik/bpf-Fix-attaching-fentry-fexit-fmod_ret-lsm-to-modules/20230310-154848
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/3f6a9d8ae850532b5ef864ef16327b0f7a669063.1678432753.git.vmalik%40redhat.com
-patch subject: [PATCH bpf-next v10 1/2] bpf: Fix attaching fentry/fexit/fmod_ret/lsm to modules
-config: arm-buildonly-randconfig-r005-20230312 (https://download.01.org/0day-ci/archive/20230316/202303160919.SGyfD0uE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/a6713fb8bbf7954ee98fec48f2a1f1e33814d92a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Viktor-Malik/bpf-Fix-attaching-fentry-fexit-fmod_ret-lsm-to-modules/20230310-154848
-        git checkout a6713fb8bbf7954ee98fec48f2a1f1e33814d92a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303160919.SGyfD0uE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/bpf/verifier.c:27:
->> kernel/bpf/../module/internal.h:260:14: error: expected ')'
-                                                          const char *name)
-                                                          ^
-   kernel/bpf/../module/internal.h:259:55: note: to match this '('
-   static inline unsigned long find_kallsyms_symbol_value(struct module *mod
-                                                         ^
->> kernel/bpf/verifier.c:18440:45: error: too many arguments to function call, expected single argument 'mod', have 2 arguments
-                                           addr = find_kallsyms_symbol_value(mod, tname);
-                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~      ^~~~~
-   kernel/bpf/../module/internal.h:259:29: note: 'find_kallsyms_symbol_value' declared here
-   static inline unsigned long find_kallsyms_symbol_value(struct module *mod
-                               ^
-   2 errors generated.
-
-
-vim +260 kernel/bpf/../module/internal.h
-
-   250	
-   251	static inline bool sect_empty(const Elf_Shdr *sect)
-   252	{
-   253		return !(sect->sh_flags & SHF_ALLOC) || sect->sh_size == 0;
-   254	}
-   255	#else /* !CONFIG_KALLSYMS */
-   256	static inline void init_build_id(struct module *mod, const struct load_info *info) { }
-   257	static inline void layout_symtab(struct module *mod, struct load_info *info) { }
-   258	static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
-   259	static inline unsigned long find_kallsyms_symbol_value(struct module *mod
- > 260							       const char *name)
-   261	{
-   262		return 0;
-   263	}
-   264	#endif /* CONFIG_KALLSYMS */
-   265	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Argh. Comma is missing.
+Viktor,
+please send a fix asap.
