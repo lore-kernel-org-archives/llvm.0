@@ -1,88 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170C237C;
-	Thu, 16 Mar 2023 03:28:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F79C433EF;
-	Thu, 16 Mar 2023 03:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1678937322;
-	bh=oPPbw/PBxWk4Q1egWNZu46IiHqVVJx0VcMlY4jCe0r0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=dK5puxNuRC2Gzse9fmdtPqVr8NzvsDuYp6512mAIgwsKgwKmeOxp7CJB2R9+9Ou9G
-	 uDEds2QwFKgzfWUV+9kK5cPn2wVl2uFcB1kjc3V4Q2/qI5JSqh/kNSN8clftqpKSMu
-	 eTnrKC33xE+p45afNDUgrWvi57bhk02jzPq3DIsCps2AIN3yzT7MQjbQvCb1b2i48O
-	 BSKXIRGO8L3iiE2L82s4bMKiN0VGGMC89mp0vN6vefzjHwE5zspvVSe0vCVAaqMLoX
-	 n2zeCs3phymkgJR/NQtTT1Q3TPjCdPOar7oEiAnd5YuKZJB8m1XhbcVF2JFhPmLOIO
-	 QVvcqHXfGOAww==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 15 Mar 2023 20:28:29 -0700
-Subject: [PATCH next] wifi: iwlwifi: Avoid disabling GCC specific flag with
- clang
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CCC37C;
+	Thu, 16 Mar 2023 04:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678939521; x=1710475521;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hpH6L+I/nEbsBP3kL+1fD0Z4aYVWtT5wrEZd2/6GUiQ=;
+  b=FFDt7k/HqKjr0StMrKax/bbbp86cvdFnphxxFBeMmnGls2HLZs/5HwD0
+   xh6MGnV9SGonAaURPvJZmbIp0t3/u/FybVZtXYpdQpbd5V3r/i//VBtKL
+   7I7lGTYlMGCg6S4pyV09+q7Ml+9+IoSl/MFytBwU6pUNMARWXl1kWMhlh
+   j65KbFMUEPmLZN45oWdxJdD7xGB7/5Xk/AE3Sm1nwJDFPVYBzWETihSn8
+   6QZH6blv8uK5P5QdiCLxk2Ujef9Xu/lDupG/QiSM+OhMwVztof5rF8wtW
+   Ah/K4DlX/CKo0LzB4hcYrmb/CKMX/uleMxb4dNppNKMpDyVpjWEUsu84U
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="317535894"
+X-IronPort-AV: E=Sophos;i="5.98,264,1673942400"; 
+   d="scan'208";a="317535894"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 21:05:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="790108656"
+X-IronPort-AV: E=Sophos;i="5.98,264,1673942400"; 
+   d="scan'208";a="790108656"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Mar 2023 21:05:19 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pcerf-0008Hn-0q;
+	Thu, 16 Mar 2023 04:05:19 +0000
+Date: Thu, 16 Mar 2023 12:05:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Leon Romanovsky <leon@kernel.org>
+Subject: [leon-rdma:rdma-next 26/31]
+ drivers/net/ethernet/mellanox/mlx4/intf.c:53:6: warning: no previous
+ prototype for function 'is_eth_supported'
+Message-ID: <202303161132.FK0lyTWs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230315-iwlwifi-fix-pragma-v1-1-ad23f92c4739@kernel.org>
-X-B4-Tracking: v=1; b=H4sIANyMEmQC/x3N0QqDMAyF4VeRXC/Q2jmKrzJ2kbqoAe0kkSmI7
- 766y5/DxznAWIUN2uoA5a+YfHIJf6ugGykPjPIuDbWrgwu+QdmmTXrBXnZclIaZMKX7I7jGR44
- RCkxkjEkpd+NFZ7KV9RoW5cL+b0/IvK/wOs8f9BH5yoMAAAA=
-To: johannes.berg@intel.com, gregory.greenman@intel.com
-Cc: kvalo@kernel.org, nathan@kernel.org, ndesaulniers@google.com, 
- trix@redhat.com, linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1454; i=nathan@kernel.org;
- h=from:subject:message-id; bh=oPPbw/PBxWk4Q1egWNZu46IiHqVVJx0VcMlY4jCe0r0=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDClCPS9PBIRVTCzMT7V6Mm3FHN+FF6zv37l7/IPU+Z4uA
- etNSxhSO0pZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBE5r5iZDg5LzOr07ladcb9
- mv9Lr/qGtUinP1rvWV/ktijzIaenaQIjw36LA09lr220P9kmfLDULGrDya/MM9ia7k55fSzX+1a
- 4LgsA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Clang errors:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
+head:   712b4584a71d7f86b5f870dae8ee6e5abd42971f
+commit: 49f2c235465534f179d6044a2c72f840ab0671ad [26/31] mlx4: Connect the ethernet part to the auxiliary bus
+config: i386-randconfig-a013-20230313 (https://download.01.org/0day-ci/archive/20230316/202303161132.FK0lyTWs-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git/commit/?id=49f2c235465534f179d6044a2c72f840ab0671ad
+        git remote add leon-rdma https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git
+        git fetch --no-tags leon-rdma rdma-next
+        git checkout 49f2c235465534f179d6044a2c72f840ab0671ad
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx4/
 
-  drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c:15:32: error: unknown warning group '-Wsuggest-attribute=format', ignored [-Werror,-Wunknown-warning-option]
-  #pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
-                                 ^
-  1 error generated.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303161132.FK0lyTWs-lkp@intel.com/
 
-The warning being disabled by this pragma is GCC specific. Guard its use
-with CONFIG_CC_IS_GCC so that it is not used with clang to clear up the
-error.
+All warnings (new ones prefixed by >>):
 
-Fixes: 4eca8cbf7ba8 ("wifi: iwlwifi: suppress printf warnings in tracing")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1818
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c | 2 ++
- 1 file changed, 2 insertions(+)
+>> drivers/net/ethernet/mellanox/mlx4/intf.c:53:6: warning: no previous prototype for function 'is_eth_supported' [-Wmissing-prototypes]
+   bool is_eth_supported(struct mlx4_dev *dev)
+        ^
+   drivers/net/ethernet/mellanox/mlx4/intf.c:53:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool is_eth_supported(struct mlx4_dev *dev)
+   ^
+   static 
+   1 warning generated.
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c b/drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c
-index c190ec5effa1..e46639b097f4 100644
---- a/drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c
-+++ b/drivers/net/wireless/intel/iwlwifi/iwl-devtrace.c
-@@ -12,7 +12,9 @@
- #include "iwl-trans.h"
- 
- #define CREATE_TRACE_POINTS
-+#ifdef CONFIG_CC_IS_GCC
- #pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
-+#endif
- #include "iwl-devtrace.h"
- 
- EXPORT_TRACEPOINT_SYMBOL(iwlwifi_dev_ucode_event);
 
----
-base-commit: 4eca8cbf7ba83c3291b5841905ce64584036b1ff
-change-id: 20230315-iwlwifi-fix-pragma-bb4630518e88
+vim +/is_eth_supported +53 drivers/net/ethernet/mellanox/mlx4/intf.c
 
-Best regards,
+    52	
+  > 53	bool is_eth_supported(struct mlx4_dev *dev)
+    54	{
+    55		for (int port = 1; port <= dev->caps.num_ports; port++)
+    56			if (dev->caps.port_type[port] == MLX4_PORT_TYPE_ETH)
+    57				return true;
+    58	
+    59		return false;
+    60	}
+    61	
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
