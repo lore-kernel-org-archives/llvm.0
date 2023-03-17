@@ -1,139 +1,83 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFEA36A
-	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 18:59:23 +0000 (UTC)
-Received: by mail-pl1-f175.google.com with SMTP id p20so6285458plw.13
-        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 11:59:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A79979C5
+	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 19:04:09 +0000 (UTC)
+Received: by mail-lj1-f170.google.com with SMTP id t14so6128917ljd.5
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 12:04:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679079563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YdbsllINb0v9Gak3RMgfN2RxSUwAAmVJ3OhZyFi4WHw=;
-        b=k+uChbs64bL79yGua7FKZhzd3fgGnzeDpk04MTG70urVc55rIYPAvmWfyFPyTFp6BO
-         roslFhr/Dj2EA3LoT04TL4ZCDM7+0oh5d2UTGvgzmsLpAtDryoLWCblwuewX1sGZgdaz
-         KKKchvzKVrG8EfI4a2u9y+1lgjCAXbSPYFKACreL2rydu28Z6SEeBV9EgYIY6sdxlyBQ
-         ClE0HVchSu1FCVnnDO2zII0+I1rI7Z7SnEtULjQbonPCsi+3CKTgUSqoUfFOwgcLEryj
-         oq9oA6YxgrbXNyDiqISHvbx2PcFjZHGMHRDzXBaby/p6dgbBjEVdbI9EWPbOxgQrZGG9
-         wQWg==
+        d=chromium.org; s=google; t=1679079847;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vxWwhYtYMhTKLT+t03kqT9HvUsxnKyYicVxmtWlKd/U=;
+        b=VaLCQLvTCM70AHROG4xz4tfrBF639waWz4KoWP8AzwXYthDGomNGp1T7jkmLSYG6ZL
+         sQFvXnCJrqBICSwPvMM6a5OUdp9euuNEyXtvS6swIWpNLZtX+94mUEIdzi0vOzHTeDjh
+         3JTXIbCJnfWdIZvosOOvSj9i6QeMcdMqZQro0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679079563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YdbsllINb0v9Gak3RMgfN2RxSUwAAmVJ3OhZyFi4WHw=;
-        b=b7qH60zdf3YKYcIeYYoKmZAgeHgxQ1kFGJCW3ozp8JUq8jeKQ06ST0kspAuY5Z53yh
-         33m1Z7Xs1Tp3U5WWIBvRFJ5tKwZ6fKlRG+8/C7+JN/9qzNq+6Dwrd1wK1QM+iC8hAKVT
-         9H2qAEL2kOsKyBiXyjFg9f8hiXvqQlWv0/QYe/wnAxWVpDcUwOWWLQl+A+R+mTTvPVHC
-         okdNEdBwl85iA71JFyHsOH7vq4u4wkvndFHMIYPsR8wMk+7hn8SovJuV3+TJwvRbtkPR
-         GLfWkOXXLUNT3KWUXiYBYRJ9gKaLeE8+Sk0w4i3IukObS3gdGAUESwa/9500+EOjAgfH
-         RvRQ==
-X-Gm-Message-State: AO0yUKW7ma1e5jsi5BzoeV1PGv6U0ibLssVVpqSd3QASJ+D8mZzwu7qN
-	0ubZ6OrSOBbt08dkfwo0YbqtQ6EPN4qXZLiloxv6zw==
-X-Google-Smtp-Source: AK7set/37emJIMDdhZRjXztwTWML/IAIOOUvhiwFLM67CD2ghxFsMzI2CO91AJyou+kUyJ9zc9WNuBjCbGenmnAU0ek=
-X-Received: by 2002:a17:903:452:b0:19e:f660:81ee with SMTP id
- iw18-20020a170903045200b0019ef66081eemr3630660plb.2.1679079562629; Fri, 17
- Mar 2023 11:59:22 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679079847;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vxWwhYtYMhTKLT+t03kqT9HvUsxnKyYicVxmtWlKd/U=;
+        b=BvL7SapyE0Q//SajbWi3ShF+Yqa7jroAtDFEFbevlTjwnwMITVT8svIT6/0dB7wJJC
+         5WVuwbkLAnGbvGm/pEpoaW7X2haFEH+BsVJ8bysB8F6JzjwE5fhwMDLGDWCY1t416AsC
+         TLhBTKravGjcKPAce/JyFuJYOrn5yBkIrfVzZgNRIuB0iWRq5bpSxQOmhQl9W1MNQ6gi
+         2h8J4kN154YmXstfRJEPE+CvgBbP6snVd8A+6DRhMignasNXaqx+C4AgP7vPqJit1iN6
+         J7G7EAGNE0ArlouikLsxln7wuaH8Uh1DjgKZWb8uhRqE38uH9zWf6PtOitD8lgEK3lZ+
+         8VgQ==
+X-Gm-Message-State: AO0yUKVcXtHbRux4+IUgF2lSJH+OGkIKmv5qwK3taRRJuiu+jRIuh9Tq
+	drrxPlQLGIPXlPtNIAPkSkmdEN+fRbraUOGGXXL1qA==
+X-Google-Smtp-Source: AK7set9HiEa6enkw+O8v0nH+vyluNOZUiaCR0NVYDozZkTby7pa60VguxOSXhQJyn+UdyYOLblrB7egT3k0I/PkyvWw=
+X-Received: by 2002:a05:651c:48e:b0:295:95a8:c6a3 with SMTP id
+ s14-20020a05651c048e00b0029595a8c6a3mr3635392ljc.10.1679079847107; Fri, 17
+ Mar 2023 12:04:07 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 17 Mar 2023 12:04:06 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk> <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
-In-Reply-To: <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 17 Mar 2023 11:59:11 -0700
-Message-ID: <CAKwvOdmJkQUe6bhvQXHo0XOncdso0Kk26n8vdJZufm4Ku72tng@mail.gmail.com>
-Subject: Re: [GIT PULL] Block fixes for 6.3-rc3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, 
-	Kees Cook <keescook@chromium.org>, 
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
+In-Reply-To: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+References: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+From: Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date: Fri, 17 Mar 2023 12:04:06 -0700
+Message-ID: <CAE-0n50=j=GPQA=wQa5wE=P2T0ipOoOn6ekhPVAJhr5nMkiVnw@mail.gmail.com>
+Subject: Re: [PATCH] module/decompress: Never use kunmap() for local un-mappings
+To: Chris Down <chris@chrisdown.name>, Daniel Thompson <daniel.thompson@linaro.org>, 
+	Douglas Anderson <dianders@chromium.org>, "Fabio M. De Francesco" <fmdefrancesco@gmail.com>, 
+	Jason Wessel <jason.wessel@windriver.com>, Jiri Kosina <jikos@kernel.org>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nick Terrell <terrelln@fb.com>, Petr Mladek <pmladek@suse.com>, Tom Rix <trix@redhat.com>, 
+	bpf@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	live-patching@vger.kernel.org, llvm@lists.linux.dev
+Cc: Piotr Gorski <piotrgorski@cachyos.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Ira Weiny <ira.weiny@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-+Sanitizer folks (BCC'd)
-(Top of lore thread:
-https://lore.kernel.org/linux-block/9d0ef355-f430-e8e2-c844-b34cfcf60d88@ke=
-rnel.dk/)
+Quoting Fabio M. De Francesco (2023-03-15 05:52:56)
+> Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
+>
+> kunmap_local() must be called on the kernel virtual address returned by
+> kmap_local_page(), differently from how we use kunmap() which instead
+> expects the mapped page as its argument.
+>
+> In module_zstd_decompress() we currently map with kmap_local_page() and
+> unmap with kunmap(). This breaks the code and so it should be fixed.
+>
+> Cc: Piotr Gorski <piotrgorski@cachyos.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Stephen Boyd <swboyd@chromium.org>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
 
-On Fri, Mar 17, 2023 at 11:35=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Mar 17, 2023 at 10:16=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wro=
-te:
-> >
-> > - blk-mq SRCU fix for BLK_MQ_F_BLOCKING devices (Christ)
->
-> Christ indeed.
->
-> But I think you meant "Chris".
->
-> > Side note - when doing the usual allmodconfig builds with gcc-12 and
-> > clang before sending them out, for the latter I see this warning being
-> > spewed with clang-15:
-> >
-> > drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() f=
-alls through to next function m5mols_get_frame_desc()
-> >
-> > Obviously not related to my changes, but mentioning it in case it has
-> > been missed as I know you love squeaky clean builds :-). Doesn't happen
-> > with clang-14.
->
-> Hmm. I have clang-15 too, but I do the allmodconfig builds with gcc,
-> and only my own "normal config" builds with clang.
->
-> So I don't see this particular issue and my builds are still squeaky clea=
-n.
->
-> That said, when I explicitly try that allmodconfig thing with clang, I
-> can see it too. And the reason seems to be something we've seen
-> before: UBSAN functions being considered non-return by clang, so clang
-> generates code like this:
->
->    ....
-> .LBB24_3:
->         callq   __sanitizer_cov_trace_pc@PLT
->         movl    $2, %esi
->         movq    $.L__unnamed_3, %rdi
->         callq   __ubsan_handle_out_of_bounds
-> .Lfunc_end24:
->         .size   m5mols_set_fmt, .Lfunc_end24-m5mols_set_fmt
->
-> ie the last thing in that m5mols_set_fmt() function is a call to
-> __ubsan_handle_out_of_bounds, and then it "falls through" to the next
-> function.
->
-> And yes, I absolutely *detest* how clang does that. Not only does it
-> cause objtool sanity checking issues, it fundamentally means that we
-> can never treat UBSAN warnings as warnings. They are always fatal.
->
-> This is a *huge* clang mis-feature, and I forget what we decided last
-> that we saw it.
->
-> But I suspect we need to disable UBSAN for clang, because clang gets
-> this so *horribly* wrong.
->
-> Fatal errors that cannot be recovered from are not something that the
-> compiler is supposed to decide on. It's exactly the same issue as
-> BUG() calls: it just results in a dead machine, and in the process the
-> actual problem easily gets lost (because maybe this only happens while
-> running X, and no serial console, and no way to actually see what the
-> UBSAN warning was as a result).
->
-> I really really detest this thing, and I think this is a fatal flaw,
-> and means that as-is, UBSAN really *has* to be disabled for clang
-> kernel builds. Maybe that will make somebody wake up and smell the
-> roses, and stop this idiotic "undefined behavior is fatal" garbage.
->
-> Nick? Do you remember what the fix was last time?
->
->                Linus
-
-
-
---=20
-Thanks,
-~Nick Desaulniers
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
