@@ -1,123 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96BE79D6
-	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 20:57:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679086641;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3ueSLYTbczhpfG9NghbRnTQhmVk9+C96iBsuLv5iJJc=;
-	b=UZ0NzoRyC9cFuIjibwQ7DAscLfmQ3KoLUPlxde60tzF7x+XYw9Y3ZW76cug3JmmSWaOkD1
-	dzDhCzS7pokOI9sXXbIGcKoIj2ka2Vt2iD9hcNOFkH7+5dTHTjEXXPwGBbGYXRucpHXRP1
-	bLK3cbMMZ7RUWht0S9ZwXh6U2GNJd7M=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-605-gZJMVdOFMymZCBnHrwLPUA-1; Fri, 17 Mar 2023 16:57:20 -0400
-X-MC-Unique: gZJMVdOFMymZCBnHrwLPUA-1
-Received: by mail-qt1-f198.google.com with SMTP id h21-20020ac87d55000000b003bffb1c9745so3129619qtb.4
-        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 13:57:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED9A79D6
+	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 21:00:28 +0000 (UTC)
+Received: by mail-ed1-f46.google.com with SMTP id er8so13469888edb.0
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 14:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679086827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oZhGvYYe72+EpjoPoiXYwYh2DEQKfYqrF7Ny0kVjGfo=;
+        b=bFc0Pc8sXPyYD8hJfB75Je/AWDEaqDQIZcaDrX71XHxJyGUFwcwpRgO9/bCgLPAhi/
+         k2z+xzWbM6myBql6/edUy7WUteXBZ0FUU0NO48BMEiEe+BHuiFf3xe0CSmgNetoMFX7Q
+         2rc34LiYQV7auDHqin9gPlDHU5jCjsDAE9l0s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679086640;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3ueSLYTbczhpfG9NghbRnTQhmVk9+C96iBsuLv5iJJc=;
-        b=CXY5BodErLzojIFVbxc/WddnRKHo81qOtVFl/bBYbPSvVxMSp2GSfgx8kMxJsdJriP
-         yX1R/SfvchyB0YSdYEePXdrXn59oACkDnpJ+uYX8o5BZafgExBOAy1BJ3yH9tmVIsRp1
-         XhGaMJ/1ZgJ0JGJCE334ypGaj3oytEfVWmQtp+upTQuyydl8SBwgGt2DXThIR/wviKEq
-         ZUKVlyazSbrkyIuD89aQGjEXtmAj3RxpUXK7RPG20cDAV+KieW81jLAssodBFA4wYMT3
-         NvkdIqLWECr2gxOcCxDwnCYasJdCJ7BlQ6Wxs78hmnRbrdzhd7VgNGNf4RfOnwKZlCbG
-         mVfA==
-X-Gm-Message-State: AO0yUKXqsDCEp3R6GAl+SohswBOS6jxVNRE/AWK+lUdSRgZD16Xqffst
-	Yqz2tVPFFDkFEZiGCpYsT93pIEufzvzzYg0z/GX7aYAeNuckoLIkBopMby06M7ofDrYJgjOCqGy
-	JNydU22kXpzEGtQ==
-X-Received: by 2002:a05:6214:e88:b0:5b4:2271:b42f with SMTP id hf8-20020a0562140e8800b005b42271b42fmr15359007qvb.47.1679086639846;
-        Fri, 17 Mar 2023 13:57:19 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+i8S89kFUh6Def3I4RhtkIaIaYkO0oKXURsOnZTacJ2FYR4+jckCSLZDHDDsPzEFtMvK2Vgw==
-X-Received: by 2002:a05:6214:e88:b0:5b4:2271:b42f with SMTP id hf8-20020a0562140e8800b005b42271b42fmr15358978qvb.47.1679086639567;
-        Fri, 17 Mar 2023 13:57:19 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id s20-20020a374514000000b00742bc037f29sm2295574qka.120.2023.03.17.13.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 13:57:19 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	linux-imx@nxp.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-serial@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] serial: imx: remove unused imx_uart_is_imx* functions
-Date: Fri, 17 Mar 2023 16:57:10 -0400
-Message-Id: <20230317205710.1672232-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20210112; t=1679086827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oZhGvYYe72+EpjoPoiXYwYh2DEQKfYqrF7Ny0kVjGfo=;
+        b=Bc7QqTlh8CZhhGmWpeASvTW22+oRG/Ki3UMULiqnflxWl+GUd/9UZ2oQ5Cer2SBg/n
+         oF6D7c0UsVt3hgZt39xSHt6jlXitZbbXpenv2T6O8nV1NEl8cLKhfKwRSrIg//FdQwys
+         3RqMfP9Zeeekcl7HXdCNV77CqCKaABDPeXWspahqv8tqPPm749yZ2bNCfY1QAqXFS17l
+         az2j5udaI1PzfLUks4ORnWro8+GUlxO7AuTVUfr/ZUmDec3bycrgrtFUbmcUbf9MFG0y
+         uY1xqqSzhbujQ2Uk0mn4iu2u3Jz0LDLMcKn4qLmTcTPygW7vEhLIX4AWUlN28K9jezVc
+         WWTg==
+X-Gm-Message-State: AO0yUKXJW96P4zBBZgqp8YTKAc/2AuPMnoLVuWVXlBgiw7Sq98Uqj7te
+	7USl1hii+Pzcc165zOZA6pGQuCMqPIpg1pCi5wXwcA==
+X-Google-Smtp-Source: AK7set9Kvv+/7BuNWsInk/d136GiHnttKBf4kAeGPtIagnzVBwgdBkR3ouNA3i7XXwjqeu5M6o9PKQ==
+X-Received: by 2002:a17:906:a419:b0:88a:1ea9:a5ea with SMTP id l25-20020a170906a41900b0088a1ea9a5eamr680613ejz.65.1679086826769;
+        Fri, 17 Mar 2023 14:00:26 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id z24-20020a1709060ad800b0092ffc83cc27sm1380971ejf.5.2023.03.17.14.00.26
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 14:00:26 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id o12so25140932edb.9
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 14:00:26 -0700 (PDT)
+X-Received: by 2002:a17:906:ef8f:b0:8de:c6a6:5134 with SMTP id
+ ze15-20020a170906ef8f00b008dec6a65134mr298086ejb.15.1679086825747; Fri, 17
+ Mar 2023 14:00:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+References: <9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk>
+ <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
+ <CAKwvOdmJkQUe6bhvQXHo0XOncdso0Kk26n8vdJZufm4Ku72tng@mail.gmail.com>
+ <6414c470.a70a0220.6b62f.3f02@mx.google.com> <CAHk-=wi5yk0+NeqB34fRC-Zvt+8QZVPTiny9MvCxxjg+ZqDhKg@mail.gmail.com>
+ <CANiq72m46OzQPtZbS_VaQGgGknFV-hKvhBw8sVZx9ef=AzupTQ@mail.gmail.com> <CAHk-=wgTSdKYbmB1JYM5vmHMcD9J9UZr0mn7BOYM_LudrP+Xvw@mail.gmail.com>
+In-Reply-To: <CAHk-=wgTSdKYbmB1JYM5vmHMcD9J9UZr0mn7BOYM_LudrP+Xvw@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 17 Mar 2023 14:00:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgLBjQZ1Xic9SDvtPOu3MNwRznZygZ35mqq4CpKmWdBtA@mail.gmail.com>
+Message-ID: <CAHk-=wgLBjQZ1Xic9SDvtPOu3MNwRznZygZ35mqq4CpKmWdBtA@mail.gmail.com>
+Subject: Re: [GIT PULL] Block fixes for 6.3-rc3
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Kees Cook <keescook@chromium.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, 
+	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-clang with W=1 reports
-drivers/tty/serial/imx.c:292:19: error:
-  unused function 'imx_uart_is_imx21' [-Werror,-Wunused-function]
-static inline int imx_uart_is_imx21(struct imx_port *sport)
-                  ^
-drivers/tty/serial/imx.c:297:19: error:
-  unused function 'imx_uart_is_imx53' [-Werror,-Wunused-function]
-static inline int imx_uart_is_imx53(struct imx_port *sport)
-                  ^
-drivers/tty/serial/imx.c:302:19: error:
-  unused function 'imx_uart_is_imx6q' [-Werror,-Wunused-function]
-static inline int imx_uart_is_imx6q(struct imx_port *sport)
-                  ^
-These static functions are not used, so remove them.
+On Fri, Mar 17, 2023 at 1:51=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> but I would *really* like clang to be fixed to not silently generate
+> code that does insane things and would be basically impossible to
+> debug if it ever triggers.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/tty/serial/imx.c | 14 --------------
- 1 file changed, 14 deletions(-)
+Side note: the key word here is "silently".
 
-diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index 84bc0e768726..dbb3af4c1a34 100644
---- a/drivers/tty/serial/imx.c
-+++ b/drivers/tty/serial/imx.c
-@@ -289,20 +289,6 @@ static inline int imx_uart_is_imx1(struct imx_port *sport)
- 	return sport->devdata->devtype == IMX1_UART;
- }
- 
--static inline int imx_uart_is_imx21(struct imx_port *sport)
--{
--	return sport->devdata->devtype == IMX21_UART;
--}
--
--static inline int imx_uart_is_imx53(struct imx_port *sport)
--{
--	return sport->devdata->devtype == IMX53_UART;
--}
--
--static inline int imx_uart_is_imx6q(struct imx_port *sport)
--{
--	return sport->devdata->devtype == IMX6Q_UART;
--}
- /*
-  * Save and restore functions for UCR1, UCR2 and UCR3 registers
-  */
--- 
-2.27.0
+If clang notices that it generates crazy code, a warning at build-time
+would be preferable to the "oh, we noticed the crazy code generation
+because we do sanity checking that just happened to catch it".
 
+If that "fall-through due to impossible third iteration" had happened
+*inside* the function, rather than at the end, we'd have never
+noticed.
+
+So we were kind of lucky in just where things triggered this time.
+Maybe that's always going to be true due to some random internal clang
+logic ("dead code fallthrough is always at the end because of how we
+sort basic blocks"), but I don't see why it would be in general.
+
+                      Linus
