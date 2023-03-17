@@ -1,128 +1,166 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2454D79C5
-	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 19:50:10 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id k2so6427474pll.8
-        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 12:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679082609;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sTkWXMj0l/9cqk/U0QQ/wZMUy1oF1i/mojVUtfUyiYM=;
-        b=IE3ITaccsan+R7me0dIE2PcYdM+dVje3nOwIhznF4FJf+hmIF+M8+FcZ3hksSrj8xy
-         Ir31hHz9tz7PZ80scltPHUN/X+6xEhGUZzX+yDTRiZ0GdSN/CcsVwIibxohSfE4m2EFo
-         t/nqkHi+beP/WkbSedbxLWL9Q9pS2qIihwCZA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679082609;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTkWXMj0l/9cqk/U0QQ/wZMUy1oF1i/mojVUtfUyiYM=;
-        b=qQ4b8lBUG00GvQKcxY0CeaIBwbDtvMKv5x65Gw5ypq5+lWQgCQQiTXWa//CEYDa7zE
-         UctTjWxI4XKRQN3ys0NNUp8UlNUpgfTcsaqvlaicjc4l5O3Xb/aLDs/xTtKWVAyIwPPe
-         55ugRWoY82caIUW20JGl8l6hNrgYALPw3HfqvvQU2rWEso+baEtS7IOqOMWZjOK6FQtg
-         3g7k5diszPAuk6IMdk3G3pFOdtHpirzeH2hDOFutfh2LRJKCiUYggIDbCOJXcM6YwtYt
-         QTfAn+U6xi4p5pvh1P4BCZuE51g6D7qYQjny2UDEuRHv+HF9ESgGdGFwAyLSty3dgGdZ
-         +OUg==
-X-Gm-Message-State: AO0yUKXemL53VBLH9YfJYf7ItKkFTtjRhzW0pg86ZeR5jMkvfiRCqv7o
-	rFCH9AGv/vSe4ReWOrc+6YHI1g==
-X-Google-Smtp-Source: AK7set9AzIb4HFRsROSmeue9TaLtzCV7t6cukuLBwQ5LSDNFbsd/UlVIO0YGe4xkZ/Axy9kZ6+LhcA==
-X-Received: by 2002:a05:6a20:728d:b0:ce:c188:68af with SMTP id o13-20020a056a20728d00b000cec18868afmr10510377pzk.17.1679082609596;
-        Fri, 17 Mar 2023 12:50:09 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h15-20020aa786cf000000b005b34d81b010sm1964869pfo.91.2023.03.17.12.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 12:50:08 -0700 (PDT)
-Message-ID: <6414c470.a70a0220.6b62f.3f02@mx.google.com>
-X-Google-Original-Message-ID: <202303171242.@keescook>
-Date: Fri, 17 Mar 2023 12:50:06 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>,
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [GIT PULL] Block fixes for 6.3-rc3
-References: <9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk>
- <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
- <CAKwvOdmJkQUe6bhvQXHo0XOncdso0Kk26n8vdJZufm4Ku72tng@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B65E79C5;
+	Fri, 17 Mar 2023 19:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679082620; x=1710618620;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zABSeeyeT25T6hQEqEWV96Sflk0MTHkgreGhnKwSQbM=;
+  b=DJ27AZpLAYkYCDF01fdhMIPHH3FYxYEAgXU2euch5OUk+wZft9XmY4Si
+   D+qcDMWE0kdRJ5qR+P/AjEA4DeF5N/AeE+vymOrV+Ccm3JG4nSJ52Ltpi
+   NfdNu94aWQy2w1tMpUozY81/fjpu/HeXl2lAAtPaMtHLHbZFwePEXjFcj
+   tAsUvPSfrQu7ZtqvBMv4ceqADmdI7NYHnx56VYA5IQ7OcCBovtb9d6efD
+   SAaHLg82DSv7ZOtHR038EHnvIe/i5JIcoyI3MtlTDOeRy4fKcMdKleIWY
+   EqYbwu6uB1MJBmHqEHzLzXQJkDCe6LCshmWmX3ho8XjCpGMPwcZ4TZ5Su
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="403218462"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="403218462"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 12:50:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="769476300"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="769476300"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Mar 2023 12:50:18 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pdG5h-0009YM-2F;
+	Fri, 17 Mar 2023 19:50:17 +0000
+Date: Sat, 18 Mar 2023 03:49:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-efi@vger.kernel.org,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Subject: [efi:urgent 12/12]
+ drivers/firmware/efi/libstub/efi-stub-helper.c:513:6: warning: variable 'dp'
+ is used uninitialized whenever 'if' condition is false
+Message-ID: <202303180324.XvQkFoRV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdmJkQUe6bhvQXHo0XOncdso0Kk26n8vdJZufm4Ku72tng@mail.gmail.com>
 
-On Fri, Mar 17, 2023 at 11:59:11AM -0700, Nick Desaulniers wrote:
-> +Sanitizer folks (BCC'd)
-> (Top of lore thread:
-> https://lore.kernel.org/linux-block/9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk/)
-> 
-> On Fri, Mar 17, 2023 at 11:35 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Fri, Mar 17, 2023 at 10:16 AM Jens Axboe <axboe@kernel.dk> wrote:
-> > > Side note - when doing the usual allmodconfig builds with gcc-12 and
-> > > clang before sending them out, for the latter I see this warning being
-> > > spewed with clang-15:
-> > >
-> > > drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() falls through to next function m5mols_get_frame_desc()
-> > >
-> > > Obviously not related to my changes, but mentioning it in case it has
-> > > been missed as I know you love squeaky clean builds :-). Doesn't happen
-> > > with clang-14.
-> >
-> > Hmm. I have clang-15 too, but I do the allmodconfig builds with gcc,
-> > and only my own "normal config" builds with clang.
-> >
-> > So I don't see this particular issue and my builds are still squeaky clean.
-> >
-> > That said, when I explicitly try that allmodconfig thing with clang, I
-> > can see it too. And the reason seems to be something we've seen
-> > before: UBSAN functions being considered non-return by clang, so clang
-> > generates code like this:
-> >
-> >    ....
-> > .LBB24_3:
-> >         callq   __sanitizer_cov_trace_pc@PLT
-> >         movl    $2, %esi
-> >         movq    $.L__unnamed_3, %rdi
-> >         callq   __ubsan_handle_out_of_bounds
-> > .Lfunc_end24:
-> >         .size   m5mols_set_fmt, .Lfunc_end24-m5mols_set_fmt
-> >
-> > ie the last thing in that m5mols_set_fmt() function is a call to
-> > __ubsan_handle_out_of_bounds, and then it "falls through" to the next
-> > function.
-> >
-> > And yes, I absolutely *detest* how clang does that. Not only does it
-> > cause objtool sanity checking issues, it fundamentally means that we
-> > can never treat UBSAN warnings as warnings. They are always fatal.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git urgent
+head:   86237b46f2b202331c07e4c6c2633ce3d3ba7f13
+commit: 86237b46f2b202331c07e4c6c2633ce3d3ba7f13 [12/12] efi: libstub: Look for initrd LoadFile2 protocol on image handle
+config: riscv-randconfig-r042-20230313 (https://download.01.org/0day-ci/archive/20230318/202303180324.XvQkFoRV-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git/commit/?id=86237b46f2b202331c07e4c6c2633ce3d3ba7f13
+        git remote add efi https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git
+        git fetch --no-tags efi urgent
+        git checkout 86237b46f2b202331c07e4c6c2633ce3d3ba7f13
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/firmware/efi/libstub/
 
-I've hit these cases a few times too. The __ubsan_handle_* stuff
-is designed to be recoverable. I think there are some cases where
-we're tripping over Clang bugs, though. Some of the past issues
-have been with Clang thinking some UBSAN feature was trap-only
-(e.g. -fsanitizer=local-bounds), but here it actually generated the call,
-but decided it was no-return. *sigh*
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303180324.XvQkFoRV-lkp@intel.com/
 
-> > But I suspect we need to disable UBSAN for clang, because clang gets
-> > this so *horribly* wrong.
+All warnings (new ones prefixed by >>):
 
-Which is to say, it normally gets it right, but there are some instances
-where things go weird. If it was horribly wrong, there would be a LOT
-more objtool warnings. :)
+>> drivers/firmware/efi/libstub/efi-stub-helper.c:513:6: warning: variable 'dp' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (status != EFI_SUCCESS) {
+               ^~~~~~~~~~~~~~~~~~~~~
+   drivers/firmware/efi/libstub/efi-stub-helper.c:528:42: note: uninitialized use occurs here
+           status = efi_call_proto(lf2, load_file, dp, false, &initrd->size, NULL);
+                                                   ^~
+   drivers/firmware/efi/libstub/efistub.h:59:38: note: expanded from macro 'efi_call_proto'
+           efi_fn_call(__inst, func, __inst, ##__VA_ARGS__);       \
+                                               ^~~~~~~~~~~
+   drivers/firmware/efi/libstub/efistub.h:53:51: note: expanded from macro 'efi_fn_call'
+   #define efi_fn_call(inst, func, ...)    (inst)->func(__VA_ARGS__)
+                                                        ^~~~~~~~~~~
+   drivers/firmware/efi/libstub/efi-stub-helper.c:513:2: note: remove the 'if' if its condition is always true
+           if (status != EFI_SUCCESS) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/firmware/efi/libstub/efi-stub-helper.c:505:32: note: initialize the variable 'dp' to silence this warning
+           efi_device_path_protocol_t *dp;
+                                         ^
+                                          = NULL
+   1 warning generated.
 
-I'm not opposed to disabling UBSAN for all*config builds if we need to,
-but I want to get these Clang bugs found and fixed so I'd be sad to lose
-the coverage.
+
+vim +513 drivers/firmware/efi/libstub/efi-stub-helper.c
+
+   483	
+   484	/**
+   485	 * efi_load_initrd_lf2() - load the initrd from the Linux initrd device path
+   486	 * @image_handle: EFI handle of the loaded image
+   487	 * @initrd:	  pointer of struct to store the address where the initrd was
+   488	 *                loaded and the size of the loaded initrd
+   489	 * @max:	  upper limit for the initrd memory allocation
+   490	 *
+   491	 * Return:
+   492	 * * %EFI_SUCCESS if the initrd was loaded successfully, in which
+   493	 *   case @load_addr and @load_size are assigned accordingly
+   494	 * * %EFI_NOT_FOUND if no LoadFile2 protocol exists on the initrd device path
+   495	 * * %EFI_OUT_OF_RESOURCES if memory allocation failed
+   496	 * * %EFI_LOAD_ERROR in all other cases
+   497	 */
+   498	static
+   499	efi_status_t efi_load_initrd_lf2(efi_handle_t image_handle,
+   500					 struct linux_efi_initrd *initrd,
+   501					 unsigned long max)
+   502	{
+   503		efi_guid_t lf2_proto_guid = EFI_LOAD_FILE2_PROTOCOL_GUID;
+   504		efi_guid_t initrd_lf2_proto_guid = LINUX_EFI_INITRD_LF2_PROTOCOL_GUID;
+   505		efi_device_path_protocol_t *dp;
+   506		efi_load_file2_protocol_t *lf2;
+   507		efi_handle_t handle;
+   508		efi_status_t status;
+   509	
+   510		/* first look for a initrd loading protocol specific to this image */
+   511		status = efi_bs_call(handle_protocol, image_handle, &initrd_lf2_proto_guid,
+   512				     (void **)&lf2);
+ > 513		if (status != EFI_SUCCESS) {
+   514			/* look for the global singleton initrd loading protocol */
+   515			dp = (efi_device_path_protocol_t *)&initrd_dev_path;
+   516			status = efi_bs_call(locate_device_path, &lf2_proto_guid, &dp,
+   517					     &handle);
+   518			if (status != EFI_SUCCESS)
+   519				return status;
+   520	
+   521			status = efi_bs_call(handle_protocol, handle, &lf2_proto_guid,
+   522					     (void **)&lf2);
+   523			if (status != EFI_SUCCESS)
+   524				return status;
+   525		}
+   526	
+   527		initrd->size = 0;
+   528		status = efi_call_proto(lf2, load_file, dp, false, &initrd->size, NULL);
+   529		if (status != EFI_BUFFER_TOO_SMALL)
+   530			return EFI_LOAD_ERROR;
+   531	
+   532		status = efi_allocate_pages(initrd->size, &initrd->base, max);
+   533		if (status != EFI_SUCCESS)
+   534			return status;
+   535	
+   536		status = efi_call_proto(lf2, load_file, dp, false, &initrd->size,
+   537					(void *)initrd->base);
+   538		if (status != EFI_SUCCESS) {
+   539			efi_free(initrd->size, initrd->base);
+   540			return EFI_LOAD_ERROR;
+   541		}
+   542		return EFI_SUCCESS;
+   543	}
+   544	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
