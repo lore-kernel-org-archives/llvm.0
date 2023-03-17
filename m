@@ -1,42 +1,44 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9AA2C9D;
-	Fri, 17 Mar 2023 22:43:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2782C9D;
+	Fri, 17 Mar 2023 22:54:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679093003; x=1710629003;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=0WfkptoQ0NvK+ISQcwbio0OYd5nFmFa/0JdMe+C/j2g=;
-  b=a0jjv5+ioOfKXM2qYhiuZ0TnxXoRfCI7ifmhoXUaw3zsWPsF2HjwR5WK
-   /iRiuuN5tjz3o2jndmAGG85LSdxrM2ieUbFf7WE+iQHWQ8XQDiSq88p0v
-   dZjiaKmfHbBfJzP3NdV6lEsyHWp/hq+ANG4j8D/xCk0BypEhwpn4IUb++
-   BtfdFC+lyYz5zHLSb6GTvFatodLF9nWklZzrXzKNDPNXP/vj9/sfFInQh
-   iG4ZE6tvM9JKSCGhMrp9AHWsFh7k+pgOM8RPyay20LhkGtjXXmf+Hkqpb
-   IJLnGOuBhvDUxRuTs+mYWV/6ZNQ8KstLsWjg0xC4gxmmEtcRut154SL/F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="366081986"
+  t=1679093664; x=1710629664;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=D9tHgr8WD7PyHjW1Xho/mPO9QPYuMXRqFSApU2QZKDk=;
+  b=CNqFV1Rrn0aLjKEIR5RLkCQt7wxpLSLqvuZH+UGuc0A8QDn+VATQ7lGm
+   1cTEQ9bYNGpiPnfRuBlnobWupz6okrV7Tgqj6I2zYeyLE6g1y1NPiCk3A
+   tt4AJyTfbr4dCdr9ormNB+igud51+PWKx3pCwlcP7hrIuQw2BKRFA/KMo
+   pYY7mgxHVBA03kaDhCJApT++dYCA66wY3rWEvyRH6vShH2J26N7vSLrkh
+   Vc9dxEyEtBMi5bLS8AjdxF24UOjSfzNP1UXy4H1rsE8AqkJzaCB2v7Clj
+   I+J0duDrWOaLp8ECwhj80Cvc0RzSycC1DDD6FGC+rOfOBO+lgUr7zOTzt
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="340734701"
 X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="366081986"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 15:43:22 -0700
+   d="scan'208";a="340734701"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 15:54:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="749434627"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="823816673"
 X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="749434627"
+   d="scan'208";a="823816673"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Mar 2023 15:43:22 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 17 Mar 2023 15:54:22 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pdInB-0009cw-22;
-	Fri, 17 Mar 2023 22:43:21 +0000
-Date: Sat, 18 Mar 2023 06:43:11 +0800
+	id 1pdIxp-0009dK-2i;
+	Fri, 17 Mar 2023 22:54:21 +0000
+Date: Sat, 18 Mar 2023 06:53:37 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [jpoimboe:static-call-null-4 4/8]
- arch/x86/kvm/../../../virt/kvm/kvm_main.o: warning: objtool: static_call:
- can't find static_call_key symbol: __SCK__kvm_x86_vcpu_blocking
-Message-ID: <202303180609.ET4TPrgv-lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Seth Forshee <sforshee@kernel.org>
+Subject: [vfs-idmapping:b4/fs-tucked-mounts 3/6] fs/namespace.c:674: warning:
+ expecting prototype for lookup_mnt(). Prototype was for __lookup_mnt()
+ instead
+Message-ID: <202303180649.ITuFC5qM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,36 +48,64 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: Josh Poimboeuf <jpoimboe@kernel.org>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git static-call-null-4
-head:   74dbc56ffbac4b4912e598d245eaf4b0a6db638f
-commit: 5c0a5c2c499b4ba2bb84fff7c63ae9365e36cb2c [4/8] static_call: Remove static_call_mod()
-config: x86_64-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230318/202303180609.ET4TPrgv-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git b4/fs-tucked-mounts
+head:   fdc56c94378120a4df4fc4159aed109c405e27cd
+commit: c2f168d4fdd7a0a9de3bb15624de05068bde646a [3/6] fs: fix __lookup_mnt() documentation
+config: i386-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230318/202303180649.ITuFC5qM-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=5c0a5c2c499b4ba2bb84fff7c63ae9365e36cb2c
-        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
-        git fetch --no-tags jpoimboe static-call-null-4
-        git checkout 5c0a5c2c499b4ba2bb84fff7c63ae9365e36cb2c
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/commit/?id=c2f168d4fdd7a0a9de3bb15624de05068bde646a
+        git remote add vfs-idmapping https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
+        git fetch --no-tags vfs-idmapping b4/fs-tucked-mounts
+        git checkout c2f168d4fdd7a0a9de3bb15624de05068bde646a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303180609.ET4TPrgv-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303180649.ITuFC5qM-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/../../../virt/kvm/kvm_main.o: warning: objtool: static_call: can't find static_call_key symbol: __SCK__kvm_x86_vcpu_blocking
---
->> arch/x86/kvm/irq.o: warning: objtool: static_call: can't find static_call_key symbol: __SCK__kvm_x86_migrate_timers
---
->> arch/x86/kvm/lapic.o: warning: objtool: static_call: can't find static_call_key symbol: __SCK__kvm_x86_hwapic_irr_update
+>> fs/namespace.c:674: warning: expecting prototype for lookup_mnt(). Prototype was for __lookup_mnt() instead
+
+
+vim +674 fs/namespace.c
+
+48a066e72d970a Al Viro           2013-09-29  660  
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  661  /**
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  662   * lookup_mnt - find child mount
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  663   * @mnt:	parent mount
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  664   * @dentry:	mountpoint
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  665   *
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  666   * If @mnt has a child mount mounted @dentry find and return it. Note
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  667   * that the child-parent relationship per {mnt,dentry} pair is unique.
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  668   * In other words, there are now shadow mounts that have the same parent
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  669   * and are mounted at the same dentry.
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  670   *
+c2f168d4fdd7a0 Christian Brauner 2023-03-14  671   * Return: The child of @mnt mounted @dentry or NULL if there is none.
+^1da177e4c3f41 Linus Torvalds    2005-04-16  672   */
+474279dc0f7745 Al Viro           2013-10-01  673  struct mount *__lookup_mnt(struct vfsmount *mnt, struct dentry *dentry)
+^1da177e4c3f41 Linus Torvalds    2005-04-16 @674  {
+38129a13e6e71f Al Viro           2014-03-20  675  	struct hlist_head *head = m_hash(mnt, dentry);
+474279dc0f7745 Al Viro           2013-10-01  676  	struct mount *p;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  677  
+38129a13e6e71f Al Viro           2014-03-20  678  	hlist_for_each_entry_rcu(p, head, mnt_hash)
+474279dc0f7745 Al Viro           2013-10-01  679  		if (&p->mnt_parent->mnt == mnt && p->mnt_mountpoint == dentry)
+474279dc0f7745 Al Viro           2013-10-01  680  			return p;
+474279dc0f7745 Al Viro           2013-10-01  681  	return NULL;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  682  }
+474279dc0f7745 Al Viro           2013-10-01  683  
+
+:::::: The code at line 674 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
 0-DAY CI Kernel Test Service
