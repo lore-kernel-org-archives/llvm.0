@@ -1,40 +1,46 @@
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32AD579D6
-	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 20:42:14 +0000 (UTC)
-Received: by mail-yb1-f181.google.com with SMTP id n125so7077195ybg.7
-        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 13:42:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3769879D6
+	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 20:45:28 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id h8so25032103ede.8
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 13:45:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679085733;
+        d=linux-foundation.org; s=google; t=1679085926;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jKqoQMP0cjX6fBJ5Baqr7Cd+5/vuvlm7dezKEA7BumQ=;
-        b=OCGa9zSyWLiqiTOYurkRhYHYwN1IW/7p8tGRKYwOYRzWrYTtQe+roJbaEFZMlTPmLF
-         mD2N4cUANRFbs1zHFfn495ZSISEGqYDzdrq/syIB1G8Jmp63diqX2hSaPQLNDsuoRwH9
-         NOw8U7+kyEnSkTVjJJscfl2Ar07uHG0Sd9hb2bEykj6da6XLFCJZP6j7AnvV0COWl71J
-         DZILg3uBs/tuXz25kq8LTzw0WXKIVoUFNiwdmmoktFhJaHAeQVTLBYYlDovGv+wUSbhs
-         tsJdWJ1L4qaM7sHIBcNKnHVcRptRu6gNapoZXaIGC39vAJJaZNrX3SLlz7HtEAHYPO1z
-         YjGg==
+        bh=gss4H1ZQ+0ilRx2yopl9iBc9rNAe4OOqCmcGOGIMEWs=;
+        b=htp8spgeov1+vv2LWdT28qcFhHsBt4cM8ukREtMPRyCaKV/ulx2X6CPwCHnz34KJHo
+         3D3nxK4bNGVdWCZqUO8EP18Ci+brH1u3baPGOUOiXZBC+UyWJwb2FL2ed58TGuU9j+5K
+         SaPzypJp/zhc+UzYNjJHnLERUT3HZe+ozvNSs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679085733;
+        d=1e100.net; s=20210112; t=1679085926;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jKqoQMP0cjX6fBJ5Baqr7Cd+5/vuvlm7dezKEA7BumQ=;
-        b=ZfZi3kGR49O63g76XqK56x6z98vtNtFQ7Vee/0EVgH2fjJ32aVK4TC2e4ab1oXUBqn
-         aQ2LAvm3rqg+R637MRSJqb3RAUv4lNKxQ/kh2xsrHsJaJbYE/Z9uWwlK1PRWJT4sW0VT
-         aq4tYLTnj0kfxE08rL2qSsM6imd8HkuUZX7sd+Qhy6Vp//JdVfwtKNtWB2Dnvqxg7wzI
-         mrYSrkf/EnZM8q7qWUFHViAJNxW7PS4i1MbX66dtwvjK43Zcctq6IA/eMZZWWBFJ1iCo
-         nZr862RjmlmK8hiAF0Z+tsJh8aUkLs/uCu5xIzYRAwqlCGawBTMzx+6BnpsXc5YUmWlZ
-         l8QQ==
-X-Gm-Message-State: AO0yUKVMEriNl/OuPWoy9WW998x8ZqbeSy1SzUHbJW+wtAkSAXm/DBRG
-	H8CxP7Kip4H77oOTcGJNFKjV8WeU5vw4Sac/2Xo=
-X-Google-Smtp-Source: AK7set9NqnQJsWl7rP+FHX5er2KO10BEglkFdEEEJn0DvKX5dso/jIWWueYin0ZzNqMU9obvzXGF8nSJrWcmkJvL6Cg=
-X-Received: by 2002:a25:ec0c:0:b0:b1d:d57:fbef with SMTP id
- j12-20020a25ec0c000000b00b1d0d57fbefmr584281ybh.11.1679085732986; Fri, 17 Mar
- 2023 13:42:12 -0700 (PDT)
+        bh=gss4H1ZQ+0ilRx2yopl9iBc9rNAe4OOqCmcGOGIMEWs=;
+        b=SYs/8h66tcksDrJRPt9oy/3iSOOUytNmi0oCOFyN06bji1ZYCFpxYQyAZYEZSpNJOj
+         bN+jwm+1uEVmZS9Bo89bE2ntvyrhP8IXU9VHpEDCXqd+QD02qpL51yQvoDLdtpGoNVPB
+         lizAehWxHYWCzIam7ku+C1CR+rSFIPhVDIVfK/7ep1RjfS6GR0vOUJXNeg7lcatkttEw
+         zWenHP0TMLrOpkck8fNK2v6CavpZi9YUNjxiEsDXY6819fIO1KyxcAlpIkXNvRP5C68c
+         djozHRO3cxW1WfGq1QCYy+quPkzeWAGVWT9vK53rJRyRzPwXvwtqOyqEzSIW4ChH49ay
+         oAYg==
+X-Gm-Message-State: AO0yUKVoTX/prvMNWE6lhA+H/uEDDfDTbWxoNjaNYsml4N9y75KiA9zE
+	Aym+kmjuYUGsdg69Z731rvHobIENJnAm5Dkw1qc5Aw==
+X-Google-Smtp-Source: AK7set92V5PtCMvv6Jg6/P+zV2M9nBWTadDFA5oK8wNpX8DcRK1CBEvwHb/62gq2w3mBai1ulhwy/g==
+X-Received: by 2002:a17:907:c083:b0:930:27c2:6d8d with SMTP id st3-20020a170907c08300b0093027c26d8dmr683980ejc.61.1679085926155;
+        Fri, 17 Mar 2023 13:45:26 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id ox7-20020a170907100700b008cf8c6f5c43sm1357821ejb.83.2023.03.17.13.45.24
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 13:45:25 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id z21so25116091edb.4
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 13:45:24 -0700 (PDT)
+X-Received: by 2002:a50:d54a:0:b0:4fc:a484:c6ed with SMTP id
+ f10-20020a50d54a000000b004fca484c6edmr2431609edj.2.1679085923690; Fri, 17 Mar
+ 2023 13:45:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,53 +49,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk>
  <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
- <CAKwvOdmJkQUe6bhvQXHo0XOncdso0Kk26n8vdJZufm4Ku72tng@mail.gmail.com>
- <6414c470.a70a0220.6b62f.3f02@mx.google.com> <CAHk-=wi5yk0+NeqB34fRC-Zvt+8QZVPTiny9MvCxxjg+ZqDhKg@mail.gmail.com>
-In-Reply-To: <CAHk-=wi5yk0+NeqB34fRC-Zvt+8QZVPTiny9MvCxxjg+ZqDhKg@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 17 Mar 2023 21:42:02 +0100
-Message-ID: <CANiq72m46OzQPtZbS_VaQGgGknFV-hKvhBw8sVZx9ef=AzupTQ@mail.gmail.com>
+ <CAHk-=wj1wYh_2d8Y1Vm6YjPTh4yMqWc++aWVY2LpX7n_atc2hA@mail.gmail.com> <CANiq72kjd+NES2mSthLKZduFm_KrwLShngs6jLqhoQPSb+1d-g@mail.gmail.com>
+In-Reply-To: <CANiq72kjd+NES2mSthLKZduFm_KrwLShngs6jLqhoQPSb+1d-g@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 17 Mar 2023 13:45:07 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj3c3Y9fWJjOwvQ0fN6hciWoh8xV69tcRqDm=tpQP14Ew@mail.gmail.com>
+Message-ID: <CAHk-=wj3c3Y9fWJjOwvQ0fN6hciWoh8xV69tcRqDm=tpQP14Ew@mail.gmail.com>
 Subject: Re: [GIT PULL] Block fixes for 6.3-rc3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kees Cook <keescook@chromium.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, 
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	linux-hardening@vger.kernel.org
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Kees Cook <keescook@chromium.org>, 
+	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 17, 2023 at 9:31=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Fri, Mar 17, 2023 at 1:31=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> 'enum m5mols_restype' should be in the range 0..2, but it seems to use
-> a 64-bit compare against '16385' (and then a 32-bit compare against
-> '8199') to decide it's out-of-bounds.
+> From a quick look, it seems that `__find_restype` (which gets inlined
+> into `m5mols_set_fmt` via `__find_resolution`) has a small loop:
+>
+>     do {
+>         if (code =3D=3D m5mols_default_ffmt[type].code)
+>             return type;
+>     } while (type++ !=3D SIZE_DEFAULT_FFMT);
+>
+> that I guess gets simplified into something like:
+>
+>     if (code =3D=3D first code)
+>         yield 0;
+>     if (code =3D=3D second code)
+>         yield 1;
+>     out of bounds;
 
-It is comparing against just the `.code` in the `m5mols_default_ffmt`
-table, i.e. the `MEDIA_BUS_FMT_VYUY8_2X8` (8199 =3D 0x2007) and
-`MEDIA_BUS_FMT_JPEG_1X8` (16385 =3D 0x4001), see
-https://elixir.bootlin.com/linux/latest/source/drivers/media/i2c/m5mols/m5m=
-ols_core.c#L52.
+Ahh. That explains the odd constants I saw. I did figure out it had
+something to do with loading 'mf->code', but then it went off the
+rails.
 
-So it is basically:
+> Though even with UBSAN disabled, if I add a dummy opaque call inside
+> the loop, it goes back to something like before, except the jump goes
+> nowhere and then `objtool` complains again:
+>
+>     .LBB24_20:
+>         callq    dummydummydummy
+>     .Lfunc_end24:
+>
+> So it is reproducible even without UBSAN getting involved:
+> https://godbolt.org/z/hTe91b3eG
 
-    if (code =3D=3D m5mols_default_ffmt[0].code)
-        return type;
-    if (type =3D=3D 2)
-        continue;
-    ++type;
+That code generation is some crazy stuff.
 
-    if (code =3D=3D m5mols_default_ffmt[1].code)
-        return type;
-    if (type =3D=3D 2)
-        continue;
-    ++type;
+Yeah, that's not acceptable, and the bug is clearly not UBSAN, but
+some generic bogus clang thing.
 
-    m5mols_default_ffmt[2].code -> out of bounds UB -> unreachable
+Much nicer to try to debug this as a "objtool complains about the
+generated code" rather than as some insane runtine problem with code
+falling off the end of the function.
 
-If the condition had `++type` instead, it would not be a problem,
-because the loop stops before we go into the out of bounds access thus
-no UB.
-
-Cheers,
-Miguel
+                Linus
