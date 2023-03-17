@@ -1,112 +1,89 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2782C9D;
-	Fri, 17 Mar 2023 22:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679093664; x=1710629664;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=D9tHgr8WD7PyHjW1Xho/mPO9QPYuMXRqFSApU2QZKDk=;
-  b=CNqFV1Rrn0aLjKEIR5RLkCQt7wxpLSLqvuZH+UGuc0A8QDn+VATQ7lGm
-   1cTEQ9bYNGpiPnfRuBlnobWupz6okrV7Tgqj6I2zYeyLE6g1y1NPiCk3A
-   tt4AJyTfbr4dCdr9ormNB+igud51+PWKx3pCwlcP7hrIuQw2BKRFA/KMo
-   pYY7mgxHVBA03kaDhCJApT++dYCA66wY3rWEvyRH6vShH2J26N7vSLrkh
-   Vc9dxEyEtBMi5bLS8AjdxF24UOjSfzNP1UXy4H1rsE8AqkJzaCB2v7Clj
-   I+J0duDrWOaLp8ECwhj80Cvc0RzSycC1DDD6FGC+rOfOBO+lgUr7zOTzt
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="340734701"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="340734701"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 15:54:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="823816673"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="823816673"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Mar 2023 15:54:22 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pdIxp-0009dK-2i;
-	Fri, 17 Mar 2023 22:54:21 +0000
-Date: Sat, 18 Mar 2023 06:53:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Seth Forshee <sforshee@kernel.org>
-Subject: [vfs-idmapping:b4/fs-tucked-mounts 3/6] fs/namespace.c:674: warning:
- expecting prototype for lookup_mnt(). Prototype was for __lookup_mnt()
- instead
-Message-ID: <202303180649.ITuFC5qM-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C254A2C9D
+	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 22:56:28 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso6807699pjb.2
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 15:56:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679093788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rgl6/Ew3LdfVeuq3EG0BPByS9IqpLUKC1pNwODZSZMU=;
+        b=e6R9EwymyM8VB3T/Qk9Bv7+QepHZSKJljv0Tk0WcqnlmSGmI/JU/r9KMRinX1eUh3Y
+         +2zTFGLlEhiGkYfExeZ0TLIqg4/MZG8WTJ1/bK4fTPeSFCS2KlnbRRscLIoJw/EiZvy3
+         wOjxustqLkj0IMLmd0C7JiYUaCLuTV3rJAnwmmblpoUX/eI5O02Ac2urVs3k6Sq3OddO
+         ukQ9C+M5H4d1KShMTho2fwl2AOx7i/LJljqCBPIb06zvUWJKpbUxefq9DUiXheNRTrCW
+         QsEYIYgTgsvg1dCdT+IwAGgGVI+1GztUQJscTfQvk5daK0y+1dfdmUH9ckBCUbrKy2o9
+         RmRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679093788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rgl6/Ew3LdfVeuq3EG0BPByS9IqpLUKC1pNwODZSZMU=;
+        b=JaBzrqQpZTa5JUo8HLJeAX/KGbrd2olnfAY+LVhdS/MZ6xZ48vSDKC6j5maEf/9i2N
+         LUBuojr+0ZCKYRIi93M9SBW9YjgfAtuqRZWMQ8AU5Qbyi2JJdGaZrZ7tDED7vrY2S7xA
+         NIInUuYS5g9X0J/Xojfi9l+x9MDcLoHLiFSAdSY04TLFx+si2ZJ9Q96FlULzTpkpALEU
+         NRc3LRhZsfdkfJ6dmKp9Ag9vaoUM5/2zgGV1FXq1Vqg+veOknJCzGqUa9CElZDdzFAOv
+         AcCcLqnwTupRPjDmaAmqEHgijSUOIK3WOyBHkioDXyf4TPxQLg8XPmm9/K+WeHiWeIVn
+         z6MQ==
+X-Gm-Message-State: AO0yUKXN2qFi63YetMjc86QJP3VXUxkXQkaB8bE96osq8MRW3DpxZCOE
+	fztWEA/8JIJ5pqO4cVOz79z8H6EOMqENJwkrvUb79w==
+X-Google-Smtp-Source: AK7set+VZ1C/vdje0Qf+DN5K6lCsci8LicRW622ZINtSJOlwFek/UOb9dFwUqU2dwUFenMc0n7bU0LcAGLAMvZzPf6E=
+X-Received: by 2002:a17:902:e749:b0:1a0:4aa3:3a9a with SMTP id
+ p9-20020a170902e74900b001a04aa33a9amr3500662plf.2.1679093787879; Fri, 17 Mar
+ 2023 15:56:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk>
+ <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
+ <CAKwvOdmJkQUe6bhvQXHo0XOncdso0Kk26n8vdJZufm4Ku72tng@mail.gmail.com>
+ <6414c470.a70a0220.6b62f.3f02@mx.google.com> <CAHk-=wi5yk0+NeqB34fRC-Zvt+8QZVPTiny9MvCxxjg+ZqDhKg@mail.gmail.com>
+ <CANiq72m46OzQPtZbS_VaQGgGknFV-hKvhBw8sVZx9ef=AzupTQ@mail.gmail.com>
+ <CAHk-=wgTSdKYbmB1JYM5vmHMcD9J9UZr0mn7BOYM_LudrP+Xvw@mail.gmail.com> <CAHk-=wgLBjQZ1Xic9SDvtPOu3MNwRznZygZ35mqq4CpKmWdBtA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgLBjQZ1Xic9SDvtPOu3MNwRznZygZ35mqq4CpKmWdBtA@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 17 Mar 2023 15:56:16 -0700
+Message-ID: <CAKwvOdkSBASKK9LZowSdNyN+OR7Kx+j5sMdiJ1nSwbvoQPzNVQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Block fixes for 6.3-rc3
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Kees Cook <keescook@chromium.org>, 
+	Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, 
+	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git b4/fs-tucked-mounts
-head:   fdc56c94378120a4df4fc4159aed109c405e27cd
-commit: c2f168d4fdd7a0a9de3bb15624de05068bde646a [3/6] fs: fix __lookup_mnt() documentation
-config: i386-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230318/202303180649.ITuFC5qM-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/commit/?id=c2f168d4fdd7a0a9de3bb15624de05068bde646a
-        git remote add vfs-idmapping https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
-        git fetch --no-tags vfs-idmapping b4/fs-tucked-mounts
-        git checkout c2f168d4fdd7a0a9de3bb15624de05068bde646a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Fri, Mar 17, 2023 at 2:00=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, Mar 17, 2023 at 1:51=E2=80=AFPM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > but I would *really* like clang to be fixed to not silently generate
+> > code that does insane things and would be basically impossible to
+> > debug if it ever triggers.
+>
+> Side note: the key word here is "silently".
+>
+> If clang notices that it generates crazy code, a warning at build-time
+> would be preferable to the "oh, we noticed the crazy code generation
+> because we do sanity checking that just happened to catch it".
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303180649.ITuFC5qM-lkp@intel.com/
+That's fair.  I have something hacked up locally that can spot the
+fallthough from m5mols_set_fmt() as objtool did. With some polish, we
+can likely ship that as a compiler warning.  Then we can have these
+checks regardless of objtool arch support.
 
-All warnings (new ones prefixed by >>):
-
->> fs/namespace.c:674: warning: expecting prototype for lookup_mnt(). Prototype was for __lookup_mnt() instead
-
-
-vim +674 fs/namespace.c
-
-48a066e72d970a Al Viro           2013-09-29  660  
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  661  /**
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  662   * lookup_mnt - find child mount
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  663   * @mnt:	parent mount
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  664   * @dentry:	mountpoint
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  665   *
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  666   * If @mnt has a child mount mounted @dentry find and return it. Note
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  667   * that the child-parent relationship per {mnt,dentry} pair is unique.
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  668   * In other words, there are now shadow mounts that have the same parent
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  669   * and are mounted at the same dentry.
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  670   *
-c2f168d4fdd7a0 Christian Brauner 2023-03-14  671   * Return: The child of @mnt mounted @dentry or NULL if there is none.
-^1da177e4c3f41 Linus Torvalds    2005-04-16  672   */
-474279dc0f7745 Al Viro           2013-10-01  673  struct mount *__lookup_mnt(struct vfsmount *mnt, struct dentry *dentry)
-^1da177e4c3f41 Linus Torvalds    2005-04-16 @674  {
-38129a13e6e71f Al Viro           2014-03-20  675  	struct hlist_head *head = m_hash(mnt, dentry);
-474279dc0f7745 Al Viro           2013-10-01  676  	struct mount *p;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  677  
-38129a13e6e71f Al Viro           2014-03-20  678  	hlist_for_each_entry_rcu(p, head, mnt_hash)
-474279dc0f7745 Al Viro           2013-10-01  679  		if (&p->mnt_parent->mnt == mnt && p->mnt_mountpoint == dentry)
-474279dc0f7745 Al Viro           2013-10-01  680  			return p;
-474279dc0f7745 Al Viro           2013-10-01  681  	return NULL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  682  }
-474279dc0f7745 Al Viro           2013-10-01  683  
-
-:::::: The code at line 674 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+First I need to teach LLVM that __stack_chk_fail is noreturn, though
+I've only verified that thus far in glibc, musl, and bionic; I still
+need to check that's the case for the BSDs' libcs.
+--=20
+Thanks,
+~Nick Desaulniers
