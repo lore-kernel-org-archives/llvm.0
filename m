@@ -1,202 +1,114 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F682577;
-	Fri, 17 Mar 2023 10:28:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679048887; x=1710584887;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G5DNTuDv3tUNoyk9z9iVWAj0/1fS2QPU9VfLFMhWOuY=;
-  b=nQmMItusmJhdRppSH4rcBRQKn/sNK4DWoePaeVHSwd8zVWdYecU5nLnn
-   W6HbyCHOxccBYzqMFSXZtQNnoRK4mMTKSrBzDvRCkGpHdok52WPxGpzIC
-   9RV0W0CmzXn8pmzwIMS8U33YaMTcCbrJJSTJbFXL9F+tthsvApq9IbGmR
-   Sm/+ifzPS438rORXGk21rFTYGOHxMupoATbHgrf4PYrzIXRcBJ7jq5Xg1
-   eBSDQ1iHYa3gk6nPv+F7hJUaucW54D6INnBxZDEXBngHe+AlL9HV5TOi8
-   za5BOJHu3CCvzAShdrdsB4pumIfnnCdzLhZEvb3g8nkb7iCAUVebfY8Cl
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="424502820"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="424502820"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:28:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="680259240"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="680259240"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 17 Mar 2023 03:28:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pd7Jc-0009I4-1L;
-	Fri, 17 Mar 2023 10:28:04 +0000
-Date: Fri, 17 Mar 2023 18:27:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
- 11/31] arch/hexagon/include/asm/page.h:139:19: error: invalid operands to
- binary expression ('void *' and 'int')
-Message-ID: <202303171822.005KzVII-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDF636F;
+	Fri, 17 Mar 2023 10:42:29 +0000 (UTC)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32H7foUJ015333;
+	Fri, 17 Mar 2023 05:41:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=KKA0KiB1b7sWikqUS2H+de2M8bIODACLff8UqwwIRKI=;
+ b=QEPeAY4bjHDR8f8q/I3SzD8amteUtM1B3ocVkO24bWFQh0Z8oUqN8gWYimJxHzGjNRaB
+ DuUJ7Twuid1w+yLki2ivqdb1rGHrmZCoK7Ynr9BdJmNqWg3V0o1xDcyzfmHHim6r/+NR
+ BPYOqoUjne6gyKF6BOvVbXEAsCXpv8hrLltG7saBPkltoaHVACk/tf4aRagzzO0210us
+ 9SDXo17Ay/9n7n+Oh4sM93/2PYKPZNOEW1xpbxXeym6rZbm7RKpi+NOFHQ10bhNhVZel
+ /2qv/X6OEnjCAUWLKtjMs3vkVhWDeeHBaF+K5e2Fh+6N4k/2b0UHtNQe11+KwMnx0Z2y Mg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pbs3b9wuk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 17 Mar 2023 05:41:01 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 17 Mar
+ 2023 05:40:58 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Fri, 17 Mar 2023 05:40:58 -0500
+Received: from [198.90.251.127] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
+	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9815D45;
+	Fri, 17 Mar 2023 10:40:58 +0000 (UTC)
+Message-ID: <2f983fe6-8c43-be16-758b-098ea461836b@opensource.cirrus.com>
+Date: Fri, 17 Mar 2023 10:40:58 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 8/8] ASoC: cs35l56: Add driver for Cirrus Logic CS35L56
+To: kernel test robot <lkp@intel.com>,
+        Richard Fitzgerald via Alsa-devel
+	<alsa-devel@alsa-project.org>,
+        <broonie@kernel.org>, <pierre-louis.bossart@linux.intel.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+        <peter.ujfalusi@linux.intel.com>, <yung-chuan.liao@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        Simon
+ Trimmer <simont@opensource.cirrus.com>
+References: <167872265923.26.336497278776737619@mailman-core.alsa-project.org>
+ <202303170422.ZYpOtc4P-lkp@intel.com>
+Content-Language: en-US
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <202303170422.ZYpOtc4P-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: OePiBmjLWfhCxasIpBWCnONiYz13bGq6
+X-Proofpoint-ORIG-GUID: OePiBmjLWfhCxasIpBWCnONiYz13bGq6
+X-Proofpoint-Spam-Reason: safe
 
-Hi Linus,
+On 16/03/2023 20:15, kernel test robot wrote:
+> Hi Richard,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on broonie-sound/for-next]
+> [also build test ERROR on linus/master v6.3-rc2 next-20230316]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald-via-Alsa-devel/ASoC-wm_adsp-Use-no_core_startstop-to-prevent-creating-preload-control/20230313-235605
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> patch link:    https://lore.kernel.org/r/167872265923.26.336497278776737619%40mailman-core.alsa-project.org
+> patch subject: [PATCH v2 8/8] ASoC: cs35l56: Add driver for Cirrus Logic CS35L56
+> config: s390-randconfig-r044-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170422.ZYpOtc4P-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # install s390 cross compiling tool for clang build
+>          # apt-get install binutils-s390x-linux-gnu
+>          # https://github.com/intel-lab-lkp/linux/commit/5856c94d659f9c9963f5c37762cf201e1f1765e9
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Richard-Fitzgerald-via-Alsa-devel/ASoC-wm_adsp-Use-no_core_startstop-to-prevent-creating-preload-control/20230313-235605
+>          git checkout 5856c94d659f9c9963f5c37762cf201e1f1765e9
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303170422.ZYpOtc4P-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     s390x-linux-ld: sound/soc/codecs/cs35l56.o: in function `cs35l56_dsp_work':
+>>> sound/soc/codecs/cs35l56.c:887: undefined reference to `sdw_write_no_pm'
+>>> s390x-linux-ld: sound/soc/codecs/cs35l56.c:888: undefined reference to `sdw_read_no_pm'
+>>> s390x-linux-ld: sound/soc/codecs/cs35l56.c:889: undefined reference to `sdw_write_no_pm'
+>     s390x-linux-ld: sound/soc/codecs/cs35l56.c:953: undefined reference to `sdw_write_no_pm'
+>     s390x-linux-ld: sound/soc/codecs/cs35l56.o: in function `cs35l56_sdw_dai_hw_params':
+>>> sound/soc/codecs/cs35l56.c:710: undefined reference to `sdw_stream_add_slave'
+>     s390x-linux-ld: sound/soc/codecs/cs35l56.o: in function `cs35l56_sdw_dai_hw_free':
+>>> sound/soc/codecs/cs35l56.c:729: undefined reference to `sdw_stream_remove_slave'
+> 
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
-head:   961fd7e75191ae82383f80c1dfd97559f14965b8
-commit: 00b68620a99582d03ba1c5430d474963f31b575e [11/31] Hexagon: Make pfn accessors statics inlines
-config: hexagon-randconfig-r041-20230313 (https://download.01.org/0day-ci/archive/20230317/202303171822.005KzVII-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=00b68620a99582d03ba1c5430d474963f31b575e
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v6.2-rc3-just-ttbr0-split-pointless-c13
-        git checkout 00b68620a99582d03ba1c5430d474963f31b575e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303171822.005KzVII-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:5:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/hexagon/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/hexagon/include/asm/thread_info.h:16:
->> arch/hexagon/include/asm/page.h:139:19: error: invalid operands to binary expression ('void *' and 'int')
-           return __va(pfn) << PAGE_SHIFT;
-                  ~~~~~~~~~ ^  ~~~~~~~~~~
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                                            ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:8: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-                        ^      ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from arch/hexagon/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:156:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-   _SIG_SET_BINOP(sigorsets, _sig_or)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:137:24: note: expanded from macro '_SIG_SET_BINOP'
-                   a3 = a->sig[3]; a2 = a->sig[2];                         \
-
-
-vim +139 arch/hexagon/include/asm/page.h
-
-   136	
-   137	static inline void * pfn_to_virt(unsigned long pfn)
-   138	{
- > 139		return __va(pfn) << PAGE_SHIFT;
-   140	}
-   141	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I don't understand what's happened here.
+include/linux/soundwire/sdw.h provides inline dummy versions of these
+functions if !IS_ENABLED(CONFIG_SOUNDWIRE) so how can they be
+undefined reference?
