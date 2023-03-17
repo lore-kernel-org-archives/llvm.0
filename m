@@ -1,89 +1,103 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C254A2C9D
-	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 22:56:28 +0000 (UTC)
-Received: by mail-pj1-f46.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso6807699pjb.2
-        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 15:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679093788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rgl6/Ew3LdfVeuq3EG0BPByS9IqpLUKC1pNwODZSZMU=;
-        b=e6R9EwymyM8VB3T/Qk9Bv7+QepHZSKJljv0Tk0WcqnlmSGmI/JU/r9KMRinX1eUh3Y
-         +2zTFGLlEhiGkYfExeZ0TLIqg4/MZG8WTJ1/bK4fTPeSFCS2KlnbRRscLIoJw/EiZvy3
-         wOjxustqLkj0IMLmd0C7JiYUaCLuTV3rJAnwmmblpoUX/eI5O02Ac2urVs3k6Sq3OddO
-         ukQ9C+M5H4d1KShMTho2fwl2AOx7i/LJljqCBPIb06zvUWJKpbUxefq9DUiXheNRTrCW
-         QsEYIYgTgsvg1dCdT+IwAGgGVI+1GztUQJscTfQvk5daK0y+1dfdmUH9ckBCUbrKy2o9
-         RmRQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3890E2C9D
+	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 23:06:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679094385;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=i4/4tOgwP/X+xCG5XArCzD3rKZ+G/aYQCWfq3NKAVk0=;
+	b=VW2KEVEif8KhzwN7G5iPj0uiaDlnk2rXCi6pyjbHbh18cNmrkKtivKxzRKNs1c6HFyB7D5
+	L7ifGki3UOa4HqqwXs/mMteVVF48W89CzEuKD+N6u7PxU7Fo+/ZZB59VM/mJHYiQ68ID5F
+	dvIFVQrcPVEWXCfqo4ZWJe1TKpfzgzk=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-18-f-HnR1LtN-ymSOv9s4oaEA-1; Fri, 17 Mar 2023 19:06:23 -0400
+X-MC-Unique: f-HnR1LtN-ymSOv9s4oaEA-1
+Received: by mail-qk1-f198.google.com with SMTP id e14-20020a05620a208e00b0074270b9960dso3346874qka.22
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 16:06:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679093788;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rgl6/Ew3LdfVeuq3EG0BPByS9IqpLUKC1pNwODZSZMU=;
-        b=JaBzrqQpZTa5JUo8HLJeAX/KGbrd2olnfAY+LVhdS/MZ6xZ48vSDKC6j5maEf/9i2N
-         LUBuojr+0ZCKYRIi93M9SBW9YjgfAtuqRZWMQ8AU5Qbyi2JJdGaZrZ7tDED7vrY2S7xA
-         NIInUuYS5g9X0J/Xojfi9l+x9MDcLoHLiFSAdSY04TLFx+si2ZJ9Q96FlULzTpkpALEU
-         NRc3LRhZsfdkfJ6dmKp9Ag9vaoUM5/2zgGV1FXq1Vqg+veOknJCzGqUa9CElZDdzFAOv
-         AcCcLqnwTupRPjDmaAmqEHgijSUOIK3WOyBHkioDXyf4TPxQLg8XPmm9/K+WeHiWeIVn
-         z6MQ==
-X-Gm-Message-State: AO0yUKXN2qFi63YetMjc86QJP3VXUxkXQkaB8bE96osq8MRW3DpxZCOE
-	fztWEA/8JIJ5pqO4cVOz79z8H6EOMqENJwkrvUb79w==
-X-Google-Smtp-Source: AK7set+VZ1C/vdje0Qf+DN5K6lCsci8LicRW622ZINtSJOlwFek/UOb9dFwUqU2dwUFenMc0n7bU0LcAGLAMvZzPf6E=
-X-Received: by 2002:a17:902:e749:b0:1a0:4aa3:3a9a with SMTP id
- p9-20020a170902e74900b001a04aa33a9amr3500662plf.2.1679093787879; Fri, 17 Mar
- 2023 15:56:27 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679094383;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i4/4tOgwP/X+xCG5XArCzD3rKZ+G/aYQCWfq3NKAVk0=;
+        b=VFTEcl+8bzA8XUHPYL08NyOHyy9/bZFS3xGFhhLmtXE4uVUMT7jcB/TMEKllDHvEwc
+         2uFJ+Gz+BEQvz2CKMcDywyswXLQXZBytY39xQmLNzZjjFwovDhKBRLtdr84A7OhJEPk0
+         jTazB1BKdlft9D73gj9w21jDorEgxElU3EufTO5Y62is4RoK8Tl4l6Z07m5OOL5crP6f
+         2LMY/lfA4lWHI61nM5Ar44E/9Shwr0F2OPzt8+3Ct3J25BGXVCsoJQOHnR/WMJ3jVNtN
+         7FoGKoPUyRBPoIGMLEAsp2nlzu8oqONHmhl1CH/pD54VgpRXZ/PM1HZOThxh2hwwXhsF
+         TqEw==
+X-Gm-Message-State: AO0yUKVyWIJY1IUBryufGY8bZ7ZiPhfV51EWadl9AWeVz1RdYi+pS2tY
+	0rwLVSjPESeWcmgwjAQfTtp3+jbiH7yrVeIUykSg/HOI28ExZ2+CBp5EERhQuDw1YQ5/C2eDO1C
+	jkws9huN8fyi7bg==
+X-Received: by 2002:a05:6214:1250:b0:56e:a0fb:18ab with SMTP id r16-20020a056214125000b0056ea0fb18abmr43535297qvv.19.1679094383193;
+        Fri, 17 Mar 2023 16:06:23 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+CvCK7xfA2z4a8rn/h8YoqqpGCDL9n+rxJp8+V5zj/8rhXm9CC2WiHcUfi72KYNIoH5Wu+QQ==
+X-Received: by 2002:a05:6214:1250:b0:56e:a0fb:18ab with SMTP id r16-20020a056214125000b0056ea0fb18abmr43535257qvv.19.1679094382804;
+        Fri, 17 Mar 2023 16:06:22 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 13-20020a37080d000000b007456efa7f73sm2518474qki.85.2023.03.17.16.06.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 16:06:22 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: mdf@kernel.org,
+	hao.wu@intel.com,
+	yilun.xu@intel.com,
+	michal.simek@xilinx.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-fpga@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] fpga: xilinx-pr-decoupler: remove unused xlnx_pr_decouple_read function
+Date: Fri, 17 Mar 2023 19:06:17 -0400
+Message-Id: <20230317230617.1673923-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk>
- <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
- <CAKwvOdmJkQUe6bhvQXHo0XOncdso0Kk26n8vdJZufm4Ku72tng@mail.gmail.com>
- <6414c470.a70a0220.6b62f.3f02@mx.google.com> <CAHk-=wi5yk0+NeqB34fRC-Zvt+8QZVPTiny9MvCxxjg+ZqDhKg@mail.gmail.com>
- <CANiq72m46OzQPtZbS_VaQGgGknFV-hKvhBw8sVZx9ef=AzupTQ@mail.gmail.com>
- <CAHk-=wgTSdKYbmB1JYM5vmHMcD9J9UZr0mn7BOYM_LudrP+Xvw@mail.gmail.com> <CAHk-=wgLBjQZ1Xic9SDvtPOu3MNwRznZygZ35mqq4CpKmWdBtA@mail.gmail.com>
-In-Reply-To: <CAHk-=wgLBjQZ1Xic9SDvtPOu3MNwRznZygZ35mqq4CpKmWdBtA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 17 Mar 2023 15:56:16 -0700
-Message-ID: <CAKwvOdkSBASKK9LZowSdNyN+OR7Kx+j5sMdiJ1nSwbvoQPzNVQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Block fixes for 6.3-rc3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Kees Cook <keescook@chromium.org>, 
-	Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, 
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-On Fri, Mar 17, 2023 at 2:00=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Mar 17, 2023 at 1:51=E2=80=AFPM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > but I would *really* like clang to be fixed to not silently generate
-> > code that does insane things and would be basically impossible to
-> > debug if it ever triggers.
->
-> Side note: the key word here is "silently".
->
-> If clang notices that it generates crazy code, a warning at build-time
-> would be preferable to the "oh, we noticed the crazy code generation
-> because we do sanity checking that just happened to catch it".
+clang with W=1 reports
+drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
+static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
+                  ^
+This static function is not used, so remove it.
 
-That's fair.  I have something hacked up locally that can spot the
-fallthough from m5mols_set_fmt() as objtool did. With some polish, we
-can likely ship that as a compiler warning.  Then we can have these
-checks regardless of objtool arch support.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/fpga/xilinx-pr-decoupler.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-First I need to teach LLVM that __stack_chk_fail is noreturn, though
-I've only verified that thus far in glibc, musl, and bionic; I still
-need to check that's the case for the BSDs' libcs.
---=20
-Thanks,
-~Nick Desaulniers
+diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
+index 2d9c491f7be9..b6f18c07c752 100644
+--- a/drivers/fpga/xilinx-pr-decoupler.c
++++ b/drivers/fpga/xilinx-pr-decoupler.c
+@@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
+ 	writel(val, d->io_base + offset);
+ }
+ 
+-static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
+-					u32 offset)
+-{
+-	return readl(d->io_base + offset);
+-}
+-
+ static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
+ {
+ 	int err;
+-- 
+2.27.0
+
