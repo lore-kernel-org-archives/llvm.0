@@ -1,83 +1,125 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A79979C5
-	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 19:04:09 +0000 (UTC)
-Received: by mail-lj1-f170.google.com with SMTP id t14so6128917ljd.5
-        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 12:04:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A8279C5
+	for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 19:44:25 +0000 (UTC)
+Received: by mail-pf1-f179.google.com with SMTP id ce7so3770027pfb.9
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 12:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679079847;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vxWwhYtYMhTKLT+t03kqT9HvUsxnKyYicVxmtWlKd/U=;
-        b=VaLCQLvTCM70AHROG4xz4tfrBF639waWz4KoWP8AzwXYthDGomNGp1T7jkmLSYG6ZL
-         sQFvXnCJrqBICSwPvMM6a5OUdp9euuNEyXtvS6swIWpNLZtX+94mUEIdzi0vOzHTeDjh
-         3JTXIbCJnfWdIZvosOOvSj9i6QeMcdMqZQro0=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679082265;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y8lKPbpLU+chXYXEC1Z4Ckd3t5BR5yXaSbXWEnS6P9M=;
+        b=qrGvPbZVywlf3hSmh6XLLhT02WKUR8q1JkH46+OKDAWEldQPRJvAaRo5S2IXtRS+Ll
+         J9r/Xxpn0r+y5sXjuJpXu5nGTRfZ4sA+BcvzeMzGKmF9VAIppQb9ur9W5nw4ichknz4k
+         GbVMQG/Nj+lH/+jofeLShfoXw6hXJtkYNF5JF9bDYYWvhsVjPnpnrZVbAyeZ+m8Uo/rW
+         j6Zw9mXjsqUPcASKox6a95B+Z/KVtEhl3Swjj4u9BJ7LLSsxdUEQ13OEA7BFbAx82BPw
+         9RE/V3V7fCUEjwPNixgVIdA+tKchjBn0L/qz6JwNwKHA4tAzlOmufmHPx3GWZsvRcoby
+         a+tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679079847;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vxWwhYtYMhTKLT+t03kqT9HvUsxnKyYicVxmtWlKd/U=;
-        b=BvL7SapyE0Q//SajbWi3ShF+Yqa7jroAtDFEFbevlTjwnwMITVT8svIT6/0dB7wJJC
-         5WVuwbkLAnGbvGm/pEpoaW7X2haFEH+BsVJ8bysB8F6JzjwE5fhwMDLGDWCY1t416AsC
-         TLhBTKravGjcKPAce/JyFuJYOrn5yBkIrfVzZgNRIuB0iWRq5bpSxQOmhQl9W1MNQ6gi
-         2h8J4kN154YmXstfRJEPE+CvgBbP6snVd8A+6DRhMignasNXaqx+C4AgP7vPqJit1iN6
-         J7G7EAGNE0ArlouikLsxln7wuaH8Uh1DjgKZWb8uhRqE38uH9zWf6PtOitD8lgEK3lZ+
-         8VgQ==
-X-Gm-Message-State: AO0yUKVcXtHbRux4+IUgF2lSJH+OGkIKmv5qwK3taRRJuiu+jRIuh9Tq
-	drrxPlQLGIPXlPtNIAPkSkmdEN+fRbraUOGGXXL1qA==
-X-Google-Smtp-Source: AK7set9HiEa6enkw+O8v0nH+vyluNOZUiaCR0NVYDozZkTby7pa60VguxOSXhQJyn+UdyYOLblrB7egT3k0I/PkyvWw=
-X-Received: by 2002:a05:651c:48e:b0:295:95a8:c6a3 with SMTP id
- s14-20020a05651c048e00b0029595a8c6a3mr3635392ljc.10.1679079847107; Fri, 17
- Mar 2023 12:04:07 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 17 Mar 2023 12:04:06 -0700
+        d=1e100.net; s=20210112; t=1679082265;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y8lKPbpLU+chXYXEC1Z4Ckd3t5BR5yXaSbXWEnS6P9M=;
+        b=ne8VaOvBxUs5QFylNgDotLewu+3KQGBP1WOXb0ZMQ0VaKX/ypDuiJYeeoj3ToOQyea
+         GE6p322thE/4yZuc/bUim1kdoc3U4lyiECdLCeBUH2xeJahZ4mAjdxWUP6uQjjK7oqD0
+         wW1DmHNQzZFvL1xHPPo4X6zBOP9KYdeZHp1gOwaYko3unc7LotguGBjaMUZFj/C6dl6D
+         aBdhCfMtUw2m6lyeeLSEeppHl3nhNVSmrvDGbpuHWDoOFGsdOHDtkZdRUiDjQCX56J0A
+         0gMgzduLAmqutwdSlf+c6Wk+JIuYNzFaOve32rKegeFYrikMI8gWeAShMoDE9/SisGll
+         zk9A==
+X-Gm-Message-State: AO0yUKVZH7oezaQyd0On/POI9XED+TtgfrYSXbmwE4HWMZgkQxCqJeVo
+	4h8U+AsEgjXYwWntzH4FFAUaxg==
+X-Google-Smtp-Source: AK7set8JBs+bLZQ54Eqj/erf1PfB0MmniZhIm38M38Xz2ZBzX5DdW8G/tmm5Dmqgc+T/qcg9nncIAQ==
+X-Received: by 2002:a05:6a00:e0e:b0:626:62f:38d8 with SMTP id bq14-20020a056a000e0e00b00626062f38d8mr5980804pfb.3.1679082265068;
+        Fri, 17 Mar 2023 12:44:25 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id t14-20020a6549ce000000b005038291e5cbsm1826565pgs.35.2023.03.17.12.44.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 12:44:24 -0700 (PDT)
+Message-ID: <93d41a6d-47f3-962b-dd71-5bb0ab9c6e4e@kernel.dk>
+Date: Fri, 17 Mar 2023 13:44:23 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20230315125256.22772-1-fmdefrancesco@gmail.com>
-References: <20230315125256.22772-1-fmdefrancesco@gmail.com>
-From: Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date: Fri, 17 Mar 2023 12:04:06 -0700
-Message-ID: <CAE-0n50=j=GPQA=wQa5wE=P2T0ipOoOn6ekhPVAJhr5nMkiVnw@mail.gmail.com>
-Subject: Re: [PATCH] module/decompress: Never use kunmap() for local un-mappings
-To: Chris Down <chris@chrisdown.name>, Daniel Thompson <daniel.thompson@linaro.org>, 
-	Douglas Anderson <dianders@chromium.org>, "Fabio M. De Francesco" <fmdefrancesco@gmail.com>, 
-	Jason Wessel <jason.wessel@windriver.com>, Jiri Kosina <jikos@kernel.org>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nick Terrell <terrelln@fb.com>, Petr Mladek <pmladek@suse.com>, Tom Rix <trix@redhat.com>, 
-	bpf@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	live-patching@vger.kernel.org, llvm@lists.linux.dev
-Cc: Piotr Gorski <piotrgorski@cachyos.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Ira Weiny <ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [GIT PULL] Block fixes for 6.3-rc3
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Kees Cook <keescook@chromium.org>
+Cc: "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>
+References: <9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk>
+ <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Quoting Fabio M. De Francesco (2023-03-15 05:52:56)
-> Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
->
-> kunmap_local() must be called on the kernel virtual address returned by
-> kmap_local_page(), differently from how we use kunmap() which instead
-> expects the mapped page as its argument.
->
-> In module_zstd_decompress() we currently map with kmap_local_page() and
-> unmap with kunmap(). This breaks the code and so it should be fixed.
->
-> Cc: Piotr Gorski <piotrgorski@cachyos.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Stephen Boyd <swboyd@chromium.org>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
+On 3/17/23 12:35?PM, Linus Torvalds wrote:
+> On Fri, Mar 17, 2023 at 10:16?AM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> - blk-mq SRCU fix for BLK_MQ_F_BLOCKING devices (Christ)
+> 
+> Christ indeed.
+> 
+> But I think you meant "Chris".
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Oops yes indeed, good catch. Though I'd love to think that if we did
+have a resurrection of that nature, blk-mq would be high on the list of
+things to hack on.
+
+>> Side note - when doing the usual allmodconfig builds with gcc-12 and
+>> clang before sending them out, for the latter I see this warning being
+>> spewed with clang-15:
+>>
+>> drivers/media/i2c/m5mols/m5mols.o: warning: objtool: m5mols_set_fmt() falls through to next function m5mols_get_frame_desc()
+>>
+>> Obviously not related to my changes, but mentioning it in case it has
+>> been missed as I know you love squeaky clean builds :-). Doesn't happen
+>> with clang-14.
+> 
+> Hmm. I have clang-15 too, but I do the allmodconfig builds with gcc,
+> and only my own "normal config" builds with clang.
+
+I just do both to avoid anything odd, it's just a few min each.
+
+> So I don't see this particular issue and my builds are still squeaky clean.
+> 
+> That said, when I explicitly try that allmodconfig thing with clang, I
+> can see it too. And the reason seems to be something we've seen
+> before: UBSAN functions being considered non-return by clang, so clang
+> generates code like this:
+> 
+>    ....
+> .LBB24_3:
+>         callq   __sanitizer_cov_trace_pc@PLT
+>         movl    $2, %esi
+>         movq    $.L__unnamed_3, %rdi
+>         callq   __ubsan_handle_out_of_bounds
+> .Lfunc_end24:
+>         .size   m5mols_set_fmt, .Lfunc_end24-m5mols_set_fmt
+> 
+> ie the last thing in that m5mols_set_fmt() function is a call to
+> __ubsan_handle_out_of_bounds, and then it "falls through" to the next
+> function.
+> 
+> And yes, I absolutely *detest* how clang does that. Not only does it
+> cause objtool sanity checking issues, it fundamentally means that we
+> can never treat UBSAN warnings as warnings. They are always fatal.
+> 
+> This is a *huge* clang mis-feature, and I forget what we decided last
+> that we saw it.
+
+Gotcha, thanks for digging into that. I must admit I didn't look any
+further at it, but figured it was worth reporting...
+
+-- 
+Jens Axboe
+
