@@ -1,32 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186E6641;
-	Fri, 17 Mar 2023 05:23:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A399C433EF;
-	Fri, 17 Mar 2023 05:23:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679030580;
-	bh=xJQNrDRxaUaFwVWort65OpSrd15uaBouLl4R0fdXr00=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OJGZ4GiphrYotwcMHRtEQkOPOdUzuAY6KzsU1KdQjcuiBdg0Qpk9zyQ5HodjXBQwz
-	 jASO5f8IbOugRrtS3GUCcOAqxkjLq5tOtYcyeu6mlJ78uCZq3mkwJ1Jd7zaVKMRyK/
-	 yXsiVosV21bL7MxvWpjBDjXu/fyjfbLPvvDGc9780FYiT8L/Aj1FVCoyxLnMl9ubjx
-	 eBPyNPBd/PioKjDHHJu2xfm5Rq/d2V3aMUoK4esjqUhjZB2JkE2mrDt22ktmCByq5E
-	 5J/KjLT7RL0ISrydi9WaANwg3Wr3GqtH0aKbkZGNsCcXVUEpFBocZb2RupB1SxKzj5
-	 4DrU8+UdIA02Q==
-Date: Thu, 16 Mar 2023 22:22:58 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "Jason A. Donenfeld" <zx2c4@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9753E65A;
+	Fri, 17 Mar 2023 07:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679036407; x=1710572407;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HmUuQQWsDjqrwKPydo5APzukhRwHmoaeu4nkVvVcBhE=;
+  b=JCIrw8mJ7eBvxj/eHw5z8/YZt112hX2YViRle/di4VrBg3tcFgP6iVS5
+   3T3yfH9nx69l17uv6O/Hw/F1/bV1cyjV+dkEJFyjJ3NYVmDkQDtvXdlyE
+   i5Cu8UO2lA4gsJfgjCZbaeOpsE2DIfuwWYoZTFWS8QiABNwgLgJwjgekl
+   LdUIkWXb6FL32AfpG0TrKLG5pVBlgPU4as/toPOCPiSx2lQM/MgeR+46N
+   z19gtq7AHvUFbA5sSXCZpK9XeaE/eGMRvHsUS/M7aRxtXbfo7Jdeb2nup
+   xeAKgxP6tp148fwgrSReibnNkUhdjfDwKvgSwZ8NRP3fmQSRH5g6x/D64
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="318592995"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="318592995"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 00:00:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="657456549"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="657456549"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 17 Mar 2023 00:00:00 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pd44F-0009AH-1l;
+	Fri, 17 Mar 2023 06:59:59 +0000
+Date: Fri, 17 Mar 2023 14:59:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Khadija Kamran <kamrankhadijadj@gmail.com>, outreachy@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: Re: [stable:linux-5.4.y 4197/7834] ERROR: "sha_transform"
- [crypto/sha1_generic.ko] undefined!
-Message-ID: <20230317052258.GB882@sol.localdomain>
-References: <202303170515.Ls4W3urG-lkp@intel.com>
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <202303171454.sScrVVOh-lkp@intel.com>
+References: <ZBMR4s8xyHGqMm72@khadija-virtual-machine>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -35,42 +48,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202303170515.Ls4W3urG-lkp@intel.com>
+In-Reply-To: <ZBMR4s8xyHGqMm72@khadija-virtual-machine>
 
-On Fri, Mar 17, 2023 at 05:06:05AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
-> head:   b829e8b6e1a7bb8cd3042b927113a22fed0b0d47
-> commit: c2f0a89cd1d5a00c5bf48060987cf53ada93d4b0 [4197/7834] random: use BLAKE2s instead of SHA1 in extraction
-> config: mips-randconfig-r003-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170515.Ls4W3urG-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mipsel-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c2f0a89cd1d5a00c5bf48060987cf53ada93d4b0
->         git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
->         git fetch --no-tags stable linux-5.4.y
->         git checkout c2f0a89cd1d5a00c5bf48060987cf53ada93d4b0
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303170515.Ls4W3urG-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> ERROR: "sha_transform" [crypto/sha1_generic.ko] undefined!
-> 
+Hi Khadija,
 
-I'm not sure what's causing this.  Before v6.0, sha_transform() was always
-built-in.  It did use "lib-y" instead of "obj-y", though, which maybe matters
-here?  Maybe removing the caller of sha_transform() from random.c somehow made
-it unavailable to modules if all other callers were disabled too.
+Thank you for the patch! Perhaps something to improve:
 
-Anyway, I'm not sure it's worth investigating this old issue further...
+[auto build test WARNING on staging/staging-testing]
 
-- Eric
+url:    https://github.com/intel-lab-lkp/linux/commits/Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230316-205814
+patch link:    https://lore.kernel.org/r/ZBMR4s8xyHGqMm72%40khadija-virtual-machine
+patch subject: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
+config: hexagon-randconfig-r033-20230312 (https://download.01.org/0day-ci/archive/20230317/202303171454.sScrVVOh-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7e359baa2318b55e12a0c099b75fbd0d799907cf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230316-205814
+        git checkout 7e359baa2318b55e12a0c099b75fbd0d799907cf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/staging/axis-fifo/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303171454.sScrVVOh-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/staging/axis-fifo/axis-fifo.c:25:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/staging/axis-fifo/axis-fifo.c:25:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/staging/axis-fifo/axis-fifo.c:25:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/staging/axis-fifo/axis-fifo.c:958:3: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+                   read_timeout, write_timeout);
+                   ^~~~~~~~~~~~
+   include/linux/printk.h:528:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   drivers/staging/axis-fifo/axis-fifo.c:958:17: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+                   read_timeout, write_timeout);
+                                 ^~~~~~~~~~~~~
+   include/linux/printk.h:528:34: note: expanded from macro 'pr_info'
+           printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+                                   ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:455:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   8 warnings generated.
+
+
+vim +958 drivers/staging/axis-fifo/axis-fifo.c
+
+4a965c5f89decd Jacob Feder 2018-07-22  954  
+4a965c5f89decd Jacob Feder 2018-07-22  955  static int __init axis_fifo_init(void)
+4a965c5f89decd Jacob Feder 2018-07-22  956  {
+4a965c5f89decd Jacob Feder 2018-07-22  957  	pr_info("axis-fifo driver loaded with parameters read_timeout = %i, write_timeout = %i\n",
+4a965c5f89decd Jacob Feder 2018-07-22 @958  		read_timeout, write_timeout);
+4a965c5f89decd Jacob Feder 2018-07-22  959  	return platform_driver_register(&axis_fifo_driver);
+4a965c5f89decd Jacob Feder 2018-07-22  960  }
+4a965c5f89decd Jacob Feder 2018-07-22  961  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
