@@ -1,62 +1,60 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDF228F1
-	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 13:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5EF259D
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 13:52:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679146797;
+	s=mimecast20190719; t=1679147556;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=GsfqRJutAPaYkw+mcXHB2f4v7VoNn3nM+/TXvQ7dbeI=;
-	b=ih6DP1jmZeIPwWgthO3j9WC47w5Moh2HIDFor7vkFl2r5XJ1cPJvFT7E+gfpCp7PAtl5NV
-	cZD0ozgNIK0rLFwOFLbQcDah6dunWfHnI8hi1fuSrh9lSO5l36mWqeVGYdV8zSJGtWa+4j
-	bBMt65gqrzK9vSBABkD71uccUYAnnIA=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=8JKKCoHtsIdOT+kL0un84AUvIlxjWeKq5FTVFUrPKc8=;
+	b=W2HN28NuRJvV2tEAbmV4FRYcdo5Nx3IJujANbCqgi53xssop7rYFTe7B0dsFZkXNhXboTt
+	mXHZsyai2lwdeUJQo2iOzhD9J2teBZSWmKqVswn7v6W5ddlfj33tJzM+/ujYE/hti3PY+6
+	yaUmUyGrMrk9MQ/1Kr1GcTeEuXIaADI=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-187-Y20oBg-TPxymxMMAD46LFA-1; Sat, 18 Mar 2023 09:39:56 -0400
-X-MC-Unique: Y20oBg-TPxymxMMAD46LFA-1
-Received: by mail-qt1-f199.google.com with SMTP id c11-20020ac85a8b000000b003bfdd43ac76so4030685qtc.5
-        for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 06:39:56 -0700 (PDT)
+ us-mta-601-zUjtalA6P8Cx96qU-PCkGg-1; Sat, 18 Mar 2023 09:52:35 -0400
+X-MC-Unique: zUjtalA6P8Cx96qU-PCkGg-1
+Received: by mail-qk1-f198.google.com with SMTP id s21-20020a05620a0bd500b0074234f33f24so3683450qki.3
+        for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 06:52:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679146795;
+        d=1e100.net; s=20210112; t=1679147554;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GsfqRJutAPaYkw+mcXHB2f4v7VoNn3nM+/TXvQ7dbeI=;
-        b=et9rcjGxNo0UFVNEn/mTsm1iehI/BrTWJCC/1/HDY+F/4HxJ98OA/ShM+VT8K0TJVw
-         4hY4eZt66WeCdxm3QpCBir1kqxuLFaXztfzptEfytPwDcwEKrRGuSIKs8a9DgZnz2fwx
-         vomEcSjqg/0mmXvbl7AwSgREjY6m9B0Fz7jV3nFZGxZ6TpYMHl114hP/e+DHFJChQe4n
-         wSjO14Txua9YtETQ1L+1K7rRfTq4isyw+7TZ9qQ3M/oNAXjzqyIzwI/RXAUJ0ktombWR
-         NafDCusePHN9Gco8f0pKKapu9ITTO3WGDOv0vO9w0atkAC7FxPuHRU88OdlDXo4oHZz2
-         FSWQ==
-X-Gm-Message-State: AO0yUKUzWyMptKrZz1nb56v2gesE9Db13NzvlyxEk6BrZx97lUNDV+u8
-	8VcBPQ91e7hcj5lWvCCjRkjfEnCNZlA950sAscY7rzyxR/mGbL58I2eKo3VF+DPKtkjTOd0nx5F
-	s33sWE6pV5LwItg==
-X-Received: by 2002:ac8:570d:0:b0:3b8:58d0:b4e4 with SMTP id 13-20020ac8570d000000b003b858d0b4e4mr18584483qtw.33.1679146795817;
-        Sat, 18 Mar 2023 06:39:55 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+8QQWnniMY6gnEIBdfGqTMXXT0qbM1AvQtynJRRUJeJmWSu8y4ycgxOaezT+v9XSCpBKj4WQ==
-X-Received: by 2002:ac8:570d:0:b0:3b8:58d0:b4e4 with SMTP id 13-20020ac8570d000000b003b858d0b4e4mr18584464qtw.33.1679146795558;
-        Sat, 18 Mar 2023 06:39:55 -0700 (PDT)
+        bh=8JKKCoHtsIdOT+kL0un84AUvIlxjWeKq5FTVFUrPKc8=;
+        b=FOmDYdLyHElux0VD0fYYS/Cg3sZKDYGWmaFQuv3q4fP6XfDlBXyTe4wpFzFOGiqLnI
+         NGh1IfDDPDdUP67DwJfvSCbk5Fu9jVq6Yj41d4Lq4RCEQxLZXSgHVHIhRIHsnw625SJo
+         8GgnMxNkcylAakJfZJBFNdZoLQ2Lkz/I37sY+QNVZDMRFOfKVU9DdDCe4wWk4WlbFUmN
+         0FWDpHakfQuI73o1Gfadqs9NH/P82bVvhQTxqCXwxwGz1njBvvuSSndVLf4HQo9zhTya
+         ugIcnqGNl6TLWnMpuE8Hh5jLSINJ4gYLu4hzCpvZTDeqKiN+F5N+sLjbuNQgKTOu/KjL
+         YuiQ==
+X-Gm-Message-State: AO0yUKU6u64pk75pheO6xWahL8A0/V0xGhH3W6hG87AIYNbJTXEBzqSK
+	bC8sSvHrOG2rhpwpbmofT39+GI3Ht1Oui7UoQicNFwxuEJ1uSCwhXEvOc6bT1sKe8IEA8TwZJa/
+	UxXIksePtN5gCSeXX3hOSIw==
+X-Received: by 2002:a05:622a:110a:b0:3bf:cd81:399f with SMTP id e10-20020a05622a110a00b003bfcd81399fmr18628187qty.3.1679147554689;
+        Sat, 18 Mar 2023 06:52:34 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8IGPXW4iPtLnhcFdeE5DBfD6algKbXB9t7jslQwB7wD2STcpXKORYgPtCB7dq5QEEc6Kgcjw==
+X-Received: by 2002:a05:622a:110a:b0:3bf:cd81:399f with SMTP id e10-20020a05622a110a00b003bfcd81399fmr18628176qty.3.1679147554463;
+        Sat, 18 Mar 2023 06:52:34 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id o16-20020ac86990000000b003bf9f9f1844sm2999664qtq.71.2023.03.18.06.39.54
+        by smtp.gmail.com with ESMTPSA id t72-20020a37464b000000b00725d8d6983asm3626195qka.61.2023.03.18.06.52.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Mar 2023 06:39:55 -0700 (PDT)
+        Sat, 18 Mar 2023 06:52:34 -0700 (PDT)
 From: Tom Rix <trix@redhat.com>
-To: anitha.chrisanthus@intel.com,
-	edmund.j.dea@intel.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
+To: perex@perex.cz,
+	tiwai@suse.com,
 	nathan@kernel.org,
 	ndesaulniers@google.com
-Cc: dri-devel@lists.freedesktop.org,
+Cc: alsa-devel@alsa-project.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/kmb: remove unused set_test_mode_src_osc_freq_target_low,hi_bits functions
-Date: Sat, 18 Mar 2023 09:39:52 -0400
-Message-Id: <20230318133952.1684907-1-trix@redhat.com>
+Subject: [PATCH] ALSA: portman2x4: remove unused portman_read_command,data functions
+Date: Sat, 18 Mar 2023 09:52:29 -0400
+Message-Id: <20230318135229.1685266-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -70,60 +68,47 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
 clang with W=1 reports
-drivers/gpu/drm/kmb/kmb_dsi.c:822:2: error: unused function
-  'set_test_mode_src_osc_freq_target_low_bits' [-Werror,-Wunused-function]
-        set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_dsi,
-        ^
-drivers/gpu/drm/kmb/kmb_dsi.c:834:2: error: unused function
-  'set_test_mode_src_osc_freq_target_hi_bits' [-Werror,-Wunused-function]
-        set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi,
-        ^
+sound/drivers/portman2x4.c:185:18: error: unused function
+  'portman_read_command' [-Werror,-Wunused-function]
+static inline u8 portman_read_command(struct portman *pm)
+                 ^
+sound/drivers/portman2x4.c:195:18: error: unused function
+  'portman_read_data' [-Werror,-Wunused-function]
+static inline u8 portman_read_data(struct portman *pm)
+                 ^
 These static functions are not used, so remove them.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/gpu/drm/kmb/kmb_dsi.c | 28 ----------------------------
- 1 file changed, 28 deletions(-)
+ sound/drivers/portman2x4.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/kmb/kmb_dsi.c b/drivers/gpu/drm/kmb/kmb_dsi.c
-index cf7cf0b07541..ed99b14375aa 100644
---- a/drivers/gpu/drm/kmb/kmb_dsi.c
-+++ b/drivers/gpu/drm/kmb/kmb_dsi.c
-@@ -818,34 +818,6 @@ static void test_mode_send(struct kmb_dsi *kmb_dsi, u32 dphy_no,
- 	}
+diff --git a/sound/drivers/portman2x4.c b/sound/drivers/portman2x4.c
+index 52a656735365..4cdf56a0eb65 100644
+--- a/sound/drivers/portman2x4.c
++++ b/sound/drivers/portman2x4.c
+@@ -182,21 +182,11 @@ static inline void portman_write_command(struct portman *pm, u8 value)
+ 	parport_write_control(pm->pardev->port, value);
  }
  
--static inline void
--	set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_dsi,
--						   u32 dphy_no,
--						   u32 freq)
+-static inline u8 portman_read_command(struct portman *pm)
 -{
--	/* Typical rise/fall time=166, refer Table 1207 databook,
--	 * sr_osc_freq_target[7:0]
--	 */
--	test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES,
--		       (freq & 0x7f));
+-	return parport_read_control(pm->pardev->port);
 -}
 -
--static inline void
--	set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi,
--						  u32 dphy_no,
--						  u32 freq)
--{
--	u32 data;
--
--	/* Flag this as high nibble */
--	data = ((freq >> 6) & 0x1f) | (1 << 7);
--
--	/* Typical rise/fall time=166, refer Table 1207 databook,
--	 * sr_osc_freq_target[11:7]
--	 */
--	test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES, data);
--}
--
- static void mipi_tx_get_vco_params(struct vco_params *vco)
+ static inline u8 portman_read_status(struct portman *pm)
  {
- 	int i;
+ 	return parport_read_status(pm->pardev->port);
+ }
+ 
+-static inline u8 portman_read_data(struct portman *pm)
+-{
+-	return parport_read_data(pm->pardev->port);
+-}
+-
+ static inline void portman_write_data(struct portman *pm, u8 value)
+ {
+ 	parport_write_data(pm->pardev->port, value);
 -- 
 2.27.0
 
