@@ -1,103 +1,127 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCEF33D9
-	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 18:20:45 +0000 (UTC)
-Received: by mail-ed1-f53.google.com with SMTP id ek18so32213366edb.6
-        for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 11:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679163643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mx8RcyjGbjYoysYjRF/7k04CTiu60fPMXIq+lfuhvoc=;
-        b=L4xbhGNh21nggR25lxAz4VdcKMsT29/hXjia4Gsn32aIGWdhJt4UVTKgQ/AowYt9JM
-         qWp7O9XB4ZyWp5lkxYLrue3ns4sKzm+JL2uGUexmf26v9ZfeOoixMHOBexnwh567HfPD
-         /uU72ki/vH89ctGOYHJJg/6dDsbmA9xtpt9qI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679163643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mx8RcyjGbjYoysYjRF/7k04CTiu60fPMXIq+lfuhvoc=;
-        b=Q99lGnKko286gRNawr6rBHlOXPcalKTRosMQF7StKAGw+uTk2+tqMp1R7gLuSr3Vpe
-         xwJ/b5yQjijj1INZqrBTtM/8YQPD4VXmWlCCdcV6lHXePqj0CEQlDHSPVXe4tMZGIgkA
-         LpaWQyEqeivxGkxaFgG5Wl8WoUAn5gc0HiqKxV4ynRbXkPJ0TfukNMmIh1vsQ3rlgL4q
-         /OBXasQjwWGxS6jlElHvGRtVWX+3V7SG33wEFD5A6ZDlxGGeppXkPO0/JYpSo1qNJlvE
-         v0V4mSHEzL/lSH1TwNuzkEFoNx5cJhHVsab3T43edT22GDSdaF0+WNSg+8TahEHx44oY
-         Jtww==
-X-Gm-Message-State: AO0yUKWQaelAqeW03GTvhTKzAP+hAjosOcJ6D9WQ1QtpWq+YByWmMoRe
-	YQpXr5JVOcyHvKz2/bq40Wk1Py1YpvwxeIMuQSRY8Q==
-X-Google-Smtp-Source: AK7set9m65hE6SH2QGvq2r84DJCDhZbFOkrbfqc7apPWd8Ff2sJOWSt31BQ+X0Ytj/YBkgeChlldJQ==
-X-Received: by 2002:a17:906:6a29:b0:887:dea8:b029 with SMTP id qw41-20020a1709066a2900b00887dea8b029mr4914418ejc.1.1679163643562;
-        Sat, 18 Mar 2023 11:20:43 -0700 (PDT)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id h18-20020a170906855200b00921357fb28csm2389618ejy.123.2023.03.18.11.20.39
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 18 Mar 2023 11:20:40 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id z21so32251090edb.4
-        for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 11:20:39 -0700 (PDT)
-X-Received: by 2002:a50:ce54:0:b0:4fa:794a:c0cc with SMTP id
- k20-20020a50ce54000000b004fa794ac0ccmr3796617edj.2.1679163639042; Sat, 18 Mar
- 2023 11:20:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDD129B2
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 18:51:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679165496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=uLZonZPlSwS4Scw9WGg4FMxNyiNHAiqXLBD/KhgTEdg=;
+	b=HMF/opDVgHO/1Zg6qSUFAWo5CZRiCqpfvTJBV955c7FAI9xkEjratPd90WmL19Sv0wHmQf
+	uvCYbzkd0UiO8ttEZeu8CZyvZOGbQqFZ0SSpwBqjPgGqVUN26/dJfgSlB3J0qUKAWXll0w
+	MjENFwKz0Nw5zESTLHywh1bzGs6/QiQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-218-M-0WE9K0Pn2uY4IuGFqcVw-1; Sat, 18 Mar 2023 14:51:34 -0400
+X-MC-Unique: M-0WE9K0Pn2uY4IuGFqcVw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE98D185A78F
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 18:51:33 +0000 (UTC)
+Received: from [172.64.0.101] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id ADB8DC15BA0;
+	Sat, 18 Mar 2023 18:51:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (96/381 SKIPPED): Test report for master
+ (6.3.0-rc2, mainline.kernel.org-clang, 478a351c)
+Date: Sat, 18 Mar 2023 18:51:33 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <9d0ef355-f430-e8e2-c844-b34cfcf60d88@kernel.dk>
- <CAHk-=wgcYvgJ5YWJPy6PA-B_yRtPfpw01fmCqtvqGN9jouc_8w@mail.gmail.com>
- <CAKwvOdmJkQUe6bhvQXHo0XOncdso0Kk26n8vdJZufm4Ku72tng@mail.gmail.com>
- <6414c470.a70a0220.6b62f.3f02@mx.google.com> <CAHk-=wi5yk0+NeqB34fRC-Zvt+8QZVPTiny9MvCxxjg+ZqDhKg@mail.gmail.com>
- <CANiq72m46OzQPtZbS_VaQGgGknFV-hKvhBw8sVZx9ef=AzupTQ@mail.gmail.com> <CAHk-=wgTSdKYbmB1JYM5vmHMcD9J9UZr0mn7BOYM_LudrP+Xvw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgTSdKYbmB1JYM5vmHMcD9J9UZr0mn7BOYM_LudrP+Xvw@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 18 Mar 2023 11:20:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiYUWaa676WN5hoyarKeKFDq3nfPg0haRRXeirtHyMg=A@mail.gmail.com>
-Message-ID: <CAHk-=wiYUWaa676WN5hoyarKeKFDq3nfPg0haRRXeirtHyMg=A@mail.gmail.com>
-Subject: Re: [GIT PULL] Block fixes for 6.3-rc3
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	"HeungJun, Kim" <riverful.kim@samsung.com>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Mauro Carvalho Chehab <mchehab@redhat.com>
-Cc: Kees Cook <keescook@chromium.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Jens Axboe <axboe@kernel.dk>, Nathan Chancellor <nathan@kernel.org>, 
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <47500.123031814513400307@us-mta-218.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 17, 2023 at 1:51=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I do think that on the kernel side, the fix is to just change
->
->         } while (type++ !=3D SIZE_DEFAULT_FFMT);
->
-> to
->
->         } while (++type !=3D SIZE_DEFAULT_FFMT);
+Hi, we tested your kernel and here are the results:
 
-Ok, I ended up deciding to just commit that minimal change, even
-though it might have been better to just make it a normal for-loop
-(and use M5MOLS_RESTYPE_MAX instead as the end condition).
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-So maybe it would be more legible (and less likely to have had that
-off-by-one) if the loop had been
+Tested-by: CKI Project <cki-project@redhat.com>
 
-        for (type =3D 0; type < M5MOLS_RESTYPE_MAX; type++)
+Kernel information:
+    Commit message: Merge tag 'net-6.3-rc3' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
 
-instead. But I'll leave that decision to the driver authors (now cc'd).
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/79606
 
-For people brought in late, this is now commit efbcbb12ee99 ("media:
-m5mols: fix off-by-one loop termination error") with link to the
-discussion here
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
-    https://lore.kernel.org/linux-block/CAHk-=3DwgTSdKYbmB1JYM5vmHMcD9J9UZr=
-0mn7BOYM_LudrP+Xvw@mail.gmail.com/
 
-so you can see the history of it (me having initially blamed UBSAN,
-but the problem can be triggered at least in theory without it).
 
-                  Linus
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
