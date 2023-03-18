@@ -1,43 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DDCC63B;
-	Sat, 18 Mar 2023 03:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A09063B;
+	Sat, 18 Mar 2023 04:14:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679111614; x=1710647614;
+  t=1679112873; x=1710648873;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=S2f/TBK9TNbpy6yhoy/gvDHeEir8NTdazt/q4DUsQ7c=;
-  b=AGvVJVrU0SGtj/elzWz48aX5n7Md/N0nMC5a5Umv+xdppjPZ4oCet+Hy
-   xjG3/hE6nd0Ng39gFV3megvW6zdMpkMWcQxlV5JhnU40f61hwSCEcWUAo
-   tzto8zP0m/VYkdyx8g23Qe+qRKKZmQjerUEL79H3NzX6Vk5ouGq0qgh/9
-   7b9kvODbQzXSC4wByjOybbi8QJbHPPlxY69gdaSJx751U3Lfkr5ay/5Jy
-   K8eFoUh+7TIobtP5QowmV+ZEiN2U7rdsMQiC1ZGgcbe+aAVIT8SgBWaHj
-   AOXJc3mYfwEkHjYMAvAhfYTFL9lFH69XH74msCxhAx+UZHiivXVgyrWSs
+  bh=IFlAq8Bm7jSTAhisY9z4dAaTURY3BzOBCWHUFCTA90A=;
+  b=QHH19Yl6yMQHbA3QOAEh+krkgOOThcpTZAptf/1h4PFtTPcUMBymb7GE
+   oVjPFjM843SybuhRaHWMBGB7Ap0TcQpujcX4baLGNmGx30L7vhGeGgajl
+   i27AJoOmzPnDrhot5J6Tm2D1afRaAT7tHDz5en7ebmVAdhbiK6P50Vptn
+   G2waUgPgAo0T58lGRb8+ruz2oyls2HBxGPaJ+sstrh+TBQ6C8HX4w+nrO
+   16W47kseN6MDQde79byGEAE0czf3NLjKvpwk5m9VRylGNMXGQ/SSN8fuD
+   +GuZ9jLJnX4xPsC6LUVZkcIYbQjzXSbcCxMgWFhT7Z7NNiukteoWarfed
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="338425477"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="322254101"
 X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="338425477"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 20:53:33 -0700
+   d="scan'208";a="322254101"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 21:14:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="657787206"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="749501624"
 X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="657787206"
+   d="scan'208";a="749501624"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 17 Mar 2023 20:53:31 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 17 Mar 2023 21:14:31 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pdNdK-0009nO-2N;
-	Sat, 18 Mar 2023 03:53:30 +0000
-Date: Sat, 18 Mar 2023 11:53:20 +0800
+	id 1pdNxf-0009ni-04;
+	Sat, 18 Mar 2023 04:14:31 +0000
+Date: Sat, 18 Mar 2023 12:13:48 +0800
 From: kernel test robot <lkp@intel.com>
 To: Luis Chamberlain <mcgrof@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [mcgrof:20230317-module-alloc-opts 27/31]
- kernel/module/main.c:2260:8: warning: variable 't' is used uninitialized
- whenever 'if' condition is true
-Message-ID: <202303181140.NLoSoXrr-lkp@intel.com>
+ kernel/module/main.c:2217:6: warning: variable 'ret' set but not used
+Message-ID: <202303181257.ykW5kzEI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +49,7 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230317-module-alloc-opts
 head:   68dfd11f7ebeb379312f4fc89c2792ce52d71ab4
 commit: 139e5ac36c4aa1e28a51bf98a7304d3040c6da6b [27/31] module: add stop-grap sanity check on module memcpy()
-config: x86_64-randconfig-r026-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181140.NLoSoXrr-lkp@intel.com/config)
+config: i386-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181257.ykW5kzEI-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -61,16 +60,16 @@ reproduce (this is a W=1 build):
         git checkout 139e5ac36c4aa1e28a51bf98a7304d3040c6da6b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/module/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/module/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181140.NLoSoXrr-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181257.ykW5kzEI-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   kernel/module/main.c:2217:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+>> kernel/module/main.c:2217:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
            int ret = -ENOMEM;
                ^
 >> kernel/module/main.c:2260:8: warning: variable 't' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
@@ -88,7 +87,7 @@ All warnings (new ones prefixed by >>):
    2 warnings generated.
 
 
-vim +2260 kernel/module/main.c
+vim +/ret +2217 kernel/module/main.c
 
   2211	
   2212	static int move_module(struct module *mod, struct load_info *info)
@@ -96,7 +95,7 @@ vim +2260 kernel/module/main.c
   2214		int i;
   2215		void *ptr;
   2216		enum mod_mem_type t;
-  2217		int ret = -ENOMEM;
+> 2217		int ret = -ENOMEM;
   2218	
   2219		for_each_mod_mem_type(type) {
   2220			if (!mod->mem[type].size) {
