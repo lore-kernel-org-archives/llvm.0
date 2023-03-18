@@ -1,106 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C19367
-	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 00:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679099015;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Ro4nhrJ5Zq0SySOEipia8lU7rnzpGPE36NY88ytAvP4=;
-	b=Yns/lgmbRufLKDfhD89R8oXs9ALZds5PM0ijLsGmevkwQD7tSBRXZ0f7tC+zLm0odYWOWn
-	pv0lVpInYwgsWwwbZyvjsbgsEdHseZZjGV4AbXHUHMqn42C/6XzEB3X/cQWNG5SJAm8vvg
-	7hMWXWouOzcbgGHegriY/XkIl3JIkvo=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-627-wXUdiSoMO3SZGGirpmQ6eQ-1; Fri, 17 Mar 2023 20:23:33 -0400
-X-MC-Unique: wXUdiSoMO3SZGGirpmQ6eQ-1
-Received: by mail-qv1-f71.google.com with SMTP id g6-20020ad45426000000b005a33510e95aso3599193qvt.16
-        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 17:23:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679099012;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ro4nhrJ5Zq0SySOEipia8lU7rnzpGPE36NY88ytAvP4=;
-        b=GyXkb0D0QiHoo/jgkAkp2la3CknDoznFcbURUVtwCCOftpoS6njL2LjUqFn6Izw4D+
-         mzCcnMP+IQ+yuoTp6lY0r4ZUI3lqN2AgtozQk4+auexksgao2gENv2jtS1hqihLqhqbv
-         NW5vMQ9M9qsng8ZNAHIuIERILLhex5BFXxbsUJofmNoSxG4Ciq9OdQXsbA8YG6FEIxKb
-         w6FBLDz8Mq90Fwg2KkFQd9TEGPIs13QB3DmSMwrf1UbMNRAwFKv8eJB/GilentenPg5Y
-         Dv9ZziNN1YYJElQHw01Cocsrl9XeWSr81FvjXSHIk4Yrjmy/l5aS4ZDpl099Eimbf/5l
-         bVlg==
-X-Gm-Message-State: AO0yUKWn6oLo8k+tmYg3y+FwqFUiTeO658E/zPN/E7vO+Q17ftTr7RfF
-	Dj0hEDjqd8s+GoX6vuY4g3uVWo+92gjloGm6ybiVQqF8DVQrt/5lbCAcwf14d7X4EZIkAZRiUS7
-	WS6fWjV5L0XmVlw==
-X-Received: by 2002:a05:6214:e62:b0:56e:9da4:831c with SMTP id jz2-20020a0562140e6200b0056e9da4831cmr39485350qvb.46.1679099012683;
-        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/fL421Kfl3tq1uEh7Q2OUg4WIgPPxO43SFyqSNmCb+PH/F1uG0zi5qpejfWxe5clSOu4VLzA==
-X-Received: by 2002:a05:6214:e62:b0:56e:9da4:831c with SMTP id jz2-20020a0562140e6200b0056e9da4831cmr39485337qvb.46.1679099012479;
-        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id a72-20020ae9e84b000000b00745a3b63569sm2623217qkg.107.2023.03.17.17.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: andrzej.hajda@intel.com,
-	neil.armstrong@linaro.org,
-	rfoss@kernel.org,
-	Laurent.pinchart@ideasonboard.com,
-	jonas@kwiboo.se,
-	jernej.skrabec@gmail.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] gpu: drm: bridge: sii9234: remove unused bridge_to_sii9234 function
-Date: Fri, 17 Mar 2023 20:23:21 -0400
-Message-Id: <20230318002321.1675181-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DDCC63B;
+	Sat, 18 Mar 2023 03:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679111614; x=1710647614;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S2f/TBK9TNbpy6yhoy/gvDHeEir8NTdazt/q4DUsQ7c=;
+  b=AGvVJVrU0SGtj/elzWz48aX5n7Md/N0nMC5a5Umv+xdppjPZ4oCet+Hy
+   xjG3/hE6nd0Ng39gFV3megvW6zdMpkMWcQxlV5JhnU40f61hwSCEcWUAo
+   tzto8zP0m/VYkdyx8g23Qe+qRKKZmQjerUEL79H3NzX6Vk5ouGq0qgh/9
+   7b9kvODbQzXSC4wByjOybbi8QJbHPPlxY69gdaSJx751U3Lfkr5ay/5Jy
+   K8eFoUh+7TIobtP5QowmV+ZEiN2U7rdsMQiC1ZGgcbe+aAVIT8SgBWaHj
+   AOXJc3mYfwEkHjYMAvAhfYTFL9lFH69XH74msCxhAx+UZHiivXVgyrWSs
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="338425477"
+X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
+   d="scan'208";a="338425477"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 20:53:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="657787206"
+X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
+   d="scan'208";a="657787206"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 17 Mar 2023 20:53:31 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pdNdK-0009nO-2N;
+	Sat, 18 Mar 2023 03:53:30 +0000
+Date: Sat, 18 Mar 2023 11:53:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mcgrof:20230317-module-alloc-opts 27/31]
+ kernel/module/main.c:2260:8: warning: variable 't' is used uninitialized
+ whenever 'if' condition is true
+Message-ID: <202303181140.NLoSoXrr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-clang with W=1 reports
-drivers/gpu/drm/bridge/sii9234.c:870:31: error:
-  unused function 'bridge_to_sii9234' [-Werror,-Wunused-function]
-static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
-                              ^
-This static function is not used, so remove it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230317-module-alloc-opts
+head:   68dfd11f7ebeb379312f4fc89c2792ce52d71ab4
+commit: 139e5ac36c4aa1e28a51bf98a7304d3040c6da6b [27/31] module: add stop-grap sanity check on module memcpy()
+config: x86_64-randconfig-r026-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181140.NLoSoXrr-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=139e5ac36c4aa1e28a51bf98a7304d3040c6da6b
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof 20230317-module-alloc-opts
+        git checkout 139e5ac36c4aa1e28a51bf98a7304d3040c6da6b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/module/
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/bridge/sii9234.c | 5 -----
- 1 file changed, 5 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181140.NLoSoXrr-lkp@intel.com/
 
-diff --git a/drivers/gpu/drm/bridge/sii9234.c b/drivers/gpu/drm/bridge/sii9234.c
-index 099b510ff285..2d17f227867b 100644
---- a/drivers/gpu/drm/bridge/sii9234.c
-+++ b/drivers/gpu/drm/bridge/sii9234.c
-@@ -867,11 +867,6 @@ static int sii9234_init_resources(struct sii9234 *ctx,
- 	return 0;
- }
- 
--static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
--{
--	return container_of(bridge, struct sii9234, bridge);
--}
--
- static enum drm_mode_status sii9234_mode_valid(struct drm_bridge *bridge,
- 					 const struct drm_display_info *info,
- 					 const struct drm_display_mode *mode)
+All warnings (new ones prefixed by >>):
+
+   kernel/module/main.c:2217:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+           int ret = -ENOMEM;
+               ^
+>> kernel/module/main.c:2260:8: warning: variable 't' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                           if (i == info->index.mod &&
+                               ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/module/main.c:2280:7: note: uninitialized use occurs here
+           for (t--; t >= 0; t--)
+                ^
+   kernel/module/main.c:2260:4: note: remove the 'if' if its condition is always false
+                           if (i == info->index.mod &&
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/module/main.c:2216:2: note: variable 't' is declared here
+           enum mod_mem_type t;
+           ^
+   2 warnings generated.
+
+
+vim +2260 kernel/module/main.c
+
+  2211	
+  2212	static int move_module(struct module *mod, struct load_info *info)
+  2213	{
+  2214		int i;
+  2215		void *ptr;
+  2216		enum mod_mem_type t;
+  2217		int ret = -ENOMEM;
+  2218	
+  2219		for_each_mod_mem_type(type) {
+  2220			if (!mod->mem[type].size) {
+  2221				mod->mem[type].base = NULL;
+  2222				continue;
+  2223			}
+  2224			mod->mem[type].size = PAGE_ALIGN(mod->mem[type].size);
+  2225			ptr = module_memory_alloc(mod->mem[type].size, type);
+  2226	
+  2227			/*
+  2228			 * The pointer to this block is stored in the module structure
+  2229			 * which is inside the block. Just mark it as not being a
+  2230			 * leak.
+  2231			 */
+  2232			kmemleak_ignore(ptr);
+  2233			if (!ptr) {
+  2234				t = type;
+  2235				goto out_enomem;
+  2236			}
+  2237			memset(ptr, 0, mod->mem[type].size);
+  2238			mod->mem[type].base = ptr;
+  2239		}
+  2240	
+  2241		/* Transfer each section which specifies SHF_ALLOC */
+  2242		pr_debug("final section addresses:\n");
+  2243		for (i = 0; i < info->hdr->e_shnum; i++) {
+  2244			void *dest;
+  2245			Elf_Shdr *shdr = &info->sechdrs[i];
+  2246			enum mod_mem_type type = shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
+  2247	
+  2248			if (!(shdr->sh_flags & SHF_ALLOC))
+  2249				continue;
+  2250	
+  2251			dest = mod->mem[type].base + (shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK);
+  2252	
+  2253			if (shdr->sh_type != SHT_NOBITS) {
+  2254				/*
+  2255				 * Our ELF checker already validated this, but let's
+  2256				 * be pedantic and make the goal clearer. We actually
+  2257				 * end up copying over all modifications made to the
+  2258				 * userspace copy of the entire struct module.
+  2259				 */
+> 2260				if (i == info->index.mod &&
+  2261				   (WARN_ON_ONCE(shdr->sh_size != sizeof(struct module)))) {
+  2262					ret = -ENOEXEC;
+  2263					goto out_enomem;
+  2264				}
+  2265				memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
+  2266			}
+  2267			/*
+  2268			 * Update the userspace copy's ELF section address to point to
+  2269			 * our newly allocated memory as a pure convenience so that
+  2270			 * users of info can keep taking advantage and using the newly
+  2271			 * minted official memory area.
+  2272			 */
+  2273			shdr->sh_addr = (unsigned long)dest;
+  2274			pr_debug("\t0x%lx %s\n",
+  2275				 (long)shdr->sh_addr, info->secstrings + shdr->sh_name);
+  2276		}
+  2277	
+  2278		return 0;
+  2279	out_enomem:
+  2280		for (t--; t >= 0; t--)
+  2281			module_memory_free(mod->mem[t].base, t);
+  2282		return -ENOMEM;
+  2283	}
+  2284	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
