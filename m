@@ -1,218 +1,106 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2BA367;
-	Sat, 18 Mar 2023 00:06:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679097987; x=1710633987;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XhTjIvpHzw0sWxBaHVQ8rD9/hEwzpTj35ai0SwL6A2s=;
-  b=SxibE9iD/TLixVTIxe+L2a9rG3dOBu8Eun0ZkSOgfhvNDHyq2U41SjF8
-   FInAd9BLG9KD1J128OS/Q+q0E7kYgvdZ+OI00kCBxHv9xcMLkFSVfR85+
-   50X5VkLerTIgVlH7hSSq70ElOT0i08PdG1uZSpHnUVLBN5G8nDSC5JZlq
-   /4KcLQRHr38smLevrcanenKqSLGL9ceafL+bi+EaRzNxKj83MjNxM6rhr
-   sy6Ej22lEvNr64Vj64sk+wXQzfnAhZux5nTl1MzfWubtDM1wHpaFywpzU
-   yEjVz1p6xbUXKdslhxioC5mGDEB/kpAEndsdik+BEM6GfPtWRAnZ/ZWpS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="339926930"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="339926930"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 17:06:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="744734166"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="744734166"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Mar 2023 17:06:24 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pdK5Y-0009fw-04;
-	Sat, 18 Mar 2023 00:06:24 +0000
-Date: Sat, 18 Mar 2023 08:06:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Liam Girdwood <liam.r.girdwood@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-	"Ap, Kamal" <kamal.ap@intel.corp-partner.google.com>,
-	Ben Zhang <benzh@google.com>
-Subject: [jsarha:topic/chromeos-4.19-s0ix 3632/9999]
- sound/soc/sof/sof-acpi-dev.c:283:36: warning: unused variable
- 'sof_acpi_match'
-Message-ID: <202303180831.InjZIMzs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C19367
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 00:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679099015;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ro4nhrJ5Zq0SySOEipia8lU7rnzpGPE36NY88ytAvP4=;
+	b=Yns/lgmbRufLKDfhD89R8oXs9ALZds5PM0ijLsGmevkwQD7tSBRXZ0f7tC+zLm0odYWOWn
+	pv0lVpInYwgsWwwbZyvjsbgsEdHseZZjGV4AbXHUHMqn42C/6XzEB3X/cQWNG5SJAm8vvg
+	7hMWXWouOzcbgGHegriY/XkIl3JIkvo=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-627-wXUdiSoMO3SZGGirpmQ6eQ-1; Fri, 17 Mar 2023 20:23:33 -0400
+X-MC-Unique: wXUdiSoMO3SZGGirpmQ6eQ-1
+Received: by mail-qv1-f71.google.com with SMTP id g6-20020ad45426000000b005a33510e95aso3599193qvt.16
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 17:23:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679099012;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ro4nhrJ5Zq0SySOEipia8lU7rnzpGPE36NY88ytAvP4=;
+        b=GyXkb0D0QiHoo/jgkAkp2la3CknDoznFcbURUVtwCCOftpoS6njL2LjUqFn6Izw4D+
+         mzCcnMP+IQ+yuoTp6lY0r4ZUI3lqN2AgtozQk4+auexksgao2gENv2jtS1hqihLqhqbv
+         NW5vMQ9M9qsng8ZNAHIuIERILLhex5BFXxbsUJofmNoSxG4Ciq9OdQXsbA8YG6FEIxKb
+         w6FBLDz8Mq90Fwg2KkFQd9TEGPIs13QB3DmSMwrf1UbMNRAwFKv8eJB/GilentenPg5Y
+         Dv9ZziNN1YYJElQHw01Cocsrl9XeWSr81FvjXSHIk4Yrjmy/l5aS4ZDpl099Eimbf/5l
+         bVlg==
+X-Gm-Message-State: AO0yUKWn6oLo8k+tmYg3y+FwqFUiTeO658E/zPN/E7vO+Q17ftTr7RfF
+	Dj0hEDjqd8s+GoX6vuY4g3uVWo+92gjloGm6ybiVQqF8DVQrt/5lbCAcwf14d7X4EZIkAZRiUS7
+	WS6fWjV5L0XmVlw==
+X-Received: by 2002:a05:6214:e62:b0:56e:9da4:831c with SMTP id jz2-20020a0562140e6200b0056e9da4831cmr39485350qvb.46.1679099012683;
+        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/fL421Kfl3tq1uEh7Q2OUg4WIgPPxO43SFyqSNmCb+PH/F1uG0zi5qpejfWxe5clSOu4VLzA==
+X-Received: by 2002:a05:6214:e62:b0:56e:9da4:831c with SMTP id jz2-20020a0562140e6200b0056e9da4831cmr39485337qvb.46.1679099012479;
+        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id a72-20020ae9e84b000000b00745a3b63569sm2623217qkg.107.2023.03.17.17.23.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 17:23:32 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: andrzej.hajda@intel.com,
+	neil.armstrong@linaro.org,
+	rfoss@kernel.org,
+	Laurent.pinchart@ideasonboard.com,
+	jonas@kwiboo.se,
+	jernej.skrabec@gmail.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] gpu: drm: bridge: sii9234: remove unused bridge_to_sii9234 function
+Date: Fri, 17 Mar 2023 20:23:21 -0400
+Message-Id: <20230318002321.1675181-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Liam,
+clang with W=1 reports
+drivers/gpu/drm/bridge/sii9234.c:870:31: error:
+  unused function 'bridge_to_sii9234' [-Werror,-Wunused-function]
+static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
+                              ^
+This static function is not used, so remove it.
 
-First bad commit (maybe != root cause):
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/bridge/sii9234.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: f05fac60091358fb9805b6a6c6dc38a995361910 [3632/9999] FROMLIST: ASoC: SOF: Add Build support for SOF core and Intel drivers
-config: mips-randconfig-r006-20230317 (https://download.01.org/0day-ci/archive/20230318/202303180831.InjZIMzs-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/jsarha/linux/commit/f05fac60091358fb9805b6a6c6dc38a995361910
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
-        git checkout f05fac60091358fb9805b6a6c6dc38a995361910
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash M=sound/soc/sof
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303180831.InjZIMzs-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
-                                                                        ^
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   In file included from sound/soc/sof/sof-acpi-dev.c:11:
-   In file included from include/linux/acpi.h:26:
-   In file included from include/linux/resource_ext.h:19:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:88:
-   In file included from arch/mips/include/asm/spinlock.h:13:
-   In file included from ./arch/mips/include/generated/asm/qrwlock.h:1:
-   include/asm-generic/qrwlock.h:75:36: warning: comparison of integers of different signs: 'int' and 'u32' (aka 'unsigned int') [-Wsign-compare]
-                                                cnts, cnts | _QW_LOCKED) == cnts);
-                                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from sound/soc/sof/sof-acpi-dev.c:11:
-   In file included from include/linux/acpi.h:26:
-   In file included from include/linux/resource_ext.h:19:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:88:
-   In file included from arch/mips/include/asm/spinlock.h:13:
-   In file included from ./arch/mips/include/generated/asm/qrwlock.h:1:
-   include/asm-generic/qrwlock.h:75:36: warning: comparison of integers of different signs: 'int' and 'u32' (aka 'unsigned int') [-Wsign-compare]
-                                                cnts, cnts | _QW_LOCKED) == cnts);
-                                                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
-   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   In file included from sound/soc/sof/sof-acpi-dev.c:11:
-   In file included from include/linux/acpi.h:26:
-   In file included from include/linux/resource_ext.h:19:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   include/linux/mmzone.h:984:44: warning: comparison of integers of different signs: 'int' and 'enum zone_type' [-Wsign-compare]
-           if (likely(!nodes && zonelist_zone_idx(z) <= highest_zoneidx))
-                                ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
-   include/linux/compiler.h:45:39: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                             ^
-   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
-                           ______r = __builtin_expect(!!(x), expect);      \
-                                                         ^
-   In file included from sound/soc/sof/sof-acpi-dev.c:11:
-   In file included from include/linux/acpi.h:26:
-   In file included from include/linux/resource_ext.h:19:
-   In file included from include/linux/slab.h:15:
-   In file included from include/linux/gfp.h:6:
-   include/linux/mmzone.h:984:44: warning: comparison of integers of different signs: 'int' and 'enum zone_type' [-Wsign-compare]
-           if (likely(!nodes && zonelist_zone_idx(z) <= highest_zoneidx))
-                                ~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
-   include/linux/compiler.h:45:66: note: expanded from macro 'likely'
-   #  define likely(x)     (__branch_check__(x, 1, __builtin_constant_p(x)))
-                                                                        ^
-   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
-                                                expect, is_constant);      \
-                                                        ^~~~~~~~~~~
-   In file included from sound/soc/sof/sof-acpi-dev.c:17:
-   In file included from include/sound/sof.h:14:
-   In file included from include/linux/pci.h:1346:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:26:
-   In file included from include/linux/page_ref.h:7:
-   include/linux/page-flags.h:162:21: warning: comparison of integers of different signs: 'const unsigned long' and 'long' [-Wsign-compare]
-           return page->flags == PAGE_POISON_PATTERN;
-                  ~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~
-   In file included from sound/soc/sof/sof-acpi-dev.c:17:
-   In file included from include/sound/sof.h:14:
-   In file included from include/linux/pci.h:1346:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:1157:
-   include/linux/vmstat.h:221:2: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
-           for_each_online_cpu(cpu)
-           ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cpumask.h:778:36: note: expanded from macro 'for_each_online_cpu'
-   #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
-                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/cpumask.h:243:9: note: expanded from macro 'for_each_cpu'
-                   (cpu) < nr_cpu_ids;)
-                    ~~~  ^ ~~~~~~~~~~
-   In file included from sound/soc/sof/sof-acpi-dev.c:17:
-   In file included from include/sound/sof.h:15:
-   In file included from include/sound/soc.h:23:
-   include/sound/pcm.h:1412:17: warning: comparison of integers of different signs: 'int' and 'unsigned int' [-Wsign-compare]
-                   if (s->number == idx)
-                       ~~~~~~~~~ ^  ~~~
->> sound/soc/sof/sof-acpi-dev.c:283:36: warning: unused variable 'sof_acpi_match' [-Wunused-const-variable]
-   static const struct acpi_device_id sof_acpi_match[] = {
-                                      ^
-   12 warnings generated.
-   Assembler messages:
-   Fatal error: invalid -march= option: `mips32'
-   clang: error: assembler command failed with exit code 1 (use -v to see invocation)
-
-
-vim +/sof_acpi_match +283 sound/soc/sof/sof-acpi-dev.c
-
-7ded5a51b17461 Liam Girdwood 2019-02-13  282  
-7ded5a51b17461 Liam Girdwood 2019-02-13 @283  static const struct acpi_device_id sof_acpi_match[] = {
-7ded5a51b17461 Liam Girdwood 2019-02-13  284  #if IS_ENABLED(CONFIG_SND_SOC_SOF_HASWELL)
-7ded5a51b17461 Liam Girdwood 2019-02-13  285  	{ "INT33C8", (unsigned long)&sof_acpi_haswell_desc },
-7ded5a51b17461 Liam Girdwood 2019-02-13  286  #endif
-7ded5a51b17461 Liam Girdwood 2019-02-13  287  #if IS_ENABLED(CONFIG_SND_SOC_SOF_BROADWELL)
-7ded5a51b17461 Liam Girdwood 2019-02-13  288  	{ "INT3438", (unsigned long)&sof_acpi_broadwell_desc },
-7ded5a51b17461 Liam Girdwood 2019-02-13  289  #endif
-7ded5a51b17461 Liam Girdwood 2019-02-13  290  #if IS_ENABLED(CONFIG_SND_SOC_SOF_BAYTRAIL)
-7ded5a51b17461 Liam Girdwood 2019-02-13  291  	{ "80860F28", (unsigned long)&sof_acpi_baytrail_desc },
-7ded5a51b17461 Liam Girdwood 2019-02-13  292  	{ "808622A8", (unsigned long)&sof_acpi_cherrytrail_desc },
-7ded5a51b17461 Liam Girdwood 2019-02-13  293  #endif
-7ded5a51b17461 Liam Girdwood 2019-02-13  294  	{ }
-7ded5a51b17461 Liam Girdwood 2019-02-13  295  };
-7ded5a51b17461 Liam Girdwood 2019-02-13  296  MODULE_DEVICE_TABLE(acpi, sof_acpi_match);
-7ded5a51b17461 Liam Girdwood 2019-02-13  297  
-
-:::::: The code at line 283 was first introduced by commit
-:::::: 7ded5a51b17461f62a4e0e3bf0090980a5292f2f FROMLIST: ASoC: SOF: Add ACPI device support
-
-:::::: TO: Liam Girdwood <liam.r.girdwood@linux.intel.com>
-:::::: CC: chrome-bot <chrome-bot@chromium.org>
-
+diff --git a/drivers/gpu/drm/bridge/sii9234.c b/drivers/gpu/drm/bridge/sii9234.c
+index 099b510ff285..2d17f227867b 100644
+--- a/drivers/gpu/drm/bridge/sii9234.c
++++ b/drivers/gpu/drm/bridge/sii9234.c
+@@ -867,11 +867,6 @@ static int sii9234_init_resources(struct sii9234 *ctx,
+ 	return 0;
+ }
+ 
+-static inline struct sii9234 *bridge_to_sii9234(struct drm_bridge *bridge)
+-{
+-	return container_of(bridge, struct sii9234, bridge);
+-}
+-
+ static enum drm_mode_status sii9234_mode_valid(struct drm_bridge *bridge,
+ 					 const struct drm_display_info *info,
+ 					 const struct drm_display_mode *mode)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
