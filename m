@@ -1,129 +1,205 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AC07F8
-	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 08:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679126498;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yFjM91Y9FXGjRDVtK/zNSH3G0o4i4uMKc9Eu0V2UNFs=;
-	b=Qdtv2Yl/RDmpBqzNjX5C1bxvE9ix3JBtnSitlvcevdXKtth/VUpoWGjvfwg77jkG/MsCUB
-	vpBfes97KC7mkzYiiia1auDar5Q0kpo0PkNhR6cMyBBsLat6b35tnMHIjVVJmsEPdeETVi
-	Jj0tV/2peUlD30mGG5W6aEDMb47n7uk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-157-Uf4m3oHCPAGGKMZcbWujpQ-1; Sat, 18 Mar 2023 04:01:37 -0400
-X-MC-Unique: Uf4m3oHCPAGGKMZcbWujpQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C0A0B3C1023C
-	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 08:01:36 +0000 (UTC)
-Received: from [172.64.0.101] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id ACFF5492B00;
-	Sat, 18 Mar 2023 08:01:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (102/381 SKIPPED): Test report for master
- (6.3.0-rc2, mainline.kernel.org-clang, ba9c7791)
-Date: Sat, 18 Mar 2023 08:01:36 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7695CA4D;
+	Sat, 18 Mar 2023 09:12:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679130762; x=1710666762;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rRiuetUfFAqBEb1lUHnFknwi+Y5KlZ2doe/5hkfsZiI=;
+  b=BM4q0QkL0nqBpDFme6i//YgQunNNBUOryRTol1d0mxlsaGSzQ07/ORJl
+   Gzq4auuTowQGyrOSD/75M4l9gvaNh7hTfIUIRIGtYs4EbNVM/Z9BKxyTd
+   KYnU14K4Mo98BxuP8BHZJXHu1pfucG1BBcNyx1Y3jKgtXsA8Jgt7C5Dzc
+   ycRUXR+HHKYjCz3vwG5sIfYf2tUg1bzF8PAp0HdaTq7zsX10TGLccOBcb
+   cjOYso+AwR1khLx/J2wPKZYziuhyyFMpp3zbEIrhr0G5xIwt0GuW3+YaD
+   n/Sr+75FAkoVh1BDglAowpbrRswaEc062WshBAA6ovYYXPl1Fk1dEDsfc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="366127465"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="366127465"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 02:12:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="630554556"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="630554556"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 18 Mar 2023 02:12:40 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pdScB-0009xy-2h;
+	Sat, 18 Mar 2023 09:12:39 +0000
+Date: Sat, 18 Mar 2023 17:12:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ben Gardon <bgardon@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sean Christopherson <seanjc@google.com>
+Subject: [sean-jc:x86/formalize_shadow_mmu 33/39]
+ arch/x86/kvm/mmu/shadow_mmu.c:3316:6: warning: no previous prototype for
+ function 'slot_rmap_write_protect'
+Message-ID: <202303181726.MCWgSIxq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <59533.123031804013700419@us-mta-157.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Ben,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://github.com/sean-jc/linux x86/formalize_shadow_mmu
+head:   dd395c7174581183cd66020ac5a784bdf2e79cd1
+commit: 35f2a3e85c12f85d138998cc783213c29f73d1d4 [33/39] KVM: x86/MMU: Remove unneeded exports from shadow_mmu.c
+config: x86_64-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181726.MCWgSIxq-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/sean-jc/linux/commit/35f2a3e85c12f85d138998cc783213c29f73d1d4
+        git remote add sean-jc https://github.com/sean-jc/linux
+        git fetch --no-tags sean-jc x86/formalize_shadow_mmu
+        git checkout 35f2a3e85c12f85d138998cc783213c29f73d1d4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181726.MCWgSIxq-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   arch/x86/kvm/mmu/shadow_mmu.c:50:8: error: redefinition of 'pte_list_desc'
+   struct pte_list_desc {
+          ^
+   arch/x86/kvm/mmu/shadow_mmu.h:29:8: note: previous definition is here
+   struct pte_list_desc {
+          ^
+   arch/x86/kvm/mmu/shadow_mmu.c:535:9: error: no member named 'tail_count' in 'struct pte_list_desc'
+                   desc->tail_count = 0;
+                   ~~~~  ^
+   arch/x86/kvm/mmu/shadow_mmu.c:541:17: error: no member named 'tail_count' in 'struct pte_list_desc'
+                   count = desc->tail_count + desc->spte_count;
+                           ~~~~  ^
+   arch/x86/kvm/mmu/shadow_mmu.c:551:10: error: no member named 'tail_count' in 'struct pte_list_desc'
+                           desc->tail_count = count;
+                           ~~~~  ^
+   arch/x86/kvm/mmu/shadow_mmu.c:673:15: error: no member named 'tail_count' in 'struct pte_list_desc'
+           return desc->tail_count + desc->spte_count;
+                  ~~~~  ^
+   arch/x86/kvm/mmu/shadow_mmu.c:811:3: error: implicit declaration of function 'kvm_flush_remote_tlbs_sptep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   kvm_flush_remote_tlbs_sptep(kvm, sptep);
+                   ^
+   arch/x86/kvm/mmu/shadow_mmu.c:905:13: error: static declaration of 'kvm_zap_rmap' follows non-static declaration
+   static bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:41:6: note: previous declaration is here
+   bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:912:13: error: static declaration of 'kvm_set_pte_rmap' follows non-static declaration
+   static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:44:6: note: previous declaration is here
+   bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1025:29: error: static declaration of 'kvm_handle_gfn_range' follows non-static declaration
+   static __always_inline bool kvm_handle_gfn_range(struct kvm *kvm,
+                               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:51:6: note: previous declaration is here
+   bool kvm_handle_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1040:13: error: static declaration of 'kvm_age_rmap' follows non-static declaration
+   static bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:54:6: note: previous declaration is here
+   bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1054:13: error: static declaration of 'kvm_test_age_rmap' follows non-static declaration
+   static bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:57:6: note: previous declaration is here
+   bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1866:3: error: implicit declaration of function 'kvm_flush_remote_tlbs_sptep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   kvm_flush_remote_tlbs_sptep(vcpu->kvm, sptep);
+                   ^
+   In file included from arch/x86/kvm/mmu/shadow_mmu.c:2960:
+   arch/x86/kvm/mmu/paging_tmpl.h:883:5: warning: no previous prototype for function 'ept_sync_spte' [-Wmissing-prototypes]
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+       ^
+   arch/x86/kvm/mmu/paging_tmpl.h:54:22: note: expanded from macro 'FNAME'
+           #define FNAME(name) ept_##name
+                               ^
+   <scratch space>:266:1: note: expanded from here
+   ept_sync_spte
+   ^
+   arch/x86/kvm/mmu/paging_tmpl.h:883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+   ^
+   static 
+   In file included from arch/x86/kvm/mmu/shadow_mmu.c:2964:
+   arch/x86/kvm/mmu/paging_tmpl.h:883:5: warning: no previous prototype for function 'paging64_sync_spte' [-Wmissing-prototypes]
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+       ^
+   arch/x86/kvm/mmu/paging_tmpl.h:27:22: note: expanded from macro 'FNAME'
+           #define FNAME(name) paging##64_##name
+                               ^
+   <scratch space>:194:1: note: expanded from here
+   paging64_sync_spte
+   ^
+   arch/x86/kvm/mmu/paging_tmpl.h:883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+   ^
+   static 
+   In file included from arch/x86/kvm/mmu/shadow_mmu.c:2968:
+   arch/x86/kvm/mmu/paging_tmpl.h:883:5: warning: no previous prototype for function 'paging32_sync_spte' [-Wmissing-prototypes]
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+       ^
+   arch/x86/kvm/mmu/paging_tmpl.h:40:22: note: expanded from macro 'FNAME'
+           #define FNAME(name) paging##32_##name
+                               ^
+   <scratch space>:114:1: note: expanded from here
+   paging32_sync_spte
+   ^
+   arch/x86/kvm/mmu/paging_tmpl.h:883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+   ^
+   static 
+>> arch/x86/kvm/mmu/shadow_mmu.c:3316:6: warning: no previous prototype for function 'slot_rmap_write_protect' [-Wmissing-prototypes]
+   bool slot_rmap_write_protect(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:3316:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool slot_rmap_write_protect(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+   ^
+   static 
+   arch/x86/kvm/mmu/shadow_mmu.c:3525:5: error: implicit declaration of function 'kvm_flush_remote_tlbs_sptep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                                   kvm_flush_remote_tlbs_sptep(kvm, sptep);
+                                   ^
+   4 warnings and 13 errors generated.
 
 
-Kernel information:
-    Commit message: Merge branch 'turbostat' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/lenb/linux
+vim +/slot_rmap_write_protect +3316 arch/x86/kvm/mmu/shadow_mmu.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/79544
+6b83197856f485 Ben Gardon 2023-02-02  3315  
+6b83197856f485 Ben Gardon 2023-02-02 @3316  bool slot_rmap_write_protect(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+6b83197856f485 Ben Gardon 2023-02-02  3317  			     const struct kvm_memory_slot *slot)
+6b83197856f485 Ben Gardon 2023-02-02  3318  {
+6b83197856f485 Ben Gardon 2023-02-02  3319  	return rmap_write_protect(rmap_head, false);
+6b83197856f485 Ben Gardon 2023-02-02  3320  }
+6b83197856f485 Ben Gardon 2023-02-02  3321  
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7471964
+:::::: The code at line 3316 was first introduced by commit
+:::::: 6b83197856f485c960da6f39a01d447f0589aa1b KVM: x86/MMU: Move the Shadow MMU implementation to shadow_mmu.c
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
+:::::: TO: Ben Gardon <bgardon@google.com>
+:::::: CC: Sean Christopherson <seanjc@google.com>
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
