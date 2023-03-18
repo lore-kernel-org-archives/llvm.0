@@ -1,43 +1,48 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BC3622;
-	Sat, 18 Mar 2023 04:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE66622;
+	Sat, 18 Mar 2023 04:55:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679114675; x=1710650675;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gjVIBVpaZOkbvxWm4BtwGdkdgVMZfO1y/XWDWblAThI=;
-  b=Y6DL0T7ETK/8uDZbMO/q/mtx57CcPsoGkvKGYClVWaLDqteseS0561hC
-   IEV71yBEit/FoiNJBv29g5xD99zmgWnZqUhruhz2PmDOklaSGdxAgMu/O
-   RzM2eV1zRN/eNSs1S/HUu1be9CzNqMFc0A8f5GlAIuZ2K+PaGMsi8olzF
-   1AKRKvBmgnpWkFtgrYRoy6T6DZjaMu4Xck05o7mDeIXWA8QJymcfqXVfg
-   fthR9UjmfsMf5lPwxEiNYh8OAE1mZeImDVyyFy+Pz0bh1tr5aKwo0LHdg
-   JogjwWr/WEsvcLX8Fo7vtuRwXSn9qkXZJtP3UBy8dqKE+wSfn5A02ZotM
+  t=1679115335; x=1710651335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZoOoKSNk9CA4TE6nM8tAJ9g+6sxpEX6EcZivLYL6CX0=;
+  b=n2KJGfILdZO7L1ylb9lhKT/pRP75KmTjz5zdD9VdPgjCUq7WjhraYa+S
+   uSapD7rCZn3fPCWdQPPuyxDJn9sBPQMZTaQGrsQzoxk3cwnYPUX+7DE26
+   W2/YEL8IWZu74wZS1R2EfOUPHRALS+HpoeOCsJXes7sS++SbP35AYTL4w
+   skY86zNbMB+4CnNO6NTUSp3lOC0C78WhZpGiuD4p0RxJbicDaNSl+RE2p
+   0ACphd/Zk0V+5S8DadOYVZADAsm3ctzbFoNjCYAQ04xRKI9v9vo+6bgCu
+   Zyx87mEilynnpfWIIdPQu6NV4P4LqNy+DJHcRDNq486AzdpVVN1uGKky0
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="338427923"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="338427923"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 21:44:34 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="335903280"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="335903280"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 21:55:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="712988387"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="712988387"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="854696000"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="854696000"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Mar 2023 21:44:32 -0700
+  by orsmga005.jf.intel.com with ESMTP; 17 Mar 2023 21:55:32 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pdOQh-0009oI-1w;
-	Sat, 18 Mar 2023 04:44:31 +0000
-Date: Sat, 18 Mar 2023 12:44:27 +0800
+	id 1pdObL-0009oY-2P;
+	Sat, 18 Mar 2023 04:55:31 +0000
+Date: Sat, 18 Mar 2023 12:54:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mcgrof:20230317-module-alloc-opts 31/31]
- kernel/module/main.c:2673:6: warning: no previous prototype for function
- 'module_autoload_proceed'
-Message-ID: <202303181235.SaEGYllF-lkp@intel.com>
+To: Bogdan Ionescu <bogdan.ionescu.work@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Krzysztof Kozlowski <krzk@kernel.org>, linux-leds@vger.kernel.or,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bogdan Ionescu <bogdan.ionescu.work@gmail.com>
+Subject: Re: [PATCH 2/2] leds: Add support for rohm,bd65b60 led driver
+Message-ID: <202303181228.ZP7Ig92k-lkp@intel.com>
+References: <20230308201451.11629-2-bogdan.ionescu.work@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,76 +51,135 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230308201451.11629-2-bogdan.ionescu.work@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230317-module-alloc-opts
-head:   68dfd11f7ebeb379312f4fc89c2792ce52d71ab4
-commit: 68dfd11f7ebeb379312f4fc89c2792ce52d71ab4 [31/31] module: add a sanity check prior to allowing kernel module auto-loading
-config: x86_64-randconfig-r026-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181235.SaEGYllF-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Bogdan,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on lee-leds/for-leds-next]
+[also build test WARNING on robh/for-next pavel-leds/for-next linus/master v6.3-rc2 next-20230317]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bogdan-Ionescu/leds-Add-support-for-rohm-bd65b60-led-driver/20230309-041730
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+patch link:    https://lore.kernel.org/r/20230308201451.11629-2-bogdan.ionescu.work%40gmail.com
+patch subject: [PATCH 2/2] leds: Add support for rohm,bd65b60 led driver
+config: s390-randconfig-r003-20230318 (https://download.01.org/0day-ci/archive/20230318/202303181228.ZP7Ig92k-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=68dfd11f7ebeb379312f4fc89c2792ce52d71ab4
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20230317-module-alloc-opts
-        git checkout 68dfd11f7ebeb379312f4fc89c2792ce52d71ab4
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/72417c0228f115628b1ad307be9d8e53532de6a6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bogdan-Ionescu/leds-Add-support-for-rohm-bd65b60-led-driver/20230309-041730
+        git checkout 72417c0228f115628b1ad307be9d8e53532de6a6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/module/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/leds/ drivers/net/usb/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181235.SaEGYllF-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181228.ZP7Ig92k-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   kernel/module/main.c:2227:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-           int ret = -ENOMEM;
-               ^
-   kernel/module/main.c:2270:8: warning: variable 't' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                           if (i == info->index.mod &&
-                               ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/module/main.c:2290:7: note: uninitialized use occurs here
-           for (t--; t >= 0; t--)
-                ^
-   kernel/module/main.c:2270:4: note: remove the 'if' if its condition is always false
-                           if (i == info->index.mod &&
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/module/main.c:2226:2: note: variable 't' is declared here
-           enum mod_mem_type t;
-           ^
->> kernel/module/main.c:2673:6: warning: no previous prototype for function 'module_autoload_proceed' [-Wmissing-prototypes]
-   bool module_autoload_proceed(const char *name)
-        ^
-   kernel/module/main.c:2673:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool module_autoload_proceed(const char *name)
-   ^
-   static 
-   3 warnings generated.
+   In file included from drivers/leds/leds-bd65b60.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/leds/leds-bd65b60.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/leds/leds-bd65b60.c:14:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   drivers/leds/leds-bd65b60.c:111:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (led->state != BD65B60_KEEP) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/leds/leds-bd65b60.c:116:2: note: uninitialized use occurs here
+           ret |= regmap_update_bits(led->regmap, REG_COMSET1, OVP_MASK, led->ovp);
+           ^~~
+   drivers/leds/leds-bd65b60.c:111:2: note: remove the 'if' if its condition is always true
+           if (led->state != BD65B60_KEEP) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/leds/leds-bd65b60.c:107:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+>> drivers/leds/leds-bd65b60.c:266:34: warning: unused variable 'of_bd65b60_leds_match' [-Wunused-const-variable]
+   static const struct of_device_id of_bd65b60_leds_match[] = {
+                                    ^
+   14 warnings generated.
 
 
-vim +/module_autoload_proceed +2673 kernel/module/main.c
+vim +/of_bd65b60_leds_match +266 drivers/leds/leds-bd65b60.c
 
-  2667	
-  2668	/*
-  2669	 * We allow contention of the module_mutex here because kernel module
-  2670	 * auto-loading a special feature *and* because we are only allowing
-  2671	 * MAX_KMOD_CONCURRENT possible checks at a time for a module.
-  2672	 */
-> 2673	bool module_autoload_proceed(const char *name)
-  2674	{
-  2675		int err;
-  2676	
-  2677		mutex_lock(&module_mutex);
-  2678		err = module_patient_check_exists(name);
-  2679		mutex_unlock(&module_mutex);
-  2680	
-  2681		if (err == -EEXIST)
-  2682			return false;
-  2683		return true;
-  2684	}
-  2685	
+   265	
+ > 266	static const struct of_device_id of_bd65b60_leds_match[] = {
+   267		{ .compatible = "rohm,bd65b60" },
+   268		{},
+   269	};
+   270	MODULE_DEVICE_TABLE(of, of_bd65b60_leds_match);
+   271	
 
 -- 
 0-DAY CI Kernel Test Service
