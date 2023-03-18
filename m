@@ -1,48 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE66622;
-	Sat, 18 Mar 2023 04:55:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20B97EE;
+	Sat, 18 Mar 2023 05:46:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679115335; x=1710651335;
+  t=1679118396; x=1710654396;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZoOoKSNk9CA4TE6nM8tAJ9g+6sxpEX6EcZivLYL6CX0=;
-  b=n2KJGfILdZO7L1ylb9lhKT/pRP75KmTjz5zdD9VdPgjCUq7WjhraYa+S
-   uSapD7rCZn3fPCWdQPPuyxDJn9sBPQMZTaQGrsQzoxk3cwnYPUX+7DE26
-   W2/YEL8IWZu74wZS1R2EfOUPHRALS+HpoeOCsJXes7sS++SbP35AYTL4w
-   skY86zNbMB+4CnNO6NTUSp3lOC0C78WhZpGiuD4p0RxJbicDaNSl+RE2p
-   0ACphd/Zk0V+5S8DadOYVZADAsm3ctzbFoNjCYAQ04xRKI9v9vo+6bgCu
-   Zyx87mEilynnpfWIIdPQu6NV4P4LqNy+DJHcRDNq486AzdpVVN1uGKky0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="335903280"
+  bh=gPlDmkRetIsrvxAqBSd4QrtZYIEN6q/reoC14Ax/+Gg=;
+  b=Ohf4f+XCKO4ivdERsh9DdLqjWKg0FnGFOfOVwZ6mCbf+qBLUHgikM9nJ
+   za6C4u3kzmQxcTu7N5MyqOMGJBV9YXWgLVS8MFQuWpHpJ4Hx7Y4UN0hGp
+   jrF/077byogAtIuNhlH0PqN0OZKMDwaYLGJ3HVGHyidM+qkj3fcClRWkS
+   7rmwgXb1OUwzLeMAw00fj2n6+zET6ftf/hfYFysBnVIh9EMSmrAHKAPip
+   ocZ8WNU2meKNAA7FXWSo4xLEDl4WfCIsm/Ah/ncSHsuUNJNn8moPxyv4S
+   5yfjnzTemVe6Pvx9/8NW3nF9wAWQAjOvi/Hgjf6MMlo90HBiGxi6i6GIB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="424685482"
 X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="335903280"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 21:55:35 -0700
+   d="scan'208";a="424685482"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 22:46:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="854696000"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="790989679"
 X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="854696000"
+   d="scan'208";a="790989679"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 17 Mar 2023 21:55:32 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 17 Mar 2023 22:46:35 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pdObL-0009oY-2P;
-	Sat, 18 Mar 2023 04:55:31 +0000
-Date: Sat, 18 Mar 2023 12:54:52 +0800
+	id 1pdPOk-0009ps-1j;
+	Sat, 18 Mar 2023 05:46:34 +0000
+Date: Sat, 18 Mar 2023 13:46:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bogdan Ionescu <bogdan.ionescu.work@gmail.com>,
-	Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Krzysztof Kozlowski <krzk@kernel.org>, linux-leds@vger.kernel.or,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bogdan Ionescu <bogdan.ionescu.work@gmail.com>
-Subject: Re: [PATCH 2/2] leds: Add support for rohm,bd65b60 led driver
-Message-ID: <202303181228.ZP7Ig92k-lkp@intel.com>
-References: <20230308201451.11629-2-bogdan.ionescu.work@gmail.com>
+To: Radhakrishna Sripada <radhakrishna.sripada@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [Intel-gfx] [PATCH 1/4] drm/i915/mtl: Squashed Phy Support
+Message-ID: <202303181322.TIgxE4wA-lkp@intel.com>
+References: <20230318005852.2303937-2-radhakrishna.sripada@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,135 +47,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308201451.11629-2-bogdan.ionescu.work@gmail.com>
+In-Reply-To: <20230318005852.2303937-2-radhakrishna.sripada@intel.com>
 
-Hi Bogdan,
+Hi Radhakrishna,
 
 Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on lee-leds/for-leds-next]
-[also build test WARNING on robh/for-next pavel-leds/for-next linus/master v6.3-rc2 next-20230317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on drm-tip/drm-tip]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bogdan-Ionescu/leds-Add-support-for-rohm-bd65b60-led-driver/20230309-041730
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-patch link:    https://lore.kernel.org/r/20230308201451.11629-2-bogdan.ionescu.work%40gmail.com
-patch subject: [PATCH 2/2] leds: Add support for rohm,bd65b60 led driver
-config: s390-randconfig-r003-20230318 (https://download.01.org/0day-ci/archive/20230318/202303181228.ZP7Ig92k-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+url:    https://github.com/intel-lab-lkp/linux/commits/Radhakrishna-Sripada/drm-i915-mtl-Squashed-Phy-Support/20230318-090025
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230318005852.2303937-2-radhakrishna.sripada%40intel.com
+patch subject: [Intel-gfx] [PATCH 1/4] drm/i915/mtl: Squashed Phy Support
+config: x86_64-randconfig-a016-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181322.TIgxE4wA-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/72417c0228f115628b1ad307be9d8e53532de6a6
+        # https://github.com/intel-lab-lkp/linux/commit/09eaa092cb75c3ac2a82dbf3b83bff437be2abfa
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bogdan-Ionescu/leds-Add-support-for-rohm-bd65b60-led-driver/20230309-041730
-        git checkout 72417c0228f115628b1ad307be9d8e53532de6a6
+        git fetch --no-tags linux-review Radhakrishna-Sripada/drm-i915-mtl-Squashed-Phy-Support/20230318-090025
+        git checkout 09eaa092cb75c3ac2a82dbf3b83bff437be2abfa
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/leds/ drivers/net/usb/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181228.ZP7Ig92k-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181322.TIgxE4wA-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/leds/leds-bd65b60.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/leds/leds-bd65b60.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/leds/leds-bd65b60.c:14:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   drivers/leds/leds-bd65b60.c:111:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (led->state != BD65B60_KEEP) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/leds/leds-bd65b60.c:116:2: note: uninitialized use occurs here
-           ret |= regmap_update_bits(led->regmap, REG_COMSET1, OVP_MASK, led->ovp);
-           ^~~
-   drivers/leds/leds-bd65b60.c:111:2: note: remove the 'if' if its condition is always true
-           if (led->state != BD65B60_KEEP) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/leds/leds-bd65b60.c:107:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> drivers/leds/leds-bd65b60.c:266:34: warning: unused variable 'of_bd65b60_leds_match' [-Wunused-const-variable]
-   static const struct of_device_id of_bd65b60_leds_match[] = {
-                                    ^
-   14 warnings generated.
+>> drivers/gpu/drm/i915/display/intel_cx0_phy.c:2174:13: warning: variable 'multiplier' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (pll_state->mplla[6] & C20_MPLLA_FRACEN) {
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_cx0_phy.c:2184:10: note: uninitialized use occurs here
+           tmp2 = (multiplier << 15) + frac_quot + DIV_ROUND_CLOSEST(frac_rem,frac_den);
+                   ^~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_cx0_phy.c:2174:9: note: remove the 'if' if its condition is always true
+           } else if (pll_state->mplla[6] & C20_MPLLA_FRACEN) {
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_cx0_phy.c:2162:25: note: initialize the variable 'multiplier' to silence this warning
+           unsigned int multiplier, refclk = 38400;
+                                  ^
+                                   = 0
+   1 warning generated.
 
 
-vim +/of_bd65b60_leds_match +266 drivers/leds/leds-bd65b60.c
+vim +2174 drivers/gpu/drm/i915/display/intel_cx0_phy.c
 
-   265	
- > 266	static const struct of_device_id of_bd65b60_leds_match[] = {
-   267		{ .compatible = "rohm,bd65b60" },
-   268		{},
-   269	};
-   270	MODULE_DEVICE_TABLE(of, of_bd65b60_leds_match);
-   271	
+  2157	
+  2158	int intel_c20pll_calc_port_clock(struct intel_encoder *encoder,
+  2159					 const struct intel_c20pll_state *pll_state)
+  2160	{
+  2161		unsigned int frac_quot = 0, frac_rem = 0, frac_den = 1;
+  2162		unsigned int multiplier, refclk = 38400;
+  2163		unsigned ref_clk_mpllb_div = 0;
+  2164		unsigned fb_clk_div4_en = 0;
+  2165		unsigned long tmp1, tmp2;
+  2166	
+  2167		if (pll_state->mpllb[6] & C20_MPLLB_FRACEN) {
+  2168			multiplier = REG_FIELD_GET(C20_MULTIPLIER_MASK, pll_state->mpllb[0]);
+  2169			ref_clk_mpllb_div = REG_FIELD_GET(C20_REF_CLK_MPLLB_DIV_MASK, pll_state->mpllb[6]);
+  2170			fb_clk_div4_en = REG_FIELD_GET(C20_FB_CLK_DIV4_EN, pll_state->mpllb[6]);
+  2171			frac_den = pll_state->mpllb[7];
+  2172			frac_quot = pll_state->mpllb[8];
+  2173			frac_rem = pll_state->mpllb[9];
+> 2174		} else if (pll_state->mplla[6] & C20_MPLLA_FRACEN) {
+  2175			multiplier = REG_FIELD_GET(C20_MULTIPLIER_MASK, pll_state->mplla[0]);
+  2176			ref_clk_mpllb_div = REG_FIELD_GET(C20_REF_CLK_MPLLB_DIV_MASK, pll_state->mpllb[6]);
+  2177			fb_clk_div4_en = REG_FIELD_GET(C20_FB_CLK_DIV4_EN, pll_state->mpllb[6]);
+  2178			frac_den = pll_state->mpllb[7];
+  2179			frac_quot = pll_state->mplla[8];
+  2180			frac_rem = pll_state->mplla[9];
+  2181		}
+  2182	
+  2183		tmp1 = DIV_ROUND_CLOSEST(refclk * (1 << (1 + fb_clk_div4_en)), 1 << ref_clk_mpllb_div);
+  2184		tmp2 = (multiplier << 15) + frac_quot + DIV_ROUND_CLOSEST(frac_rem,frac_den);
+  2185	
+  2186		return DIV_ROUND_CLOSEST((tmp1 * tmp2) >> 17, 10);
+  2187	}
+  2188	
 
 -- 
 0-DAY CI Kernel Test Service
