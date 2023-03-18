@@ -1,48 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1171C7F8;
-	Sat, 18 Mar 2023 07:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7D07F8;
+	Sat, 18 Mar 2023 08:00:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679123389; x=1710659389;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZZe5l4cXg80AEW9cX2gNAzHIp4JAzqxmUcwHOz1YtFo=;
-  b=AbhZbsheW4wfv6D16nRnos+G4QXxuEt1qjs9UZc7g4zfB/F9G5dN+wnN
-   6qvRlMvDJqdLMkHyia3nUDl3iYzO5z36GEjtfPlqQnWRVHB9QcIj/iZ1C
-   DzJcpadjvxDcdKSMAhUpN5j83WQwYnLyb4MM9JF0q1pbrXBHuPwxYIcRC
-   Xk0zpOh22ybHQivPtV7LZYC6w5ztYN7+L3ByP8hrl3E/y8tyeleLv1i/k
-   6LQyMiblaGtCf60MjpBZaToVxK20C9YFjI4SfHcagY/JqnxyRlFz0OTlo
-   OJmUNUvTfCl8BxClZ4MXxQhzs5MCXtMWCqh+/Xhf6KkK6HPlFNR9ebhw5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="318069530"
+  t=1679126440; x=1710662440;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RuxZMVkQ4DWVD5VJ2kXMA/3PouJ9kcCaYBlrYBjd6pU=;
+  b=VO9ZiMFO9UlPv8wBJGoHwYxMABkss7qunnjtOHuF/rDV+TR5DuIJPa3n
+   oK8oxhpa7KRVscpNKbzLxFzPeGw2oFviS53lDMpsY/+7HBWBqXdeRcwKh
+   RRPv2OkooMenHOXYLJSlE2U/HAGxxx01opYOJ0Jg4CDc2og3shMQoNY9j
+   awixcxglH1JYgAvTYjyxL3vSSxHxTDy2szPebEmgt+xwsLl6+r66qcdG0
+   0RioPPgzd3lOVgpzrth/wQTkwJ4wOlpm73P0m7e6p9tKQI7HFFpuGattZ
+   YTJeFcG0MFV3G5u/zEKQRJPHsUkqyceeids42FsbA+1CFRLeitxMQ6kRC
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="339953222"
 X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="318069530"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 00:09:45 -0700
+   d="scan'208";a="339953222"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 01:00:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="673812694"
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="710758248"
 X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="673812694"
+   d="scan'208";a="710758248"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 18 Mar 2023 00:09:42 -0700
+  by orsmga008.jf.intel.com with ESMTP; 18 Mar 2023 01:00:38 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pdQh6-0009tK-1Y;
-	Sat, 18 Mar 2023 07:09:36 +0000
-Date: Sat, 18 Mar 2023 15:08:36 +0800
+	id 1pdRUT-0009uo-1v;
+	Sat, 18 Mar 2023 08:00:37 +0000
+Date: Sat, 18 Mar 2023 16:00:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Szymon Heidrich <szymon.heidrich@gmail.com>, woojung.huh@microchip.com,
-	UNGLinuxDriver@microchip.com, kuba@kernel.org, davem@davemloft.net,
-	edumazet@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
-	szymon.heidrich@gmail.com, linux-usb@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] net: usb: lan78xx: Limit packet length to skb->len
-Message-ID: <202303181417.1MZBovse-lkp@intel.com>
-References: <20230317173606.91426-1-szymon.heidrich@gmail.com>
+To: Ben Gardon <bgardon@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sean Christopherson <seanjc@google.com>
+Subject: [sean-jc:x86/formalize_shadow_mmu 30/39]
+ arch/x86/kvm/mmu/paging_tmpl.h:883:5: warning: no previous prototype for
+ function 'ept_sync_spte'
+Message-ID: <202303181506.qveHr3jp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,207 +47,263 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230317173606.91426-1-szymon.heidrich@gmail.com>
 
-Hi Szymon,
+Hi Ben,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v6.3-rc2 next-20230317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Szymon-Heidrich/net-usb-lan78xx-Limit-packet-length-to-skb-len/20230318-013659
-patch link:    https://lore.kernel.org/r/20230317173606.91426-1-szymon.heidrich%40gmail.com
-patch subject: [PATCH v2] net: usb: lan78xx: Limit packet length to skb->len
-config: s390-randconfig-r003-20230318 (https://download.01.org/0day-ci/archive/20230318/202303181417.1MZBovse-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+tree:   https://github.com/sean-jc/linux x86/formalize_shadow_mmu
+head:   dd395c7174581183cd66020ac5a784bdf2e79cd1
+commit: 6872b75e1974f3841e145f7d5b7edb63c053ff24 [30/39] KVM: x86/MMU: Clean up naming of exported Shadow MMU functions
+config: x86_64-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181506.qveHr3jp-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/17c060ef752f4a1366ed7d8e62ba5f64f654eced
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Szymon-Heidrich/net-usb-lan78xx-Limit-packet-length-to-skb-len/20230318-013659
-        git checkout 17c060ef752f4a1366ed7d8e62ba5f64f654eced
+        # https://github.com/sean-jc/linux/commit/6872b75e1974f3841e145f7d5b7edb63c053ff24
+        git remote add sean-jc https://github.com/sean-jc/linux
+        git fetch --no-tags sean-jc x86/formalize_shadow_mmu
+        git checkout 6872b75e1974f3841e145f7d5b7edb63c053ff24
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/usb/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181417.1MZBovse-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303181506.qveHr3jp-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/usb/lan78xx.c:6:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/usb/lan78xx.c:6:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/usb/lan78xx.c:6:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/net/usb/lan78xx.c:3603:20: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-                           struct sk_buff *skb2;
-                                           ^
-   13 warnings generated.
+   arch/x86/kvm/mmu/shadow_mmu.c:50:8: error: redefinition of 'pte_list_desc'
+   struct pte_list_desc {
+          ^
+   arch/x86/kvm/mmu/shadow_mmu.h:29:8: note: previous definition is here
+   struct pte_list_desc {
+          ^
+   arch/x86/kvm/mmu/shadow_mmu.c:535:9: error: no member named 'tail_count' in 'struct pte_list_desc'
+                   desc->tail_count = 0;
+                   ~~~~  ^
+   arch/x86/kvm/mmu/shadow_mmu.c:541:17: error: no member named 'tail_count' in 'struct pte_list_desc'
+                   count = desc->tail_count + desc->spte_count;
+                           ~~~~  ^
+   arch/x86/kvm/mmu/shadow_mmu.c:551:10: error: no member named 'tail_count' in 'struct pte_list_desc'
+                           desc->tail_count = count;
+                           ~~~~  ^
+   arch/x86/kvm/mmu/shadow_mmu.c:673:15: error: no member named 'tail_count' in 'struct pte_list_desc'
+           return desc->tail_count + desc->spte_count;
+                  ~~~~  ^
+   arch/x86/kvm/mmu/shadow_mmu.c:811:3: error: implicit declaration of function 'kvm_flush_remote_tlbs_sptep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   kvm_flush_remote_tlbs_sptep(kvm, sptep);
+                   ^
+   arch/x86/kvm/mmu/shadow_mmu.c:905:13: error: static declaration of 'kvm_zap_rmap' follows non-static declaration
+   static bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:46:6: note: previous declaration is here
+   bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:912:13: error: static declaration of 'kvm_set_pte_rmap' follows non-static declaration
+   static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:49:6: note: previous declaration is here
+   bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1025:29: error: static declaration of 'kvm_handle_gfn_range' follows non-static declaration
+   static __always_inline bool kvm_handle_gfn_range(struct kvm *kvm,
+                               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:56:6: note: previous declaration is here
+   bool kvm_handle_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1040:13: error: static declaration of 'kvm_age_rmap' follows non-static declaration
+   static bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:59:6: note: previous declaration is here
+   bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1054:13: error: static declaration of 'kvm_test_age_rmap' follows non-static declaration
+   static bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:62:6: note: previous declaration is here
+   bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1294:13: error: static declaration of 'kvm_mmu_prepare_zap_page' follows non-static declaration
+   static bool kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:71:6: note: previous declaration is here
+   bool kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1296:13: error: static declaration of 'kvm_mmu_commit_zap_page' follows non-static declaration
+   static void kvm_mmu_commit_zap_page(struct kvm *kvm,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:73:6: note: previous declaration is here
+   void kvm_mmu_commit_zap_page(struct kvm *kvm, struct list_head *invalid_list);
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1866:3: error: implicit declaration of function 'kvm_flush_remote_tlbs_sptep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   kvm_flush_remote_tlbs_sptep(vcpu->kvm, sptep);
+                   ^
+   arch/x86/kvm/mmu/shadow_mmu.c:1947:13: error: static declaration of '__kvm_mmu_prepare_zap_page' follows non-static declaration
+   static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:68:6: note: previous declaration is here
+   bool __kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:2012:13: error: static declaration of 'kvm_mmu_prepare_zap_page' follows non-static declaration
+   static bool kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:71:6: note: previous declaration is here
+   bool kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:2021:13: error: static declaration of 'kvm_mmu_commit_zap_page' follows non-static declaration
+   static void kvm_mmu_commit_zap_page(struct kvm *kvm,
+               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:73:6: note: previous declaration is here
+   void kvm_mmu_commit_zap_page(struct kvm *kvm, struct list_head *invalid_list);
+        ^
+   In file included from arch/x86/kvm/mmu/shadow_mmu.c:2961:
+>> arch/x86/kvm/mmu/paging_tmpl.h:883:5: warning: no previous prototype for function 'ept_sync_spte' [-Wmissing-prototypes]
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+       ^
+   arch/x86/kvm/mmu/paging_tmpl.h:54:22: note: expanded from macro 'FNAME'
+           #define FNAME(name) ept_##name
+                               ^
+   <scratch space>:266:1: note: expanded from here
+   ept_sync_spte
+   ^
+   arch/x86/kvm/mmu/paging_tmpl.h:883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+   ^
+   static 
+   In file included from arch/x86/kvm/mmu/shadow_mmu.c:2965:
+>> arch/x86/kvm/mmu/paging_tmpl.h:883:5: warning: no previous prototype for function 'paging64_sync_spte' [-Wmissing-prototypes]
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+       ^
+   arch/x86/kvm/mmu/paging_tmpl.h:27:22: note: expanded from macro 'FNAME'
+           #define FNAME(name) paging##64_##name
+                               ^
+   <scratch space>:194:1: note: expanded from here
+   paging64_sync_spte
+   ^
+   arch/x86/kvm/mmu/paging_tmpl.h:883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+   ^
+   static 
+   In file included from arch/x86/kvm/mmu/shadow_mmu.c:2969:
+>> arch/x86/kvm/mmu/paging_tmpl.h:883:5: warning: no previous prototype for function 'paging32_sync_spte' [-Wmissing-prototypes]
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+       ^
+   arch/x86/kvm/mmu/paging_tmpl.h:40:22: note: expanded from macro 'FNAME'
+           #define FNAME(name) paging##32_##name
+                               ^
+   <scratch space>:114:1: note: expanded from here
+   paging32_sync_spte
+   ^
+   arch/x86/kvm/mmu/paging_tmpl.h:883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+   ^
+   static 
+   arch/x86/kvm/mmu/shadow_mmu.c:3204:29: error: static declaration of 'walk_slot_rmaps' follows non-static declaration
+   static __always_inline bool walk_slot_rmaps(struct kvm *kvm,
+                               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:96:6: note: previous declaration is here
+   bool walk_slot_rmaps(struct kvm *kvm, const struct kvm_memory_slot *slot,
+        ^
+   arch/x86/kvm/mmu/shadow_mmu.c:3215:29: error: static declaration of 'walk_slot_rmaps_4k' follows non-static declaration
+   static __always_inline bool walk_slot_rmaps_4k(struct kvm *kvm,
+                               ^
+   arch/x86/kvm/mmu/shadow_mmu.h:99:6: note: previous declaration is here
+   bool walk_slot_rmaps_4k(struct kvm *kvm, const struct kvm_memory_slot *slot,
+        ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   3 warnings and 20 errors generated.
 
 
-vim +3603 drivers/net/usb/lan78xx.c
+vim +/ept_sync_spte +883 arch/x86/kvm/mmu/paging_tmpl.h
 
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3552  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3553  static int lan78xx_rx(struct lan78xx_net *dev, struct sk_buff *skb,
-ec4c7e12396b1a John Efstathiades         2021-11-18  3554  		      int budget, int *work_done)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3555  {
-0dd87266c1337d John Efstathiades         2021-11-18  3556  	if (skb->len < RX_SKB_MIN_LEN)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3557  		return 0;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3558  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3559  	/* Extract frames from the URB buffer and pass each one to
-ec4c7e12396b1a John Efstathiades         2021-11-18  3560  	 * the stack in a new NAPI SKB.
-ec4c7e12396b1a John Efstathiades         2021-11-18  3561  	 */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3562  	while (skb->len > 0) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3563  		u32 rx_cmd_a, rx_cmd_b, align_count, size;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3564  		u16 rx_cmd_c;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3565  		unsigned char *packet;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3566  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3567  		rx_cmd_a = get_unaligned_le32(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3568  		skb_pull(skb, sizeof(rx_cmd_a));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3569  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3570  		rx_cmd_b = get_unaligned_le32(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3571  		skb_pull(skb, sizeof(rx_cmd_b));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3572  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3573  		rx_cmd_c = get_unaligned_le16(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3574  		skb_pull(skb, sizeof(rx_cmd_c));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3575  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3576  		packet = skb->data;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3577  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3578  		/* get the packet length */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3579  		size = (rx_cmd_a & RX_CMD_A_LEN_MASK_);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3580  		align_count = (4 - ((size + RXW_PADDING) % 4)) % 4;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3581  
-17c060ef752f4a Szymon Heidrich           2023-03-17  3582  		if (unlikely(size > skb->len)) {
-17c060ef752f4a Szymon Heidrich           2023-03-17  3583  			netif_dbg(dev, rx_err, dev->net,
-17c060ef752f4a Szymon Heidrich           2023-03-17  3584  				  "size err rx_cmd_a=0x%08x\n",
-17c060ef752f4a Szymon Heidrich           2023-03-17  3585  				  rx_cmd_a);
-17c060ef752f4a Szymon Heidrich           2023-03-17  3586  			return 0;
-17c060ef752f4a Szymon Heidrich           2023-03-17  3587  		}
-17c060ef752f4a Szymon Heidrich           2023-03-17  3588  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3589  		if (unlikely(rx_cmd_a & RX_CMD_A_RED_)) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3590  			netif_dbg(dev, rx_err, dev->net,
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3591  				  "Error rx_cmd_a=0x%08x", rx_cmd_a);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3592  		} else {
-17c060ef752f4a Szymon Heidrich           2023-03-17  3593  			u32 frame_len;
-17c060ef752f4a Szymon Heidrich           2023-03-17  3594  
-17c060ef752f4a Szymon Heidrich           2023-03-17  3595  			if (unlikely(size < ETH_FCS_LEN)) {
-17c060ef752f4a Szymon Heidrich           2023-03-17  3596  				netif_dbg(dev, rx_err, dev->net,
-17c060ef752f4a Szymon Heidrich           2023-03-17  3597  					  "size err rx_cmd_a=0x%08x\n",
-17c060ef752f4a Szymon Heidrich           2023-03-17  3598  					  rx_cmd_a);
-17c060ef752f4a Szymon Heidrich           2023-03-17  3599  				return 0;
-17c060ef752f4a Szymon Heidrich           2023-03-17  3600  			}
-17c060ef752f4a Szymon Heidrich           2023-03-17  3601  
-17c060ef752f4a Szymon Heidrich           2023-03-17  3602  			frame_len = size - ETH_FCS_LEN;
-ec4c7e12396b1a John Efstathiades         2021-11-18 @3603  			struct sk_buff *skb2;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3604  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3605  			skb2 = napi_alloc_skb(&dev->napi, frame_len);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3606  			if (!skb2)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3607  				return 0;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3608  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3609  			memcpy(skb2->data, packet, frame_len);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3610  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3611  			skb_put(skb2, frame_len);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3612  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3613  			lan78xx_rx_csum_offload(dev, skb2, rx_cmd_a, rx_cmd_b);
-ec21ecf0aad279 Dave Stevenson            2018-06-25  3614  			lan78xx_rx_vlan_offload(dev, skb2, rx_cmd_a, rx_cmd_b);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3615  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3616  			/* Processing of the URB buffer must complete once
-ec4c7e12396b1a John Efstathiades         2021-11-18  3617  			 * it has started. If the NAPI work budget is exhausted
-ec4c7e12396b1a John Efstathiades         2021-11-18  3618  			 * while frames remain they are added to the overflow
-ec4c7e12396b1a John Efstathiades         2021-11-18  3619  			 * queue for delivery in the next NAPI polling cycle.
-ec4c7e12396b1a John Efstathiades         2021-11-18  3620  			 */
-ec4c7e12396b1a John Efstathiades         2021-11-18  3621  			if (*work_done < budget) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3622  				lan78xx_skb_return(dev, skb2);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3623  				++(*work_done);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3624  			} else {
-ec4c7e12396b1a John Efstathiades         2021-11-18  3625  				skb_queue_tail(&dev->rxq_overflow, skb2);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3626  			}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3627  		}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3628  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3629  		skb_pull(skb, size);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3630  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3631  		/* skip padding bytes before the next frame starts */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3632  		if (skb->len)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3633  			skb_pull(skb, align_count);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3634  	}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3635  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3636  	return 1;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3637  }
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3638  
+6539e738f65a8f arch/x86/kvm/paging_tmpl.h     Joerg Roedel        2010-09-10  871  
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  872  /*
+6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  873   * Using the information in sp->shadowed_translation (kvm_mmu_page_get_gfn()) is
+6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  874   * safe because:
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  875   * - The spte has a reference to the struct page, so the pfn for a given gfn
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  876   *   can't change unless all sptes pointing to it are nuked first.
+c3e5e415bc1e6c arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2021-09-18  877   *
+c3e5e415bc1e6c arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2021-09-18  878   * Returns
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  879   * < 0: failed to sync spte
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  880   *   0: the spte is synced and no tlb flushing is required
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  881   * > 0: the spte is synced and tlb flushing is required
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  882   */
+47e60247f1c316 arch/x86/kvm/mmu/paging_tmpl.h Ben Gardon          2023-02-02 @883  int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  884  {
+9bdbba13b88688 arch/x86/kvm/paging_tmpl.h     Lai Jiangshan       2010-11-19  885  	bool host_writable;
+51fb60d81b483a arch/x86/kvm/paging_tmpl.h     Gui Jianfeng        2010-04-16  886  	gpa_t first_pte_gpa;
+4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  887  	u64 *sptep, spte;
+53597858dbf8da arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2021-08-17  888  	struct kvm_memory_slot *slot;
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  889  	unsigned pte_access;
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  890  	pt_element_t gpte;
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  891  	gpa_t pte_gpa;
+f55c3f419ab1f0 arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2010-05-13  892  	gfn_t gfn;
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  893  
+19ace7d6ca15a4 arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-17  894  	if (WARN_ON_ONCE(!sp->spt[i]))
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  895  		return 0;
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  896  
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  897  	first_pte_gpa = FNAME(get_level1_sp_gpa)(sp);
+51fb60d81b483a arch/x86/kvm/paging_tmpl.h     Gui Jianfeng        2010-04-16  898  	pte_gpa = first_pte_gpa + i * sizeof(pt_element_t);
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  899  
+54bf36aac52031 arch/x86/kvm/paging_tmpl.h     Paolo Bonzini       2015-04-08  900  	if (kvm_vcpu_read_guest_atomic(vcpu, pte_gpa, &gpte,
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  901  				       sizeof(pt_element_t)))
+c3e5e415bc1e6c arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2021-09-18  902  		return -1;
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  903  
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  904  	if (FNAME(prefetch_invalid_gpte)(vcpu, sp, &sp->spt[i], gpte))
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  905  		return 1;
+407c61c6bd6a51 arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2010-11-23  906  
+ce88decffd17bf arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  907  	gfn = gpte_to_gfn(gpte);
+ce88decffd17bf arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  908  	pte_access = sp->role.access;
+42522d08cdba6d arch/x86/kvm/paging_tmpl.h     Peter Xu            2018-07-18  909  	pte_access &= FNAME(gpte_access)(gpte);
+44dd3ffa7bb311 arch/x86/kvm/paging_tmpl.h     Vitaly Kuznetsov    2018-10-08  910  	FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
+ce88decffd17bf arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  911  
+c3e5e415bc1e6c arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2021-09-18  912  	if (sync_mmio_spte(vcpu, &sp->spt[i], gfn, pte_access))
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  913  		return 0;
+ce88decffd17bf arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  914  
+9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  915  	/*
+9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  916  	 * Drop the SPTE if the new protections would result in a RWX=0
+9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  917  	 * SPTE or if the gfn is changing.  The RWX=0 case only affects
+9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  918  	 * EPT with execute-only support, i.e. EPT without an effective
+9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  919  	 * "present" bit, as all other paging modes will create a
+9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  920  	 * read-only SPTE if pte_access is zero.
+9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  921  	 */
+6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  922  	if ((!pte_access && !shadow_present_mask) ||
+6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  923  	    gfn != kvm_mmu_page_get_gfn(sp, i)) {
+c37079586f317d arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  924  		drop_spte(vcpu->kvm, &sp->spt[i]);
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  925  		return 1;
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  926  	}
+e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  927  	/*
+e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  928  	 * Do nothing if the permissions are unchanged.  The existing SPTE is
+e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  929  	 * still, and prefetch_invalid_gpte() has verified that the A/D bits
+e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  930  	 * are set in the "new" gPTE, i.e. there is no danger of missing an A/D
+e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  931  	 * update due to A/D bits being set in the SPTE but not the gPTE.
+e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  932  	 */
+e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  933  	if (kvm_mmu_page_get_access(sp, i) == pte_access)
+e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  934  		return 0;
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  935  
+6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  936  	/* Update the shadowed access bits in case they changed. */
+6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  937  	kvm_mmu_page_set_access(sp, i, pte_access);
+6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  938  
+4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  939  	sptep = &sp->spt[i];
+4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  940  	spte = *sptep;
+4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  941  	host_writable = spte & shadow_host_writable_mask;
+53597858dbf8da arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2021-08-17  942  	slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
+53597858dbf8da arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2021-08-17  943  	make_spte(vcpu, sp, slot, pte_access, gfn,
+4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  944  		  spte_to_pfn(spte), spte, true, false,
+7158bee4b47519 arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  945  		  host_writable, &spte);
+f8e453b00cf1d9 arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2010-12-23  946  
+c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  947  	return mmu_spte_update(sptep, spte);
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  948  }
+e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  949  
+
+:::::: The code at line 883 was first introduced by commit
+:::::: 47e60247f1c316484333b71439780fd37a2c1014 KVM: x86/MMU: Move paging_tmpl.h includes to shadow_mmu.c
+
+:::::: TO: Ben Gardon <bgardon@google.com>
+:::::: CC: Sean Christopherson <seanjc@google.com>
 
 -- 
 0-DAY CI Kernel Test Service
