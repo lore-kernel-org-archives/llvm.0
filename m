@@ -1,169 +1,103 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A09063B;
-	Sat, 18 Mar 2023 04:14:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679112873; x=1710648873;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IFlAq8Bm7jSTAhisY9z4dAaTURY3BzOBCWHUFCTA90A=;
-  b=QHH19Yl6yMQHbA3QOAEh+krkgOOThcpTZAptf/1h4PFtTPcUMBymb7GE
-   oVjPFjM843SybuhRaHWMBGB7Ap0TcQpujcX4baLGNmGx30L7vhGeGgajl
-   i27AJoOmzPnDrhot5J6Tm2D1afRaAT7tHDz5en7ebmVAdhbiK6P50Vptn
-   G2waUgPgAo0T58lGRb8+ruz2oyls2HBxGPaJ+sstrh+TBQ6C8HX4w+nrO
-   16W47kseN6MDQde79byGEAE0czf3NLjKvpwk5m9VRylGNMXGQ/SSN8fuD
-   +GuZ9jLJnX4xPsC6LUVZkcIYbQjzXSbcCxMgWFhT7Z7NNiukteoWarfed
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="322254101"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="322254101"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 21:14:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="749501624"
-X-IronPort-AV: E=Sophos;i="5.98,270,1673942400"; 
-   d="scan'208";a="749501624"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Mar 2023 21:14:31 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pdNxf-0009ni-04;
-	Sat, 18 Mar 2023 04:14:31 +0000
-Date: Sat, 18 Mar 2023 12:13:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mcgrof:20230317-module-alloc-opts 27/31]
- kernel/module/main.c:2217:6: warning: variable 'ret' set but not used
-Message-ID: <202303181257.ykW5kzEI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449D163B
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 04:16:18 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id 204-20020a2514d5000000b00a3637aea9e1so7266880ybu.17
+        for <llvm@lists.linux.dev>; Fri, 17 Mar 2023 21:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679112977;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=39Fefym6R4RrQjQOXnUkj5Wbs7EvPing/MjHK7t/Lyw=;
+        b=lSAzuBmFZ+h8hiSzVh0biFlm455SUKogAcvaf1DponXDVrVupq8TYodfl/wuKq3+lG
+         StIer+QGQznxUabXcz2df43r3hGbTAZmZFmuhtEuptxU9lRGI2GQfhVMjBHn7E6oe9rY
+         EIEg8HGk++eNcDMhd150EGX8kmfrSXpRDtZ1Jmj+5TpUC1UhlNjrE5Qm5qB076rcW5nX
+         b0mnyKdlSuPrmiRCFOmpwbvvLCp+sq/Z0vpQkfDRC0evcIRZsN6hp5UqmpznRXafyYp7
+         1YcVKN2gtFUK/BfZcoLNkgVX91sNHKGVoiuKcaydIFpibjnyQfWUE+qS+w6SRTh1CNuN
+         gAeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679112977;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=39Fefym6R4RrQjQOXnUkj5Wbs7EvPing/MjHK7t/Lyw=;
+        b=q+2Q73etl1zT5vC0lEgAXDZgXPOgSKok7Miul4IMZI8S992O80+XhnLlrBMbsYEfxk
+         Vzwvbo5CImP85JAuW3aVFKH7rwtf9g+c58NFXFSrUhU0aHUOCZD4kO/A1UGGi2zJ+MuD
+         ts1uBBwnqgzVhskHHdgTXpVLcZnm90s5OIzHtoSUivVR2yC/WlQjQiL6V+kLODEQYdwG
+         WLs5cd0+jPZXFvQS7+g1TG1S3pMyYiIfOjy16yEiNdEUKuGcnWP20DNoUo6tD35earXD
+         5QkdxdZnqqpbbvrwn7F83Was6DV8qMm7BVP7a0AWHehddYpE9z4NzpnC82x0j8zHwSdy
+         ouIw==
+X-Gm-Message-State: AO0yUKWofbr1lZBaw2KtzgSoKLPv71TCHxngpSn4y55sPcUI5CzL0W1e
+	+B9afkSgWBD/dIewHu9OPQ3fMKyeFHbkvQ==
+X-Google-Smtp-Source: AK7set8R2hY7ySptFbksr8tOnpVYxuTWiaaKxkqJCvC0czQRuIKj/2zJ7wSxtFdQ8Yte+Avdjdb73Hxrct/0kw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:af4d:0:b0:544:b7ff:b0df with SMTP id
+ x13-20020a81af4d000000b00544b7ffb0dfmr3997390ywj.2.1679112977179; Fri, 17 Mar
+ 2023 21:16:17 -0700 (PDT)
+Date: Sat, 18 Mar 2023 12:15:54 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230318041555.4192172-1-davidgow@google.com>
+Subject: [PATCH] arch:um: Only disable SSE on clang to work around old GCC bugs
+From: David Gow <davidgow@google.com>
+To: Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, SeongJae Park <sj@kernel.org>
+Cc: David Gow <davidgow@google.com>, linux-um@lists.infradead.org, x86@kernel.org, 
+	llvm@lists.linux.dev, rust-for-linux@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230317-module-alloc-opts
-head:   68dfd11f7ebeb379312f4fc89c2792ce52d71ab4
-commit: 139e5ac36c4aa1e28a51bf98a7304d3040c6da6b [27/31] module: add stop-grap sanity check on module memcpy()
-config: i386-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230318/202303181257.ykW5kzEI-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=139e5ac36c4aa1e28a51bf98a7304d3040c6da6b
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20230317-module-alloc-opts
-        git checkout 139e5ac36c4aa1e28a51bf98a7304d3040c6da6b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/module/
+As part of the Rust support for UML, we disable SSE (and similar flags)
+to match the normal x86 builds. This both makes sense (we ideally want a
+similar configuration to x86), and works around a crash bug with SSE
+generation under Rust with LLVM.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181257.ykW5kzEI-lkp@intel.com/
+However, this breaks compiling stdlib.h under gcc < 11, as the x86_64
+ABI requires floating-point return values be stored in an SSE register.
+gcc 11 fixes this by only doing register allocation when a function is
+actually used, and since we never use atof(), it shouldn't be a problem:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
 
-All warnings (new ones prefixed by >>):
+Nevertheless, only disable SSE on clang setups, as that's a simple way
+of working around everyone's bugs.
 
->> kernel/module/main.c:2217:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-           int ret = -ENOMEM;
-               ^
->> kernel/module/main.c:2260:8: warning: variable 't' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                           if (i == info->index.mod &&
-                               ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/module/main.c:2280:7: note: uninitialized use occurs here
-           for (t--; t >= 0; t--)
-                ^
-   kernel/module/main.c:2260:4: note: remove the 'if' if its condition is always false
-                           if (i == info->index.mod &&
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/module/main.c:2216:2: note: variable 't' is declared here
-           enum mod_mem_type t;
-           ^
-   2 warnings generated.
+Fixes: 884981867947 ("rust: arch/um: Disable FP/SIMD instruction to match x86")
+Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Link: https://lore.kernel.org/linux-um/6df2ecef9011d85654a82acd607fdcbc93ad593c.camel@huaweicloud.com/
+Tested-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Tested-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ arch/x86/Makefile.um | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-
-vim +/ret +2217 kernel/module/main.c
-
-  2211	
-  2212	static int move_module(struct module *mod, struct load_info *info)
-  2213	{
-  2214		int i;
-  2215		void *ptr;
-  2216		enum mod_mem_type t;
-> 2217		int ret = -ENOMEM;
-  2218	
-  2219		for_each_mod_mem_type(type) {
-  2220			if (!mod->mem[type].size) {
-  2221				mod->mem[type].base = NULL;
-  2222				continue;
-  2223			}
-  2224			mod->mem[type].size = PAGE_ALIGN(mod->mem[type].size);
-  2225			ptr = module_memory_alloc(mod->mem[type].size, type);
-  2226	
-  2227			/*
-  2228			 * The pointer to this block is stored in the module structure
-  2229			 * which is inside the block. Just mark it as not being a
-  2230			 * leak.
-  2231			 */
-  2232			kmemleak_ignore(ptr);
-  2233			if (!ptr) {
-  2234				t = type;
-  2235				goto out_enomem;
-  2236			}
-  2237			memset(ptr, 0, mod->mem[type].size);
-  2238			mod->mem[type].base = ptr;
-  2239		}
-  2240	
-  2241		/* Transfer each section which specifies SHF_ALLOC */
-  2242		pr_debug("final section addresses:\n");
-  2243		for (i = 0; i < info->hdr->e_shnum; i++) {
-  2244			void *dest;
-  2245			Elf_Shdr *shdr = &info->sechdrs[i];
-  2246			enum mod_mem_type type = shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
-  2247	
-  2248			if (!(shdr->sh_flags & SHF_ALLOC))
-  2249				continue;
-  2250	
-  2251			dest = mod->mem[type].base + (shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK);
-  2252	
-  2253			if (shdr->sh_type != SHT_NOBITS) {
-  2254				/*
-  2255				 * Our ELF checker already validated this, but let's
-  2256				 * be pedantic and make the goal clearer. We actually
-  2257				 * end up copying over all modifications made to the
-  2258				 * userspace copy of the entire struct module.
-  2259				 */
-> 2260				if (i == info->index.mod &&
-  2261				   (WARN_ON_ONCE(shdr->sh_size != sizeof(struct module)))) {
-  2262					ret = -ENOEXEC;
-  2263					goto out_enomem;
-  2264				}
-  2265				memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
-  2266			}
-  2267			/*
-  2268			 * Update the userspace copy's ELF section address to point to
-  2269			 * our newly allocated memory as a pure convenience so that
-  2270			 * users of info can keep taking advantage and using the newly
-  2271			 * minted official memory area.
-  2272			 */
-  2273			shdr->sh_addr = (unsigned long)dest;
-  2274			pr_debug("\t0x%lx %s\n",
-  2275				 (long)shdr->sh_addr, info->secstrings + shdr->sh_name);
-  2276		}
-  2277	
-  2278		return 0;
-  2279	out_enomem:
-  2280		for (t--; t >= 0; t--)
-  2281			module_memory_free(mod->mem[t].base, t);
-  2282		return -ENOMEM;
-  2283	}
-  2284	
-
+diff --git a/arch/x86/Makefile.um b/arch/x86/Makefile.um
+index b70559b821df..2106a2bd152b 100644
+--- a/arch/x86/Makefile.um
++++ b/arch/x86/Makefile.um
+@@ -3,9 +3,14 @@ core-y += arch/x86/crypto/
+ 
+ #
+ # Disable SSE and other FP/SIMD instructions to match normal x86
++# This is required to work around issues in older LLVM versions, but breaks
++# GCC versions < 11. See:
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
+ #
++ifeq ($(CONFIG_CC_IS_CLANG),y)
+ KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
+ KBUILD_RUSTFLAGS += -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2
++endif
+ 
+ ifeq ($(CONFIG_X86_32),y)
+ START := 0x8048000
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0.rc1.284.g88254d51c5-goog
+
