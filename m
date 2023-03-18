@@ -1,119 +1,112 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA91C1106;
-	Sat, 18 Mar 2023 10:25:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679135147; x=1710671147;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QeuqZ4d2XSEH7Pd96Bs2l+zOIKCKzXxApnquS6nmsNM=;
-  b=fIq7UPpxlGObp1uKyd/9brsDvmfMdXbLLwwlllauNB8VbfWM0YjHY3ZM
-   mSrMnvXY8iUvbYyNzMa5VMJJbmYM3eF6FnoT9jdkQQJMDxZB75XCD8ao3
-   hWZaiQ2SpnD03SdYf8LxNbCRQyrdShHkJsdGx4y6+85mM5NML+XHBeTCm
-   TFCJ3vPOlLd6bptJBHkvTBpKyhYA5Y+YIkBZi2hWSBMzfgXpyCXSm5ueM
-   D3a5gAEDNlQevdhRgtr0D2+lIhSLnRFyaVozxZiYTzkPKMdk6o911wGLm
-   N1kphlIKD8u/2Pe5YjVwgDavpF6aa3KRF9miunBk1GkpfK88BXKrTwrlt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="318823486"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="318823486"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 03:25:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="804384418"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="804384418"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Mar 2023 03:25:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pdTkr-000A0M-11;
-	Sat, 18 Mar 2023 10:25:41 +0000
-Date: Sat, 18 Mar 2023 18:24:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>,
-	linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-	suzuki.poulose@arm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	scclevenger@os.amperecomputing.com,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-	devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] coresight: etm4x: Change etm4_platform_driver driver
- for MMIO devices
-Message-ID: <202303181800.KxbuwjRT-lkp@intel.com>
-References: <20230317030501.1811905-5-anshuman.khandual@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AE810E4
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 11:01:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679137297;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=JszJER7bzKHS6QlKEqCYdfbmAdtpftLANBf5URAnzSk=;
+	b=FjldydrG4B2unpo/L/MWqiN2SHi+csHaeSv+sl0A6zKTnz4+7dDVa0ZaV26BAY1+D8Xvvj
+	FyZdCG/SigvLPgMDsg4EkpIZThDkDKiy9t8dtHoz67xorwxR0MOW/uNK/jnZYZrk7tKkCf
+	4pIEuOttr4hGvnNQOj6IV7sroSE3St4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-507-NKUDb6gSPhGe3GJBbAZ_sQ-1; Sat, 18 Mar 2023 07:01:36 -0400
+X-MC-Unique: NKUDb6gSPhGe3GJBbAZ_sQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3A648533DC
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 11:01:35 +0000 (UTC)
+Received: from [172.64.0.101] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id BFEDA1121315;
+	Sat, 18 Mar 2023 11:01:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (136/381 SKIPPED): Test report for master
+ (6.3.0-rc2, mainline.kernel.org-clang, 02ef7d39)
+Date: Sat, 18 Mar 2023 11:01:35 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317030501.1811905-5-anshuman.khandual@arm.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <22241.123031807013600223@us-mta-507.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Anshuman,
+Hi, we tested your kernel and here are the results:
 
-Thank you for the patch! Perhaps something to improve:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on soc/for-next rafael-pm/linux-next linus/master v6.3-rc2 next-20230317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230317030501.1811905-5-anshuman.khandual%40arm.com
-patch subject: [PATCH 4/7] coresight: etm4x: Change etm4_platform_driver driver for MMIO devices
-config: arm64-buildonly-randconfig-r002-20230312 (https://download.01.org/0day-ci/archive/20230318/202303181800.KxbuwjRT-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/f02ad9e7f97ab4fc1f90c7e6399004e9ec89ef26
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
-        git checkout f02ad9e7f97ab4fc1f90c7e6399004e9ec89ef26
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
+Kernel information:
+    Commit message: Merge tag 'pm-6.3-rc3' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/rafael/linux-pm
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181800.KxbuwjRT-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/79547
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
->> drivers/hwtracing/coresight/coresight-etm4x-core.c:2336:32: warning: unused variable 'etm4_dev_pm_ops' [-Wunused-const-variable]
-   static const struct dev_pm_ops etm4_dev_pm_ops = {
-                                  ^
-   1 warning generated.
 
 
-vim +/etm4_dev_pm_ops +2336 drivers/hwtracing/coresight/coresight-etm4x-core.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-  2335	
-> 2336	static const struct dev_pm_ops etm4_dev_pm_ops = {
-  2337		SET_RUNTIME_PM_OPS(etm4_runtime_suspend, etm4_runtime_resume, NULL)
-  2338	};
-  2339	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
