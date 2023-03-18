@@ -1,130 +1,124 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090307EE;
-	Sat, 18 Mar 2023 05:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679118399; x=1710654399;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XwBj/9hfmpagIdGRdqZJjnfQeY4udKL5fw//ppbl99Q=;
-  b=nVhOtB4h4Dsfr/PFYnyYmpFtMFXmXWd9yFkoTMn1h9Do+zPQzo9rQbGY
-   NEuyFSh/emrH8zEYK1i3goSEvnHHaAMnsG8Kx8MHXu5KnOStMUsp9/lEq
-   gqZkVE96U+pzRmBrUkHspnJm+NaAi6ylT2kx3ny1oNlVgRrfrzuxppEs4
-   HGgZlVAYE+Fb6JdPvzgz771o39m3t6RGjdXRHXqOg83ol+AAUJk3BtQMh
-   FzRYrMvMg9LqeKmiNzvscap0qhk6gUm5+b9t+ceT2Q9f/1JJA7ggX/chF
-   HTJWK7BZsPxvB75d7kTiyanctU++uw5Fm/1uEoN9BbX2bDV6gjkq7y5Go
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="424685486"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="424685486"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 22:46:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="790989675"
-X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
-   d="scan'208";a="790989675"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Mar 2023 22:46:35 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pdPOk-0009pm-1D;
-	Sat, 18 Mar 2023 05:46:34 +0000
-Date: Sat, 18 Mar 2023 13:46:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keguang Zhang <keguang.zhang@gmail.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Keguang Zhang <keguang.zhang@gmail.com>
-Subject: Re: [PATCH v3 3/4] clk: loongson1: Re-implement the clock driver
-Message-ID: <202303181358.BXLJVMkh-lkp@intel.com>
-References: <20230316104707.236034-4-keguang.zhang@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F577EC
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 05:51:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679118693;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qug3gsLEaOdCyRj0TruCO4OfXJWXZxDtApHz5XjwRkg=;
+	b=ibJnZ5bX6JdQr0op17z8gqUTrLK+9Wwyat2eT0kCybdV/o9XKmf5WiRo05Wm7EyiVQud83
+	bhr5E+9em8UgCCsii2/7/WkqnprM5/OHekrxyOZf5k7j1c4ctee+4Gq1/oK9HkyPnYYU/0
+	luI6S+Wb9v8RvI2QofEtfCbRRCBLt48=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-joD0fl5BNI6Ew5NFkAP5MQ-1; Sat, 18 Mar 2023 01:51:32 -0400
+X-MC-Unique: joD0fl5BNI6Ew5NFkAP5MQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1DFB03C0DDA3
+	for <llvm@lists.linux.dev>; Sat, 18 Mar 2023 05:51:32 +0000 (UTC)
+Received: from [172.64.0.101] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0549F40B3ED6;
+	Sat, 18 Mar 2023 05:51:32 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (124/381 SKIPPED): Test report for master
+ (6.3.0-rc2, mainline.kernel.org-clang, cb80b960)
+Date: Sat, 18 Mar 2023 05:51:31 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316104707.236034-4-keguang.zhang@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <34564.123031801513200709@us-mta-651.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Keguang,
+Hi, we tested your kernel and here are the results:
 
-I love your patch! Yet something to improve:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on 6f173737e1b5670c200329677e821cce1d3d755e]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang/dt-bindings-clock-Add-Loongson-1-clock/20230316-185026
-base:   6f173737e1b5670c200329677e821cce1d3d755e
-patch link:    https://lore.kernel.org/r/20230316104707.236034-4-keguang.zhang%40gmail.com
-patch subject: [PATCH v3 3/4] clk: loongson1: Re-implement the clock driver
-config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20230318/202303181358.BXLJVMkh-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/de00eab744ddc82edb1853048dd5d50aa8220115
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Keguang-Zhang/dt-bindings-clock-Add-Loongson-1-clock/20230316-185026
-        git checkout de00eab744ddc82edb1853048dd5d50aa8220115
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
+Kernel information:
+    Commit message: Merge tag 'riscv-for-linus-6.3-rc3' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/riscv/linux
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303181358.BXLJVMkh-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/79537
 
-All errors (new ones prefixed by >>):
-
->> drivers/clk/clk-loongson1.c:300:15: error: expected parameter declarator
-   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-                 ^
->> drivers/clk/clk-loongson1.c:300:15: error: expected ')'
-   drivers/clk/clk-loongson1.c:300:14: note: to match this '('
-   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-                ^
->> drivers/clk/clk-loongson1.c:300:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-   ^
-   int
->> drivers/clk/clk-loongson1.c:300:14: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-                ^
-                                                          void
-   drivers/clk/clk-loongson1.c:301:20: error: expected parameter declarator
-   MODULE_DESCRIPTION("Loongson1 clock driver");
-                      ^
-   drivers/clk/clk-loongson1.c:301:20: error: expected ')'
-   drivers/clk/clk-loongson1.c:301:19: note: to match this '('
-   MODULE_DESCRIPTION("Loongson1 clock driver");
-                     ^
-   drivers/clk/clk-loongson1.c:301:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   MODULE_DESCRIPTION("Loongson1 clock driver");
-   ^
-   int
-   drivers/clk/clk-loongson1.c:301:19: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   MODULE_DESCRIPTION("Loongson1 clock driver");
-                     ^
-                                              void
-   8 errors generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: [upstream] WARNING: CPU: 120 PID: 1 at arch/powerpc/include/=
+asm/book3s/64/tlbflush.h:166 change_protection+0x10d8/0x1470
+            URL: https://lore.kernel.org/all/20221019122106.a525f33bafeb74d=
+e59fd0d99@danny.cz/
+            Affected tests:
+                 ppc64le - Reboot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-vim +300 drivers/clk/clk-loongson1.c
 
-   299	
- > 300	MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
