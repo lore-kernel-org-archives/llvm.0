@@ -1,45 +1,44 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E00A138F;
-	Sun, 19 Mar 2023 12:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4D01398;
+	Sun, 19 Mar 2023 13:05:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679230450; x=1710766450;
+  t=1679231109; x=1710767109;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BuyzoVkPxsspe16htj0duE1OX9CneZW0JyftawfkTLg=;
-  b=hZeKyyxH3BN2OZAZukNwpI7ikiPUOGYKq9MnvwwnvOhgzUVuRIW0M778
-   a5w1Z475B7YtRcSYZb0EwsueFld/aQjWnkSQKdQfsdapaTpBNixvtdd14
-   KsZnG1uRepwpT8Zb1Ny0jDnTPl0ckCr/5IVgE3cOuUWgBboxLtdq7b0Ij
-   HP+mnp1c60H3KqUKc63Hapm+BmlJyEdX+/r5uzaTaqDBmdHtMpX8RD4DF
-   JRsIUmDJQIPXk8vvABYa/lIhstTnchepQ0ERoUHpgxrXyJGRsweLbwght
-   sUnYTp3ScUz1CjVn9MsPMOWpmWxZAws8cDbLoRx/SHGDw5cEJbnj45UDZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="424782670"
+  bh=GZ01iO1sb0NRVsuNxqUxurGmdwGQTJHvVSMY3++A4ss=;
+  b=AEy1OIDRVlqjDZpBarTEV8HhMTp/kDpcXdT8uTFijvgqWmLoZz0ySTXa
+   j8fR7HJYf8DSVqJwc/XayTFkZnIKCwkqmN8SWg0CLrXTpbrLJl+iAb5FB
+   +ry7/zc5c8Xvk4Y4V0L1pisKPHXfsvM1+hG1p10OtCD8YXvBZz0GtMgn/
+   l8gzfZvwPebDSa5v6ao4aE3KLholM4a8UM3EmYLzBLf2MVdu6rdadrEk0
+   M7IC6CpbO6dfPYiG8cJWHlTaai0TukiTvjRulOV4wjiUT/Vuprc9BRGOr
+   /S5G0iwn62ZIj1NoRhun9/I9wG2exB/3Aubut60ODJB2RMgwNiH1INNVB
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338530963"
 X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
-   d="scan'208";a="424782670"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 05:54:09 -0700
+   d="scan'208";a="338530963"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 06:05:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="824190931"
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749792729"
 X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
-   d="scan'208";a="824190931"
+   d="scan'208";a="749792729"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Mar 2023 05:54:07 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 19 Mar 2023 06:05:07 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pdsY2-000AWk-1R;
-	Sun, 19 Mar 2023 12:54:06 +0000
-Date: Sun, 19 Mar 2023 20:54:01 +0800
+	id 1pdsig-000AWw-2A;
+	Sun, 19 Mar 2023 13:05:06 +0000
+Date: Sun, 19 Mar 2023 21:04:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Akira Kawata <akirakawata1@gmail.com>
+To: Ben Gardon <bgardon@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <keescook@chromium.org>, Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.10.y 2813/9999]
- arch/mips/kernel/../../../fs/binfmt_elf.c:823:16: warning: variable
- 'load_addr' set but not used
-Message-ID: <202303192015.1YEqpRJ9-lkp@intel.com>
+	Sean Christopherson <seanjc@google.com>
+Subject: [sean-jc:x86/formalize_shadow_mmu 29/39]
+ arch/x86/kvm/mmu/mmu.c:3178:15: error: no previous prototype for function
+ 'mmu_shrink_scan'
+Message-ID: <202303192012.JgXNu15n-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,488 +48,122 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Akira,
+Hi Ben,
 
-FYI, the error/warning still remains.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-head:   de26e1b2103b1f56451f6ad77f0190c9066c87dc
-commit: dd85ed4af8f5cb42990fb5f42c22d268028693a3 [2813/9999] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
-config: mips-buildonly-randconfig-r002-20230319 (https://download.01.org/0day-ci/archive/20230319/202303192015.1YEqpRJ9-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+tree:   https://github.com/sean-jc/linux x86/formalize_shadow_mmu
+head:   dd395c7174581183cd66020ac5a784bdf2e79cd1
+commit: 65d06e1aa5898de35579978883d1d71dad826347 [29/39] KVM: x86/MMU: Cleanup shrinker interface with Shadow MMU
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230319/202303192012.JgXNu15n-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips64el-linux-gnuabi64
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=dd85ed4af8f5cb42990fb5f42c22d268028693a3
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.10.y
-        git checkout dd85ed4af8f5cb42990fb5f42c22d268028693a3
+        # https://github.com/sean-jc/linux/commit/65d06e1aa5898de35579978883d1d71dad826347
+        git remote add sean-jc https://github.com/sean-jc/linux
+        git fetch --no-tags sean-jc x86/formalize_shadow_mmu
+        git checkout 65d06e1aa5898de35579978883d1d71dad826347
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303192015.1YEqpRJ9-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303192012.JgXNu15n-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/mips/kernel/binfmt_elfn32.c:113:
->> arch/mips/kernel/../../../fs/binfmt_elf.c:823:16: warning: variable 'load_addr' set but not used [-Wunused-but-set-variable]
-           unsigned long load_addr, load_bias = 0, phdr_addr = 0;
-                         ^
-   arch/mips/kernel/binfmt_elfn32.c:86:1: warning: unused function 'jiffies_to_old_timeval32' [-Wunused-function]
-   jiffies_to_old_timeval32(unsigned long jiffies, struct old_timeval32 *value)
+   arch/x86/kvm/mmu/mmu.c:758:1: error: version control conflict marker in file
+   <<<<<<< HEAD
    ^
-   2 warnings generated.
+   arch/x86/kvm/mmu/mmu.c:2129:23: error: use of undeclared identifier 'paging64_sync_spte'; did you mean 'paging64_sync_page'?
+           context->sync_spte = paging64_sync_spte;
+                                ^~~~~~~~~~~~~~~~~~
+                                paging64_sync_page
+   arch/x86/kvm/mmu/shadow_mmu.h:132:5: note: 'paging64_sync_page' declared here
+   int paging64_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp);
+       ^
+   arch/x86/kvm/mmu/mmu.c:2136:23: error: use of undeclared identifier 'paging32_sync_spte'; did you mean 'paging32_sync_page'?
+           context->sync_spte = paging32_sync_spte;
+                                ^~~~~~~~~~~~~~~~~~
+                                paging32_sync_page
+   arch/x86/kvm/mmu/shadow_mmu.h:131:5: note: 'paging32_sync_page' declared here
+   int paging32_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp);
+       ^
+   arch/x86/kvm/mmu/mmu.c:2355:24: error: use of undeclared identifier 'ept_sync_spte'; did you mean 'ept_sync_page'?
+                   context->sync_spte = ept_sync_spte;
+                                        ^~~~~~~~~~~~~
+                                        ept_sync_page
+   arch/x86/kvm/mmu/shadow_mmu.h:133:5: note: 'ept_sync_page' declared here
+   int ept_sync_page(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp);
+       ^
+   arch/x86/kvm/mmu/mmu.c:2576:34: error: variable has incomplete type 'struct kvm_shadow_walk_iterator'
+           struct kvm_shadow_walk_iterator iterator;
+                                           ^
+   arch/x86/kvm/mmu/mmu.c:2576:9: note: forward declaration of 'struct kvm_shadow_walk_iterator'
+           struct kvm_shadow_walk_iterator iterator;
+                  ^
+   arch/x86/kvm/mmu/mmu.c:2584:2: error: implicit declaration of function 'for_each_shadow_entry_using_root' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           for_each_shadow_entry_using_root(vcpu, root_hpa, addr, iterator) {
+           ^
+>> arch/x86/kvm/mmu/mmu.c:3178:15: error: no previous prototype for function 'mmu_shrink_scan' [-Werror,-Wmissing-prototypes]
+   unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+                 ^
+   arch/x86/kvm/mmu/mmu.c:3178:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+   ^
+   static 
+   7 errors generated.
 
 
-vim +/load_addr +823 arch/mips/kernel/../../../fs/binfmt_elf.c
+vim +/mmu_shrink_scan +3178 arch/x86/kvm/mmu/mmu.c
 
-   819	
-   820	static int load_elf_binary(struct linux_binprm *bprm)
-   821	{
-   822		struct file *interpreter = NULL; /* to shut gcc up */
- > 823		unsigned long load_addr, load_bias = 0, phdr_addr = 0;
-   824		int load_addr_set = 0;
-   825		unsigned long error;
-   826		struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
-   827		struct elf_phdr *elf_property_phdata = NULL;
-   828		unsigned long elf_bss, elf_brk;
-   829		int bss_prot = 0;
-   830		int retval, i;
-   831		unsigned long elf_entry;
-   832		unsigned long e_entry;
-   833		unsigned long interp_load_addr = 0;
-   834		unsigned long start_code, end_code, start_data, end_data;
-   835		unsigned long reloc_func_desc __maybe_unused = 0;
-   836		int executable_stack = EXSTACK_DEFAULT;
-   837		struct elfhdr *elf_ex = (struct elfhdr *)bprm->buf;
-   838		struct elfhdr *interp_elf_ex = NULL;
-   839		struct arch_elf_state arch_state = INIT_ARCH_ELF_STATE;
-   840		struct mm_struct *mm;
-   841		struct pt_regs *regs;
-   842	
-   843		retval = -ENOEXEC;
-   844		/* First of all, some simple consistency checks */
-   845		if (memcmp(elf_ex->e_ident, ELFMAG, SELFMAG) != 0)
-   846			goto out;
-   847	
-   848		if (elf_ex->e_type != ET_EXEC && elf_ex->e_type != ET_DYN)
-   849			goto out;
-   850		if (!elf_check_arch(elf_ex))
-   851			goto out;
-   852		if (elf_check_fdpic(elf_ex))
-   853			goto out;
-   854		if (!bprm->file->f_op->mmap)
-   855			goto out;
-   856	
-   857		elf_phdata = load_elf_phdrs(elf_ex, bprm->file);
-   858		if (!elf_phdata)
-   859			goto out;
-   860	
-   861		elf_ppnt = elf_phdata;
-   862		for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
-   863			char *elf_interpreter;
-   864	
-   865			if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
-   866				elf_property_phdata = elf_ppnt;
-   867				continue;
-   868			}
-   869	
-   870			if (elf_ppnt->p_type != PT_INTERP)
-   871				continue;
-   872	
-   873			/*
-   874			 * This is the program interpreter used for shared libraries -
-   875			 * for now assume that this is an a.out format binary.
-   876			 */
-   877			retval = -ENOEXEC;
-   878			if (elf_ppnt->p_filesz > PATH_MAX || elf_ppnt->p_filesz < 2)
-   879				goto out_free_ph;
-   880	
-   881			retval = -ENOMEM;
-   882			elf_interpreter = kmalloc(elf_ppnt->p_filesz, GFP_KERNEL);
-   883			if (!elf_interpreter)
-   884				goto out_free_ph;
-   885	
-   886			retval = elf_read(bprm->file, elf_interpreter, elf_ppnt->p_filesz,
-   887					  elf_ppnt->p_offset);
-   888			if (retval < 0)
-   889				goto out_free_interp;
-   890			/* make sure path is NULL terminated */
-   891			retval = -ENOEXEC;
-   892			if (elf_interpreter[elf_ppnt->p_filesz - 1] != '\0')
-   893				goto out_free_interp;
-   894	
-   895			interpreter = open_exec(elf_interpreter);
-   896			kfree(elf_interpreter);
-   897			retval = PTR_ERR(interpreter);
-   898			if (IS_ERR(interpreter))
-   899				goto out_free_ph;
-   900	
-   901			/*
-   902			 * If the binary is not readable then enforce mm->dumpable = 0
-   903			 * regardless of the interpreter's permissions.
-   904			 */
-   905			would_dump(bprm, interpreter);
-   906	
-   907			interp_elf_ex = kmalloc(sizeof(*interp_elf_ex), GFP_KERNEL);
-   908			if (!interp_elf_ex) {
-   909				retval = -ENOMEM;
-   910				goto out_free_ph;
-   911			}
-   912	
-   913			/* Get the exec headers */
-   914			retval = elf_read(interpreter, interp_elf_ex,
-   915					  sizeof(*interp_elf_ex), 0);
-   916			if (retval < 0)
-   917				goto out_free_dentry;
-   918	
-   919			break;
-   920	
-   921	out_free_interp:
-   922			kfree(elf_interpreter);
-   923			goto out_free_ph;
-   924		}
-   925	
-   926		elf_ppnt = elf_phdata;
-   927		for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++)
-   928			switch (elf_ppnt->p_type) {
-   929			case PT_GNU_STACK:
-   930				if (elf_ppnt->p_flags & PF_X)
-   931					executable_stack = EXSTACK_ENABLE_X;
-   932				else
-   933					executable_stack = EXSTACK_DISABLE_X;
-   934				break;
-   935	
-   936			case PT_LOPROC ... PT_HIPROC:
-   937				retval = arch_elf_pt_proc(elf_ex, elf_ppnt,
-   938							  bprm->file, false,
-   939							  &arch_state);
-   940				if (retval)
-   941					goto out_free_dentry;
-   942				break;
-   943			}
-   944	
-   945		/* Some simple consistency checks for the interpreter */
-   946		if (interpreter) {
-   947			retval = -ELIBBAD;
-   948			/* Not an ELF interpreter */
-   949			if (memcmp(interp_elf_ex->e_ident, ELFMAG, SELFMAG) != 0)
-   950				goto out_free_dentry;
-   951			/* Verify the interpreter has a valid arch */
-   952			if (!elf_check_arch(interp_elf_ex) ||
-   953			    elf_check_fdpic(interp_elf_ex))
-   954				goto out_free_dentry;
-   955	
-   956			/* Load the interpreter program headers */
-   957			interp_elf_phdata = load_elf_phdrs(interp_elf_ex,
-   958							   interpreter);
-   959			if (!interp_elf_phdata)
-   960				goto out_free_dentry;
-   961	
-   962			/* Pass PT_LOPROC..PT_HIPROC headers to arch code */
-   963			elf_property_phdata = NULL;
-   964			elf_ppnt = interp_elf_phdata;
-   965			for (i = 0; i < interp_elf_ex->e_phnum; i++, elf_ppnt++)
-   966				switch (elf_ppnt->p_type) {
-   967				case PT_GNU_PROPERTY:
-   968					elf_property_phdata = elf_ppnt;
-   969					break;
-   970	
-   971				case PT_LOPROC ... PT_HIPROC:
-   972					retval = arch_elf_pt_proc(interp_elf_ex,
-   973								  elf_ppnt, interpreter,
-   974								  true, &arch_state);
-   975					if (retval)
-   976						goto out_free_dentry;
-   977					break;
-   978				}
-   979		}
-   980	
-   981		retval = parse_elf_properties(interpreter ?: bprm->file,
-   982					      elf_property_phdata, &arch_state);
-   983		if (retval)
-   984			goto out_free_dentry;
-   985	
-   986		/*
-   987		 * Allow arch code to reject the ELF at this point, whilst it's
-   988		 * still possible to return an error to the code that invoked
-   989		 * the exec syscall.
-   990		 */
-   991		retval = arch_check_elf(elf_ex,
-   992					!!interpreter, interp_elf_ex,
-   993					&arch_state);
-   994		if (retval)
-   995			goto out_free_dentry;
-   996	
-   997		/* Flush all traces of the currently running executable */
-   998		retval = begin_new_exec(bprm);
-   999		if (retval)
-  1000			goto out_free_dentry;
-  1001	
-  1002		/* Do this immediately, since STACK_TOP as used in setup_arg_pages
-  1003		   may depend on the personality.  */
-  1004		SET_PERSONALITY2(*elf_ex, &arch_state);
-  1005		if (elf_read_implies_exec(*elf_ex, executable_stack))
-  1006			current->personality |= READ_IMPLIES_EXEC;
-  1007	
-  1008		if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
-  1009			current->flags |= PF_RANDOMIZE;
-  1010	
-  1011		setup_new_exec(bprm);
-  1012	
-  1013		/* Do this so that we can load the interpreter, if need be.  We will
-  1014		   change some of these later */
-  1015		retval = setup_arg_pages(bprm, randomize_stack_top(STACK_TOP),
-  1016					 executable_stack);
-  1017		if (retval < 0)
-  1018			goto out_free_dentry;
-  1019		
-  1020		elf_bss = 0;
-  1021		elf_brk = 0;
-  1022	
-  1023		start_code = ~0UL;
-  1024		end_code = 0;
-  1025		start_data = 0;
-  1026		end_data = 0;
-  1027	
-  1028		/* Now we do a little grungy work by mmapping the ELF image into
-  1029		   the correct location in memory. */
-  1030		for(i = 0, elf_ppnt = elf_phdata;
-  1031		    i < elf_ex->e_phnum; i++, elf_ppnt++) {
-  1032			int elf_prot, elf_flags;
-  1033			unsigned long k, vaddr;
-  1034			unsigned long total_size = 0;
-  1035			unsigned long alignment;
-  1036	
-  1037			if (elf_ppnt->p_type != PT_LOAD)
-  1038				continue;
-  1039	
-  1040			if (unlikely (elf_brk > elf_bss)) {
-  1041				unsigned long nbyte;
-  1042		            
-  1043				/* There was a PT_LOAD segment with p_memsz > p_filesz
-  1044				   before this one. Map anonymous pages, if needed,
-  1045				   and clear the area.  */
-  1046				retval = set_brk(elf_bss + load_bias,
-  1047						 elf_brk + load_bias,
-  1048						 bss_prot);
-  1049				if (retval)
-  1050					goto out_free_dentry;
-  1051				nbyte = ELF_PAGEOFFSET(elf_bss);
-  1052				if (nbyte) {
-  1053					nbyte = ELF_MIN_ALIGN - nbyte;
-  1054					if (nbyte > elf_brk - elf_bss)
-  1055						nbyte = elf_brk - elf_bss;
-  1056					if (clear_user((void __user *)elf_bss +
-  1057								load_bias, nbyte)) {
-  1058						/*
-  1059						 * This bss-zeroing can fail if the ELF
-  1060						 * file specifies odd protections. So
-  1061						 * we don't check the return value
-  1062						 */
-  1063					}
-  1064				}
-  1065			}
-  1066	
-  1067			elf_prot = make_prot(elf_ppnt->p_flags, &arch_state,
-  1068					     !!interpreter, false);
-  1069	
-  1070			elf_flags = MAP_PRIVATE | MAP_DENYWRITE | MAP_EXECUTABLE;
-  1071	
-  1072			vaddr = elf_ppnt->p_vaddr;
-  1073			/*
-  1074			 * If we are loading ET_EXEC or we have already performed
-  1075			 * the ET_DYN load_addr calculations, proceed normally.
-  1076			 */
-  1077			if (elf_ex->e_type == ET_EXEC || load_addr_set) {
-  1078				elf_flags |= MAP_FIXED;
-  1079			} else if (elf_ex->e_type == ET_DYN) {
-  1080				/*
-  1081				 * This logic is run once for the first LOAD Program
-  1082				 * Header for ET_DYN binaries to calculate the
-  1083				 * randomization (load_bias) for all the LOAD
-  1084				 * Program Headers, and to calculate the entire
-  1085				 * size of the ELF mapping (total_size). (Note that
-  1086				 * load_addr_set is set to true later once the
-  1087				 * initial mapping is performed.)
-  1088				 *
-  1089				 * There are effectively two types of ET_DYN
-  1090				 * binaries: programs (i.e. PIE: ET_DYN with INTERP)
-  1091				 * and loaders (ET_DYN without INTERP, since they
-  1092				 * _are_ the ELF interpreter). The loaders must
-  1093				 * be loaded away from programs since the program
-  1094				 * may otherwise collide with the loader (especially
-  1095				 * for ET_EXEC which does not have a randomized
-  1096				 * position). For example to handle invocations of
-  1097				 * "./ld.so someprog" to test out a new version of
-  1098				 * the loader, the subsequent program that the
-  1099				 * loader loads must avoid the loader itself, so
-  1100				 * they cannot share the same load range. Sufficient
-  1101				 * room for the brk must be allocated with the
-  1102				 * loader as well, since brk must be available with
-  1103				 * the loader.
-  1104				 *
-  1105				 * Therefore, programs are loaded offset from
-  1106				 * ELF_ET_DYN_BASE and loaders are loaded into the
-  1107				 * independently randomized mmap region (0 load_bias
-  1108				 * without MAP_FIXED).
-  1109				 */
-  1110				if (interpreter) {
-  1111					load_bias = ELF_ET_DYN_BASE;
-  1112					if (current->flags & PF_RANDOMIZE)
-  1113						load_bias += arch_mmap_rnd();
-  1114					alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
-  1115					if (alignment)
-  1116						load_bias &= ~(alignment - 1);
-  1117					elf_flags |= MAP_FIXED;
-  1118				} else
-  1119					load_bias = 0;
-  1120	
-  1121				/*
-  1122				 * Since load_bias is used for all subsequent loading
-  1123				 * calculations, we must lower it by the first vaddr
-  1124				 * so that the remaining calculations based on the
-  1125				 * ELF vaddrs will be correctly offset. The result
-  1126				 * is then page aligned.
-  1127				 */
-  1128				load_bias = ELF_PAGESTART(load_bias - vaddr);
-  1129	
-  1130				total_size = total_mapping_size(elf_phdata,
-  1131								elf_ex->e_phnum);
-  1132				if (!total_size) {
-  1133					retval = -EINVAL;
-  1134					goto out_free_dentry;
-  1135				}
-  1136			}
-  1137	
-  1138			error = elf_map(bprm->file, load_bias + vaddr, elf_ppnt,
-  1139					elf_prot, elf_flags, total_size);
-  1140			if (BAD_ADDR(error)) {
-  1141				retval = IS_ERR((void *)error) ?
-  1142					PTR_ERR((void*)error) : -EINVAL;
-  1143				goto out_free_dentry;
-  1144			}
-  1145	
-  1146			if (!load_addr_set) {
-  1147				load_addr_set = 1;
-  1148				load_addr = (elf_ppnt->p_vaddr - elf_ppnt->p_offset);
-  1149				if (elf_ex->e_type == ET_DYN) {
-  1150					load_bias += error -
-  1151					             ELF_PAGESTART(load_bias + vaddr);
-  1152					load_addr += load_bias;
-  1153					reloc_func_desc = load_bias;
-  1154				}
-  1155			}
-  1156	
-  1157			/*
-  1158			 * Figure out which segment in the file contains the Program
-  1159			 * Header table, and map to the associated memory address.
-  1160			 */
-  1161			if (elf_ppnt->p_offset <= elf_ex->e_phoff &&
-  1162			    elf_ex->e_phoff < elf_ppnt->p_offset + elf_ppnt->p_filesz) {
-  1163				phdr_addr = elf_ex->e_phoff - elf_ppnt->p_offset +
-  1164					    elf_ppnt->p_vaddr;
-  1165			}
-  1166	
-  1167			k = elf_ppnt->p_vaddr;
-  1168			if ((elf_ppnt->p_flags & PF_X) && k < start_code)
-  1169				start_code = k;
-  1170			if (start_data < k)
-  1171				start_data = k;
-  1172	
-  1173			/*
-  1174			 * Check to see if the section's size will overflow the
-  1175			 * allowed task size. Note that p_filesz must always be
-  1176			 * <= p_memsz so it is only necessary to check p_memsz.
-  1177			 */
-  1178			if (BAD_ADDR(k) || elf_ppnt->p_filesz > elf_ppnt->p_memsz ||
-  1179			    elf_ppnt->p_memsz > TASK_SIZE ||
-  1180			    TASK_SIZE - elf_ppnt->p_memsz < k) {
-  1181				/* set_brk can never work. Avoid overflows. */
-  1182				retval = -EINVAL;
-  1183				goto out_free_dentry;
-  1184			}
-  1185	
-  1186			k = elf_ppnt->p_vaddr + elf_ppnt->p_filesz;
-  1187	
-  1188			if (k > elf_bss)
-  1189				elf_bss = k;
-  1190			if ((elf_ppnt->p_flags & PF_X) && end_code < k)
-  1191				end_code = k;
-  1192			if (end_data < k)
-  1193				end_data = k;
-  1194			k = elf_ppnt->p_vaddr + elf_ppnt->p_memsz;
-  1195			if (k > elf_brk) {
-  1196				bss_prot = elf_prot;
-  1197				elf_brk = k;
-  1198			}
-  1199		}
-  1200	
-  1201		e_entry = elf_ex->e_entry + load_bias;
-  1202		phdr_addr += load_bias;
-  1203		elf_bss += load_bias;
-  1204		elf_brk += load_bias;
-  1205		start_code += load_bias;
-  1206		end_code += load_bias;
-  1207		start_data += load_bias;
-  1208		end_data += load_bias;
-  1209	
-  1210		/* Calling set_brk effectively mmaps the pages that we need
-  1211		 * for the bss and break sections.  We must do this before
-  1212		 * mapping in the interpreter, to make sure it doesn't wind
-  1213		 * up getting placed where the bss needs to go.
-  1214		 */
-  1215		retval = set_brk(elf_bss, elf_brk, bss_prot);
-  1216		if (retval)
-  1217			goto out_free_dentry;
-  1218		if (likely(elf_bss != elf_brk) && unlikely(padzero(elf_bss))) {
-  1219			retval = -EFAULT; /* Nobody gets to see this, but.. */
-  1220			goto out_free_dentry;
-  1221		}
-  1222	
-  1223		if (interpreter) {
-  1224			elf_entry = load_elf_interp(interp_elf_ex,
-  1225						    interpreter,
-  1226						    load_bias, interp_elf_phdata,
-  1227						    &arch_state);
-  1228			if (!IS_ERR((void *)elf_entry)) {
-  1229				/*
-  1230				 * load_elf_interp() returns relocation
-  1231				 * adjustment
-  1232				 */
-  1233				interp_load_addr = elf_entry;
-  1234				elf_entry += interp_elf_ex->e_entry;
-  1235			}
-  1236			if (BAD_ADDR(elf_entry)) {
-  1237				retval = IS_ERR((void *)elf_entry) ?
-  1238						(int)elf_entry : -EINVAL;
-  1239				goto out_free_dentry;
-  1240			}
-  1241			reloc_func_desc = interp_load_addr;
-  1242	
-  1243			allow_write_access(interpreter);
-  1244			fput(interpreter);
-  1245	
-  1246			kfree(interp_elf_ex);
-  1247			kfree(interp_elf_phdata);
-  1248		} else {
-  1249			elf_entry = e_entry;
-  1250			if (BAD_ADDR(elf_entry)) {
-  1251				retval = -EINVAL;
-  1252				goto out_free_dentry;
-  1253			}
-  1254		}
-  1255	
-  1256		kfree(elf_phdata);
-  1257	
-  1258		set_binfmt(&elf_format);
-  1259	
+  3177	
+> 3178	unsigned long mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+  3179	{
+  3180		struct kvm *kvm;
+  3181		int nr_to_scan = sc->nr_to_scan;
+  3182		unsigned long freed = 0;
+  3183	
+  3184		mutex_lock(&kvm_lock);
+  3185	
+  3186		list_for_each_entry(kvm, &vm_list, vm_list) {
+  3187			/*
+  3188			 * Never scan more than sc->nr_to_scan VM instances.
+  3189			 * Will not hit this condition practically since we do not try
+  3190			 * to shrink more than one VM and it is very unlikely to see
+  3191			 * !n_used_mmu_pages so many times.
+  3192			 */
+  3193			if (!nr_to_scan--)
+  3194				break;
+  3195	
+  3196			/*
+  3197			 * n_used_mmu_pages is accessed without holding kvm->mmu_lock
+  3198			 * here. We may skip a VM instance errorneosly, but we do not
+  3199			 * want to shrink a VM that only started to populate its MMU
+  3200			 * anyway.
+  3201			 */
+  3202			if (!kvm->arch.n_used_mmu_pages &&
+  3203			    !kvm_shadow_mmu_has_zapped_obsolete_pages(kvm))
+  3204				continue;
+  3205	
+  3206			freed = kvm_shadow_mmu_shrink_scan(kvm, sc->nr_to_scan);
+  3207	
+  3208			/*
+  3209			 * unfair on small ones
+  3210			 * per-vm shrinkers cry out
+  3211			 * sadness comes quickly
+  3212			 */
+  3213			list_move_tail(&kvm->vm_list, &vm_list);
+  3214			break;
+  3215		}
+  3216	
+  3217		mutex_unlock(&kvm_lock);
+  3218		return freed;
+  3219	}
+  3220	
 
 -- 
 0-DAY CI Kernel Test Service
