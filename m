@@ -1,59 +1,65 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F119D1846
-	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 13:29:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737C41846
+	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 13:37:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679232551;
+	s=mimecast20190719; t=1679233057;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=ANmcUKdeZ35HVLQbpIeLtv5km0l77GjCF1V3yivxd/c=;
-	b=EMPh7oDosPVP1plU+4QrphvBS70Lnq75U8WI2DP14DnPA5CHOTCBHA8FYe1Q+A3qIhayok
-	M3fl/cmEu+qcb5uJ3XpoDmPZQPwB0h9opIrkT9Dg0HZVbBUcXpDMVe9UNzyh5NpZDZXOG4
-	sVqz0j6OKFErZWd4KhU0st3e7DGUF2c=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=4ElBMEAOxAifaU/g2MZDiubtm18mJfcsN/DjXe1709c=;
+	b=MCO+MJ+CmSuT0SSamESJuvqJFqF8eg02jlYsrLbPl5iCd/OCafEFhAdWqpG0AcUxBRAZCk
+	YLal7Ps3IjZ4Ml6RDeF8CNe8891R83LTN1Yqq9Oy9qY4xc9OFGhLQfgzDDxOE4sJ9HfG4K
+	NdFxRI1ZEMN3miytba0QzaLa2NgQ13U=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-93-JLurGUGDOGqiEr0lqCoFdA-1; Sun, 19 Mar 2023 09:29:10 -0400
-X-MC-Unique: JLurGUGDOGqiEr0lqCoFdA-1
-Received: by mail-qv1-f72.google.com with SMTP id qf24-20020a0562144b9800b005bd49d98a78so3137134qvb.14
-        for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 06:29:10 -0700 (PDT)
+ us-mta-215-bMwlMhcbOjq4Bq7derjhAA-1; Sun, 19 Mar 2023 09:37:36 -0400
+X-MC-Unique: bMwlMhcbOjq4Bq7derjhAA-1
+Received: by mail-qk1-f200.google.com with SMTP id 72-20020a37064b000000b007467c5d3abeso523293qkg.19
+        for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 06:37:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679232550;
+        d=1e100.net; s=20210112; t=1679233056;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ANmcUKdeZ35HVLQbpIeLtv5km0l77GjCF1V3yivxd/c=;
-        b=qiMbjM9TDj9V1rUFdRxabABAsOwj37kKaAIHcFZ12jM7I+GimTa0A6ZFMn9Ep0EX3s
-         WObIjJbOb9BjaqLM3P56pP6dOI8h23/FQaPba0d+cKGhJdaYyiFYuRkIY1c0d5UvrrxD
-         Bc43dEFPk6EvUysZhDpMcrmkW0QbJfjmBFjnHx6axebVFDNUAOq9IYk5P61ITQMy2SWr
-         yD3aDSN0mwYkS7RIZmNOD/CNPEcgVB4vT940poLMM6B+SC/qpCP0bsXPPuYe1I9DhYoZ
-         KntjKyUrp00rpFd9oUyles7rJ0cUb4JZ7wAdL53R09oR9lrHKVeV/02g0yTiF5NjAD4n
-         SH4Q==
-X-Gm-Message-State: AO0yUKUNS4wFxzIwzDytTksxcteZiQ16Dt2Sf6SAIZ/FPeUIf85oWFLN
-	R/kbJiuXNgPtVkRqxUoXWfitfynBFexTv5gh+nea+a2snGTcq7dRe4/HstDOtbh8ss8eCjSJkls
-	b/jXeFkJBkSYSUw==
-X-Received: by 2002:ad4:5b82:0:b0:5c6:92e0:ba3 with SMTP id 2-20020ad45b82000000b005c692e00ba3mr4241348qvp.2.1679232549862;
-        Sun, 19 Mar 2023 06:29:09 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9gPmwGNLtM0v9nVCNI6C/T0bsibDS00yQE+EVnyhxbao46OynaehouvyMppAXl7cpBQG3Ljw==
-X-Received: by 2002:ad4:5b82:0:b0:5c6:92e0:ba3 with SMTP id 2-20020ad45b82000000b005c692e00ba3mr4241321qvp.2.1679232549482;
-        Sun, 19 Mar 2023 06:29:09 -0700 (PDT)
+        bh=4ElBMEAOxAifaU/g2MZDiubtm18mJfcsN/DjXe1709c=;
+        b=bpaUD7fZG5EvsYbD/mJivH1dnH7LBhHIFttUIghGhLko0nuOp0+yDdodzatwH4UwS/
+         UcM3ja9Ed/ZIMSs62Av5/ztKJFLXkbmve/DDxLtqAed1CKn/+8FyQw3496TtlXO1PTSY
+         S2PII8v2Zr/Yw4BdWfNXlYv4UkXg/L3T//7ZSTDytws/f272R5hAxUP5NGhvt8VzmKx1
+         5GIGc2pEn49WawEq6Zz3Mko7u6V/fjO5RH5GnYwDr9hdUg7OX8E+9+//jYVZlxRnSCj6
+         X6nIW5e8GX/8gD4d9mp0QTlO/yfE9upk/kUWYlslUSvSolLeKuADir/fQ4+4rsi216yE
+         IxUg==
+X-Gm-Message-State: AO0yUKUcTiWXuSD56BOHZYvndfHjULHEs4TxWMbbNc4Suzjp6faUkyrX
+	UBIAGRpKg69XG50JWtnHF3DayhokjpYctbsaIFCVZ/XfzgNj7CD/Z/Fox/pafMEBosGkd0p4Nim
+	qXPWt1WHZKaHpKw==
+X-Received: by 2002:ac8:7d8d:0:b0:3b8:5bc6:deab with SMTP id c13-20020ac87d8d000000b003b85bc6deabmr23562506qtd.8.1679233056184;
+        Sun, 19 Mar 2023 06:37:36 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8IdYHA1YnUBVuZoPyzEs2rGkOGdaTNCx3yzfNl2lCRczCgZAgZJ1vDCIHW7RUBIRurqasktA==
+X-Received: by 2002:ac8:7d8d:0:b0:3b8:5bc6:deab with SMTP id c13-20020ac87d8d000000b003b85bc6deabmr23562486qtd.8.1679233055937;
+        Sun, 19 Mar 2023 06:37:35 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 124-20020a370482000000b0073b929d0371sm5472111qke.4.2023.03.19.06.29.08
+        by smtp.gmail.com with ESMTPSA id h12-20020ac8568c000000b003d75bb8e652sm4551676qta.65.2023.03.19.06.37.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 06:29:09 -0700 (PDT)
+        Sun, 19 Mar 2023 06:37:35 -0700 (PDT)
 From: Tom Rix <trix@redhat.com>
-To: Liam.Howlett@oracle.com,
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org,
 	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-mm@kvack.org,
+	ndesaulniers@google.com,
+	sven@svenpeter.dev,
+	agx@sigxcpu.org,
+	Jonathan.Cameron@huawei.com,
+	jun.nie@linaro.org,
+	u.kleine-koenig@pengutronix.de
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] maple_tree: remove unused maple_tree functions
-Date: Sun, 19 Mar 2023 09:29:03 -0400
-Message-Id: <20230319132903.1702426-1-trix@redhat.com>
+Subject: [PATCH] usb: typec: tipd: remove unused tps6598x_write16,32 functions
+Date: Sun, 19 Mar 2023 09:37:32 -0400
+Message-Id: <20230319133732.1702841-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -67,51 +73,42 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
 clang with W=1 reports
-lib/maple_tree.c:331:21: error: unused function
-  'mte_set_full' [-Werror,-Wunused-function]
-static inline void *mte_set_full(const struct maple_enode *node)
-                    ^
-lib/maple_tree.c:336:21: error: unused function
-  'mte_clear_full' [-Werror,-Wunused-function]
-static inline void *mte_clear_full(const struct maple_enode *node)
-                    ^
-lib/maple_tree.c:341:20: error: unused function
-  'mte_has_null' [-Werror,-Wunused-function]
-static inline bool mte_has_null(const struct maple_enode *node)
-                   ^
+drivers/usb/typec/tipd/core.c:180:19: error: unused function
+  'tps6598x_write16' [-Werror,-Wunused-function]
+static inline int tps6598x_write16(struct tps6598x *tps, u8 reg, u16 val)
+                  ^
+drivers/usb/typec/tipd/core.c:185:19: error: unused function
+  'tps6598x_write32' [-Werror,-Wunused-function]
+static inline int tps6598x_write32(struct tps6598x *tps, u8 reg, u32 val)
+                  ^
 These static functions are not used, so remove them.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- lib/maple_tree.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+ drivers/usb/typec/tipd/core.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 556ca46a9b44..e407f29ef91a 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -328,21 +328,6 @@ static inline void *mte_safe_root(const struct maple_enode *node)
- 	return (void *)((unsigned long)node & ~MAPLE_ROOT_NODE);
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index 485b90c13078..af6ecb54b52c 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -177,16 +177,6 @@ static inline int tps6598x_read64(struct tps6598x *tps, u8 reg, u64 *val)
+ 	return tps6598x_block_read(tps, reg, val, sizeof(u64));
  }
  
--static inline void *mte_set_full(const struct maple_enode *node)
+-static inline int tps6598x_write16(struct tps6598x *tps, u8 reg, u16 val)
 -{
--	return (void *)((unsigned long)node & ~MAPLE_ENODE_NULL);
+-	return tps6598x_block_write(tps, reg, &val, sizeof(u16));
 -}
 -
--static inline void *mte_clear_full(const struct maple_enode *node)
+-static inline int tps6598x_write32(struct tps6598x *tps, u8 reg, u32 val)
 -{
--	return (void *)((unsigned long)node | MAPLE_ENODE_NULL);
+-	return tps6598x_block_write(tps, reg, &val, sizeof(u32));
 -}
 -
--static inline bool mte_has_null(const struct maple_enode *node)
--{
--	return (unsigned long)node & MAPLE_ENODE_NULL;
--}
--
- static inline bool ma_is_root(struct maple_node *node)
+ static inline int tps6598x_write64(struct tps6598x *tps, u8 reg, u64 val)
  {
- 	return ((unsigned long)node->parent & MA_ROOT_PARENT);
+ 	return tps6598x_block_write(tps, reg, &val, sizeof(u64));
 -- 
 2.27.0
 
