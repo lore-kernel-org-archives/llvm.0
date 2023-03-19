@@ -1,61 +1,61 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BEBB1856
-	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 14:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16F7EE4C9
+	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 14:36:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679235807;
+	s=mimecast20190719; t=1679236605;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=T/hIkiUkQpnPgtTLze7otKxFbigf/WOsrX7aDGKl4Xk=;
-	b=eWsaXKn2RPxxApNuIluoStLQcmTpnWoZDxgwYtjxatvbvQI9X+aQgZHOytmzwftrxlhotQ
-	RwuFnzDUMcfxUAnlKs3L35oWts9U7yYmUjko7ZNtdr8g6vHxLVDXlDbGOJ9OFhvNIBn0sN
-	2bDmnYN9MZa1/LJC/0Bekgyxz1CV9G8=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=XWzHgiL2NSowgeGQA1tqAXRb6Sm60VFytFuHZjvfdfI=;
+	b=he5pGrG98aZU2TwVYxzyw8yHnJrCJAVJnJ/qP0M8L9St/T5fYv+CCUVoZap9qk3ro0KOuU
+	BcIQF9SiGPGDq9vHQzorss6bHcIioRcF7s0LO/FH8v6bsSlHOgA+twokdp80k74Qs2Vhk1
+	BbY+qnaGxa2A4rgpnoEkWIlH6XRLBxM=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-97-GASHENiGOkCZIp1Eh7jq9g-1; Sun, 19 Mar 2023 10:23:24 -0400
-X-MC-Unique: GASHENiGOkCZIp1Eh7jq9g-1
-Received: by mail-qt1-f200.google.com with SMTP id i24-20020ac84f58000000b003bfe3358691so5317837qtw.21
-        for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 07:23:24 -0700 (PDT)
+ us-mta-262-muCV1Y-kOO6aKYU286jahA-1; Sun, 19 Mar 2023 10:36:44 -0400
+X-MC-Unique: muCV1Y-kOO6aKYU286jahA-1
+Received: by mail-qv1-f72.google.com with SMTP id q1-20020ad44341000000b005a676b725a2so4891560qvs.18
+        for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 07:36:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679235804;
+        d=1e100.net; s=20210112; t=1679236604;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=T/hIkiUkQpnPgtTLze7otKxFbigf/WOsrX7aDGKl4Xk=;
-        b=tIz0AWNprFsyzLPBlUCORKzY2N/a7yKtXRvn+XnCPkhg7B4B6Hw9DThbhZz1JG1lNb
-         SqUtNkG945Kfdw1ho0vdw87A56xlJoDvQdGxpwBW0r1xtMAiErpP/gUOeuPxnPV0YQZ1
-         7gpmoYo1m/t3sfRhlfnNfgxtUJPBwOx7k4jXlut7DWIeDP4T/m34pd9qSjyQu6y4hjjm
-         dUGz1WA5z0lvA8jroaRwLcwhZ4kMeM89DxN8Nf6Apz0TYRm8en2XW3NkFS2ojeCWUlux
-         gv+MfDI2gtfZQZ1lFGt17o/ogrOv4oCUbrK6Gy+VGFFrJNpbDHFSrjdc4ywv1xmh4QNY
-         yQLQ==
-X-Gm-Message-State: AO0yUKVlHZBxmZWQsqKkPug0Npz+/yQjWc3Y6S8ivQ1EI4182UEtX16w
-	lCPIJi/xR2el0GYsrjx7nsi7c+i+zcz8t+OzZ/6lKT3aKb1EUsb2as3WuulSfNxeh2/DZD4HNuk
-	Td1txGi5w0tha00Xtmbd/mA==
-X-Received: by 2002:ac8:5c81:0:b0:3b8:2504:e90a with SMTP id r1-20020ac85c81000000b003b82504e90amr14481137qta.3.1679235803805;
-        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+VdKmYQdrgrfLXblYozKf6KZb4B0tCRITCJXTgRYRA6AKoIA4AB44uaiwX/F6ze/obzO3pzQ==
-X-Received: by 2002:ac8:5c81:0:b0:3b8:2504:e90a with SMTP id r1-20020ac85c81000000b003b82504e90amr14481124qta.3.1679235803572;
-        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
+        bh=XWzHgiL2NSowgeGQA1tqAXRb6Sm60VFytFuHZjvfdfI=;
+        b=41e6hvtpZGqqjnSqzrcLVk3F0Domdk6hPRhoCyl8fr9TP+287CpZg6T4EqiQTMmeku
+         m1Dzy5yhvuYmsBBaX4GAYlszbGexRpITpUl7engwAbzRfXLE7H4aiQDVPu0/I6CLuLCB
+         CJhxQlYgnXi3vRSINCzsS27onbtR8i5MzoB9dKsq0RTNNXEjKw8A3MjVSnTQFIpggfg+
+         Y1j6xs9hnl7i4WGiloAf3J/y5sVLQ0ahE5T8S20dMaiiOa8EBJvIWTJOdcAMI3D/I2p/
+         m+Og4Q/scsk0c1/1WZCyaiEc/Dq+cv5pLYzxUcBPMAgGdxu8SsywB5PbZakydNdIXujh
+         +Y7g==
+X-Gm-Message-State: AO0yUKXwELeWem5BrerNwnLJpw9MKlXP606iu7Q3mtq3xC8hMVuHPVJD
+	7f5URPif9uSQ1N72cM7IYhj/ISSzYrT//IAGK7wPFEBu4ubN2qiV8ouAVI+H51Yk/wKGhFa9hFj
+	fzvJH/JhxxOLDZw==
+X-Received: by 2002:a05:622a:1214:b0:3e0:98f3:6cec with SMTP id y20-20020a05622a121400b003e098f36cecmr1856192qtx.44.1679236603785;
+        Sun, 19 Mar 2023 07:36:43 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+97Dibvhqhg/Ulk6oZwTmlmWDnkiUm3S+2qMc0ntf5rUqQTbBuvGEsBgE3pdJyCZ+fZ2xf9g==
+X-Received: by 2002:a05:622a:1214:b0:3e0:98f3:6cec with SMTP id y20-20020a05622a121400b003e098f36cecmr1856174qtx.44.1679236603549;
+        Sun, 19 Mar 2023 07:36:43 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id o8-20020ac841c8000000b003de4e646d63sm2103047qtm.32.2023.03.19.07.23.22
+        by smtp.gmail.com with ESMTPSA id l16-20020ac84a90000000b003d4ee7879d0sm2756qtq.56.2023.03.19.07.36.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 07:23:23 -0700 (PDT)
+        Sun, 19 Mar 2023 07:36:43 -0700 (PDT)
 From: Tom Rix <trix@redhat.com>
-To: patrik.r.jakobsson@gmail.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
+To: robert.jarzmik@free.fr,
+	linus.walleij@linaro.org,
+	brgl@bgdev.pl,
 	nathan@kernel.org,
 	ndesaulniers@google.com
-Cc: dri-devel@lists.freedesktop.org,
+Cc: linux-gpio@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/gma500: remove unused gma_pipe_event function
-Date: Sun, 19 Mar 2023 10:23:20 -0400
-Message-Id: <20230319142320.1704336-1-trix@redhat.com>
+Subject: [PATCH] gpio: pxa: remove unused gpio_is_pxa_type function
+Date: Sun, 19 Mar 2023 10:36:40 -0400
+Message-Id: <20230319143640.1704735-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -69,39 +69,33 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
 clang with W=1 reports
-drivers/gpu/drm/gma500/psb_irq.c:35:19: error: unused function
-  'gma_pipe_event' [-Werror,-Wunused-function]
-static inline u32 gma_pipe_event(int pipe)
+drivers/gpio/gpio-pxa.c:174:19: error: unused function
+  'gpio_is_pxa_type' [-Werror,-Wunused-function]
+static inline int gpio_is_pxa_type(int type)
                   ^
 This function is not used, so remove it.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/gpu/drm/gma500/psb_irq.c | 11 -----------
- 1 file changed, 11 deletions(-)
+ drivers/gpio/gpio-pxa.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/gma500/psb_irq.c b/drivers/gpu/drm/gma500/psb_irq.c
-index d421031462df..343c51250207 100644
---- a/drivers/gpu/drm/gma500/psb_irq.c
-+++ b/drivers/gpu/drm/gma500/psb_irq.c
-@@ -32,17 +32,6 @@ static inline u32 gma_pipestat(int pipe)
- 	BUG();
+diff --git a/drivers/gpio/gpio-pxa.c b/drivers/gpio/gpio-pxa.c
+index 1198ab0305d0..a1630ed4b741 100644
+--- a/drivers/gpio/gpio-pxa.c
++++ b/drivers/gpio/gpio-pxa.c
+@@ -171,11 +171,6 @@ static inline struct pxa_gpio_bank *gpio_to_pxabank(struct gpio_chip *c,
+ 	return chip_to_pxachip(c)->banks + gpio / 32;
  }
  
--static inline u32 gma_pipe_event(int pipe)
+-static inline int gpio_is_pxa_type(int type)
 -{
--	if (pipe == 0)
--		return _PSB_PIPEA_EVENT_FLAG;
--	if (pipe == 1)
--		return _MDFLD_PIPEB_EVENT_FLAG;
--	if (pipe == 2)
--		return _MDFLD_PIPEC_EVENT_FLAG;
--	BUG();
+-	return (type & MMP_GPIO) == 0;
 -}
 -
- static inline u32 gma_pipeconf(int pipe)
+ static inline int gpio_is_mmp_type(int type)
  {
- 	if (pipe == 0)
+ 	return (type & MMP_GPIO) != 0;
 -- 
 2.27.0
 
