@@ -1,284 +1,52 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5397B1846;
-	Sun, 19 Mar 2023 14:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679237233; x=1710773233;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7wi+QQ2GtL/7hx48hwBKhnxFCxwLp4AWVEyeH+VVUQ0=;
-  b=QvQTdTgKlWViF+4KesSv/Oz4+BJiBS6kV9/DtE52Tdml2+WkSaB8tiQW
-   mD21tGJIRS1wPb12XpLJ08qG6w/iNnGSArs4PsapFhHJOyYEJiKsnnWLQ
-   NgmGFK5hFB6qvje7cS1QiN4gZfN9iV1Ec8F7r4wEruxPhgI2eS7FJWa9e
-   wXMryKYqqaK5R6etCaScavkpnjLDdYp4aNeIYAgYBo4MWN7mRskYYqrQC
-   o0nSKN/4BmOvnkAfR9lDKX5oNucyhKlI2AKpqljMx+X0S2oISTs/ToMiD
-   yk/VOdCxkv/aha8RolNLxWS2CJ2sHxNOHv42jBRftnzyssbx/D9FVVd/H
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="340052156"
-X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
-   d="scan'208";a="340052156"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 07:47:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="680813633"
-X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
-   d="scan'208";a="680813633"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 19 Mar 2023 07:47:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pduJQ-000AYS-29;
-	Sun, 19 Mar 2023 14:47:08 +0000
-Date: Sun, 19 Mar 2023 22:46:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ben Gardon <bgardon@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sean Christopherson <seanjc@google.com>
-Subject: [sean-jc:x86/formalize_shadow_mmu 30/39]
- arch/x86/kvm/mmu/paging_tmpl.h:883:5: error: no previous prototype for
- function 'ept_sync_spte'
-Message-ID: <202303192202.LZsYMrp9-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65061E4DA
+	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 15:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E44FC433D2;
+	Sun, 19 Mar 2023 15:21:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679239277;
+	bh=X6Wow6KKerQaleqzMVF1PBmhuJOFPbG4PJDoBqXRDkA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=fbwSp60FTnEXYV/5fsld3fc8yUiPTDcOW3Rcu+QM+hTT4jXXJMkWTC5NBD+TpoSxt
+	 XPuL/ekAke+/OIRqDYF904AmYi6AVkIessZCAJJGzEBRxMZieRhDUl8ud840BOsXbz
+	 B8retvRRHqhNXFSXoRdiOaZRNmdnuJHv3z+6jyfFcZYEE/7ksJ0HMbNH4recTsnYot
+	 zESPTm1nntrVq9yO69OW7arfzeLOb7t19LgVd1wiPnB4v/V+vZNwHYr8pocBRJQ1fw
+	 mfir6gRmX//iGnwbmXFYZeK//kFLduA1bGbtUWbGaaH3GXE20ZxOjV2+NuPHIwkRVE
+	 xpdu6Es0pdvDg==
+From: Kalle Valo <kvalo@kernel.org>
+To: Tom Rix <trix@redhat.com>
+Cc: stas.yakovlev@gmail.com,  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,  pabeni@redhat.com,  nathan@kernel.org,  ndesaulniers@google.com,  linux-wireless@vger.kernel.org,  netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,  llvm@lists.linux.dev
+Subject: Re: [PATCH] ipw2x00: remove unused _ipw_read16 function
+In-Reply-To: <20230319135418.1703380-1-trix@redhat.com> (Tom Rix's message of
+	"Sun, 19 Mar 2023 09:54:18 -0400")
+References: <20230319135418.1703380-1-trix@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date: Sun, 19 Mar 2023 17:21:09 +0200
+Message-ID: <87ilewix7e.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
-Hi Ben,
+Tom Rix <trix@redhat.com> writes:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+> clang with W=1 reports
+> drivers/net/wireless/intel/ipw2x00/ipw2200.c:381:19: error:
+>   unused function '_ipw_read16' [-Werror,-Wunused-function]
+> static inline u16 _ipw_read16(struct ipw_priv *ipw, unsigned long ofs)
+>                   ^
+> This function and its wrapping marco are not used, so remove them.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-tree:   https://github.com/sean-jc/linux x86/formalize_shadow_mmu
-head:   dd395c7174581183cd66020ac5a784bdf2e79cd1
-commit: 6872b75e1974f3841e145f7d5b7edb63c053ff24 [30/39] KVM: x86/MMU: Clean up naming of exported Shadow MMU functions
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230319/202303192202.LZsYMrp9-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/sean-jc/linux/commit/6872b75e1974f3841e145f7d5b7edb63c053ff24
-        git remote add sean-jc https://github.com/sean-jc/linux
-        git fetch --no-tags sean-jc x86/formalize_shadow_mmu
-        git checkout 6872b75e1974f3841e145f7d5b7edb63c053ff24
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303192202.LZsYMrp9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   arch/x86/kvm/mmu/shadow_mmu.c:50:8: error: redefinition of 'pte_list_desc'
-   struct pte_list_desc {
-          ^
-   arch/x86/kvm/mmu/shadow_mmu.h:29:8: note: previous definition is here
-   struct pte_list_desc {
-          ^
-   arch/x86/kvm/mmu/shadow_mmu.c:535:9: error: no member named 'tail_count' in 'struct pte_list_desc'
-                   desc->tail_count = 0;
-                   ~~~~  ^
-   arch/x86/kvm/mmu/shadow_mmu.c:541:17: error: no member named 'tail_count' in 'struct pte_list_desc'
-                   count = desc->tail_count + desc->spte_count;
-                           ~~~~  ^
-   arch/x86/kvm/mmu/shadow_mmu.c:551:10: error: no member named 'tail_count' in 'struct pte_list_desc'
-                           desc->tail_count = count;
-                           ~~~~  ^
-   arch/x86/kvm/mmu/shadow_mmu.c:673:15: error: no member named 'tail_count' in 'struct pte_list_desc'
-           return desc->tail_count + desc->spte_count;
-                  ~~~~  ^
-   arch/x86/kvm/mmu/shadow_mmu.c:811:3: error: implicit declaration of function 'kvm_flush_remote_tlbs_sptep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   kvm_flush_remote_tlbs_sptep(kvm, sptep);
-                   ^
-   arch/x86/kvm/mmu/shadow_mmu.c:905:13: error: static declaration of 'kvm_zap_rmap' follows non-static declaration
-   static bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:46:6: note: previous declaration is here
-   bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:912:13: error: static declaration of 'kvm_set_pte_rmap' follows non-static declaration
-   static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:49:6: note: previous declaration is here
-   bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:1025:29: error: static declaration of 'kvm_handle_gfn_range' follows non-static declaration
-   static __always_inline bool kvm_handle_gfn_range(struct kvm *kvm,
-                               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:56:6: note: previous declaration is here
-   bool kvm_handle_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:1040:13: error: static declaration of 'kvm_age_rmap' follows non-static declaration
-   static bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:59:6: note: previous declaration is here
-   bool kvm_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:1054:13: error: static declaration of 'kvm_test_age_rmap' follows non-static declaration
-   static bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:62:6: note: previous declaration is here
-   bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:1294:13: error: static declaration of 'kvm_mmu_prepare_zap_page' follows non-static declaration
-   static bool kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:71:6: note: previous declaration is here
-   bool kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:1296:13: error: static declaration of 'kvm_mmu_commit_zap_page' follows non-static declaration
-   static void kvm_mmu_commit_zap_page(struct kvm *kvm,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:73:6: note: previous declaration is here
-   void kvm_mmu_commit_zap_page(struct kvm *kvm, struct list_head *invalid_list);
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:1866:3: error: implicit declaration of function 'kvm_flush_remote_tlbs_sptep' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   kvm_flush_remote_tlbs_sptep(vcpu->kvm, sptep);
-                   ^
-   arch/x86/kvm/mmu/shadow_mmu.c:1947:13: error: static declaration of '__kvm_mmu_prepare_zap_page' follows non-static declaration
-   static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:68:6: note: previous declaration is here
-   bool __kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:2012:13: error: static declaration of 'kvm_mmu_prepare_zap_page' follows non-static declaration
-   static bool kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:71:6: note: previous declaration is here
-   bool kvm_mmu_prepare_zap_page(struct kvm *kvm, struct kvm_mmu_page *sp,
-        ^
-   arch/x86/kvm/mmu/shadow_mmu.c:2021:13: error: static declaration of 'kvm_mmu_commit_zap_page' follows non-static declaration
-   static void kvm_mmu_commit_zap_page(struct kvm *kvm,
-               ^
-   arch/x86/kvm/mmu/shadow_mmu.h:73:6: note: previous declaration is here
-   void kvm_mmu_commit_zap_page(struct kvm *kvm, struct list_head *invalid_list);
-        ^
-   In file included from arch/x86/kvm/mmu/shadow_mmu.c:2961:
->> arch/x86/kvm/mmu/paging_tmpl.h:883:5: error: no previous prototype for function 'ept_sync_spte' [-Werror,-Wmissing-prototypes]
-   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
-       ^
-   arch/x86/kvm/mmu/paging_tmpl.h:54:22: note: expanded from macro 'FNAME'
-           #define FNAME(name) ept_##name
-                               ^
-   <scratch space>:197:1: note: expanded from here
-   ept_sync_spte
-   ^
-   arch/x86/kvm/mmu/paging_tmpl.h:883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
-   ^
-   static 
-   In file included from arch/x86/kvm/mmu/shadow_mmu.c:2965:
->> arch/x86/kvm/mmu/paging_tmpl.h:883:5: error: no previous prototype for function 'paging64_sync_spte' [-Werror,-Wmissing-prototypes]
-   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
-       ^
-   arch/x86/kvm/mmu/paging_tmpl.h:27:22: note: expanded from macro 'FNAME'
-           #define FNAME(name) paging##64_##name
-                               ^
-   <scratch space>:115:1: note: expanded from here
-   paging64_sync_spte
-   ^
-   arch/x86/kvm/mmu/paging_tmpl.h:883:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
-   ^
-   static 
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-
-
-vim +/ept_sync_spte +883 arch/x86/kvm/mmu/paging_tmpl.h
-
-6539e738f65a8f arch/x86/kvm/paging_tmpl.h     Joerg Roedel        2010-09-10  871  
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  872  /*
-6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  873   * Using the information in sp->shadowed_translation (kvm_mmu_page_get_gfn()) is
-6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  874   * safe because:
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  875   * - The spte has a reference to the struct page, so the pfn for a given gfn
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  876   *   can't change unless all sptes pointing to it are nuked first.
-c3e5e415bc1e6c arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2021-09-18  877   *
-c3e5e415bc1e6c arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2021-09-18  878   * Returns
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  879   * < 0: failed to sync spte
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  880   *   0: the spte is synced and no tlb flushing is required
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  881   * > 0: the spte is synced and tlb flushing is required
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  882   */
-47e60247f1c316 arch/x86/kvm/mmu/paging_tmpl.h Ben Gardon          2023-02-02 @883  int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  884  {
-9bdbba13b88688 arch/x86/kvm/paging_tmpl.h     Lai Jiangshan       2010-11-19  885  	bool host_writable;
-51fb60d81b483a arch/x86/kvm/paging_tmpl.h     Gui Jianfeng        2010-04-16  886  	gpa_t first_pte_gpa;
-4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  887  	u64 *sptep, spte;
-53597858dbf8da arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2021-08-17  888  	struct kvm_memory_slot *slot;
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  889  	unsigned pte_access;
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  890  	pt_element_t gpte;
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  891  	gpa_t pte_gpa;
-f55c3f419ab1f0 arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2010-05-13  892  	gfn_t gfn;
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  893  
-19ace7d6ca15a4 arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-17  894  	if (WARN_ON_ONCE(!sp->spt[i]))
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  895  		return 0;
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  896  
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  897  	first_pte_gpa = FNAME(get_level1_sp_gpa)(sp);
-51fb60d81b483a arch/x86/kvm/paging_tmpl.h     Gui Jianfeng        2010-04-16  898  	pte_gpa = first_pte_gpa + i * sizeof(pt_element_t);
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  899  
-54bf36aac52031 arch/x86/kvm/paging_tmpl.h     Paolo Bonzini       2015-04-08  900  	if (kvm_vcpu_read_guest_atomic(vcpu, pte_gpa, &gpte,
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  901  				       sizeof(pt_element_t)))
-c3e5e415bc1e6c arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2021-09-18  902  		return -1;
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  903  
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  904  	if (FNAME(prefetch_invalid_gpte)(vcpu, sp, &sp->spt[i], gpte))
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  905  		return 1;
-407c61c6bd6a51 arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2010-11-23  906  
-ce88decffd17bf arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  907  	gfn = gpte_to_gfn(gpte);
-ce88decffd17bf arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  908  	pte_access = sp->role.access;
-42522d08cdba6d arch/x86/kvm/paging_tmpl.h     Peter Xu            2018-07-18  909  	pte_access &= FNAME(gpte_access)(gpte);
-44dd3ffa7bb311 arch/x86/kvm/paging_tmpl.h     Vitaly Kuznetsov    2018-10-08  910  	FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
-ce88decffd17bf arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  911  
-c3e5e415bc1e6c arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2021-09-18  912  	if (sync_mmio_spte(vcpu, &sp->spt[i], gfn, pte_access))
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  913  		return 0;
-ce88decffd17bf arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  914  
-9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  915  	/*
-9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  916  	 * Drop the SPTE if the new protections would result in a RWX=0
-9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  917  	 * SPTE or if the gfn is changing.  The RWX=0 case only affects
-9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  918  	 * EPT with execute-only support, i.e. EPT without an effective
-9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  919  	 * "present" bit, as all other paging modes will create a
-9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  920  	 * read-only SPTE if pte_access is zero.
-9fb3565743d583 arch/x86/kvm/mmu/paging_tmpl.h Sean Christopherson 2022-05-13  921  	 */
-6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  922  	if ((!pte_access && !shadow_present_mask) ||
-6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  923  	    gfn != kvm_mmu_page_get_gfn(sp, i)) {
-c37079586f317d arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2011-07-12  924  		drop_spte(vcpu->kvm, &sp->spt[i]);
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  925  		return 1;
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  926  	}
-e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  927  	/*
-e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  928  	 * Do nothing if the permissions are unchanged.  The existing SPTE is
-e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  929  	 * still, and prefetch_invalid_gpte() has verified that the A/D bits
-e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  930  	 * are set in the "new" gPTE, i.e. there is no danger of missing an A/D
-e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  931  	 * update due to A/D bits being set in the SPTE but not the gPTE.
-e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  932  	 */
-e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  933  	if (kvm_mmu_page_get_access(sp, i) == pte_access)
-e6722d9211b2aa arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  934  		return 0;
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  935  
-6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  936  	/* Update the shadowed access bits in case they changed. */
-6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  937  	kvm_mmu_page_set_access(sp, i, pte_access);
-6a97575d5cffb7 arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2022-06-22  938  
-4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  939  	sptep = &sp->spt[i];
-4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  940  	spte = *sptep;
-4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  941  	host_writable = spte & shadow_host_writable_mask;
-53597858dbf8da arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2021-08-17  942  	slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn);
-53597858dbf8da arch/x86/kvm/mmu/paging_tmpl.h David Matlack       2021-08-17  943  	make_spte(vcpu, sp, slot, pte_access, gfn,
-4758d47e0d685c arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  944  		  spte_to_pfn(spte), spte, true, false,
-7158bee4b47519 arch/x86/kvm/mmu/paging_tmpl.h Paolo Bonzini       2021-08-17  945  		  host_writable, &spte);
-f8e453b00cf1d9 arch/x86/kvm/paging_tmpl.h     Xiao Guangrong      2010-12-23  946  
-c3c6c9fc5d24bc arch/x86/kvm/mmu/paging_tmpl.h Lai Jiangshan       2023-02-16  947  	return mmu_spte_update(sptep, spte);
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  948  }
-e8bc217aef67d4 arch/x86/kvm/paging_tmpl.h     Marcelo Tosatti     2008-09-23  949  
-
-:::::: The code at line 883 was first introduced by commit
-:::::: 47e60247f1c316484333b71439780fd37a2c1014 KVM: x86/MMU: Move paging_tmpl.h includes to shadow_mmu.c
-
-:::::: TO: Ben Gardon <bgardon@google.com>
-:::::: CC: Sean Christopherson <seanjc@google.com>
+I'll add "wifi:" to the title.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
