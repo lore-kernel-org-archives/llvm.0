@@ -1,71 +1,265 @@
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE1B7C
-	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 21:18:01 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id e65so10852753ybh.10
-        for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 14:18:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679260681;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OvuN9jR+G4W2pj0hYHw8fCbcQee3vmX+JNF1Jp+xXy4=;
-        b=ZvR6jfv7uP8WYBs2D1jZNN/C/OpwONxAwGY8g4y5Y6CCqtOnA+7n//k/XDwV9VBgTa
-         XM1qNRq51rD9AuUOu3/TFVWZUsVA80XFrgGOUEvzM2KJWwA9VPihrLwVvSQAxa5k4JNt
-         lTEBuZBYSCyL5+W3TcAAfnSixOanlqLP4dVI/9bdXGeS6XQEjHuVZSoZXF2vTFJ/J+lZ
-         loH1NcRrBf4DdaCt6DSvW4YDdStWURtLpVJJ2SRk7Vi9AROqZhZ8kr17hjzuDUjnzAq0
-         v8OIHE8q0sw9XszdserPpgjcmpYtOsWJNmWcBTYD6NRza3pzELR1Zl+AL6J3nz7s3npM
-         Jx0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679260681;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OvuN9jR+G4W2pj0hYHw8fCbcQee3vmX+JNF1Jp+xXy4=;
-        b=oFT1JCSbrCUDnQg+DugLl6SJuPvyM93gBHKB3qxXPiQwRpZXHp+OT6QNJyGg+1W1QM
-         F2F78ZJCkuH6BQY3KLjei3qEudYQKk9tYWC89q/46OJGMb6oKTPogt5roSt2QPhHmnrX
-         2s7QIdDDTlhhmGi85no9Z2n8GTiOV0UTf/U7qcNZDepCZ5skFuMBb0940Z4A9BtRNzAE
-         0UpBXosGE3oCKjAOh+B1LxSGfUyCRXXVkVDWqeG/YaOm4MMUgohEva7zotI04/r6IPCj
-         b/zk+Xeds3VVe/gMuuSDaxhGiffspGhTtBacorun0hWsASqQT8egdrSTw28+G45tMtSn
-         LQew==
-X-Gm-Message-State: AO0yUKUbnkUzCMDygg3C9mVry3trCahnmNLda5F2JFjfTQuRWCkpoPYN
-	pXR2eXXHKj0nM5saITCNsLuQYPk1il7GvewQ3HJdog==
-X-Google-Smtp-Source: AK7set+9VnS+Zx/Lf+kkoI5Pn5uEfuXiMP/8MBqDkugjbYgC+nPgXVZvyjCbx64znVipe6WWNffPhmpNXjZ+Lq3mMew=
-X-Received: by 2002:a05:6902:1243:b0:b13:7a6:f462 with SMTP id
- t3-20020a056902124300b00b1307a6f462mr5166402ybu.3.1679260680938; Sun, 19 Mar
- 2023 14:18:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91A9A35;
+	Sun, 19 Mar 2023 22:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679266588; x=1710802588;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wjE/G7gWwGzmXJlP821K/c1CGX5wOLr+QKc5UK/+cBQ=;
+  b=bn4es39C5x1RRg/ds8OkK8iDyOeD4BuWjKFRiJ4TzQO8yIrSdVWydoAA
+   X/YuDrx6GqSotBUrA11owJnnnvauDX0GcHQLDqHT3N2KryN3VrQisBVqy
+   7X9ukX3iNq7DlQcOoQCeahhck43ckAueWQ4wxfyZb2nlXGGgcnbmOhFEc
+   uxqbMVC0TBN65s3l2Gz62trwedC+LeE8s0ShcRbTD0fqeqWIb+oFSC+5Z
+   21fdyAlsQ35HzN0xnzalMJY42lmrgtU2+VtdU/kfb/tUEV7gG2q+tXCV2
+   vGfEFLkMI+LUWs4OZWNSFSFO1Aq14KynO0aAQgVOTZMuoVubhfGwAKW4l
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="403415705"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="403415705"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 15:56:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="749876220"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="749876220"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Mar 2023 15:56:23 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pe1ws-000AhO-38;
+	Sun, 19 Mar 2023 22:56:22 +0000
+Date: Mon, 20 Mar 2023 06:56:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kal Conley <kal.conley@dectris.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Kal Conley <kal.conley@dectris.com>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+Message-ID: <202303200630.XXuzQ6pQ-lkp@intel.com>
+References: <20230319195656.326701-2-kal.conley@dectris.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230319143640.1704735-1-trix@redhat.com>
-In-Reply-To: <20230319143640.1704735-1-trix@redhat.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sun, 19 Mar 2023 22:17:50 +0100
-Message-ID: <CACRpkdZW0_tdUaoykjE9TkeQ2e-+CfmOVEHmKLuoqyf1AzL1nQ@mail.gmail.com>
-Subject: Re: [PATCH] gpio: pxa: remove unused gpio_is_pxa_type function
-To: Tom Rix <trix@redhat.com>
-Cc: robert.jarzmik@free.fr, brgl@bgdev.pl, nathan@kernel.org, 
-	ndesaulniers@google.com, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319195656.326701-2-kal.conley@dectris.com>
 
-On Sun, Mar 19, 2023 at 3:36=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+Hi Kal,
 
-> clang with W=3D1 reports
-> drivers/gpio/gpio-pxa.c:174:19: error: unused function
->   'gpio_is_pxa_type' [-Werror,-Wunused-function]
-> static inline int gpio_is_pxa_type(int type)
->                   ^
-> This function is not used, so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Thank you for the patch! Perhaps something to improve:
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+[auto build test WARNING on bpf/master]
+[also build test WARNING on next-20230317]
+[cannot apply to bpf-next/master linus/master v6.3-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yours,
-Linus Walleij
+url:    https://github.com/intel-lab-lkp/linux/commits/Kal-Conley/xsk-Support-UMEM-chunk_size-PAGE_SIZE/20230320-035849
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20230319195656.326701-2-kal.conley%40dectris.com
+patch subject: [PATCH bpf-next 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
+config: s390-randconfig-r016-20230319 (https://download.01.org/0day-ci/archive/20230320/202303200630.XXuzQ6pQ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/bbcc35c4ff807754bf61ef2c1f11195533e53de0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kal-Conley/xsk-Support-UMEM-chunk_size-PAGE_SIZE/20230320-035849
+        git checkout bbcc35c4ff807754bf61ef2c1f11195533e53de0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303200630.XXuzQ6pQ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from net/xdp/xsk.c:23:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from net/xdp/xsk.c:23:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from net/xdp/xsk.c:23:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> net/xdp/xsk.c:425:68: warning: '_Static_assert' with no message is a C2x extension [-Wc2x-extensions]
+   _Static_assert(XDP_UMEM_MAX_CHUNK_SIZE / PAGE_SIZE <= MAX_SKB_FRAGS);
+                                                                      ^
+                                                                      , ""
+   13 warnings generated.
+--
+   In file included from net/xdp/xdp_umem.c:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from net/xdp/xdp_umem.c:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from net/xdp/xdp_umem.c:15:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> net/xdp/xdp_umem.c:23:52: warning: '_Static_assert' with no message is a C2x extension [-Wc2x-extensions]
+   _Static_assert(XDP_UMEM_MIN_CHUNK_SIZE <= PAGE_SIZE);
+                                                      ^
+                                                      , ""
+   net/xdp/xdp_umem.c:24:53: warning: '_Static_assert' with no message is a C2x extension [-Wc2x-extensions]
+   _Static_assert(XDP_UMEM_MAX_CHUNK_SIZE <= HPAGE_SIZE);
+                                                       ^
+                                                       , ""
+   14 warnings generated.
+
+
+vim +/_Static_assert +425 net/xdp/xsk.c
+
+   423	
+   424	/* Chunks must fit in the SKB `frags` array. */
+ > 425	_Static_assert(XDP_UMEM_MAX_CHUNK_SIZE / PAGE_SIZE <= MAX_SKB_FRAGS);
+   426	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
