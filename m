@@ -1,60 +1,63 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B705DE4E4
-	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 17:04:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60061E4E5
+	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 17:24:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679245494;
+	s=mimecast20190719; t=1679246680;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=5hGGrSeYkeZSTlJKXjJeoxK62+EdXw5xS8spAiPT4N8=;
-	b=ccrXDtc/0sFmaNBrQ0qd6Ule0uH4eN6o3n/KkP+zBJAoca11bsOsz+ooLXN4r/ATNRsQhY
-	Eb1CLOaO9XFDQrYhkCdRQfDlQ8F7OrPD/zuLzkAxVV4qJfjMtkfZexzrkGrrPAI8vn+pUf
-	yPbfy2Ufht6LLdJD93PPrwhrYlQ/z7c=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=WYm22h0FZEjzDnur0SvUWRtWO3WPGs/nZ3mlQqCc8gk=;
+	b=WMCDQ3Yi4PBP+qLJY69i0IKEubYojCsPNWlarCyFfmPqsRX46vAOiE4QBEAKUg2tvmTG3n
+	KNNoYAgmbCJEf3UQPjuDRIZXyILRpOgMMpMAkkf0B5pEFeLvTfFuG/OEOyevG99OO/txtV
+	J7fjAzocjwFalB3hnrdrR734Qd4+LRE=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-645-aBWKai5aOC-W9m3F6PYVAA-1; Sun, 19 Mar 2023 13:04:53 -0400
-X-MC-Unique: aBWKai5aOC-W9m3F6PYVAA-1
-Received: by mail-qv1-f72.google.com with SMTP id f3-20020a0cc303000000b005c9966620daso417065qvi.4
-        for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 10:04:53 -0700 (PDT)
+ us-mta-620-jcG3FVsOOiS4Xa89svyD6Q-1; Sun, 19 Mar 2023 13:24:38 -0400
+X-MC-Unique: jcG3FVsOOiS4Xa89svyD6Q-1
+Received: by mail-qv1-f71.google.com with SMTP id h10-20020a0cd80a000000b005cc75c78efcso195074qvj.21
+        for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 10:24:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679245493;
+        d=1e100.net; s=20210112; t=1679246678;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5hGGrSeYkeZSTlJKXjJeoxK62+EdXw5xS8spAiPT4N8=;
-        b=JbSrdzwvYccKrkHb5AlLrF1zOlNvmXmw6TUgPoAYnPk5bLtQ0/de9C0h8VFBFR+zl8
-         Zwr+Sutv4BPRotgnpWpYR7kRJ/EGgocX3sVouY8e8y+gmpOKqwLfwsoNyKh4UH3WuXw9
-         tMb5ig4v6HJu5e/pDMjw3Kjz40PGSzxRFpTs2t8dJdvAaVdKk9ibw37la5XUfzgVbYOq
-         JSVf1HoFAMtyMHPpzHj+tleSDmRLMOufhZ/eRyMU/8yBD0rfEx6kUJwyVd7gxqfmCsk3
-         DTsnWvbRW7mVzNpfgd+MrCCp73c403GzAuJVwXVjuJtCRcOYxlMMjWC2w/ZG2cWkmCtM
-         tk6w==
-X-Gm-Message-State: AO0yUKX6yR3VdCYe6KLMpkAsVwoz6DpLD145auN8V2pkWoc0Ifpr3tcW
-	DgJd1IZ9Xk85icdJekFFDYwD7Besj2qLTnnv/LgD6ZnK7raKNNO891sc4pj79mBb5AGYxLk8zWP
-	A0IsznNUzxco9xw==
-X-Received: by 2002:ac8:5841:0:b0:3bf:bbd3:1f11 with SMTP id h1-20020ac85841000000b003bfbbd31f11mr24021868qth.21.1679245492837;
-        Sun, 19 Mar 2023 10:04:52 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/H4vADgftD8rf5YWTGqtn/mKRl2Y1/a6dCKsWGV9D8uNc3r11rwxbJZBxO/iJ8/yMZTeNSog==
-X-Received: by 2002:ac8:5841:0:b0:3bf:bbd3:1f11 with SMTP id h1-20020ac85841000000b003bfbbd31f11mr24021833qth.21.1679245492452;
-        Sun, 19 Mar 2023 10:04:52 -0700 (PDT)
+        bh=WYm22h0FZEjzDnur0SvUWRtWO3WPGs/nZ3mlQqCc8gk=;
+        b=Q2+Ke5ndQ/XEHv1HBZlbR+NTPcIKkoexxdFhcH1N44/mjN2Dx9ktMp1YlGwImTLccG
+         cEDonwUeRCdahaV+iuG2fxPEOYU9UPJJNU8AqVu0I6bX5sJ3WbiT1Gyvu+5niUPS3GqH
+         PZcushyVLBpECC4CAIkdXEK//FV8FgVOzxiwjRZHmd6hC1km4UNtDwAj7OmwZXnbyP+n
+         yTqTEcK6aIUqZQwvYb6GUVmsv3WODoquL+Gz30I2uNmfSxQZKexXd8jl2iBq+e9Ecicd
+         258WRhprE5s1nVfohDc0fFuCIM7tVe9vVtGovETMJkfFAYB/hhpqfh3uYWLwTzAi91oc
+         1Qpg==
+X-Gm-Message-State: AO0yUKWoB6lIQ/CeK0vzNZVI9iyfxveiUFTD3cI4gYaCXc8Vq1tfn+bw
+	Jw0mKUHqm7XkZxuhPutkvS7ky6uDrTd0gVhOEWaa2j+ZIC5bz9kQSs2LWzYg741XEJlp2KXCYi2
+	OgIqhb5cqJlBb7w==
+X-Received: by 2002:ac8:7f8c:0:b0:3bf:dc2e:ce5d with SMTP id z12-20020ac87f8c000000b003bfdc2ece5dmr22196965qtj.4.1679246678269;
+        Sun, 19 Mar 2023 10:24:38 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8Yug+NOU+/B0nf5Ys4tKHcVGq8qmgqxjRscDDR3teSxftfURGyZtdjxvhppM9zckFSgDcZLQ==
+X-Received: by 2002:ac8:7f8c:0:b0:3bf:dc2e:ce5d with SMTP id z12-20020ac87f8c000000b003bfdc2ece5dmr22196945qtj.4.1679246678019;
+        Sun, 19 Mar 2023 10:24:38 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id t197-20020a3746ce000000b0074280fc7bd8sm5735681qka.60.2023.03.19.10.04.51
+        by smtp.gmail.com with ESMTPSA id l5-20020ac87245000000b003d3b9f79b4asm4926103qtp.68.2023.03.19.10.24.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Mar 2023 10:04:52 -0700 (PDT)
+        Sun, 19 Mar 2023 10:24:37 -0700 (PDT)
 From: Tom Rix <trix@redhat.com>
-To: matt.hsiao@hpe.com,
-	arnd@arndb.de,
-	gregkh@linuxfoundation.org,
+To: rajur@chelsio.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
 	nathan@kernel.org,
 	ndesaulniers@google.com
-Cc: linux-kernel@vger.kernel.org,
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] misc: hpilo: remove unused is_device_reset function
-Date: Sun, 19 Mar 2023 13:04:47 -0400
-Message-Id: <20230319170447.1707655-1-trix@redhat.com>
+Subject: [PATCH] net: cxgb3: remove unused fl_to_qset function
+Date: Sun, 19 Mar 2023 13:24:33 -0400
+Message-Id: <20230319172433.1708161-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -68,34 +71,33 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
 clang with W=1 reports
-drivers/misc/hpilo.c:395:19: error: unused function
-  'is_device_reset' [-Werror,-Wunused-function]
-static inline int is_device_reset(struct ilo_hwinfo *hw)
-                  ^
+drivers/net/ethernet/chelsio/cxgb3/sge.c:169:32: error: unused function
+  'fl_to_qset' [-Werror,-Wunused-function]
+static inline struct sge_qset *fl_to_qset(const struct sge_fl *q, int qidx)
+                               ^
 This function is not used, so remove it.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/misc/hpilo.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/net/ethernet/chelsio/cxgb3/sge.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/misc/hpilo.c b/drivers/misc/hpilo.c
-index 8d00df9243c4..ba4b00b8bea1 100644
---- a/drivers/misc/hpilo.c
-+++ b/drivers/misc/hpilo.c
-@@ -392,12 +392,6 @@ static inline int is_db_reset(int db_out)
- 	return db_out & (1 << DB_RESET);
- }
+diff --git a/drivers/net/ethernet/chelsio/cxgb3/sge.c b/drivers/net/ethernet/chelsio/cxgb3/sge.c
+index 62dfbdd33365..efa7f401529e 100644
+--- a/drivers/net/ethernet/chelsio/cxgb3/sge.c
++++ b/drivers/net/ethernet/chelsio/cxgb3/sge.c
+@@ -166,11 +166,6 @@ static u8 flit_desc_map[] = {
+ #endif
+ };
  
--static inline int is_device_reset(struct ilo_hwinfo *hw)
+-static inline struct sge_qset *fl_to_qset(const struct sge_fl *q, int qidx)
 -{
--	/* check for global reset condition */
--	return is_db_reset(get_device_outbound(hw));
+-	return container_of(q, struct sge_qset, fl[qidx]);
 -}
 -
- static inline void clear_pending_db(struct ilo_hwinfo *hw, int clr)
+ static inline struct sge_qset *rspq_to_qset(const struct sge_rspq *q)
  {
- 	iowrite32(clr, &hw->mmio_vaddr[DB_OUT]);
+ 	return container_of(q, struct sge_qset, rspq);
 -- 
 2.27.0
 
