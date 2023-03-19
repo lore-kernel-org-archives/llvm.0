@@ -1,84 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2F0A35
-	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 23:34:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 652A6C433D2;
-	Sun, 19 Mar 2023 23:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA60A35;
+	Sun, 19 Mar 2023 23:41:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F7EC433EF;
+	Sun, 19 Mar 2023 23:41:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679268886;
-	bh=OHFIkS02PBwwN4tDVa9bwFIXVHAnsp7dEnx4o7xqt/k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uWS+q1/L6zMGmM54AkIQYlVjdUqomwxLOUxhh5bAA1qlRYSVcSb6zn8PU6mU8PhVP
-	 ZAIvUAJMkimSaOiK/gxicLqQhubfng5yZfvFzXxfg18Q/x7lDJCwdZR/cQcpHb1uvO
-	 SSk3FHfWhGTeFU2vXTZRw19TeowFt2kxewwPKlOO9jJHpB5Vcy46IjUBe00d2CFS+3
-	 0ZpR1G6R5SAeqoizt5d+wBItTLpPlnbccdeNT+NPaIzTS9Zs2z3TPO6WQS1QzX080m
-	 fPB/FqFyXk8vxidUm7Zx7iYQlnKg69M1PDcTMrDLp2OuMfVi1f1al7/JtPqqe4V8d2
-	 1ZDg7Zc2ZTxIA==
-Date: Sun, 19 Mar 2023 16:34:44 -0700
+	s=k20201202; t=1679269279;
+	bh=Mkaeo/vthgqNOnRW7e/YWH7LRP0nK4bMLrrHQo9+nos=;
+	h=From:Date:Subject:To:Cc:From;
+	b=LhUHf1hdzhV/XqB+u/WFJM2h4mtaOufVWTao6RuDHvTwGmydEoFt6j87J7OXQGCD5
+	 TvLinJ39k3qRDhAxyDCn1ehr7pyFj9gA3Kt4r2elZYgAYFgaIkNYex0IvtwEP9sRUf
+	 iyt1WuoTSSrWu/MuaEAh9TmaUdRM/nvmXPYPRmcMFwbGs/46MkGnJU6wzo7zhtgjHB
+	 nqQEr3EnAiYYrroiL5UQYDcjhJC6v6EGsVV831vUHtn2ASAM7mpt3KDXOeTe8vEtNc
+	 nowfNVCFUyy89eaTu/Fu91MvbLLQxuQ7GMM2PEYNme/Jcwg3HyjRgsEH6lM+X6xeyL
+	 xR0t9DrtT/Ajg==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Tom Rix <trix@redhat.com>, perex@perex.cz, tiwai@suse.com,
-	ndesaulniers@google.com, alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ALSA: ymfpci: remove unused snd_ymfpci_readb function
-Message-ID: <20230319233444.GA12415@dev-arch.thelio-3990X>
-References: <20230318132708.1684504-1-trix@redhat.com>
- <87mt49mabx.wl-tiwai@suse.de>
+Date: Sun, 19 Mar 2023 16:41:08 -0700
+Subject: [PATCH net-next] net: pasemi: Fix return type of
+ pasemi_mac_start_tx()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mt49mabx.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230319-pasemi-incompatible-pointer-types-strict-v1-1-1b9459d8aef0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJOdF2QC/x2O0QrCMAxFf2Xk2cDa6XD+ivjQ1cwFbFaaIJOxf
+ 7fz8XA5h7uBUmFSuDUbFPqw8iIV3KmBOAd5EfKzMvjWd23nBsxBKTGyxCXlYDy+CfPCYlTQvpk
+ U1QpHw+ulH7zvpzO5FmpurCKOJUicj2AKWpVjyIUmXv8f7iBkKLQaPPb9ByucpQqdAAAA
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+ pabeni@redhat.com
+Cc: ndesaulniers@google.com, trix@redhat.com, netdev@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2364; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Mkaeo/vthgqNOnRW7e/YWH7LRP0nK4bMLrrHQo9+nos=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCnic+d9e6jx8VlpWEPDhtdigWIVqY926j/NXXqbPcp5g
+ WWouQJLRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhIQzwjw+xNQTdPbPv4LlP/
+ VdaBesEVO5gSzc7M2h1ySmauVSDfewZGhh+BSalcy8IT96w7vJflvt3lvZ8XVDXf3C60e+bR1da
+ JBjwA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Sun, Mar 19, 2023 at 09:09:22AM +0100, Takashi Iwai wrote:
-> On Sat, 18 Mar 2023 14:27:08 +0100,
-> Tom Rix wrote:
-> > 
-> > clang with W=1 reports
-> > sound/pci/ymfpci/ymfpci_main.c:34:18: error:
-> >   unused function 'snd_ymfpci_readb' [-Werror,-Wunused-function]
-> > static inline u8 snd_ymfpci_readb(struct snd_ymfpci *chip, u32 offset)
-> >                  ^
-> > This static function is not used, so remove it.
-> > 
-> > Signed-off-by: Tom Rix <trix@redhat.com>
-> 
-> I applied now, but still wondering why it warns at all even if it's a
-> static inline function...
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+warning in clang aims to catch these at compile time, which reveals:
 
-See commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build") for some more information. The key part
-of the commit message is 'with W=1', this will not happen with a normal
-clang build.
+  drivers/net/ethernet/pasemi/pasemi_mac.c:1665:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .ndo_start_xmit         = pasemi_mac_start_tx,
+                                    ^~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-Cheers,
-Nathan
+->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+'netdev_tx_t', not 'int'. Adjust the return type of
+pasemi_mac_start_tx() to match the prototype's to resolve the warning.
+While PowerPC does not currently implement support for kCFI, it could in
+the future, which means this warning becomes a fatal CFI failure at run
+time.
 
-> > ---
-> >  sound/pci/ymfpci/ymfpci_main.c | 5 -----
-> >  1 file changed, 5 deletions(-)
-> > 
-> > diff --git a/sound/pci/ymfpci/ymfpci_main.c b/sound/pci/ymfpci/ymfpci_main.c
-> > index c80114c0ad7b..2858736ed20a 100644
-> > --- a/sound/pci/ymfpci/ymfpci_main.c
-> > +++ b/sound/pci/ymfpci/ymfpci_main.c
-> > @@ -31,11 +31,6 @@
-> >  
-> >  static void snd_ymfpci_irq_wait(struct snd_ymfpci *chip);
-> >  
-> > -static inline u8 snd_ymfpci_readb(struct snd_ymfpci *chip, u32 offset)
-> > -{
-> > -	return readb(chip->reg_area_virt + offset);
-> > -}
-> > -
-> >  static inline void snd_ymfpci_writeb(struct snd_ymfpci *chip, u32 offset, u8 val)
-> >  {
-> >  	writeb(val, chip->reg_area_virt + offset);
-> > -- 
-> > 2.27.0
-> > 
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/net/ethernet/pasemi/pasemi_mac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/pasemi/pasemi_mac.c b/drivers/net/ethernet/pasemi/pasemi_mac.c
+index aaab590ef548..ed7dd0a04235 100644
+--- a/drivers/net/ethernet/pasemi/pasemi_mac.c
++++ b/drivers/net/ethernet/pasemi/pasemi_mac.c
+@@ -1423,7 +1423,7 @@ static void pasemi_mac_queue_csdesc(const struct sk_buff *skb,
+ 	write_dma_reg(PAS_DMA_TXCHAN_INCR(txring->chan.chno), 2);
+ }
+ 
+-static int pasemi_mac_start_tx(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t pasemi_mac_start_tx(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct pasemi_mac * const mac = netdev_priv(dev);
+ 	struct pasemi_mac_txring * const txring = tx_ring(mac);
+
+---
+base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65
+change-id: 20230319-pasemi-incompatible-pointer-types-strict-8569226f4e10
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
