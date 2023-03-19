@@ -1,97 +1,53 @@
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBE41846
-	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 18:24:15 +0000 (UTC)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-	by mail.gandi.net (Postfix) with ESMTPSA id 39C2940002;
-	Sun, 19 Mar 2023 18:24:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1679250247;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UxKJ5DqiHIKx6uJVgysoPzQWoYyFGH7gsA6iqa5x6zM=;
-	b=lnJmxOVr1SeA5dJXwWhxXkKpUi16Mz6Gga2nftt9alNqQztJWa9xF8CpzrHFkHWuL9MwS7
-	0d4lMp3VOfUs/F2UdbXdLu4iXnfy14Ic199tawTfU0adAg/pQFt6UvOy64vy3GdWdjTYL7
-	AVSEo8Y5N37fY+9R2gbO7QU5T9CoyllK1VtyiAUDl7UbzP+6Dpq4cb24SD1TF0MQcsOsxh
-	DfOQZ7T+RMZg9SC2TD9KwSbY7tN2zOLOWKUb1uIPQsQrMr3HWAE5QMOWtK/xgaqESfb94J
-	aiqNeQcgk21/VIrdICiCbQlMlWcqeFuPYKE8FoLb1Kc+K/ej5ivP9hRxNdJviQ==
-Date: Sun, 19 Mar 2023 19:24:05 +0100
-From: Herve Codina <herve.codina@bootlin.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803041872
+	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 19:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=dckGfQg6kn3B8kgvZ3tmjZnRr1vtXFAdWVSiqcNmDYA=; b=keiJjIFniHCX8fhpO8BrWfQDwc
+	+xwQ+qHC8BCpNgEg2qx+S8wZ+VcnIVxCEOzLW7uu9YnPWXq0b42uh0q3t+eU7qK8lkzHn6h1bRyT4
+	5fuX4cbxHZOMZUyR6AvPIsD3dPFoIdurzgNlgXrBUlsq7k6omFSHZYKpDgKBubUgtBEtHkU8oL0fI
+	BBC/20GSmImV6rDbfnfvkUcY/6HIZWRchyhtbiBA2Ry2dci/s6gs/skEvxajIz4wn6BadtenowyqF
+	T8FMzdl5mqsVv0Baka5PlwujpKZoITJSPV3nqCJMKLcrkz82RlIk/O5sjH3SQdU2OzhH0x+LLt8/x
+	Uibee0rQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1pdyv2-000Ktv-20; Sun, 19 Mar 2023 19:42:16 +0000
+Date: Sun, 19 Mar 2023 19:42:16 +0000
+From: Matthew Wilcox <willy@infradead.org>
 To: Tom Rix <trix@redhat.com>
-Cc: gregkh@linuxfoundation.org, nathan@kernel.org, ndesaulniers@google.com,
- linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] usb: gadget: udc: remove unused usbf_ep_dma_reg_clrset
- function
-Message-ID: <20230319192405.6202ea2b@bootlin.com>
-In-Reply-To: <20230319155910.1706294-1-trix@redhat.com>
-References: <20230319155910.1706294-1-trix@redhat.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+Cc: Liam.Howlett@oracle.com, nathan@kernel.org, ndesaulniers@google.com,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] maple_tree: remove unused maple_tree functions
+Message-ID: <ZBdlmDVKdrtM4BXb@casper.infradead.org>
+References: <20230319132903.1702426-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230319132903.1702426-1-trix@redhat.com>
 
-Hi Tom,
-
-On Sun, 19 Mar 2023 11:59:10 -0400
-Tom Rix <trix@redhat.com> wrote:
-
-> clang with W=3D1 reports
-> drivers/usb/gadget/udc/renesas_usbf.c:548:20: error: unused function
->   'usbf_ep_dma_reg_clrset' [-Werror,-Wunused-function]
-> static inline void usbf_ep_dma_reg_clrset(struct usbf_ep *ep, uint offset,
+On Sun, Mar 19, 2023 at 09:29:03AM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> lib/maple_tree.c:331:21: error: unused function
+>   'mte_set_full' [-Werror,-Wunused-function]
+> static inline void *mte_set_full(const struct maple_enode *node)
+>                     ^
+> lib/maple_tree.c:336:21: error: unused function
+>   'mte_clear_full' [-Werror,-Wunused-function]
+> static inline void *mte_clear_full(const struct maple_enode *node)
+>                     ^
+> lib/maple_tree.c:341:20: error: unused function
+>   'mte_has_null' [-Werror,-Wunused-function]
+> static inline bool mte_has_null(const struct maple_enode *node)
 >                    ^
-> This function is not used, so remove it.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/usb/gadget/udc/renesas_usbf.c | 11 -----------
->  1 file changed, 11 deletions(-)
->=20
-> diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/u=
-dc/renesas_usbf.c
-> index cb23e62e8a87..84ac9fe4ce7f 100644
-> --- a/drivers/usb/gadget/udc/renesas_usbf.c
-> +++ b/drivers/usb/gadget/udc/renesas_usbf.c
-> @@ -545,17 +545,6 @@ static inline void usbf_ep_dma_reg_bitclr(struct usb=
-f_ep *ep, uint offset,
->  	usbf_ep_dma_reg_writel(ep, offset, tmp);
->  }
-> =20
-> -static inline void usbf_ep_dma_reg_clrset(struct usbf_ep *ep, uint offse=
-t,
-> -					  u32 clr, u32 set)
-> -{
-> -	u32 tmp;
-> -
-> -	tmp =3D usbf_ep_dma_reg_readl(ep, offset);
-> -	tmp &=3D ~clr;
-> -	tmp |=3D set;
-> -	usbf_ep_dma_reg_writel(ep, offset, tmp);
-> -}
-> -
->  static void usbf_ep0_send_null(struct usbf_ep *ep0, bool is_data1)
->  {
->  	u32 set;
+> These static functions are not used, so remove them.
 
-Yes, indeed.
-
-Acked-by: Herve Codina <herve.codina@bootlin.com>
-
-Thanks for the patch.
-Regards,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+No.  They're just not used yet.  NACK.
