@@ -1,114 +1,131 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A981111B;
-	Sun, 19 Mar 2023 10:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679222529; x=1710758529;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vroytviTcMsDgJWV0chpXYs2+nVSafQMYYHo7SoKyhA=;
-  b=dBWOIHS64prObzC13vnQCrvV2MBQgPDssnPQvr1CLKf2bWdAFwicQwAO
-   FFDiBYCVKvFvsxv+jYVnOCS5evE6jUEr/7CvA4SQZkWwmaoQcvBaVcdCX
-   MO7T5SnRWqmN5YKbAramYxirCcmkLYRpeBHaYENoGz2oRJ5+JKNlLzO+i
-   NPjF549CDEd2fVkuhPxgbUtN0fouOUsT9MySGogx1g4ce0YwMACU4d/hq
-   1peak9GzgGF4QzPzIYNveLwOPxOxeq3CXeVR5wDILXlac79Ihcm1pJlm7
-   NY/jSqZ3BVFuc3/rHt7py8se6aSFrYpUrKnDJmuHpFOWnUqfIxRAENpZc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="337210148"
-X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
-   d="scan'208";a="337210148"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 03:42:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="1010176018"
-X-IronPort-AV: E=Sophos;i="5.98,273,1673942400"; 
-   d="scan'208";a="1010176018"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 19 Mar 2023 03:42:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pdqUG-000AUw-3A;
-	Sun, 19 Mar 2023 10:42:04 +0000
-Date: Sun, 19 Mar 2023 18:41:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: ChiYuan Huang <cy_huang@richtek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-leds@vger.kernel.org, Lee Jones <lee@kernel.org>,
-	Alice Chen <alice_chen@richtek.com>,
-	ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: [lee-leds:for-leds-next 13/15]
- drivers/leds/rgb/leds-mt6370-rgb.c:889:8: error: call to undeclared function
- 'FIELD_GET'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202303191803.6bgnovZl-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C47111A
+	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 11:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679223639;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7kIPxg41dFrVVpm4EjxMBQPMcW23NSFs1ERECRd99A4=;
+	b=UxwHbu38CyZPrWQRkCwM4wK79+m+mBVHMIKiQYuBG8WxslLjU3AquSZT1s7AX/LEZ19tQ0
+	WGg5V6diSuF4LFl3nB+REn5k9za1P2FzFPbANWobyNanhVbErL5cO/GQmVKDxjNXcm3biA
+	QmAvLS6FyTd6yVJ5T887iBcwW4dwxGk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-549-4qUgeJ2NMqyRwqJS8ZjZqg-1; Sun, 19 Mar 2023 07:00:37 -0400
+X-MC-Unique: 4qUgeJ2NMqyRwqJS8ZjZqg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 648EB3C0F68E
+	for <llvm@lists.linux.dev>; Sun, 19 Mar 2023 11:00:37 +0000 (UTC)
+Received: from [172.64.0.101] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 5504F492C14;
+	Sun, 19 Mar 2023 11:00:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (96/381 SKIPPED): Test report for master
+ (6.3.0-rc2, mainline.kernel.org-clang, efbcbb12)
+Date: Sun, 19 Mar 2023 11:00:37 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <56835.123031907003701154@us-mta-549.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-head:   4ba9df04b7ac66d2d000ed7ae2d8136302d99a57
-commit: 55a8a5c16eb37e7723244337af04388557f4fa2f [13/15] leds: rgb: mt6370: Add MediaTek MT6370 current sink type LED Indicator support
-config: riscv-randconfig-r042-20230319 (https://download.01.org/0day-ci/archive/20230319/202303191803.6bgnovZl-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/commit/?id=55a8a5c16eb37e7723244337af04388557f4fa2f
-        git remote add lee-leds https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git
-        git fetch --no-tags lee-leds for-leds-next
-        git checkout 55a8a5c16eb37e7723244337af04388557f4fa2f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/leds/rgb/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303191803.6bgnovZl-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> drivers/leds/rgb/leds-mt6370-rgb.c:889:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           vid = FIELD_GET(MT6370_VENDOR_ID_MASK, devinfo);
-                 ^
-   1 error generated.
+Kernel information:
+    Commit message: media: m5mols: fix off-by-one loop termination error
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/79753
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
 
 
-vim +/FIELD_GET +889 drivers/leds/rgb/leds-mt6370-rgb.c
 
-   879	
-   880	static int mt6370_check_vendor_info(struct mt6370_priv *priv)
-   881	{
-   882		unsigned int devinfo, vid;
-   883		int ret;
-   884	
-   885		ret = regmap_read(priv->regmap, MT6370_REG_DEV_INFO, &devinfo);
-   886		if (ret)
-   887			return ret;
-   888	
- > 889		vid = FIELD_GET(MT6370_VENDOR_ID_MASK, devinfo);
-   890		if (vid == MT6372_VENDOR_ID || vid == MT6372C_VENDOR_ID) {
-   891			priv->reg_fields = mt6372_reg_fields;
-   892			priv->ranges = mt6372_led_ranges;
-   893			priv->pdata = &mt6372_pdata;
-   894		} else {
-   895			/* Common for MT6370/71 */
-   896			priv->reg_fields = common_reg_fields;
-   897			priv->ranges = common_led_ranges;
-   898			priv->pdata = &common_pdata;
-   899		}
-   900	
-   901		return 0;
-   902	}
-   903	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
