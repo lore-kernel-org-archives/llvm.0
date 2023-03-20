@@ -1,312 +1,143 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC802F36
-	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 18:35:43 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id ja10so13490974plb.5
-        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 11:35:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DE24C6B
+	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 18:40:29 +0000 (UTC)
+Received: by mail-ua1-f48.google.com with SMTP id x33so8586248uaf.12
+        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 11:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679337342;
+        d=linaro.org; s=google; t=1679337628;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iBIl2PWRcHeYzQ9ABWRCPOq3QoTVxUFeIIxTv/pav1A=;
-        b=TUO9Wfgh09wDgxw22v5tTr+AP20sMvc8HV/V0RplKkyKnycMGQFB3QdPZDz64R13/J
-         EPmT1ENRDnwub7hrMvy4S+DIDM57OS+sjlrl0SsQXc+n2I+Ndvsrflh5D2skNTkgA9Xn
-         dUSS3M3Y7Kr/G56Dbbe+JTPhfsnyYoonh0OX7C1+jmn9Hme2yWE7cEIfAvAJQnbzPBdp
-         YXOulWUIJCsS21BbTQdJxy30wqKO7yaON3hMk9DzEPId6FQCIF5UYoDiZvtFGVHIIoHX
-         4DF01+LCmsy8R98AApC8YMB/b+bSyxcd57HezeN1XbNin8HGwReF6l0CxW5Dw5X6Ui5g
-         0dSw==
+        bh=yRXc2hz1Iyz4zZlb4PkpxwfxHP9/5AAbgn8o/1fstKc=;
+        b=fCPa7dxOdX75YB4iebz6/YsqHObho72FNPm85eKCUXK0SWtPjKAVN3owSn7COZUTZJ
+         mDhG7u3He3+ltZAkexETCJZdCDqys+1aRwVkPCLf3NYW13ZYgcu5qX+jWS2UpxU80c6n
+         vkjdIjV/yG+dTkQvNeiJZaCB/VGJXJXujqrXGvk/NiGR90sOVqgi+75WjF008Tl6lkVQ
+         RKiG5+kU0ll5XY5bUCEHGa+s55TTsf2iOH0IO1da3QYRs8JGquEBcNXe2En6RZ8r/qTx
+         gdLRv04dqN1l7Hq0X7CYdZfq/aAaK5dr3hkiqvcK5IWuWuOTUO4mD0E4KAB4jYui08e2
+         KZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679337342;
+        d=1e100.net; s=20210112; t=1679337628;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iBIl2PWRcHeYzQ9ABWRCPOq3QoTVxUFeIIxTv/pav1A=;
-        b=OcrY2fBQButxL4g14fdLC0Y2kCPi+aJHoU7l6/5BriJSKKMtUGiqAkLHy6LBoJ2R++
-         +qhxbPf2m8OA4qUco4OIkacNRRcP7Z8maF7kfanUalgK48ZRYAjmD3cTAvRWmzixLfN6
-         vDbhjg9wqqnANP4cvtGUHX7DtLOprDyTTi2d4hi43S8wgNeqXTMMzPJxTIA4u7jm1Jqn
-         cGxhLDJb2zJSp63i0+HeEBUoxuhzoDr9ltxNZNdszW6WzQNVztMolAFDLN0ra4PbRnz5
-         NDmUgPxBmaJD8sfdmJzY+Ot1CG3DsxJmBnBcp/+M6V4h2S9n0AslDDdGil/gwny3MncK
-         ENRQ==
-X-Gm-Message-State: AO0yUKXMWzSKwhbMSIKPeTx+p+wGOdCxM+5qc1PbI9ffqtwNfSAALc0k
-	/RMYOI5I//zaB32c9wqUxSgEuG+tDwvdhxbkjZIXnw==
-X-Google-Smtp-Source: AK7set/s6BHfuCrf+r5ad8FHtC6QyXWvZpvg3aBDjLTGoAytFMuK97cpZm63QPbMMn7E1HIxebrVR064vmhz20AEzOA=
-X-Received: by 2002:a17:902:e749:b0:1a0:4aa3:3a9a with SMTP id
- p9-20020a170902e74900b001a04aa33a9amr6942617plf.2.1679337342303; Mon, 20 Mar
- 2023 11:35:42 -0700 (PDT)
+        bh=yRXc2hz1Iyz4zZlb4PkpxwfxHP9/5AAbgn8o/1fstKc=;
+        b=irxfYmZr5JgE1eh6CjUl9dCgtc3zpFPSa/aOBINft4MkziwCIxZWL/Fh7knOLa4myJ
+         sKh1hmg01KFse1Dm0A965IeBD9VWkzoHqdQfYBxR3gGrNU6cad5oqvvLj/ToauTrdJ27
+         fhatVZVyHbya6iiGPxck0y6lHelZHG4sLjadvwE0yj6WKRwU+hl9bGl5+762WOb3BF92
+         fCVEF37W+MfU9+4RjvkcUOQGbzOG6orn6cjH09cSX/J36w1FeU/xNQr2jbMr3Tnhu5hi
+         UQkwUOS0lsSnk8orqOdgYBUbKdW8b9pvhIAF8aEVEBfBrREtgDihLKrxlVlXA+gHKS2X
+         kkqw==
+X-Gm-Message-State: AO0yUKXShyWEUHULpLGmKvcRWbJBlwjag0imS+z1winyj7GlzBGLAors
+	FJGEMAXtR4sDx2HM2mFg5RYXxPK0pI0ZLI49q8XFPA==
+X-Google-Smtp-Source: AK7set8Y2G3DWP+1nUSxL7tzZouFSFwcwHrD9ont46UDJZYxB7UKIsVHOe3DTskCSaLQBHQxRrBiNRHPpMLNB9OUYgs=
+X-Received: by 2002:ab0:1006:0:b0:68e:2dce:3162 with SMTP id
+ f6-20020ab01006000000b0068e2dce3162mr5199367uab.2.1679337627835; Mon, 20 Mar
+ 2023 11:40:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230320121006.4863-1-petr.pavlu@suse.com>
-In-Reply-To: <20230320121006.4863-1-petr.pavlu@suse.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 20 Mar 2023 11:35:30 -0700
-Message-ID: <CAKwvOdkFvMgYypc4w+UChO2O50wSHqXJUct2fkxrd+Qgn2C4Cg@mail.gmail.com>
-Subject: Re: [PATCH v5] x86: Avoid relocation information in final vmlinux
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, nathan@kernel.org, 
-	trix@redhat.com, corbet@lwn.net, linux-kernel@vger.kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>, linux-toolchains <linux-toolchains@vger.kernel.org>, 
-	Fangrui Song <maskray@google.com>
+References: <20230320145513.305686421@linuxfoundation.org>
+In-Reply-To: <20230320145513.305686421@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 21 Mar 2023 00:10:16 +0530
+Message-ID: <CA+G9fYvNEThYX-c204_knup5G_1vA27j+HouS-n=HMUsdJpC_g@mail.gmail.com>
+Subject: Re: [PATCH 6.2 000/211] 6.2.8-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, llvm@lists.linux.dev, 
+	Michael Ellerman <mpe@ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 20, 2023 at 5:10=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
+On Mon, 20 Mar 2023 at 20:26, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> The Linux build process on x86 roughly consists of compiling all input
-> files, statically linking them into a vmlinux ELF file, and then taking
-> and turning this file into an actual bzImage bootable file.
+> This is the start of the stable review cycle for the 6.2.8 release.
+> There are 211 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> vmlinux has in this process two main purposes:
-> 1) It is an intermediate build target on the way to produce the final
->    bootable image.
-> 2) It is a file that is expected to be used by debuggers and standard
->    ELF tooling to work with the built kernel.
+> Responses should be made by Wed, 22 Mar 2023 14:54:32 +0000.
+> Anything received after that time might be too late.
 >
-> For the second purpose, a vmlinux file is typically collected by various
-> package build recipes, such as distribution spec files, including the
-> kernel's own tar-pkg target.
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.2.8-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.2.y
+> and the diffstat can be found below.
 >
-> When building a kernel supporting KASLR with CONFIG_X86_NEED_RELOCS,
-> vmlinux contains also relocation information produced by using the
-> --emit-relocs linker option. This is utilized by subsequent build steps
-> to create vmlinux.relocs and produce a relocatable image. However, the
-> information is not needed by debuggers and other standard ELF tooling.
+> thanks,
 >
-> The issue is then that the collected vmlinux file and hence distribution
-> packages end up unnecessarily large because of this extra data. The
-> following is a size comparison of vmlinux v6.0 with and without the
-> relocation information:
-> | Configuration      | With relocs | Stripped relocs |
-> | x86_64_defconfig   |       70 MB |           43 MB |
-> | +CONFIG_DEBUG_INFO |      818 MB |          367 MB |
-
-Thanks for getting this to work with llvm-objcopy.  It's a pretty big
-win for us, especially for thin-lto builds which produce a ridiculous
-amount of debug info duplication (something I'm petitioning our DWARF
-folks to look into for DWARFv6) some measurements (all LLVM=3D1):
-
-Before this patch:
-defconfig:
-76M vmlinux
-DEBUG_INFO:
-510M vmlinux
-DEBUG_INFO+LTO_CLANG_THIN:
-796M vmlinux
-
-after:
-defconfig:
-48M vmlinux (-36.8%)
-DEBUG_INFO:
-270M vmlinux (-47%)
-LTO_CLANG_THIN:
-400M vmlinux (-49.8%)
-
-So basically a 50% reduction in vmlinux size, depending on the precise
-configs selected. That's pretty great!
-
-Android usually keeps around vmlinux artifacts as well as the
-compressed image in case we need to debug the image later, this should
-help us cut our storage costs for those quite a bit.  arm64 is more
-common for Android, but x86_64 is pretty helpful for a virtualized
-target; we do use it alot for first party development.
-
-I also tested that I could still boot the result in QEMU, attach GDB,
-and still hit breakpoints in the resulting vmlinux.  I also tested
-that there were no more rel/rela sections missed in the resulting
-vmlinux images.
-
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Some minor review comments below.
+> greg k-h
 
 
-I do also wonder if linkers have something like --emit-relocs, but the
-option to produce it in an additional file. That would help us avoid
-producing it only to split it out in the first place.
-
->
-> Optimize a resulting vmlinux by adding a postlink step that splits the
-> relocation information into vmlinux.relocs and then strips it from the
-> vmlinux binary.
->
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->
-> Changes since v4 [1]:
-> - Update the example target which is mentioned in the patch description
->   to collect vmlinux from binrpm-pkg to tar-pkg, to reflect fc8c2d8ff206
->   ("kbuild: Stop including vmlinux.bz2 in the rpm's").
->
-> Changes since v3 [2]:
-> - Update the Kbuild.include path in arch/x86/Makefile.postlink to work
->   after 67d7c3023a67 ("kbuild: remove --include-dir MAKEFLAG from top
->   Makefile").
->
-> Changes since v2 [3]:
-> - Ignore only the moved vmlinux.relocs, add it to .gitignore and
->   Documentation/dontdiff.
-> - Clean up the patch description.
->
-> Changes since v1 [4]:
-> - Fix the command to remove relocations to work with llvm-objcopy too.
->
-> [1] https://lore.kernel.org/lkml/20230227131829.26824-1-petr.pavlu@suse.c=
-om/
-> [2] https://lore.kernel.org/lkml/20221211141227.7622-1-petr.pavlu@suse.co=
-m/
-> [3] https://lore.kernel.org/lkml/20220927084632.14531-1-petr.pavlu@suse.c=
-om/
-> [4] https://lore.kernel.org/lkml/20220913132911.6850-1-petr.pavlu@suse.co=
-m/
->
->  .gitignore                          |  1 +
->  Documentation/dontdiff              |  1 +
->  arch/x86/Makefile.postlink          | 41 +++++++++++++++++++++++++++++
->  arch/x86/boot/compressed/.gitignore |  1 -
->  arch/x86/boot/compressed/Makefile   | 10 +++----
->  5 files changed, 47 insertions(+), 7 deletions(-)
->  create mode 100644 arch/x86/Makefile.postlink
->
-> diff --git a/.gitignore b/.gitignore
-> index 70ec6037fa7a..9bafd3c6bb5f 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -65,6 +65,7 @@ modules.order
->  /vmlinux
->  /vmlinux.32
->  /vmlinux.map
-> +/vmlinux.relocs
-
-Why do you move this from the arch/x86/boot/compressed/ dir?
-
->  /vmlinux.symvers
->  /vmlinux-gdb.py
->  /vmlinuz
-> diff --git a/Documentation/dontdiff b/Documentation/dontdiff
-> index 3c399f132e2d..a62ad01e6d11 100644
-> --- a/Documentation/dontdiff
-> +++ b/Documentation/dontdiff
-> @@ -254,6 +254,7 @@ vmlinux.aout
->  vmlinux.bin.all
->  vmlinux.lds
->  vmlinux.map
-> +vmlinux.relocs
->  vmlinux.symvers
->  vmlinuz
->  voffset.h
-> diff --git a/arch/x86/Makefile.postlink b/arch/x86/Makefile.postlink
-> new file mode 100644
-> index 000000000000..195af937aa4d
-> --- /dev/null
-> +++ b/arch/x86/Makefile.postlink
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +# =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> +# Post-link x86 pass
-> +# =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> +#
-> +# 1. Separate relocations from vmlinux into vmlinux.relocs.
-> +# 2. Strip relocations from vmlinux.
-> +
-> +PHONY :=3D __archpost
-> +__archpost:
-> +
-> +-include include/config/auto.conf
-> +include $(srctree)/scripts/Kbuild.include
-> +
-> +CMD_RELOCS =3D arch/x86/tools/relocs
-> +quiet_cmd_relocs =3D RELOCS  $@.relocs
-> +      cmd_relocs =3D $(CMD_RELOCS) $@ > $@.relocs;$(CMD_RELOCS) --abs-re=
-locs $@
-> +
-> +quiet_cmd_strip_relocs =3D RSTRIP  $@
-> +      cmd_strip_relocs =3D $(OBJCOPY) --remove-section=3D'.rel.*' --remo=
-ve-section=3D'.rel__*' --remove-section=3D'.rela.*' --remove-section=3D'.re=
-la__*' $@
-
-This line is pretty long (146 chars), can you use \ here to wrap it?
-
-> +
-> +# `@true` prevents complaint when there is nothing to be done
-> +
-> +vmlinux: FORCE
-> +       @true
-> +ifeq ($(CONFIG_X86_NEED_RELOCS),y)
-> +       $(call cmd,relocs)
-> +       $(call cmd,strip_relocs)
-> +endif
-> +
-> +%.ko: FORCE
-> +       @true
-> +
-> +clean:
-> +       @rm -f vmlinux.relocs
-> +
-> +PHONY +=3D FORCE clean
-> +
-> +FORCE:
-> +
-> +.PHONY: $(PHONY)
-> diff --git a/arch/x86/boot/compressed/.gitignore b/arch/x86/boot/compress=
-ed/.gitignore
-> index 25805199a506..b2968175fc27 100644
-> --- a/arch/x86/boot/compressed/.gitignore
-> +++ b/arch/x86/boot/compressed/.gitignore
-> @@ -1,7 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  relocs
->  vmlinux.bin.all
-> -vmlinux.relocs
->  vmlinux.lds
->  mkpiggy
->  piggy.S
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed=
-/Makefile
-> index 6b6cfe607bdb..19d1fb601796 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -121,14 +121,12 @@ $(obj)/vmlinux.bin: vmlinux FORCE
->
->  targets +=3D $(patsubst $(obj)/%,%,$(vmlinux-objs-y)) vmlinux.bin.all vm=
-linux.relocs
->
-> -CMD_RELOCS =3D arch/x86/tools/relocs
-> -quiet_cmd_relocs =3D RELOCS  $@
-> -      cmd_relocs =3D $(CMD_RELOCS) $< > $@;$(CMD_RELOCS) --abs-relocs $<
-> -$(obj)/vmlinux.relocs: vmlinux FORCE
-> -       $(call if_changed,relocs)
-> +# vmlinux.relocs is created by the vmlinux postlink step.
-> +vmlinux.relocs: vmlinux
-> +       @true
->
->  vmlinux.bin.all-y :=3D $(obj)/vmlinux.bin
-> -vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) +=3D $(obj)/vmlinux.relocs
-> +vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) +=3D vmlinux.relocs
-
-Why do you remove $(obj) here? I'm guessing that's why you moved
-vmlinux.relocs between .gitignore files?
-
->
->  $(obj)/vmlinux.bin.gz: $(vmlinux.bin.all-y) FORCE
->         $(call if_changed,gzip)
-> --
-> 2.35.3
->
+Results from Linaro=E2=80=99s test farm.
+Regressions on PowerPC build failures.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+> Christophe Leroy <christophe.leroy@csgroup.eu>
+>     powerpc/64: Set default CPU in Kconfig
+
+We see PowerPC build failures with Clang 16 and nightly on the
+following configurations:
+* cell_defconfig
+* ppc64e_defconfig
+* tqm8xx_defconfig
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Error messages respectively:
+-----8<-----
+error: unknown target CPU 'cell'
+note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
+603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
+970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
+pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
+power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
+powerpc64, ppc64, powerpc64le, ppc64le, future
+----->8-----
+
+-----8<-----
+error: unknown target CPU 'e500mc64'
+note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
+603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
+970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
+pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
+power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
+powerpc64, ppc64, powerpc64le, ppc64le, future
+----->8-----
+
+-----8<-----
+error: unknown target CPU '860'
+note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
+603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
+970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
+pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
+power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
+powerpc64, ppc64, powerpc64le, ppc64le, future
+----->8-----
+
+The bisection pointed to this commit,
+  45f7091aac35 ("powerpc/64: Set default CPU in Kconfig")
+
+
+Follow up fix patch is here as per Christophe Leroy comments,
+ powerpc: Disable CPU unknown by CLANG when CC_IS_CLANG
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
