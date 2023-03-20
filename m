@@ -1,136 +1,144 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF31923BE;
-	Mon, 20 Mar 2023 16:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679329135; x=1710865135;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LQdM0riCbeP1sRWzrLXe5dOWuCERMjrqwkeUy1B09Ow=;
-  b=Um1nbjY/duk+6WHSEzBJZnj45WQO3nXOEotUK6IcVbg6XGjCxML04tob
-   AMfHbBQnpYco2aPzqGdl1RFt5Yu4KMo1uAE39d9b4889gfpz47wRRx5JC
-   G4ZQamg7bv7N4osHDJa2Lm+d//3trWvkxA78VZHtEUZfTZICwNF+rKXLt
-   ZNMbuNVCpveWHBAdKUtQBD4sc/RyPUcxifwu4lkf+mqNqKwBdolqDrmfy
-   0Z+AicMMYHzjNEqY2nYA68nHhhHJYP6JnUqULxLYI0PS0Qm77PQgxNW2d
-   06am4FGY3DXqQXWKjaecDwxMPEUuw/8hYrvc4WK7uttmfoKFb9uSVMIT+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="322549091"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="322549091"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 09:18:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="681138458"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="681138458"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Mar 2023 09:18:48 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1peIDf-000B8l-38;
-	Mon, 20 Mar 2023 16:18:47 +0000
-Date: Tue, 21 Mar 2023 00:18:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [frederic-dynticks:rcu/dev 4/4] kernel/rcu/tree_nocb.h:1340:3:
- error: non-void function 'lazy_rcu_shrink_scan' should return a value
-Message-ID: <202303210029.e3BTmJcH-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C560723BE
+	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 16:24:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679329482;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yKuiUgRvJgr0BMcont0ecSgYQ2TFv8+RdPWPNJF4zVg=;
+	b=MuFHso+pM1e33tIq/yE7zowEpIh2wQvj9qY2Q9trEo2ssBh1DxMe2DSjt/Aowh2h6SPKgZ
+	A4Tff4iLveQ42ec8NMllqpL7mDvLPkDqQiaXylvNUfmIG0jrIF7F5JslrcRPEv/ZPy+4u3
+	N19KJ2sq1VkBF5OY/B7s2F3VyM/uu8U=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-542-Qwy_UMU5OXWblAau24AOQw-1; Mon, 20 Mar 2023 12:24:41 -0400
+X-MC-Unique: Qwy_UMU5OXWblAau24AOQw-1
+Received: by mail-qv1-f71.google.com with SMTP id c15-20020a056214070f00b005bb308e7c12so5179247qvz.19
+        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 09:24:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679329481;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yKuiUgRvJgr0BMcont0ecSgYQ2TFv8+RdPWPNJF4zVg=;
+        b=1AzUyrJ4oj1UPmqUXkxjwMhsTSiq/MTagQkQSX7+yWrIXpQjntoDK7RcZ/1MJcGXzj
+         3sqcU/X9pTnUKVGSZenH60LQF4fCt6+9NamkZk3Q2OehMAlup7EwEzqkokrAoHgsf59M
+         CW5U3njrtRXx3N9c64ZkONXcLL75EN/NOiDT875iOy653kN6pQC3t5DHqP+Gc0i0hspX
+         vWoTkyZ9WTAVzxPRktKSCc7IP5wsrpUSCg1WoZEo/VAO1X7ot4a75bvm5aLQhksQH+p1
+         Mm4A9FGZMHZeQM+UCUPj2a5cjg4XgLuW4+NSs5IcHvqlH2Q1kIjHSs4ROO8kT/uJFilo
+         8zOQ==
+X-Gm-Message-State: AO0yUKV+MGd6k+TXysmYx4Rq9cF6dlxp9QMRCLt3v0tQbW4aIigbz5+5
+	7bVLTKnLpx6lHdnYkxviLcBhg6OdZZEPvPLkmkPlEui02EOW58btOEaGh2N0vCw0hrJf98cGPxl
+	SJmQUHSp0/J8/Y0qZQWdVW/SPcJuz/oCcndj57m6qwlbPTaBKbZta2Wz9PCCuLktM5qju
+X-Received: by 2002:ad4:5f07:0:b0:5b9:7cd9:9a15 with SMTP id fo7-20020ad45f07000000b005b97cd99a15mr24454960qvb.48.1679329480987;
+        Mon, 20 Mar 2023 09:24:40 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9RPaNXkyvrZQBlHuyu3LLY2I0lqvkat9qvlTe6YR423Sg2i2SXi7nbLf5x5L1aI2JLWCb6+w==
+X-Received: by 2002:a62:7910:0:b0:625:e77b:93b2 with SMTP id u16-20020a627910000000b00625e77b93b2mr16590831pfc.5.1679329460084;
+        Mon, 20 Mar 2023 09:24:20 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id g11-20020aa7818b000000b005892ea4f092sm6761949pfi.95.2023.03.20.09.24.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 09:24:19 -0700 (PDT)
+Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
+ xlnx_pr_decouple_read function
+To: Xu Yilun <yilun.xu@intel.com>, Michal Simek <michal.simek@amd.com>
+Cc: mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
+ nathan@kernel.org, ndesaulniers@google.com, linux-fpga@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230317230617.1673923-1-trix@redhat.com>
+ <c8eaefed-e1fd-e0c1-7e8f-561c20632646@amd.com>
+ <ZBhqutJChvRkUsRL@yilunxu-OptiPlex-7050>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <2dc1f25d-d621-ec04-6de5-f731f2a8bb41@redhat.com>
+Date: Mon, 20 Mar 2023 09:24:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/dev
-head:   8364e60b2b41c706f28ca7d1ea6e9a3e5b5993ed
-commit: 8364e60b2b41c706f28ca7d1ea6e9a3e5b5993ed [4/4] rcu: Make shrinker to iterate only NOCB CPUs
-config: x86_64-buildonly-randconfig-r002-20230320 (https://download.01.org/0day-ci/archive/20230321/202303210029.e3BTmJcH-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=8364e60b2b41c706f28ca7d1ea6e9a3e5b5993ed
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks rcu/dev
-        git checkout 8364e60b2b41c706f28ca7d1ea6e9a3e5b5993ed
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210029.e3BTmJcH-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/rcu/tree.c:4956:
->> kernel/rcu/tree_nocb.h:1340:3: error: non-void function 'lazy_rcu_shrink_scan' should return a value [-Wreturn-type]
-                   return;
-                   ^
-   1 error generated.
+In-Reply-To: <ZBhqutJChvRkUsRL@yilunxu-OptiPlex-7050>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 
 
-vim +/lazy_rcu_shrink_scan +1340 kernel/rcu/tree_nocb.h
+On 3/20/23 7:16 AM, Xu Yilun wrote:
+> On 2023-03-20 at 08:40:22 +0100, Michal Simek wrote:
+>>
+>> On 3/18/23 00:06, Tom Rix wrote:
+>>> CAUTION: This message has originated from an External Source. Please use proper judgment and caution when opening attachments, clicking links, or responding to this email.
+>>>
+>>>
+>>> clang with W=1 reports
+>>> drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
+>>> static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
+>>>                     ^
+>>> This static function is not used, so remove it.
+>>>
+>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>> ---
+>>>    drivers/fpga/xilinx-pr-decoupler.c | 6 ------
+>>>    1 file changed, 6 deletions(-)
+>>>
+>>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
+>>> index 2d9c491f7be9..b6f18c07c752 100644
+>>> --- a/drivers/fpga/xilinx-pr-decoupler.c
+>>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
+>>> @@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
+>>>           writel(val, d->io_base + offset);
+>>>    }
+>>>
+>>> -static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
+>>> -                                       u32 offset)
+>>> -{
+>>> -       return readl(d->io_base + offset);
+>>> -}
+>>> -
+>>>    static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
+>>>    {
+>>>           int err;
+>>> --
+>>> 2.27.0
+>>>
+>> It should be fixed like this instead.
+>>
+>> Thanks,
+>> Michal
+>>
+>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
+>> index 2d9c491f7be9..58508f44cd49 100644
+>> --- a/drivers/fpga/xilinx-pr-decoupler.c
+>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
+>> @@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct
+>> fpga_bridge *bridge)
+>>          if (err)
+>>                  return err;
+>>
+>> -       status = readl(priv->io_base);
+>> +       status = xlnx_pr_decouple_read(priv);
+> OK, I'll drop the previous fix, and waiting for the new one.
 
-  1331	
-  1332	static unsigned long
-  1333	lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
-  1334	{
-  1335		int cpu;
-  1336		unsigned long flags;
-  1337		unsigned long count = 0;
-  1338	
-  1339		if (!cpumask_available(rcu_nocb_mask))
-> 1340			return;
-  1341		/*
-  1342		 * Protect against concurrent (de-)offloading. Otherwise nocb locking
-  1343		 * may be ignored or imbalanced.
-  1344		 */
-  1345		mutex_lock(&rcu_state.barrier_mutex);
-  1346	
-  1347		/* Snapshot count of all CPUs */
-  1348		for_each_cpu(cpu, rcu_nocb_mask) {
-  1349			struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
-  1350			int _count;
-  1351	
-  1352			if (!rcu_rdp_is_offloaded(rdp))
-  1353				continue;
-  1354	
-  1355			if (!READ_ONCE(rdp->lazy_len))
-  1356				continue;
-  1357	
-  1358			rcu_nocb_lock_irqsave(rdp, flags);
-  1359			/*
-  1360			 * Recheck under the nocb lock. Since we are not holding the bypass
-  1361			 * lock we may still race with increments from the enqueuer but still
-  1362			 * we know for sure if there is at least one lazy callback.
-  1363			 */
-  1364			count = READ_ONCE(rdp->lazy_len);
-  1365			if (!count) {
-  1366				rcu_nocb_unlock_irqrestore(rdp, flags);
-  1367				continue;
-  1368			}
-  1369			WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false));
-  1370			rcu_nocb_unlock_irqrestore(rdp, flags);
-  1371			wake_nocb_gp(rdp, false);
-  1372			sc->nr_to_scan -= _count;
-  1373			count += _count;
-  1374			if (sc->nr_to_scan <= 0)
-  1375				break;
-  1376		}
-  1377	
-  1378		mutex_unlock(&rcu_state.barrier_mutex);
-  1379	
-  1380		return count ? count : SHRINK_STOP;
-  1381	}
-  1382	
+Michal,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Will you make this change ?
+
+Tom
+
+>
+> Thanks,
+> Yilun
+>
+>>          clk_disable(priv->clk);
+>>
+
