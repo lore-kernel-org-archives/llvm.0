@@ -1,43 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AF21FBF;
-	Mon, 20 Mar 2023 16:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF31923BE;
+	Mon, 20 Mar 2023 16:18:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679329131; x=1710865131;
+  t=1679329135; x=1710865135;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dP+T0t+QcIypHsQgoQHwc7ZpcZXtcaf2PYrjdj9HN+Y=;
-  b=EeLlwkVKwgo/NiQ/IPIwxYtjJ/V5SS5Z3uVSWN7tINPjYUcjzoWMktDg
-   9pts3lUvlCQRhVRW2iv41xil/rMVqnymUS7qimhv2aF2u282GkQm1RGmo
-   C09YfdrDuYtdytUt1Up0nCcV+qFSRcg0sjemKF8PgCmB/Dakhmi3Hiinf
-   hEepDCknQ6GwG6/89ZFEFJdeMyRqbt46nBtocqwLifLaHZG3La/SogjOE
-   cr6qCMeSXf9+zjS8gGuJ1UUFfZAbk/RnGpgGxaJfD2P0nik0ijwSAT47X
-   ix5+9Mkc19CZeLZkIMa7+a3L7gkE7r/wxRz7eWCYAbncUG4jRDh8Nv6rG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="366427726"
+  bh=LQdM0riCbeP1sRWzrLXe5dOWuCERMjrqwkeUy1B09Ow=;
+  b=Um1nbjY/duk+6WHSEzBJZnj45WQO3nXOEotUK6IcVbg6XGjCxML04tob
+   AMfHbBQnpYco2aPzqGdl1RFt5Yu4KMo1uAE39d9b4889gfpz47wRRx5JC
+   G4ZQamg7bv7N4osHDJa2Lm+d//3trWvkxA78VZHtEUZfTZICwNF+rKXLt
+   ZNMbuNVCpveWHBAdKUtQBD4sc/RyPUcxifwu4lkf+mqNqKwBdolqDrmfy
+   0Z+AicMMYHzjNEqY2nYA68nHhhHJYP6JnUqULxLYI0PS0Qm77PQgxNW2d
+   06am4FGY3DXqQXWKjaecDwxMPEUuw/8hYrvc4WK7uttmfoKFb9uSVMIT+
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="322549091"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="366427726"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 09:18:50 -0700
+   d="scan'208";a="322549091"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 09:18:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="713634096"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="681138458"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="713634096"
+   d="scan'208";a="681138458"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 20 Mar 2023 09:18:48 -0700
+  by orsmga002.jf.intel.com with ESMTP; 20 Mar 2023 09:18:48 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1peIDf-000B8g-2w;
+	id 1peIDf-000B8l-38;
 	Mon, 20 Mar 2023 16:18:47 +0000
-Date: Tue, 21 Mar 2023 00:18:29 +0800
+Date: Tue, 21 Mar 2023 00:18:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
+To: Frederic Weisbecker <frederic@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [broonie-ci:kvm-arm64-fgt 3/3]
- arch/arm64/kvm/hyp/include/hyp/switch.h:102:26: warning: variable
- 'host_ctxt' set but not used
-Message-ID: <202303210031.APdFYAx5-lkp@intel.com>
+Subject: [frederic-dynticks:rcu/dev 4/4] kernel/rcu/tree_nocb.h:1340:3:
+ error: non-void function 'lazy_rcu_shrink_scan' should return a value
+Message-ID: <202303210029.e3BTmJcH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,143 +46,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Mark,
-
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git kvm-arm64-fgt
-head:   5cd718c2e5c52de666e2937dc655db3766bbc3b7
-commit: 5cd718c2e5c52de666e2937dc655db3766bbc3b7 [3/3] KVM: arm64: Move FGT value configuration to vCPU state
-config: arm64-buildonly-randconfig-r005-20230320 (https://download.01.org/0day-ci/archive/20230321/202303210031.APdFYAx5-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/dev
+head:   8364e60b2b41c706f28ca7d1ea6e9a3e5b5993ed
+commit: 8364e60b2b41c706f28ca7d1ea6e9a3e5b5993ed [4/4] rcu: Make shrinker to iterate only NOCB CPUs
+config: x86_64-buildonly-randconfig-r002-20230320 (https://download.01.org/0day-ci/archive/20230321/202303210029.e3BTmJcH-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=5cd718c2e5c52de666e2937dc655db3766bbc3b7
-        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
-        git fetch --no-tags broonie-ci kvm-arm64-fgt
-        git checkout 5cd718c2e5c52de666e2937dc655db3766bbc3b7
+        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=8364e60b2b41c706f28ca7d1ea6e9a3e5b5993ed
+        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+        git fetch --no-tags frederic-dynticks rcu/dev
+        git checkout 8364e60b2b41c706f28ca7d1ea6e9a3e5b5993ed
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/hyp/vhe/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210031.APdFYAx5-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210029.e3BTmJcH-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/arm64/kvm/hyp/vhe/switch.c:7:
->> arch/arm64/kvm/hyp/include/hyp/switch.h:102:26: warning: variable 'host_ctxt' set but not used [-Wunused-but-set-variable]
-           struct kvm_cpu_context *host_ctxt;
-                                   ^
-   arch/arm64/kvm/hyp/vhe/switch.c:107:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_CP15_32]            = kvm_hyp_handle_cp15_32,
-                                             ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:106:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:108:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SYS64]              = kvm_hyp_handle_sysreg,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:106:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:109:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SVE]                = kvm_hyp_handle_fpsimd,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:106:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:110:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:106:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:111:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_IABT_LOW]           = kvm_hyp_handle_iabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:106:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:112:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_DABT_LOW]           = kvm_hyp_handle_dabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:106:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:113:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_PAC]                = kvm_hyp_handle_ptrauth,
-                                             ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:106:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/vhe/switch.c:256:17: warning: no previous prototype for function 'hyp_panic' [-Wmissing-prototypes]
-   void __noreturn hyp_panic(void)
+   In file included from kernel/rcu/tree.c:4956:
+>> kernel/rcu/tree_nocb.h:1340:3: error: non-void function 'lazy_rcu_shrink_scan' should return a value [-Wreturn-type]
+                   return;
                    ^
-   arch/arm64/kvm/hyp/vhe/switch.c:256:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __noreturn hyp_panic(void)
-   ^
-   static 
-   arch/arm64/kvm/hyp/vhe/switch.c:266:17: warning: no previous prototype for function 'kvm_unexpected_el2_exception' [-Wmissing-prototypes]
-   asmlinkage void kvm_unexpected_el2_exception(void)
-                   ^
-   arch/arm64/kvm/hyp/vhe/switch.c:266:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void kvm_unexpected_el2_exception(void)
-              ^
-              static 
-   10 warnings generated.
+   1 error generated.
 
 
-vim +/host_ctxt +102 arch/arm64/kvm/hyp/include/hyp/switch.h
+vim +/lazy_rcu_shrink_scan +1340 kernel/rcu/tree_nocb.h
 
-    99	
-   100	static inline void __deactivate_traps_common(struct kvm_vcpu *vcpu)
-   101	{
- > 102		struct kvm_cpu_context *host_ctxt;
-   103	
-   104		write_sysreg(vcpu->arch.mdcr_el2_host, mdcr_el2);
-   105	
-   106		write_sysreg(0, hstr_el2);
-   107		if (kvm_arm_support_pmu_v3())
-   108			write_sysreg(0, pmuserenr_el0);
-   109	
-   110		/* Restore the host FGT configuration here,  */
-   111		if (cpus_have_final_cap(ARM64_HAS_FGT)) {
-   112			host_ctxt = &this_cpu_ptr(&kvm_host_data)->host_ctxt;
-   113	
-   114			write_sysreg_s(__vcpu_sys_reg(vcpu, HFGRTR_EL2),
-   115				       SYS_HFGRTR_EL2);
-   116			write_sysreg_s(__vcpu_sys_reg(vcpu, HFGWTR_EL2),
-   117				       SYS_HFGWTR_EL2);
-   118		}
-   119	}
-   120	
+  1331	
+  1332	static unsigned long
+  1333	lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+  1334	{
+  1335		int cpu;
+  1336		unsigned long flags;
+  1337		unsigned long count = 0;
+  1338	
+  1339		if (!cpumask_available(rcu_nocb_mask))
+> 1340			return;
+  1341		/*
+  1342		 * Protect against concurrent (de-)offloading. Otherwise nocb locking
+  1343		 * may be ignored or imbalanced.
+  1344		 */
+  1345		mutex_lock(&rcu_state.barrier_mutex);
+  1346	
+  1347		/* Snapshot count of all CPUs */
+  1348		for_each_cpu(cpu, rcu_nocb_mask) {
+  1349			struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+  1350			int _count;
+  1351	
+  1352			if (!rcu_rdp_is_offloaded(rdp))
+  1353				continue;
+  1354	
+  1355			if (!READ_ONCE(rdp->lazy_len))
+  1356				continue;
+  1357	
+  1358			rcu_nocb_lock_irqsave(rdp, flags);
+  1359			/*
+  1360			 * Recheck under the nocb lock. Since we are not holding the bypass
+  1361			 * lock we may still race with increments from the enqueuer but still
+  1362			 * we know for sure if there is at least one lazy callback.
+  1363			 */
+  1364			count = READ_ONCE(rdp->lazy_len);
+  1365			if (!count) {
+  1366				rcu_nocb_unlock_irqrestore(rdp, flags);
+  1367				continue;
+  1368			}
+  1369			WARN_ON_ONCE(!rcu_nocb_flush_bypass(rdp, NULL, jiffies, false));
+  1370			rcu_nocb_unlock_irqrestore(rdp, flags);
+  1371			wake_nocb_gp(rdp, false);
+  1372			sc->nr_to_scan -= _count;
+  1373			count += _count;
+  1374			if (sc->nr_to_scan <= 0)
+  1375				break;
+  1376		}
+  1377	
+  1378		mutex_unlock(&rcu_state.barrier_mutex);
+  1379	
+  1380		return count ? count : SHRINK_STOP;
+  1381	}
+  1382	
 
 -- 
 0-DAY CI Kernel Test Service
