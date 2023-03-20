@@ -1,99 +1,97 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68907EA1
-	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 01:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679276623; x=1710812623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YxjmBq6ikxvqoFB0iL+NlLNlseMTypJf5oOjYf5MAyM=;
-  b=hAjOiGw97clEFJe7JLt46/CtXfYzBuTV6MPANYxiu1ABifPE6n3jXS7/
-   KVutQpXs+r7gMtna4rkzSiBDrKE0Clw2hdDyZvvtshQZYqS7I4P+CsNFY
-   v+2lNDuWRLkEhVVrikfuEIhdgpCrgVWWi6FQI98b174TW3fOuG8eHNV51
-   x8LQbVjUhpb/qryJpeIikxBSzyytx1dIGlyt8HsUZ5BjcGA2t3Yk+jAg2
-   RqGkuiFqsYJ7y23m9b0omhalrtkWe7hASyvL2AfcaNcdt+u2U7rXaHJCT
-   j4f3m49Fufm59VWfM7ejXiObHV8X7DyY9LkuVd6l53sNVj9Xx4Sy0gsty
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="337269057"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="337269057"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2023 18:43:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="804741234"
-X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
-   d="scan'208";a="804741234"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga004.jf.intel.com with ESMTP; 19 Mar 2023 18:43:39 -0700
-Date: Mon, 20 Mar 2023 09:32:16 +0800
-From: Xu Yilun <yilun.xu@intel.com>
-To: Tom Rix <trix@redhat.com>
-Cc: mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
-	nathan@kernel.org, ndesaulniers@google.com,
-	linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
- xlnx_pr_decouple_read function
-Message-ID: <ZBe3oDPvAK4yn6Cs@yilunxu-OptiPlex-7050>
-References: <20230317230617.1673923-1-trix@redhat.com>
- <ZBWLeC7UuDf+4dJE@yilunxu-OptiPlex-7050>
- <7cab9365-6493-2de0-bcef-cd46809056a8@redhat.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9E6EC2;
+	Mon, 20 Mar 2023 03:05:33 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B65F9FEC;
+	Sun, 19 Mar 2023 20:06:16 -0700 (PDT)
+Received: from [10.162.41.7] (a077893.blr.arm.com [10.162.41.7])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B1343F67D;
+	Sun, 19 Mar 2023 20:05:26 -0700 (PDT)
+Message-ID: <4d3fa526-f108-3f8c-71db-ebfb2734f9fa@arm.com>
+Date: Mon, 20 Mar 2023 08:35:23 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cab9365-6493-2de0-bcef-cd46809056a8@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 4/7] coresight: etm4x: Change etm4_platform_driver driver
+ for MMIO devices
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org,
+ coresight@lists.linaro.org, suzuki.poulose@arm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ scclevenger@os.amperecomputing.com, Rob Herring <robh+dt@kernel.org>,
+ Frank Rowand <frowand.list@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Sudeep Holla <sudeep.holla@arm.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>,
+ Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
+ devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20230317030501.1811905-5-anshuman.khandual@arm.com>
+ <202303181800.KxbuwjRT-lkp@intel.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <202303181800.KxbuwjRT-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2023-03-18 at 05:59:28 -0700, Tom Rix wrote:
-> 
-> On 3/18/23 2:59 AM, Xu Yilun wrote:
-> > On 2023-03-17 at 19:06:17 -0400, Tom Rix wrote:
-> > > clang with W=1 reports
-> > > drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
-> > > static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
-> > >                    ^
-> > > This static function is not used, so remove it.
-> > I prefer to move the description as the first section. If you agree, I
-> > could do it before apply.
-> 
-> I have no preference, that is fine.
 
-Applied, thanks.
 
+On 3/18/23 15:54, kernel test robot wrote:
+> Hi Anshuman,
 > 
-> Tom
+> Thank you for the patch! Perhaps something to improve:
 > 
-> > 
-> > Acked-by: Xu Yilun <yilun.xu@intel.com>
-> > 
-> > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > ---
-> > >   drivers/fpga/xilinx-pr-decoupler.c | 6 ------
-> > >   1 file changed, 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-> > > index 2d9c491f7be9..b6f18c07c752 100644
-> > > --- a/drivers/fpga/xilinx-pr-decoupler.c
-> > > +++ b/drivers/fpga/xilinx-pr-decoupler.c
-> > > @@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
-> > >   	writel(val, d->io_base + offset);
-> > >   }
-> > > -static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
-> > > -					u32 offset)
-> > > -{
-> > > -	return readl(d->io_base + offset);
-> > > -}
-> > > -
-> > >   static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
-> > >   {
-> > >   	int err;
-> > > -- 
-> > > 2.27.0
-> > > 
+> [auto build test WARNING on robh/for-next]
+> [also build test WARNING on soc/for-next rafael-pm/linux-next linus/master v6.3-rc2 next-20230317]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> patch link:    https://lore.kernel.org/r/20230317030501.1811905-5-anshuman.khandual%40arm.com
+> patch subject: [PATCH 4/7] coresight: etm4x: Change etm4_platform_driver driver for MMIO devices
+> config: arm64-buildonly-randconfig-r002-20230312 (https://download.01.org/0day-ci/archive/20230318/202303181800.KxbuwjRT-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/f02ad9e7f97ab4fc1f90c7e6399004e9ec89ef26
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Anshuman-Khandual/coresight-etm4x-Allocate-and-device-assign-struct-etmv4_drvdata-earlier/20230317-110755
+>         git checkout f02ad9e7f97ab4fc1f90c7e6399004e9ec89ef26
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303181800.KxbuwjRT-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/hwtracing/coresight/coresight-etm4x-core.c:2336:32: warning: unused variable 'etm4_dev_pm_ops' [-Wunused-const-variable]
+>    static const struct dev_pm_ops etm4_dev_pm_ops = {
+
+These pm_ops needs to tagged along with the platform driver.
+
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index 3ce2b4911a49..fe10dd91183e 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -2280,6 +2280,7 @@ static struct platform_driver etm4_platform_driver = {
+                .of_match_table         = etm4_match,
+                .acpi_match_table       = ACPI_PTR(etm4x_acpi_ids),
+                .suppress_bind_attrs    = true,
++               .pm                     = &etm4_dev_pm_ops,
+        },
+ };
