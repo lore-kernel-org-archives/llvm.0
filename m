@@ -1,218 +1,171 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35E36D1B;
-	Mon, 20 Mar 2023 19:22:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679340176; x=1710876176;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U3FRldIghgkxNGkr6s5MStl/8Sqbf7uSl9+GhzoH6b4=;
-  b=b0v8B8C2yOB2oFKaZANi6ZIl9S4iTOjGPHHi7J+EFIyOrXwFS1AMu6tb
-   4D9CRGkQOrONLoNy3fzf/gvx6xrCKNDbSe/xAQ5iY7Y1jxf+TMDTO0E+G
-   dhfmLmJjmkqkwj7NE3MJHgUAVPBdgTkSN3d1ceXW+9rWq1P91NnhwiM0V
-   sngQD648xLv/SSmJSLgDOiDbjcG65JO6dqXQI3ODr2GUTY8zfQCTZbvyA
-   XGn9o+0OBC3oQyoiDM6Tz4fqvCz8NMPsTwjjBFSt7QUUOem9/0EpqsvCG
-   vpiMV8xaYMamVm8RLaooJ9PWyYC+FjLTpJTJLi7Nv0QeLzRJ8lhFYfJS4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="340304591"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="340304591"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 12:22:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674521751"
-X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="674521751"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2023 12:22:55 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1peL5q-000BG2-1Z;
-	Mon, 20 Mar 2023 19:22:54 +0000
-Date: Tue, 21 Mar 2023 03:22:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v2 1/5] PM: domains: Allow power off queuing from
- providers
-Message-ID: <202303210319.sOmW6Lr7-lkp@intel.com>
-References: <20230320134217.1685781-2-abel.vesa@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7A06FA6
+	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 20:05:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679342735;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vLGqq2dkr4d+qChfROhQzB1nvGWWiqjAAUgEiPWsWfk=;
+	b=QKLNv1rhjW8T39/4DXb/tRsT9UOxnTd+tFBX+IkZVN6NvkO2gEXh2rOfqqzPQe6RpSm1r9
+	lxaECuW2UAwduQlJbBEy/LU4vWfzrNI9KycyyAoxdmifG3m+1j7PrGswaqDG62VFIEGL6E
+	ysV34252cvQR9T6KnQRUSma3of56/OA=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-339-VQuJH_EJMo-6zfwVHFXlZA-1; Mon, 20 Mar 2023 16:05:34 -0400
+X-MC-Unique: VQuJH_EJMo-6zfwVHFXlZA-1
+Received: by mail-qt1-f197.google.com with SMTP id z1-20020ac87ca1000000b003ba2a2c50f9so7547756qtv.23
+        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 13:05:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679342733;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:from:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vLGqq2dkr4d+qChfROhQzB1nvGWWiqjAAUgEiPWsWfk=;
+        b=i6pWhXPXbmRh62TJuRcPEp4Y+xw5uRHGmc+5Vgw2TkC0fJk/s01V9ZTHwcCwGzj11I
+         jybxMlyij8uoZFlkbemfhBpuy1ZM1CKKre1xfqFdMheZd++WE1RbX4LrzCSM40tZmjZq
+         whEiQqXxXwLoCd8gjTBBjycrA8OqVsDygcGgwArAjTp6coZBXqXM8PxDOgSE4m1KSQIc
+         IzvDCXfIO45pHkUWuzw7FFNcm5PM9G9IlSgwlxxF2lW1bck1aeGdzlVISC+owePSuTnk
+         E8fXH7j93luFd2FGJBNir8hSfMJ0q0qECbJEiXS0/aNdM4G7efEu8Wx7LlOzNfgJqxw3
+         ZZCQ==
+X-Gm-Message-State: AO0yUKUH/2LC72WNwl8pScB4Q+Jo9s1QWyRiakD8Pj82XGAFWB5rFJvD
+	bEl+nbqQuf2M1wuITzJaj/sfVQHCY3qQWR8b9XUQV3kqPUf14ZNiQcP5OYxmWm+ZXJg90TjzA83
+	gf8QRkkjE2ogb0cy7bqn7DBdR3em8E6jsTKJG0kMrgIZ9f4C4AGruGjjSXg0BmcfgxIIG
+X-Received: by 2002:ac8:7f4e:0:b0:3bf:d149:8966 with SMTP id g14-20020ac87f4e000000b003bfd1498966mr617516qtk.62.1679342733314;
+        Mon, 20 Mar 2023 13:05:33 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8EYVn9VEzuCjZa06sZPyJPdqRWwwdN6xTMK4QNdqi2czOa4Al3y0wS1AbtorjeGXE8yHikrQ==
+X-Received: by 2002:ac8:7f4e:0:b0:3bf:d149:8966 with SMTP id g14-20020ac87f4e000000b003bfd1498966mr617464qtk.62.1679342732969;
+        Mon, 20 Mar 2023 13:05:32 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id bk12-20020a05620a1a0c00b0074357a6529asm7968058qkb.105.2023.03.20.13.05.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Mar 2023 13:05:32 -0700 (PDT)
+Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
+ xlnx_pr_decouple_read function
+From: Tom Rix <trix@redhat.com>
+To: Xu Yilun <yilun.xu@intel.com>, Michal Simek <michal.simek@amd.com>
+Cc: mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
+ nathan@kernel.org, ndesaulniers@google.com, linux-fpga@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230317230617.1673923-1-trix@redhat.com>
+ <c8eaefed-e1fd-e0c1-7e8f-561c20632646@amd.com>
+ <ZBhqutJChvRkUsRL@yilunxu-OptiPlex-7050>
+ <2dc1f25d-d621-ec04-6de5-f731f2a8bb41@redhat.com>
+Message-ID: <5fb2fa11-5a58-1856-7cb9-9687637d0741@redhat.com>
+Date: Mon, 20 Mar 2023 13:05:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320134217.1685781-2-abel.vesa@linaro.org>
-
-Hi Abel,
-
-[FYI, it's a private test report for your RFC patch.]
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on rafael-pm/linux-next linus/master v6.3-rc3 next-20230320]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Abel-Vesa/PM-domains-Allow-power-off-queuing-from-providers/20230320-214327
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230320134217.1685781-2-abel.vesa%40linaro.org
-patch subject: [RFC PATCH v2 1/5] PM: domains: Allow power off queuing from providers
-config: arm-randconfig-r036-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210319.sOmW6Lr7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/fef66120c9d99388e95560573d2e0c92c7a547c8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Abel-Vesa/PM-domains-Allow-power-off-queuing-from-providers/20230320-214327
-        git checkout fef66120c9d99388e95560573d2e0c92c7a547c8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/char/tpm/ drivers/opp/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210319.sOmW6Lr7-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/opp/core.c:18:
-   include/linux/pm_domain.h:284:2: error: void function 'genpd_queue_power_off_work' should not return a value [-Wreturn-type]
-           return -EOPNOTSUPP;
-           ^      ~~~~~~~~~~~
->> include/linux/pm_domain.h:282:6: warning: no previous prototype for function 'genpd_queue_power_off_work' [-Wmissing-prototypes]
-   void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
-        ^
-   include/linux/pm_domain.h:282:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
-   ^
-   static 
-   In file included from drivers/opp/core.c:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/opp/core.c:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/opp/core.c:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/opp/core.c:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/opp/core.c:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/opp/core.c:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-                           (set1->sig[2] == set2->sig[2]) &&
-                                            ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
---
-   In file included from drivers/opp/of.c:17:
-   include/linux/pm_domain.h:284:2: error: void function 'genpd_queue_power_off_work' should not return a value [-Wreturn-type]
-           return -EOPNOTSUPP;
-           ^      ~~~~~~~~~~~
->> include/linux/pm_domain.h:282:6: warning: no previous prototype for function 'genpd_queue_power_off_work' [-Wmissing-prototypes]
-   void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
-        ^
-   include/linux/pm_domain.h:282:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
-   ^
-   static 
-   1 warning and 1 error generated.
+In-Reply-To: <2dc1f25d-d621-ec04-6de5-f731f2a8bb41@redhat.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 
 
-vim +/genpd_queue_power_off_work +282 include/linux/pm_domain.h
+On 3/20/23 9:24 AM, Tom Rix wrote:
+>
+> On 3/20/23 7:16 AM, Xu Yilun wrote:
+>> On 2023-03-20 at 08:40:22 +0100, Michal Simek wrote:
+>>>
+>>> On 3/18/23 00:06, Tom Rix wrote:
+>>>> CAUTION: This message has originated from an External Source. 
+>>>> Please use proper judgment and caution when opening attachments, 
+>>>> clicking links, or responding to this email.
+>>>>
+>>>>
+>>>> clang with W=1 reports
+>>>> drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 
+>>>> 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
+>>>> static inline u32 xlnx_pr_decouple_read(const struct 
+>>>> xlnx_pr_decoupler_data *d,
+>>>>                     ^
+>>>> This static function is not used, so remove it.
+>>>>
+>>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>>> ---
+>>>>    drivers/fpga/xilinx-pr-decoupler.c | 6 ------
+>>>>    1 file changed, 6 deletions(-)
+>>>>
+>>>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c 
+>>>> b/drivers/fpga/xilinx-pr-decoupler.c
+>>>> index 2d9c491f7be9..b6f18c07c752 100644
+>>>> --- a/drivers/fpga/xilinx-pr-decoupler.c
+>>>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
+>>>> @@ -34,12 +34,6 @@ static inline void 
+>>>> xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
+>>>>           writel(val, d->io_base + offset);
+>>>>    }
+>>>>
+>>>> -static inline u32 xlnx_pr_decouple_read(const struct 
+>>>> xlnx_pr_decoupler_data *d,
+>>>> -                                       u32 offset)
+>>>> -{
+>>>> -       return readl(d->io_base + offset);
+>>>> -}
+>>>> -
+>>>>    static int xlnx_pr_decoupler_enable_set(struct fpga_bridge 
+>>>> *bridge, bool enable)
+>>>>    {
+>>>>           int err;
+>>>> -- 
+>>>> 2.27.0
+>>>>
+>>> It should be fixed like this instead.
+>>>
+>>> Thanks,
+>>> Michal
+>>>
+>>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c 
+>>> b/drivers/fpga/xilinx-pr-decoupler.c
+>>> index 2d9c491f7be9..58508f44cd49 100644
+>>> --- a/drivers/fpga/xilinx-pr-decoupler.c
+>>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
+>>> @@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct
+>>> fpga_bridge *bridge)
+>>>          if (err)
+>>>                  return err;
+>>>
+>>> -       status = readl(priv->io_base);
+>>> +       status = xlnx_pr_decouple_read(priv);
+>> OK, I'll drop the previous fix, and waiting for the new one.
+>
+> Michal,
+>
+> Will you make this change ?
 
-   281	
- > 282	void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
-   283	{
-   284		return -EOPNOTSUPP;
-   285	}
-   286	
+Let me provide some context.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I am cleaning up about 70 similar unused functions all over the tree.
+
+I have removed a lot of one liner wrappers that look like this.
+
+My opinion, to be useful the wrapper needs to be used multiple places 
+and/or do something non trival otherwise we will bloat the codebase with 
+with 5x lines of code to do a simple readl.
+
+But this is subjection. If you want this change, you should make it.
+
+Tom
+
+>
+> Tom
+>
+>>
+>> Thanks,
+>> Yilun
+>>
+>>>          clk_disable(priv->clk);
+>>>
+
