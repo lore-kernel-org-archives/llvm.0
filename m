@@ -1,292 +1,103 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C854A7B;
-	Mon, 20 Mar 2023 22:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679352602; x=1710888602;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JgQS1F3wYa0FlxJrgU1mmVVbhshy8+BlyBvEm4DNbws=;
-  b=i6B3k0zlTBG9rTWavgw0wegdWC0FOIQE4kRW177TRSMlcYa9msYxbpuh
-   aMOAqY3aEKfDVQPalRfuAMez+JQ9sBy5BucqsJjhjhA5fTlJ8CX/tDSh9
-   gmMFEMSUzpa5nEYeKgNg1gq9QF1sZHX50N4c36b3Gc0PFI8nRMhLVQQcq
-   YGcerLvYBX0QUhn1pblrepw89XIifBLGNO+KD7lAUwxz/YIBfXpcIWzOE
-   W/94Xsu0G6/lKsovKkBeOnbI5OS2VHXC2mNGFxt+RTRvIkaE1gtaijNI1
-   0+92NHb8e5nsgEz+xrdn9oVId9BDd4pvhWjutGpb5K8OQEwcSwNRfvENQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="341156048"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="341156048"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 15:50:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="770380696"
-X-IronPort-AV: E=Sophos;i="5.98,277,1673942400"; 
-   d="scan'208";a="770380696"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Mar 2023 15:50:00 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1peOKF-000BNK-2J;
-	Mon, 20 Mar 2023 22:49:59 +0000
-Date: Tue, 21 Mar 2023 06:49:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Iulia Tanasescu <iulia.tanasescu@nxp.com>,
-	linux-bluetooth@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Iulia Tanasescu <iulia.tanasescu@nxp.com>
-Subject: Re: [PATCH 1/1] Bluetooth: Split bt_iso_qos into dedicated structures
-Message-ID: <202303210652.rxBfO9uo-lkp@intel.com>
-References: <20230320143608.25399-2-iulia.tanasescu@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5BE7B
+	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 23:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679353934;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8OXg4VI8cm6vRN/hId3npmgyDD4BW9c8No9p4EZybmM=;
+	b=bxYxTa20CZivNqnpUecAKMZC5iHCnkeE0+T8Ieco0z2AV9enwfkOJFdjZsac0T+9h9OuHc
+	rMhXGtNvqHfl3cGkWMMivRUQ/06GQ9sSO7v+c+HKYTkRHX7wOKFtVgXJQ7QroW45/RJ3OT
+	XToR8bfh+V08jT2t8g2tdSOiCRzGvXM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-270-21iDvVhEOoGPJxGWSBYs5w-1; Mon, 20 Mar 2023 19:12:13 -0400
+X-MC-Unique: 21iDvVhEOoGPJxGWSBYs5w-1
+Received: by mail-qt1-f200.google.com with SMTP id i2-20020ac84882000000b003d6fee1d438so7817836qtq.1
+        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 16:12:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679353933;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8OXg4VI8cm6vRN/hId3npmgyDD4BW9c8No9p4EZybmM=;
+        b=1VxeSRSrubEa0SeA8OIm9V2FbdrixafYbeuFiZjtgeW0rEBYEI93Xdn63w7SXR2gQ1
+         8x05lIIiRZ0LANuDgQZ68dZfYwUBkixlFcFHYrOZ5888MVhzP/eAS70k9XscDMk7zH+X
+         6mKZZ8+7v3XqShQQB4qd2nFM0Mno9gmZFb8ktsJxQCp/IE854mfjkD4bIR/66SeimkYu
+         Xpz2ojKi4mX/tn7lVg2pMtOu2lQWxZe3V3HGHz8sp91YhiFP/Z+W/DPws74DCB1tsjNp
+         AWYcCqjiQWx8UoJYASQtT5fzPTESVa+Hsq/j7fynJ5+a27nZcY5UwDJyL9/tupzVzfdz
+         8q/w==
+X-Gm-Message-State: AO0yUKVuZAtGPI0bMRU25rL8lpEmEHJSRLBDnkWaUquEsrconzQR4snq
+	FeZnhNTH5yiWK0lPnNeYKPSGlNwkwnoECHbS0+YIWTXBMzL0qKu/7aFoJtjg6jYZ7PhVofFfhEu
+	P2T3t3kVmqnNTYA==
+X-Received: by 2002:a05:6214:e6a:b0:5b3:4b99:7af8 with SMTP id jz10-20020a0562140e6a00b005b34b997af8mr998488qvb.21.1679353933194;
+        Mon, 20 Mar 2023 16:12:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+WMLf2/hC3NpULLTuNzWukCaLGaPzgM3n1zv6eFgYYW5UjHVNHtsaQFRkKcay04SkrmfZlyQ==
+X-Received: by 2002:a05:6214:e6a:b0:5b3:4b99:7af8 with SMTP id jz10-20020a0562140e6a00b005b34b997af8mr998476qvb.21.1679353932932;
+        Mon, 20 Mar 2023 16:12:12 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id o10-20020a05620a0d4a00b0074281812276sm1755579qkl.97.2023.03.20.16.12.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Mar 2023 16:12:12 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: peter.ujfalusi@gmail.com,
+	vkoul@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] dmaengine: ti: edma: remove unused edma_and function
+Date: Mon, 20 Mar 2023 19:12:09 -0400
+Message-Id: <20230320231209.1728940-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320143608.25399-2-iulia.tanasescu@nxp.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Iulia,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on dd41882582a9ab19938598179386b81b793b4a5c]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Iulia-Tanasescu/Bluetooth-Split-bt_iso_qos-into-dedicated-structures/20230320-223805
-base:   dd41882582a9ab19938598179386b81b793b4a5c
-patch link:    https://lore.kernel.org/r/20230320143608.25399-2-iulia.tanasescu%40nxp.com
-patch subject: [PATCH 1/1] Bluetooth: Split bt_iso_qos into dedicated structures
-config: x86_64-randconfig-a005-20230320 (https://download.01.org/0day-ci/archive/20230321/202303210652.rxBfO9uo-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/656a3f84716d5b683951fe8c2cdc3fd17a09950c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Iulia-Tanasescu/Bluetooth-Split-bt_iso_qos-into-dedicated-structures/20230320-223805
-        git checkout 656a3f84716d5b683951fe8c2cdc3fd17a09950c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210652.rxBfO9uo-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/bluetooth/iso.c:1306:3: error: expected expression
-                   struct bt_iso_unicast_qos unicast_qos;
+clang with W=1 reports
+drivers/dma/ti/edma.c:321:20: error: unused function
+  'edma_and' [-Werror,-Wunused-function]
+static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
                    ^
->> net/bluetooth/iso.c:1314:36: error: use of undeclared identifier 'unicast_qos'
-                   len = min_t(unsigned int, sizeof(unicast_qos), optlen);
-                                                    ^
->> net/bluetooth/iso.c:1314:36: error: use of undeclared identifier 'unicast_qos'
-   net/bluetooth/iso.c:1315:21: error: use of undeclared identifier 'unicast_qos'
-                   if (len != sizeof(unicast_qos)) {
-                                     ^
-   net/bluetooth/iso.c:1320:34: error: use of undeclared identifier 'unicast_qos'
-                   memset(&unicast_qos, 0, sizeof(unicast_qos));
-                                                  ^
-   net/bluetooth/iso.c:1320:11: error: use of undeclared identifier 'unicast_qos'
-                   memset(&unicast_qos, 0, sizeof(unicast_qos));
-                           ^
-   net/bluetooth/iso.c:1320:11: error: use of undeclared identifier 'unicast_qos'
-   net/bluetooth/iso.c:1320:11: error: use of undeclared identifier 'unicast_qos'
-   net/bluetooth/iso.c:1322:26: error: use of undeclared identifier 'unicast_qos'
-                   if (copy_from_sockptr(&unicast_qos, optval, len)) {
-                                          ^
-   net/bluetooth/iso.c:1327:27: error: use of undeclared identifier 'unicast_qos'
-                   if (!check_unicast_qos(&unicast_qos)) {
-                                           ^
-   net/bluetooth/iso.c:1332:29: error: use of undeclared identifier 'unicast_qos'
-                   iso_pi(sk)->unicast_qos = unicast_qos;
-                                             ^
-   net/bluetooth/iso.c:1337:3: error: expected expression
-                   struct bt_iso_bcast_sink_qos sink_qos;
-                   ^
->> net/bluetooth/iso.c:1345:36: error: use of undeclared identifier 'sink_qos'
-                   len = min_t(unsigned int, sizeof(sink_qos), optlen);
-                                                    ^
->> net/bluetooth/iso.c:1345:36: error: use of undeclared identifier 'sink_qos'
-   net/bluetooth/iso.c:1346:21: error: use of undeclared identifier 'sink_qos'
-                   if (len != sizeof(sink_qos)) {
-                                     ^
-   net/bluetooth/iso.c:1351:31: error: use of undeclared identifier 'sink_qos'
-                   memset(&sink_qos, 0, sizeof(sink_qos));
-                                               ^
-   net/bluetooth/iso.c:1351:11: error: use of undeclared identifier 'sink_qos'
-                   memset(&sink_qos, 0, sizeof(sink_qos));
-                           ^
-   net/bluetooth/iso.c:1351:11: error: use of undeclared identifier 'sink_qos'
-   net/bluetooth/iso.c:1351:11: error: use of undeclared identifier 'sink_qos'
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+This function is not used, so remove it.
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/dma/ti/edma.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-vim +1306 net/bluetooth/iso.c
-
-  1275	
-  1276	static int iso_sock_setsockopt(struct socket *sock, int level, int optname,
-  1277				       sockptr_t optval, unsigned int optlen)
-  1278	{
-  1279		struct sock *sk = sock->sk;
-  1280		int len, err = 0;
-  1281		u32 opt;
-  1282	
-  1283		BT_DBG("sk %p", sk);
-  1284	
-  1285		lock_sock(sk);
-  1286	
-  1287		switch (optname) {
-  1288		case BT_DEFER_SETUP:
-  1289			if (sk->sk_state != BT_BOUND && sk->sk_state != BT_LISTEN) {
-  1290				err = -EINVAL;
-  1291				break;
-  1292			}
-  1293	
-  1294			if (copy_from_sockptr(&opt, optval, sizeof(u32))) {
-  1295				err = -EFAULT;
-  1296				break;
-  1297			}
-  1298	
-  1299			if (opt)
-  1300				set_bit(BT_SK_DEFER_SETUP, &bt_sk(sk)->flags);
-  1301			else
-  1302				clear_bit(BT_SK_DEFER_SETUP, &bt_sk(sk)->flags);
-  1303			break;
-  1304	
-  1305		case BT_ISO_UNICAST_QOS:
-> 1306			struct bt_iso_unicast_qos unicast_qos;
-  1307	
-  1308			if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND &&
-  1309			    sk->sk_state != BT_CONNECT2) {
-  1310				err = -EINVAL;
-  1311				break;
-  1312			}
-  1313	
-> 1314			len = min_t(unsigned int, sizeof(unicast_qos), optlen);
-  1315			if (len != sizeof(unicast_qos)) {
-  1316				err = -EINVAL;
-  1317				break;
-  1318			}
-  1319	
-  1320			memset(&unicast_qos, 0, sizeof(unicast_qos));
-  1321	
-  1322			if (copy_from_sockptr(&unicast_qos, optval, len)) {
-  1323				err = -EFAULT;
-  1324				break;
-  1325			}
-  1326	
-  1327			if (!check_unicast_qos(&unicast_qos)) {
-  1328				err = -EINVAL;
-  1329				break;
-  1330			}
-  1331	
-  1332			iso_pi(sk)->unicast_qos = unicast_qos;
-  1333	
-  1334			break;
-  1335	
-  1336		case BT_ISO_BCAST_SINK_QOS:
-  1337			struct bt_iso_bcast_sink_qos sink_qos;
-  1338	
-  1339			if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND &&
-  1340			    sk->sk_state != BT_CONNECT2) {
-  1341				err = -EINVAL;
-  1342				break;
-  1343			}
-  1344	
-> 1345			len = min_t(unsigned int, sizeof(sink_qos), optlen);
-  1346			if (len != sizeof(sink_qos)) {
-  1347				err = -EINVAL;
-  1348				break;
-  1349			}
-  1350	
-  1351			memset(&sink_qos, 0, sizeof(sink_qos));
-  1352	
-  1353			if (copy_from_sockptr(&sink_qos, optval, len)) {
-  1354				err = -EFAULT;
-  1355				break;
-  1356			}
-  1357	
-  1358			if (!check_bcast_sink_qos(&sink_qos)) {
-  1359				err = -EINVAL;
-  1360				break;
-  1361			}
-  1362	
-  1363			iso_pi(sk)->sink_qos = sink_qos;
-  1364	
-  1365			break;
-  1366	
-  1367		case BT_ISO_BCAST_SOURCE_QOS:
-  1368			struct bt_iso_bcast_source_qos source_qos;
-  1369	
-  1370			if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND &&
-  1371			    sk->sk_state != BT_CONNECT2) {
-  1372				err = -EINVAL;
-  1373				break;
-  1374			}
-  1375	
-  1376			len = min_t(unsigned int, sizeof(source_qos), optlen);
-  1377			if (len != sizeof(source_qos)) {
-  1378				err = -EINVAL;
-  1379				break;
-  1380			}
-  1381	
-  1382			memset(&source_qos, 0, sizeof(source_qos));
-  1383	
-  1384			if (copy_from_sockptr(&source_qos, optval, len)) {
-  1385				err = -EFAULT;
-  1386				break;
-  1387			}
-  1388	
-  1389			if (!check_bcast_source_qos(&source_qos)) {
-  1390				err = -EINVAL;
-  1391				break;
-  1392			}
-  1393	
-  1394			iso_pi(sk)->source_qos = source_qos;
-  1395	
-  1396			break;
-  1397	
-  1398		case BT_ISO_BASE:
-  1399			if (sk->sk_state != BT_OPEN && sk->sk_state != BT_BOUND &&
-  1400			    sk->sk_state != BT_CONNECT2) {
-  1401				err = -EINVAL;
-  1402				break;
-  1403			}
-  1404	
-  1405			if (optlen > sizeof(iso_pi(sk)->base)) {
-  1406				err = -EOVERFLOW;
-  1407				break;
-  1408			}
-  1409	
-  1410			len = min_t(unsigned int, sizeof(iso_pi(sk)->base), optlen);
-  1411	
-  1412			if (copy_from_sockptr(iso_pi(sk)->base, optval, len)) {
-  1413				err = -EFAULT;
-  1414				break;
-  1415			}
-  1416	
-  1417			iso_pi(sk)->base_len = len;
-  1418	
-  1419			break;
-  1420	
-  1421		default:
-  1422			err = -ENOPROTOOPT;
-  1423			break;
-  1424		}
-  1425	
-  1426		release_sock(sk);
-  1427		return err;
-  1428	}
-  1429	
-
+diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+index fa06d7e6d8e3..9ea91c640c32 100644
+--- a/drivers/dma/ti/edma.c
++++ b/drivers/dma/ti/edma.c
+@@ -318,14 +318,6 @@ static inline void edma_modify(struct edma_cc *ecc, int offset, unsigned and,
+ 	edma_write(ecc, offset, val);
+ }
+ 
+-static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
+-{
+-	unsigned val = edma_read(ecc, offset);
+-
+-	val &= and;
+-	edma_write(ecc, offset, val);
+-}
+-
+ static inline void edma_or(struct edma_cc *ecc, int offset, unsigned or)
+ {
+ 	unsigned val = edma_read(ecc, offset);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
