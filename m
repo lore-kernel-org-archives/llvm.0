@@ -1,109 +1,218 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43A04C7D
-	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 19:22:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC29C4339B;
-	Mon, 20 Mar 2023 19:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679340137;
-	bh=94gPjLzOy2pXzOmmuxBBL7sppv5BgFwZA7x73zO1EZM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RTcGeD8zFAd6fzgqbBlGBrEaJKiEwpnZ2wgsblpAfkCBgaG0JXeW7jefqmRBcx3At
-	 TfVIBjupDhG5Lbvll1NLYGGEcL+W8oX40EDl0LmbJ2MrOMHw1OusuiUZHN0IIFfgpj
-	 p5lvsMlxufHwF28rEhVWPpoXk+cudbWmeZWhPU+NWoctpun4nvFyuld4vXlAAJOPp/
-	 7mLij9160YizCqmO68m8zqK/DuXLCzOAklEhKZGpvIQH4IZR/a/eMJLnpkfNnYHYKJ
-	 owhj4FVDMbo/JQhRs5lNKhOJ15TOFGN900mNu0kzZZGh5msGIlSsrBDn1rZGLXSgn3
-	 jkJhp/9bPdoMg==
-Date: Mon, 20 Mar 2023 12:22:15 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	dri-devel@lists.freedesktop.org, linux-toolchains@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: Linux 6.3-rc3
-Message-ID: <20230320192215.GA617563@dev-arch.thelio-3990X>
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
- <20230320180501.GA598084@dev-arch.thelio-3990X>
- <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
- <20230320185337.GA615556@dev-arch.thelio-3990X>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35E36D1B;
+	Mon, 20 Mar 2023 19:22:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679340176; x=1710876176;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U3FRldIghgkxNGkr6s5MStl/8Sqbf7uSl9+GhzoH6b4=;
+  b=b0v8B8C2yOB2oFKaZANi6ZIl9S4iTOjGPHHi7J+EFIyOrXwFS1AMu6tb
+   4D9CRGkQOrONLoNy3fzf/gvx6xrCKNDbSe/xAQ5iY7Y1jxf+TMDTO0E+G
+   dhfmLmJjmkqkwj7NE3MJHgUAVPBdgTkSN3d1ceXW+9rWq1P91NnhwiM0V
+   sngQD648xLv/SSmJSLgDOiDbjcG65JO6dqXQI3ODr2GUTY8zfQCTZbvyA
+   XGn9o+0OBC3oQyoiDM6Tz4fqvCz8NMPsTwjjBFSt7QUUOem9/0EpqsvCG
+   vpiMV8xaYMamVm8RLaooJ9PWyYC+FjLTpJTJLi7Nv0QeLzRJ8lhFYfJS4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="340304591"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="340304591"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 12:22:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674521751"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="674521751"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2023 12:22:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1peL5q-000BG2-1Z;
+	Mon, 20 Mar 2023 19:22:54 +0000
+Date: Tue, 21 Mar 2023 03:22:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v2 1/5] PM: domains: Allow power off queuing from
+ providers
+Message-ID: <202303210319.sOmW6Lr7-lkp@intel.com>
+References: <20230320134217.1685781-2-abel.vesa@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230320185337.GA615556@dev-arch.thelio-3990X>
+In-Reply-To: <20230320134217.1685781-2-abel.vesa@linaro.org>
 
-On Mon, Mar 20, 2023 at 11:53:37AM -0700, Nathan Chancellor wrote:
-> On Mon, Mar 20, 2023 at 11:26:17AM -0700, Linus Torvalds wrote:
-> > On Mon, Mar 20, 2023 at 11:05 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > On the clang front, I am still seeing the following warning turned error
-> > > for arm64 allmodconfig at least:
-> > >
-> > >   drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
-> > >           if (syncpt_irq < 0)
-> > >               ^~~~~~~~~~
-> > 
-> > Hmm. I do my arm64 allmodconfig builds with gcc, and I'm surprised
-> > that gcc doesn't warn about this.
-> 
-> Perhaps these would make doing allmodconfig builds with clang more
-> frequently less painful for you?
-> 
-> https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
-> 
-> > That syncpt_irq thing isn't written to anywhere, so that's pretty egregious.
-> > 
-> > We use -Wno-maybe-uninitialized because gcc gets it so wrong, but
-> > that's different from the "-Wuninitialized" thing (without the
-> > "maybe").
-> > 
-> > I've seen gcc mess this up when there is one single assignment,
-> > because then the SSA format makes it *so* easy to just use that
-> > assignment out-of-order (or unconditionally), but this case looks
-> > unusually clear-cut.
-> > 
-> > So the fact that gcc doesn't warn about it is outright odd.
-> > 
-> > > If that does not come to you through other means before -rc4, could you
-> > > just apply it directly so that I can stop applying it to our CI? :)
-> > 
-> > Bah. I took it now, there's no excuse for that thing.
-> 
-> Thanks!
-> 
-> > Do we have any gcc people around that could explain why gcc failed so
-> > miserably at this trivial case?
-> 
-> Cc'ing linux-toolchains. The start of the thread is here:
-> 
-> https://lore.kernel.org/CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com/
-> 
-> The problematic function before the fix is here:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/host1x/dev.c?id=3d3699bde4b043eea17993e4e76804a8128f0fdb#n487
-> 
-> I will see if I have some cycles to try and reduce something out for the
-> GCC folks.
+Hi Abel,
 
-While setting up the reduction, I noticed that there is an instance of
--Wmaybe-uninitialized at this site. Seems odd that it is not sure, I will
-reduce on that.
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on rafael-pm/linux-next linus/master v6.3-rc3 next-20230320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  ../drivers/gpu/host1x/dev.c: In function 'host1x_probe':
-  ../drivers/gpu/host1x/dev.c:520:12: error: 'syncpt_irq' may be used uninitialized [-Werror=maybe-uninitialized]
-    520 |         if (syncpt_irq < 0)
-        |            ^
-  ../drivers/gpu/host1x/dev.c:490:13: note: 'syncpt_irq' was declared here
-    490 |         int syncpt_irq;
-        |             ^~~~~~~~~~
-  cc1: all warnings being treated as errors
+url:    https://github.com/intel-lab-lkp/linux/commits/Abel-Vesa/PM-domains-Allow-power-off-queuing-from-providers/20230320-214327
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230320134217.1685781-2-abel.vesa%40linaro.org
+patch subject: [RFC PATCH v2 1/5] PM: domains: Allow power off queuing from providers
+config: arm-randconfig-r036-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210319.sOmW6Lr7-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/fef66120c9d99388e95560573d2e0c92c7a547c8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Abel-Vesa/PM-domains-Allow-power-off-queuing-from-providers/20230320-214327
+        git checkout fef66120c9d99388e95560573d2e0c92c7a547c8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/char/tpm/ drivers/opp/
 
-Cheers,
-Nathan
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210319.sOmW6Lr7-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/opp/core.c:18:
+   include/linux/pm_domain.h:284:2: error: void function 'genpd_queue_power_off_work' should not return a value [-Wreturn-type]
+           return -EOPNOTSUPP;
+           ^      ~~~~~~~~~~~
+>> include/linux/pm_domain.h:282:6: warning: no previous prototype for function 'genpd_queue_power_off_work' [-Wmissing-prototypes]
+   void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
+        ^
+   include/linux/pm_domain.h:282:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
+   ^
+   static 
+   In file included from drivers/opp/core.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/opp/core.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/opp/core.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/opp/core.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/opp/core.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from drivers/opp/core.c:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+--
+   In file included from drivers/opp/of.c:17:
+   include/linux/pm_domain.h:284:2: error: void function 'genpd_queue_power_off_work' should not return a value [-Wreturn-type]
+           return -EOPNOTSUPP;
+           ^      ~~~~~~~~~~~
+>> include/linux/pm_domain.h:282:6: warning: no previous prototype for function 'genpd_queue_power_off_work' [-Wmissing-prototypes]
+   void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
+        ^
+   include/linux/pm_domain.h:282:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
+   ^
+   static 
+   1 warning and 1 error generated.
+
+
+vim +/genpd_queue_power_off_work +282 include/linux/pm_domain.h
+
+   281	
+ > 282	void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
+   283	{
+   284		return -EOPNOTSUPP;
+   285	}
+   286	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
