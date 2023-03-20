@@ -1,107 +1,127 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78901861
-	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 12:52:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679316729;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=j7ASg0gkUTJq52inUxEUZw0nsEnRgkwG95p6EniSL+I=;
-	b=AmR2DPsQiNwHVJ+95i8agla137nPMdzo9uxf2GfhZbjNaQpTF57Qqvz3GesvIDCQXCuumm
-	TNAaDsMCwvJhigGUDDcAMnKZCzdwkf3ZtZIY2lYuCxZPGYAF8XmaYUG6pN7Ac/gIhxc9r4
-	P7d35PxCw2X2/n6EOOBHszub/BhAiac=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-649-PQ465yuvP_i9oeodZIFZpg-1; Mon, 20 Mar 2023 08:52:05 -0400
-X-MC-Unique: PQ465yuvP_i9oeodZIFZpg-1
-Received: by mail-qt1-f197.google.com with SMTP id w13-20020ac857cd000000b003e37d3e6de2so234611qta.16
-        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 05:52:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679316725;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j7ASg0gkUTJq52inUxEUZw0nsEnRgkwG95p6EniSL+I=;
-        b=WVKGSsvarshCYugai9WJYXK5DZmUzeMxJvj9nOFdjQ9S949vfXY69V0uUxQFdfAPve
-         T1Jso3ZIKvM7yhGVAoYfJPSFM7g887/A435OJL+8ifQXGdqeFEF9fndQ1NAwiDKLMEZa
-         ReGNWjtRupgJsQHj3sRBaghYPEL5uXWqHgjqWXJ/QT/i9snKFxlspy2dm+yWWX5+H34A
-         VoyRTxT4YneQAYqB7T1x3Td7Hgp5c0/9kxb7l0gOxC0GsEvYw5K2o7fkbrjTfEDAQzjN
-         QdDpbpnEmYayKqQoYloF+U/Vz/zPhhgnSsJDP82+IJaE7Ej62F5qJbnC/NXKZd+8O/wB
-         qp1A==
-X-Gm-Message-State: AO0yUKWZJb4zGA5syXxznc9NsCU6zHCtK/FRq+XPTmivJ6U4Dqk2vjB6
-	jKVnVqJD70IltFjWqjMFmf9CCaUnvcJcdt/yU2TL6L1WnxLqedIiAtbJh4kG30AuIC9Rv4TgWOt
-	uefAco07sRad2o5bTYIcRgA==
-X-Received: by 2002:a05:6214:29c1:b0:5ac:239a:9200 with SMTP id gh1-20020a05621429c100b005ac239a9200mr36792344qvb.9.1679316725189;
-        Mon, 20 Mar 2023 05:52:05 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/mIgQ9WLkpN/lX38TAKIMzAXzxhdDQGgmTFJDrdCZybZKyAGo36og/nqUn3oQNrEhjhBPFaw==
-X-Received: by 2002:a05:6214:29c1:b0:5ac:239a:9200 with SMTP id gh1-20020a05621429c100b005ac239a9200mr36792313qvb.9.1679316724937;
-        Mon, 20 Mar 2023 05:52:04 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id r132-20020a37448a000000b007466432a559sm5038056qka.86.2023.03.20.05.52.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 05:52:04 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: qiang.zhao@nxp.com,
-	leoyang.li@nxp.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linuxppc-dev@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] soc: fsl: qe: remove unused qe_ic_from_irq function
-Date: Mon, 20 Mar 2023 08:52:02 -0400
-Message-Id: <20230320125202.1721775-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778941861;
+	Mon, 20 Mar 2023 12:53:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679316825; x=1710852825;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=60725+ynTPRQqtgyyn0xaxRRSwmxpt65izZazGSpuvU=;
+  b=Aka34oBq/bPk/tLH8Zb39dFPlY4yT5ccUwAlA1Nn4rYGm+n75lNTHbGr
+   joNkcT1w6/o74fyNnB4B0baPlpGHq9rszzVzjx9AUG0SJ3bVTNTzURu/E
+   tiAxFJaHMolgi6W4GYENCyGvkm35d8LOR+jIF7K+8mFIMsDqAOKxohRjh
+   eTIlG9c95PAlYhj3U7Nk7PaS/7PSZ0n1d8bgGltEPqRgwAppAemPxKdGv
+   JWu+AtFJoHeOx+NWVto0mqPD1h0tphcV7+NlzqjMWAtj0fEX30ql2cvz2
+   qP3K3EwHaDqkdXgRwb/IIAuuhbVjYOfaTuUZ5TDDiDPkqhmThBlASNLeT
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="366368986"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="366368986"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 05:53:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="713547748"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="713547748"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Mar 2023 05:53:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1peF1C-000B2k-1Z;
+	Mon, 20 Mar 2023 12:53:42 +0000
+Date: Mon, 20 Mar 2023 20:53:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [intel-tdx:tdx-mig-wip 104/627]
+ drivers/firmware/efi/libstub/x86-stub.c:790:14: warning: implicit
+ declaration of function 'efi_is_64bit' is invalid in C99
+Message-ID: <202303202058.Uqjp8Lvx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-clang with W=1 reports
-drivers/soc/fsl/qe/qe_ic.c:235:29: error: unused function
-  'qe_ic_from_irq' [-Werror,-Wunused-function]
-static inline struct qe_ic *qe_ic_from_irq(unsigned int virq)
-                            ^
-The use of this function was removed with
-commit d7c2878cfcfa ("soc: fsl: qe: remove unused qe_ic_set_* functions")
+Hi Kirill,
 
-This function is not used, so remove it.
+FYI, the error/warning still remains.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v2: Add to commit log when the use was removed.
+tree:   https://github.com/intel/tdx.git tdx-mig-wip
+head:   61038376124dad7d5d6f0e23bb56643c4e9bd64a
+commit: f9d9defcf521899d36fdc2577bb89a1bac32493d [104/627] x86/tdx: Add unaccepted memory support
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230320/202303202058.Uqjp8Lvx-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/tdx/commit/f9d9defcf521899d36fdc2577bb89a1bac32493d
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx tdx-mig-wip
+        git checkout f9d9defcf521899d36fdc2577bb89a1bac32493d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/ drivers/firmware/efi/libstub/
 
----
- drivers/soc/fsl/qe/qe_ic.c | 5 -----
- 1 file changed, 5 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303202058.Uqjp8Lvx-lkp@intel.com/
 
-diff --git a/drivers/soc/fsl/qe/qe_ic.c b/drivers/soc/fsl/qe/qe_ic.c
-index bbae3d39c7be..c0b4f865fba9 100644
---- a/drivers/soc/fsl/qe/qe_ic.c
-+++ b/drivers/soc/fsl/qe/qe_ic.c
-@@ -232,11 +232,6 @@ static inline void qe_ic_write(__be32  __iomem *base, unsigned int reg,
- 	iowrite32be(value, base + (reg >> 2));
- }
- 
--static inline struct qe_ic *qe_ic_from_irq(unsigned int virq)
--{
--	return irq_get_chip_data(virq);
--}
--
- static inline struct qe_ic *qe_ic_from_irq_data(struct irq_data *d)
- {
- 	return irq_data_get_irq_chip_data(d);
+All warnings (new ones prefixed by >>):
+
+>> drivers/firmware/efi/libstub/x86-stub.c:790:14: warning: implicit declaration of function 'efi_is_64bit' is invalid in C99 [-Wimplicit-function-declaration]
+           signature = efi_is_64bit() ? EFI64_LOADER_SIGNATURE
+                       ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for EFI_STUB
+   Depends on [n]: EFI [=n]
+   Selected by [y]:
+   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
+   WARNING: unmet direct dependencies detected for UNACCEPTED_MEMORY
+   Depends on [n]: EFI [=n] && EFI_STUB [=y]
+   Selected by [y]:
+   - INTEL_TDX_GUEST [=y] && HYPERVISOR_GUEST [=y] && X86_64 [=y] && CPU_SUP_INTEL [=y] && X86_X2APIC [=y]
+
+
+vim +/efi_is_64bit +790 drivers/firmware/efi/libstub/x86-stub.c
+
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  783  
+cd33a5c1d53e43 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2019-12-24  784  static efi_status_t exit_boot_func(struct efi_boot_memmap *map,
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  785  				   void *priv)
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  786  {
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  787  	const char *signature;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  788  	struct exit_boot_struct *p = priv;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  789  
+aab9593c0cb445 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2018-07-20 @790  	signature = efi_is_64bit() ? EFI64_LOADER_SIGNATURE
+aab9593c0cb445 arch/x86/boot/compressed/eboot.c        Ard Biesheuvel 2018-07-20  791  				   : EFI32_LOADER_SIGNATURE;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  792  	memcpy(&p->efi->efi_loader_signature, signature, sizeof(__u32));
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  793  
+eed4e0193ee7b0 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-30  794  	efi_set_u64_split((unsigned long)efi_system_table,
+eed4e0193ee7b0 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-30  795  			  &p->efi->efi_systab, &p->efi->efi_systab_hi);
+eab3126571ed1e drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-06-03  796  	p->efi->efi_memdesc_size	= map->desc_size;
+eab3126571ed1e drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-06-03  797  	p->efi->efi_memdesc_version	= map->desc_ver;
+eab3126571ed1e drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-06-03  798  	efi_set_u64_split((unsigned long)map->map,
+eed4e0193ee7b0 drivers/firmware/efi/libstub/x86-stub.c Arvind Sankar  2020-04-30  799  			  &p->efi->efi_memmap, &p->efi->efi_memmap_hi);
+eab3126571ed1e drivers/firmware/efi/libstub/x86-stub.c Ard Biesheuvel 2022-06-03  800  	p->efi->efi_memmap_size		= map->map_size;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  801  
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  802  	return EFI_SUCCESS;
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  803  }
+d64934019f6cc3 arch/x86/boot/compressed/eboot.c        Jeffrey Hugo   2016-08-29  804  
+
+:::::: The code at line 790 was first introduced by commit
+:::::: aab9593c0cb4454f9d261a8c87a3361f3186c4ec efi/x86: Replace references to efi_early->is64 with efi_is_64bit()
+
+:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
