@@ -1,248 +1,142 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B874C6A
-	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 18:41:30 +0000 (UTC)
-Received: by mail-pl1-f181.google.com with SMTP id u5so13491744plq.7
-        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 11:41:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530EF4C6B
+	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 18:42:53 +0000 (UTC)
+Received: by mail-vs1-f54.google.com with SMTP id c1so8598864vsk.2
+        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 11:42:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679337690;
+        d=linaro.org; s=google; t=1679337772;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sebx0TlAgxAANslvKkDYNuoP3rxT8jA6wy3Ud58CnGE=;
-        b=Q+XtM/4GZZl+47UGm6LV0ISK3CCTlqSZiMWauS4wYISNVA8jpv6Y6p3v3GmsvkilY7
-         8SZOa/qbocKZAIa5eJbCcyi5nH1xPBF0ZNOlqEua8E1HbrqrXGv+T6sB1r84DH/7M5mf
-         NWa88XZZdRq9KnWjSRRsVXYZM1wYm//kOxB4exBlxjV+yCSB3GUoRrroDT3OfpmZS2hc
-         JSQddMLBksd4YWyc1EwnAfoP3VQEZKYUjmd+ay32ymwA27YRVByDZphYPrIUjv74pmfQ
-         sjFFFsZa9ixp+xewlXQwF2WawYXBBm+kmU1GWbEeiNhpzg+IMmgwSKc2VdwS+E2sVVk/
-         FJyw==
+        bh=S6qDlxgrvXVQRNB9kUbn6eufRRtTHPLdDgSZt+65vJI=;
+        b=f4tYwGPHEiPX9T9NSQEefkwCMwavF0Hfvbj8MPt8OzL6EDMfSsCfBfOjHcWUPINIYO
+         9ZL/1zFGenH3AzWv9GV0KXiADSzo+VifNzGX+xdaveJasZVWPs86w8AHE3037eSicsTt
+         W43IW3n/QcpZBLnGR3WvNGApR8libNVl60RcIJrrrziM44R40p2A9CINpYv2KRzKMDoJ
+         OkCQRcPkeAYra3fLCg2RE27/RiocXxzaspEN4Ngo+hL/I7Vxzk0GJDyy86SyNuimXbYj
+         ++tKvusG3Ooqy+780AhinPAkinpjJ8vsgoBuqnLayzMZ7eLNDKSNOj4oabisOMENf/lU
+         p2nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679337690;
+        d=1e100.net; s=20210112; t=1679337772;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sebx0TlAgxAANslvKkDYNuoP3rxT8jA6wy3Ud58CnGE=;
-        b=g5uF41Ic3gN5HQqruyTlHMzwWW1zekDABcAj7YkyRvmf1wBlz6PFSxCCaCcih4VM3T
-         G/q0G8T8EQdlrUIGjAAzL09zi3IKL8K5+2a/7ahejDmbgMt4wBV/qom1K5DwMXYLhMY7
-         WbTtHGFDcNF/w/NaQ+g+cBw8KEMusBXnFH6tb5iKhaOqVeKfOV8BRfgrJE3kmi2ODZ+T
-         Ig1nA4eS2y7oipCoHZsgac799iok/+rkJkpiZKCZdNmZ+WQuxA8cro1wi/FA8VwrVJUP
-         g8IeDp9YQhejo+erixTbAuMwiu8iO/4u1UzCK9TxJZ8R5fa5VPiikHtCEgOK7jAyfYH8
-         WXcw==
-X-Gm-Message-State: AO0yUKXLJxHn/W1P8/mh/jElf/kR4PdUc8RfYXip0fRSB5auHp7s7sNW
-	wTDo0ik7DWzWHlAlrWvJnfTPoX41LSv6DWaGchNemA==
-X-Google-Smtp-Source: AK7set/vhawYGH3DhT3/v6d5Ny4Jjt66TnVuAEbHphTcmhiCUIZFWQ7DMe0qgAMD0rlNa9YxBuWPuw6edly1Iv8yUR4=
-X-Received: by 2002:a17:90a:6e45:b0:23c:fb7d:de70 with SMTP id
- s5-20020a17090a6e4500b0023cfb7dde70mr52766pjm.7.1679337689910; Mon, 20 Mar
- 2023 11:41:29 -0700 (PDT)
+        bh=S6qDlxgrvXVQRNB9kUbn6eufRRtTHPLdDgSZt+65vJI=;
+        b=vRuyDTKBFV5ofZBIgNSzGW4NXpg4QiIu1QeAVx2Z3H7grKp5RHWGsLbPXKHVrX2vJU
+         K+MWR1jW2nUbXKWE2bYO/kFfUdCpsu6jiusxsRaUynhspjESGBq51FAAEqYx/CQcb6RZ
+         x7sL97Co5GO5hQSvBJS+we3l/R5n2N+aRDBXXK3uoXnp+rvnsKTC5jPP7Fw/X8vQwk59
+         7Ur2R/lfV6/GT1oCsvOlYVlmRl50Nh5V/GU/rq7xpI1Ukd10HxGHHVIqcQpVZeC6D+tu
+         zHNcd85sACxF8lfRF4f3dIogx+rtNEzCChpB4vlllsc8xcXD5D0GIjjuwj1yGH0bWoNr
+         v9ug==
+X-Gm-Message-State: AAQBX9cY6ssIZN2RPIrKZsGYm18w1CZoS/rZKN2uLvm1UJCFMPsMix97
+	epmvBn8oOVPJyNlCprTV1+EVQ69HHIq8GgUdNMnwWw==
+X-Google-Smtp-Source: AK7set/vVlTyUh2BRkhjfN5Eql28JK/M5ok9ZONQir0aJp4DhxnNQlA6ExlGsyH5oMhXl2OBLvkb746J5x0qgMXmI+w=
+X-Received: by 2002:a67:c01c:0:b0:402:9b84:1be4 with SMTP id
+ v28-20020a67c01c000000b004029b841be4mr4451vsi.6.1679337771950; Mon, 20 Mar
+ 2023 11:42:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230308195933.806917-1-ndesaulniers@google.com> <CA+G9fYtTL+y-ZYeZXKHbVg9XiYVeHE-RaAjaRHTT+EfXO924cA@mail.gmail.com>
-In-Reply-To: <CA+G9fYtTL+y-ZYeZXKHbVg9XiYVeHE-RaAjaRHTT+EfXO924cA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 20 Mar 2023 11:41:18 -0700
-Message-ID: <CAKwvOdnM9WjxHY_uw_0nyhGTZDuQ+730NrX2sgw9cBLkrhF8oA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: sigaltstack: fix -Wuninitialized
-To: Shuah Khan <shuah@kernel.org>
-Cc: Linux Kernel Functional Testing <lkft@linaro.org>, 
-	KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>, linux-api@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, lkft-triage@lists.linaro.org, 
-	Thomas Gleixner <tglx@linutronix.de>, "Chang S. Bae" <chang.seok.bae@intel.com>, 
-	Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>, Stas Sergeev <stsp@list.ru>, 
-	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>, 
-	Andy Lutomirski <luto@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev, 
-	Naresh Kamboju <naresh.kamboju@linaro.org>
+References: <20230320145507.420176832@linuxfoundation.org>
+In-Reply-To: <20230320145507.420176832@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 21 Mar 2023 00:12:40 +0530
+Message-ID: <CA+G9fYtCtfSqrje=1wkw1ODpnJorDMFkB1bSVexpyc4gi3X0ZQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/198] 6.1.21-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, llvm@lists.linux.dev, 
+	Michael Ellerman <mpe@ellerman.id.au>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Shuah,
-Did this get picked up? Just checking it doesn't fall through the cracks.
-EOM
-
-On Mon, Mar 13, 2023 at 2:50=E2=80=AFAM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
+On Mon, 20 Mar 2023 at 20:26, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Thu, 9 Mar 2023 at 01:29, Nick Desaulniers <ndesaulniers@google.com> w=
-rote:
-> >
-> > Building sigaltstack with clang via:
-> > $ ARCH=3Dx86 make LLVM=3D1 -C tools/testing/selftests/sigaltstack/
-> >
-> > produces the following warning:
-> >   warning: variable 'sp' is uninitialized when used here [-Wuninitializ=
-ed]
-> >   if (sp < (unsigned long)sstack ||
-> >       ^~
-> >
-> > Clang expects these to be declared at global scope; we've fixed this in
-> > the kernel proper by using the macro `current_stack_pointer`. This is
-> > defined in different headers for different target architectures, so jus=
-t
-> > create a new header that defines the arch-specific register names for
-> > the stack pointer register, and define it for more targets (at least th=
-e
-> > ones that support current_stack_pointer/ARCH_HAS_CURRENT_STACK_POINTER)=
-.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Link: https://lore.kernel.org/lkml/CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimB=
-p86LhGBa0eCnEpA@mail.gmail.com/
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> This is the start of the stable review cycle for the 6.1.21 release.
+> There are 198 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Build and boot tested with clang-16 and tested sigaltstack
-> on arm64, armv7, FVP, x86_64 and i386 [1] & [2].
-> These tests were performed at Linaro test farm by Anders
-> with the help of tuxplan / tuxmake and tuxrun.
+> Responses should be made by Wed, 22 Mar 2023 14:54:29 +0000.
+> Anything received after that time might be too late.
 >
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Tested-by:  Anders Roxell <anders.roxell@linaro.org>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.21-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
 >
+> thanks,
 >
-> Build log:
-> -------
-> clang --target=3Daarch64-linux-gnu -fintegrated-as
-> -Werror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument
-> -Werror=3Doption-ignored -Werror=3Dunused-command-line-argument
-> --target=3Daarch64-linux-gnu -fintegrated-as -Wall     sas.c  -o
-> /home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/sigaltstack/sas
->
-> Test log:
-> ----------
->
-> Linux version 6.3.0-rc1-next-20230310 (tuxmake@tuxmake) (Debian clang
-> version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.41),
-> Debian LLD 16.0.0) #1 SMP PREEMPT @1678519789
-> ...
->
-> [   56.327569] kselftest: Running tests in sigaltstack
-> TAP version 13
-> 1..1
-> # selftests: sigaltstack: sas
-> # # [NOTE] the stack size is 26400
-> # TAP version 13
-> # 1..3
-> # ok 1 Initial sigaltstack state was SS_DISABLE
-> # # [RUN] signal USR1
-> # ok 2 sigaltstack is disabled in sighandler
-> # # [RUN] switched to user ctx
-> # # [RUN] signal USR2
-> # # [OK] Stack preserved
-> # ok 3 sigaltstack is still SS_AUTODISARM after signal
-> # # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-> ok 1 selftests: sigaltstack: sas
->
-> Details of test log links provided [3].
->
-> > ---
-> > Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > Cc: KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>
-> > Cc: linux-api@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: lkft-triage@lists.linaro.org
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: "Chang S. Bae" <chang.seok.bae@intel.com>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Borislav Petkov <bp@suse.de>
-> > Cc: Stas Sergeev <stsp@list.ru>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Anders Roxell <anders.roxell@linaro.org>
-> > Cc: Andy Lutomirski <luto@kernel.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: llvm@lists.linux.dev
-> > ---
-> >  .../sigaltstack/current_stack_pointer.h       | 23 +++++++++++++++++++
-> >  tools/testing/selftests/sigaltstack/sas.c     |  7 +-----
-> >  2 files changed, 24 insertions(+), 6 deletions(-)
-> >  create mode 100644 tools/testing/selftests/sigaltstack/current_stack_p=
-ointer.h
-> >
-> > diff --git a/tools/testing/selftests/sigaltstack/current_stack_pointer.=
-h b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
-> > new file mode 100644
-> > index 000000000000..ea9bdf3a90b1
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
-> > @@ -0,0 +1,23 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +#if __alpha__
-> > +register unsigned long sp asm("$30");
-> > +#elif __arm__ || __aarch64__ || __csky__ || __m68k__ || __mips__ || __=
-riscv
-> > +register unsigned long sp asm("sp");
-> > +#elif __i386__
-> > +register unsigned long sp asm("esp");
-> > +#elif __loongarch64
-> > +register unsigned long sp asm("$sp");
-> > +#elif __ppc__
-> > +register unsigned long sp asm("r1");
-> > +#elif __s390x__
-> > +register unsigned long sp asm("%15");
-> > +#elif __sh__
-> > +register unsigned long sp asm("r15");
-> > +#elif __x86_64__
-> > +register unsigned long sp asm("rsp");
-> > +#elif __XTENSA__
-> > +register unsigned long sp asm("a1");
-> > +#else
-> > +#error "implement current_stack_pointer equivalent"
-> > +#endif
-> > diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/=
-selftests/sigaltstack/sas.c
-> > index c53b070755b6..98d37cb744fb 100644
-> > --- a/tools/testing/selftests/sigaltstack/sas.c
-> > +++ b/tools/testing/selftests/sigaltstack/sas.c
-> > @@ -20,6 +20,7 @@
-> >  #include <sys/auxv.h>
-> >
-> >  #include "../kselftest.h"
-> > +#include "current_stack_pointer.h"
-> >
-> >  #ifndef SS_AUTODISARM
-> >  #define SS_AUTODISARM  (1U << 31)
-> > @@ -46,12 +47,6 @@ void my_usr1(int sig, siginfo_t *si, void *u)
-> >         stack_t stk;
-> >         struct stk_data *p;
-> >
-> > -#if __s390x__
-> > -       register unsigned long sp asm("%15");
-> > -#else
-> > -       register unsigned long sp asm("sp");
-> > -#endif
-> > -
-> >         if (sp < (unsigned long)sstack ||
-> >                         sp >=3D (unsigned long)sstack + stack_size) {
-> >                 ksft_exit_fail_msg("SP is not on sigaltstack\n");
-> > --
-> > 2.40.0.rc0.216.gc4246ad0f0-goog
->
-> log link:
-> -----
-> [1] https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/b=
-uild/lore_kernel_org_linux-kselftest_20230308195933_806917-1-ndesaulniers_g=
-oogle_com/?failures_only=3Dfalse#!?filter-tests=3Dkselftest-sigaltstack&det=
-ails=3D#test-results
-> [2] https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/b=
-uild/lore_kernel_org_linux-kselftest_20230308195933_806917-1-ndesaulniers_g=
-oogle_com/testrun/15468761/suite/kselftest-sigaltstack/test/sigaltstack_sas=
-/log
-> [3] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/anders/tests/2M=
-rJ2e4bDCC4iZjIrnRqmnE7KfC
->
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+> greg k-h
 
 
+Results from Linaro=E2=80=99s test farm.
+Regressions on PowerPC build failures.
 
---=20
-Thanks,
-~Nick Desaulniers
+> Christophe Leroy <christophe.leroy@csgroup.eu>
+>     powerpc/64: Set default CPU in Kconfig
+>
+
+We see PowerPC build failures with Clang 16 and nightly on the
+following configurations:
+* cell_defconfig
+* ppc64e_defconfig
+* tqm8xx_defconfig
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Error messages respectively:
+-----8<-----
+error: unknown target CPU 'cell'
+note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
+603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
+970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
+pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
+power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
+powerpc64, ppc64, powerpc64le, ppc64le, future
+----->8-----
+
+-----8<-----
+error: unknown target CPU 'e500mc64'
+note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
+603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
+970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
+pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
+power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
+powerpc64, ppc64, powerpc64le, ppc64le, future
+----->8-----
+
+-----8<-----
+error: unknown target CPU '860'
+note: valid target CPU values are: generic, 440, 450, 601, 602, 603,
+603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548,
+970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5,
+pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7,
+power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32,
+powerpc64, ppc64, powerpc64le, ppc64le, future
+----->8-----
+
+The bisection pointed to this commit,
+  45f7091aac35 ("powerpc/64: Set default CPU in Kconfig")
+
+
+Follow up fix patch is here as per Christophe Leroy comments,
+ powerpc: Disable CPU unknown by CLANG when CC_IS_CLANG
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
