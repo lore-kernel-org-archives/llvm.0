@@ -1,171 +1,174 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7A06FA6
-	for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 20:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679342735;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vLGqq2dkr4d+qChfROhQzB1nvGWWiqjAAUgEiPWsWfk=;
-	b=QKLNv1rhjW8T39/4DXb/tRsT9UOxnTd+tFBX+IkZVN6NvkO2gEXh2rOfqqzPQe6RpSm1r9
-	lxaECuW2UAwduQlJbBEy/LU4vWfzrNI9KycyyAoxdmifG3m+1j7PrGswaqDG62VFIEGL6E
-	ysV34252cvQR9T6KnQRUSma3of56/OA=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-339-VQuJH_EJMo-6zfwVHFXlZA-1; Mon, 20 Mar 2023 16:05:34 -0400
-X-MC-Unique: VQuJH_EJMo-6zfwVHFXlZA-1
-Received: by mail-qt1-f197.google.com with SMTP id z1-20020ac87ca1000000b003ba2a2c50f9so7547756qtv.23
-        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 13:05:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679342733;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vLGqq2dkr4d+qChfROhQzB1nvGWWiqjAAUgEiPWsWfk=;
-        b=i6pWhXPXbmRh62TJuRcPEp4Y+xw5uRHGmc+5Vgw2TkC0fJk/s01V9ZTHwcCwGzj11I
-         jybxMlyij8uoZFlkbemfhBpuy1ZM1CKKre1xfqFdMheZd++WE1RbX4LrzCSM40tZmjZq
-         whEiQqXxXwLoCd8gjTBBjycrA8OqVsDygcGgwArAjTp6coZBXqXM8PxDOgSE4m1KSQIc
-         IzvDCXfIO45pHkUWuzw7FFNcm5PM9G9IlSgwlxxF2lW1bck1aeGdzlVISC+owePSuTnk
-         E8fXH7j93luFd2FGJBNir8hSfMJ0q0qECbJEiXS0/aNdM4G7efEu8Wx7LlOzNfgJqxw3
-         ZZCQ==
-X-Gm-Message-State: AO0yUKUH/2LC72WNwl8pScB4Q+Jo9s1QWyRiakD8Pj82XGAFWB5rFJvD
-	bEl+nbqQuf2M1wuITzJaj/sfVQHCY3qQWR8b9XUQV3kqPUf14ZNiQcP5OYxmWm+ZXJg90TjzA83
-	gf8QRkkjE2ogb0cy7bqn7DBdR3em8E6jsTKJG0kMrgIZ9f4C4AGruGjjSXg0BmcfgxIIG
-X-Received: by 2002:ac8:7f4e:0:b0:3bf:d149:8966 with SMTP id g14-20020ac87f4e000000b003bfd1498966mr617516qtk.62.1679342733314;
-        Mon, 20 Mar 2023 13:05:33 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8EYVn9VEzuCjZa06sZPyJPdqRWwwdN6xTMK4QNdqi2czOa4Al3y0wS1AbtorjeGXE8yHikrQ==
-X-Received: by 2002:ac8:7f4e:0:b0:3bf:d149:8966 with SMTP id g14-20020ac87f4e000000b003bfd1498966mr617464qtk.62.1679342732969;
-        Mon, 20 Mar 2023 13:05:32 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bk12-20020a05620a1a0c00b0074357a6529asm7968058qkb.105.2023.03.20.13.05.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 13:05:32 -0700 (PDT)
-Subject: Re: [PATCH] fpga: xilinx-pr-decoupler: remove unused
- xlnx_pr_decouple_read function
-From: Tom Rix <trix@redhat.com>
-To: Xu Yilun <yilun.xu@intel.com>, Michal Simek <michal.simek@amd.com>
-Cc: mdf@kernel.org, hao.wu@intel.com, michal.simek@xilinx.com,
- nathan@kernel.org, ndesaulniers@google.com, linux-fpga@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20230317230617.1673923-1-trix@redhat.com>
- <c8eaefed-e1fd-e0c1-7e8f-561c20632646@amd.com>
- <ZBhqutJChvRkUsRL@yilunxu-OptiPlex-7050>
- <2dc1f25d-d621-ec04-6de5-f731f2a8bb41@redhat.com>
-Message-ID: <5fb2fa11-5a58-1856-7cb9-9687637d0741@redhat.com>
-Date: Mon, 20 Mar 2023 13:05:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6096FA6;
+	Mon, 20 Mar 2023 20:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679343259; x=1710879259;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u+jOUwoE6OkKQ7xRHEiSIZbHt9zZyJpg1s70VOyfcyE=;
+  b=ly1fiZyirt1/F/bCEYL2jBCYuHdceoZ0CCJFO1Qtmxstrx8FR9PSXEYH
+   NeNle56d9JWZa7wGlVvJnamAZ4R2sTEDiVYrZ8KDPuokE4WdXnxum2Yp6
+   d26h4VaWHZs1wG+Bu51ZXY6M9uDFsv7AITS9QxI/PupXE3kb724u/9+fs
+   P1v56NpYNioEbvWXuAAje4+s2L885QrR7x0tqKzVEo2lfocVKhpTd1k6d
+   qmHRc0h3JllOZlB03UG4E95erqolg/fApSCTWx6BB9tF1Gg5r0IJ0Q0La
+   P7/n7iegtOivUsnFZSndy9ZQ3olHG7JJyERhcHqO7dTXfvZ9ANrE2YqPg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319168740"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="319168740"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:13:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="1010629523"
+X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
+   d="scan'208";a="1010629523"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2023 13:13:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1peLtD-000BHc-1j;
+	Mon, 20 Mar 2023 20:13:55 +0000
+Date: Tue, 21 Mar 2023 04:13:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Rob Clark <robdclark@chromium.org>, Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	"open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v2 18/23] PM / QoS: Decouple request alloc from
+ dev_pm_qos_mtx
+Message-ID: <202303210444.Qtybv08z-lkp@intel.com>
+References: <20230320144356.803762-19-robdclark@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <2dc1f25d-d621-ec04-6de5-f731f2a8bb41@redhat.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320144356.803762-19-robdclark@gmail.com>
+
+Hi Rob,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on rafael-pm/linux-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc3 next-20230320]
+[cannot apply to chanwoo/devfreq-testing]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230320144356.803762-19-robdclark%40gmail.com
+patch subject: [PATCH v2 18/23] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
+config: arm-randconfig-r005-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210444.Qtybv08z-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/2d7e4629d7265d7e77fc72d01e84d27d805b7485
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
+        git checkout 2d7e4629d7265d7e77fc72d01e84d27d805b7485
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/base/power/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210444.Qtybv08z-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/base/power/qos.c:947:8: warning: variable 'req' is uninitialized when used here [-Wuninitialized]
+                   if (!req) {
+                        ^~~
+   drivers/base/power/qos.c:938:33: note: initialize the variable 'req' to silence this warning
+                   struct dev_pm_qos_request *req;
+                                                 ^
+                                                  = NULL
+   1 warning generated.
 
 
-On 3/20/23 9:24 AM, Tom Rix wrote:
->
-> On 3/20/23 7:16 AM, Xu Yilun wrote:
->> On 2023-03-20 at 08:40:22 +0100, Michal Simek wrote:
->>>
->>> On 3/18/23 00:06, Tom Rix wrote:
->>>> CAUTION: This message has originated from an External Source. 
->>>> Please use proper judgment and caution when opening attachments, 
->>>> clicking links, or responding to this email.
->>>>
->>>>
->>>> clang with W=1 reports
->>>> drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 
->>>> 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
->>>> static inline u32 xlnx_pr_decouple_read(const struct 
->>>> xlnx_pr_decoupler_data *d,
->>>>                     ^
->>>> This static function is not used, so remove it.
->>>>
->>>> Signed-off-by: Tom Rix <trix@redhat.com>
->>>> ---
->>>>    drivers/fpga/xilinx-pr-decoupler.c | 6 ------
->>>>    1 file changed, 6 deletions(-)
->>>>
->>>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c 
->>>> b/drivers/fpga/xilinx-pr-decoupler.c
->>>> index 2d9c491f7be9..b6f18c07c752 100644
->>>> --- a/drivers/fpga/xilinx-pr-decoupler.c
->>>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
->>>> @@ -34,12 +34,6 @@ static inline void 
->>>> xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
->>>>           writel(val, d->io_base + offset);
->>>>    }
->>>>
->>>> -static inline u32 xlnx_pr_decouple_read(const struct 
->>>> xlnx_pr_decoupler_data *d,
->>>> -                                       u32 offset)
->>>> -{
->>>> -       return readl(d->io_base + offset);
->>>> -}
->>>> -
->>>>    static int xlnx_pr_decoupler_enable_set(struct fpga_bridge 
->>>> *bridge, bool enable)
->>>>    {
->>>>           int err;
->>>> -- 
->>>> 2.27.0
->>>>
->>> It should be fixed like this instead.
->>>
->>> Thanks,
->>> Michal
->>>
->>> diff --git a/drivers/fpga/xilinx-pr-decoupler.c 
->>> b/drivers/fpga/xilinx-pr-decoupler.c
->>> index 2d9c491f7be9..58508f44cd49 100644
->>> --- a/drivers/fpga/xilinx-pr-decoupler.c
->>> +++ b/drivers/fpga/xilinx-pr-decoupler.c
->>> @@ -69,7 +69,7 @@ static int xlnx_pr_decoupler_enable_show(struct
->>> fpga_bridge *bridge)
->>>          if (err)
->>>                  return err;
->>>
->>> -       status = readl(priv->io_base);
->>> +       status = xlnx_pr_decouple_read(priv);
->> OK, I'll drop the previous fix, and waiting for the new one.
->
-> Michal,
->
-> Will you make this change ?
+vim +/req +947 drivers/base/power/qos.c
 
-Let me provide some context.
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  917  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  918  /**
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  919   * dev_pm_qos_update_user_latency_tolerance - Update user space latency tolerance.
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  920   * @dev: Device to update the user space latency tolerance for.
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  921   * @val: New user space latency tolerance for @dev (negative values disable).
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  922   */
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  923  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  924  {
+2d7e4629d7265d Rob Clark         2023-03-20  925  	struct dev_pm_qos_request *req = NULL;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  926  	int ret;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  927  
+00dd582e52a535 Rob Clark         2023-03-20  928  	ret = dev_pm_qos_constraints_ensure_allocated(dev);
+00dd582e52a535 Rob Clark         2023-03-20  929  	if (ret)
+00dd582e52a535 Rob Clark         2023-03-20  930  		return ret;
+00dd582e52a535 Rob Clark         2023-03-20  931  
+2d7e4629d7265d Rob Clark         2023-03-20  932  	if (!dev->power.qos->latency_tolerance_req)
+2d7e4629d7265d Rob Clark         2023-03-20  933  		req = kzalloc(sizeof(*req), GFP_KERNEL);
+2d7e4629d7265d Rob Clark         2023-03-20  934  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  935  	mutex_lock(&dev_pm_qos_mtx);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  936  
+00dd582e52a535 Rob Clark         2023-03-20  937  	if (!dev->power.qos->latency_tolerance_req) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  938  		struct dev_pm_qos_request *req;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  939  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  940  		if (val < 0) {
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  941  			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  942  				ret = 0;
+80a6f7c79b7822 Andrew Lutomirski 2016-11-29  943  			else
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  944  				ret = -EINVAL;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  945  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  946  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11 @947  		if (!req) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  948  			ret = -ENOMEM;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  949  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  950  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  951  		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  952  		if (ret < 0) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  953  			kfree(req);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  954  			goto out;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  955  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  956  		dev->power.qos->latency_tolerance_req = req;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  957  	} else {
+2d7e4629d7265d Rob Clark         2023-03-20  958  		/*
+2d7e4629d7265d Rob Clark         2023-03-20  959  		 * If we raced with another thread to allocate the request,
+2d7e4629d7265d Rob Clark         2023-03-20  960  		 * simply free the redundant allocation and move on.
+2d7e4629d7265d Rob Clark         2023-03-20  961  		 */
+2d7e4629d7265d Rob Clark         2023-03-20  962  		if (req)
+2d7e4629d7265d Rob Clark         2023-03-20  963  			kfree(req);
+2d7e4629d7265d Rob Clark         2023-03-20  964  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  965  		if (val < 0) {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  966  			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  967  			ret = 0;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  968  		} else {
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  969  			ret = __dev_pm_qos_update_request(dev->power.qos->latency_tolerance_req, val);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  970  		}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  971  	}
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  972  
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  973   out:
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  974  	mutex_unlock(&dev_pm_qos_mtx);
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  975  	return ret;
+2d984ad132a87c Rafael J. Wysocki 2014-02-11  976  }
+034e7906211c18 Andrew Lutomirski 2016-11-29  977  EXPORT_SYMBOL_GPL(dev_pm_qos_update_user_latency_tolerance);
+13b2c4a0c3b1cd Mika Westerberg   2015-07-27  978  
 
-I am cleaning up about 70 similar unused functions all over the tree.
-
-I have removed a lot of one liner wrappers that look like this.
-
-My opinion, to be useful the wrapper needs to be used multiple places 
-and/or do something non trival otherwise we will bloat the codebase with 
-with 5x lines of code to do a simple readl.
-
-But this is subjection. If you want this change, you should make it.
-
-Tom
-
->
-> Tom
->
->>
->> Thanks,
->> Yilun
->>
->>>          clk_disable(priv->clk);
->>>
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
