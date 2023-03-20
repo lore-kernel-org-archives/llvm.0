@@ -1,37 +1,37 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569846FA6;
-	Mon, 20 Mar 2023 20:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748D26FBE;
+	Mon, 20 Mar 2023 20:36:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679343902; x=1710879902;
+  t=1679344566; x=1710880566;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KIVDdjsYnIsbLZQqcW5ppQQ9NCMVMlN1ylEKQ8oyZGY=;
-  b=bEos6USIPfLZey4HmrhykyJR/CT9apRb/9eOx8BbgbFqk5bkwAL6h51b
-   nSGdvp0lqjlzqyqz6+9vnzrcTWALfk0iWr11wVDMCHP8r+YnY760nb5H4
-   sBV8s/YxWCQ3abC45CFdaGaGyBoX2HchPjFjP94xAV6bGAzIbDGwN7fWK
-   uvmSRe05EsF0CNe8S0Mka91OZ76jl+RLCrwXHyk43RmjZ/gBoYkdA6BCi
-   dyRP832eB+4IN+L2qUm5D8YHL1VbaSrUvU2m3BEs5tE9xbt47oFi5+MJr
-   BU0JfKpLGlH1qvrI8R2iTLiW8vnUzyBgac08GDp2NkTN75u49VqqLnicX
+  bh=UsoZniJEJWP45lJ5ecD6XZcUsmbUa2BKs5hpD4ZsmmI=;
+  b=S4bv9s5vtp72P/pp+XFZdqWgGeiydVVHXGC3/vEIysCMZVltQPxMiIq4
+   3jngxuo/Tx9b7V+kqVofE5yj2Nly2vMVZv0MHBLNewnoE4GrN24l4IDBA
+   H5YTW8crKdnGjHLsgSxTH1AjCbARaY70MjQUJa3M+aQ7iCc839g1X0VMq
+   ZQjfYPbtkf7PAovSzbvul+tb+bmwJ8ncbiAPnnm0zf4AUsgJcH0lBtLj7
+   5iCh4tcL+ruhHVF7t+p2eGH+/+WAyswiL4YZHwdU2iJUysIgehN/zkq4b
+   nGITdGE/p72b+e/qmSH7rnKP5LGi2RM+FAaIGpxe04CmsDvVF4qvdiQyk
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319170104"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="318424176"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="319170104"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:25:01 -0700
+   d="scan'208";a="318424176"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:36:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674546518"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="681223530"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="674546518"
+   d="scan'208";a="681223530"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2023 13:24:56 -0700
+  by orsmga002.jf.intel.com with ESMTP; 20 Mar 2023 13:36:01 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1peM3r-000BI6-2k;
-	Mon, 20 Mar 2023 20:24:55 +0000
-Date: Tue, 21 Mar 2023 04:24:10 +0800
+	id 1peMEW-000BIY-0e;
+	Mon, 20 Mar 2023 20:35:56 +0000
+Date: Tue, 21 Mar 2023 04:34:56 +0800
 From: kernel test robot <lkp@intel.com>
 To: Nuno =?iso-8859-1?Q?Gon=E7alves?= <nunog@fr24.com>,
 	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
@@ -51,7 +51,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Nuno =?iso-8859-1?Q?Gon=E7alves?= <nunog@fr24.com>,
 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH bpf-next] xsk: allow remap of fill and/or completion rings
-Message-ID: <202303210417.mv8mDIaV-lkp@intel.com>
+Message-ID: <202303210446.mO2yxOwo-lkp@intel.com>
 References: <20230320105323.187307-1-nunog@fr24.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -73,7 +73,7 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-Gon-alves/xsk-allow-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
 patch link:    https://lore.kernel.org/r/20230320105323.187307-1-nunog%40fr24.com
 patch subject: [PATCH bpf-next] xsk: allow remap of fill and/or completion rings
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230321/202303210417.mv8mDIaV-lkp@intel.com/config)
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230321/202303210446.mO2yxOwo-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -85,11 +85,11 @@ reproduce (this is a W=1 build):
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/xdp/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210417.mv8mDIaV-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210446.mO2yxOwo-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
