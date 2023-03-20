@@ -1,52 +1,58 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6096FA6;
-	Mon, 20 Mar 2023 20:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569846FA6;
+	Mon, 20 Mar 2023 20:25:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679343259; x=1710879259;
+  t=1679343902; x=1710879902;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=u+jOUwoE6OkKQ7xRHEiSIZbHt9zZyJpg1s70VOyfcyE=;
-  b=ly1fiZyirt1/F/bCEYL2jBCYuHdceoZ0CCJFO1Qtmxstrx8FR9PSXEYH
-   NeNle56d9JWZa7wGlVvJnamAZ4R2sTEDiVYrZ8KDPuokE4WdXnxum2Yp6
-   d26h4VaWHZs1wG+Bu51ZXY6M9uDFsv7AITS9QxI/PupXE3kb724u/9+fs
-   P1v56NpYNioEbvWXuAAje4+s2L885QrR7x0tqKzVEo2lfocVKhpTd1k6d
-   qmHRc0h3JllOZlB03UG4E95erqolg/fApSCTWx6BB9tF1Gg5r0IJ0Q0La
-   P7/n7iegtOivUsnFZSndy9ZQ3olHG7JJyERhcHqO7dTXfvZ9ANrE2YqPg
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319168740"
+  bh=KIVDdjsYnIsbLZQqcW5ppQQ9NCMVMlN1ylEKQ8oyZGY=;
+  b=bEos6USIPfLZey4HmrhykyJR/CT9apRb/9eOx8BbgbFqk5bkwAL6h51b
+   nSGdvp0lqjlzqyqz6+9vnzrcTWALfk0iWr11wVDMCHP8r+YnY760nb5H4
+   sBV8s/YxWCQ3abC45CFdaGaGyBoX2HchPjFjP94xAV6bGAzIbDGwN7fWK
+   uvmSRe05EsF0CNe8S0Mka91OZ76jl+RLCrwXHyk43RmjZ/gBoYkdA6BCi
+   dyRP832eB+4IN+L2qUm5D8YHL1VbaSrUvU2m3BEs5tE9xbt47oFi5+MJr
+   BU0JfKpLGlH1qvrI8R2iTLiW8vnUzyBgac08GDp2NkTN75u49VqqLnicX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="319170104"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="319168740"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:13:59 -0700
+   d="scan'208";a="319170104"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 13:25:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="1010629523"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="674546518"
 X-IronPort-AV: E=Sophos;i="5.98,276,1673942400"; 
-   d="scan'208";a="1010629523"
+   d="scan'208";a="674546518"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 20 Mar 2023 13:13:56 -0700
+  by orsmga007.jf.intel.com with ESMTP; 20 Mar 2023 13:24:56 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1peLtD-000BHc-1j;
-	Mon, 20 Mar 2023 20:13:55 +0000
-Date: Tue, 21 Mar 2023 04:13:37 +0800
+	id 1peM3r-000BI6-2k;
+	Mon, 20 Mar 2023 20:24:55 +0000
+Date: Tue, 21 Mar 2023 04:24:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+To: Nuno =?iso-8859-1?Q?Gon=E7alves?= <nunog@fr24.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rob Clark <robdclark@chromium.org>, Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	"open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v2 18/23] PM / QoS: Decouple request alloc from
- dev_pm_qos_mtx
-Message-ID: <202303210444.Qtybv08z-lkp@intel.com>
-References: <20230320144356.803762-19-robdclark@gmail.com>
+	netdev@vger.kernel.org,
+	Nuno =?iso-8859-1?Q?Gon=E7alves?= <nunog@fr24.com>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] xsk: allow remap of fill and/or completion rings
+Message-ID: <202303210417.mv8mDIaV-lkp@intel.com>
+References: <20230320105323.187307-1-nunog@fr24.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,119 +61,112 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230320144356.803762-19-robdclark@gmail.com>
+In-Reply-To: <20230320105323.187307-1-nunog@fr24.com>
 
-Hi Rob,
+Hi Nuno,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on rafael-pm/linux-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc3 next-20230320]
-[cannot apply to chanwoo/devfreq-testing]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230320144356.803762-19-robdclark%40gmail.com
-patch subject: [PATCH v2 18/23] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
-config: arm-randconfig-r005-20230319 (https://download.01.org/0day-ci/archive/20230321/202303210444.Qtybv08z-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-Gon-alves/xsk-allow-remap-of-fill-and-or-completion-rings/20230320-190022
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230320105323.187307-1-nunog%40fr24.com
+patch subject: [PATCH bpf-next] xsk: allow remap of fill and/or completion rings
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230321/202303210417.mv8mDIaV-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/2d7e4629d7265d7e77fc72d01e84d27d805b7485
+        # https://github.com/intel-lab-lkp/linux/commit/56f6a0c68dd5f4419fd7685cc83ceee2c70f3f2e
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rob-Clark/drm-msm-Pre-allocate-hw_fence/20230320-224826
-        git checkout 2d7e4629d7265d7e77fc72d01e84d27d805b7485
+        git fetch --no-tags linux-review Nuno-Gon-alves/xsk-allow-remap-of-fill-and-or-completion-rings/20230320-190022
+        git checkout 56f6a0c68dd5f4419fd7685cc83ceee2c70f3f2e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/base/power/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303210444.Qtybv08z-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303210417.mv8mDIaV-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/base/power/qos.c:947:8: warning: variable 'req' is uninitialized when used here [-Wuninitialized]
-                   if (!req) {
-                        ^~~
-   drivers/base/power/qos.c:938:33: note: initialize the variable 'req' to silence this warning
-                   struct dev_pm_qos_request *req;
-                                                 ^
-                                                  = NULL
-   1 warning generated.
+>> net/xdp/xsk.c:1303:24: error: use of undeclared identifier 'xs'
+           int state = READ_ONCE(xs->state);
+                                 ^
+>> net/xdp/xsk.c:1303:24: error: use of undeclared identifier 'xs'
+>> net/xdp/xsk.c:1303:24: error: use of undeclared identifier 'xs'
+>> net/xdp/xsk.c:1303:24: error: use of undeclared identifier 'xs'
+>> net/xdp/xsk.c:1303:24: error: use of undeclared identifier 'xs'
+>> net/xdp/xsk.c:1303:24: error: use of undeclared identifier 'xs'
+>> net/xdp/xsk.c:1303:24: error: use of undeclared identifier 'xs'
+>> net/xdp/xsk.c:1303:6: error: initializing 'int' with an expression of incompatible type 'void'
+           int state = READ_ONCE(xs->state);
+               ^       ~~~~~~~~~~~~~~~~~~~~
+>> net/xdp/xsk.c:1318:8: error: cannot take the address of an rvalue of type 'struct xsk_queue *'
+                           q = READ_ONCE(state == XSK_READY ? xs->fq_tmp :
+                               ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
+           __READ_ONCE(x);                                                 \
+           ^           ~
+   include/asm-generic/rwonce.h:44:70: note: expanded from macro '__READ_ONCE'
+   #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+                                                                         ^ ~
+   net/xdp/xsk.c:1321:8: error: cannot take the address of an rvalue of type 'struct xsk_queue *'
+                           q = READ_ONCE(state == XSK_READY ? xs->cq_tmp :
+                               ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
+           __READ_ONCE(x);                                                 \
+           ^           ~
+   include/asm-generic/rwonce.h:44:70: note: expanded from macro '__READ_ONCE'
+   #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+                                                                         ^ ~
+   10 errors generated.
 
 
-vim +/req +947 drivers/base/power/qos.c
+vim +/xs +1303 net/xdp/xsk.c
 
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  917  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  918  /**
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  919   * dev_pm_qos_update_user_latency_tolerance - Update user space latency tolerance.
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  920   * @dev: Device to update the user space latency tolerance for.
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  921   * @val: New user space latency tolerance for @dev (negative values disable).
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  922   */
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  923  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  924  {
-2d7e4629d7265d Rob Clark         2023-03-20  925  	struct dev_pm_qos_request *req = NULL;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  926  	int ret;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  927  
-00dd582e52a535 Rob Clark         2023-03-20  928  	ret = dev_pm_qos_constraints_ensure_allocated(dev);
-00dd582e52a535 Rob Clark         2023-03-20  929  	if (ret)
-00dd582e52a535 Rob Clark         2023-03-20  930  		return ret;
-00dd582e52a535 Rob Clark         2023-03-20  931  
-2d7e4629d7265d Rob Clark         2023-03-20  932  	if (!dev->power.qos->latency_tolerance_req)
-2d7e4629d7265d Rob Clark         2023-03-20  933  		req = kzalloc(sizeof(*req), GFP_KERNEL);
-2d7e4629d7265d Rob Clark         2023-03-20  934  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  935  	mutex_lock(&dev_pm_qos_mtx);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  936  
-00dd582e52a535 Rob Clark         2023-03-20  937  	if (!dev->power.qos->latency_tolerance_req) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  938  		struct dev_pm_qos_request *req;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  939  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  940  		if (val < 0) {
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  941  			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  942  				ret = 0;
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  943  			else
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  944  				ret = -EINVAL;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  945  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  946  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11 @947  		if (!req) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  948  			ret = -ENOMEM;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  949  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  950  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  951  		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  952  		if (ret < 0) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  953  			kfree(req);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  954  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  955  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  956  		dev->power.qos->latency_tolerance_req = req;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  957  	} else {
-2d7e4629d7265d Rob Clark         2023-03-20  958  		/*
-2d7e4629d7265d Rob Clark         2023-03-20  959  		 * If we raced with another thread to allocate the request,
-2d7e4629d7265d Rob Clark         2023-03-20  960  		 * simply free the redundant allocation and move on.
-2d7e4629d7265d Rob Clark         2023-03-20  961  		 */
-2d7e4629d7265d Rob Clark         2023-03-20  962  		if (req)
-2d7e4629d7265d Rob Clark         2023-03-20  963  			kfree(req);
-2d7e4629d7265d Rob Clark         2023-03-20  964  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  965  		if (val < 0) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  966  			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  967  			ret = 0;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  968  		} else {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  969  			ret = __dev_pm_qos_update_request(dev->power.qos->latency_tolerance_req, val);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  970  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  971  	}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  972  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  973   out:
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  974  	mutex_unlock(&dev_pm_qos_mtx);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  975  	return ret;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  976  }
-034e7906211c18 Andrew Lutomirski 2016-11-29  977  EXPORT_SYMBOL_GPL(dev_pm_qos_update_user_latency_tolerance);
-13b2c4a0c3b1cd Mika Westerberg   2015-07-27  978  
+  1297	
+  1298	static int xsk_mmap(struct file *file, struct socket *sock,
+  1299			    struct vm_area_struct *vma)
+  1300	{
+  1301		loff_t offset = (loff_t)vma->vm_pgoff << PAGE_SHIFT;
+  1302		unsigned long size = vma->vm_end - vma->vm_start;
+> 1303		int state = READ_ONCE(xs->state);
+  1304		struct xdp_sock *xs = xdp_sk(sock->sk);
+  1305		struct xsk_queue *q = NULL;
+  1306	
+  1307		if (!(state == XSK_READY || state == XSK_BOUND))
+  1308			return -EBUSY;
+  1309	
+  1310		if (offset == XDP_PGOFF_RX_RING) {
+  1311			q = READ_ONCE(xs->rx);
+  1312		} else if (offset == XDP_PGOFF_TX_RING) {
+  1313			q = READ_ONCE(xs->tx);
+  1314		} else {
+  1315			/* Matches the smp_wmb() in XDP_UMEM_REG */
+  1316			smp_rmb();
+  1317			if (offset == XDP_UMEM_PGOFF_FILL_RING)
+> 1318				q = READ_ONCE(state == XSK_READY ? xs->fq_tmp :
+  1319								   xs->pool->fq);
+  1320			else if (offset == XDP_UMEM_PGOFF_COMPLETION_RING)
+  1321				q = READ_ONCE(state == XSK_READY ? xs->cq_tmp :
+  1322								   xs->pool->cq);
+  1323		}
+  1324	
+  1325		if (!q)
+  1326			return -EINVAL;
+  1327	
+  1328		/* Matches the smp_wmb() in xsk_init_queue */
+  1329		smp_rmb();
+  1330		if (size > q->ring_vmalloc_size)
+  1331			return -EINVAL;
+  1332	
+  1333		return remap_vmalloc_range(vma, q->ring, 0);
+  1334	}
+  1335	
 
 -- 
 0-DAY CI Kernel Test Service
