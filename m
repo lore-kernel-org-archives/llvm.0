@@ -1,119 +1,103 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1392DD30A;
-	Tue, 21 Mar 2023 18:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679421854; x=1710957854;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WWnKpoXH9LJKGtKfB4Tf/lY7B46BCYh21/k0WHftRn4=;
-  b=hpqlRIq97rwk0KDSiBAcDvEZJF1fIOYouTcJQhlcEq+du+Bsme2sgt1n
-   w+5PwtlMYeEkk6ZvJNrprbMMR1pnbciIfD5fLQjxcvtxX2mFuCLfn6GMT
-   RJd+uK5ybsfkC6wsw0sARsiA1yRvO11hwK8DjsnUTJmrsdhpf+7Iu/TEr
-   J08q0ta5pxkZpRCOhvmIGev2Llz6iuE2Bc+hGli42V09TQ85iWn8He0ix
-   hpSA3+sA7emUMR6T83e1vy5eLQOkuZvZUHjQl1nBtiZ89SMJnDgwsyxCF
-   tWBUTrPYvJ+oWbZ9zWdSXNDqQ/mCe71yYrG07OxpjbEzUFl0cp96SgF7U
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="401591105"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="401591105"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 11:03:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="792197649"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="792197649"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Mar 2023 11:03:44 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pegKm-000CEv-0A;
-	Tue, 21 Mar 2023 18:03:44 +0000
-Date: Wed, 22 Mar 2023 02:03:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-scsi-devel:tls-netlink.v7 3/20]
- drivers/nvme/common/keyring.c:14:5: warning: no previous prototype for
- function 'nvme_keyring_init'
-Message-ID: <202303220128.ky1IoKee-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4288FD30A
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 18:13:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679422398;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7PqcmUw+IZmRGt9WUw0A+lCjcIOG3yrVoicilFi5R4o=;
+	b=Aa9TIQakz5fAXa78lnLEfS0RxZwWyUDqVl4iJlaom1Lxeo1Ski8DPFL9S2Nakt0bugtuR8
+	d3TMiqI/vBYO3SUiaK/QsEuQ3EHfevy9rjNhQgLe71xhNLRH+NG9bdZTLhJAHAXshMShHX
+	ckT7u6K3KPDVHu2hrag4VTJ0dWNMwOo=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-660-LsU2romWO9i_3IcGxxjYMw-1; Tue, 21 Mar 2023 14:13:06 -0400
+X-MC-Unique: LsU2romWO9i_3IcGxxjYMw-1
+Received: by mail-qv1-f72.google.com with SMTP id e11-20020ad4536b000000b005a9292e8c2bso8072383qvv.1
+        for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 11:13:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679422383;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7PqcmUw+IZmRGt9WUw0A+lCjcIOG3yrVoicilFi5R4o=;
+        b=2lMWuIulYOTZuQ2Z02eLn+KsEew928oNKheVeAhkyM4tkon9XPV+tF+6uzEMSO0CIf
+         yqu/JQ8m4ZJGu+fDDAJ+t2d6n7w5fcJL126pn85UI+AKqcaUICbGj5m4jOJur+zdwq9k
+         Ur75KchiTLq54ctS4QKTfqEgHxu4FpogFdp3/j7CP+nxwHeqTnv1+wyJOyDB8ZBaybDx
+         9s4Sk1h8rrpjkE/q/Bd5+rx56XgLHRCarLO+ZPDoBZhgJ+Ogdg5QUgDA2AGPalOZd9Z6
+         Ijv8APPbvdTSdM4uy2OrTQfwSzRBu+UJFgTSF6Xr//YXcFuiA2sHr2DmBWotD8RlWx5f
+         C7fg==
+X-Gm-Message-State: AO0yUKUCPk5UFVXV71zMftWi/7n+lf9fLxa66FYp4o9jPqe9mjfqJ2mN
+	lht0tmpRIBItOgUTObXrHIBUIKYyhf4qU7eZJmkXU3kTw3UI1Yoi1iDlV5g4Eviz3vpJh+a0+WW
+	uWF7HZdjCjHFRXA==
+X-Received: by 2002:ac8:7c55:0:b0:3e3:8119:7c68 with SMTP id o21-20020ac87c55000000b003e381197c68mr1356029qtv.52.1679422383558;
+        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+5mKIAyTWquc0+eLxRrstoll07nUcDhsg7ybPYJhnq2pOAz549MYFTu+kSCHFP7AxBTc+21g==
+X-Received: by 2002:ac8:7c55:0:b0:3e3:8119:7c68 with SMTP id o21-20020ac87c55000000b003e381197c68mr1355993qtv.52.1679422383304;
+        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id i1-20020a05620a0a0100b0074631fb7ccesm9599518qka.67.2023.03.21.11.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:13:03 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] USB: serial: quatech2: remove unused qt2_setdevice function
+Date: Tue, 21 Mar 2023 14:12:55 -0400
+Message-Id: <20230321181255.1825963-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-netlink.v7
-head:   5c13b43fa2c503188a6d668b0dec6a22078329a2
-commit: e9b1071a27a0122e041829e87e86852c8b80c04a [3/20] nvme-keyring: register '.nvme' keyring
-config: mips-randconfig-r001-20230319 (https://download.01.org/0day-ci/archive/20230322/202303220128.ky1IoKee-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=e9b1071a27a0122e041829e87e86852c8b80c04a
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-netlink.v7
-        git checkout e9b1071a27a0122e041829e87e86852c8b80c04a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/nvme/common/
+clang with W=1 reports
+drivers/usb/serial/quatech2.c:179:19: error: unused function
+  'qt2_setdevice' [-Werror,-Wunused-function]
+static inline int qt2_setdevice(struct usb_device *dev, u8 *data)
+                  ^
+This function is not used, so remove it.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303220128.ky1IoKee-lkp@intel.com/
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/serial/quatech2.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/nvme/common/keyring.c:16:6: warning: unused variable 'err' [-Wunused-variable]
-           int err;
-               ^
->> drivers/nvme/common/keyring.c:14:5: warning: no previous prototype for function 'nvme_keyring_init' [-Wmissing-prototypes]
-   int nvme_keyring_init(void)
-       ^
-   drivers/nvme/common/keyring.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int nvme_keyring_init(void)
-   ^
-   static 
->> drivers/nvme/common/keyring.c:31:6: warning: no previous prototype for function 'nvme_keyring_exit' [-Wmissing-prototypes]
-   void nvme_keyring_exit(void)
-        ^
-   drivers/nvme/common/keyring.c:31:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void nvme_keyring_exit(void)
-   ^
-   static 
-   3 warnings generated.
-
-
-vim +/nvme_keyring_init +14 drivers/nvme/common/keyring.c
-
-    13	
-  > 14	int nvme_keyring_init(void)
-    15	{
-    16		int err;
-    17	
-    18		nvme_keyring = keyring_alloc(".nvme",
-    19					     GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
-    20					     current_cred(),
-    21					     (KEY_POS_ALL & ~KEY_POS_SETATTR) |
-    22					     (KEY_USR_ALL & ~KEY_USR_SETATTR),
-    23					     KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
-    24		if (IS_ERR(nvme_keyring))
-    25			return PTR_ERR(nvme_keyring);
-    26	
-    27		return 0;
-    28	}
-    29	EXPORT_SYMBOL_GPL(nvme_keyring_init);
-    30	
-  > 31	void nvme_keyring_exit(void)
-
+diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
+index 6fca40ace83a..fee581409bf6 100644
+--- a/drivers/usb/serial/quatech2.c
++++ b/drivers/usb/serial/quatech2.c
+@@ -176,14 +176,6 @@ static inline int qt2_control_msg(struct usb_device *dev,
+ 			       NULL, 0, QT2_USB_TIMEOUT);
+ }
+ 
+-static inline int qt2_setdevice(struct usb_device *dev, u8 *data)
+-{
+-	u16 x = ((u16) (data[1] << 8) | (u16) (data[0]));
+-
+-	return qt2_control_msg(dev, QT_SET_GET_DEVICE, x, 0);
+-}
+-
+-
+ static inline int qt2_getregister(struct usb_device *dev,
+ 				  u8 uart,
+ 				  u8 reg,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
