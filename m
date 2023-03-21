@@ -1,66 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E637C
-	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 03:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D932AC433EF;
-	Tue, 21 Mar 2023 03:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679368217;
-	bh=5II7b+BkVoa4QOA60BgChtOdWYA0PzzTAZsvlZtgtLw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GdrpCZCIC8A4OKRXMMTtaTDf3wHFP8iv4In0FTOpLiX8avN+ToWtsJxMLxhF87Y4V
-	 QEB2xOeZQlenGJ97WqeaSvioVLljgnMI03y0Jj0ORJDER1mWLGMNpRpxSpPMNfjrT4
-	 2TynwHJbpEX/AKMozC/d2kDAiZ1YNIdY+/ZlgfqEOOC0XJZmMpbV+pmTLk2P904jfp
-	 szSo6CEJbTXmFifsO/JIQWFgtLJGrJRijiLcD7VWYgOC/ghZQWxm2BgZilmccD+DdA
-	 66dsoFaIdyQRdjofw2vUSQVwi2ElUPRanYXfHs3SlmoNDXpRsCfgC1+w7o18YqXmx4
-	 sIyTTr7F1e7Kg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC675E68D22;
-	Tue, 21 Mar 2023 03:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BF2185D
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 04:51:09 +0000 (UTC)
+Received: by mail-pg1-f170.google.com with SMTP id z10so7886537pgr.8
+        for <llvm@lists.linux.dev>; Mon, 20 Mar 2023 21:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1679374269;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xFlUlkbo9SY0Rd6++Wy+hBR39sR+EwklTRgRI+Gv5Pw=;
+        b=K7klt6sH2xGAsE6FRNrZzAypRZVRjVbKEKG6uDEeHCtQZpcnsZFxpGg91AP4AFx6oO
+         N54kvVln969LTBXPkdLW0Xg8HUxnicqj9Ide6Wbsvni3aH+kQ2wUuiGtxeh5WRQY/O9j
+         ljs9Eps1SJ1tlMXY3bov+I3Gk8nzwdUP0FmwU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679374269;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xFlUlkbo9SY0Rd6++Wy+hBR39sR+EwklTRgRI+Gv5Pw=;
+        b=BYGqnpWm02gBPkFVXC776GsO/wAX2exLVWXIoxZjFl4vLAZWz9rUFHnjyPPwgGcXSF
+         /+dAmv76JcjJnzxq1Mw90duSfzEg86qBSFA3Ge9oW7fSsuLs62aya7wWYoi571XfOCjn
+         I8SHnlQfqtO930QQo/R9YY4kKzgounKescSUnk6Mbdn3dQzGA5tbfsickRvfxsdj8OWB
+         IEU5r9GZN/rx6S1TfHKxp1cJdc/VkKNgRA/DEfne8aKQuhLZqUp78612W7bl+ZpRNaKr
+         kha2X9XOy95tY4mgxLnP76aaBIJu9PPWlb4ayMCrJbEOuLEAHyEqd3ALUsozGVvR7APh
+         K83Q==
+X-Gm-Message-State: AO0yUKVG728O03qCp4sB1t1niP1QHz+pwrtjksQt96Sz9UsHw0tn+VaW
+	BrH+OcaiWN8fR/TUSxvc0fus2sXeA/PxMORJJURwrg==
+X-Google-Smtp-Source: AK7set82aHsZYqNETwBCxN6JaH/U7uzqwf+VwKlinynHbi1gWLfXQnBpCPLfMgVclh59ARAnoXU49Eq7Iyode0dklRI=
+X-Received: by 2002:a05:6a00:80db:b0:625:dc5b:9d1d with SMTP id
+ ei27-20020a056a0080db00b00625dc5b9d1dmr557648pfb.0.1679374269255; Mon, 20 Mar
+ 2023 21:51:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: cxgb3: remove unused fl_to_qset function
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <167936821776.24814.6478937204704825271.git-patchwork-notify@kernel.org>
-Date: Tue, 21 Mar 2023 03:10:17 +0000
-References: <20230319172433.1708161-1-trix@redhat.com>
-In-Reply-To: <20230319172433.1708161-1-trix@redhat.com>
+References: <20230320232317.1729464-1-trix@redhat.com>
+In-Reply-To: <20230320232317.1729464-1-trix@redhat.com>
+From: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Date: Tue, 21 Mar 2023 10:20:58 +0530
+Message-ID: <CALs4sv3CoBEfvV7_508jm-ea3kuhvv6qK6ogT6XdTk9L-ZEJOQ@mail.gmail.com>
+Subject: Re: [PATCH] net: atheros: atl1c: remove unused atl1c_irq_reset function
 To: Tom Rix <trix@redhat.com>
-Cc: rajur@chelsio.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
- ndesaulniers@google.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: chris.snook@gmail.com, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org, 
+	ndesaulniers@google.com, yuanjilin@cdjrlc.com, liew.s.piaw@gmail.com, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000c8c5d605f761ca35"
 
-Hello:
+--000000000000c8c5d605f761ca35
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun, 19 Mar 2023 13:24:33 -0400 you wrote:
-> clang with W=1 reports
-> drivers/net/ethernet/chelsio/cxgb3/sge.c:169:32: error: unused function
->   'fl_to_qset' [-Werror,-Wunused-function]
-> static inline struct sge_qset *fl_to_qset(const struct sge_fl *q, int qidx)
->                                ^
+On Tue, Mar 21, 2023 at 4:54=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/net/ethernet/atheros/atl1c/atl1c_main.c:214:20: error:
+>   unused function 'atl1c_irq_reset' [-Werror,-Wunused-function]
+> static inline void atl1c_irq_reset(struct atl1c_adapter *adapter)
+>                    ^
 > This function is not used, so remove it.
-> 
-> [...]
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/net/ethernet/atheros/atl1c/atl1c_main.c | 10 ----------
+>  1 file changed, 10 deletions(-)
 
-Here is the summary with links:
-  - net: cxgb3: remove unused fl_to_qset function
-    https://git.kernel.org/netdev/net-next/c/a08df15eab0c
+Looks good to me.
+Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+> diff --git a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c b/drivers/ne=
+t/ethernet/atheros/atl1c/atl1c_main.c
+> index 40c781695d58..4a288799633f 100644
+> --- a/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
+> +++ b/drivers/net/ethernet/atheros/atl1c/atl1c_main.c
+> @@ -207,16 +207,6 @@ static inline void atl1c_irq_disable(struct atl1c_ad=
+apter *adapter)
+>         synchronize_irq(adapter->pdev->irq);
+>  }
+>
+> -/**
+> - * atl1c_irq_reset - reset interrupt confiure on the NIC
+> - * @adapter: board private structure
+> - */
+> -static inline void atl1c_irq_reset(struct atl1c_adapter *adapter)
+> -{
+> -       atomic_set(&adapter->irq_sem, 1);
+> -       atl1c_irq_enable(adapter);
+> -}
+> -
+>  /*
+>   * atl1c_wait_until_idle - wait up to AT_HW_MAX_IDLE_DELAY reads
+>   * of the idle status register until the device is actually idle
+> --
+> 2.27.0
+>
 
+--000000000000c8c5d605f761ca35
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
+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
+OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
+dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
+fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
+9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
+pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
+25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
+Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDwHxU/f+7wtXpHwK8c4enekf0yV4BDG
+fskOh3IJR94mMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDMy
+MTA0NTEwOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQBqgwwBcoYwifktzl6KUWgAzvsI18ZHccH+aKTETXkC2T/Ri6Az
+7w/M99zjMfXW4dN1rFKtB/6i4HzX65qsDZ1sbOktm0lN+yn86k7AoTd1Lz7iWa2LaR/+n6KVr3wd
+/n54tkrmkUSWh1Fu8WT+5NRF6BgqUmoHB/PKI0nFPsR2kbx7r6l/YqfPwgLo3KWZpzWDTfNR41j+
+R+sD4jcVVJ/yyNMhxeTP0Gs40cvVjvjzKEN731iSePlzwAmWVOf24ADETeeCokro7rc67uWkxHMU
+U76/W7ho9NHaQaBr2r6k08yDLD8IK37XbOcX5sCuihm5g26w+tPE+0kOOa+Pt+Z0
+--000000000000c8c5d605f761ca35--
