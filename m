@@ -1,106 +1,109 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BDFD505;
-	Tue, 21 Mar 2023 18:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679424291; x=1710960291;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=IeKCwpYdTHeues9Nu1bL1vGYR4sMAo1AHIYouEIqXvM=;
-  b=NGLhByruNF9tF1Jp7bRBcRZ/RwGVQ9r14WJMqBWMwnq+TKME4zgyGdX9
-   sB1PH6XgYDiGeTfqYqErhfI1t98bFQ3qY+7Dq7EZELKC0sN5un82P5Y7y
-   3oAaBv+LoIbaIJBknI/DhZDnXkjWl9oP0yrhtikt3UCP/R9K4gFzjWrx9
-   gO69gCdS7r/3rzJRAIgVT1HcMn7GzDFYHAmCJRbTrFmCJy4b4ExGZeTbn
-   twoLAABMAk3pAKz6NcvfnMEwNq4MGJc746NvBxxbzVNA9DEdW3O8PX9UL
-   4uNglh8Tu9GboflqnOFY76Lz7Z7G4OJfhkrYD+qUPNg6XozM/k35G6Z5y
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="339068995"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="339068995"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 11:44:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="750716887"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="750716887"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Mar 2023 11:44:49 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pegyW-000CIG-2r;
-	Tue, 21 Mar 2023 18:44:48 +0000
-Date: Wed, 22 Mar 2023 02:44:41 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
- kallsyms_on_each_match_symbol: .text+0xd24): relocation R_RISCV_PCREL_HI20
- out of range: -524490 is not in [-524288, 524287]; references
- kallsyms_relative_base
-Message-ID: <202303220209.TfJHhu63-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE27D505
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 18:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679424498;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=m16LG5qfJ+bTUG6Spw+RzSoYpGmgfuoZ6sJRsgb/iNs=;
+	b=g2OjsOpkHV4PtfQ1K45KRMH40txc1+2RQm/oyRz/tlOcz6jM3HGUAgQJPl0PcrE2TatCQl
+	KdrykfTc5GSostQ0lHuEp8FTk5KmEiBB9DWaDr7wqY3r6cR+cVeBafwHkQJAGJAmE9SGmc
+	t/dkaXqFPFaoAVHS4mpa3omxcY3sGo4=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-180-jzxa_KRuN4WbKalZI82zKg-1; Tue, 21 Mar 2023 14:48:17 -0400
+X-MC-Unique: jzxa_KRuN4WbKalZI82zKg-1
+Received: by mail-qk1-f198.google.com with SMTP id 187-20020a3707c4000000b007468d9a30faso2897488qkh.23
+        for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 11:48:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679424497;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m16LG5qfJ+bTUG6Spw+RzSoYpGmgfuoZ6sJRsgb/iNs=;
+        b=G2sDJ0RBIU+xGvyhHBNiMtpbUMwYf98o5zNRi2xl6aUbK/Uw08ZLmaz1Gc8iRDKo1T
+         55jP4zOdnweDraXL8WrP8rdlQX73+5vrwRyqUXnMJjhxSXWuUcEXWLQTZg0x1g9U5nMl
+         je+1sqFQjo/GCyGsR7Wx9ZEXQx/lC82p3G2tTIzi47x8kF3fCEywJpbHDDw53Z9IoBzJ
+         iiJkg766VqlkAXxG9k1qvt9SULnYGlgEZKEXboYfTHGdG0dGDEZaCJU+9VpHt0gPsEAD
+         Q2mgvQ0bY5kEwoZo20bgDCcmbRsE8uO+snKXW66nfn6hf2mx8hQyX492FMB1dBV1WyNh
+         J/Cg==
+X-Gm-Message-State: AO0yUKU/4xsIHf9qiOACS2JvP7/NIWA3zKwk+W8Q95R/p7dbR56LjRS0
+	GNGsKhh/hqBmxwcmUJ/LV8LRbrUOpQGxhCAiYcU6X1vrNOUtGrcoLXyqK0sRv0YqvIXIY1qglS6
+	jlY9xGZTzTjFekw==
+X-Received: by 2002:a05:6214:e4c:b0:5a3:44a1:788d with SMTP id o12-20020a0562140e4c00b005a344a1788dmr1318811qvc.29.1679424496997;
+        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/uiKZ9Rf3XmfwDfIlgK1+2Ku5dlt08hCszlwq6yiw64bq4vrpan11278XtwOhJWytpr/YkPw==
+X-Received: by 2002:a05:6214:e4c:b0:5a3:44a1:788d with SMTP id o12-20020a0562140e4c00b005a344a1788dmr1318782qvc.29.1679424496733;
+        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 66-20020a370b45000000b0071eddd3bebbsm1525699qkl.81.2023.03.21.11.48.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: dchickles@marvell.com,
+	sburla@marvell.com,
+	fmanlunas@marvell.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] liquidio: remove unused IQ_INSTR_MODE_64B function
+Date: Tue, 21 Mar 2023 14:48:11 -0400
+Message-Id: <20230321184811.1827306-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-CC: linux-kernel@vger.kernel.org
-TO: Zhen Lei <thunder.leizhen@huawei.com>
-CC: Luis Chamberlain <mcgrof@kernel.org>
+clang with W=1 reports
+drivers/net/ethernet/cavium/liquidio/request_manager.c:43:19: error:
+  unused function 'IQ_INSTR_MODE_64B' [-Werror,-Wunused-function]
+static inline int IQ_INSTR_MODE_64B(struct octeon_device *oct, int iq_no)
+                  ^
+This function and its macro wrapper are not used, so remove them.
 
-Hi Zhen,
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/ethernet/cavium/liquidio/request_manager.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   17214b70a159c6547df9ae204a6275d983146f6b
-commit: 4dc533e0f2c04174e1ae4aa98e7cffc1c04b9998 kallsyms: Add helper kallsyms_on_each_match_symbol()
-date:   4 months ago
-config: riscv-randconfig-r025-20230321 (https://download.01.org/0day-ci/archive/20230322/202303220209.TfJHhu63-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4dc533e0f2c04174e1ae4aa98e7cffc1c04b9998
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4dc533e0f2c04174e1ae4aa98e7cffc1c04b9998
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303220209.TfJHhu63-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0xd24): relocation R_RISCV_PCREL_HI20 out of range: -524490 is not in [-524288, 524287]; references kallsyms_relative_base
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0xd38): relocation R_RISCV_PCREL_HI20 out of range: -524490 is not in [-524288, 524287]; references kallsyms_seqs_of_names
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_on_each_match_symbol: .text+0xd40): relocation R_RISCV_PCREL_HI20 out of range: -524490 is not in [-524288, 524287]; references kallsyms_offsets
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_names: .text+0x180): relocation R_RISCV_PCREL_HI20 out of range: -524489 is not in [-524288, 524287]; references kallsyms_num_syms
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
---
->> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_names: .text+0x1ac): relocation R_RISCV_PCREL_HI20 out of range: -524489 is not in [-524288, 524287]; references kallsyms_seqs_of_names
-   >>> referenced by kallsyms.c
-   >>> defined in vmlinux.a(kernel/kallsyms.o)
-
+diff --git a/drivers/net/ethernet/cavium/liquidio/request_manager.c b/drivers/net/ethernet/cavium/liquidio/request_manager.c
+index 8e59c2825533..32f854c0cd79 100644
+--- a/drivers/net/ethernet/cavium/liquidio/request_manager.c
++++ b/drivers/net/ethernet/cavium/liquidio/request_manager.c
+@@ -40,15 +40,6 @@ static void  __check_db_timeout(struct octeon_device *oct, u64 iq_no);
+ 
+ static void (*reqtype_free_fn[MAX_OCTEON_DEVICES][REQTYPE_LAST + 1]) (void *);
+ 
+-static inline int IQ_INSTR_MODE_64B(struct octeon_device *oct, int iq_no)
+-{
+-	struct octeon_instr_queue *iq =
+-	    (struct octeon_instr_queue *)oct->instr_queue[iq_no];
+-	return iq->iqcmd_64B;
+-}
+-
+-#define IQ_INSTR_MODE_32B(oct, iq_no)  (!IQ_INSTR_MODE_64B(oct, iq_no))
+-
+ /* Define this to return the request status comaptible to old code */
+ /*#define OCTEON_USE_OLD_REQ_STATUS*/
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
