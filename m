@@ -1,44 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C378E10E9;
-	Tue, 21 Mar 2023 12:34:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4699E10E9;
+	Tue, 21 Mar 2023 12:44:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679402070; x=1710938070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/3dnn/40tEEoIbk/vepy6ODI8Bj1yWd43WocgOBe+8g=;
-  b=LG/wzFLBcPd+XxkovIYUmwlx7UQSK4WDYVNU9jvuWYDq60IQItKCCfAi
-   0cMo6NdCbrO7thL3lZ+tYRCvT0/bFO6/nPMcsjvFBhGamgL3hCzVbDFFP
-   NRPtvLYUKxB+2UgS4NruLE+52Fbur2Nhc6ixXnlEFspSGKu61SVPCyaHf
-   7FCoA4DaTdiEytdpqTBMzYhXQSlrMhWV4jY+UMbbFtjP6JT0dbLoSqiqL
-   ACPHvTd2RZiCNPkTPZqXOM9Y1KYqEPFTyFjJ+eSIJMO5TYfSmF26H0ph4
-   DFVYDohhW5MdCuJdZP45aXOfiV4KQeZSlASlbWRR01VtzcOyHWMlcDURy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="401495607"
+  t=1679402670; x=1710938670;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=yjeCQ5uuBRZ2I5a9pP66A9TQRhcHFw/6DfmmP+VXyzE=;
+  b=U9wf8WBCQiEvDfZKlFkOB5Ec+dfrXOdI4wgniITtwQQBLiH3VTfP709Q
+   K4OZxKXGcR+rAXtChwIFVnPXpvHuO3M1kHO3xGkG1YZCbmO2NVXMmLYNX
+   tu6sToxMid3oAMiFxfk5cyvEIc8Z+CRyaSEfsm7kGWcC3RIGy+2lC/P72
+   Q3CFIJuEtSh+rMcNC5zii3+z0igp0aSck3Swt34mTAu9MFNhzfKDcKIlV
+   a/mda/I7x2Lx7pHPJjoNiPlq5vlaYc8VODB7AHQpmIwo3EAFiCQdpSiIM
+   P3GL8bMu1JjnLLOBENlOGQtUWCSWvGV5M8u5iWpfPh2dhO9td+cgquBmq
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="403803549"
 X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="401495607"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 05:34:29 -0700
+   d="scan'208";a="403803549"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 05:44:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="683863151"
+X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="927381914"
 X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="683863151"
+   d="scan'208";a="927381914"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Mar 2023 05:34:28 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 21 Mar 2023 05:44:28 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pebC7-000Buc-1k;
-	Tue, 21 Mar 2023 12:34:27 +0000
-Date: Tue, 21 Mar 2023 20:33:46 +0800
+	id 1pebLn-000BvC-37;
+	Tue, 21 Mar 2023 12:44:27 +0000
+Date: Tue, 21 Mar 2023 20:43:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Radhakrishna Sripada <radhakrishna.sripada@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [Intel-gfx] [PATCH 1/4] drm/i915/mtl: Squashed Phy Support
-Message-ID: <202303212045.4ONidwhT-lkp@intel.com>
-References: <20230318005852.2303937-2-radhakrishna.sripada@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function
+ kallsyms_lookup_name: .text+0x94): relocation R_RISCV_PCREL_HI20 out of
+ range: -524489 is not in [-524288, 524287]; references
+ kallsyms_seqs_of_names
+Message-ID: <202303212032.CO1xWeBX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,88 +46,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230318005852.2303937-2-radhakrishna.sripada@intel.com>
 
-Hi Radhakrishna,
+CC: linux-kernel@vger.kernel.org
+TO: Zhen Lei <thunder.leizhen@huawei.com>
+CC: Luis Chamberlain <mcgrof@kernel.org>
 
-Thank you for the patch! Yet something to improve:
+Hi Zhen,
 
-[auto build test ERROR on drm-tip/drm-tip]
+FYI, the error/warning still remains.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Radhakrishna-Sripada/drm-i915-mtl-Squashed-Phy-Support/20230318-090025
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230318005852.2303937-2-radhakrishna.sripada%40intel.com
-patch subject: [Intel-gfx] [PATCH 1/4] drm/i915/mtl: Squashed Phy Support
-config: x86_64-randconfig-a004-20230320 (https://download.01.org/0day-ci/archive/20230321/202303212045.4ONidwhT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   17214b70a159c6547df9ae204a6275d983146f6b
+commit: 60443c88f3a89fd303a9e8c0e84895910675c316 kallsyms: Improve the performance of kallsyms_lookup_name()
+date:   4 months ago
+config: riscv-randconfig-r025-20230321 (https://download.01.org/0day-ci/archive/20230321/202303212032.CO1xWeBX-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/09eaa092cb75c3ac2a82dbf3b83bff437be2abfa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Radhakrishna-Sripada/drm-i915-mtl-Squashed-Phy-Support/20230318-090025
-        git checkout 09eaa092cb75c3ac2a82dbf3b83bff437be2abfa
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=60443c88f3a89fd303a9e8c0e84895910675c316
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 60443c88f3a89fd303a9e8c0e84895910675c316
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303212045.4ONidwhT-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303212032.CO1xWeBX-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_cx0_phy.c:2174:13: error: variable 'multiplier' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-           } else if (pll_state->mplla[6] & C20_MPLLA_FRACEN) {
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_cx0_phy.c:2184:10: note: uninitialized use occurs here
-           tmp2 = (multiplier << 15) + frac_quot + DIV_ROUND_CLOSEST(frac_rem,frac_den);
-                   ^~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_cx0_phy.c:2174:9: note: remove the 'if' if its condition is always true
-           } else if (pll_state->mplla[6] & C20_MPLLA_FRACEN) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_cx0_phy.c:2162:25: note: initialize the variable 'multiplier' to silence this warning
-           unsigned int multiplier, refclk = 38400;
-                                  ^
-                                   = 0
-   1 error generated.
-
-
-vim +2174 drivers/gpu/drm/i915/display/intel_cx0_phy.c
-
-  2157	
-  2158	int intel_c20pll_calc_port_clock(struct intel_encoder *encoder,
-  2159					 const struct intel_c20pll_state *pll_state)
-  2160	{
-  2161		unsigned int frac_quot = 0, frac_rem = 0, frac_den = 1;
-  2162		unsigned int multiplier, refclk = 38400;
-  2163		unsigned ref_clk_mpllb_div = 0;
-  2164		unsigned fb_clk_div4_en = 0;
-  2165		unsigned long tmp1, tmp2;
-  2166	
-  2167		if (pll_state->mpllb[6] & C20_MPLLB_FRACEN) {
-  2168			multiplier = REG_FIELD_GET(C20_MULTIPLIER_MASK, pll_state->mpllb[0]);
-  2169			ref_clk_mpllb_div = REG_FIELD_GET(C20_REF_CLK_MPLLB_DIV_MASK, pll_state->mpllb[6]);
-  2170			fb_clk_div4_en = REG_FIELD_GET(C20_FB_CLK_DIV4_EN, pll_state->mpllb[6]);
-  2171			frac_den = pll_state->mpllb[7];
-  2172			frac_quot = pll_state->mpllb[8];
-  2173			frac_rem = pll_state->mpllb[9];
-> 2174		} else if (pll_state->mplla[6] & C20_MPLLA_FRACEN) {
-  2175			multiplier = REG_FIELD_GET(C20_MULTIPLIER_MASK, pll_state->mplla[0]);
-  2176			ref_clk_mpllb_div = REG_FIELD_GET(C20_REF_CLK_MPLLB_DIV_MASK, pll_state->mpllb[6]);
-  2177			fb_clk_div4_en = REG_FIELD_GET(C20_FB_CLK_DIV4_EN, pll_state->mpllb[6]);
-  2178			frac_den = pll_state->mpllb[7];
-  2179			frac_quot = pll_state->mplla[8];
-  2180			frac_rem = pll_state->mplla[9];
-  2181		}
-  2182	
-  2183		tmp1 = DIV_ROUND_CLOSEST(refclk * (1 << (1 + fb_clk_div4_en)), 1 << ref_clk_mpllb_div);
-  2184		tmp2 = (multiplier << 15) + frac_quot + DIV_ROUND_CLOSEST(frac_rem,frac_den);
-  2185	
-  2186		return DIV_ROUND_CLOSEST((tmp1 * tmp2) >> 17, 10);
-  2187	}
-  2188	
+>> ld.lld: error: vmlinux.a(kernel/kallsyms.o):(function kallsyms_lookup_name: .text+0x94): relocation R_RISCV_PCREL_HI20 out of range: -524489 is not in [-524288, 524287]; references kallsyms_seqs_of_names
+   >>> referenced by kallsyms.c
+   >>> defined in vmlinux.a(kernel/kallsyms.o)
 
 -- 
 0-DAY CI Kernel Test Service
