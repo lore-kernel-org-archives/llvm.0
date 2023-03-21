@@ -1,118 +1,66 @@
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD45D10E5
-	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 00:36:20 +0000 (UTC)
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32L0X2Og8021089, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-	by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32L0X2Og8021089
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Tue, 21 Mar 2023 08:33:02 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 21 Mar 2023 08:32:27 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 21 Mar 2023 08:32:26 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Tue, 21 Mar 2023 08:32:26 +0800
-From: Ping-Ke Shih <pkshih@realtek.com>
-To: Tom Rix <trix@redhat.com>,
-        "tony0620emma@gmail.com"
-	<tony0620emma@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com"
-	<edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "nathan@kernel.org"
-	<nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>
-CC: "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: RE: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
-Thread-Topic: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
-Thread-Index: AQHZW4S2PiAeUP74qUG+p5pnBukePa8EYhmQ
-Date: Tue, 21 Mar 2023 00:32:26 +0000
-Message-ID: <e9ca21b87b4246ddaafc5b0cabc9eb74@realtek.com>
-References: <20230320233448.1729899-1-trix@redhat.com>
-In-Reply-To: <20230320233448.1729899-1-trix@redhat.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2023/3/20_=3F=3F_10:00:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E637C
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 03:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D932AC433EF;
+	Tue, 21 Mar 2023 03:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679368217;
+	bh=5II7b+BkVoa4QOA60BgChtOdWYA0PzzTAZsvlZtgtLw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=GdrpCZCIC8A4OKRXMMTtaTDf3wHFP8iv4In0FTOpLiX8avN+ToWtsJxMLxhF87Y4V
+	 QEB2xOeZQlenGJ97WqeaSvioVLljgnMI03y0Jj0ORJDER1mWLGMNpRpxSpPMNfjrT4
+	 2TynwHJbpEX/AKMozC/d2kDAiZ1YNIdY+/ZlgfqEOOC0XJZmMpbV+pmTLk2P904jfp
+	 szSo6CEJbTXmFifsO/JIQWFgtLJGrJRijiLcD7VWYgOC/ghZQWxm2BgZilmccD+DdA
+	 66dsoFaIdyQRdjofw2vUSQVwi2ElUPRanYXfHs3SlmoNDXpRsCfgC1+w7o18YqXmx4
+	 sIyTTr7F1e7Kg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BC675E68D22;
+	Tue, 21 Mar 2023 03:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: cxgb3: remove unused fl_to_qset function
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <167936821776.24814.6478937204704825271.git-patchwork-notify@kernel.org>
+Date: Tue, 21 Mar 2023 03:10:17 +0000
+References: <20230319172433.1708161-1-trix@redhat.com>
+In-Reply-To: <20230319172433.1708161-1-trix@redhat.com>
+To: Tom Rix <trix@redhat.com>
+Cc: rajur@chelsio.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+ ndesaulniers@google.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
+Hello:
 
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> -----Original Message-----
-> From: Tom Rix <trix@redhat.com>
-> Sent: Tuesday, March 21, 2023 7:35 AM
-> To: tony0620emma@gmail.com; kvalo@kernel.org; davem@davemloft.net; edumaz=
-et@google.com; kuba@kernel.org;
-> pabeni@redhat.com; nathan@kernel.org; ndesaulniers@google.com
-> Cc: linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@=
-vger.kernel.org;
-> llvm@lists.linux.dev; Tom Rix <trix@redhat.com>
-> Subject: [PATCH] wifi: rtw88: remove unused rtw_pci_get_tx_desc function
->=20
-> clang with W=3D1 reports
-> drivers/net/wireless/realtek/rtw88/pci.c:92:21: error:
->   unused function 'rtw_pci_get_tx_desc' [-Werror,-Wunused-function]
-> static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring, =
-u8 idx)
->                     ^
+On Sun, 19 Mar 2023 13:24:33 -0400 you wrote:
+> clang with W=1 reports
+> drivers/net/ethernet/chelsio/cxgb3/sge.c:169:32: error: unused function
+>   'fl_to_qset' [-Werror,-Wunused-function]
+> static inline struct sge_qset *fl_to_qset(const struct sge_fl *q, int qidx)
+>                                ^
 > This function is not used, so remove it.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> 
+> [...]
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+Here is the summary with links:
+  - net: cxgb3: remove unused fl_to_qset function
+    https://git.kernel.org/netdev/net-next/c/a08df15eab0c
 
-> ---
->  drivers/net/wireless/realtek/rtw88/pci.c | 7 -------
->  1 file changed, 7 deletions(-)
->=20
-> diff --git a/drivers/net/wireless/realtek/rtw88/pci.c b/drivers/net/wirel=
-ess/realtek/rtw88/pci.c
-> index b4bd831c9845..6a8e6ee82069 100644
-> --- a/drivers/net/wireless/realtek/rtw88/pci.c
-> +++ b/drivers/net/wireless/realtek/rtw88/pci.c
-> @@ -89,13 +89,6 @@ static void rtw_pci_write32(struct rtw_dev *rtwdev, u3=
-2 addr, u32 val)
->         writel(val, rtwpci->mmap + addr);
->  }
->=20
-> -static inline void *rtw_pci_get_tx_desc(struct rtw_pci_tx_ring *tx_ring,=
- u8 idx)
-> -{
-> -       int offset =3D tx_ring->r.desc_size * idx;
-> -
-> -       return tx_ring->r.head + offset;
-> -}
-> -
->  static void rtw_pci_free_tx_ring_skbs(struct rtw_dev *rtwdev,
->                                       struct rtw_pci_tx_ring *tx_ring)
->  {
-> --
-> 2.27.0
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
