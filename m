@@ -1,138 +1,103 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7895D311
-	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 18:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954BFD30A
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 18:24:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679422905;
+	s=mimecast20190719; t=1679423061;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=BH68QW3+ZMl68FyeJgLKhJfMaUa1qV6xWOdmxgInzZA=;
-	b=b7zX5GPuw4Xsa/ZX/WJURz+u+i9kH+iwbcmUv52e0mHLzSoaN9Qx5WaOUuLERKu7AeIKwU
-	lZBS1NxEWyHCHMKuyAiMW7vmyXEyimgYRX6r/OVp/53b2RnVeEKdVPlQ3uu1NR5VjraA5a
-	lqQJDmTynZpdi4kidksBifrpFV0OJKw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-IL6cqDdINkGWNgipQRtdDg-1; Tue, 21 Mar 2023 14:21:44 -0400
-X-MC-Unique: IL6cqDdINkGWNgipQRtdDg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0E70D3801F73
-	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 18:21:44 +0000 (UTC)
-Received: from [172.64.15.49] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id EF0481121314;
-	Tue, 21 Mar 2023 18:21:43 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (112/381 SKIPPED): Test report for master
- (6.3.0-rc3, mainline.kernel.org-clang, 17214b70)
-Date: Tue, 21 Mar 2023 18:21:43 -0000
-To: llvm@lists.linux.dev
+	bh=1knlGgYN2VT/JtfLiS27/wQuiH/G9YJjnb0AMKUk5yM=;
+	b=dQMUQ9kTd/6Ec1AnA8A/v7G4ifbEn4ZMPdAZiXAmv8xmVngjDznuFIIRPqFxFOcS8b+iwj
+	O7MFuEXGhNUpmWnZqQpb/nH7XjEhq2ZW9lV8fDzN8KxjxPfIP0FhL3CREDKcAP55E8wNtV
+	b6tOkqTrwgUxqVbYP5Mz+71qIv1pRBo=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-497-J434zAjyPyetlJ9VSkYMkA-1; Tue, 21 Mar 2023 14:24:20 -0400
+X-MC-Unique: J434zAjyPyetlJ9VSkYMkA-1
+Received: by mail-qv1-f69.google.com with SMTP id f3-20020a0cc303000000b005c9966620daso3485369qvi.4
+        for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 11:24:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679423060;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1knlGgYN2VT/JtfLiS27/wQuiH/G9YJjnb0AMKUk5yM=;
+        b=bWi0SGT+ixKt3sJKhmEGzoVd7FEVvt9p5NjRfasOow3aEMYpqsu29XSIIrOYH3nRPR
+         4iQQID+Bp8PCdOG9vHCazptPrG7g7VYyGyTp8e6J+9cNr6avDbJNvjYv2t7qauJggWSp
+         ppU3fr5vzQZIOrq8zhT8na25LM+lfOvSRmzFkDYWkI8+JvkXB4GNg8o3MgVM398FtrHO
+         JISV176plTJWRlZB6+5mzjHsLi7wWZMCn7Jleasyx/F3H9wjGY4yG9MPlqnnZ+ZiIvED
+         iqEnZ/Q2P02wtY5R8HaqvcGy9pXfTqXolNhBfwo68x3LtiFzuqiM1ezZps1iLdumZvF6
+         G4cQ==
+X-Gm-Message-State: AO0yUKUXbKTGPEmuoOG2kCxptsJ0fxx3eD8uPdYKgmAhIqlAiqjZSo7R
+	Lu+CLsdrPeSgwXfklc2aNQVYZX9iIiXja8+A4CuGyH6CU60vlTYg0vFFk+xlxnSlSzp91n5xsnj
+	YArPYf28J/uuOzQ==
+X-Received: by 2002:ac8:5a13:0:b0:3e3:8392:a20e with SMTP id n19-20020ac85a13000000b003e38392a20emr1818994qta.11.1679423059995;
+        Tue, 21 Mar 2023 11:24:19 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+dI/AIvwoRVUqT1YTTXfDAONNxagr+5GYbKtG20x4g1N6bckO9liMnHnzF2jPTXjsqnR44fA==
+X-Received: by 2002:ac8:5a13:0:b0:3e3:8392:a20e with SMTP id n19-20020ac85a13000000b003e38392a20emr1818956qta.11.1679423059754;
+        Tue, 21 Mar 2023 11:24:19 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id d18-20020ac86692000000b003e386bb1566sm822618qtp.31.2023.03.21.11.24.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:24:19 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: zackr@vmware.com,
+	linux-graphics-maintainer@vmware.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
+Date: Tue, 21 Mar 2023 14:24:14 -0400
+Message-Id: <20230321182414.1826372-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <93334.123032114214400699@us-mta-325.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi, we tested your kernel and here are the results:
+clang with W=1 reports
+drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c:56:35: error:
+  unused function 'vmw_overlay' [-Werror,-Wunused-function]
+static inline struct vmw_overlay *vmw_overlay(struct drm_device *dev)
+                                  ^
+This function is not used, so remove it.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'fsverity-for-linus' of git://git.kernel.org/=
-pub/scm/fs/fsverity/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/80252
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftest build - bpf: progs/find_vma_fail1.c:16:16: error: =
-cannot assign to non-static data member 'vm_flags' with const-qualified typ=
-e 'const vm_flags_t'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1594
-            Affected tests:
-                  x86_64 (debug) - kselftest build - bpf
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c b/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c
+index 8d171d71cb8a..7e112319a23c 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c
+@@ -53,12 +53,6 @@ struct vmw_overlay {
+ 	struct vmw_stream stream[VMW_MAX_NUM_STREAMS];
+ };
+ 
+-static inline struct vmw_overlay *vmw_overlay(struct drm_device *dev)
+-{
+-	struct vmw_private *dev_priv = vmw_priv(dev);
+-	return dev_priv ? dev_priv->overlay_priv : NULL;
+-}
+-
+ struct vmw_escape_header {
+ 	uint32_t cmd;
+ 	SVGAFifoCmdEscape body;
+-- 
+2.27.0
 
