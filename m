@@ -1,118 +1,110 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEECB8C04;
-	Tue, 21 Mar 2023 11:30:38 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CABDDAD7;
-	Tue, 21 Mar 2023 04:31:21 -0700 (PDT)
-Received: from [10.57.19.235] (unknown [10.57.19.235])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E06683F71E;
-	Tue, 21 Mar 2023 04:30:34 -0700 (PDT)
-Message-ID: <695e97b5-754b-1364-ec71-2550eeaca6e9@arm.com>
-Date: Tue, 21 Mar 2023 11:30:33 +0000
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9328D9440
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 11:46:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679399203;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ymNZ6VwYV2ATvUKNgNsMq/UfCBI6C3UP9i+FWnYVIDA=;
+	b=EKXbX6hx6A8mhMr//o9tQWZzhPsrkk3fnB0vmT1+Ofz4mAr6CIODTDJ5pvBWHMD+RWZJsO
+	5vVWPNPr6G/1iXU4XQ4fMJdNvtyJrXjTU9mxokcWPt+cd38GzoXJujrZTXGB0G/KnV1uFu
+	uQnfoSC4E3BVBXU+9Hok5R3ogwfEA+U=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-186-QS27_ZuIPiOOGAmxVO3Zqg-1; Tue, 21 Mar 2023 07:46:42 -0400
+X-MC-Unique: QS27_ZuIPiOOGAmxVO3Zqg-1
+Received: by mail-qk1-f200.google.com with SMTP id 66-20020a370345000000b00746886b1593so2444089qkd.14
+        for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 04:46:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679399202;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ymNZ6VwYV2ATvUKNgNsMq/UfCBI6C3UP9i+FWnYVIDA=;
+        b=TolU3Y2BeytGvbCayztnCCCw6jMCnTLZg9Vl3pd5zXZM1+JnzCDTkHxXnQGnH5jhiC
+         Dg8+fMlyIFJ0Zz9Y/d8yUF3uhMCQWUJ1hCHK3NL7uGRxw887O6YDaQt7bNUh55ShxUQV
+         jNEDAZfNMWCZJKsCvVvy7gHZhlJ3BhVGxxoXQIiyfVtVgtcZaRVPxPptrkKw+oWw6OmX
+         a6kN+qdpYvZ46y0pk74ErcUSb2KMZmwk+T4gYOoRl6nnle+Y50HJ8w8b4Nze5umYfTwa
+         XcWIB7novAg6uVZDTUYF+PpD3Ba7dhCBiy0Oc7GxcwMgWE5Yi8RDhLXwd7GeywBZ8VXi
+         SM4Q==
+X-Gm-Message-State: AO0yUKVz5VdFWOUQAIukAzq42a2e2EEPA5dNkkIhZjOm/H4BzUQMOBfn
+	lkdCdaqVZoCIuJhqA2QurEfv5VehcZTWyAmMt2drtmWvOBaD6lCgN94J5QmUg/jgwCi3mwA/GQ3
+	mDRGq1LoLc1erOA==
+X-Received: by 2002:a05:6214:404:b0:56b:377e:88a7 with SMTP id z4-20020a056214040400b0056b377e88a7mr3463927qvx.21.1679399201776;
+        Tue, 21 Mar 2023 04:46:41 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/fiAb6HEprEWi8AUt3xnbJCW2fUvHyYpabsY5bMNHiKBf3tCo9LT9+NAcbKM/NkXH6hE4cgg==
+X-Received: by 2002:a05:6214:404:b0:56b:377e:88a7 with SMTP id z4-20020a056214040400b0056b377e88a7mr3463904qvx.21.1679399201529;
+        Tue, 21 Mar 2023 04:46:41 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 2-20020a05620a040200b007468733cd1fsm3864969qkp.58.2023.03.21.04.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 04:46:41 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: miquel.raynal@bootlin.com,
+	richard@nod.at,
+	vigneshr@ti.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] mtd: rawnand: remove unused is_imx51_nfc and imx53_nfc functions
+Date: Tue, 21 Mar 2023 07:46:38 -0400
+Message-Id: <20230321114638.1782086-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 13/17] PM: EM: Refactor struct em_perf_domain and add
- default_table
-Content-Language: en-US
-To: rafael@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
- amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
- daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
- pavel@ucw.cz, Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
- rostedt@goodmis.org, mhiramat@kernel.org, linux-pm@vger.kernel.org,
- kernel test robot <lkp@intel.com>
-References: <20230314103357.26010-14-lukasz.luba@arm.com>
- <202303151927.WD6O0PWN-lkp@intel.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <202303151927.WD6O0PWN-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Rafael,
+clang with W=1 reports
+drivers/mtd/nand/raw/mxc_nand.c:1602:19: error: unused function
+  'is_imx51_nfc' [-Werror,-Wunused-function]
+static inline int is_imx51_nfc(struct mxc_nand_host *host)
+                  ^
+drivers/mtd/nand/raw/mxc_nand.c:1607:19: error: unused function
+  'is_imx53_nfc' [-Werror,-Wunused-function]
+static inline int is_imx53_nfc(struct mxc_nand_host *host)
+                  ^
+These functions are not used, so remove them.
 
-On 3/15/23 11:32, kernel test robot wrote:
-> Hi Lukasz,
-> 
-> I love your patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on rafael-pm/linux-next]
-> [also build test WARNING on rafael-pm/thermal linus/master pavel-leds/for-next v6.3-rc2 next-20230315]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/PM-EM-Refactor-em_cpufreq_update_efficiencies-arguments/20230314-184448
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-> patch link:    https://lore.kernel.org/r/20230314103357.26010-14-lukasz.luba%40arm.com
-> patch subject: [PATCH 13/17] PM: EM: Refactor struct em_perf_domain and add default_table
-> config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230315/202303151927.WD6O0PWN-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/ce3aad5db08006a2a6b6d52f9c26b11448cd8bb4
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Lukasz-Luba/PM-EM-Refactor-em_cpufreq_update_efficiencies-arguments/20230314-184448
->          git checkout ce3aad5db08006a2a6b6d52f9c26b11448cd8bb4
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thermal/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303151927.WD6O0PWN-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/thermal/cpufreq_cooling.c:381:24: warning: unused variable 'table' [-Wunused-variable]
->             struct em_perf_state *table;
->                                   ^
->     1 warning generated.
-> 
-> 
-> vim +/table +381 drivers/thermal/cpufreq_cooling.c
-> 
->     376	
->     377	static unsigned int get_state_freq(struct cpufreq_cooling_device *cpufreq_cdev,
->     378					   unsigned long state)
->     379	{
->     380		struct cpufreq_policy *policy;
->   > 381		struct em_perf_state *table;
->     382		unsigned long idx;
->     383	
-> 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/mtd/nand/raw/mxc_nand.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-I'll move that variable into the below section which has the #ifdef,
-so it won't complain when there isn't IPA config set.
+diff --git a/drivers/mtd/nand/raw/mxc_nand.c b/drivers/mtd/nand/raw/mxc_nand.c
+index f6c96341b896..f61ffcbe57c8 100644
+--- a/drivers/mtd/nand/raw/mxc_nand.c
++++ b/drivers/mtd/nand/raw/mxc_nand.c
+@@ -1599,16 +1599,6 @@ static inline int is_imx25_nfc(struct mxc_nand_host *host)
+ 	return host->devtype_data == &imx25_nand_devtype_data;
+ }
+ 
+-static inline int is_imx51_nfc(struct mxc_nand_host *host)
+-{
+-	return host->devtype_data == &imx51_nand_devtype_data;
+-}
+-
+-static inline int is_imx53_nfc(struct mxc_nand_host *host)
+-{
+-	return host->devtype_data == &imx53_nand_devtype_data;
+-}
+-
+ static const struct of_device_id mxcnd_dt_ids[] = {
+ 	{ .compatible = "fsl,imx21-nand", .data = &imx21_nand_devtype_data, },
+ 	{ .compatible = "fsl,imx27-nand", .data = &imx27_nand_devtype_data, },
+-- 
+2.27.0
 
-Thus, the change for this get_state_freq() in v2 would be like:
-------------------------------8<----------------------
-
-  #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
-         /* Use the Energy Model table if available */
-         if (cpufreq_cdev->em) {
-+               struct em_perf_state *table;
-+               table = cpufreq_cdev->em->default_table->state;
-                 idx = cpufreq_cdev->max_level - state;
--               return cpufreq_cdev->em->table[idx].frequency;
-+               return table[idx].frequency;
-         }
-  #endif
-
-------------------->8---------------------------------
-
-
-BTW, I might refactor this cpufreq_cooling.c file later,
-since there is a lot of this #ifdef sections spread around...
-But that would be after OSPM in Ancona.
-
-Regards,
-Lukasz
