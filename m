@@ -1,110 +1,62 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9328D9440
-	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 11:46:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679399203;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2C59440
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 11:57:58 +0000 (UTC)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B071A1EC04DA;
+	Tue, 21 Mar 2023 12:57:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+	t=1679399870;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ymNZ6VwYV2ATvUKNgNsMq/UfCBI6C3UP9i+FWnYVIDA=;
-	b=EKXbX6hx6A8mhMr//o9tQWZzhPsrkk3fnB0vmT1+Ofz4mAr6CIODTDJ5pvBWHMD+RWZJsO
-	5vVWPNPr6G/1iXU4XQ4fMJdNvtyJrXjTU9mxokcWPt+cd38GzoXJujrZTXGB0G/KnV1uFu
-	uQnfoSC4E3BVBXU+9Hok5R3ogwfEA+U=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-186-QS27_ZuIPiOOGAmxVO3Zqg-1; Tue, 21 Mar 2023 07:46:42 -0400
-X-MC-Unique: QS27_ZuIPiOOGAmxVO3Zqg-1
-Received: by mail-qk1-f200.google.com with SMTP id 66-20020a370345000000b00746886b1593so2444089qkd.14
-        for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 04:46:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679399202;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ymNZ6VwYV2ATvUKNgNsMq/UfCBI6C3UP9i+FWnYVIDA=;
-        b=TolU3Y2BeytGvbCayztnCCCw6jMCnTLZg9Vl3pd5zXZM1+JnzCDTkHxXnQGnH5jhiC
-         Dg8+fMlyIFJ0Zz9Y/d8yUF3uhMCQWUJ1hCHK3NL7uGRxw887O6YDaQt7bNUh55ShxUQV
-         jNEDAZfNMWCZJKsCvVvy7gHZhlJ3BhVGxxoXQIiyfVtVgtcZaRVPxPptrkKw+oWw6OmX
-         a6kN+qdpYvZ46y0pk74ErcUSb2KMZmwk+T4gYOoRl6nnle+Y50HJ8w8b4Nze5umYfTwa
-         XcWIB7novAg6uVZDTUYF+PpD3Ba7dhCBiy0Oc7GxcwMgWE5Yi8RDhLXwd7GeywBZ8VXi
-         SM4Q==
-X-Gm-Message-State: AO0yUKVz5VdFWOUQAIukAzq42a2e2EEPA5dNkkIhZjOm/H4BzUQMOBfn
-	lkdCdaqVZoCIuJhqA2QurEfv5VehcZTWyAmMt2drtmWvOBaD6lCgN94J5QmUg/jgwCi3mwA/GQ3
-	mDRGq1LoLc1erOA==
-X-Received: by 2002:a05:6214:404:b0:56b:377e:88a7 with SMTP id z4-20020a056214040400b0056b377e88a7mr3463927qvx.21.1679399201776;
-        Tue, 21 Mar 2023 04:46:41 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/fiAb6HEprEWi8AUt3xnbJCW2fUvHyYpabsY5bMNHiKBf3tCo9LT9+NAcbKM/NkXH6hE4cgg==
-X-Received: by 2002:a05:6214:404:b0:56b:377e:88a7 with SMTP id z4-20020a056214040400b0056b377e88a7mr3463904qvx.21.1679399201529;
-        Tue, 21 Mar 2023 04:46:41 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 2-20020a05620a040200b007468733cd1fsm3864969qkp.58.2023.03.21.04.46.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 04:46:41 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: miquel.raynal@bootlin.com,
-	richard@nod.at,
-	vigneshr@ti.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-mtd@lists.infradead.org,
+	 content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+	bh=tJTLPFrCxjtK1io8o+ICWrix+0DFGFZh2QqywcB+n2Y=;
+	b=ADKm5mLh4ClOXv8F3RCPYMKXCxf/FNOmpMAu6z8Wc5H/2tIwyjI/nhZD18fAegzahK9z2P
+	RCSEo1aHASGD6BjLzDI8phbKyumXzbeh0RGPaI4sR6dFBSpi3WviT/pa0ay6H7IbKFkL80
+	1WzaZ2NCHpRTzPJoYz/oGnlGenpJf44=
+Date: Tue, 21 Mar 2023 12:57:46 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	nathan@kernel.org, trix@redhat.com, corbet@lwn.net,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] mtd: rawnand: remove unused is_imx51_nfc and imx53_nfc functions
-Date: Tue, 21 Mar 2023 07:46:38 -0400
-Message-Id: <20230321114638.1782086-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	clang-built-linux <llvm@lists.linux.dev>,
+	linux-toolchains <linux-toolchains@vger.kernel.org>,
+	Fangrui Song <maskray@google.com>
+Subject: Re: [PATCH v5] x86: Avoid relocation information in final vmlinux
+Message-ID: <20230321115746.GBZBmbujAI4ZBxVn0G@fat_crate.local>
+References: <20230320121006.4863-1-petr.pavlu@suse.com>
+ <CAKwvOdkFvMgYypc4w+UChO2O50wSHqXJUct2fkxrd+Qgn2C4Cg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdkFvMgYypc4w+UChO2O50wSHqXJUct2fkxrd+Qgn2C4Cg@mail.gmail.com>
 
-clang with W=1 reports
-drivers/mtd/nand/raw/mxc_nand.c:1602:19: error: unused function
-  'is_imx51_nfc' [-Werror,-Wunused-function]
-static inline int is_imx51_nfc(struct mxc_nand_host *host)
-                  ^
-drivers/mtd/nand/raw/mxc_nand.c:1607:19: error: unused function
-  'is_imx53_nfc' [-Werror,-Wunused-function]
-static inline int is_imx53_nfc(struct mxc_nand_host *host)
-                  ^
-These functions are not used, so remove them.
+On Mon, Mar 20, 2023 at 11:35:30AM -0700, Nick Desaulniers wrote:
+> Why do you move this from the arch/x86/boot/compressed/ dir?
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/mtd/nand/raw/mxc_nand.c | 10 ----------
- 1 file changed, 10 deletions(-)
+I got an explanation here:
 
-diff --git a/drivers/mtd/nand/raw/mxc_nand.c b/drivers/mtd/nand/raw/mxc_nand.c
-index f6c96341b896..f61ffcbe57c8 100644
---- a/drivers/mtd/nand/raw/mxc_nand.c
-+++ b/drivers/mtd/nand/raw/mxc_nand.c
-@@ -1599,16 +1599,6 @@ static inline int is_imx25_nfc(struct mxc_nand_host *host)
- 	return host->devtype_data == &imx25_nand_devtype_data;
- }
- 
--static inline int is_imx51_nfc(struct mxc_nand_host *host)
--{
--	return host->devtype_data == &imx51_nand_devtype_data;
--}
--
--static inline int is_imx53_nfc(struct mxc_nand_host *host)
--{
--	return host->devtype_data == &imx53_nand_devtype_data;
--}
--
- static const struct of_device_id mxcnd_dt_ids[] = {
- 	{ .compatible = "fsl,imx21-nand", .data = &imx21_nand_devtype_data, },
- 	{ .compatible = "fsl,imx27-nand", .data = &imx27_nand_devtype_data, },
+https://lore.kernel.org/r/16941b45-0f4f-e7c9-4602-d9acb0c612c3@suse.com
+
+but my counterargument is:
+
+vmlinux.relocs is used there, in that dir, so it should stay there just
+like the rest of the by-products generated there.
+
+Thx.
+
 -- 
-2.27.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
