@@ -1,109 +1,136 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE27D505
-	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 18:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F29D505
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 18:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679424498;
+	s=mimecast20190719; t=1679424703;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=m16LG5qfJ+bTUG6Spw+RzSoYpGmgfuoZ6sJRsgb/iNs=;
-	b=g2OjsOpkHV4PtfQ1K45KRMH40txc1+2RQm/oyRz/tlOcz6jM3HGUAgQJPl0PcrE2TatCQl
-	KdrykfTc5GSostQ0lHuEp8FTk5KmEiBB9DWaDr7wqY3r6cR+cVeBafwHkQJAGJAmE9SGmc
-	t/dkaXqFPFaoAVHS4mpa3omxcY3sGo4=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-180-jzxa_KRuN4WbKalZI82zKg-1; Tue, 21 Mar 2023 14:48:17 -0400
-X-MC-Unique: jzxa_KRuN4WbKalZI82zKg-1
-Received: by mail-qk1-f198.google.com with SMTP id 187-20020a3707c4000000b007468d9a30faso2897488qkh.23
-        for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 11:48:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679424497;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m16LG5qfJ+bTUG6Spw+RzSoYpGmgfuoZ6sJRsgb/iNs=;
-        b=G2sDJ0RBIU+xGvyhHBNiMtpbUMwYf98o5zNRi2xl6aUbK/Uw08ZLmaz1Gc8iRDKo1T
-         55jP4zOdnweDraXL8WrP8rdlQX73+5vrwRyqUXnMJjhxSXWuUcEXWLQTZg0x1g9U5nMl
-         je+1sqFQjo/GCyGsR7Wx9ZEXQx/lC82p3G2tTIzi47x8kF3fCEywJpbHDDw53Z9IoBzJ
-         iiJkg766VqlkAXxG9k1qvt9SULnYGlgEZKEXboYfTHGdG0dGDEZaCJU+9VpHt0gPsEAD
-         Q2mgvQ0bY5kEwoZo20bgDCcmbRsE8uO+snKXW66nfn6hf2mx8hQyX492FMB1dBV1WyNh
-         J/Cg==
-X-Gm-Message-State: AO0yUKU/4xsIHf9qiOACS2JvP7/NIWA3zKwk+W8Q95R/p7dbR56LjRS0
-	GNGsKhh/hqBmxwcmUJ/LV8LRbrUOpQGxhCAiYcU6X1vrNOUtGrcoLXyqK0sRv0YqvIXIY1qglS6
-	jlY9xGZTzTjFekw==
-X-Received: by 2002:a05:6214:e4c:b0:5a3:44a1:788d with SMTP id o12-20020a0562140e4c00b005a344a1788dmr1318811qvc.29.1679424496997;
-        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/uiKZ9Rf3XmfwDfIlgK1+2Ku5dlt08hCszlwq6yiw64bq4vrpan11278XtwOhJWytpr/YkPw==
-X-Received: by 2002:a05:6214:e4c:b0:5a3:44a1:788d with SMTP id o12-20020a0562140e4c00b005a344a1788dmr1318782qvc.29.1679424496733;
-        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 66-20020a370b45000000b0071eddd3bebbsm1525699qkl.81.2023.03.21.11.48.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 11:48:16 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: dchickles@marvell.com,
-	sburla@marvell.com,
-	fmanlunas@marvell.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] liquidio: remove unused IQ_INSTR_MODE_64B function
-Date: Tue, 21 Mar 2023 14:48:11 -0400
-Message-Id: <20230321184811.1827306-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	bh=EQ/VNcEVKuEIglGJ90YwRlksepf/JKXj+N86f38gG8s=;
+	b=FzoGATgvmZ9yCOyB4SCtBmhyy5s2odQRmyOVfBldlmqergPpXWWyepnGiE/P+11URbzSIB
+	1AgeGxS847b27PVWK07HCm7V+DBxAbowm+55ZdDsiBNPHRgzyck48KBQ7wwel4t5/+q7Jg
+	/s2ivmAhq5DheMNNK4A7xKDV5x2Y15I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-460-oT0yAEGLP_CW2nT50N4C1A-1; Tue, 21 Mar 2023 14:51:42 -0400
+X-MC-Unique: oT0yAEGLP_CW2nT50N4C1A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 126891C06ED7
+	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 18:51:42 +0000 (UTC)
+Received: from [172.64.15.49] (unknown [10.30.34.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id F0A68140E960;
+	Tue, 21 Mar 2023 18:51:41 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (134/381 SKIPPED): Test report for master
+ (6.3.0-rc3, mainline.kernel.org-clang, 7d31677b)
+Date: Tue, 21 Mar 2023 18:51:41 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <17484.123032114514201285@us-mta-460.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-clang with W=1 reports
-drivers/net/ethernet/cavium/liquidio/request_manager.c:43:19: error:
-  unused function 'IQ_INSTR_MODE_64B' [-Werror,-Wunused-function]
-static inline int IQ_INSTR_MODE_64B(struct octeon_device *oct, int iq_no)
-                  ^
-This function and its macro wrapper are not used, so remove them.
+Hi, we tested your kernel and here are the results:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/ethernet/cavium/liquidio/request_manager.c | 9 ---------
- 1 file changed, 9 deletions(-)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-diff --git a/drivers/net/ethernet/cavium/liquidio/request_manager.c b/drivers/net/ethernet/cavium/liquidio/request_manager.c
-index 8e59c2825533..32f854c0cd79 100644
---- a/drivers/net/ethernet/cavium/liquidio/request_manager.c
-+++ b/drivers/net/ethernet/cavium/liquidio/request_manager.c
-@@ -40,15 +40,6 @@ static void  __check_db_timeout(struct octeon_device *oct, u64 iq_no);
- 
- static void (*reqtype_free_fn[MAX_OCTEON_DEVICES][REQTYPE_LAST + 1]) (void *);
- 
--static inline int IQ_INSTR_MODE_64B(struct octeon_device *oct, int iq_no)
--{
--	struct octeon_instr_queue *iq =
--	    (struct octeon_instr_queue *)oct->instr_queue[iq_no];
--	return iq->iqcmd_64B;
--}
--
--#define IQ_INSTR_MODE_32B(oct, iq_no)  (!IQ_INSTR_MODE_64B(oct, iq_no))
--
- /* Define this to return the request status comaptible to old code */
- /*#define OCTEON_USE_OLD_REQ_STATUS*/
- 
--- 
-2.27.0
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: gpu: host1x: fix uninitialized variable use
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/80191
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftest build - bpf: progs/find_vma_fail1.c:16:16: error: =
+cannot assign to non-static data member 'vm_flags' with const-qualified typ=
+e 'const vm_flags_t'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1594
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
