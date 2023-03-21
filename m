@@ -1,92 +1,118 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9228C04;
-	Tue, 21 Mar 2023 11:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679397747; x=1710933747;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sfORhRiVHQmtzdjGHhmxgrB1wKT3hy5Lc7QGL+RMo0A=;
-  b=CWeXih7+tBkZykOgwQXYXCnfm25UMzhtJvGEv2OA0XpPEFPRkyXzzjEB
-   yqbnYYC6t5Qx5oTOBZZh3YaTmoZz8cWisgY3TuccpZYYj1/+INXU81zrR
-   U3n8Xf36S0nHNO8GqhkTukUyKpdiJtC/22fG/sYYknTXoXPsUb3FSoOxF
-   q1dtA0dbeghmL7w8xJEPnp+CcGDXq4zjEdsEquVmmAbdX0Fpju9Q2SnHu
-   xIT0oX/2aJYHFgSF4YxvmG7NKde3/jn4QgKQ6oz51S0f1QMN3DryZpV12
-   +i+w2qXwQfEvSJF+pGz/2ZV3mTZBAGHT2KJCitxMTX7VGPQTPLDJf2CCO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="403786538"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="403786538"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 04:22:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10655"; a="824896475"
-X-IronPort-AV: E=Sophos;i="5.98,278,1673942400"; 
-   d="scan'208";a="824896475"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Mar 2023 04:22:26 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pea4P-000BqY-03;
-	Tue, 21 Mar 2023 11:22:25 +0000
-Date: Tue, 21 Mar 2023 19:22:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexandre Ghiti <alex@ghiti.fr>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Palmer Dabbelt <palmer@rivosinc.com>
-Subject: <instantiation>:26:8: error: symbol '__pecoff_text_end' can not be
- undefined in a subtraction expression
-Message-ID: <202303211908.171VMZlz-lkp@intel.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEECB8C04;
+	Tue, 21 Mar 2023 11:30:38 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CABDDAD7;
+	Tue, 21 Mar 2023 04:31:21 -0700 (PDT)
+Received: from [10.57.19.235] (unknown [10.57.19.235])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E06683F71E;
+	Tue, 21 Mar 2023 04:30:34 -0700 (PDT)
+Message-ID: <695e97b5-754b-1364-ec71-2550eeaca6e9@arm.com>
+Date: Tue, 21 Mar 2023 11:30:33 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 13/17] PM: EM: Refactor struct em_perf_domain and add
+ default_table
+Content-Language: en-US
+To: rafael@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
+ amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
+ pavel@ucw.cz, Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+ rostedt@goodmis.org, mhiramat@kernel.org, linux-pm@vger.kernel.org,
+ kernel test robot <lkp@intel.com>
+References: <20230314103357.26010-14-lukasz.luba@arm.com>
+ <202303151927.WD6O0PWN-lkp@intel.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <202303151927.WD6O0PWN-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git for-next
-head:   0af44711e93ad0fcacc5c36723478acda54a2f68
-commit: 88713f77905e621a997fb7aabb2e5377f0fa6580 riscv: Introduce CONFIG_RELOCATABLE
-date:   10 hours ago
-config: riscv-randconfig-r042-20230319 (https://download.01.org/0day-ci/archive/20230321/202303211908.171VMZlz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?id=88713f77905e621a997fb7aabb2e5377f0fa6580
-        git remote add palmer https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git
-        git fetch --no-tags palmer for-next
-        git checkout 88713f77905e621a997fb7aabb2e5377f0fa6580
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Hi Rafael,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303211908.171VMZlz-lkp@intel.com/
+On 3/15/23 11:32, kernel test robot wrote:
+> Hi Lukasz,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on rafael-pm/linux-next]
+> [also build test WARNING on rafael-pm/thermal linus/master pavel-leds/for-next v6.3-rc2 next-20230315]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/PM-EM-Refactor-em_cpufreq_update_efficiencies-arguments/20230314-184448
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+> patch link:    https://lore.kernel.org/r/20230314103357.26010-14-lukasz.luba%40arm.com
+> patch subject: [PATCH 13/17] PM: EM: Refactor struct em_perf_domain and add default_table
+> config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20230315/202303151927.WD6O0PWN-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/ce3aad5db08006a2a6b6d52f9c26b11448cd8bb4
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Lukasz-Luba/PM-EM-Refactor-em_cpufreq_update_efficiencies-arguments/20230314-184448
+>          git checkout ce3aad5db08006a2a6b6d52f9c26b11448cd8bb4
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/thermal/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303151927.WD6O0PWN-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/thermal/cpufreq_cooling.c:381:24: warning: unused variable 'table' [-Wunused-variable]
+>             struct em_perf_state *table;
+>                                   ^
+>     1 warning generated.
+> 
+> 
+> vim +/table +381 drivers/thermal/cpufreq_cooling.c
+> 
+>     376	
+>     377	static unsigned int get_state_freq(struct cpufreq_cooling_device *cpufreq_cdev,
+>     378					   unsigned long state)
+>     379	{
+>     380		struct cpufreq_policy *policy;
+>   > 381		struct em_perf_state *table;
+>     382		unsigned long idx;
+>     383	
+> 
 
-All errors (new ones prefixed by >>):
+I'll move that variable into the below section which has the #ifdef,
+so it won't complain when there isn't IPA config set.
 
-   arch/riscv/kernel/head.S:329:5: warning: 'CONFIG_RISCV_BOOT_SPINWAIT' is not defined, evaluates to 0 [-Wundef]
-   #if CONFIG_RISCV_BOOT_SPINWAIT
-       ^
-   1 warning generated.
->> <instantiation>:26:8: error: symbol '__pecoff_text_end' can not be undefined in a subtraction expression
-    .long __pecoff_data_virt_end - __pecoff_text_end
-          ^
-   <instantiation>:84:8: error: symbol '__pecoff_text_end' can not be undefined in a subtraction expression
-    .long __pecoff_data_virt_end - __pecoff_text_end
-          ^
-   <instantiation>:86:8: error: symbol '__pecoff_text_end' can not be undefined in a subtraction expression
-    .long __pecoff_data_raw_end - __pecoff_text_end
-          ^
+Thus, the change for this get_state_freq() in v2 would be like:
+------------------------------8<----------------------
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+  #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+         /* Use the Energy Model table if available */
+         if (cpufreq_cdev->em) {
++               struct em_perf_state *table;
++               table = cpufreq_cdev->em->default_table->state;
+                 idx = cpufreq_cdev->max_level - state;
+-               return cpufreq_cdev->em->table[idx].frequency;
++               return table[idx].frequency;
+         }
+  #endif
+
+------------------->8---------------------------------
+
+
+BTW, I might refactor this cpufreq_cooling.c file later,
+since there is a lot of this #ifdef sections spread around...
+But that would be after OSPM in Ancona.
+
+Regards,
+Lukasz
