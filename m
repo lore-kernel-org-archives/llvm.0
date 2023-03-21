@@ -1,97 +1,120 @@
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689AAD530
-	for <llvm@lists.linux.dev>; Tue, 21 Mar 2023 20:21:33 +0000 (UTC)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-	 client-signature RSA-PSS (2048 bits) client-digest SHA256)
-	(Client CN "mail.riseup.net", Issuer "R3" (not verified))
-	by mx1.riseup.net (Postfix) with ESMTPS id 4Ph2nh23XDzDqGt;
-	Tue, 21 Mar 2023 20:12:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-	t=1679429528; bh=+4hKPyRMH2aAK35R9DtVSpBun70VepUerw2XjaTytxU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cnch0x4zGxsR9VcUGElrbA7sE/iBGr3H+sdwfYJ4+SiLz3Odfgd7jOUhGap+KYViM
-	 zi1bsUKERut+p8wrLXb3bAC/JUBiyoqP9DSKFbqqoXm+jMhRuyOd+Hzvo3D/ltY8ts
-	 FEnJ/T9QtDnPvc5H9n/Ci5fvDIdLLCWA33tXns78=
-X-Riseup-User-ID: 1C3CD006F550256050AEC2FA37B1A54058F970E2E8F94543F974B5CEED22D817
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	 by fews2.riseup.net (Postfix) with ESMTPSA id 4Ph2nP1MWTz1y8Z;
-	Tue, 21 Mar 2023 20:11:52 +0000 (UTC)
-Message-ID: <a7313cdd-c54e-cbbf-e8e9-8330184912ac@riseup.net>
-Date: Tue, 21 Mar 2023 17:11:47 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6E410788;
+	Tue, 21 Mar 2023 22:19:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679437199; x=1710973199;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KkKXJs01d6aNUn4ec8jm1yRJxeI+Isjz4/G3GmiRxUM=;
+  b=kZtJcxdm18TXS6rmU4n/5GWIdzjfzmK/KoYgiwpIhbYsYYuCnjIOIm1t
+   0BCo94dJ5Acl4+sm60LBQ0ED34jBxWI98irmjUiH9sGRPy3xQmfBejYrv
+   nw16vf9CUjve6r5jEDkuTfnW8FhNuU4nCIGoMLLYBsOTgdo/ZjZwbjXsu
+   FobYpIJs7bl0681taqWIDJh5KCauJCybEPxpliUzJaWEoXFT1n4avhmMq
+   +Fm0SY9yTSW+8GDydEZh768VOg3Uf1TjMRNqlhzWXqukaDUuTn5KT2GsO
+   n9xBuYdIeZ659ILFVSyUKU4U0Sy3O8mDQsWQaZqmSCZS4u5jh9P5LcDVG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="327449635"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="327449635"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 15:19:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="714166500"
+X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
+   d="scan'208";a="714166500"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 21 Mar 2023 15:19:57 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pekKh-000CTa-2u;
+	Tue, 21 Mar 2023 22:19:56 +0000
+Date: Wed, 22 Mar 2023 06:19:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
+Subject: [rafael-pm:bleeding-edge 43/45]
+ drivers/thermal/thermal_sysfs.c:717:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <202303220652.Yhopf8F0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH] arch:um: Only disable SSE on clang to work around old GCC
- bugs
-Content-Language: en-US
-To: David Gow <davidgow@google.com>, Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, SeongJae Park <sj@kernel.org>
-Cc: linux-um@lists.infradead.org, x86@kernel.org, llvm@lists.linux.dev,
- rust-for-linux@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-References: <20230318041555.4192172-1-davidgow@google.com>
-From: Arthur Grillo Queiroz Cabral <arthurgrillo@riseup.net>
-In-Reply-To: <20230318041555.4192172-1-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   98fe6903f79cffbb0f271369f62f4e5fea0e978c
+commit: 9b3fc1c6ba14f12e819e9d44c72013a1da58c0d9 [43/45] thermal: core: Introduce thermal_cooling_device_update()
+config: i386-randconfig-a001-20230320 (https://download.01.org/0day-ci/archive/20230322/202303220652.Yhopf8F0-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=9b3fc1c6ba14f12e819e9d44c72013a1da58c0d9
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout 9b3fc1c6ba14f12e819e9d44c72013a1da58c0d9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/thermal/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303220652.Yhopf8F0-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/thermal_sysfs.c:717:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!stats)
+               ^~~~~~
+   drivers/thermal/thermal_sysfs.c:727:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/thermal/thermal_sysfs.c:717:2: note: remove the 'if' if its condition is always false
+           if (!stats)
+           ^~~~~~~~~~~
+   drivers/thermal/thermal_sysfs.c:712:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
 
+vim +717 drivers/thermal/thermal_sysfs.c
 
-On 18/03/23 01:15, 'David Gow' via KUnit Development wrote:
-> As part of the Rust support for UML, we disable SSE (and similar flags)
-> to match the normal x86 builds. This both makes sense (we ideally want a
-> similar configuration to x86), and works around a crash bug with SSE
-> generation under Rust with LLVM.
-> 
-> However, this breaks compiling stdlib.h under gcc < 11, as the x86_64
-> ABI requires floating-point return values be stored in an SSE register.
-> gcc 11 fixes this by only doing register allocation when a function is
-> actually used, and since we never use atof(), it shouldn't be a problem:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
-> 
-> Nevertheless, only disable SSE on clang setups, as that's a simple way
-> of working around everyone's bugs.
-> 
-> Fixes: 884981867947 ("rust: arch/um: Disable FP/SIMD instruction to match x86")
-> Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
-> Link: https://lore.kernel.org/linux-um/6df2ecef9011d85654a82acd607fdcbc93ad593c.camel@huaweicloud.com/
-> Tested-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
-> Tested-by: SeongJae Park <sj@kernel.org>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  arch/x86/Makefile.um | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/x86/Makefile.um b/arch/x86/Makefile.um
-> index b70559b821df..2106a2bd152b 100644
-> --- a/arch/x86/Makefile.um
-> +++ b/arch/x86/Makefile.um
-> @@ -3,9 +3,14 @@ core-y += arch/x86/crypto/
->  
->  #
->  # Disable SSE and other FP/SIMD instructions to match normal x86
-> +# This is required to work around issues in older LLVM versions, but breaks
-> +# GCC versions < 11. See:
-> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99652
->  #
-> +ifeq ($(CONFIG_CC_IS_CLANG),y)
->  KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
->  KBUILD_RUSTFLAGS += -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2
-> +endif
->  
->  ifeq ($(CONFIG_X86_32),y)
->  START := 0x8048000
+   706	
+   707	static ssize_t total_trans_show(struct device *dev,
+   708					struct device_attribute *attr, char *buf)
+   709	{
+   710		struct thermal_cooling_device *cdev = to_cooling_device(dev);
+   711		struct cooling_dev_stats *stats;
+   712		int ret;
+   713	
+   714		mutex_lock(&cdev->lock);
+   715	
+   716		stats = cdev->stats;
+ > 717		if (!stats)
+   718			goto unlock;
+   719	
+   720		spin_lock(&stats->lock);
+   721		ret = sprintf(buf, "%u\n", stats->total_trans);
+   722		spin_unlock(&stats->lock);
+   723	
+   724	unlock:
+   725		mutex_unlock(&cdev->lock);
+   726	
+   727		return ret;
+   728	}
+   729	
 
-Tested-by: Arthur Grillo <arthurgrillo@riseup.net>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
