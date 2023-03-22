@@ -1,115 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBE22F37;
-	Wed, 22 Mar 2023 19:59:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C942C433A1;
-	Wed, 22 Mar 2023 19:59:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679515176;
-	bh=Pimu7YMlgMvD9aPxdSzZGlfStbfAP+xpCj244fNbLuw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QWZRqinq+D4RQIIIqJ/TFE2fD9b0RBdasDxZeH+x2+R52LrJ7DcwHsG4USO734qqS
-	 +GQ//TAE+3ERRJmp9oC0PVFXjNrqtqmwcs9TduwchmnHwGPZjKNDEYtKNMhJYDzShO
-	 w8ps28gwAa6zWD9tj6svba5YQuekBkcC3+mGLwynxDmClE6HZN7mAIVzS90tx/+ga+
-	 v3UkmpDmt1s2Js+RgPZHXnjAoaxegnrZVr8cXPj99HzJN4ehwub4rOPv0qN+IzP/gu
-	 va6F0B8LLRdqpY1I1DEXuyP7TOV9oTt+VfF4TA9dUqiGUpRB59vOVd0hukyy3gTZcO
-	 HCO0oWQjqUFUA==
-Date: Wed, 22 Mar 2023 12:59:33 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Qin Jian <qinjian@cqplus1.com>, kernel test robot <lkp@intel.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [clk:clk-sunplus 1/1] drivers/clk/clk-sp7021.c:316:8: warning:
- result of comparison of constant 18446744073709551615 with expression of
- type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char:
- (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigne...
-Message-ID: <20230322195933.GA2828949@dev-arch.thelio-3990X>
-References: <202303221947.pXP2v4xJ-lkp@intel.com>
- <81b2a67f89d7f46dd27f6d05606e753f.sboyd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908A4BA29
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 20:09:59 +0000 (UTC)
+Received: from p508fd58e.dip0.t-ipconnect.de ([80.143.213.142] helo=phil.fritz.box)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1pf4mJ-0004Ps-T8; Wed, 22 Mar 2023 21:09:47 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: daniel@ffwll.ch,
+	Tom Rix <trix@redhat.com>,
+	hjc@rock-chips.com,
+	nathan@kernel.org,
+	s.hauer@pengutronix.de,
+	airlied@gmail.com,
+	ndesaulniers@google.com,
+	michael.riesch@wolfvision.net
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	llvm@lists.linux.dev,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/rockchip: vop2: fix uninitialized variable possible_crtcs
+Date: Wed, 22 Mar 2023 21:09:45 +0100
+Message-Id: <167951576826.1541042.11962083782525897631.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230316132302.531724-1-trix@redhat.com>
+References: <20230316132302.531724-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <81b2a67f89d7f46dd27f6d05606e753f.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 22, 2023 at 10:39:06AM -0700, Stephen Boyd wrote:
-> Quoting kernel test robot (2023-03-22 04:17:48)
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-sunplus
-> > head:   d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
-> > commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2 [1/1] clk: Add Sunplus SP7021 clock driver
-> > config: mips-randconfig-r012-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221947.pXP2v4xJ-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install mips cross compiling tool for clang build
-> >         # apt-get install binutils-mipsel-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/commit/?id=d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
-> >         git remote add clk https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
-> >         git fetch --no-tags clk clk-sunplus
-> >         git checkout d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/clk/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Link: https://lore.kernel.org/oe-kbuild-all/202303221947.pXP2v4xJ-lkp@intel.com/
-> > 
+On Thu, 16 Mar 2023 09:23:02 -0400, Tom Rix wrote:
+> clang reportes this error
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error:
+>   variable 'possible_crtcs' is used uninitialized whenever 'if'
+>   condition is false [-Werror,-Wsometimes-uninitialized]
+>                         if (vp) {
+>                             ^~
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2336:36: note:
+>   uninitialized use occurs here
+>                 ret = vop2_plane_init(vop2, win, possible_crtcs);
+>                                                  ^~~~~~~~~~~~~~
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:4:
+>   note: remove the 'if' if its condition is always true
+>                         if (vp) {
+>                         ^~~~~~~~
 > 
-> Does this fix it?
-> 
-> ---8<---
-> diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
-> index 8fec14120105..caabbf5e2197 100644
-> --- a/drivers/clk/clk-sp7021.c
-> +++ b/drivers/clk/clk-sp7021.c
-> @@ -30,9 +30,9 @@ enum {
->  	P_MAX
->  };
->  
-> -#define MASK_SEL_FRA	GENMASK(1, 1)
-> -#define MASK_SDM_MOD	GENMASK(2, 2)
-> -#define MASK_PH_SEL	GENMASK(4, 4)
-> +#define MASK_SEL_FRA	BITMASK(1)
-> +#define MASK_SDM_MOD	BITMASK(2)
-> +#define MASK_PH_SEL	BITMASK(4)
->  #define MASK_NFRA	GENMASK(12, 6)
->  #define MASK_DIVR	GENMASK(8, 7)
->  #define MASK_DIVN	GENMASK(7, 0)
-> 
+> [...]
 
-No (BITMASK did not exist but BIT_MASK does). It looks like clang is
-complaining that mask is an unsigned int and it is being compared
-against ~0ull, which will always be false. This makes the warning go
-away for me, which is similar to commit cfd6fb45cfaf ("crypto: ccree -
-avoid out-of-range warnings from clang"), but I am not sure if that is
-correct or not.
+Applied, thanks!
 
-diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
-index 8fec14120105..11d22043ddd7 100644
---- a/drivers/clk/clk-sp7021.c
-+++ b/drivers/clk/clk-sp7021.c
-@@ -41,7 +41,7 @@ enum {
- /* HIWORD_MASK FIELD_PREP */
- #define HWM_FIELD_PREP(mask, value)		\
- ({						\
--	u32 _m = mask;				\
-+	u64 _m = mask;				\
- 	(_m << 16) | FIELD_PREP(_m, value);	\
- })
- 
+[1/1] drm/rockchip: vop2: fix uninitialized variable possible_crtcs
+      commit: e88adb4ac27a37de4167150b8a6a736d40cf7018
 
-For the record, this only happens under W=1 but I think we would like to
-eventually enable this warning so it would be good to avoid introducing
-new instances.
-
-Cheers,
-Nathan
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
