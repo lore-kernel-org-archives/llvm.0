@@ -1,94 +1,156 @@
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4F28F4A
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 16:27:50 +0000 (UTC)
-Received: by mail-ua1-f47.google.com with SMTP id n17so13037171uaj.10
-        for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 09:27:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1679502470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QcBh8LbgiZnRhxN9ZOExXV06VdRnER7GdJGafrPv3AA=;
-        b=lLbOg/bI0Dt7zVFdc55ZLV/hefFjA7ho51BY5gzdLMX6Oyig4MrRdDK9z9blgXY5bO
-         nuxQ0YLJFsW/vCWmqo22bc0rxCbKlPnqOmxyhuuCSjYyKI4Qz4pTH2nCNdDpLUvaqg5s
-         GkeWJJ0gZynt+siiqozduL/YGDbrgyIkiVMLEzSK/KZ1ZsXCyDNH8f5JUNmeGpIE5+4X
-         ROtBj8CelDicuOx9TKlP8rVfW4qCUWByDs1X3vfCz6UQYz6CMVUneVXA4nWQlFRIKIaR
-         pe9EXYZNLwatGCN+mYjBhxl2EpARc3ka7ArZtYZlWC+mtONp0wmC14KjIkvA0TFJ5YEI
-         ESUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679502470;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QcBh8LbgiZnRhxN9ZOExXV06VdRnER7GdJGafrPv3AA=;
-        b=pi3H3Cy1oL+ptN98d2H4ETwj+mqw+xusyix0tj3jILh5KMCQBHxgmGKFD+kckaLCQj
-         ha3GzmNmV6Egq/YSOMAz+uZw6EGOirstLF/8E/YkiyCQZnAw00N/S3xB9boFmIZvQSAe
-         E1GJHkxiFPds4ueYIQg2zcbZP3Fy312gSolWGguE3jbm8CoGsodU0p8gHCB+j02EJCow
-         tqsCzaUa0MOUgwbliRY9YQ4GYhHotMTUUSQCgupZrlOuaymWUcRmKtOfXME7stspmaZj
-         MKFrHyqx2h4mbUy5qQ4cgHfsR9AxTrCXxtCydSIuuEH0RGwWQZ1hDXQrlyCO1MvfJjuU
-         m8iw==
-X-Gm-Message-State: AO0yUKURftEr9lLhawDqWLhwCnaw248U0NhDyzi1orXjYIadlpn01TBH
-	mjHrPLTTHtO95PoS31S5wdo3xSAUYjue/Y8n/GojYg==
-X-Google-Smtp-Source: AKy350apkN3Ok9m7z9C5n8gXItofIv4O6BGooPA8ZvkwmqTth2C+Qhld0DPukx24/DJ0VdX72givemdT/lEhKYvO67M=
-X-Received: by 2002:a05:6130:228:b0:68b:923a:d6f4 with SMTP id
- s40-20020a056130022800b0068b923ad6f4mr3595319uac.2.1679502469910; Wed, 22 Mar
- 2023 09:27:49 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF8928ED
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 16:36:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8474FC433EF;
+	Wed, 22 Mar 2023 16:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679503000;
+	bh=JtpcCBVdb1GEST8Z6EfeHFkUnh2oyShLs1D02L46UQ0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SaUpxaISsWjOvBWJ/PPWNYvcn0RFA8yaR1kIClK/mOxQ5uLIPk6RIoWaGeVvVefH3
+	 R6SeG4ALqfHZBo3r7xKSAkNdp75V86ue7yemobPGked6puYhKmvmpjpU4/n5h7+Z72
+	 IJWgirTDYBwd1a9ZL6TlRL0RhQz10h0Tve4PKSs2OdzhWUeuBkr072BFP528tVbc61
+	 IatGkYTXKcuj9b+0ZTmSKf0CNg91dT18Ce3RQ6koWEsEEC1La0PdHPZBL5dtxHRtyV
+	 2wZX6A5aPDthSN4rY/gIyW/2AGehpD/86Byts2+VDBlPrn3/7bXhmt2SU5CFlMD4tA
+	 qUYKAUd10kxFA==
+Date: Wed, 22 Mar 2023 09:36:37 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kalle Valo <kvalo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	dri-devel@lists.freedesktop.org, linux-toolchains@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: Linux 6.3-rc3
+Message-ID: <20230322163637.GA918620@dev-arch.thelio-3990X>
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+ <20230320180501.GA598084@dev-arch.thelio-3990X>
+ <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+ <20230320185337.GA615556@dev-arch.thelio-3990X>
+ <87pm91uf9c.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230319143640.1704735-1-trix@redhat.com>
-In-Reply-To: <20230319143640.1704735-1-trix@redhat.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 22 Mar 2023 17:27:39 +0100
-Message-ID: <CAMRc=MfMDLC1npyyjGe+Ph6fNwB_Wau7XDPMAnM-wPzec3_rfA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: pxa: remove unused gpio_is_pxa_type function
-To: Tom Rix <trix@redhat.com>
-Cc: robert.jarzmik@free.fr, linus.walleij@linaro.org, nathan@kernel.org, 
-	ndesaulniers@google.com, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87pm91uf9c.fsf@kernel.org>
 
-On Sun, Mar 19, 2023 at 3:36=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/gpio/gpio-pxa.c:174:19: error: unused function
->   'gpio_is_pxa_type' [-Werror,-Wunused-function]
-> static inline int gpio_is_pxa_type(int type)
->                   ^
-> This function is not used, so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpio/gpio-pxa.c | 5 -----
->  1 file changed, 5 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-pxa.c b/drivers/gpio/gpio-pxa.c
-> index 1198ab0305d0..a1630ed4b741 100644
-> --- a/drivers/gpio/gpio-pxa.c
-> +++ b/drivers/gpio/gpio-pxa.c
-> @@ -171,11 +171,6 @@ static inline struct pxa_gpio_bank *gpio_to_pxabank(=
-struct gpio_chip *c,
->         return chip_to_pxachip(c)->banks + gpio / 32;
->  }
->
-> -static inline int gpio_is_pxa_type(int type)
-> -{
-> -       return (type & MMP_GPIO) =3D=3D 0;
-> -}
-> -
->  static inline int gpio_is_mmp_type(int type)
->  {
->         return (type & MMP_GPIO) !=3D 0;
-> --
-> 2.27.0
->
+On Wed, Mar 22, 2023 at 02:44:47PM +0200, Kalle Valo wrote:
+> Nathan Chancellor <nathan@kernel.org> writes:
+> 
+> > On Mon, Mar 20, 2023 at 11:26:17AM -0700, Linus Torvalds wrote:
+> >> On Mon, Mar 20, 2023 at 11:05 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >> >
+> >> > On the clang front, I am still seeing the following warning turned error
+> >> > for arm64 allmodconfig at least:
+> >> >
+> >> >   drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+> >> >           if (syncpt_irq < 0)
+> >> >               ^~~~~~~~~~
+> >> 
+> >> Hmm. I do my arm64 allmodconfig builds with gcc, and I'm surprised
+> >> that gcc doesn't warn about this.
+> >
+> > Perhaps these would make doing allmodconfig builds with clang more
+> > frequently less painful for you?
+> >
+> > https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
+> 
+> Thank you, at least for me this is really helpful.
 
-Applied, thanks!
+Really glad to hear! I hope this helps make testing and verifying
+changes with clang and LLVM easier for developers and maintainers.
 
-Bart
+> I tried now clang for the first time but seeing a strange problem.
+> 
+> I prefer to define the compiler in GNUmakefile so it's easy to change
+> compilers and I don't need to remember the exact command line. So I have
+> this in the top level GNUmakefile (all the rest commented out):
+> 
+> LLVM=/opt/clang/llvm-16.0.0/bin/
+> 
+> If I run 'make oldconfig' it seems to use clang but after I run just
+> 'make' it seems to switch back to the host GCC compiler and ask for GCC
+> specific config questions again. Workaround for this seems to be adding
+> 'export LLVM' to GNUmakefile, after that also 'make' uses clang as
+> expected.
+
+Interesting... I just tested with a basic GNUmakefile and everything
+seems to work fine without an export. At the same time, the export
+should not hurt anything, so as long as it works, that is what matters.
+
+    $ gcc --version
+    fish: Unknown command: gcc
+
+
+    $ fd -t x . $CBL_TC_LLVM_STORE/16.0.0/bin -x basename
+    clang-16
+    llvm-nm
+    llvm-objdump
+    llvm-objcopy
+    llvm-symbolizer
+    llvm-strings
+    llvm-readobj
+    llvm-dwarfdump
+    lld
+    llvm-ar
+
+
+    $ cat GNUmakefile
+    LLVM := $(CBL_TC_LLVM_STORE)/16.0.0/bin/
+
+    include Makefile
+
+
+    $ make -sj(nproc) defconfig
+
+
+    $ head -13 .config
+    #
+    # Automatically generated file; DO NOT EDIT.
+    # Linux/x86 6.3.0-rc3 Kernel Configuration
+    #
+    CONFIG_CC_VERSION_TEXT="ClangBuiltLinux clang version 16.0.0"
+    CONFIG_GCC_VERSION=0
+    CONFIG_CC_IS_CLANG=y
+    CONFIG_CLANG_VERSION=160000
+    CONFIG_AS_IS_LLVM=y
+    CONFIG_AS_VERSION=160000
+    CONFIG_LD_VERSION=0
+    CONFIG_LD_IS_LLD=y
+    CONFIG_LLD_VERSION=160000
+
+
+    $ make -sj(nproc) init/main.o
+
+
+    $ $CBL_TC_LLVM_STORE/16.0.0/bin/llvm-readelf -p .comment init/main.o
+    String dump of section '.comment':
+    [     1] ClangBuiltLinux clang version 16.0.0
+
+
+I added an informational print and I always saw the correct value:
+
+diff --git a/Makefile b/Makefile
+index a2c310df2145..070394c4cb8c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -431,6 +431,7 @@ HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
+ HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+ 
+ ifneq ($(LLVM),)
++$(info LLVM: $(LLVM))
+ ifneq ($(filter %/,$(LLVM)),)
+ LLVM_PREFIX := $(LLVM)
+ else ifneq ($(filter -%,$(LLVM)),)
+
+If you have any further issues, please do not hesitate to reach out!
+
+Cheers,
+Nathan
