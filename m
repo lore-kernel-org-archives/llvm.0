@@ -1,159 +1,169 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A03BA29
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 20:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679515900;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DrhC7FllxsgQyKYmH7PVCmwU5znnq1FHWdKpaAGGH2w=;
-	b=MPSGfRiRHJ6KyLIlexfRt/sDTZtZP8U7UIt7TDiMqDj4j/JM82uw6nz3WPPysTSlBK2NpF
-	iM6zwatqUtdp+nljaX9mfGPAu8NIw9IL9CD8cbxU4zKoQZDjYReOtH7tMGGtY8kf8xKY9j
-	MKMJTlwGs6z7D5rq2vs2LrwckP4dHnA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-447-Sbe3M5gSOS6QVVZfqvEnhg-1; Wed, 22 Mar 2023 16:11:38 -0400
-X-MC-Unique: Sbe3M5gSOS6QVVZfqvEnhg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 94C8685C06A
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 20:11:38 +0000 (UTC)
-Received: from [172.64.15.49] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7CCA940C6E67;
-	Wed, 22 Mar 2023 20:11:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (96/381 SKIPPED): Test report for master
- (6.3.0-rc3, mainline.kernel.org-clang, a2eaf246)
-Date: Wed, 22 Mar 2023 20:11:38 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0CB2584
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 20:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F4DC433D2;
+	Wed, 22 Mar 2023 20:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679517362;
+	bh=hE2w4AlCqCQiTuP+k7QtxIGexqc4E4HzGht5f7pSXto=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fDOSKjSIElrDPJuw6V2b2pglkrc/0ueVTVDsGM6sjNnd/PEuyhyJb1T6RtmV1aHqw
+	 SIMoOiO6x65Ses4hsJQZF94mB6hA7ICejIHxunue3Z85uEVWnrhGzOxUThl2h/doRC
+	 5oheGbKWN+MG3tF6qkvUdB50x9TLnvfL0nZGwVHRKP2bkaxMHkNP3C9EZaMLyiXs7R
+	 gp417KrBcHyxqrIzwCWjHRTbVTnHWbai2lB29mDvmZgyIbrbygElvVJUDTShIvS53c
+	 vHMb8rlRuy2Ln1AVBPCfxuFK8iEG3e0+0gMFUrxdvrOXc6UDSTuTp6TUE5tub1nwJj
+	 88QkxWs2wLYAQ==
+Date: Wed, 22 Mar 2023 13:36:00 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kalle Valo <kvalo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	dri-devel@lists.freedesktop.org, linux-toolchains@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: Linux 6.3-rc3
+Message-ID: <20230322203600.GA2837284@dev-arch.thelio-3990X>
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+ <20230320180501.GA598084@dev-arch.thelio-3990X>
+ <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+ <20230320185337.GA615556@dev-arch.thelio-3990X>
+ <87pm91uf9c.fsf@kernel.org>
+ <20230322163637.GA918620@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <83268.123032216113802579@us-mta-447.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230322163637.GA918620@dev-arch.thelio-3990X>
 
-Hi, we tested your kernel and here are the results:
+On Wed, Mar 22, 2023 at 09:36:37AM -0700, Nathan Chancellor wrote:
+> On Wed, Mar 22, 2023 at 02:44:47PM +0200, Kalle Valo wrote:
+> > Nathan Chancellor <nathan@kernel.org> writes:
+> > 
+> > > On Mon, Mar 20, 2023 at 11:26:17AM -0700, Linus Torvalds wrote:
+> > >> On Mon, Mar 20, 2023 at 11:05 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >> >
+> > >> > On the clang front, I am still seeing the following warning turned error
+> > >> > for arm64 allmodconfig at least:
+> > >> >
+> > >> >   drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+> > >> >           if (syncpt_irq < 0)
+> > >> >               ^~~~~~~~~~
+> > >> 
+> > >> Hmm. I do my arm64 allmodconfig builds with gcc, and I'm surprised
+> > >> that gcc doesn't warn about this.
+> > >
+> > > Perhaps these would make doing allmodconfig builds with clang more
+> > > frequently less painful for you?
+> > >
+> > > https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
+> > 
+> > Thank you, at least for me this is really helpful.
+> 
+> Really glad to hear! I hope this helps make testing and verifying
+> changes with clang and LLVM easier for developers and maintainers.
+> 
+> > I tried now clang for the first time but seeing a strange problem.
+> > 
+> > I prefer to define the compiler in GNUmakefile so it's easy to change
+> > compilers and I don't need to remember the exact command line. So I have
+> > this in the top level GNUmakefile (all the rest commented out):
+> > 
+> > LLVM=/opt/clang/llvm-16.0.0/bin/
+> > 
+> > If I run 'make oldconfig' it seems to use clang but after I run just
+> > 'make' it seems to switch back to the host GCC compiler and ask for GCC
+> > specific config questions again. Workaround for this seems to be adding
+> > 'export LLVM' to GNUmakefile, after that also 'make' uses clang as
+> > expected.
+> 
+> Interesting... I just tested with a basic GNUmakefile and everything
+> seems to work fine without an export. At the same time, the export
+> should not hurt anything, so as long as it works, that is what matters.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Ah, the export is needed so that mixed-build works properly (see lines
+324 to 361 in Makefile), as 'make' will be called to process each target
+individually; without the export, LLVM is not set for the subsequent
+'make' calls, so gcc is called. I just saw the same behavior as you did
+while testing with
 
-Tested-by: CKI Project <cki-project@redhat.com>
+  $ make -j(nproc) clean defconfig all
 
-Kernel information:
-    Commit message: Merge tag 'nfsd-6.3-3' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/cel/linux
+without the export (GCC was used instead of LLVM).
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/80566
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Libkcapi AF_ALG test: alg: timeout due to an unusually slow =
-machine
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1395
-            Affected tests:
-                  x86_64 (debug) - Libkcapi AF_ALG test
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: stress-ng invoked oom-killer: gf=
-p_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=3D0, o=
-om_score_adj=3D1000
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1214
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: SELinux prevents pipefs
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1541
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: (panic) Comm: systemd-oomd Not t=
-ainted 6.1.0-rc3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1461
-            Affected tests:
-                   s390x - stress: stress-ng - memory
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+>     $ gcc --version
+>     fish: Unknown command: gcc
+> 
+> 
+>     $ fd -t x . $CBL_TC_LLVM_STORE/16.0.0/bin -x basename
+>     clang-16
+>     llvm-nm
+>     llvm-objdump
+>     llvm-objcopy
+>     llvm-symbolizer
+>     llvm-strings
+>     llvm-readobj
+>     llvm-dwarfdump
+>     lld
+>     llvm-ar
+> 
+> 
+>     $ cat GNUmakefile
+>     LLVM := $(CBL_TC_LLVM_STORE)/16.0.0/bin/
+> 
+>     include Makefile
+> 
+> 
+>     $ make -sj(nproc) defconfig
+> 
+> 
+>     $ head -13 .config
+>     #
+>     # Automatically generated file; DO NOT EDIT.
+>     # Linux/x86 6.3.0-rc3 Kernel Configuration
+>     #
+>     CONFIG_CC_VERSION_TEXT="ClangBuiltLinux clang version 16.0.0"
+>     CONFIG_GCC_VERSION=0
+>     CONFIG_CC_IS_CLANG=y
+>     CONFIG_CLANG_VERSION=160000
+>     CONFIG_AS_IS_LLVM=y
+>     CONFIG_AS_VERSION=160000
+>     CONFIG_LD_VERSION=0
+>     CONFIG_LD_IS_LLD=y
+>     CONFIG_LLD_VERSION=160000
+> 
+> 
+>     $ make -sj(nproc) init/main.o
+> 
+> 
+>     $ $CBL_TC_LLVM_STORE/16.0.0/bin/llvm-readelf -p .comment init/main.o
+>     String dump of section '.comment':
+>     [     1] ClangBuiltLinux clang version 16.0.0
+> 
+> 
+> I added an informational print and I always saw the correct value:
+> 
+> diff --git a/Makefile b/Makefile
+> index a2c310df2145..070394c4cb8c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -431,6 +431,7 @@ HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
+>  HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
+>  
+>  ifneq ($(LLVM),)
+> +$(info LLVM: $(LLVM))
+>  ifneq ($(filter %/,$(LLVM)),)
+>  LLVM_PREFIX := $(LLVM)
+>  else ifneq ($(filter -%,$(LLVM)),)
+> 
+> If you have any further issues, please do not hesitate to reach out!
+> 
+> Cheers,
+> Nathan
+> 
