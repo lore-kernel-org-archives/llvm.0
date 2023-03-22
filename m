@@ -1,356 +1,158 @@
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2070.outbound.protection.outlook.com [40.107.93.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18692291E
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 13:38:50 +0000 (UTC)
-Received: (Authenticated sender: alex@ghiti.fr)
-	by mail.gandi.net (Postfix) with ESMTPSA id C1BD960013;
-	Wed, 22 Mar 2023 13:38:35 +0000 (UTC)
-Message-ID: <459b4e6d-f469-d7f3-99e4-2efbc461b61d@ghiti.fr>
-Date: Wed, 22 Mar 2023 14:38:34 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767522F21
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 13:46:13 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IWYpm+/spXhJrevR/GVpfZBktcWsZle5Qe3lmDgIQBXEp0Nx+IVFho0Hi8p1jYDQdv9QarLv1aypGc6X0FC1xcL0NdZxeTJscAa66K5tL+OQJHdN2+4eM7HqbItM6xV2h9pZ324hXC4gEewgeAkBs9A5XcNX6onAlv955UoaQsAZ54+UuPpBNEUhb0aMNuiWJmc1x/wac6WykJrMszvvv5Ivxz5s0RLvusZspdnFQGwp7vCRNDyk36Td6K1OU2IU6fA420mt5b7WHWIFLb0z5ZbeC3SW3ndU/9ormLllCquvKcGyBWdO2npQnaWIUPSMqh0pzCnGtvIu0/oIxBdu9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ultFKFMecxFpI+W/s7nys7r3AQRcPMpqRIglnCIc0Xo=;
+ b=K1iXSHBExHuYSmroEDgZyDslwU76CSDt1pi6hIKG+54i9aN3V4b4jjNZnkgAbeTUPv5StXRdQU3EVv2IXtOrw4zQsTBi9QRCj7kE0aWzR9KM+vZvWZVcEcj8U6cdCZmrg+dRmbqfaCzbEhTetr3/wwk0vFaJUAhfmQbJqhE4ZSAyhwPcyqOG84SH5XdZGmblKVD57eawjXMeCGcl2PfGSbaZIBC+8mSUbwNIpFCY73Sz2VRlJkV2ex+PuBwK0nsTkAKB7wbA4JoozehK2BdBZxYAGZPht0RyHYy2hEsda595+IwpQwhwOPzsBUl8NGoV9iXW+bnhoNhdc716O6qteA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ultFKFMecxFpI+W/s7nys7r3AQRcPMpqRIglnCIc0Xo=;
+ b=pfLmMoz7fQkAO846B6v+BIJ/IuQwjcxmWHLUgj3lr+WqDRXBCE6kVZz0KJpP3TenOd6EZ+MPl8ptzAgBMc0Qo+Gt2qd1Aapw82mmH5+OQNUOhs2HI0euZVs88ODG/7GCYoDf9AuoqrX1XLVYSXBCz8VoWgQv8K+rzZmyLjIr4vBunwHBudS9C2/X/9PtD6fSKsvqhnjPkjnGSrELEJf3uzkgMcA26EQ4HdBW4Vp0RD2Oy/LdCmtNq0HokrXBPI9WZ4Ikj+/WvHPqcVzp5rqZHthqi2BndN0v2HKe6TzLDf8acVf0zwPY3ygN8R3ZyYZUAvOiO1ApcudD2uYw+yaubQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ IA1PR12MB6305.namprd12.prod.outlook.com (2603:10b6:208:3e7::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 13:46:11 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::5464:997b:389:4b07]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::5464:997b:389:4b07%9]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 13:46:11 +0000
+Message-ID: <85946aff-0cf7-62ca-60f6-e95c65b67e51@nvidia.com>
+Date: Wed, 22 Mar 2023 13:46:02 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] dmaengine: tegra-apb: remove unused tdma_read function
+Content-Language: en-US
+To: Tom Rix <trix@redhat.com>, ldewangan@nvidia.com, vkoul@kernel.org,
+ thierry.reding@gmail.com, nathan@kernel.org, ndesaulniers@google.com
+Cc: dmaengine@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230322121001.2569909-1-trix@redhat.com>
+From: Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20230322121001.2569909-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LNXP265CA0054.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:5d::18) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
-Content-Language: en-US
-From: Alexandre Ghiti <alex@ghiti.fr>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, nathan@kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, ndesaulniers@google.com,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-References: <20230215143626.453491-1-alexghiti@rivosinc.com>
- <20230215143626.453491-2-alexghiti@rivosinc.com>
- <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
-In-Reply-To: <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|IA1PR12MB6305:EE_
+X-MS-Office365-Filtering-Correlation-Id: b17f11ee-0542-46c0-b78e-08db2adbcbae
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	RmtQodHDwwD9+ewixnk/odLgnYbCIp4aePxdIhORAqCzgz7T93mo+I8zJ7xBmA9PUAa9hSQVpoyLYj4cA9KDYILYBSTn7pv9p0n5LvPK5THj4VfSovy9DkvX11mJSaUSDVBj0reS2TFWmTMdbhqN/cnnIT0YEokg+zeGLAQvY0PT34qtf2EFBKps3AT1eEVMGONVRYA7CcLXrz6xtfE8qN45A7Ny7TTSFC3ViPCI+o81LWNJLd0vmUieWNiB9frGsNShq0OT5Dj39B3DWo3yGM0Did3TYz/eKa3s8WGZkRLhqWHZ6wHWg2nCg0EGM/JP9JcAap6/uoRLGDXkGDePsh7hOt1VA3l5ziyyTDfH1DK6ettiQ1YXH3LWJKAtF475cf5WGDRHglgXQbsZex0AWFzPQKwDu9d3/95+86ja8PrnKocM4iFYhz0+7S317ipprwiCYvKZIEilZy3rrox7uoebq6sgMnZbUT9EKJN6s2SyNR/1SKUKpmVNUqNs0SyvXr3AqhpFykOLgzCUriTPmI3922SZ77i1LHSDb1W211Rv+UbpeaUAsfUwmlW95zLPWF2jq7TRXYJN+6TnRI2RiSDKa7BiOYTB44WLMXh63KJT5bG9Bxif/OOkZUNG99VC4jHcYgcedIJtXsWobOpPnBrrDVoQ3Av/3cXYuuJBg7+h76ayOX/8AsEPwvv2jl/uuH6MpXsOkgJRM7wOfxYhV28QyKokOvKiGf/FF8zXNwM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(136003)(346002)(396003)(451199018)(5660300002)(41300700001)(86362001)(38100700002)(8936002)(36756003)(31696002)(2906002)(4326008)(6666004)(6486002)(83380400001)(53546011)(478600001)(2616005)(186003)(6512007)(6506007)(8676002)(31686004)(316002)(66946007)(66556008)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZGVEQkgySEVrL05xazVEcnpGb2xpYXI0ZDR2ZytzRGNGWXo2NCtNMU5Cc0pB?=
+ =?utf-8?B?Q0luVVlsM3phaGFFc2JzTEtYQml2dTZJNzhOOFlsN2xHMFY2Ym05c1lCNlpP?=
+ =?utf-8?B?RjlJWlhjRzdQMjVveEN6Ync4WEhNU25MbWI5T25UaGFhR3B6MTdjWGJVdE9t?=
+ =?utf-8?B?OXhyOXU4dUY5dHdNMDcwUTRlQmw1UENYR3FTQnVTVmFKeFRBNlVqWG4wZWFu?=
+ =?utf-8?B?dlJVSkZOWEFDVzRrNHFpZE91SmxTcFBWbnRqK3ZhakpDNGlHWDl6ZmV5ZzJ3?=
+ =?utf-8?B?aFlPRFNFNDYyRno5bUFCNjFUdmE2aVdkWkhDMWloVXp2a2x6UmNrVFBMb1dJ?=
+ =?utf-8?B?MlBic2NiTFI5dWRPRFU0NTVhdTlOUTN2QlFrWklJUlRPOFRTdG5zYTIvSGVh?=
+ =?utf-8?B?VkFBbS9kV3B1djU1TkdYWjRIWUg3Ykd6OURrVVFBazM2UnN5RzNaeEFjaEZ0?=
+ =?utf-8?B?L2x2VFp2eEhjWkxZVXo5OEptZ1RxZjluUkdFS05YNHN0cUtHR1NxQ3d1RXNQ?=
+ =?utf-8?B?eWI4ZU5BUk5VaXFVK3p0SFhwanorQUIyU2k4NW5KRUVVa3UrSkJ1YWlHUm9X?=
+ =?utf-8?B?UWtpK0RZR3NPdjE3L2JvWWRrT2dLTWVEZXE3RjlobmpNNURhdWwxNHlhcE9G?=
+ =?utf-8?B?bFYrNzc0cXQySitEWVh3MEJsME1WTDZweEdUQnRHejdOMXltaHRQMjdMK1FF?=
+ =?utf-8?B?dXdFTTFZVGVzUlRNZGxXOFJ0K0dYRnRIRXNuUGI1dDcwUmkrRlV4TS9RSzRa?=
+ =?utf-8?B?NHJIaXZ3bVBwdkl4SEdYVnBjNXFwd2J0WDFRQUxXaDJKUEc1ejF2TCtuRDV2?=
+ =?utf-8?B?WUhLeXlOdkRGMVI2eUdQTFVkN3B6YkIya09Lc1dUMnRSS3FzMFpyVG1xZUp3?=
+ =?utf-8?B?NmJIMFZBMHhqSUt3YXJ3dXVhUGJ6OHdJOGpQTitnWXdWbzg2K3Awd3hhZnk1?=
+ =?utf-8?B?d0VQcUNMS0FWbkxRUTczSEYrODkwQzJOZGlBWEYwbloxL2dKSU1yUGZnelVI?=
+ =?utf-8?B?TFZESWJPUnRaeEs1b2h2MVJsQytjK2RhMkQzemFyOG1oQzJkQlNwc0QzTWp3?=
+ =?utf-8?B?VjBtajdTSDJsbGlCcVh0ZW8wY2liN2pqd24ycVRob0xIRVV2bVZOQy95UXZo?=
+ =?utf-8?B?cVRjb3MxdFBrcGViT2h5S2ZBK204aDk1Y01uMnBIc2lRRml6SFZQcWRkOW5W?=
+ =?utf-8?B?NXB0Rm8wRktHdXlpcGJOZy9PZlVzeDA1dXIyU2tYc091TWpwNThucjRrbVhp?=
+ =?utf-8?B?TmtoMmZqT3RNV0dxSjNmSmZ6QmRna2w1ZGNXb2NuVWVMaUlTSWtYYUtkVS9Z?=
+ =?utf-8?B?eVlUbWhqeTM1NnR5eTRtODVranVRVU11NWY3ZmJ2dWgxMkFOSHBWWkJZa0ti?=
+ =?utf-8?B?QWtZaEExMU1uUnNUN1QxT2dSWVdXNmhQaEE2Wklra2xHY3ZjR1pHVzZVcGxt?=
+ =?utf-8?B?aWxBempRTXA5cE9KdzVlRldHNnhxUGY1Y0VmTmxjZVAxT0ZDVVEvc1hTa2kx?=
+ =?utf-8?B?a28rUWRrOWZBK1M3UGxvUTMzQ0R3RGNVcXIyR2JNMXBOL2ltbjFTYlJKWStK?=
+ =?utf-8?B?S2M1S0ZrZG9tcWhwUk9zZmlQYkpZZnVNbVpFQWpKaWg0OFJZb3hucTVuSFJu?=
+ =?utf-8?B?K0xqeXFIaWVuUzhpOFFEaTNwem5EdVlHc3lUZEpreUg5UWg5NkxOV2RzZWs0?=
+ =?utf-8?B?empTTnBKZjMrSXl3UWZCZDRFVm5RQzFSeDNiT1RkWmhzdktGYktuVXZMZE5F?=
+ =?utf-8?B?UEFtT2NvL1dnTjg5VkRkN1BNRlo0V2psQ3U3Q0hOL2YzZHdlVXNLY0xGUmpX?=
+ =?utf-8?B?cGVNVUEvZUNmN1RpZ0I0QU9Ub1VFVTZuVDBsZk1WNCtUWksyWi9ldmZ0TlhB?=
+ =?utf-8?B?MjFWU0ZRYmJvMi9jM29wM3dUWVRLMGU4SnYrTDluZ2krR1pWQld4RmhLbjM2?=
+ =?utf-8?B?VytCc1IwNURBcFBvMzEzYUhwMEFFckZSaEVnc2JvcnNXRU51UHVleVNDeUY0?=
+ =?utf-8?B?TTBiZ213L1pKTnZERUlHcHcyUkx0emJDVnVmT0tSbVkrY0N4Umh1cUNPRTVT?=
+ =?utf-8?B?dnk4akdsQVlhbkdmSXUwWDkvQVA4RnlsL3JIWkFjY2kva0M5R0I0OGk3d1N6?=
+ =?utf-8?B?cU4vL1k5MFVQVnBvUmpzWkFFTlRDUDM2THp3TUd0d1lkL3Fzd0JIeDI0Smps?=
+ =?utf-8?B?SVJ1Tkp1SjNRL3JtVDA3NU0xRGg5UUl4SnV1aXd2N2FBbnBoa2JmMEdPak5D?=
+ =?utf-8?B?ZTZNeHhrSDdJNDFwRmZRREF3c1J3PT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b17f11ee-0542-46c0-b78e-08db2adbcbae
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 13:46:10.9454
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: D1r0XEGEzL4K4Jeu3N6pQsYF32v7vh+clG3FUv84nT1p6EVpsxaOjnHhjurJvH5YcOd/KeHx/Sj7UPjdSaQh5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6305
 
-@linux-kbuild: Does anyone has an idea to solve this?
+
+
+On 22/03/2023 12:10, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/dma/tegra20-apb-dma.c:236:19: error: unused function
+>    'tdma_read' [-Werror,-Wunused-function]
+> static inline u32 tdma_read(struct tegra_dma *tdma, u32 reg)
+>                    ^
+> This function is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>   drivers/dma/tegra20-apb-dma.c | 5 -----
+>   1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/dma/tegra20-apb-dma.c b/drivers/dma/tegra20-apb-dma.c
+> index eaafcbe4ca94..cc6b91f48979 100644
+> --- a/drivers/dma/tegra20-apb-dma.c
+> +++ b/drivers/dma/tegra20-apb-dma.c
+> @@ -233,11 +233,6 @@ static inline void tdma_write(struct tegra_dma *tdma, u32 reg, u32 val)
+>   	writel(val, tdma->base_addr + reg);
+>   }
+>   
+> -static inline u32 tdma_read(struct tegra_dma *tdma, u32 reg)
+> -{
+> -	return readl(tdma->base_addr + reg);
+> -}
+> -
+>   static inline void tdc_write(struct tegra_dma_channel *tdc,
+>   			     u32 reg, u32 val)
+>   {
+
 
 Thanks!
 
-On 2/22/23 13:29, Alexandre Ghiti wrote:
-> +cc linux-kbuild, llvm, Nathan, Nick
->
-> On 2/15/23 15:36, Alexandre Ghiti wrote:
->> From: Alexandre Ghiti <alex@ghiti.fr>
->>
->> This config allows to compile 64b kernel as PIE and to relocate it at
->> any virtual address at runtime: this paves the way to KASLR.
->> Runtime relocation is possible since relocation metadata are embedded 
->> into
->> the kernel.
->>
->> Note that relocating at runtime introduces an overhead even if the
->> kernel is loaded at the same address it was linked at and that the 
->> compiler
->> options are those used in arm64 which uses the same RELA relocation
->> format.
->>
->> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
->> ---
->>   arch/riscv/Kconfig              | 14 +++++++++
->>   arch/riscv/Makefile             |  7 +++--
->>   arch/riscv/kernel/efi-header.S  |  6 ++--
->>   arch/riscv/kernel/vmlinux.lds.S | 10 ++++--
->>   arch/riscv/mm/Makefile          |  4 +++
->>   arch/riscv/mm/init.c            | 54 ++++++++++++++++++++++++++++++++-
->>   6 files changed, 87 insertions(+), 8 deletions(-)
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index e2b656043abf..e0ee7ce4b2e3 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -544,6 +544,20 @@ config COMPAT
->>           If you want to execute 32-bit userspace applications, say Y.
->>   +config RELOCATABLE
->> +    bool "Build a relocatable kernel"
->> +    depends on MMU && 64BIT && !XIP_KERNEL
->> +    help
->> +          This builds a kernel as a Position Independent Executable 
->> (PIE),
->> +          which retains all relocation metadata required to relocate 
->> the
->> +          kernel binary at runtime to a different virtual address 
->> than the
->> +          address it was linked at.
->> +          Since RISCV uses the RELA relocation format, this requires a
->> +          relocation pass at runtime even if the kernel is loaded at 
->> the
->> +          same address it was linked at.
->> +
->> +          If unsure, say N.
->> +
->>   endmenu # "Kernel features"
->>     menu "Boot options"
->> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
->> index 82153960ac00..97c34136b027 100644
->> --- a/arch/riscv/Makefile
->> +++ b/arch/riscv/Makefile
->> @@ -7,9 +7,12 @@
->>   #
->>     OBJCOPYFLAGS    := -O binary
->> -LDFLAGS_vmlinux :=
->> +ifeq ($(CONFIG_RELOCATABLE),y)
->> +    LDFLAGS_vmlinux += -shared -Bsymbolic -z notext -z norelro
->> +    KBUILD_CFLAGS += -fPIE
->> +endif
->>   ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
->> -    LDFLAGS_vmlinux := --no-relax
->> +    LDFLAGS_vmlinux += --no-relax
->>       KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
->>       CC_FLAGS_FTRACE := -fpatchable-function-entry=8
->>   endif
->> diff --git a/arch/riscv/kernel/efi-header.S 
->> b/arch/riscv/kernel/efi-header.S
->> index 8e733aa48ba6..f7ee09c4f12d 100644
->> --- a/arch/riscv/kernel/efi-header.S
->> +++ b/arch/riscv/kernel/efi-header.S
->> @@ -33,7 +33,7 @@ optional_header:
->>       .byte    0x02                    // MajorLinkerVersion
->>       .byte    0x14                    // MinorLinkerVersion
->>       .long    __pecoff_text_end - efi_header_end    // SizeOfCode
->> -    .long    __pecoff_data_virt_size            // 
->> SizeOfInitializedData
->> +    .long    __pecoff_data_virt_end - __pecoff_text_end    // 
->> SizeOfInitializedData
->>       .long    0                    // SizeOfUninitializedData
->>       .long    __efistub_efi_pe_entry - _start        // 
->> AddressOfEntryPoint
->>       .long    efi_header_end - _start            // BaseOfCode
->> @@ -91,9 +91,9 @@ section_table:
->>           IMAGE_SCN_MEM_EXECUTE            // Characteristics
->>         .ascii    ".data\0\0\0"
->> -    .long    __pecoff_data_virt_size            // VirtualSize
->> +    .long    __pecoff_data_virt_end - __pecoff_text_end    // 
->> VirtualSize
->>       .long    __pecoff_text_end - _start        // VirtualAddress
->> -    .long    __pecoff_data_raw_size            // SizeOfRawData
->> +    .long    __pecoff_data_raw_end - __pecoff_text_end    // 
->> SizeOfRawData
->>       .long    __pecoff_text_end - _start        // PointerToRawData
->>         .long    0                    // PointerToRelocations
->> diff --git a/arch/riscv/kernel/vmlinux.lds.S 
->> b/arch/riscv/kernel/vmlinux.lds.S
->> index 4e6c88aa4d87..8be2de3be08c 100644
->> --- a/arch/riscv/kernel/vmlinux.lds.S
->> +++ b/arch/riscv/kernel/vmlinux.lds.S
->> @@ -122,9 +122,15 @@ SECTIONS
->>           *(.sdata*)
->>       }
->>   +    .rela.dyn : ALIGN(8) {
->> +        __rela_dyn_start = .;
->> +        *(.rela .rela*)
->> +        __rela_dyn_end = .;
->> +    }
->> +
->
->
-> So I realized those relocations would be better in the init section so 
-> we can get rid of them at some point. So I tried the following:
->
-> diff --git a/arch/riscv/kernel/vmlinux.lds.S 
-> b/arch/riscv/kernel/vmlinux.lds.S
-> index 7ac215467fd5..6111023a89ef 100644
-> --- a/arch/riscv/kernel/vmlinux.lds.S
-> +++ b/arch/riscv/kernel/vmlinux.lds.S
-> @@ -93,6 +93,12 @@ SECTIONS
->                 *(.rel.dyn*)
->         }
->
-> +       .rela.dyn : ALIGN(8) {
-> +               __rela_dyn_start = .;
-> +               *(.rela .rela*)
-> +               __rela_dyn_end = .;
-> +       }
-> +
->         __init_data_end = .;
->
->         . = ALIGN(8);
-> @@ -119,12 +125,6 @@ SECTIONS
->                 *(.sdata*)
->         }
->
-> -       .rela.dyn : ALIGN(8) {
-> -               __rela_dyn_start = .;
-> -               *(.rela .rela*)
-> -               __rela_dyn_end = .;
-> -       }
-> -
->  #ifdef CONFIG_EFI
->         .pecoff_edata_padding : { BYTE(0); . = 
-> ALIGN(PECOFF_FILE_ALIGNMENT); }
->         __pecoff_data_raw_end = ABSOLUTE(.);
->
->
-> But then all the relocations in vmlinux end up being null:
->
-> vmlinux:     file format elf64-littleriscv
->
-> $ riscv64-linux-gnu-objdump -R vmlinux
->
-> DYNAMIC RELOCATION RECORDS
-> OFFSET           TYPE              VALUE
-> 0000000000000000 R_RISCV_NONE      *ABS*
-> 0000000000000000 R_RISCV_NONE      *ABS*
-> ....
->
->  I also noticed that re-linking vmlinux with the same command right 
-> after works (ie, the relocations are now valid):
->
-> $ riscv64-linux-gnu-objdump -R vmlinux
->
-> vmlinux:     file format elf64-littleriscv
->
-> DYNAMIC RELOCATION RECORDS
-> OFFSET           TYPE              VALUE
-> ffffffff82600718 R_RISCV_RELATIVE  *ABS*-0x000000007d9ff8e8
-> ffffffff82600720 R_RISCV_RELATIVE  *ABS*-0x000000007d9ff8e8
-> ...
->
-> Below is the command used to generate this working vmlinux:
->
-> riscv64-unknown-linux-gnu-ld -melf64lriscv -z noexecstack 
-> --no-warn-rwx-segments -shared -Bsymbolic -z notext -z norelro 
-> --no-relax --build-id=sha1 --script=./arch/riscv/kernel/vmlinux.lds 
-> -Map=vmlinux.map -o vmlinux --whole-archive vmlinux.a 
-> .vmlinux.export.o init/version-timestamp.o --no-whole-archive 
-> --start-group ./drivers/firmware/efi/libstub/lib.a --end-group 
-> .tmp_vmlinux.kallsyms3.o
->
-> I tried a lot of things, but I struggle to understand, does anyone 
-> have any idea? FYI, the same problem happens with LLVM.
->
-> Thanks,
->
-> Alex
->
->
->>   #ifdef CONFIG_EFI
->>       .pecoff_edata_padding : { BYTE(0); . = 
->> ALIGN(PECOFF_FILE_ALIGNMENT); }
->> -    __pecoff_data_raw_size = ABSOLUTE(. - __pecoff_text_end);
->> +    __pecoff_data_raw_end = ABSOLUTE(.);
->>   #endif
->>         /* End of data section */
->> @@ -134,7 +140,7 @@ SECTIONS
->>     #ifdef CONFIG_EFI
->>       . = ALIGN(PECOFF_SECTION_ALIGNMENT);
->> -    __pecoff_data_virt_size = ABSOLUTE(. - __pecoff_text_end);
->> +    __pecoff_data_virt_end = ABSOLUTE(.);
->>   #endif
->>       _end = .;
->>   diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
->> index 2ac177c05352..b85e9e82f082 100644
->> --- a/arch/riscv/mm/Makefile
->> +++ b/arch/riscv/mm/Makefile
->> @@ -1,6 +1,10 @@
->>   # SPDX-License-Identifier: GPL-2.0-only
->>     CFLAGS_init.o := -mcmodel=medany
->> +ifdef CONFIG_RELOCATABLE
->> +CFLAGS_init.o += -fno-pie
->> +endif
->> +
->>   ifdef CONFIG_FTRACE
->>   CFLAGS_REMOVE_init.o = $(CC_FLAGS_FTRACE)
->>   CFLAGS_REMOVE_cacheflush.o = $(CC_FLAGS_FTRACE)
->> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->> index 7f01c2e56efe..3862696c2ac9 100644
->> --- a/arch/riscv/mm/init.c
->> +++ b/arch/riscv/mm/init.c
->> @@ -20,6 +20,9 @@
->>   #include <linux/dma-map-ops.h>
->>   #include <linux/crash_dump.h>
->>   #include <linux/hugetlb.h>
->> +#ifdef CONFIG_RELOCATABLE
->> +#include <linux/elf.h>
->> +#endif
->>     #include <asm/fixmap.h>
->>   #include <asm/tlbflush.h>
->> @@ -146,7 +149,7 @@ static void __init print_vm_layout(void)
->>           print_ml("kasan", KASAN_SHADOW_START, KASAN_SHADOW_END);
->>   #endif
->>   -        print_ml("kernel", (unsigned long)KERNEL_LINK_ADDR,
->> +        print_ml("kernel", (unsigned long)kernel_map.virt_addr,
->>                (unsigned long)ADDRESS_SPACE_END);
->>       }
->>   }
->> @@ -854,6 +857,44 @@ static __init void set_satp_mode(uintptr_t dtb_pa)
->>   #error "setup_vm() is called from head.S before relocate so it 
->> should not use absolute addressing."
->>   #endif
->>   +#ifdef CONFIG_RELOCATABLE
->> +extern unsigned long __rela_dyn_start, __rela_dyn_end;
->> +
->> +static void __init relocate_kernel(void)
->> +{
->> +    Elf64_Rela *rela = (Elf64_Rela *)&__rela_dyn_start;
->> +    /*
->> +     * This holds the offset between the linked virtual address and the
->> +     * relocated virtual address.
->> +     */
->> +    uintptr_t reloc_offset = kernel_map.virt_addr - KERNEL_LINK_ADDR;
->> +    /*
->> +     * This holds the offset between kernel linked virtual address and
->> +     * physical address.
->> +     */
->> +    uintptr_t va_kernel_link_pa_offset = KERNEL_LINK_ADDR - 
->> kernel_map.phys_addr;
->> +
->> +    for ( ; rela < (Elf64_Rela *)&__rela_dyn_end; rela++) {
->> +        Elf64_Addr addr = (rela->r_offset - va_kernel_link_pa_offset);
->> +        Elf64_Addr relocated_addr = rela->r_addend;
->> +
->> +        if (rela->r_info != R_RISCV_RELATIVE)
->> +            continue;
->> +
->> +        /*
->> +         * Make sure to not relocate vdso symbols like rt_sigreturn
->> +         * which are linked from the address 0 in vmlinux since
->> +         * vdso symbol addresses are actually used as an offset from
->> +         * mm->context.vdso in VDSO_OFFSET macro.
->> +         */
->> +        if (relocated_addr >= KERNEL_LINK_ADDR)
->> +            relocated_addr += reloc_offset;
->> +
->> +        *(Elf64_Addr *)addr = relocated_addr;
->> +    }
->> +}
->> +#endif /* CONFIG_RELOCATABLE */
->> +
->>   #ifdef CONFIG_XIP_KERNEL
->>   static void __init create_kernel_page_table(pgd_t *pgdir,
->>                           __always_unused bool early)
->> @@ -1039,6 +1080,17 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->>       BUG_ON((kernel_map.virt_addr + kernel_map.size) > 
->> ADDRESS_SPACE_END - SZ_4K);
->>   #endif
->>   +#ifdef CONFIG_RELOCATABLE
->> +    /*
->> +     * Early page table uses only one PUD, which makes it possible
->> +     * to map PUD_SIZE aligned on PUD_SIZE: if the relocation offset
->> +     * makes the kernel cross over a PUD_SIZE boundary, raise a bug
->> +     * since a part of the kernel would not get mapped.
->> +     */
->> +    BUG_ON(PUD_SIZE - (kernel_map.virt_addr & (PUD_SIZE - 1)) < 
->> kernel_map.size);
->> +    relocate_kernel();
->> +#endif
->> +
->>       apply_early_boot_alternatives();
->>       pt_ops_set_early();
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+
+Jon
+
+-- 
+nvpublic
