@@ -1,45 +1,48 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6E410788;
-	Tue, 21 Mar 2023 22:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A35C10E5;
+	Wed, 22 Mar 2023 00:53:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679437199; x=1710973199;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KkKXJs01d6aNUn4ec8jm1yRJxeI+Isjz4/G3GmiRxUM=;
-  b=kZtJcxdm18TXS6rmU4n/5GWIdzjfzmK/KoYgiwpIhbYsYYuCnjIOIm1t
-   0BCo94dJ5Acl4+sm60LBQ0ED34jBxWI98irmjUiH9sGRPy3xQmfBejYrv
-   nw16vf9CUjve6r5jEDkuTfnW8FhNuU4nCIGoMLLYBsOTgdo/ZjZwbjXsu
-   FobYpIJs7bl0681taqWIDJh5KCauJCybEPxpliUzJaWEoXFT1n4avhmMq
-   +Fm0SY9yTSW+8GDydEZh768VOg3Uf1TjMRNqlhzWXqukaDUuTn5KT2GsO
-   n9xBuYdIeZ659ILFVSyUKU4U0Sy3O8mDQsWQaZqmSCZS4u5jh9P5LcDVG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="327449635"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="327449635"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 15:19:59 -0700
+  t=1679446400; x=1710982400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PW5+lKHrsPBo20QJvQbLwYxaOXo5Xht6FFbihrbgyK4=;
+  b=CWI/emYpQx4320ZTpO+KVUNxCbmwSFzWdusNiU3Mn2iUKJzkyEk8Rp2I
+   IwWMAVB8Z3OnAdqS+Hwdsx+URJeuHkstNzooo6rLKuSnenan7swrDi4MI
+   fxO9dfi53drt480zcBXwmW9HeuRbHH9TElNhtKu1G19csnsHBg9AfSEy2
+   RtsfZZI+ppmFr8kKr8YskZstFFnGa12Or/bTXJkQrudeffRU2hxRM1i8R
+   hVHqeSi2SWSaq8/b/yN4qfcHegiQrT+vSceCNvUsm2FlUiIq0IJaoPwWY
+   LmW2Qma0giZYi+mgYeX3bUQlDYOClAf6tyISP6fnVzikJCq+EeUczNJW4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="403980145"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="403980145"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2023 17:53:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="714166500"
-X-IronPort-AV: E=Sophos;i="5.98,279,1673942400"; 
-   d="scan'208";a="714166500"
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="1011178333"
+X-IronPort-AV: E=Sophos;i="5.98,280,1673942400"; 
+   d="scan'208";a="1011178333"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 21 Mar 2023 15:19:57 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 21 Mar 2023 17:53:04 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pekKh-000CTa-2u;
-	Tue, 21 Mar 2023 22:19:56 +0000
-Date: Wed, 22 Mar 2023 06:19:09 +0800
+	id 1pemit-000Ccg-25;
+	Wed, 22 Mar 2023 00:53:03 +0000
+Date: Wed, 22 Mar 2023 08:52:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-Subject: [rafael-pm:bleeding-edge 43/45]
- drivers/thermal/thermal_sysfs.c:717:6: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202303220652.Yhopf8F0-lkp@intel.com>
+To: Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
+	lgirdwood@gmail.com, perex@perex.cz,
+	pierre-louis.bossart@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kevin-lu@ti.com,
+	shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+	navada@ti.com, Shenghao Ding <13916275206@139.com>
+Subject: Re: [PATCH v5] ASoC: tas2781: Add tas2781 driver
+Message-ID: <202303220800.Pz99eL6X-lkp@intel.com>
+References: <20230321113130.25853-1-13916275206@139.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,72 +51,198 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230321113130.25853-1-13916275206@139.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   98fe6903f79cffbb0f271369f62f4e5fea0e978c
-commit: 9b3fc1c6ba14f12e819e9d44c72013a1da58c0d9 [43/45] thermal: core: Introduce thermal_cooling_device_update()
-config: i386-randconfig-a001-20230320 (https://download.01.org/0day-ci/archive/20230322/202303220652.Yhopf8F0-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Shenghao,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230321]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230321-193259
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230321113130.25853-1-13916275206%40139.com
+patch subject: [PATCH v5] ASoC: tas2781: Add tas2781 driver
+config: arm-randconfig-r046-20230320 (https://download.01.org/0day-ci/archive/20230322/202303220800.Pz99eL6X-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=9b3fc1c6ba14f12e819e9d44c72013a1da58c0d9
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout 9b3fc1c6ba14f12e819e9d44c72013a1da58c0d9
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/a29d62a28a9077c66a962c69116c4eeb61f876f9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230321-193259
+        git checkout a29d62a28a9077c66a962c69116c4eeb61f876f9
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/thermal/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303220652.Yhopf8F0-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303220800.Pz99eL6X-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/thermal/thermal_sysfs.c:717:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!stats)
-               ^~~~~~
-   drivers/thermal/thermal_sysfs.c:727:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/thermal/thermal_sysfs.c:717:2: note: remove the 'if' if its condition is always false
-           if (!stats)
-           ^~~~~~~~~~~
-   drivers/thermal/thermal_sysfs.c:712:9: note: initialize the variable 'ret' to silence this warning
+>> sound/soc/codecs/tas2781-i2c.c:1608:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (i2c->dev.of_node)
+               ^~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-i2c.c:1626:6: note: uninitialized use occurs here
+           if (ret < 0 && tas_dev != NULL)
+               ^~~
+   sound/soc/codecs/tas2781-i2c.c:1608:2: note: remove the 'if' if its condition is always true
+           if (i2c->dev.of_node)
+           ^~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-i2c.c:1580:9: note: initialize the variable 'ret' to silence this warning
            int ret;
                   ^
                    = 0
    1 warning generated.
+--
+>> sound/soc/codecs/tas2781-dsp.c:1239:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (page == TAS2781_YRAM5_PAGE) {
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:1269:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/tas2781-dsp.c:1239:3: note: remove the 'if' if its condition is always true
+                   if (page == TAS2781_YRAM5_PAGE) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:1210:14: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   } else if (page == TAS2781_YRAM3_PAGE) {
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:1269:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/tas2781-dsp.c:1210:10: note: remove the 'if' if its condition is always true
+                   } else if (page == TAS2781_YRAM3_PAGE) {
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:1195:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+>> sound/soc/codecs/tas2781-dsp.c:2066:6: warning: variable 'prog_status' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (rca_conf_no > rca->ncfgs || rca_conf_no <= 0 ||
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2151:9: note: uninitialized use occurs here
+           return prog_status;
+                  ^~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2066:2: note: remove the 'if' if its condition is always false
+           if (rca_conf_no > rca->ncfgs || rca_conf_no <= 0 ||
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/codecs/tas2781-dsp.c:2066:6: warning: variable 'prog_status' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+           if (rca_conf_no > rca->ncfgs || rca_conf_no <= 0 ||
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2151:9: note: uninitialized use occurs here
+           return prog_status;
+                  ^~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2066:6: note: remove the '||' if its condition is always false
+           if (rca_conf_no > rca->ncfgs || rca_conf_no <= 0 ||
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/codecs/tas2781-dsp.c:2066:6: warning: variable 'prog_status' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+           if (rca_conf_no > rca->ncfgs || rca_conf_no <= 0 ||
+               ^~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2151:9: note: uninitialized use occurs here
+           return prog_status;
+                  ^~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2066:6: note: remove the '||' if its condition is always false
+           if (rca_conf_no > rca->ncfgs || rca_conf_no <= 0 ||
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2059:6: warning: variable 'prog_status' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (prm_no >= tas_fmw->nr_programs) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2151:9: note: uninitialized use occurs here
+           return prog_status;
+                  ^~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2059:2: note: remove the 'if' if its condition is always false
+           if (prm_no >= tas_fmw->nr_programs) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2052:6: warning: variable 'prog_status' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (cfg_no >= tas_fmw->nr_configurations) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2151:9: note: uninitialized use occurs here
+           return prog_status;
+                  ^~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2052:2: note: remove the 'if' if its condition is always false
+           if (cfg_no >= tas_fmw->nr_configurations) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2047:6: warning: variable 'prog_status' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!tas_fmw) {
+               ^~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2151:9: note: uninitialized use occurs here
+           return prog_status;
+                  ^~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2047:2: note: remove the 'if' if its condition is always false
+           if (!tas_fmw) {
+           ^~~~~~~~~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:2045:17: note: initialize the variable 'prog_status' to silence this warning
+           int prog_status;
+                          ^
+                           = 0
+   8 warnings generated.
 
 
-vim +717 drivers/thermal/thermal_sysfs.c
+vim +1608 sound/soc/codecs/tas2781-i2c.c
 
-   706	
-   707	static ssize_t total_trans_show(struct device *dev,
-   708					struct device_attribute *attr, char *buf)
-   709	{
-   710		struct thermal_cooling_device *cdev = to_cooling_device(dev);
-   711		struct cooling_dev_stats *stats;
-   712		int ret;
-   713	
-   714		mutex_lock(&cdev->lock);
-   715	
-   716		stats = cdev->stats;
- > 717		if (!stats)
-   718			goto unlock;
-   719	
-   720		spin_lock(&stats->lock);
-   721		ret = sprintf(buf, "%u\n", stats->total_trans);
-   722		spin_unlock(&stats->lock);
-   723	
-   724	unlock:
-   725		mutex_unlock(&cdev->lock);
-   726	
-   727		return ret;
-   728	}
-   729	
+  1576	
+  1577	static int tasdevice_i2c_probe(struct i2c_client *i2c)
+  1578	{
+  1579		struct tasdevice_priv *tas_dev = NULL;
+  1580		int ret;
+  1581		const struct acpi_device_id *acpi_id;
+  1582		const struct i2c_device_id *id = i2c_match_id(tasdevice_id, i2c);
+  1583	
+  1584		tas_dev = devm_kzalloc(&i2c->dev, sizeof(*tas_dev), GFP_KERNEL);
+  1585		if (!tas_dev) {
+  1586			ret = -ENOMEM;
+  1587			goto out;
+  1588		}
+  1589	
+  1590		if (ACPI_HANDLE(&i2c->dev)) {
+  1591			acpi_id = acpi_match_device(i2c->dev.driver->acpi_match_table,
+  1592					&i2c->dev);
+  1593			if (!acpi_id) {
+  1594				dev_err(&i2c->dev, "No driver data\n");
+  1595				ret = -EINVAL;
+  1596				goto out;
+  1597			}
+  1598			tas_dev->chip_id = acpi_id->driver_data;
+  1599			tas_dev->isacpi = true;
+  1600		} else {
+  1601			tas_dev->chip_id = (id != NULL) ? id->driver_data : 0;
+  1602			tas_dev->isacpi = false;
+  1603		}
+  1604	
+  1605		tas_dev->dev = &i2c->dev;
+  1606		tas_dev->client = (void *)i2c;
+  1607	
+> 1608		if (i2c->dev.of_node)
+  1609			ret = tasdevice_parse_dt(tas_dev);
+  1610		else {
+  1611			dev_err(tas_dev->dev, "No DTS info\n");
+  1612			goto out;
+  1613		}
+  1614	
+  1615		tas_dev->regmap = devm_regmap_init_i2c(i2c,
+  1616			&tasdevice_regmap);
+  1617		if (IS_ERR(tas_dev->regmap)) {
+  1618			ret = PTR_ERR(tas_dev->regmap);
+  1619			dev_err(&i2c->dev, "Failed to allocate register map: %d\n",
+  1620				ret);
+  1621			goto out;
+  1622		}
+  1623		ret = tasdevice_init(tas_dev);
+  1624	
+  1625	out:
+  1626		if (ret < 0 && tas_dev != NULL)
+  1627			tasdevice_remove(tas_dev);
+  1628		return ret;
+  1629	
 
 -- 
 0-DAY CI Kernel Test Service
