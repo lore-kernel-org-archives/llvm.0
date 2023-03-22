@@ -1,82 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099462592
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 12:44:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2730AC433D2;
-	Wed, 22 Mar 2023 12:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679489093;
-	bh=cYht+F6XkhcFtC9v6SKL72id95a8krZJbrH6VmzeT4Q=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=WONpPLt9AmcBhHrRzuN0Qnbyrl+ANDZBJK9VwQ+ZPTMFUOb7DtKCXUj1nGbyIhwl6
-	 C85TEyMv3uRNjotWlL/CmGroxtM9UAiFltY/EtQ3hKYPEz3SWc0vxnVaKGlgnOvuEu
-	 dSVK/zjKyMPpx1roUkDIqvSmxuJALfSbW/c0U5B52Aq9fuvqb96lNkjryPXvfQWx3R
-	 icYhHDJRJQLuyzYk60vhv9U9WYW+wN70A8U2V19lBUxDy5PWEKCVJYB+/a93CTy64B
-	 33gtmFtpskmrNeO9u/LTa7/LW6PNCrvVqFTID7hNXzIaa7c8g1JsfKapGmmT7TXoVX
-	 9T4Dm0UcjZXoA==
-From: Kalle Valo <kvalo@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,  David Airlie <airlied@gmail.com>,  Daniel Vetter <daniel@ffwll.ch>,  dri-devel@lists.freedesktop.org,  linux-toolchains@vger.kernel.org,  llvm@lists.linux.dev
-Subject: Re: Linux 6.3-rc3
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
-	<20230320180501.GA598084@dev-arch.thelio-3990X>
-	<CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
-	<20230320185337.GA615556@dev-arch.thelio-3990X>
-Date: Wed, 22 Mar 2023 14:44:47 +0200
-In-Reply-To: <20230320185337.GA615556@dev-arch.thelio-3990X> (Nathan
-	Chancellor's message of "Mon, 20 Mar 2023 11:53:37 -0700")
-Message-ID: <87pm91uf9c.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C867C28FC
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 12:58:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679489897;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TIlkqLegAeBC+m6CULqCYBtfGXGiuVBtfnZhQsPJi1c=;
+	b=SuMISo12SX8QsCQ0Tk20n6SGBbSu6dKxKtKtUAMcesqNoun0dtA+JXpRC/U87Ta7x2wlBs
+	I3zNh0a22L2KAtc5HuEGQ9xNC4U0sYSNUwiGSddYI+4in0qMzqQHwtKOk5LcIMVL6dUB//
+	SkjB99f+FayFA/W1iqsqBUUJX864g2o=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-663-RbEByEr6N9yhyN1tK-peSA-1; Wed, 22 Mar 2023 08:58:09 -0400
+X-MC-Unique: RbEByEr6N9yhyN1tK-peSA-1
+Received: by mail-qv1-f71.google.com with SMTP id a15-20020a0562140c2f00b005ad28a23cffso9128354qvd.6
+        for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 05:58:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679489888;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TIlkqLegAeBC+m6CULqCYBtfGXGiuVBtfnZhQsPJi1c=;
+        b=VFoQfRob/WYAuFyZzDUFcCwq4wGgLAPpi+GkkXu+2XdaL0TS0Ea5HhAgqlFNJZnFxy
+         KuTtsRMt5iXjfva61KAoufaXGPSXcmyBsRACfoVXXYgm0e2dqx6KGBKrLYsFV6LR+A0U
+         pc8Le5wHi775vInLl0usK8gyxAYAD7Pu/+Hu4WodI5sjFzXJolJM7AfMaeBpKTSZ+/MU
+         4uYFfgP7Xqpf/q6E6/D9WR3DytLSHdYXZcZuMp/tMS+hodekJ60Dm9+9YEy52Gz64VkS
+         JUU7cDACwQRXRfmJni+WYTg7rLmOt9jq9oq6gVt+sfiaOUjVKe0HjPzuljZhyREEUUOP
+         8EHg==
+X-Gm-Message-State: AO0yUKWFDvquHi+MldbcFvBBgQTNXgdqBtmI0mzFLX0OT3PKkv7flrMO
+	osBiWgf2L3V3y7N/iZwXL1+2VdqL8gdtJPKpGFA5nnlIr4Emi7U7Mzxza3iacm45cTsaLadgqBQ
+	ilJeD6CDdLKtyrw==
+X-Received: by 2002:ac8:4e8f:0:b0:3e0:61d0:f7f7 with SMTP id 15-20020ac84e8f000000b003e061d0f7f7mr3644647qtp.14.1679489888596;
+        Wed, 22 Mar 2023 05:58:08 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+ZXo2BL1krc+p+oXQftVChy1UR6ByYgMLDN+KiLPI5b2ZE0C/8zB2LdH0plZsW39kzr5AVQQ==
+X-Received: by 2002:ac8:4e8f:0:b0:3e0:61d0:f7f7 with SMTP id 15-20020ac84e8f000000b003e061d0f7f7mr3644621qtp.14.1679489888366;
+        Wed, 22 Mar 2023 05:58:08 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id j9-20020ac874c9000000b003dffd3d3df5sm6394388qtr.2.2023.03.22.05.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 05:58:08 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: tony@atomide.com,
+	lee@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-omap@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] mfd: omap-usb-tll: remove unused usbtll_readb function
+Date: Wed, 22 Mar 2023 08:58:03 -0400
+Message-Id: <20230322125803.2570968-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Nathan Chancellor <nathan@kernel.org> writes:
+clang with W=1 reports
+drivers/mfd/omap-usb-tll.c:128:18: error: unused function
+  'usbtll_readb' [-Werror,-Wunused-function]
+static inline u8 usbtll_readb(void __iomem *base, u32 reg)
+                 ^
+This function is not used so remove it.
 
-> On Mon, Mar 20, 2023 at 11:26:17AM -0700, Linus Torvalds wrote:
->> On Mon, Mar 20, 2023 at 11:05=E2=80=AFAM Nathan Chancellor <nathan@kerne=
-l.org> wrote:
->> >
->> > On the clang front, I am still seeing the following warning turned err=
-or
->> > for arm64 allmodconfig at least:
->> >
->> >   drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is unin=
-itialized when used here [-Werror,-Wuninitialized]
->> >           if (syncpt_irq < 0)
->> >               ^~~~~~~~~~
->>=20
->> Hmm. I do my arm64 allmodconfig builds with gcc, and I'm surprised
->> that gcc doesn't warn about this.
->
-> Perhaps these would make doing allmodconfig builds with clang more
-> frequently less painful for you?
->
-> https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/mfd/omap-usb-tll.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Thank you, at least for me this is really helpful. I tried now clang for
-the first time but seeing a strange problem.
+diff --git a/drivers/mfd/omap-usb-tll.c b/drivers/mfd/omap-usb-tll.c
+index 8ca4067da6cd..69cbc2097911 100644
+--- a/drivers/mfd/omap-usb-tll.c
++++ b/drivers/mfd/omap-usb-tll.c
+@@ -125,11 +125,6 @@ static inline void usbtll_writeb(void __iomem *base, u32 reg, u8 val)
+ 	writeb_relaxed(val, base + reg);
+ }
+ 
+-static inline u8 usbtll_readb(void __iomem *base, u32 reg)
+-{
+-	return readb_relaxed(base + reg);
+-}
+-
+ /*-------------------------------------------------------------------------*/
+ 
+ static bool is_ohci_port(enum usbhs_omap_port_mode pmode)
+-- 
+2.27.0
 
-I prefer to define the compiler in GNUmakefile so it's easy to change
-compilers and I don't need to remember the exact command line. So I have
-this in the top level GNUmakefile (all the rest commented out):
-
-LLVM=3D/opt/clang/llvm-16.0.0/bin/
-
-If I run 'make oldconfig' it seems to use clang but after I run just
-'make' it seems to switch back to the host GCC compiler and ask for GCC
-specific config questions again. Workaround for this seems to be adding
-'export LLVM' to GNUmakefile, after that also 'make' uses clang as
-expected.
-
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
