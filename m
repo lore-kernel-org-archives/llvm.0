@@ -1,43 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD4F1FBA;
-	Wed, 22 Mar 2023 07:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E461FD5;
+	Wed, 22 Mar 2023 08:04:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679469149; x=1711005149;
+  t=1679472270; x=1711008270;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OLo49VJum4+IdQ+HttbTHrEjnLrRFrzhOY+WpJ0raTc=;
-  b=AOVTH70OrgcQ79vOZeIWECijvhxQVxk8iTfXF90ttntQM0DIUfqkmevG
-   0iTnpp/J2OUpZ/s3dL7cwMd1hkcTvRLFmCheTJMe05g76FNsnlsreWmMg
-   iV+37qlr8glA+mMbFeF/8kNp01NKR22QFsC94qlVAy+TIiyZ2WAmPsUZU
-   oIkRqkzvvspq0nBld1ibcSO2cRMp/j8jjEbRXdADCOkoTaZR6N/1kZcaJ
-   nrnFIjBxuo7EfXy5Ri8w+R7+uOOIKNwNpPwigRxl1hNf24qxFp9Z8S77D
-   B6ZsGSX9d2yoe4stw1+thWpuyZzWG3yAzgx2jpFrrduJ+0CHBxKPIkBzV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="425430688"
+  bh=pHc3/WLt2TL3wsvFnYitdU5tRcyozOyckhtrWsy8vDE=;
+  b=HaauikXZadj8lHZ432NXJ67Ejs2rjshTfbNfKT64wLQR8etFbqMuAe3S
+   +7FQFOxAeE0O0BukjfCEhllj2/CU2Yv7i0Lg/uHbFUywncKKfrYvWFk1w
+   h3JqVxbn0ZSZ5/9r0JvI7rQwu7E9RX4/QgFA0CMDoyAo76ljHdrd5xm38
+   vqGylw9AjmpqL7GVH+0ZT5A0KXQNd6o5sUzlPoe5A5xVx1F/2HWQuiRaS
+   lTlY0g1P0ykFUHxtTqlaNbpNv06YDiZhJyMolFZ82+peeV+cFL2Pn8Vfr
+   GOyQZmwqFlwWSoBeJee6UTOgmwonHo3R5NcMAylcYsaDWTIJxpsueTfwK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="366889387"
 X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="425430688"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 00:12:27 -0700
+   d="scan'208";a="366889387"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 01:04:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="712122989"
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="631900088"
 X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="712122989"
+   d="scan'208";a="631900088"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Mar 2023 00:12:25 -0700
+  by orsmga003.jf.intel.com with ESMTP; 22 Mar 2023 01:04:27 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pese0-000D1e-1r;
-	Wed, 22 Mar 2023 07:12:24 +0000
-Date: Wed, 22 Mar 2023 15:11:37 +0800
+	id 1petSM-000D4o-3B;
+	Wed, 22 Mar 2023 08:04:26 +0000
+Date: Wed, 22 Mar 2023 16:03:28 +0800
 From: kernel test robot <lkp@intel.com>
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [jpoimboe:static-call-null-4 11/11]
  arch/x86/include/asm/kvm-x86-ops.h:23:1: error: implicit declaration of
  function '__KVM_X86_OP' is invalid in C99
-Message-ID: <202303221510.4StbKF4q-lkp@intel.com>
+Message-ID: <202303221551.8XpbctAW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,16 +49,16 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git static-call-null-4
 head:   67517470624490a1d82c0b3a5e744a72d325b4af
-commit: 99a484ab8cf69008f50c0cc79d3ebec8d67ebc2d [11/11] static_call: Remove DEFINE_STATIC_CALL_RET0()
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230322/202303221510.4StbKF4q-lkp@intel.com/config)
+commit: 67517470624490a1d82c0b3a5e744a72d325b4af [11/11] static_call: Remove DEFINE_STATIC_CALL_RET0()
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230322/202303221551.8XpbctAW-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=99a484ab8cf69008f50c0cc79d3ebec8d67ebc2d
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=67517470624490a1d82c0b3a5e744a72d325b4af
         git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
         git fetch --no-tags jpoimboe static-call-null-4
-        git checkout 99a484ab8cf69008f50c0cc79d3ebec8d67ebc2d
+        git checkout 67517470624490a1d82c0b3a5e744a72d325b4af
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
@@ -66,7 +66,7 @@ reproduce (this is a W=1 build):
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303221510.4StbKF4q-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303221551.8XpbctAW-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
@@ -143,8 +143,8 @@ e4fc23bad81359 Paolo Bonzini       2021-12-09    8   * both DECLARE/DEFINE_STATI
 e4fc23bad81359 Paolo Bonzini       2021-12-09    9   * "static_call_update()" calls.
 e4fc23bad81359 Paolo Bonzini       2021-12-09   10   *
 e4fc23bad81359 Paolo Bonzini       2021-12-09   11   * KVM_X86_OP_OPTIONAL() can be used for those functions that can have
-644ec6a57f07a5 Josh Poimboeuf      2023-03-21   12   * a NULL definition.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
-99a484ab8cf690 Josh Poimboeuf      2023-03-21   13   * to make a definition optional.
+37c88ccaa01035 Josh Poimboeuf      2023-03-21   12   * a NULL definition.  KVM_X86_OP_OPTIONAL_RET0() can be used likewise
+67517470624490 Josh Poimboeuf      2023-03-21   13   * to make a definition optional.
 9af5471bdbb2a2 Jason Baron         2021-01-14   14   */
 d83420c2d74e66 Sean Christopherson 2022-11-30   15  KVM_X86_OP(check_processor_compatibility)
 e4fc23bad81359 Paolo Bonzini       2021-12-09   16  KVM_X86_OP(hardware_enable)
