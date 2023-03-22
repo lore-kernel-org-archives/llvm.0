@@ -1,155 +1,298 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2101.outbound.protection.outlook.com [40.107.244.101])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA8F2584
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 20:40:53 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zi4NdqGVgKBV9LKtKSQ1V1VFcT4dyQ4PQupvu+DlFsjb13iysxn+a/CnwmGz4oKhrrImIxDmfmqulMWzk78IGlYTBwWo7CHLkDuDD/ORPlqtAYS5GpcYvPrhehHxK9pMi7KF1E+NYmx1K4twm2k8mZZTcH+a0PjXBJ1HZrCfSbENVwXpLy1UWnRnTxCC5/tErTLl51qesqNFzSAYEI74VeCLNMUIvU4Qlm9SXswTNDMZ+1ha2gsUUDyiokCz1a0cgBash0/pZj7zCbHgWA0dpCT43eu47z8IXmjuAZoygDSqFysq7zMgOpCkNa9rTAQFdSIc4xgdvz4gB+G7mD3NIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tgZD2KmchfSEjwnxFRYWSv6wB0c7DH7Rry+jZ2QV8lE=;
- b=YNTsYFCTJCBx1HKClhbIIR2M+vYbfXz3oh1xH8vntJ32wkuqY+QLZ9wT9fYgrI962crjHFj0YTaGUEBAYTjO9BTnVnhLJWM8NVNs0RY+UVWGUDUDr1s/dfkffJEGbpbRsyy96yiqYzrMLLYLjMiDUPog/4RuRfrUWQtBKWn///451xLPfrvyvkGV4hvxdSXYDRxI2xRTYfX+T9qLLkxSpdQ4elfRQqpdjXraDIrPuyOvvMLIHcI9ew4jLTty56n4wzj00k92CnHLp9ZiDx8clRgXssKpCnQo48jVZUvg34NpFugXKgBd0hRRPiSXBY5SvMTGY5QLxH+GLsrEiLOpVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tgZD2KmchfSEjwnxFRYWSv6wB0c7DH7Rry+jZ2QV8lE=;
- b=V25RtERJR8TBCvsEgPGZfdASA+bywV1aDRWaAY57Tk9UcAYoGCAPHFnZOlCoK7dFhpVlcPnbhHDlhunH4htHQRGTybe9KEKWWDzN7V7mbvnIk0tLAt12lB8h5iGrL8mXx8HPgB+UwUWdkBS7QMhWiHCFRfvI4pDdjEdJBjJNKjg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA0PR13MB4143.namprd13.prod.outlook.com (2603:10b6:806:94::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
- 2023 20:40:50 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
- 20:40:50 +0000
-Date: Wed, 22 Mar 2023 21:40:43 +0100
-From: Simon Horman <simon.horman@corigine.com>
-To: Tom Rix <trix@redhat.com>
-Cc: kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-	ndesaulniers@google.com, ath10k@lists.infradead.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] ath10k: remove unused ath10k_get_ring_byte function
-Message-ID: <ZBtnbgeW9T75ZXfv@corigine.com>
-References: <20230322122855.2570417-1-trix@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322122855.2570417-1-trix@redhat.com>
-X-ClientProxiedBy: AM0PR10CA0104.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:e6::21) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6987BA37;
+	Wed, 22 Mar 2023 20:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679518262; x=1711054262;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I4d8RxRoyHbM2RBEnIM/cyYocxErAeky3F/PhRTHP3Q=;
+  b=nydWdFTcqu0zBEmF+1xaNxS5iMEDvTaRZGj5j3hQvGE99O9WElYzi8wM
+   TE5sHnTrfxl0wx0EApDxV8N40P8Tkuu/nOSPcyeFPEuzysUkG0KjsYPdP
+   jnz/DrZYitn7JWbqK1NBXlIT2WjaXSjWUzOz/YBMVqhxxOfDS8mJq5acC
+   uEShDjRb3MYPISmK9pkt9mcbTOHKcCaUsIh90zPgsrusewg2OGCH+x5xo
+   Y8HRkd/8TY8zzxFDoHIdNiIt2IlHUSkrTXydGbclepP2SKjJ+uP9NmtDS
+   FmZ6o+Mboj82kJII6O5V+/nHTs+aRdncHV0Yis+HVNEBsP0hSJKx6q4tN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="404218047"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="404218047"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 13:51:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="659313985"
+X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
+   d="scan'208";a="659313985"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Mar 2023 13:50:59 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pf5Q6-000DeM-0B;
+	Wed, 22 Mar 2023 20:50:54 +0000
+Date: Thu, 23 Mar 2023 04:50:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Stoakes <lstoakes@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-unstable 282/290] mm/mmap.c:939:11: warning: variable
+ 'next' is used uninitialized whenever 'if' condition is false
+Message-ID: <202303230412.43XWWGFX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA0PR13MB4143:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd1eed4f-a8e8-4d17-0bfb-08db2b15b8b3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	B2OtgbQ8a/rsryUIIRtCmyT+/CPS002lOkreX+NjaUQvrhdHAeaRPuwBWxhF6diypjj8zU3TP9Gcoe+W2i4zZJm45bhY7Uqa2PShelhi6BGtOsxLsfmpByvgnwcF2BCkSGgAK+5X+xFTaW8LkA3knQhX71rbCjhW4a4YYdrPg6lelNH23mJrJQQi+oJLzC5rLa35Q00Mk3M5JyipEQYuUjGfkTc7ivT9LG1F4uNfy/3vOoSxECnDMZKuBdif6ArfUJX5wvpbYH4QthnI4VMweK7Ku9Rkc6k/psRui/LfolLYhX6naixcSwDtdHeIk845M99a70ZqXJdncQFG11482m810Wh1qQJDa+B3pcnbgCg92xyZIjQeCvVXiaVsOXA7sY/CQLVTXq5WMI4kDvfLcMznRUwzni8u2Ekz+yUeOHfjCcvT7uoAvXw/nSb5ficmy1plNpiO0DVUzHCJesq/9TnfNOvXbEWzfjOl/cnG6nEYM391tblgMrKH4QmKXTL1GkRXjIvbg3zfQKmmtp8mrL+G2gBO0WIRjogdXRCOFOlu77/gP6jNBED3ChsIX+NaW2dQHrOrMHSL7HaPNF4EFzXgCWYa4bcu7ZJqJx/5SPmwxRPXg9kqm1priL++TGlsdblLYKp84NfUYmnbc8vNJCZluYCIlhcgYDguwWU+4VFSRZMepSLpWkoISTiDBcbC
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(396003)(136003)(346002)(366004)(376002)(451199018)(6512007)(2616005)(83380400001)(6666004)(6486002)(4326008)(6916009)(6506007)(8676002)(66476007)(8936002)(316002)(66556008)(478600001)(66946007)(7416002)(5660300002)(44832011)(2906002)(41300700001)(186003)(38100700002)(86362001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?8ABZ7QnnuKdbgg6S1PU4i0rxUmK55EeXll/p6jBGLN8CqumiCAb0YxRD3b4k?=
- =?us-ascii?Q?j/jWntRqOUtuG02yHTJcsl/ILXHpkDmk7ASlFUx5e1BlMFHVMXrsyx1nOLDH?=
- =?us-ascii?Q?6DjsmWdL0WHURTxOdyK+waYzejIAikLUHgYWfdSAWkwohU2ItBe3J5w38Q9E?=
- =?us-ascii?Q?VQRys4doH0caTIO9Eio8wZXsJdpfIdTbae2LoJPWgrzwWjUvql9lpJv+M0RT?=
- =?us-ascii?Q?oVsrpx7czFvlhoi99kdm4/XTt5gFzJ8G2VQPAVq5eoiaD+DN0BeN/RQXQ6FG?=
- =?us-ascii?Q?iID9VvyiJnK8cZ1aFjiImUs700KWwV3yeO/8TYoVkIrlr/ut+CAlyUOuQrC6?=
- =?us-ascii?Q?JIuEJjqE33zG1XU4OZCZ4J2hE3EW8WYPQ7hDy0+ojPElAsJNcnRu/zupEsBt?=
- =?us-ascii?Q?Ub+7rBH+jy5/wfsSy2I6SWvcWL4tOAcXU4FkUsKt96w5FpbRccf2I+jhRthS?=
- =?us-ascii?Q?Wl9R9A37pLGDTZQILauqq9Je+I7GJfrtVh6xWb2NA9sk37ZccbuRe1zD4/Jf?=
- =?us-ascii?Q?OdBRD29pLF5AZkgMfbnhPDDGmE3Tfjpfh+9ddlQeCy3h/xApMKCMgWy3RgU2?=
- =?us-ascii?Q?2fd7x0VeHgeOWe3l9OK5XaSdDsyGOGrw+5RZy3yOD5FNG/PrSn73Sms7B8qg?=
- =?us-ascii?Q?7/ATgXvf7rhQHNFkY05AVizKOoW4FaGeYqsVbHnQPld4bxPOzHClZK0PRtL0?=
- =?us-ascii?Q?IipF6ZExSiaehpAa9CStJdi5XwqhvH1JXMPQ2VYq6V7FGO372IiYmvFezYRA?=
- =?us-ascii?Q?QMoauxV8EZev3TTc0fCxQZP5/0maSiaT/IN3YDLgCDQN2BB7vftpXBZl13ub?=
- =?us-ascii?Q?GLCtr5aFKAWxsO99Mjk7efkqn/fGuVTN4yg6j3eY7jBf+aRJqSqqbAN4c7zT?=
- =?us-ascii?Q?hXftFgfDq25mFS+MbkyF8AvHO9PunWX7XX5nKK4zHp9QyO4O/s6pN/z5Kuen?=
- =?us-ascii?Q?7a0qxpcgzkcqCj5xPiJYXCzNPCpEPaS5XGzOUtSLUaNw1almRuf3f9idQBdS?=
- =?us-ascii?Q?nvo3m16z+CKUMJZhxFQBlBeYxX7llMZ6r34hOdAjCECSqNmptT465bHPnIWI?=
- =?us-ascii?Q?Ta4iLGVjarSrsLJ1cCjY2WoH6XNtsZPxw+/UVuan707Z+MSTU1vuyUyN75Zi?=
- =?us-ascii?Q?nNCJptOdOLCOA/Gan+docdVtJiJz00r/SY80+QHLuiR6glf3PeMkQ8grCKdX?=
- =?us-ascii?Q?Bwxe3ArlwbnACSOLaETV/FvVcrPPCL3mMXeBJXnya1H75WCydBa2Js2okbzN?=
- =?us-ascii?Q?Fhc8VWdifS0D1c/+QKZjtXvxQCrfPfR8YGbHQXE4JIEm0A7V7wJ20fAsh0BO?=
- =?us-ascii?Q?t4r8X0rj6RI4Bkfc2jTR5W1u4fc/xtLkX908gYUOv4E0lS4zb8bYJXGxP3+z?=
- =?us-ascii?Q?BNvOvuVMXnAQG0hhmy05qiGTZ8Q8ZNdwoYMdiGpkeTd/mLaVisVJsnnrAVmM?=
- =?us-ascii?Q?hlYprUs7yGyL2noMOxgwoxLfrUhVQ1rHiMLa02SrF+tG6WLgBWRsgciux2g2?=
- =?us-ascii?Q?oFG5railicQhPHYy7omvFXc3V+77TXtIa9cPsh6iYTdih4P2rj5fJHpnXJ+l?=
- =?us-ascii?Q?DGDENpdgDxhb4bHL5Sn8xUiTzFmMuz4jev/k5tjK0XTzRyMAbQHhpqQbihFM?=
- =?us-ascii?Q?xQAYLKYxQv/6X2eVINh8NFj7ZRVIe4EXs3wT/Cos6vdTcp+9dqkbtfDkoEAE?=
- =?us-ascii?Q?aioZGw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd1eed4f-a8e8-4d17-0bfb-08db2b15b8b3
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 20:40:49.9243
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6qQHIgK1EUB8Vqv1VakVDoX3hhmlNQuaTAt9/C+OvB43mFhSpER7rzNs8tyKF+/lEzxiF+FfDzAzE7MKc6OD8lJ/1sc+gg84HB+2Rpj9Z0k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR13MB4143
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Mar 22, 2023 at 08:28:55AM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/net/wireless/ath/ath10k/ce.c:88:1: error:
->   unused function 'ath10k_get_ring_byte' [-Werror,-Wunused-function]
-> ath10k_get_ring_byte(unsigned int offset,
-> ^
-> This function is not used so remove it.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   39aca4f17e02ee4076b6ab327577c9b1be23775d
+commit: e887ecae997ebaaad4d9b93e6a01fd5495ec1bc3 [282/290] mm/mmap/vma_merge: set next to NULL if not applicable
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230323/202303230412.43XWWGFX-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?id=e887ecae997ebaaad4d9b93e6a01fd5495ec1bc3
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch --no-tags akpm-mm mm-unstable
+        git checkout e887ecae997ebaaad4d9b93e6a01fd5495ec1bc3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Hi Tom,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303230412.43XWWGFX-lkp@intel.com/
 
-this looks good. But this patch applied, and with clang 11.0.2,
-make CC=clang W=1 tells me:
+All warnings (new ones prefixed by >>):
 
-drivers/net/wireless/ath/ath10k/ce.c:80:19: error: unused function 'shadow_dst_wr_ind_addr' [-Werror,-Wunused-function]
-static inline u32 shadow_dst_wr_ind_addr(struct ath10k *ar,
-                  ^
-drivers/net/wireless/ath/ath10k/ce.c:434:20: error: unused function 'ath10k_ce_error_intr_enable' [-Werror,-Wunused-function]
-static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
-                   ^
-Perhaps those functions should be removed too?
+>> mm/mmap.c:939:11: warning: variable 'next' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           else if (!curr)
+                    ^~~~~
+   mm/mmap.c:962:6: note: uninitialized use occurs here
+           if (next && mpol_equal(policy, vma_policy(next)) &&
+               ^~~~
+   mm/mmap.c:939:7: note: remove the 'if' if its condition is always true
+           else if (!curr)
+                ^~~~~~~~~~
+   mm/mmap.c:914:36: note: initialize the variable 'next' to silence this warning
+           struct vm_area_struct *curr, *next, *res = NULL;
+                                             ^
+                                              = NULL
+   1 warning generated.
 
-> ---
->  drivers/net/wireless/ath/ath10k/ce.c | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath10k/ce.c b/drivers/net/wireless/ath/ath10k/ce.c
-> index b656cfc03648..c27b8204718a 100644
-> --- a/drivers/net/wireless/ath/ath10k/ce.c
-> +++ b/drivers/net/wireless/ath/ath10k/ce.c
-> @@ -84,13 +84,6 @@ ath10k_set_ring_byte(unsigned int offset,
->  	return ((offset << addr_map->lsb) & addr_map->mask);
->  }
->  
-> -static inline unsigned int
-> -ath10k_get_ring_byte(unsigned int offset,
-> -		     struct ath10k_hw_ce_regs_addr_map *addr_map)
-> -{
-> -	return ((offset & addr_map->mask) >> (addr_map->lsb));
-> -}
-> -
->  static inline u32 ath10k_ce_read32(struct ath10k *ar, u32 offset)
->  {
->  	struct ath10k_ce *ce = ath10k_ce_priv(ar);
-> -- 
-> 2.27.0
-> 
+
+vim +939 mm/mmap.c
+
+   851	
+   852	/*
+   853	 * Given a mapping request (addr,end,vm_flags,file,pgoff,anon_name),
+   854	 * figure out whether that can be merged with its predecessor or its
+   855	 * successor.  Or both (it neatly fills a hole).
+   856	 *
+   857	 * In most cases - when called for mmap, brk or mremap - [addr,end) is
+   858	 * certain not to be mapped by the time vma_merge is called; but when
+   859	 * called for mprotect, it is certain to be already mapped (either at
+   860	 * an offset within prev, or at the start of next), and the flags of
+   861	 * this area are about to be changed to vm_flags - and the no-change
+   862	 * case has already been eliminated.
+   863	 *
+   864	 * The following mprotect cases have to be considered, where **** is
+   865	 * the area passed down from mprotect_fixup, never extending beyond one
+   866	 * vma, PPPP is the previous vma, CCCC is a concurrent vma that starts
+   867	 * at the same address as **** and is of the same or larger span, and
+   868	 * NNNN the next vma after ****:
+   869	 *
+   870	 *     ****             ****                   ****
+   871	 *    PPPPPPNNNNNN    PPPPPPNNNNNN       PPPPPPCCCCCC
+   872	 *    cannot merge    might become       might become
+   873	 *                    PPNNNNNNNNNN       PPPPPPPPPPCC
+   874	 *    mmap, brk or    case 4 below       case 5 below
+   875	 *    mremap move:
+   876	 *                        ****               ****
+   877	 *                    PPPP    NNNN       PPPPCCCCNNNN
+   878	 *                    might become       might become
+   879	 *                    PPPPPPPPPPPP 1 or  PPPPPPPPPPPP 6 or
+   880	 *                    PPPPPPPPNNNN 2 or  PPPPPPPPNNNN 7 or
+   881	 *                    PPPPNNNNNNNN 3     PPPPNNNNNNNN 8
+   882	 *
+   883	 * It is important for case 8 that the vma CCCC overlapping the
+   884	 * region **** is never going to extended over NNNN. Instead NNNN must
+   885	 * be extended in region **** and CCCC must be removed. This way in
+   886	 * all cases where vma_merge succeeds, the moment vma_merge drops the
+   887	 * rmap_locks, the properties of the merged vma will be already
+   888	 * correct for the whole merged range. Some of those properties like
+   889	 * vm_page_prot/vm_flags may be accessed by rmap_walks and they must
+   890	 * be correct for the whole merged range immediately after the
+   891	 * rmap_locks are released. Otherwise if NNNN would be removed and
+   892	 * CCCC would be extended over the NNNN range, remove_migration_ptes
+   893	 * or other rmap walkers (if working on addresses beyond the "end"
+   894	 * parameter) may establish ptes with the wrong permissions of CCCC
+   895	 * instead of the right permissions of NNNN.
+   896	 *
+   897	 * In the code below:
+   898	 * PPPP is represented by *prev
+   899	 * CCCC is represented by *curr or not represented at all (NULL)
+   900	 * NNNN is represented by *next or not represented at all (NULL)
+   901	 * **** is not represented - it will be merged and the vma containing the
+   902	 *      area is returned, or the function will return NULL
+   903	 */
+   904	struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+   905				struct vm_area_struct *prev, unsigned long addr,
+   906				unsigned long end, unsigned long vm_flags,
+   907				struct anon_vma *anon_vma, struct file *file,
+   908				pgoff_t pgoff, struct mempolicy *policy,
+   909				struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+   910				struct anon_vma_name *anon_name)
+   911	{
+   912		pgoff_t pglen = (end - addr) >> PAGE_SHIFT;
+   913		pgoff_t vma_pgoff;
+   914		struct vm_area_struct *curr, *next, *res = NULL;
+   915		struct vm_area_struct *vma, *adjust, *remove, *remove2;
+   916		int err = -1;
+   917		bool merge_prev = false;
+   918		bool merge_next = false;
+   919		bool vma_expanded = false;
+   920		struct vma_prepare vp;
+   921		unsigned long vma_end = end;
+   922		long adj_start = 0;
+   923		unsigned long vma_start = addr;
+   924	
+   925		validate_mm(mm);
+   926		/*
+   927		 * We later require that vma->vm_flags == vm_flags,
+   928		 * so this tests vma->vm_flags & VM_SPECIAL, too.
+   929		 */
+   930		if (vm_flags & VM_SPECIAL)
+   931			return NULL;
+   932	
+   933		/* Does the input range span an existing VMA? (cases 5 - 8) */
+   934		curr = find_vma_intersection(mm, prev ? prev->vm_end : 0, end);
+   935	
+   936		if (curr && end == curr->vm_end)
+   937			/* Is there is a VMA immediately adjacent (cases 6 - 8)? */
+   938			next = vma_lookup(mm, curr->vm_end);
+ > 939		else if (!curr)
+   940			/* Is there a VMA next to a hole (case 1 - 3) or prev (4)? */
+   941			next = vma_lookup(mm, end);
+   942	
+   943		/* verify some invariant that must be enforced by the caller */
+   944		VM_WARN_ON(prev && addr <= prev->vm_start);
+   945		VM_WARN_ON(curr && end > curr->vm_end);
+   946		VM_WARN_ON(addr >= end);
+   947	
+   948		if (prev) {
+   949			res = prev;
+   950			vma = prev;
+   951			vma_start = prev->vm_start;
+   952			vma_pgoff = prev->vm_pgoff;
+   953			/* Can we merge the predecessor? */
+   954			if (prev->vm_end == addr && mpol_equal(vma_policy(prev), policy)
+   955			    && can_vma_merge_after(prev, vm_flags, anon_vma, file,
+   956					   pgoff, vm_userfaultfd_ctx, anon_name)) {
+   957				merge_prev = true;
+   958				vma_prev(vmi);
+   959			}
+   960		}
+   961		/* Can we merge the successor? */
+   962		if (next && mpol_equal(policy, vma_policy(next)) &&
+   963		    can_vma_merge_before(next, vm_flags,
+   964					 anon_vma, file, pgoff+pglen,
+   965					 vm_userfaultfd_ctx, anon_name)) {
+   966			merge_next = true;
+   967		}
+   968	
+   969		remove = remove2 = adjust = NULL;
+   970		/* Can we merge both the predecessor and the successor? */
+   971		if (merge_prev && merge_next &&
+   972		    is_mergeable_anon_vma(prev->anon_vma, next->anon_vma, NULL)) {
+   973			remove = next;				/* case 1 */
+   974			vma_end = next->vm_end;
+   975			err = dup_anon_vma(prev, next);
+   976			if (curr) {				/* case 6 */
+   977				remove = curr;
+   978				remove2 = next;
+   979				if (!next->anon_vma)
+   980					err = dup_anon_vma(prev, curr);
+   981			}
+   982		} else if (merge_prev) {
+   983			err = 0;				/* case 2 */
+   984			if (curr) {
+   985				err = dup_anon_vma(prev, curr);
+   986				if (end == curr->vm_end) {	/* case 7 */
+   987					remove = curr;
+   988				} else {			/* case 5 */
+   989					adjust = curr;
+   990					adj_start = (end - curr->vm_start);
+   991				}
+   992			}
+   993		} else if (merge_next) {
+   994			res = next;
+   995			if (prev && addr < prev->vm_end) {	/* case 4 */
+   996				vma_end = addr;
+   997				adjust = next;
+   998				adj_start = -(prev->vm_end - addr);
+   999				err = dup_anon_vma(next, prev);
+  1000			} else {
+  1001				vma = next;			/* case 3 */
+  1002				vma_start = addr;
+  1003				vma_end = next->vm_end;
+  1004				vma_pgoff = next->vm_pgoff;
+  1005				err = 0;
+  1006				if (curr) {			/* case 8 */
+  1007					vma_pgoff = curr->vm_pgoff;
+  1008					remove = curr;
+  1009					err = dup_anon_vma(next, curr);
+  1010				}
+  1011			}
+  1012		}
+  1013	
+  1014		/* Cannot merge or error in anon_vma clone */
+  1015		if (err)
+  1016			return NULL;
+  1017	
+  1018		if (vma_iter_prealloc(vmi))
+  1019			return NULL;
+  1020	
+  1021		init_multi_vma_prep(&vp, vma, adjust, remove, remove2);
+  1022		VM_WARN_ON(vp.anon_vma && adjust && adjust->anon_vma &&
+  1023			   vp.anon_vma != adjust->anon_vma);
+  1024	
+  1025		vma_prepare(&vp);
+  1026		vma_adjust_trans_huge(vma, vma_start, vma_end, adj_start);
+  1027		if (vma_start < vma->vm_start || vma_end > vma->vm_end)
+  1028			vma_expanded = true;
+  1029	
+  1030		vma->vm_start = vma_start;
+  1031		vma->vm_end = vma_end;
+  1032		vma->vm_pgoff = vma_pgoff;
+  1033	
+  1034		if (vma_expanded)
+  1035			vma_iter_store(vmi, vma);
+  1036	
+  1037		if (adj_start) {
+  1038			adjust->vm_start += adj_start;
+  1039			adjust->vm_pgoff += adj_start >> PAGE_SHIFT;
+  1040			if (adj_start < 0) {
+  1041				WARN_ON(vma_expanded);
+  1042				vma_iter_store(vmi, next);
+  1043			}
+  1044		}
+  1045	
+  1046		vma_complete(&vp, vmi, mm);
+  1047		vma_iter_free(vmi);
+  1048		validate_mm(mm);
+  1049		khugepaged_enter_vma(res, vm_flags);
+  1050	
+  1051		return res;
+  1052	}
+  1053	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
