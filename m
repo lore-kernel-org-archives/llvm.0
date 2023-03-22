@@ -1,47 +1,46 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B9E23D4;
-	Wed, 22 Mar 2023 11:07:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623D22566;
+	Wed, 22 Mar 2023 11:18:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679483258; x=1711019258;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P2mPW/WRUDwJB8jKQQeQja24bidu3yN8jymHDJ02YSM=;
-  b=FHJhVgk2eVR3fISKQPAWByNzdnTtoimck1gO4UOVbpiLPKUBqnlQvG+E
-   pF0nRQcfaSk1k/olqdnE0NPVOChkJS8ZG6XJLZyGAXa7uDhPymbSY696/
-   R+zwfgr/k6dihFnoCQ/0lLYNeuRVvL/LVBhjWgtmeAi23oHPZZTkVuJlE
-   ghwV7PfnlY993znoWtLy8iqhcJpqLcvcOJfx7O/BDBYoEg214Z2pSDXCw
-   H+d17knQPIUw+Byw7yqNNhtNFDUMum9BOFlFjy3S4CceVffU9nT0mUV/b
-   NhcpWlBleU/dUgemzSwoqK1XQWJI7cwxvfa9dLmZc3nx7P4RK2tgljFNt
+  t=1679483917; x=1711019917;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NOS3qjKWkRPBeWnoeomAnjKX3B7ayL8JnTZy2osIB6s=;
+  b=MFEZi2pQN4oG0qMcXhHLjETcrvGLdVLOrbpQs2Mq8I+kDBgQrHXPdRmh
+   HIZgHXx7BI6mrGI2eAyQEadXpYpM+WfZ3yWdva60wCd+Wv1K8PjIG+IcZ
+   IdT+fikZi76FGozwDOo6NbPXL20Sk/O+sDo4SPcE/Roa/As7xO1lZfBQK
+   vH6oukSglfm1Eu22JEqPZ8zvaJuejXchrEL/6pJNO1BxUzhgcLWIBM25P
+   vGf2W7zVMXO2fOV/nrbmwNQnNZMnPwonkVsZY8wWl+agE62cpf7aRBF2K
+   KpipnVIdtBGYlsxsCDzOHBJ5LD/sKR1ENAvMmGUJpBPs3zLdcf1GSdYjF
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="339224442"
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="327566794"
 X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="339224442"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 04:07:36 -0700
+   d="scan'208";a="327566794"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 04:18:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="750992316"
+X-IronPort-AV: E=McAfee;i="6600,9927,10656"; a="681860415"
 X-IronPort-AV: E=Sophos;i="5.98,281,1673942400"; 
-   d="scan'208";a="750992316"
+   d="scan'208";a="681860415"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Mar 2023 04:07:34 -0700
+  by orsmga002.jf.intel.com with ESMTP; 22 Mar 2023 04:18:34 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pewJZ-000DDQ-27;
-	Wed, 22 Mar 2023 11:07:33 +0000
-Date: Wed, 22 Mar 2023 19:07:27 +0800
+	id 1pewUE-000DDy-0g;
+	Wed, 22 Mar 2023 11:18:34 +0000
+Date: Wed, 22 Mar 2023 19:17:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-	viro@zeniv.linux.org.uk
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, brauner@kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-	Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] fs/buffer: Remove redundant assignment to err
-Message-ID: <202303221812.QiRW1CXX-lkp@intel.com>
-References: <20230322065949.29223-1-jiapeng.chong@linux.alibaba.com>
+To: Qin Jian <qinjian@cqplus1.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Stephen Boyd <sboyd@kernel.org>
+Subject: [clk:clk-sunplus 1/1] drivers/clk/clk-sp7021.c:316:8: warning:
+ result of comparison of constant 18446744073709551615 with expression of
+ type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char:
+ (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigne...
+Message-ID: <202303221947.pXP2v4xJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,180 +49,163 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230322065949.29223-1-jiapeng.chong@linux.alibaba.com>
 
-Hi Jiapeng,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on vfs-idmapping/for-next]
-[also build test WARNING on linus/master v6.3-rc3 next-20230322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiapeng-Chong/fs-buffer-Remove-redundant-assignment-to-err/20230322-150022
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git for-next
-patch link:    https://lore.kernel.org/r/20230322065949.29223-1-jiapeng.chong%40linux.alibaba.com
-patch subject: [PATCH] fs/buffer: Remove redundant assignment to err
-config: hexagon-randconfig-r036-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221812.QiRW1CXX-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-sunplus
+head:   d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2 [1/1] clk: Add Sunplus SP7021 clock driver
+config: mips-randconfig-r012-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221947.pXP2v4xJ-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3e00c2b4797c228b1939a15506c9ab807d0fa809
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jiapeng-Chong/fs-buffer-Remove-redundant-assignment-to-err/20230322-150022
-        git checkout 3e00c2b4797c228b1939a15506c9ab807d0fa809
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/commit/?id=d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+        git remote add clk https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
+        git fetch --no-tags clk clk-sunplus
+        git checkout d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/clk/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303221812.QiRW1CXX-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303221947.pXP2v4xJ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from fs/buffer.c:24:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/buffer.c:24:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/buffer.c:24:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/buffer.c:2639:1: warning: unused label 'out' [-Wunused-label]
-   out:
-   ^~~~
-   fs/buffer.c:2282:5: warning: stack frame size (2144) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
-   int block_read_full_folio(struct folio *folio, get_block_t *get_block)
-       ^
-   79/2144 (3.68%) spills, 2065/2144 (96.32%) variables
-   8 warnings generated.
+>> drivers/clk/clk-sp7021.c:316:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:317:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:318:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:319:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:321:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
 
 
-vim +/out +2639 fs/buffer.c
+vim +316 drivers/clk/clk-sp7021.c
 
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2572  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2573  int block_truncate_page(struct address_space *mapping,
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2574  			loff_t from, get_block_t *get_block)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2575  {
-09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2576  	pgoff_t index = from >> PAGE_SHIFT;
-09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2577  	unsigned offset = from & (PAGE_SIZE-1);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2578  	unsigned blocksize;
-54b21a7992a31d Andrew Morton      2006-01-08  2579  	sector_t iblock;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2580  	unsigned length, pos;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2581  	struct inode *inode = mapping->host;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2582  	struct page *page;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2583  	struct buffer_head *bh;
-3e00c2b4797c22 Jiapeng Chong      2023-03-22  2584  	int err = 0;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2585  
-93407472a21b82 Fabian Frederick   2017-02-27  2586  	blocksize = i_blocksize(inode);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2587  	length = offset & (blocksize - 1);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2588  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2589  	/* Block boundary? Nothing to do */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2590  	if (!length)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2591  		return 0;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2592  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2593  	length = blocksize - length;
-09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2594  	iblock = (sector_t)index << (PAGE_SHIFT - inode->i_blkbits);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2595  	
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2596  	page = grab_cache_page(mapping, index);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2597  	if (!page)
-3e00c2b4797c22 Jiapeng Chong      2023-03-22  2598  		return -ENOMEM;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2599  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2600  	if (!page_has_buffers(page))
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2601  		create_empty_buffers(page, blocksize, 0);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2602  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2603  	/* Find the buffer that contains "offset" */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2604  	bh = page_buffers(page);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2605  	pos = blocksize;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2606  	while (offset >= pos) {
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2607  		bh = bh->b_this_page;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2608  		iblock++;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2609  		pos += blocksize;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2610  	}
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2611  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2612  	if (!buffer_mapped(bh)) {
-b0cf2321c65991 Badari Pulavarty   2006-03-26  2613  		WARN_ON(bh->b_size != blocksize);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2614  		err = get_block(inode, iblock, bh, 0);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2615  		if (err)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2616  			goto unlock;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2617  		/* unmapped? It's a hole - nothing to do */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2618  		if (!buffer_mapped(bh))
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2619  			goto unlock;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2620  	}
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2621  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2622  	/* Ok, it's mapped. Make sure it's up-to-date */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2623  	if (PageUptodate(page))
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2624  		set_buffer_uptodate(bh);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2625  
-33a266dda9fbbe David Chinner      2007-02-12  2626  	if (!buffer_uptodate(bh) && !buffer_delay(bh) && !buffer_unwritten(bh)) {
-e7ea1129afab0e Zhang Yi           2022-09-01  2627  		err = bh_read(bh, 0);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2628  		/* Uhhuh. Read error. Complain and punt. */
-e7ea1129afab0e Zhang Yi           2022-09-01  2629  		if (err < 0)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2630  			goto unlock;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2631  	}
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2632  
-eebd2aa355692a Christoph Lameter  2008-02-04  2633  	zero_user(page, offset, length);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2634  	mark_buffer_dirty(bh);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2635  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2636  unlock:
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2637  	unlock_page(page);
-09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  2638  	put_page(page);
-^1da177e4c3f41 Linus Torvalds     2005-04-16 @2639  out:
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2640  	return err;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2641  }
-1fe72eaa0f46a0 H Hartley Sweeten  2009-09-22  2642  EXPORT_SYMBOL(block_truncate_page);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  2643  
+   309	
+   310	static int plltv_set_rate(struct sp_pll *clk)
+   311	{
+   312		unsigned long flags;
+   313		u32 r0, r1, r2;
+   314	
+   315		r0  = BIT(clk->bp_bit + 16);
+ > 316		r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
+   317		r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
+   318		r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
+   319		r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
+   320	
+   321		r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
+   322	
+   323		r2  = HWM_FIELD_PREP(MASK_DIVN, clk->p[DIVN] - 1);
+   324		r2 |= HWM_FIELD_PREP(MASK_DIVM, clk->p[DIVM] - 1);
+   325	
+   326		spin_lock_irqsave(&clk->lock, flags);
+   327		writel(r0, clk->reg);
+   328		writel(r1, clk->reg + 4);
+   329		writel(r2, clk->reg + 8);
+   330		spin_unlock_irqrestore(&clk->lock, flags);
+   331	
+   332		return 0;
+   333	}
+   334	
 
 -- 
 0-DAY CI Kernel Test Service
