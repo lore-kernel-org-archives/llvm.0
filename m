@@ -1,51 +1,82 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0F02592;
-	Wed, 22 Mar 2023 12:33:59 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4PhSR374XHz4xFc;
-	Wed, 22 Mar 2023 23:27:27 +1100 (AEDT)
-From: Michael Ellerman <patch-notifications@ellerman.id.au>
-To: mpe@ellerman.id.au, Nathan Chancellor <nathan@kernel.org>
-Cc: npiggin@gmail.com, christophe.leroy@csgroup.eu, erhard_f@mailbox.org, ndesaulniers@google.com, trix@redhat.com, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-In-Reply-To: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
-References: <20230118-ppc64-elfv2-llvm-v1-0-b9e2ec9da11d@kernel.org>
-Subject: Re: [PATCH 0/3] Allow CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 with ld.lld 15+
-Message-Id: <167948793442.559204.2964050663889516909.b4-ty@ellerman.id.au>
-Date: Wed, 22 Mar 2023 23:25:34 +1100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099462592
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 12:44:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2730AC433D2;
+	Wed, 22 Mar 2023 12:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679489093;
+	bh=cYht+F6XkhcFtC9v6SKL72id95a8krZJbrH6VmzeT4Q=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=WONpPLt9AmcBhHrRzuN0Qnbyrl+ANDZBJK9VwQ+ZPTMFUOb7DtKCXUj1nGbyIhwl6
+	 C85TEyMv3uRNjotWlL/CmGroxtM9UAiFltY/EtQ3hKYPEz3SWc0vxnVaKGlgnOvuEu
+	 dSVK/zjKyMPpx1roUkDIqvSmxuJALfSbW/c0U5B52Aq9fuvqb96lNkjryPXvfQWx3R
+	 icYhHDJRJQLuyzYk60vhv9U9WYW+wN70A8U2V19lBUxDy5PWEKCVJYB+/a93CTy64B
+	 33gtmFtpskmrNeO9u/LTa7/LW6PNCrvVqFTID7hNXzIaa7c8g1JsfKapGmmT7TXoVX
+	 9T4Dm0UcjZXoA==
+From: Kalle Valo <kvalo@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,  David Airlie <airlied@gmail.com>,  Daniel Vetter <daniel@ffwll.ch>,  dri-devel@lists.freedesktop.org,  linux-toolchains@vger.kernel.org,  llvm@lists.linux.dev
+Subject: Re: Linux 6.3-rc3
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+	<20230320180501.GA598084@dev-arch.thelio-3990X>
+	<CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+	<20230320185337.GA615556@dev-arch.thelio-3990X>
+Date: Wed, 22 Mar 2023 14:44:47 +0200
+In-Reply-To: <20230320185337.GA615556@dev-arch.thelio-3990X> (Nathan
+	Chancellor's message of "Mon, 20 Mar 2023 11:53:37 -0700")
+Message-ID: <87pm91uf9c.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 15 Feb 2023 11:41:14 -0700, Nathan Chancellor wrote:
-> Currently, CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 is not selectable with
-> ld.lld because of an explicit dependency on GNU ld, due to lack of
-> testing with LLVM.
-> 
-> Erhard was kind enough to test this option on his hardware with LLVM 15,
-> which ran without any issues. This should not be too surprising, as
-> ld.lld does not have support for the ELFv1 ABI, only ELFv2, so it should
-> have decent support. With this series, big endian kernels can be built
-> with LLVM=1.
-> 
-> [...]
+Nathan Chancellor <nathan@kernel.org> writes:
 
-Applied to powerpc/next.
+> On Mon, Mar 20, 2023 at 11:26:17AM -0700, Linus Torvalds wrote:
+>> On Mon, Mar 20, 2023 at 11:05=E2=80=AFAM Nathan Chancellor <nathan@kerne=
+l.org> wrote:
+>> >
+>> > On the clang front, I am still seeing the following warning turned err=
+or
+>> > for arm64 allmodconfig at least:
+>> >
+>> >   drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is unin=
+itialized when used here [-Werror,-Wuninitialized]
+>> >           if (syncpt_irq < 0)
+>> >               ^~~~~~~~~~
+>>=20
+>> Hmm. I do my arm64 allmodconfig builds with gcc, and I'm surprised
+>> that gcc doesn't warn about this.
+>
+> Perhaps these would make doing allmodconfig builds with clang more
+> frequently less painful for you?
+>
+> https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
 
-[1/3] powerpc/boot: Only use '-mabi=elfv2' with CONFIG_PPC64_BOOT_WRAPPER
-      https://git.kernel.org/powerpc/c/d1c5accacb234c3a9f1609a73b4b2eaa4ef07d1a
-[2/3] powerpc: Fix use of '-mabi=elfv2' with clang
-      https://git.kernel.org/powerpc/c/7c3bd8362b06cff0a4044a4975adb7d71db2dfba
-[3/3] powerpc: Allow CONFIG_PPC64_BIG_ENDIAN_ELF_ABI_V2 with ld.lld 15+
-      https://git.kernel.org/powerpc/c/a11334d8327b3fd7987cbfb38e956a44c722d88f
+Thank you, at least for me this is really helpful. I tried now clang for
+the first time but seeing a strange problem.
 
-cheers
+I prefer to define the compiler in GNUmakefile so it's easy to change
+compilers and I don't need to remember the exact command line. So I have
+this in the top level GNUmakefile (all the rest commented out):
+
+LLVM=3D/opt/clang/llvm-16.0.0/bin/
+
+If I run 'make oldconfig' it seems to use clang but after I run just
+'make' it seems to switch back to the host GCC compiler and ask for GCC
+specific config questions again. Workaround for this seems to be adding
+'export LLVM' to GNUmakefile, after that also 'make' uses clang as
+expected.
+
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes
