@@ -1,93 +1,115 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF8B9476
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 18:25:57 +0000 (UTC)
-Received: by mail-pj1-f46.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso20001309pjb.3
-        for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 11:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679509557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xai25ViACOhtMbP/9A/HIC69Te+6jb14im4nmgBreX0=;
-        b=Nc7bqPWvvVP0Fh9GRUREatEuPhbNWcj8ydyJq6p7WhnKTmZsmINp40U8jm2U/D3eOh
-         GiADNrvpDW1src3wBD86k8hybLw++0LHdLBlze0Q290ZO1ycLMYXpjqhF0bC849Amhtk
-         Uy0gNTTczAqnmq7Ne1eUnCmgjRAczfqeQ58RKE9Z1Dbo8WYhXCE+35mHwpNTZjinRv7Z
-         SvFY91A1LyC+CNVJab3PMehak5rGBLhjGTsCzg52VkGZ8uMK06Y5GA1JlP2dh0NN6NWH
-         L5Jzlk3GH1BS4NTePFlNBmFvEFZSn5SfhLcK85z0+yzixjDvudD4Wt6pqVVnBBIsUYXI
-         dcEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679509557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xai25ViACOhtMbP/9A/HIC69Te+6jb14im4nmgBreX0=;
-        b=k9wpeCa7Ev1cEEE7uXw2inLS3144t9dLkuhQUpLjCgnggGSDOApvjXFvzMCtZC7t3O
-         Le/fY85Aknl1EaiF67esigsk3shx+B/B91+VWPKNl5ITSD48p8tneFPeWPZPXfRCe1aa
-         bIdRZrprWRWtyaUU+v2xCplj1ys1eGNFjOn3SlqtoDHkGxqBWU8f62oJ2xvxxXBwfqQg
-         4eM9p22KvmJTrJSNu4Z7E68WI2NuLRSGpSqP09GVYAJw5TEUKzkuwdtiEX/yjSNmJuN2
-         0nH0+zP8bqywHiUplRqqtIwkRbk8Hb6FoMl5Y8npucfkIqx+GaZoMYJpj9HJBKYQAu3T
-         HoVg==
-X-Gm-Message-State: AO0yUKXaqpvUO1sU/VHiaBP5U+7q4NuJn7aELnSaF7U9rLpico6UK718
-	RhNyWaue9YtDnTDZVfc87dfZNrI5Ax2g8wbKofbZIA==
-X-Google-Smtp-Source: AK7set/ZMXJixIFC4D/KWjt5E7Yb69EPs9KtjzG+BYb//151Eeugg7QbDH72EBo41HILsUMiYkKai/KWyETz2jWK8JA=
-X-Received: by 2002:a17:902:7b8b:b0:19a:82a2:fcf9 with SMTP id
- w11-20020a1709027b8b00b0019a82a2fcf9mr1399015pll.2.1679509556719; Wed, 22 Mar
- 2023 11:25:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBE22F37;
+	Wed, 22 Mar 2023 19:59:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C942C433A1;
+	Wed, 22 Mar 2023 19:59:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679515176;
+	bh=Pimu7YMlgMvD9aPxdSzZGlfStbfAP+xpCj244fNbLuw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QWZRqinq+D4RQIIIqJ/TFE2fD9b0RBdasDxZeH+x2+R52LrJ7DcwHsG4USO734qqS
+	 +GQ//TAE+3ERRJmp9oC0PVFXjNrqtqmwcs9TduwchmnHwGPZjKNDEYtKNMhJYDzShO
+	 w8ps28gwAa6zWD9tj6svba5YQuekBkcC3+mGLwynxDmClE6HZN7mAIVzS90tx/+ga+
+	 v3UkmpDmt1s2Js+RgPZHXnjAoaxegnrZVr8cXPj99HzJN4ehwub4rOPv0qN+IzP/gu
+	 va6F0B8LLRdqpY1I1DEXuyP7TOV9oTt+VfF4TA9dUqiGUpRB59vOVd0hukyy3gTZcO
+	 HCO0oWQjqUFUA==
+Date: Wed, 22 Mar 2023 12:59:33 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Qin Jian <qinjian@cqplus1.com>, kernel test robot <lkp@intel.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [clk:clk-sunplus 1/1] drivers/clk/clk-sp7021.c:316:8: warning:
+ result of comparison of constant 18446744073709551615 with expression of
+ type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char:
+ (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigne...
+Message-ID: <20230322195933.GA2828949@dev-arch.thelio-3990X>
+References: <202303221947.pXP2v4xJ-lkp@intel.com>
+ <81b2a67f89d7f46dd27f6d05606e753f.sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230215143626.453491-1-alexghiti@rivosinc.com>
- <20230215143626.453491-2-alexghiti@rivosinc.com> <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
- <877cw7dphf.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <877cw7dphf.fsf@all.your.base.are.belong.to.us>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 22 Mar 2023 11:25:45 -0700
-Message-ID: <CAKwvOdk0Lr-9gt0xAKvkcwA53+Wy8oeYQo1RJ7XH-LKCCURQCQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, nathan@kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <81b2a67f89d7f46dd27f6d05606e753f.sboyd@kernel.org>
 
-On Fri, Feb 24, 2023 at 7:58=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
-.org> wrote:
->
-> Alexandre Ghiti <alex@ghiti.fr> writes:
->
-> > +cc linux-kbuild, llvm, Nathan, Nick
-> >
-> > On 2/15/23 15:36, Alexandre Ghiti wrote:
-> >> From: Alexandre Ghiti <alex@ghiti.fr>
-> >>
-> > I tried a lot of things, but I struggle to understand, does anyone have
-> > any idea? FYI, the same problem happens with LLVM.
+On Wed, Mar 22, 2023 at 10:39:06AM -0700, Stephen Boyd wrote:
+> Quoting kernel test robot (2023-03-22 04:17:48)
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-sunplus
+> > head:   d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+> > commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2 [1/1] clk: Add Sunplus SP7021 clock driver
+> > config: mips-randconfig-r012-20230322 (https://download.01.org/0day-ci/archive/20230322/202303221947.pXP2v4xJ-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install mips cross compiling tool for clang build
+> >         # apt-get install binutils-mipsel-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/commit/?id=d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+> >         git remote add clk https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
+> >         git fetch --no-tags clk clk-sunplus
+> >         git checkout d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/clk/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Link: https://lore.kernel.org/oe-kbuild-all/202303221947.pXP2v4xJ-lkp@intel.com/
+> > 
+> 
+> Does this fix it?
+> 
+> ---8<---
+> diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
+> index 8fec14120105..caabbf5e2197 100644
+> --- a/drivers/clk/clk-sp7021.c
+> +++ b/drivers/clk/clk-sp7021.c
+> @@ -30,9 +30,9 @@ enum {
+>  	P_MAX
+>  };
+>  
+> -#define MASK_SEL_FRA	GENMASK(1, 1)
+> -#define MASK_SDM_MOD	GENMASK(2, 2)
+> -#define MASK_PH_SEL	GENMASK(4, 4)
+> +#define MASK_SEL_FRA	BITMASK(1)
+> +#define MASK_SDM_MOD	BITMASK(2)
+> +#define MASK_PH_SEL	BITMASK(4)
+>  #define MASK_NFRA	GENMASK(12, 6)
+>  #define MASK_DIVR	GENMASK(8, 7)
+>  #define MASK_DIVN	GENMASK(7, 0)
+> 
 
-Off the top of my head, no idea.
+No (BITMASK did not exist but BIT_MASK does). It looks like clang is
+complaining that mask is an unsigned int and it is being compared
+against ~0ull, which will always be false. This makes the warning go
+away for me, which is similar to commit cfd6fb45cfaf ("crypto: ccree -
+avoid out-of-range warnings from clang"), but I am not sure if that is
+correct or not.
 
-(Maybe as a follow up to this series, I wonder if pursuing
-ARCH_HAS_RELR for ARCH=3Driscv is worthwhile?)
+diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
+index 8fec14120105..11d22043ddd7 100644
+--- a/drivers/clk/clk-sp7021.c
++++ b/drivers/clk/clk-sp7021.c
+@@ -41,7 +41,7 @@ enum {
+ /* HIWORD_MASK FIELD_PREP */
+ #define HWM_FIELD_PREP(mask, value)		\
+ ({						\
+-	u32 _m = mask;				\
++	u64 _m = mask;				\
+ 	(_m << 16) | FIELD_PREP(_m, value);	\
+ })
+ 
 
->
-> Don't ask me *why*, but adding --emit-relocs to your linker flags solves
-> "the NULL .rela.dyn" both for GCC and LLVM.
->
-> The downside is that you end up with a bunch of .rela cruft in your
-> vmlinux.
+For the record, this only happens under W=1 but I think we would like to
+eventually enable this warning so it would be good to avoid introducing
+new instances.
 
-There was a patch just this week to use $(OBJCOPY) to strip these from
-vmlinux (for x86). Looks like x86 uses --emit-relocs for KASLR:
-https://lore.kernel.org/lkml/20230320121006.4863-1-petr.pavlu@suse.com/
---=20
-Thanks,
-~Nick Desaulniers
+Cheers,
+Nathan
