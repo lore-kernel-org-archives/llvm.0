@@ -1,254 +1,131 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E48BA53;
-	Wed, 22 Mar 2023 23:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679528650; x=1711064650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qw02EwvrD9YAPynAX4WZC2T8OQkJ5gsR8oDM2kkWs3E=;
-  b=mhTw3sRdgfLG/A02eZUMJu6o/eSGjACVDXqCwDZ7ecr23HppSkU7ZOBv
-   2SUC9pqCtu8lbibOL7ej9RmsJYQTZwm8U5e8I0PsBf9QM7cY9G2nolr7V
-   KqQDitlkS9rgOKWskGKMpo3m/L1QphCAhWbfs8qAYNHDAs/KR7LWVS+9/
-   hCEDC7/8PazFFUJZUwd1GiADOlomxOZpvihf1Idqib0n4ppyeOq5z1QkG
-   aBUkT1hXKGBji6obw2OkmJGrIpdmMqnDLO7NT1VHD1u7UG/P3gUxWEwIe
-   LM5jwd813Q1FHDMKqanQC705/sBUNfZkyDhgrxJS+Jj1hbnXmFPCJVDvZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="404247108"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="404247108"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 16:44:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="712444421"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="712444421"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Mar 2023 16:44:06 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pf87c-000Dki-1Z;
-	Wed, 22 Mar 2023 23:44:00 +0000
-Date: Thu, 23 Mar 2023 07:43:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next 7/8] virtio_net: introduce
- receive_mergeable_xdp()
-Message-ID: <202303230720.XUavHilr-lkp@intel.com>
-References: <20230322030308.16046-8-xuanzhuo@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B671ABA53;
+	Wed, 22 Mar 2023 23:48:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1EEC433D2;
+	Wed, 22 Mar 2023 23:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679528925;
+	bh=wWdLNiCNfnRGyGZ00699DT+v9vg5lBigHWNeZvkgUrw=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=i9V+BBFcNtBZruyQRBAA4M+mpqfzubCFLDCmMm7KReRuxW+R3YTZt7uUqCzDUu/4s
+	 7QNCmWga6UjU7PO8YovoKse2Xlg39DYXAb0yWjfypCUrka7go2ravpJ0aR73J1lQhs
+	 PnpNc3sCC7qVWvhBHD+muC0KINu3a+sHecHrzss/Ety6btbusud9twK8AUSJvQWTYS
+	 AtenEzJN3YUppXMUwdkXPbr3tLBZ2I/ezzLNBZQCOLujgn88KOs+jMX5FtogxX7qb/
+	 yTNh6gJvMu3zrdgv2oYxHayFGYRDq93imbanJP+6e2K/c9GYl/9G/0HEuLmK/WMmJ0
+	 I0OmqXV1j2BNw==
+Message-ID: <00c24196e5ceb60b7d69967b73910264.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322030308.16046-8-xuanzhuo@linux.alibaba.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230322195933.GA2828949@dev-arch.thelio-3990X>
+References: <202303221947.pXP2v4xJ-lkp@intel.com> <81b2a67f89d7f46dd27f6d05606e753f.sboyd@kernel.org> <20230322195933.GA2828949@dev-arch.thelio-3990X>
+Subject: Re: [clk:clk-sunplus 1/1] drivers/clk/clk-sp7021.c:316:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigne...
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Qin Jian <qinjian@cqplus1.com>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+To: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 22 Mar 2023 16:48:43 -0700
+User-Agent: alot/0.10
 
-Hi Xuan,
+Quoting Nathan Chancellor (2023-03-22 12:59:33)
+> On Wed, Mar 22, 2023 at 10:39:06AM -0700, Stephen Boyd wrote:
+> > Quoting kernel test robot (2023-03-22 04:17:48)
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git=
+ clk-sunplus
+> > > head:   d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+> > > commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2 [1/1] clk: Add Sunpl=
+us SP7021 clock driver
+> > > config: mips-randconfig-r012-20230322 (https://download.01.org/0day-c=
+i/archive/20230322/202303221947.pXP2v4xJ-lkp@intel.com/config)
+> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project =
+67409911353323ca5edf2049ef0df54132fa1ca7)
+> > > reproduce (this is a W=3D1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # install mips cross compiling tool for clang build
+> > >         # apt-get install binutils-mipsel-linux-gnu
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.g=
+it/commit/?id=3Dd54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+> > >         git remote add clk https://git.kernel.org/pub/scm/linux/kerne=
+l/git/clk/linux.git
+> > >         git fetch --no-tags clk clk-sunplus
+> > >         git checkout d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
+s W=3D1 O=3Dbuild_dir ARCH=3Dmips olddefconfig
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
+s W=3D1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash drivers/clk/
+> > >=20
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Link: https://lore.kernel.org/oe-kbuild-all/202303221947.pXP2v4xJ-l=
+kp@intel.com/
+> > >=20
+> >=20
+> > Does this fix it?
+> >=20
+> > ---8<---
+> > diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
+> > index 8fec14120105..caabbf5e2197 100644
+> > --- a/drivers/clk/clk-sp7021.c
+> > +++ b/drivers/clk/clk-sp7021.c
+> > @@ -30,9 +30,9 @@ enum {
+> >       P_MAX
+> >  };
+> > =20
+> > -#define MASK_SEL_FRA GENMASK(1, 1)
+> > -#define MASK_SDM_MOD GENMASK(2, 2)
+> > -#define MASK_PH_SEL  GENMASK(4, 4)
+> > +#define MASK_SEL_FRA BITMASK(1)
+> > +#define MASK_SDM_MOD BITMASK(2)
+> > +#define MASK_PH_SEL  BITMASK(4)
+> >  #define MASK_NFRA    GENMASK(12, 6)
+> >  #define MASK_DIVR    GENMASK(8, 7)
+> >  #define MASK_DIVN    GENMASK(7, 0)
+> >=20
+>=20
+> No (BITMASK did not exist but BIT_MASK does).
 
-Thank you for the patch! Perhaps something to improve:
+Heh ok.
 
-[auto build test WARNING on net-next/main]
+> It looks like clang is
+> complaining that mask is an unsigned int and it is being compared
+> against ~0ull, which will always be false. This makes the warning go
+> away for me, which is similar to commit cfd6fb45cfaf ("crypto: ccree -
+> avoid out-of-range warnings from clang"), but I am not sure if that is
+> correct or not.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/virtio_net-mergeable-xdp-put-old-page-immediately/20230322-110445
-patch link:    https://lore.kernel.org/r/20230322030308.16046-8-xuanzhuo%40linux.alibaba.com
-patch subject: [PATCH net-next 7/8] virtio_net: introduce receive_mergeable_xdp()
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230323/202303230720.XUavHilr-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c00edb888e239eb9eb468c0e93419f373f5e72a7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Xuan-Zhuo/virtio_net-mergeable-xdp-put-old-page-immediately/20230322-110445
-        git checkout c00edb888e239eb9eb468c0e93419f373f5e72a7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/
+Cool thanks. Can you send it as a proper patch?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230720.XUavHilr-lkp@intel.com/
+>=20
+> diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
+> index 8fec14120105..11d22043ddd7 100644
+> --- a/drivers/clk/clk-sp7021.c
+> +++ b/drivers/clk/clk-sp7021.c
+> @@ -41,7 +41,7 @@ enum {
+>  /* HIWORD_MASK FIELD_PREP */
+>  #define HWM_FIELD_PREP(mask, value)            \
+>  ({                                             \
+> -       u32 _m =3D mask;                          \
+> +       u64 _m =3D mask;                          \
+>         (_m << 16) | FIELD_PREP(_m, value);     \
+>  })
+> =20
+>=20
+> For the record, this only happens under W=3D1 but I think we would like to
+> eventually enable this warning so it would be good to avoid introducing
+> new instances.
 
-All warnings (new ones prefixed by >>):
+It makes sense to me because FIELD_PREP typically takes a GENMASK input,
+which is an unsigned long long shifted around.=20
 
->> drivers/net/virtio_net.c:1399:6: warning: variable 'page' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (unlikely(len > truesize - room)) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:78:22: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/virtio_net.c:1490:11: note: uninitialized use occurs here
-           put_page(page);
-                    ^~~~
-   drivers/net/virtio_net.c:1399:2: note: remove the 'if' if its condition is always false
-           if (unlikely(len > truesize - room)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/virtio_net.c:1392:19: note: initialize the variable 'page' to silence this warning
-           struct page *page;
-                            ^
-                             = NULL
->> drivers/net/virtio_net.c:1399:6: warning: variable 'num_buf' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (unlikely(len > truesize - room)) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:78:22: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/virtio_net.c:1491:25: note: uninitialized use occurs here
-           mergeable_buf_free(rq, num_buf, dev, stats);
-                                  ^~~~~~~
-   drivers/net/virtio_net.c:1399:2: note: remove the 'if' if its condition is always false
-           if (unlikely(len > truesize - room)) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/virtio_net.c:1393:13: note: initialize the variable 'num_buf' to silence this warning
-           int num_buf;
-                      ^
-                       = 0
-   2 warnings generated.
-
-
-vim +1399 drivers/net/virtio_net.c
-
-  1375	
-  1376	static struct sk_buff *receive_mergeable(struct net_device *dev,
-  1377						 struct virtnet_info *vi,
-  1378						 struct receive_queue *rq,
-  1379						 void *buf,
-  1380						 void *ctx,
-  1381						 unsigned int len,
-  1382						 unsigned int *xdp_xmit,
-  1383						 struct virtnet_rq_stats *stats)
-  1384	{
-  1385		unsigned int truesize = mergeable_ctx_to_truesize(ctx);
-  1386		unsigned int headroom = mergeable_ctx_to_headroom(ctx);
-  1387		unsigned int tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
-  1388		unsigned int room = SKB_DATA_ALIGN(headroom + tailroom);
-  1389		struct virtio_net_hdr_mrg_rxbuf *hdr;
-  1390		struct sk_buff *head_skb, *curr_skb;
-  1391		struct bpf_prog *xdp_prog;
-  1392		struct page *page;
-  1393		int num_buf;
-  1394		int offset;
-  1395	
-  1396		head_skb = NULL;
-  1397		stats->bytes += len - vi->hdr_len;
-  1398	
-> 1399		if (unlikely(len > truesize - room)) {
-  1400			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
-  1401				 dev->name, len, (unsigned long)(truesize - room));
-  1402			dev->stats.rx_length_errors++;
-  1403			goto err_skb;
-  1404		}
-  1405	
-  1406		if (likely(vi->xdp_enabled)) {
-  1407			rcu_read_lock();
-  1408			xdp_prog = rcu_dereference(rq->xdp_prog);
-  1409			if (xdp_prog) {
-  1410				head_skb = receive_mergeable_xdp(dev, vi, rq, xdp_prog,
-  1411								 buf, ctx, len, xdp_xmit,
-  1412								 stats);
-  1413				rcu_read_unlock();
-  1414				return head_skb;
-  1415			}
-  1416			rcu_read_unlock();
-  1417		}
-  1418	
-  1419		hdr = buf;
-  1420		num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
-  1421		page = virt_to_head_page(buf);
-  1422		offset = buf - page_address(page);
-  1423	
-  1424		head_skb = page_to_skb(vi, rq, page, offset, len, truesize, headroom);
-  1425		curr_skb = head_skb;
-  1426	
-  1427		if (unlikely(!curr_skb))
-  1428			goto err_skb;
-  1429		while (--num_buf) {
-  1430			int num_skb_frags;
-  1431	
-  1432			buf = virtqueue_get_buf_ctx(rq->vq, &len, &ctx);
-  1433			if (unlikely(!buf)) {
-  1434				pr_debug("%s: rx error: %d buffers out of %d missing\n",
-  1435					 dev->name, num_buf,
-  1436					 virtio16_to_cpu(vi->vdev,
-  1437							 hdr->num_buffers));
-  1438				dev->stats.rx_length_errors++;
-  1439				goto err_buf;
-  1440			}
-  1441	
-  1442			stats->bytes += len;
-  1443			page = virt_to_head_page(buf);
-  1444	
-  1445			truesize = mergeable_ctx_to_truesize(ctx);
-  1446			headroom = mergeable_ctx_to_headroom(ctx);
-  1447			tailroom = headroom ? sizeof(struct skb_shared_info) : 0;
-  1448			room = SKB_DATA_ALIGN(headroom + tailroom);
-  1449			if (unlikely(len > truesize - room)) {
-  1450				pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
-  1451					 dev->name, len, (unsigned long)(truesize - room));
-  1452				dev->stats.rx_length_errors++;
-  1453				goto err_skb;
-  1454			}
-  1455	
-  1456			num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
-  1457			if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
-  1458				struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
-  1459	
-  1460				if (unlikely(!nskb))
-  1461					goto err_skb;
-  1462				if (curr_skb == head_skb)
-  1463					skb_shinfo(curr_skb)->frag_list = nskb;
-  1464				else
-  1465					curr_skb->next = nskb;
-  1466				curr_skb = nskb;
-  1467				head_skb->truesize += nskb->truesize;
-  1468				num_skb_frags = 0;
-  1469			}
-  1470			if (curr_skb != head_skb) {
-  1471				head_skb->data_len += len;
-  1472				head_skb->len += len;
-  1473				head_skb->truesize += truesize;
-  1474			}
-  1475			offset = buf - page_address(page);
-  1476			if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
-  1477				put_page(page);
-  1478				skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
-  1479						     len, truesize);
-  1480			} else {
-  1481				skb_add_rx_frag(curr_skb, num_skb_frags, page,
-  1482						offset, len, truesize);
-  1483			}
-  1484		}
-  1485	
-  1486		ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
-  1487		return head_skb;
-  1488	
-  1489	err_skb:
-  1490		put_page(page);
-  1491		mergeable_buf_free(rq, num_buf, dev, stats);
-  1492	
-  1493	err_buf:
-  1494		stats->drops++;
-  1495		dev_kfree_skb(head_skb);
-  1496		return NULL;
-  1497	}
-  1498	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I think I'm building with W=3D1, but I'm not building with clang. I'll
+have to go fetch another compiler and put it into circulation.
