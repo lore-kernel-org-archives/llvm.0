@@ -1,127 +1,356 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C409428FC
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 13:21:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679491298;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1h5c9Xe5m/iQXmk9fJ7pJ1QSI6JTFH6RkYVKb36h5NM=;
-	b=L191CCC9hymaqFo7AxuctzMquv3wH3ipLNvpX/fvRM+QimZmS21s+VwybtyeslxLnt1G4p
-	3CXFeSCwnw5yEg/48mjrx3ZjCtV0HPs1hdjXbpIx0NzsUQCCnJJls1SKrTN4W13vtE3WLh
-	/nBtJcD/ITpevbcKvQZkxDhIS+QHYJM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-286-NNG-KtoZNgm1UiQsVPt2cQ-1; Wed, 22 Mar 2023 09:21:36 -0400
-X-MC-Unique: NNG-KtoZNgm1UiQsVPt2cQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7896B88B7A2
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 13:21:36 +0000 (UTC)
-Received: from [172.64.15.49] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 64EE02166B29;
-	Wed, 22 Mar 2023 13:21:36 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (96/381 SKIPPED): Test report for master
- (6.3.0-rc3, mainline.kernel.org-clang, a1effab7)
-Date: Wed, 22 Mar 2023 13:21:36 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18692291E
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 13:38:50 +0000 (UTC)
+Received: (Authenticated sender: alex@ghiti.fr)
+	by mail.gandi.net (Postfix) with ESMTPSA id C1BD960013;
+	Wed, 22 Mar 2023 13:38:35 +0000 (UTC)
+Message-ID: <459b4e6d-f469-d7f3-99e4-2efbc461b61d@ghiti.fr>
+Date: Wed, 22 Mar 2023 14:38:34 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <80055.123032209213622625@us-mta-286.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
+Content-Language: en-US
+From: Alexandre Ghiti <alex@ghiti.fr>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, nathan@kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, ndesaulniers@google.com,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+References: <20230215143626.453491-1-alexghiti@rivosinc.com>
+ <20230215143626.453491-2-alexghiti@rivosinc.com>
+ <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
+In-Reply-To: <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+@linux-kbuild: Does anyone has an idea to solve this?
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Thanks!
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'vfio-v6.3-rc4' of https://github.com/awillia=
-m/linux-vfio
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/80572
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+On 2/22/23 13:29, Alexandre Ghiti wrote:
+> +cc linux-kbuild, llvm, Nathan, Nick
+>
+> On 2/15/23 15:36, Alexandre Ghiti wrote:
+>> From: Alexandre Ghiti <alex@ghiti.fr>
+>>
+>> This config allows to compile 64b kernel as PIE and to relocate it at
+>> any virtual address at runtime: this paves the way to KASLR.
+>> Runtime relocation is possible since relocation metadata are embedded 
+>> into
+>> the kernel.
+>>
+>> Note that relocating at runtime introduces an overhead even if the
+>> kernel is loaded at the same address it was linked at and that the 
+>> compiler
+>> options are those used in arm64 which uses the same RELA relocation
+>> format.
+>>
+>> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+>> ---
+>>   arch/riscv/Kconfig              | 14 +++++++++
+>>   arch/riscv/Makefile             |  7 +++--
+>>   arch/riscv/kernel/efi-header.S  |  6 ++--
+>>   arch/riscv/kernel/vmlinux.lds.S | 10 ++++--
+>>   arch/riscv/mm/Makefile          |  4 +++
+>>   arch/riscv/mm/init.c            | 54 ++++++++++++++++++++++++++++++++-
+>>   6 files changed, 87 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index e2b656043abf..e0ee7ce4b2e3 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -544,6 +544,20 @@ config COMPAT
+>>           If you want to execute 32-bit userspace applications, say Y.
+>>   +config RELOCATABLE
+>> +    bool "Build a relocatable kernel"
+>> +    depends on MMU && 64BIT && !XIP_KERNEL
+>> +    help
+>> +          This builds a kernel as a Position Independent Executable 
+>> (PIE),
+>> +          which retains all relocation metadata required to relocate 
+>> the
+>> +          kernel binary at runtime to a different virtual address 
+>> than the
+>> +          address it was linked at.
+>> +          Since RISCV uses the RELA relocation format, this requires a
+>> +          relocation pass at runtime even if the kernel is loaded at 
+>> the
+>> +          same address it was linked at.
+>> +
+>> +          If unsure, say N.
+>> +
+>>   endmenu # "Kernel features"
+>>     menu "Boot options"
+>> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+>> index 82153960ac00..97c34136b027 100644
+>> --- a/arch/riscv/Makefile
+>> +++ b/arch/riscv/Makefile
+>> @@ -7,9 +7,12 @@
+>>   #
+>>     OBJCOPYFLAGS    := -O binary
+>> -LDFLAGS_vmlinux :=
+>> +ifeq ($(CONFIG_RELOCATABLE),y)
+>> +    LDFLAGS_vmlinux += -shared -Bsymbolic -z notext -z norelro
+>> +    KBUILD_CFLAGS += -fPIE
+>> +endif
+>>   ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+>> -    LDFLAGS_vmlinux := --no-relax
+>> +    LDFLAGS_vmlinux += --no-relax
+>>       KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+>>       CC_FLAGS_FTRACE := -fpatchable-function-entry=8
+>>   endif
+>> diff --git a/arch/riscv/kernel/efi-header.S 
+>> b/arch/riscv/kernel/efi-header.S
+>> index 8e733aa48ba6..f7ee09c4f12d 100644
+>> --- a/arch/riscv/kernel/efi-header.S
+>> +++ b/arch/riscv/kernel/efi-header.S
+>> @@ -33,7 +33,7 @@ optional_header:
+>>       .byte    0x02                    // MajorLinkerVersion
+>>       .byte    0x14                    // MinorLinkerVersion
+>>       .long    __pecoff_text_end - efi_header_end    // SizeOfCode
+>> -    .long    __pecoff_data_virt_size            // 
+>> SizeOfInitializedData
+>> +    .long    __pecoff_data_virt_end - __pecoff_text_end    // 
+>> SizeOfInitializedData
+>>       .long    0                    // SizeOfUninitializedData
+>>       .long    __efistub_efi_pe_entry - _start        // 
+>> AddressOfEntryPoint
+>>       .long    efi_header_end - _start            // BaseOfCode
+>> @@ -91,9 +91,9 @@ section_table:
+>>           IMAGE_SCN_MEM_EXECUTE            // Characteristics
+>>         .ascii    ".data\0\0\0"
+>> -    .long    __pecoff_data_virt_size            // VirtualSize
+>> +    .long    __pecoff_data_virt_end - __pecoff_text_end    // 
+>> VirtualSize
+>>       .long    __pecoff_text_end - _start        // VirtualAddress
+>> -    .long    __pecoff_data_raw_size            // SizeOfRawData
+>> +    .long    __pecoff_data_raw_end - __pecoff_text_end    // 
+>> SizeOfRawData
+>>       .long    __pecoff_text_end - _start        // PointerToRawData
+>>         .long    0                    // PointerToRelocations
+>> diff --git a/arch/riscv/kernel/vmlinux.lds.S 
+>> b/arch/riscv/kernel/vmlinux.lds.S
+>> index 4e6c88aa4d87..8be2de3be08c 100644
+>> --- a/arch/riscv/kernel/vmlinux.lds.S
+>> +++ b/arch/riscv/kernel/vmlinux.lds.S
+>> @@ -122,9 +122,15 @@ SECTIONS
+>>           *(.sdata*)
+>>       }
+>>   +    .rela.dyn : ALIGN(8) {
+>> +        __rela_dyn_start = .;
+>> +        *(.rela .rela*)
+>> +        __rela_dyn_end = .;
+>> +    }
+>> +
+>
+>
+> So I realized those relocations would be better in the init section so 
+> we can get rid of them at some point. So I tried the following:
+>
+> diff --git a/arch/riscv/kernel/vmlinux.lds.S 
+> b/arch/riscv/kernel/vmlinux.lds.S
+> index 7ac215467fd5..6111023a89ef 100644
+> --- a/arch/riscv/kernel/vmlinux.lds.S
+> +++ b/arch/riscv/kernel/vmlinux.lds.S
+> @@ -93,6 +93,12 @@ SECTIONS
+>                 *(.rel.dyn*)
+>         }
+>
+> +       .rela.dyn : ALIGN(8) {
+> +               __rela_dyn_start = .;
+> +               *(.rela .rela*)
+> +               __rela_dyn_end = .;
+> +       }
+> +
+>         __init_data_end = .;
+>
+>         . = ALIGN(8);
+> @@ -119,12 +125,6 @@ SECTIONS
+>                 *(.sdata*)
+>         }
+>
+> -       .rela.dyn : ALIGN(8) {
+> -               __rela_dyn_start = .;
+> -               *(.rela .rela*)
+> -               __rela_dyn_end = .;
+> -       }
+> -
+>  #ifdef CONFIG_EFI
+>         .pecoff_edata_padding : { BYTE(0); . = 
+> ALIGN(PECOFF_FILE_ALIGNMENT); }
+>         __pecoff_data_raw_end = ABSOLUTE(.);
+>
+>
+> But then all the relocations in vmlinux end up being null:
+>
+> vmlinux:     file format elf64-littleriscv
+>
+> $ riscv64-linux-gnu-objdump -R vmlinux
+>
+> DYNAMIC RELOCATION RECORDS
+> OFFSET           TYPE              VALUE
+> 0000000000000000 R_RISCV_NONE      *ABS*
+> 0000000000000000 R_RISCV_NONE      *ABS*
+> ....
+>
+>  I also noticed that re-linking vmlinux with the same command right 
+> after works (ie, the relocations are now valid):
+>
+> $ riscv64-linux-gnu-objdump -R vmlinux
+>
+> vmlinux:     file format elf64-littleriscv
+>
+> DYNAMIC RELOCATION RECORDS
+> OFFSET           TYPE              VALUE
+> ffffffff82600718 R_RISCV_RELATIVE  *ABS*-0x000000007d9ff8e8
+> ffffffff82600720 R_RISCV_RELATIVE  *ABS*-0x000000007d9ff8e8
+> ...
+>
+> Below is the command used to generate this working vmlinux:
+>
+> riscv64-unknown-linux-gnu-ld -melf64lriscv -z noexecstack 
+> --no-warn-rwx-segments -shared -Bsymbolic -z notext -z norelro 
+> --no-relax --build-id=sha1 --script=./arch/riscv/kernel/vmlinux.lds 
+> -Map=vmlinux.map -o vmlinux --whole-archive vmlinux.a 
+> .vmlinux.export.o init/version-timestamp.o --no-whole-archive 
+> --start-group ./drivers/firmware/efi/libstub/lib.a --end-group 
+> .tmp_vmlinux.kallsyms3.o
+>
+> I tried a lot of things, but I struggle to understand, does anyone 
+> have any idea? FYI, the same problem happens with LLVM.
+>
+> Thanks,
+>
+> Alex
+>
+>
+>>   #ifdef CONFIG_EFI
+>>       .pecoff_edata_padding : { BYTE(0); . = 
+>> ALIGN(PECOFF_FILE_ALIGNMENT); }
+>> -    __pecoff_data_raw_size = ABSOLUTE(. - __pecoff_text_end);
+>> +    __pecoff_data_raw_end = ABSOLUTE(.);
+>>   #endif
+>>         /* End of data section */
+>> @@ -134,7 +140,7 @@ SECTIONS
+>>     #ifdef CONFIG_EFI
+>>       . = ALIGN(PECOFF_SECTION_ALIGNMENT);
+>> -    __pecoff_data_virt_size = ABSOLUTE(. - __pecoff_text_end);
+>> +    __pecoff_data_virt_end = ABSOLUTE(.);
+>>   #endif
+>>       _end = .;
+>>   diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
+>> index 2ac177c05352..b85e9e82f082 100644
+>> --- a/arch/riscv/mm/Makefile
+>> +++ b/arch/riscv/mm/Makefile
+>> @@ -1,6 +1,10 @@
+>>   # SPDX-License-Identifier: GPL-2.0-only
+>>     CFLAGS_init.o := -mcmodel=medany
+>> +ifdef CONFIG_RELOCATABLE
+>> +CFLAGS_init.o += -fno-pie
+>> +endif
+>> +
+>>   ifdef CONFIG_FTRACE
+>>   CFLAGS_REMOVE_init.o = $(CC_FLAGS_FTRACE)
+>>   CFLAGS_REMOVE_cacheflush.o = $(CC_FLAGS_FTRACE)
+>> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+>> index 7f01c2e56efe..3862696c2ac9 100644
+>> --- a/arch/riscv/mm/init.c
+>> +++ b/arch/riscv/mm/init.c
+>> @@ -20,6 +20,9 @@
+>>   #include <linux/dma-map-ops.h>
+>>   #include <linux/crash_dump.h>
+>>   #include <linux/hugetlb.h>
+>> +#ifdef CONFIG_RELOCATABLE
+>> +#include <linux/elf.h>
+>> +#endif
+>>     #include <asm/fixmap.h>
+>>   #include <asm/tlbflush.h>
+>> @@ -146,7 +149,7 @@ static void __init print_vm_layout(void)
+>>           print_ml("kasan", KASAN_SHADOW_START, KASAN_SHADOW_END);
+>>   #endif
+>>   -        print_ml("kernel", (unsigned long)KERNEL_LINK_ADDR,
+>> +        print_ml("kernel", (unsigned long)kernel_map.virt_addr,
+>>                (unsigned long)ADDRESS_SPACE_END);
+>>       }
+>>   }
+>> @@ -854,6 +857,44 @@ static __init void set_satp_mode(uintptr_t dtb_pa)
+>>   #error "setup_vm() is called from head.S before relocate so it 
+>> should not use absolute addressing."
+>>   #endif
+>>   +#ifdef CONFIG_RELOCATABLE
+>> +extern unsigned long __rela_dyn_start, __rela_dyn_end;
+>> +
+>> +static void __init relocate_kernel(void)
+>> +{
+>> +    Elf64_Rela *rela = (Elf64_Rela *)&__rela_dyn_start;
+>> +    /*
+>> +     * This holds the offset between the linked virtual address and the
+>> +     * relocated virtual address.
+>> +     */
+>> +    uintptr_t reloc_offset = kernel_map.virt_addr - KERNEL_LINK_ADDR;
+>> +    /*
+>> +     * This holds the offset between kernel linked virtual address and
+>> +     * physical address.
+>> +     */
+>> +    uintptr_t va_kernel_link_pa_offset = KERNEL_LINK_ADDR - 
+>> kernel_map.phys_addr;
+>> +
+>> +    for ( ; rela < (Elf64_Rela *)&__rela_dyn_end; rela++) {
+>> +        Elf64_Addr addr = (rela->r_offset - va_kernel_link_pa_offset);
+>> +        Elf64_Addr relocated_addr = rela->r_addend;
+>> +
+>> +        if (rela->r_info != R_RISCV_RELATIVE)
+>> +            continue;
+>> +
+>> +        /*
+>> +         * Make sure to not relocate vdso symbols like rt_sigreturn
+>> +         * which are linked from the address 0 in vmlinux since
+>> +         * vdso symbol addresses are actually used as an offset from
+>> +         * mm->context.vdso in VDSO_OFFSET macro.
+>> +         */
+>> +        if (relocated_addr >= KERNEL_LINK_ADDR)
+>> +            relocated_addr += reloc_offset;
+>> +
+>> +        *(Elf64_Addr *)addr = relocated_addr;
+>> +    }
+>> +}
+>> +#endif /* CONFIG_RELOCATABLE */
+>> +
+>>   #ifdef CONFIG_XIP_KERNEL
+>>   static void __init create_kernel_page_table(pgd_t *pgdir,
+>>                           __always_unused bool early)
+>> @@ -1039,6 +1080,17 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>>       BUG_ON((kernel_map.virt_addr + kernel_map.size) > 
+>> ADDRESS_SPACE_END - SZ_4K);
+>>   #endif
+>>   +#ifdef CONFIG_RELOCATABLE
+>> +    /*
+>> +     * Early page table uses only one PUD, which makes it possible
+>> +     * to map PUD_SIZE aligned on PUD_SIZE: if the relocation offset
+>> +     * makes the kernel cross over a PUD_SIZE boundary, raise a bug
+>> +     * since a part of the kernel would not get mapped.
+>> +     */
+>> +    BUG_ON(PUD_SIZE - (kernel_map.virt_addr & (PUD_SIZE - 1)) < 
+>> kernel_map.size);
+>> +    relocate_kernel();
+>> +#endif
+>> +
+>>       apply_early_boot_alternatives();
+>>       pt_ops_set_early();
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
