@@ -1,100 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C867C28FC
-	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 12:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679489897;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TIlkqLegAeBC+m6CULqCYBtfGXGiuVBtfnZhQsPJi1c=;
-	b=SuMISo12SX8QsCQ0Tk20n6SGBbSu6dKxKtKtUAMcesqNoun0dtA+JXpRC/U87Ta7x2wlBs
-	I3zNh0a22L2KAtc5HuEGQ9xNC4U0sYSNUwiGSddYI+4in0qMzqQHwtKOk5LcIMVL6dUB//
-	SkjB99f+FayFA/W1iqsqBUUJX864g2o=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-663-RbEByEr6N9yhyN1tK-peSA-1; Wed, 22 Mar 2023 08:58:09 -0400
-X-MC-Unique: RbEByEr6N9yhyN1tK-peSA-1
-Received: by mail-qv1-f71.google.com with SMTP id a15-20020a0562140c2f00b005ad28a23cffso9128354qvd.6
-        for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 05:58:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679489888;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TIlkqLegAeBC+m6CULqCYBtfGXGiuVBtfnZhQsPJi1c=;
-        b=VFoQfRob/WYAuFyZzDUFcCwq4wGgLAPpi+GkkXu+2XdaL0TS0Ea5HhAgqlFNJZnFxy
-         KuTtsRMt5iXjfva61KAoufaXGPSXcmyBsRACfoVXXYgm0e2dqx6KGBKrLYsFV6LR+A0U
-         pc8Le5wHi775vInLl0usK8gyxAYAD7Pu/+Hu4WodI5sjFzXJolJM7AfMaeBpKTSZ+/MU
-         4uYFfgP7Xqpf/q6E6/D9WR3DytLSHdYXZcZuMp/tMS+hodekJ60Dm9+9YEy52Gz64VkS
-         JUU7cDACwQRXRfmJni+WYTg7rLmOt9jq9oq6gVt+sfiaOUjVKe0HjPzuljZhyREEUUOP
-         8EHg==
-X-Gm-Message-State: AO0yUKWFDvquHi+MldbcFvBBgQTNXgdqBtmI0mzFLX0OT3PKkv7flrMO
-	osBiWgf2L3V3y7N/iZwXL1+2VdqL8gdtJPKpGFA5nnlIr4Emi7U7Mzxza3iacm45cTsaLadgqBQ
-	ilJeD6CDdLKtyrw==
-X-Received: by 2002:ac8:4e8f:0:b0:3e0:61d0:f7f7 with SMTP id 15-20020ac84e8f000000b003e061d0f7f7mr3644647qtp.14.1679489888596;
-        Wed, 22 Mar 2023 05:58:08 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+ZXo2BL1krc+p+oXQftVChy1UR6ByYgMLDN+KiLPI5b2ZE0C/8zB2LdH0plZsW39kzr5AVQQ==
-X-Received: by 2002:ac8:4e8f:0:b0:3e0:61d0:f7f7 with SMTP id 15-20020ac84e8f000000b003e061d0f7f7mr3644621qtp.14.1679489888366;
-        Wed, 22 Mar 2023 05:58:08 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j9-20020ac874c9000000b003dffd3d3df5sm6394388qtr.2.2023.03.22.05.58.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 05:58:08 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: tony@atomide.com,
-	lee@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-omap@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] mfd: omap-usb-tll: remove unused usbtll_readb function
-Date: Wed, 22 Mar 2023 08:58:03 -0400
-Message-Id: <20230322125803.2570968-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA8828FC
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 13:20:57 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VhtADZO8APuKAJoqoF0T6NzFyLjyPvz6TZ5jviBEzPyCYHIW4jJ+FhIxwEOh9/SCwA/a9PDW+vUZGOpUTCi/poPOb5/gADHc0nyHu+H6iGR8Lc5NwJvgGWk7Ug0V19idPEsZ7zaygTUv+89W3JECm4ClZcZ+tCKNyNd7W5HRmBS0RPnWQI/Ft875rPaeI2vswRLWXuoHm5G5mo4g/geC34ZUl2dqLr2h8DMvl37wzAnOyPXEA7HgQXCjcGdOP4Piabv/qbcdj24iZITmxcE4BJagDcZM4t6VUsYHU8LhV2C9hGmznUSo1g4Es9fJ10lpqBsZJnZW7IcxLkZ5LSyg+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3Xgts+bCfPlvupjEPS7v90+Rkp9rJuyCY/YdKaOcFDo=;
+ b=YrJHtHCzrgaUT7xL9EArWYu3VTwew9c4IMeTZort0oSc/+3OIhSMFO8r3VCaXKJ2m83Txup+AAqYcAicw9mgkcy7b0gRiqDeTsT8U1QVQaWSH4yDTslHaDuby18YW//KPmakerNKwCwDcBP9LCX/DTAEJ3bH9m47rcIiWkL949G3sm78/cJ6lfEJuhI28s+62ws0tUFSQlmmP3U7ZXlh9f8aUy9VAc3fzoAnSWEYroQa5Cnqer9VCL5+OC3Z/8vsAicvTztj6mPBR1XwTBpL1NYr1pJzsZOjuYk98mzUQMWM0q19QJzF/upQBG8Xhia+KRjS8AsWk41/BWnO3qcQAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3Xgts+bCfPlvupjEPS7v90+Rkp9rJuyCY/YdKaOcFDo=;
+ b=EW6CzcF3MFda8FONWKUXTZ5VEiCcem0JP9clHPISNvHC2M3ETqFDY2QiqjBllWL7xJNsEsZQVgzNu4fpKRbChSsMFTukLiwi150dl0UhiGZdhg1IaL+C4JDXSqk4a+SEe7TNCOOnek+wYTwBB2EruO9rVW9IIQUuU2qfl7hxanw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB3878.namprd13.prod.outlook.com (2603:10b6:610:93::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 13:20:53 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 13:20:53 +0000
+Date: Wed, 22 Mar 2023 14:20:46 +0100
+From: Simon Horman <simon.horman@corigine.com>
+To: Tom Rix <trix@redhat.com>
+Cc: isdn@linux-pingi.de, nathan@kernel.org, ndesaulniers@google.com,
+	kuba@kernel.org, alexanderduyck@fb.com, yangyingliang@huawei.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] mISDN: remove unused vpm_read_address function
+Message-ID: <ZBsArtzFkgz+05LK@corigine.com>
+References: <20230321120127.1782548-1-trix@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321120127.1782548-1-trix@redhat.com>
+X-ClientProxiedBy: AM9P195CA0026.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21f::31) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3878:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5962337b-f35e-4456-5145-08db2ad8434f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	sOfIAiB/7Gl/4JhhkVNjvxEpsdagiv8qNy0j3OBq8ETU/iHarq+ZijYSdARm2oDCgyH04EFpUYBh5gUpF6PRvKcyIfgLP7t6LfmVxCcdrIUSDmTfGagSl+8Nn6B34IaFYfluKz+vCDIP55l4H7zhn1qWajazGfef8p1n6EBbDu3z7jCrCZTnh4wmVIWnKMjI8sQYhDLws7IUolHOBo4jKOoOiXBWTKtv6Hl6K7FX6eSrWTeAaephJuUOjGWS7qK2eCBvmc6C7f2IILDpN1MOqY6IKT0sQ8U2l/hSxew59iKNDxNw+UiPWdm678ygMWZCiU630F6cRDx9h70coO9QwHdQnF6KTaQUUN1uQuxKZEET2xSqDcGs6Bd02w57iAh55n/QjqSGZ2XFz0mwYS2zNWlD+Ase5GNrOQTolDcRXFH9UTKmJvvyEI9xjjXPa+M4ITaxL5vREDuX3yspwYY6ZlAU3IpoouOKV9N3UcoC6W7cHMZU0tSisCm7GNk2oUr9rfEpstFkqWBylFtvzPW1D2L5llbzOpL19ScqSNtWUriOvYyCPuf50oubRpMJUJzI3T4jteWMGp908yv5Yoi2nDAe8cA9fWNVSq2rtaUwdQ0DNZ9J5HACAEA08LyHPaIVhR4WUkLZrjkS4HnEjN7naNkzXzWdAmkqJH2ef0PFlyabyNZxSP0eeuzI8U+yfh9yElrfF84A+dXV0yX8vgKUxUJ3diah2tp5ZmvuLrwJFtenVVGy29FHJkVUGnGtAZfL
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39840400004)(366004)(346002)(376002)(136003)(451199018)(66556008)(6512007)(2616005)(6506007)(186003)(6486002)(4326008)(8676002)(6666004)(316002)(6916009)(66476007)(478600001)(66946007)(7416002)(4744005)(8936002)(5660300002)(2906002)(44832011)(41300700001)(86362001)(38100700002)(36756003)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?XThWeFtnqriwHhzwWijVGGe6jVj+dkWSVa41co4gYA11BiKNtSuXk2lcw7lb?=
+ =?us-ascii?Q?7ohZ/u2ud0kFgOcDBE1gxecKz1K9BHEyDpW8Gz86KtKjCsrKS4lewv8m3UT7?=
+ =?us-ascii?Q?dzwmeHRQk3UxVSfd7AdAf3oZqPKtPmGZqNQ3DFRlkT+0ABiGVOcF1QoOXHcY?=
+ =?us-ascii?Q?W7y8iEOXTKjIZYsfOhar0CNi15AaAO8MrZU376LVS15x1jf92T2iZbK5E0Mb?=
+ =?us-ascii?Q?fK1AXjc/xonxZ+Ii90ol+vRrATtJlTHdm6eOFL6miPQZLnqxEgxB3hjEFkbV?=
+ =?us-ascii?Q?xPFwcp7zPKKJgMoYsUqBcwDFmm6WgQuPv2ufCjQzB/kf8p8C/IBvsj5UakYy?=
+ =?us-ascii?Q?9ljqnsc8TPZez8bcR5/XTiE9rYEh5IID7P1x64+TNU6lt18IPt8OE29Kwy2i?=
+ =?us-ascii?Q?jRIktT4RfBuk2lKB0U9txxzlro6m2RQPxtTY4Zf2P3e0ejSXAhcrz9P/Q4W3?=
+ =?us-ascii?Q?no76N2RFvYk7WnfmY+tDGdJRTSWC3ltAALLO7kbp/yog08KUfMM/8TYXyJe5?=
+ =?us-ascii?Q?r9f+XKFM8iGoQlZlSZVqF6UBUEbB+SadYsZYyE2sou/5NFjK/sjE7oE0QnUn?=
+ =?us-ascii?Q?A6h5b7m/DNdfokCdtTfEramzWqCEctiWczVTfXUnVB7p3Z5nu8E2vuSwbF5M?=
+ =?us-ascii?Q?BfgXJujTafs0TjCFoG3v3MEX/S7eL/XnxvpdU+ml/+DZhYg/sXcfLQea0kOm?=
+ =?us-ascii?Q?9xZUCWCBSbcGXQ/OpqtqW/erKsT6r1GiC6STy3MttqYD7Ko9IIutCWQfdzUj?=
+ =?us-ascii?Q?GqpiFQlVf8mrdSHJCG4aRpui/NpqYBqS4UwNvKH/InD3oc6VEOEPhU73HnJV?=
+ =?us-ascii?Q?ZhIo5mDeWUjqsvK1dOvC90xOd/nv8LHcVcDSvfDbbxOK35PY42iKSRHLg9l/?=
+ =?us-ascii?Q?guOU4vbaoQG4AW/5EhQrcTVm7LY46Lsc92hDD0hFK6DP1WkDQ8opRo915fY/?=
+ =?us-ascii?Q?X5afsd9Kl49bDLasOCz604RHhcovhlTeGoBiP7f+y1jY9aIDjmWcgmTSj9dJ?=
+ =?us-ascii?Q?aTvQSXA+qwuAM0zQUeFlMOo7pXxzEbW9MTyJtm1DxkxDDkk48/emQWng/8Z5?=
+ =?us-ascii?Q?xnbWIgXzSJP6hqUoOIubQP/vWrl+rzubvBitcnlB2s9RD7/+XJwUH79H+AOc?=
+ =?us-ascii?Q?irqvZKWQFUzTcl88q7e/HfPyM/oQsoI6xx0tcOT/wkjCMVNu10wBmVz3F/R9?=
+ =?us-ascii?Q?b4/xbyae4KNVDJALKELOb4RWOljMUrSBKPA4IKKz6ZbtpXXtOZYPjIStnJIw?=
+ =?us-ascii?Q?DnJct1enVVyC3aghPEB1iP9Fl5i50jED49/OIGmNvDn6o0zghIOTzLuEImvS?=
+ =?us-ascii?Q?QaIvNfzisiPjaG9Bhz8Hl+3pbLXFRHMaYBrGp7plrHb6qP6MN1nEBwWlTZZm?=
+ =?us-ascii?Q?x4q1c6oGhhDya1bcjs/fiDPcremcjJ6BZFXvey8wGCpM/k4OBWNrwhVtuhyN?=
+ =?us-ascii?Q?LeT+KfefrNLT0GPOJ1zsREHKNvxJA+BBCFsPw8IswZEuRCwVnaqZgrOK1czC?=
+ =?us-ascii?Q?x+/CbqtwkQZkiEFmmA0brpnxBogbGm5n1uomSL3HrN8MiHsLKSkoaF9jM206?=
+ =?us-ascii?Q?qrCkqbWTembcO7cELTQW8K6RsgnkQEdcjI7OPlIgquyv8NuCXyTK7DGnrwAR?=
+ =?us-ascii?Q?0bNra90pfCEL4z80CKMeythI3BVBVUflY3nAkPbd9hCMPKAlyT+ktv1Z5Rvq?=
+ =?us-ascii?Q?3Q40Zg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5962337b-f35e-4456-5145-08db2ad8434f
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 13:20:53.6148
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fN+1SujG2YVcu78XifloGGA89RBErSGoRV3bgcW4duquJS9UF8aKbaBtr3Mb7LP8hytDAfVAsXDKxnS9X7hZ7JuO1kt2KiMBs7E0EUo30fM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3878
 
-clang with W=1 reports
-drivers/mfd/omap-usb-tll.c:128:18: error: unused function
-  'usbtll_readb' [-Werror,-Wunused-function]
-static inline u8 usbtll_readb(void __iomem *base, u32 reg)
-                 ^
-This function is not used so remove it.
+On Tue, Mar 21, 2023 at 08:01:27AM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/isdn/hardware/mISDN/hfcmulti.c:667:1: error: unused function
+>   'vpm_read_address' [-Werror,-Wunused-function]
+> vpm_read_address(struct hfc_multi *c)
+> ^
+> This function is not used, so remove it.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/mfd/omap-usb-tll.c | 5 -----
- 1 file changed, 5 deletions(-)
+Yes, agreed.
 
-diff --git a/drivers/mfd/omap-usb-tll.c b/drivers/mfd/omap-usb-tll.c
-index 8ca4067da6cd..69cbc2097911 100644
---- a/drivers/mfd/omap-usb-tll.c
-+++ b/drivers/mfd/omap-usb-tll.c
-@@ -125,11 +125,6 @@ static inline void usbtll_writeb(void __iomem *base, u32 reg, u8 val)
- 	writeb_relaxed(val, base + reg);
- }
- 
--static inline u8 usbtll_readb(void __iomem *base, u32 reg)
--{
--	return readb_relaxed(base + reg);
--}
--
- /*-------------------------------------------------------------------------*/
- 
- static bool is_ohci_port(enum usbhs_omap_port_mode pmode)
--- 
-2.27.0
+But with this patch applied, make CC=clang W=1 tells me:
 
+  CALL    scripts/checksyscalls.sh
+  CC [M]  drivers/isdn/hardware/mISDN/hfcmulti.o
+drivers/isdn/hardware/mISDN/hfcmulti.c:643:1: error: unused function 'cpld_read_reg' [-Werror,-Wunused-function]
+
+So perhaps cpld_read_reg should be removed too?
