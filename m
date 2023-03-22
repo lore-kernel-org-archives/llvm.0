@@ -1,179 +1,119 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2103.outbound.protection.outlook.com [40.107.243.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF2A2FAF;
-	Wed, 22 Mar 2023 16:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679503550; x=1711039550;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HLEX+TICJUHD+xoUywFhjd9IZevwvDbZuDni1AXm058=;
-  b=WyVPu+QwtxdAtKmQLl54J7JRMjCZ6OLXXcc2SKOercPSCC74+k6x7432
-   /7H3KBvyPHh2BD3xFbF4XnV/5c/Y7tr0WqKzhmzu4NNHhyjWAwvVJ74YM
-   8hlHRhcbmfZepQLyO5e5BFwACGjqEAyCDtf9k6Z7tttJu7genSS7hyyym
-   D5fJaBz2ieox1mzN5Rx2YEvysaTfJoMhUQ0fL18gfSSgne00Ewy3gB2hg
-   is79+JLX4orPRCh4KEvCFLC0AEa3YO8n5BQTKfeBeDJ+BtWNTjQzoNGty
-   DYQd54ptKd3jJMrZoQLxGioR4/fNVkKNulEbBh3cV4T4lwsUKpH5oy/rK
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="318917424"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="318917424"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 09:45:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="751117882"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="751117882"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Mar 2023 09:45:47 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pf1as-000DVM-0k;
-	Wed, 22 Mar 2023 16:45:46 +0000
-Date: Thu, 23 Mar 2023 00:45:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haijun Liu <haijun.liu@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-	Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Subject: include/asm-generic/io.h:464:31: error: performing pointer
- arithmetic on a null pointer has undefined behavior
-Message-ID: <202303230040.6r3jj0VE-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D073E2FAF
+	for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 16:48:33 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k2856J7yQSmI5LnK0bzg+3RJ1AFtv+2mcug11Wws6fQD2+54+KV64T/C+onbaOQSk2D0NH0oJ67MDaP1ufzAB/lpSbqVSoQdm3uL/tPJjecMqfriaT0lPNE+FPya1vSHA6myWda7THJWsDH57Zxz8lQY5CVsJ+I7K0PIhpSwIiWF7JlU0to4i79ku9+QGXO5HTjooDWxjVrmy6ctUwRmnLuEBPDBmCa+dNQh6xClP5DV5/sFxlODQkVve3pvZdmH22AI0GL8rBPI2fwfHeSgU3avFtjOwSArIYgIUbVPggxDRfkw58rkpwweYudreCKsiKXOwSkjVRCOaX9g+lIDyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9M/kQDHPYkkY2bShdlGfEi0owLQef8OkYn5LpF9pOQ4=;
+ b=cAGW4D/rudvg/6ETQdc022Yj0bnhxpiEn1+Ps4mGpEV3KNr5fK8bfISB6vphqboKrgufve0lBlhQ12BC8namKBytGGCHhCzrx4W/+tNv6NKh7HUkpT26w3BwEZTBSi2ysJKNifjhyOm3sWwmxwuaxEi430wqVue8VT343bzCpKlW2/MEb87pLWBWQYTaH603XrKGURQ1GesoeAsEub9ehxwvzKDHWCI57IXbCAp5JN8yQYe/HJkKcsF6KbDtBcWLp+gNACEv3dg9JthY0voUmYN7Br2kFxX+3C33PtPHEap1/6KO1iNIpRZ8PoRdTOo4qIz9coL5iGz3lw2HvQJeBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9M/kQDHPYkkY2bShdlGfEi0owLQef8OkYn5LpF9pOQ4=;
+ b=tv21imxKf5JO0Qa0x0VO/EdvIzuYbw0nXiCCrRtyaI8YMstngYNSa7YgQKfRXncM0wg5H/U2W2WZpHkS8vnr30tmAmYLQ2/dqWA9K2ZBKyCOuZ25oc8NPs40ueFevZXAm+Y0ryfCcwvDxZ3rDwPpz6gBE67rjF9Sw7de0HDHGBs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH7PR13MB5406.namprd13.prod.outlook.com (2603:10b6:510:126::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Wed, 22 Mar
+ 2023 16:48:30 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.037; Wed, 22 Mar 2023
+ 16:48:30 +0000
+Date: Wed, 22 Mar 2023 17:48:23 +0100
+From: Simon Horman <simon.horman@corigine.com>
+To: Tom Rix <trix@redhat.com>
+Cc: dchickles@marvell.com, sburla@marvell.com, fmanlunas@marvell.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] liquidio: remove unused IQ_INSTR_MODE_64B function
+Message-ID: <ZBsxV0pHfG3Xh5qh@corigine.com>
+References: <20230321184811.1827306-1-trix@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321184811.1827306-1-trix@redhat.com>
+X-ClientProxiedBy: AS4P191CA0015.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d5::12) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB5406:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d1699c3-50b8-454c-cc15-08db2af543ea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	3GvqTUlkDYWj0yjRiH7xs5YCBRWDi0elIjzqSKYLW/ZRTef77LrIJIWYuCZRE4ymvGTwdzDyRgQULRhJG0V12Ztdhg0KeFtZoG4iZd7s/9b2HZawo8lY8/u2FXDu4W298cbjXjHka7Uoaw9+m51febSXyLSc68/uPwUFd6XOHbguEdOSKAMhnb7g/Hny0LcjiMSSclpQEilv4WA53/wogGWzvQptJXtCtjhXgec1LkJp15GWWl232kD+7RgV0orJPHdd/H7WlP4qsK5lCFL+dY9e3ymsUCk7i3ZfagvSnma1LtI5gkG6KFAzeo6TfrOY9v0W0pxjB40Hyj5JlbCl48uGe+Wd4dIWC4MrCvUVI+FMkWZnUzpKjruju/j2QtlyrymeVGoTWSkpayODZmo70OYBUSst1jCK4nTxSCHAX0XlIbDJNqOtVYRZqty0+2u5lVH0nzjPAWNnuM6k72nO050rkoPPrF5hpotH2hJLoMzMaYOeuVGoSCVeNe6UhopKJzOr9QoS4rEaTPHQlf/554npX/ppsnQEtrqxWFomLdTyiQZ7owOUQfQ6rxDXFY+24kAV9T3GTgukaxl47Q0kik0RgbON7ryKCnya7LM7K7ats5LRKNNjo/n5L0pDlO7oj8hgztp8PCcjtIZY5Tl8tn2QMZxHoWZHOWiNOLFXBRnY+lhTwomCvGBLCUJjx7rV
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(136003)(396003)(376002)(366004)(346002)(451199018)(83380400001)(2616005)(316002)(6506007)(6512007)(6486002)(7416002)(5660300002)(6916009)(6666004)(478600001)(186003)(44832011)(38100700002)(4326008)(86362001)(66556008)(2906002)(8676002)(66946007)(66476007)(36756003)(4744005)(8936002)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?NkOGVCbinRpwWgN2U5BKTUvsArW4yxSGwWo6yQShjSRaA6HmJpgFoti15OaZ?=
+ =?us-ascii?Q?68vuksfHmHgyIbRdtUkNCF0sdyt7WWBsxKOulhx/8iNNPBdxgQpmkWY5lUBs?=
+ =?us-ascii?Q?n6KfP7fDCvYQNeyskwblLdFWkjOx2K5h+rYBMO+xLdJfBv+ouIjfmv7ca3XU?=
+ =?us-ascii?Q?n8S1GIqaLbdX3gNmnf/jxfNMxwKBVczz6LmmYeXXIVoubiVrQqCtyNFsLLPU?=
+ =?us-ascii?Q?gmgG9ryykpbRKKmt7rQiBh0Dxy99qohTvkAM2x8219pUoamQN8Cwpx35VWr1?=
+ =?us-ascii?Q?BkjL4D84LGV/7PFJfCzSJtioMKMaqM654crvj1r3YURPt38f31hhAZe1bazO?=
+ =?us-ascii?Q?71MAipc48m0h1Ycsx+Q1S8VIy/rhzcPQ0dBF4mAav9iAQtuzUrzoMV+zd/ew?=
+ =?us-ascii?Q?yViK70YRKhpBeZhC8KC1z0RUwmCIux5ObVKgVbdey82JHZb142WGi8rbaeTT?=
+ =?us-ascii?Q?Ibz1GXWa/MHzfoRZ4l9vTbXb8tHdyW4ndj8V4M+8pOmNltoGk2nSAc/GuHf+?=
+ =?us-ascii?Q?XYikOBZMJARxdDxP0g+1ZO6Jb4K/015cEs8z3f9sNzXF4EVsup/Ct5Rwk/8u?=
+ =?us-ascii?Q?AS43GdT/ZCKujg+j//LLYm2yQ0j3bvCoGQVsF/GIp/4wTNSdlgRr8w/yHOj7?=
+ =?us-ascii?Q?x0WBFjepOedMJleu11EnT594U+GLi649+HVOf3CVIzBGQ22fqiFGFbtAOjEF?=
+ =?us-ascii?Q?zH/rZIvh3h7IgwVeYRn4Qvqc5ds2FU/xuKRL2e2WL53hvwiL3TyQvWk6Zbcp?=
+ =?us-ascii?Q?zMwZF2juPwCQLuwbKtwXJVi0vhzqBqNiMozv2WqIxWnPPZ++GG7FgkLH6CeZ?=
+ =?us-ascii?Q?cg9oR3AtiU9NCn9yQLMJ/IXY4hgdYbci0DzKMB1wodDADDzLopNThE7yOi/k?=
+ =?us-ascii?Q?IUeIFMb4anVmqeKDCfI3jbzE7W8GIvZdHf54XcA8U+uz8PjDFTKtrCJe1ObR?=
+ =?us-ascii?Q?UlDtXTMoMobUCPxskCC4g/FOsXfJ8mLzqfE4TGCeu2jVALGkK2ux4ACgUIzj?=
+ =?us-ascii?Q?Gf2okQwPDioQgvruWU4CC/D7mOPIMG9GMbJrPMncX1DChemD1l4+QBPYvIIE?=
+ =?us-ascii?Q?aYlV9uVfmesCtD9m9pp7vbug9vLxweHhsCE5QZpulfAYneHxCQiI6jNLXe1J?=
+ =?us-ascii?Q?VWt2+q2saR97l3pxn9CQ4gJ9Eu0xHEws8DRTT1VNCiHSyt2aiZm0aRJMxAXh?=
+ =?us-ascii?Q?YgpFXBC8UVKwt6iZ4GtN9X3D6gxhf7tVX7aLUWS9JlUZIOLy/hX3On/OcpIp?=
+ =?us-ascii?Q?tXd7DjX9ccXRFxpe+4S5CwsG3ZGY9axyZoQ+vjnRJLGzFXBFLyb8KxOz2sFh?=
+ =?us-ascii?Q?pOL48y9uNJsIkvyZx+lZRZiIut+wOn1wdlnoN8Mm+LDgzIdpQYAPRZMlUhHL?=
+ =?us-ascii?Q?nEF8PlaOumKMSzkpCMdeSra12ZcMB5phxVWFgNbj1K8mofTYoAAGqyECYWOf?=
+ =?us-ascii?Q?MfGANMEvM5/EfVAgMn4sbxBj5GjXsvbereOhnr9KB8SgMnhwHzYq4xGeADg8?=
+ =?us-ascii?Q?LDc0Jr42GTkUzoDgKJCfOQfRP0CBxZTXi64ZzLO/deYSBlXywytoPes0yz9D?=
+ =?us-ascii?Q?4H61K6UZwIoVw57ywz5WaNGi3nvREtfC2lkMBZopasggiihWJkuq5AIPfLfW?=
+ =?us-ascii?Q?uEYRJra+KR1CSnRH7Dojw/iG1EsTXe+xssX8rKy31wGyTZEeU8CqH42M6pkM?=
+ =?us-ascii?Q?y5e6TQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d1699c3-50b8-454c-cc15-08db2af543ea
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 16:48:29.9814
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fhbXDmwWmE118m0Mk47wOTQ4OpHdLPnbSoNJXx2VyTjWNzolNJFPIy1sJ660yrQ53iJ+9Vek/ybN/1xEz8YRcXRm4CgAkXXqMlBS6VVboKA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB5406
 
-Hi Haijun,
+On Tue, Mar 21, 2023 at 02:48:11PM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/net/ethernet/cavium/liquidio/request_manager.c:43:19: error:
+>   unused function 'IQ_INSTR_MODE_64B' [-Werror,-Wunused-function]
+> static inline int IQ_INSTR_MODE_64B(struct octeon_device *oct, int iq_no)
+>                   ^
+> This function and its macro wrapper are not used, so remove them.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-FYI, the error/warning still remains.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a1effab7a3a35a837dd9d2b974a1bc4939df1ad5
-commit: 13e920d93e37fcaef4a9309515798a3cae9dcf19 net: wwan: t7xx: Add core components
-date:   11 months ago
-config: s390-randconfig-r001-20230322 (https://download.01.org/0day-ci/archive/20230323/202303230040.6r3jj0VE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=13e920d93e37fcaef4a9309515798a3cae9dcf19
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 13e920d93e37fcaef4a9309515798a3cae9dcf19
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303230040.6r3jj0VE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
->> include/asm-generic/io.h:464:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/net/wwan/t7xx/t7xx_pci.c:22:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   12 errors generated.
-
-
-vim +464 include/asm-generic/io.h
-
-3f7e212df82ca0 Arnd Bergmann  2009-05-13  450  
-9216efafc52ff9 Thierry Reding 2014-10-01  451  /*
-9216efafc52ff9 Thierry Reding 2014-10-01  452   * {in,out}{b,w,l}() access little endian I/O. {in,out}{b,w,l}_p() can be
-9216efafc52ff9 Thierry Reding 2014-10-01  453   * implemented on hardware that needs an additional delay for I/O accesses to
-9216efafc52ff9 Thierry Reding 2014-10-01  454   * take effect.
-9216efafc52ff9 Thierry Reding 2014-10-01  455   */
-9216efafc52ff9 Thierry Reding 2014-10-01  456  
-f009c89df79abe John Garry     2020-03-28  457  #if !defined(inb) && !defined(_inb)
-f009c89df79abe John Garry     2020-03-28  458  #define _inb _inb
-214ba3584b2e2c Stafford Horne 2020-07-26  459  static inline u8 _inb(unsigned long addr)
-9216efafc52ff9 Thierry Reding 2014-10-01  460  {
-87fe2d543f8173 Sinan Kaya     2018-04-05  461  	u8 val;
-87fe2d543f8173 Sinan Kaya     2018-04-05  462  
-87fe2d543f8173 Sinan Kaya     2018-04-05  463  	__io_pbr();
-87fe2d543f8173 Sinan Kaya     2018-04-05 @464  	val = __raw_readb(PCI_IOBASE + addr);
-abbbbc83a210e9 Will Deacon    2019-02-22  465  	__io_par(val);
-87fe2d543f8173 Sinan Kaya     2018-04-05  466  	return val;
-9216efafc52ff9 Thierry Reding 2014-10-01  467  }
-9216efafc52ff9 Thierry Reding 2014-10-01  468  #endif
-9216efafc52ff9 Thierry Reding 2014-10-01  469  
-
-:::::: The code at line 464 was first introduced by commit
-:::::: 87fe2d543f817300e13f0ea683f38c122737856e io: change inX() to have their own IO barrier overrides
-
-:::::: TO: Sinan Kaya <okaya@codeaurora.org>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
