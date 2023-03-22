@@ -1,44 +1,44 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056768C01;
-	Wed, 22 Mar 2023 15:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853E68C01;
+	Wed, 22 Mar 2023 15:23:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679497983; x=1711033983;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BPRQUKu+qBgifK27Px0rE+E2xaVa1QPMWTqx7CnVwA0=;
-  b=GcDhfd4469XjBjdpcXAVZXGoJa6qCvyTf6KobQevLLfNKdvv8gtqM1mi
-   t3Se6Q08UDlPK1BXITq7hjIJ/obSqKQBfPgpSVryzhqL6Vy0TD1HnpwG8
-   KsJ8awlxz+nkqf5AHOpvLhGPsOn0Ee7Y/d0qCPRe8kkBXqVnF0ntPvVj1
-   znKh5s7z7dWPfEV0J0uZTTEhDL5d0l9RSbZd0sjuLnHGsmlq+riFZBXtT
-   /ve/Xfdl6WEzeYc64oP2Am2KqfFGB7wv8hT5Ged/O/WpAfYeL2nw1uq5b
-   pc6fwveuaBkndmxhXJkcOKHh5VlDEK5YNqzve6oFFUpJ1kNyjUgV19VdS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="336743521"
+  t=1679498626; x=1711034626;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hs+jJFqcJ6oQIKDyU52p04F2VEqNuaUbOL8nGWQli9Q=;
+  b=n9dsj55GeEDgMKKQQsWnMPiu+yQtoT+0qT0L8gqpexm0S/Y0lb23qNnL
+   c06G15Q6JVVX7GLKYmftbVD8nw2xgfdCk9io9NfEjp0OYzbDqtaie/xjU
+   SmdDYjfr2QBFNB5zoHQMSJ2QBwtHTwV+lLS8rfJz1kMciB1lUpJlMBpSu
+   cd0TaGTyiDpm5Xuld7HtGrEmoFBoSqHVf1V8vsDUcd+OGwpzoVy/sCgHH
+   A9IuCcdsRStuSj8Sxxs3LnFoWvixpI3t4606aMnw2Oul6sDdHm+aYXm4o
+   ZGoEA/bGx/jksiWAiCiVmNxwvgxtiLV7Ig3OTfdqKW8YD2SBUu1cChek/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="318887525"
 X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="336743521"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 08:12:44 -0700
+   d="scan'208";a="318887525"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 08:23:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="746359567"
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="714438626"
 X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="746359567"
+   d="scan'208";a="714438626"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Mar 2023 08:12:43 -0700
+  by orsmga001.jf.intel.com with ESMTP; 22 Mar 2023 08:23:43 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pf08o-000DQM-0W;
-	Wed, 22 Mar 2023 15:12:42 +0000
-Date: Wed, 22 Mar 2023 23:12:17 +0800
+	id 1pf0JS-000DQy-1q;
+	Wed, 22 Mar 2023 15:23:42 +0000
+Date: Wed, 22 Mar 2023 23:22:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: ye.xingchen@zte.com.cn, wsa+renesas@sang-engineering.com
+To: Jiri Slaby <jslaby@suse.cz>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: gpio: Use dev_err_probe()
-Message-ID: <202303222240.y3A3yNqb-lkp@intel.com>
-References: <202303221640559786295@zte.com.cn>
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [jirislaby:devel 27/46] drivers/tty/serial/stm32-usart.c:686:9:
+ error: call to undeclared function 'uart_circ_empty'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202303222321.2Q5vlD3k-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,89 +47,153 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202303221640559786295@zte.com.cn>
 
-Hi,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on linus/master v6.3-rc3 next-20230322]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/i2c-gpio-Use-dev_err_probe/20230322-164142
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/202303221640559786295%40zte.com.cn
-patch subject: [PATCH] i2c: gpio: Use dev_err_probe()
-config: arm-randconfig-r046-20230322 (https://download.01.org/0day-ci/archive/20230322/202303222240.y3A3yNqb-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   1bf93d9ee094d8d799c333abb0e1b7aca6d4cba3
+commit: 162967376aea871d0287902da6294fe5e4cdbc51 [27/46] tty: serial, use kfifo
+config: hexagon-randconfig-r041-20230322 (https://download.01.org/0day-ci/archive/20230322/202303222321.2Q5vlD3k-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/6d20957af4d6ae04d7249889f6a52bb88a89ce29
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ye-xingchen-zte-com-cn/i2c-gpio-Use-dev_err_probe/20230322-164142
-        git checkout 6d20957af4d6ae04d7249889f6a52bb88a89ce29
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=162967376aea871d0287902da6294fe5e4cdbc51
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout 162967376aea871d0287902da6294fe5e4cdbc51
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/i2c/busses/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303222240.y3A3yNqb-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303222321.2Q5vlD3k-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/i2c/busses/i2c-gpio.c:359:43: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-                         "error trying to get descriptor: %d\n");
-                                                          ~^
-   1 warning generated.
+   In file included from drivers/tty/serial/stm32-usart.c:16:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/tty/serial/stm32-usart.c:16:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/tty/serial/stm32-usart.c:16:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/tty/serial/stm32-usart.c:686:9: error: call to undeclared function 'uart_circ_empty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                !(uart_circ_empty(xmit) || uart_tx_stopped(port)))) {
+                  ^
+   drivers/tty/serial/stm32-usart.c:686:9: note: did you mean 'uart_lsr_tx_empty'?
+   include/linux/serial.h:26:20: note: 'uart_lsr_tx_empty' declared here
+   static inline bool uart_lsr_tx_empty(u16 lsr)
+                      ^
+>> drivers/tty/serial/stm32-usart.c:686:25: error: use of undeclared identifier 'xmit'
+                !(uart_circ_empty(xmit) || uart_tx_stopped(port)))) {
+                                  ^
+   6 warnings and 2 errors generated.
 
 
-vim +359 drivers/i2c/busses/i2c-gpio.c
+vim +/uart_circ_empty +686 drivers/tty/serial/stm32-usart.c
 
-   327	
-   328	static struct gpio_desc *i2c_gpio_get_desc(struct device *dev,
-   329						   const char *con_id,
-   330						   unsigned int index,
-   331						   enum gpiod_flags gflags)
-   332	{
-   333		struct gpio_desc *retdesc;
-   334		int ret;
-   335	
-   336		retdesc = devm_gpiod_get(dev, con_id, gflags);
-   337		if (!IS_ERR(retdesc)) {
-   338			dev_dbg(dev, "got GPIO from name %s\n", con_id);
-   339			return retdesc;
-   340		}
-   341	
-   342		retdesc = devm_gpiod_get_index(dev, NULL, index, gflags);
-   343		if (!IS_ERR(retdesc)) {
-   344			dev_dbg(dev, "got GPIO from index %u\n", index);
-   345			return retdesc;
-   346		}
-   347	
-   348		ret = PTR_ERR(retdesc);
-   349	
-   350		/* FIXME: hack in the old code, is this really necessary? */
-   351		if (ret == -EINVAL)
-   352			retdesc = ERR_PTR(-EPROBE_DEFER);
-   353	
-   354		/* This happens if the GPIO driver is not yet probed, let's defer */
-   355		if (ret == -ENOENT)
-   356			retdesc = ERR_PTR(-EPROBE_DEFER);
-   357	
-   358		dev_err_probe(dev, PTR_ERR(retdesc),
- > 359			      "error trying to get descriptor: %d\n");
-   360	
-   361		return retdesc;
-   362	}
-   363	
+3489187204eb75 Alexandre TORGUE 2016-09-15  674  
+56f9a76c27b51b Erwan Le Ray     2021-01-06  675  static void stm32_usart_transmit_chars(struct uart_port *port)
+48a6092fb41fab Maxime Coquelin  2015-06-10  676  {
+ada8618ff3bfe1 Alexandre TORGUE 2016-09-15  677  	struct stm32_port *stm32_port = to_stm32_port(port);
+d825f0bea20f49 Stephen Boyd     2021-01-22  678  	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
+162967376aea87 Jiri Slaby       2022-01-05  679  	struct tty_port *tport = &port->state->port;
+d3d079bde07e1b Valentin Caron   2022-01-11  680  	u32 isr;
+d3d079bde07e1b Valentin Caron   2022-01-11  681  	int ret;
+48a6092fb41fab Maxime Coquelin  2015-06-10  682  
+d7c76716169ddc Marek Vasut      2022-04-30  683  	if (!stm32_port->hw_flow_control &&
+c47527cbcc3c50 Marek Vasut      2023-02-23  684  	    port->rs485.flags & SER_RS485_ENABLED &&
+c47527cbcc3c50 Marek Vasut      2023-02-23  685  	    (port->x_char ||
+c47527cbcc3c50 Marek Vasut      2023-02-23 @686  	     !(uart_circ_empty(xmit) || uart_tx_stopped(port)))) {
+d7c76716169ddc Marek Vasut      2022-04-30  687  		stm32_usart_tc_interrupt_disable(port);
+d7c76716169ddc Marek Vasut      2022-04-30  688  		stm32_usart_rs485_rts_enable(port);
+d7c76716169ddc Marek Vasut      2022-04-30  689  	}
+d7c76716169ddc Marek Vasut      2022-04-30  690  
+48a6092fb41fab Maxime Coquelin  2015-06-10  691  	if (port->x_char) {
+9a135f16d22885 Valentin Caron   2022-01-04  692  		if (stm32_usart_tx_dma_started(stm32_port) &&
+9a135f16d22885 Valentin Caron   2022-01-04  693  		    stm32_usart_tx_dma_enabled(stm32_port))
+56f9a76c27b51b Erwan Le Ray     2021-01-06  694  			stm32_usart_clr_bits(port, ofs->cr3, USART_CR3_DMAT);
+d3d079bde07e1b Valentin Caron   2022-01-11  695  
+d3d079bde07e1b Valentin Caron   2022-01-11  696  		/* Check that TDR is empty before filling FIFO */
+d3d079bde07e1b Valentin Caron   2022-01-11  697  		ret =
+d3d079bde07e1b Valentin Caron   2022-01-11  698  		readl_relaxed_poll_timeout_atomic(port->membase + ofs->isr,
+d3d079bde07e1b Valentin Caron   2022-01-11  699  						  isr,
+d3d079bde07e1b Valentin Caron   2022-01-11  700  						  (isr & USART_SR_TXE),
+d3d079bde07e1b Valentin Caron   2022-01-11  701  						  10, 1000);
+d3d079bde07e1b Valentin Caron   2022-01-11  702  		if (ret)
+d3d079bde07e1b Valentin Caron   2022-01-11  703  			dev_warn(port->dev, "1 character may be erased\n");
+d3d079bde07e1b Valentin Caron   2022-01-11  704  
+ada8618ff3bfe1 Alexandre TORGUE 2016-09-15  705  		writel_relaxed(port->x_char, port->membase + ofs->tdr);
+48a6092fb41fab Maxime Coquelin  2015-06-10  706  		port->x_char = 0;
+48a6092fb41fab Maxime Coquelin  2015-06-10  707  		port->icount.tx++;
+9a135f16d22885 Valentin Caron   2022-01-04  708  		if (stm32_usart_tx_dma_started(stm32_port))
+56f9a76c27b51b Erwan Le Ray     2021-01-06  709  			stm32_usart_set_bits(port, ofs->cr3, USART_CR3_DMAT);
+48a6092fb41fab Maxime Coquelin  2015-06-10  710  		return;
+48a6092fb41fab Maxime Coquelin  2015-06-10  711  	}
+48a6092fb41fab Maxime Coquelin  2015-06-10  712  
+162967376aea87 Jiri Slaby       2022-01-05  713  	if (kfifo_is_empty(&tport->xmit_fifo) || uart_tx_stopped(port)) {
+56f9a76c27b51b Erwan Le Ray     2021-01-06  714  		stm32_usart_tx_interrupt_disable(port);
+48a6092fb41fab Maxime Coquelin  2015-06-10  715  		return;
+48a6092fb41fab Maxime Coquelin  2015-06-10  716  	}
+48a6092fb41fab Maxime Coquelin  2015-06-10  717  
+64c32eab660386 Erwan Le Ray     2019-05-21  718  	if (ofs->icr == UNDEF_REG)
+56f9a76c27b51b Erwan Le Ray     2021-01-06  719  		stm32_usart_clr_bits(port, ofs->isr, USART_SR_TC);
+64c32eab660386 Erwan Le Ray     2019-05-21  720  	else
+1250ed7114a977 Fabrice Gasnier  2019-11-21  721  		writel_relaxed(USART_ICR_TCCF, port->membase + ofs->icr);
+64c32eab660386 Erwan Le Ray     2019-05-21  722  
+3489187204eb75 Alexandre TORGUE 2016-09-15  723  	if (stm32_port->tx_ch)
+56f9a76c27b51b Erwan Le Ray     2021-01-06  724  		stm32_usart_transmit_chars_dma(port);
+3489187204eb75 Alexandre TORGUE 2016-09-15  725  	else
+56f9a76c27b51b Erwan Le Ray     2021-01-06  726  		stm32_usart_transmit_chars_pio(port);
+48a6092fb41fab Maxime Coquelin  2015-06-10  727  
+162967376aea87 Jiri Slaby       2022-01-05  728  	if (kfifo_len(&tport->xmit_fifo) < WAKEUP_CHARS)
+48a6092fb41fab Maxime Coquelin  2015-06-10  729  		uart_write_wakeup(port);
+48a6092fb41fab Maxime Coquelin  2015-06-10  730  
+162967376aea87 Jiri Slaby       2022-01-05  731  	if (kfifo_is_empty(&tport->xmit_fifo)) {
+56f9a76c27b51b Erwan Le Ray     2021-01-06  732  		stm32_usart_tx_interrupt_disable(port);
+d7c76716169ddc Marek Vasut      2022-04-30  733  		if (!stm32_port->hw_flow_control &&
+d7c76716169ddc Marek Vasut      2022-04-30  734  		    port->rs485.flags & SER_RS485_ENABLED) {
+d7c76716169ddc Marek Vasut      2022-04-30  735  			stm32_usart_tc_interrupt_enable(port);
+d7c76716169ddc Marek Vasut      2022-04-30  736  		}
+d7c76716169ddc Marek Vasut      2022-04-30  737  	}
+48a6092fb41fab Maxime Coquelin  2015-06-10  738  }
+48a6092fb41fab Maxime Coquelin  2015-06-10  739  
+
+:::::: The code at line 686 was first introduced by commit
+:::::: c47527cbcc3c50800f34b8c684f29721f75de246 serial: stm32: Re-assert RTS/DE GPIO in RS485 mode only if more data are transmitted
+
+:::::: TO: Marek Vasut <marex@denx.de>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
