@@ -1,43 +1,43 @@
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B57CA950;
-	Thu, 23 Mar 2023 16:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F33A950;
+	Thu, 23 Mar 2023 16:51:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679590297; x=1711126297;
+  t=1679590299; x=1711126299;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=123AA5ELbZfpz7VtBcVSzqg9/UGsBV1fQ6/lkV2i1D8=;
-  b=ZtqAVA1YCUFvvz59hEMjW9maVqUg7KkoTp8UNQzRVxpp2gSANr0B7SVh
-   tBOyaRFcBY0L5rVc/4f58Fknm5DzZBYU0V2MsoOwh+jPBCymE8TW/r0kT
-   u5X+5zFxkDc5WoX5Xc6CHQXfn8wpVDTxIpNZoko8zolzHh7eeTRLLPWYr
-   JFZyA1BkWx9aveNcqW9ycTQGkt6G1W+qUydw7v528LnFNF8jjpKTYL0lb
-   IEmHVpW2HwsyqCxanqjmTJqwNFDkqlH0Wq9bn0fAZ7nzjOFjwWCFGho9w
-   iZiFmL32TRyhu9GvTciuAXzvpvBz6F5LzbWR393Ew8U4sr6y4BOfKcl+z
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="339588633"
+  bh=gol4GFX54FO4WNeKu+XTxoaVCDKBpq4J47Q+uJRsF4M=;
+  b=Xiq5pSs5Ht4HveEZkISf0IyLoleQj2Bb2Aiy4WyPwWPr7uA8yRysIm8G
+   Wg7qRVaclBKSefmpcMH76So4ngfh0zzSeMe1OSUuqcbgY40PsvTdxXnrg
+   n/jl3+YEW/MjlXD+izljon1txHC7F6gLtpyjSHeMHz+LxMFFf+puwghXh
+   e4LPDeWIZlXCqNmWef4vv7XSA4H/CspIwYfGqGL3YgnQXXkI10r0d8/6F
+   9UcnYOjhVyjXJJ7ENXnxHcjbsYG4jlAES0xd5BG778qe5bcRVABQ2sD1V
+   5UZZMH1DQ7+2ZBg18ULZTWlnlvMDMJQg30+yJ7+8xu/a3V9u834f7FufB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="339588636"
 X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="339588633"
+   d="scan'208";a="339588636"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 09:51:37 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="682374286"
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="682374288"
 X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="682374286"
+   d="scan'208";a="682374288"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
   by orsmga002.jf.intel.com with ESMTP; 23 Mar 2023 09:51:35 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pfOA2-000EY7-3C;
-	Thu, 23 Mar 2023 16:51:35 +0000
-Date: Fri, 24 Mar 2023 00:50:44 +0800
+	id 1pfOA2-000EY4-2l;
+	Thu, 23 Mar 2023 16:51:34 +0000
+Date: Fri, 24 Mar 2023 00:50:45 +0800
 From: kernel test robot <lkp@intel.com>
 To: Imre Deak <imre.deak@intel.com>, intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: Re: [Intel-gfx] [PATCH 01/29] drm/i915/tc: Group the TC PHY
  setup/query functions per platform
-Message-ID: <202303240014.FNfWYmf7-lkp@intel.com>
+Message-ID: <202303240020.UQr6flaJ-lkp@intel.com>
 References: <20230323142035.1432621-2-imre.deak@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,7 +59,7 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Imre-Deak/drm-i915-tc-Gro
 base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
 patch link:    https://lore.kernel.org/r/20230323142035.1432621-2-imre.deak%40intel.com
 patch subject: [Intel-gfx] [PATCH 01/29] drm/i915/tc: Group the TC PHY setup/query functions per platform
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230324/202303240014.FNfWYmf7-lkp@intel.com/config)
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230324/202303240020.UQr6flaJ-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -70,12 +70,12 @@ reproduce (this is a W=1 build):
         git checkout 7b85ed1627f7c16b7ff080b604d35d729c70313f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303240014.FNfWYmf7-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303240020.UQr6flaJ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
