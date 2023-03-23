@@ -1,101 +1,162 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED46DC959
-	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 20:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123C92CA4
+	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 20:31:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679603243;
+	s=mimecast20190719; t=1679603501;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=OhYpZ8KzjW1wsLxHwkxEX6G5RCZGyESus86bamUc+qA=;
-	b=eHT/mzyGs3FlyF/fzv7v0dRDotVsZluLDcn0JIW+H4IxDF9TuxnCHRZBhbzxYkV8Lb/WvU
-	kqWPcDnxvVj8hdaJ6xIpCjTSP4S0aPZZxM/zstRsirx9Oc0ITrAi40Iv10zOjGUEDEQDEF
-	+Ak0yS6EPo5/7w77zSZr6KXbJ1kUlQ8=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-441-_VN17-RYOT-a81-hS_paWA-1; Thu, 23 Mar 2023 16:27:18 -0400
-X-MC-Unique: _VN17-RYOT-a81-hS_paWA-1
-Received: by mail-qk1-f199.google.com with SMTP id x80-20020a376353000000b0074681bc7f42so6866606qkb.8
-        for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 13:27:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679603236;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OhYpZ8KzjW1wsLxHwkxEX6G5RCZGyESus86bamUc+qA=;
-        b=SkmqlzECSwN63LPcjUT1aZt7cbrjNe4HSA0erHLL0zghXeI+O2ir6G85yXxt/Pmynq
-         WT0zMMbjB5qvb6Z8v82snJv9GqEE8GzFwyDoBDuGUNQSFlv6cR5HxMejBTp6QjAmKbi4
-         L7IrPFLr4b0Tv7CEJKDFCRdQLRQn2I3e3Q0n0gi6Fb7K6Ada89GbsB96UI/vO0nMtwNC
-         AhbZjMHbh/EtHEIxKu/oDT498zz7a3gtJQVfMM9F4IyXNHJL9LZR6M42LkKUs4Vc462W
-         aC8VVo0gSzJgYItKcLlDIgG0N5hgYHhfZYBJ5+lB4kIiqH9uybW2YAyyTXYbBf5lKfDO
-         CHgg==
-X-Gm-Message-State: AO0yUKXNSSucGDs+I7RGRo7Yxdea7BU53nRPYNarhMQlF1sz+NYEFGWt
-	jZxjJ+JVxH5DYSXy2scq/9GvB0u42FaJ+m1cZqd+tYWG2ifSxDnHYBsM5GPAiVzqNtpLrWLTduJ
-	Xc/rmnncpvzpudw==
-X-Received: by 2002:a05:622a:b:b0:3e3:87b8:8d44 with SMTP id x11-20020a05622a000b00b003e387b88d44mr1268776qtw.21.1679603236379;
-        Thu, 23 Mar 2023 13:27:16 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9nfcaOOPG+v24oW8TGCbt1FFZkuvDD8XTlbtr5XxZmlwYWNwjdxerj/TRLmVhphIi/iVJv0A==
-X-Received: by 2002:a05:622a:b:b0:3e3:87b8:8d44 with SMTP id x11-20020a05622a000b00b003e387b88d44mr1268751qtw.21.1679603236138;
-        Thu, 23 Mar 2023 13:27:16 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id f9-20020ac84709000000b003e0c94a6af0sm7986298qtp.53.2023.03.23.13.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 13:27:15 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: perex@perex.cz,
-	tiwai@suse.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] ALSA: hdspm: remove unused copy_u32_le function
-Date: Thu, 23 Mar 2023 16:27:13 -0400
-Message-Id: <20230323202713.2637150-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	bh=3n1ea8snuWRzgsHnB4XIZGHkI2uEH99wKsVRzdeTgLo=;
+	b=UUmFmDQNDUj2bGjJ/n0EwduZdp7gA0RUgAnKtO4aKy2rCEkp+IrcRrVg+EDoUe4yQgXdv/
+	mra03dJokCtFAzYanjWz3q3o9YOahkIlpeSISVHzrT5Tds0JQTpzB4J1aNqQ3IfpNoyNXS
+	3Nz/3vraZlHtjS7OlwNQggoTS6c8NV4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-507-ARsbTz8kO8KdeK-dk4Tg4w-1; Thu, 23 Mar 2023 16:31:40 -0400
+X-MC-Unique: ARsbTz8kO8KdeK-dk4Tg4w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9893380611B
+	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 20:31:39 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.33.173])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A8ACDC15BA0;
+	Thu, 23 Mar 2023 20:31:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 20 of 381): Test report for master
+ (6.3.0-rc3, mainline.kernel.org-clang, fff5a5e7)
+Date: Thu, 23 Mar 2023 20:31:39 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <58382.123032316314000223@us-mta-507.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-clang with W=1 reports
-sound/pci/rme9652/hdspm.c:6149:19: error: unused function
-  'copy_u32_le' [-Werror,-Wunused-function]
-static inline int copy_u32_le(void __user *dest, void __iomem *src)
-                  ^
-This function is not used so remove it.
+Hi, we tested your kernel and here are the results:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- sound/pci/rme9652/hdspm.c | 6 ------
- 1 file changed, 6 deletions(-)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-diff --git a/sound/pci/rme9652/hdspm.c b/sound/pci/rme9652/hdspm.c
-index fa1812e7a49d..267c7848974a 100644
---- a/sound/pci/rme9652/hdspm.c
-+++ b/sound/pci/rme9652/hdspm.c
-@@ -6146,12 +6146,6 @@ static int snd_hdspm_hwdep_dummy_op(struct snd_hwdep *hw, struct file *file)
- 	return 0;
- }
- 
--static inline int copy_u32_le(void __user *dest, void __iomem *src)
--{
--	u32 val = readl(src);
--	return copy_to_user(dest, &val, 4);
--}
--
- static int snd_hdspm_hwdep_ioctl(struct snd_hwdep *hw, struct file *file,
- 		unsigned int cmd, unsigned long arg)
- {
--- 
-2.27.0
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.armlinux.org.uk/~rmk=
+/linux-arm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/80887
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
