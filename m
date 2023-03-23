@@ -1,131 +1,266 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B671ABA53;
-	Wed, 22 Mar 2023 23:48:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1EEC433D2;
-	Wed, 22 Mar 2023 23:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679528925;
-	bh=wWdLNiCNfnRGyGZ00699DT+v9vg5lBigHWNeZvkgUrw=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=i9V+BBFcNtBZruyQRBAA4M+mpqfzubCFLDCmMm7KReRuxW+R3YTZt7uUqCzDUu/4s
-	 7QNCmWga6UjU7PO8YovoKse2Xlg39DYXAb0yWjfypCUrka7go2ravpJ0aR73J1lQhs
-	 PnpNc3sCC7qVWvhBHD+muC0KINu3a+sHecHrzss/Ety6btbusud9twK8AUSJvQWTYS
-	 AtenEzJN3YUppXMUwdkXPbr3tLBZ2I/ezzLNBZQCOLujgn88KOs+jMX5FtogxX7qb/
-	 yTNh6gJvMu3zrdgv2oYxHayFGYRDq93imbanJP+6e2K/c9GYl/9G/0HEuLmK/WMmJ0
-	 I0OmqXV1j2BNw==
-Message-ID: <00c24196e5ceb60b7d69967b73910264.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EB915B4;
+	Thu, 23 Mar 2023 01:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679534783; x=1711070783;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bca4rV0/SD5/IeJf0J1JNJdskFY4zNxqkHrZncUa/T4=;
+  b=ERXAY2Vckk4nRSBG4V4uxDUF3mjT/TKllhrzc7PqeZo7Ev6Mq1ZGOhCq
+   VecNbtT1aGBpMZvLtX00G3Lf5utDdreX/jzoraMYfgTDblbRRwyd79RCd
+   MoyeVi60pJURJKEItEkPXJQxNKzvxmJ9z4RvztDzJDxjp4MQHzbCG6QV7
+   YFO+zYrc4WIBbrnGx8UHgxiikKTSP819eK1AO2SIC3xP9WYsvGH++NEH0
+   4DJVxPSAQiNtqrakWmTjVmyigL1IjNf0Ahw/OJ+vGMe0+/g5nOsLJ7K7A
+   9U4cC7Xr4umFlK1ySO7NusqOtD8Ryn68yc3jQS/C/y/IK7JI7WRrewLgs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="338090482"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="338090482"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 18:26:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="659390571"
+X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
+   d="scan'208";a="659390571"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Mar 2023 18:26:08 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pf9iM-000DoI-3B;
+	Thu, 23 Mar 2023 01:26:02 +0000
+Date: Thu, 23 Mar 2023 09:25:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: William Breathitt Gray <william.gray@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [brgl:gpio/for-next 55/68] drivers/gpio/gpio-pci-idio-16.c:32:23:
+ error: field has incomplete type 'struct idio_16_state'
+Message-ID: <202303230924.cF2c6S05-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230322195933.GA2828949@dev-arch.thelio-3990X>
-References: <202303221947.pXP2v4xJ-lkp@intel.com> <81b2a67f89d7f46dd27f6d05606e753f.sboyd@kernel.org> <20230322195933.GA2828949@dev-arch.thelio-3990X>
-Subject: Re: [clk:clk-sunplus 1/1] drivers/clk/clk-sp7021.c:316:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigne...
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Qin Jian <qinjian@cqplus1.com>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-To: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 22 Mar 2023 16:48:43 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Quoting Nathan Chancellor (2023-03-22 12:59:33)
-> On Wed, Mar 22, 2023 at 10:39:06AM -0700, Stephen Boyd wrote:
-> > Quoting kernel test robot (2023-03-22 04:17:48)
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git=
- clk-sunplus
-> > > head:   d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
-> > > commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2 [1/1] clk: Add Sunpl=
-us SP7021 clock driver
-> > > config: mips-randconfig-r012-20230322 (https://download.01.org/0day-c=
-i/archive/20230322/202303221947.pXP2v4xJ-lkp@intel.com/config)
-> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project =
-67409911353323ca5edf2049ef0df54132fa1ca7)
-> > > reproduce (this is a W=3D1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
-/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # install mips cross compiling tool for clang build
-> > >         # apt-get install binutils-mipsel-linux-gnu
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.g=
-it/commit/?id=3Dd54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
-> > >         git remote add clk https://git.kernel.org/pub/scm/linux/kerne=
-l/git/clk/linux.git
-> > >         git fetch --no-tags clk clk-sunplus
-> > >         git checkout d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
-s W=3D1 O=3Dbuild_dir ARCH=3Dmips olddefconfig
-> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cros=
-s W=3D1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash drivers/clk/
-> > >=20
-> > > If you fix the issue, kindly add following tag where applicable
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Link: https://lore.kernel.org/oe-kbuild-all/202303221947.pXP2v4xJ-l=
-kp@intel.com/
-> > >=20
-> >=20
-> > Does this fix it?
-> >=20
-> > ---8<---
-> > diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
-> > index 8fec14120105..caabbf5e2197 100644
-> > --- a/drivers/clk/clk-sp7021.c
-> > +++ b/drivers/clk/clk-sp7021.c
-> > @@ -30,9 +30,9 @@ enum {
-> >       P_MAX
-> >  };
-> > =20
-> > -#define MASK_SEL_FRA GENMASK(1, 1)
-> > -#define MASK_SDM_MOD GENMASK(2, 2)
-> > -#define MASK_PH_SEL  GENMASK(4, 4)
-> > +#define MASK_SEL_FRA BITMASK(1)
-> > +#define MASK_SDM_MOD BITMASK(2)
-> > +#define MASK_PH_SEL  BITMASK(4)
-> >  #define MASK_NFRA    GENMASK(12, 6)
-> >  #define MASK_DIVR    GENMASK(8, 7)
-> >  #define MASK_DIVN    GENMASK(7, 0)
-> >=20
->=20
-> No (BITMASK did not exist but BIT_MASK does).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+head:   16d6fa5a94b3873968941b701b99903abc4e5059
+commit: 473b79057bbd9756f6969e6647e2d9ecababa7af [55/68] gpio: idio-16: Remove unused legacy interface
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230323/202303230924.cF2c6S05-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git/commit/?id=473b79057bbd9756f6969e6647e2d9ecababa7af
+        git remote add brgl https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+        git fetch --no-tags brgl gpio/for-next
+        git checkout 473b79057bbd9756f6969e6647e2d9ecababa7af
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpio/
 
-Heh ok.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303230924.cF2c6S05-lkp@intel.com/
 
-> It looks like clang is
-> complaining that mask is an unsigned int and it is being compared
-> against ~0ull, which will always be false. This makes the warning go
-> away for me, which is similar to commit cfd6fb45cfaf ("crypto: ccree -
-> avoid out-of-range warnings from clang"), but I am not sure if that is
-> correct or not.
+All errors (new ones prefixed by >>):
 
-Cool thanks. Can you send it as a proper patch?
+>> drivers/gpio/gpio-pci-idio-16.c:32:23: error: field has incomplete type 'struct idio_16_state'
+           struct idio_16_state state;
+                                ^
+   drivers/gpio/gpio-pci-idio-16.c:32:9: note: forward declaration of 'struct idio_16_state'
+           struct idio_16_state state;
+                  ^
+>> drivers/gpio/gpio-pci-idio-16.c:39:6: error: implicit declaration of function 'idio_16_get_direction' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (idio_16_get_direction(offset))
+               ^
+   drivers/gpio/gpio-pci-idio-16.c:39:6: note: did you mean 'idio_16_gpio_get_direction'?
+   drivers/gpio/gpio-pci-idio-16.c:36:12: note: 'idio_16_gpio_get_direction' declared here
+   static int idio_16_gpio_get_direction(struct gpio_chip *chip,
+              ^
+>> drivers/gpio/gpio-pci-idio-16.c:62:9: error: implicit declaration of function 'idio_16_get' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           return idio_16_get(idio16gpio->reg, &idio16gpio->state, offset);
+                  ^
+>> drivers/gpio/gpio-pci-idio-16.c:70:2: error: implicit declaration of function 'idio_16_get_multiple' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
+           ^
+   drivers/gpio/gpio-pci-idio-16.c:70:2: note: did you mean 'idio_16_gpio_get_multiple'?
+   drivers/gpio/gpio-pci-idio-16.c:65:12: note: 'idio_16_gpio_get_multiple' declared here
+   static int idio_16_gpio_get_multiple(struct gpio_chip *chip,
+              ^
+>> drivers/gpio/gpio-pci-idio-16.c:79:2: error: implicit declaration of function 'idio_16_set' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           idio_16_set(idio16gpio->reg, &idio16gpio->state, offset, value);
+           ^
+>> drivers/gpio/gpio-pci-idio-16.c:87:2: error: implicit declaration of function 'idio_16_set_multiple' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           idio_16_set_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
+           ^
+   drivers/gpio/gpio-pci-idio-16.c:87:2: note: did you mean 'idio_16_gpio_set_multiple'?
+   drivers/gpio/gpio-pci-idio-16.c:82:13: note: 'idio_16_gpio_set_multiple' declared here
+   static void idio_16_gpio_set_multiple(struct gpio_chip *chip,
+               ^
+>> drivers/gpio/gpio-pci-idio-16.c:106:31: error: incomplete definition of type 'struct idio_16'
+                   iowrite8(0, &idio16gpio->reg->irq_ctl);
+                                ~~~~~~~~~~~~~~~^
+   drivers/gpio/gpio-pci-idio-16.c:31:9: note: forward declaration of 'struct idio_16'
+           struct idio_16 __iomem *reg;
+                  ^
+   drivers/gpio/gpio-pci-idio-16.c:129:27: error: incomplete definition of type 'struct idio_16'
+                   ioread8(&idio16gpio->reg->irq_ctl);
+                            ~~~~~~~~~~~~~~~^
+   drivers/gpio/gpio-pci-idio-16.c:31:9: note: forward declaration of 'struct idio_16'
+           struct idio_16 __iomem *reg;
+                  ^
+   drivers/gpio/gpio-pci-idio-16.c:164:39: error: incomplete definition of type 'struct idio_16'
+           irq_status = ioread8(&idio16gpio->reg->irq_status);
+                                 ~~~~~~~~~~~~~~~^
+   drivers/gpio/gpio-pci-idio-16.c:31:9: note: forward declaration of 'struct idio_16'
+           struct idio_16 __iomem *reg;
+                  ^
+   drivers/gpio/gpio-pci-idio-16.c:178:30: error: incomplete definition of type 'struct idio_16'
+           iowrite8(0, &idio16gpio->reg->in0_7);
+                        ~~~~~~~~~~~~~~~^
+   drivers/gpio/gpio-pci-idio-16.c:31:9: note: forward declaration of 'struct idio_16'
+           struct idio_16 __iomem *reg;
+                  ^
+   drivers/gpio/gpio-pci-idio-16.c:198:30: error: incomplete definition of type 'struct idio_16'
+           iowrite8(0, &idio16gpio->reg->irq_ctl);
+                        ~~~~~~~~~~~~~~~^
+   drivers/gpio/gpio-pci-idio-16.c:31:9: note: forward declaration of 'struct idio_16'
+           struct idio_16 __iomem *reg;
+                  ^
+   drivers/gpio/gpio-pci-idio-16.c:199:30: error: incomplete definition of type 'struct idio_16'
+           iowrite8(0, &idio16gpio->reg->in0_7);
+                        ~~~~~~~~~~~~~~~^
+   drivers/gpio/gpio-pci-idio-16.c:31:9: note: forward declaration of 'struct idio_16'
+           struct idio_16 __iomem *reg;
+                  ^
+   drivers/gpio/gpio-pci-idio-16.c:232:30: error: incomplete definition of type 'struct idio_16'
+           iowrite8(0, &idio16gpio->reg->filter_ctl);
+                        ~~~~~~~~~~~~~~~^
+   drivers/gpio/gpio-pci-idio-16.c:31:9: note: forward declaration of 'struct idio_16'
+           struct idio_16 __iomem *reg;
+                  ^
+>> drivers/gpio/gpio-pci-idio-16.c:248:2: error: implicit declaration of function 'idio_16_state_init' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           idio_16_state_init(&idio16gpio->state);
+           ^
+   drivers/gpio/gpio-pci-idio-16.c:248:2: note: did you mean 'file_ra_state_init'?
+   include/linux/fs.h:2750:1: note: 'file_ra_state_init' declared here
+   file_ra_state_init(struct file_ra_state *ra, struct address_space *mapping);
+   ^
+   14 errors generated.
 
->=20
-> diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
-> index 8fec14120105..11d22043ddd7 100644
-> --- a/drivers/clk/clk-sp7021.c
-> +++ b/drivers/clk/clk-sp7021.c
-> @@ -41,7 +41,7 @@ enum {
->  /* HIWORD_MASK FIELD_PREP */
->  #define HWM_FIELD_PREP(mask, value)            \
->  ({                                             \
-> -       u32 _m =3D mask;                          \
-> +       u64 _m =3D mask;                          \
->         (_m << 16) | FIELD_PREP(_m, value);     \
->  })
-> =20
->=20
-> For the record, this only happens under W=3D1 but I think we would like to
-> eventually enable this warning so it would be good to avoid introducing
-> new instances.
 
-It makes sense to me because FIELD_PREP typically takes a GENMASK input,
-which is an unsigned long long shifted around.=20
+vim +32 drivers/gpio/gpio-pci-idio-16.c
 
-I think I'm building with W=3D1, but I'm not building with clang. I'll
-have to go fetch another compiler and put it into circulation.
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   19  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   20  /**
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   21   * struct idio_16_gpio - GPIO device private data structure
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   22   * @chip:	instance of the gpio_chip
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   23   * @lock:	synchronization lock to prevent I/O race conditions
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   24   * @reg:	I/O address offset for the GPIO device registers
+e7f758fa9b7fda William Breathitt Gray 2022-09-18   25   * @state:	ACCES IDIO-16 device state
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   26   * @irq_mask:	I/O bits affected by interrupts
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   27   */
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   28  struct idio_16_gpio {
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   29  	struct gpio_chip chip;
+ea38ce081d1555 Julia Cartwright       2017-03-21   30  	raw_spinlock_t lock;
+e7f758fa9b7fda William Breathitt Gray 2022-09-18   31  	struct idio_16 __iomem *reg;
+e7f758fa9b7fda William Breathitt Gray 2022-09-18  @32  	struct idio_16_state state;
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   33  	unsigned long irq_mask;
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   34  };
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   35  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   36  static int idio_16_gpio_get_direction(struct gpio_chip *chip,
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   37  	unsigned int offset)
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   38  {
+e7f758fa9b7fda William Breathitt Gray 2022-09-18  @39  	if (idio_16_get_direction(offset))
+e42615ec233b30 Matti Vaittinen        2019-11-06   40  		return GPIO_LINE_DIRECTION_IN;
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   41  
+e42615ec233b30 Matti Vaittinen        2019-11-06   42  	return GPIO_LINE_DIRECTION_OUT;
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   43  }
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   44  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   45  static int idio_16_gpio_direction_input(struct gpio_chip *chip,
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   46  	unsigned int offset)
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   47  {
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   48  	return 0;
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   49  }
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   50  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   51  static int idio_16_gpio_direction_output(struct gpio_chip *chip,
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   52  	unsigned int offset, int value)
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   53  {
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   54  	chip->set(chip, offset, value);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   55  	return 0;
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   56  }
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   57  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   58  static int idio_16_gpio_get(struct gpio_chip *chip, unsigned int offset)
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   59  {
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   60  	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   61  
+e7f758fa9b7fda William Breathitt Gray 2022-09-18  @62  	return idio_16_get(idio16gpio->reg, &idio16gpio->state, offset);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   63  }
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   64  
+810ebfc5efca9a William Breathitt Gray 2018-03-22   65  static int idio_16_gpio_get_multiple(struct gpio_chip *chip,
+810ebfc5efca9a William Breathitt Gray 2018-03-22   66  	unsigned long *mask, unsigned long *bits)
+810ebfc5efca9a William Breathitt Gray 2018-03-22   67  {
+810ebfc5efca9a William Breathitt Gray 2018-03-22   68  	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
+810ebfc5efca9a William Breathitt Gray 2018-03-22   69  
+e7f758fa9b7fda William Breathitt Gray 2022-09-18  @70  	idio_16_get_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
+810ebfc5efca9a William Breathitt Gray 2018-03-22   71  	return 0;
+810ebfc5efca9a William Breathitt Gray 2018-03-22   72  }
+810ebfc5efca9a William Breathitt Gray 2018-03-22   73  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   74  static void idio_16_gpio_set(struct gpio_chip *chip, unsigned int offset,
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   75  	int value)
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   76  {
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   77  	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   78  
+e7f758fa9b7fda William Breathitt Gray 2022-09-18  @79  	idio_16_set(idio16gpio->reg, &idio16gpio->state, offset, value);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   80  }
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   81  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   82  static void idio_16_gpio_set_multiple(struct gpio_chip *chip,
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   83  	unsigned long *mask, unsigned long *bits)
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   84  {
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   85  	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   86  
+e7f758fa9b7fda William Breathitt Gray 2022-09-18  @87  	idio_16_set_multiple(idio16gpio->reg, &idio16gpio->state, mask, bits);
+2dc7c3c16daac7 William Breathitt Gray 2019-12-04   88  }
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   89  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   90  static void idio_16_irq_ack(struct irq_data *data)
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   91  {
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   92  }
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   93  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   94  static void idio_16_irq_mask(struct irq_data *data)
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   95  {
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   96  	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   97  	struct idio_16_gpio *const idio16gpio = gpiochip_get_data(chip);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   98  	const unsigned long mask = BIT(irqd_to_hwirq(data));
+02e74fc0401ae3 William Breathitt Gray 2017-02-01   99  	unsigned long flags;
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  100  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  101  	idio16gpio->irq_mask &= ~mask;
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  102  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  103  	if (!idio16gpio->irq_mask) {
+ea38ce081d1555 Julia Cartwright       2017-03-21  104  		raw_spin_lock_irqsave(&idio16gpio->lock, flags);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  105  
+02e74fc0401ae3 William Breathitt Gray 2017-02-01 @106  		iowrite8(0, &idio16gpio->reg->irq_ctl);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  107  
+ea38ce081d1555 Julia Cartwright       2017-03-21  108  		raw_spin_unlock_irqrestore(&idio16gpio->lock, flags);
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  109  	}
+141d5527568e92 Linus Walleij          2023-03-09  110  
+141d5527568e92 Linus Walleij          2023-03-09  111  	gpiochip_disable_irq(chip, irqd_to_hwirq(data));
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  112  }
+02e74fc0401ae3 William Breathitt Gray 2017-02-01  113  
+
+:::::: The code at line 32 was first introduced by commit
+:::::: e7f758fa9b7fda8b91f2e429b2be93ae0b88ac33 gpio: pci-idio-16: Utilize the idio-16 GPIO library
+
+:::::: TO: William Breathitt Gray <william.gray@linaro.org>
+:::::: CC: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
