@@ -1,139 +1,418 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98BD917CE;
-	Thu, 23 Mar 2023 04:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679544009; x=1711080009;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NsGdUJBncGKWfC7GpKnDTmKlDEqGv3Q1q5ABVkhCRKs=;
-  b=fmiQ8RVdpuIuNTwK4dNpMwj/geTUioGtXT6LvqKLOyE/wrfSie3mGaHi
-   izLGJ+6HBWZcFVWDhQU/ATMWiJ7sfCFCp25uVP3xUw48/QXu9cUn5mPh5
-   pe62/clgUj/R2G9sDE64QrjC6/c7kMWMt7sdtpbwEcw1YgrRiTIE2Abz8
-   EWAtQQ5EarVAQksAyAQupzDBRSeFVL87vGDL79r4OKtMF/TEnedSt11yZ
-   xfcf+0i1jY3xylLmE7bJrm4QEA1BZiYJtG9JqfWKtjr4KwzLqYPQmxMHc
-   vnwo37L8m4v8EYurMWCJSumn+v7lGMEwD4/Pw/GKOXLxPdb4F73PRgMII
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="336894974"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="336894974"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 21:00:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="751325355"
-X-IronPort-AV: E=Sophos;i="5.98,283,1673942400"; 
-   d="scan'208";a="751325355"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Mar 2023 21:00:07 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfC7T-000Dvq-16;
-	Thu, 23 Mar 2023 04:00:07 +0000
-Date: Thu, 23 Mar 2023 12:00:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mcgrof:20230322-deprecate-bdev_disk_changed 1/1]
- block/partitions/core.c:701:1: error: type specifier missing, defaults to
- 'int'; ISO C99 and later do not support implicit int
-Message-ID: <202303231125.zhFczwGo-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2FA17CE
+	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 04:13:00 +0000 (UTC)
+Received: by mail-pl1-f175.google.com with SMTP id z19so10773728plo.2
+        for <llvm@lists.linux.dev>; Wed, 22 Mar 2023 21:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1679544779;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6kdgdsJazUM5sci8JahR0dUzXBqTqFNtmta29tfieM=;
+        b=IU4xtvN9R2rn2mP/JII1W5yQeztVG3weqd1uBwU7AqDEwqbBlqK3SBkKMsaNdXfX5Q
+         iBinqqyzsuZG4DD/Thc33Su9CWChkRzTtxCSwJI0ER1pC2DCHOdNsy/P+1Fn5Aa9OQlA
+         G/UgKR97rZ+8RkR9MdGBruP6jGRt/yR2EFnUyAnfHNBqGuUnoo0HGtv/1oZyHCa7zNVQ
+         YPJGDAKy6HWSdycrzS7ZlQGokWnIk7HA27aJQGrAZ1pH//aGxk0DNxJqzEE4a014dW/g
+         GPCmGSX/w7WNq2+YJWSfxn+Od28BERg8z75TdcgVDkQHVJ+UW3n0keMhCLoZZt3C5MzQ
+         fGzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679544779;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E6kdgdsJazUM5sci8JahR0dUzXBqTqFNtmta29tfieM=;
+        b=C44VWlEUKeWa7i2KAB70NuEDxopQcWJBY0MsM8aSo3g+8CUUZ8bLso/C+8zgkEPpzz
+         4cG6Eo+HYYMdF4w4l/ZTjOdH2eGM9xEX1U0hjLMUfpJJnBQULXvPzogs9lfw+QpO6ggI
+         t8NI2x72kfu24fjg+EVJIvOCmfg/u+PCe62hmayko3LOe96NSb9JIVzq0Q6D4lfZAU4k
+         MJJfxLtXzmJj/lSeG/ChozJX96F3wcIOLYhn9Z45xWfUzHJeWjJV0j/hway60KED1BNR
+         5tL9hMsVkHkEwQF9Tq/zFBLc9oF3Hw+O0ayqe3zLYEasla4rY72mp31PwDa2Hb5rnruY
+         cYlw==
+X-Gm-Message-State: AO0yUKVo1u+lD0GZOlFnxpAltQt6aPOr0Vn0Mm8nU9f1feEk/IU/qUdg
+	4eTz7c+0RQgR41jePgtN5XxVLbTYNINF+NYlxH2oag==
+X-Google-Smtp-Source: AK7set+ncu/7c66HKbKRXM0s9vhJNDAuWR4Kazo79VJFUw88ochMphzawtdZ66QdtvmX/syTvMn4HA==
+X-Received: by 2002:a17:902:f550:b0:19e:7b09:bd4d with SMTP id h16-20020a170902f55000b0019e7b09bd4dmr6200991plf.47.1679544779064;
+        Wed, 22 Mar 2023 21:12:59 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id je9-20020a170903264900b001a065d3ea3bsm11232440plb.295.2023.03.22.21.12.57
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 21:12:58 -0700 (PDT)
+Message-ID: <641bd1ca.170a0220.facf.434f@mx.google.com>
+Date: Wed, 22 Mar 2023 21:12:58 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20230323
+Subject: next/master build: 18 builds: 13 failed, 5 passed, 14 errors,
+ 23 warnings (next-20230323)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230322-deprecate-bdev_disk_changed
-head:   64988d63873be8d60ab3ebb87c869cba3960116e
-commit: 64988d63873be8d60ab3ebb87c869cba3960116e [1/1] block: annotate bdev_disk_changed() deprecation with a symbol namespace
-config: arm-randconfig-r046-20230322 (https://download.01.org/0day-ci/archive/20230323/202303231125.zhFczwGo-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=64988d63873be8d60ab3ebb87c869cba3960116e
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20230322-deprecate-bdev_disk_changed
-        git checkout 64988d63873be8d60ab3ebb87c869cba3960116e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash block/
+next/master build: 18 builds: 13 failed, 5 passed, 14 errors, 23 warnings (=
+next-20230323)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303231125.zhFczwGo-lkp@intel.com/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230323/
 
-All errors (new ones prefixed by >>):
+Tree: next
+Branch: master
+Git Describe: next-20230323
+Git Commit: 7c4a254d78f89546d0e74a40617ef24c6151c8d1
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 5 unique architectures
 
->> block/partitions/core.c:701:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-   EXPORT_SYMBOL_GPL_NS(bdev_disk_changed, BLOCK_DEPRECATED);
-   ^
-   int
->> block/partitions/core.c:701:22: error: a parameter list without types is only allowed in a function definition
-   EXPORT_SYMBOL_GPL_NS(bdev_disk_changed, BLOCK_DEPRECATED);
-                        ^
-   2 errors generated.
+Build Failures Detected:
 
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
+FAIL
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook: (clang-13) FAIL
+    cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-c=
+hromebook: (clang-13) FAIL
 
-vim +/int +701 block/partitions/core.c
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config: (clang-13) FA=
+IL
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config: (clang-1=
+3) FAIL
 
-   654	
-   655	int bdev_disk_changed(struct gendisk *disk, bool invalidate)
-   656	{
-   657		int ret = 0;
-   658	
-   659		lockdep_assert_held(&disk->open_mutex);
-   660	
-   661		if (!disk_live(disk))
-   662			return -ENXIO;
-   663	
-   664	rescan:
-   665		if (disk->open_partitions)
-   666			return -EBUSY;
-   667		sync_blockdev(disk->part0);
-   668		invalidate_bdev(disk->part0);
-   669		blk_drop_partitions(disk);
-   670	
-   671		clear_bit(GD_NEED_PART_SCAN, &disk->state);
-   672	
-   673		/*
-   674		 * Historically we only set the capacity to zero for devices that
-   675		 * support partitions (independ of actually having partitions created).
-   676		 * Doing that is rather inconsistent, but changing it broke legacy
-   677		 * udisks polling for legacy ide-cdrom devices.  Use the crude check
-   678		 * below to get the sane behavior for most device while not breaking
-   679		 * userspace for this particular setup.
-   680		 */
-   681		if (invalidate) {
-   682			if (!(disk->flags & GENHD_FL_NO_PART) ||
-   683			    !(disk->flags & GENHD_FL_REMOVABLE))
-   684				set_capacity(disk, 0);
-   685		}
-   686	
-   687		if (get_capacity(disk)) {
-   688			ret = blk_add_partitions(disk);
-   689			if (ret == -EAGAIN)
-   690				goto rescan;
-   691		} else if (invalidate) {
-   692			/*
-   693			 * Tell userspace that the media / partition table may have
-   694			 * changed.
-   695			 */
-   696			kobject_uevent(&disk_to_dev(disk)->kobj, KOBJ_CHANGE);
-   697		}
-   698	
-   699		return ret;
-   700	}
- > 701	EXPORT_SYMBOL_GPL_NS(bdev_disk_changed, BLOCK_DEPRECATED);
-   702	
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
+-chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook: (clang-13) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config: (clang-13=
+) FAIL
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book: (clang-13) FAIL
+    x86_64_defconfig+x86-chromebook: (clang-13) FAIL
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Errors and Warnings Detected:
+
+arm64:
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
+1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
+book (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
+omebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chr=
+omebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-c=
+hromebook (clang-13): 1 error, 1 warning
+    defconfig+arm64-chromebook (clang-13): 7 warnings
+
+arm:
+    cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (clang-13): 1 =
+error, 1 warning
+    cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (clang-13=
+): 1 error, 1 warning
+
+mips:
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc64_defconfig+kselftest (gcc-10): 1 error, 2 warnings
+
+x86_64:
+    cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86=
+-chromebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86=
+-chromebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-=
+chromebook (clang-13): 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (clang-13)=
+: 1 error, 1 warning
+    cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chrome=
+book (clang-13): 1 error, 1 warning
+    x86_64_defconfig+x86-chromebook (clang-13): 1 error, 1 warning
+
+Errors summary:
+
+    13   mm/mmap.c:939:11: error: variable 'next' is used uninitialized whe=
+never 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings summary:
+
+    14   mm/mmap.c:912:36: note: initialize the variable 'next' to silence =
+this warning
+    1    mm/vmalloc.c:3543:6: warning: variable 'remains' is used uninitial=
+ized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1    mm/vmalloc.c:3539:6: warning: variable 'remains' is used uninitial=
+ized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1    mm/vmalloc.c:3524:16: note: initialize the variable 'remains' to s=
+ilence this warning
+    1    mm/mmap.c:939:11: warning: variable 'next' is used uninitialized w=
+henever 'if' condition is false [-Wsometimes-uninitialized]
+    1    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    2 warnings generated.
+    1    1 warning generated.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
+) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatc=
+hes
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatc=
+hes
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section misma=
+tches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mi=
+smatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
+matches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
+-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 7 wa=
+rnings, 0 section mismatches
+
+Warnings:
+    mm/mmap.c:939:11: warning: variable 'next' is used uninitialized whenev=
+er 'if' condition is false [-Wsometimes-uninitialized]
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+    1 warning generated.
+    mm/vmalloc.c:3543:6: warning: variable 'remains' is used uninitialized =
+whenever 'if' condition is true [-Wsometimes-uninitialized]
+    mm/vmalloc.c:3539:6: warning: variable 'remains' is used uninitialized =
+whenever 'if' condition is true [-Wsometimes-uninitialized]
+    mm/vmalloc.c:3524:16: note: initialize the variable 'remains' to silenc=
+e this warning
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+kselftest (sparc, gcc-10) =E2=80=94 FAIL, 1 error, 2 warn=
+ings, 0 section mismatches
+
+Errors:
+    arch/sparc/include/asm/percpu_64.h:19:25: error: =E2=80=98__local_per_c=
+pu_offset=E2=80=99 undeclared (first use in this function); did you mean =
+=E2=80=98per_cpu_offset=E2=80=99?
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/include/asm/current.h:18:30: warning: call-clobbered registe=
+r used for global register variable
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 FAIL, 1 error,=
+ 1 warning, 0 section mismatches
+
+Errors:
+    mm/mmap.c:939:11: error: variable 'next' is used uninitialized whenever=
+ 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+
+Warnings:
+    mm/mmap.c:912:36: note: initialize the variable 'next' to silence this =
+warning
+
+---
+For more info write to <info@kernelci.org>
