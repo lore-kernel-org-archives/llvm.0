@@ -1,96 +1,126 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AD48F4A
-	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 12:14:02 +0000 (UTC)
-Received: by mail-yb1-f180.google.com with SMTP id b18so5455147ybp.1
-        for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 05:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679573641;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBcr6rGUQpq73pjYT7vRUWqGDW5Dr38jLB7HJdT5cIo=;
-        b=voEb/826RcZ3kwUnJrKKb5X0HAbeEHDo9gxIa7fYVS2TgYVRFp8uQLGPf5rqZHl+hL
-         Q/TNwsas90BLJQRUYzSmNUUVS1mlzjMMyIrkLWAYkIFqrjIX5nNAqZzEX6SwnOjt4tiz
-         Lt3fG2Sx0aV86xTqdDs4TZZsEveXVz9psGjGoSLn3Uo4f2v0FRGNfLff+FeaGmdlHkiN
-         fgA8epD3GnmWQDOPB9sJtcPHg2XvO/2/LrRw/UY9Pn0KdQZikvonson8U2c4q4ZFEqRk
-         hbgu+3nxxqgPSw7s/Ajwzp/0lb9xvCHwZKVkXItCgf1MMGU6p8GmU6//bqu4XYYJVixI
-         Bgpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679573641;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CBcr6rGUQpq73pjYT7vRUWqGDW5Dr38jLB7HJdT5cIo=;
-        b=A4oZKvOb2sQL4IYZnnZjrq5buNll6yFx7+7enANX4qkwBDPm89/JfW5J8sjiRRcy3G
-         FkS/H5LyI6ilAt+Eu+PS2AWcVkt/e/6hVw46E1LxPuDhDIyLqyDiF5RJSrXIrz7Tm4X9
-         pIw/5+y9ssr3h8e97UQjJKPZ/D5xuKKo6pB1SHLek8Dq7Trxze3wbbCQZlppp5yr63bm
-         ii8UP23Jn1cSIywe1XGrM5apUZIWNLW0h82H4IlSVnxKPkkdYQ5ZeTHngUX5V8XoozTO
-         B21r7ki86VAhVR1jgHZelbMeVAh9HEFfjgROGFWyKa50jpDB3jXJPxAW4eXnrxm8f6Hu
-         BUrQ==
-X-Gm-Message-State: AAQBX9ehb3pLWv5qwkNWJrrv3L67LTxLZmpWVpXj0HJ+AvkooktB7erU
-	nU0p556RpOfLpJ6Wvc21OZazwh5P4LkXDKJPGRABkQ==
-X-Google-Smtp-Source: AKy350a5HqJ3Do5D8FQMtsU4FwpW2pRvPpCLBVv/YVEXdN/L2HtAIv5Arz6/7Km/jGditdZo9mvd1J5GFyhyQUTw4+I=
-X-Received: by 2002:a05:6902:1689:b0:b75:8ac3:d5d9 with SMTP id
- bx9-20020a056902168900b00b758ac3d5d9mr948334ybb.3.1679573641152; Thu, 23 Mar
- 2023 05:14:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2686F944E;
+	Thu, 23 Mar 2023 13:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679579191; x=1711115191;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9ennairkf3iy0DLpGRVHy/xvU8CQYM6AxEOs9CSrRLY=;
+  b=cKbEvOktt+X0Zhy/7zQePUCQZHnvXAvg9VHG6+ruU1Cx1sWYYCzfxvuQ
+   iRfqLkZXMV25vcxRkyyzP0dXeMCjx0MB+UrUXj6uUugSvFELaQTicXXQ0
+   7l2AGrFWLM2T7RioEexJNg+dYuOHJgLVgIpp06ijRAkkHFRr52ZZI3Ofy
+   EgA62YTnp8zb/zWsQYN3vHNQQ+arzLspms4C0zizR/c2LlLe3xMTUtrBX
+   tvzrt/AJu3rkkWQsuWeNNvaUrzQjtV88O2jNvWjL0LWXwE+AkP2ILrCh7
+   2d3Ep6SaNJZohLMsDw58LVKph5pz9YYK02CK9f75JEEAj39yYSiyzvHTZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="339523430"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="339523430"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 06:46:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="928241273"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="928241273"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Mar 2023 06:46:28 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pfLGt-000EPt-2m;
+	Thu, 23 Mar 2023 13:46:27 +0000
+Date: Thu, 23 Mar 2023 21:46:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Garry <john.g.garry@oracle.com>, jejb@linux.ibm.com,
+	martin.petersen@oracle.com, dgilbert@interlog.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bvanassche@acm.org, John Garry <john.g.garry@oracle.com>
+Subject: Re: [PATCH v2 06/11] scsi: scsi_debug: Dynamically allocate
+ sdebug_queued_cmd
+Message-ID: <202303232141.ElpLC72H-lkp@intel.com>
+References: <20230323094555.584624-7-john.g.garry@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230319164744.1707169-1-trix@redhat.com>
-In-Reply-To: <20230319164744.1707169-1-trix@redhat.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 23 Mar 2023 13:13:25 +0100
-Message-ID: <CAPDyKFqfdYKXwaCbT6_hBsX1ZxeVtNivZBQmh3gA8554F944hA@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdricoh_cs: remove unused sdricoh_readw function
-To: Tom Rix <trix@redhat.com>
-Cc: saschasommer@freenet.de, nathan@kernel.org, ndesaulniers@google.com, 
-	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323094555.584624-7-john.g.garry@oracle.com>
 
-On Sun, 19 Mar 2023 at 17:47, Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=1 reports
-> drivers/mmc/host/sdricoh_cs.c:104:28: error: unused function
->   'sdricoh_readw' [-Werror,-Wunused-function]
-> static inline unsigned int sdricoh_readw(struct sdricoh_host *host,
->                            ^
-> This function is not used, so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi John,
 
-Applied for next, thanks!
+I love your patch! Perhaps something to improve:
 
-Kind regards
-Uffe
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on next-20230323]
+[cannot apply to jejb-scsi/for-next linus/master v6.3-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Garry/scsi-scsi_debug-Fix-check-for-sdev-queue-full/20230323-175305
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230323094555.584624-7-john.g.garry%40oracle.com
+patch subject: [PATCH v2 06/11] scsi: scsi_debug: Dynamically allocate sdebug_queued_cmd
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230323/202303232141.ElpLC72H-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/be81e49de2c71f280dd3eac902d05afcb1061d12
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review John-Garry/scsi-scsi_debug-Fix-check-for-sdev-queue-full/20230323-175305
+        git checkout be81e49de2c71f280dd3eac902d05afcb1061d12
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303232141.ElpLC72H-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/scsi_debug.c:5579:27: warning: no previous prototype for function 'sdebug_alloc_queued_cmd' [-Wmissing-prototypes]
+   struct sdebug_queued_cmd *sdebug_alloc_queued_cmd(struct scsi_cmnd *scmd)
+                             ^
+   drivers/scsi/scsi_debug.c:5579:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct sdebug_queued_cmd *sdebug_alloc_queued_cmd(struct scsi_cmnd *scmd)
+   ^
+   static 
+   1 warning generated.
 
 
-> ---
->  drivers/mmc/host/sdricoh_cs.c | 8 --------
->  1 file changed, 8 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdricoh_cs.c b/drivers/mmc/host/sdricoh_cs.c
-> index 76a8cd3a186f..57b8c1a96756 100644
-> --- a/drivers/mmc/host/sdricoh_cs.c
-> +++ b/drivers/mmc/host/sdricoh_cs.c
-> @@ -101,14 +101,6 @@ static inline void sdricoh_writel(struct sdricoh_host *host, unsigned int reg,
->
->  }
->
-> -static inline unsigned int sdricoh_readw(struct sdricoh_host *host,
-> -                                        unsigned int reg)
-> -{
-> -       unsigned int value = readw(host->iobase + reg);
-> -       dev_vdbg(host->dev, "rb %x 0x%x\n", reg, value);
-> -       return value;
-> -}
-> -
->  static inline void sdricoh_writew(struct sdricoh_host *host, unsigned int reg,
->                                          unsigned short value)
->  {
-> --
-> 2.27.0
->
+vim +/sdebug_alloc_queued_cmd +5579 drivers/scsi/scsi_debug.c
+
+  5578	
+> 5579	struct sdebug_queued_cmd *sdebug_alloc_queued_cmd(struct scsi_cmnd *scmd)
+  5580	{
+  5581		struct sdebug_queued_cmd *sqcp = kmem_cache_zalloc(queued_cmd_cache, GFP_ATOMIC);
+  5582		struct sdebug_defer *sd_dp;
+  5583	
+  5584		if (!sqcp)
+  5585			return NULL;
+  5586	
+  5587		sd_dp = &sqcp->sd_dp;
+  5588	
+  5589		hrtimer_init(&sd_dp->hrt, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
+  5590		sd_dp->hrt.function = sdebug_q_cmd_hrt_complete;
+  5591		INIT_WORK(&sd_dp->ew.work, sdebug_q_cmd_wq_complete);
+  5592	
+  5593		sqcp->scmd = scmd;
+  5594		sd_dp->sqa_idx = -1;
+  5595	
+  5596		return sqcp;
+  5597	}
+  5598	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
