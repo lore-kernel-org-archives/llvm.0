@@ -1,202 +1,143 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2130.outbound.protection.outlook.com [40.107.244.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F492BA54;
-	Thu, 23 Mar 2023 18:03:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679594621; x=1711130621;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P5vLr1EmL8h7eHQhc8i127T9nq9qHp50s3VJKwH/T58=;
-  b=UegksNFIHQQ3PbvGUGfYL61A3HyzL6mbWnVMt4MvyAbY8xmt8idu9xkS
-   4MOqFpBDU9NJHbT1k2oHY1NO1q6DB9txUt8iLj+Xr1Q6zfGJsWZ/qx9Vk
-   y7AzAYiV2ww3MLGYshmTOR4Yku8vI/RYZO5ZrPm3IxLSWYk7fxDjF4kzw
-   v/Bdd+3sYvHGCoBHZTLUaHMfI9Nfhb4eTHnCWV2G45kmWA4YqMYbbJu2j
-   39GVbACXP5IL1JU7X1QobAxaiWM8bXOY9lDkLvwnpuX0Vy3N15w3MN6I9
-   CGCr/uwkmNMa1jfQH6q8INKJ4vAuKpKimQ0o6U0Uov74I2GgKhzhZ3kAb
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="402158143"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="402158143"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 11:03:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="714921162"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="714921162"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Mar 2023 11:03:38 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfPHl-000EbM-1b;
-	Thu, 23 Mar 2023 18:03:37 +0000
-Date: Fri, 24 Mar 2023 02:02:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Tretter <m.tretter@pengutronix.de>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>
-Subject: Re: [PATCH 8/8] usb: gadget: uvc: implement s/g_parm
-Message-ID: <202303240129.Efnw3p6C-lkp@intel.com>
-References: <20230323-uvc-gadget-cleanup-v1-8-e41f0c5d9d8e@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 080C03C04
+	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 18:31:47 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KQO6VNJwDerSoV8cFu3Mn12MdReE0kmNU0jhN95m1VOfhT44ojtfoOEV8T8dyq90PPgZsCS5+4wlc3qDfpjaxhugkzS8rrEIHPOuTMh2rlRgBgDHAvgvBX/lpvWZoK1bn4BWwExj3ArjYFSTsgX+EpCF//2ewOgyvK9jFFQRjqyyJ6I+D+vT4NPsoCZAL41FzNYLV8zmxfHHp85jSZA3UvwxGkhgGibwPe/9BKvpH/Dz+amIIfJkWMnlEZwHg1JTIvutSt5NaCIQJ7P8xbyfSYOYruDa0BUL4zV83U6EUH3+XrEfWVYga/8NQKLEm3ZIgBdp1CV0GXIT9QE1+O8+6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lofKCubnXUaYWHmHuodlsCRyFwNUQNqBMaRVMvxVDoE=;
+ b=d0wfgy4kAeWGbO0XaI3+cDrA/8ktkWujoFYskbW1W6/ILuicMubIrOIpeeuqIz6Vv0AeJtt5kMruiS8ScVhrRzySypO9zieg7I0AuHBNzmJSKuHBUgzKIQ+EC/Db+Obz/1cxtrdVOCcIdatSbFUAdmheFZjUwcUNyVv/7gwGEwS2UmC1RRPnISkD7wELM45Zs+G+/hfyLg5yl68QQeZk8l6x5rqxaHGgUCnfFSoth8fW1gmyQE0zRXRuSTuj09Soa1JL2YjmaFY4ldzkg89R46J7eR5nqPESoZrOR1fDQwd3sQe2S5Cwm8p+UM4PBYCZ5/5sWJy7CLvhg6b+4sNVXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lofKCubnXUaYWHmHuodlsCRyFwNUQNqBMaRVMvxVDoE=;
+ b=XSYJ7MbbmI2t10TZKTAduxqc4rNUNPY7m42XGdq7wezZG6CuJL9C5SlxfYO5reyg2tUiysfwK7465IfuKZanrN6BPu24WMErf9RimbJX35JLinCoUzhMF9XmQoEyG/ZChAZgik17PbT/LaqWbKeMxmvyeX3APUkhZdvkOqgB4z8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BN0PR13MB5149.namprd13.prod.outlook.com (2603:10b6:408:150::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37; Thu, 23 Mar
+ 2023 18:31:44 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.038; Thu, 23 Mar 2023
+ 18:31:44 +0000
+Date: Thu, 23 Mar 2023 19:31:38 +0100
+From: Simon Horman <simon.horman@corigine.com>
+To: Tom Rix <trix@redhat.com>
+Cc: kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+	ndesaulniers@google.com, ath10k@lists.infradead.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ath10k: remove unused ath10k_get_ring_byte function
+Message-ID: <ZBybCkpexqml5hHF@corigine.com>
+References: <20230322122855.2570417-1-trix@redhat.com>
+ <ZBtnbgeW9T75ZXfv@corigine.com>
+ <0b9f9c45-7e88-deda-46a6-8c7961878b83@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b9f9c45-7e88-deda-46a6-8c7961878b83@redhat.com>
+X-ClientProxiedBy: AM0PR03CA0041.eurprd03.prod.outlook.com (2603:10a6:208::18)
+ To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323-uvc-gadget-cleanup-v1-8-e41f0c5d9d8e@pengutronix.de>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BN0PR13MB5149:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b4d2f70-5f0b-4218-8e5a-08db2bccda72
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	MqZWPIlhAKpD+mUo0mn2q60YO3J1TK4CxXAZpWKipnZwRhZLhRLc99fTwc9i0E0FOdoM9QBfmXOPQvMe5d90REoLqlqJmwC4FJ1yKmzmSWV2mkWZM2G++rf50z0udfzibwaKnrCk7LizeqdRgjvUFh1i0Hqw8z9XK4RbQHyB/pv9QnZ6XTv7Nc/hnpUB7y8Xrf4e9LGvRT+6vD2ty6Lrjej0jLkL+nJa4cgvDWEFkDtDoGgJF193n8ZzeDCfhUSQS97tz9HxbTN3ZAM+QAacGK8NpAB+VxdzMY/8FTrJ7w96gVCLb+O628HqcxxhXQl5GXJlOy52rjb+nZtPwk2YlOSkUbXog8OHTTCVp1nFZKjIQ3qwAeuhPw/Llvdpdt1mhKRHNMq1CSoJ9MlCStA49uUUJwsG/gkB3SFnhbdpQkj/5DOdjTjN1JcSTI2qoHqhUkYKJQ/3ZzyYhpMTC8i3sOaibe0OjRda1yMvk/6x9f6isy65MRkztmSnGGXqR1RN+ebLvZTyNw4+1UuKg9YdZ75D4zf/KA7RKLMJvONMeHh3ZuRcO6l+rkWW2rX/25eXFf38RM6TqTqNBuH8twufr9cGp+TsUTbiUdOTl2+Xk9+5Y6+sY0Mwvq1rF1siRrOUCvu59VgUWkQQCHoFZB4FTALFq0dA1Tb2eQt1RCBdIANzvXOKGGp65ssjHV8oDR/8
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(136003)(366004)(39840400004)(451199018)(38100700002)(2906002)(6486002)(478600001)(186003)(2616005)(86362001)(36756003)(8676002)(4326008)(66556008)(66946007)(66476007)(6916009)(5660300002)(53546011)(6666004)(8936002)(6512007)(6506007)(316002)(7416002)(44832011)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Qt0SEXzdk6SFGE3SljezVfP7Q+8J0JXPDU1uK4w555ItK1UsHTqcsayigDFu?=
+ =?us-ascii?Q?7V+rREiTndwooCG4mEdk1xFLF6kX+ktWZpmnMEA8oeMM00PQlBUZSEkc3JCH?=
+ =?us-ascii?Q?1xfeB/FE9PpGigKn0Tjpb5ED0AyXzFft0FB5MFrYrYnF/H/XZS2lx+cyUDr+?=
+ =?us-ascii?Q?AaCvBOEOL/1xH2RwY5m2Ng4cqJZ8ItaBkX8kAqdI5SEERWoy3GJh9YuNxNLg?=
+ =?us-ascii?Q?A/DyyZm1iaUf8ThY2dTqJHgt7jVlsWy3UW216qxQ2rAP3AGzXpbbUKn4Fwib?=
+ =?us-ascii?Q?Cb41KQPoftFSe2lDW+96nlGM/VBagCzGnMfndR3XkbTSIeE5oSWb6/N3k5wx?=
+ =?us-ascii?Q?sLv9tfpq6xI77Y679FXH0t1PF1wyGT73bEVD0JivC9SYNBj2yKWO3xu3CN4O?=
+ =?us-ascii?Q?WKAJxEqPy6E28qjtMVMNZ4UgcmLC2BovcZOQIL+nkrU3H4XXH5m0jTbNWESJ?=
+ =?us-ascii?Q?I8nza1v/a4upS8B6lzVI+EgE+ivFB2U5XxeIaSCdQ0J2ObnNhg7IINA6Dk6b?=
+ =?us-ascii?Q?iIs+MdUJ2oU/b8gvOYakP+VF6NFmzDkOL3RoLO2VANPr0MFi23sZdQB93Bjz?=
+ =?us-ascii?Q?cSwC6wXErUfMqhmMr0m5hO292CAdPqwx+CmgZSZzQNSGYcNM96buarA+q2w3?=
+ =?us-ascii?Q?0ivkIVQj5Zmsi6at6Jm/TQPFjxpYMfWwi2zxYtnqnfpz92XqEHdANlyZJ2ay?=
+ =?us-ascii?Q?4n3qfArP7kh/DbwKhX0/8Rz/Em/AZ1SUI1xdp7s+lhpJfqyLrSqwq6LjkHCe?=
+ =?us-ascii?Q?rt71aoAvo41Xyblq30AU9tnTJfhtPbGSprrRxf04uZ4y99qUpnKjtt1fyQ+w?=
+ =?us-ascii?Q?1rXuXzImPoZLNnPzfQzYiWvphHk74IY1Yy16oVRzI+D7L5zh/Dr7HQ4yzv3f?=
+ =?us-ascii?Q?GcpnLceIBGIsnw1hHkbpaVah/zHmLE5PeX48w6l6k0tz9Rrbec3nh0u1cBeA?=
+ =?us-ascii?Q?d2VESzAtDBlJVRfFWURpuLrzuLLy5bchMLSla2K2wvnjw+Z02dJN+TW/bYEr?=
+ =?us-ascii?Q?SK4/Vz20akWqL/C6Qj3667RDLZIHDsx3EJn0UnMG4+ZmD/g19+Yi5uxpTtFz?=
+ =?us-ascii?Q?mTbK3fE7fWLtO9+KR73b04kNjl216BbWn8JQKUjIOxJzvAbeGAsAgh50AHI6?=
+ =?us-ascii?Q?y0jLQnQ161IOS9kPheEe/xtr2ogPAjUEOS0Ceaw3getXCnMpF7Bl0Rm1ssiw?=
+ =?us-ascii?Q?7XYHbO6Yt4Vwp1SKx1VEMzi2r4TDciraLxiOyhskFcfoEI5mQryYfRfrSZbW?=
+ =?us-ascii?Q?hEx5G/uRfOBxFZhu5TLf+LeK9xrR/uUnGjDqSvDuYTvMJFqngoa/SgN9Gxax?=
+ =?us-ascii?Q?hF4Pk1QHYqKVG39TIUziTZwHcrIUehe7vAIjZ+/zI9rjpoZhRj7U+ePVum+I?=
+ =?us-ascii?Q?PHyCUuNUdtPfo88i6edPNE5RCWGoO7PVEwh3XpjNYLwBudmoyGqxtZZ+bIxs?=
+ =?us-ascii?Q?J8gpzYwMrbhm9GISciJf/VRlNvqWdfOHGeNoyJtJ/xvPk7U/cKRYiItfbi6b?=
+ =?us-ascii?Q?n1zO4g17/nPt1C/MqV0yLhBt7Rl8mfJ+mM1BnkSHZH6J/FR1szvb15EEw1G6?=
+ =?us-ascii?Q?8Z5Y1xjiX8fmvUmstaOAKQom7wrcOPbfLuZwwSccledumb9vtHjgrBydECFo?=
+ =?us-ascii?Q?DIGY+5SPlqCvrLoDDQTg7wA13FYoqHfLvFRkfC+f7u6Qa6MmMh+8I5WzfO96?=
+ =?us-ascii?Q?UKtE3g=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b4d2f70-5f0b-4218-8e5a-08db2bccda72
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2023 18:31:44.4614
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fGMDZxPTYrRzk7+pLZLMVpifim3zX0Rk1MW5YJ8oU8xJoa43biSMb7jjFB01bZYdRClNoTsAxwMRXCCgx3247gGevezCGtk6fzk8ij3HAn0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR13MB5149
 
-Hi Michael,
+On Thu, Mar 23, 2023 at 07:18:09AM -0700, Tom Rix wrote:
+> 
+> On 3/22/23 1:40 PM, Simon Horman wrote:
+> > On Wed, Mar 22, 2023 at 08:28:55AM -0400, Tom Rix wrote:
+> > > clang with W=1 reports
+> > > drivers/net/wireless/ath/ath10k/ce.c:88:1: error:
+> > >    unused function 'ath10k_get_ring_byte' [-Werror,-Wunused-function]
+> > > ath10k_get_ring_byte(unsigned int offset,
+> > > ^
+> > > This function is not used so remove it.
+> > > 
+> > > Signed-off-by: Tom Rix <trix@redhat.com>
+> > Hi Tom,
+> > 
+> > this looks good. But this patch applied, and with clang 11.0.2,
+> > make CC=clang W=1 tells me:
+> > 
+> > drivers/net/wireless/ath/ath10k/ce.c:80:19: error: unused function 'shadow_dst_wr_ind_addr' [-Werror,-Wunused-function]
+> > static inline u32 shadow_dst_wr_ind_addr(struct ath10k *ar,
+> >                    ^
+> > drivers/net/wireless/ath/ath10k/ce.c:434:20: error: unused function 'ath10k_ce_error_intr_enable' [-Werror,-Wunused-function]
+> > static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
+> >                     ^
+> > Perhaps those functions should be removed too?
+> 
+> I believe these were removed with
+> 
+> c3ab8c9a296 ("wifi: ath10k: Remove the unused function
+> shadow_dst_wr_ind_addr() and ath10k_ce_error_intr_enable()")
 
-I love your patch! Yet something to improve:
+Sorry, my bad. You are correct.
+Patch looks good to me (now).
 
-[auto build test ERROR on 8be174835f07b2c106b9961c0775486d06112a3c]
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Tretter/usb-gadget-uvc-use-fourcc-printk-helper/20230323-194359
-base:   8be174835f07b2c106b9961c0775486d06112a3c
-patch link:    https://lore.kernel.org/r/20230323-uvc-gadget-cleanup-v1-8-e41f0c5d9d8e%40pengutronix.de
-patch subject: [PATCH 8/8] usb: gadget: uvc: implement s/g_parm
-config: hexagon-randconfig-r041-20230322 (https://download.01.org/0day-ci/archive/20230324/202303240129.Efnw3p6C-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f6fdbbf392bbaa79e8553af32337c54a663760db
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Michael-Tretter/usb-gadget-uvc-use-fourcc-printk-helper/20230323-194359
-        git checkout f6fdbbf392bbaa79e8553af32337c54a663760db
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/gadget/function/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303240129.Efnw3p6C-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from drivers/usb/gadget/function/uvc_v4l2.c:24:
-   In file included from drivers/usb/gadget/function/uvc.h:15:
-   In file included from include/linux/usb/composite.h:27:
-   In file included from include/linux/usb/gadget.h:24:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/usb/gadget/function/uvc_v4l2.c:24:
-   In file included from drivers/usb/gadget/function/uvc.h:15:
-   In file included from include/linux/usb/composite.h:27:
-   In file included from include/linux/usb/gadget.h:24:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/usb/gadget/function/uvc_v4l2.c:24:
-   In file included from drivers/usb/gadget/function/uvc.h:15:
-   In file included from include/linux/usb/composite.h:27:
-   In file included from include/linux/usb/gadget.h:24:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/usb/gadget/function/uvc_v4l2.c:289:2: warning: comparison of distinct pointer types ('typeof ((interval)) *' (aka 'unsigned long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-           do_div(interval, timeperframe->denominator);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
->> drivers/usb/gadget/function/uvc_v4l2.c:289:2: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-           do_div(interval, timeperframe->denominator);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-                   __rem = __div64_32(&(n), __base);       \
-                                      ^~~~
-   include/asm-generic/div64.h:213:38: note: passing argument to parameter 'dividend' here
-   extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-                                        ^
->> drivers/usb/gadget/function/uvc_v4l2.c:289:2: warning: shift count >= width of type [-Wshift-count-overflow]
-           do_div(interval, timeperframe->denominator);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-           } else if (likely(((n) >> 32) == 0)) {          \
-                                  ^  ~~
-   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                                               ^
-   8 warnings and 1 error generated.
-
-
-vim +289 drivers/usb/gadget/function/uvc_v4l2.c
-
-   265	
-   266	static void find_closest_timeperframe(struct uvc_device *uvc,
-   267					      struct v4l2_fract *timeperframe)
-   268	{
-   269		struct uvc_video *video = &uvc->video;
-   270		struct uvcg_format *uformat;
-   271		struct uvcg_frame *uframe;
-   272		unsigned long interval;
-   273		unsigned int best_interval;
-   274		unsigned int curr;
-   275		unsigned int dist;
-   276		unsigned int best_dist = UINT_MAX;
-   277		int i;
-   278	
-   279		if (timeperframe->denominator == 0)
-   280			timeperframe->denominator = video->timeperframe.denominator;
-   281		if (timeperframe->numerator == 0)
-   282			timeperframe->numerator = video->timeperframe.numerator;
-   283	
-   284		uformat = find_format_by_pix(uvc, video->fcc);
-   285		uframe = find_closest_frame_by_size(uvc, uformat,
-   286						    video->width, video->height);
-   287	
-   288		interval = timeperframe->numerator * 10000000;
- > 289		do_div(interval, timeperframe->denominator);
-   290	
-   291		for (i = 0; i < uframe->frame.b_frame_interval_type; i++) {
-   292			curr = uframe->dw_frame_interval[i];
-   293			dist = interval > curr ? interval - curr : curr - interval;
-   294			if (dist < best_dist) {
-   295				best_dist = dist;
-   296				best_interval = curr;
-   297			}
-   298		}
-   299	
-   300		timeperframe->numerator = best_interval;
-   301		timeperframe->denominator = 10000000;
-   302		v4l2_simplify_fraction(&timeperframe->numerator,
-   303				       &timeperframe->denominator, 8, 333);
-   304	}
-   305	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
