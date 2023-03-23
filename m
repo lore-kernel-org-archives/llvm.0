@@ -1,99 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD1DA93A
-	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 15:19:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679584762;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9JfTMOmWgVFviT3j1h1ZVlXRJuPtZf94XGhzCpT7TZI=;
-	b=jLTQ1vaM/Pj1cL5OKcCYKuefgMRr2NwkFH8yBJzqAMKhAI/73islrDaHDyx+pKAbB6Z7zF
-	8R6eSRDsBx2LKMaWTBNySrU2Bw9a69q/+oCCyXbFeYcnZtwMPVnZ1IUv8IvuzqIgh3IkXK
-	7lXqtZsXQ+VenaDeSD+nun3SHao21wA=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-455-RwDnlBkIOuyjX7phPRzJfQ-1; Thu, 23 Mar 2023 11:18:14 -0400
-X-MC-Unique: RwDnlBkIOuyjX7phPRzJfQ-1
-Received: by mail-qt1-f197.google.com with SMTP id y10-20020a05622a164a00b003e38e0a3cc3so2781307qtj.14
-        for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 08:18:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679584685;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9JfTMOmWgVFviT3j1h1ZVlXRJuPtZf94XGhzCpT7TZI=;
-        b=UWY4XS6Gt/3EnThRSOHTsjS+E1+/ntr7LwOzr1shddGMEgJMBHvJjPTnFiZXbqn4+P
-         FtxzgzpB3GhQehNCr9UV/9OS3SjQnjt2s3yJEX/zfzF+PJohTErvdbaD4OAWrukOVfQC
-         RZUxWeNy0sK3sMtnakzkIM3dE2EBrcVI+KB7IEhGhk/UlMnfNZGVAkycunNNtDwACDdT
-         EGjCqw079HYcb4l2fYFWzc4WMYYVqL9GQLwNtVhtTGTbBTmhjMkx6cyqSmUStpzcQyo7
-         Gu78x3sgSLL2mPtwTtLZqpeFZMqe0B2fHymo9Mmr3EfuhiItZ6eAcbz3023ehcAfS8fL
-         0bWg==
-X-Gm-Message-State: AO0yUKW8wsdSR6vAq9ZzkaZy0SuaxhzRe4wPdrRXn8sa/dVG4YlNgHdz
-	XNv+StrrA0BWMlqIyxN0PmrCUSlSWZb/JrLAYpDY3LGrR+jriZVSyD6/O+iy6vlrHBxS4PKgm1K
-	5XtfoipZfZ3Db1f6obQywK2qkCwa9nAFDblHoK/1+3NGRvZUv1HQrZBRL6+paIUjnPdxb
-X-Received: by 2002:ac8:5bcc:0:b0:3e1:65f5:4a85 with SMTP id b12-20020ac85bcc000000b003e165f54a85mr13130763qtb.58.1679584685652;
-        Thu, 23 Mar 2023 08:18:05 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8LNOQxfUqAJQEgzeCPGIWCE6BE+k4IT7L6mRJOClAlDS0h+wmBxg2TVB0f+9BHgFC2x3KR1g==
-X-Received: by 2002:ac8:5bcc:0:b0:3e1:65f5:4a85 with SMTP id b12-20020ac85bcc000000b003e165f54a85mr13130718qtb.58.1679584685365;
-        Thu, 23 Mar 2023 08:18:05 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w8-20020a05620a424800b0073b587194d0sm13656463qko.104.2023.03.23.08.18.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Mar 2023 08:18:04 -0700 (PDT)
-Subject: Re: [PATCH] mISDN: remove unused vpm_read_address function
-To: Simon Horman <simon.horman@corigine.com>
-Cc: isdn@linux-pingi.de, nathan@kernel.org, ndesaulniers@google.com,
- kuba@kernel.org, alexanderduyck@fb.com, yangyingliang@huawei.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230321120127.1782548-1-trix@redhat.com>
- <ZBsArtzFkgz+05LK@corigine.com>
-From: Tom Rix <trix@redhat.com>
-Message-ID: <bfc6db20-e094-7fd5-21b5-3d0b81fb494f@redhat.com>
-Date: Thu, 23 Mar 2023 08:18:01 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B3DA93A;
+	Thu, 23 Mar 2023 15:49:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679586595; x=1711122595;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JgAkob/Z48KbaDgCIXndDzrtMp/Smh5x57zGttss1MM=;
+  b=TIhnuaMRxhwDAtLC50OWKWo6GfRzGS1mdVUrtdHi+a9izY24Dzf2ciiI
+   OQnIsxjWxy7AExg5k+zP/EJFD4E4+uDNwNpOP0FOG00wxP1AyWQCwoJb4
+   j2mzhXhEAjSQKpL7CO2/vSG1ejAzjuYvTfPjqBi4Q0yB6E2t4QVdXE9+a
+   HjPKNL+V72mDsraN+l5iFf2yG1fL8yKBa4RkRBQQFi+5LUIsGLQhTZ7AJ
+   3ZRv0RLYouMjYJQo6njyCT1lYiFxJb1uwkjBZV0z+aUJSkI7scDxbT4kr
+   wXcBVpKdNmGrEgvGLm6ZFsRv1tTsqPWIKXztC3Bde3YPQezbUnKOXn2Hq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="319183619"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="319183619"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 08:49:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="684797693"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="684797693"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Mar 2023 08:49:32 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pfNC0-000EUr-0V;
+	Thu, 23 Mar 2023 15:49:32 +0000
+Date: Thu, 23 Mar 2023 23:49:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: [peterz-queue:smp/core 9/13] ld.lld: error: duplicate symbol:
+ __tracepoint_ipi_raise
+Message-ID: <202303232336.xsAJnXKe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <ZBsArtzFkgz+05LK@corigine.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git smp/core
+head:   6ce99af1c9685e7dd788092089a03e75612bd6ed
+commit: dac32ddd3c4f2d55f9df1d64a0a93993d10f6978 [9/13] treewide: Trace IPIs sent via smp_send_reschedule()
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230323/202303232336.xsAJnXKe-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=dac32ddd3c4f2d55f9df1d64a0a93993d10f6978
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue smp/core
+        git checkout dac32ddd3c4f2d55f9df1d64a0a93993d10f6978
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On 3/22/23 6:20 AM, Simon Horman wrote:
-> On Tue, Mar 21, 2023 at 08:01:27AM -0400, Tom Rix wrote:
->> clang with W=1 reports
->> drivers/isdn/hardware/mISDN/hfcmulti.c:667:1: error: unused function
->>    'vpm_read_address' [-Werror,-Wunused-function]
->> vpm_read_address(struct hfc_multi *c)
->> ^
->> This function is not used, so remove it.
-> Yes, agreed.
->
-> But with this patch applied, make CC=clang W=1 tells me:
->
->    CALL    scripts/checksyscalls.sh
->    CC [M]  drivers/isdn/hardware/mISDN/hfcmulti.o
-> drivers/isdn/hardware/mISDN/hfcmulti.c:643:1: error: unused function 'cpld_read_reg' [-Werror,-Wunused-function]
->
-> So perhaps cpld_read_reg should be removed too?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303232336.xsAJnXKe-lkp@intel.com/
 
-Yes, i will add and respin.
+All errors (new ones prefixed by >>):
 
-Thanks,
+>> ld.lld: error: duplicate symbol: __tracepoint_ipi_raise
+   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
+   >>>            virt/kvm/kvm_main.o:(__tracepoint_ipi_raise) in archive vmlinux.a
+   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
+   >>>            kernel/smp.o:(__tracepoints+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCT__tp_func_ipi_raise
+   >>> defined at kvm_main.c
+   >>>            virt/kvm/kvm_main.o:(__SCT__tp_func_ipi_raise) in archive vmlinux.a
+   >>> defined at smp.c
+   >>>            kernel/smp.o:(.static_call.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCT__tp_func_ipi_exit
+   >>> defined at kvm_main.c
+   >>>            virt/kvm/kvm_main.o:(__SCT__tp_func_ipi_exit) in archive vmlinux.a
+   >>> defined at smp.c
+   >>>            kernel/smp.o:(.static_call.text+0x18) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __traceiter_ipi_exit
+   >>> defined at ipi.h:102 (include/trace/events/ipi.h:102)
+   >>>            virt/kvm/kvm_main.o:(__traceiter_ipi_exit) in archive vmlinux.a
+   >>> defined at ipi.h:102 (include/trace/events/ipi.h:102)
+   >>>            kernel/smp.o:(.text+0x250) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCK__tp_func_ipi_raise
+   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
+   >>>            virt/kvm/kvm_main.o:(__SCK__tp_func_ipi_raise) in archive vmlinux.a
+   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
+   >>>            kernel/smp.o:(.data+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCK__tp_func_ipi_send_cpumask
+   >>> defined at ipi.h:38 (include/trace/events/ipi.h:38)
+   >>>            virt/kvm/kvm_main.o:(__SCK__tp_func_ipi_send_cpumask) in archive vmlinux.a
+   >>> defined at ipi.h:38 (include/trace/events/ipi.h:38)
+   >>>            kernel/smp.o:(.data+0x10) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCK__tp_func_ipi_entry
+   >>> defined at ipi.h:86 (include/trace/events/ipi.h:86)
+   >>>            virt/kvm/kvm_main.o:(__SCK__tp_func_ipi_entry) in archive vmlinux.a
+   >>> defined at ipi.h:86 (include/trace/events/ipi.h:86)
+   >>>            kernel/smp.o:(.data+0x20) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCK__tp_func_ipi_exit
+   >>> defined at ipi.h:102 (include/trace/events/ipi.h:102)
+   >>>            virt/kvm/kvm_main.o:(__SCK__tp_func_ipi_exit) in archive vmlinux.a
+   >>> defined at ipi.h:102 (include/trace/events/ipi.h:102)
+   >>>            kernel/smp.o:(.data+0x30) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __traceiter_ipi_raise
+   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
+   >>>            virt/kvm/kvm_main.o:(__traceiter_ipi_raise) in archive vmlinux.a
+   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
+   >>>            kernel/smp.o:(.text+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __tracepoint_ipi_send_cpumask
+   >>> defined at ipi.h:38 (include/trace/events/ipi.h:38)
+   >>>            virt/kvm/kvm_main.o:(__tracepoint_ipi_send_cpumask) in archive vmlinux.a
+   >>> defined at ipi.h:38 (include/trace/events/ipi.h:38)
+   >>>            kernel/smp.o:(__tracepoints+0x40) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: __SCT__tp_func_ipi_send_cpumask
+   >>> defined at kvm_main.c
+   >>>            virt/kvm/kvm_main.o:(__SCT__tp_func_ipi_send_cpumask) in archive vmlinux.a
+   >>> defined at smp.c
+   >>>            kernel/smp.o:(.static_call.text+0x8) in archive vmlinux.a
+..
 
-Tom
-
-
->
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
