@@ -1,133 +1,143 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F33A950;
-	Thu, 23 Mar 2023 16:51:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679590299; x=1711126299;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gol4GFX54FO4WNeKu+XTxoaVCDKBpq4J47Q+uJRsF4M=;
-  b=Xiq5pSs5Ht4HveEZkISf0IyLoleQj2Bb2Aiy4WyPwWPr7uA8yRysIm8G
-   Wg7qRVaclBKSefmpcMH76So4ngfh0zzSeMe1OSUuqcbgY40PsvTdxXnrg
-   n/jl3+YEW/MjlXD+izljon1txHC7F6gLtpyjSHeMHz+LxMFFf+puwghXh
-   e4LPDeWIZlXCqNmWef4vv7XSA4H/CspIwYfGqGL3YgnQXXkI10r0d8/6F
-   9UcnYOjhVyjXJJ7ENXnxHcjbsYG4jlAES0xd5BG778qe5bcRVABQ2sD1V
-   5UZZMH1DQ7+2ZBg18ULZTWlnlvMDMJQg30+yJ7+8xu/a3V9u834f7FufB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="339588636"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="339588636"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 09:51:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="682374288"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="682374288"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 23 Mar 2023 09:51:35 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfOA2-000EY4-2l;
-	Thu, 23 Mar 2023 16:51:34 +0000
-Date: Fri, 24 Mar 2023 00:50:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Imre Deak <imre.deak@intel.com>, intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [Intel-gfx] [PATCH 01/29] drm/i915/tc: Group the TC PHY
- setup/query functions per platform
-Message-ID: <202303240020.UQr6flaJ-lkp@intel.com>
-References: <20230323142035.1432621-2-imre.deak@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CB0A950
+	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 16:59:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679590779;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+upkbu9j0REGb3XQPl52CEvrtu/lB3040Vqf6c3jPBI=;
+	b=ZtKYHKVCZB0RElOfdJ3AOHOYXxAPSmIriXaxqqcJhwkdU95dI1rR0YeDPS+BjQ1ElFp55Z
+	EVpm6OdwxohS11I9Cft+fT+64/rRf1huqR3GTp0iweO0Ye7naE/a4Ts+fv45d19WhXUq+D
+	xGApBDv1rh8OkAbutE7yup/6utlfmwo=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-595-lqglu1mhP_SmaXCtBrFsHw-1; Thu, 23 Mar 2023 12:59:38 -0400
+X-MC-Unique: lqglu1mhP_SmaXCtBrFsHw-1
+Received: by mail-qv1-f69.google.com with SMTP id y19-20020ad445b3000000b005a5123cb627so11109747qvu.20
+        for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 09:59:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679590777;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+upkbu9j0REGb3XQPl52CEvrtu/lB3040Vqf6c3jPBI=;
+        b=dV1z/7GhekHJyPD91alJH60wiqTpHSem8Lwzx1v11ZNDjKu+zpXMpMwJ58OFfsVqdE
+         9kau14ysccUhXaIkPv2lLE2jYX2U5XJA6kAHbD9HA3bX0nBDIuBBUxGm522QS7zxlkHZ
+         /nrak8fcGFpB/butH+/8DYFqnpANnUvY4Qzfr+7cLHCey8pT2+tK02F+TFhExU3KCbxV
+         K9HP+bbANoLRnBqpEpwc+JKuoKViLHif+DhhLrZEMJObIWKBqgiquYgNZDKVeB4Ri2xq
+         9kZZa+k2D6AeSlXDzx6sXnW49SOLQbsc5JEzcAiZGoixnWAWovggAncIvlyLIeU27R8+
+         lIBw==
+X-Gm-Message-State: AO0yUKV5GGnnfM4H7ZPTQ7x5MFbnoLPuiUoikmQfCZmRK+pnqFBjT63P
+	QKu83Z+CN3k0eXwWJdJB7U3W9S20MoFKk+s4ydLlwG6X5zNPTp7V5bIYNt/4GPEY3DoSaIc3CqD
+	06PWBtZjK1tQEpg==
+X-Received: by 2002:ac8:5fcf:0:b0:3d8:519a:91c9 with SMTP id k15-20020ac85fcf000000b003d8519a91c9mr11318281qta.8.1679590777756;
+        Thu, 23 Mar 2023 09:59:37 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8bCx/r2ljWME1lt8mzPqwTkV08BThI3LuMi5lnq3IRAqduegWWqYlgrB2h30Ce/+PHxdWpgQ==
+X-Received: by 2002:ac8:5fcf:0:b0:3d8:519a:91c9 with SMTP id k15-20020ac85fcf000000b003d8519a91c9mr11318256qta.8.1679590777497;
+        Thu, 23 Mar 2023 09:59:37 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id i4-20020a378604000000b0073b3316bbd0sm13538309qkd.29.2023.03.23.09.59.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 09:59:37 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: gregkh@linuxfoundation.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	error27@gmail.com,
+	colin.i.king@gmail.com
+Cc: linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] staging: rtl8192u: remove unused ieee80211_SignalStrengthTranslate function
+Date: Thu, 23 Mar 2023 12:59:31 -0400
+Message-Id: <20230323165931.2634587-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323142035.1432621-2-imre.deak@intel.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Imre,
+clang with W=1 reports
+drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c:1961:18: error: unused
+  function 'ieee80211_SignalStrengthTranslate' [-Werror,-Wunused-function]
+static inline u8 ieee80211_SignalStrengthTranslate(
+                 ^
+This function is not used so remove it.
+It may have been used in the past but that has been commented out.
+Also remove the comment.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ .../staging/rtl8192u/ieee80211/ieee80211_rx.c | 38 -------------------
+ 1 file changed, 38 deletions(-)
 
-[auto build test WARNING on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Imre-Deak/drm-i915-tc-Group-the-TC-PHY-setup-query-functions-per-platform/20230323-222328
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230323142035.1432621-2-imre.deak%40intel.com
-patch subject: [Intel-gfx] [PATCH 01/29] drm/i915/tc: Group the TC PHY setup/query functions per platform
-config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230324/202303240020.UQr6flaJ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7b85ed1627f7c16b7ff080b604d35d729c70313f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Imre-Deak/drm-i915-tc-Group-the-TC-PHY-setup-query-functions-per-platform/20230323-222328
-        git checkout 7b85ed1627f7c16b7ff080b604d35d729c70313f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303240020.UQr6flaJ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_tc.c:264: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * ICL TC PHY handlers
-   drivers/gpu/drm/i915/display/intel_tc.c:457: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * ADLP TC PHY handlers
-   drivers/gpu/drm/i915/display/intel_tc.c:535: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Generic TC PHY handlers
-   drivers/gpu/drm/i915/display/intel_tc.c:1026: warning: Function parameter or member 'work' not described in 'intel_tc_port_disconnect_phy_work'
-   drivers/gpu/drm/i915/display/intel_tc.c:1026: warning: Excess function parameter 'dig_port' description in 'intel_tc_port_disconnect_phy_work'
-
-
-vim +264 drivers/gpu/drm/i915/display/intel_tc.c
-
-   262	
-   263	/**
- > 264	 * ICL TC PHY handlers
-   265	 * -------------------
-   266	 */
-   267	static u32 icl_tc_port_live_status_mask(struct intel_digital_port *dig_port)
-   268	{
-   269		struct drm_i915_private *i915 = to_i915(dig_port->base.base.dev);
-   270		u32 isr_bit = i915->display.hotplug.pch_hpd[dig_port->base.hpd_pin];
-   271		u32 mask = 0;
-   272		u32 val;
-   273	
-   274		val = intel_de_read(i915, PORT_TX_DFLEXDPSP(dig_port->tc_phy_fia));
-   275	
-   276		if (val == 0xffffffff) {
-   277			drm_dbg_kms(&i915->drm,
-   278				    "Port %s: PHY in TCCOLD, nothing connected\n",
-   279				    dig_port->tc_port_name);
-   280			return mask;
-   281		}
-   282	
-   283		if (val & TC_LIVE_STATE_TBT(dig_port->tc_phy_fia_idx))
-   284			mask |= BIT(TC_PORT_TBT_ALT);
-   285		if (val & TC_LIVE_STATE_TC(dig_port->tc_phy_fia_idx))
-   286			mask |= BIT(TC_PORT_DP_ALT);
-   287	
-   288		if (intel_de_read(i915, SDEISR) & isr_bit)
-   289			mask |= BIT(TC_PORT_LEGACY);
-   290	
-   291		/* The sink can be connected only in a single mode. */
-   292		if (!drm_WARN_ON_ONCE(&i915->drm, hweight32(mask) > 1))
-   293			tc_port_fixup_legacy_flag(dig_port, mask);
-   294	
-   295		return mask;
-   296	}
-   297	
-
+diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
+index 5c73e3f8541a..ca09367005e1 100644
+--- a/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
++++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_rx.c
+@@ -1958,43 +1958,6 @@ int ieee80211_parse_info_param(struct ieee80211_device *ieee,
+ 	return 0;
+ }
+ 
+-static inline u8 ieee80211_SignalStrengthTranslate(
+-	u8  CurrSS
+-	)
+-{
+-	u8 RetSS;
+-
+-	// Step 1. Scale mapping.
+-	if (CurrSS >= 71 && CurrSS <= 100) {
+-		RetSS = 90 + ((CurrSS - 70) / 3);
+-	} else if (CurrSS >= 41 && CurrSS <= 70) {
+-		RetSS = 78 + ((CurrSS - 40) / 3);
+-	} else if (CurrSS >= 31 && CurrSS <= 40) {
+-		RetSS = 66 + (CurrSS - 30);
+-	} else if (CurrSS >= 21 && CurrSS <= 30) {
+-		RetSS = 54 + (CurrSS - 20);
+-	} else if (CurrSS >= 5 && CurrSS <= 20) {
+-		RetSS = 42 + (((CurrSS - 5) * 2) / 3);
+-	} else if (CurrSS == 4) {
+-		RetSS = 36;
+-	} else if (CurrSS == 3) {
+-		RetSS = 27;
+-	} else if (CurrSS == 2) {
+-		RetSS = 18;
+-	} else if (CurrSS == 1) {
+-		RetSS = 9;
+-	} else {
+-		RetSS = CurrSS;
+-	}
+-	//RT_TRACE(COMP_DBG, DBG_LOUD, ("##### After Mapping:  LastSS: %d, CurrSS: %d, RetSS: %d\n", LastSS, CurrSS, RetSS));
+-
+-	// Step 2. Smoothing.
+-
+-	//RT_TRACE(COMP_DBG, DBG_LOUD, ("$$$$$ After Smoothing:  LastSS: %d, CurrSS: %d, RetSS: %d\n", LastSS, CurrSS, RetSS));
+-
+-	return RetSS;
+-}
+-
+ /* 0-100 index */
+ static long ieee80211_translate_todbm(u8 signal_strength_index)
+ {
+@@ -2095,7 +2058,6 @@ static inline int ieee80211_network_init(
+ 		network->flags |= NETWORK_EMPTY_ESSID;
+ 
+ 	stats->signal = 30 + (stats->SignalStrength * 70) / 100;
+-	//stats->signal = ieee80211_SignalStrengthTranslate(stats->signal);
+ 	stats->noise = ieee80211_translate_todbm((u8)(100 - stats->signal)) - 25;
+ 
+ 	memcpy(&network->stats, stats, sizeof(network->stats));
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
