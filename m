@@ -1,142 +1,143 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B3DA93A;
-	Thu, 23 Mar 2023 15:49:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679586595; x=1711122595;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JgAkob/Z48KbaDgCIXndDzrtMp/Smh5x57zGttss1MM=;
-  b=TIhnuaMRxhwDAtLC50OWKWo6GfRzGS1mdVUrtdHi+a9izY24Dzf2ciiI
-   OQnIsxjWxy7AExg5k+zP/EJFD4E4+uDNwNpOP0FOG00wxP1AyWQCwoJb4
-   j2mzhXhEAjSQKpL7CO2/vSG1ejAzjuYvTfPjqBi4Q0yB6E2t4QVdXE9+a
-   HjPKNL+V72mDsraN+l5iFf2yG1fL8yKBa4RkRBQQFi+5LUIsGLQhTZ7AJ
-   3ZRv0RLYouMjYJQo6njyCT1lYiFxJb1uwkjBZV0z+aUJSkI7scDxbT4kr
-   wXcBVpKdNmGrEgvGLm6ZFsRv1tTsqPWIKXztC3Bde3YPQezbUnKOXn2Hq
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="319183619"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="319183619"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 08:49:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="684797693"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="684797693"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Mar 2023 08:49:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfNC0-000EUr-0V;
-	Thu, 23 Mar 2023 15:49:32 +0000
-Date: Thu, 23 Mar 2023 23:49:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:smp/core 9/13] ld.lld: error: duplicate symbol:
- __tracepoint_ipi_raise
-Message-ID: <202303232336.xsAJnXKe-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD954A93A
+	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 16:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679588028;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KbMR0xrX13/vpqXtbfb3ZQ/trhkNWEMduVf+oaF3Fe8=;
+	b=f8Id94MdlWFdHMAcA11MRIvR5Y5B7v6l+bcGtimPJy3CDvf3dyytzf65hXI1lsG8vU/vso
+	/7AuucKiWBw+htq76iuxEwbPg5ZI4m82F+Ypxp3KqMlllCMUGdaZlGguFrJ5TvsC1AAK+s
+	uQvTwGIMA4DmzYUoxbIRhBzXVlYRxXc=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-177-tCQ2T-k0Or2W98PzE4wiXg-1; Thu, 23 Mar 2023 12:13:47 -0400
+X-MC-Unique: tCQ2T-k0Or2W98PzE4wiXg-1
+Received: by mail-qv1-f72.google.com with SMTP id f3-20020a0cc303000000b005c9966620daso6438064qvi.4
+        for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 09:13:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679588027;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KbMR0xrX13/vpqXtbfb3ZQ/trhkNWEMduVf+oaF3Fe8=;
+        b=Xp2B/WyJff/QFrAKV/vsRznsvm9bC0K2fObsv5MHUbWtmLmxJ1KRRdzi09pRHhSyge
+         brGXpUYpnZ+PuEGJn7WjwG1JUmW6nyOoBC1SmlmfYUQObVndyoNCLM2dsnyMwAIqNXNE
+         y1QK/CfJdnWSBMCXcgSDvjoktb3Jsn5kKBHWiaZSnW0TqJn9+1rm39Y1yTW+s8sTKV9o
+         OkdWFW8zZ05+UcaTYHnjEUEoVKX376LRhxjXSK+P/qE7XElm4HpcnmGWKk5MEjsdCe33
+         n1JDzHG9IB7htLwxf4O7xDaiixlG95x5RXnPJbhvCHKtJYwlsWjTW8/hHuyhRz5HVjls
+         k27Q==
+X-Gm-Message-State: AO0yUKUd4WVURx1dzpK8NmWtS1xVqhGjT4E80swjkBCrFikskRWMKqTd
+	5SRLLItqGjV0SbrpZIVwtf2C5HDDdTSf1wihdywNbBHne0eLcVlEKg0d4vpU8TUulycEpLTKFZL
+	QoVpcFg7c0I0j4g==
+X-Received: by 2002:ac8:7fc6:0:b0:3e3:8ed5:a46b with SMTP id b6-20020ac87fc6000000b003e38ed5a46bmr7580392qtk.34.1679588027004;
+        Thu, 23 Mar 2023 09:13:47 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8iOLbXObqxCv5YZqFAUuGys7Qtjn8a01N2100PrXD69Su2AVUSuvrVzwG1RwXwNk3swo0Zcg==
+X-Received: by 2002:ac8:7fc6:0:b0:3e3:8ed5:a46b with SMTP id b6-20020ac87fc6000000b003e38ed5a46bmr7580361qtk.34.1679588026709;
+        Thu, 23 Mar 2023 09:13:46 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id c20-20020ac86614000000b003e1080e0f8csm7631543qtp.16.2023.03.23.09.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Mar 2023 09:13:46 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: isdn@linux-pingi.de,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	yangyingliang@huawei.com,
+	alexanderduyck@fb.com,
+	kuba@kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>,
+	Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH] mISDN: remove unused vpm_read_address and cpld_read_reg functions
+Date: Thu, 23 Mar 2023 12:13:43 -0400
+Message-Id: <20230323161343.2633836-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git smp/core
-head:   6ce99af1c9685e7dd788092089a03e75612bd6ed
-commit: dac32ddd3c4f2d55f9df1d64a0a93993d10f6978 [9/13] treewide: Trace IPIs sent via smp_send_reschedule()
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230323/202303232336.xsAJnXKe-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=dac32ddd3c4f2d55f9df1d64a0a93993d10f6978
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue smp/core
-        git checkout dac32ddd3c4f2d55f9df1d64a0a93993d10f6978
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+clang with W=1 reports
+drivers/isdn/hardware/mISDN/hfcmulti.c:667:1: error: unused function
+  'vpm_read_address' [-Werror,-Wunused-function]
+vpm_read_address(struct hfc_multi *c)
+^
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303232336.xsAJnXKe-lkp@intel.com/
+drivers/isdn/hardware/mISDN/hfcmulti.c:643:1: error: unused function
+  'cpld_read_reg' [-Werror,-Wunused-function]
+cpld_read_reg(struct hfc_multi *hc, unsigned char reg)
+^
 
-All errors (new ones prefixed by >>):
+These functions are not used, so remove them.
 
->> ld.lld: error: duplicate symbol: __tracepoint_ipi_raise
-   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
-   >>>            virt/kvm/kvm_main.o:(__tracepoint_ipi_raise) in archive vmlinux.a
-   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
-   >>>            kernel/smp.o:(__tracepoints+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __SCT__tp_func_ipi_raise
-   >>> defined at kvm_main.c
-   >>>            virt/kvm/kvm_main.o:(__SCT__tp_func_ipi_raise) in archive vmlinux.a
-   >>> defined at smp.c
-   >>>            kernel/smp.o:(.static_call.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __SCT__tp_func_ipi_exit
-   >>> defined at kvm_main.c
-   >>>            virt/kvm/kvm_main.o:(__SCT__tp_func_ipi_exit) in archive vmlinux.a
-   >>> defined at smp.c
-   >>>            kernel/smp.o:(.static_call.text+0x18) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __traceiter_ipi_exit
-   >>> defined at ipi.h:102 (include/trace/events/ipi.h:102)
-   >>>            virt/kvm/kvm_main.o:(__traceiter_ipi_exit) in archive vmlinux.a
-   >>> defined at ipi.h:102 (include/trace/events/ipi.h:102)
-   >>>            kernel/smp.o:(.text+0x250) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __SCK__tp_func_ipi_raise
-   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
-   >>>            virt/kvm/kvm_main.o:(__SCK__tp_func_ipi_raise) in archive vmlinux.a
-   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
-   >>>            kernel/smp.o:(.data+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __SCK__tp_func_ipi_send_cpumask
-   >>> defined at ipi.h:38 (include/trace/events/ipi.h:38)
-   >>>            virt/kvm/kvm_main.o:(__SCK__tp_func_ipi_send_cpumask) in archive vmlinux.a
-   >>> defined at ipi.h:38 (include/trace/events/ipi.h:38)
-   >>>            kernel/smp.o:(.data+0x10) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __SCK__tp_func_ipi_entry
-   >>> defined at ipi.h:86 (include/trace/events/ipi.h:86)
-   >>>            virt/kvm/kvm_main.o:(__SCK__tp_func_ipi_entry) in archive vmlinux.a
-   >>> defined at ipi.h:86 (include/trace/events/ipi.h:86)
-   >>>            kernel/smp.o:(.data+0x20) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __SCK__tp_func_ipi_exit
-   >>> defined at ipi.h:102 (include/trace/events/ipi.h:102)
-   >>>            virt/kvm/kvm_main.o:(__SCK__tp_func_ipi_exit) in archive vmlinux.a
-   >>> defined at ipi.h:102 (include/trace/events/ipi.h:102)
-   >>>            kernel/smp.o:(.data+0x30) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __traceiter_ipi_raise
-   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
-   >>>            virt/kvm/kvm_main.o:(__traceiter_ipi_raise) in archive vmlinux.a
-   >>> defined at ipi.h:19 (include/trace/events/ipi.h:19)
-   >>>            kernel/smp.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __tracepoint_ipi_send_cpumask
-   >>> defined at ipi.h:38 (include/trace/events/ipi.h:38)
-   >>>            virt/kvm/kvm_main.o:(__tracepoint_ipi_send_cpumask) in archive vmlinux.a
-   >>> defined at ipi.h:38 (include/trace/events/ipi.h:38)
-   >>>            kernel/smp.o:(__tracepoints+0x40) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __SCT__tp_func_ipi_send_cpumask
-   >>> defined at kvm_main.c
-   >>>            virt/kvm/kvm_main.o:(__SCT__tp_func_ipi_send_cpumask) in archive vmlinux.a
-   >>> defined at smp.c
-   >>>            kernel/smp.o:(.static_call.text+0x8) in archive vmlinux.a
-..
+Reported-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/isdn/hardware/mISDN/hfcmulti.c | 31 --------------------------
+ 1 file changed, 31 deletions(-)
 
+diff --git a/drivers/isdn/hardware/mISDN/hfcmulti.c b/drivers/isdn/hardware/mISDN/hfcmulti.c
+index e840609c50eb..2e5cb9dde3ec 100644
+--- a/drivers/isdn/hardware/mISDN/hfcmulti.c
++++ b/drivers/isdn/hardware/mISDN/hfcmulti.c
+@@ -639,23 +639,6 @@ cpld_write_reg(struct hfc_multi *hc, unsigned char reg, unsigned char val)
+ 	return;
+ }
+ 
+-static inline unsigned char
+-cpld_read_reg(struct hfc_multi *hc, unsigned char reg)
+-{
+-	unsigned char bytein;
+-
+-	cpld_set_reg(hc, reg);
+-
+-	/* Do data pin read low byte */
+-	HFC_outb(hc, R_GPIO_OUT1, reg);
+-
+-	enablepcibridge(hc);
+-	bytein = readpcibridge(hc, 1);
+-	disablepcibridge(hc);
+-
+-	return bytein;
+-}
+-
+ static inline void
+ vpm_write_address(struct hfc_multi *hc, unsigned short addr)
+ {
+@@ -663,20 +646,6 @@ vpm_write_address(struct hfc_multi *hc, unsigned short addr)
+ 	cpld_write_reg(hc, 1, 0x01 & (addr >> 8));
+ }
+ 
+-static inline unsigned short
+-vpm_read_address(struct hfc_multi *c)
+-{
+-	unsigned short addr;
+-	unsigned short highbit;
+-
+-	addr = cpld_read_reg(c, 0);
+-	highbit = cpld_read_reg(c, 1);
+-
+-	addr = addr | (highbit << 8);
+-
+-	return addr & 0x1ff;
+-}
+-
+ static inline unsigned char
+ vpm_in(struct hfc_multi *c, int which, unsigned short addr)
+ {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
