@@ -1,126 +1,131 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2686F944E;
-	Thu, 23 Mar 2023 13:46:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679579191; x=1711115191;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9ennairkf3iy0DLpGRVHy/xvU8CQYM6AxEOs9CSrRLY=;
-  b=cKbEvOktt+X0Zhy/7zQePUCQZHnvXAvg9VHG6+ruU1Cx1sWYYCzfxvuQ
-   iRfqLkZXMV25vcxRkyyzP0dXeMCjx0MB+UrUXj6uUugSvFELaQTicXXQ0
-   7l2AGrFWLM2T7RioEexJNg+dYuOHJgLVgIpp06ijRAkkHFRr52ZZI3Ofy
-   EgA62YTnp8zb/zWsQYN3vHNQQ+arzLspms4C0zizR/c2LlLe3xMTUtrBX
-   tvzrt/AJu3rkkWQsuWeNNvaUrzQjtV88O2jNvWjL0LWXwE+AkP2ILrCh7
-   2d3Ep6SaNJZohLMsDw58LVKph5pz9YYK02CK9f75JEEAj39yYSiyzvHTZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="339523430"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="339523430"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 06:46:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="928241273"
-X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
-   d="scan'208";a="928241273"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Mar 2023 06:46:28 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfLGt-000EPt-2m;
-	Thu, 23 Mar 2023 13:46:27 +0000
-Date: Thu, 23 Mar 2023 21:46:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Garry <john.g.garry@oracle.com>, jejb@linux.ibm.com,
-	martin.petersen@oracle.com, dgilbert@interlog.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bvanassche@acm.org, John Garry <john.g.garry@oracle.com>
-Subject: Re: [PATCH v2 06/11] scsi: scsi_debug: Dynamically allocate
- sdebug_queued_cmd
-Message-ID: <202303232141.ElpLC72H-lkp@intel.com>
-References: <20230323094555.584624-7-john.g.garry@oracle.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F01944E
+	for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 14:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679581095;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wmOQUOtAqacRyOXsSm85w+5nwuG+5y33vZI5QHs5gnc=;
+	b=MCsWK+I9wFHWmDkklzUGUQGxw/cGiXRnp9flNCj43d1DY2lIbXFMTc2WEjYunOgisdEasm
+	Yg5SZS8Vv4EoRFzEf77Hqm6Lk7XM/b1T3uwsa2frfZnnJyLOVUWyb8/2rotabYIixquCnO
+	8SImmndg1ZiWV4oANUQdtxa2e6JXTE4=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-611-Bw8IwbEJOLGzQBUBUCcfuw-1; Thu, 23 Mar 2023 10:18:14 -0400
+X-MC-Unique: Bw8IwbEJOLGzQBUBUCcfuw-1
+Received: by mail-qv1-f71.google.com with SMTP id l18-20020ad44bd2000000b005a9cf5f609eso10880865qvw.15
+        for <llvm@lists.linux.dev>; Thu, 23 Mar 2023 07:18:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679581093;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wmOQUOtAqacRyOXsSm85w+5nwuG+5y33vZI5QHs5gnc=;
+        b=Xsf+0609C/BmJan3sN/tXLBimDzjvvmvgR0QtTg41njp1k3rlZdp5ZRerBnzsqFRpb
+         NBKyEqZ1yg0gOEhPm4a7YkaOcMX3YQk2ZwIAS2o3b3TmUibTbFyEwr7ub2MSFptyz0tG
+         +HMzLU7Uuyn8iGnfpGFKcNWBBb4t+/1B90qthfMlSEu2ntsC+w6tiwXGfAybgJ0TFERD
+         UwcWanXvUmyDq4V+hyKrMlYZMcM8VG7qyIJiRVMNPH1hdoC9qhYht0W8czVtRDngVvnf
+         BXcM0rwOrVYWwdSczyCeUCj9C3J4RlcAdgA7rdV0V5njl1jhAkA8HpFoD79KxJFJyd0H
+         d9Uw==
+X-Gm-Message-State: AO0yUKXNm2TfF8r5lmAsNBvs5NxLawa0Fd6b3xYe7p1y+E17+tERh8dF
+	eKq1785DTwfBzj03prhlg+aAz15plj8KCna0e9aEYtS0OjLEFpHW5cdv6cn9t+uzqrJnubMkmsi
+	nB7064oQfEoqsX6KDnMq49lvyASRYKgVwBmOhmUf8GyToC/UPLKyaYSt6E4aWL62Uzlt0
+X-Received: by 2002:ac8:5845:0:b0:3bf:abd5:f1ef with SMTP id h5-20020ac85845000000b003bfabd5f1efmr11961153qth.7.1679581093159;
+        Thu, 23 Mar 2023 07:18:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8+oxS4bzeF5lRLgX7lO++tpFXfO+fw1zDuVOc/fpqog2+KS85aPH3xR/dKuzfXWCYb7jmdzA==
+X-Received: by 2002:ac8:5845:0:b0:3bf:abd5:f1ef with SMTP id h5-20020ac85845000000b003bfabd5f1efmr11961109qth.7.1679581092868;
+        Thu, 23 Mar 2023 07:18:12 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05620a057000b00745c2b29091sm5993338qkp.93.2023.03.23.07.18.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 07:18:12 -0700 (PDT)
+Subject: Re: [PATCH] ath10k: remove unused ath10k_get_ring_byte function
+To: Simon Horman <simon.horman@corigine.com>
+Cc: kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+ ndesaulniers@google.com, ath10k@lists.infradead.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230322122855.2570417-1-trix@redhat.com>
+ <ZBtnbgeW9T75ZXfv@corigine.com>
+From: Tom Rix <trix@redhat.com>
+Message-ID: <0b9f9c45-7e88-deda-46a6-8c7961878b83@redhat.com>
+Date: Thu, 23 Mar 2023 07:18:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323094555.584624-7-john.g.garry@oracle.com>
-
-Hi John,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on next-20230323]
-[cannot apply to jejb-scsi/for-next linus/master v6.3-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Garry/scsi-scsi_debug-Fix-check-for-sdev-queue-full/20230323-175305
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230323094555.584624-7-john.g.garry%40oracle.com
-patch subject: [PATCH v2 06/11] scsi: scsi_debug: Dynamically allocate sdebug_queued_cmd
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230323/202303232141.ElpLC72H-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/be81e49de2c71f280dd3eac902d05afcb1061d12
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review John-Garry/scsi-scsi_debug-Fix-check-for-sdev-queue-full/20230323-175305
-        git checkout be81e49de2c71f280dd3eac902d05afcb1061d12
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303232141.ElpLC72H-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/scsi/scsi_debug.c:5579:27: warning: no previous prototype for function 'sdebug_alloc_queued_cmd' [-Wmissing-prototypes]
-   struct sdebug_queued_cmd *sdebug_alloc_queued_cmd(struct scsi_cmnd *scmd)
-                             ^
-   drivers/scsi/scsi_debug.c:5579:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct sdebug_queued_cmd *sdebug_alloc_queued_cmd(struct scsi_cmnd *scmd)
-   ^
-   static 
-   1 warning generated.
+In-Reply-To: <ZBtnbgeW9T75ZXfv@corigine.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 
 
-vim +/sdebug_alloc_queued_cmd +5579 drivers/scsi/scsi_debug.c
+On 3/22/23 1:40 PM, Simon Horman wrote:
+> On Wed, Mar 22, 2023 at 08:28:55AM -0400, Tom Rix wrote:
+>> clang with W=1 reports
+>> drivers/net/wireless/ath/ath10k/ce.c:88:1: error:
+>>    unused function 'ath10k_get_ring_byte' [-Werror,-Wunused-function]
+>> ath10k_get_ring_byte(unsigned int offset,
+>> ^
+>> This function is not used so remove it.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+> Hi Tom,
+>
+> this looks good. But this patch applied, and with clang 11.0.2,
+> make CC=clang W=1 tells me:
+>
+> drivers/net/wireless/ath/ath10k/ce.c:80:19: error: unused function 'shadow_dst_wr_ind_addr' [-Werror,-Wunused-function]
+> static inline u32 shadow_dst_wr_ind_addr(struct ath10k *ar,
+>                    ^
+> drivers/net/wireless/ath/ath10k/ce.c:434:20: error: unused function 'ath10k_ce_error_intr_enable' [-Werror,-Wunused-function]
+> static inline void ath10k_ce_error_intr_enable(struct ath10k *ar,
+>                     ^
+> Perhaps those functions should be removed too?
 
-  5578	
-> 5579	struct sdebug_queued_cmd *sdebug_alloc_queued_cmd(struct scsi_cmnd *scmd)
-  5580	{
-  5581		struct sdebug_queued_cmd *sqcp = kmem_cache_zalloc(queued_cmd_cache, GFP_ATOMIC);
-  5582		struct sdebug_defer *sd_dp;
-  5583	
-  5584		if (!sqcp)
-  5585			return NULL;
-  5586	
-  5587		sd_dp = &sqcp->sd_dp;
-  5588	
-  5589		hrtimer_init(&sd_dp->hrt, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
-  5590		sd_dp->hrt.function = sdebug_q_cmd_hrt_complete;
-  5591		INIT_WORK(&sd_dp->ew.work, sdebug_q_cmd_wq_complete);
-  5592	
-  5593		sqcp->scmd = scmd;
-  5594		sd_dp->sqa_idx = -1;
-  5595	
-  5596		return sqcp;
-  5597	}
-  5598	
+I believe these were removed with
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+c3ab8c9a296 ("wifi: ath10k: Remove the unused function 
+shadow_dst_wr_ind_addr() and ath10k_ce_error_intr_enable()")
+
+Tom
+
+>
+>> ---
+>>   drivers/net/wireless/ath/ath10k/ce.c | 7 -------
+>>   1 file changed, 7 deletions(-)
+>>
+>> diff --git a/drivers/net/wireless/ath/ath10k/ce.c b/drivers/net/wireless/ath/ath10k/ce.c
+>> index b656cfc03648..c27b8204718a 100644
+>> --- a/drivers/net/wireless/ath/ath10k/ce.c
+>> +++ b/drivers/net/wireless/ath/ath10k/ce.c
+>> @@ -84,13 +84,6 @@ ath10k_set_ring_byte(unsigned int offset,
+>>   	return ((offset << addr_map->lsb) & addr_map->mask);
+>>   }
+>>   
+>> -static inline unsigned int
+>> -ath10k_get_ring_byte(unsigned int offset,
+>> -		     struct ath10k_hw_ce_regs_addr_map *addr_map)
+>> -{
+>> -	return ((offset & addr_map->mask) >> (addr_map->lsb));
+>> -}
+>> -
+>>   static inline u32 ath10k_ce_read32(struct ath10k *ar, u32 offset)
+>>   {
+>>   	struct ath10k_ce *ce = ath10k_ce_priv(ar);
+>> -- 
+>> 2.27.0
+>>
+
