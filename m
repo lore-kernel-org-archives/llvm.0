@@ -1,218 +1,115 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B75FD2F7;
-	Fri, 24 Mar 2023 17:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679678281; x=1711214281;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hA4koLHftrpeOq5mL+OCKc3pGVwHrPtB+eq+RJU3Q7o=;
-  b=T2znl2Cziy6AqD7aHXaUdP8g4tnpyDa6r0kB7Cymb+nxaS0qndvNQ7xw
-   fHFrA1UrDNZc+4c8kkrBUF+bT93mI8D2CjE70MMQKQc9KDzMsxFp90xAZ
-   5oiPDTSpeLABI6OwiUlJYbfImFYyhHGLx4jjdqb8D8qT0iIemsWNVc2LG
-   ExKvuLqfTm2lRjhFpk2+UAsgZKbS0eEFTNPyyePHplp0tdVuETz9Uzolk
-   yyI/bCi6WKy+xKtYx1/bNe9fco2+xMcg7khhHq80GGVA9rQfTnRYSzPYd
-   tVMlSJU0LSWd9e+l2pmBt+u5JckYePnZ5JKTbQOmx4CXntceut0i+uSkp
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="402423917"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="402423917"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 10:18:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="806739969"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="806739969"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2023 10:17:26 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfl2b-000FVk-2d;
-	Fri, 24 Mar 2023 17:17:25 +0000
-Date: Sat, 25 Mar 2023 01:16:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: edward.cree@amd.com, linux-net-drivers@amd.com, davem@davemloft.net,
-	kuba@kernel.org, pabeni@redhat.com, edumazet@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Edward Cree <ecree.xilinx@gmail.com>, netdev@vger.kernel.org,
-	habetsm.xilinx@gmail.com, michal.swiatkowski@linux.intel.com
-Subject: Re: [PATCH net-next v2 5/6] sfc: add code to register and unregister
- encap matches
-Message-ID: <202303250154.HsaEs3hh-lkp@intel.com>
-References: <57c4e599df3fff7bf678c1813445bd6016c6db79.1679603051.git.ecree.xilinx@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF9AD2F7
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 17:31:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679679062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yS3LsgviE014HnSKQD34+joeCRTUmhUGUupA/8MRjOw=;
+	b=URTHvHiEavAQBBtJ84ia1h1+hJnIWZevzV9dSxzFC0CHjeNVML6wVoTcV4mWokTMx8plKk
+	GC6BIV8+wvJbf2mqlNWZ4hKpi5J3GFqpBv+WLutlnO+DHfR4KhWzxz4X/s0ALMyPtSGWPs
+	1IscFCCH+owUF9pRShiVLa7Mv/4EKGE=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-664-x42C_Qz5MH6wOWBE3PPVkA-1; Fri, 24 Mar 2023 13:31:00 -0400
+X-MC-Unique: x42C_Qz5MH6wOWBE3PPVkA-1
+Received: by mail-qt1-f199.google.com with SMTP id t15-20020a05622a180f00b003e37dd114e3so1435310qtc.10
+        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:31:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679679060;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yS3LsgviE014HnSKQD34+joeCRTUmhUGUupA/8MRjOw=;
+        b=yEh3ufFFn3SgZbMW0GH83hCmwm6Jl20TsF4q0D8glch/ocnAy9vc1opPbllCISI+/n
+         VU+bS4ykpIG+X9YZPSys2GbDBnI5M9fHGGMxnVA56/X7Lql8UTP+TBrqTLMmlaWh1MD0
+         LKgSgf0fM1b7b3cgsmErjJZ2OpjIDbPm+d0SFuRu/sd4B8veGbcfcTxl+kV9/oozs9pg
+         xJyYeovGbE3aBFSjVp3DtjKQ+UlnrGOeqrWD4Y6ZjUJE0jWOXE2f9/IiXPmH5uWdGFeN
+         53ZsuJzdlQRYL/4BhTHO3o8AtoyyGHGWvqL2f+Nq3Tnt9WlqBTfRlG2qiREh/nmEkqKH
+         beRw==
+X-Gm-Message-State: AAQBX9exXM0nx0xHu7f2TqhlFOqHL2uRtwJLd8cP5G5Xnv9ITqtNzrtu
+	xrvzJX98dRmjM1tOWPn/l65O1Fu6KjaJyBh61fbIQ57sr/u8qfI2cX6ZbnTkpWfqrBetYYw0/In
+	Sc4/2FH97iv14xA==
+X-Received: by 2002:ad4:5ce4:0:b0:5cd:3326:792 with SMTP id iv4-20020ad45ce4000000b005cd33260792mr6578287qvb.38.1679679059814;
+        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bL4q0XGxOQvO9LMmJSyYvbSuls1/y5BcXjsOOA+UHzr4CWRhukcoArhUedrPOnlcO+cjsmPw==
+X-Received: by 2002:ad4:5ce4:0:b0:5cd:3326:792 with SMTP id iv4-20020ad45ce4000000b005cd33260792mr6578253qvb.38.1679679059593;
+        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id cw2-20020ad44dc2000000b005dd8b9345aesm829312qvb.70.2023.03.24.10.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: linkinjeon@kernel.org,
+	sfrench@samba.org,
+	senozhatsky@chromium.org,
+	tom@talpey.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-cifs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] ksmbd: remove unused is_char_allowed function
+Date: Fri, 24 Mar 2023 13:30:56 -0400
+Message-Id: <20230324173056.2652725-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57c4e599df3fff7bf678c1813445bd6016c6db79.1679603051.git.ecree.xilinx@gmail.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi,
+clang with W=1 reports
+fs/ksmbd/unicode.c:122:19: error: unused function
+  'is_char_allowed' [-Werror,-Wunused-function]
+static inline int is_char_allowed(char *ch)
+                  ^
+This function is not used so remove it.
 
-I love your patch! Perhaps something to improve:
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ fs/ksmbd/unicode.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/edward-cree-amd-com/sfc-document-TC-to-EF100-MAE-action-translation-concepts/20230324-044845
-patch link:    https://lore.kernel.org/r/57c4e599df3fff7bf678c1813445bd6016c6db79.1679603051.git.ecree.xilinx%40gmail.com
-patch subject: [PATCH net-next v2 5/6] sfc: add code to register and unregister encap matches
-config: arm-randconfig-r025-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250154.HsaEs3hh-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/48db650a79ec4f4091360a2c1363d1cac6235707
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review edward-cree-amd-com/sfc-document-TC-to-EF100-MAE-action-translation-concepts/20230324-044845
-        git checkout 48db650a79ec4f4091360a2c1363d1cac6235707
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/sfc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303250154.HsaEs3hh-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/sfc/tc.c:414:43: warning: variable 'ipv6' is uninitialized when used here [-Wuninitialized]
-           rc = efx_mae_check_encap_match_caps(efx, ipv6, extack);
-                                                    ^~~~
-   drivers/net/ethernet/sfc/tc.c:356:11: note: initialize the variable 'ipv6' to silence this warning
-           bool ipv6;
-                    ^
-                     = 0
-   1 warning generated.
-
-
-vim +/ipv6 +414 drivers/net/ethernet/sfc/tc.c
-
-   348	
-   349	__always_unused
-   350	static int efx_tc_flower_record_encap_match(struct efx_nic *efx,
-   351						    struct efx_tc_match *match,
-   352						    enum efx_encap_type type,
-   353						    struct netlink_ext_ack *extack)
-   354	{
-   355		struct efx_tc_encap_match *encap, *old;
-   356		bool ipv6;
-   357		int rc;
-   358	
-   359		/* We require that the socket-defining fields (IP addrs and UDP dest
-   360		 * port) are present and exact-match.  Other fields are currently not
-   361		 * allowed.  This meets what OVS will ask for, and means that we don't
-   362		 * need to handle difficult checks for overlapping matches as could
-   363		 * come up if we allowed masks or varying sets of match fields.
-   364		 */
-   365		if (match->mask.enc_dst_ip | match->mask.enc_src_ip) {
-   366			if (!IS_ALL_ONES(match->mask.enc_dst_ip)) {
-   367				NL_SET_ERR_MSG_MOD(extack,
-   368						   "Egress encap match is not exact on dst IP address");
-   369				return -EOPNOTSUPP;
-   370			}
-   371			if (!IS_ALL_ONES(match->mask.enc_src_ip)) {
-   372				NL_SET_ERR_MSG_MOD(extack,
-   373						   "Egress encap match is not exact on src IP address");
-   374				return -EOPNOTSUPP;
-   375			}
-   376	#ifdef CONFIG_IPV6
-   377			if (!ipv6_addr_any(&match->mask.enc_dst_ip6) ||
-   378			    !ipv6_addr_any(&match->mask.enc_src_ip6)) {
-   379				NL_SET_ERR_MSG_MOD(extack,
-   380						   "Egress encap match on both IPv4 and IPv6, don't understand");
-   381				return -EOPNOTSUPP;
-   382			}
-   383		} else {
-   384			ipv6 = true;
-   385			if (!efx_ipv6_addr_all_ones(&match->mask.enc_dst_ip6)) {
-   386				NL_SET_ERR_MSG_MOD(extack,
-   387						   "Egress encap match is not exact on dst IP address");
-   388				return -EOPNOTSUPP;
-   389			}
-   390			if (!efx_ipv6_addr_all_ones(&match->mask.enc_src_ip6)) {
-   391				NL_SET_ERR_MSG_MOD(extack,
-   392						   "Egress encap match is not exact on src IP address");
-   393				return -EOPNOTSUPP;
-   394			}
-   395	#endif
-   396		}
-   397		if (!IS_ALL_ONES(match->mask.enc_dport)) {
-   398			NL_SET_ERR_MSG_MOD(extack, "Egress encap match is not exact on dst UDP port");
-   399			return -EOPNOTSUPP;
-   400		}
-   401		if (match->mask.enc_sport) {
-   402			NL_SET_ERR_MSG_MOD(extack, "Egress encap match on src UDP port not supported");
-   403			return -EOPNOTSUPP;
-   404		}
-   405		if (match->mask.enc_ip_tos) {
-   406			NL_SET_ERR_MSG_MOD(extack, "Egress encap match on IP ToS not supported");
-   407			return -EOPNOTSUPP;
-   408		}
-   409		if (match->mask.enc_ip_ttl) {
-   410			NL_SET_ERR_MSG_MOD(extack, "Egress encap match on IP TTL not supported");
-   411			return -EOPNOTSUPP;
-   412		}
-   413	
- > 414		rc = efx_mae_check_encap_match_caps(efx, ipv6, extack);
-   415		if (rc) {
-   416			NL_SET_ERR_MSG_FMT_MOD(extack, "MAE hw reports no support for IPv%d encap matches",
-   417					       ipv6 ? 6 : 4);
-   418			return -EOPNOTSUPP;
-   419		}
-   420	
-   421		encap = kzalloc(sizeof(*encap), GFP_USER);
-   422		if (!encap)
-   423			return -ENOMEM;
-   424		encap->src_ip = match->value.enc_src_ip;
-   425		encap->dst_ip = match->value.enc_dst_ip;
-   426	#ifdef CONFIG_IPV6
-   427		encap->src_ip6 = match->value.enc_src_ip6;
-   428		encap->dst_ip6 = match->value.enc_dst_ip6;
-   429	#endif
-   430		encap->udp_dport = match->value.enc_dport;
-   431		encap->tun_type = type;
-   432		old = rhashtable_lookup_get_insert_fast(&efx->tc->encap_match_ht,
-   433							&encap->linkage,
-   434							efx_tc_encap_match_ht_params);
-   435		if (old) {
-   436			/* don't need our new entry */
-   437			kfree(encap);
-   438			if (old->tun_type != type) {
-   439				NL_SET_ERR_MSG_FMT_MOD(extack,
-   440						       "Egress encap match with conflicting tun_type %u != %u",
-   441						       old->tun_type, type);
-   442				return -EEXIST;
-   443			}
-   444			if (!refcount_inc_not_zero(&old->ref))
-   445				return -EAGAIN;
-   446			/* existing entry found */
-   447			encap = old;
-   448		} else {
-   449			rc = efx_mae_register_encap_match(efx, encap);
-   450			if (rc) {
-   451				NL_SET_ERR_MSG_MOD(extack, "Failed to record egress encap match in HW");
-   452				goto fail;
-   453			}
-   454			refcount_set(&encap->ref, 1);
-   455		}
-   456		match->encap = encap;
-   457		return 0;
-   458	fail:
-   459		rhashtable_remove_fast(&efx->tc->encap_match_ht, &encap->linkage,
-   460				       efx_tc_encap_match_ht_params);
-   461		kfree(encap);
-   462		return rc;
-   463	}
-   464	
-
+diff --git a/fs/ksmbd/unicode.c b/fs/ksmbd/unicode.c
+index a0db699ddafd..9ae676906ed3 100644
+--- a/fs/ksmbd/unicode.c
++++ b/fs/ksmbd/unicode.c
+@@ -113,24 +113,6 @@ cifs_mapchar(char *target, const __u16 src_char, const struct nls_table *cp,
+ 	goto out;
+ }
+ 
+-/*
+- * is_char_allowed() - check for valid character
+- * @ch:		input character to be checked
+- *
+- * Return:	1 if char is allowed, otherwise 0
+- */
+-static inline int is_char_allowed(char *ch)
+-{
+-	/* check for control chars, wildcards etc. */
+-	if (!(*ch & 0x80) &&
+-	    (*ch <= 0x1f ||
+-	     *ch == '?' || *ch == '"' || *ch == '<' ||
+-	     *ch == '>' || *ch == '|'))
+-		return 0;
+-
+-	return 1;
+-}
+-
+ /*
+  * smb_from_utf16() - convert utf16le string to local charset
+  * @to:		destination buffer
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
