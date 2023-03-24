@@ -1,116 +1,99 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D63525F
-	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:50:26 +0000 (UTC)
-Received: by mail-ot1-f53.google.com with SMTP id p11-20020a9d454b000000b0069d8eb419f9so681835oti.4
-        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 03:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1679655025;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LA3Zcbbrd2EPDNxAP1qxAnsroRRZb68Sab3Jkh0P0Sc=;
-        b=Ml2sbeXt/dJV+DVGdd+scTwplDkwCY6tNDAarNSO3EkTPvCC5TMw0SXUB/1GzsyHlb
-         Q/hm5Fs1tVJHZiaUSjpj4ilnnjhayYRhd1Jb5N8YsoVyBUjufC8K2OsitmUyB/8AVL9F
-         fH381F+xJ4iNHp8+pGopMBOJLEhExFdBuAkHQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679655025;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LA3Zcbbrd2EPDNxAP1qxAnsroRRZb68Sab3Jkh0P0Sc=;
-        b=EOu5YGfPmtp8C7thD05Cggxylm1pPHlKKKuZVbfKQl7uiK4x/n/UubG5Wmw1Pjm62M
-         Nrg8kx1o9L6Bc1cPFEgkaQZKLN90kCG9s7BR2lfH/+eh6BhFwwdITmnXiI6Rt3UZMKRJ
-         9g7PWJFdk3NcYrIoW7A0BPiBtMLabjaRyhXf8oRGN1W3hTiAahoKJGKdbOk/BFk2KQiW
-         A0JSDPAEQ4ZcyfPhUxqqH3RCSK0H55gFQAAnxSvOqsmc7qZa8WMwU9Jc+gEIuhr4LBOE
-         qMPpsPxUE4lPO/GutwSeppRPuVewtJfg6PF88FUkg1PaW20eMRKO5cJ6/+S0uu2SLKEV
-         ew/g==
-X-Gm-Message-State: AO0yUKUA3cZ/ig4gWFbytvFB0XckfGMaPSMJXRHN6EUa7S/hvy0BkdS0
-	bU7u2kjKbSp6iav1LVV0LL6W4bGBsFbs9GQyJnNo2w==
-X-Google-Smtp-Source: AK7set9XwOprmvMSZxE219+neH4dJVe0b6v5IUqmo46jRmevl4lz/+ilhJWCP96nyC4V+5+FhrFrE2HhdAGzya1YoHU=
-X-Received: by 2002:a9d:4f15:0:b0:699:7d71:d2dc with SMTP id
- d21-20020a9d4f15000000b006997d71d2dcmr916625otl.6.1679655025541; Fri, 24 Mar
- 2023 03:50:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C18525F
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:54:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87892C433D2;
+	Fri, 24 Mar 2023 10:54:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679655247;
+	bh=05TRJlmt+n+Rfz7qihEXoMNgUCXEtNcYL32YthagoLk=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=ZdbMGXD2UULJcRdC1qoFKwkOtzO9RKWLMKHs725xtj9tNndRiEi44p+zwT8wrbwDo
+	 NHKyZ+8ybCye8FZr3sG37zSwGBbhA4RCAF6jdIEs0kWrXLD4KhQ8oRcr/n+8xHtByd
+	 G7H0+6phPKzTpebgXRik23ixC6/0z10+AhmHLDElSIWR3TGHpjKfKhDToPXG58HGWB
+	 ce3LWVy11a8jdY3uiBG0n8BzR5nh1QCAYt2SRwRV1beohunn//XetphFXcpOo23ErM
+	 oc5fJ+ATOkRWfOAIL0c827OB/A8E19Bk/LSpd99zsGqX5n8IypFCK7zNHJIOdWi/Mw
+	 J/QM20+MiDm+g==
+From: Kalle Valo <kvalo@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,  David Airlie <airlied@gmail.com>,  Daniel Vetter <daniel@ffwll.ch>,  dri-devel@lists.freedesktop.org,  linux-toolchains@vger.kernel.org,  llvm@lists.linux.dev
+Subject: Re: Linux 6.3-rc3
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+	<20230320180501.GA598084@dev-arch.thelio-3990X>
+	<CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+	<20230320185337.GA615556@dev-arch.thelio-3990X>
+	<87pm91uf9c.fsf@kernel.org>
+	<20230322163637.GA918620@dev-arch.thelio-3990X>
+Date: Fri, 24 Mar 2023 12:54:01 +0200
+In-Reply-To: <20230322163637.GA918620@dev-arch.thelio-3990X> (Nathan
+	Chancellor's message of "Wed, 22 Mar 2023 09:36:37 -0700")
+Message-ID: <87wn36ctdi.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230127221418.2522612-1-arnd@kernel.org> <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
- <20230308165644.GA1181835@dev-arch.thelio-3990X> <67f9fe7f-392a-9acd-1a4d-0a43da634367@nvidia.com>
- <ZB1xWRo0rkhku2BS@phenom.ffwll.local> <CAKMK7uF4tYyw6Eio6YkWZpBej1J8_5+VLU_hvVbL-Lnk06=v1g@mail.gmail.com>
- <ZB19rRHIeLxyzDrX@orome>
-In-Reply-To: <ZB19rRHIeLxyzDrX@orome>
-From: Daniel Vetter <daniel@ffwll.ch>
-Date: Fri, 24 Mar 2023 11:50:14 +0100
-Message-ID: <CAKMK7uGP+n6CkMLq4N006Mctj6ta7NV3iSBt7qZiisptTBVv8w@mail.gmail.com>
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jon Hunter <jonathanh@nvidia.com>, Nathan Chancellor <nathan@kernel.org>, 
-	David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Robin Murphy <robin.murphy@arm.com>, dri-devel@lists.freedesktop.org, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-On Fri, 24 Mar 2023 at 11:38, Thierry Reding <thierry.reding@gmail.com> wrote:
+Nathan Chancellor <nathan@kernel.org> writes:
+
+> On Wed, Mar 22, 2023 at 02:44:47PM +0200, Kalle Valo wrote:
+>> Nathan Chancellor <nathan@kernel.org> writes:
+>> 
+>> > Perhaps these would make doing allmodconfig builds with clang more
+>> > frequently less painful for you?
+>> >
+>> > https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
+>> 
+>> Thank you, at least for me this is really helpful.
 >
-> On Fri, Mar 24, 2023 at 10:59:23AM +0100, Daniel Vetter wrote:
-> > On Fri, 24 Mar 2023 at 10:46, Daniel Vetter <daniel@ffwll.ch> wrote:
-> > >
-> > > On Wed, Mar 08, 2023 at 05:28:06PM +0000, Jon Hunter wrote:
-> > > >
-> > > >
-> > > > On 08/03/2023 16:56, Nathan Chancellor wrote:
-> > > > > Ping? This warning is now in 6.3-rc1.
-> > > >
-> > > > Thierry is away at the moment.
-> > > >
-> > > > David, Daniel, do you want to pick this up directly in the meantime as a fix
-> > > > for 6.3? Mikko has already reviewed and FWIW ...
-> > >
-> > > Generally first fallback should be drm-misc maintainers (or anyone else
-> > > with commit rights), but since this fell through cracks for weeks it seems
-> > > I'll pick it up to drm-fixes now directly.
-> >
-> > Ok I think I found out why this fell through cracks, MAINTAINERS isn't
-> > updated that host1x&tegra is maintained in drm-misc.
-> >
-> > John, since Thierry is out, can you pls create the MAINTAINERS patch to
-> > - point at drm-misc git repo everywhere needed
-> > - add any missing host1x paths to the drm-misc entry so that
-> > get_maintainers.pl adds the right people for this patch (currently it
-> > doesn't)
-> >
-> > Also should we have at least a 2nd person for tegra stuff (or well
-> > maybe nvidia stuff in general) for drm-misc? Currently it's just
-> > Thierry, and I don't think that's enough. Whomever gets volunteered
-> > please follow
-> >
-> > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-misc
+> Really glad to hear! I hope this helps make testing and verifying
+> changes with clang and LLVM easier for developers and maintainers.
+
+It really does. And I hope you are able to update these packages in
+future as well so that it would be easy to get the latest clang.
+
+>> I tried now clang for the first time but seeing a strange problem.
+>> 
+>> I prefer to define the compiler in GNUmakefile so it's easy to change
+>> compilers and I don't need to remember the exact command line. So I have
+>> this in the top level GNUmakefile (all the rest commented out):
+>> 
+>> LLVM=/opt/clang/llvm-16.0.0/bin/
+>> 
+>> If I run 'make oldconfig' it seems to use clang but after I run just
+>> 'make' it seems to switch back to the host GCC compiler and ask for GCC
+>> specific config questions again. Workaround for this seems to be adding
+>> 'export LLVM' to GNUmakefile, after that also 'make' uses clang as
+>> expected.
 >
-> We never actually moved host1x and Tegra DRM to drm-misc completely.
-> There's still a separate tree that feeds into linux-next. This made
-> sense a while ago because there was a lot going on, but development
-> speed has decreased recently, so we may want to fix that. The big
-> benefit is that drm-misc is better oiled than drm-tegra, so getting
-> things merged would be easier for everyone.
+> Interesting... I just tested with a basic GNUmakefile and everything
+> seems to work fine without an export. At the same time, the export
+> should not hurt anything, so as long as it works, that is what matters.
 
-Hm I thought you had a split where you feed -fixes through misc and
-features through tegra.git? Just listing both trees would cover that.
+Sure, once I figured out the quirks I can workaround them. I was just
+hoping that other users would not have to go through the same hassle as
+I did :)
 
-> I'm all in favor of adding a second Tegra person to take pick up the
-> slack when necessary.
+> If you have any further issues, please do not hesitate to reach out!
 
-Imo features still through tegra.git with just you is fine, there's
-not going to be anyone else (like ci farms) blocked if that's held up
-for a bit. It's more the bugfixes where a 2nd nvidia person would be
-great.
--Daniel
+This is nitpicking but it would be nice if the tarball contents wouldn't
+conflict with each other. Now both llvm-16.0.0-aarch64.tar.gz and
+llvm-16.0.0-x86_64.tar extract to the same directory llvm-16.0.0 with
+same binary names. It would be much better if they would extract to
+llvm-16.0.0-aarch64 and llvm-16.0.0-x86_64, respectively.
+
+For example, Arnd's crosstool packages don't conflict with each other:
+
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
+
+And maybe request a similar llvm directory under pub/tools to make it
+more official? :)
+
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
