@@ -1,83 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CB26FA1
-	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 15:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BEF6C433EF;
-	Fri, 24 Mar 2023 15:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679671398;
-	bh=pSKqpC0a1kWME7wWNk8qBL0xdEmVi13/hyo55l1Pm08=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=HRiqB9cfU8MwjF/Ip6NmJBjYpbr/mpSLcd+TVVfddfoK+QK9yBnzXCdB9MoxAhYfP
-	 ATnCkS+AnfJK7YaoqAMFy5X//g+iAVIvZZRx0yr21uWb3M5Omm/0cLqwgFAluPa3ty
-	 8Sw1hqfduRdJSsUr5F6kC1omPyDMoSeYZ0ERDoguL05Mg/5mvUUTfPtM5R7GaoOLJ2
-	 BmhcBeO7+ipKHkUV4BRhzp00/frpyeJ7p0ylOvoj+6DNPCVTZYNnQyAONo3nd1IRPe
-	 XnrumaqU5wI6hKVclvYDeAq8ogxYV/UNMRUBUEtnllhvZ7MUvaXxv7naVSKnBJWZjz
-	 zgH44JrMoozvw==
-From: Kalle Valo <kvalo@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,  David Airlie <airlied@gmail.com>,  Daniel Vetter <daniel@ffwll.ch>,  dri-devel@lists.freedesktop.org,  linux-toolchains@vger.kernel.org,  llvm@lists.linux.dev
-Subject: Re: Linux 6.3-rc3
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
-	<20230320180501.GA598084@dev-arch.thelio-3990X>
-	<CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
-	<20230320185337.GA615556@dev-arch.thelio-3990X>
-	<87pm91uf9c.fsf@kernel.org>
-	<20230322163637.GA918620@dev-arch.thelio-3990X>
-	<87wn36ctdi.fsf@kernel.org>
-	<20230324151150.GC428955@dev-arch.thelio-3990X>
-Date: Fri, 24 Mar 2023 17:23:12 +0200
-In-Reply-To: <20230324151150.GC428955@dev-arch.thelio-3990X> (Nathan
-	Chancellor's message of "Fri, 24 Mar 2023 08:11:50 -0700")
-Message-ID: <87o7oicgwv.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1D36FA1;
+	Fri, 24 Mar 2023 15:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679671402; x=1711207402;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=67Ifw9mmyJRELTQW5P+QTodIwWBkaBtEAdB+tLBaqIw=;
+  b=WMFq6th7xePhctoMivdOVkFovIHgQBIablObWYy4bmfg64qXJGhmOXPM
+   ctMB8OKB2YTkSmJ3pt8nDCaxX8lJLPRbu07V73QH0a0gGDmUiNl4ZsPXW
+   jlx+tP/r19XfFf3eLn8Bsy5MPi/dNi7TE7k2HA5hP98S+HAr7sM6d+8DN
+   Is5stDLpuRCh7bCJXIAw/XlqaiWdDLu+3YE4JDhJzvCYoyQhoTlKq1PTX
+   uQ2KSKGdSqWGOnv575rXEMnxkA/9xrowDVUf3rppyMudGasfHTKb/xt5G
+   BJ9C5G21CEQAqaiU89u3yjMVWcEL42HfKCf6wDo92VkmEDzY5Y+mim6Zl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="402390709"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="402390709"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 08:23:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="632867022"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="632867022"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 24 Mar 2023 08:23:20 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pfjGB-000FQ8-33;
+	Fri, 24 Mar 2023 15:23:19 +0000
+Date: Fri, 24 Mar 2023 23:22:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:dma-sync-rework 20/20]
+ arch/hexagon/kernel/dma.c:19:27: error: use of undeclared identifier 'paddr'
+Message-ID: <202303242303.IAFZ31Wv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Nathan Chancellor <nathan@kernel.org> writes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git dma-sync-rework
+head:   9a711fbea373208c1eeb2fafb0c744bc23a79a43
+commit: 9a711fbea373208c1eeb2fafb0c744bc23a79a43 [20/20] dma-mapping: replace custom code with generic implementation
+config: hexagon-randconfig-r033-20230324 (https://download.01.org/0day-ci/archive/20230324/202303242303.IAFZ31Wv-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=9a711fbea373208c1eeb2fafb0c744bc23a79a43
+        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+        git fetch --no-tags arnd-asm-generic dma-sync-rework
+        git checkout 9a711fbea373208c1eeb2fafb0c744bc23a79a43
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
->> This is nitpicking but it would be nice if the tarball contents wouldn't
->> conflict with each other. Now both llvm-16.0.0-aarch64.tar.gz and
->> llvm-16.0.0-x86_64.tar extract to the same directory llvm-16.0.0 with
->> same binary names. It would be much better if they would extract to
->> llvm-16.0.0-aarch64 and llvm-16.0.0-x86_64, respectively.
->> 
->> For example, Arnd's crosstool packages don't conflict with each other:
->> 
->> https://mirrors.edge.kernel.org/pub/tools/crosstool/
->
-> I could certainly do that but what is the use case for extracting both?
-> You cannot run the aarch64 version on an x86_64 host and vice versa, so
-> why bother extracting them?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303242303.IAFZ31Wv-lkp@intel.com/
 
-Ah, I didn't realise that. I assumed llvm-16.0.0-aarch64.tar.gz was a
-cross compiler. I'm sure you documented that in the page but hey who
-reads the documentation ;)
+All errors (new ones prefixed by >>):
 
-> I had figured the architecture would be irrelevant once installed on
-> the host, so I opted only to include it in the tarball name. Perhaps I
-> should make it clearer that these are the host architectures, not the
-> target architectures (because clang is multi-targeted, unlike GCC)?
+   In file included from arch/hexagon/kernel/dma.c:8:
+   In file included from include/linux/dma-map-ops.h:9:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from arch/hexagon/kernel/dma.c:8:
+   In file included from include/linux/dma-map-ops.h:9:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from arch/hexagon/kernel/dma.c:8:
+   In file included from include/linux/dma-map-ops.h:9:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> arch/hexagon/kernel/dma.c:19:27: error: use of undeclared identifier 'paddr'
+           hexagon_inv_dcache_range(paddr, paddr + size);
+                                    ^
+   arch/hexagon/kernel/dma.c:19:34: error: use of undeclared identifier 'paddr'
+           hexagon_inv_dcache_range(paddr, paddr + size);
+                                           ^
+>> arch/hexagon/kernel/dma.c:24:2: error: call to undeclared function 'hexagon_flush_dcache_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           hexagon_flush_dcache_range(paddr, paddr + size);
+           ^
+   arch/hexagon/kernel/dma.c:24:2: note: did you mean 'hexagon_clean_dcache_range'?
+   arch/hexagon/include/asm/cacheflush.h:75:13: note: 'hexagon_clean_dcache_range' declared here
+   extern void hexagon_clean_dcache_range(unsigned long start, unsigned long end);
+               ^
+   arch/hexagon/kernel/dma.c:24:29: error: use of undeclared identifier 'paddr'
+           hexagon_flush_dcache_range(paddr, paddr + size);
+                                      ^
+   arch/hexagon/kernel/dma.c:24:36: error: use of undeclared identifier 'paddr'
+           hexagon_flush_dcache_range(paddr, paddr + size);
+                                             ^
+   6 warnings and 5 errors generated.
 
-Makes sense now. But I still think it's good style that a tarball named
-llvm-16.0.0-aarch64.tar.gz extracts to llvm-16.0.0-aarch64.
 
->> And maybe request a similar llvm directory under pub/tools to make it
->> more official? :)
->
-> Yes, I was talking that over with Nick recently, as having it under a
-> group on kernel.org would make taking over maintainership easier should
-> something happen to me :)
+vim +/paddr +19 arch/hexagon/kernel/dma.c
 
-Yeah, sharing the load is always good.
+    16	
+    17	static inline void arch_dma_cache_inv(phys_addr_t start, size_t size)
+    18	{
+  > 19		hexagon_inv_dcache_range(paddr, paddr + size);
+    20	}
+    21	
+    22	static inline void arch_dma_cache_wback_inv(phys_addr_t start, size_t size)
+    23	{
+  > 24		hexagon_flush_dcache_range(paddr, paddr + size);
+    25	}
+    26	
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
