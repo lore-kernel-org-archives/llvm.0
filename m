@@ -1,138 +1,103 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D302B525F;
-	Fri, 24 Mar 2023 11:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679659110; x=1711195110;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZBOnlGHEHX5QehSOnThNvSqkic6+pzAnwoOKrCff764=;
-  b=QJnvD4E0iibWote4SEjgGGlj3zcA3Y5EEOr2kwqZ+VvkL5jmRfgZ6HxA
-   kdW1UjmU/9UIhfHXovkTIUnZM63d+002Dhw2fACX1BwLlAl202tNemLEj
-   iGmOBztu0/xFzE7taypvhvqNz5n9qJ1hBMc42umVNBPFi/iW6WmynW+G3
-   ASaW86z2csYFAT3TElO7w+d/oOv0SNOxrHy271cAuGizlZrTxb0C4m915
-   HoeXnUp+xPmYcMnPKXq9BFC91i3EOkqXCshcVgYgo2j6i2Je/jiA6P/RR
-   IEfBnjbSFD27Lb9y/VolBcI1AUy/HZ7ulSeo2lM5cMhyh+uaoFkxU+f8y
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="367494520"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="367494520"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 04:58:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="632818046"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="632818046"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 Mar 2023 04:58:19 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfg3h-000FGu-29;
-	Fri, 24 Mar 2023 11:58:13 +0000
-Date: Fri, 24 Mar 2023 19:57:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chung-Chiang Cheng <cccheng@synology.com>, linux-ext4@vger.kernel.org,
-	tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
-	yi.zhang@huawei.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, shepjeng@gmail.com,
-	kernel@cccheng.net, Chung-Chiang Cheng <cccheng@synology.com>,
-	Robbie Ko <robbieko@synology.com>
-Subject: Re: [PATCH] ext4: defer updating i_disksize until endio
-Message-ID: <202303241950.C1ApLyal-lkp@intel.com>
-References: <20230324092907.1341457-1-cccheng@synology.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F285662
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 13:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679664417;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rqu3TJ9Us4tjFNY0o3zPlo/dxstIWcHIOGlWftNzUnQ=;
+	b=eh62+0trEr7F8Xo2fRLbctUumberdj0TmYkvEnAbOsM79hU/h4QrIDmEaWM9U86jUrntFl
+	FqborovT+Xkp8+0CP1CW+0HYZsSKbv74OQozKe8zxtkAc7tQDCCTkmyFl+FhTHDECSVKoT
+	sTE7qoPwCL2GfUatxBlFrawHpqRp9m0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-548-3AFWlN1bO8Cn1z6UjbxhfQ-1; Fri, 24 Mar 2023 09:26:56 -0400
+X-MC-Unique: 3AFWlN1bO8Cn1z6UjbxhfQ-1
+Received: by mail-qk1-f197.google.com with SMTP id s12-20020a37a90c000000b007468eaf866aso751275qke.17
+        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 06:26:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679664416;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rqu3TJ9Us4tjFNY0o3zPlo/dxstIWcHIOGlWftNzUnQ=;
+        b=XhjdlBPSqKgn9yQFvsQoMlgPmYnvUD8xerY7U4Lf4wYpF7uPe/zX7huXIR+KuClPmg
+         cLpOJ8h0/pJhx8e24b9Gw75Y++x3x0ptbqN16JmVjuxnuB1hF3KzsJOxM5fYRSjSV3sg
+         CdrUzWWcC32PXmu4dwfEjKcCyac3iqEAzmSi+ppjQgfLkpUEqFWq7avpimL1X3G8cstF
+         Vl2oF61A3i46gKl3RCJTqe8aNBUFE5CqisFO7EA9cWQZsQAnORxb8+CGpyeISmkphk/v
+         dnNIZXJIUfMpdO8amCvCcLjBq6e2/OZPemcciWo8ndHpWGaxEHLC2VqPgW+W5JP1CkDj
+         UKRw==
+X-Gm-Message-State: AAQBX9dg8kp1ByjKkn1Mel6ijopxOq6aOlAtVcNWkr7eidJ6WugCCMjw
+	ZlhOGVpPtz+h4Z2rrKlc0FNzqPnmo27wZi0DQ5A32V2d05+XF4WcQpdFi1gU4rG6Iw/JcKuvOkF
+	e+jkWuWrrnpgDBA==
+X-Received: by 2002:a05:6214:d07:b0:5ad:1a83:8021 with SMTP id 7-20020a0562140d0700b005ad1a838021mr3926028qvh.49.1679664415749;
+        Fri, 24 Mar 2023 06:26:55 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bWyV7OYeyD9u0w6iNh0EYkkwfo17tJz1C8lhIiQ8oaWqvEFwUsQXfvyFHVNhZAkqBx+PZ4Og==
+X-Received: by 2002:a05:6214:d07:b0:5ad:1a83:8021 with SMTP id 7-20020a0562140d0700b005ad1a838021mr3926002qvh.49.1679664415511;
+        Fri, 24 Mar 2023 06:26:55 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 123-20020a370381000000b00746a7945d87sm5095680qkd.52.2023.03.24.06.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 06:26:55 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: vkoul@kernel.org,
+	kishon@kernel.org,
+	heiko@sntech.de,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-phy@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] phy: rockchip: remove unused hw_to_inno function
+Date: Fri, 24 Mar 2023 09:26:49 -0400
+Message-Id: <20230324132649.2649166-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324092907.1341457-1-cccheng@synology.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Chung-Chiang,
+clang with W=1 reports
+drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c:284:36: error:
+  unused function 'hw_to_inno' [-Werror,-Wunused-function]
+static inline struct inno_dsidphy *hw_to_inno(struct clk_hw *hw)
+                                   ^
+This function is not used so remove it.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-[auto build test WARNING on v6.3-rc3]
-[also build test WARNING on linus/master]
-[cannot apply to tytso-ext4/dev next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chung-Chiang-Cheng/ext4-defer-updating-i_disksize-until-endio/20230324-173716
-patch link:    https://lore.kernel.org/r/20230324092907.1341457-1-cccheng%40synology.com
-patch subject: [PATCH] ext4: defer updating i_disksize until endio
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230324/202303241950.C1ApLyal-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9a02b364d2cffe71a45866edf750b0280c8cb990
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chung-Chiang-Cheng/ext4-defer-updating-i_disksize-until-endio/20230324-173716
-        git checkout 9a02b364d2cffe71a45866edf750b0280c8cb990
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ext4/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241950.C1ApLyal-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/ext4/inode.c:3115:23: warning: variable 'end' set but not used [-Wunused-but-set-variable]
-           unsigned long start, end;
-                                ^
-   1 warning generated.
-
-
-vim +/end +3115 fs/ext4/inode.c
-
-64769240bd07f4 Alex Tomas         2008-07-11  3108  
-64769240bd07f4 Alex Tomas         2008-07-11  3109  static int ext4_da_write_end(struct file *file,
-64769240bd07f4 Alex Tomas         2008-07-11  3110  			     struct address_space *mapping,
-64769240bd07f4 Alex Tomas         2008-07-11  3111  			     loff_t pos, unsigned len, unsigned copied,
-64769240bd07f4 Alex Tomas         2008-07-11  3112  			     struct page *page, void *fsdata)
-64769240bd07f4 Alex Tomas         2008-07-11  3113  {
-64769240bd07f4 Alex Tomas         2008-07-11  3114  	struct inode *inode = mapping->host;
-632eaeab1feb5d Mingming Cao       2008-07-11 @3115  	unsigned long start, end;
-79f0be8d2e6ebd Aneesh Kumar K.V   2008-10-08  3116  	int write_mode = (int)(unsigned long)fsdata;
-79f0be8d2e6ebd Aneesh Kumar K.V   2008-10-08  3117  
-74d553aad7926e Theodore Ts'o      2013-04-03  3118  	if (write_mode == FALL_BACK_TO_NONDELALLOC)
-74d553aad7926e Theodore Ts'o      2013-04-03  3119  		return ext4_write_end(file, mapping, pos,
-79f0be8d2e6ebd Aneesh Kumar K.V   2008-10-08  3120  				      len, copied, page, fsdata);
-632eaeab1feb5d Mingming Cao       2008-07-11  3121  
-9bffad1ed2a003 Theodore Ts'o      2009-06-17  3122  	trace_ext4_da_write_end(inode, pos, len, copied);
-6984aef59814fb Zhang Yi           2021-07-16  3123  
-6984aef59814fb Zhang Yi           2021-07-16  3124  	if (write_mode != CONVERT_INLINE_DATA &&
-6984aef59814fb Zhang Yi           2021-07-16  3125  	    ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA) &&
-6984aef59814fb Zhang Yi           2021-07-16  3126  	    ext4_has_inline_data(inode))
-6984aef59814fb Zhang Yi           2021-07-16  3127  		return ext4_write_inline_data_end(inode, pos, len, copied, page);
-6984aef59814fb Zhang Yi           2021-07-16  3128  
-09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  3129  	start = pos & (PAGE_SIZE - 1);
-632eaeab1feb5d Mingming Cao       2008-07-11  3130  	end = start + copied - 1;
-64769240bd07f4 Alex Tomas         2008-07-11  3131  
-64769240bd07f4 Alex Tomas         2008-07-11  3132  	/*
-4df031ff5876d9 Zhang Yi           2021-07-16  3133  	 * Since we are holding inode lock, we are sure i_disksize <=
-4df031ff5876d9 Zhang Yi           2021-07-16  3134  	 * i_size. We also know that if i_disksize < i_size, there are
-9a02b364d2cffe Chung-Chiang Cheng 2023-03-24  3135  	 * delalloc writes pending in the range upto i_size. There's no
-9a02b364d2cffe Chung-Chiang Cheng 2023-03-24  3136  	 * need to touch i_disksize since the endio of writeback will
-9a02b364d2cffe Chung-Chiang Cheng 2023-03-24  3137  	 * push i_disksize upto i_size eventually.
-4df031ff5876d9 Zhang Yi           2021-07-16  3138  	 *
-4df031ff5876d9 Zhang Yi           2021-07-16  3139  	 * Note that we defer inode dirtying to generic_write_end() /
-4df031ff5876d9 Zhang Yi           2021-07-16  3140  	 * ext4_da_write_inline_data_end().
-64769240bd07f4 Alex Tomas         2008-07-11  3141  	 */
-9c3569b50f12e4 Tao Ma             2012-12-10  3142  
-cc883236b79297 Zhang Yi           2021-07-16  3143  	return generic_write_end(file, mapping, pos, len, copied, page, fsdata);
-64769240bd07f4 Alex Tomas         2008-07-11  3144  }
-64769240bd07f4 Alex Tomas         2008-07-11  3145  
-
+diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+index 726928ff1273..401b0aabb159 100644
+--- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
++++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+@@ -281,11 +281,6 @@ struct inno_mipi_dphy_timing inno_mipi_dphy_timing_table_max_2_5ghz[] = {
+ 	{2500000000, 0x15, 0x54, 0x7f, 0x15, 0x6a},
+ };
+ 
+-static inline struct inno_dsidphy *hw_to_inno(struct clk_hw *hw)
+-{
+-	return container_of(hw, struct inno_dsidphy, pll.hw);
+-}
+-
+ static void phy_update_bits(struct inno_dsidphy *inno,
+ 			    u8 first, u8 second, u8 mask, u8 val)
+ {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
