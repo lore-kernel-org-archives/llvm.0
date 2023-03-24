@@ -1,61 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E6C6FA1
-	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 14:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE4DBC433EF;
-	Fri, 24 Mar 2023 14:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DC56FA1
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 15:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A886C433EF;
+	Fri, 24 Mar 2023 15:11:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679669590;
-	bh=9Bzy8ntyyYlzsjNmc78UfhexZSZPRHrJSAQutSdB5D8=;
-	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-	b=tfkXgJpaG5VCC/Jf8RDQRSZg7Yiq04dsHBrN4FVubuiMfby8e3MORukt5N28Az1Zv
-	 U//O96cq547CPg5LppNQFcUfxoHtYfPHQu7aVbpqykYd2m1d1z5p1HGwT52A2jUNOi
-	 4ULJB8zU645n7Nu/bGuq1gU4SXG/LJfFYzyJAdJzlKKYODinyhX1PBRPwKNSR+WaxT
-	 YtbtKAFHJuejoWh+3rXDv9brQU1lxbf0yKkeV9sW+huOawP3IbAL72hlznajQoIBJ4
-	 SKYeD6hcgaBELO62PLdrRqJaGSDkA7Cr37oRkWrIw2t/mnvh0keGm5QIk9hmu6aArS
-	 mhiho7aAPGkkA==
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1679670712;
+	bh=LXkcBaVN4sD3aA/Yu8oqsBZwSZvmPG3nbf3lXKaMxBw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Q7XyjBSlZLCbflyBFYLN3PU1XLSRlIcWMtf8/jETGeeiJziAIM3Fk7N125iH5TCXV
+	 07zvCLWWzvRJB1qTr+KeCY2aqKpdfVyzQvX3av2JjOk1SQmw2S3h9NPOTkzVrH93Wi
+	 pdVph57fEjSZZR9pgbMB1B2QrmZkmPsGnUjvGfAQznBeyjeIRlMc0RJVcRJp9CH7LY
+	 lng/crNCS0C3rVCPLaGeea9dVE5XIXBZi9agCNDETO9DYVFjtMWXwOnj748JQ6DpO7
+	 xmA8kzxky13rYck3GGP0hNCxB+vOh2gWmnnEp55FN5jwYTObGv4srpeLDgEfNFB9AY
+	 CqKmZdnmiCG0A==
+Date: Fri, 24 Mar 2023 08:11:50 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kalle Valo <kvalo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	dri-devel@lists.freedesktop.org, linux-toolchains@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: Linux 6.3-rc3
+Message-ID: <20230324151150.GC428955@dev-arch.thelio-3990X>
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+ <20230320180501.GA598084@dev-arch.thelio-3990X>
+ <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+ <20230320185337.GA615556@dev-arch.thelio-3990X>
+ <87pm91uf9c.fsf@kernel.org>
+ <20230322163637.GA918620@dev-arch.thelio-3990X>
+ <87wn36ctdi.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] ath10k: remove unused ath10k_get_ring_byte function
-From: Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230322122855.2570417-1-trix@redhat.com>
-References: <20230322122855.2570417-1-trix@redhat.com>
-To: Tom Rix <trix@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
- ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Tom Rix <trix@redhat.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167966958590.27260.15660698872917271448.kvalo@kernel.org>
-Date: Fri, 24 Mar 2023 14:53:07 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wn36ctdi.fsf@kernel.org>
 
-Tom Rix <trix@redhat.com> wrote:
-
-> clang with W=1 reports:
+On Fri, Mar 24, 2023 at 12:54:01PM +0200, Kalle Valo wrote:
+> Nathan Chancellor <nathan@kernel.org> writes:
 > 
-> drivers/net/wireless/ath/ath10k/ce.c:88:1: error:
->   unused function 'ath10k_get_ring_byte' [-Werror,-Wunused-function]
-> ath10k_get_ring_byte(unsigned int offset,
-> ^
-> This function is not used so remove it.
+> > On Wed, Mar 22, 2023 at 02:44:47PM +0200, Kalle Valo wrote:
+> >> Nathan Chancellor <nathan@kernel.org> writes:
+> >> 
+> >> > Perhaps these would make doing allmodconfig builds with clang more
+> >> > frequently less painful for you?
+> >> >
+> >> > https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
+> >> 
+> >> Thank you, at least for me this is really helpful.
+> >
+> > Really glad to hear! I hope this helps make testing and verifying
+> > changes with clang and LLVM easier for developers and maintainers.
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> It really does. And I hope you are able to update these packages in
+> future as well so that it would be easy to get the latest clang.
 
-Patch applied to ath-next branch of ath.git, thanks.
+That is the current plan (I will push 16.0.1, 16.0.2, etc. as they are
+released), I have a relatively automated process for this going forward.
 
-9fc093b756f6 wifi: ath10k: remove unused ath10k_get_ring_byte function
+> >> I tried now clang for the first time but seeing a strange problem.
+> >> 
+> >> I prefer to define the compiler in GNUmakefile so it's easy to change
+> >> compilers and I don't need to remember the exact command line. So I have
+> >> this in the top level GNUmakefile (all the rest commented out):
+> >> 
+> >> LLVM=/opt/clang/llvm-16.0.0/bin/
+> >> 
+> >> If I run 'make oldconfig' it seems to use clang but after I run just
+> >> 'make' it seems to switch back to the host GCC compiler and ask for GCC
+> >> specific config questions again. Workaround for this seems to be adding
+> >> 'export LLVM' to GNUmakefile, after that also 'make' uses clang as
+> >> expected.
+> >
+> > Interesting... I just tested with a basic GNUmakefile and everything
+> > seems to work fine without an export. At the same time, the export
+> > should not hurt anything, so as long as it works, that is what matters.
+> 
+> Sure, once I figured out the quirks I can workaround them. I was just
+> hoping that other users would not have to go through the same hassle as
+> I did :)
+> 
+> > If you have any further issues, please do not hesitate to reach out!
+> 
+> This is nitpicking but it would be nice if the tarball contents wouldn't
+> conflict with each other. Now both llvm-16.0.0-aarch64.tar.gz and
+> llvm-16.0.0-x86_64.tar extract to the same directory llvm-16.0.0 with
+> same binary names. It would be much better if they would extract to
+> llvm-16.0.0-aarch64 and llvm-16.0.0-x86_64, respectively.
+> 
+> For example, Arnd's crosstool packages don't conflict with each other:
+> 
+> https://mirrors.edge.kernel.org/pub/tools/crosstool/
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230322122855.2570417-1-trix@redhat.com/
+I could certainly do that but what is the use case for extracting both?
+You cannot run the aarch64 version on an x86_64 host and vice versa, so
+why bother extracting them? I had figured the architecture would be
+irrelevant once installed on the host, so I opted only to include it in
+the tarball name. Perhaps I should make it clearer that these are the
+host architectures, not the target architectures (because clang is
+multi-targeted, unlike GCC)?
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> And maybe request a similar llvm directory under pub/tools to make it
+> more official? :)
 
+Yes, I was talking that over with Nick recently, as having it under a
+group on kernel.org would make taking over maintainership easier should
+something happen to me :)
+
+Thanks for all the feedback so far, it is much appreciated!
+
+Cheers,
+Nathan
