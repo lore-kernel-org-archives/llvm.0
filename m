@@ -1,43 +1,47 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20069525F;
-	Fri, 24 Mar 2023 11:37:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D302B525F;
+	Fri, 24 Mar 2023 11:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679657836; x=1711193836;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Da93ipLAbjMdB8xPzHB5Z8npwIdfZ+9GmGCXnO0te8M=;
-  b=gcwhpQw2ra7j/CNXhcTvCm7JDigJXSku3jMlfjkqu1jzt+Tamdd8teXI
-   UCvgqXEH1M2ouQYcFj6atePbFLNRDKs3sM1r3SiHmNETmkTo5RZwGkvNm
-   iedjBCV7pyzDY2oLAubGh0QhWsJAbUXJ2yaZU9OYzAjCjrg/PQrjXCY0r
-   sOvE6j185aXasHQ31lWdsmKC2IOg2Z2aSK7w9QhjtXyTVsTYv6mfJgKRW
-   RFqD3imiSoAbm7oN2qzBzMdMW1vQPhMVlG504yJFYVfWIN5V76+j5Ndhk
-   NtWRL+CjyqT/6Oi+NClsjjeTQVvv1qKpAM+tE+FxV3AmaPEFwBZKoz8TW
+  t=1679659110; x=1711195110;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZBOnlGHEHX5QehSOnThNvSqkic6+pzAnwoOKrCff764=;
+  b=QJnvD4E0iibWote4SEjgGGlj3zcA3Y5EEOr2kwqZ+VvkL5jmRfgZ6HxA
+   kdW1UjmU/9UIhfHXovkTIUnZM63d+002Dhw2fACX1BwLlAl202tNemLEj
+   iGmOBztu0/xFzE7taypvhvqNz5n9qJ1hBMc42umVNBPFi/iW6WmynW+G3
+   ASaW86z2csYFAT3TElO7w+d/oOv0SNOxrHy271cAuGizlZrTxb0C4m915
+   HoeXnUp+xPmYcMnPKXq9BFC91i3EOkqXCshcVgYgo2j6i2Je/jiA6P/RR
+   IEfBnjbSFD27Lb9y/VolBcI1AUy/HZ7ulSeo2lM5cMhyh+uaoFkxU+f8y
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="320150512"
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="367494520"
 X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="320150512"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 04:37:15 -0700
+   d="scan'208";a="367494520"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 04:58:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="713057607"
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="632818046"
 X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="713057607"
+   d="scan'208";a="632818046"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 Mar 2023 04:37:13 -0700
+  by orsmga003.jf.intel.com with ESMTP; 24 Mar 2023 04:58:19 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pffjN-000FG0-08;
-	Fri, 24 Mar 2023 11:37:13 +0000
-Date: Fri, 24 Mar 2023 19:36:50 +0800
+	id 1pfg3h-000FGu-29;
+	Fri, 24 Mar 2023 11:58:13 +0000
+Date: Fri, 24 Mar 2023 19:57:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Marangi <ansuelsmth@gmail.com>
-Subject: [lunn:v6.3-rc2-net-next-phy-leds 5/15] ld.lld: error: undefined
- symbol: devm_mdiobus_alloc_size
-Message-ID: <202303241935.xRMa6mc6-lkp@intel.com>
+To: Chung-Chiang Cheng <cccheng@synology.com>, linux-ext4@vger.kernel.org,
+	tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+	yi.zhang@huawei.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, shepjeng@gmail.com,
+	kernel@cccheng.net, Chung-Chiang Cheng <cccheng@synology.com>,
+	Robbie Ko <robbieko@synology.com>
+Subject: Re: [PATCH] ext4: defer updating i_disksize until endio
+Message-ID: <202303241950.C1ApLyal-lkp@intel.com>
+References: <20230324092907.1341457-1-cccheng@synology.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,54 +50,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230324092907.1341457-1-cccheng@synology.com>
 
-tree:   https://github.com/lunn/linux.git v6.3-rc2-net-next-phy-leds
-head:   0e205e6fad28ba805941ac8889c66a1607c4d505
-commit: ee27c28a24b23132532d52fb82b00add65dc29dc [5/15] net: phy: Add a binding for PHY LEDs
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230324/202303241935.xRMa6mc6-lkp@intel.com/config)
+Hi Chung-Chiang,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on v6.3-rc3]
+[also build test WARNING on linus/master]
+[cannot apply to tytso-ext4/dev next-20230324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chung-Chiang-Cheng/ext4-defer-updating-i_disksize-until-endio/20230324-173716
+patch link:    https://lore.kernel.org/r/20230324092907.1341457-1-cccheng%40synology.com
+patch subject: [PATCH] ext4: defer updating i_disksize until endio
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230324/202303241950.C1ApLyal-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/ee27c28a24b23132532d52fb82b00add65dc29dc
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v6.3-rc2-net-next-phy-leds
-        git checkout ee27c28a24b23132532d52fb82b00add65dc29dc
+        # https://github.com/intel-lab-lkp/linux/commit/9a02b364d2cffe71a45866edf750b0280c8cb990
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chung-Chiang-Cheng/ext4-defer-updating-i_disksize-until-endio/20230324-173716
+        git checkout 9a02b364d2cffe71a45866edf750b0280c8cb990
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ext4/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241935.xRMa6mc6-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303241950.C1ApLyal-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: devm_mdiobus_alloc_size
-   >>> referenced by phy.h:458 (include/linux/phy.h:458)
-   >>>               drivers/net/ethernet/microchip/lan743x_main.o:(lan743x_pcidev_probe) in archive vmlinux.a
-   >>> referenced by phy.h:458 (include/linux/phy.h:458)
-   >>>               drivers/net/ethernet/ni/nixge.o:(nixge_probe) in archive vmlinux.a
+>> fs/ext4/inode.c:3115:23: warning: variable 'end' set but not used [-Wunused-but-set-variable]
+           unsigned long start, end;
+                                ^
+   1 warning generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PHYLIB
-   Depends on [m]: NETDEVICES [=y] && (LEDS_CLASS [=m] || LEDS_CLASS [=m]=n)
-   Selected by [y]:
-   - PHYLINK [=y] && NETDEVICES [=y]
-   - TIGON3 [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_BROADCOM [=y] && PCI [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
-   - LAN743X [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICROCHIP [=y] && PCI [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
-   - NI_XGE_MANAGEMENT_ENET [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_NI [=y] && HAS_IOMEM [=y] && HAS_DMA [=y]
-   - XILINX_EMACLITE [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_XILINX [=y] && HAS_IOMEM [=y]
-   Selected by [m]:
-   - ALTERA_TSE [=m] && NETDEVICES [=y] && ETHERNET [=y] && HAS_DMA [=y]
-   - DNET [=m] && NETDEVICES [=y] && ETHERNET [=y] && HAS_IOMEM [=y]
-   - B44 [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_BROADCOM [=y] && SSB_POSSIBLE [=y] && HAS_DMA [=y]
-   - KS8851_MLL [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICREL [=y] && HAS_IOMEM [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
-   - SMSC911X [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_SMSC [=y] && HAS_IOMEM [=y]
-   - SMSC9420 [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_SMSC [=y] && PCI [=y]
-   - XILINX_LL_TEMAC [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_XILINX [=y] && HAS_IOMEM [=y]
-   - USB_NET_AX88179_178A [=m] && NETDEVICES [=y] && USB_NET_DRIVERS [=m] && USB_USBNET [=m]
+
+vim +/end +3115 fs/ext4/inode.c
+
+64769240bd07f4 Alex Tomas         2008-07-11  3108  
+64769240bd07f4 Alex Tomas         2008-07-11  3109  static int ext4_da_write_end(struct file *file,
+64769240bd07f4 Alex Tomas         2008-07-11  3110  			     struct address_space *mapping,
+64769240bd07f4 Alex Tomas         2008-07-11  3111  			     loff_t pos, unsigned len, unsigned copied,
+64769240bd07f4 Alex Tomas         2008-07-11  3112  			     struct page *page, void *fsdata)
+64769240bd07f4 Alex Tomas         2008-07-11  3113  {
+64769240bd07f4 Alex Tomas         2008-07-11  3114  	struct inode *inode = mapping->host;
+632eaeab1feb5d Mingming Cao       2008-07-11 @3115  	unsigned long start, end;
+79f0be8d2e6ebd Aneesh Kumar K.V   2008-10-08  3116  	int write_mode = (int)(unsigned long)fsdata;
+79f0be8d2e6ebd Aneesh Kumar K.V   2008-10-08  3117  
+74d553aad7926e Theodore Ts'o      2013-04-03  3118  	if (write_mode == FALL_BACK_TO_NONDELALLOC)
+74d553aad7926e Theodore Ts'o      2013-04-03  3119  		return ext4_write_end(file, mapping, pos,
+79f0be8d2e6ebd Aneesh Kumar K.V   2008-10-08  3120  				      len, copied, page, fsdata);
+632eaeab1feb5d Mingming Cao       2008-07-11  3121  
+9bffad1ed2a003 Theodore Ts'o      2009-06-17  3122  	trace_ext4_da_write_end(inode, pos, len, copied);
+6984aef59814fb Zhang Yi           2021-07-16  3123  
+6984aef59814fb Zhang Yi           2021-07-16  3124  	if (write_mode != CONVERT_INLINE_DATA &&
+6984aef59814fb Zhang Yi           2021-07-16  3125  	    ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA) &&
+6984aef59814fb Zhang Yi           2021-07-16  3126  	    ext4_has_inline_data(inode))
+6984aef59814fb Zhang Yi           2021-07-16  3127  		return ext4_write_inline_data_end(inode, pos, len, copied, page);
+6984aef59814fb Zhang Yi           2021-07-16  3128  
+09cbfeaf1a5a67 Kirill A. Shutemov 2016-04-01  3129  	start = pos & (PAGE_SIZE - 1);
+632eaeab1feb5d Mingming Cao       2008-07-11  3130  	end = start + copied - 1;
+64769240bd07f4 Alex Tomas         2008-07-11  3131  
+64769240bd07f4 Alex Tomas         2008-07-11  3132  	/*
+4df031ff5876d9 Zhang Yi           2021-07-16  3133  	 * Since we are holding inode lock, we are sure i_disksize <=
+4df031ff5876d9 Zhang Yi           2021-07-16  3134  	 * i_size. We also know that if i_disksize < i_size, there are
+9a02b364d2cffe Chung-Chiang Cheng 2023-03-24  3135  	 * delalloc writes pending in the range upto i_size. There's no
+9a02b364d2cffe Chung-Chiang Cheng 2023-03-24  3136  	 * need to touch i_disksize since the endio of writeback will
+9a02b364d2cffe Chung-Chiang Cheng 2023-03-24  3137  	 * push i_disksize upto i_size eventually.
+4df031ff5876d9 Zhang Yi           2021-07-16  3138  	 *
+4df031ff5876d9 Zhang Yi           2021-07-16  3139  	 * Note that we defer inode dirtying to generic_write_end() /
+4df031ff5876d9 Zhang Yi           2021-07-16  3140  	 * ext4_da_write_inline_data_end().
+64769240bd07f4 Alex Tomas         2008-07-11  3141  	 */
+9c3569b50f12e4 Tao Ma             2012-12-10  3142  
+cc883236b79297 Zhang Yi           2021-07-16  3143  	return generic_write_end(file, mapping, pos, len, copied, page, fsdata);
+64769240bd07f4 Alex Tomas         2008-07-11  3144  }
+64769240bd07f4 Alex Tomas         2008-07-11  3145  
 
 -- 
 0-DAY CI Kernel Test Service
