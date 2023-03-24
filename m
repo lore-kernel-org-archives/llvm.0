@@ -1,44 +1,69 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52F23C26;
-	Fri, 24 Mar 2023 09:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679648651; x=1711184651;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QYcsRVyjJDvXX8ifW06A+9/ytrnuXbQ3M6t4xwFKZQ4=;
-  b=S0COYh1NNdBPAMBpJqr5YqUvzldE0kmTcBvfHWxoR2GXtlf06tQchtoX
-   wd9x+X1qWLAd8qVa0grwwwejoJzJqKmVM1jVvu7YsuxO6UDt/OK5u5a1M
-   gQaCUCUZp990OOrhyMa5QpIL45UO8wzdEkDlzHquv8qWt1+PRq3V5eQe0
-   JOuSJ0aQN2fywWg0008u3cz0r/NyTLh9odg+ynH2qO7XDqeHv27qfoLMu
-   ZdJVHL0IMxaLXK2PhL9i5oJSD0PbM0ouA4qqCgzLp1ZgRk2MISwFUdspa
-   m5wtqiaxwNu6sMcjSvBwBXN1kWayvvsyqpXGrmiJZ9Ph6IHYmHMHDR9Ch
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="319385470"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="319385470"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 02:04:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="793371937"
-X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
-   d="scan'208";a="793371937"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Mar 2023 02:04:07 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfdLD-000F9o-1F;
-	Fri, 24 Mar 2023 09:04:07 +0000
-Date: Fri, 24 Mar 2023 17:03:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Niklas Schnelle <schnelle@linux.ibm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Arnd Bergmann <arnd@kernel.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [niks:has_ioport_v4 4/39] drivers/char/tpm/tpm_infineon.c:57:24:
- error: use of undeclared identifier 'TPM_INF_IO_PORT'
-Message-ID: <202303241614.EqRa1WCi-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16ECC3C24
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 09:46:05 +0000 (UTC)
+Received: by mail-wm1-f41.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso2759564wms.1
+        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 02:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1679651164;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gJJPNwdnhB7IEUXT0JnB6iYS0mxcFwN9Ppf5t8hZzl0=;
+        b=Qa5OozZIoo53C5F+9azNMKZ21DB0vyydBQZAXgS8Chw91SQ1BJh/YnRGO1VlHf+QDW
+         NqJGq+76prl0S1xv0UN00iYF2Bcwn9MwJ2u+hl338DaU0W7zfnh0k0xaTP+snNZR8wXB
+         NVhLlHPLJoaHlxMr4jMkL1ELSluWeVhWBZxTM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679651164;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gJJPNwdnhB7IEUXT0JnB6iYS0mxcFwN9Ppf5t8hZzl0=;
+        b=NlB4DRND/dbz06OOfx4PrS2m7RotZgnFMTLMLlBZJcE1aewo52Zy4E41jBijirwP62
+         vb5s9cGitb6vsXxbcY4u53OxBsUwuDncrVuS+l1aK9MJhj+HPwNgVLD/QFynFx8PsHS/
+         KKPFe30C6vuRQZ9KeymSLzAvcFLltTQiBaRq37C3VSVREZg3FpnR+DBp0xSnMebD8iZ5
+         RfhXA91+P1OWxOjkQKMMPXPCOb9jvTAQ0k8jrZoLbNNLfsD8ksqvwVmNfiKThXPYttp6
+         2xwiGxArkF+PGR6+vOhJpQORP95iw8DdB6d1/+qHOTSkGdJBnuFPxJDEC+/YdT4Wu2Y8
+         g+xQ==
+X-Gm-Message-State: AO0yUKWoTKLPzppzXUmksOf/7bOdvWXRroLwy2/P4Czxfpv+OGh1gn8h
+	Bmxc273CG8hwacPP2HXOUW5VcA==
+X-Google-Smtp-Source: AK7set/XwgOJNEXGcex+NV0vGUZdreitg2m5Y+Upud+kwI0Y7U+h+kwJ6hiaNA1oq8/pyWeh2R5p1g==
+X-Received: by 2002:a05:600c:4fc1:b0:3ed:2a41:8529 with SMTP id o1-20020a05600c4fc100b003ed2a418529mr1438389wmq.2.1679651164092;
+        Fri, 24 Mar 2023 02:46:04 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id 14-20020a05600c024e00b003ed2384566fsm4369256wmj.21.2023.03.24.02.46.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 02:46:03 -0700 (PDT)
+Date: Fri, 24 Mar 2023 10:46:01 +0100
+From: Daniel Vetter <daniel@ffwll.ch>
+To: Jon Hunter <jonathanh@nvidia.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Mikko Perttunen <mperttunen@nvidia.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Robin Murphy <robin.murphy@arm.com>,
+	dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
+Message-ID: <ZB1xWRo0rkhku2BS@phenom.ffwll.local>
+Mail-Followup-To: Jon Hunter <jonathanh@nvidia.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, Mikko Perttunen <mperttunen@nvidia.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Robin Murphy <robin.murphy@arm.com>,
+	dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230127221418.2522612-1-arnd@kernel.org>
+ <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
+ <20230308165644.GA1181835@dev-arch.thelio-3990X>
+ <67f9fe7f-392a-9acd-1a4d-0a43da634367@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,85 +72,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <67f9fe7f-392a-9acd-1a4d-0a43da634367@nvidia.com>
+X-Operating-System: Linux phenom 6.1.0-6-amd64 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git has_ioport_v4
-head:   53b49a3f5a95d058e0deb169b87e695d69033f5c
-commit: 07c67f2075061c0893444807c2afa4de6e7d08f5 [4/39] char: impi, tpm: depend on HAS_IOPORT
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230324/202303241614.EqRa1WCi-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/commit/?id=07c67f2075061c0893444807c2afa4de6e7d08f5
-        git remote add niks https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
-        git fetch --no-tags niks has_ioport_v4
-        git checkout 07c67f2075061c0893444807c2afa4de6e7d08f5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/char/tpm/
+On Wed, Mar 08, 2023 at 05:28:06PM +0000, Jon Hunter wrote:
+> 
+> 
+> On 08/03/2023 16:56, Nathan Chancellor wrote:
+> > Ping? This warning is now in 6.3-rc1.
+> 
+> Thierry is away at the moment.
+> 
+> David, Daniel, do you want to pick this up directly in the meantime as a fix
+> for 6.3? Mikko has already reviewed and FWIW ...
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241614.EqRa1WCi-lkp@intel.com/
+Generally first fallback should be drm-misc maintainers (or anyone else
+with commit rights), but since this fell through cracks for weeks it seems
+I'll pick it up to drm-fixes now directly.
+-Daniel
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/char/tpm/tpm_infineon.c:16:
-   In file included from drivers/char/tpm/tpm.h:28:
-   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-           int mapping_size;
-               ^
->> drivers/char/tpm/tpm_infineon.c:57:24: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-           if (tpm_dev.iotype == TPM_INF_IO_PORT)
-                                 ^
-   drivers/char/tpm/tpm_infineon.c:67:24: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-           if (tpm_dev.iotype == TPM_INF_IO_PORT)
-                                 ^
-   drivers/char/tpm/tpm_infineon.c:76:24: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-           if (tpm_dev.iotype == TPM_INF_IO_PORT)
-                                 ^
-   drivers/char/tpm/tpm_infineon.c:86:24: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-           if (tpm_dev.iotype == TPM_INF_IO_PORT)
-                                 ^
-   drivers/char/tpm/tpm_infineon.c:411:20: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-                   tpm_dev.iotype = TPM_INF_IO_PORT;
-                                    ^
-   drivers/char/tpm/tpm_infineon.c:543:23: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-                            tpm_dev.iotype == TPM_INF_IO_PORT ?
-                                              ^
-   drivers/char/tpm/tpm_infineon.c:546:23: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-                            tpm_dev.iotype == TPM_INF_IO_PORT ?
-                                              ^
-   drivers/char/tpm/tpm_infineon.c:570:24: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-           if (tpm_dev.iotype == TPM_INF_IO_PORT) {
-                                 ^
-   drivers/char/tpm/tpm_infineon.c:588:24: error: use of undeclared identifier 'TPM_INF_IO_PORT'
-           if (tpm_dev.iotype == TPM_INF_IO_PORT) {
-                                 ^
-   1 warning and 9 errors generated.
-
-
-vim +/TPM_INF_IO_PORT +57 drivers/char/tpm/tpm_infineon.c
-
-d954e8edee5de9 Alex Williamson 2007-05-08  53  
-d954e8edee5de9 Alex Williamson 2007-05-08  54  static inline void tpm_data_out(unsigned char data, unsigned char offset)
-d954e8edee5de9 Alex Williamson 2007-05-08  55  {
-07c67f2075061c Niklas Schnelle 2021-12-20  56  #ifdef CONFIG_HAS_IOPORT
-d954e8edee5de9 Alex Williamson 2007-05-08 @57  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
-d954e8edee5de9 Alex Williamson 2007-05-08  58  		outb(data, tpm_dev.data_regs + offset);
-d954e8edee5de9 Alex Williamson 2007-05-08  59  	else
-07c67f2075061c Niklas Schnelle 2021-12-20  60  #endif
-d954e8edee5de9 Alex Williamson 2007-05-08  61  		writeb(data, tpm_dev.mem_base + tpm_dev.data_regs + offset);
-d954e8edee5de9 Alex Williamson 2007-05-08  62  }
-d954e8edee5de9 Alex Williamson 2007-05-08  63  
-
-:::::: The code at line 57 was first introduced by commit
-:::::: d954e8edee5de90f8625c041ce177e04ae2c88fe tpm_infineon: add support for devices in mmio space
-
-:::::: TO: Alex Williamson <alex.williamson@hp.com>
-:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+> 
+> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+> 
+> Thanks
+> Jon
+> 
+> 
+> > On Thu, Feb 23, 2023 at 09:28:28AM -0700, Nathan Chancellor wrote:
+> > > Hi Thierry, Daniel, and David,
+> > > 
+> > > On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
+> > > > From: Arnd Bergmann <arnd@arndb.de>
+> > > > 
+> > > > The error handling for platform_get_irq() failing no longer
+> > > > works after a recent change, clang now points this out with
+> > > > a warning:
+> > > > 
+> > > > drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+> > > >          if (syncpt_irq < 0)
+> > > >              ^~~~~~~~~~
+> > > > 
+> > > > Fix this by removing the variable and checking the correct
+> > > > error status.
+> > > > 
+> > > > Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
+> > > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > > > ---
+> > > >   drivers/gpu/host1x/dev.c | 5 ++---
+> > > >   1 file changed, 2 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+> > > > index 4872d183d860..aae2efeef503 100644
+> > > > --- a/drivers/gpu/host1x/dev.c
+> > > > +++ b/drivers/gpu/host1x/dev.c
+> > > > @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
+> > > >   static int host1x_probe(struct platform_device *pdev)
+> > > >   {
+> > > >   	struct host1x *host;
+> > > > -	int syncpt_irq;
+> > > >   	int err;
+> > > >   	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
+> > > > @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
+> > > >   	}
+> > > >   	host->syncpt_irq = platform_get_irq(pdev, 0);
+> > > > -	if (syncpt_irq < 0)
+> > > > -		return syncpt_irq;
+> > > > +	if (host->syncpt_irq < 0)
+> > > > +		return host->syncpt_irq;
+> > > >   	mutex_init(&host->devices_lock);
+> > > >   	INIT_LIST_HEAD(&host->devices);
+> > > > -- 
+> > > > 2.39.0
+> > > > 
+> > > 
+> > > Apologies if this has been reported already or has a solution in
+> > > progress but mainline is now broken because this change got separated
+> > > from the change it is fixing:
+> > > 
+> > > https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4249931209/jobs/7391912774
+> > > https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2M7y9HpiXB13qiC2mkHMyeZOcLW/build.log
+> > > 
+> > > I see this change sitting in the drm-tegra tree [1], which is getting
+> > > merged into -next, so it is fixed there, which is why we did not notice
+> > > any issues until the drm-next tree was merged into mainline. Can this be
+> > > fast tracked to Linus to unbreak clang builds with -Werror?
+> > > 
+> > > [1]: https://gitlab.freedesktop.org/drm/tegra/-/commit/b9930311641cf2ed905a84aabe27e8f3868aee4a
+> 
+> -- 
+> nvpublic
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
