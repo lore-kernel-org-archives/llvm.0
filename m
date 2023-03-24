@@ -1,184 +1,84 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D36D19B;
-	Fri, 24 Mar 2023 16:36:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679675791; x=1711211791;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E0UJ7VmcciWSYTPf5BbLPlRUDAx29FD8hjDzttjz+Kw=;
-  b=EGn22X08vdGJZaSjCaghSVNGx3nLxPaW6VV9qF42EHGZMkXPdxgszimE
-   KC4J/4TWKEXluhZ8HDcelWHJbaZBJCJINRYMVS/VZHQTZeFrRf+e8K7rh
-   OCuSSWBMqSpEo8AgJji42+1bkElXJn18sf3Vi4OxcZ4N8FJYaZOEs/osG
-   apwxwarUodI9esP8GZdVQdthYid1tjf3Sa3/JmKgatwKSBctdZ4Dp4cHl
-   6FYi/sBMKNnjzkDYiA8H8pSe7ibGFHVxZP/21bKG0J8Pp7vZYAK2LvJas
-   AG6MSjLHOdVLzXHgiiYEVmgGvS4oHSJIlrvUJh3YL6frfsxB381ZoxQpu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="328245814"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="328245814"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 09:35:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="682747399"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="682747399"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 24 Mar 2023 09:35:23 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfkNv-000FT6-0l;
-	Fri, 24 Mar 2023 16:35:23 +0000
-Date: Sat, 25 Mar 2023 00:34:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:dma-sync-rework 5/20]
- arch/powerpc/mm/dma-noncoherent.c:91:59: error: must use 'enum' tag to refer
- to type 'dma_cache_op'
-Message-ID: <202303250004.IpEq1z41-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845EB19B
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 16:50:11 +0000 (UTC)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-177ca271cb8so2329920fac.2
+        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 09:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679676610;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=1DGyIN34KgC0DU/dG7K0bXU7qcx4+HSMWL/GkKHyPhI=;
+        b=bVwiBdzRLa1lsfOcclAi6GO+XbR6MVA+A6vuIkAiHb0mxBUtxOM1o+zrR8eExLmPMy
+         QU4tTuE9ywhDKtQEbvYF2Fikp0sWcexTw68YVUiO0vwQGyWvABK/Qc5op/kOvpSKUd2e
+         VlsVl/ClswPrkfpaj7k+YqIFu496lXYE39yXf1gHk9dHgbk9dDMBYmuEm/wUitBVVd+X
+         lKc9DWaeVXTmkPwH1wUc/J3H5VE7UvDnSDdefpnrfjH+9FaMpH/xdjh38E7lXBASsZSI
+         iN4Q0YP8WpCt2moeemCX8OJY6fxC5jvC/51XqI9uTZjRbiCh1pUdoV5iKUjd/7aPhNqi
+         GhMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679676610;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1DGyIN34KgC0DU/dG7K0bXU7qcx4+HSMWL/GkKHyPhI=;
+        b=n6Ik0ZJRyRbBhN0FbLXlQTB4Bx7tewMMKt+fQ76wr7zpYlW3jrFUg7PaMp2C4kvtuz
+         Is5D61LLL/ftkswPAoMhMkfaxQk18VZFw1gpbn0/rmZ+PG7aAkH/SSI90c2NFwy0/Uya
+         o1hIaB+gSZTw10DLhHs9a1tg8zocbxjteXj+ju7Di9+zUDbdObbyEUVrJCZv+Uec1BXL
+         uiRa8cy3UIGRAJsVPOvE+kGYqQ8GwBXa+hYZxG9D8RAW0J564+9+GlInuP0Siiyg9vcP
+         Q5/OLajzC/VJRHrVhjwNtpRmwyTp+TSe1dGaAixNxeq7Y1ZPl8Ck924hkOGRXSt/M+2Y
+         BIHw==
+X-Gm-Message-State: AAQBX9cdpQSechLTkeQPaP04pLNga7BOMGenTW2dTw2mK6mkcLoYB2nR
+	5E3OAmpUJz6lhZJ330ThYBY=
+X-Google-Smtp-Source: AKy350YegC9Y5rZlLkkMA6KNYBOntyayTAXqWSJGwsQUTpx9mVId6Lbu7ZViY22SLpFM8rSCQ2JFTQ==
+X-Received: by 2002:a05:6870:1608:b0:17e:9798:6e34 with SMTP id b8-20020a056870160800b0017e97986e34mr2398934oae.32.1679676610509;
+        Fri, 24 Mar 2023 09:50:10 -0700 (PDT)
+Received: from [192.168.0.162] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id ea43-20020a056870072b00b0017e0c13b29asm2345970oab.36.2023.03.24.09.50.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 09:50:10 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <892fdfe5-ef22-a37a-20bc-912e67d6df4e@lwfinger.net>
+Date: Fri, 24 Mar 2023 11:50:08 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] b43legacy: remove unused freq_r3A_value function
+Content-Language: en-US
+To: Tom Rix <trix@redhat.com>, kvalo@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+ ndesaulniers@google.com
+Cc: linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230324135022.2649735-1-trix@redhat.com>
+From: Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <20230324135022.2649735-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git dma-sync-rework
-head:   9a711fbea373208c1eeb2fafb0c744bc23a79a43
-commit: 8c96c581a246a71ec30a3971cdf7b702b22bb537 [5/20] powerpc: dma-mapping: split out cache operation logic
-config: powerpc-randconfig-r033-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250004.IpEq1z41-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=8c96c581a246a71ec30a3971cdf7b702b22bb537
-        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-        git fetch --no-tags arnd-asm-generic dma-sync-rework
-        git checkout 8c96c581a246a71ec30a3971cdf7b702b22bb537
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+On 3/24/23 08:50, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/net/wireless/broadcom/b43legacy/radio.c:1713:5: error:
+>    unused function 'freq_r3A_value' [-Werror,-Wunused-function]
+> u16 freq_r3A_value(u16 frequency)
+>      ^
+> This function is not used so remove it.
+> 
+> Signed-off-by: Tom Rix<trix@redhat.com>
+> ---
+>   drivers/net/wireless/broadcom/b43legacy/radio.c | 17 -----------------
+>   1 file changed, 17 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303250004.IpEq1z41-lkp@intel.com/
+Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
 
-All errors (new ones prefixed by >>):
+Thanks,
 
->> arch/powerpc/mm/dma-noncoherent.c:91:59: error: must use 'enum' tag to refer to type 'dma_cache_op'
-   static void __dma_phys_op(phys_addr_t paddr, size_t size, dma_cache_op op)
-                                                             ^
-                                                             enum 
-   arch/powerpc/mm/dma-noncoherent.c:107:10: error: use of undeclared identifier 'direction'
-           switch (direction) {
-                   ^
->> arch/powerpc/mm/dma-noncoherent.c:115:8: error: use of undeclared identifier 'start'; did you mean 'short'?
-                   if ((start | end) & (L1_CACHE_BYTES - 1))
-                        ^~~~~
-                        short
-   arch/powerpc/mm/dma-noncoherent.c:115:8: error: expected expression
-   arch/powerpc/mm/dma-noncoherent.c:116:18: error: use of undeclared identifier 'start'
-                           __dma_phys_op(start, end, DMA_CACHE_FLUSH);
-                                         ^
->> arch/powerpc/mm/dma-noncoherent.c:116:25: error: use of undeclared identifier 'end'
-                           __dma_phys_op(start, end, DMA_CACHE_FLUSH);
-                                                ^
-   arch/powerpc/mm/dma-noncoherent.c:118:18: error: use of undeclared identifier 'start'
-                           __dma_phys_op(start, end, DMA_CACHE_INVAL);
-                                         ^
-   arch/powerpc/mm/dma-noncoherent.c:118:25: error: use of undeclared identifier 'end'
-                           __dma_phys_op(start, end, DMA_CACHE_INVAL);
-                                                ^
-   arch/powerpc/mm/dma-noncoherent.c:121:17: error: use of undeclared identifier 'start'
-                   __dma_phys_op(start, end, DMA_CACHE_CLEAN);
-                                 ^
-   arch/powerpc/mm/dma-noncoherent.c:121:24: error: use of undeclared identifier 'end'
-                   __dma_phys_op(start, end, DMA_CACHE_CLEAN);
-                                        ^
-   arch/powerpc/mm/dma-noncoherent.c:124:17: error: use of undeclared identifier 'start'
-                   __dma_phys_op(start, end, DMA_CACHE_FLUSH);
-                                 ^
-   arch/powerpc/mm/dma-noncoherent.c:124:24: error: use of undeclared identifier 'end'
-                   __dma_phys_op(start, end, DMA_CACHE_FLUSH);
-                                        ^
-   arch/powerpc/mm/dma-noncoherent.c:132:10: error: use of undeclared identifier 'direction'
-           switch (direction) {
-                   ^
-   arch/powerpc/mm/dma-noncoherent.c:140:8: error: use of undeclared identifier 'start'; did you mean 'short'?
-                   if ((start | end) & (L1_CACHE_BYTES - 1))
-                        ^~~~~
-                        short
-   arch/powerpc/mm/dma-noncoherent.c:140:8: error: expected expression
-   arch/powerpc/mm/dma-noncoherent.c:141:18: error: use of undeclared identifier 'start'
-                           __dma_phys_op(start, end, DMA_CACHE_FLUSH);
-                                         ^
-   arch/powerpc/mm/dma-noncoherent.c:141:25: error: use of undeclared identifier 'end'
-                           __dma_phys_op(start, end, DMA_CACHE_FLUSH);
-                                                ^
-   arch/powerpc/mm/dma-noncoherent.c:143:18: error: use of undeclared identifier 'start'
-                           __dma_phys_op(start, end, DMA_CACHE_INVAL);
-                                         ^
-   arch/powerpc/mm/dma-noncoherent.c:143:25: error: use of undeclared identifier 'end'
-                           __dma_phys_op(start, end, DMA_CACHE_INVAL);
-                                                ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
+Larry
 
-
-vim +91 arch/powerpc/mm/dma-noncoherent.c
-
-    86	
-    87	/*
-    88	 * __dma_phys_op makes memory consistent. identical to __dma_op, but
-    89	 * takes a phys_addr_t instead of a virtual address
-    90	 */
-  > 91	static void __dma_phys_op(phys_addr_t paddr, size_t size, dma_cache_op op)
-    92	{
-    93		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-    94		unsigned offset = paddr & ~PAGE_MASK;
-    95	
-    96	#ifdef CONFIG_HIGHMEM
-    97		__dma_highmem_op(page, offset, size, op);
-    98	#else
-    99		unsigned long start = (unsigned long)page_address(page) + offset;
-   100		__dma_op((void *)start, size, op);
-   101	#endif
-   102	}
-   103	
-   104	void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-   105			enum dma_data_direction dir)
-   106	{
-   107		switch (direction) {
-   108		case DMA_NONE:
-   109			BUG();
-   110		case DMA_FROM_DEVICE:
-   111			/*
-   112			 * invalidate only when cache-line aligned otherwise there is
-   113			 * the potential for discarding uncommitted data from the cache
-   114			 */
- > 115			if ((start | end) & (L1_CACHE_BYTES - 1))
- > 116				__dma_phys_op(start, end, DMA_CACHE_FLUSH);
-   117			else
-   118				__dma_phys_op(start, end, DMA_CACHE_INVAL);
-   119			break;
-   120		case DMA_TO_DEVICE:		/* writeback only */
-   121			__dma_phys_op(start, end, DMA_CACHE_CLEAN);
-   122			break;
-   123		case DMA_BIDIRECTIONAL:	/* writeback and invalidate */
-   124			__dma_phys_op(start, end, DMA_CACHE_FLUSH);
-   125			break;
-   126		}
-   127	}
-   128	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
