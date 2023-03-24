@@ -1,49 +1,44 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E304D747E;
-	Fri, 24 Mar 2023 16:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D36D19B;
+	Fri, 24 Mar 2023 16:36:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679674466; x=1711210466;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hvr/IAw6GwHmF6Ka+HdBXFuG4UC3HNZI/3j9kHSlW6I=;
-  b=Z4afg/L3vu4a1iRwjBsvASnGxGb756VZVnhxd87CqtYrAv+aDEyz5OEK
-   GYK3VO6xGA51JAHhejzBc++mrpOx/BdjxFUcmsbXMhJI3lAcRrDbMSgpb
-   uU44tnBmRmy7QRnpkQ3E9vROq5CruBMqT2MwzqNU775VcMDTXLo4bCJf4
-   c4XnvYfsoosueOSdSFsNbfnIdTBWJl2hgxypCI4I9CR/D5gkzNxe8Fypv
-   OpsI4+X4McZ7mGbwr5Rw7SNAF11AoaFmo3XytC3ey1L/Os15pNSauF8I3
-   FkccpUTUutXPViFpXe4wv7rjXRAyRlXHR/AtmhzT33smW9w9H6MnykZlK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="328239374"
+  t=1679675791; x=1711211791;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E0UJ7VmcciWSYTPf5BbLPlRUDAx29FD8hjDzttjz+Kw=;
+  b=EGn22X08vdGJZaSjCaghSVNGx3nLxPaW6VV9qF42EHGZMkXPdxgszimE
+   KC4J/4TWKEXluhZ8HDcelWHJbaZBJCJINRYMVS/VZHQTZeFrRf+e8K7rh
+   OCuSSWBMqSpEo8AgJji42+1bkElXJn18sf3Vi4OxcZ4N8FJYaZOEs/osG
+   apwxwarUodI9esP8GZdVQdthYid1tjf3Sa3/JmKgatwKSBctdZ4Dp4cHl
+   6FYi/sBMKNnjzkDYiA8H8pSe7ibGFHVxZP/21bKG0J8Pp7vZYAK2LvJas
+   AG6MSjLHOdVLzXHgiiYEVmgGvS4oHSJIlrvUJh3YL6frfsxB381ZoxQpu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="328245814"
 X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="328239374"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 09:14:26 -0700
+   d="scan'208";a="328245814"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 09:35:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="676199945"
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="682747399"
 X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="676199945"
+   d="scan'208";a="682747399"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2023 09:14:23 -0700
+  by orsmga002.jf.intel.com with ESMTP; 24 Mar 2023 09:35:23 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pfk3a-000FS4-1E;
-	Fri, 24 Mar 2023 16:14:22 +0000
-Date: Sat, 25 Mar 2023 00:14:13 +0800
+	id 1pfkNv-000FT6-0l;
+	Fri, 24 Mar 2023 16:35:23 +0000
+Date: Sat, 25 Mar 2023 00:34:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: ChiaEn Wu <chiaen_wu@richtek.com>, jic23@kernel.org, lars@metafoo.de,
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, peterwu.pub@gmail.com,
-	cy_huang@richtek.com, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: Re: [PATCH] iio: adc: mt6370: Fix ibus and ibat scaling value of
- some specific vendor ID chips
-Message-ID: <202303250050.V7JLIADZ-lkp@intel.com>
-References: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
+	linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:dma-sync-rework 5/20]
+ arch/powerpc/mm/dma-noncoherent.c:91:59: error: must use 'enum' tag to refer
+ to type 'dma_cache_op'
+Message-ID: <202303250004.IpEq1z41-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,95 +47,137 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1679667167-16261-1-git-send-email-chiaen_wu@richtek.com>
 
-Hi ChiaEn,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v6.3-rc3 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/ChiaEn-Wu/iio-adc-mt6370-Fix-ibus-and-ibat-scaling-value-of-some-specific-vendor-ID-chips/20230324-221545
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/1679667167-16261-1-git-send-email-chiaen_wu%40richtek.com
-patch subject: [PATCH] iio: adc: mt6370: Fix ibus and ibat scaling value of some specific vendor ID chips
-config: riscv-randconfig-r034-20230324 (https://download.01.org/0day-ci/archive/20230325/202303250050.V7JLIADZ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git dma-sync-rework
+head:   9a711fbea373208c1eeb2fafb0c744bc23a79a43
+commit: 8c96c581a246a71ec30a3971cdf7b702b22bb537 [5/20] powerpc: dma-mapping: split out cache operation logic
+config: powerpc-randconfig-r033-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250004.IpEq1z41-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/9822359d5de2dba531d882cfee6949864a2d6170
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ChiaEn-Wu/iio-adc-mt6370-Fix-ibus-and-ibat-scaling-value-of-some-specific-vendor-ID-chips/20230324-221545
-        git checkout 9822359d5de2dba531d882cfee6949864a2d6170
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=8c96c581a246a71ec30a3971cdf7b702b22bb537
+        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+        git fetch --no-tags arnd-asm-generic dma-sync-rework
+        git checkout 8c96c581a246a71ec30a3971cdf7b702b22bb537
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/iio/adc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303250050.V7JLIADZ-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303250004.IpEq1z41-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iio/adc/mt6370-adc.c:306:31: warning: variable 'priv' is uninitialized when used here [-Wuninitialized]
-           ret = mt6370_get_vendor_info(priv);
-                                        ^~~~
-   drivers/iio/adc/mt6370-adc.c:297:30: note: initialize the variable 'priv' to silence this warning
-           struct mt6370_adc_data *priv;
-                                       ^
-                                        = NULL
-   1 warning generated.
+>> arch/powerpc/mm/dma-noncoherent.c:91:59: error: must use 'enum' tag to refer to type 'dma_cache_op'
+   static void __dma_phys_op(phys_addr_t paddr, size_t size, dma_cache_op op)
+                                                             ^
+                                                             enum 
+   arch/powerpc/mm/dma-noncoherent.c:107:10: error: use of undeclared identifier 'direction'
+           switch (direction) {
+                   ^
+>> arch/powerpc/mm/dma-noncoherent.c:115:8: error: use of undeclared identifier 'start'; did you mean 'short'?
+                   if ((start | end) & (L1_CACHE_BYTES - 1))
+                        ^~~~~
+                        short
+   arch/powerpc/mm/dma-noncoherent.c:115:8: error: expected expression
+   arch/powerpc/mm/dma-noncoherent.c:116:18: error: use of undeclared identifier 'start'
+                           __dma_phys_op(start, end, DMA_CACHE_FLUSH);
+                                         ^
+>> arch/powerpc/mm/dma-noncoherent.c:116:25: error: use of undeclared identifier 'end'
+                           __dma_phys_op(start, end, DMA_CACHE_FLUSH);
+                                                ^
+   arch/powerpc/mm/dma-noncoherent.c:118:18: error: use of undeclared identifier 'start'
+                           __dma_phys_op(start, end, DMA_CACHE_INVAL);
+                                         ^
+   arch/powerpc/mm/dma-noncoherent.c:118:25: error: use of undeclared identifier 'end'
+                           __dma_phys_op(start, end, DMA_CACHE_INVAL);
+                                                ^
+   arch/powerpc/mm/dma-noncoherent.c:121:17: error: use of undeclared identifier 'start'
+                   __dma_phys_op(start, end, DMA_CACHE_CLEAN);
+                                 ^
+   arch/powerpc/mm/dma-noncoherent.c:121:24: error: use of undeclared identifier 'end'
+                   __dma_phys_op(start, end, DMA_CACHE_CLEAN);
+                                        ^
+   arch/powerpc/mm/dma-noncoherent.c:124:17: error: use of undeclared identifier 'start'
+                   __dma_phys_op(start, end, DMA_CACHE_FLUSH);
+                                 ^
+   arch/powerpc/mm/dma-noncoherent.c:124:24: error: use of undeclared identifier 'end'
+                   __dma_phys_op(start, end, DMA_CACHE_FLUSH);
+                                        ^
+   arch/powerpc/mm/dma-noncoherent.c:132:10: error: use of undeclared identifier 'direction'
+           switch (direction) {
+                   ^
+   arch/powerpc/mm/dma-noncoherent.c:140:8: error: use of undeclared identifier 'start'; did you mean 'short'?
+                   if ((start | end) & (L1_CACHE_BYTES - 1))
+                        ^~~~~
+                        short
+   arch/powerpc/mm/dma-noncoherent.c:140:8: error: expected expression
+   arch/powerpc/mm/dma-noncoherent.c:141:18: error: use of undeclared identifier 'start'
+                           __dma_phys_op(start, end, DMA_CACHE_FLUSH);
+                                         ^
+   arch/powerpc/mm/dma-noncoherent.c:141:25: error: use of undeclared identifier 'end'
+                           __dma_phys_op(start, end, DMA_CACHE_FLUSH);
+                                                ^
+   arch/powerpc/mm/dma-noncoherent.c:143:18: error: use of undeclared identifier 'start'
+                           __dma_phys_op(start, end, DMA_CACHE_INVAL);
+                                         ^
+   arch/powerpc/mm/dma-noncoherent.c:143:25: error: use of undeclared identifier 'end'
+                           __dma_phys_op(start, end, DMA_CACHE_INVAL);
+                                                ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
-vim +/priv +306 drivers/iio/adc/mt6370-adc.c
+vim +91 arch/powerpc/mm/dma-noncoherent.c
 
-   293	
-   294	static int mt6370_adc_probe(struct platform_device *pdev)
-   295	{
-   296		struct device *dev = &pdev->dev;
-   297		struct mt6370_adc_data *priv;
-   298		struct iio_dev *indio_dev;
-   299		struct regmap *regmap;
-   300		int ret;
-   301	
-   302		regmap = dev_get_regmap(pdev->dev.parent, NULL);
-   303		if (!regmap)
-   304			return dev_err_probe(dev, -ENODEV, "Failed to get regmap\n");
-   305	
- > 306		ret = mt6370_get_vendor_info(priv);
-   307		if (ret)
-   308			return dev_err_probe(dev, ret, "Failed to get vid\n");
-   309	
-   310		indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
-   311		if (!indio_dev)
-   312			return -ENOMEM;
-   313	
-   314		priv = iio_priv(indio_dev);
-   315		priv->dev = dev;
-   316		priv->regmap = regmap;
-   317		mutex_init(&priv->adc_lock);
-   318	
-   319		ret = regmap_write(priv->regmap, MT6370_REG_CHG_ADC, 0);
-   320		if (ret)
-   321			return dev_err_probe(dev, ret, "Failed to reset ADC\n");
-   322	
-   323		indio_dev->name = "mt6370-adc";
-   324		indio_dev->info = &mt6370_adc_iio_info;
-   325		indio_dev->modes = INDIO_DIRECT_MODE;
-   326		indio_dev->channels = mt6370_adc_channels;
-   327		indio_dev->num_channels = ARRAY_SIZE(mt6370_adc_channels);
-   328	
-   329		return devm_iio_device_register(dev, indio_dev);
-   330	}
-   331	
+    86	
+    87	/*
+    88	 * __dma_phys_op makes memory consistent. identical to __dma_op, but
+    89	 * takes a phys_addr_t instead of a virtual address
+    90	 */
+  > 91	static void __dma_phys_op(phys_addr_t paddr, size_t size, dma_cache_op op)
+    92	{
+    93		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
+    94		unsigned offset = paddr & ~PAGE_MASK;
+    95	
+    96	#ifdef CONFIG_HIGHMEM
+    97		__dma_highmem_op(page, offset, size, op);
+    98	#else
+    99		unsigned long start = (unsigned long)page_address(page) + offset;
+   100		__dma_op((void *)start, size, op);
+   101	#endif
+   102	}
+   103	
+   104	void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+   105			enum dma_data_direction dir)
+   106	{
+   107		switch (direction) {
+   108		case DMA_NONE:
+   109			BUG();
+   110		case DMA_FROM_DEVICE:
+   111			/*
+   112			 * invalidate only when cache-line aligned otherwise there is
+   113			 * the potential for discarding uncommitted data from the cache
+   114			 */
+ > 115			if ((start | end) & (L1_CACHE_BYTES - 1))
+ > 116				__dma_phys_op(start, end, DMA_CACHE_FLUSH);
+   117			else
+   118				__dma_phys_op(start, end, DMA_CACHE_INVAL);
+   119			break;
+   120		case DMA_TO_DEVICE:		/* writeback only */
+   121			__dma_phys_op(start, end, DMA_CACHE_CLEAN);
+   122			break;
+   123		case DMA_BIDIRECTIONAL:	/* writeback and invalidate */
+   124			__dma_phys_op(start, end, DMA_CACHE_FLUSH);
+   125			break;
+   126		}
+   127	}
+   128	
 
 -- 
 0-DAY CI Kernel Test Service
