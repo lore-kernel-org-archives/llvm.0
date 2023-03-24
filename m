@@ -1,123 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6B6107BB
-	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 19:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679687652;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=l3XY7P7qXKaSPDLbgUFV6/pwM2nIqWoTRMEvcOe7JBo=;
-	b=GCiWFAkrUn4juFyjMehy3oiTYgKN6xjSZqrOs0oW7vrDRu2rvGP0yQwZY8VNb9GSnRB4ut
-	rCIPHgI8Wri4N1LvHNCDrbzYwXM1Q1PKVhdo0HS+wW/d4lrMpETpXy1Knou3C0o8V+FXYV
-	ybdmHYOGVtZR6jonlvy5mr/dALgr0CI=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-94-f2-eDdd8N9e1748u4I7JFQ-1; Fri, 24 Mar 2023 15:54:09 -0400
-X-MC-Unique: f2-eDdd8N9e1748u4I7JFQ-1
-Received: by mail-qt1-f199.google.com with SMTP id t15-20020a05622a180f00b003e37dd114e3so1657326qtc.10
-        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 12:54:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679687649;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l3XY7P7qXKaSPDLbgUFV6/pwM2nIqWoTRMEvcOe7JBo=;
-        b=J+0s97bDjLQRWKkRaqztj4ynMjFk1o+yZ2TQ81K3s316WRlXNV3fuEWsW8SajV71NG
-         x1lswoZqLRHjTIDoVdak4KWFdB4RulgZM+21wvlyMA3dJ4gUcUvVLnMc7Di/Tw3v5fKw
-         OgwOMO+Jz2HhLuQoipbGrESxAaiDfE9IvJkGgENBcuik9CAvfEHIp+F/kujaR/GHzVbk
-         WHdKAJNJ6DrVUeXQnwXmdOtwlSoe18VJl5DrTprdmauj1N+37K6wlpDG4SU3bXxY6S0e
-         SmGi4nRMtFfr2KbltZG56VOffQ/jAroBCkcxDgLoNeXbloZsvVuzGwhVhYybIk3kHCsT
-         thhw==
-X-Gm-Message-State: AAQBX9eAEDKxKlrHsbrosFXDDJftVPoWWAsP9PJ3UamySQ856QhfkQ2Y
-	fHbnuUC5FaOnitGHqdc+tjGJY16DrJqN2OEsPypFdgMnB6Z0J3tgE9GSfOf0ZuET/W7TSf5rG27
-	ByaY/VuVWO5Patw==
-X-Received: by 2002:a05:6214:2aad:b0:56e:9317:eb9a with SMTP id js13-20020a0562142aad00b0056e9317eb9amr6592663qvb.29.1679687649100;
-        Fri, 24 Mar 2023 12:54:09 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y3suJMoeD22pwLpecdSYpxhvSJ69sCrGTjVBJLxJGFJIxRx3Oe7uCHkoJj7IPUAMd1rm5fxw==
-X-Received: by 2002:a05:6214:2aad:b0:56e:9317:eb9a with SMTP id js13-20020a0562142aad00b0056e9317eb9amr6592635qvb.29.1679687648834;
-        Fri, 24 Mar 2023 12:54:08 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j185-20020a37b9c2000000b007465ad44891sm13466083qkf.102.2023.03.24.12.54.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 12:54:08 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: zackr@vmware.com,
-	linux-graphics-maintainer@vmware.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/vmwgfx: remove unused mksstat_init_record function
-Date: Fri, 24 Mar 2023 15:54:03 -0400
-Message-Id: <20230324195403.2655148-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A492D27706;
+	Fri, 24 Mar 2023 21:04:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679691863; x=1711227863;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lrh8mfNbujVclko7AoZ5oMBIAjQ3E9uh/4Jho+AveiE=;
+  b=ktB3mKp7GHM8FtDdQEmQBqqE5DG+C8c/RWSAulIKI7UiErMPOwjhyYJU
+   xlhE5wtGtWZonikpGzWLwU4zCmcyWQTqLan4TiYpXXDY2ZGOJQnTa5pb/
+   IkgwaRpXpg4kX/QUpelD1DDftXNkTgVclmXHQxaE6q1ZPiIvmF3c7F0Uh
+   /Q3kfR+MvJrpESs4/wBayVFg6hAQR7PuRuyOWKbgPfH0vg7qG2RM6Wsch
+   5jHVc3VuA12gETTAQVgemaC76Icd/oYL7yWOrBnGfU5uUPg+w1CuaVkFN
+   hBelcL1YV4fTyab0YFiaSQQlJlv+orGAli/+5EgdKpXfbX3GSDbkEjtRR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="338608055"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="338608055"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 14:01:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="793584347"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="793584347"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Mar 2023 14:01:33 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pfoXU-000Fee-2t;
+	Fri, 24 Mar 2023 21:01:32 +0000
+Date: Sat, 25 Mar 2023 05:01:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liang Kan <kan.liang@linux.intel.com>, linux-cxl@vger.kernel.org,
+	peterz@infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mingo@redhat.com,
+	acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
+	dan.j.williams@intel.com, linuxarm@huawei.com,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v2 3/5] cxl/pci: Find and register CXL PMU devices
+Message-ID: <202303250419.FANh4fIC-lkp@intel.com>
+References: <20230324171313.18448-4-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324171313.18448-4-Jonathan.Cameron@huawei.com>
 
-clang with W=1 reports
-drivers/gpu/drm/vmwgfx/vmwgfx_msg.c:716:21: error: unused function
-  'mksstat_init_record' [-Werror,-Wunused-function]
-static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
-                    ^
-This function is not used so remove it.
+Hi Jonathan,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 26 --------------------------
- 1 file changed, 26 deletions(-)
+I love your patch! Yet something to improve:
 
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
-index e76976a95a1e..ca1a3fe44fa5 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
-@@ -702,32 +702,6 @@ static inline void hypervisor_ppn_remove(PPN64 pfn)
- /* Header to the text description of mksGuestStat instance descriptor */
- #define MKSSTAT_KERNEL_DESCRIPTION "vmwgfx"
- 
--/**
-- * mksstat_init_record: Initializes an MKSGuestStatCounter-based record
-- * for the respective mksGuestStat index.
-- *
-- * @stat_idx: Index of the MKSGuestStatCounter-based mksGuestStat record.
-- * @pstat: Pointer to array of MKSGuestStatCounterTime.
-- * @pinfo: Pointer to array of MKSGuestStatInfoEntry.
-- * @pstrs: Pointer to current end of the name/description sequence.
-- * Return: Pointer to the new end of the names/description sequence.
-- */
--
--static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
--	MKSGuestStatCounterTime *pstat, MKSGuestStatInfoEntry *pinfo, char *pstrs)
--{
--	char *const pstrd = pstrs + strlen(mksstat_kern_name_desc[stat_idx][0]) + 1;
--	strcpy(pstrs, mksstat_kern_name_desc[stat_idx][0]);
--	strcpy(pstrd, mksstat_kern_name_desc[stat_idx][1]);
--
--	pinfo[stat_idx].name.s = pstrs;
--	pinfo[stat_idx].description.s = pstrd;
--	pinfo[stat_idx].flags = MKS_GUEST_STAT_FLAG_NONE;
--	pinfo[stat_idx].stat.counter = (MKSGuestStatCounter *)&pstat[stat_idx];
--
--	return pstrd + strlen(mksstat_kern_name_desc[stat_idx][1]) + 1;
--}
--
- /**
-  * mksstat_init_record_time: Initializes an MKSGuestStatCounterTime-based record
-  * for the respective mksGuestStat index.
+[auto build test ERROR on acme/perf/core]
+[also build test ERROR on tip/perf/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230325-011827
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
+patch link:    https://lore.kernel.org/r/20230324171313.18448-4-Jonathan.Cameron%40huawei.com
+patch subject: [PATCH v2 3/5] cxl/pci: Find and register CXL PMU devices
+config: arm-randconfig-r023-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250419.FANh4fIC-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/ab99ab31e5c4aa9f68425f3505f22a790d64bfe9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230325-011827
+        git checkout ab99ab31e5c4aa9f68425f3505f22a790d64bfe9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/cxl/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303250419.FANh4fIC-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/cxl/core/port.c:60:20: error: use of undeclared identifier 'cxl_cpmu_type'; did you mean 'cxl_bus_type'?
+           if (dev->type == &cxl_cpmu_type)
+                             ^~~~~~~~~~~~~
+                             cxl_bus_type
+   drivers/cxl/cxl.h:732:24: note: 'cxl_bus_type' declared here
+   extern struct bus_type cxl_bus_type;
+                          ^
+   1 error generated.
+
+
+vim +60 drivers/cxl/core/port.c
+
+    40	
+    41	static int cxl_device_id(const struct device *dev)
+    42	{
+    43		if (dev->type == &cxl_nvdimm_bridge_type)
+    44			return CXL_DEVICE_NVDIMM_BRIDGE;
+    45		if (dev->type == &cxl_nvdimm_type)
+    46			return CXL_DEVICE_NVDIMM;
+    47		if (dev->type == CXL_PMEM_REGION_TYPE())
+    48			return CXL_DEVICE_PMEM_REGION;
+    49		if (dev->type == CXL_DAX_REGION_TYPE())
+    50			return CXL_DEVICE_DAX_REGION;
+    51		if (is_cxl_port(dev)) {
+    52			if (is_cxl_root(to_cxl_port(dev)))
+    53				return CXL_DEVICE_ROOT;
+    54			return CXL_DEVICE_PORT;
+    55		}
+    56		if (is_cxl_memdev(dev))
+    57			return CXL_DEVICE_MEMORY_EXPANDER;
+    58		if (dev->type == CXL_REGION_TYPE())
+    59			return CXL_DEVICE_REGION;
+  > 60		if (dev->type == &cxl_cpmu_type)
+    61			return CXL_DEVICE_CPMU;
+    62		return 0;
+    63	}
+    64	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
