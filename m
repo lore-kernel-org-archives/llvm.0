@@ -1,176 +1,364 @@
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2065.outbound.protection.outlook.com [40.107.22.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695BB443C
-	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 09:59:35 +0000 (UTC)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-17aceccdcf6so1207273fac.9
-        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 02:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1679651974;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3S1jZpPFamxYpM15q1AsKfyrzurt5PTq4wNBIuUsWUI=;
-        b=QYW+l3DBUnQ5ubmYmXBr0H1dxlZ4HSLqh7wMlwF3ocB1NGNlLlfABYYXqOkIlu/qWx
-         chXDwyqc0t3c6D9QdQ4Jem9Okt6b6TJ2rlECoLD11Lovfw1LHQJajCmUaHHrTx5sZM0s
-         b076vp1OwlQK4nnvJWTh/gCUBqGaYjFE6MKG8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679651974;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3S1jZpPFamxYpM15q1AsKfyrzurt5PTq4wNBIuUsWUI=;
-        b=6n3h6492o6GoF+dCPLeGImKoWyp4VqNoZmQmqbRYtBzhRcdKPmhzHIskCx4hxW6jN+
-         gNjy+JYr3RdKLM2dw3I5AQndDLyyT5EsMS+b8RLehP8fPkGT4bbFZ2Y/jmICW9thj2gd
-         OF4MjPHWho2PTBmejRmDDzKqRBut936Tx9xIZfGOkz15mgMA5zZeSegPWgFatoSXNz7o
-         wGetML5bMR09as0FOyvdGkNrFcI8ykgDFXHQ0raOSVpizV8amRC+/X4L+IJpn40hYSMu
-         D3NbPsSY4R1qCjJ59/bP3YVV0jx7oCM9uU/M2bU12ynSBU4KfRs7YLiZqZi7hleiNW3G
-         zeKQ==
-X-Gm-Message-State: AAQBX9eSN2yBu9SwvOp4Ft/RDhkWzju+f8h5Bb6qZO0/Wq26j2IIQohw
-	91q1ziYOgHnwQ6Q/SVgvs6svgXdO1xASSdb1EMFrsA==
-X-Google-Smtp-Source: AK7set8nnSsWs0sg/cfPv8YNM0ZQhXr8KxqRW4ooPSiAH3ue+FwWvT+JfLiS9Ro4hwDEE7/aUEiXBwoGKN/IAsNiCbA=
-X-Received: by 2002:a05:6870:1050:b0:177:bf3e:5d4f with SMTP id
- 16-20020a056870105000b00177bf3e5d4fmr837720oaj.8.1679651974508; Fri, 24 Mar
- 2023 02:59:34 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975BB1FD3
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:30:52 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AZKi8I1SaBdSQUXrTQUdrgMAE1cb6JurH6QdoCFUzIPoHlXk7p1tmuof3d9gZBp3y9V21MNNS2sRS+dQeMIhHTb9w5IXtFvE3G+H7nBCqWwUeo5p5+AHIFzIOfElyWL9ZxmFid2eBMF5/F0vcjimedXkq95ocyDEJpZXB3Q9gEItfIopI+hHpUW2HM4PB69hrb+T1t6KUIMJaxdLVbsZi8PcmlZZUKVEDs1XAdnAF8msGxwIdPP4EnsgmzKGd8grPIme4k+xA2o8zIqQV8tIic4Wbkbu7fWqx7Kc0JSen6e4tCeqrFDN9lBW0+2Yba0B4y0BnInjmy6f3EGXXHFSoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gFymgbccdaZwuPCHu5Zjk5QY08rFEEor/S+LouvDxJw=;
+ b=HXFFfvDdZroTSwI86ENLASQFNNkEnND3eqqxQ++Rp8G6FHvzbekjGOZQRf+A+CTz3ussNwP4JYjXBDhpwRMgJnWTdz849nlfL3y25mzQwG5eAIzGEmx1RNM23B7BToLV2+7E7sgDyLOxG0pTQ+Py8s6yJy8abOc6QMwTB5FQkDZ3JSekCptoLmc09HUoMX341bOhJwxE8xkzVnwKW3mKTfKX1WJKV5g7UhV0SfTwyKYZI/UGxMo2OXVlumjSw2yc/uwZwZ9Fop9HnyTCYs9z8QZpNohlUpMSbUj0pdr1Ae6Nf8j9mKJ6/+HEsq/uX9QnphfIQWzSbgjDpiY8vANEQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gFymgbccdaZwuPCHu5Zjk5QY08rFEEor/S+LouvDxJw=;
+ b=rYwTs82ojR2FhdSXFh6UimnRc1DE8HI8cBJuq4L031TlY+X3aFcKXt6xOKpZPuJ2qD6dvf6pJOK46XmeLLlgOz7xF7TAdsYD5l5GcAezjKo94gRZEJRDcwWntK/GmvPjvhxd1t8IjnBTB8F9rkbgRiFnA9H4Lmk7Jslcq5oiS3ExXExsNRmTHA7Gvba4t3p0bYGqjRRlEvfG934gFoh4jUJR5gV6vQU8dgzKMwmZgYdrQj151TyEquSekNzuutE+CU6j2MkxebVvZ+GTlK2/PdWTnMUH663l9MDofkhIHWpr7mqFuiV28NK4e06+EuLHgJBZ83zRbi5uDMaSG9FNMQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by DBBPR04MB7562.eurprd04.prod.outlook.com
+ (2603:10a6:10:1f6::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.38; Fri, 24 Mar
+ 2023 10:30:49 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::34da:496c:c4b1:9929]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::34da:496c:c4b1:9929%3]) with mapi id 15.20.6178.038; Fri, 24 Mar 2023
+ 10:30:48 +0000
+Message-ID: <b502c381-34b1-21f2-175f-754996778069@suse.com>
+Date: Fri, 24 Mar 2023 11:30:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5] x86: Avoid relocation information in final vmlinux
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+ nathan@kernel.org, trix@redhat.com, corbet@lwn.net,
+ linux-kernel@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>,
+ linux-toolchains <linux-toolchains@vger.kernel.org>,
+ Fangrui Song <maskray@google.com>
+References: <20230320121006.4863-1-petr.pavlu@suse.com>
+ <CAKwvOdkFvMgYypc4w+UChO2O50wSHqXJUct2fkxrd+Qgn2C4Cg@mail.gmail.com>
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <CAKwvOdkFvMgYypc4w+UChO2O50wSHqXJUct2fkxrd+Qgn2C4Cg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0165.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b3::13) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230127221418.2522612-1-arnd@kernel.org> <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
- <20230308165644.GA1181835@dev-arch.thelio-3990X> <67f9fe7f-392a-9acd-1a4d-0a43da634367@nvidia.com>
- <ZB1xWRo0rkhku2BS@phenom.ffwll.local>
-In-Reply-To: <ZB1xWRo0rkhku2BS@phenom.ffwll.local>
-From: Daniel Vetter <daniel@ffwll.ch>
-Date: Fri, 24 Mar 2023 10:59:23 +0100
-Message-ID: <CAKMK7uF4tYyw6Eio6YkWZpBej1J8_5+VLU_hvVbL-Lnk06=v1g@mail.gmail.com>
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Mikko Perttunen <mperttunen@nvidia.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Robin Murphy <robin.murphy@arm.com>, dri-devel@lists.freedesktop.org, 
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|DBBPR04MB7562:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9398a41e-914e-4aa2-0f32-08db2c52d58f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	5FJnJi0mZUh/NcVkKfO9201Vlhi0JguawNfUsZoiGdJENSmUT0nZwhBz3AA9W41yzxuqS69F48Rv9Fisa+IJqaFBMKyA/SLCjdThH23iNYpF3AuOLq1N7LEIEZgNSnVNc9gKLXBhbcQ4niNseOjf20E7WZSved78J377IjihRAUtGhQ9VTOYYmffTLIk6ladapIHHNXtuQBD3mgUDvpzt11XrSVdiAqUupVddhoQkTp5Cc9dEVh/2w2b6THk6ix0AxQSPv36W8HU8E4ixdvO9nmgfSTEaKxu5NUV4aG9xEctue1cLWXDRq7/1vps4DnWrF6xFTflT+pp0Vb9WC8+vfU5lBxxOPkYFvVktUhRHuTu4f+8C7Dyf4k5Q+1SDDbRxoqZzdDWepaRdDmlEHVElAMqy/nsRDGc/OjB67Qm9hVsz5BhVR5dOmfL/7wJa/SLasFwlG2x9lBdJuQOZikSXI/qbQr0VivT8hLsfKnk/d+EXP2wboW40scv0i9Av2jFQKskjY4+0gK/ydtoZtQzw0sdv3z2ngy11o+5EpgQyextj8ti8Ui2KotUVVOneOXE5XYrRhfTdqq3ApmYAScMiQnbttRUh0hD2gp0N008fCUfKIPpSLbfxvvSIkEbrC1zggwl8xBBNy16hfymNFrK9PCzGH1moNcyskILZe1nRsMOqrsUfDmoXxM+Jl4NcVOMfsP0pIJTpF2ozLq1XsgfXRRciHLt3TRDc1q6KRa6JUOYYvKTAVzrpbzIQFqwR1yP
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(376002)(136003)(396003)(366004)(451199018)(86362001)(31696002)(36756003)(186003)(7416002)(478600001)(44832011)(66476007)(66556008)(6916009)(8676002)(4326008)(5660300002)(54906003)(8936002)(66946007)(41300700001)(316002)(2906002)(53546011)(6512007)(26005)(38100700002)(6506007)(6486002)(55236004)(966005)(2616005)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cUlmYjdKOWxYa09FbHU3dDkwbHEvaUJWVUh2a2lNeFprcFhQS1dzeGZhVFNx?=
+ =?utf-8?B?WmxyTkUxK2FiaGhZWUVTQitZRUxJcmFqcWZpS3RQQi9rcWQ2eUlPZEhRSW50?=
+ =?utf-8?B?RGZTS1ZnakNHMU5ySWJXOW1hME1IaC96eS9XOEwxWUFXakR1WEI1OVh0Qi9H?=
+ =?utf-8?B?bWZya0UyMEI0Qm9uQmNPdnRZWmVqQ0h6aEhPWUtzcUx1bDV5VWFTVXZSYWxa?=
+ =?utf-8?B?TTNHdEpLZEdzRldNZkl3UVdXOUw3T1p0aTZrOE9RcHM1a3BYZGFzN3VUaEk5?=
+ =?utf-8?B?d1cxYVdvU29icUYvZzc4cUkySUhFckhsdFBqUWtrZGZHOEJFVG8yOGViVXc5?=
+ =?utf-8?B?cGl5L2pjZ0FjVjBubVJCQTRHUW9nb3JWaGlzWUR0MEREYjhEeXdpMldNdEtJ?=
+ =?utf-8?B?SVBkQ0VwMEdkUDlQeUZsZm85eldCTSsrS2F0SWVXaEMza2lLRVNVKzM2MlB0?=
+ =?utf-8?B?SFpaTFQxQjZydUlTRmZ3Vy85YnJoMDhvYXd6ZHJqMUwwQzR0aFVOMFl0MUNK?=
+ =?utf-8?B?MjE3c0JNKzA1RGY4cFVPSlYxdkNnTzZtUzZ2RjRkWjBDbmJ0d050TkU5djdG?=
+ =?utf-8?B?V0ZPeldGZmNXcnBzVUc3MzV0SUJwbFlPeG13WkFSNmZZWEZMTXh0Y201YTZ5?=
+ =?utf-8?B?MUMwZzVRTU8rTiswbHU2dCs2VWYwelAwQ0hLZnEyNnBoOWNFQWttZGc4c0Ex?=
+ =?utf-8?B?MWJYOUE5bU11SzNqeE1PdTR1YTZXcEFRM0dxeDhCbHZyQmNnTGpiNnFlbENa?=
+ =?utf-8?B?SWE4Tm5yMEhrUVZ2Y3RiaUo4VGFYM3h1OE4wdC83YWE0TVBtMWc2c2cvYVd4?=
+ =?utf-8?B?SHRWcFk3UUpFWFlIY1R1WTB6dGN4a1UrcGo5WENSVVRNOC91OTFLZE0wcGp5?=
+ =?utf-8?B?RXpQZHlwK2U0TDd3bVpRUkJVbWRhN1lNczRqQ1BqblNhbXRoV3ViemY0T2p5?=
+ =?utf-8?B?UGdDRmpFbUdpNlBLRWM1dVBtdWtNL3V0WVZhb0Z0aDJCUFlBMFBTbWgzVzZs?=
+ =?utf-8?B?TERhL1l5dTAzM2tEY0N0aytPTnpSWmJJdW5xOFZNVU5DTkxXYkh0Ykg3aVVF?=
+ =?utf-8?B?blc0WkJyL3gvNm5BR0F2NjIxR0JrQUlGTThydHhYbE5PdDh1TitHNEE2Qjcz?=
+ =?utf-8?B?dE9VWFFoZXl5c0xVN0dXaU5mT1Y2RFVoVkg4My9aRDRHazlqTWthZkVWRzdj?=
+ =?utf-8?B?UkduMVhQdXFMZmI5T1cyOHI5Y1JLazV3N09wSXBuS2hZNDVrNlBQQi9IRjlt?=
+ =?utf-8?B?Z2tSQksrc0h4cDNxVisvZ3JBZkNXMVR3aC93eDZyTkZvTitneWtKRnBtZkFX?=
+ =?utf-8?B?ajRDUEpqVG0yeW51Smx4Snd2dWJab2x6NjRzaHhLNmVISUZZT2ZzV2JmOFpC?=
+ =?utf-8?B?OG0yUjJjUUMydDBTRDY1ZlB4QUdoblNZNklSbmZPb09jM2lUQkRIK1RKakpV?=
+ =?utf-8?B?ZHlBU2Flekk3dU5WTnhVNkwxVmlHZThXVWdmcU1JdFhzd1VnNzFZcEFvMmdu?=
+ =?utf-8?B?UVF0MVp4YXR6Zzc5N2puNFpGczdQSHVuT1cvKzZGK2pHZ084L3hkbFNEK1VG?=
+ =?utf-8?B?ODZUTTRPRWl3MUpMd0RTNk1pV00rRmxqTWxnSmdYZnpWNkk0M1FJT3VKZFZJ?=
+ =?utf-8?B?VTcrL1dnYnRJQjZOTjFxKzl5TU9Wd1o1ZlRUTC9UTTJJUlQvenB6dGhoWmt1?=
+ =?utf-8?B?b0Z1bmpyTzUxSnlYd3FlaWFETFZDbS9QZlBHNC9OYS9uOFh4dmwyTHBLZ2Nq?=
+ =?utf-8?B?WEV6WWIxVHYwUGpWQ00vK3IrbHkzZTB1c2Y1UmtPK2poY3lhM1MvcG5pcHFO?=
+ =?utf-8?B?ZDhIR2FTdlB6ZFR6Qk5vNnBmTzQ5WTZWSUtKSDdVTHY5Z2c0ZEg3NW1BL3Zx?=
+ =?utf-8?B?bFBoLzRudW9RM1NzTjFTSmpKOUdIWjdpQnZIYkoyaWJzbmU4dm5jd21FWEsv?=
+ =?utf-8?B?dFJySnE4NFpTbTFSdHFZR1hETGFRa3ppcWtCWGtvRzl0VlgyZUxvNDIrdjM0?=
+ =?utf-8?B?N0w3UmJtblVDUWhXcm5MdC9IbTVnczFRYldQV3M2dzdCM2hmM2FGQ3pSWllp?=
+ =?utf-8?B?b3B4NmpKZkZTMjlSY0tGSDNFdzBMSC9FR09TckF4RzkzUnVoUWNsU0hUWDhq?=
+ =?utf-8?Q?T/UJlH/HxHmBFFYCMK0Rv6H5Z?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9398a41e-914e-4aa2-0f32-08db2c52d58f
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Mar 2023 10:30:48.7732
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OxJLhZd3daLY/v5wfV/ooyxBBeYSbyoNZaiCbt4aGCtL5Rpw1nbPIGln76l+Tbj07fhlaRAp7zeX9aVDFVY37g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7562
 
-On Fri, 24 Mar 2023 at 10:46, Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Wed, Mar 08, 2023 at 05:28:06PM +0000, Jon Hunter wrote:
-> >
-> >
-> > On 08/03/2023 16:56, Nathan Chancellor wrote:
-> > > Ping? This warning is now in 6.3-rc1.
-> >
-> > Thierry is away at the moment.
-> >
-> > David, Daniel, do you want to pick this up directly in the meantime as a fix
-> > for 6.3? Mikko has already reviewed and FWIW ...
->
-> Generally first fallback should be drm-misc maintainers (or anyone else
-> with commit rights), but since this fell through cracks for weeks it seems
-> I'll pick it up to drm-fixes now directly.
+On 3/20/23 19:35, Nick Desaulniers wrote:
+> On Mon, Mar 20, 2023 at 5:10 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>>
+>> The Linux build process on x86 roughly consists of compiling all input
+>> files, statically linking them into a vmlinux ELF file, and then taking
+>> and turning this file into an actual bzImage bootable file.
+>>
+>> vmlinux has in this process two main purposes:
+>> 1) It is an intermediate build target on the way to produce the final
+>>    bootable image.
+>> 2) It is a file that is expected to be used by debuggers and standard
+>>    ELF tooling to work with the built kernel.
+>>
+>> For the second purpose, a vmlinux file is typically collected by various
+>> package build recipes, such as distribution spec files, including the
+>> kernel's own tar-pkg target.
+>>
+>> When building a kernel supporting KASLR with CONFIG_X86_NEED_RELOCS,
+>> vmlinux contains also relocation information produced by using the
+>> --emit-relocs linker option. This is utilized by subsequent build steps
+>> to create vmlinux.relocs and produce a relocatable image. However, the
+>> information is not needed by debuggers and other standard ELF tooling.
+>>
+>> The issue is then that the collected vmlinux file and hence distribution
+>> packages end up unnecessarily large because of this extra data. The
+>> following is a size comparison of vmlinux v6.0 with and without the
+>> relocation information:
+>> | Configuration      | With relocs | Stripped relocs |
+>> | x86_64_defconfig   |       70 MB |           43 MB |
+>> | +CONFIG_DEBUG_INFO |      818 MB |          367 MB |
+> 
+> Thanks for getting this to work with llvm-objcopy.  It's a pretty big
+> win for us, especially for thin-lto builds which produce a ridiculous
+> amount of debug info duplication (something I'm petitioning our DWARF
+> folks to look into for DWARFv6) some measurements (all LLVM=1):
+> 
+> Before this patch:
+> defconfig:
+> 76M vmlinux
+> DEBUG_INFO:
+> 510M vmlinux
+> DEBUG_INFO+LTO_CLANG_THIN:
+> 796M vmlinux
+> 
+> after:
+> defconfig:
+> 48M vmlinux (-36.8%)
+> DEBUG_INFO:
+> 270M vmlinux (-47%)
+> LTO_CLANG_THIN:
+> 400M vmlinux (-49.8%)
+> 
+> So basically a 50% reduction in vmlinux size, depending on the precise
+> configs selected. That's pretty great!
+> 
+> Android usually keeps around vmlinux artifacts as well as the
+> compressed image in case we need to debug the image later, this should
+> help us cut our storage costs for those quite a bit.  arm64 is more
+> common for Android, but x86_64 is pretty helpful for a virtualized
+> target; we do use it alot for first party development.
+> 
+> I also tested that I could still boot the result in QEMU, attach GDB,
+> and still hit breakpoints in the resulting vmlinux.  I also tested
+> that there were no more rel/rela sections missed in the resulting
+> vmlinux images.
+> 
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Ok I think I found out why this fell through cracks, MAINTAINERS isn't
-updated that host1x&tegra is maintained in drm-misc.
+Thanks for testing this change.
 
-John, since Thierry is out, can you pls create the MAINTAINERS patch to
-- point at drm-misc git repo everywhere needed
-- add any missing host1x paths to the drm-misc entry so that
-get_maintainers.pl adds the right people for this patch (currently it
-doesn't)
+> 
+> Some minor review comments below.
+> 
+> 
+> I do also wonder if linkers have something like --emit-relocs, but the
+> option to produce it in an additional file. That would help us avoid
+> producing it only to split it out in the first place.
 
-Also should we have at least a 2nd person for tegra stuff (or well
-maybe nvidia stuff in general) for drm-misc? Currently it's just
-Thierry, and I don't think that's enough. Whomever gets volunteered
-please follow
+I'm afraid I'm not aware of such an option.
 
-https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-misc
+> 
+>>
+>> Optimize a resulting vmlinux by adding a postlink step that splits the
+>> relocation information into vmlinux.relocs and then strips it from the
+>> vmlinux binary.
+>>
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> ---
+>>
+>> Changes since v4 [1]:
+>> - Update the example target which is mentioned in the patch description
+>>   to collect vmlinux from binrpm-pkg to tar-pkg, to reflect fc8c2d8ff206
+>>   ("kbuild: Stop including vmlinux.bz2 in the rpm's").
+>>
+>> Changes since v3 [2]:
+>> - Update the Kbuild.include path in arch/x86/Makefile.postlink to work
+>>   after 67d7c3023a67 ("kbuild: remove --include-dir MAKEFLAG from top
+>>   Makefile").
+>>
+>> Changes since v2 [3]:
+>> - Ignore only the moved vmlinux.relocs, add it to .gitignore and
+>>   Documentation/dontdiff.
+>> - Clean up the patch description.
+>>
+>> Changes since v1 [4]:
+>> - Fix the command to remove relocations to work with llvm-objcopy too.
+>>
+>> [1] https://lore.kernel.org/lkml/20230227131829.26824-1-petr.pavlu@suse.com/
+>> [2] https://lore.kernel.org/lkml/20221211141227.7622-1-petr.pavlu@suse.com/
+>> [3] https://lore.kernel.org/lkml/20220927084632.14531-1-petr.pavlu@suse.com/
+>> [4] https://lore.kernel.org/lkml/20220913132911.6850-1-petr.pavlu@suse.com/
+>>
+>>  .gitignore                          |  1 +
+>>  Documentation/dontdiff              |  1 +
+>>  arch/x86/Makefile.postlink          | 41 +++++++++++++++++++++++++++++
+>>  arch/x86/boot/compressed/.gitignore |  1 -
+>>  arch/x86/boot/compressed/Makefile   | 10 +++----
+>>  5 files changed, 47 insertions(+), 7 deletions(-)
+>>  create mode 100644 arch/x86/Makefile.postlink
+>>
+>> diff --git a/.gitignore b/.gitignore
+>> index 70ec6037fa7a..9bafd3c6bb5f 100644
+>> --- a/.gitignore
+>> +++ b/.gitignore
+>> @@ -65,6 +65,7 @@ modules.order
+>>  /vmlinux
+>>  /vmlinux.32
+>>  /vmlinux.map
+>> +/vmlinux.relocs
+> 
+> Why do you move this from the arch/x86/boot/compressed/ dir?
 
-Thanks, Daniel
+The idea was for Makefile.postlink to produce its output at own $(obj) level
+which is essentially the top objtree directory. However, I can see the
+argument to write vmlinux.relocs in the same directory where other related
+output files are present.
 
+> 
+>>  /vmlinux.symvers
+>>  /vmlinux-gdb.py
+>>  /vmlinuz
+>> diff --git a/Documentation/dontdiff b/Documentation/dontdiff
+>> index 3c399f132e2d..a62ad01e6d11 100644
+>> --- a/Documentation/dontdiff
+>> +++ b/Documentation/dontdiff
+>> @@ -254,6 +254,7 @@ vmlinux.aout
+>>  vmlinux.bin.all
+>>  vmlinux.lds
+>>  vmlinux.map
+>> +vmlinux.relocs
+>>  vmlinux.symvers
+>>  vmlinuz
+>>  voffset.h
+>> diff --git a/arch/x86/Makefile.postlink b/arch/x86/Makefile.postlink
+>> new file mode 100644
+>> index 000000000000..195af937aa4d
+>> --- /dev/null
+>> +++ b/arch/x86/Makefile.postlink
+>> @@ -0,0 +1,41 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +# ===========================================================================
+>> +# Post-link x86 pass
+>> +# ===========================================================================
+>> +#
+>> +# 1. Separate relocations from vmlinux into vmlinux.relocs.
+>> +# 2. Strip relocations from vmlinux.
+>> +
+>> +PHONY := __archpost
+>> +__archpost:
+>> +
+>> +-include include/config/auto.conf
+>> +include $(srctree)/scripts/Kbuild.include
+>> +
+>> +CMD_RELOCS = arch/x86/tools/relocs
+>> +quiet_cmd_relocs = RELOCS  $@.relocs
+>> +      cmd_relocs = $(CMD_RELOCS) $@ > $@.relocs;$(CMD_RELOCS) --abs-relocs $@
+>> +
+>> +quiet_cmd_strip_relocs = RSTRIP  $@
+>> +      cmd_strip_relocs = $(OBJCOPY) --remove-section='.rel.*' --remove-section='.rel__*' --remove-section='.rela.*' --remove-section='.rela__*' $@
+> 
+> This line is pretty long (146 chars), can you use \ here to wrap it?
 
->
-> >
-> > Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-> >
-> > Thanks
-> > Jon
-> >
-> >
-> > > On Thu, Feb 23, 2023 at 09:28:28AM -0700, Nathan Chancellor wrote:
-> > > > Hi Thierry, Daniel, and David,
-> > > >
-> > > > On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
-> > > > > From: Arnd Bergmann <arnd@arndb.de>
-> > > > >
-> > > > > The error handling for platform_get_irq() failing no longer
-> > > > > works after a recent change, clang now points this out with
-> > > > > a warning:
-> > > > >
-> > > > > drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
-> > > > >          if (syncpt_irq < 0)
-> > > > >              ^~~~~~~~~~
-> > > > >
-> > > > > Fix this by removing the variable and checking the correct
-> > > > > error status.
-> > > > >
-> > > > > Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
-> > > > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > > > > ---
-> > > > >   drivers/gpu/host1x/dev.c | 5 ++---
-> > > > >   1 file changed, 2 insertions(+), 3 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-> > > > > index 4872d183d860..aae2efeef503 100644
-> > > > > --- a/drivers/gpu/host1x/dev.c
-> > > > > +++ b/drivers/gpu/host1x/dev.c
-> > > > > @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
-> > > > >   static int host1x_probe(struct platform_device *pdev)
-> > > > >   {
-> > > > >         struct host1x *host;
-> > > > > -       int syncpt_irq;
-> > > > >         int err;
-> > > > >         host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
-> > > > > @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
-> > > > >         }
-> > > > >         host->syncpt_irq = platform_get_irq(pdev, 0);
-> > > > > -       if (syncpt_irq < 0)
-> > > > > -               return syncpt_irq;
-> > > > > +       if (host->syncpt_irq < 0)
-> > > > > +               return host->syncpt_irq;
-> > > > >         mutex_init(&host->devices_lock);
-> > > > >         INIT_LIST_HEAD(&host->devices);
-> > > > > --
-> > > > > 2.39.0
-> > > > >
-> > > >
-> > > > Apologies if this has been reported already or has a solution in
-> > > > progress but mainline is now broken because this change got separated
-> > > > from the change it is fixing:
-> > > >
-> > > > https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/4249931209/jobs/7391912774
-> > > > https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2M7y9HpiXB13qiC2mkHMyeZOcLW/build.log
-> > > >
-> > > > I see this change sitting in the drm-tegra tree [1], which is getting
-> > > > merged into -next, so it is fixed there, which is why we did not notice
-> > > > any issues until the drm-next tree was merged into mainline. Can this be
-> > > > fast tracked to Linus to unbreak clang builds with -Werror?
-> > > >
-> > > > [1]: https://gitlab.freedesktop.org/drm/tegra/-/commit/b9930311641cf2ed905a84aabe27e8f3868aee4a
-> >
-> > --
-> > nvpublic
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+Ack, I'll wrap it in a new version.
 
+>> +
+>> +# `@true` prevents complaint when there is nothing to be done
+>> +
+>> +vmlinux: FORCE
+>> +       @true
+>> +ifeq ($(CONFIG_X86_NEED_RELOCS),y)
+>> +       $(call cmd,relocs)
+>> +       $(call cmd,strip_relocs)
+>> +endif
+>> +
+>> +%.ko: FORCE
+>> +       @true
+>> +
+>> +clean:
+>> +       @rm -f vmlinux.relocs
+>> +
+>> +PHONY += FORCE clean
+>> +
+>> +FORCE:
+>> +
+>> +.PHONY: $(PHONY)
+>> diff --git a/arch/x86/boot/compressed/.gitignore b/arch/x86/boot/compressed/.gitignore
+>> index 25805199a506..b2968175fc27 100644
+>> --- a/arch/x86/boot/compressed/.gitignore
+>> +++ b/arch/x86/boot/compressed/.gitignore
+>> @@ -1,7 +1,6 @@
+>>  # SPDX-License-Identifier: GPL-2.0-only
+>>  relocs
+>>  vmlinux.bin.all
+>> -vmlinux.relocs
+>>  vmlinux.lds
+>>  mkpiggy
+>>  piggy.S
+>> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+>> index 6b6cfe607bdb..19d1fb601796 100644
+>> --- a/arch/x86/boot/compressed/Makefile
+>> +++ b/arch/x86/boot/compressed/Makefile
+>> @@ -121,14 +121,12 @@ $(obj)/vmlinux.bin: vmlinux FORCE
+>>
+>>  targets += $(patsubst $(obj)/%,%,$(vmlinux-objs-y)) vmlinux.bin.all vmlinux.relocs
+>>
+>> -CMD_RELOCS = arch/x86/tools/relocs
+>> -quiet_cmd_relocs = RELOCS  $@
+>> -      cmd_relocs = $(CMD_RELOCS) $< > $@;$(CMD_RELOCS) --abs-relocs $<
+>> -$(obj)/vmlinux.relocs: vmlinux FORCE
+>> -       $(call if_changed,relocs)
+>> +# vmlinux.relocs is created by the vmlinux postlink step.
+>> +vmlinux.relocs: vmlinux
+>> +       @true
+>>
+>>  vmlinux.bin.all-y := $(obj)/vmlinux.bin
+>> -vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) += $(obj)/vmlinux.relocs
+>> +vmlinux.bin.all-$(CONFIG_X86_NEED_RELOCS) += vmlinux.relocs
+> 
+> Why do you remove $(obj) here? I'm guessing that's why you moved
+> vmlinux.relocs between .gitignore files?
 
+Yes, it is because this version of Makefile.postlink saves vmlinux.relocs in
+the top objtree directory.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks,
+Petr
