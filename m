@@ -1,148 +1,87 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D583F33F6
-	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:38:41 +0000 (UTC)
-Received: by mail-ed1-f49.google.com with SMTP id o12so6027951edb.9
-        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 03:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679654320;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ECT1/Ru7wV82ugDePS3u/IWmW8AXpzFH/azNcPIPIVk=;
-        b=RzqE2AQnZGhHDLwMMdp+78VXQ2QgjyazQbEtVsMB/DIoReiiYrQY3DOmbRPwLmjXbV
-         xX/Ar0CnzH3u/UsvfhAykXjF7Tq9BdN02wmcNErfPEIhtHe2M6jnS0R7eTahexUCwJAm
-         bnKrketFKxMGlsHyuT/qM3OUKv+D40LHlJr/VoF+jecJ54YcrE5tyCF13AzKfDRSiTSG
-         wKnwP/IxIH+cqvesf+mrMlai9NHeTQgOw/Mq+/3HcbPRbbYqLixKTvWI8385JuDCCQwj
-         CqcMc72Qa4zRqMTNwuii+ZCbZtqKJTWwiFeWdXrHyF/LBOrEIf5354vGUkj7bzrBvtWK
-         AaOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679654320;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ECT1/Ru7wV82ugDePS3u/IWmW8AXpzFH/azNcPIPIVk=;
-        b=t36wiUJGj11P/btI484SJIiyElQvV96sRlQOMGRNa/EZLFKkEFllaOAdTcQlKQzSX/
-         q2GaAwl/EXKTRTzJqweJfbt1SRFG+72TZh2x06GiIiJRdM/ENIEauurlm9oQEmjyURXf
-         drpGTfX49ex+2KH+WQFIHx0/vZhDq5vEJo43Yhq6KRurbPEBVnd08jTSwCydd1g7iaMj
-         d9zZQHpmxjY92XDb0FRBAtcs0e129/GdobJG3tcba+x+3SmhCRLEEoEjPt2KCmieu9WV
-         d8gyTAX5QuMGfwqI0LFn1no9WyoOkHIhjiY25XHZAB1DpUZm+G0W3CO7vTvDs9wI1ykI
-         Fa1A==
-X-Gm-Message-State: AAQBX9dPEGtKoFVHoS9+oc77Qcr04Pjby454tTV0xH5gC41RK22cnSDv
-	rE43LDWC/pf33l+x6iNsyDs=
-X-Google-Smtp-Source: AKy350YhoHLiRBo1ctGglttUmGpas7AzWt+igKKTxGZtmvo09PoGpabh9E5mLh3z1b3hamSWfM7xYA==
-X-Received: by 2002:a17:906:b24e:b0:930:21a:c80 with SMTP id ce14-20020a170906b24e00b00930021a0c80mr2089595ejb.47.1679654319862;
-        Fri, 24 Mar 2023 03:38:39 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id g26-20020a1709064e5a00b00930525d89e2sm9972454ejw.89.2023.03.24.03.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 03:38:39 -0700 (PDT)
-Date: Fri, 24 Mar 2023 11:38:37 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Daniel Vetter <daniel@ffwll.ch>
-Cc: Jon Hunter <jonathanh@nvidia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, Mikko Perttunen <mperttunen@nvidia.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Robin Murphy <robin.murphy@arm.com>,
-	dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
-Message-ID: <ZB19rRHIeLxyzDrX@orome>
-References: <20230127221418.2522612-1-arnd@kernel.org>
- <Y/eULFO4jbivQ679@dev-arch.thelio-3990X>
- <20230308165644.GA1181835@dev-arch.thelio-3990X>
- <67f9fe7f-392a-9acd-1a4d-0a43da634367@nvidia.com>
- <ZB1xWRo0rkhku2BS@phenom.ffwll.local>
- <CAKMK7uF4tYyw6Eio6YkWZpBej1J8_5+VLU_hvVbL-Lnk06=v1g@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028CE525F
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:40:13 +0000 (UTC)
+Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 2588BD420A
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:34:43 +0000 (UTC)
+Received: (Authenticated sender: alex@ghiti.fr)
+	by mail.gandi.net (Postfix) with ESMTPSA id 55EDD100004;
+	Fri, 24 Mar 2023 10:34:27 +0000 (UTC)
+Message-ID: <877d03e1-b00b-7863-6104-21b42bc63711@ghiti.fr>
+Date: Fri, 24 Mar 2023 11:34:26 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="kg2CDr5zPYYVxPyh"
-Content-Disposition: inline
-In-Reply-To: <CAKMK7uF4tYyw6Eio6YkWZpBej1J8_5+VLU_hvVbL-Lnk06=v1g@mail.gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>, =?UTF-8?B?QmrDtnJuIFTDtnBl?=
+ =?UTF-8?Q?l?= <bjorn@kernel.org>
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, nathan@kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20230215143626.453491-1-alexghiti@rivosinc.com>
+ <20230215143626.453491-2-alexghiti@rivosinc.com>
+ <4a6fc7a3-9697-a49b-0941-97f32194b0d7@ghiti.fr>
+ <877cw7dphf.fsf@all.your.base.are.belong.to.us>
+ <CAKwvOdk0Lr-9gt0xAKvkcwA53+Wy8oeYQo1RJ7XH-LKCCURQCQ@mail.gmail.com>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <CAKwvOdk0Lr-9gt0xAKvkcwA53+Wy8oeYQo1RJ7XH-LKCCURQCQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Hi Nick,
+
+On 3/22/23 19:25, Nick Desaulniers wrote:
+> On Fri, Feb 24, 2023 at 7:58 AM Björn Töpel <bjorn@kernel.org> wrote:
+>> Alexandre Ghiti <alex@ghiti.fr> writes:
+>>
+>>> +cc linux-kbuild, llvm, Nathan, Nick
+>>>
+>>> On 2/15/23 15:36, Alexandre Ghiti wrote:
+>>>> From: Alexandre Ghiti <alex@ghiti.fr>
+>>>>
+>>> I tried a lot of things, but I struggle to understand, does anyone have
+>>> any idea? FYI, the same problem happens with LLVM.
+> Off the top of my head, no idea.
+>
+> (Maybe as a follow up to this series, I wonder if pursuing
+> ARCH_HAS_RELR for ARCH=riscv is worthwhile?)
 
 
---kg2CDr5zPYYVxPyh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+IIUC, the goal for using RELR is to reduce the size of a kernel image: 
+right now, this is not my priority, but I'll add that to my todo list 
+because that may be useful to distros.
 
-On Fri, Mar 24, 2023 at 10:59:23AM +0100, Daniel Vetter wrote:
-> On Fri, 24 Mar 2023 at 10:46, Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > On Wed, Mar 08, 2023 at 05:28:06PM +0000, Jon Hunter wrote:
-> > >
-> > >
-> > > On 08/03/2023 16:56, Nathan Chancellor wrote:
-> > > > Ping? This warning is now in 6.3-rc1.
-> > >
-> > > Thierry is away at the moment.
-> > >
-> > > David, Daniel, do you want to pick this up directly in the meantime a=
-s a fix
-> > > for 6.3? Mikko has already reviewed and FWIW ...
-> >
-> > Generally first fallback should be drm-misc maintainers (or anyone else
-> > with commit rights), but since this fell through cracks for weeks it se=
-ems
-> > I'll pick it up to drm-fixes now directly.
->=20
-> Ok I think I found out why this fell through cracks, MAINTAINERS isn't
-> updated that host1x&tegra is maintained in drm-misc.
->=20
-> John, since Thierry is out, can you pls create the MAINTAINERS patch to
-> - point at drm-misc git repo everywhere needed
-> - add any missing host1x paths to the drm-misc entry so that
-> get_maintainers.pl adds the right people for this patch (currently it
-> doesn't)
->=20
-> Also should we have at least a 2nd person for tegra stuff (or well
-> maybe nvidia stuff in general) for drm-misc? Currently it's just
-> Thierry, and I don't think that's enough. Whomever gets volunteered
-> please follow
->=20
-> https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm=
--misc
 
-We never actually moved host1x and Tegra DRM to drm-misc completely.
-There's still a separate tree that feeds into linux-next. This made
-sense a while ago because there was a lot going on, but development
-speed has decreased recently, so we may want to fix that. The big
-benefit is that drm-misc is better oiled than drm-tegra, so getting
-things merged would be easier for everyone.
+>
+>> Don't ask me *why*, but adding --emit-relocs to your linker flags solves
+>> "the NULL .rela.dyn" both for GCC and LLVM.
+>>
+>> The downside is that you end up with a bunch of .rela cruft in your
+>> vmlinux.
+> There was a patch just this week to use $(OBJCOPY) to strip these from
+> vmlinux (for x86). Looks like x86 uses --emit-relocs for KASLR:
+> https://lore.kernel.org/lkml/20230320121006.4863-1-petr.pavlu@suse.com/
 
-I'm all in favor of adding a second Tegra person to take pick up the
-slack when necessary.
 
-Thierry
+That's nice, that would be an interesting intermediate step until we 
+find the issue here as I believe it is important to have the relocations 
+in the init section to save memory.
 
---kg2CDr5zPYYVxPyh
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks for your answer Nick, really appreciated,
 
------BEGIN PGP SIGNATURE-----
+Alex
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQdfasACgkQ3SOs138+
-s6GJTg//d12Nx4SOSj062aViq5Ogt408l+g2R+09DBr0O/NW9IoUKKRq7fCrhw9P
-JLcHXdUYAgr9WylfV2Y/KVkd2zIVOUzmwqtM5S3knJ2WYZfLV9X4R9H2dOqN4YrL
-uVxLeQtZB6NRAZMZeg0YnPuS25Lx7gYbK7GqViItayAlhqx0lbpYM3LrjSeC5cwP
-W2scYiTrwByz5w6VFizFUztlZON8DrAEJ9+PcLWDjVzJwTl6cfvRRimkj9A380XK
-R6YVZpNGLy7Jlb8i/UayquMrl9YzJh6oewgDLnM/ckx/Pq0KWs5RH/wKRTS+9tX6
-y9FFrf3WIc0oz/mK7A7T9hW6Vno7Ys1N+RYxCENLdruWODQfjAeB23C+k7O8dckX
-yVJmhRSqBRBfnnsMursu9le1/m2ahXjTuch6rNlBWdXgiWlgsOtXqCCwo039C/al
-DrLJ6FtY2qftqjOFZUFvdArFPIER9Qrki1UFyBEOVnKdw7RFvs8iht1nXi7Blqny
-R20SUVz+U8ptBV0JvxPa/IjuRw8G+pE0pUHv73FmArI+oVO+uSilaLqVZLYSKZqo
-02sod/iBFkbic92VT8zItvb3N4fvYE+jVyHAPG+YuaqXfRdYFZTcm1mcETw5omll
-i5PFlRnImLAvtl6Uz3MEgYCs/4jvWUnxKlA+8KV/JtcM7XfrgwA=
-=zSBl
------END PGP SIGNATURE-----
 
---kg2CDr5zPYYVxPyh--
