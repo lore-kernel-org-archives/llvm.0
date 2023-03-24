@@ -1,115 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF9AD2F7
-	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 17:31:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679679062;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yS3LsgviE014HnSKQD34+joeCRTUmhUGUupA/8MRjOw=;
-	b=URTHvHiEavAQBBtJ84ia1h1+hJnIWZevzV9dSxzFC0CHjeNVML6wVoTcV4mWokTMx8plKk
-	GC6BIV8+wvJbf2mqlNWZ4hKpi5J3GFqpBv+WLutlnO+DHfR4KhWzxz4X/s0ALMyPtSGWPs
-	1IscFCCH+owUF9pRShiVLa7Mv/4EKGE=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-x42C_Qz5MH6wOWBE3PPVkA-1; Fri, 24 Mar 2023 13:31:00 -0400
-X-MC-Unique: x42C_Qz5MH6wOWBE3PPVkA-1
-Received: by mail-qt1-f199.google.com with SMTP id t15-20020a05622a180f00b003e37dd114e3so1435310qtc.10
-        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:31:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679679060;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yS3LsgviE014HnSKQD34+joeCRTUmhUGUupA/8MRjOw=;
-        b=yEh3ufFFn3SgZbMW0GH83hCmwm6Jl20TsF4q0D8glch/ocnAy9vc1opPbllCISI+/n
-         VU+bS4ykpIG+X9YZPSys2GbDBnI5M9fHGGMxnVA56/X7Lql8UTP+TBrqTLMmlaWh1MD0
-         LKgSgf0fM1b7b3cgsmErjJZ2OpjIDbPm+d0SFuRu/sd4B8veGbcfcTxl+kV9/oozs9pg
-         xJyYeovGbE3aBFSjVp3DtjKQ+UlnrGOeqrWD4Y6ZjUJE0jWOXE2f9/IiXPmH5uWdGFeN
-         53ZsuJzdlQRYL/4BhTHO3o8AtoyyGHGWvqL2f+Nq3Tnt9WlqBTfRlG2qiREh/nmEkqKH
-         beRw==
-X-Gm-Message-State: AAQBX9exXM0nx0xHu7f2TqhlFOqHL2uRtwJLd8cP5G5Xnv9ITqtNzrtu
-	xrvzJX98dRmjM1tOWPn/l65O1Fu6KjaJyBh61fbIQ57sr/u8qfI2cX6ZbnTkpWfqrBetYYw0/In
-	Sc4/2FH97iv14xA==
-X-Received: by 2002:ad4:5ce4:0:b0:5cd:3326:792 with SMTP id iv4-20020ad45ce4000000b005cd33260792mr6578287qvb.38.1679679059814;
-        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bL4q0XGxOQvO9LMmJSyYvbSuls1/y5BcXjsOOA+UHzr4CWRhukcoArhUedrPOnlcO+cjsmPw==
-X-Received: by 2002:ad4:5ce4:0:b0:5cd:3326:792 with SMTP id iv4-20020ad45ce4000000b005cd33260792mr6578253qvb.38.1679679059593;
-        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id cw2-20020ad44dc2000000b005dd8b9345aesm829312qvb.70.2023.03.24.10.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 10:30:59 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: linkinjeon@kernel.org,
-	sfrench@samba.org,
-	senozhatsky@chromium.org,
-	tom@talpey.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-cifs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] ksmbd: remove unused is_char_allowed function
-Date: Fri, 24 Mar 2023 13:30:56 -0400
-Message-Id: <20230324173056.2652725-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90177D2F7;
+	Fri, 24 Mar 2023 17:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679679450; x=1711215450;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HkPJwubimH9FL5MsjNq3bMdfxdl2ZtMV9NFR2g0BQrE=;
+  b=K+Y1T/hLqd4ej+8LAFYk3G5+0kGaA6xRqtBGgiLV/YUECsLHl+B/oy/A
+   dWAV0mAIMa/VZsEWgRozQdOjbVO/JoVNT3X2ECzr9s/YozCdQaiaWXBIm
+   KUxztTOz7dKEteFA0akIQZwUkfvBOAP9DdT88JiBZLE2g9vg1hh/2N8QB
+   WRpu22SJXVAJuD/Aax1KHT18PuuQgAavlc3XOGL5Mq/2VwfXHiJ61TYZZ
+   DwEFS++FR3TPn0KfUiUrvPAN0NXVYdfpGgtzW6jfRW39DOQ5RdKPRVHna
+   gAGMqZW7pkzpsfWFvMM7w0ZRPhezRKo/xSQpn5dA6st7VlmvObvLDCZAD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="426105528"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="426105528"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 10:37:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="685246824"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="685246824"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Mar 2023 10:37:27 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pflLy-000FWe-1I;
+	Fri, 24 Mar 2023 17:37:26 +0000
+Date: Sat, 25 Mar 2023 01:37:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: [chunkuang-hu:mediatek-drm-next 9/13]
+ drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c:415:10: warning: cast to
+ smaller integer type 'enum mtk_ovl_adaptor_comp_type' from 'const void *'
+Message-ID: <202303250109.kP1Qb39o-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-clang with W=1 reports
-fs/ksmbd/unicode.c:122:19: error: unused function
-  'is_char_allowed' [-Werror,-Wunused-function]
-static inline int is_char_allowed(char *ch)
-                  ^
-This function is not used so remove it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git mediatek-drm-next
+head:   012cc7ebec1e795518b0cd5ec9015fd4b4701a8a
+commit: 453c3364632a1f305db7d425dc9f8d6711cd3491 [9/13] drm/mediatek: Add ovl_adaptor support for MT8195
+config: arm64-buildonly-randconfig-r003-20230324 (https://download.01.org/0day-ci/archive/20230325/202303250109.kP1Qb39o-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/commit/?id=453c3364632a1f305db7d425dc9f8d6711cd3491
+        git remote add chunkuang-hu https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git
+        git fetch --no-tags chunkuang-hu mediatek-drm-next
+        git checkout 453c3364632a1f305db7d425dc9f8d6711cd3491
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/mediatek/
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/ksmbd/unicode.c | 18 ------------------
- 1 file changed, 18 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303250109.kP1Qb39o-lkp@intel.com/
 
-diff --git a/fs/ksmbd/unicode.c b/fs/ksmbd/unicode.c
-index a0db699ddafd..9ae676906ed3 100644
---- a/fs/ksmbd/unicode.c
-+++ b/fs/ksmbd/unicode.c
-@@ -113,24 +113,6 @@ cifs_mapchar(char *target, const __u16 src_char, const struct nls_table *cp,
- 	goto out;
- }
- 
--/*
-- * is_char_allowed() - check for valid character
-- * @ch:		input character to be checked
-- *
-- * Return:	1 if char is allowed, otherwise 0
-- */
--static inline int is_char_allowed(char *ch)
--{
--	/* check for control chars, wildcards etc. */
--	if (!(*ch & 0x80) &&
--	    (*ch <= 0x1f ||
--	     *ch == '?' || *ch == '"' || *ch == '<' ||
--	     *ch == '>' || *ch == '|'))
--		return 0;
--
--	return 1;
--}
--
- /*
-  * smb_from_utf16() - convert utf16le string to local charset
-  * @to:		destination buffer
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c:415:10: warning: cast to smaller integer type 'enum mtk_ovl_adaptor_comp_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+                   type = (enum mtk_ovl_adaptor_comp_type)of_id->data;
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +415 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+
+   391	
+   392	static int ovl_adaptor_comp_init(struct device *dev, struct component_match **match)
+   393	{
+   394		struct mtk_disp_ovl_adaptor *priv = dev_get_drvdata(dev);
+   395		struct device_node *node, *parent;
+   396		struct platform_device *comp_pdev;
+   397	
+   398		parent = dev->parent->parent->of_node->parent;
+   399	
+   400		for_each_child_of_node(parent, node) {
+   401			const struct of_device_id *of_id;
+   402			enum mtk_ovl_adaptor_comp_type type;
+   403			int id;
+   404	
+   405			of_id = of_match_node(mtk_ovl_adaptor_comp_dt_ids, node);
+   406			if (!of_id)
+   407				continue;
+   408	
+   409			if (!of_device_is_available(node)) {
+   410				dev_dbg(dev, "Skipping disabled component %pOF\n",
+   411					node);
+   412				continue;
+   413			}
+   414	
+ > 415			type = (enum mtk_ovl_adaptor_comp_type)of_id->data;
+   416			id = ovl_adaptor_comp_get_id(dev, node, type);
+   417			if (id < 0) {
+   418				dev_warn(dev, "Skipping unknown component %pOF\n",
+   419					 node);
+   420				continue;
+   421			}
+   422	
+   423			comp_pdev = of_find_device_by_node(node);
+   424			if (!comp_pdev)
+   425				return -EPROBE_DEFER;
+   426	
+   427			priv->ovl_adaptor_comp[id] = &comp_pdev->dev;
+   428	
+   429			drm_of_component_match_add(dev, match, compare_of, node);
+   430			dev_dbg(dev, "Adding component match for %pOF\n", node);
+   431		}
+   432	
+   433		if (!*match) {
+   434			dev_err(dev, "No match device for ovl_adaptor\n");
+   435			return -ENODEV;
+   436		}
+   437	
+   438		return 0;
+   439	}
+   440	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
