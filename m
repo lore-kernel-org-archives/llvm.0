@@ -1,99 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C18525F
-	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 10:54:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87892C433D2;
-	Fri, 24 Mar 2023 10:54:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679655247;
-	bh=05TRJlmt+n+Rfz7qihEXoMNgUCXEtNcYL32YthagoLk=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=ZdbMGXD2UULJcRdC1qoFKwkOtzO9RKWLMKHs725xtj9tNndRiEi44p+zwT8wrbwDo
-	 NHKyZ+8ybCye8FZr3sG37zSwGBbhA4RCAF6jdIEs0kWrXLD4KhQ8oRcr/n+8xHtByd
-	 G7H0+6phPKzTpebgXRik23ixC6/0z10+AhmHLDElSIWR3TGHpjKfKhDToPXG58HGWB
-	 ce3LWVy11a8jdY3uiBG0n8BzR5nh1QCAYt2SRwRV1beohunn//XetphFXcpOo23ErM
-	 oc5fJ+ATOkRWfOAIL0c827OB/A8E19Bk/LSpd99zsGqX5n8IypFCK7zNHJIOdWi/Mw
-	 J/QM20+MiDm+g==
-From: Kalle Valo <kvalo@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,  David Airlie <airlied@gmail.com>,  Daniel Vetter <daniel@ffwll.ch>,  dri-devel@lists.freedesktop.org,  linux-toolchains@vger.kernel.org,  llvm@lists.linux.dev
-Subject: Re: Linux 6.3-rc3
-References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
-	<20230320180501.GA598084@dev-arch.thelio-3990X>
-	<CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
-	<20230320185337.GA615556@dev-arch.thelio-3990X>
-	<87pm91uf9c.fsf@kernel.org>
-	<20230322163637.GA918620@dev-arch.thelio-3990X>
-Date: Fri, 24 Mar 2023 12:54:01 +0200
-In-Reply-To: <20230322163637.GA918620@dev-arch.thelio-3990X> (Nathan
-	Chancellor's message of "Wed, 22 Mar 2023 09:36:37 -0700")
-Message-ID: <87wn36ctdi.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20069525F;
+	Fri, 24 Mar 2023 11:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679657836; x=1711193836;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Da93ipLAbjMdB8xPzHB5Z8npwIdfZ+9GmGCXnO0te8M=;
+  b=gcwhpQw2ra7j/CNXhcTvCm7JDigJXSku3jMlfjkqu1jzt+Tamdd8teXI
+   UCvgqXEH1M2ouQYcFj6atePbFLNRDKs3sM1r3SiHmNETmkTo5RZwGkvNm
+   iedjBCV7pyzDY2oLAubGh0QhWsJAbUXJ2yaZU9OYzAjCjrg/PQrjXCY0r
+   sOvE6j185aXasHQ31lWdsmKC2IOg2Z2aSK7w9QhjtXyTVsTYv6mfJgKRW
+   RFqD3imiSoAbm7oN2qzBzMdMW1vQPhMVlG504yJFYVfWIN5V76+j5Ndhk
+   NtWRL+CjyqT/6Oi+NClsjjeTQVvv1qKpAM+tE+FxV3AmaPEFwBZKoz8TW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="320150512"
+X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
+   d="scan'208";a="320150512"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 04:37:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="713057607"
+X-IronPort-AV: E=Sophos;i="5.98,287,1673942400"; 
+   d="scan'208";a="713057607"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 24 Mar 2023 04:37:13 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pffjN-000FG0-08;
+	Fri, 24 Mar 2023 11:37:13 +0000
+Date: Fri, 24 Mar 2023 19:36:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Marangi <ansuelsmth@gmail.com>
+Subject: [lunn:v6.3-rc2-net-next-phy-leds 5/15] ld.lld: error: undefined
+ symbol: devm_mdiobus_alloc_size
+Message-ID: <202303241935.xRMa6mc6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Nathan Chancellor <nathan@kernel.org> writes:
+tree:   https://github.com/lunn/linux.git v6.3-rc2-net-next-phy-leds
+head:   0e205e6fad28ba805941ac8889c66a1607c4d505
+commit: ee27c28a24b23132532d52fb82b00add65dc29dc [5/15] net: phy: Add a binding for PHY LEDs
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230324/202303241935.xRMa6mc6-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/lunn/linux/commit/ee27c28a24b23132532d52fb82b00add65dc29dc
+        git remote add lunn https://github.com/lunn/linux.git
+        git fetch --no-tags lunn v6.3-rc2-net-next-phy-leds
+        git checkout ee27c28a24b23132532d52fb82b00add65dc29dc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> On Wed, Mar 22, 2023 at 02:44:47PM +0200, Kalle Valo wrote:
->> Nathan Chancellor <nathan@kernel.org> writes:
->> 
->> > Perhaps these would make doing allmodconfig builds with clang more
->> > frequently less painful for you?
->> >
->> > https://lore.kernel.org/llvm/20230319235619.GA18547@dev-arch.thelio-3990X/
->> 
->> Thank you, at least for me this is really helpful.
->
-> Really glad to hear! I hope this helps make testing and verifying
-> changes with clang and LLVM easier for developers and maintainers.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303241935.xRMa6mc6-lkp@intel.com/
 
-It really does. And I hope you are able to update these packages in
-future as well so that it would be easy to get the latest clang.
+All errors (new ones prefixed by >>):
 
->> I tried now clang for the first time but seeing a strange problem.
->> 
->> I prefer to define the compiler in GNUmakefile so it's easy to change
->> compilers and I don't need to remember the exact command line. So I have
->> this in the top level GNUmakefile (all the rest commented out):
->> 
->> LLVM=/opt/clang/llvm-16.0.0/bin/
->> 
->> If I run 'make oldconfig' it seems to use clang but after I run just
->> 'make' it seems to switch back to the host GCC compiler and ask for GCC
->> specific config questions again. Workaround for this seems to be adding
->> 'export LLVM' to GNUmakefile, after that also 'make' uses clang as
->> expected.
->
-> Interesting... I just tested with a basic GNUmakefile and everything
-> seems to work fine without an export. At the same time, the export
-> should not hurt anything, so as long as it works, that is what matters.
+>> ld.lld: error: undefined symbol: devm_mdiobus_alloc_size
+   >>> referenced by phy.h:458 (include/linux/phy.h:458)
+   >>>               drivers/net/ethernet/microchip/lan743x_main.o:(lan743x_pcidev_probe) in archive vmlinux.a
+   >>> referenced by phy.h:458 (include/linux/phy.h:458)
+   >>>               drivers/net/ethernet/ni/nixge.o:(nixge_probe) in archive vmlinux.a
 
-Sure, once I figured out the quirks I can workaround them. I was just
-hoping that other users would not have to go through the same hassle as
-I did :)
-
-> If you have any further issues, please do not hesitate to reach out!
-
-This is nitpicking but it would be nice if the tarball contents wouldn't
-conflict with each other. Now both llvm-16.0.0-aarch64.tar.gz and
-llvm-16.0.0-x86_64.tar extract to the same directory llvm-16.0.0 with
-same binary names. It would be much better if they would extract to
-llvm-16.0.0-aarch64 and llvm-16.0.0-x86_64, respectively.
-
-For example, Arnd's crosstool packages don't conflict with each other:
-
-https://mirrors.edge.kernel.org/pub/tools/crosstool/
-
-And maybe request a similar llvm directory under pub/tools to make it
-more official? :)
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PHYLIB
+   Depends on [m]: NETDEVICES [=y] && (LEDS_CLASS [=m] || LEDS_CLASS [=m]=n)
+   Selected by [y]:
+   - PHYLINK [=y] && NETDEVICES [=y]
+   - TIGON3 [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_BROADCOM [=y] && PCI [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
+   - LAN743X [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICROCHIP [=y] && PCI [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
+   - NI_XGE_MANAGEMENT_ENET [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_NI [=y] && HAS_IOMEM [=y] && HAS_DMA [=y]
+   - XILINX_EMACLITE [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_XILINX [=y] && HAS_IOMEM [=y]
+   Selected by [m]:
+   - ALTERA_TSE [=m] && NETDEVICES [=y] && ETHERNET [=y] && HAS_DMA [=y]
+   - DNET [=m] && NETDEVICES [=y] && ETHERNET [=y] && HAS_IOMEM [=y]
+   - B44 [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_BROADCOM [=y] && SSB_POSSIBLE [=y] && HAS_DMA [=y]
+   - KS8851_MLL [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICREL [=y] && HAS_IOMEM [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
+   - SMSC911X [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_SMSC [=y] && HAS_IOMEM [=y]
+   - SMSC9420 [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_SMSC [=y] && PCI [=y]
+   - XILINX_LL_TEMAC [=m] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_XILINX [=y] && HAS_IOMEM [=y]
+   - USB_NET_AX88179_178A [=m] && NETDEVICES [=y] && USB_NET_DRIVERS [=m] && USB_USBNET [=m]
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
