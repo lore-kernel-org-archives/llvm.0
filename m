@@ -1,48 +1,48 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F325A17DB;
-	Fri, 24 Mar 2023 02:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096B320F5;
+	Fri, 24 Mar 2023 05:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679626558; x=1711162558;
+  t=1679636406; x=1711172406;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DO6YsYCdF4dQEBnvdYw32rQ5TOcKg8m5rWccaAoqGo8=;
-  b=gXbhIWtDj8/lcR472+ZoDDHsa35TZsOVYR/XOBVgwrsK9pJWnYRvLMEp
-   hD9BVtVVBP2joXBXn1IgBVAW9wFi0V9IUkCFeXyYdEvBa5ITUmZy8w/aj
-   tHTZ5cx7b9BCUSCG3bwG22FGgT4+ujuWqeVmO6S985kpq/OCf19YkTBzv
-   45zF6wE0y25TMBrygofIhrnAhZnVeRyY/9be9v6q7Vpmj6o976pfvcrXv
-   g8MpdWOLMSHF+0ZCz2//G02y0m0Abrk5F3WTLera/Pe9zVMi8r4biOw/2
-   1i+FK+zpd2SCYo3/1w5P30Ydk+yRO8T5Kbf4dRttbuUIMMTfg+W0tEv0o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="328091404"
+  bh=lz4E1YV6Yw7Hz3q4Hij1kHmq1J+RPLt8Y3nDI4SGDMQ=;
+  b=hxixpqgFE6d4xPcn6Oe2OFoVWIGTARuSfvc+WvJqLWvBojXeph1G+RZL
+   k+HnF3pqORunNunyCEVYd34eTiBF4zlPXHZXXFGHFt0eLqtk62I+fS34M
+   PC98X4epCv0XWo4GJj3WEUTX7c9AfvZ2D5/3duNX7SOYjDsYL+AOqaUsY
+   +CMYOK3crKjfweWB49gD2bWc4UqE0Dk77H1MWbgNAA0Z7dfI6Ra6f5LrT
+   QRk/Ou8zFJOwfslE/D9U3KA9AmfL+04WN/pJEKj7Ut/D+xHwHeBZqeJ3s
+   NApdGf+oV8Mu4mP/8I44CioD0wplDs9EN1brbaZF13KlXMyn0U1uylE87
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="367439464"
 X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="328091404"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 19:55:57 -0700
+   d="scan'208";a="367439464"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 22:40:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="856714502"
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="676010886"
 X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="856714502"
+   d="scan'208";a="676010886"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Mar 2023 19:55:55 -0700
+  by orsmga007.jf.intel.com with ESMTP; 23 Mar 2023 22:40:01 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pfXas-000Euy-2D;
-	Fri, 24 Mar 2023 02:55:54 +0000
-Date: Fri, 24 Mar 2023 10:55:33 +0800
+	id 1pfa9g-000F1E-2P;
+	Fri, 24 Mar 2023 05:40:00 +0000
+Date: Fri, 24 Mar 2023 13:39:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Elliot Berman <quic_eberman@quicinc.com>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Sudeep Holla <sudeep.holla@arm.com>
+To: Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
+	vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
+	dan.j.williams@intel.com, dave.jiang@intel.com,
+	Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org,
+	rrichter@amd.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Elliot Berman <quic_eberman@quicinc.com>,
-	linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] mailbox: pcc: Use mbox_bind_client
-Message-ID: <202303241039.usKTcpEw-lkp@intel.com>
-References: <20230323191527.1472695-4-quic_eberman@quicinc.com>
+	linux-kernel@vger.kernel.org, bhelgaas@google.com
+Subject: Re: [PATCH v2 5/5] cxl/pci: Add RCH downstream port error logging
+Message-ID: <202303241305.7Xdy6342-lkp@intel.com>
+References: <20230323213808.398039-6-terry.bowman@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,99 +51,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323191527.1472695-4-quic_eberman@quicinc.com>
+In-Reply-To: <20230323213808.398039-6-terry.bowman@amd.com>
 
-Hi Elliot,
+Hi Terry,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on 6ccbe33a39523f6d62b22c5ee99c6695993c935e]
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus efi/next cxl/next linus/master v6.3-rc3 next-20230323]
+[cannot apply to cxl/pending]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Elliot-Berman/mailbox-Allow-direct-registration-to-a-channel/20230324-031813
-base:   6ccbe33a39523f6d62b22c5ee99c6695993c935e
-patch link:    https://lore.kernel.org/r/20230323191527.1472695-4-quic_eberman%40quicinc.com
-patch subject: [PATCH v2 3/3] mailbox: pcc: Use mbox_bind_client
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230324/202303241039.usKTcpEw-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230324-054044
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20230323213808.398039-6-terry.bowman%40amd.com
+patch subject: [PATCH v2 5/5] cxl/pci: Add RCH downstream port error logging
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230324/202303241305.7Xdy6342-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5db6edf9f393224193ab13e82d63e0d7616c74c9
+        # https://github.com/intel-lab-lkp/linux/commit/c40ca148e9cff1a1c32cd4c5c9b252bf0cf201b6
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Elliot-Berman/mailbox-Allow-direct-registration-to-a-channel/20230324-031813
-        git checkout 5db6edf9f393224193ab13e82d63e0d7616c74c9
+        git fetch --no-tags linux-review Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230324-054044
+        git checkout c40ca148e9cff1a1c32cd4c5c9b252bf0cf201b6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mailbox/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241039.usKTcpEw-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303241305.7Xdy6342-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/mailbox/pcc.c:285:17: warning: variable 'dev' set but not used [-Wunused-but-set-variable]
-           struct device *dev;
-                          ^
->> drivers/mailbox/pcc.c:355:5: warning: no previous prototype for function 'pcc_startup' [-Wmissing-prototypes]
-   int pcc_startup(struct mbox_chan *chan)
-       ^
-   drivers/mailbox/pcc.c:355:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int pcc_startup(struct mbox_chan *chan)
-   ^
-   static 
->> drivers/mailbox/pcc.c:378:6: warning: no previous prototype for function 'pcc_shutdown' [-Wmissing-prototypes]
-   void pcc_shutdown(struct mbox_chan *chan)
-        ^
-   drivers/mailbox/pcc.c:378:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void pcc_shutdown(struct mbox_chan *chan)
-   ^
-   static 
-   3 warnings generated.
+>> drivers/cxl/mem.c:51:31: error: no member named 'rcec' in 'struct pci_dev'
+           struct pci_dev *rcec = pdev->rcec;
+                                  ~~~~  ^
+>> drivers/cxl/mem.c:63:14: error: no member named 'aer_cap' in 'struct pci_dev'
+           aer = rcec->aer_cap;
+                 ~~~~  ^
+   2 errors generated.
 
 
-vim +/pcc_startup +355 drivers/mailbox/pcc.c
+vim +51 drivers/cxl/mem.c
 
-   347	
-   348	/**
-   349	 * pcc_startup - Called from Mailbox Controller code. Used here
-   350	 *		to request the interrupt.
-   351	 * @chan: Pointer to Mailbox channel to startup.
-   352	 *
-   353	 * Return: Err if something failed else 0 for success.
-   354	 */
- > 355	int pcc_startup(struct mbox_chan *chan)
-   356	{
-   357		struct pcc_chan_info *pchan = chan->con_priv;
-   358		int rc;
-   359	
-   360		if (pchan->plat_irq > 0) {
-   361			rc = devm_request_irq(chan->mbox->dev, pchan->plat_irq, pcc_mbox_irq, 0,
-   362					      MBOX_IRQ_NAME, chan);
-   363			if (unlikely(rc)) {
-   364				dev_err(chan->mbox->dev, "failed to register PCC interrupt %d\n",
-   365					pchan->plat_irq);
-   366				return rc;
-   367			}
-   368		}
-   369	
-   370		return 0;
-   371	}
-   372	
-   373	/**
-   374	 * pcc_shutdown - Called from Mailbox Controller code. Used here
-   375	 *		to free the interrupt.
-   376	 * @chan: Pointer to Mailbox channel to shutdown.
-   377	 */
- > 378	void pcc_shutdown(struct mbox_chan *chan)
-   379	{
-   380		struct pcc_chan_info *pchan = chan->con_priv;
-   381	
-   382		if (pchan->plat_irq > 0)
-   383			devm_free_irq(chan->mbox->dev, pchan->plat_irq, chan);
-   384	}
-   385	
+    48	
+    49	static int rcec_enable_aer_ints(struct pci_dev *pdev)
+    50	{
+  > 51		struct pci_dev *rcec = pdev->rcec;
+    52		int aer, rc;
+    53		u32 mask;
+    54	
+    55		if (!rcec)
+    56			return -ENODEV;
+    57	
+    58		/*
+    59		 * Internal errors are masked by default, unmask RCEC's here
+    60		 * PCI6.0 7.8.4.3 Uncorrectable Error Mask Register (Offset 08h)
+    61		 * PCI6.0 7.8.4.6 Correctable Error Mask Register (Offset 14h)
+    62		 */
+  > 63		aer = rcec->aer_cap;
+    64		rc = pci_read_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, &mask);
+    65		if (rc)
+    66			return rc;
+    67		mask &= ~PCI_ERR_UNC_INTN;
+    68		rc = pci_write_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, mask);
+    69		if (rc)
+    70			return rc;
+    71	
+    72		rc = pci_read_config_dword(rcec, aer + PCI_ERR_COR_MASK, &mask);
+    73		if (rc)
+    74			return rc;
+    75		mask &= ~PCI_ERR_COR_INTERNAL;
+    76		rc = pci_write_config_dword(rcec, aer + PCI_ERR_COR_MASK, mask);
+    77	
+    78		return rc;
+    79	}
+    80	
 
 -- 
 0-DAY CI Kernel Test Service
