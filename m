@@ -1,138 +1,85 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096B320F5;
-	Fri, 24 Mar 2023 05:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679636406; x=1711172406;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lz4E1YV6Yw7Hz3q4Hij1kHmq1J+RPLt8Y3nDI4SGDMQ=;
-  b=hxixpqgFE6d4xPcn6Oe2OFoVWIGTARuSfvc+WvJqLWvBojXeph1G+RZL
-   k+HnF3pqORunNunyCEVYd34eTiBF4zlPXHZXXFGHFt0eLqtk62I+fS34M
-   PC98X4epCv0XWo4GJj3WEUTX7c9AfvZ2D5/3duNX7SOYjDsYL+AOqaUsY
-   +CMYOK3crKjfweWB49gD2bWc4UqE0Dk77H1MWbgNAA0Z7dfI6Ra6f5LrT
-   QRk/Ou8zFJOwfslE/D9U3KA9AmfL+04WN/pJEKj7Ut/D+xHwHeBZqeJ3s
-   NApdGf+oV8Mu4mP/8I44CioD0wplDs9EN1brbaZF13KlXMyn0U1uylE87
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="367439464"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="367439464"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 22:40:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="676010886"
-X-IronPort-AV: E=Sophos;i="5.98,286,1673942400"; 
-   d="scan'208";a="676010886"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 23 Mar 2023 22:40:01 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfa9g-000F1E-2P;
-	Fri, 24 Mar 2023 05:40:00 +0000
-Date: Fri, 24 Mar 2023 13:39:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
-	vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
-	dan.j.williams@intel.com, dave.jiang@intel.com,
-	Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org,
-	rrichter@amd.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, bhelgaas@google.com
-Subject: Re: [PATCH v2 5/5] cxl/pci: Add RCH downstream port error logging
-Message-ID: <202303241305.7Xdy6342-lkp@intel.com>
-References: <20230323213808.398039-6-terry.bowman@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F637E
+	for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 06:40:02 +0000 (UTC)
+Date: Fri, 24 Mar 2023 06:39:40 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1679639994; x=1679899194;
+	bh=t8jpMN3wfbAQuj49A582R+IEs96xm9DZzn+g2KuauyU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=BYXA0/5YuV1Mln4WmAEtlUIS+6rncvW94XSn1d6MCU2fXseNVD8VqjtVHPirutP+R
+	 h2thlHKG9Djbq+BcAUAiex4HO9tNaovz4/4NptN1JDkvnEdgm47uJskbXM5KxCxxLS
+	 AR5n+/9NfpE2EQJ3HEJJRzg5FVv/chmc6vSm2Y2hlelkwu/6Xae3tmCF8v3a9nfyqD
+	 h5ICqSzQI6y/lCVxW864auAHwt0iPAtMmatSjYwotsn0Oe6TUT7XQ1yL0YUyLpQLzB
+	 cUvl+tXxVNEEQK1VLZYZ4Vy15MxamSda9amGr7vOWHYdWOGDgsVeP1uFyZl4qg38FB
+	 AY2mvMsVqwKjg==
+To: Tom Rix <trix@redhat.com>
+From: Juerg Haefliger <juergh@proton.me>
+Cc: jdelvare@suse.com, linux@roeck-us.net, nathan@kernel.org, ndesaulniers@google.com, linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] hwmon: remove unused superio_outb function
+Message-ID: <gqQsy2yvABurRT9U-4tOiaWH2TVeWQYwyGv1404EC-DjGvEaetDVDaumJCJUrmHirk1-npBa4cVtU-19HfGJSvpF28Qmd0Qw4ANatYC-ZMo=@proton.me>
+In-Reply-To: <20230323211535.2637939-1-trix@redhat.com>
+References: <20230323211535.2637939-1-trix@redhat.com>
+Feedback-ID: 45149698:user:proton
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323213808.398039-6-terry.bowman@amd.com>
-
-Hi Terry,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus efi/next cxl/next linus/master v6.3-rc3 next-20230323]
-[cannot apply to cxl/pending]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230324-054044
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20230323213808.398039-6-terry.bowman%40amd.com
-patch subject: [PATCH v2 5/5] cxl/pci: Add RCH downstream port error logging
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230324/202303241305.7Xdy6342-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c40ca148e9cff1a1c32cd4c5c9b252bf0cf201b6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Terry-Bowman/cxl-pci-Add-RCH-downstream-port-AER-and-RAS-register-discovery/20230324-054044
-        git checkout c40ca148e9cff1a1c32cd4c5c9b252bf0cf201b6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303241305.7Xdy6342-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/cxl/mem.c:51:31: error: no member named 'rcec' in 'struct pci_dev'
-           struct pci_dev *rcec = pdev->rcec;
-                                  ~~~~  ^
->> drivers/cxl/mem.c:63:14: error: no member named 'aer_cap' in 'struct pci_dev'
-           aer = rcec->aer_cap;
-                 ~~~~  ^
-   2 errors generated.
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +51 drivers/cxl/mem.c
 
-    48	
-    49	static int rcec_enable_aer_ints(struct pci_dev *pdev)
-    50	{
-  > 51		struct pci_dev *rcec = pdev->rcec;
-    52		int aer, rc;
-    53		u32 mask;
-    54	
-    55		if (!rcec)
-    56			return -ENODEV;
-    57	
-    58		/*
-    59		 * Internal errors are masked by default, unmask RCEC's here
-    60		 * PCI6.0 7.8.4.3 Uncorrectable Error Mask Register (Offset 08h)
-    61		 * PCI6.0 7.8.4.6 Correctable Error Mask Register (Offset 14h)
-    62		 */
-  > 63		aer = rcec->aer_cap;
-    64		rc = pci_read_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, &mask);
-    65		if (rc)
-    66			return rc;
-    67		mask &= ~PCI_ERR_UNC_INTN;
-    68		rc = pci_write_config_dword(rcec, aer + PCI_ERR_UNCOR_MASK, mask);
-    69		if (rc)
-    70			return rc;
-    71	
-    72		rc = pci_read_config_dword(rcec, aer + PCI_ERR_COR_MASK, &mask);
-    73		if (rc)
-    74			return rc;
-    75		mask &= ~PCI_ERR_COR_INTERNAL;
-    76		rc = pci_write_config_dword(rcec, aer + PCI_ERR_COR_MASK, mask);
-    77	
-    78		return rc;
-    79	}
-    80	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+
+------- Original Message -------
+On Thursday, March 23rd, 2023 at 22:15, Tom Rix <trix@redhat.com> wrote:
+
+
+>=20
+>=20
+> clang with W=3D1 reports
+> drivers/hwmon/vt1211.c:198:20: error: unused function
+> 'superio_outb' [-Werror,-Wunused-function]
+> static inline void superio_outb(int sio_cip, int reg, int val)
+> ^
+> This function is not used so remove it.
+>=20
+> Signed-off-by: Tom Rix trix@redhat.com
+
+Looks good.
+
+Acked-by: Juerg Haefliger <juergh@proton.me>
+
+...Juerg
+
+=20
+> ---
+> drivers/hwmon/vt1211.c | 6 ------
+> 1 file changed, 6 deletions(-)
+>=20
+> diff --git a/drivers/hwmon/vt1211.c b/drivers/hwmon/vt1211.c
+> index 4a5e911d26eb..fcd4be7a5a85 100644
+> --- a/drivers/hwmon/vt1211.c
+> +++ b/drivers/hwmon/vt1211.c
+> @@ -195,12 +195,6 @@ struct vt1211_data {
+> /* VT1211 logical device numbers /
+> #define SIO_VT1211_LDN_HWMON 0x0b / HW monitor */
+>=20
+> -static inline void superio_outb(int sio_cip, int reg, int val)
+> -{
+> - outb(reg, sio_cip);
+> - outb(val, sio_cip + 1);
+> -}
+> -
+> static inline int superio_inb(int sio_cip, int reg)
+> {
+> outb(reg, sio_cip);
+> --
+> 2.27.0
