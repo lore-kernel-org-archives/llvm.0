@@ -1,128 +1,178 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCD728EB
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 14:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679753165;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1lbJBPwhH6Cq9r2UgzRHc6kwTuKIZL2sdzIekbj7z0w=;
-	b=WH/z0kTWukUuPIufn7cvdDKAW/wgu505bzuzDrZjUg9cbZlqg88KVElMjFoPgebgAkhqfh
-	unfQFV4clqsFh41Hs3AiVKyoH5kz5Xh1CaD4SKbYaZzcaO+hfIoyVnOi+CISA69+GQdgFi
-	kqZwemixYLm5vVswO0YFyfPpvBYgZBw=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-281--8KcxxphMqiyWDBI3z00Yw-1; Sat, 25 Mar 2023 10:06:04 -0400
-X-MC-Unique: -8KcxxphMqiyWDBI3z00Yw-1
-Received: by mail-qk1-f199.google.com with SMTP id c80-20020ae9ed53000000b007468c560e1bso2179151qkg.2
-        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 07:06:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679753163;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1lbJBPwhH6Cq9r2UgzRHc6kwTuKIZL2sdzIekbj7z0w=;
-        b=QxhsyZk08EpNEQsZqehjtKAUCPGUOjLwYL1+Q26s59k9NujnlBmQm3eKX96YtnNU3z
-         ZAuf3TZF7JdZf4yvWT7uq77s4EELEpuQo6io6tBVdo2Q2OaBQ9v21yv+FPGaVy+S3fEi
-         9YHbOwqOVeIoxZTbMZy0jDbG0uV0TS4yvoMTuYD8fHtzzJr+TTuXmvIlGQILk2rpqgWV
-         EoZEjjRxxd3ZPe8Ni2q7cLE0biRxXezeMrpDv1wEvSEmxBDTxxmokC7MuU4MzO6n/Lqt
-         c2c/hR+krlMk0v64sQJT/8jcb0HocKixQ0MCzT89h5LYM/cnT178wIC6J0WuYzfImZUE
-         7o+g==
-X-Gm-Message-State: AAQBX9dUZdmSEoA2LQoVGWdafH2a+syqQG+Aj+gC7qMldXkU8AXkAEx9
-	BV5LVy076Dvm0uxgfvRv0WfWroKYjSET8yPpotteTEEs7/u2qvmlNz650t8Y0vsxtVZNUP4BKdT
-	fcCn95YiH9jtXCg==
-X-Received: by 2002:a05:6214:cc1:b0:5d9:cb0b:3de4 with SMTP id 1-20020a0562140cc100b005d9cb0b3de4mr12296848qvx.45.1679753163303;
-        Sat, 25 Mar 2023 07:06:03 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z/EL6Tkp3U6JqLt4Li2rJy95cscsYC+qqgT2enwwScQiVROP52ZEJU7J0WILTQqrJ+SkA3kQ==
-X-Received: by 2002:a05:6214:cc1:b0:5d9:cb0b:3de4 with SMTP id 1-20020a0562140cc100b005d9cb0b3de4mr12296776qvx.45.1679753162854;
-        Sat, 25 Mar 2023 07:06:02 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id oj9-20020a056214440900b005dd8b9345bbsm1478977qvb.83.2023.03.25.07.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 07:06:02 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: selvin.xavier@broadcom.com,
-	jgg@ziepe.ca,
-	leon@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] RDMA/bnxt_re: remove unused num_srqne_processed and num_cqne_processed variables
-Date: Sat, 25 Mar 2023 10:05:59 -0400
-Message-Id: <20230325140559.1336056-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B6429A5;
+	Sat, 25 Mar 2023 14:24:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679754248; x=1711290248;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fWnwKgiACzUjmHZD/VpEGrkRZoO32ZcvirvyD887QJ4=;
+  b=eiDly+mnyUXbaa95wAXbwqWCSYJzNKjFeAm/i+dSuWNDdrv+KeRO2pae
+   GpseaoV3Yqqs2QJcVnvvZJyqfJ3GOiPXsal9o2zAioACv5L2Xzqv61ojg
+   wCXCEMPwW6cBwzZAUHoh6ZwGemFgxuYfalYm7tSaaTHxj/+DHsz73zSrG
+   TOfgMlK29jNvUsfR7ePClZsZggxfZ/mwvHKMZMhMgGJNjFBn1/CKnC10A
+   c2a0E6EPZueEJoh3N4suHCmq8BLE77eRtlAkmf7DGu7h/I8J5dD3JFdgZ
+   VTg3obOeuxgOzbQZr/H5UKKLBZekbKsUy+xVC3da08PTNi2loV4uQIbjd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="342372212"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="342372212"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 07:24:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="793780441"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="793780441"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Mar 2023 07:24:03 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pg4oN-000GJb-16;
+	Sat, 25 Mar 2023 14:24:03 +0000
+Date: Sat, 25 Mar 2023 22:23:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Sage <eric_sage@apple.com>, netfilter-devel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, fw@strlen.de,
+	kadlec@netfilter.org, pablo@netfilter.org,
+	Eric Sage <eric_sage@apple.com>
+Subject: Re: [PATCH v3] netfilter: nfnetlink_queue: enable classid socket
+ info retrieval
+Message-ID: <202303252207.P9ydXMRy-lkp@intel.com>
+References: <20230323184438.42218-1-eric_sage@apple.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323184438.42218-1-eric_sage@apple.com>
 
-clang with W=1 reports
-drivers/infiniband/hw/bnxt_re/qplib_fp.c:303:6: error: variable
-  'num_srqne_processed' set but not used [-Werror,-Wunused-but-set-variable]
-        int num_srqne_processed = 0;
-            ^
-drivers/infiniband/hw/bnxt_re/qplib_fp.c:304:6: error: variable
-  'num_cqne_processed' set but not used [-Werror,-Wunused-but-set-variable]
-        int num_cqne_processed = 0;
-            ^
-These variables are not used so remove them.
+Hi Eric,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/infiniband/hw/bnxt_re/qplib_fp.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/infiniband/hw/bnxt_re/qplib_fp.c b/drivers/infiniband/hw/bnxt_re/qplib_fp.c
-index 96e581ced50e..0ba14087dfcd 100644
---- a/drivers/infiniband/hw/bnxt_re/qplib_fp.c
-+++ b/drivers/infiniband/hw/bnxt_re/qplib_fp.c
-@@ -300,8 +300,6 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
- {
- 	struct bnxt_qplib_nq *nq = from_tasklet(nq, t, nq_tasklet);
- 	struct bnxt_qplib_hwq *hwq = &nq->hwq;
--	int num_srqne_processed = 0;
--	int num_cqne_processed = 0;
- 	struct bnxt_qplib_cq *cq;
- 	int budget = nq->budget;
- 	u32 sw_cons, raw_cons;
-@@ -340,9 +338,7 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
- 					    DBC_DBC_TYPE_CQ_ARMENA);
- 			spin_lock_bh(&cq->compl_lock);
- 			atomic_set(&cq->arm_state, 0);
--			if (!nq->cqn_handler(nq, (cq)))
--				num_cqne_processed++;
--			else
-+			if (nq->cqn_handler(nq, (cq)))
- 				dev_warn(&nq->pdev->dev,
- 					 "cqn - type 0x%x not handled\n", type);
- 			cq->cnq_events++;
-@@ -361,11 +357,9 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
- 			srq = (struct bnxt_qplib_srq *)q_handle;
- 			bnxt_qplib_armen_db(&srq->dbinfo,
- 					    DBC_DBC_TYPE_SRQ_ARMENA);
--			if (!nq->srqn_handler(nq,
--					      (struct bnxt_qplib_srq *)q_handle,
--					      nqsrqe->event))
--				num_srqne_processed++;
--			else
-+			if (nq->srqn_handler(nq,
-+					     (struct bnxt_qplib_srq *)q_handle,
-+					     nqsrqe->event))
- 				dev_warn(&nq->pdev->dev,
- 					 "SRQ event 0x%x not handled\n",
- 					 nqsrqe->event);
+[auto build test WARNING on horms-ipvs/master]
+[also build test WARNING on linus/master v6.3-rc3 next-20230324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Sage/netfilter-nfnetlink_queue-enable-classid-socket-info-retrieval/20230324-034613
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
+patch link:    https://lore.kernel.org/r/20230323184438.42218-1-eric_sage%40apple.com
+patch subject: [PATCH v3] netfilter: nfnetlink_queue: enable classid socket info retrieval
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230325/202303252207.P9ydXMRy-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5337cbc118f664da3b9316c76695fdd28eaeeb65
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Eric-Sage/netfilter-nfnetlink_queue-enable-classid-socket-info-retrieval/20230324-034613
+        git checkout 5337cbc118f664da3b9316c76695fdd28eaeeb65
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/netfilter/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303252207.P9ydXMRy-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/netfilter/nfnetlink_queue.c:425:3: warning: expression result unused [-Wunused-value]
+                   + nla_total_size(sizeof(u_int32_t));    /* classid */
+                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +425 net/netfilter/nfnetlink_queue.c
+
+   387	
+   388	static struct sk_buff *
+   389	nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
+   390				   struct nf_queue_entry *entry,
+   391				   __be32 **packet_id_ptr)
+   392	{
+   393		size_t size;
+   394		size_t data_len = 0, cap_len = 0;
+   395		unsigned int hlen = 0;
+   396		struct sk_buff *skb;
+   397		struct nlattr *nla;
+   398		struct nfqnl_msg_packet_hdr *pmsg;
+   399		struct nlmsghdr *nlh;
+   400		struct sk_buff *entskb = entry->skb;
+   401		struct net_device *indev;
+   402		struct net_device *outdev;
+   403		struct nf_conn *ct = NULL;
+   404		enum ip_conntrack_info ctinfo = 0;
+   405		const struct nfnl_ct_hook *nfnl_ct;
+   406		bool csum_verify;
+   407		char *secdata = NULL;
+   408		u32 seclen = 0;
+   409		ktime_t tstamp;
+   410	
+   411		size = nlmsg_total_size(sizeof(struct nfgenmsg))
+   412			+ nla_total_size(sizeof(struct nfqnl_msg_packet_hdr))
+   413			+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+   414			+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+   415	#if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+   416			+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+   417			+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+   418	#endif
+   419			+ nla_total_size(sizeof(u_int32_t))	/* mark */
+   420			+ nla_total_size(sizeof(u_int32_t))	/* priority */
+   421			+ nla_total_size(sizeof(struct nfqnl_msg_packet_hw))
+   422			+ nla_total_size(sizeof(u_int32_t))	/* skbinfo */
+   423			+ nla_total_size(sizeof(u_int32_t));	/* cap_len */
+   424	#if IS_ENABLED(CONFIG_CGROUP_NET_CLASSID)
+ > 425			+ nla_total_size(sizeof(u_int32_t));	/* classid */
+   426	#endif
+   427	
+   428		tstamp = skb_tstamp_cond(entskb, false);
+   429		if (tstamp)
+   430			size += nla_total_size(sizeof(struct nfqnl_msg_packet_timestamp));
+   431	
+   432		size += nfqnl_get_bridge_size(entry);
+   433	
+   434		if (entry->state.hook <= NF_INET_FORWARD ||
+   435		   (entry->state.hook == NF_INET_POST_ROUTING && entskb->sk == NULL))
+   436			csum_verify = !skb_csum_unnecessary(entskb);
+   437		else
+   438			csum_verify = false;
+   439	
+   440		outdev = entry->state.out;
+   441	
+   442		switch ((enum nfqnl_config_mode)READ_ONCE(queue->copy_mode)) {
+   443		case NFQNL_COPY_META:
+   444		case NFQNL_COPY_NONE:
+   445			break;
+   446	
+   447		case NFQNL_COPY_PACKET:
+   448			if (!(queue->flags & NFQA_CFG_F_GSO) &&
+   449			    entskb->ip_summed == CHECKSUM_PARTIAL &&
+   450			    skb_checksum_help(entskb))
+   451				return NULL;
+   452	
+   453			data_len = READ_ONCE(queue->copy_range);
+   454			if (data_len > entskb->len)
+   455				data_len = entskb->len;
+   456	
+   457			hlen = skb_zerocopy_headlen(entskb);
+   458			hlen = min_t(unsigned int, hlen, data_len);
+   459			size += sizeof(struct nlattr) + hlen;
+   460			cap_len = entskb->len;
+   461			break;
+   462		}
+   463	
+   464		nfnl_ct = rcu_dereference(nfnl_ct_hook);
+   465	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
