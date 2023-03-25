@@ -1,46 +1,43 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B6429A5;
-	Sat, 25 Mar 2023 14:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E533B28E2;
+	Sat, 25 Mar 2023 15:15:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679754248; x=1711290248;
+  t=1679757306; x=1711293306;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fWnwKgiACzUjmHZD/VpEGrkRZoO32ZcvirvyD887QJ4=;
-  b=eiDly+mnyUXbaa95wAXbwqWCSYJzNKjFeAm/i+dSuWNDdrv+KeRO2pae
-   GpseaoV3Yqqs2QJcVnvvZJyqfJ3GOiPXsal9o2zAioACv5L2Xzqv61ojg
-   wCXCEMPwW6cBwzZAUHoh6ZwGemFgxuYfalYm7tSaaTHxj/+DHsz73zSrG
-   TOfgMlK29jNvUsfR7ePClZsZggxfZ/mwvHKMZMhMgGJNjFBn1/CKnC10A
-   c2a0E6EPZueEJoh3N4suHCmq8BLE77eRtlAkmf7DGu7h/I8J5dD3JFdgZ
-   VTg3obOeuxgOzbQZr/H5UKKLBZekbKsUy+xVC3da08PTNi2loV4uQIbjd
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="342372212"
+  bh=BrbbmeiVzAUMWkCR5zgPhZBiqTZU/l3gDHn2ink1uEw=;
+  b=jGm7SGElRd9jCOvcjKD37MCnBVu+FTpiM/MlSN92bS92uLQA5nfdoFyS
+   2WBzaPUZ7jU+469Ql8YtroVNoT14sGetyncw2PHjjVO8vUrMX3nUieHhF
+   /BLzI3GsEwjDRK4EjCOrYmK0M6czJRiC8mbT1nM6++NkOESBfOqxiavXT
+   unJPXlR88hRnfJANwSZW7hRSNU/sQKRWPJJpQ5v+gT6GIpSgVyaOfxhVk
+   X3l4UtTx5h+lDcUbhytnysMyXOcu5vL1NivWoGnUsrF1EC4yvWr2ByHAq
+   l4vFwNYwybptT3Ub3ow0BiHO4pc+qz12jERCLQazCrcHuJjVDXSGFaiZw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="323867020"
 X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="342372212"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 07:24:06 -0700
+   d="scan'208";a="323867020"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 08:15:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="793780441"
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="807002403"
 X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="793780441"
+   d="scan'208";a="807002403"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 25 Mar 2023 07:24:03 -0700
+  by orsmga004.jf.intel.com with ESMTP; 25 Mar 2023 08:15:05 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pg4oN-000GJb-16;
-	Sat, 25 Mar 2023 14:24:03 +0000
-Date: Sat, 25 Mar 2023 22:23:28 +0800
+	id 1pg5bk-000GL5-1l;
+	Sat, 25 Mar 2023 15:15:04 +0000
+Date: Sat, 25 Mar 2023 23:14:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Sage <eric_sage@apple.com>, netfilter-devel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, fw@strlen.de,
-	kadlec@netfilter.org, pablo@netfilter.org,
-	Eric Sage <eric_sage@apple.com>
-Subject: Re: [PATCH v3] netfilter: nfnetlink_queue: enable classid socket
- info retrieval
-Message-ID: <202303252207.P9ydXMRy-lkp@intel.com>
-References: <20230323184438.42218-1-eric_sage@apple.com>
+To: David Gow <davidgow@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 2/2] kunit: Add APIs for managing devices
+Message-ID: <202303252216.4ChgDLYh-lkp@intel.com>
+References: <20230325043104.3761770-3-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,129 +46,99 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323184438.42218-1-eric_sage@apple.com>
+In-Reply-To: <20230325043104.3761770-3-davidgow@google.com>
 
-Hi Eric,
+Hi David,
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on horms-ipvs/master]
-[also build test WARNING on linus/master v6.3-rc3 next-20230324]
+[FYI, it's a private test report for your RFC patch.]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc3]
+[cannot apply to next-20230324]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Sage/netfilter-nfnetlink_queue-enable-classid-socket-info-retrieval/20230324-034613
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git master
-patch link:    https://lore.kernel.org/r/20230323184438.42218-1-eric_sage%40apple.com
-patch subject: [PATCH v3] netfilter: nfnetlink_queue: enable classid socket info retrieval
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230325/202303252207.P9ydXMRy-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/kunit-resource-Add-kunit_defer-functionality/20230325-123304
+patch link:    https://lore.kernel.org/r/20230325043104.3761770-3-davidgow%40google.com
+patch subject: [RFC PATCH 2/2] kunit: Add APIs for managing devices
+config: hexagon-randconfig-r041-20230322 (https://download.01.org/0day-ci/archive/20230325/202303252216.4ChgDLYh-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5337cbc118f664da3b9316c76695fdd28eaeeb65
+        # https://github.com/intel-lab-lkp/linux/commit/489de1f44af455844bbc158f03f5940c2707992d
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eric-Sage/netfilter-nfnetlink_queue-enable-classid-socket-info-retrieval/20230324-034613
-        git checkout 5337cbc118f664da3b9316c76695fdd28eaeeb65
+        git fetch --no-tags linux-review David-Gow/kunit-resource-Add-kunit_defer-functionality/20230325-123304
+        git checkout 489de1f44af455844bbc158f03f5940c2707992d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/netfilter/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/kunit/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303252207.P9ydXMRy-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303252216.4ChgDLYh-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> net/netfilter/nfnetlink_queue.c:425:3: warning: expression result unused [-Wunused-value]
-                   + nla_total_size(sizeof(u_int32_t));    /* classid */
-                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> lib/kunit/device.c:57:20: warning: cast from 'void (*)(struct device *)' to 'kunit_defer_function_t' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+           kunit_defer(test, (kunit_defer_function_t)device_unregister, &kunit_dev->dev, GFP_KERNEL);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> lib/kunit/device.c:32:16: warning: no previous prototype for function 'kunit_device_register' [-Wmissing-prototypes]
+   struct device *kunit_device_register(struct kunit *test, const char *name)
+                  ^
+   lib/kunit/device.c:32:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct device *kunit_device_register(struct kunit *test, const char *name)
+   ^
+   static 
+   lib/kunit/device.c:65:28: warning: cast from 'void (*)(struct device *)' to 'kunit_defer_function_t' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+           kunit_defer_trigger(test, (kunit_defer_function_t)device_unregister, dev);
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> lib/kunit/device.c:63:6: warning: no previous prototype for function 'kunit_device_unregister' [-Wmissing-prototypes]
+   void kunit_device_unregister(struct kunit *test, struct device *dev)
+        ^
+   lib/kunit/device.c:63:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void kunit_device_unregister(struct kunit *test, struct device *dev)
+   ^
+   static 
+   4 warnings generated.
 
 
-vim +425 net/netfilter/nfnetlink_queue.c
+vim +57 lib/kunit/device.c
 
-   387	
-   388	static struct sk_buff *
-   389	nfqnl_build_packet_message(struct net *net, struct nfqnl_instance *queue,
-   390				   struct nf_queue_entry *entry,
-   391				   __be32 **packet_id_ptr)
-   392	{
-   393		size_t size;
-   394		size_t data_len = 0, cap_len = 0;
-   395		unsigned int hlen = 0;
-   396		struct sk_buff *skb;
-   397		struct nlattr *nla;
-   398		struct nfqnl_msg_packet_hdr *pmsg;
-   399		struct nlmsghdr *nlh;
-   400		struct sk_buff *entskb = entry->skb;
-   401		struct net_device *indev;
-   402		struct net_device *outdev;
-   403		struct nf_conn *ct = NULL;
-   404		enum ip_conntrack_info ctinfo = 0;
-   405		const struct nfnl_ct_hook *nfnl_ct;
-   406		bool csum_verify;
-   407		char *secdata = NULL;
-   408		u32 seclen = 0;
-   409		ktime_t tstamp;
-   410	
-   411		size = nlmsg_total_size(sizeof(struct nfgenmsg))
-   412			+ nla_total_size(sizeof(struct nfqnl_msg_packet_hdr))
-   413			+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
-   414			+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
-   415	#if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
-   416			+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
-   417			+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
-   418	#endif
-   419			+ nla_total_size(sizeof(u_int32_t))	/* mark */
-   420			+ nla_total_size(sizeof(u_int32_t))	/* priority */
-   421			+ nla_total_size(sizeof(struct nfqnl_msg_packet_hw))
-   422			+ nla_total_size(sizeof(u_int32_t))	/* skbinfo */
-   423			+ nla_total_size(sizeof(u_int32_t));	/* cap_len */
-   424	#if IS_ENABLED(CONFIG_CGROUP_NET_CLASSID)
- > 425			+ nla_total_size(sizeof(u_int32_t));	/* classid */
-   426	#endif
-   427	
-   428		tstamp = skb_tstamp_cond(entskb, false);
-   429		if (tstamp)
-   430			size += nla_total_size(sizeof(struct nfqnl_msg_packet_timestamp));
-   431	
-   432		size += nfqnl_get_bridge_size(entry);
-   433	
-   434		if (entry->state.hook <= NF_INET_FORWARD ||
-   435		   (entry->state.hook == NF_INET_POST_ROUTING && entskb->sk == NULL))
-   436			csum_verify = !skb_csum_unnecessary(entskb);
-   437		else
-   438			csum_verify = false;
-   439	
-   440		outdev = entry->state.out;
-   441	
-   442		switch ((enum nfqnl_config_mode)READ_ONCE(queue->copy_mode)) {
-   443		case NFQNL_COPY_META:
-   444		case NFQNL_COPY_NONE:
-   445			break;
-   446	
-   447		case NFQNL_COPY_PACKET:
-   448			if (!(queue->flags & NFQA_CFG_F_GSO) &&
-   449			    entskb->ip_summed == CHECKSUM_PARTIAL &&
-   450			    skb_checksum_help(entskb))
-   451				return NULL;
-   452	
-   453			data_len = READ_ONCE(queue->copy_range);
-   454			if (data_len > entskb->len)
-   455				data_len = entskb->len;
-   456	
-   457			hlen = skb_zerocopy_headlen(entskb);
-   458			hlen = min_t(unsigned int, hlen, data_len);
-   459			size += sizeof(struct nlattr) + hlen;
-   460			cap_len = entskb->len;
-   461			break;
-   462		}
-   463	
-   464		nfnl_ct = rcu_dereference(nfnl_ct_hook);
-   465	
+    31	
+  > 32	struct device *kunit_device_register(struct kunit *test, const char *name)
+    33	{
+    34		struct kunit_device *kunit_dev;
+    35		int err = -ENOMEM;
+    36	
+    37		kunit_dev = kzalloc(sizeof(struct kunit_device), GFP_KERNEL);
+    38		if (!kunit_dev)
+    39			return ERR_PTR(err);
+    40	
+    41		kunit_dev->owner = test;
+    42	
+    43		err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
+    44		if (err) {
+    45			kfree(kunit_dev);
+    46			return ERR_PTR(err);
+    47		}
+    48	
+    49		kunit_dev->dev.release = kunit_device_release;
+    50	
+    51		err = device_register(&kunit_dev->dev);
+    52		if (err) {
+    53			put_device(&kunit_dev->dev);
+    54			return ERR_PTR(err);
+    55		}
+    56	
+  > 57		kunit_defer(test, (kunit_defer_function_t)device_unregister, &kunit_dev->dev, GFP_KERNEL);
+    58	
+    59		return &kunit_dev->dev;
+    60	}
+    61	EXPORT_SYMBOL_GPL(kunit_device_register);
+    62	
+  > 63	void kunit_device_unregister(struct kunit *test, struct device *dev)
 
 -- 
 0-DAY CI Kernel Test Service
