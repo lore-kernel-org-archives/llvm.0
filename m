@@ -1,119 +1,227 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2131.outbound.protection.outlook.com [40.107.243.131])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FF12F2A
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 16:06:01 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZmPMurnMl5+1Ze+tbOLbgSvPiUK8mOODn1fNT0gtQCKxi7HD+hK72A7HFwVEHr0Z5mqQjQuh75DnbBiYLTM3reRch5HBQOSvbK6Dcwr3om1aTYjLSmMTY4mh1R+Efl0TFXifbC94CytVTCllSBZSs3ycZetGhETgIvCbVcpXvheaXAOBG/o1XiO4eZBpEyYuzXuz1wOjcmktkTIzPUZnHH7fRKqJ5LA4ljl8bbiD95UbucZhr4ljO4L9u9aZzTJ0ztEEvaod/dVc9J8JJUUIzsu8PkCTlKZIsT//JZ7f5aTimraY0wMz3yDCwGBkLdVzB+UCZfvskgHy1oCgUsJAfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vHXs6V5BOg2hz5VFm6j0ahftt7saNf2gQRMibBii2xA=;
- b=kJqp3sAeReWk/2GiODbXbO9P5aAsWNg0+Tq7ZNBsXM/5VgDuyOejThbTwzswAcFB+bE9oePBm1JjG2Ehq4YBSphGxwaQaBxwY9X4fUaaA18tQPsvAkEZUkj9SSk/FulGOdtN1IMAhLItvTsCEazUsgZ7tTq55ZM0LN8PcuhJ7tMzzg4e+v54W/g/1QUrzUag4mftGnoaDAF1Gmt6HHmY/auFSpus2qEF/2u97fb/hw2KDaUc5fKwuWySwERbmGyubdfuShdnkkFz1Il586Vurp6bMlfRbIDAnwvXqZDg3miSP+bREWPDf6WcoBWbZYWjy95ZjRRO6e1Ibsa451kjAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vHXs6V5BOg2hz5VFm6j0ahftt7saNf2gQRMibBii2xA=;
- b=JlRX7vv7mOm5Kojf+f+OZH4z1Z5UsgF/AmARkPYTqb8jqD5fYWEEwjpv41hVe09ZguQ+tjCHlrmI6XlG3/HsbEJmBy60zfXh4oom6JERKuj/2yhNPNVJwd1B5zoscx+mbeiqvbbNFY2t8ZuMHQold33ptWSOQzO6+7SPSLvexIY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DS7PR13MB4621.namprd13.prod.outlook.com (2603:10b6:5:3b0::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Sat, 25 Mar
- 2023 16:05:59 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.041; Sat, 25 Mar 2023
- 16:05:59 +0000
-Date: Sat, 25 Mar 2023 17:05:52 +0100
-From: Simon Horman <simon.horman@corigine.com>
-To: Tom Rix <trix@redhat.com>
-Cc: johannes@sipsolutions.net, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
-	ndesaulniers@google.com, linux-wireless@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] mac80211: minstrel_ht: remove unused n_supported variable
-Message-ID: <ZB8b4CWiSENo49Kz@corigine.com>
-References: <20230325132610.1334820-1-trix@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230325132610.1334820-1-trix@redhat.com>
-X-ClientProxiedBy: AS4P195CA0001.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:5e2::8) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A79D3C27;
+	Sat, 25 Mar 2023 19:49:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679773759; x=1711309759;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/55eFo1NR1xT1wYp3Cp0xIc5nr1VWKvWhVajJLz/C+s=;
+  b=MeCW5674rMYgwwVwiwsgyakrM3qZMYiy0qUHi+BB9TBkBNFQgZG2fYpi
+   Y4OV3beu89GO7/7L3m8u9YXYQ19DHJPFRLA5mNsltlkSbvoEKKbgGIc00
+   ytwYyE6qzDdjzNsEHMWGsLp/GXfFYJOwrC/xDqSODld0qJ1ZioKZd1hiC
+   uolyg9qlrhQ66KpVCYFNF3c2sjqxI7MjtD3zzvkziUFnnqx+PQImtgtkN
+   HNrzuaQ8iRbRNV3KRCwpy/cvfarQCB4fss84mlT0Q3HfNp8cFa1b6Jiig
+   efXqbZHKLpT78lJRh3eLSumYXk8XxFDnKVbwfLAHJMdbsoYEho3+MDrw/
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="402606819"
+X-IronPort-AV: E=Sophos;i="5.98,291,1673942400"; 
+   d="scan'208";a="402606819"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 12:49:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="807039644"
+X-IronPort-AV: E=Sophos;i="5.98,291,1673942400"; 
+   d="scan'208";a="807039644"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 Mar 2023 12:49:16 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pg9t5-000GdD-3B;
+	Sat, 25 Mar 2023 19:49:15 +0000
+Date: Sun, 26 Mar 2023 03:49:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: ye.xingchen@zte.com.cn, andersson@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] remoteproc/davinci: Use dev_err_probe()
+Message-ID: <202303260319.W0GPLfaj-lkp@intel.com>
+References: <202303231600496082749@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS7PR13MB4621:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54924172-8f76-4596-14ae-08db2d4ad296
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	aN0oKYccGwKLXTih7qkQ3XuDv7NJZo6ol6/n1noUvd6ZZBx/zV5lMOfBUnnT6CSNQHc7rYK6x70qex7yshYZA9fFLl2C1kkukQH7KqhQ9gjkHCUqHEvrnPTr2Wt5am+E/KosLKP2cR8VxR3/O4lx6FLs9NWheJZ6Yl+hKbsNrNzgUmabzdBQKu1l5uwnPaeqdlvz60eJxvAElcHo1fH1pmEMDNc+QcYtWL7Ecve0BXg8Mp5NnySxcbh90PwKaFBo/OmBhBsqfIKhxm7tjLWIJ8zi1RKAA/wOypDdQniRmPiDzbRzeryVjo/UIOa0Gvut1D06Mw6YJvZOslKPsxnPd52tgi1eqdF1P2kPr28f+Zmui5Xllffd3AFTM+XkNMC6Njn8JSQ+QQf/rT8JdqbAUzEtewIJdKyknomexn/SiU1lUg9C5/lUryxtTrH8ufo7DMaGRpM1b5vROkOne6AD3s2DWogaz0/IIKKGZLvJ36voaxqUUoyObj5TSxJafEGtyu2nQqjs8AvVUcleUp5ZC7oAzHHhSt3oSulvd2oiFK2LCEzZn1Oh9//eA5sA4Cfb/uKZ54zKL6uJFpLS/y+SH4I84DPh5mScSs6FwcFyZwc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(396003)(136003)(39830400003)(451199021)(38100700002)(4744005)(44832011)(2906002)(6486002)(5660300002)(41300700001)(7416002)(66556008)(66476007)(8936002)(66946007)(6916009)(4326008)(8676002)(478600001)(316002)(86362001)(6666004)(36756003)(6506007)(6512007)(2616005)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Q3rvu4I9dMkYE34o1q1w6fSVougpZl6Knn5N9IcItVkuuEXACdoB4RMyn0em?=
- =?us-ascii?Q?xrsXc5ooTzL6n27D5NqF7j/ssrMRIh3RMRz9Y6G0cekv5rQ0tC93z9Xdqyy+?=
- =?us-ascii?Q?T7eAWU998BeNci3ypfEacIGtTy8D99Xi32A0Mz+SY8X1ikAHhDBeS07lBp13?=
- =?us-ascii?Q?8ymQhWITNaM5RiVtbQRgjUNRWNm6bZ2LxM/Qbo3xXVHMBtKJ2oAitpyy7MiG?=
- =?us-ascii?Q?efhvGOkchxZ7otOacmYuTdLgQvZRssDsLLbqRDjmHzNxfjPuSd0GLHYp7WM9?=
- =?us-ascii?Q?ReWQjgXdNXhHfSfZxj8OxhSqF4n+UXv8paANYX2XGMkbXy1X7/sNX0myj8G9?=
- =?us-ascii?Q?conoHFvTbOhrYdsPTWEpdYP3hsyzXZQRu/SJ3spXmKC75bUv9mZCFHhT8o1r?=
- =?us-ascii?Q?qCrdykAcJRcfadPPjuMfqYzatkJGzFj+ZWQob4NJrWJHUnqEyJUfkociF9FT?=
- =?us-ascii?Q?nLDBeX9U0xfQCiPVmUowrY4zrB0MnfMZ/PXukjM04BgiVdJgxPULPL8pzw0U?=
- =?us-ascii?Q?Q/p0/Ak+FQFOMBHl9H7XGqn7vpps4oSpmc5NKIFTOVuBYw1LiG63gfe13JrR?=
- =?us-ascii?Q?JjEw+E5bjfl9vNAdID5IkgkNkWLEhv0EdYyQzrXMShBYux5OT5Ak4c6Oa/Ip?=
- =?us-ascii?Q?JMuw+GpBmS2hbDPFAubaIXihiEpCsypGMpLs4lbsDZjFHN6BFOINJXkKU9XP?=
- =?us-ascii?Q?+Y4f9cw5EV6XHLe18jMlzYH1tDygClXSdhBUdfqyrPZVVA8JNnu6MeypjD57?=
- =?us-ascii?Q?R4enn3GIvP9rRS51SJIbP1e2Y8oVlYqBPBIR638P5dI0VP3U0JR9wMY06LJJ?=
- =?us-ascii?Q?jzRMhXlwbS1T2tKqSZ5Au0JCFXTLB06YUaN/fovrjf6FHqIiUxHVie35GUqS?=
- =?us-ascii?Q?N0JOO+oBw1odvoIzIzhixVQVR1u3FGf66HCohdDR4I5Xj9fBJ8/6a13vZRSY?=
- =?us-ascii?Q?ojv1oCrq00/IVIFaLbOhIQCOibfyo3zJYcjmZGbjeErrjWPDeWRMlRF2BXO+?=
- =?us-ascii?Q?6Wkp8EovBk6865UaUvYbX5cXiO6k4DXqAD7SOsrSJ5L1YJgTEtm2AOXJm3Hm?=
- =?us-ascii?Q?PUR5E3tU31qeMtqs5Jrv9kWxhIcAHJnWkCIvewbDe2Z5JUTYRTXF1AjpUong?=
- =?us-ascii?Q?ZXLsNVCaGE3B2OU7/uHG2qLqu9HdcoihvIT0U4e09cz+RNEzJqx28nUX+XRo?=
- =?us-ascii?Q?VCUVnBdOycrjh9t0cibsMqSGHe9CuZQthw/UjEtH1xozRtcgJ9lUP0REQ9aQ?=
- =?us-ascii?Q?cowyz8BG2QgErKLi6cglIcg81roVMLdofQxLAvcygXiRQWbcRnfD5FUXthE3?=
- =?us-ascii?Q?M5LQursUIBWVfR0JdA0ndKXxTcNEuVKyYICN8dphx+NCak9H0gEuYkuCVoJ2?=
- =?us-ascii?Q?CWmXqPrTJr8xDfWmds+C4BzrW9AfFzMYVbHVOP/G9LPx6+RhXkqPixG/4quS?=
- =?us-ascii?Q?9Wtwqd+MCFs84xfy/dXenr3W/iFgMbIQwxpx6fGv7YYQJZqwGyKDAZehM00d?=
- =?us-ascii?Q?1Lv43hNNvaABR+UDahxbzjkkZH/5lwmkwpFcZOWG3bZZNv5gu84bCavRVIDs?=
- =?us-ascii?Q?mT4oFQsD1dwCRtl0IOcsnVxBef26R3jq4n79PMl+U3tfnX6GfakKp8BSxJZ5?=
- =?us-ascii?Q?BTDw8oyj9WBkTkMyTAB02NFDxXhu6ZFMEzQ1vDRx3PqS9Bp5vrzIig5P5O+M?=
- =?us-ascii?Q?TWDn8A=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54924172-8f76-4596-14ae-08db2d4ad296
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2023 16:05:58.8656
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9Hw6XyKazaZzyXo8uCUC6Y/MJmGa1mi6+N+Efxa3fu8kNF3VKtLZw9P9vOa6XxoWCy9iPUmP5I4GFCKge05GfEPQ4iMJ1nDGzzFF7f7SE64=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR13MB4621
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202303231600496082749@zte.com.cn>
 
-On Sat, Mar 25, 2023 at 09:26:10AM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> net/mac80211/rc80211_minstrel_ht.c:1711:6: error: variable
->   'n_supported' set but not used [-Werror,-Wunused-but-set-variable]
->         int n_supported = 0;
->             ^
-> This variable is not used so remove it.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Thank you for the patch! Perhaps something to improve:
 
+[auto build test WARNING on remoteproc/rproc-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/ye-xingchen-zte-com-cn/remoteproc-davinci-Use-dev_err_probe/20230323-160242
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
+patch link:    https://lore.kernel.org/r/202303231600496082749%40zte.com.cn
+patch subject: [PATCH] remoteproc/davinci: Use dev_err_probe()
+config: arm-davinci_all_defconfig (https://download.01.org/0day-ci/archive/20230326/202303260319.W0GPLfaj-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/a0080d71b9ef7a6f3996093945ea5578f8e43ce1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review ye-xingchen-zte-com-cn/remoteproc-davinci-Use-dev_err_probe/20230323-160242
+        git checkout a0080d71b9ef7a6f3996093945ea5578f8e43ce1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303260319.W0GPLfaj-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/remoteproc/da8xx_remoteproc.c:283:42: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+                                        "unable to get reset control: %ld\n");
+                                                                      ~~^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PINCTRL_SINGLE
+   Depends on [n]: PINCTRL [=n] && OF [=y] && HAS_IOMEM [=y]
+   Selected by [y]:
+   - ARCH_DAVINCI [=y] && ARCH_MULTI_V5 [=y] && CPU_LITTLE_ENDIAN [=y]
+
+
+vim +283 drivers/remoteproc/da8xx_remoteproc.c
+
+   235	
+   236	static int da8xx_rproc_probe(struct platform_device *pdev)
+   237	{
+   238		struct device *dev = &pdev->dev;
+   239		struct da8xx_rproc *drproc;
+   240		struct rproc *rproc;
+   241		struct irq_data *irq_data;
+   242		struct resource *bootreg_res;
+   243		struct resource *chipsig_res;
+   244		struct clk *dsp_clk;
+   245		struct reset_control *dsp_reset;
+   246		void __iomem *chipsig;
+   247		void __iomem *bootreg;
+   248		int irq;
+   249		int ret;
+   250	
+   251		irq = platform_get_irq(pdev, 0);
+   252		if (irq < 0)
+   253			return irq;
+   254	
+   255		irq_data = irq_get_irq_data(irq);
+   256		if (!irq_data) {
+   257			dev_err(dev, "irq_get_irq_data(%d): NULL\n", irq);
+   258			return -EINVAL;
+   259		}
+   260	
+   261		bootreg_res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+   262							   "host1cfg");
+   263		bootreg = devm_ioremap_resource(dev, bootreg_res);
+   264		if (IS_ERR(bootreg))
+   265			return PTR_ERR(bootreg);
+   266	
+   267		chipsig_res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+   268							   "chipsig");
+   269		chipsig = devm_ioremap_resource(dev, chipsig_res);
+   270		if (IS_ERR(chipsig))
+   271			return PTR_ERR(chipsig);
+   272	
+   273		dsp_clk = devm_clk_get(dev, NULL);
+   274		if (IS_ERR(dsp_clk)) {
+   275			dev_err(dev, "clk_get error: %ld\n", PTR_ERR(dsp_clk));
+   276	
+   277			return PTR_ERR(dsp_clk);
+   278		}
+   279	
+   280		dsp_reset = devm_reset_control_get_exclusive(dev, NULL);
+   281		if (IS_ERR(dsp_reset))
+   282			return dev_err_probe(dev, PTR_ERR(dsp_reset),
+ > 283					     "unable to get reset control: %ld\n");
+   284	
+   285		if (dev->of_node) {
+   286			ret = of_reserved_mem_device_init(dev);
+   287			if (ret) {
+   288				dev_err(dev, "device does not have specific CMA pool: %d\n",
+   289					ret);
+   290				return ret;
+   291			}
+   292		}
+   293	
+   294		rproc = rproc_alloc(dev, "dsp", &da8xx_rproc_ops, da8xx_fw_name,
+   295			sizeof(*drproc));
+   296		if (!rproc) {
+   297			ret = -ENOMEM;
+   298			goto free_mem;
+   299		}
+   300	
+   301		/* error recovery is not supported at present */
+   302		rproc->recovery_disabled = true;
+   303	
+   304		drproc = rproc->priv;
+   305		drproc->rproc = rproc;
+   306		drproc->dsp_clk = dsp_clk;
+   307		drproc->dsp_reset = dsp_reset;
+   308		rproc->has_iommu = false;
+   309	
+   310		ret = da8xx_rproc_get_internal_memories(pdev, drproc);
+   311		if (ret)
+   312			goto free_rproc;
+   313	
+   314		platform_set_drvdata(pdev, rproc);
+   315	
+   316		/* everything the ISR needs is now setup, so hook it up */
+   317		ret = devm_request_threaded_irq(dev, irq, da8xx_rproc_callback,
+   318						handle_event, 0, "da8xx-remoteproc",
+   319						rproc);
+   320		if (ret) {
+   321			dev_err(dev, "devm_request_threaded_irq error: %d\n", ret);
+   322			goto free_rproc;
+   323		}
+   324	
+   325		/*
+   326		 * rproc_add() can end up enabling the DSP's clk with the DSP
+   327		 * *not* in reset, but da8xx_rproc_start() needs the DSP to be
+   328		 * held in reset at the time it is called.
+   329		 */
+   330		ret = reset_control_assert(dsp_reset);
+   331		if (ret)
+   332			goto free_rproc;
+   333	
+   334		drproc->chipsig = chipsig;
+   335		drproc->bootreg = bootreg;
+   336		drproc->ack_fxn = irq_data->chip->irq_ack;
+   337		drproc->irq_data = irq_data;
+   338		drproc->irq = irq;
+   339	
+   340		ret = rproc_add(rproc);
+   341		if (ret) {
+   342			dev_err(dev, "rproc_add failed: %d\n", ret);
+   343			goto free_rproc;
+   344		}
+   345	
+   346		return 0;
+   347	
+   348	free_rproc:
+   349		rproc_free(rproc);
+   350	free_mem:
+   351		if (dev->of_node)
+   352			of_reserved_mem_device_release(dev);
+   353		return ret;
+   354	}
+   355	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
