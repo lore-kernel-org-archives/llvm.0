@@ -1,43 +1,45 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2055E7F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B03D181;
 	Sat, 25 Mar 2023 00:07:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1679702861; x=1711238861;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=e/13J3lB2S2Q4AC4ZIGremQsZSDCxlLufJIgQHzCHUI=;
-  b=Kik4Sj7wTSErSTHU96iLbaOOEiHwc/eKBgGcFftAtX3Lp9jpKATAFvxM
-   5qWAhCPYW8LdbkXUPvVl5UH41INeGxpUSY8FWc5/EzGqnv3MLmHZyyc9P
-   XXvGB7EFDO0AwvwSesUZRmozwt5QDLIuTegP16Ljh3xeb6P7BAgy6athL
-   AlwbdP5wxvch2vElR+Ow2dbKOUe+ttWzXEJAaojUwmmnPYWjRlKFiG/Jo
-   xLijSC4LxbeMM5y1fFOzMWcRPAsAukaPnNdknDB2rILOc402ll02Z6g31
-   C16sXqg21aM30iKZseJFsqR0qYc1gEuD+SNNUgEALgGOPR1EODunlSr9w
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="323797706"
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZqjYe5ETR3cpC9yt/U6Ag3nhDT8ZbYROeXbqxVPvoi4=;
+  b=glZzhaX2Qx9FMpYzyVL/Q5lmGThflzxeF8T2d0Pc8U7XXEssPyHqXUbz
+   iRc4T8d2fZTrBiHDJBVBJHHVfVgtOfgyQy1/17iapZ14SNlry9sxrJTHi
+   zfll7ls8xOzqbqPC1IlseCbNB3PAtOVdxtOUA54lUuNoWWLWUa7YX9xx9
+   JLVMon3ql6ctey4slNQe4jf6rFLk723Bbnbn77NbCG8Qje5MWpU5CXBN7
+   6NBNgXw4kGfyaRbocojhb1nhr8EZ6BAenSLheQh8GmxX7cV9iVF4dH4D8
+   4Ak/llyooc/tuefvKdgHuaNea4vhmy3zJ1GSYYKqiO1Qs85tIxl0RcDpD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="337418238"
 X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
-   d="scan'208";a="323797706"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 17:07:40 -0700
+   d="scan'208";a="337418238"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 17:07:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="857055306"
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="1012463714"
 X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
-   d="scan'208";a="857055306"
+   d="scan'208";a="1012463714"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Mar 2023 17:07:39 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 24 Mar 2023 17:07:39 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pfrRa-000Fmj-2i;
+	id 1pfrRa-000Fmh-2d;
 	Sat, 25 Mar 2023 00:07:38 +0000
-Date: Sat, 25 Mar 2023 08:06:44 +0800
+Date: Sat, 25 Mar 2023 08:06:45 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
+To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	linux-bluetooth@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [avpatel:alexghiti_test 64/78] arch/riscv/kvm/vcpu_switch.S:259:81:
- error: invalid reassignment of non-absolute variable
- '.L__sym_size___kvm_riscv_switch_to'
-Message-ID: <202303250750.d3blhI0S-lkp@intel.com>
+Subject: Re: [PATCH 1/2] Bluetooth: hci_conn: Fix not cleaning up on LE
+ Connection failure
+Message-ID: <202303250737.5bz7V6oX-lkp@intel.com>
+References: <20230324204525.3630188-1-luiz.dentz@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,76 +48,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230324204525.3630188-1-luiz.dentz@gmail.com>
 
-tree:   https://github.com/avpatel/linux.git alexghiti_test
-head:   93aaa7cba9ba7ae91a47812465117e2f9b9e3712
-commit: 5e80bb15471e7230112a34e008a593f2ddac38cd [64/78] RISC-V: KVM: Use SBI sync SRET call when available
-config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20230325/202303250750.d3blhI0S-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+Hi Luiz,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on bluetooth-next/master]
+[also build test WARNING on bluetooth/master linus/master v6.3-rc3 next-20230324]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Luiz-Augusto-von-Dentz/Bluetooth-Fix-printing-errors-if-LE-Connection-times-out/20230325-044559
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+patch link:    https://lore.kernel.org/r/20230324204525.3630188-1-luiz.dentz%40gmail.com
+patch subject: [PATCH 1/2] Bluetooth: hci_conn: Fix not cleaning up on LE Connection failure
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230325/202303250737.5bz7V6oX-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/avpatel/linux/commit/5e80bb15471e7230112a34e008a593f2ddac38cd
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel alexghiti_test
-        git checkout 5e80bb15471e7230112a34e008a593f2ddac38cd
+        # https://github.com/intel-lab-lkp/linux/commit/e15b8378a4f3221972483cf6bb52f0649341a55e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Luiz-Augusto-von-Dentz/Bluetooth-Fix-printing-errors-if-LE-Connection-times-out/20230325-044559
+        git checkout e15b8378a4f3221972483cf6bb52f0649341a55e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/bluetooth/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303250750.d3blhI0S-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303250737.5bz7V6oX-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/riscv/kvm/vcpu_switch.S:259:81: error: invalid reassignment of non-absolute variable '.L__sym_size___kvm_riscv_switch_to'
-   .type __kvm_riscv_switch_to STT_FUNC ; .set .L__sym_size___kvm_riscv_switch_to, .-__kvm_riscv_switch_to ; .size __kvm_riscv_switch_to, .L__sym_size___kvm_riscv_switch_to
-                                                                                   ^
+>> net/bluetooth/hci_conn.c:1202:7: warning: variable 'params' is uninitialized when used here [-Wuninitialized]
+               (params && params->explicit_connect))
+                ^~~~~~
+   net/bluetooth/hci_conn.c:1191:32: note: initialize the variable 'params' to silence this warning
+           struct hci_conn_params *params;
+                                         ^
+                                          = NULL
+   1 warning generated.
 
 
-vim +259 arch/riscv/kvm/vcpu_switch.S
+vim +/params +1202 net/bluetooth/hci_conn.c
 
-5e80bb15471e72 Anup Patel 2022-10-09  230  
-5e80bb15471e72 Anup Patel 2022-10-09  231  	/*
-5e80bb15471e72 Anup Patel 2022-10-09  232  	 * Parameters:
-5e80bb15471e72 Anup Patel 2022-10-09  233  	 * A0 <= Pointer to struct kvm_vcpu_arch
-5e80bb15471e72 Anup Patel 2022-10-09  234  	 * A1 <= SBI extension ID
-5e80bb15471e72 Anup Patel 2022-10-09  235  	 * A2 <= SBI function ID
-5e80bb15471e72 Anup Patel 2022-10-09  236  	 * A3 <= Flags for SBI sync SRET call
-5e80bb15471e72 Anup Patel 2022-10-09  237  	 */
-5e80bb15471e72 Anup Patel 2022-10-09  238  ENTRY(__kvm_riscv_nacl_switch_to)
-5e80bb15471e72 Anup Patel 2022-10-09  239  	SAVE_HOST_GPRS
-5e80bb15471e72 Anup Patel 2022-10-09  240  
-5e80bb15471e72 Anup Patel 2022-10-09  241  	SAVE_HOST_AND_RESTORE_GUEST_CSRS __kvm_riscv_nacl_switch_to_return
-5e80bb15471e72 Anup Patel 2022-10-09  242  
-5e80bb15471e72 Anup Patel 2022-10-09  243  	/* Resume Guest using SBI nested acceleration */
-5e80bb15471e72 Anup Patel 2022-10-09  244  	add	a6, a2, zero
-5e80bb15471e72 Anup Patel 2022-10-09  245  	add	a7, a1, zero
-5e80bb15471e72 Anup Patel 2022-10-09  246  	ecall
-5e80bb15471e72 Anup Patel 2022-10-09  247  
-5e80bb15471e72 Anup Patel 2022-10-09  248  	/* Back to Host */
-5e80bb15471e72 Anup Patel 2022-10-09  249  	.align 2
-5e80bb15471e72 Anup Patel 2022-10-09  250  __kvm_riscv_nacl_switch_to_return:
-5e80bb15471e72 Anup Patel 2022-10-09  251  	SAVE_GUEST_GPRS
-5e80bb15471e72 Anup Patel 2022-10-09  252  
-5e80bb15471e72 Anup Patel 2022-10-09  253  	SAVE_GUEST_AND_RESTORE_HOST_CSRS
-5e80bb15471e72 Anup Patel 2022-10-09  254  
-5e80bb15471e72 Anup Patel 2022-10-09  255  	RESTORE_HOST_GPRS
-34bde9d8b9e6e5 Anup Patel 2021-09-27  256  
-34bde9d8b9e6e5 Anup Patel 2021-09-27  257  	/* Return to C code */
-34bde9d8b9e6e5 Anup Patel 2021-09-27  258  	ret
-34bde9d8b9e6e5 Anup Patel 2021-09-27 @259  ENDPROC(__kvm_riscv_switch_to)
-9f7013265112a9 Anup Patel 2021-09-27  260  
-
-:::::: The code at line 259 was first introduced by commit
-:::::: 34bde9d8b9e6e5249db3c07cf1ebfe75c23c671c RISC-V: KVM: Implement VCPU world-switch
-
-:::::: TO: Anup Patel <anup.patel@wdc.com>
-:::::: CC: Anup Patel <anup@brainfault.org>
+^1da177e4c3f41 Linus Torvalds         2005-04-16  1186  
+9bb3c01fdb2201 Andre Guedes           2014-01-30  1187  /* This function requires the caller holds hdev->lock */
+9b3628d79b46f0 Luiz Augusto von Dentz 2022-04-22  1188  static void hci_le_conn_failed(struct hci_conn *conn, u8 status)
+9bb3c01fdb2201 Andre Guedes           2014-01-30  1189  {
+9bb3c01fdb2201 Andre Guedes           2014-01-30  1190  	struct hci_dev *hdev = conn->hdev;
+f161dd4122ffa7 Johan Hedberg          2014-08-15  1191  	struct hci_conn_params *params;
+f161dd4122ffa7 Johan Hedberg          2014-08-15  1192  
+e15b8378a4f322 Luiz Augusto von Dentz 2023-03-24  1193  	hci_connect_le_scan_cleanup(conn);
+9bb3c01fdb2201 Andre Guedes           2014-01-30  1194  
+acb9f911ea1f82 Johan Hedberg          2015-12-03  1195  	/* If the status indicates successful cancellation of
+91641b79e1e153 Zheng Yongjun          2021-06-02  1196  	 * the attempt (i.e. Unknown Connection Id) there's no point of
+acb9f911ea1f82 Johan Hedberg          2015-12-03  1197  	 * notifying failure since we'll go back to keep trying to
+acb9f911ea1f82 Johan Hedberg          2015-12-03  1198  	 * connect. The only exception is explicit connect requests
+acb9f911ea1f82 Johan Hedberg          2015-12-03  1199  	 * where a timeout + cancel does indicate an actual failure.
+acb9f911ea1f82 Johan Hedberg          2015-12-03  1200  	 */
+acb9f911ea1f82 Johan Hedberg          2015-12-03  1201  	if (status != HCI_ERROR_UNKNOWN_CONN_ID ||
+acb9f911ea1f82 Johan Hedberg          2015-12-03 @1202  	    (params && params->explicit_connect))
+acb9f911ea1f82 Johan Hedberg          2015-12-03  1203  		mgmt_connect_failed(hdev, &conn->dst, conn->type,
+acb9f911ea1f82 Johan Hedberg          2015-12-03  1204  				    conn->dst_type, status);
+9bb3c01fdb2201 Andre Guedes           2014-01-30  1205  
+abfeea476c68af Luiz Augusto von Dentz 2021-10-27  1206  	/* Enable advertising in case this was a failed connection
+3c857757ef6e5a Johan Hedberg          2014-03-25  1207  	 * attempt as a peripheral.
+3c857757ef6e5a Johan Hedberg          2014-03-25  1208  	 */
+abfeea476c68af Luiz Augusto von Dentz 2021-10-27  1209  	hci_enable_advertising(hdev);
+9bb3c01fdb2201 Andre Guedes           2014-01-30  1210  }
+9bb3c01fdb2201 Andre Guedes           2014-01-30  1211  
 
 -- 
 0-DAY CI Kernel Test Service
