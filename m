@@ -1,49 +1,49 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5415A191;
-	Sat, 25 Mar 2023 00:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679704663; x=1711240663;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EDmSn0BoNS6C36guPoIH97rCDRjlnX5uzMGFKE4QSsc=;
-  b=B58W2at5TL1J7qC6Uyr4xfSWfRliOTF3o7aKiAYDIMhBFmRTNc45ZPHB
-   aGaisdv+4qYjAxOrudHwjJorSwUKiexIOKZPPo3uP3k4UCPyrDbkSQu3S
-   9hC7FBNdtUhq05HSmOZoT+5jRO6YRhEaRFw8yi1YLodsyXnQ0nbVWBlhu
-   oKVYsP/Rr7cpCwDfsekNYpiyN16H+9qRpXbEFaOn2kWHXMVJ2r+1iNNqb
-   2n8R/yxsOe+/xcFMp/SIDTaIm0GWdVDV9owSdfuRsnZoL2xKByjfmWOSy
-   LG6zQ18D5sDNpC6knYR0+AtxeFGpt0q/zznXlSx4Szy/PxulTVA+O40Pv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="339941404"
-X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
-   d="scan'208";a="339941404"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 17:37:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="826436446"
-X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
-   d="scan'208";a="826436446"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Mar 2023 17:37:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfrud-000FoJ-31;
-	Sat, 25 Mar 2023 00:37:39 +0000
-Date: Sat, 25 Mar 2023 08:37:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: Disable EL2 traps for BRBE instructions executed
- in EL1
-Message-ID: <202303250802.KytExIHw-lkp@intel.com>
-References: <20230324055127.2228330-1-anshuman.khandual@arm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A40379
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 01:20:27 +0000 (UTC)
+Received: by mail-pj1-f48.google.com with SMTP id d13so2976107pjh.0
+        for <llvm@lists.linux.dev>; Fri, 24 Mar 2023 18:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679707227;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xRU59Fp1LPCf2L9u79Fxev0jeYDDSl0nAnmtEcwYt0k=;
+        b=Gblh5P6wOi+3Vk7yht26IljnWQaGUVcIHVDJfTW5QQIE2S7Jc+welPvGIGUK3Arv7o
+         lRY6zU6X6eS/dJDuSm83CcsKMEXtCK+DpamswOkkiZ+SUhF2+F2vknhjXPThDKb3WovF
+         EP1sjpoYg2ry6q03v/LrZy3x3hnv+tNZ03CkM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679707227;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xRU59Fp1LPCf2L9u79Fxev0jeYDDSl0nAnmtEcwYt0k=;
+        b=2P4T0REUClWumz7UZ6lpDoPzaJk/ljYVIbgwS5+FIzDMclL4gYZp02MOyh9SGvqwlY
+         wDRONfPi3KHd0AZ7pXf+Fd3ctw2FS+lEpWL9wwa2ravN0ee3Z790uybuQDWTbfl2KrZi
+         QqasP15haLrQxhUROh4p89b1wCafEcdZOi86PSeYXOH4pnHTSvYQJOyfskgM0mDvSR/a
+         4x9IxylemJ9yHGbSSpSQ7JuGLw/o5u/PRwn4+YtHE6Ibt3KYetuXabvFDWdBAJcLp/w0
+         rEtt40qCZvZPe10VpvPtDN0yP4nKkM6t5TuvtZPUrMNTiaumXLKPKHoZpUlai0bHqE+r
+         LjeQ==
+X-Gm-Message-State: AAQBX9fsR+Fop96bK7xH4uKlbCVlAbArzvNJptnmWH2SZh5Nw9SOv5XI
+	lYZbvoLlPr8VORC5rFkpRsYBbw==
+X-Google-Smtp-Source: AKy350ZzS7Y6pc1qWAFsV1Kr4heRJSNrsm+/JeoaH9QVVJn4GXIZCCUZPXrtKpXfaSfy+Z6kX9PdTQ==
+X-Received: by 2002:a17:90b:38cd:b0:234:67ef:304b with SMTP id nn13-20020a17090b38cd00b0023467ef304bmr5082656pjb.37.1679707227397;
+        Fri, 24 Mar 2023 18:20:27 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id n3-20020a654503000000b004fb997a0bd8sm13917727pgq.30.2023.03.24.18.20.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 18:20:26 -0700 (PDT)
+Date: Sat, 25 Mar 2023 10:20:22 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Tom Rix <trix@redhat.com>
+Cc: linkinjeon@kernel.org, sfrench@samba.org, senozhatsky@chromium.org,
+	tom@talpey.com, nathan@kernel.org, ndesaulniers@google.com,
+	linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] ksmbd: remove unused is_char_allowed function
+Message-ID: <20230325012022.GH3271889@google.com>
+References: <20230324173056.2652725-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,63 +52,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230324055127.2228330-1-anshuman.khandual@arm.com>
+In-Reply-To: <20230324173056.2652725-1-trix@redhat.com>
 
-Hi Anshuman,
+On (23/03/24 13:30), Tom Rix wrote:
+> 
+> clang with W=1 reports
+> fs/ksmbd/unicode.c:122:19: error: unused function
+>   'is_char_allowed' [-Werror,-Wunused-function]
+> static inline int is_char_allowed(char *ch)
+>                   ^
+> This function is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thank you for the patch! Yet something to improve:
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on arm/for-next arm/fixes kvmarm/next soc/for-next xilinx-xlnx/master linus/master v6.3-rc3 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/arm64-Disable-EL2-traps-for-BRBE-instructions-executed-in-EL1/20230324-135312
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230324055127.2228330-1-anshuman.khandual%40arm.com
-patch subject: [PATCH] arm64: Disable EL2 traps for BRBE instructions executed in EL1
-config: arm64-randconfig-r001-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250802.KytExIHw-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/457bbac085c7f83be1a63b54f6caf32b820503eb
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anshuman-Khandual/arm64-Disable-EL2-traps-for-BRBE-instructions-executed-in-EL1/20230324-135312
-        git checkout 457bbac085c7f83be1a63b54f6caf32b820503eb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303250802.KytExIHw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> <instantiation>:36:14: error: expected compatible register or logical immediate
-    orr x0, x0, #HFGITR_EL2_nBRBIALL
-                ^
-   <instantiation>:10:2: note: while in macro instantiation
-    __init_el2_fgt
-    ^
-   arch/arm64/kernel/head.S:577:2: note: while in macro instantiation
-    init_el2_state
-    ^
-   <instantiation>:37:14: error: expected compatible register or logical immediate
-    orr x0, x0, #HFGITR_EL2_nBRBINJ
-                ^
-   <instantiation>:10:2: note: while in macro instantiation
-    __init_el2_fgt
-    ^
-   arch/arm64/kernel/head.S:577:2: note: while in macro instantiation
-    init_el2_state
-    ^
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+We have a copy of that function in fs/ksmbd/misc.c.
