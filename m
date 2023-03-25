@@ -1,270 +1,123 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2106.outbound.protection.outlook.com [40.107.220.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DD22F2A;
-	Sat, 25 Mar 2023 15:46:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679759170; x=1711295170;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DW/VkCkTlJo7d/YHh/5/psvwJohuv3nMYDw5biokPlw=;
-  b=Qq+kWhWhledRA+DdjYIg2udD0u/bxd8t18a8Nc7GYhbw+VbDt/rRuLJq
-   DQ3Vloxh+jnsT/d7lwPtzC2UweDuSIZb56Q/8i5OIy7PqecGnM8ny/lrw
-   +6NuI+NYK9Qm6XY+yYXzW1/j8IEM3mcTgnA7MGjqtSWVsZNRLW10tb7Dz
-   mpkIQNbn7MYA3BJ4J+3nk3cAjPj4uXKeQP2OdWVFIw88IybilTThv3hsS
-   D82t2OrpSdShPF2NsekkvHL9EHXBdmX+aPrJCEsVTPBrldjf4Rws3WIQl
-   xrKsLKdE1z0lPU+IcaVqK4QGKrjkoaxs1qWqLg0csmt1RrrqD8UhAwUJZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="341558505"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="341558505"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 08:46:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="1012602539"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="1012602539"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2023 08:46:06 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pg65l-000GLn-2z;
-	Sat, 25 Mar 2023 15:46:05 +0000
-Date: Sat, 25 Mar 2023 23:45:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Baokun Li <libaokun1@huawei.com>, linux-ext4@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tytso@mit.edu,
-	adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-	linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-	yangerkun@huawei.com, yukuai3@huawei.com, libaokun1@huawei.com,
-	stable@kernel.org
-Subject: Re: [PATCH 1/2] ext4: turning quotas off if mount failed after
- enable quotas
-Message-ID: <202303252326.6jz5qEAa-lkp@intel.com>
-References: <20230325064732.1897482-2-libaokun1@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC5A2F2A
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 15:59:03 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=keMz2gSxPCuFKUSxGg0wNNsaavnBORV+iAVjKfk2LyEe6fIwlBc0qKIUfuvvtzuPjjJKLaKc0ipZFer8H5gVOSZ+fVIvKKFfFhFU5SuudBy0JpMMwB/tcy6B9T4O4UViYa9Khft/V+2AppY39oo8YbZykqT9aavH4w12OPKzOp6rK6eyYIHl0BAUoacl6uzabKmflzn+sCbVujOHrcXClG9O11WyWcME+h9AxMqWP7x+EAh39wFBt6HdoMfSRDZpmzjgD7DBAoX1saPVRr71ZDPIM0UUpblW+LC5l0DJpOiEB60PMpfZlVj0blwoZ6O25hioIKvu9IiBU3/WNlTswA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nFfOc6F/srpvQpa5wJiwvUdCjzi4ShQWTiKS2h2bZWk=;
+ b=F+RRK69P48kMOA0FRBCcliZK5VUfYs8NkhXHqKAdNi3vWvKHO/flN2nzsqHLcl82+calhYHNcZtocBXdY08//7zDyDX3SXm4zroieSPALzbpwuUbxWxau8gaC7FGkPXbsEJ6HIYTSfT95cFq4S70ckfRJJDHHtKuREJTFP2s4HquWeOEHNF8hMSZTCt5dMiatm4axbJ9eYWoIDAFzqPmP7t7aMwa9F4eArv9hqJq8cEBfo2VeR0yv6bNchG09ZVC+8IgZn24369KkkAug/9PNQXkm2OCOwsbd7UDCGOzABcBd9dJgMsBCnbvDTDEgwFL4iNni4lTjH8kBlXg0CxNNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nFfOc6F/srpvQpa5wJiwvUdCjzi4ShQWTiKS2h2bZWk=;
+ b=QhPWA/VJxryoQGjj3gNZeML8pycB6J8usJHYsl0/czJpGAldrgoTp5ZI8Hnach2lj45hLnPgpXnRQy8ihDAvccX+PooYwVFAQ2LhjcOd+S2HPyHZMvEG94anuKUlzZBl7k5rms+rNUYM6Hii2zkt6G+2FgSl563uroULHhcH+hU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DS7PR13MB4621.namprd13.prod.outlook.com (2603:10b6:5:3b0::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.41; Sat, 25 Mar
+ 2023 15:59:00 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.041; Sat, 25 Mar 2023
+ 15:58:59 +0000
+Date: Sat, 25 Mar 2023 16:58:49 +0100
+From: Simon Horman <simon.horman@corigine.com>
+To: Tom Rix <trix@redhat.com>
+Cc: aspriel@gmail.com, franky.lin@broadcom.com, hante.meuleman@broadcom.com,
+	kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+	ndesaulniers@google.com, johannes.berg@intel.com,
+	quic_srirrama@quicinc.com, alexander@wetzel-home.de,
+	shaul.triebitz@intel.com, linux-wireless@vger.kernel.org,
+	brcm80211-dev-list.pdl@broadcom.com,
+	SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] wifi: mac80211: remove unused has_5g variable
+Message-ID: <ZB8aOahMb4PQoGQK@corigine.com>
+References: <20230325130343.1334209-1-trix@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230325130343.1334209-1-trix@redhat.com>
+X-ClientProxiedBy: AM3PR04CA0134.eurprd04.prod.outlook.com (2603:10a6:207::18)
+ To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230325064732.1897482-2-libaokun1@huawei.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS7PR13MB4621:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a20e63d-aa00-4c38-e55d-08db2d49d883
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	50QDB8HuVOdBr9mR7J+HrOLsyJmbj9CpJW7D0+l4rP5vev/8fQF28oOiSAdBzYhCXUIb4lYm1xbORzbYJDMuZU6y35y/m+ONRbHbAUDEExj66DSYwe9+t8bXMl9HTmLpEJ8heLms1GMYD3tYKQOWYX7xkHCZRgHJMOWXyTAgxJTE29HDMgEmJcLnp51bfkAM9Sz2NOlKtDzHb9mq7OElWOVHui9mtYt2+sfZt9IXdATH4Oy4E3Jtvi0XEv9nO3ROlOY5O6WSSGdKAb6DFFEqGtB4maCMh3mZVw5veExj4OmT2dPi1sI6zVX++sv6rCqrt1aj2qdHXLQiGkiQGZCMXIXO4pZeFDSwAQW5X5Ce4N0UOUDCYNMGSTWe3Is1Wo0TsreE56X5mAGG9j8FQ36wLIfFKXNR7OVsgINuJmqKGzoEQhFvfPhF/qitc9sve8oa0e+vTNMuszMG4uJv4XzDYyTmW65u6cg08vItrGmUtBgSI9pCN/9cKN3RS3yungAg7jJzJg3ZZK+ocZNEIQNoROnnXX3fdjd1ikFl7ktkcmkYlxD0nwZat8rmRAKhFyKEBOdvuzhaZ2N2+QaI5GF158vEzARBs0feGROuYvBUiHc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39830400003)(136003)(366004)(396003)(346002)(376002)(451199021)(36756003)(86362001)(6666004)(186003)(2616005)(6506007)(6512007)(5660300002)(7416002)(8936002)(66556008)(66476007)(6916009)(4326008)(8676002)(66946007)(41300700001)(2906002)(4744005)(38100700002)(44832011)(6486002)(478600001)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?q2CLgUT4dlrZzKSN4zStrcedvIwxwYjb8IYHBaLpwBQOaTlzmDKAK/4sD3MJ?=
+ =?us-ascii?Q?aupH7v66XxTHfuLd1OAuOplZeDzg1/dbGhy0E1e+cYYcv3YKPa3lHzd0r3yl?=
+ =?us-ascii?Q?DavZN367Q00WMg7lgZwge6GxG6+3CAfCc7hL+8YdcZjeXqoLvXuGNSFkoMg8?=
+ =?us-ascii?Q?1NCkqdcSA6w7MkNJvXiA/TXk6s2ev9Ed50x96+i8Jt/jh+52fI3UdRcCHzDw?=
+ =?us-ascii?Q?fVoJwEeDQvDUZRvmmAO0zPT+UIK7MskjRrvtL/ndDy3+7D6Gr/4EDVl8WM84?=
+ =?us-ascii?Q?h22KQFBHaGYSnOQ6i6INI1U4iXAse0RXwY516dDs0MXzpIkgdV5fIb94ClxI?=
+ =?us-ascii?Q?g2cea+ziqriaEHX0Nh8cQGX/FHyuBuE7+uCbMLaA7nHaDIBJJXhAS2wZbi7K?=
+ =?us-ascii?Q?8p4C2nAkJg5Rm7auEiYPTZEd+JAtgS8EFzO3F+0a0ex90BUFw2E+rk+CU/Py?=
+ =?us-ascii?Q?R/usz3aCOnkuQhKH5jyraNVH00q3jZBN+3NKfzI90qCRIWnT/Hyt7WukRgU3?=
+ =?us-ascii?Q?EzPrYsn0qMeF0j9NzQlK8jv+X2jFCZ+L9J7D9oH0WF7WkTNEA02KdPxox98e?=
+ =?us-ascii?Q?PI3Hm9xk7+aL+10IIY1Ndv9RxqG4XayzlguRoAaRJb59ePWDE/54X5H632B3?=
+ =?us-ascii?Q?ZqHhauViXvQjxC5fD2cpPII7nvg1+It6Tz0dswMEAWraF5I73JIeGQb4+3jh?=
+ =?us-ascii?Q?IksU3PJOM/DFESVRB2hdQ1nDo5frfmmA8n0xfeq3loaeFHNbqDfsw+EACEQu?=
+ =?us-ascii?Q?t0++G1MZ6mR8Ccbu6vfJYGwjbjm6WwKQ8rTmCV5ydA41KkIUIO+48SWHR10e?=
+ =?us-ascii?Q?Vppzjv3u3Bssb+2Yjt4x6ZHI4lZhIwa8/ut0Zzv+4ok8E2o1nzzYfHeB4CUa?=
+ =?us-ascii?Q?MXfNmDN3P+fnFF7HfhRcYIWT7w5l0IPdNVoeZnWBE/ACkEDil9U2L3kpzeg8?=
+ =?us-ascii?Q?KtI/lBgQaeIAB2Jl4o9Nyi0/eVwoz92saJE0F+fiad4W9JZpLROFbbWddcOY?=
+ =?us-ascii?Q?tn6LT4L5zCcqoEH2YTGBCxcsMnT4QNX7WePsfZnlDvWMH8E/kHoAYPH9Q9La?=
+ =?us-ascii?Q?bV4yXdBIqeOfRyJgQHm1OmR+irNgt4J0AAfJbvRTi4LglLtUs9qyVDeFlfYg?=
+ =?us-ascii?Q?L+hY6O0+3y3EH74DCM9sTWTe5Zyf9E6wFWUwvRPn8eIe/p4BejvMbCw0IZmm?=
+ =?us-ascii?Q?1e1EpSv8YlIOui3mt7pyCFVCBQAWzrSVBxxe5mbrXdvBu8PYMraJw/RBq5+r?=
+ =?us-ascii?Q?v2eNqKXPIuBZlJQHl61G7I4wnKZtvOFTA1XcYN/pjQ5dG6+anji6Q4pQUrD6?=
+ =?us-ascii?Q?FmRHK4/WWOHeuVk6QfFH6vkRju8VJ+BnWiNauuFluUlTJTK2boYO3C1ULbcd?=
+ =?us-ascii?Q?zbM81KEjshIo+tqnT+dkWt5QIgdxU2H7Q1RrCfkhIxakz4ijG/t/gQrxTTRZ?=
+ =?us-ascii?Q?FFIGvebBV/2SNGXfq0iA9IWor3Wmpg9OpQMnAR+hOFMb9A1D0PhMBqb4U84O?=
+ =?us-ascii?Q?e9LjKAd5DQ/9nRP3qZgJIhTHQ02gE9UPTW8dWKWMJAmevoRe8xzaT9toonbM?=
+ =?us-ascii?Q?XpZG+uc8qo2pw+07CPfBhu3EhRDt+ZrBqXMZ0JDg9vWB6CA1aPPmdsAs+6bN?=
+ =?us-ascii?Q?XzdQ2t0YIelaVN9kKid2MpQh23ObflWQkmDXuB3DT3O2EqnV1x8pcK7tzJcV?=
+ =?us-ascii?Q?HiQRHw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a20e63d-aa00-4c38-e55d-08db2d49d883
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Mar 2023 15:58:59.4254
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kMNIb0f0kXw88K+amuM0gYgMY/7RYURzgpaSiGOiGwXqYeSa41nheLMS6/EnAaXkRHyxqA+1/k9ZtESsgIJCcKUgWp8qDUPUo40KZMvXr0g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR13MB4621
 
-Hi Baokun,
+On Sat, Mar 25, 2023 at 09:03:43AM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/net/wireless/broadcom/brcm80211/brcmsmac/mac80211_if.c:1051:6: error:
+>   variable 'has_5g' set but not used [-Werror,-Wunused-but-set-variable]
+>         int has_5g = 0;
+>             ^
+> This variable is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on linus/master v6.3-rc3 next-20230324]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Baokun-Li/ext4-turning-quotas-off-if-mount-failed-after-enable-quotas/20230325-144948
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230325064732.1897482-2-libaokun1%40huawei.com
-patch subject: [PATCH 1/2] ext4: turning quotas off if mount failed after enable quotas
-config: hexagon-randconfig-r041-20230322 (https://download.01.org/0day-ci/archive/20230325/202303252326.6jz5qEAa-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0796673fe204bc43455489f7d9cdf18c1ca9c678
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Baokun-Li/ext4-turning-quotas-off-if-mount-failed-after-enable-quotas/20230325-144948
-        git checkout 0796673fe204bc43455489f7d9cdf18c1ca9c678
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/ext4/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303252326.6jz5qEAa-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/ext4/super.c:27:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from fs/ext4/super.c:27:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from fs/ext4/super.c:27:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> fs/ext4/super.c:5544:1: warning: unused label 'failed_mount9' [-Wunused-label]
-   failed_mount9:
-   ^~~~~~~~~~~~~~
-   fs/ext4/super.c:2045:1: warning: unused function 'ctx_set_flags' [-Wunused-function]
-   EXT4_SET_CTX(flags); /* set only */
-   ^
-   fs/ext4/super.c:2023:20: note: expanded from macro 'EXT4_SET_CTX'
-   static inline void ctx_set_##name(struct ext4_fs_context *ctx,          \
-                      ^
-   <scratch space>:22:1: note: expanded from here
-   ctx_set_flags
-   ^
-   8 warnings generated.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
 
-vim +/failed_mount9 +5544 fs/ext4/super.c
-
-9b2ff35753c051 Jan Kara                2013-03-02  5499  
-bc71726c725767 zhangyi (F              2020-06-20  5500) 	/*
-bc71726c725767 zhangyi (F              2020-06-20  5501) 	 * Save the original bdev mapping's wb_err value which could be
-bc71726c725767 zhangyi (F              2020-06-20  5502) 	 * used to detect the metadata async write error.
-bc71726c725767 zhangyi (F              2020-06-20  5503) 	 */
-bc71726c725767 zhangyi (F              2020-06-20  5504) 	spin_lock_init(&sbi->s_bdev_wb_lock);
-bc71726c725767 zhangyi (F              2020-06-20  5505) 	errseq_check_and_advance(&sb->s_bdev->bd_inode->i_mapping->wb_err,
-bc71726c725767 zhangyi (F              2020-06-20  5506) 				 &sbi->s_bdev_wb_err);
-bc71726c725767 zhangyi (F              2020-06-20  5507) 	sb->s_bdev->bd_super = sb;
-617ba13b31fbf5 Mingming Cao            2006-10-11  5508  	EXT4_SB(sb)->s_mount_state |= EXT4_ORPHAN_FS;
-617ba13b31fbf5 Mingming Cao            2006-10-11  5509  	ext4_orphan_cleanup(sb, es);
-617ba13b31fbf5 Mingming Cao            2006-10-11  5510  	EXT4_SB(sb)->s_mount_state &= ~EXT4_ORPHAN_FS;
-9b6641dd95a0c4 Ye Bin                  2022-05-25  5511  	/*
-9b6641dd95a0c4 Ye Bin                  2022-05-25  5512  	 * Update the checksum after updating free space/inode counters and
-9b6641dd95a0c4 Ye Bin                  2022-05-25  5513  	 * ext4_orphan_cleanup. Otherwise the superblock can have an incorrect
-9b6641dd95a0c4 Ye Bin                  2022-05-25  5514  	 * checksum in the buffer cache until it is written out and
-9b6641dd95a0c4 Ye Bin                  2022-05-25  5515  	 * e2fsprogs programs trying to open a file system immediately
-9b6641dd95a0c4 Ye Bin                  2022-05-25  5516  	 * after it is mounted can fail.
-9b6641dd95a0c4 Ye Bin                  2022-05-25  5517  	 */
-9b6641dd95a0c4 Ye Bin                  2022-05-25  5518  	ext4_superblock_csum_set(sb);
-0390131ba84fd3 Frank Mayhar            2009-01-07  5519  	if (needs_recovery) {
-b31e15527a9bb7 Eric Sandeen            2009-06-04  5520  		ext4_msg(sb, KERN_INFO, "recovery complete");
-11215630aada28 Jan Kara                2020-07-10  5521  		err = ext4_mark_recovery_complete(sb, es);
-11215630aada28 Jan Kara                2020-07-10  5522  		if (err)
-0796673fe204bc Baokun Li               2023-03-25  5523  			goto failed_mount10;
-0390131ba84fd3 Frank Mayhar            2009-01-07  5524  	}
-0390131ba84fd3 Frank Mayhar            2009-01-07  5525  
-70200574cc229f Christoph Hellwig       2022-04-15  5526  	if (test_opt(sb, DISCARD) && !bdev_max_discard_sectors(sb->s_bdev))
-79add3a3f795e6 Lukas Czerner           2012-11-08  5527  		ext4_msg(sb, KERN_WARNING,
-70200574cc229f Christoph Hellwig       2022-04-15  5528  			 "mounting with \"discard\" option, but the device does not support discard");
-79add3a3f795e6 Lukas Czerner           2012-11-08  5529  
-66e61a9e9504f6 Theodore Ts'o           2010-07-27  5530  	if (es->s_error_count)
-66e61a9e9504f6 Theodore Ts'o           2010-07-27  5531  		mod_timer(&sbi->s_err_report, jiffies + 300*HZ); /* 5 minutes */
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  5532  
-efbed4dc5857f8 Theodore Ts'o           2013-10-17  5533  	/* Enable message ratelimiting. Default is 10 messages per 5 secs. */
-efbed4dc5857f8 Theodore Ts'o           2013-10-17  5534  	ratelimit_state_init(&sbi->s_err_ratelimit_state, 5 * HZ, 10);
-efbed4dc5857f8 Theodore Ts'o           2013-10-17  5535  	ratelimit_state_init(&sbi->s_warning_ratelimit_state, 5 * HZ, 10);
-efbed4dc5857f8 Theodore Ts'o           2013-10-17  5536  	ratelimit_state_init(&sbi->s_msg_ratelimit_state, 5 * HZ, 10);
-1cf006ed19a887 Dmitry Monakhov         2020-07-25  5537  	atomic_set(&sbi->s_warning_count, 0);
-1cf006ed19a887 Dmitry Monakhov         2020-07-25  5538  	atomic_set(&sbi->s_msg_count, 0);
-efbed4dc5857f8 Theodore Ts'o           2013-10-17  5539  
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  5540  	return 0;
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  5541  
-0796673fe204bc Baokun Li               2023-03-25  5542  failed_mount10:
-0796673fe204bc Baokun Li               2023-03-25  5543  	ext4_quota_off_umount(sb);
-02f310fcf47fa9 Jan Kara                2021-08-16 @5544  failed_mount9:
-02f310fcf47fa9 Jan Kara                2021-08-16  5545  	ext4_release_orphan_info(sb);
-72ba74508b2857 Theodore Ts'o           2013-01-24  5546  failed_mount8:
-ebd173beb8db5b Theodore Ts'o           2015-09-23  5547  	ext4_unregister_sysfs(sb);
-cb8d53d2c97369 Eric Biggers            2020-09-22  5548  	kobject_put(&sbi->s_kobj);
-dcf2d804ed6ffe Tao Ma                  2011-10-06  5549  failed_mount7:
-dcf2d804ed6ffe Tao Ma                  2011-10-06  5550  	ext4_unregister_li_request(sb);
-dcf2d804ed6ffe Tao Ma                  2011-10-06  5551  failed_mount6:
-f9ae9cf5d72b39 Theodore Ts'o           2014-07-11  5552  	ext4_mb_release(sb);
-7c990728b99ed6 Suraj Jitindar Singh    2020-02-18  5553  	rcu_read_lock();
-7c990728b99ed6 Suraj Jitindar Singh    2020-02-18  5554  	flex_groups = rcu_dereference(sbi->s_flex_groups);
-7c990728b99ed6 Suraj Jitindar Singh    2020-02-18  5555  	if (flex_groups) {
-7c990728b99ed6 Suraj Jitindar Singh    2020-02-18  5556  		for (i = 0; i < sbi->s_flex_groups_allocated; i++)
-7c990728b99ed6 Suraj Jitindar Singh    2020-02-18  5557  			kvfree(flex_groups[i]);
-7c990728b99ed6 Suraj Jitindar Singh    2020-02-18  5558  		kvfree(flex_groups);
-7c990728b99ed6 Suraj Jitindar Singh    2020-02-18  5559  	}
-7c990728b99ed6 Suraj Jitindar Singh    2020-02-18  5560  	rcu_read_unlock();
-d5e03cbb0c88cd Theodore Ts'o           2014-07-15  5561  	percpu_counter_destroy(&sbi->s_freeclusters_counter);
-d5e03cbb0c88cd Theodore Ts'o           2014-07-15  5562  	percpu_counter_destroy(&sbi->s_freeinodes_counter);
-d5e03cbb0c88cd Theodore Ts'o           2014-07-15  5563  	percpu_counter_destroy(&sbi->s_dirs_counter);
-d5e03cbb0c88cd Theodore Ts'o           2014-07-15  5564  	percpu_counter_destroy(&sbi->s_dirtyclusters_counter);
-efc61345274d6c Eric Whitney            2021-02-18  5565  	percpu_counter_destroy(&sbi->s_sra_exceeded_retry_limit);
-bbd55937de8f27 Eric Biggers            2020-02-19  5566  	percpu_free_rwsem(&sbi->s_writepages_rwsem);
-007649375f6af2 Azat Khuzhin            2014-04-07  5567  failed_mount5:
-f9ae9cf5d72b39 Theodore Ts'o           2014-07-11  5568  	ext4_ext_release(sb);
-f9ae9cf5d72b39 Theodore Ts'o           2014-07-11  5569  	ext4_release_system_zone(sb);
-f9ae9cf5d72b39 Theodore Ts'o           2014-07-11  5570  failed_mount4a:
-94bf608a18fa44 Al Viro                 2012-01-09  5571  	dput(sb->s_root);
-32a9bb57d7c1fd Manish Katiyar          2011-02-27  5572  	sb->s_root = NULL;
-94bf608a18fa44 Al Viro                 2012-01-09  5573  failed_mount4:
-b31e15527a9bb7 Eric Sandeen            2009-06-04  5574  	ext4_msg(sb, KERN_ERR, "mount failed");
-2e8fa54e3b48e4 Jan Kara                2013-06-04  5575  	if (EXT4_SB(sb)->rsv_conversion_wq)
-2e8fa54e3b48e4 Jan Kara                2013-06-04  5576  		destroy_workqueue(EXT4_SB(sb)->rsv_conversion_wq);
-4c0425ff68b1b8 Mingming Cao            2009-09-28  5577  failed_mount_wq:
-dec214d00e0d78 Tahsin Erdogan          2017-06-22  5578  	ext4_xattr_destroy_cache(sbi->s_ea_inode_cache);
-dec214d00e0d78 Tahsin Erdogan          2017-06-22  5579  	sbi->s_ea_inode_cache = NULL;
-50c15df69e062b Chengguang Xu           2018-12-04  5580  
-47387409ee2e09 Tahsin Erdogan          2017-06-22  5581  	ext4_xattr_destroy_cache(sbi->s_ea_block_cache);
-47387409ee2e09 Tahsin Erdogan          2017-06-22  5582  	sbi->s_ea_block_cache = NULL;
-50c15df69e062b Chengguang Xu           2018-12-04  5583  
-0390131ba84fd3 Frank Mayhar            2009-01-07  5584  	if (sbi->s_journal) {
-bb9464e08309f6 yangerkun               2021-09-24  5585  		/* flush s_error_work before journal destroy. */
-bb9464e08309f6 yangerkun               2021-09-24  5586  		flush_work(&sbi->s_error_work);
-dab291af8d6307 Mingming Cao            2006-10-11  5587  		jbd2_journal_destroy(sbi->s_journal);
-47b4a50bebfd34 Jan Kara                2008-07-11  5588  		sbi->s_journal = NULL;
-0390131ba84fd3 Frank Mayhar            2009-01-07  5589  	}
-50460fe8c6d1d9 Darrick J. Wong         2014-10-30  5590  failed_mount3a:
-d3922a777f9b4c Zheng Liu               2013-07-01  5591  	ext4_es_unregister_shrinker(sbi);
-eb68d0e2fc5a4e Zheng Liu               2014-09-01  5592  failed_mount3:
-bb9464e08309f6 yangerkun               2021-09-24  5593  	/* flush s_error_work before sbi destroy */
-c92dc856848f32 Jan Kara                2020-11-27  5594  	flush_work(&sbi->s_error_work);
-2a4ae3bcdf05b8 Jan Kara                2021-03-15  5595  	del_timer_sync(&sbi->s_err_report);
-618f003199c618 Pavel Skripkin          2021-04-30  5596  	ext4_stop_mmpd(sbi);
-a4e6a511d7de5d Jason Yan               2022-09-16  5597  	ext4_group_desc_free(sbi);
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  5598  failed_mount:
-0441984a339897 Darrick J. Wong         2012-04-29  5599  	if (sbi->s_chksum_driver)
-0441984a339897 Darrick J. Wong         2012-04-29  5600  		crypto_free_shash(sbi->s_chksum_driver);
-c83ad55eaa91c8 Gabriel Krisman Bertazi 2019-04-25  5601  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
