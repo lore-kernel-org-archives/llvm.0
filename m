@@ -1,359 +1,171 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E037C17F1
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 08:12:13 +0000 (UTC)
-Received: by mail-lj1-f169.google.com with SMTP id by8so3894969ljb.12
-        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 01:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679731932;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=A4XgPFdc/okcXx2NbhmBkGOEY1T8HTI/lZkH2CUhYRE=;
-        b=C//SxJywjFJCBim3f6DyMsplXjZ4WAJfXUaNGINYm4lfjGjLMUse/uAxgZciltCCWG
-         7S8tbz/Pj9CzPyyRLzphy/aYo1cmxLBKEvSZNTJ3s77/GiDHzGgq36oQzc7DsNV5c8OC
-         CBFltmG8eP3gwIxGF9+ZWZligefahxMz9ar3bYi/F05sxnoRpaLFxbxRZOJIb6g14vWf
-         JD33Qp3p0ULL7MRGoDYX7Dnh/9Ccxpepq9E1jVeBH4KAtXzeJNkJIuzl1KaMo+iPJyvt
-         oR6vJYg0YYLzW2xlrQxMJ2w3MJGVhLkkCWiDUnu5LzAahvJAvpz44zYMUehRXL0AQAeZ
-         tpyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679731932;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4XgPFdc/okcXx2NbhmBkGOEY1T8HTI/lZkH2CUhYRE=;
-        b=w5d+4vrDpUwCEQjbH3bkbaNthB49Kt7FQwHajdf7BBeWeH+62KC8pjwJHWDSIvKl1E
-         1LrUHIgDdHa3xLXLnLb5YjvjUSR+g3vpiNfWE+YOAAF8MzS9DzWJUd+P/Z9fwdw09ilR
-         rLvk3nz4TFvcv48mn6cXY5wyC6LeppKpq5w5+8Ui1LU+hqeEZv8+18ukmol2Aa8HnRa9
-         dvwSUGhFQxJb4rYS6KBLXk4pGZAN1XZzuXZFT1Yu5ixGclJjqYiPcJ7zmWyfGrwqqkTT
-         A417wjAzMfYN0wJV5UNE70/kgAawHuoLuXnFcyx4SCow+EGRto1YQUnpim3roNaPMpkP
-         Sstw==
-X-Gm-Message-State: AAQBX9f4oRODi6X51g56KrPXMozM2FHNNo81tCZASzj5SMDK+mKORwQU
-	b1yOQ8FhMFCP5gRH/Z3XfvM=
-X-Google-Smtp-Source: AKy350ZSw9H6KrkYhnBYCdWvbVd4OQ5MwkUCRpmMI4PZZlLnyTuRn6CcIDCfClOBlNuS/0x5UHLXiA==
-X-Received: by 2002:a2e:8604:0:b0:290:5166:7c28 with SMTP id a4-20020a2e8604000000b0029051667c28mr2010774lji.20.1679731931733;
-        Sat, 25 Mar 2023 01:12:11 -0700 (PDT)
-Received: from localhost ([188.119.65.94])
-        by smtp.gmail.com with ESMTPSA id s24-20020a2e98d8000000b002996e0e6461sm3715162ljj.29.2023.03.25.01.12.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 25 Mar 2023 01:12:11 -0700 (PDT)
-From: Dan Li <ashimida.1990@gmail.com>
-To: gcc-patches@gcc.gnu.org,
-	Richard Sandiford <richard.sandiford@arm.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Dan Li <ashimida.1990@gmail.com>,
-	Marco Elver <elver@google.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Song Liu <song@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Borislav Petkov <bp@suse.de>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Aaron Tomlin <atomlin@redhat.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Yuntao Wang <ytcoode@gmail.com>,
-	Changbin Du <changbin.du@intel.com>
-Cc: linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [RFC/RFT,V2 3/3] [PR102768] aarch64: Add support for Kernel Control Flow Integrity
-Date: Sat, 25 Mar 2023 01:11:17 -0700
-Message-Id: <20230325081117.93245-4-ashimida.1990@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230325081117.93245-1-ashimida.1990@gmail.com>
-References: <20221219055431.22596-1-ashimida.1990@gmail.com>
- <20230325081117.93245-1-ashimida.1990@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D14C17F1;
+	Sat, 25 Mar 2023 08:18:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679732287; x=1711268287;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vkGsebY+bi2zt68dIYP5n+JMfaG3q4r/7n81x+5v2jE=;
+  b=EFysMelJDUnzSaC7Z09+x0aiO0B8FrTUmSDSaTEDnX1g8gyyaq5F2BMc
+   OkHzanbq66RX2eAD9OEm+jw4JOU70IUbDl5JR7ssktjoGNQGkYMUn/Y+i
+   grvFU65A7MkeceBk1YNadATswZ5g7VA6DGjDaXDOhdczMMocJaYly53md
+   t5SvVYJynd7S5WTbJ0WsXRZ1HWdfWMEsSyzZfc/VZvxM2HPVe7kwOjqfA
+   OqtNjAK/q5Y2Kfrfpg/wARgMjNvHmfCng9K9gDYteHnJ90XJHAJWzJAJu
+   Yzj5+I1yHjrDks3BehiSF/eKvEGo8MI3HFNwxLqg2OhFMWOpo1bTYeiOR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="319603156"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="319603156"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 01:17:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="1012535901"
+X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
+   d="scan'208";a="1012535901"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2023 01:17:54 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pfz62-000G6N-0Q;
+	Sat, 25 Mar 2023 08:17:54 +0000
+Date: Sat, 25 Mar 2023 16:16:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
+	lgirdwood@gmail.com, perex@perex.cz,
+	pierre-louis.bossart@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kevin-lu@ti.com,
+	shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+	navada@ti.com, Shenghao Ding <13916275206@139.com>
+Subject: Re: [PATCH v6] ASoC: tas2781: Add tas2781 driver
+Message-ID: <202303251653.7HZjyxTf-lkp@intel.com>
+References: <20230324110755.27652-1-13916275206@139.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324110755.27652-1-13916275206@139.com>
 
-In the AArch64 platform, typeid can be directly inserted in front
-of the function header (offset is patch_area_entry + 4), it should
-be assumed that patch_area_entry is the same for all functions.
+Hi Shenghao,
 
-For all functions that will not be called indirectly, insert the
-reserved RESERVED_CFI_TYPEID (0x0) as typeid in front of them. If
-not, the attacker may use the instruction/data before the function
-as typeid to bypass CFI.
+Thank you for the patch! Perhaps something to improve:
 
-All typeids ignore some bits (& AARCH64_UNALLOCATED_INSN_MASK) to
-avoid conflicts with the AArch64 instruction set (see AAPCS64 for
-details).
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on linus/master v6.3-rc3 next-20230323]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Dan Li <ashimida.1990@gmail.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230324-190955
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230324110755.27652-1-13916275206%40139.com
+patch subject: [PATCH v6] ASoC: tas2781: Add tas2781 driver
+config: arm-randconfig-r021-20230322 (https://download.01.org/0day-ci/archive/20230325/202303251653.7HZjyxTf-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/ae727fb08bb90265d16859aa62c7c956e46841ee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230324-190955
+        git checkout ae727fb08bb90265d16859aa62c7c956e46841ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
 
-gcc/ChangeLog:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303251653.7HZjyxTf-lkp@intel.com/
 
-	* config/aarch64/aarch64.cc (RESERVED_CFI_TYPEID): Macro definition.
-	(DEFAULT_CFI_TYPEID): Likewise.
-	(AARCH64_UNALLOCATED_INSN_MASK): Likewise.
-	(aarch64_calc_func_cfi_typeid): Platform-dependent CFI function.
-	(cgraph_indirectly_callable): Determine whether a funtion may
-	be called indirectly.
-	(aarch64_output_func_kcfi_typeid): Platform-dependent CFI function.
-	(aarch64_output_icall_kcfi_check): Likewise.
-	(TARGET_HAVE_KCFI): New hook.
-	(TARGET_CALC_FUNC_CFI_TYPEID): Likewise.
-	(TARGET_ASM_OUTPUT_FUNC_KCFI_TYPEID): Likewise.
-	(TARGET_ASM_OUTPUT_ICALL_KCFI_CHECK): Likewise.
-	* doc/invoke.texi: Document -fsanitize=kcfi.
----
- gcc/config/aarch64/aarch64.cc | 166 ++++++++++++++++++++++++++++++++++
- gcc/doc/invoke.texi           |  36 ++++++++
- 2 files changed, 202 insertions(+)
+All warnings (new ones prefixed by >>):
 
-diff --git a/gcc/config/aarch64/aarch64.cc b/gcc/config/aarch64/aarch64.cc
-index 5c9e7791a12..5b55541d437 100644
---- a/gcc/config/aarch64/aarch64.cc
-+++ b/gcc/config/aarch64/aarch64.cc
-@@ -5450,6 +5450,160 @@ aarch64_output_sve_addvl_addpl (rtx offset)
-   return buffer;
- }
- 
-+/* Reserved for all functions that cannot be called indirectly.  */
-+#define RESERVED_CFI_TYPEID 0x0U
-+
-+/* If the typeid of a function that can be called indirectly is equal to
-+   RESERVED_CFI_TYPEID, change it to DEFAULT_CFI_TYPEID.  */
-+#define DEFAULT_CFI_TYPEID 0x00000ADAU
-+
-+/* Mask of reserved and unallocated instructions in AArch64 platform.  */
-+#define AARCH64_UNALLOCATED_INSN_MASK 0xE7FFFFFFU
-+
-+static unsigned int
-+aarch64_calc_func_cfi_typeid (const_tree fntype)
-+{
-+  unsigned int hash;
-+
-+  /* The value of typeid has a probability of being the same as the encoding
-+     of an instruction.  If the attacker can find the same encoding as the
-+     typeid in the assembly code, then he has found a usable jump location.
-+     So here, a platform-related mask is used when generating a typeid to
-+     avoid such conflicts as much as possible.  */
-+  hash = unified_type_hash (fntype) & AARCH64_UNALLOCATED_INSN_MASK;
-+
-+  /* RESERVED_CFI_TYPEID is reserved for functions that cannot
-+     be called indirectly.  */
-+  if (hash == RESERVED_CFI_TYPEID)
-+    hash = DEFAULT_CFI_TYPEID;
-+
-+  return hash;
-+}
-+
-+static bool
-+cgraph_indirectly_callable (struct cgraph_node *node,
-+			    void *data ATTRIBUTE_UNUSED)
-+{
-+  if (node->externally_visible || node->address_taken)
-+    return true;
-+
-+  return false;
-+}
-+
-+static void
-+aarch64_output_func_kcfi_typeid (FILE * stream, tree decl)
-+{
-+  struct cgraph_node *node;
-+  unsigned int cur_func_typeid;
-+
-+  node = cgraph_node::get (decl);
-+
-+  if (!node->call_for_symbol_thunks_and_aliases (cgraph_indirectly_callable,
-+						 NULL, true))
-+    /* CFI's typeid check always considers that there is a typeid before the
-+       target function, so it is also necessary to output typeid for functions
-+       that cannot be called indirectly to prevent attackers from bypassing
-+       CFI by using instructions/data before those functions.
-+       The typeid inserted before such a function is RESERVED_CFI_TYPEID,
-+       and the calculation of the typeid must ensure that this value is always
-+       reserved.  */
-+    cur_func_typeid = RESERVED_CFI_TYPEID;
-+  else
-+    cur_func_typeid = aarch64_calc_func_cfi_typeid (TREE_TYPE (decl));
-+
-+  fprintf (stream, "__kcfi_%s:\n", get_name (decl));
-+  fprintf (stream, "\t.4byte %#010x\n", cur_func_typeid);
-+}
-+
-+/* This function outputs assembly instructions to check cfi typeid before
-+   indirect call (blr Xn), which may destroy x16, x17, x9 registers (according
-+   to the AAPCS64 specification, these registers do not need to be restored
-+   after the function call).
-+   The assembly code output by this function is as follows:
-+	ldur    w16, [x1, #-4]
-+	movk    w17, #13570
-+	movk    w17, #17309, lsl #16
-+	cmp     w16, w17
-+	b.eq	.Lkcfi8
-+	brk     #0x8221
-+.Lkcfi8:
-+	blr     x1
-+ */
-+
-+static void
-+aarch64_output_icall_kcfi_check (rtx reg, unsigned int value)
-+{
-+  unsigned int addr_reg, scratch_reg1, scratch_reg2;
-+  unsigned int esr, addr_index, type_index;
-+  char label_buf[256];
-+  const char *label_ptr;
-+  unsigned HOST_WIDE_INT patch_area_entry = crtl->patch_area_entry;
-+  rtx_code_label * tmp_label = gen_label_rtx ();
-+
-+  gcc_assert (GET_CODE (reg) == REG);
-+
-+  addr_reg = REGNO (reg);
-+
-+  /* The typeid read from the front of the callee is saved in the
-+     register specified by scratch_reg1, the default is R16_REGNUM.  */
-+  scratch_reg1 = R16_REGNUM;
-+
-+  /* The expected typeid of the caller is saved in the register
-+     specified by scratch_reg2, which defaults to R17_REGNUM.  */
-+  scratch_reg2 = R17_REGNUM;
-+
-+  gcc_assert (GP_REGNUM_P (addr_reg));
-+
-+  /* If one of the scratch registers is used for the call target,
-+     we can clobber another caller-saved temporary register instead
-+     (in this case, R9_REGNUM) as the check is immediately followed
-+     by the call instruction.  */
-+  if (addr_reg == R16_REGNUM)
-+    {
-+      scratch_reg1 = R9_REGNUM;
-+    }
-+  else if (addr_reg == R17_REGNUM)
-+    {
-+      scratch_reg2 = R9_REGNUM;
-+    }
-+
-+  gcc_assert ((scratch_reg1 != addr_reg) && (scratch_reg2 != addr_reg));
-+
-+  ASM_GENERATE_INTERNAL_LABEL (label_buf, "Lkcfi",
-+			       CODE_LABEL_NUMBER (tmp_label));
-+  label_ptr = targetm.strip_name_encoding (label_buf);
-+
-+  /* The offset of callee's typeid needs to be adjusted according to
-+     patch_area_entry.  This assumes that patch_area_entry is the
-+     same for all functions.  */
-+  fprintf (asm_out_file, "\tldur\tw%d, [x%d, #-%ld]\n",
-+	   scratch_reg1, addr_reg, patch_area_entry * 4 + 4);
-+
-+  fprintf (asm_out_file, "\tmovk\tw%d, #%d\n", scratch_reg2, value & 0xFFFF);
-+
-+  fprintf (asm_out_file, "\tmovk\tw%d, #%d, lsl #16\n",
-+	   scratch_reg2, (value >> 16) & 0xFFFF);
-+
-+  fprintf (asm_out_file, "\tcmp\tw%d, w%d\n", scratch_reg1, scratch_reg2);
-+
-+  fprintf (asm_out_file, "\tb.eq\t%s\n", label_ptr);
-+
-+  /* The base ESR for brk is 0x8000 and the register information is
-+     encoded in bits 0-9 as follows:
-+     - 0-4: n, where the register Xn contains the callee address
-+     - 5-9: m, where the register Wm contains the expected typeid
-+     Where n, m are in[0,30].
-+  */
-+  addr_index = addr_reg - R0_REGNUM;
-+  type_index = scratch_reg2 - R0_REGNUM;
-+  esr = 0x8000 | ((type_index & 31) << 5) | (addr_index & 31);
-+  fprintf (asm_out_file, "\tbrk\t#0x%x\n", esr);
-+
-+  fprintf (asm_out_file, "%s:\n", label_ptr);
-+
-+  return;
-+}
-+
- /* Return true if X is a valid immediate for an SVE vector INC or DEC
-    instruction.  If it is, store the number of elements in each vector
-    quadword in *NELTS_PER_VQ_OUT (if nonnull) and store the multiplication
-@@ -27823,6 +27977,18 @@ aarch64_libgcc_floating_mode_supported_p
- #undef TARGET_HAVE_SHADOW_CALL_STACK
- #define TARGET_HAVE_SHADOW_CALL_STACK true
- 
-+#undef TARGET_HAVE_KCFI
-+#define TARGET_HAVE_KCFI true
-+
-+#undef TARGET_CALC_FUNC_CFI_TYPEID
-+#define TARGET_CALC_FUNC_CFI_TYPEID aarch64_calc_func_cfi_typeid
-+
-+#undef TARGET_ASM_OUTPUT_FUNC_KCFI_TYPEID
-+#define TARGET_ASM_OUTPUT_FUNC_KCFI_TYPEID aarch64_output_func_kcfi_typeid
-+
-+#undef TARGET_ASM_OUTPUT_ICALL_KCFI_CHECK
-+#define TARGET_ASM_OUTPUT_ICALL_KCFI_CHECK aarch64_output_icall_kcfi_check
-+
- struct gcc_target targetm = TARGET_INITIALIZER;
- 
- #include "gt-aarch64.h"
-diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
-index ff6c338bedb..1b2ba7a0f29 100644
---- a/gcc/doc/invoke.texi
-+++ b/gcc/doc/invoke.texi
-@@ -15736,6 +15736,42 @@ to turn off exceptions.
- See @uref{https://clang.llvm.org/docs/ShadowCallStack.html} for more
- details.
- 
-+@item -fsanitize=kcfi
-+@opindex fsanitize=kcfi
-+The KCFI sanitizer, enabled with @option{-fsanitize=kcfi}, implements a
-+forward-edge control flow integrity scheme for indirect calls.  It
-+attaches a type identifier (@code{typeid}) for each function and injects
-+verification code before indirect calls.
-+
-+A @code{typeid} is a 32-bit constant, its value is mainly related to the
-+return value type and all parameter types of the function, and is invariant
-+for each compilation.  Since the value of @code{typeid} may conflict with
-+the instruction set encoding of the current platform, some bits may be
-+ignored on different platforms.
-+
-+At compile time, the compiler inserts checking code on all indirect calls,
-+and at run time, before any indirect calls occur, the code checks that
-+the @code{typeid} before the callee function matches the @code{typeid}
-+requested by the caller.  If the match fails, an exception instruction
-+will be triggered, such as a @code{brk} in aarch64.  This mechanism is
-+mainly designed for low-level codes, such as operating systems, and the
-+system needs to handle those exceptions by itself.
-+
-+If a program contains indirect calls to assembly functions, they must be
-+manually annotated with the expected type identifiers to prevent errors.
-+To make this easier, CFI generates a weak SHN_ABS
-+@code{__kcfi_typeid_<function>} symbol for each address-taken function
-+declaration, which can be used to annotate functions in assembly as long
-+as at least one C translation unit linked into the program takes the
-+function address.
-+
-+Currently this feature only supports the aarch64 platform, mainly for
-+the linux kernel.  Users who want to use this feature in other system
-+need to provide their own support for the exception handling.
-+
-+See @uref{https://clang.llvm.org/docs/ControlFlowIntegrity.html} for
-+more details.
-+
- @item -fsanitize=thread
- @opindex fsanitize=thread
- Enable ThreadSanitizer, a fast data race detector.
+>> sound/soc/codecs/tas2781-dsp.c:1357:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (in) {
+               ^~
+   sound/soc/codecs/tas2781-dsp.c:1378:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/tas2781-dsp.c:1357:2: note: remove the 'if' if its condition is always true
+           if (in) {
+           ^~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:1343:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   sound/soc/codecs/tas2781-dsp.c:1407:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (in) {
+               ^~
+   sound/soc/codecs/tas2781-dsp.c:1444:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/tas2781-dsp.c:1407:2: note: remove the 'if' if its condition is always true
+           if (in) {
+           ^~~~~~~~
+   sound/soc/codecs/tas2781-dsp.c:1388:9: note: initialize the variable 'ret' to silence this warning
+           int ret, i;
+                  ^
+                   = 0
+   2 warnings generated.
+
+
+vim +1357 sound/soc/codecs/tas2781-dsp.c
+
+  1336	
+  1337	static int do_singlereg_checksum(struct tasdevice_priv *tasdevice,
+  1338		enum channel chl, unsigned char book, unsigned char page,
+  1339		unsigned char reg, unsigned char val)
+  1340	{
+  1341		struct tas_crc crc_data;
+  1342		unsigned int nData1;
+  1343		int ret;
+  1344		bool in;
+  1345	
+  1346		if ((book == TASDEVICE_BOOK_ID(TAS2781_SA_COEFF_SWAP_REG))
+  1347			&& (page == TASDEVICE_PAGE_ID(TAS2781_SA_COEFF_SWAP_REG))
+  1348			&& (reg >= TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG))
+  1349			&& (reg <= (TASDEVICE_PAGE_REG(
+  1350			TAS2781_SA_COEFF_SWAP_REG) + 4))) {
+  1351			/*DSP swap command, pass */
+  1352			ret = 0;
+  1353			goto end;
+  1354		}
+  1355	
+  1356		in = check_yram(&crc_data, book, page, reg, 1);
+> 1357		if (in) {
+  1358			ret = tasdevice_dev_read(tasdevice, chl,
+  1359				TASDEVICE_REG(book, page, reg), &nData1);
+  1360			if (ret < 0)
+  1361				goto end;
+  1362	
+  1363			if (nData1 != val) {
+  1364				dev_err(tasdevice->dev,
+  1365					"B[0x%x]P[0x%x]R[0x%x] W[0x%x], R[0x%x]\n",
+  1366					book, page, reg,
+  1367					val, nData1);
+  1368				tasdevice->tasdevice[chl].err_code |=
+  1369					ERROR_YRAM_CRCCHK;
+  1370				ret = -EAGAIN;
+  1371				goto end;
+  1372			}
+  1373	
+  1374			ret = crc8(tasdevice->crc8_lkp_tbl, &val, 1, 0);
+  1375		}
+  1376	
+  1377	end:
+  1378		return ret;
+  1379	}
+  1380	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
