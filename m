@@ -1,112 +1,193 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EE8E643;
-	Sat, 25 Mar 2023 04:53:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679720033; x=1711256033;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Sr2PaA2Wh83YrQlVsajUD78EG0G6QZQj52QwuWQtJF4=;
-  b=g2id+mnMX6NdFPJEOWzW+ZxtMD2HkaIPpQ5ugJNvB6qQQbBYwt8YKSPZ
-   26yy3LOExs4RgX6rla+ikW9ilPXh+fGnOzCwPCqtJ1E5SVrhJmejZ1Myf
-   Z3orUwJPoEpwsJJ24fpMg3he/+yxQGolHevFQPwU7AkDm3KRAiZW6Wo4a
-   Nj5zhwizOEjZAhZPw4uJEptfY5/GfjJxWiHJFR9Is78zQb+FnQxQzxucw
-   UGqK5nrwINg7flVr4w1jHq81YWKknE3ostNbLWtlf0SD9sbuulwLxBxlu
-   5Iv17FNd6xqw1E+FQfPhOj5RK1tPeDgm7GNU6C61mWsIBq3FQTLdqj/Aj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="323819292"
-X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
-   d="scan'208";a="323819292"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 21:53:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="928889773"
-X-IronPort-AV: E=Sophos;i="5.98,289,1673942400"; 
-   d="scan'208";a="928889773"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Mar 2023 21:53:47 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfvuU-000Fy3-2y;
-	Sat, 25 Mar 2023 04:53:46 +0000
-Date: Sat, 25 Mar 2023 12:53:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:iter-ubuf 2/2] lib/iov_iter.c:1786:9: warning: no
- previous prototype for function '__import_iovec_ubuf'
-Message-ID: <202303251233.dDz1N6Ph-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6F0136D
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 06:11:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679724705;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QHy2yrnFN6Hk6FS38hOILzHp1sRb/I8pCFqGQEgFwKU=;
+	b=S3d2t+cYR5keXWkw8EXUClQRasJPgLqiTrhR+BBwUc6hIxfnevaigpfPA8U7ejzPMMMg/L
+	RQXKutT55SUaZWAC0F7rqsMisJU6XZhJxR68VtTmEU9nP7z8gDkzqy5fi3+dJUP4/nppzw
+	n+1MSoDOgs2VNGobJ0QA/zGO2JEvgnY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-149-rd9ZPtrZO9OarVTfEJ8Nvg-1; Sat, 25 Mar 2023 02:11:43 -0400
+X-MC-Unique: rd9ZPtrZO9OarVTfEJ8Nvg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 907B429A9D3C
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 06:11:43 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.33.173])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7A8651415117;
+	Sat, 25 Mar 2023 06:11:43 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 381): Test report for master
+ (6.3.0-rc3, mainline.kernel.org-clang, cb7f5b41)
+Date: Sat, 25 Mar 2023 06:11:43 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <62796.123032502114300283@us-mta-149.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git iter-ubuf
-head:   8ccf20004bd671f70362eac93833c12f5ce89c66
-commit: 8ccf20004bd671f70362eac93833c12f5ce89c66 [2/2] iov_iter: import single vector iovecs as ITER_UBUF
-config: arm-randconfig-r046-20230322 (https://download.01.org/0day-ci/archive/20230325/202303251233.dDz1N6Ph-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?id=8ccf20004bd671f70362eac93833c12f5ce89c66
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch --no-tags axboe-block iter-ubuf
-        git checkout 8ccf20004bd671f70362eac93833c12f5ce89c66
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303251233.dDz1N6Ph-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> lib/iov_iter.c:1786:9: warning: no previous prototype for function '__import_iovec_ubuf' [-Wmissing-prototypes]
-   ssize_t __import_iovec_ubuf(int type, const struct iovec __user *uvec,
-           ^
-   lib/iov_iter.c:1786:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   ssize_t __import_iovec_ubuf(int type, const struct iovec __user *uvec,
-   ^
-   static 
-   1 warning generated.
+Kernel information:
+    Commit message: Merge tag 'slab-fix-for-6.3-rc4' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/vbabka/slab
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/81473
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: generic/129: ./xfstests-run.sh: line 55:=
+ results/generic/129.dmesg: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1407
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: generic/130: fatal: cannot open file `=
+/var/lib/xfstests/results//check.time' for reading: No such file or directo=
+ry
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1376
+            Affected tests:
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: xfstests - cifsv3.11: generic/132: FAIL: tee: results/generi=
+c/generic-132.log: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1491
+            Affected tests:
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
 
-vim +/__import_iovec_ubuf +1786 lib/iov_iter.c
 
-  1782	
-  1783	/*
-  1784	 * Single segment iovec supplied by the user, import it as ITER_UBUF.
-  1785	 */
-> 1786	ssize_t __import_iovec_ubuf(int type, const struct iovec __user *uvec,
-  1787				    struct iovec **iovp, struct iov_iter *i,
-  1788				    bool compat)
-  1789	{
-  1790		struct iovec *iov = *iovp;
-  1791		ssize_t ret;
-  1792	
-  1793		if (compat)
-  1794			ret = copy_compat_iovec_from_user(iov, uvec, 1);
-  1795		else
-  1796			ret = copy_iovec_from_user(iov, uvec, 1);
-  1797		if (unlikely(ret))
-  1798			return ret;
-  1799	
-  1800		import_ubuf(type, iov->iov_base, iov->iov_len, i);
-  1801		*iovp = NULL;
-  1802		return i->count;
-  1803	}
-  1804	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
