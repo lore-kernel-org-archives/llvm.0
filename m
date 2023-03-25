@@ -1,215 +1,118 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F4F28EB
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 13:41:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483AA28EB
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 13:45:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679751700;
+	s=mimecast20190719; t=1679751910;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=OQgsO1VR89zcSCRBJXKKKxFGMLXDeGrKTJxjthoz2IE=;
-	b=RY3wmMB4LrnffO8Py9P62KU9iVo1vIDQBB6W0tJTQKX6pYOGa76sM9iZgmuUWmb2gql757
-	bTndhwlrc3Va5T4zK0BNQIJveJTeC27umQDywt9EWPXwn0AFLd+kxhB+1wKasr9wYtLdJr
-	oOb/yLTCtBJpFd9gaQPCaVRKPLLUMY4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-523-H3_TC3dSOma_C40DtEblEg-1; Sat, 25 Mar 2023 09:41:39 -0400
-X-MC-Unique: H3_TC3dSOma_C40DtEblEg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34FD7802314
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 13:41:39 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.33.173])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1DAF61121315;
-	Sat, 25 Mar 2023 13:41:39 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 5 of 381): Test report for master
- (6.3.0-rc3, mainline.kernel.org-clang, e76db6e5)
-Date: Sat, 25 Mar 2023 13:41:39 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	bh=CA7h/KT6ar6s3WSm/PcPsckHI4JxnLRkTxYhhO4xj4k=;
+	b=QsSkWCqzG94/C8/m2MCOQMZGyhzatoiQy6aH9ZK0AeQ4v0OfW/TgeLpxavwcLToTbmUWgW
+	bsOX87wVlvv+4Vzes8mQxr1/SQTwBbTj6YIG06v47b5VyRynuTWGAuZ5sdRxaxnubm/VoC
+	cwqBNz067mbBtwspBJATT6OpjRqxzFQ=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-433-4gJWse1IO_unuv2whuV-mg-1; Sat, 25 Mar 2023 09:45:07 -0400
+X-MC-Unique: 4gJWse1IO_unuv2whuV-mg-1
+Received: by mail-qv1-f72.google.com with SMTP id a15-20020a0562140c2f00b005ad28a23cffso2049604qvd.6
+        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 06:45:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679751907;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CA7h/KT6ar6s3WSm/PcPsckHI4JxnLRkTxYhhO4xj4k=;
+        b=1/dzBthPvH/5fjM/uCy9DK01IxjUkPTLbywEPxTm9YjLFJDG5BZaY1BcyM4LzLPNri
+         dLYm06Lgi3MlWnncUUJOmdqbYTtAiCKytFtKmtDGdVN2Kq9fdbGWyqbFInFI4jMEq84C
+         /T7wSYWbI9BUQQBK1Gscfh14UC6/3Ir/+mEA97yZowcdEnN6At6kl8JbGwxWtU8cZ6rq
+         v7PLp12WOGT6cRpQ2cqO4L23/3oEuCdsnEJDNqo3dpvZOV4yYv/27pBKSMXbnthwEdGG
+         M1roElDIix47J0T2s39UOpUaUs87XwhrAqAkn4S7XZmcYyb/6tOwq+o2nR2qTbuy1P65
+         eIPQ==
+X-Gm-Message-State: AO0yUKXRTe6WP+6UeK412plxVJYB7yZguZuEy3SXjWFN4y6ywd5Hacj8
+	vMwMHMj9rjMdT0osmTyIn8UFzkXFk6t3MAMrZWFYrIEzraYa8eZKsZu3OxCFq2lYl+BmiJTeYOa
+	M4tLzCMK4ZiOGew==
+X-Received: by 2002:a05:622a:647:b0:3e3:9948:98d1 with SMTP id a7-20020a05622a064700b003e3994898d1mr10992004qtb.38.1679751907341;
+        Sat, 25 Mar 2023 06:45:07 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9lBadmzaW3R6GBzpZCCcrV/q81u7BWSsClYIuBO79n0CA6GzW3uhjcVgbc5HCJD7hhViJ7VQ==
+X-Received: by 2002:a05:622a:647:b0:3e3:9948:98d1 with SMTP id a7-20020a05622a064700b003e3994898d1mr10991982qtb.38.1679751907150;
+        Sat, 25 Mar 2023 06:45:07 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id h23-20020ac85497000000b003e3927a2cd8sm2528739qtq.3.2023.03.25.06.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 06:45:06 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: harry.wentland@amd.com,
+	sunpeng.li@amd.com,
+	Rodrigo.Siqueira@amd.com,
+	alexander.deucher@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	Jun.Lei@amd.com,
+	wenjing.liu@amd.com,
+	Jimmy.Kizito@amd.com,
+	Cruise.Hung@amd.com
+Cc: amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: remove unused matching_stream_ptrs variable
+Date: Sat, 25 Mar 2023 09:45:03 -0400
+Message-Id: <20230325134503.1335510-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <31826.123032509413900397@us-mta-523.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi, we tested your kernel and here are the results:
+clang with W=1 reports
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_enc_cfg.c:625:6: error:
+  variable 'matching_stream_ptrs' set but not used [-Werror,-Wunused-but-set-variable]
+        int matching_stream_ptrs = 0;
+            ^
+This variable is not used so remove it.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-
-Kernel information:
-    Commit message: Merge tag 'arm-fixes-6.3-2' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/81529
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7557461
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7557465
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7557469
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7557505
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7557509
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7557515
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: mkfs -t xfs /dev/md1: TIMEO=
-UT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1374
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1612
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: xfstests - btrfs: ERROR: unable to open /dev/sda5: Device or=
- resource busy
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1597
-            Affected tests:
-                  x86_64 (debug) - xfstests - btrfs
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
-robe of ARMHC500:20 failed with error -17
-            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
-YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
-            Affected tests:
-                 aarch64 - Boot test
-                 aarch64 - Reboot test
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
+index 41198c729d90..30c0644d4418 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
+@@ -622,7 +622,6 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc_state *state)
+ 	int i, j;
+ 	uint8_t valid_count = 0;
+ 	uint8_t dig_stream_count = 0;
+-	int matching_stream_ptrs = 0;
+ 	int eng_ids_per_ep_id[MAX_PIPES] = {0};
+ 	int ep_ids_per_eng_id[MAX_PIPES] = {0};
+ 	int valid_bitmap = 0;
+@@ -645,9 +644,7 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc_state *state)
+ 		struct link_enc_assignment assignment = state->res_ctx.link_enc_cfg_ctx.link_enc_assignments[i];
+ 
+ 		if (assignment.valid) {
+-			if (assignment.stream == state->streams[i])
+-				matching_stream_ptrs++;
+-			else
++			if (assignment.stream != state->streams[i])
+ 				valid_stream_ptrs = false;
+ 		}
+ 	}
+-- 
+2.27.0
 
