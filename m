@@ -1,193 +1,147 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6F0136D
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 06:11:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679724705;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=QHy2yrnFN6Hk6FS38hOILzHp1sRb/I8pCFqGQEgFwKU=;
-	b=S3d2t+cYR5keXWkw8EXUClQRasJPgLqiTrhR+BBwUc6hIxfnevaigpfPA8U7ejzPMMMg/L
-	RQXKutT55SUaZWAC0F7rqsMisJU6XZhJxR68VtTmEU9nP7z8gDkzqy5fi3+dJUP4/nppzw
-	n+1MSoDOgs2VNGobJ0QA/zGO2JEvgnY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149-rd9ZPtrZO9OarVTfEJ8Nvg-1; Sat, 25 Mar 2023 02:11:43 -0400
-X-MC-Unique: rd9ZPtrZO9OarVTfEJ8Nvg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 907B429A9D3C
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 06:11:43 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.33.173])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7A8651415117;
-	Sat, 25 Mar 2023 06:11:43 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 4 of 381): Test report for master
- (6.3.0-rc3, mainline.kernel.org-clang, cb7f5b41)
-Date: Sat, 25 Mar 2023 06:11:43 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A7C7F
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 08:12:00 +0000 (UTC)
+Received: by mail-lj1-f175.google.com with SMTP id q14so3905130ljm.11
+        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 01:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679731918;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+NlJ/oPig1GP7X1e2c7GDto79ZOIHWgulBZ822qNni0=;
+        b=MAds8lO/SQafNzkzu9ERbPN00+9EVMg0nVXQHSKzx5xVWQRzNxVtddouKOyGkU5kpo
+         ahAUApjRyB4tG4GifLdRUnQ6xNGdrZAkkTG9TU8AEfXRnjKq/7+1Np0T7F+UKpoYg8vl
+         Hl7f97ZfuWXxy7ro+uE17qnhYq8vxvbCEnTwLlbX9P3EDE/bbvjrkGAF/Ax7ze77Yi68
+         NiwV7EHhDwW/oJvfN5RJ0xZwInUZAPA2au5kQIxP4BrXZmxjun9GCm9vq2Ta75em70iC
+         s0Hda8iINwzZ7a2G8zetIGAqfiUQsA69Ebc3nE/Z4AvxM8uUzX8TWWsqfo21WVIHUlWq
+         NHWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679731918;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+NlJ/oPig1GP7X1e2c7GDto79ZOIHWgulBZ822qNni0=;
+        b=O6AzMwomnvybedYq9xaDTRoMrB5gnY5l+nm+MxD8cIEIM96jyw1pdXWOykv4O0x6Je
+         OSFjyBjVWJrFX9HbW730HAfwy4Z+y04GmVg29dnhLCAYhFqVDRG/BSVcxpLmpDhCYmTb
+         UAbm7YMog+TpqToTB4jUBFi7NlwKXRvowVx0mzg7fKlDJs7FVZ/PVw+y9Lopx3oJwGw3
+         peM+HNh9Lsni5ShtN2wArQwekYnXDO+uoXne+VEoFXDv8emHZb+BBQQskidofOXgNA6m
+         e3rm2qZOhLbWPB/sFu55WpM7xmSrzEaJgMzenPPj2a/tqc4BJcVzei5T5qpynaWY8WFm
+         h3MQ==
+X-Gm-Message-State: AAQBX9cRyO02Fo3m1qZsG1zsRE1EbGd+6sklJk6IVt8OToeYqWoan0U8
+	gjRd80XhnSQeQiNJrIuEbK8=
+X-Google-Smtp-Source: AKy350bznPlxqT/a26p+A5M3mnHqnoezsghoLnhAEYwchx0tAr4G/87IgOsFxXs0YJA3U6iXy8jEYg==
+X-Received: by 2002:a2e:86d5:0:b0:29f:e144:6c6a with SMTP id n21-20020a2e86d5000000b0029fe1446c6amr1490057ljj.23.1679731918514;
+        Sat, 25 Mar 2023 01:11:58 -0700 (PDT)
+Received: from localhost ([188.119.65.94])
+        by smtp.gmail.com with ESMTPSA id m18-20020a195212000000b004e95f53adc7sm3720859lfb.27.2023.03.25.01.11.57
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 25 Mar 2023 01:11:57 -0700 (PDT)
+From: Dan Li <ashimida.1990@gmail.com>
+To: gcc-patches@gcc.gnu.org,
+	Richard Sandiford <richard.sandiford@arm.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Dan Li <ashimida.1990@gmail.com>,
+	Marco Elver <elver@google.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Song Liu <song@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Juergen Gross <jgross@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Borislav Petkov <bp@suse.de>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Aaron Tomlin <atomlin@redhat.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	Yuntao Wang <ytcoode@gmail.com>,
+	Changbin Du <changbin.du@intel.com>
+Cc: linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [RFC/RFT,V2 0/3] Add compiler support for Kernel Control Flow Integrity
+Date: Sat, 25 Mar 2023 01:11:14 -0700
+Message-Id: <20230325081117.93245-1-ashimida.1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221219055431.22596-1-ashimida.1990@gmail.com>
+References: <20221219055431.22596-1-ashimida.1990@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <62796.123032502114300283@us-mta-149.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+This series of patches is mainly used to support the control flow
+integrity protection of the linux kernel [1], which is similar to
+-fsanitize=kcfi in clang 16.0 [2,3].
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Any suggestion please let me know :).
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Thanks, Dan.
 
-Kernel information:
-    Commit message: Merge tag 'slab-fix-for-6.3-rc4' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/vbabka/slab
+[1] https://lore.kernel.org/all/20220908215504.3686827-1-samitolvanen@google.com/
+[2] https://clang.llvm.org/docs/ControlFlowIntegrity.html
+[3] https://reviews.llvm.org/D119296
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/81473
+Signed-off-by: Dan Li <ashimida.1990@gmail.com>
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1612
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: generic/129: ./xfstests-run.sh: line 55:=
- results/generic/129.dmesg: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1407
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: generic/130: fatal: cannot open file `=
-/var/lib/xfstests/results//check.time' for reading: No such file or directo=
-ry
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1376
-            Affected tests:
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: xfstests - cifsv3.11: generic/132: FAIL: tee: results/generi=
-c/generic-132.log: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1491
-            Affected tests:
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+---
+Dan Li (3):
+  [PR102768] flag-types.h (enum sanitize_code): Extend sanitize_code to
+    64 bits to support more features
+  [PR102768] Support CFI: Add basic support for Kernel Control Flow
+    Integrity
+  [PR102768] aarch64: Add support for Kernel Control Flow Integrity
 
+ gcc/asan.h                    |   4 +-
+ gcc/c-family/c-attribs.cc     |  10 +-
+ gcc/c-family/c-common.h       |   2 +-
+ gcc/c/c-parser.cc             |   4 +-
+ gcc/cfgexpand.cc              |  26 ++++++
+ gcc/cgraphunit.cc             |  34 +++++++
+ gcc/combine.cc                |   1 +
+ gcc/common.opt                |   4 +-
+ gcc/config/aarch64/aarch64.cc | 166 ++++++++++++++++++++++++++++++++++
+ gcc/cp/typeck.cc              |   2 +-
+ gcc/doc/invoke.texi           |  36 ++++++++
+ gcc/doc/tm.texi               |  27 ++++++
+ gcc/doc/tm.texi.in            |   8 ++
+ gcc/dwarf2asm.cc              |   2 +-
+ gcc/emit-rtl.cc               |   1 +
+ gcc/emit-rtl.h                |   4 +
+ gcc/final.cc                  |  24 ++++-
+ gcc/flag-types.h              |  67 +++++++-------
+ gcc/gimple.cc                 |  11 +++
+ gcc/gimple.h                  |   5 +-
+ gcc/opt-suggestions.cc        |   2 +-
+ gcc/opts.cc                   |  26 +++---
+ gcc/opts.h                    |   8 +-
+ gcc/output.h                  |   3 +
+ gcc/reg-notes.def             |   1 +
+ gcc/target.def                |  38 ++++++++
+ gcc/toplev.cc                 |   4 +
+ gcc/tree-cfg.cc               |   2 +-
+ gcc/tree.cc                   | 144 +++++++++++++++++++++++++++++
+ gcc/tree.h                    |   1 +
+ gcc/varasm.cc                 |  26 ++++++
+ 31 files changed, 627 insertions(+), 66 deletions(-)
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+-- 
+2.17.1
 
