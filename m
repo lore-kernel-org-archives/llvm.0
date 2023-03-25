@@ -1,171 +1,620 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D14C17F1;
-	Sat, 25 Mar 2023 08:18:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679732287; x=1711268287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vkGsebY+bi2zt68dIYP5n+JMfaG3q4r/7n81x+5v2jE=;
-  b=EFysMelJDUnzSaC7Z09+x0aiO0B8FrTUmSDSaTEDnX1g8gyyaq5F2BMc
-   OkHzanbq66RX2eAD9OEm+jw4JOU70IUbDl5JR7ssktjoGNQGkYMUn/Y+i
-   grvFU65A7MkeceBk1YNadATswZ5g7VA6DGjDaXDOhdczMMocJaYly53md
-   t5SvVYJynd7S5WTbJ0WsXRZ1HWdfWMEsSyzZfc/VZvxM2HPVe7kwOjqfA
-   OqtNjAK/q5Y2Kfrfpg/wARgMjNvHmfCng9K9gDYteHnJ90XJHAJWzJAJu
-   Yzj5+I1yHjrDks3BehiSF/eKvEGo8MI3HFNwxLqg2OhFMWOpo1bTYeiOR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="319603156"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="319603156"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 01:17:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="1012535901"
-X-IronPort-AV: E=Sophos;i="5.98,290,1673942400"; 
-   d="scan'208";a="1012535901"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Mar 2023 01:17:54 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pfz62-000G6N-0Q;
-	Sat, 25 Mar 2023 08:17:54 +0000
-Date: Sat, 25 Mar 2023 16:16:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
-	lgirdwood@gmail.com, perex@perex.cz,
-	pierre-louis.bossart@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kevin-lu@ti.com,
-	shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-	navada@ti.com, Shenghao Ding <13916275206@139.com>
-Subject: Re: [PATCH v6] ASoC: tas2781: Add tas2781 driver
-Message-ID: <202303251653.7HZjyxTf-lkp@intel.com>
-References: <20230324110755.27652-1-13916275206@139.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837B71843
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 08:54:21 +0000 (UTC)
+Received: by mail-pl1-f170.google.com with SMTP id kq3so3893408plb.13
+        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 01:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679734461;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FxzWcmwxfumvw06OzVJ/yMbENPGmTunYQ4gTxXUdKlI=;
+        b=idb79Si3cccJizWjii+4DctDPbdgUrjT3Z05o/fCLtH/1thefxr4A4LFzgR2aA88tC
+         Ss6X840MB9ySvakMahCKd4E6RATba9CqEbznUdTfgjQYXxh1FMqVJf4xSHjEa2d4k4Zo
+         9230FyaWM8dyByzmoLM9NHzG6fIAcINzZ9mzowg4wGKX05xNjg/e1FIkOCQ9VpDwUadS
+         9JFT6iOQ70BAlcuCAiOabLnyuCdHwK99vxd1dnLnDDMREpqx/Hjog2QadtL7nuiv4S+l
+         KxcgFKwjvA1IK8AssHJSW5np+trW/Ty7y9WNoJLRZLvgSuZ8BYKeMb6toE6XVHa32rQh
+         Kh4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679734461;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FxzWcmwxfumvw06OzVJ/yMbENPGmTunYQ4gTxXUdKlI=;
+        b=C8fAzIQkza0oifgJbN5dIrP+5NuPw8ckl1i0BphtU+59IGcib88suPQ+neaERqVpzw
+         Zh7X0oAiF9DtpJKdlHuLlHJVyd68lMTgWQfmW76ClsI3cDUSwNhrqIVzO5rHo60bwhwS
+         y1zdFqbsQw/VwyO5FSHlH8gBD0tZ54rVfYg2q3tCxrwrPNulsKkOfd+gIo5H5YYHMoA8
+         cCv3isKLDhv9LEIvo+8sK/yhakMaVLTNuz7jju/rbdEvvCTYlWIIM+1ZFXv+GfX1PYz0
+         34yACIL03U00ymQMwl1TICiZnzaxpPI/X1WD2SWSjWU219PCCjwYfN0J+QRC7FQcueqn
+         PG0A==
+X-Gm-Message-State: AAQBX9c58vMVKFfU+4/uGMthARVCRj6GCiGUG8zxCh1/4ItBqCwmuzId
+	Ycv5CJSh4794pdhjeS9qzck=
+X-Google-Smtp-Source: AKy350aRz00qMkI64NXn9kQxKNy7q6I4LAkTa9m2YXXfL8yRQhWkrhVJREm/139YrzJdRB3t8WELKw==
+X-Received: by 2002:a17:902:e812:b0:19c:e440:9256 with SMTP id u18-20020a170902e81200b0019ce4409256mr7129674plg.35.1679734460720;
+        Sat, 25 Mar 2023 01:54:20 -0700 (PDT)
+Received: from localhost ([103.152.220.91])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170902d34600b00198d7b52eefsm15395659plk.257.2023.03.25.01.54.19
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 25 Mar 2023 01:54:20 -0700 (PDT)
+From: Dan Li <ashimida.1990@gmail.com>
+To: Aaron Tomlin <atomlin@redhat.com>,
+	Alexander Potapenko <glider@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Borislav Petkov <bp@suse.de>,
+	Brian Gerst <brgerst@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Changbin Du <changbin.du@intel.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dan Li <ashimida.1990@gmail.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	gcc-patches@gcc.gnu.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Juergen Gross <jgross@suse.com>,
+	Kalesh Singh <kaleshsingh@google.com>,
+	Kees Cook <keescook@chromium.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Marco Elver <elver@google.com>,
+	Mark Brown <broonie@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Michael Roth <michael.roth@amd.com>,
+	Michal Marek <michal.lkml@markovi.net>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Sandiford <richard.sandiford@arm.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Song Liu <song@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tom Rix <trix@redhat.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	x86@kernel.org,
+	Yuntao Wang <ytcoode@gmail.com>,
+	Yu Zhao <yuzhao@google.com>,
+	Zhen Lei <thunder.leizhen@huawei.com>
+Cc: linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
+Date: Sat, 25 Mar 2023 01:54:16 -0700
+Message-Id: <20230325085416.95191-1-ashimida.1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221219061758.23321-1-ashimida.1990@gmail.com>
+References: <20221219061758.23321-1-ashimida.1990@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230324110755.27652-1-13916275206@139.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Shenghao,
+Based on Sami's patch[1], this patch makes the corresponding kernel
+configuration of CFI available when compiling the kernel with the gcc[2].
 
-Thank you for the patch! Perhaps something to improve:
+The code after enabling cfi (with -fsanitize=kcfi,
+-fpatchable-function-entry=3,1) is as follows:
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on linus/master v6.3-rc3 next-20230323]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+int (*p)(void);
+int func (int)
+{
+  	p();
+}
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230324-190955
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230324110755.27652-1-13916275206%40139.com
-patch subject: [PATCH v6] ASoC: tas2781: Add tas2781 driver
-config: arm-randconfig-r021-20230322 (https://download.01.org/0day-ci/archive/20230325/202303251653.7HZjyxTf-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/ae727fb08bb90265d16859aa62c7c956e46841ee
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230324-190955
-        git checkout ae727fb08bb90265d16859aa62c7c956e46841ee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
+__kcfi_func:
+        .4byte 0x439d3502
+        .global func
+        .text
+.LPFE1:
+        nop
+        .type   func, %function
+func:
+        nop
+        nop
+.LFB0:
+        ......
+        adrp    x0, p
+        add     x0, x0, :lo12:p
+        ldr     x0, [x0]
+        ldur    w16, [x0, #-8]
+        movk    w17, #23592
+        movk    w17, #17921, lsl #16
+        cmp     w16, w17
+        b.eq    .Lkcfi2
+        brk     #0x8220
+.Lkcfi2:
+        blr     x0
+        ......
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303251653.7HZjyxTf-lkp@intel.com/
+In the compiler part[4], most of the content is the same as Sami's
+implementation[3], except for some minor differences, mainly including:
 
-All warnings (new ones prefixed by >>):
+1. The function typeid is calculated differently and it is difficult
+to be consistent.
 
->> sound/soc/codecs/tas2781-dsp.c:1357:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (in) {
-               ^~
-   sound/soc/codecs/tas2781-dsp.c:1378:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   sound/soc/codecs/tas2781-dsp.c:1357:2: note: remove the 'if' if its condition is always true
-           if (in) {
-           ^~~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:1343:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   sound/soc/codecs/tas2781-dsp.c:1407:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (in) {
-               ^~
-   sound/soc/codecs/tas2781-dsp.c:1444:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   sound/soc/codecs/tas2781-dsp.c:1407:2: note: remove the 'if' if its condition is always true
-           if (in) {
-           ^~~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:1388:9: note: initialize the variable 'ret' to silence this warning
-           int ret, i;
-                  ^
-                   = 0
-   2 warnings generated.
+2. A reserved typeid (such as 0x0U on the aarch64 platform) is always
+inserted in front of functions that should not be called indirectly.
+Functions that can be called indirectly will not use this hash value,
+which prevents instructions/data before the function from being used
+as a typeid by an attacker.
 
+3. Some bits are ignored in the typeid to avoid conflicts between the
+typeid and the instruction set of a specific platform, thereby preventing
+an attacker from bypassing the CFI check by using the instruction as a
+typeid, such as on the aarch64 platform:
+* If the following instruction sequence exists:
+	400620:       a9be7bfd        stp     x29, x30, [sp, #-32]!
+	400624:       910003fd        mov     x29, sp
+	400628:       f9000bf3        str     x19, [sp, #16]
+* If the expected typeid of the indirect call is exactly 0x910003fd,
+  the attacker can jump to the next instruction position of any
+  "mov x29,sp" instruction (such as 0x400628 here).
 
-vim +1357 sound/soc/codecs/tas2781-dsp.c
+4. Insert a symbol __kcfi_<function> before each function's typeid,
+which may be helpful for fine-grained KASLR implementations.
 
-  1336	
-  1337	static int do_singlereg_checksum(struct tasdevice_priv *tasdevice,
-  1338		enum channel chl, unsigned char book, unsigned char page,
-  1339		unsigned char reg, unsigned char val)
-  1340	{
-  1341		struct tas_crc crc_data;
-  1342		unsigned int nData1;
-  1343		int ret;
-  1344		bool in;
-  1345	
-  1346		if ((book == TASDEVICE_BOOK_ID(TAS2781_SA_COEFF_SWAP_REG))
-  1347			&& (page == TASDEVICE_PAGE_ID(TAS2781_SA_COEFF_SWAP_REG))
-  1348			&& (reg >= TASDEVICE_PAGE_REG(TAS2781_SA_COEFF_SWAP_REG))
-  1349			&& (reg <= (TASDEVICE_PAGE_REG(
-  1350			TAS2781_SA_COEFF_SWAP_REG) + 4))) {
-  1351			/*DSP swap command, pass */
-  1352			ret = 0;
-  1353			goto end;
-  1354		}
-  1355	
-  1356		in = check_yram(&crc_data, book, page, reg, 1);
-> 1357		if (in) {
-  1358			ret = tasdevice_dev_read(tasdevice, chl,
-  1359				TASDEVICE_REG(book, page, reg), &nData1);
-  1360			if (ret < 0)
-  1361				goto end;
-  1362	
-  1363			if (nData1 != val) {
-  1364				dev_err(tasdevice->dev,
-  1365					"B[0x%x]P[0x%x]R[0x%x] W[0x%x], R[0x%x]\n",
-  1366					book, page, reg,
-  1367					val, nData1);
-  1368				tasdevice->tasdevice[chl].err_code |=
-  1369					ERROR_YRAM_CRCCHK;
-  1370				ret = -EAGAIN;
-  1371				goto end;
-  1372			}
-  1373	
-  1374			ret = crc8(tasdevice->crc8_lkp_tbl, &val, 1, 0);
-  1375		}
-  1376	
-  1377	end:
-  1378		return ret;
-  1379	}
-  1380	
+I'm not sure if these distinctions need to be removed, they're kept
+in this version for now, and I'm happy to remove them in the next
+version if necessary (except for the first one).
 
+The current implementation of gcc only supports the aarch64 platform，
+the x86 version is still in progress.
+
+This produces the following oops on CFI failure (generated using lkdtm):
+
+/ # echo CFI_FORWARD_PROTO > /sys/kernel/debug/provoke-crash/DIRECT
+[   17.153364] lkdtm: Performing direct entry CFI_FORWARD_PROTO
+[   17.153675] lkdtm: Calling matched prototype ...
+[   17.154188] lkdtm: Calling mismatched prototype ...
+[   17.154553] CFI failure at lkdtm_indirect_call+0x38/0x54 (target: lkdtm_increment_int+0x0/0x2c; expected type: 0xc59c68f1)
+[   17.155627] Internal error: Oops - CFI: 0000000000000000 [#1] PREEMPT SMP
+[   17.156025] Modules linked in:
+[   17.156580] CPU: 1 PID: 110 Comm: sh Not tainted 6.1.0-00001-g7ead10685f57-dirty #2
+[   17.156975] Hardware name: linux,dummy-virt (DT)
+[   17.157290] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   17.157621] pc : lkdtm_indirect_call+0x38/0x54
+[   17.157902] lr : lkdtm_CFI_FORWARD_PROTO+0x48/0x7c
+[   17.158142] sp : ffff80000b083c80
+[   17.158316] x29: ffff80000b083c80 x28: ffff0000068ccc40 x27: 0000000000000000
+[   17.158820] x26: 0000000000000000 x25: 0000000000000000 x24: 000000000bd069a0
+[   17.159239] x23: ffff0000053493c0 x22: ffff80000b083df0 x21: 0000000000000012
+[   17.159673] x20: ffff80000aa29150 x19: ffff000006909000 x18: ffff80000b035068
+[   17.160110] x17: 00000000c59c68f1 x16: 00000000a2d40772 x15: 0000000000000006
+[   17.160530] x14: 0000000000000000 x13: 2e2e2e2065707974 x12: 6f746f7270206465
+[   17.160947] x11: 686374616d73696d x10: ffff80000a7254b8 x9 : ffff800009268330
+[   17.161376] x8 : 00000000ffffefff x7 : ffff80000a7254b8 x6 : 80000000fffff000
+[   17.161789] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+[   17.162264] x2 : 0000000000000000 x1 : ffff800008a4e248 x0 : ffff80000abca500
+[   17.162865] Call trace:
+[   17.163099]  lkdtm_indirect_call+0x38/0x54
+[   17.163411]  lkdtm_CFI_FORWARD_PROTO+0x48/0x7c
+[   17.163663]  lkdtm_do_action+0x48/0x5c
+[   17.163876]  direct_entry+0x144/0x160
+[   17.164084]  full_proxy_write+0x84/0xe4
+[   17.164298]  vfs_write+0xe8/0x32c
+
+The gcc-related patches[4] are based on tag: releases/gcc-12.2.0.
+This patch is based on tag: v6.2.
+
+Sorry for the long delay, the next version should not be that slow.
+Any suggestion please let me know :).
+
+Thanks,
+Dan.
+
+[1] https://lore.kernel.org/all/20220908215504.3686827-1-samitolvanen@google.com/
+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107048
+[3] https://reviews.llvm.org/D119296
+[4] https://lore.kernel.org/all/20230325081117.93245-1-ashimida.1990@gmail.com/
+
+Signed-off-by: Dan Li <ashimida.1990@gmail.com>
+
+---
+RFC/RFT V2:
+- The CFI typeid check is changed from the form of calling the callback
+function to the calling of the brk instruction.
+- Add support for -fpatchable-function-entry=M,N
+---
+ Makefile                                |  2 +-
+ arch/Kconfig                            | 21 +++++++++++----------
+ arch/arm64/Kconfig                      |  2 +-
+ arch/arm64/kernel/traps.c               |  8 ++++----
+ arch/x86/Kconfig                        | 12 ++++++------
+ arch/x86/include/asm/cfi.h              |  4 ++--
+ arch/x86/kernel/Makefile                |  2 +-
+ arch/x86/purgatory/Makefile             |  2 +-
+ drivers/misc/lkdtm/cfi.c                |  2 +-
+ include/asm-generic/vmlinux.lds.h       |  2 +-
+ include/linux/cfi.h                     |  4 ++--
+ include/linux/cfi_types.h               |  6 +++---
+ include/linux/compiler-gcc.h            |  4 ++++
+ kernel/Makefile                         |  2 +-
+ kernel/module/Kconfig                   |  2 +-
+ scripts/kallsyms.c                      |  3 ++-
+ tools/perf/util/include/linux/linkage.h |  2 +-
+ 17 files changed, 43 insertions(+), 37 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3f6628780eb2..0dd22c76c39e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1014,7 +1014,7 @@ KBUILD_AFLAGS	+= -fno-lto
+ export CC_FLAGS_LTO
+ endif
+ 
+-ifdef CONFIG_CFI_CLANG
++ifdef CONFIG_CFI
+ CC_FLAGS_CFI	:= -fsanitize=kcfi
+ KBUILD_CFLAGS	+= $(CC_FLAGS_CFI)
+ export CC_FLAGS_CFI
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 12e3ddabac9d..ff015a611091 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -748,33 +748,34 @@ config LTO_CLANG_THIN
+ 	  If unsure, say Y.
+ endchoice
+ 
+-config ARCH_SUPPORTS_CFI_CLANG
++config ARCH_SUPPORTS_CFI
+ 	bool
+ 	help
+-	  An architecture should select this option if it can support Clang's
+-	  Control-Flow Integrity (CFI) checking.
++	  An architecture should select this option if it can support the
++	  compiler's Control-Flow Integrity (CFI) checking.
+ 
+ config ARCH_USES_CFI_TRAPS
+ 	bool
+ 
+-config CFI_CLANG
+-	bool "Use Clang's Control Flow Integrity (CFI)"
+-	depends on ARCH_SUPPORTS_CFI_CLANG
++config CFI
++	bool "Use Control Flow Integrity (CFI)"
++	depends on ARCH_SUPPORTS_CFI
+ 	depends on $(cc-option,-fsanitize=kcfi)
+ 	help
+-	  This option enables Clang’s forward-edge Control Flow Integrity
++	  This option enables the compiler’s forward-edge Control Flow Integrity
+ 	  (CFI) checking, where the compiler injects a runtime check to each
+ 	  indirect function call to ensure the target is a valid function with
+ 	  the correct static type. This restricts possible call targets and
+ 	  makes it more difficult for an attacker to exploit bugs that allow
+ 	  the modification of stored function pointers. More information can be
+-	  found from Clang's documentation:
++	  found from the compiler's documentation:
+ 
+-	    https://clang.llvm.org/docs/ControlFlowIntegrity.html
++	  - Clang: https://clang.llvm.org/docs/ControlFlowIntegrity.html
++	  - GCC: https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#Instrumentation-Options
+ 
+ config CFI_PERMISSIVE
+ 	bool "Use CFI in permissive mode"
+-	depends on CFI_CLANG
++	depends on CFI
+ 	help
+ 	  When selected, Control Flow Integrity (CFI) violations result in a
+ 	  warning instead of a kernel panic. This option should only be used
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index c5ccca26a408..8795d4f68420 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -90,7 +90,7 @@ config ARM64
+ 	select ARCH_SUPPORTS_SHADOW_CALL_STACK if CC_HAVE_SHADOW_CALL_STACK
+ 	select ARCH_SUPPORTS_LTO_CLANG if CPU_LITTLE_ENDIAN
+ 	select ARCH_SUPPORTS_LTO_CLANG_THIN
+-	select ARCH_SUPPORTS_CFI_CLANG
++	select ARCH_SUPPORTS_CFI
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+ 	select ARCH_SUPPORTS_NUMA_BALANCING
+diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+index 4c0caa589e12..26d29dfdf3eb 100644
+--- a/arch/arm64/kernel/traps.c
++++ b/arch/arm64/kernel/traps.c
+@@ -981,7 +981,7 @@ static struct break_hook bug_break_hook = {
+ 	.imm = BUG_BRK_IMM,
+ };
+ 
+-#ifdef CONFIG_CFI_CLANG
++#ifdef CONFIG_CFI
+ static int cfi_handler(struct pt_regs *regs, unsigned long esr)
+ {
+ 	unsigned long target;
+@@ -1011,7 +1011,7 @@ static struct break_hook cfi_break_hook = {
+ 	.imm = CFI_BRK_IMM_BASE,
+ 	.mask = CFI_BRK_IMM_MASK,
+ };
+-#endif /* CONFIG_CFI_CLANG */
++#endif /* CONFIG_CFI*/
+ 
+ static int reserved_fault_handler(struct pt_regs *regs, unsigned long esr)
+ {
+@@ -1084,7 +1084,7 @@ static struct break_hook kasan_break_hook = {
+ int __init early_brk64(unsigned long addr, unsigned long esr,
+ 		struct pt_regs *regs)
+ {
+-#ifdef CONFIG_CFI_CLANG
++#ifdef CONFIG_CFI
+ 	if ((esr_comment(esr) & ~CFI_BRK_IMM_MASK) == CFI_BRK_IMM_BASE)
+ 		return cfi_handler(regs, esr) != DBG_HOOK_HANDLED;
+ #endif
+@@ -1098,7 +1098,7 @@ int __init early_brk64(unsigned long addr, unsigned long esr,
+ void __init trap_init(void)
+ {
+ 	register_kernel_break_hook(&bug_break_hook);
+-#ifdef CONFIG_CFI_CLANG
++#ifdef CONFIG_CFI
+ 	register_kernel_break_hook(&cfi_break_hook);
+ #endif
+ 	register_kernel_break_hook(&fault_break_hook);
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3604074a878b..f014c58ef8a3 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -110,8 +110,8 @@ config X86
+ 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
+ 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
+ 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
+-	select ARCH_SUPPORTS_CFI_CLANG		if X86_64
+-	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI_CLANG
++	select ARCH_SUPPORTS_CFI		if X86_64
++	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI
+ 	select ARCH_SUPPORTS_LTO_CLANG
+ 	select ARCH_SUPPORTS_LTO_CLANG_THIN
+ 	select ARCH_USE_BUILTIN_BSWAP
+@@ -2501,11 +2501,11 @@ config FUNCTION_PADDING_CFI
+ 	default  3 if FUNCTION_ALIGNMENT_8B
+ 	default  0
+ 
+-# Basically: FUNCTION_ALIGNMENT - 5*CFI_CLANG
++# Basically: FUNCTION_ALIGNMENT - 5*CFI
+ # except Kconfig can't do arithmetic :/
+ config FUNCTION_PADDING_BYTES
+ 	int
+-	default FUNCTION_PADDING_CFI if CFI_CLANG
++	default FUNCTION_PADDING_CFI if CFI
+ 	default FUNCTION_ALIGNMENT
+ 
+ config CALL_PADDING
+@@ -2515,7 +2515,7 @@ config CALL_PADDING
+ 
+ config FINEIBT
+ 	def_bool y
+-	depends on X86_KERNEL_IBT && CFI_CLANG && RETPOLINE
++	depends on X86_KERNEL_IBT && CFI && RETPOLINE
+ 	select CALL_PADDING
+ 
+ config HAVE_CALL_THUNKS
+@@ -2528,7 +2528,7 @@ config CALL_THUNKS
+ 
+ config PREFIX_SYMBOLS
+ 	def_bool y
+-	depends on CALL_PADDING && !CFI_CLANG
++	depends on CALL_PADDING && !CFI
+ 
+ menuconfig SPECULATION_MITIGATIONS
+ 	bool "Mitigations for speculative execution vulnerabilities"
+diff --git a/arch/x86/include/asm/cfi.h b/arch/x86/include/asm/cfi.h
+index 58dacd90daef..dad029608ac2 100644
+--- a/arch/x86/include/asm/cfi.h
++++ b/arch/x86/include/asm/cfi.h
+@@ -10,13 +10,13 @@
+ 
+ #include <linux/cfi.h>
+ 
+-#ifdef CONFIG_CFI_CLANG
++#ifdef CONFIG_CFI
+ enum bug_trap_type handle_cfi_failure(struct pt_regs *regs);
+ #else
+ static inline enum bug_trap_type handle_cfi_failure(struct pt_regs *regs)
+ {
+ 	return BUG_TRAP_TYPE_NONE;
+ }
+-#endif /* CONFIG_CFI_CLANG */
++#endif /* CONFIG_CFI */
+ 
+ #endif /* _ASM_X86_CFI_H */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 96d51bbc2bd4..2e756e8f5bc1 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -141,7 +141,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+ 
+ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
+ 
+-obj-$(CONFIG_CFI_CLANG)			+= cfi.o
++obj-$(CONFIG_CFI)			+= cfi.o
+ 
+ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+ 
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index 17f09dc26381..a88b7212d39e 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -56,7 +56,7 @@ ifdef CONFIG_RETPOLINE
+ PURGATORY_CFLAGS_REMOVE		+= $(RETPOLINE_CFLAGS)
+ endif
+ 
+-ifdef CONFIG_CFI_CLANG
++ifdef CONFIG_CFI
+ PURGATORY_CFLAGS_REMOVE		+= $(CC_FLAGS_CFI)
+ endif
+ 
+diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+index fc28714ae3a6..2720fe4c57a6 100644
+--- a/drivers/misc/lkdtm/cfi.c
++++ b/drivers/misc/lkdtm/cfi.c
+@@ -43,7 +43,7 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+ 	lkdtm_indirect_call((void *)lkdtm_increment_int);
+ 
+ 	pr_err("FAIL: survived mismatched prototype function call!\n");
+-	pr_expected_config(CONFIG_CFI_CLANG);
++	pr_expected_config(CONFIG_CFI);
+ }
+ 
+ /*
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 659bf3b31c91..1276722fdf95 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -162,7 +162,7 @@
+ #define PATCHABLE_DISCARDS	*(__patchable_function_entries)
+ #endif
+ 
+-#ifndef CONFIG_ARCH_SUPPORTS_CFI_CLANG
++#ifndef CONFIG_ARCH_SUPPORTS_CFI
+ /*
+  * Simply points to ftrace_stub, but with the proper protocol.
+  * Defined by the linker script in linux/vmlinux.lds.h
+diff --git a/include/linux/cfi.h b/include/linux/cfi.h
+index 5e134f4ce8b7..d15cfc3c748b 100644
+--- a/include/linux/cfi.h
++++ b/include/linux/cfi.h
+@@ -10,7 +10,7 @@
+ #include <linux/bug.h>
+ #include <linux/module.h>
+ 
+-#ifdef CONFIG_CFI_CLANG
++#ifdef CONFIG_CFI
+ enum bug_trap_type report_cfi_failure(struct pt_regs *regs, unsigned long addr,
+ 				      unsigned long *target, u32 type);
+ 
+@@ -23,7 +23,7 @@ static inline enum bug_trap_type report_cfi_failure_noaddr(struct pt_regs *regs,
+ #ifdef CONFIG_ARCH_USES_CFI_TRAPS
+ bool is_cfi_trap(unsigned long addr);
+ #endif
+-#endif /* CONFIG_CFI_CLANG */
++#endif /* CONFIG_CFI */
+ 
+ #ifdef CONFIG_MODULES
+ #ifdef CONFIG_ARCH_USES_CFI_TRAPS
+diff --git a/include/linux/cfi_types.h b/include/linux/cfi_types.h
+index 6b8713675765..2e098274e45c 100644
+--- a/include/linux/cfi_types.h
++++ b/include/linux/cfi_types.h
+@@ -8,7 +8,7 @@
+ #ifdef __ASSEMBLY__
+ #include <linux/linkage.h>
+ 
+-#ifdef CONFIG_CFI_CLANG
++#ifdef CONFIG_CFI
+ /*
+  * Use the __kcfi_typeid_<function> type identifier symbol to
+  * annotate indirectly called assembly functions. The compiler emits
+@@ -29,12 +29,12 @@
+ #define SYM_TYPED_START(name, linkage, align...)	\
+ 	SYM_TYPED_ENTRY(name, linkage, align)
+ 
+-#else /* CONFIG_CFI_CLANG */
++#else /* CONFIG_CFI */
+ 
+ #define SYM_TYPED_START(name, linkage, align...)	\
+ 	SYM_START(name, linkage, align)
+ 
+-#endif /* CONFIG_CFI_CLANG */
++#endif /* CONFIG_CFI */
+ 
+ #ifndef SYM_TYPED_FUNC_START
+ #define SYM_TYPED_FUNC_START(name) 			\
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index 7af9e34ec261..4838081392e2 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -82,6 +82,10 @@
+ #define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
+ #endif
+ 
++#ifdef CONFIG_CFI
++#define __nocfi __attribute__((no_sanitize("kcfi")))
++#endif
++
+ #define __no_sanitize_address __attribute__((__no_sanitize_address__))
+ 
+ #if defined(__SANITIZE_THREAD__)
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 10ef068f598d..756abc34140e 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -112,7 +112,7 @@ obj-$(CONFIG_KCSAN) += kcsan/
+ obj-$(CONFIG_SHADOW_CALL_STACK) += scs.o
+ obj-$(CONFIG_HAVE_STATIC_CALL) += static_call.o
+ obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call_inline.o
+-obj-$(CONFIG_CFI_CLANG) += cfi.o
++obj-$(CONFIG_CFI) += cfi.o
+ 
+ obj-$(CONFIG_PERF_EVENTS) += events/
+ 
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 424b3bc58f3f..e40de2aaea87 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -289,6 +289,6 @@ config UNUSED_KSYMS_WHITELIST
+ 
+ config MODULES_TREE_LOOKUP
+ 	def_bool y
+-	depends on PERF_EVENTS || TRACING || CFI_CLANG
++	depends on PERF_EVENTS || TRACING || CFI
+ 
+ endif # MODULES
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 8a68179a98a3..bbb6d3a91089 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -136,7 +136,8 @@ static bool is_ignored_symbol(const char *name, char type)
+ 		"__ThumbV7PILongThunk_",
+ 		"__LA25Thunk_",		/* mips lld */
+ 		"__microLA25Thunk_",
+-		"__kcfi_typeid_",	/* CFI type identifiers */
++		"__kcfi_",		/* CFI type identifiers */
++		"__pi___kcfi",		/* CFI type identifiers */
+ 		NULL
+ 	};
+ 
+diff --git a/tools/perf/util/include/linux/linkage.h b/tools/perf/util/include/linux/linkage.h
+index 75e2248416f5..20d87771f6ac 100644
+--- a/tools/perf/util/include/linux/linkage.h
++++ b/tools/perf/util/include/linux/linkage.h
+@@ -116,7 +116,7 @@
+ #endif
+ 
+ // In the kernel sources (include/linux/cfi_types.h), this has a different
+-// definition when CONFIG_CFI_CLANG is used, for tools/ just use the !clang
++// definition when CONFIG_CFI is used, for tools/ just use the !clang
+ // definition:
+ #ifndef SYM_TYPED_START
+ #define SYM_TYPED_START(name, linkage, align...)        \
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.17.1
+
