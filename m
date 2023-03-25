@@ -1,75 +1,128 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3987728EB
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 13:51:13 +0000 (UTC)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-544f7c176easo85828677b3.9
-        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 06:51:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679752272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PeMx+51y0jX6AmFg23qU+UO5+vL72ohSvQttXU02rrk=;
-        b=GviucWSxUP3oWPKJhEiiMYP8IaOK8nlm2qtLoDolhL3OpW4AIzP/4dxZGsIuEmHHVx
-         z2FXK3fKxYbnqdQWxH/p2xRx1Q+dSLwlb1fSn95EYARanmUaKLSZaHEuZE90fYhY7Vjy
-         HmNwpxuy/8ghlc+dnGJMgclY8/8mPmxeEGv3xgVJaKUqef/ymuhW5aK0cb4p8yRd5U6S
-         G605C9mz7ccAn3cmBZJIUvEfQm861kA2DKJyjhhV20FV78HJnji1G63Vcaa6mcVa/BMW
-         8fHweFa1zftL4UhXoV+zMvEt0vs1qro64W7ATePHkrIW24wNVozZaxysgzjLlaCk3kFJ
-         9tVg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCD728EB
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 14:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679753165;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1lbJBPwhH6Cq9r2UgzRHc6kwTuKIZL2sdzIekbj7z0w=;
+	b=WH/z0kTWukUuPIufn7cvdDKAW/wgu505bzuzDrZjUg9cbZlqg88KVElMjFoPgebgAkhqfh
+	unfQFV4clqsFh41Hs3AiVKyoH5kz5Xh1CaD4SKbYaZzcaO+hfIoyVnOi+CISA69+GQdgFi
+	kqZwemixYLm5vVswO0YFyfPpvBYgZBw=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-281--8KcxxphMqiyWDBI3z00Yw-1; Sat, 25 Mar 2023 10:06:04 -0400
+X-MC-Unique: -8KcxxphMqiyWDBI3z00Yw-1
+Received: by mail-qk1-f199.google.com with SMTP id c80-20020ae9ed53000000b007468c560e1bso2179151qkg.2
+        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 07:06:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679752272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PeMx+51y0jX6AmFg23qU+UO5+vL72ohSvQttXU02rrk=;
-        b=vkOxdRJsafC00np1fK1tgVIdYs5WEFh/Nd2CErIMBcw31gwfbvLNMtqgHOYPnH2RPF
-         lFw44Yl8oKJ1OkGFg5XsOE9tarmDBmqTsBO5rE1xW4PSE1j2A4NCNXFwuFANz6LvaSdk
-         vbV6+02Kw7VsKKBzAiw8vkuveV+8/uj/B3EuDnm9aFEunfv1oROlGefwevq+Uz4S0QVk
-         82cwEXZI3gI2pE6IBha+s2idTp68hAIzg9wUmImguRyeXCw8bQ0Wv/dBRKYgTvKPl7e/
-         dq76S5xK0cAELKt9FFSc7kZ7mChc/HlcC+PdgZlYKvB2AVORtFRUJWCzy/HM3tF9GLtV
-         EoWg==
-X-Gm-Message-State: AAQBX9fDTnMHGWEc7vFgxxu+C+JoIJwtS6uXwgvX+iNL2NU+Ww7B6JDT
-	PUsAPDUA+JmmkFKS1qsLoB8=
-X-Google-Smtp-Source: AKy350Z3DzrKwWrvSOrG8gFzdH+L4ldXznlz/pjPvEuMZ/8n3xxXhgWbBFL9MvXeZkvF/DzlD/kvAw==
-X-Received: by 2002:a81:4e16:0:b0:541:a029:1591 with SMTP id c22-20020a814e16000000b00541a0291591mr6104211ywb.2.1679752272104;
-        Sat, 25 Mar 2023 06:51:12 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id be15-20020a05690c008f00b00545a0818488sm967405ywb.24.2023.03.25.06.51.11
+        d=1e100.net; s=20210112; t=1679753163;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1lbJBPwhH6Cq9r2UgzRHc6kwTuKIZL2sdzIekbj7z0w=;
+        b=QxhsyZk08EpNEQsZqehjtKAUCPGUOjLwYL1+Q26s59k9NujnlBmQm3eKX96YtnNU3z
+         ZAuf3TZF7JdZf4yvWT7uq77s4EELEpuQo6io6tBVdo2Q2OaBQ9v21yv+FPGaVy+S3fEi
+         9YHbOwqOVeIoxZTbMZy0jDbG0uV0TS4yvoMTuYD8fHtzzJr+TTuXmvIlGQILk2rpqgWV
+         EoZEjjRxxd3ZPe8Ni2q7cLE0biRxXezeMrpDv1wEvSEmxBDTxxmokC7MuU4MzO6n/Lqt
+         c2c/hR+krlMk0v64sQJT/8jcb0HocKixQ0MCzT89h5LYM/cnT178wIC6J0WuYzfImZUE
+         7o+g==
+X-Gm-Message-State: AAQBX9dUZdmSEoA2LQoVGWdafH2a+syqQG+Aj+gC7qMldXkU8AXkAEx9
+	BV5LVy076Dvm0uxgfvRv0WfWroKYjSET8yPpotteTEEs7/u2qvmlNz650t8Y0vsxtVZNUP4BKdT
+	fcCn95YiH9jtXCg==
+X-Received: by 2002:a05:6214:cc1:b0:5d9:cb0b:3de4 with SMTP id 1-20020a0562140cc100b005d9cb0b3de4mr12296848qvx.45.1679753163303;
+        Sat, 25 Mar 2023 07:06:03 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Z/EL6Tkp3U6JqLt4Li2rJy95cscsYC+qqgT2enwwScQiVROP52ZEJU7J0WILTQqrJ+SkA3kQ==
+X-Received: by 2002:a05:6214:cc1:b0:5d9:cb0b:3de4 with SMTP id 1-20020a0562140cc100b005d9cb0b3de4mr12296776qvx.45.1679753162854;
+        Sat, 25 Mar 2023 07:06:02 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id oj9-20020a056214440900b005dd8b9345bbsm1478977qvb.83.2023.03.25.07.06.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 06:51:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 25 Mar 2023 06:51:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tom Rix <trix@redhat.com>
-Cc: juergh@proton.me, jdelvare@suse.com, nathan@kernel.org,
-	ndesaulniers@google.com, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] hwmon: remove unused superio_outb function
-Message-ID: <0db043dd-a94b-4f39-a5c0-a0132733c054@roeck-us.net>
-References: <20230323211535.2637939-1-trix@redhat.com>
+        Sat, 25 Mar 2023 07:06:02 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: selvin.xavier@broadcom.com,
+	jgg@ziepe.ca,
+	leon@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] RDMA/bnxt_re: remove unused num_srqne_processed and num_cqne_processed variables
+Date: Sat, 25 Mar 2023 10:05:59 -0400
+Message-Id: <20230325140559.1336056-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323211535.2637939-1-trix@redhat.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-On Thu, Mar 23, 2023 at 05:15:35PM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/hwmon/vt1211.c:198:20: error: unused function
->   'superio_outb' [-Werror,-Wunused-function]
-> static inline void superio_outb(int sio_cip, int reg, int val)
->                    ^
-> This function is not used so remove it.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> Acked-by: Juerg Haefliger <juergh@proton.me>
+clang with W=1 reports
+drivers/infiniband/hw/bnxt_re/qplib_fp.c:303:6: error: variable
+  'num_srqne_processed' set but not used [-Werror,-Wunused-but-set-variable]
+        int num_srqne_processed = 0;
+            ^
+drivers/infiniband/hw/bnxt_re/qplib_fp.c:304:6: error: variable
+  'num_cqne_processed' set but not used [-Werror,-Wunused-but-set-variable]
+        int num_cqne_processed = 0;
+            ^
+These variables are not used so remove them.
 
-Applied.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/infiniband/hw/bnxt_re/qplib_fp.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/infiniband/hw/bnxt_re/qplib_fp.c b/drivers/infiniband/hw/bnxt_re/qplib_fp.c
+index 96e581ced50e..0ba14087dfcd 100644
+--- a/drivers/infiniband/hw/bnxt_re/qplib_fp.c
++++ b/drivers/infiniband/hw/bnxt_re/qplib_fp.c
+@@ -300,8 +300,6 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
+ {
+ 	struct bnxt_qplib_nq *nq = from_tasklet(nq, t, nq_tasklet);
+ 	struct bnxt_qplib_hwq *hwq = &nq->hwq;
+-	int num_srqne_processed = 0;
+-	int num_cqne_processed = 0;
+ 	struct bnxt_qplib_cq *cq;
+ 	int budget = nq->budget;
+ 	u32 sw_cons, raw_cons;
+@@ -340,9 +338,7 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
+ 					    DBC_DBC_TYPE_CQ_ARMENA);
+ 			spin_lock_bh(&cq->compl_lock);
+ 			atomic_set(&cq->arm_state, 0);
+-			if (!nq->cqn_handler(nq, (cq)))
+-				num_cqne_processed++;
+-			else
++			if (nq->cqn_handler(nq, (cq)))
+ 				dev_warn(&nq->pdev->dev,
+ 					 "cqn - type 0x%x not handled\n", type);
+ 			cq->cnq_events++;
+@@ -361,11 +357,9 @@ static void bnxt_qplib_service_nq(struct tasklet_struct *t)
+ 			srq = (struct bnxt_qplib_srq *)q_handle;
+ 			bnxt_qplib_armen_db(&srq->dbinfo,
+ 					    DBC_DBC_TYPE_SRQ_ARMENA);
+-			if (!nq->srqn_handler(nq,
+-					      (struct bnxt_qplib_srq *)q_handle,
+-					      nqsrqe->event))
+-				num_srqne_processed++;
+-			else
++			if (nq->srqn_handler(nq,
++					     (struct bnxt_qplib_srq *)q_handle,
++					     nqsrqe->event))
+ 				dev_warn(&nq->pdev->dev,
+ 					 "SRQ event 0x%x not handled\n",
+ 					 nqsrqe->event);
+-- 
+2.27.0
+
