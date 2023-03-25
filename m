@@ -1,118 +1,75 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483AA28EB
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 13:45:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679751910;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CA7h/KT6ar6s3WSm/PcPsckHI4JxnLRkTxYhhO4xj4k=;
-	b=QsSkWCqzG94/C8/m2MCOQMZGyhzatoiQy6aH9ZK0AeQ4v0OfW/TgeLpxavwcLToTbmUWgW
-	bsOX87wVlvv+4Vzes8mQxr1/SQTwBbTj6YIG06v47b5VyRynuTWGAuZ5sdRxaxnubm/VoC
-	cwqBNz067mbBtwspBJATT6OpjRqxzFQ=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-433-4gJWse1IO_unuv2whuV-mg-1; Sat, 25 Mar 2023 09:45:07 -0400
-X-MC-Unique: 4gJWse1IO_unuv2whuV-mg-1
-Received: by mail-qv1-f72.google.com with SMTP id a15-20020a0562140c2f00b005ad28a23cffso2049604qvd.6
-        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 06:45:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679751907;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3987728EB
+	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 13:51:13 +0000 (UTC)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-544f7c176easo85828677b3.9
+        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 06:51:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679752272;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CA7h/KT6ar6s3WSm/PcPsckHI4JxnLRkTxYhhO4xj4k=;
-        b=1/dzBthPvH/5fjM/uCy9DK01IxjUkPTLbywEPxTm9YjLFJDG5BZaY1BcyM4LzLPNri
-         dLYm06Lgi3MlWnncUUJOmdqbYTtAiCKytFtKmtDGdVN2Kq9fdbGWyqbFInFI4jMEq84C
-         /T7wSYWbI9BUQQBK1Gscfh14UC6/3Ir/+mEA97yZowcdEnN6At6kl8JbGwxWtU8cZ6rq
-         v7PLp12WOGT6cRpQ2cqO4L23/3oEuCdsnEJDNqo3dpvZOV4yYv/27pBKSMXbnthwEdGG
-         M1roElDIix47J0T2s39UOpUaUs87XwhrAqAkn4S7XZmcYyb/6tOwq+o2nR2qTbuy1P65
-         eIPQ==
-X-Gm-Message-State: AO0yUKXRTe6WP+6UeK412plxVJYB7yZguZuEy3SXjWFN4y6ywd5Hacj8
-	vMwMHMj9rjMdT0osmTyIn8UFzkXFk6t3MAMrZWFYrIEzraYa8eZKsZu3OxCFq2lYl+BmiJTeYOa
-	M4tLzCMK4ZiOGew==
-X-Received: by 2002:a05:622a:647:b0:3e3:9948:98d1 with SMTP id a7-20020a05622a064700b003e3994898d1mr10992004qtb.38.1679751907341;
-        Sat, 25 Mar 2023 06:45:07 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9lBadmzaW3R6GBzpZCCcrV/q81u7BWSsClYIuBO79n0CA6GzW3uhjcVgbc5HCJD7hhViJ7VQ==
-X-Received: by 2002:a05:622a:647:b0:3e3:9948:98d1 with SMTP id a7-20020a05622a064700b003e3994898d1mr10991982qtb.38.1679751907150;
-        Sat, 25 Mar 2023 06:45:07 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id h23-20020ac85497000000b003e3927a2cd8sm2528739qtq.3.2023.03.25.06.45.06
+        bh=PeMx+51y0jX6AmFg23qU+UO5+vL72ohSvQttXU02rrk=;
+        b=GviucWSxUP3oWPKJhEiiMYP8IaOK8nlm2qtLoDolhL3OpW4AIzP/4dxZGsIuEmHHVx
+         z2FXK3fKxYbnqdQWxH/p2xRx1Q+dSLwlb1fSn95EYARanmUaKLSZaHEuZE90fYhY7Vjy
+         HmNwpxuy/8ghlc+dnGJMgclY8/8mPmxeEGv3xgVJaKUqef/ymuhW5aK0cb4p8yRd5U6S
+         G605C9mz7ccAn3cmBZJIUvEfQm861kA2DKJyjhhV20FV78HJnji1G63Vcaa6mcVa/BMW
+         8fHweFa1zftL4UhXoV+zMvEt0vs1qro64W7ATePHkrIW24wNVozZaxysgzjLlaCk3kFJ
+         9tVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679752272;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PeMx+51y0jX6AmFg23qU+UO5+vL72ohSvQttXU02rrk=;
+        b=vkOxdRJsafC00np1fK1tgVIdYs5WEFh/Nd2CErIMBcw31gwfbvLNMtqgHOYPnH2RPF
+         lFw44Yl8oKJ1OkGFg5XsOE9tarmDBmqTsBO5rE1xW4PSE1j2A4NCNXFwuFANz6LvaSdk
+         vbV6+02Kw7VsKKBzAiw8vkuveV+8/uj/B3EuDnm9aFEunfv1oROlGefwevq+Uz4S0QVk
+         82cwEXZI3gI2pE6IBha+s2idTp68hAIzg9wUmImguRyeXCw8bQ0Wv/dBRKYgTvKPl7e/
+         dq76S5xK0cAELKt9FFSc7kZ7mChc/HlcC+PdgZlYKvB2AVORtFRUJWCzy/HM3tF9GLtV
+         EoWg==
+X-Gm-Message-State: AAQBX9fDTnMHGWEc7vFgxxu+C+JoIJwtS6uXwgvX+iNL2NU+Ww7B6JDT
+	PUsAPDUA+JmmkFKS1qsLoB8=
+X-Google-Smtp-Source: AKy350Z3DzrKwWrvSOrG8gFzdH+L4ldXznlz/pjPvEuMZ/8n3xxXhgWbBFL9MvXeZkvF/DzlD/kvAw==
+X-Received: by 2002:a81:4e16:0:b0:541:a029:1591 with SMTP id c22-20020a814e16000000b00541a0291591mr6104211ywb.2.1679752272104;
+        Sat, 25 Mar 2023 06:51:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id be15-20020a05690c008f00b00545a0818488sm967405ywb.24.2023.03.25.06.51.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 06:45:06 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: harry.wentland@amd.com,
-	sunpeng.li@amd.com,
-	Rodrigo.Siqueira@amd.com,
-	alexander.deucher@amd.com,
-	christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	Jun.Lei@amd.com,
-	wenjing.liu@amd.com,
-	Jimmy.Kizito@amd.com,
-	Cruise.Hung@amd.com
-Cc: amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amd/display: remove unused matching_stream_ptrs variable
-Date: Sat, 25 Mar 2023 09:45:03 -0400
-Message-Id: <20230325134503.1335510-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 25 Mar 2023 06:51:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 25 Mar 2023 06:51:10 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Tom Rix <trix@redhat.com>
+Cc: juergh@proton.me, jdelvare@suse.com, nathan@kernel.org,
+	ndesaulniers@google.com, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] hwmon: remove unused superio_outb function
+Message-ID: <0db043dd-a94b-4f39-a5c0-a0132733c054@roeck-us.net>
+References: <20230323211535.2637939-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323211535.2637939-1-trix@redhat.com>
 
-clang with W=1 reports
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_enc_cfg.c:625:6: error:
-  variable 'matching_stream_ptrs' set but not used [-Werror,-Wunused-but-set-variable]
-        int matching_stream_ptrs = 0;
-            ^
-This variable is not used so remove it.
+On Thu, Mar 23, 2023 at 05:15:35PM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/hwmon/vt1211.c:198:20: error: unused function
+>   'superio_outb' [-Werror,-Wunused-function]
+> static inline void superio_outb(int sio_cip, int reg, int val)
+>                    ^
+> This function is not used so remove it.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> Acked-by: Juerg Haefliger <juergh@proton.me>
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Applied.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-index 41198c729d90..30c0644d4418 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-@@ -622,7 +622,6 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc_state *state)
- 	int i, j;
- 	uint8_t valid_count = 0;
- 	uint8_t dig_stream_count = 0;
--	int matching_stream_ptrs = 0;
- 	int eng_ids_per_ep_id[MAX_PIPES] = {0};
- 	int ep_ids_per_eng_id[MAX_PIPES] = {0};
- 	int valid_bitmap = 0;
-@@ -645,9 +644,7 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc_state *state)
- 		struct link_enc_assignment assignment = state->res_ctx.link_enc_cfg_ctx.link_enc_assignments[i];
- 
- 		if (assignment.valid) {
--			if (assignment.stream == state->streams[i])
--				matching_stream_ptrs++;
--			else
-+			if (assignment.stream != state->streams[i])
- 				valid_stream_ptrs = false;
- 		}
- 	}
--- 
-2.27.0
-
+Thanks,
+Guenter
