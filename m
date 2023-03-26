@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4F22F3C
-	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 17:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110E63C3A
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 17:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679850101;
+	s=mimecast20190719; t=1679850749;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=dc8td2Ss2O+7Dc4REdn5WuJAkmo7/Wsq7GXL/DP477A=;
-	b=ZiWAlRfLClH4Q5Y7XmoYm3pIGhJf+cPo/EdqfBhisvMev9Ns5swHd73ulau5PNZ3vbrVPi
-	EgenAAzx3Sx7MZ31VDQJUHbx8FAOIKOAuJe5zjDo/IzNf17mfnOS4vNeTkxNYarwRf9Jtt
-	KbENPyyZusP1ef+LA20xHC2IRBIcVCo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=SFJ54fBfOH4EpcquuhY8vJlbuaH5TOMKPKWfLJgVUKE=;
+	b=KOCcz4IEiaSSfE7Y2iiu6Yymsh3DqVJu7IIpzgtvjIiGDEoEZtcpd5q2fqHEenZ49/H15V
+	4qvpnZfXtz4GO6Eu5vz7megS/cYtI3qvcyyjAV+FpnU+w3HUqjXyJSxUkoPab1tKZY6bhX
+	les399v9PJLliIgbn0i0TzIU30E4Jj4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-108-lW7chuTfOha-z0lAYOO-wA-1; Sun, 26 Mar 2023 13:01:40 -0400
-X-MC-Unique: lW7chuTfOha-z0lAYOO-wA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-197-VVyNtUxJOqacIHHW5Uuh0g-1; Sun, 26 Mar 2023 13:12:28 -0400
+X-MC-Unique: VVyNtUxJOqacIHHW5Uuh0g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA33A3C00088
-	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 17:01:39 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BF7680C8C1
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 17:12:28 +0000 (UTC)
 Received: from [172.64.3.40] (unknown [10.30.33.173])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D072A492C18;
-	Sun, 26 Mar 2023 17:01:39 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E8FEC140EBF4;
+	Sun, 26 Mar 2023 17:12:27 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 19 of 381): Test report for master
- (6.3.0-rc3, mainline.kernel.org-clang, da8e7da1)
-Date: Sun, 26 Mar 2023 17:01:39 -0000
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 43 of 381): Test report for master
+ (6.3.0-rc3, mainline.kernel.org-clang, 4bdec23f)
+Date: Sun, 26 Mar 2023 17:12:27 -0000
 To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <21385.123032613014000237@us-mta-108.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <39470.123032613122800549@us-mta-197.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,32 +52,26 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'nfsd-6.3-4' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/cel/linux
+    Commit message: Merge tag 'hwmon-for-v6.3-rc4' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/groeck/linux-staging
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/81689
+    https://datawarehouse.cki-project.org/kcidb/checkouts/81670
 
 One or more kernel tests failed:
     Unrecognized or new issues:
           x86_64 (debug) - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7564537
+7562470
           x86_64 (debug) - Reboot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7564541
+7562474
           x86_64 (debug) - Boot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7564545
+7562478
           x86_64 (debug) - Reboot test
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7564581
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7564585
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7564591
+7562514
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -117,17 +111,18 @@ l-tests/-/issues/1418
             Affected tests:
                   x86_64 (debug) - kselftests upstream - bpf
                   x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
         Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
 iled
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
             Affected tests:
                    s390x - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
