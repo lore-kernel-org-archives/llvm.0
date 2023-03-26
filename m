@@ -1,143 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from iad0.nichi.link (iad0.nichi.link [5.161.83.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163AE2F3C
-	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 16:34:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03CEC4339B
-	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 16:34:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679848486;
-	bh=lniLhjzAVP4A7/HZzVY4+OrTbNpVJm/gYIDl+oQterE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JK3Yveqek/OJHInqxbDUOO4UWY67DeXaOjY5IknYOWk+oxY5lR1xHuR77gsb143FU
-	 kvRAzHEad2ehIHdRTM/RHydR6QCWR+uuhY2J1gbT/HI6YtlqiOtUG61VBQaQ/b+xyZ
-	 rwVEB5LxxQmV/hMzeKVGhmu/o9OQwsJx++9XdX8Cvp968Tr73FxM0epsJ+ujdcAI61
-	 sC1IH1WNzp3+89nKTG1XA2dkn899Qjt5NeBSq8LSIpbRRiRYTCMY830+VCSPdL3GEb
-	 0Kwt03VBvIyqBKN0pjk4satvfryw7CSOwgFwMqsRaIqI9J08PZ3ev/1ZxRwvSSUhu4
-	 dFX7zy5UTOvAQ==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-17ec8963db8so6906359fac.8
-        for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 09:34:46 -0700 (PDT)
-X-Gm-Message-State: AO0yUKXHoksPzYuGnTGNypv5ybqnNKygMllFXF4uTLvALQVKVCBaqRU2
-	MBoaeEqpGzORTRoprxROP1ZI6BAI1CB7qeCAycA=
-X-Google-Smtp-Source: AKy350ZKevNh0OIe4jwck411MTacKfhxDKD4eEX6xDTuM7GhMe3UsweBg/WHTc/a+KMwbk0nCqKHqiBgIpefvnGdVjA=
-X-Received: by 2002:a05:6870:a2a:b0:177:aff1:a393 with SMTP id
- bf42-20020a0568700a2a00b00177aff1a393mr2203464oac.11.1679848485974; Sun, 26
- Mar 2023 09:34:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A2D2F3C
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 16:54:43 +0000 (UTC)
+Received: from [IPV6:2402:f000:2:c801:3a00:25ff:fe59:8c06] (unknown [IPv6:2402:f000:2:c801:3a00:25ff:fe59:8c06])
+	by iad0.nichi.link (Postfix) with ESMTPA id DD5A887A02;
+	Sun, 26 Mar 2023 16:48:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nichi.co; s=default;
+	t=1679849316;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VWn62rWoesr1V+Jp7k/v6C+Nt0B/JD6KJm7XDX0ZcKc=;
+	b=F4FKRJcUCMPpnaM9P5gN6jHEGLeMEv2703QQMls5hBQlIuu7B37ZLAroMiOHDz0ft2j9EG
+	7bwp10mFfNIwt6S7z15djRxHlN42VxOTUMTElNyhDiIUxqWH945MbE7oOz4ueh7zfblIco
+	lb+YloLzv045ZonQ40my3l7bIV7Lfgg=
+Message-ID: <3db66793-c647-f6c9-7c5b-d7a331c8f328@nichi.co>
+Date: Mon, 27 Mar 2023 00:48:31 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230326153412.63128-1-hi@alyssa.is>
-In-Reply-To: <20230326153412.63128-1-hi@alyssa.is>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 27 Mar 2023 01:34:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARyn3R3BRxJ0Wdd_djTNQQR3Qh56jXAhR+gzgTsPY7Xew@mail.gmail.com>
-Message-ID: <CAK7LNARyn3R3BRxJ0Wdd_djTNQQR3Qh56jXAhR+gzgTsPY7Xew@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
 Subject: Re: [PATCH] purgatory: fix disabling debug info
-To: Alyssa Ross <hi@alyssa.is>
-Cc: Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Alyssa Ross <hi@alyssa.is>, Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+ Tom Rix <trix@redhat.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, stable@vger.kernel.org
+References: <20230326153412.63128-1-hi@alyssa.is>
+Content-Language: en-US
+From: Nick Cao <nickcao@nichi.co>
+In-Reply-To: <20230326153412.63128-1-hi@alyssa.is>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 27, 2023 at 12:35=E2=80=AFAM Alyssa Ross <hi@alyssa.is> wrote:
->
+With this patch applied on top of 
+https://github.com/NickCao/linux/tree/f258de7fdb1e69492f8962da5d34646da49685db, 
+the built kernel image no longer contains reference to the source 
+directory (which is not allowed in the Nixpkgs kernel building 
+infrastructure).
+
+Tested-by: Nick Cao <nickcao@nichi.co>
+
+On 3/26/23 23:34, Alyssa Ross wrote:
 > Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
 > Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
 > -Wa versions of both of those if building with Clang and GNU as.  As a
 > result, debug info was being generated for the purgatory objects, even
 > though the intention was that it not be.
->
+> 
 > Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
 > Signed-off-by: Alyssa Ross <hi@alyssa.is>
 > Cc: stable@vger.kernel.org
 > ---
->  arch/riscv/purgatory/Makefile | 12 ++++++------
->  arch/x86/purgatory/Makefile   |  4 ++--
->  2 files changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefil=
-e
+>   arch/riscv/purgatory/Makefile | 12 ++++++------
+>   arch/x86/purgatory/Makefile   |  4 ++--
+>   2 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
 > index d16bf715a586..97001798fa19 100644
 > --- a/arch/riscv/purgatory/Makefile
 > +++ b/arch/riscv/purgatory/Makefile
-> @@ -84,12 +84,12 @@ CFLAGS_string.o                     +=3D $(PURGATORY_=
-CFLAGS)
->  CFLAGS_REMOVE_ctype.o          +=3D $(PURGATORY_CFLAGS_REMOVE)
->  CFLAGS_ctype.o                 +=3D $(PURGATORY_CFLAGS)
->
-> -AFLAGS_REMOVE_entry.o          +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_memcpy.o         +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_memset.o         +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strcmp.o         +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strlen.o         +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strncmp.o                +=3D -Wa,-gdwarf-2
-> +AFLAGS_REMOVE_entry.o          +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
-dwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_memcpy.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
-dwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_memset.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
-dwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strcmp.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
-dwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strlen.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
-dwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strncmp.o                +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-=
-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-
-
-You can merge these into a single line:
-
- asflags-remove-y +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwa=
-rf-5
-
-
-Or, a slightly shorter but tricky way is:
-
- asflags-remove-y +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5, $(x) -Wa,$(x))
-
-
->  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
->                 $(call if_changed,ld)
+> @@ -84,12 +84,12 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+>   CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
+>   CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
+>   
+> -AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
+> +AFLAGS_REMOVE_entry.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_memcpy.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_memset.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strcmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strlen.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strncmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+>   
+>   $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>   		$(call if_changed,ld)
 > diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
 > index 17f09dc26381..f1b1ef6c4cbf 100644
 > --- a/arch/x86/purgatory/Makefile
 > +++ b/arch/x86/purgatory/Makefile
-> @@ -69,8 +69,8 @@ CFLAGS_sha256.o                       +=3D $(PURGATORY_=
-CFLAGS)
->  CFLAGS_REMOVE_string.o         +=3D $(PURGATORY_CFLAGS_REMOVE)
->  CFLAGS_string.o                        +=3D $(PURGATORY_CFLAGS)
->
-> -AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_entry64.o                        +=3D -Wa,-gdwarf-2
-> +AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-=
-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_entry64.o                        +=3D -g -gdwarf-4 -gdwarf=
--5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-
-
-Ditto.
-
-
-Thanks.
-
-
-
->  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
->                 $(call if_changed,ld)
->
+> @@ -69,8 +69,8 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
+>   CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
+>   CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+>   
+> -AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
+> +AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_entry64.o			+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+>   
+>   $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>   		$(call if_changed,ld)
+> 
 > base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
-> --
-> 2.37.1
->
-
-
---=20
-Best Regards
-Masahiro Yamada
