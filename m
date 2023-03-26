@@ -1,96 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7198529A5;
-	Sun, 26 Mar 2023 16:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00982C433A1;
-	Sun, 26 Mar 2023 16:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163AE2F3C
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 16:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03CEC4339B
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 16:34:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679848377;
-	bh=MFtwJoaiaMmU47hUJLTqYCV1D5njDckHxzeUqLWDr2w=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=Wm/gkb5qqEEPWesXEqFEgrIaGukhLzuct50DX88Yl3p0txLylcuzRVNK13ZtnSnl7
-	 jNozqrw/T83EABoFP5FgDolGFByo9WOZ40piddPhom1woueY+FvVadoZxB7kn5K8AH
-	 5HjR41hHDOPtokzD7n3Z7WbWYfMIEGA5ouzNx1RV4pfFOpeCkJ7q53qh4P9If5aNUs
-	 aqz+b1AmsUNZnfud/cjUDJUgxi5iuCyjnlSvTUVycydiEyeJ/jTeQQ3sZ3ZnAGTmaL
-	 zaIeMjkVYAOumbJYshm8Tn64VDiIQLlrVOKnxLRf+faRUSGaTjOxQoncCUVz1yO8Y3
-	 wEXAx6QkJXMGw==
-Received: by pali.im (Postfix)
-	id 2419478E; Sun, 26 Mar 2023 18:32:54 +0200 (CEST)
-Date: Sun, 26 Mar 2023 18:32:54 +0200
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
-	llvm@lists.linux.dev,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: error: unknown target CPU '8540'
-Message-ID: <20230326163254.ie55gm7nd7aenlzb@pali>
-References: <202303211707.ogAtY5qJ-lkp@intel.com>
+	s=k20201202; t=1679848486;
+	bh=lniLhjzAVP4A7/HZzVY4+OrTbNpVJm/gYIDl+oQterE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JK3Yveqek/OJHInqxbDUOO4UWY67DeXaOjY5IknYOWk+oxY5lR1xHuR77gsb143FU
+	 kvRAzHEad2ehIHdRTM/RHydR6QCWR+uuhY2J1gbT/HI6YtlqiOtUG61VBQaQ/b+xyZ
+	 rwVEB5LxxQmV/hMzeKVGhmu/o9OQwsJx++9XdX8Cvp968Tr73FxM0epsJ+ujdcAI61
+	 sC1IH1WNzp3+89nKTG1XA2dkn899Qjt5NeBSq8LSIpbRRiRYTCMY830+VCSPdL3GEb
+	 0Kwt03VBvIyqBKN0pjk4satvfryw7CSOwgFwMqsRaIqI9J08PZ3ev/1ZxRwvSSUhu4
+	 dFX7zy5UTOvAQ==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-17ec8963db8so6906359fac.8
+        for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 09:34:46 -0700 (PDT)
+X-Gm-Message-State: AO0yUKXHoksPzYuGnTGNypv5ybqnNKygMllFXF4uTLvALQVKVCBaqRU2
+	MBoaeEqpGzORTRoprxROP1ZI6BAI1CB7qeCAycA=
+X-Google-Smtp-Source: AKy350ZKevNh0OIe4jwck411MTacKfhxDKD4eEX6xDTuM7GhMe3UsweBg/WHTc/a+KMwbk0nCqKHqiBgIpefvnGdVjA=
+X-Received: by 2002:a05:6870:a2a:b0:177:aff1:a393 with SMTP id
+ bf42-20020a0568700a2a00b00177aff1a393mr2203464oac.11.1679848485974; Sun, 26
+ Mar 2023 09:34:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202303211707.ogAtY5qJ-lkp@intel.com>
-User-Agent: NeoMutt/20180716
+References: <20230326153412.63128-1-hi@alyssa.is>
+In-Reply-To: <20230326153412.63128-1-hi@alyssa.is>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 27 Mar 2023 01:34:09 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARyn3R3BRxJ0Wdd_djTNQQR3Qh56jXAhR+gzgTsPY7Xew@mail.gmail.com>
+Message-ID: <CAK7LNARyn3R3BRxJ0Wdd_djTNQQR3Qh56jXAhR+gzgTsPY7Xew@mail.gmail.com>
+Subject: Re: [PATCH] purgatory: fix disabling debug info
+To: Alyssa Ross <hi@alyssa.is>
+Cc: Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tuesday 21 March 2023 17:59:58 kernel test robot wrote:
-> CC: linux-kernel@vger.kernel.org
-> TO: Christophe Leroy <christophe.leroy@csgroup.eu>
-> CC: Michael Ellerman <mpe@ellerman.id.au>
-> 
-> Hi Christophe,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   17214b70a159c6547df9ae204a6275d983146f6b
-> commit: 45f7091aac3546ef8112bf62836650ca0bbf0b79 powerpc/64: Set default CPU in Kconfig
-> date:   7 weeks ago
-> config: powerpc-tqm8560_defconfig (https://download.01.org/0day-ci/archive/20230321/202303211707.ogAtY5qJ-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install powerpc cross compiling tool for clang build
->         # apt-get install binutils-powerpc-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=45f7091aac3546ef8112bf62836650ca0bbf0b79
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 45f7091aac3546ef8112bf62836650ca0bbf0b79
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303211707.ogAtY5qJ-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    clang: error: unsupported argument '-me500' to option '-Wa,'
->    make[2]: *** [scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
-> >> error: unknown target CPU '8540'
->    note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
+On Mon, Mar 27, 2023 at 12:35=E2=80=AFAM Alyssa Ross <hi@alyssa.is> wrote:
+>
+> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+> -Wa versions of both of those if building with Clang and GNU as.  As a
+> result, debug info was being generated for the purgatory objects, even
+> though the intention was that it not be.
+>
+> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+> Signed-off-by: Alyssa Ross <hi@alyssa.is>
+> Cc: stable@vger.kernel.org
+> ---
+>  arch/riscv/purgatory/Makefile | 12 ++++++------
+>  arch/x86/purgatory/Makefile   |  4 ++--
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefil=
+e
+> index d16bf715a586..97001798fa19 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -84,12 +84,12 @@ CFLAGS_string.o                     +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_ctype.o          +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_ctype.o                 +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_entry.o          +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memcpy.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memset.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strcmp.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strlen.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strncmp.o                +=3D -Wa,-gdwarf-2
+> +AFLAGS_REMOVE_entry.o          +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_memcpy.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_memset.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strcmp.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strlen.o         +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-g=
+dwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_strncmp.o                +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-=
+g -Wa,-gdwarf4 -Wa,-gdwarf-5
 
-Hello! This is expected error because LLVM does not support e500v1
-(8540) powerpc cores. LLVM supports e500v2 (8548) cores via LLVM
-target cpu value "e500".
 
-You should switch compiler from LLVM to GCC when compiling Linux for
-e500v1/8540 powerpc cores.
+You can merge these into a single line:
 
->    make[2]: *** [scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
->    make[2]: Target 'scripts/mod/' not remade because of errors.
->    make[1]: *** [Makefile:1285: prepare0] Error 2
->    make[1]: Target 'prepare' not remade because of errors.
->    make: *** [Makefile:242: __sub-make] Error 2
->    make: Target 'prepare' not remade because of errors.
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+ asflags-remove-y +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwa=
+rf-5
+
+
+Or, a slightly shorter but tricky way is:
+
+ asflags-remove-y +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5, $(x) -Wa,$(x))
+
+
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 17f09dc26381..f1b1ef6c4cbf 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -69,8 +69,8 @@ CFLAGS_sha256.o                       +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_string.o         +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_string.o                        +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_entry64.o                        +=3D -Wa,-gdwarf-2
+> +AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -g -gdwarf-4 -gdwarf-5 -Wa,-=
+g -Wa,-gdwarf4 -Wa,-gdwarf-5
+> +AFLAGS_REMOVE_entry64.o                        +=3D -g -gdwarf-4 -gdwarf=
+-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+
+
+Ditto.
+
+
+Thanks.
+
+
+
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+>
+> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+> --
+> 2.37.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
