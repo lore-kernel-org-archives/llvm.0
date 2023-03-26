@@ -1,137 +1,181 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FE33C27
-	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 15:35:20 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.nyi.internal (Postfix) with ESMTP id E8DA35C0097;
-	Sun, 26 Mar 2023 11:35:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 26 Mar 2023 11:35:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1679844919; x=1679931319; bh=yoT/5dYYqL
-	s4VW9DjOm5vJu5zkmQqNSHt74uigodyG0=; b=DcZ8FFH+ZKH5Cc/KPXyQ6095+J
-	FZRtvDPa/cwFzEybbsCEo67TJTLbJjKI32Agk+2/Ta7JP1bVMjB6H6pQuYL1YYGe
-	OM7+8hHmWdvcCNnAQE8CqEh9VcTjJ0iajDhMkDKsb5aKsAcz8m3oLevEmSfmRtJx
-	vXtw3tKwrNi+Q6upRcWR4TLDKAQ8r4OxsgC8bEfz078fMl4kBFiknFa2xqYE7Knp
-	gy2fB9SJvq78kd6bTwrw7j6kPZDc7LiFvY/UjyjfvBWu1LLwCHoiAXZNsUsYnPOP
-	vIZh+d7vcSs/KhwF7irakcBe08zzoeduyAeId4rgcs44WUYrDuvrRBKOge/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1679844919; x=1679931319; bh=yoT/5dYYqLs4V
-	W9DjOm5vJu5zkmQqNSHt74uigodyG0=; b=mhZV1XekrPJxvBxD+08qQSkVdeuHR
-	S6BLfD8jUebaNfB/6llIvVPeE+iVnyc+8i0ZrUISs9EGu3FEhDc9tXfbbiDg6/Rp
-	t7Cn82Z9jTTNrKuBE65KTl4sedDz2sbHCW2KWC7oOV4ccZ7er1pKGXX/0kZ6JuLE
-	phrZpaorSOV7tFazWTLIWhvoq4vAEwK8kE89kb1ZVvkxstNRGtqy4YUQ4g7AhDTc
-	sipaGzN+dOV63OWWAUGdRIaEgxHBe8U5Vdd8GTgt3UrVrbwgTYJX5DB4jtd0b6lT
-	c+5BPvcCm4lcd9mmTPIBApSqYbAZaLyN8GJs9/tHci8u6L/N45yQgwYzA==
-X-ME-Sender: <xms:NmYgZAM8DwGMN29GdqG2obCVpaousxTdJZa6vkygu7TjX902y_UrIQ>
-    <xme:NmYgZG9bIVhl6RlvVfKGXSiUp2XKl1W7jBH30f9LUUXKeycGjahB1tQdThnWsNNgV
-    uBmN3Tn6ETHuUZOtA>
-X-ME-Received: <xmr:NmYgZHQADgJ9KkqK31FnxV0-RBbzBDE3czPXOKHDuYSNYD5XClVJaTpJvxw3qT2VPdIa60q8kgUM_CHHhlEWHSGFbVN-yFdrIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehtddgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlhihsshgr
-    ucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepheekgf
-    dtveettdekuddugeeugfdujeehuefgleegtedthfffudfhheduhfduuefhnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhephhhisegrlhihshhsrg
-    drihhs
-X-ME-Proxy: <xmx:NmYgZIvVMbyCHcHQxKTyvg8vqLI4GiwVwP7PATduFkE3bs1DW-ltag>
-    <xmx:NmYgZIeSeol3dytw8tE4J0nI_2MO4_sd3JolAgVRPukBHgA8Attc8Q>
-    <xmx:NmYgZM1JMFDh7Ug-WGuZ-l_VeLkZvoe9YaSntQwKbDxl7NnIO8HrtQ>
-    <xmx:N2YgZM1pUExcWP24azkIfCk7vwjrJZspEDwALDyH0_ShsoBlT4Foyw>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 26 Mar 2023 11:35:18 -0400 (EDT)
-Received: by x220.qyliss.net (Postfix, from userid 1000)
-	id 8850F1FD0; Sun, 26 Mar 2023 15:35:16 +0000 (UTC)
-From: Alyssa Ross <hi@alyssa.is>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Cao <nickcao@nichi.co>,
-	linux-kbuild@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	Tom Rix <trix@redhat.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Alyssa Ross <hi@alyssa.is>,
-	stable@vger.kernel.org
-Subject: [PATCH] purgatory: fix disabling debug info
-Date: Sun, 26 Mar 2023 15:34:12 +0000
-Message-Id: <20230326153412.63128-1-hi@alyssa.is>
-X-Mailer: git-send-email 2.37.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56977F3
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 16:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679848309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WNeKkaKWJ8KEVkkKhdSszq3H5jHSiDjREEgfIOthTWg=;
+	b=jRS9VS4hPWDLFN6hodbfk2XfacW4SDYpcKIWWyfTdDN50pIfCrTYP/2xqlsb06Sgu/3sGp
+	sGVzymmczEeBJrKMpgCjJ2oxCzba3RRBRckZicLTIXJ1VuPA1nEOjhJ2M0gHd0GK9JAPe5
+	oeahMcwhubKaxVU2Il9cr7l2oZZEq2Y=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-570-QQ9-7LQPMHKjCxd_DnKfkA-1; Sun, 26 Mar 2023 12:31:47 -0400
+X-MC-Unique: QQ9-7LQPMHKjCxd_DnKfkA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B22E1C05EB1
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 16:31:47 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.33.173])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 6B6FC140EBF4;
+	Sun, 26 Mar 2023 16:31:42 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 58 of 381): Test report for master
+ (6.3.0-rc3, mainline.kernel.org-clang, 5b9ff397)
+Date: Sun, 26 Mar 2023 16:31:42 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <78801.123032612314700106@us-mta-570.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
--Wa versions of both of those if building with Clang and GNU as.  As a
-result, debug info was being generated for the purgatory objects, even
-though the intention was that it not be.
+Hi, we tested your kernel and here are the results:
 
-Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Cc: stable@vger.kernel.org
----
- arch/riscv/purgatory/Makefile | 12 ++++++------
- arch/x86/purgatory/Makefile   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-index d16bf715a586..97001798fa19 100644
---- a/arch/riscv/purgatory/Makefile
-+++ b/arch/riscv/purgatory/Makefile
-@@ -84,12 +84,12 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
-+AFLAGS_REMOVE_entry.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_memcpy.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_memset.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_strcmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_strlen.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_strncmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 17f09dc26381..f1b1ef6c4cbf 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -69,8 +69,8 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
-+AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-+AFLAGS_REMOVE_entry64.o			+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
 
-base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
--- 
-2.37.1
+Kernel information:
+    Commit message: Merge tag 'xfs-6.3-fixes-7' of git://git.kernel.org/pub=
+/scm/fs/xfs/xfs-linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/81685
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7563511
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7563515
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7563519
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7563555
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7563559
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7563565
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
