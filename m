@@ -1,77 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5A120F8;
-	Sun, 26 Mar 2023 13:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA032C433D2;
-	Sun, 26 Mar 2023 13:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1679836817;
-	bh=DCQOATmQzGlfzrAUPN5To5/sRencn+ujNeV4RPDtAhg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=phANgEHH2kJz0I0Oe8aMuD8w0DTDBgbn31+krj3VEfj+obWiF4VMXuS8LN4fdHaz1
-	 d2TbE9vR1zTX2SF0UWh8a681jalSCXPfojgdz6W/Kx3cmlZKJiuZNWdP6340Gp7NVP
-	 ReYSLIlSN1UO1BoInk6ycAq5jw2W/Mw/y4oscBsA=
-Date: Sun, 26 Mar 2023 15:20:14 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Tom Rix <trix@redhat.com>
-Cc: Nam Cao <namcaov@gmail.com>, nathan@kernel.org, ndesaulniers@google.com,
-	artur.bujdoso@gmail.com, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] staging: rtl8723bs: remove unused pHalData variable
-Message-ID: <ZCBGjp7bJBWWztOG@kroah.com>
-References: <20230326122321.1352337-1-trix@redhat.com>
- <ZCA+vIjUFHZFUFPC@nam-dell>
- <ZCBArurFCc7Pae+T@kroah.com>
- <8a2746a0-57e0-621b-7db9-2719554d050b@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FE33C27
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 15:35:20 +0000 (UTC)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.nyi.internal (Postfix) with ESMTP id E8DA35C0097;
+	Sun, 26 Mar 2023 11:35:19 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sun, 26 Mar 2023 11:35:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1679844919; x=1679931319; bh=yoT/5dYYqL
+	s4VW9DjOm5vJu5zkmQqNSHt74uigodyG0=; b=DcZ8FFH+ZKH5Cc/KPXyQ6095+J
+	FZRtvDPa/cwFzEybbsCEo67TJTLbJjKI32Agk+2/Ta7JP1bVMjB6H6pQuYL1YYGe
+	OM7+8hHmWdvcCNnAQE8CqEh9VcTjJ0iajDhMkDKsb5aKsAcz8m3oLevEmSfmRtJx
+	vXtw3tKwrNi+Q6upRcWR4TLDKAQ8r4OxsgC8bEfz078fMl4kBFiknFa2xqYE7Knp
+	gy2fB9SJvq78kd6bTwrw7j6kPZDc7LiFvY/UjyjfvBWu1LLwCHoiAXZNsUsYnPOP
+	vIZh+d7vcSs/KhwF7irakcBe08zzoeduyAeId4rgcs44WUYrDuvrRBKOge/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1679844919; x=1679931319; bh=yoT/5dYYqLs4V
+	W9DjOm5vJu5zkmQqNSHt74uigodyG0=; b=mhZV1XekrPJxvBxD+08qQSkVdeuHR
+	S6BLfD8jUebaNfB/6llIvVPeE+iVnyc+8i0ZrUISs9EGu3FEhDc9tXfbbiDg6/Rp
+	t7Cn82Z9jTTNrKuBE65KTl4sedDz2sbHCW2KWC7oOV4ccZ7er1pKGXX/0kZ6JuLE
+	phrZpaorSOV7tFazWTLIWhvoq4vAEwK8kE89kb1ZVvkxstNRGtqy4YUQ4g7AhDTc
+	sipaGzN+dOV63OWWAUGdRIaEgxHBe8U5Vdd8GTgt3UrVrbwgTYJX5DB4jtd0b6lT
+	c+5BPvcCm4lcd9mmTPIBApSqYbAZaLyN8GJs9/tHci8u6L/N45yQgwYzA==
+X-ME-Sender: <xms:NmYgZAM8DwGMN29GdqG2obCVpaousxTdJZa6vkygu7TjX902y_UrIQ>
+    <xme:NmYgZG9bIVhl6RlvVfKGXSiUp2XKl1W7jBH30f9LUUXKeycGjahB1tQdThnWsNNgV
+    uBmN3Tn6ETHuUZOtA>
+X-ME-Received: <xmr:NmYgZHQADgJ9KkqK31FnxV0-RBbzBDE3czPXOKHDuYSNYD5XClVJaTpJvxw3qT2VPdIa60q8kgUM_CHHhlEWHSGFbVN-yFdrIQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehtddgleduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlhihsshgr
+    ucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepheekgf
+    dtveettdekuddugeeugfdujeehuefgleegtedthfffudfhheduhfduuefhnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhephhhisegrlhihshhsrg
+    drihhs
+X-ME-Proxy: <xmx:NmYgZIvVMbyCHcHQxKTyvg8vqLI4GiwVwP7PATduFkE3bs1DW-ltag>
+    <xmx:NmYgZIeSeol3dytw8tE4J0nI_2MO4_sd3JolAgVRPukBHgA8Attc8Q>
+    <xmx:NmYgZM1JMFDh7Ug-WGuZ-l_VeLkZvoe9YaSntQwKbDxl7NnIO8HrtQ>
+    <xmx:N2YgZM1pUExcWP24azkIfCk7vwjrJZspEDwALDyH0_ShsoBlT4Foyw>
+Feedback-ID: i12284293:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 26 Mar 2023 11:35:18 -0400 (EDT)
+Received: by x220.qyliss.net (Postfix, from userid 1000)
+	id 8850F1FD0; Sun, 26 Mar 2023 15:35:16 +0000 (UTC)
+From: Alyssa Ross <hi@alyssa.is>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Cao <nickcao@nichi.co>,
+	linux-kbuild@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	Tom Rix <trix@redhat.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Alyssa Ross <hi@alyssa.is>,
+	stable@vger.kernel.org
+Subject: [PATCH] purgatory: fix disabling debug info
+Date: Sun, 26 Mar 2023 15:34:12 +0000
+Message-Id: <20230326153412.63128-1-hi@alyssa.is>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a2746a0-57e0-621b-7db9-2719554d050b@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 26, 2023 at 06:13:16AM -0700, Tom Rix wrote:
-> 
-> On 3/26/23 5:55 AM, Greg KH wrote:
-> > On Sun, Mar 26, 2023 at 02:46:52PM +0200, Nam Cao wrote:
-> > > On Sun, Mar 26, 2023 at 08:23:21AM -0400, Tom Rix wrote:
-> > > > clang with W=1 reports
-> > > > drivers/staging/rtl8723bs/hal/hal_btcoex.c:1182:23: error: variable
-> > > >    'pHalData' set but not used [-Werror,-Wunused-but-set-variable]
-> > > >          struct hal_com_data *pHalData;
-> > > >                               ^
-> > > > This variable is not used so remove it.
-> > > > 
-> > > > Signed-off-by: Tom Rix <trix@redhat.com>
-> > > > ---
-> > > >   drivers/staging/rtl8723bs/hal/hal_btcoex.c | 4 ----
-> > > >   1 file changed, 4 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/staging/rtl8723bs/hal/hal_btcoex.c b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> > > > index e36f8c369a04..0cb2adcc1f78 100644
-> > > > --- a/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> > > > +++ b/drivers/staging/rtl8723bs/hal/hal_btcoex.c
-> > > > @@ -1179,10 +1179,6 @@ bool hal_btcoex_IsBtDisabled(struct adapter *padapter)
-> > > >   void hal_btcoex_SetChipType(struct adapter *padapter, u8 chipType)
-> > > >   {
-> > > > -	struct hal_com_data *pHalData;
-> > > > -
-> > > > -
-> > > > -	pHalData = GET_HAL_DATA(padapter);
-> > > >   }
-> > > If this function doesn't do anything, does it not make more sense to
-> > > just remove this function entirely?
-> > This function is already removed in linux-next, so it doesn't matter :)
-> 
-> My patch is against linux-next from tag next-20230324
+Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+-Wa versions of both of those if building with Clang and GNU as.  As a
+result, debug info was being generated for the purgatory objects, even
+though the intention was that it not be.
 
-Ah, ok, well it will be gone in the next one, as this is already gone in
-my tree.
+Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+Signed-off-by: Alyssa Ross <hi@alyssa.is>
+Cc: stable@vger.kernel.org
+---
+ arch/riscv/purgatory/Makefile | 12 ++++++------
+ arch/x86/purgatory/Makefile   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-thanks,
+diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+index d16bf715a586..97001798fa19 100644
+--- a/arch/riscv/purgatory/Makefile
++++ b/arch/riscv/purgatory/Makefile
+@@ -84,12 +84,12 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+ CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
+ CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
+ 
+-AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
++AFLAGS_REMOVE_entry.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
++AFLAGS_REMOVE_memcpy.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
++AFLAGS_REMOVE_memset.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
++AFLAGS_REMOVE_strcmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
++AFLAGS_REMOVE_strlen.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
++AFLAGS_REMOVE_strncmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+ 
+ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+ 		$(call if_changed,ld)
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index 17f09dc26381..f1b1ef6c4cbf 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -69,8 +69,8 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
+ CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
+ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+ 
+-AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
++AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
++AFLAGS_REMOVE_entry64.o			+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
+ 
+ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+ 		$(call if_changed,ld)
 
-greg k-h
+base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+-- 
+2.37.1
+
