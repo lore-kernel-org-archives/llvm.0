@@ -1,186 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6232574
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 21:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFEE18D
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 00:17:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679778105;
+	s=mimecast20190719; t=1679789859;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=oCbL/4BCOUxjkaKr6r8NUuZJGu4AQmM4GGKoR87MSEk=;
-	b=inWk/ui+1xaAxg1AWDviBr5svZkOlz7Ekj5gRyJulgISe+RzldyLxwV1WGBkFsJg3VQkUg
-	tsa72FxRnvgSpYU7gkHnIWWuc1x4FSlMxu2YIeAyLsg30Wk+uHMlzAok067rpTVlKklew/
-	B9JUrvG5tzeQg8DOkB4YKQEYMmoH2tI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-lgd8ka9QPuWGUGvKJOOHOg-1; Sat, 25 Mar 2023 17:01:44 -0400
-X-MC-Unique: lgd8ka9QPuWGUGvKJOOHOg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3EB6D2A59554
-	for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 21:01:44 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.33.173])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1C517404DC41;
-	Sat, 25 Mar 2023 21:01:44 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 22 of 381): Test report for master
- (6.3.0-rc3, mainline.kernel.org-clang, fd3d06ff)
-Date: Sat, 25 Mar 2023 21:01:44 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	bh=D61zQjRsLuXz/56PVuTWbWV80IKbwWyVMu0ddKqCreo=;
+	b=en8qmZDDFgEIc/mNpGPRh2TP1eKYNxYNaGysnrhGUZ/IPA4JPOkWJW5rcVxYiTEIi7QKnj
+	VbSQGISPonK6urCvPPo7qGMDvjcvLn/uhb5aT8GN5c/67MElSHM+QQVqx1MZ8VlRhVCIbj
+	Dq3NDHz+/fXhw6h77eoa2UkMbY/0RTw=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-626-3ZGbjPNDNU22ZoVHb07KqA-1; Sat, 25 Mar 2023 20:17:38 -0400
+X-MC-Unique: 3ZGbjPNDNU22ZoVHb07KqA-1
+Received: by mail-qt1-f199.google.com with SMTP id w13-20020ac857cd000000b003e37d3e6de2so3465047qta.16
+        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 17:17:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679789858;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D61zQjRsLuXz/56PVuTWbWV80IKbwWyVMu0ddKqCreo=;
+        b=c21/Av07gZufOcmtVF/Zhvsripe6MVm6LOVKXqhzuAdCwNslgYn9Tz+yg+mbNFTbvS
+         nkhNN4Bl8auC0yp9TQhnVVpr5Qt6gtKJGzHai5/GkREt4ThB+I2D+5GrgJPiQWYMRfwY
+         C7zZYikEEFFawOX2gOLBfFJzNMDRNs8siJClK+fPeZQEq86Xz8DA9kR9JeZ92t+enlpe
+         T2I/Sz+e6rDWEFoATT0Uq6Zmnit/yGOJLbKWmqiLMW2MOBc2tgqAK47a8xUQIcbLlMMI
+         VRfx2r7UARd5mqwhgVzDIfGTymIBrw8n9CbgzvA2KsK381SlRffYRZI7bzlFsHzjsiX2
+         eZQw==
+X-Gm-Message-State: AAQBX9cQ15qeNg0pJULdiX8OQzO96NahYnDfJjPoZekHvREmKmWvyHuN
+	mpc6eZQv8J/RW+g+1sFAM6ZkRu19BwOsFcNf2eQa8b/iFCavDEuzQ24NFlaw6Yt7X3nreNdB3hT
+	Wji8xmtzr7HNtMw==
+X-Received: by 2002:a05:6214:2506:b0:5a5:d286:c706 with SMTP id gf6-20020a056214250600b005a5d286c706mr15063793qvb.17.1679789857890;
+        Sat, 25 Mar 2023 17:17:37 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZugfWYhwn2fNmL9rQUMhOV2wtNFMMLNcZ9o3qv7OoE+LRL/5md/0aJyAMSsIMeQNzQQ+l9MA==
+X-Received: by 2002:a05:6214:2506:b0:5a5:d286:c706 with SMTP id gf6-20020a056214250600b005a5d286c706mr15063781qvb.17.1679789857620;
+        Sat, 25 Mar 2023 17:17:37 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 204-20020a3708d5000000b007485a383921sm528719qki.116.2023.03.25.17.17.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Mar 2023 17:17:37 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: aelior@marvell.com,
+	manishc@marvell.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] qed: remove unused num_ooo_add_to_peninsula variable
+Date: Sat, 25 Mar 2023 20:17:33 -0400
+Message-Id: <20230326001733.1343274-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <93079.123032517014400362@us-mta-657.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi, we tested your kernel and here are the results:
+clang with W=1 reports
+drivers/net/ethernet/qlogic/qed/qed_ll2.c:649:6: error: variable
+  'num_ooo_add_to_peninsula' set but not used [-Werror,-Wunused-but-set-variable]
+        u32 num_ooo_add_to_peninsula = 0, cid;
+            ^
+This variable is not used so remove it.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/ethernet/qlogic/qed/qed_ll2.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-
-Kernel information:
-    Commit message: Merge tag 'thermal-6.3-rc4' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/rafael/linux-pm
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/81510
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7555737
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7555741
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7555745
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7555781
-          x86_64 (debug) - Boot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7555785
-          x86_64 (debug) - Reboot test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7555791
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: mkfs -t xfs /dev/md1: TIMEO=
-UT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1374
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1612
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
-p kernel
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1561
-            Affected tests:
-                 aarch64 - kdump - sysrq-c
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_ll2.c b/drivers/net/ethernet/qlogic/qed/qed_ll2.c
+index e5116a86cfbc..717a0b3f89bd 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_ll2.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_ll2.c
+@@ -646,13 +646,13 @@ static int qed_ll2_lb_rxq_handler(struct qed_hwfn *p_hwfn,
+ 	struct qed_ll2_rx_queue *p_rx = &p_ll2_conn->rx_queue;
+ 	u16 packet_length = 0, parse_flags = 0, vlan = 0;
+ 	struct qed_ll2_rx_packet *p_pkt = NULL;
+-	u32 num_ooo_add_to_peninsula = 0, cid;
+ 	union core_rx_cqe_union *cqe = NULL;
+ 	u16 cq_new_idx = 0, cq_old_idx = 0;
+ 	struct qed_ooo_buffer *p_buffer;
+ 	struct ooo_opaque *ooo_opq;
+ 	u8 placement_offset = 0;
+ 	u8 cqe_type;
++	u32 cid;
+ 
+ 	cq_new_idx = le16_to_cpu(*p_rx->p_fw_cons);
+ 	cq_old_idx = qed_chain_get_cons_idx(&p_rx->rcq_chain);
+@@ -762,7 +762,6 @@ static int qed_ll2_lb_rxq_handler(struct qed_hwfn *p_hwfn,
+ 						   cid, ooo_opq->ooo_isle);
+ 				break;
+ 			case TCP_EVENT_ADD_PEN:
+-				num_ooo_add_to_peninsula++;
+ 				qed_ooo_put_ready_buffer(p_hwfn,
+ 							 p_hwfn->p_ooo_info,
+ 							 p_buffer, true);
+-- 
+2.27.0
 
