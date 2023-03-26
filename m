@@ -1,115 +1,126 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFEE18D
-	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 00:17:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679789859;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=D61zQjRsLuXz/56PVuTWbWV80IKbwWyVMu0ddKqCreo=;
-	b=en8qmZDDFgEIc/mNpGPRh2TP1eKYNxYNaGysnrhGUZ/IPA4JPOkWJW5rcVxYiTEIi7QKnj
-	VbSQGISPonK6urCvPPo7qGMDvjcvLn/uhb5aT8GN5c/67MElSHM+QQVqx1MZ8VlRhVCIbj
-	Dq3NDHz+/fXhw6h77eoa2UkMbY/0RTw=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-626-3ZGbjPNDNU22ZoVHb07KqA-1; Sat, 25 Mar 2023 20:17:38 -0400
-X-MC-Unique: 3ZGbjPNDNU22ZoVHb07KqA-1
-Received: by mail-qt1-f199.google.com with SMTP id w13-20020ac857cd000000b003e37d3e6de2so3465047qta.16
-        for <llvm@lists.linux.dev>; Sat, 25 Mar 2023 17:17:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679789858;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D61zQjRsLuXz/56PVuTWbWV80IKbwWyVMu0ddKqCreo=;
-        b=c21/Av07gZufOcmtVF/Zhvsripe6MVm6LOVKXqhzuAdCwNslgYn9Tz+yg+mbNFTbvS
-         nkhNN4Bl8auC0yp9TQhnVVpr5Qt6gtKJGzHai5/GkREt4ThB+I2D+5GrgJPiQWYMRfwY
-         C7zZYikEEFFawOX2gOLBfFJzNMDRNs8siJClK+fPeZQEq86Xz8DA9kR9JeZ92t+enlpe
-         T2I/Sz+e6rDWEFoATT0Uq6Zmnit/yGOJLbKWmqiLMW2MOBc2tgqAK47a8xUQIcbLlMMI
-         VRfx2r7UARd5mqwhgVzDIfGTymIBrw8n9CbgzvA2KsK381SlRffYRZI7bzlFsHzjsiX2
-         eZQw==
-X-Gm-Message-State: AAQBX9cQ15qeNg0pJULdiX8OQzO96NahYnDfJjPoZekHvREmKmWvyHuN
-	mpc6eZQv8J/RW+g+1sFAM6ZkRu19BwOsFcNf2eQa8b/iFCavDEuzQ24NFlaw6Yt7X3nreNdB3hT
-	Wji8xmtzr7HNtMw==
-X-Received: by 2002:a05:6214:2506:b0:5a5:d286:c706 with SMTP id gf6-20020a056214250600b005a5d286c706mr15063793qvb.17.1679789857890;
-        Sat, 25 Mar 2023 17:17:37 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZugfWYhwn2fNmL9rQUMhOV2wtNFMMLNcZ9o3qv7OoE+LRL/5md/0aJyAMSsIMeQNzQQ+l9MA==
-X-Received: by 2002:a05:6214:2506:b0:5a5:d286:c706 with SMTP id gf6-20020a056214250600b005a5d286c706mr15063781qvb.17.1679789857620;
-        Sat, 25 Mar 2023 17:17:37 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 204-20020a3708d5000000b007485a383921sm528719qki.116.2023.03.25.17.17.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Mar 2023 17:17:37 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: aelior@marvell.com,
-	manishc@marvell.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] qed: remove unused num_ooo_add_to_peninsula variable
-Date: Sat, 25 Mar 2023 20:17:33 -0400
-Message-Id: <20230326001733.1343274-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62C336A;
+	Sun, 26 Mar 2023 00:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679790386; x=1711326386;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PjyW3M9gchViuMOkWKBiti9p0Vnkx+btmmxL03qkX8E=;
+  b=BWzU58qOuNgr2SbpgvokHWmowt1Obi9TeBmD5eMqBKHr9FHYSAZfmX36
+   0lp66oE0eYE0WGSRQ+8594KQjx2Dn4TioEc4dzPd5snwBRZIK53KPVRF5
+   iimt2Om8LWHE3RhECxTABbkIZq1O/49UknIlWWSDw0nAqiEEV3RYA3DnU
+   aXf+uNTLl+jrkP+KH+Im6dn0DAxryxPcfRyoN3lsVALwqembmDvoMXwIN
+   RihcHSJgAgeLlECvoD4WIAbbpmjVgkv6dlmKP8DpBJ2RTujsNZsUgtgWR
+   uMxkRH2G7GDRwZdRnRcZEU6I3ZSiWbvmTsGx/oXsMqISu+gduniz+PRsX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="338747827"
+X-IronPort-AV: E=Sophos;i="5.98,291,1673942400"; 
+   d="scan'208";a="338747827"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2023 17:26:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10660"; a="747571641"
+X-IronPort-AV: E=Sophos;i="5.98,291,1673942400"; 
+   d="scan'208";a="747571641"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Mar 2023 17:26:24 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pgEDH-000Gm7-3D;
+	Sun, 26 Mar 2023 00:26:23 +0000
+Date: Sun, 26 Mar 2023 08:26:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 8/39] sound/soc/soc-ops.c:817:5: warning:
+ stack frame size (1072) exceeds limit (1024) in 'snd_soc_set_enum_kctl'
+Message-ID: <202303260852.KupV2smW-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-clang with W=1 reports
-drivers/net/ethernet/qlogic/qed/qed_ll2.c:649:6: error: variable
-  'num_ooo_add_to_peninsula' set but not used [-Werror,-Wunused-but-set-variable]
-        u32 num_ooo_add_to_peninsula = 0, cid;
-            ^
-This variable is not used so remove it.
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   b4adc8d4b163c456483eded9c3b6b1082b8feb40
+commit: e44f313d4ee5114ffdf399b048f8fcab0a177ba5 [8/39] ASoC: ops: Introduce 'soc_set_enum_kctl'
+config: riscv-randconfig-r032-20230326 (https://download.01.org/0day-ci/archive/20230326/202303260852.KupV2smW-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/e44f313d4ee5114ffdf399b048f8fcab0a177ba5
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout e44f313d4ee5114ffdf399b048f8fcab0a177ba5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash sound/soc/
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/ethernet/qlogic/qed/qed_ll2.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303260852.KupV2smW-lkp@intel.com/
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_ll2.c b/drivers/net/ethernet/qlogic/qed/qed_ll2.c
-index e5116a86cfbc..717a0b3f89bd 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_ll2.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_ll2.c
-@@ -646,13 +646,13 @@ static int qed_ll2_lb_rxq_handler(struct qed_hwfn *p_hwfn,
- 	struct qed_ll2_rx_queue *p_rx = &p_ll2_conn->rx_queue;
- 	u16 packet_length = 0, parse_flags = 0, vlan = 0;
- 	struct qed_ll2_rx_packet *p_pkt = NULL;
--	u32 num_ooo_add_to_peninsula = 0, cid;
- 	union core_rx_cqe_union *cqe = NULL;
- 	u16 cq_new_idx = 0, cq_old_idx = 0;
- 	struct qed_ooo_buffer *p_buffer;
- 	struct ooo_opaque *ooo_opq;
- 	u8 placement_offset = 0;
- 	u8 cqe_type;
-+	u32 cid;
- 
- 	cq_new_idx = le16_to_cpu(*p_rx->p_fw_cons);
- 	cq_old_idx = qed_chain_get_cons_idx(&p_rx->rcq_chain);
-@@ -762,7 +762,6 @@ static int qed_ll2_lb_rxq_handler(struct qed_hwfn *p_hwfn,
- 						   cid, ooo_opq->ooo_isle);
- 				break;
- 			case TCP_EVENT_ADD_PEN:
--				num_ooo_add_to_peninsula++;
- 				qed_ooo_put_ready_buffer(p_hwfn,
- 							 p_hwfn->p_ooo_info,
- 							 p_buffer, true);
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/soc-ops.c:817:5: warning: stack frame size (1072) exceeds limit (1024) in 'snd_soc_set_enum_kctl' [-Wframe-larger-than]
+   int snd_soc_set_enum_kctl(struct snd_soc_card *card,
+       ^
+   84/1072 (7.84%) spills, 988/1072 (92.16%) variables
+   1 warning generated.
+
+
+vim +/snd_soc_set_enum_kctl +817 sound/soc/soc-ops.c
+
+   806	
+   807	/**
+   808	 * snd_soc_set_enum_kctl - Set enumerated controls matching a pattern
+   809	 *
+   810	 * @card: where to look for the controls
+   811	 * @name: name pattern
+   812	 * @value: string value to set the controls to
+   813	 *
+   814	 * Return number of matching and set controls on success, else error.
+   815	 * No controls need to match.
+   816	 */
+ > 817	int snd_soc_set_enum_kctl(struct snd_soc_card *card,
+   818		const char *name, const char *value)
+   819	{
+   820		struct snd_kcontrol *kctl;
+   821		int hits = 0;
+   822		int ret;
+   823	
+   824		/* Sanity check for name */
+   825		if (unlikely(!name))
+   826			return -EINVAL;
+   827	
+   828		list_for_each_entry(kctl, &card->snd_card->controls, list) {
+   829			if (!soc_control_matches(kctl, name))
+   830				continue;
+   831	
+   832			ret = soc_set_enum_kctl(kctl, value);
+   833			if (ret < 0)
+   834				return ret;
+   835			hits++;
+   836		}
+   837	
+   838		if (!hits)
+   839			return -EINVAL;
+   840	
+   841		return hits;
+   842	}
+   843	EXPORT_SYMBOL_GPL(snd_soc_set_enum_kctl);
+   844	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
