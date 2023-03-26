@@ -1,106 +1,192 @@
-Received: from iad0.nichi.link (iad0.nichi.link [5.161.83.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A2D2F3C
-	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 16:54:43 +0000 (UTC)
-Received: from [IPV6:2402:f000:2:c801:3a00:25ff:fe59:8c06] (unknown [IPv6:2402:f000:2:c801:3a00:25ff:fe59:8c06])
-	by iad0.nichi.link (Postfix) with ESMTPA id DD5A887A02;
-	Sun, 26 Mar 2023 16:48:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nichi.co; s=default;
-	t=1679849316;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4F22F3C
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 17:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679850101;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VWn62rWoesr1V+Jp7k/v6C+Nt0B/JD6KJm7XDX0ZcKc=;
-	b=F4FKRJcUCMPpnaM9P5gN6jHEGLeMEv2703QQMls5hBQlIuu7B37ZLAroMiOHDz0ft2j9EG
-	7bwp10mFfNIwt6S7z15djRxHlN42VxOTUMTElNyhDiIUxqWH945MbE7oOz4ueh7zfblIco
-	lb+YloLzv045ZonQ40my3l7bIV7Lfgg=
-Message-ID: <3db66793-c647-f6c9-7c5b-d7a331c8f328@nichi.co>
-Date: Mon, 27 Mar 2023 00:48:31 +0800
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dc8td2Ss2O+7Dc4REdn5WuJAkmo7/Wsq7GXL/DP477A=;
+	b=ZiWAlRfLClH4Q5Y7XmoYm3pIGhJf+cPo/EdqfBhisvMev9Ns5swHd73ulau5PNZ3vbrVPi
+	EgenAAzx3Sx7MZ31VDQJUHbx8FAOIKOAuJe5zjDo/IzNf17mfnOS4vNeTkxNYarwRf9Jtt
+	KbENPyyZusP1ef+LA20xHC2IRBIcVCo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-108-lW7chuTfOha-z0lAYOO-wA-1; Sun, 26 Mar 2023 13:01:40 -0400
+X-MC-Unique: lW7chuTfOha-z0lAYOO-wA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA33A3C00088
+	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 17:01:39 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.33.173])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D072A492C18;
+	Sun, 26 Mar 2023 17:01:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 19 of 381): Test report for master
+ (6.3.0-rc3, mainline.kernel.org-clang, da8e7da1)
+Date: Sun, 26 Mar 2023 17:01:39 -0000
+To: llvm@lists.linux.dev, bgoncalv@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] purgatory: fix disabling debug info
-To: Alyssa Ross <hi@alyssa.is>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
- Tom Rix <trix@redhat.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, stable@vger.kernel.org
-References: <20230326153412.63128-1-hi@alyssa.is>
-Content-Language: en-US
-From: Nick Cao <nickcao@nichi.co>
-In-Reply-To: <20230326153412.63128-1-hi@alyssa.is>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <21385.123032613014000237@us-mta-108.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-With this patch applied on top of 
-https://github.com/NickCao/linux/tree/f258de7fdb1e69492f8962da5d34646da49685db, 
-the built kernel image no longer contains reference to the source 
-directory (which is not allowed in the Nixpkgs kernel building 
-infrastructure).
+Hi, we tested your kernel and here are the results:
 
-Tested-by: Nick Cao <nickcao@nichi.co>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-On 3/26/23 23:34, Alyssa Ross wrote:
-> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
-> -Wa versions of both of those if building with Clang and GNU as.  As a
-> result, debug info was being generated for the purgatory objects, even
-> though the intention was that it not be.
-> 
-> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
-> Signed-off-by: Alyssa Ross <hi@alyssa.is>
-> Cc: stable@vger.kernel.org
-> ---
->   arch/riscv/purgatory/Makefile | 12 ++++++------
->   arch/x86/purgatory/Makefile   |  4 ++--
->   2 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-> index d16bf715a586..97001798fa19 100644
-> --- a/arch/riscv/purgatory/Makefile
-> +++ b/arch/riscv/purgatory/Makefile
-> @@ -84,12 +84,12 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
->   CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
->   CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
->   
-> -AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
-> +AFLAGS_REMOVE_entry.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_memcpy.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_memset.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strcmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strlen.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_strncmp.o		+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
->   
->   $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
->   		$(call if_changed,ld)
-> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> index 17f09dc26381..f1b1ef6c4cbf 100644
-> --- a/arch/x86/purgatory/Makefile
-> +++ b/arch/x86/purgatory/Makefile
-> @@ -69,8 +69,8 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
->   CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
->   CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
->   
-> -AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
-> +AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
-> +AFLAGS_REMOVE_entry64.o			+= -g -gdwarf-4 -gdwarf-5 -Wa,-g -Wa,-gdwarf4 -Wa,-gdwarf-5
->   
->   $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
->   		$(call if_changed,ld)
-> 
-> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+
+Kernel information:
+    Commit message: Merge tag 'nfsd-6.3-4' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/cel/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/81689
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7564537
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7564541
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7564545
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7564581
+          x86_64 (debug) - Boot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7564585
+          x86_64 (debug) - Reboot test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7564591
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
