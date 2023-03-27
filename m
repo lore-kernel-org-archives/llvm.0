@@ -1,41 +1,45 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8366E622;
-	Mon, 27 Mar 2023 03:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B390620;
+	Mon, 27 Mar 2023 05:15:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679888644; x=1711424644;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=GQTgmM4Xb832yVBSVCyEVJDNRzrg9kfGPctLBLAgA0E=;
-  b=dk914gWMn2amCtjBdx6srR4329oEwErDe7oVCl2Gac0vAPS/1tNAgDeX
-   /oR8oP38XQ8xBUZkgEuo7XkRSZsgfslaTSUNs/bQk6aH4Graayenlrc64
-   jE5s8vpSzS14hoqtjEh7gsdqs+FbI3JdMJbFZQA/UCRRBh4KkZS5dcAXq
-   iGr1/Uu1mFKeiO6Pd55dOA6jiZwXcSB4QOzjhZX/IY7efBCtKIakMCA/v
-   LXfIsSV894bXXrdldil1YV4sVkWIqGYw92x9sEZhjjSsOcDm0DvsBljEW
-   VoVUH7gSwy86TKBiQ1NeG6ScA9cnzXQ1LH9Mxw2NxliUH1F6ZD/JN7XT2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="328609743"
+  t=1679894108; x=1711430108;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PHVqIs8qb9ytZ5VFulGHppQMg4/eWsl7JZ1eyBFQsBk=;
+  b=krmzuP/0hqEZ5iAycSkyre0uWaASKFMD4WyjX/PvletOCiAHPf5naNMu
+   RMBr/O0vd+iD8J6QyoQ0RbvqlTJ94fuo65bnPOGyUSeVqRkKTlBLzgK3t
+   NpyaAx1wuOqMfej85JhxqYVMKZuBDcZfN46HgJ0zr0TIG7qX66oOBq+Jb
+   847Ws4Ka7C6aFpcp6FCjTMJcrJ0ThLKSuThzmrS5g71iXgZ9Q9Udv2+XS
+   uGkctpL/6DLUFBWM3E4QjQWoDOlh+K4p09rTK1i3YvR7Uo7aSg7IJI1mt
+   U6XymHR+oZauBCB+Mbhd3KF/k2hs4Ba5sy9uGGinNhENpN4BlcfWoLvjK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367921664"
 X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="328609743"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 20:44:04 -0700
+   d="scan'208";a="367921664"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 22:15:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="715919394"
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="633493917"
 X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="715919394"
+   d="scan'208";a="633493917"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Mar 2023 20:44:02 -0700
+  by orsmga003.jf.intel.com with ESMTP; 26 Mar 2023 22:15:04 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pgdm6-000HWo-11;
-	Mon, 27 Mar 2023 03:44:02 +0000
-Date: Mon, 27 Mar 2023 11:43:08 +0800
+	id 1pgfCC-000HYx-0Q;
+	Mon, 27 Mar 2023 05:15:04 +0000
+Date: Mon, 27 Mar 2023 13:14:48 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: __ct_user_enter+0x33: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <202303271143.eUG1UWi1-lkp@intel.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [stable:linux-5.15.y 5587/9999]
+ drivers/isdn/hardware/mISDN/speedfax.c:108:1: warning: performing pointer
+ arithmetic on a null pointer has undefined behavior
+Message-ID: <202303271330.fS0SWkRb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,123 +49,357 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: linux-kernel@vger.kernel.org
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
-CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-
-Hi Frederic,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   197b6b60ae7bc51dd0814953c562833143b292aa
-commit: 0ffc781a19ed3030c792ad1a0e44e6e047bb9adc context_tracking: Rename __context_tracking_enter/exit() to __ct_user_enter/exit()
-date:   9 months ago
-config: x86_64-randconfig-a016-20230327 (https://download.01.org/0day-ci/archive/20230327/202303271143.eUG1UWi1-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   115472395b0a9ea522ba0e106d6dfd7a73df8ba6
+commit: dc235db7b79a352d07d62e8757ad856dbf1564c1 [5587/9999] RISC-V: Make port I/O string accessors actually work
+config: riscv-randconfig-r042-20230327 (https://download.01.org/0day-ci/archive/20230327/202303271330.fS0SWkRb-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ffc781a19ed3030c792ad1a0e44e6e047bb9adc
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0ffc781a19ed3030c792ad1a0e44e6e047bb9adc
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=dc235db7b79a352d07d62e8757ad856dbf1564c1
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout dc235db7b79a352d07d62e8757ad856dbf1564c1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/isdn/hardware/mISDN/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303271143.eUG1UWi1-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303271330.fS0SWkRb-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: sync_regs+0x24: call to memcpy() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x7a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x59: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x31: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x56: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check+0x49: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_start+0x68: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check+0x65: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x2e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_idle_enter+0x14: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_enter+0x41: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x1e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_irq_exit+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_idle_exit+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_exit+0x1b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_nmi_enter+0x38: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x1e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_irq_enter+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x50: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x59: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x50: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x50: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x49: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x5f: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: __ct_user_enter+0x33: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x42: call to ftrace_likely_update() leaves .noinstr.text section
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:660:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/speedfax.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:668:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/speedfax.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:676:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/speedfax.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:685:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/speedfax.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:694:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/speedfax.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:703:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/speedfax.c:12:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/isdn/hardware/mISDN/speedfax.c:108:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IND(ISAC, sfax_hw, p_isac)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:57:3: note: expanded from macro 'IOFUNC_IND'
+                   insb(hw->ap.port, dp, size);                            \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+>> drivers/isdn/hardware/mISDN/speedfax.c:108:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IND(ISAC, sfax_hw, p_isac)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:62:3: note: expanded from macro 'IOFUNC_IND'
+                   outsb(hw->ap.port, dp, size);                           \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/isdn/hardware/mISDN/speedfax.c:109:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IND(ISAR, sfax_hw, p_isar)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:57:3: note: expanded from macro 'IOFUNC_IND'
+                   insb(hw->ap.port, dp, size);                            \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   drivers/isdn/hardware/mISDN/speedfax.c:109:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IND(ISAR, sfax_hw, p_isar)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:62:3: note: expanded from macro 'IOFUNC_IND'
+                   outsb(hw->ap.port, dp, size);                           \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   17 warnings generated.
+--
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:660:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/mISDNinfineon.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:668:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/mISDNinfineon.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:676:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/mISDNinfineon.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:685:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/mISDNinfineon.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:694:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/mISDNinfineon.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:703:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/isdn/hardware/mISDN/mISDNinfineon.c:26:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/isdn/hardware/mISDN/mISDNinfineon.c:257:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IO(ISAC, inf_hw, isac.a.io)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:36:3: note: expanded from macro 'IOFUNC_IO'
+                   insb(hw->ap.port + off, dp, size);                      \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+>> drivers/isdn/hardware/mISDN/mISDNinfineon.c:257:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IO(ISAC, inf_hw, isac.a.io)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:40:3: note: expanded from macro 'IOFUNC_IO'
+                   outsb(hw->ap.port + off, dp, size);                     \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/isdn/hardware/mISDN/mISDNinfineon.c:258:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IO(IPAC, inf_hw, hscx.a.io)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:36:3: note: expanded from macro 'IOFUNC_IO'
+                   insb(hw->ap.port + off, dp, size);                      \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   drivers/isdn/hardware/mISDN/mISDNinfineon.c:258:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IO(IPAC, inf_hw, hscx.a.io)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:40:3: note: expanded from macro 'IOFUNC_IO'
+                   outsb(hw->ap.port + off, dp, size);                     \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/isdn/hardware/mISDN/mISDNinfineon.c:259:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IND(ISAC, inf_hw, isac.a.io)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:57:3: note: expanded from macro 'IOFUNC_IND'
+                   insb(hw->ap.port, dp, size);                            \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   drivers/isdn/hardware/mISDN/mISDNinfineon.c:259:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IND(ISAC, inf_hw, isac.a.io)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:62:3: note: expanded from macro 'IOFUNC_IND'
+                   outsb(hw->ap.port, dp, size);                           \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/isdn/hardware/mISDN/mISDNinfineon.c:260:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IND(IPAC, inf_hw, hscx.a.io)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:57:3: note: expanded from macro 'IOFUNC_IND'
+                   insb(hw->ap.port, dp, size);                            \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   drivers/isdn/hardware/mISDN/mISDNinfineon.c:260:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   IOFUNC_IND(IPAC, inf_hw, hscx.a.io)
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/isdn/hardware/mISDN/iohelper.h:62:3: note: expanded from macro 'IOFUNC_IND'
+                   outsb(hw->ap.port, dp, size);                           \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   21 warnings generated.
+..
 
 
-objdump-func vmlinux.o __ct_user_enter:
-0000 00000000000061a0 <__ct_user_enter>:
-0000     61a0:	55                   	push   %rbp
-0001     61a1:	48 89 e5             	mov    %rsp,%rbp
-0004     61a4:	41 57                	push   %r15
-0006     61a6:	41 56                	push   %r14
-0008     61a8:	41 54                	push   %r12
-000a     61aa:	53                   	push   %rbx
-000b     61ab:	41 89 fe             	mov    %edi,%r14d
-000e     61ae:	65 4c 8b 3c 25 00 00 00 00 	mov    %gs:0x0,%r15	61b3: R_X86_64_32S	current_task
-0017     61b7:	4d 8b a7 a0 03 00 00 	mov    0x3a0(%r15),%r12
-001e     61be:	31 db                	xor    %ebx,%ebx
-0020     61c0:	4d 85 e4             	test   %r12,%r12
-0023     61c3:	0f 94 c3             	sete   %bl
-0026     61c6:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	61c9: R_X86_64_32S	_ftrace_annotated_branch+0x4e120
-002d     61cd:	89 de                	mov    %ebx,%esi
-002f     61cf:	31 d2                	xor    %edx,%edx
-0031     61d1:	31 c9                	xor    %ecx,%ecx
-0033     61d3:	e8 00 00 00 00       	call   61d8 <__ct_user_enter+0x38>	61d4: R_X86_64_PLT32	ftrace_likely_update-0x4
-0038     61d8:	4d 85 e4             	test   %r12,%r12
-003b     61db:	75 04                	jne    61e1 <__ct_user_enter+0x41>
-003d     61dd:	90                   	nop
-003e     61de:	0f 0b                	ud2
-0040     61e0:	90                   	nop
-0041     61e1:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	61e4: R_X86_64_32S	_ftrace_annotated_branch+0x4e150
-0048     61e8:	89 de                	mov    %ebx,%esi
-004a     61ea:	31 d2                	xor    %edx,%edx
-004c     61ec:	31 c9                	xor    %ecx,%ecx
-004e     61ee:	e8 00 00 00 00       	call   61f3 <__ct_user_enter+0x53>	61ef: R_X86_64_PLT32	ftrace_likely_update-0x4
-0053     61f3:	e8 48 00 00 00       	call   6240 <context_tracking_recursion_enter>
-0058     61f8:	84 c0                	test   %al,%al
-005a     61fa:	74 3b                	je     6237 <__ct_user_enter+0x97>
-005c     61fc:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 6203 <__ct_user_enter+0x63>	61ff: R_X86_64_PC32	context_tracking+0x4
-0063     6203:	44 39 f0             	cmp    %r14d,%eax
-0066     6206:	74 28                	je     6230 <__ct_user_enter+0x90>
-0068     6208:	65 8a 05 00 00 00 00 	mov    %gs:0x0(%rip),%al        # 620f <__ct_user_enter+0x6f>	620b: R_X86_64_PC32	context_tracking-0x4
-006f     620f:	41 83 fe 01          	cmp    $0x1,%r14d
-0073     6213:	75 13                	jne    6228 <__ct_user_enter+0x88>
-0075     6215:	84 c0                	test   %al,%al
-0077     6217:	74 0f                	je     6228 <__ct_user_enter+0x88>
-0079     6219:	90                   	nop
-007a     621a:	e8 00 00 00 00       	call   621f <__ct_user_enter+0x7f>	621b: R_X86_64_PLT32	.text+0x56233c
-007f     621f:	4c 89 ff             	mov    %r15,%rdi
-0082     6222:	e8 00 00 00 00       	call   6227 <__ct_user_enter+0x87>	6223: R_X86_64_PLT32	vtime_user_enter-0x4
-0087     6227:	90                   	nop
-0088     6228:	65 44 89 35 00 00 00 00 	mov    %r14d,%gs:0x0(%rip)        # 6230 <__ct_user_enter+0x90>	622c: R_X86_64_PC32	context_tracking+0x4
-0090     6230:	65 ff 0d 00 00 00 00 	decl   %gs:0x0(%rip)        # 6237 <__ct_user_enter+0x97>	6233: R_X86_64_PC32	context_tracking
-0097     6237:	5b                   	pop    %rbx
-0098     6238:	41 5c                	pop    %r12
-009a     623a:	41 5e                	pop    %r14
-009c     623c:	41 5f                	pop    %r15
-009e     623e:	5d                   	pop    %rbp
-009f     623f:	c3                   	ret
+vim +108 drivers/isdn/hardware/mISDN/speedfax.c
+
+da2272c91ae81b Karsten Keil 2009-07-22  107  
+da2272c91ae81b Karsten Keil 2009-07-22 @108  IOFUNC_IND(ISAC, sfax_hw, p_isac)
+da2272c91ae81b Karsten Keil 2009-07-22  109  IOFUNC_IND(ISAR, sfax_hw, p_isar)
+da2272c91ae81b Karsten Keil 2009-07-22  110  
+
+:::::: The code at line 108 was first introduced by commit
+:::::: da2272c91ae81b41ae6fa6ebdc767a6cef73b770 mISDN: Add support for Speedfax+ cards
+
+:::::: TO: Karsten Keil <keil@b1-systems.de>
+:::::: CC: Karsten Keil <keil@b1-systems.de>
 
 -- 
 0-DAY CI Kernel Test Service
