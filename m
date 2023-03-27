@@ -1,101 +1,114 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8281DA29
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 09:31:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=8DqjXeO1tc2m6wXJ4uu/hd4TZQ+nIIRzc4UwCMqvjG8=; b=eoYR6vnhQmVHVaf0Cx3ZejMm+E
-	IoLUG92swHmVbyoasGep3/EHaAXqfnR7A4Vn5xqegIAyLZk84yxJreTtlxEga511ZtWcEl54MxGx5
-	v9mFmGlwqg7QOxSavhHNC4J2dfU4s50L/h4SRZnDWoE4b/hrOH6cyTUchcfWi8WRXksfndBJCa7fX
-	sjRo8mGUT0Cfo5Aimw9arEnsHfRD0hvllcS4nSudTC6cJzZsFtLffiFeOPRauma25Q/YpWIRDYFKW
-	1OP4FS98NR3/hE/qdvCXj4HwcEzoaFy0uBYF5/rfcha+rXC5weZvvOHCJ67PXIHr47oe7GhV6x+qb
-	9m2Vp8Jg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1pgjBF-00695J-18;
-	Mon, 27 Mar 2023 09:30:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 568E73005DB;
-	Mon, 27 Mar 2023 11:30:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id E8DF82014D86B; Mon, 27 Mar 2023 11:30:16 +0200 (CEST)
-Date: Mon, 27 Mar 2023 11:30:16 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dan Li <ashimida.1990@gmail.com>
-Cc: Aaron Tomlin <atomlin@redhat.com>,
-	Alexander Potapenko <glider@google.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>,
-	Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-	Brian Gerst <brgerst@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Changbin Du <changbin.du@intel.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Frederic Weisbecker <frederic@kernel.org>, gcc-patches@gcc.gnu.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-	Jiri Olsa <jolsa@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Juergen Gross <jgross@suse.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	Kees Cook <keescook@chromium.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Marco Elver <elver@google.com>, Mark Brown <broonie@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Roth <michael.roth@amd.com>,
-	Michal Marek <michal.lkml@markovi.net>,
-	Miguel Ojeda <ojeda@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Richard Sandiford <richard.sandiford@arm.com>,
-	Sami Tolvanen <samitolvanen@google.com>, Song Liu <song@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Tom Rix <trix@redhat.com>,
-	Uros Bizjak <ubizjak@gmail.com>, Will Deacon <will@kernel.org>,
-	x86@kernel.org, Yuntao Wang <ytcoode@gmail.com>,
-	Yu Zhao <yuzhao@google.com>, Zhen Lei <thunder.leizhen@huawei.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
-Message-ID: <20230327093016.GB4253@hirez.programming.kicks-ass.net>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <20230325085416.95191-1-ashimida.1990@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A26EA3
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 12:08:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679918909;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=f6OgJqgpSNTTFYSUSudYbvVLpng6GaBH202qHK3zoFk=;
+	b=dEui0Z7fZftarzISaK7sgjln8LR7ZIZ1XLzPW85MHG8kWBpubOF0m/v1znag3rvgn+0uQu
+	wAwjMVSTu2zCFVCbymiPflpk8HobWKFhfrYeBzHQAEXQxuJS+2rNv4X72b7F24m3ZPpOAk
+	rm6E/G1TX9OyhCpy4jsvH7uEBcqcGI0=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-6-yzQU1Hz8PJCpio6CCZ62ww-1; Mon, 27 Mar 2023 08:08:28 -0400
+X-MC-Unique: yzQU1Hz8PJCpio6CCZ62ww-1
+Received: by mail-qv1-f71.google.com with SMTP id y19-20020ad445b3000000b005a5123cb627so3370044qvu.20
+        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679918907;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f6OgJqgpSNTTFYSUSudYbvVLpng6GaBH202qHK3zoFk=;
+        b=7b+Tk/n5YbxzlN3x7VbBnfvpnvVLtKBzLJ5dfyvB1oC85RCAb/ITpnPuRTa41r39vc
+         wqpK0zjDnSXG2GXwPwDps7kZiFYr51lkhpUABYHVVo1zY4EKB+SR8h+26YMs6MrG3asq
+         n6ZfAUBrNcPrqXEe7fwrSUsy4CDzirmva8w150Ttl9ZX0uyRjlQoHaQRItysw09Yb99f
+         dTE2czj6nO+mNZG5ZBlktUuG3KPfUTlrce54vzVc815i7ruESolsMRGNkOB46uCA/r7q
+         2QbkYb8Dzc0hrld0pr4IQRD1FPAlAAe6oFGb159ngOfRsws76KVDibZy/JyO4dgNEnzo
+         1ACw==
+X-Gm-Message-State: AO0yUKXnbbw16jSL32m9Jkw6rfxQvYiin+4OKc8PRVK6d0ImlCW0RtiZ
+	RV8fG77uYCYh+wxzMVJPpjOINmsTijdpQsKzqAGDq2taDwLV+2y/VDNe7MrfvahO0Ctwg+t1pOj
+	8kqY7rGhAdHVuWw==
+X-Received: by 2002:ac8:574e:0:b0:3d6:d1d3:eeb8 with SMTP id 14-20020ac8574e000000b003d6d1d3eeb8mr20398693qtx.11.1679918907442;
+        Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YyfOhpAFIIn4S3oaK+SRWKemSRvTcR5bSBOqlG0NAjA410/ztoUYY6RVRQVXHBhcaeImdxww==
+X-Received: by 2002:ac8:574e:0:b0:3d6:d1d3:eeb8 with SMTP id 14-20020ac8574e000000b003d6d1d3eeb8mr20398655qtx.11.1679918907195;
+        Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id bn29-20020a05620a2add00b007486052d731sm1396515qkb.10.2023.03.27.05.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 05:08:26 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: jic23@kernel.org,
+	lars@metafoo.de,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	andriy.shevchenko@linux.intel.com,
+	u.kleine-koenig@pengutronix.de
+Cc: linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] iio: tsl2772: remove unused prox_diode_mask variable
+Date: Mon, 27 Mar 2023 08:08:23 -0400
+Message-Id: <20230327120823.1369700-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230325085416.95191-1-ashimida.1990@gmail.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
+clang with W=1 reports
+drivers/iio/light/tsl2772.c:576:24: error: variable
+  'prox_diode_mask' set but not used [-Werror,-Wunused-but-set-variable]
+        int i, ret, num_leds, prox_diode_mask;
+                              ^
+This variable is not used so remove it.
 
-> In the compiler part[4], most of the content is the same as Sami's
-> implementation[3], except for some minor differences, mainly including:
-> 
-> 1. The function typeid is calculated differently and it is difficult
-> to be consistent.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/iio/light/tsl2772.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-This means there is an effective ABI break between the compilers, which
-is sad :-( Is there really nothing to be done about this?
+diff --git a/drivers/iio/light/tsl2772.c b/drivers/iio/light/tsl2772.c
+index ad50baa0202c..c090405c2358 100644
+--- a/drivers/iio/light/tsl2772.c
++++ b/drivers/iio/light/tsl2772.c
+@@ -573,7 +573,7 @@ static int tsl2772_read_prox_led_current(struct tsl2772_chip *chip)
+ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+ {
+ 	struct device *dev = &chip->client->dev;
+-	int i, ret, num_leds, prox_diode_mask;
++	int i, ret, num_leds;
+ 	u32 leds[TSL2772_MAX_PROX_LEDS];
+ 
+ 	ret = device_property_count_u32(dev, "amstaos,proximity-diodes");
+@@ -590,13 +590,8 @@ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+ 		return ret;
+ 	}
+ 
+-	prox_diode_mask = 0;
+ 	for (i = 0; i < num_leds; i++) {
+-		if (leds[i] == 0)
+-			prox_diode_mask |= TSL2772_DIODE0;
+-		else if (leds[i] == 1)
+-			prox_diode_mask |= TSL2772_DIODE1;
+-		else {
++		if (leds[i] > 1) {
+ 			dev_err(dev, "Invalid value %d in amstaos,proximity-diodes.\n", leds[i]);
+ 			return -EINVAL;
+ 		}
+-- 
+2.27.0
+
