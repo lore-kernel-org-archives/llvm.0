@@ -1,149 +1,108 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9AB365;
-	Mon, 27 Mar 2023 22:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679956781; x=1711492781;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jw64NH9VCniTv6ZR3b7VgSIWKTfRI77qXUm0pHRQSQ0=;
-  b=VWl/td5ddrvr5+saf3tWVNst+2QrcaRRf4vj4AaI2TcYWrplF8hLpchf
-   /n+Fb06gYewrKr/wsDaRHzDwayERkGSRqLsQ0wWngwOJ06io1fJf+yh6h
-   wNpzDzeav/8eqsugpPhisGflcGL3QwPu+oyZu691bsZPA18O7JNjHgTJ8
-   ir6Iv7YS13uv/N8WQk5HGtFhZ6pqD3t5CW6sWwEaz0zttJ6ZFVmJQLHf0
-   YVMYqt4zArVxqu2KvNNOSr4Z+f+86d3ZaILMu/AZt0J+wBwdm3Z3GEhMB
-   l1Y+JCfVyzlWx1mV/y8CGIylPtDiv3twAHDeRmm6MyaF3NxUgZoMl+9L3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="328853611"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="328853611"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 15:39:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="827218608"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="827218608"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Mar 2023 15:39:37 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pgvV2-000I4F-2w;
-	Mon, 27 Mar 2023 22:39:36 +0000
-Date: Tue, 28 Mar 2023 06:39:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Harini Katakam <harini.katakam@amd.com>, nicolas.ferre@microchip.com,
-	davem@davemloft.net, richardcochran@gmail.com,
-	claudiu.beznea@microchip.com, andrei.pistirica@microchip.com,
-	kuba@kernel.org, edumazet@google.com, pabeni@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	michal.simek@amd.com, harinikatakamlinux@gmail.com,
-	harini.katakam@amd.com
-Subject: Re: [PATCH net-next v3 1/3] net: macb: Update gem PTP support check
-Message-ID: <202303280600.LarprmhI-lkp@intel.com>
-References: <20230327110607.21964-2-harini.katakam@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93A42F3A
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 23:54:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679961274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bN/6UZ/3G3OFwtl3tDJU5Pd1KJsgKsolxsW5pCSkgR4=;
+	b=WLIssPveYcYDhvunF6FIg5lVle20hiq/nboHaHFqf61/xjFkWYRKbMsuQ+mfUPg45heE8j
+	Pl1sdjyQgiY7CM4SUWyHXhprrOWBe8JrM8mI/tPenO8UqtApi+Nt0c0w6zk1rvsMkMi8UI
+	EvZwty2KthXOvr2etgDcRtF9AygCprs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-512-ohNc5ke4OT2DWhYlsP2oYA-1; Mon, 27 Mar 2023 19:54:31 -0400
+X-MC-Unique: ohNc5ke4OT2DWhYlsP2oYA-1
+Received: by mail-qk1-f199.google.com with SMTP id 206-20020a370cd7000000b007467b5765d2so4857163qkm.0
+        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 16:54:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679961271;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bN/6UZ/3G3OFwtl3tDJU5Pd1KJsgKsolxsW5pCSkgR4=;
+        b=hTBLHYbczAO7ylrsia1j8YeaNQRMO1rLtldtPCtNzKoFeTXHFJrUWZ6cinu0hOJmng
+         2kUrQJTK56KwxR4PzLWkjjgQ4jkerW21B+kfqwkOkd7DaU5FpVWwoA7h+vM+BJ1bRvHv
+         QfdjR7tsuffttJ7W/T94byHbtD/38XhWKxLIKhfLecINGvzd72flhb5FlESV425lTclF
+         HD8cwK79vY5bQV67Sn7mz0//diot0ZFCVxBtEa95QRFUaI7f/sd3RzCxTkNLpR2LG56j
+         H9RPYcLsXwZM6gGHFYhYESiC2mh50eiwPv3EyyM4uW7gntf+CgsfDLlsCx/LPi9QkcQh
+         FPWA==
+X-Gm-Message-State: AAQBX9fgPZaoOmZD7hisj6N88/08sq4nW4D8656mkdozuCDdrSu4x+ae
+	Yab44lfGyP/tmjSql0k/4YcJbeHuUuCa4F+VXpxc3ZZkHm6i1Ph7P66Txq0Y2ctHMDIdTyI358a
+	nlATcEcXS5S3vcg==
+X-Received: by 2002:a05:6214:1c45:b0:56b:7ec7:b158 with SMTP id if5-20020a0562141c4500b0056b7ec7b158mr24155029qvb.36.1679961271137;
+        Mon, 27 Mar 2023 16:54:31 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YG2xhiotyuMY1L5G1mR7yrlH1f/ryIRtriuEls3TFl4S1M/12D5tDvSsBcKMGolgb5vfZ0sA==
+X-Received: by 2002:a05:6214:1c45:b0:56b:7ec7:b158 with SMTP id if5-20020a0562141c4500b0056b7ec7b158mr24155015qvb.36.1679961270903;
+        Mon, 27 Mar 2023 16:54:30 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id m124-20020a375882000000b0073b8745fd39sm17118677qkb.110.2023.03.27.16.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 16:54:30 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] net: ethernet: 8390: axnet_cs: remove unused xfer_count variable
+Date: Mon, 27 Mar 2023 19:54:23 -0400
+Message-Id: <20230327235423.1777590-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327110607.21964-2-harini.katakam@amd.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Harini,
+clang with W=1 reports
+drivers/net/ethernet/8390/axnet_cs.c:653:9: error: variable
+  'xfer_count' set but not used [-Werror,-Wunused-but-set-variable]
+    int xfer_count = count;
+        ^
+This variable is not used so remove it.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/ethernet/8390/axnet_cs.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Harini-Katakam/net-macb-Update-gem-PTP-support-check/20230327-190937
-patch link:    https://lore.kernel.org/r/20230327110607.21964-2-harini.katakam%40amd.com
-patch subject: [PATCH net-next v3 1/3] net: macb: Update gem PTP support check
-config: powerpc-randconfig-r021-20230327 (https://download.01.org/0day-ci/archive/20230328/202303280600.LarprmhI-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/0a2f03b6a91caa746dfd1b56b998534464dae83d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Harini-Katakam/net-macb-Update-gem-PTP-support-check/20230327-190937
-        git checkout 0a2f03b6a91caa746dfd1b56b998534464dae83d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/cadence/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303280600.LarprmhI-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/cadence/macb_main.c:3897:9: error: no member named 'hw_dma_cap' in 'struct macb'
-                                   bp->hw_dma_cap |= HW_DMA_CAP_PTP;
-                                   ~~  ^
->> drivers/net/ethernet/cadence/macb_main.c:3897:23: error: use of undeclared identifier 'HW_DMA_CAP_PTP'
-                                   bp->hw_dma_cap |= HW_DMA_CAP_PTP;
-                                                     ^
->> drivers/net/ethernet/cadence/macb_main.c:3898:21: error: use of undeclared identifier 'gem_ptp_info'; did you mean 'gem_ptp_init'?
-                                   bp->ptp_info = &gem_ptp_info;
-                                                   ^~~~~~~~~~~~
-                                                   gem_ptp_init
-   drivers/net/ethernet/cadence/macb.h:1352:20: note: 'gem_ptp_init' declared here
-   static inline void gem_ptp_init(struct net_device *ndev) { }
-                      ^
-   3 errors generated.
-
-
-vim +3897 drivers/net/ethernet/cadence/macb_main.c
-
-5f1fa992382cf8 drivers/net/macb.c                       Alexander Beregalov 2009-04-11  3866  
-64ec42fe272322 drivers/net/ethernet/cadence/macb.c      Moritz Fischer      2016-03-29  3867  /* Configure peripheral capabilities according to device tree
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3868   * and integration options used
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3869   */
-64ec42fe272322 drivers/net/ethernet/cadence/macb.c      Moritz Fischer      2016-03-29  3870  static void macb_configure_caps(struct macb *bp,
-64ec42fe272322 drivers/net/ethernet/cadence/macb.c      Moritz Fischer      2016-03-29  3871  				const struct macb_config *dt_conf)
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3872  {
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3873  	u32 dcfg;
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3874  
-f6970505defd0e drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2015-03-31  3875  	if (dt_conf)
-f6970505defd0e drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2015-03-31  3876  		bp->caps = dt_conf->caps;
-f6970505defd0e drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2015-03-31  3877  
-f2ce8a9e48385f drivers/net/ethernet/cadence/macb.c      Andy Shevchenko     2015-07-24  3878  	if (hw_is_gem(bp->regs, bp->native_io)) {
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3879  		bp->caps |= MACB_CAPS_MACB_IS_GEM;
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3880  
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3881  		dcfg = gem_readl(bp, DCFG1);
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3882  		if (GEM_BFEXT(IRQCOR, dcfg) == 0)
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3883  			bp->caps |= MACB_CAPS_ISR_CLEAR_ON_WRITE;
-e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3884  		if (GEM_BFEXT(NO_PCS, dcfg) == 0)
-e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3885  			bp->caps |= MACB_CAPS_PCS;
-e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3886  		dcfg = gem_readl(bp, DCFG12);
-e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3887  		if (GEM_BFEXT(HIGH_SPEED, dcfg) == 1)
-e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3888  			bp->caps |= MACB_CAPS_HIGH_SPEED;
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3889  		dcfg = gem_readl(bp, DCFG2);
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3890  		if ((dcfg & (GEM_BIT(RX_PKT_BUFF) | GEM_BIT(TX_PKT_BUFF))) == 0)
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3891  			bp->caps |= MACB_CAPS_FIFO_MODE;
-ab91f0a9b5f4b9 drivers/net/ethernet/cadence/macb_main.c Rafal Ozieblo       2017-06-29  3892  		if (gem_has_ptp(bp)) {
-7b4296148066f1 drivers/net/ethernet/cadence/macb.c      Rafal Ozieblo       2017-06-29  3893  			if (!GEM_BFEXT(TSU, gem_readl(bp, DCFG5)))
-7897b071ac3b45 drivers/net/ethernet/cadence/macb_main.c Antoine Tenart      2019-11-13  3894  				dev_err(&bp->pdev->dev,
-7897b071ac3b45 drivers/net/ethernet/cadence/macb_main.c Antoine Tenart      2019-11-13  3895  					"GEM doesn't support hardware ptp.\n");
-ab91f0a9b5f4b9 drivers/net/ethernet/cadence/macb_main.c Rafal Ozieblo       2017-06-29  3896  			else {
-7b4296148066f1 drivers/net/ethernet/cadence/macb.c      Rafal Ozieblo       2017-06-29 @3897  				bp->hw_dma_cap |= HW_DMA_CAP_PTP;
-ab91f0a9b5f4b9 drivers/net/ethernet/cadence/macb_main.c Rafal Ozieblo       2017-06-29 @3898  				bp->ptp_info = &gem_ptp_info;
-7b4296148066f1 drivers/net/ethernet/cadence/macb.c      Rafal Ozieblo       2017-06-29  3899  			}
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3900  		}
-ab91f0a9b5f4b9 drivers/net/ethernet/cadence/macb_main.c Rafal Ozieblo       2017-06-29  3901  	}
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3902  
-a35919e174350d drivers/net/ethernet/cadence/macb.c      Andy Shevchenko     2015-07-24  3903  	dev_dbg(&bp->pdev->dev, "Cadence caps 0x%08x\n", bp->caps);
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3904  }
-e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3905  
-
+diff --git a/drivers/net/ethernet/8390/axnet_cs.c b/drivers/net/ethernet/8390/axnet_cs.c
+index 3aef959fc25b..78f985885547 100644
+--- a/drivers/net/ethernet/8390/axnet_cs.c
++++ b/drivers/net/ethernet/8390/axnet_cs.c
+@@ -650,7 +650,6 @@ static void block_input(struct net_device *dev, int count,
+ {
+     unsigned int nic_base = dev->base_addr;
+     struct ei_device *ei_local = netdev_priv(dev);
+-    int xfer_count = count;
+     char *buf = skb->data;
+ 
+     if ((netif_msg_rx_status(ei_local)) && (count != 4))
+@@ -662,9 +661,7 @@ static void block_input(struct net_device *dev, int count,
+     insw(nic_base + AXNET_DATAPORT,buf,count>>1);
+     if (count & 0x01) {
+ 	buf[count-1] = inb(nic_base + AXNET_DATAPORT);
+-	xfer_count++;
+     }
+-
+ }
+ 
+ /*====================================================================*/
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
