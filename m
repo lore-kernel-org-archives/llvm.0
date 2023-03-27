@@ -1,123 +1,185 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6193C0F;
-	Mon, 27 Mar 2023 16:06:37 +0000 (UTC)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Plcg30hrgz6J7m2;
-	Mon, 27 Mar 2023 23:48:47 +0800 (CST)
-Received: from localhost (10.48.153.9) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 27 Mar
- 2023 16:50:18 +0100
-Date: Mon, 27 Mar 2023 16:50:17 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: kernel test robot <lkp@intel.com>
-CC: Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
-	<peterz@infradead.org>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <mingo@redhat.com>, <acme@kernel.org>,
-	<mark.rutland@arm.com>, <will@kernel.org>, <dan.j.williams@intel.com>,
-	<linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, "Davidlohr Bueso" <dave@stgolabs.net>, Dave
- Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v2 3/5] cxl/pci: Find and register CXL PMU devices
-Message-ID: <20230327165017.000010dd@Huawei.com>
-In-Reply-To: <202303250419.FANh4fIC-lkp@intel.com>
-References: <20230324171313.18448-4-Jonathan.Cameron@huawei.com>
-	<202303250419.FANh4fIC-lkp@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83F83C0F
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 16:12:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679933579; x=1711469579;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=6nDdB6nJGY9awDPV/o7SbWl0Kh2wlGZpTm2nwuANIKs=;
+  b=d9QnAYBjCVidpdFepP4eTEruYwOAsFx//icL7TSkyd2mMSqzuV3B7BxC
+   VzAOqOFSvDYLfUUCn8K6ArnhgM681C+qleQh9Z7sj2W7OE5FMnM6UnG23
+   GDWlNa5qtGuIsF6ZAvZ/gKkxuXhJ+XxqROK2WzWkCTXUBv533kEJ5/0AP
+   sRHhDV13ecS38dZnAODKNYI4FWjYV8RnMmuN5nEW+RHfJt5C0uKU8uNFY
+   /srYfnTFlrdJVgCecqR3/dvv36ABNvnPdSgew1NjGEXxo0hrMvZl5GFCK
+   LqBnnDaLtqdq2xK7bRYwXZWwaZeq6aJxpjAxDdVIZdgNmDKpa2xqodgQF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="339033782"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="339033782"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 09:12:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="772769879"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="772769879"
+Received: from mstancu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.49.51])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 09:12:05 -0700
+From: Jani Nikula <jani.nikula@linux.intel.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, Linus Torvalds
+ <torvalds@linux-foundation.org>
+Cc: linux-toolchains@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
+ llvm@lists.linux.dev, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, dri-devel@lists.freedesktop.org, Nathan
+ Chancellor <nathan@kernel.org>, sedat.dilek@gmail.com
+Subject: Re: Linux 6.3-rc3
+In-Reply-To: <CAK7LNATe7Ah-ow9wYGrtL9i4z-VD=MCo=sJjbC_S0ofEoH6CFQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+ <20230320180501.GA598084@dev-arch.thelio-3990X>
+ <CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+ <20230320185337.GA615556@dev-arch.thelio-3990X>
+ <87pm91uf9c.fsf@kernel.org>
+ <CA+icZUUYyqhV2HFzVtpi_KjBoYxjk7OB0UBVd2mX6abjmYhDjg@mail.gmail.com>
+ <CAHk-=whdrvCkSWh=BRrwZwNo3=yLBXXM88NGx8VEpP1VTgmkyQ@mail.gmail.com>
+ <CAK7LNATe7Ah-ow9wYGrtL9i4z-VD=MCo=sJjbC_S0ofEoH6CFQ@mail.gmail.com>
+Date: Mon, 27 Mar 2023 19:12:02 +0300
+Message-ID: <87bkke5g31.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.153.9]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 25 Mar 2023 05:01:09 +0800
-kernel test robot <lkp@intel.com> wrote:
+On Sat, 25 Mar 2023, Masahiro Yamada <masahiroy@kernel.org> wrote:
+> Hello Linus,
+>
+>
+> Thanks for giving me some more homeworks.
+>
+>
+> On Thu, Mar 23, 2023 at 1:56=E2=80=AFAM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> On Wed, Mar 22, 2023 at 9:40=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.c=
+om> wrote:
+>> >
+>> > You have to pass `make LLVM=3D1` in any case... to `oldconfig` or when
+>> > adding any MAKEFLAGS like -j${number-of-available-cpus}.
+>>
+>> I actually think we should look (again) at just making the compiler
+>> choice (and the prefix) be a Kconfig option.
+>>
+>> That would simplify *so* many use cases.
+>>
+>> It used to be that gcc was "THE compiler" and anything else was just
+>> an odd toy special case, but that's clearly not true any more.
+>>
+>> So it would be lovely to make the kernel choice a Kconfig choice - so
+>> you'd set it only at config time, and then after that a kernel build
+>> wouldn't need special flags any more, and you'd never need to play
+>> games with GNUmakefile or anything like that.
+>
+>
+> Presumably, this is the right direction.
+>
+> To achieve it, Kconfig needs to have some mechanism to evaluate
+> shell commands dynamically.
+>
+> If a user switches the toolchain set between GCC and LLVM
+> while running the Kconfig, $(cc-option) in Kconfig files must
+> be re-calculated.
+>
+> Currently, Kconfig cannot do it. All macros are static - they are
+> expanded in the parse stage, and become constant strings.
+>
+> Ulf Magnusson and I discussed the dynamic approach a few years back,
+> but I adopted the static way since it is much simpler.
+> We need to reconsider the dynamic approach to do this correctly.
+> I do not think it is too difficult technically.
+> We just need to come up with a decent syntax.
 
-> Hi Jonathan,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on acme/perf/core]
-> [also build test ERROR on tip/perf/core]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230325-011827
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
-> patch link:    https://lore.kernel.org/r/20230324171313.18448-4-Jonathan.Cameron%40huawei.com
-> patch subject: [PATCH v2 3/5] cxl/pci: Find and register CXL PMU devices
-> config: arm-randconfig-r023-20230322 (https://download.01.org/0day-ci/archive/20230325/202303250419.FANh4fIC-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://github.com/intel-lab-lkp/linux/commit/ab99ab31e5c4aa9f68425f3505f22a790d64bfe9
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230325-011827
->         git checkout ab99ab31e5c4aa9f68425f3505f22a790d64bfe9
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/cxl/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303250419.FANh4fIC-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/cxl/core/port.c:60:20: error: use of undeclared identifier 'cxl_cpmu_type'; did you mean 'cxl_bus_type'?  
->            if (dev->type == &cxl_cpmu_type)
->                              ^~~~~~~~~~~~~
-Definition is under the CXL_REGION ifdef and it shouldn't be.
-Moved it up to alongside the nvdimm ones.
+I acknowledge being clueless about mostly everything that requires. But
+in the mean time, how about just adding something like:
 
->                              cxl_bus_type
->    drivers/cxl/cxl.h:732:24: note: 'cxl_bus_type' declared here
->    extern struct bus_type cxl_bus_type;
->                           ^
->    1 error generated.
-> 
-> 
-> vim +60 drivers/cxl/core/port.c
-> 
->     40	
->     41	static int cxl_device_id(const struct device *dev)
->     42	{
->     43		if (dev->type == &cxl_nvdimm_bridge_type)
->     44			return CXL_DEVICE_NVDIMM_BRIDGE;
->     45		if (dev->type == &cxl_nvdimm_type)
->     46			return CXL_DEVICE_NVDIMM;
->     47		if (dev->type == CXL_PMEM_REGION_TYPE())
->     48			return CXL_DEVICE_PMEM_REGION;
->     49		if (dev->type == CXL_DAX_REGION_TYPE())
->     50			return CXL_DEVICE_DAX_REGION;
->     51		if (is_cxl_port(dev)) {
->     52			if (is_cxl_root(to_cxl_port(dev)))
->     53				return CXL_DEVICE_ROOT;
->     54			return CXL_DEVICE_PORT;
->     55		}
->     56		if (is_cxl_memdev(dev))
->     57			return CXL_DEVICE_MEMORY_EXPANDER;
->     58		if (dev->type == CXL_REGION_TYPE())
->     59			return CXL_DEVICE_REGION;
->   > 60		if (dev->type == &cxl_cpmu_type)  
->     61			return CXL_DEVICE_CPMU;
->     62		return 0;
->     63	}
->     64	
-> 
+-include .env
 
+near the beginning of the top Makefile?
+
+You could shove the tools or ARCH or output dir etc. there, so you don't
+have to remember to add them on the command line every time.
+
+BR,
+Jani.
+
+
+
+>
+>
+>
+>> Yes, you'd still use environment variables (or make arguments) for
+>> that initial Kconfig, but that's no different from the other
+>> environment variables we already have, like KCONFIG_SEED that kconfig
+>> uses internally, but also things like "$(ARCH)" that we already use
+>> *inside* the Kconfig files themselves.
+>>
+>> I really dislike how you have to set ARCH and CROSS_COMPILE etc
+>> externally, and can't just have them *in* the config file.
+>>
+>> So when you do cross-compiles, right now you have to do something like
+>>
+>>     make ARCH=3Di386 allmodconfig
+>>
+>> to build the .config file, but then you have to *repeat* that
+>> ARCH=3Di386 when you actually build things:
+>>
+>>     make ARCH=3Di386
+>>
+>> because the ARCH choice ends up being in the .config file, but the
+>> makefiles themselves always take it from the environment.
+>>
+>> There are good historical reasons for our behavior (and probably a
+>> number of extant practical reasons too), but it's a bit annoying, and
+>> it would be lovely if we could start moving away from this model.
+>>
+>>             Linus
+>
+>
+> Moving ARCH into the .config file needs careful thoughts, I think.
+>
+> Not all targets include the .config file.
+> For example, "make clean", "make help", etc.
+>
+> It is unclear which targets require explicit ARCH=3D option.
+>
+> One solution is to move "archhelp", "CLEAN_FILES" etc.
+> from arch/*/Makefile to the top Makefile.
+> We will lose per-arch splitting in several places, though.
+>
+>
+> U-Boot adopts this model - 'ARCH' is determined in the Kconfig time,
+> so users do not need to give ARCH=3D option from the command line.
+>
+> https://github.com/u-boot/u-boot/blob/v2023.01/arch/Kconfig#L44
+>
+> You may get a quick idea of what it will look like.
+>
+>
+>
+> I will take a look at this direction (the compiler choice in Kconfig firs=
+t),
+> but it will not happen soonish due to the limited time for upstream work.
+>
+>
+> --
+> Best Regards
+>
+> Masahiro Yamada
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center
