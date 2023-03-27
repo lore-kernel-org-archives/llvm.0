@@ -1,63 +1,104 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E29B67EA;
-	Mon, 27 Mar 2023 06:08:48 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBCBD4B3;
-	Sun, 26 Mar 2023 23:09:26 -0700 (PDT)
-Received: from [10.162.42.7] (a077893.blr.arm.com [10.162.42.7])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB7193F6C4;
-	Sun, 26 Mar 2023 23:08:39 -0700 (PDT)
-Message-ID: <4feeae36-f6fe-1422-9f0f-081b9106e91c@arm.com>
-Date: Mon, 27 Mar 2023 11:38:36 +0530
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D765622
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 08:57:58 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 5A8111F390;
+	Mon, 27 Mar 2023 08:57:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1679907470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VsjdwQC1SQNlX4Ss19all/21eWMCxSr72u89IWVV3N8=;
+	b=3NB+KVfA63hYNzd6cCOT0J91ZMysy4InCEVvnVWRQEVecqVkoF/PZK4nAw4K4GR2gCDtiN
+	7Q5Rc95I4tErGOm+y7rXNbmD8J4HUjKGusyhe16EI5pcHsf/3xxzQSf9YcW1CX22M1ZqfT
+	NiqcarGBdO3kOvdKbJ1Xbp5zx4PIyDs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1679907470;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VsjdwQC1SQNlX4Ss19all/21eWMCxSr72u89IWVV3N8=;
+	b=O/zS+lKt9iROId/HQmgAGxFMCy5PCQ62LGW6KPGAuidre1hh0+hViOJBt2Bk0rCYQDWdTH
+	yUw4i7s+0KlhnCAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 480B913329;
+	Mon, 27 Mar 2023 08:57:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id +uSMEY5aIWRHVQAAMHmgww
+	(envelope-from <jack@suse.cz>); Mon, 27 Mar 2023 08:57:50 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id CC219A071C; Mon, 27 Mar 2023 10:57:49 +0200 (CEST)
+Date: Mon, 27 Mar 2023 10:57:49 +0200
+From: Jan Kara <jack@suse.cz>
+To: Tom Rix <trix@redhat.com>
+Cc: nathan@kernel.org, ndesaulniers@google.com, willy@infradead.org,
+	akpm@linux-foundation.org, jack@suse.cz, jlayton@kernel.org,
+	song@kernel.org, yi.zhang@huawei.com, bvanassche@acm.org,
+	reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] reiserfs: remove unused sched_count variable
+Message-ID: <20230327085749.feyfegzdjxqhymdu@quack3>
+References: <20230326204459.1358553-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: Disable EL2 traps for BRBE instructions executed
- in EL1
-Content-Language: en-US
-To: kernel test robot <lkp@intel.com>, linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
- linux-kernel@vger.kernel.org
-References: <20230324055127.2228330-1-anshuman.khandual@arm.com>
- <202303250802.KytExIHw-lkp@intel.com>
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <202303250802.KytExIHw-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230326204459.1358553-1-trix@redhat.com>
 
-
-
-On 3/25/23 06:07, kernel test robot wrote:
-> All errors (new ones prefixed by >>):
+On Sun 26-03-23 16:44:59, Tom Rix wrote:
+> clang with W=1 reports
+> fs/reiserfs/journal.c:3034:6: error: variable
+>   'sched_count' set but not used [-Werror,-Wunused-but-set-variable]
+>         int sched_count = 0;
+>             ^
+> This variable is not used so remove it.
 > 
->>> <instantiation>:36:14: error: expected compatible register or logical immediate
->     orr x0, x0, #HFGITR_EL2_nBRBIALL
->                 ^
->    <instantiation>:10:2: note: while in macro instantiation
->     __init_el2_fgt
->     ^
->    arch/arm64/kernel/head.S:577:2: note: while in macro instantiation
->     init_el2_state
->     ^
->    <instantiation>:37:14: error: expected compatible register or logical immediate
->     orr x0, x0, #HFGITR_EL2_nBRBINJ
->                 ^
->    <instantiation>:10:2: note: while in macro instantiation
->     __init_el2_fgt
->     ^
->    arch/arm64/kernel/head.S:577:2: note: while in macro instantiation
->     init_el2_state
->     ^
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-I guess these build errors are caused by unavailability of the pre-requisite
-patches from Mark Brown, in this test environment ?
+Thanks. I've added the fix to my tree.
 
-https://lore.kernel.org/all/20230306-arm64-fgt-reg-gen-v3-0-decba93cbaab@kernel.org/
- 
+								Honza
+
+> ---
+>  fs/reiserfs/journal.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
+> index 9ce4ec296b74..4d11d60f493c 100644
+> --- a/fs/reiserfs/journal.c
+> +++ b/fs/reiserfs/journal.c
+> @@ -3031,7 +3031,6 @@ static int do_journal_begin_r(struct reiserfs_transaction_handle *th,
+>  	unsigned int old_trans_id;
+>  	struct reiserfs_journal *journal = SB_JOURNAL(sb);
+>  	struct reiserfs_transaction_handle myth;
+> -	int sched_count = 0;
+>  	int retval;
+>  	int depth;
+>  
+> @@ -3088,7 +3087,6 @@ static int do_journal_begin_r(struct reiserfs_transaction_handle *th,
+>  		    ((journal->j_len + nblocks + 2) * 100) <
+>  		    (journal->j_len_alloc * 75)) {
+>  			if (atomic_read(&journal->j_wcount) > 10) {
+> -				sched_count++;
+>  				queue_log_writer(sb);
+>  				goto relock;
+>  			}
+> -- 
+> 2.27.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
