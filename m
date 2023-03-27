@@ -1,218 +1,114 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06CFA57;
-	Mon, 27 Mar 2023 14:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679928453; x=1711464453;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gvtVaHDSj8/60CnRMhLEfiEJM9T3UCmxTI4xWFAvBB0=;
-  b=OYtJu1PjDmaDIx5gBsa7dmiiSdG153fjEeqg3RtW4txrSR8wHQKwu6hU
-   AdWga1vMNK2O7SZ4tw1SkruqFpsYN6qIyLVBKVlbEVCe6WLti2hg7JYoG
-   Vc+ZMD3R7/sKJHHn/w7aqPBhVbcWkAR5KlzeO3tO/O3WXpSuqur5gNseb
-   EFC9apWOWM6pXYlK83W7K9r/ZLCtkAMc/nO5NRqjOLQbURE/8mzJzeEmM
-   eB0DTqCY0a8k/q0gDgNh/mVBUFwziQ5c4egN0cUdZ4ULB0ZrbIQE8H21t
-   DHjHDNoFHZHCfcqrYypNIbOo//f9kTXlaJTV724nh9oCt9wb5/mXhst1k
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320682476"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="320682476"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 07:47:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="1013140887"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="1013140887"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Mar 2023 07:47:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pgo7u-000HmV-1D;
-	Mon, 27 Mar 2023 14:47:14 +0000
-Date: Mon, 27 Mar 2023 22:46:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yu Zhe <yuzhe@nfschina.com>, andersson@kernel.org,
-	mathieu.poirier@linaro.org, angelogioacchino.delregno@collabora.com,
-	agross@kernel.org, konrad.dybcio@linaro.org,
-	patrice.chotard@foss.st.com, mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com, liqiong@nfschina.com,
-	Yu Zhe <yuzhe@nfschina.com>
-Subject: Re: [PATCH v2] remoteproc: remove unnecessary (void*) conversions
-Message-ID: <202303272213.jOYrwBZu-lkp@intel.com>
-References: <20230320061157.29660-1-yuzhe@nfschina.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8454C33C0
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 15:12:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679929919;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DYh+IUQKnsNavgY4j1iAAQrUA1J5asaTGD0FKGxhaXM=;
+	b=TXujnrP4HA04vJM7HwEzDd14afITPVEc2txIuuG8Y6FOXa1sQW/VFXq2KJfBiMvQfIxR2k
+	XcHjIqrEIhD1IhZD+dLKu2HmGse5T7uCp/hWm+vMNbg6qb4psjqGCo19j6UPZjo7MWHYua
+	/8cUuaNA0Cib/SjgpYI82dzNvfNnugo=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-37-xjnkS5XYPwaSew-lLOXTbQ-1; Mon, 27 Mar 2023 11:11:56 -0400
+X-MC-Unique: xjnkS5XYPwaSew-lLOXTbQ-1
+Received: by mail-qv1-f70.google.com with SMTP id pr2-20020a056214140200b005b3ed9328a3so3664939qvb.10
+        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 08:11:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679929915;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DYh+IUQKnsNavgY4j1iAAQrUA1J5asaTGD0FKGxhaXM=;
+        b=T3pgIQNp0+Iq3cXFVrVV3oYG7sJdfbhBIcvRBVk+/yhjcmmPD6yP3eHUOc8KZiKPhB
+         /oF7ErGt8OggEOGNDx0XwFUsIyCtZRL/oyEIK6+gnSVBiM1Bc7rfuHtAR/sG3yOSxwaO
+         fFwfMwsA2fmuFgs+Q07xhBO3G9tULzbPXrFf90WsQBzVBpQ43AIqD4gss4cwMjoVCtl7
+         14QbqUFC/tAF8CjYXGC7J+ftEV0XLreHqaGRDFFIwVJq6Y7oA/QxvRxw3GvnWqMoRWn1
+         4ufwdC79+Vjy95AZz3YecylU1V7zJdA/j6MGVu4dKr6bDR5wfwShBxIoPMjgDdUdbYDS
+         9I3w==
+X-Gm-Message-State: AO0yUKVhX6Xq5ZRSOPCd/+0g8UXZkUFbyHqUUpvvFns+xqR655iGlVlo
+	ikLiLHxmac52H5GlG/SbTXj2eJ4KpDTPEYvYWzv3abdhVXMg5i1CT+/5kZSea20GfJ8OnKTxuJm
+	7ORoyfkUw+zE84g==
+X-Received: by 2002:ac8:57c2:0:b0:3e1:6c7e:2ee0 with SMTP id w2-20020ac857c2000000b003e16c7e2ee0mr22110166qta.11.1679929915678;
+        Mon, 27 Mar 2023 08:11:55 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9BAzNnvmMx3UPAztYRtfcEZS/JC0Zbgk59lkyKNRW1O3h/77E7anPa59QcSLU+bg9VrGKy2w==
+X-Received: by 2002:ac8:57c2:0:b0:3e1:6c7e:2ee0 with SMTP id w2-20020ac857c2000000b003e16c7e2ee0mr22110133qta.11.1679929915395;
+        Mon, 27 Mar 2023 08:11:55 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id l6-20020ac848c6000000b003bfb0ea8094sm8328255qtr.83.2023.03.27.08.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 08:11:55 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: aspriel@gmail.com,
+	franky.lin@broadcom.com,
+	hante.meuleman@broadcom.com,
+	kvalo@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-wireless@vger.kernel.org,
+	brcm80211-dev-list.pdl@broadcom.com,
+	SHA-cyfmac-dev-list@infineon.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] brcmsmac: ampdu: remove unused suc_mpdu variable
+Date: Mon, 27 Mar 2023 11:11:51 -0400
+Message-Id: <20230327151151.1771350-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320061157.29660-1-yuzhe@nfschina.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Yu,
+clang with W=1 reports
+drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c:848:5: error: variable
+  'suc_mpdu' set but not used [-Werror,-Wunused-but-set-variable]
+        u8 suc_mpdu = 0, tot_mpdu = 0;
+           ^
+This variable is not used so remove it.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-[auto build test ERROR on v6.3-rc3]
-[also build test ERROR on linus/master]
-[cannot apply to remoteproc/rproc-next next-20230327]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Zhe/remoteproc-remove-unnecessary-void-conversions/20230320-141403
-patch link:    https://lore.kernel.org/r/20230320061157.29660-1-yuzhe%40nfschina.com
-patch subject: [PATCH v2] remoteproc: remove unnecessary (void*) conversions
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20230327/202303272213.jOYrwBZu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/38335303eda6c4de037cd00e20c9065a76f82291
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yu-Zhe/remoteproc-remove-unnecessary-void-conversions/20230320-141403
-        git checkout 38335303eda6c4de037cd00e20c9065a76f82291
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303272213.jOYrwBZu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/remoteproc/st_remoteproc.c:361:16: error: assigning to 'struct st_rproc_config *' from 'const void *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           ddata->config = match->data;
-                         ^ ~~~~~~~~~~~
-   1 error generated.
-
-
-vim +361 drivers/remoteproc/st_remoteproc.c
-
-   337	
-   338	static int st_rproc_probe(struct platform_device *pdev)
-   339	{
-   340		struct device *dev = &pdev->dev;
-   341		const struct of_device_id *match;
-   342		struct st_rproc *ddata;
-   343		struct device_node *np = dev->of_node;
-   344		struct rproc *rproc;
-   345		struct mbox_chan *chan;
-   346		int enabled;
-   347		int ret, i;
-   348	
-   349		match = of_match_device(st_rproc_match, dev);
-   350		if (!match || !match->data) {
-   351			dev_err(dev, "No device match found\n");
-   352			return -ENODEV;
-   353		}
-   354	
-   355		rproc = rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
-   356		if (!rproc)
-   357			return -ENOMEM;
-   358	
-   359		rproc->has_iommu = false;
-   360		ddata = rproc->priv;
- > 361		ddata->config = match->data;
-   362	
-   363		platform_set_drvdata(pdev, rproc);
-   364	
-   365		ret = st_rproc_parse_dt(pdev);
-   366		if (ret)
-   367			goto free_rproc;
-   368	
-   369		enabled = st_rproc_state(pdev);
-   370		if (enabled < 0) {
-   371			ret = enabled;
-   372			goto free_clk;
-   373		}
-   374	
-   375		if (enabled) {
-   376			atomic_inc(&rproc->power);
-   377			rproc->state = RPROC_RUNNING;
-   378		} else {
-   379			clk_set_rate(ddata->clk, ddata->clk_rate);
-   380		}
-   381	
-   382		if (of_get_property(np, "mbox-names", NULL)) {
-   383			ddata->mbox_client_vq0.dev		= dev;
-   384			ddata->mbox_client_vq0.tx_done		= NULL;
-   385			ddata->mbox_client_vq0.tx_block	= false;
-   386			ddata->mbox_client_vq0.knows_txdone	= false;
-   387			ddata->mbox_client_vq0.rx_callback	= st_rproc_mbox_callback_vq0;
-   388	
-   389			ddata->mbox_client_vq1.dev		= dev;
-   390			ddata->mbox_client_vq1.tx_done		= NULL;
-   391			ddata->mbox_client_vq1.tx_block	= false;
-   392			ddata->mbox_client_vq1.knows_txdone	= false;
-   393			ddata->mbox_client_vq1.rx_callback	= st_rproc_mbox_callback_vq1;
-   394	
-   395			/*
-   396			 * To control a co-processor without IPC mechanism.
-   397			 * This driver can be used without mbox and rpmsg.
-   398			 */
-   399			chan = mbox_request_channel_byname(&ddata->mbox_client_vq0, "vq0_rx");
-   400			if (IS_ERR(chan)) {
-   401				dev_err(&rproc->dev, "failed to request mbox chan 0\n");
-   402				ret = PTR_ERR(chan);
-   403				goto free_clk;
-   404			}
-   405			ddata->mbox_chan[ST_RPROC_VQ0 * MBOX_MAX + MBOX_RX] = chan;
-   406	
-   407			chan = mbox_request_channel_byname(&ddata->mbox_client_vq0, "vq0_tx");
-   408			if (IS_ERR(chan)) {
-   409				dev_err(&rproc->dev, "failed to request mbox chan 0\n");
-   410				ret = PTR_ERR(chan);
-   411				goto free_mbox;
-   412			}
-   413			ddata->mbox_chan[ST_RPROC_VQ0 * MBOX_MAX + MBOX_TX] = chan;
-   414	
-   415			chan = mbox_request_channel_byname(&ddata->mbox_client_vq1, "vq1_rx");
-   416			if (IS_ERR(chan)) {
-   417				dev_err(&rproc->dev, "failed to request mbox chan 1\n");
-   418				ret = PTR_ERR(chan);
-   419				goto free_mbox;
-   420			}
-   421			ddata->mbox_chan[ST_RPROC_VQ1 * MBOX_MAX + MBOX_RX] = chan;
-   422	
-   423			chan = mbox_request_channel_byname(&ddata->mbox_client_vq1, "vq1_tx");
-   424			if (IS_ERR(chan)) {
-   425				dev_err(&rproc->dev, "failed to request mbox chan 1\n");
-   426				ret = PTR_ERR(chan);
-   427				goto free_mbox;
-   428			}
-   429			ddata->mbox_chan[ST_RPROC_VQ1 * MBOX_MAX + MBOX_TX] = chan;
-   430		}
-   431	
-   432		ret = rproc_add(rproc);
-   433		if (ret)
-   434			goto free_mbox;
-   435	
-   436		return 0;
-   437	
-   438	free_mbox:
-   439		for (i = 0; i < ST_RPROC_MAX_VRING * MBOX_MAX; i++)
-   440			mbox_free_channel(ddata->mbox_chan[i]);
-   441	free_clk:
-   442		clk_unprepare(ddata->clk);
-   443	free_rproc:
-   444		rproc_free(rproc);
-   445		return ret;
-   446	}
-   447	
-
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c
+index 2631eb7569eb..e24228e60027 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c
+@@ -845,7 +845,7 @@ brcms_c_ampdu_dotxstatus_complete(struct ampdu_info *ampdu, struct scb *scb,
+ 	u16 seq, start_seq = 0, bindex, index, mcl;
+ 	u8 mcs = 0;
+ 	bool ba_recd = false, ack_recd = false;
+-	u8 suc_mpdu = 0, tot_mpdu = 0;
++	u8 tot_mpdu = 0;
+ 	uint supr_status;
+ 	bool retry = true;
+ 	u16 mimoantsel = 0;
+@@ -975,7 +975,6 @@ brcms_c_ampdu_dotxstatus_complete(struct ampdu_info *ampdu, struct scb *scb,
+ 				ieee80211_tx_status_irqsafe(wlc->pub->ieee_hw,
+ 							    p);
+ 				ack_recd = true;
+-				suc_mpdu++;
+ 			}
+ 		}
+ 		/* either retransmit or send bar if ack not recd */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
