@@ -1,71 +1,109 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB8A2102
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 13:07:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679922473; x=1711458473;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xEhSDxvMVUikwKT6OOXXJ0JooLf8U/9nqWd8K7Tx3NA=;
-  b=Mxkpou81NujpZaLERV5HwO6FK+YcthQDrTymhN5fQ2nFEhackd7aQae2
-   oHdIGH4wYb3N08ur6zWndrxEV3uP4LAowmJh1Df6etri/P0xQ5FGpMX9O
-   jMmmzJoDrr38T7DxdlWEr6n+u+CQM5ci0mKnQ9A3ZRFkigYOZz9hwpYVB
-   0/+fzTC29XgZ6+V4klGTjPvxb70vOH7EDYFxJWaQDfu/S9vnXWHPVu1on
-   9Bly3DlXWTvnoMZPEQ7V3hrpYHvjUNtz1OQS03yoqMmkiOTatakZNFi6P
-   pp+6UQk9RcS5sEanKbfNAHJzxNRHl2b9VXjqzFd9339kLh8Y0/0QKXkSk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="402852986"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="402852986"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 06:07:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="772695912"
-X-IronPort-AV: E=Sophos;i="5.98,294,1673942400"; 
-   d="scan'208";a="772695912"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Mar 2023 06:07:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1pgmZg-009Exk-1J;
-	Mon, 27 Mar 2023 16:07:48 +0300
-Date: Mon, 27 Mar 2023 16:07:48 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Tom Rix <trix@redhat.com>
-Cc: jic23@kernel.org, lars@metafoo.de, nathan@kernel.org,
-	ndesaulniers@google.com, u.kleine-koenig@pengutronix.de,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] iio: tsl2772: remove unused prox_diode_mask variable
-Message-ID: <ZCGVJOSBjKO3FKD6@smile.fi.intel.com>
-References: <20230327120823.1369700-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E6E2102
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 13:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679923411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ui34VP0V+QC6wWMG4ZdbC0pVVInhui/1SjnIEjUUE7Q=;
+	b=AFSETKwrndjWF5jPBWjZM+jz9sRvKE0TiQUeR7/obg/vUtLPucTT6KWKMD3MDDA0tCOL1Z
+	9JykrYBdUKL2+s24VCuRG2goFpNPC4AWJPOUQOWNoMcZDeTRD33eGtujj4Kjh2RUejayK1
+	s7tcK8tJuKZD0AMk35OjZ3HQR02bUIo=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-512-8oONhmAqORWbB8JKhnbgLA-1; Mon, 27 Mar 2023 09:23:30 -0400
+X-MC-Unique: 8oONhmAqORWbB8JKhnbgLA-1
+Received: by mail-qv1-f69.google.com with SMTP id e1-20020a0cd641000000b005b47df84f6eso3537163qvj.0
+        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 06:23:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679923409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ui34VP0V+QC6wWMG4ZdbC0pVVInhui/1SjnIEjUUE7Q=;
+        b=46m15j4K6Qk26gfHD22gzoDoJ4GFYsteVriWRZ2KFlqptkS8Ee1QxTkaBDq0vR53uI
+         1J36KMH/ScA4W5AkMqSUfWOCqtRV7ABhGIiNWzBD4TZC4UugRRYGNUd4uicM8uxoVsi3
+         rfYeuSLw1TFTZQAhMWcjwpNSGtWpGyL8olt1Gtb5pb1TfrDOkNVjORbeaEpbNjAm2wef
+         XNYhJAluqgHiTwLI/GiIjoSh10vJVDZe7N54ylmzXlJDKUc2qI7qPZLEWYipUOFHz1j/
+         lN1WY4zPdUvag86MpQtnCoT9Dj3Uo18RLHUONk+lVWaCIUb/e7IM5r0AchBV9DaRYE+7
+         KriQ==
+X-Gm-Message-State: AO0yUKUXt8x8vXwLlwvkTY1LzNh7atXKkYGwtKcSAYVniI6bE1dlkaVp
+	8qqxhkW2+4a+UNJ/YZOy59n0pI6ylQK380BXFRDgR0YU/eBb6j+tAhNsnjlOYsz9chHVIekJouO
+	xJn00rDgPv5LTAA==
+X-Received: by 2002:a05:622a:40a:b0:3db:7f42:ab0f with SMTP id n10-20020a05622a040a00b003db7f42ab0fmr19454883qtx.67.1679923409754;
+        Mon, 27 Mar 2023 06:23:29 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+TKrzjeDXUF1w6E7KXi6Z2D3VUgzjcBgQe8o1XtRAeXO/pT5DBPtMKGbooPmazbkCED5aifw==
+X-Received: by 2002:a05:622a:40a:b0:3db:7f42:ab0f with SMTP id n10-20020a05622a040a00b003db7f42ab0fmr19454839qtx.67.1679923409444;
+        Mon, 27 Mar 2023 06:23:29 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id j23-20020ac86657000000b003e0c29112b6sm10606129qtp.7.2023.03.27.06.23.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Mar 2023 06:23:29 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: song@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-raid@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] md/raid5: remove unused working_disks variable
+Date: Mon, 27 Mar 2023 09:23:24 -0400
+Message-Id: <20230327132324.1769595-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230327120823.1369700-1-trix@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-On Mon, Mar 27, 2023 at 08:08:23AM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/iio/light/tsl2772.c:576:24: error: variable
->   'prox_diode_mask' set but not used [-Werror,-Wunused-but-set-variable]
->         int i, ret, num_leds, prox_diode_mask;
->                               ^
-> This variable is not used so remove it.
+clang with W=1 reports
+drivers/md/raid5.c:7719:6: error: variable 'working_disks'
+  set but not used [-Werror,-Wunused-but-set-variable]
+        int working_disks = 0;
+            ^
+This variable is not used so remove it.
 
-While from the compilation point of view this is a correct fix, I think
-we need to hear from the author (or interested stakeholders) about this
-feature. Perhaps it should be enabled / fixed differently.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+v2: remove brances
+---
+ drivers/md/raid5.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 7b820b81d8c2..812a12e3e41a 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -7716,7 +7716,6 @@ static void raid5_set_io_opt(struct r5conf *conf)
+ static int raid5_run(struct mddev *mddev)
+ {
+ 	struct r5conf *conf;
+-	int working_disks = 0;
+ 	int dirty_parity_disks = 0;
+ 	struct md_rdev *rdev;
+ 	struct md_rdev *journal_dev = NULL;
+@@ -7912,10 +7911,8 @@ static int raid5_run(struct mddev *mddev)
+ 			pr_warn("md: cannot handle concurrent replacement and reshape.\n");
+ 			goto abort;
+ 		}
+-		if (test_bit(In_sync, &rdev->flags)) {
+-			working_disks++;
++		if (test_bit(In_sync, &rdev->flags))
+ 			continue;
+-		}
+ 		/* This disc is not fully in-sync.  However if it
+ 		 * just stored parity (beyond the recovery_offset),
+ 		 * when we don't need to be concerned about the
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.27.0
 
