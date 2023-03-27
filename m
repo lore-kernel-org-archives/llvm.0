@@ -1,99 +1,157 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF5062A
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 01:56:28 +0000 (UTC)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlFmK2Ytfz4f4QHV
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 09:37:05 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-	by APP3 (Coremail) with SMTP id _Ch0CgCnUyFB8yBkwDiEFg--.45250S3;
-	Mon, 27 Mar 2023 09:37:06 +0800 (CST)
-Subject: Re: [PATCH] md/raid5: remove unused working_disks variable
-To: Tom Rix <trix@redhat.com>, song@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com
-Cc: linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230326125637.1352895-1-trix@redhat.com>
-From: Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <afd9db2f-72af-8ac0-9ab1-655fc79d992e@huaweicloud.com>
-Date: Mon, 27 Mar 2023 09:37:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0589F62A;
+	Mon, 27 Mar 2023 02:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679883124; x=1711419124;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8S/SepVjMRx72JXxp5dop7Uh13vNqZ05re9q9sjARYo=;
+  b=L3KeGwNpSBu60pAtB7bi77p7hx8IzJYOcdikAi2YHZGM8L0iGrf4eWgY
+   5RRheemUgiwdYt+F/ZZE1A0PtEpO7dp9F14RgLoGQ7TF4DRXfMS7k4yq2
+   1ywiwjGig1UIHf8ylwpYkSRQt167mK5yRjodzjhfl1wcE2fnmyQm55GUt
+   fE1XllRRdu/pCsdlAu4Yy4YQWxzfJBM29rq9PqVhmXU3iC0YL5/hQo3V0
+   d2UDoQZXfQGB/cIIy4W5c9CEeHoZbqX2SqgPfbUB0qmkQITwjh2A96kU3
+   bjw2vgZlWofEXzuwV2bRY0nIwj7pHQuERs9v3DpwQZcFgiFvQtIyCJevE
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367902106"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="367902106"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 19:12:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="857502189"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="857502189"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 26 Mar 2023 19:12:00 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pgcL2-000HTf-0C;
+	Mon, 27 Mar 2023 02:12:00 +0000
+Date: Mon, 27 Mar 2023 10:11:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	David Yang <mmyangfl@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Nick Alcock <nick.alcock@oracle.com>
+Subject: Re: [PATCH 4/4] clk: hisilicon: Migrate devm APIs
+Message-ID: <202303271023.do1t8Cfa-lkp@intel.com>
+References: <20230326052757.297551-5-mmyangfl@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20230326125637.1352895-1-trix@redhat.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgCnUyFB8yBkwDiEFg--.45250S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4rWF1fWF4DuF4UCrWxZwb_yoW8Jw4fpa
-	10v3W5ur4UXFW5Ka9rA3y7CFyFqanFy3y8GF9xu3WfXay5XrWDKw4rXry5WryDJFWSy3ya
-	vF1UKr4DGw1fKrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230326052757.297551-5-mmyangfl@gmail.com>
 
-Hi,
+Hi David,
 
-ÔÚ 2023/03/26 20:56, Tom Rix Ð´µÀ:
-> clang with W=1 reports
-> drivers/md/raid5.c:7719:6: error: variable 'working_disks'
->    set but not used [-Werror,-Wunused-but-set-variable]
->          int working_disks = 0;
->              ^
-> This variable is not used so remove it.
+Thank you for the patch! Yet something to improve:
 
-Other than some nits below, this patch looks good to me, feel free to
-add:
+[auto build test ERROR on fff5a5e7f528b2ed2c335991399a766c2cf01103]
 
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/clk-hisilicon-Add-helper-functions-for-platform-driver/20230326-133108
+base:   fff5a5e7f528b2ed2c335991399a766c2cf01103
+patch link:    https://lore.kernel.org/r/20230326052757.297551-5-mmyangfl%40gmail.com
+patch subject: [PATCH 4/4] clk: hisilicon: Migrate devm APIs
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20230327/202303271023.do1t8Cfa-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/7fd49da57e4d2205c1f5842dc29fc79c0f89263e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Yang/clk-hisilicon-Add-helper-functions-for-platform-driver/20230326-133108
+        git checkout 7fd49da57e4d2205c1f5842dc29fc79c0f89263e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
 
-Please also mention that commit 908f4fbd2657 ("md/raid5: be more
-thorough in calculating 'degraded' value.") remove the last reference.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->   drivers/md/raid5.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> index 7b820b81d8c2..2b1e78c46817 100644
-> --- a/drivers/md/raid5.c
-> +++ b/drivers/md/raid5.c
-> @@ -7716,7 +7716,6 @@ static void raid5_set_io_opt(struct r5conf *conf)
->   static int raid5_run(struct mddev *mddev)
->   {
->   	struct r5conf *conf;
-> -	int working_disks = 0;
->   	int dirty_parity_disks = 0;
->   	struct md_rdev *rdev;
->   	struct md_rdev *journal_dev = NULL;
-> @@ -7913,7 +7912,6 @@ static int raid5_run(struct mddev *mddev)
->   			goto abort;
->   		}
->   		if (test_bit(In_sync, &rdev->flags)) {
-> -			working_disks++;
-Please remove the braces as well,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303271023.do1t8Cfa-lkp@intel.com/
 
-Thanks,
-Kuai
->   			continue;
->   		}
->   		/* This disc is not fully in-sync.  However if it
-> 
+All errors (new ones prefixed by >>):
 
+>> drivers/clk/hisilicon/clk-hi3620.c:435:14: error: use of undeclared identifier 'clks'
+                           __func__, clks[i].name);
+                                     ^
+>> drivers/clk/hisilicon/clk-hi3620.c:435:19: error: use of undeclared identifier 'i'
+                           __func__, clks[i].name);
+                                          ^
+>> drivers/clk/hisilicon/clk-hi3620.c:436:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct clk_hw *' [-Wint-conversion]
+                   return ret;
+                          ^~~
+   3 errors generated.
+--
+>> drivers/clk/hisilicon/clk-hix5hd2.c:300:17: error: member reference type 'struct clk_hw_onecell_data *' is a pointer; did you mean to use '->'?
+                   data->clk_data.clks[clks[i].id] = clk;
+                   ~~~~~~~~~~~~~~^
+                                 ->
+>> drivers/clk/hisilicon/clk-hix5hd2.c:300:18: error: no member named 'clks' in 'struct clk_hw_onecell_data'
+                   data->clk_data.clks[clks[i].id] = clk;
+                   ~~~~~~~~~~~~~~ ^
+   2 errors generated.
+
+
+vim +/clks +435 drivers/clk/hisilicon/clk-hi3620.c
+
+   399	
+   400	static struct clk_hw *
+   401	clk_register_hisi_mmc(struct device *dev, const struct hisi_mmc_clock *mmc_clk,
+   402			      void __iomem *base)
+   403	{
+   404		struct clk_mmc *mclk;
+   405		struct clk_init_data init;
+   406		int ret;
+   407	
+   408		mclk = devm_kzalloc(dev, sizeof(*mclk), GFP_KERNEL);
+   409		if (!mclk)
+   410			return ERR_PTR(-ENOMEM);
+   411	
+   412		init.name = mmc_clk->name;
+   413		init.ops = &clk_mmc_ops;
+   414		init.flags = mmc_clk->flags;
+   415		init.parent_names = (mmc_clk->parent_name ? &mmc_clk->parent_name : NULL);
+   416		init.num_parents = (mmc_clk->parent_name ? 1 : 0);
+   417		mclk->hw.init = &init;
+   418	
+   419		mclk->id = mmc_clk->id;
+   420		mclk->clken_reg = base + mmc_clk->clken_reg;
+   421		mclk->clken_bit = mmc_clk->clken_bit;
+   422		mclk->div_reg = base + mmc_clk->div_reg;
+   423		mclk->div_off = mmc_clk->div_off;
+   424		mclk->div_bits = mmc_clk->div_bits;
+   425		mclk->drv_reg = base + mmc_clk->drv_reg;
+   426		mclk->drv_off = mmc_clk->drv_off;
+   427		mclk->drv_bits = mmc_clk->drv_bits;
+   428		mclk->sam_reg = base + mmc_clk->sam_reg;
+   429		mclk->sam_off = mmc_clk->sam_off;
+   430		mclk->sam_bits = mmc_clk->sam_bits;
+   431	
+   432		ret = devm_clk_hw_register(dev, &mclk->hw);
+   433		if (ret) {
+   434			dev_err(dev, "%s: failed to register clock %s\n",
+ > 435				__func__, clks[i].name);
+ > 436			return ret;
+   437		}
+   438	
+   439		return &mclk->hw;
+   440	}
+   441	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
