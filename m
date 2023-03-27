@@ -1,105 +1,99 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBDA20E4
-	for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 20:57:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679864237;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ufG0EzSJoZX2ZjEcM3na2tjubK9S5CNNR2tM4hGa6ao=;
-	b=Bcz4GXrpXL+WupZFte8/JdOPiFUpQK6JnTpqfvNGWfijajtCVtmu8tIKR+b6PqHT2hlqnM
-	lpaayfRg/SerAXyuQHflYvmMhHoeP/NuUIYGHHBrEDeOhh6VNGyS2rcFZY1U5v9suIxyUZ
-	5g4fENuqLaL8TNIpb7kHXf8Tzf2PBH0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-223-_Qw0rKXUNe2W35ex51W3uA-1; Sun, 26 Mar 2023 16:57:16 -0400
-X-MC-Unique: _Qw0rKXUNe2W35ex51W3uA-1
-Received: by mail-qk1-f200.google.com with SMTP id c80-20020ae9ed53000000b007468c560e1bso3153632qkg.2
-        for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 13:57:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679864236;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ufG0EzSJoZX2ZjEcM3na2tjubK9S5CNNR2tM4hGa6ao=;
-        b=xSs0NyNh+4ilKB46jOWKYUkTewFUI4u+HFxZbXj2fwh6xB84/vBZX/cIXDb4C1TbZA
-         Z2NtASot3P4Bx7CwIeNkvwySRV8RN72pig6g3xXKqwedQRbGurPkLfSMmImHp14jvckp
-         RAg6AtJr3IOxJSboaRwPx5jRIrk2mchTW6aZU5WKBt7Ilq5BIlrcMH2U8tIB5E1QI2kk
-         CWOgrusGxLwoNm6bqNvnIiizu1f3r0FKNhBM5H2oxvFXbdeSCDR5eg4spBfidkfh5FcI
-         gEYIyaX9JHpuVTnzozkmObiG6OALtC6vEwSpef9dyghcaTL3vBb/XMiIk9gAzTBJTYMz
-         syhQ==
-X-Gm-Message-State: AAQBX9cXg4YBWhQEmCHcFQetwb/bRr+19aL53EEJgDd368Pp8dj1ijNZ
-	MqePWgmNkXDR1qX/mvXo6+iADTsPR8l582PFROd9WT76ozZFXNrT6ZIpRQ5Ry3lED/5kUVT1rBW
-	bmqbMJ3rBDwJMSA==
-X-Received: by 2002:a05:6214:27c6:b0:5cd:f9fd:f66a with SMTP id ge6-20020a05621427c600b005cdf9fdf66amr17047957qvb.0.1679864235982;
-        Sun, 26 Mar 2023 13:57:15 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bvbaW/HvmNUD1O5GI6KZgnKPbVGv3bPPwbsQ+CWQB5zxGNwM7H9VkAJkVX4CFGJxeRjvsYFQ==
-X-Received: by 2002:a05:6214:27c6:b0:5cd:f9fd:f66a with SMTP id ge6-20020a05621427c600b005cdf9fdf66amr17047944qvb.0.1679864235774;
-        Sun, 26 Mar 2023 13:57:15 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id l4-20020ad44244000000b005dd8b9345cesm2409267qvq.102.2023.03.26.13.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 13:57:15 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: perex@perex.cz,
-	tiwai@suse.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	wangjianli@cdjrlc.com
-Cc: alsa-devel@alsa-project.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] ALSA: remove unused loop_count variable
-Date: Sun, 26 Mar 2023 16:57:12 -0400
-Message-Id: <20230326205712.1358918-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF5062A
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 01:56:28 +0000 (UTC)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PlFmK2Ytfz4f4QHV
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 09:37:05 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+	by APP3 (Coremail) with SMTP id _Ch0CgCnUyFB8yBkwDiEFg--.45250S3;
+	Mon, 27 Mar 2023 09:37:06 +0800 (CST)
+Subject: Re: [PATCH] md/raid5: remove unused working_disks variable
+To: Tom Rix <trix@redhat.com>, song@kernel.org, nathan@kernel.org,
+ ndesaulniers@google.com
+Cc: linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230326125637.1352895-1-trix@redhat.com>
+From: Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <afd9db2f-72af-8ac0-9ab1-655fc79d992e@huaweicloud.com>
+Date: Mon, 27 Mar 2023 09:37:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
+In-Reply-To: <20230326125637.1352895-1-trix@redhat.com>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+X-CM-TRANSID:_Ch0CgCnUyFB8yBkwDiEFg--.45250S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4rWF1fWF4DuF4UCrWxZwb_yoW8Jw4fpa
+	10v3W5ur4UXFW5Ka9rA3y7CFyFqanFy3y8GF9xu3WfXay5XrWDKw4rXry5WryDJFWSy3ya
+	vF1UKr4DGw1fKrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
 
-clang with W=1 reports
-sound/pci/asihpi/hpi6000.c:1256:6: error: variable
-  'loop_count' set but not used [-Werror,-Wunused-but-set-variable]
-        u32 loop_count = 0;
-            ^
-This variable is not used so remove it.
+Hi,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- sound/pci/asihpi/hpi6000.c | 2 --
- 1 file changed, 2 deletions(-)
+ÔÚ 2023/03/26 20:56, Tom Rix Ð´µÀ:
+> clang with W=1 reports
+> drivers/md/raid5.c:7719:6: error: variable 'working_disks'
+>    set but not used [-Werror,-Wunused-but-set-variable]
+>          int working_disks = 0;
+>              ^
+> This variable is not used so remove it.
 
-diff --git a/sound/pci/asihpi/hpi6000.c b/sound/pci/asihpi/hpi6000.c
-index 88d902997b74..72aa135d69f8 100644
---- a/sound/pci/asihpi/hpi6000.c
-+++ b/sound/pci/asihpi/hpi6000.c
-@@ -1253,7 +1253,6 @@ static u16 hpi6000_dsp_block_read32(struct hpi_adapter_obj *pao,
- 	int local_count = count;
- 	int xfer_size;
- 	u32 *pdata = dest;
--	u32 loop_count = 0;
- 
- 	while (local_count) {
- 		if (local_count > c6711_burst_size)
-@@ -1273,7 +1272,6 @@ static u16 hpi6000_dsp_block_read32(struct hpi_adapter_obj *pao,
- 		pdata += xfer_size;
- 		local_hpi_address += sizeof(u32) * xfer_size;
- 		local_count -= xfer_size;
--		loop_count++;
- 	}
- 
- 	if (time_out)
--- 
-2.27.0
+Other than some nits below, this patch looks good to me, feel free to
+add:
+
+Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+
+Please also mention that commit 908f4fbd2657 ("md/raid5: be more
+thorough in calculating 'degraded' value.") remove the last reference.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>   drivers/md/raid5.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> index 7b820b81d8c2..2b1e78c46817 100644
+> --- a/drivers/md/raid5.c
+> +++ b/drivers/md/raid5.c
+> @@ -7716,7 +7716,6 @@ static void raid5_set_io_opt(struct r5conf *conf)
+>   static int raid5_run(struct mddev *mddev)
+>   {
+>   	struct r5conf *conf;
+> -	int working_disks = 0;
+>   	int dirty_parity_disks = 0;
+>   	struct md_rdev *rdev;
+>   	struct md_rdev *journal_dev = NULL;
+> @@ -7913,7 +7912,6 @@ static int raid5_run(struct mddev *mddev)
+>   			goto abort;
+>   		}
+>   		if (test_bit(In_sync, &rdev->flags)) {
+> -			working_disks++;
+Please remove the braces as well,
+
+Thanks,
+Kuai
+>   			continue;
+>   		}
+>   		/* This disc is not fully in-sync.  However if it
+> 
 
