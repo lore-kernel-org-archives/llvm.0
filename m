@@ -1,109 +1,173 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E6E2102
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 13:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0A62102
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 13:40:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679923411;
+	s=mimecast20190719; t=1679924449;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=Ui34VP0V+QC6wWMG4ZdbC0pVVInhui/1SjnIEjUUE7Q=;
-	b=AFSETKwrndjWF5jPBWjZM+jz9sRvKE0TiQUeR7/obg/vUtLPucTT6KWKMD3MDDA0tCOL1Z
-	9JykrYBdUKL2+s24VCuRG2goFpNPC4AWJPOUQOWNoMcZDeTRD33eGtujj4Kjh2RUejayK1
-	s7tcK8tJuKZD0AMk35OjZ3HQR02bUIo=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-512-8oONhmAqORWbB8JKhnbgLA-1; Mon, 27 Mar 2023 09:23:30 -0400
-X-MC-Unique: 8oONhmAqORWbB8JKhnbgLA-1
-Received: by mail-qv1-f69.google.com with SMTP id e1-20020a0cd641000000b005b47df84f6eso3537163qvj.0
-        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 06:23:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679923409;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ui34VP0V+QC6wWMG4ZdbC0pVVInhui/1SjnIEjUUE7Q=;
-        b=46m15j4K6Qk26gfHD22gzoDoJ4GFYsteVriWRZ2KFlqptkS8Ee1QxTkaBDq0vR53uI
-         1J36KMH/ScA4W5AkMqSUfWOCqtRV7ABhGIiNWzBD4TZC4UugRRYGNUd4uicM8uxoVsi3
-         rfYeuSLw1TFTZQAhMWcjwpNSGtWpGyL8olt1Gtb5pb1TfrDOkNVjORbeaEpbNjAm2wef
-         XNYhJAluqgHiTwLI/GiIjoSh10vJVDZe7N54ylmzXlJDKUc2qI7qPZLEWYipUOFHz1j/
-         lN1WY4zPdUvag86MpQtnCoT9Dj3Uo18RLHUONk+lVWaCIUb/e7IM5r0AchBV9DaRYE+7
-         KriQ==
-X-Gm-Message-State: AO0yUKUXt8x8vXwLlwvkTY1LzNh7atXKkYGwtKcSAYVniI6bE1dlkaVp
-	8qqxhkW2+4a+UNJ/YZOy59n0pI6ylQK380BXFRDgR0YU/eBb6j+tAhNsnjlOYsz9chHVIekJouO
-	xJn00rDgPv5LTAA==
-X-Received: by 2002:a05:622a:40a:b0:3db:7f42:ab0f with SMTP id n10-20020a05622a040a00b003db7f42ab0fmr19454883qtx.67.1679923409754;
-        Mon, 27 Mar 2023 06:23:29 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+TKrzjeDXUF1w6E7KXi6Z2D3VUgzjcBgQe8o1XtRAeXO/pT5DBPtMKGbooPmazbkCED5aifw==
-X-Received: by 2002:a05:622a:40a:b0:3db:7f42:ab0f with SMTP id n10-20020a05622a040a00b003db7f42ab0fmr19454839qtx.67.1679923409444;
-        Mon, 27 Mar 2023 06:23:29 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j23-20020ac86657000000b003e0c29112b6sm10606129qtp.7.2023.03.27.06.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 06:23:29 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: song@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-raid@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH v2] md/raid5: remove unused working_disks variable
-Date: Mon, 27 Mar 2023 09:23:24 -0400
-Message-Id: <20230327132324.1769595-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	bh=/qNncmgkrjFk3fRmTrQBnZCsU2OEbYfpvYU/DU+PBeA=;
+	b=QePPc89gfJ65aPpx28L/7DiNM4wPgJVmHyeHEHqn6rGBUEk/8ebLWYGfqidOtHHR3S9zMg
+	Y0rWf15suouYM5Vt++gDOLjDUKFvyvj7JeNw1DloKfO5tUYC95OpkLXjhKys2gUwrIGshZ
+	kAsnRlXss1QMqkV2a7EKcLDeMzvc2Qg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-I5cjdQL8N5-oABqwCkmGVQ-1; Mon, 27 Mar 2023 09:40:48 -0400
+X-MC-Unique: I5cjdQL8N5-oABqwCkmGVQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 59B8F2999B3A
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 13:40:48 +0000 (UTC)
+Received: from [172.64.0.121] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 42FCB404DC4E;
+	Mon, 27 Mar 2023 13:40:48 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 19 of 381): Test report for master
+ (6.3.0-rc3, mainline.kernel.org-clang, 0ec57cfa)
+Date: Mon, 27 Mar 2023 13:40:48 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <71972.123032709404802283@us-mta-558.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-clang with W=1 reports
-drivers/md/raid5.c:7719:6: error: variable 'working_disks'
-  set but not used [-Werror,-Wunused-but-set-variable]
-        int working_disks = 0;
-            ^
-This variable is not used so remove it.
+Hi, we tested your kernel and here are the results:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v2: remove brances
----
- drivers/md/raid5.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index 7b820b81d8c2..812a12e3e41a 100644
---- a/drivers/md/raid5.c
-+++ b/drivers/md/raid5.c
-@@ -7716,7 +7716,6 @@ static void raid5_set_io_opt(struct r5conf *conf)
- static int raid5_run(struct mddev *mddev)
- {
- 	struct r5conf *conf;
--	int working_disks = 0;
- 	int dirty_parity_disks = 0;
- 	struct md_rdev *rdev;
- 	struct md_rdev *journal_dev = NULL;
-@@ -7912,10 +7911,8 @@ static int raid5_run(struct mddev *mddev)
- 			pr_warn("md: cannot handle concurrent replacement and reshape.\n");
- 			goto abort;
- 		}
--		if (test_bit(In_sync, &rdev->flags)) {
--			working_disks++;
-+		if (test_bit(In_sync, &rdev->flags))
- 			continue;
--		}
- 		/* This disc is not fully in-sync.  However if it
- 		 * just stored parity (beyond the recovery_offset),
- 		 * when we don't need to be concerned about the
--- 
-2.27.0
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'usb-6.3-rc4' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/gregkh/usb
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/81845
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] RIP: 0010:cooling_device_stats_setup+0xfb/0x110
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2181987
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
