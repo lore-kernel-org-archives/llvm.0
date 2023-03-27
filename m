@@ -1,114 +1,167 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A26EA3
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 12:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653DAECF
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 12:41:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679918909;
+	s=mimecast20190719; t=1679920903;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=f6OgJqgpSNTTFYSUSudYbvVLpng6GaBH202qHK3zoFk=;
-	b=dEui0Z7fZftarzISaK7sgjln8LR7ZIZ1XLzPW85MHG8kWBpubOF0m/v1znag3rvgn+0uQu
-	wAwjMVSTu2zCFVCbymiPflpk8HobWKFhfrYeBzHQAEXQxuJS+2rNv4X72b7F24m3ZPpOAk
-	rm6E/G1TX9OyhCpy4jsvH7uEBcqcGI0=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-6-yzQU1Hz8PJCpio6CCZ62ww-1; Mon, 27 Mar 2023 08:08:28 -0400
-X-MC-Unique: yzQU1Hz8PJCpio6CCZ62ww-1
-Received: by mail-qv1-f71.google.com with SMTP id y19-20020ad445b3000000b005a5123cb627so3370044qvu.20
-        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679918907;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f6OgJqgpSNTTFYSUSudYbvVLpng6GaBH202qHK3zoFk=;
-        b=7b+Tk/n5YbxzlN3x7VbBnfvpnvVLtKBzLJ5dfyvB1oC85RCAb/ITpnPuRTa41r39vc
-         wqpK0zjDnSXG2GXwPwDps7kZiFYr51lkhpUABYHVVo1zY4EKB+SR8h+26YMs6MrG3asq
-         n6ZfAUBrNcPrqXEe7fwrSUsy4CDzirmva8w150Ttl9ZX0uyRjlQoHaQRItysw09Yb99f
-         dTE2czj6nO+mNZG5ZBlktUuG3KPfUTlrce54vzVc815i7ruESolsMRGNkOB46uCA/r7q
-         2QbkYb8Dzc0hrld0pr4IQRD1FPAlAAe6oFGb159ngOfRsws76KVDibZy/JyO4dgNEnzo
-         1ACw==
-X-Gm-Message-State: AO0yUKXnbbw16jSL32m9Jkw6rfxQvYiin+4OKc8PRVK6d0ImlCW0RtiZ
-	RV8fG77uYCYh+wxzMVJPpjOINmsTijdpQsKzqAGDq2taDwLV+2y/VDNe7MrfvahO0Ctwg+t1pOj
-	8kqY7rGhAdHVuWw==
-X-Received: by 2002:ac8:574e:0:b0:3d6:d1d3:eeb8 with SMTP id 14-20020ac8574e000000b003d6d1d3eeb8mr20398693qtx.11.1679918907442;
-        Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YyfOhpAFIIn4S3oaK+SRWKemSRvTcR5bSBOqlG0NAjA410/ztoUYY6RVRQVXHBhcaeImdxww==
-X-Received: by 2002:ac8:574e:0:b0:3d6:d1d3:eeb8 with SMTP id 14-20020ac8574e000000b003d6d1d3eeb8mr20398655qtx.11.1679918907195;
-        Mon, 27 Mar 2023 05:08:27 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id bn29-20020a05620a2add00b007486052d731sm1396515qkb.10.2023.03.27.05.08.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 05:08:26 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: jic23@kernel.org,
-	lars@metafoo.de,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	andriy.shevchenko@linux.intel.com,
-	u.kleine-koenig@pengutronix.de
-Cc: linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] iio: tsl2772: remove unused prox_diode_mask variable
-Date: Mon, 27 Mar 2023 08:08:23 -0400
-Message-Id: <20230327120823.1369700-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	bh=EGO985OaZAryQYuACZxuMp6qbxnarteDUJCHvByAXrE=;
+	b=ftoVWzH0h1v7LLkodiOjBUT7A72+1EH+WZSLfHbUXCLDsRA53LyqwnXkzDy98WHtMGqShL
+	RdUEAu8Wj5qY4TDj0De4xhGtTTQbFAYjOwtAx7jb9kYcvSZLOsd2wit9c6G9GlPM3afa9g
+	xOVIUdddioyo084epjKCshuTwVsAE7k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-nBNM2fjeMgGGZQnQ63qKrw-1; Mon, 27 Mar 2023 08:41:41 -0400
+X-MC-Unique: nBNM2fjeMgGGZQnQ63qKrw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9403087B2A1
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 12:41:41 +0000 (UTC)
+Received: from [172.64.0.121] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 81787404DC4E;
+	Mon, 27 Mar 2023 12:41:41 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 59 of 381): Test report for master
+ (6.3.0-rc3, mainline.kernel.org-clang, 18940c88)
+Date: Mon, 27 Mar 2023 12:41:41 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <08624.123032708414102248@us-mta-564.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-clang with W=1 reports
-drivers/iio/light/tsl2772.c:576:24: error: variable
-  'prox_diode_mask' set but not used [-Werror,-Wunused-but-set-variable]
-        int i, ret, num_leds, prox_diode_mask;
-                              ^
-This variable is not used so remove it.
+Hi, we tested your kernel and here are the results:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/iio/light/tsl2772.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-diff --git a/drivers/iio/light/tsl2772.c b/drivers/iio/light/tsl2772.c
-index ad50baa0202c..c090405c2358 100644
---- a/drivers/iio/light/tsl2772.c
-+++ b/drivers/iio/light/tsl2772.c
-@@ -573,7 +573,7 @@ static int tsl2772_read_prox_led_current(struct tsl2772_chip *chip)
- static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
- {
- 	struct device *dev = &chip->client->dev;
--	int i, ret, num_leds, prox_diode_mask;
-+	int i, ret, num_leds;
- 	u32 leds[TSL2772_MAX_PROX_LEDS];
- 
- 	ret = device_property_count_u32(dev, "amstaos,proximity-diodes");
-@@ -590,13 +590,8 @@ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
- 		return ret;
- 	}
- 
--	prox_diode_mask = 0;
- 	for (i = 0; i < num_leds; i++) {
--		if (leds[i] == 0)
--			prox_diode_mask |= TSL2772_DIODE0;
--		else if (leds[i] == 1)
--			prox_diode_mask |= TSL2772_DIODE1;
--		else {
-+		if (leds[i] > 1) {
- 			dev_err(dev, "Invalid value %d in amstaos,proximity-diodes.\n", leds[i]);
- 			return -EINVAL;
- 		}
--- 
-2.27.0
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'sched_urgent_for_v6.3_rc4' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/tip/tip
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/81835
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] RIP: 0010:cooling_device_stats_setup+0xfb/0x110
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2181987
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: [rawhide] kdump - sysrq-c: kdump: kexec: failed to load kdum=
+p kernel
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2052949#c1
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: kdump - sysrq-c: (panic) dump_backtrace+0xe8/0x140
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1561
+            Affected tests:
+                 aarch64 - kdump - sysrq-c
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
