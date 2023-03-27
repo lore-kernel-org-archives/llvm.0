@@ -1,104 +1,149 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A137B79DD
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 22:18:21 +0000 (UTC)
-Received: by mail-ed1-f42.google.com with SMTP id er13so1232309edb.9
-        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 15:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679955500;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8qpaub3I/CyGwEFR/k/WmlBCDNumW/+SJIaNcuoNk9k=;
-        b=sLjlJgjeoT0WV0qFn9qz1kIcxyac6pMVMv4H0/t9YS7zXIrH7YfP7jRP4vvtxYuMhv
-         ZkjmSM2TjJ2zegpBf5QGdb0Mg2dEBQNtRk9nXqhWfdzK8Cn2PNTlxJjlOr4L+7Qk675Y
-         nXesSbqZ55WgkfqcvQkclW2y9t9tEOxFKzyyUPFbBZcRrU7ShBkSWppcY0urgbLMqJbf
-         tLMwthWt0GlBeegianqR6puXwKX0gRuaDR6yup4MiyrXZu76w9isj8TE+VUN+DdOSY4A
-         IQCaYyBU7XaWxUoZ4cGVm4P8s5+myV0YBVlJc6RiTvo7dF/Tw2pzx5QhD46MOXhuxEcU
-         F3DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679955500;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8qpaub3I/CyGwEFR/k/WmlBCDNumW/+SJIaNcuoNk9k=;
-        b=yIipvs3H+AatOF0g/GvJWKJ73I2yB+AQeSNIU5kxS78zYgi3RVewp/3BMErDgIFlxh
-         OuDjfQd5A6+EiBbfMcuGKRLUVFakXwXOYX4jTTPNqsViePuPYFmi2gpmDTHMEUu6D05W
-         G5ds6BFVKMGQJZmXmZWFP65TclxEU82FVPJo4mbnmiSWDETFsowZzOAveURyUzfkTLD0
-         f7sY6YIGjHqvaA3A/1468w5uEKVxTne4IN1Gi4pQY2wAwB2feTHerBTMNcS3yas7/Xki
-         ZuNUsLX1NW1pgqFU1HYcA7iMKjvEkAn7hw3M8KoDB403B6ieZ73PBGHk6ZKlMaMW11/8
-         FW1w==
-X-Gm-Message-State: AAQBX9dbSH58sgum6Bn69CEF+Ki0mwrVILofB+m89r4/wTcYBpXpG9sZ
-	CVQxBuxsAc8EL9RFGMqh5Vka79Qbdkek7PHa7TaT4w==
-X-Google-Smtp-Source: AKy350ZxmCEdEpv7zB21M0WMADbalXlh1cyjmKEj/2FvVMMOcTkxQAp+v5N9qKKGwJDSfSrEt6L5EOsdS/vzof9S9Yw=
-X-Received: by 2002:a17:907:cb86:b0:930:42bd:ef1d with SMTP id
- un6-20020a170907cb8600b0093042bdef1dmr6723296ejc.11.1679955499628; Mon, 27
- Mar 2023 15:18:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9AB365;
+	Mon, 27 Mar 2023 22:39:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679956781; x=1711492781;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jw64NH9VCniTv6ZR3b7VgSIWKTfRI77qXUm0pHRQSQ0=;
+  b=VWl/td5ddrvr5+saf3tWVNst+2QrcaRRf4vj4AaI2TcYWrplF8hLpchf
+   /n+Fb06gYewrKr/wsDaRHzDwayERkGSRqLsQ0wWngwOJ06io1fJf+yh6h
+   wNpzDzeav/8eqsugpPhisGflcGL3QwPu+oyZu691bsZPA18O7JNjHgTJ8
+   ir6Iv7YS13uv/N8WQk5HGtFhZ6pqD3t5CW6sWwEaz0zttJ6ZFVmJQLHf0
+   YVMYqt4zArVxqu2KvNNOSr4Z+f+86d3ZaILMu/AZt0J+wBwdm3Z3GEhMB
+   l1Y+JCfVyzlWx1mV/y8CGIylPtDiv3twAHDeRmm6MyaF3NxUgZoMl+9L3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="328853611"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="328853611"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 15:39:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="827218608"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="827218608"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 27 Mar 2023 15:39:37 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pgvV2-000I4F-2w;
+	Mon, 27 Mar 2023 22:39:36 +0000
+Date: Tue, 28 Mar 2023 06:39:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Harini Katakam <harini.katakam@amd.com>, nicolas.ferre@microchip.com,
+	davem@davemloft.net, richardcochran@gmail.com,
+	claudiu.beznea@microchip.com, andrei.pistirica@microchip.com,
+	kuba@kernel.org, edumazet@google.com, pabeni@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	michal.simek@amd.com, harinikatakamlinux@gmail.com,
+	harini.katakam@amd.com
+Subject: Re: [PATCH net-next v3 1/3] net: macb: Update gem PTP support check
+Message-ID: <202303280600.LarprmhI-lkp@intel.com>
+References: <20230327110607.21964-2-harini.katakam@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <20230325085416.95191-1-ashimida.1990@gmail.com> <20230327093016.GB4253@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230327093016.GB4253@hirez.programming.kicks-ass.net>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 27 Mar 2023 15:17:43 -0700
-Message-ID: <CABCJKueH6ohH27xCPz9a_ndRR26Na_mo=MGF3eqjwV2=gJy+wQ@mail.gmail.com>
-Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Dan Li <ashimida.1990@gmail.com>, Aaron Tomlin <atomlin@redhat.com>, 
-	Alexander Potapenko <glider@google.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Alexandru Elisei <alexandru.elisei@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Anshuman Khandual <anshuman.khandual@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Boqun Feng <boqun.feng@gmail.com>, 
-	Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>, Brian Gerst <brgerst@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Changbin Du <changbin.du@intel.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, "Eric W. Biederman" <ebiederm@xmission.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, gcc-patches@gcc.gnu.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, Kees Cook <keescook@chromium.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, Marco Elver <elver@google.com>, 
-	Mark Brown <broonie@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Michael Roth <michael.roth@amd.com>, Michal Marek <michal.lkml@markovi.net>, 
-	Miguel Ojeda <ojeda@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Richard Sandiford <richard.sandiford@arm.com>, Song Liu <song@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Will Deacon <will@kernel.org>, x86@kernel.org, Yuntao Wang <ytcoode@gmail.com>, 
-	Yu Zhao <yuzhao@google.com>, Zhen Lei <thunder.leizhen@huawei.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230327110607.21964-2-harini.katakam@amd.com>
 
-On Mon, Mar 27, 2023 at 2:30=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
->
-> > In the compiler part[4], most of the content is the same as Sami's
-> > implementation[3], except for some minor differences, mainly including:
-> >
-> > 1. The function typeid is calculated differently and it is difficult
-> > to be consistent.
->
-> This means there is an effective ABI break between the compilers, which
-> is sad :-( Is there really nothing to be done about this?
+Hi Harini,
 
-I agree, this would be unfortunate, and would also be a compatibility
-issue with rustc where there's ongoing work to support
-clang-compatible CFI type hashes:
+Thank you for the patch! Yet something to improve:
 
-https://github.com/rust-lang/rust/pull/105452
+[auto build test ERROR on net-next/main]
 
-Sami
+url:    https://github.com/intel-lab-lkp/linux/commits/Harini-Katakam/net-macb-Update-gem-PTP-support-check/20230327-190937
+patch link:    https://lore.kernel.org/r/20230327110607.21964-2-harini.katakam%40amd.com
+patch subject: [PATCH net-next v3 1/3] net: macb: Update gem PTP support check
+config: powerpc-randconfig-r021-20230327 (https://download.01.org/0day-ci/archive/20230328/202303280600.LarprmhI-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0a2f03b6a91caa746dfd1b56b998534464dae83d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Harini-Katakam/net-macb-Update-gem-PTP-support-check/20230327-190937
+        git checkout 0a2f03b6a91caa746dfd1b56b998534464dae83d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/cadence/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303280600.LarprmhI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/cadence/macb_main.c:3897:9: error: no member named 'hw_dma_cap' in 'struct macb'
+                                   bp->hw_dma_cap |= HW_DMA_CAP_PTP;
+                                   ~~  ^
+>> drivers/net/ethernet/cadence/macb_main.c:3897:23: error: use of undeclared identifier 'HW_DMA_CAP_PTP'
+                                   bp->hw_dma_cap |= HW_DMA_CAP_PTP;
+                                                     ^
+>> drivers/net/ethernet/cadence/macb_main.c:3898:21: error: use of undeclared identifier 'gem_ptp_info'; did you mean 'gem_ptp_init'?
+                                   bp->ptp_info = &gem_ptp_info;
+                                                   ^~~~~~~~~~~~
+                                                   gem_ptp_init
+   drivers/net/ethernet/cadence/macb.h:1352:20: note: 'gem_ptp_init' declared here
+   static inline void gem_ptp_init(struct net_device *ndev) { }
+                      ^
+   3 errors generated.
+
+
+vim +3897 drivers/net/ethernet/cadence/macb_main.c
+
+5f1fa992382cf8 drivers/net/macb.c                       Alexander Beregalov 2009-04-11  3866  
+64ec42fe272322 drivers/net/ethernet/cadence/macb.c      Moritz Fischer      2016-03-29  3867  /* Configure peripheral capabilities according to device tree
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3868   * and integration options used
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3869   */
+64ec42fe272322 drivers/net/ethernet/cadence/macb.c      Moritz Fischer      2016-03-29  3870  static void macb_configure_caps(struct macb *bp,
+64ec42fe272322 drivers/net/ethernet/cadence/macb.c      Moritz Fischer      2016-03-29  3871  				const struct macb_config *dt_conf)
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3872  {
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3873  	u32 dcfg;
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3874  
+f6970505defd0e drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2015-03-31  3875  	if (dt_conf)
+f6970505defd0e drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2015-03-31  3876  		bp->caps = dt_conf->caps;
+f6970505defd0e drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2015-03-31  3877  
+f2ce8a9e48385f drivers/net/ethernet/cadence/macb.c      Andy Shevchenko     2015-07-24  3878  	if (hw_is_gem(bp->regs, bp->native_io)) {
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3879  		bp->caps |= MACB_CAPS_MACB_IS_GEM;
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3880  
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3881  		dcfg = gem_readl(bp, DCFG1);
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3882  		if (GEM_BFEXT(IRQCOR, dcfg) == 0)
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3883  			bp->caps |= MACB_CAPS_ISR_CLEAR_ON_WRITE;
+e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3884  		if (GEM_BFEXT(NO_PCS, dcfg) == 0)
+e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3885  			bp->caps |= MACB_CAPS_PCS;
+e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3886  		dcfg = gem_readl(bp, DCFG12);
+e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3887  		if (GEM_BFEXT(HIGH_SPEED, dcfg) == 1)
+e4e143e26ce8f5 drivers/net/ethernet/cadence/macb_main.c Parshuram Thombare  2020-10-29  3888  			bp->caps |= MACB_CAPS_HIGH_SPEED;
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3889  		dcfg = gem_readl(bp, DCFG2);
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3890  		if ((dcfg & (GEM_BIT(RX_PKT_BUFF) | GEM_BIT(TX_PKT_BUFF))) == 0)
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3891  			bp->caps |= MACB_CAPS_FIFO_MODE;
+ab91f0a9b5f4b9 drivers/net/ethernet/cadence/macb_main.c Rafal Ozieblo       2017-06-29  3892  		if (gem_has_ptp(bp)) {
+7b4296148066f1 drivers/net/ethernet/cadence/macb.c      Rafal Ozieblo       2017-06-29  3893  			if (!GEM_BFEXT(TSU, gem_readl(bp, DCFG5)))
+7897b071ac3b45 drivers/net/ethernet/cadence/macb_main.c Antoine Tenart      2019-11-13  3894  				dev_err(&bp->pdev->dev,
+7897b071ac3b45 drivers/net/ethernet/cadence/macb_main.c Antoine Tenart      2019-11-13  3895  					"GEM doesn't support hardware ptp.\n");
+ab91f0a9b5f4b9 drivers/net/ethernet/cadence/macb_main.c Rafal Ozieblo       2017-06-29  3896  			else {
+7b4296148066f1 drivers/net/ethernet/cadence/macb.c      Rafal Ozieblo       2017-06-29 @3897  				bp->hw_dma_cap |= HW_DMA_CAP_PTP;
+ab91f0a9b5f4b9 drivers/net/ethernet/cadence/macb_main.c Rafal Ozieblo       2017-06-29 @3898  				bp->ptp_info = &gem_ptp_info;
+7b4296148066f1 drivers/net/ethernet/cadence/macb.c      Rafal Ozieblo       2017-06-29  3899  			}
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3900  		}
+ab91f0a9b5f4b9 drivers/net/ethernet/cadence/macb_main.c Rafal Ozieblo       2017-06-29  3901  	}
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3902  
+a35919e174350d drivers/net/ethernet/cadence/macb.c      Andy Shevchenko     2015-07-24  3903  	dev_dbg(&bp->pdev->dev, "Cadence caps 0x%08x\n", bp->caps);
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3904  }
+e175587f4d32de drivers/net/ethernet/cadence/macb.c      Nicolas Ferre       2014-07-24  3905  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
