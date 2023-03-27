@@ -1,114 +1,136 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8454C33C0
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 15:12:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1679929919;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DYh+IUQKnsNavgY4j1iAAQrUA1J5asaTGD0FKGxhaXM=;
-	b=TXujnrP4HA04vJM7HwEzDd14afITPVEc2txIuuG8Y6FOXa1sQW/VFXq2KJfBiMvQfIxR2k
-	XcHjIqrEIhD1IhZD+dLKu2HmGse5T7uCp/hWm+vMNbg6qb4psjqGCo19j6UPZjo7MWHYua
-	/8cUuaNA0Cib/SjgpYI82dzNvfNnugo=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-37-xjnkS5XYPwaSew-lLOXTbQ-1; Mon, 27 Mar 2023 11:11:56 -0400
-X-MC-Unique: xjnkS5XYPwaSew-lLOXTbQ-1
-Received: by mail-qv1-f70.google.com with SMTP id pr2-20020a056214140200b005b3ed9328a3so3664939qvb.10
-        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 08:11:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679929915;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DYh+IUQKnsNavgY4j1iAAQrUA1J5asaTGD0FKGxhaXM=;
-        b=T3pgIQNp0+Iq3cXFVrVV3oYG7sJdfbhBIcvRBVk+/yhjcmmPD6yP3eHUOc8KZiKPhB
-         /oF7ErGt8OggEOGNDx0XwFUsIyCtZRL/oyEIK6+gnSVBiM1Bc7rfuHtAR/sG3yOSxwaO
-         fFwfMwsA2fmuFgs+Q07xhBO3G9tULzbPXrFf90WsQBzVBpQ43AIqD4gss4cwMjoVCtl7
-         14QbqUFC/tAF8CjYXGC7J+ftEV0XLreHqaGRDFFIwVJq6Y7oA/QxvRxw3GvnWqMoRWn1
-         4ufwdC79+Vjy95AZz3YecylU1V7zJdA/j6MGVu4dKr6bDR5wfwShBxIoPMjgDdUdbYDS
-         9I3w==
-X-Gm-Message-State: AO0yUKVhX6Xq5ZRSOPCd/+0g8UXZkUFbyHqUUpvvFns+xqR655iGlVlo
-	ikLiLHxmac52H5GlG/SbTXj2eJ4KpDTPEYvYWzv3abdhVXMg5i1CT+/5kZSea20GfJ8OnKTxuJm
-	7ORoyfkUw+zE84g==
-X-Received: by 2002:ac8:57c2:0:b0:3e1:6c7e:2ee0 with SMTP id w2-20020ac857c2000000b003e16c7e2ee0mr22110166qta.11.1679929915678;
-        Mon, 27 Mar 2023 08:11:55 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9BAzNnvmMx3UPAztYRtfcEZS/JC0Zbgk59lkyKNRW1O3h/77E7anPa59QcSLU+bg9VrGKy2w==
-X-Received: by 2002:ac8:57c2:0:b0:3e1:6c7e:2ee0 with SMTP id w2-20020ac857c2000000b003e16c7e2ee0mr22110133qta.11.1679929915395;
-        Mon, 27 Mar 2023 08:11:55 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id l6-20020ac848c6000000b003bfb0ea8094sm8328255qtr.83.2023.03.27.08.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 08:11:55 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: aspriel@gmail.com,
-	franky.lin@broadcom.com,
-	hante.meuleman@broadcom.com,
-	kvalo@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-wireless@vger.kernel.org,
-	brcm80211-dev-list.pdl@broadcom.com,
-	SHA-cyfmac-dev-list@infineon.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] brcmsmac: ampdu: remove unused suc_mpdu variable
-Date: Mon, 27 Mar 2023 11:11:51 -0400
-Message-Id: <20230327151151.1771350-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446B23C0F;
+	Mon, 27 Mar 2023 15:18:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679930312; x=1711466312;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=17LMq6FcckRvCjRKh2cYsU9tHbmYq+HS/t9LCbX9zWs=;
+  b=XRxKw6YDlwBjmsBEeav0LrqO3G2aKK/iojUhC19QrU4PpcmL17WaU9gR
+   ysUh9e2f/qtH+5KQ5MrBDJIQWBhbfeVixS1GEKkmct95+OczyGaCLuE4x
+   nWxhkkcQVZzh18u6YaiPHZ87N3PeuZsTQntlg0vUz3FRua9whQUxjsoZx
+   394K7rLvaEyUJ5lr/Qe/DIY6pFxXusQH0pVLRHUYh4sDJOGpr57abwFN5
+   0g+wINomQr+6l9z4h4R5/z6uYEgjPZRqiziTIrAt1xl16ZWbwhU5ghFJq
+   xGGWKQIaYCOn2ZFq3hLKm9UGD+89JvZgvc4o9VQbly1Gtb5En/nuaD19C
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="320693419"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="320693419"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 08:18:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="676999194"
+X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
+   d="scan'208";a="676999194"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2023 08:18:16 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pgobv-000Hnx-10;
+	Mon, 27 Mar 2023 15:18:15 +0000
+Date: Mon, 27 Mar 2023 23:17:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maximilian Weigand <mweigand@mweigand.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Maximilian Weigand <mweigand@mweigand.net>,
+	Alistair Francis <alistair@alistair23.me>
+Subject: Re: [PATCH 2/6] Input: cyttsp5: remove unused code
+Message-ID: <202303272323.nRNi9Sso-lkp@intel.com>
+References: <20230323135205.1160879-3-mweigand@mweigand.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323135205.1160879-3-mweigand@mweigand.net>
 
-clang with W=1 reports
-drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c:848:5: error: variable
-  'suc_mpdu' set but not used [-Werror,-Wunused-but-set-variable]
-        u8 suc_mpdu = 0, tot_mpdu = 0;
-           ^
-This variable is not used so remove it.
+Hi Maximilian,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c
-index 2631eb7569eb..e24228e60027 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmsmac/ampdu.c
-@@ -845,7 +845,7 @@ brcms_c_ampdu_dotxstatus_complete(struct ampdu_info *ampdu, struct scb *scb,
- 	u16 seq, start_seq = 0, bindex, index, mcl;
- 	u8 mcs = 0;
- 	bool ba_recd = false, ack_recd = false;
--	u8 suc_mpdu = 0, tot_mpdu = 0;
-+	u8 tot_mpdu = 0;
- 	uint supr_status;
- 	bool retry = true;
- 	u16 mimoantsel = 0;
-@@ -975,7 +975,6 @@ brcms_c_ampdu_dotxstatus_complete(struct ampdu_info *ampdu, struct scb *scb,
- 				ieee80211_tx_status_irqsafe(wlc->pub->ieee_hw,
- 							    p);
- 				ack_recd = true;
--				suc_mpdu++;
- 			}
- 		}
- 		/* either retransmit or send bar if ack not recd */
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on dtor-input/for-linus linus/master v6.3-rc4 next-20230327]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Maximilian-Weigand/Input-cyttsp5-fix-array-length/20230323-215957
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/20230323135205.1160879-3-mweigand%40mweigand.net
+patch subject: [PATCH 2/6] Input: cyttsp5: remove unused code
+config: i386-randconfig-a011-20230327 (https://download.01.org/0day-ci/archive/20230327/202303272323.nRNi9Sso-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4358a60821eb8149dabed197c09d3c0eab63bf38
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Maximilian-Weigand/Input-cyttsp5-fix-array-length/20230323-215957
+        git checkout 4358a60821eb8149dabed197c09d3c0eab63bf38
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/input/touchscreen/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303272323.nRNi9Sso-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/input/touchscreen/cyttsp5.c:604:5: warning: unused variable 'cmd' [-Wunused-variable]
+           u8 cmd[2];
+              ^
+   1 warning generated.
+
+
+vim +/cmd +604 drivers/input/touchscreen/cyttsp5.c
+
+5b0c03e24a061f Alistair Francis 2022-10-31  598  
+5b0c03e24a061f Alistair Francis 2022-10-31  599  static int cyttsp5_get_hid_descriptor(struct cyttsp5 *ts,
+5b0c03e24a061f Alistair Francis 2022-10-31  600  				      struct cyttsp5_hid_desc *desc)
+5b0c03e24a061f Alistair Francis 2022-10-31  601  {
+5b0c03e24a061f Alistair Francis 2022-10-31  602  	struct device *dev = ts->dev;
+5b0c03e24a061f Alistair Francis 2022-10-31  603  	int rc;
+5b0c03e24a061f Alistair Francis 2022-10-31 @604  	u8 cmd[2];
+5b0c03e24a061f Alistair Francis 2022-10-31  605  
+5b0c03e24a061f Alistair Francis 2022-10-31  606  	rc = cyttsp5_write(ts, HID_DESC_REG, NULL, 0);
+5b0c03e24a061f Alistair Francis 2022-10-31  607  	if (rc) {
+5b0c03e24a061f Alistair Francis 2022-10-31  608  		dev_err(dev, "Failed to get HID descriptor, rc=%d\n", rc);
+5b0c03e24a061f Alistair Francis 2022-10-31  609  		return rc;
+5b0c03e24a061f Alistair Francis 2022-10-31  610  	}
+5b0c03e24a061f Alistair Francis 2022-10-31  611  
+5b0c03e24a061f Alistair Francis 2022-10-31  612  	rc = wait_for_completion_interruptible_timeout(&ts->cmd_done,
+5b0c03e24a061f Alistair Francis 2022-10-31  613  			msecs_to_jiffies(CY_HID_GET_HID_DESCRIPTOR_TIMEOUT_MS));
+5b0c03e24a061f Alistair Francis 2022-10-31  614  	if (rc <= 0) {
+5b0c03e24a061f Alistair Francis 2022-10-31  615  		dev_err(ts->dev, "HID get descriptor timed out\n");
+5b0c03e24a061f Alistair Francis 2022-10-31  616  		rc = -ETIMEDOUT;
+5b0c03e24a061f Alistair Francis 2022-10-31  617  		return rc;
+5b0c03e24a061f Alistair Francis 2022-10-31  618  	}
+5b0c03e24a061f Alistair Francis 2022-10-31  619  
+5b0c03e24a061f Alistair Francis 2022-10-31  620  	memcpy(desc, ts->response_buf, sizeof(*desc));
+5b0c03e24a061f Alistair Francis 2022-10-31  621  
+5b0c03e24a061f Alistair Francis 2022-10-31  622  	/* Check HID descriptor length and version */
+5b0c03e24a061f Alistair Francis 2022-10-31  623  	if (le16_to_cpu(desc->hid_desc_len) != sizeof(*desc) ||
+5b0c03e24a061f Alistair Francis 2022-10-31  624  	    le16_to_cpu(desc->bcd_version) != HID_VERSION) {
+5b0c03e24a061f Alistair Francis 2022-10-31  625  		dev_err(dev, "Unsupported HID version\n");
+5b0c03e24a061f Alistair Francis 2022-10-31  626  		return -ENODEV;
+5b0c03e24a061f Alistair Francis 2022-10-31  627  	}
+5b0c03e24a061f Alistair Francis 2022-10-31  628  
+5b0c03e24a061f Alistair Francis 2022-10-31  629  	return 0;
+5b0c03e24a061f Alistair Francis 2022-10-31  630  }
+5b0c03e24a061f Alistair Francis 2022-10-31  631  
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
