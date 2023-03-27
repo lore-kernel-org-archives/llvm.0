@@ -1,131 +1,297 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A37622
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 02:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAAE7C433A8
-	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 02:42:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1679884930;
-	bh=6VzDqX48Vl38IiLh2rkurFRzDn0V2PY1IZwfkVKLHBs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=le+wVaujnmigkIxLcC+BBlb+L/EMpxeO7Na5IaemZUVhnFs3HUxmNZHz7oPcctthu
-	 xKbTOv+VAm17PPXvskg+agwZs0QJhMklxMh7wf3BOpHkVrbgbEILQgzGLzYvOqQGUv
-	 e/poab9zYziebClPUO3ZyGyUhe8NMoonf9lc+0uyfnLM7t9JVXmEnuizf4bL/8xGdR
-	 2OxDPf0urRfD7akRCN+pa3di3mvIwCrXCnhr3DvnDUOx004YT6uAL7fifIWYlgoKVP
-	 Xj+euO8CwKwp5AMM/ca5VYm5y1nAOTrHQEQ4ZnqFpYT701MxbojYvK6BN3G8CgmxFs
-	 qK3ALWFQo7jAA==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-17aaa51a911so7822604fac.5
-        for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 19:42:10 -0700 (PDT)
-X-Gm-Message-State: AAQBX9c91uSz8/UY7eMovPWVZc4ee6Ldv71JbyqltxK/CRPENj6fpSUx
-	/e3Bx1EgYTKGgP7vCH+GukwrBl4ZguaJX1By8uA=
-X-Google-Smtp-Source: AKy350bMxmeywLQZtcIhcbwfTUAlICv85a5HdlyEXx820LhBAGY0y4TcQppgHU2tLzA5NynqOEARjQGH1XU2iOfJIuY=
-X-Received: by 2002:a05:6871:e86:b0:17e:d9e2:a55c with SMTP id
- vl6-20020a0568710e8600b0017ed9e2a55cmr3302021oab.11.1679884929854; Sun, 26
- Mar 2023 19:42:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985FB622;
+	Mon, 27 Mar 2023 02:53:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679885583; x=1711421583;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9eVdGH/DopYEekjVEJ36PqM+ZaOFt22BlZBQTp7DdEk=;
+  b=acHyGy3PXnftHpRe5dNTQ0NLk1V1TPnHXKRM7d4b/AYMNrvvXQ6THckO
+   OMDo3lFWc2u+LP9X9B6auSP8NFw57z7AAbwy6QRMH33PNT87WqXIZfuEi
+   T2USbL/Ssfq7VfsesNZ9zwVr2Xm6RRRM6GPM957/QY7U6XpD7d8LkI8fI
+   eY8MACsrPQnsTCa4Fs9wuC+TL0S7NeJu98GWA8DdwXtQT54N6u5BOROMb
+   s/l+yFHryxY4k3ccFCEQoTw+bQaT1+tH+Q3EoMfpPl+bpodJPTzoqelqz
+   jzRPgyMlhG7k5o8o1YD2CW05VUngsizDWsiTmLEci3WS2V4KfX2YzOC0p
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="324050336"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="324050336"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 19:53:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="929310306"
+X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
+   d="scan'208";a="929310306"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Mar 2023 19:53:01 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pgcyi-000HUl-2g;
+	Mon, 27 Mar 2023 02:53:00 +0000
+Date: Mon, 27 Mar 2023 10:52:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar
+ within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed
+ union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to
+ 'struct dw_edma_v0_ch_regs' being packed, wh...
+Message-ID: <202303271012.Jah7vYLr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230326182120.194541-1-hi@alyssa.is>
-In-Reply-To: <20230326182120.194541-1-hi@alyssa.is>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 27 Mar 2023 11:41:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR6W9=dOwV8E=biPQ_KGF7LXcb2-6PdSevej7H0xs7EUA@mail.gmail.com>
-Message-ID: <CAK7LNAR6W9=dOwV8E=biPQ_KGF7LXcb2-6PdSevej7H0xs7EUA@mail.gmail.com>
-Subject: Re: [PATCH v2] purgatory: fix disabling debug info
-To: Alyssa Ross <hi@alyssa.is>
-Cc: Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Mar 27, 2023 at 3:23=E2=80=AFAM Alyssa Ross <hi@alyssa.is> wrote:
->
-> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
-> -Wa versions of both of those if building with Clang and GNU as.  As a
-> result, debug info was being generated for the purgatory objects, even
-> though the intention was that it not be.
->
-> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
-> Signed-off-by: Alyssa Ross <hi@alyssa.is>
-> Cc: stable@vger.kernel.org
+Hi Arnd,
 
+FYI, the error/warning still remains.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   197b6b60ae7bc51dd0814953c562833143b292aa
+commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
+date:   12 months ago
+config: arm-randconfig-r002-20230327 (https://download.01.org/0day-ci/archive/20230327/202303271012.Jah7vYLr-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/
 
-Thanks, looks good to me.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303271012.Jah7vYLr-lkp@intel.com/
 
-I can offer to pick this up to my tree later,
-but I will wait for Ack from the arch maintainers
-and other comments.
+All warnings (new ones prefixed by >>):
 
-
-
-
-
-
-
-> ---
->
-> Difference from v2: replace each AFLAGS_REMOVE_* assignment with a
-> single aflags-remove-y line, and use foreach to add the -Wa versions,
-> as suggested by Masahiro Yamada.
->
->  arch/riscv/purgatory/Makefile | 7 +------
->  arch/x86/purgatory/Makefile   | 3 +--
->  2 files changed, 2 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefil=
-e
-> index d16bf715a586..5730797a6b40 100644
-> --- a/arch/riscv/purgatory/Makefile
-> +++ b/arch/riscv/purgatory/Makefile
-> @@ -84,12 +84,7 @@ CFLAGS_string.o                      +=3D $(PURGATORY_=
-CFLAGS)
->  CFLAGS_REMOVE_ctype.o          +=3D $(PURGATORY_CFLAGS_REMOVE)
->  CFLAGS_ctype.o                 +=3D $(PURGATORY_CFLAGS)
->
-> -AFLAGS_REMOVE_entry.o          +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_memcpy.o         +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_memset.o         +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strcmp.o         +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strlen.o         +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_strncmp.o                +=3D -Wa,-gdwarf-2
-> +asflags-remove-y               +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5,=
- $(x) -Wa,$(x))
->
->  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
->                 $(call if_changed,ld)
-> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-> index 17f09dc26381..82fec66d46d2 100644
-> --- a/arch/x86/purgatory/Makefile
-> +++ b/arch/x86/purgatory/Makefile
-> @@ -69,8 +69,7 @@ CFLAGS_sha256.o                       +=3D $(PURGATORY_=
-CFLAGS)
->  CFLAGS_REMOVE_string.o         +=3D $(PURGATORY_CFLAGS_REMOVE)
->  CFLAGS_string.o                        +=3D $(PURGATORY_CFLAGS)
->
-> -AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -Wa,-gdwarf-2
-> -AFLAGS_REMOVE_entry64.o                        +=3D -Wa,-gdwarf-2
-> +asflags-remove-y               +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5,=
- $(x) -Wa,$(x))
->
->  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
->                 $(call if_changed,ld)
->
-> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
-> --
-> 2.37.1
->
+   In file included from drivers/dma/dw-edma/dw-edma-v0-core.c:13:
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:37:4: warning: field sar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:31:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } sar;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:44:4: warning: field dar within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:38:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } dar;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:51:4: warning: field llp within 'struct dw_edma_v0_ch_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:45:2)' and is usually due to 'struct dw_edma_v0_ch_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } llp;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:172:4: warning: field rd_err_status within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:166:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rd_err_status;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:182:4: warning: field rd_done_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:176:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rd_done_imwr;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:189:4: warning: field rd_abort_imwr within 'struct dw_edma_v0_regs' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:183:2)' and is usually due to 'struct dw_edma_v0_regs' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rd_abort_imwr;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:71:4: warning: field wr_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:65:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } wr_engine_hshake_cnt;
+             ^
+>> drivers/dma/dw-edma/dw-edma-v0-regs.h:79:4: warning: field rd_engine_hshake_cnt within 'struct dw_edma_v0_unroll' is less aligned than 'union (unnamed union at drivers/dma/dw-edma/dw-edma-v0-regs.h:73:2)' and is usually due to 'struct dw_edma_v0_unroll' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+           } rd_engine_hshake_cnt;
+             ^
+   8 warnings generated.
 
 
---=20
-Best Regards
-Masahiro Yamada
+vim +37 drivers/dma/dw-edma/dw-edma-v0-regs.h
+
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04   26  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04   27  struct dw_edma_v0_ch_regs {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   28  	u32 ch_control1;				/* 0x0000 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   29  	u32 ch_control2;				/* 0x0004 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   30  	u32 transfer_size;				/* 0x0008 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   31  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   32  		u64 reg;				/* 0x000c..0x0010 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   33  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   34  			u32 lsb;			/* 0x000c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   35  			u32 msb;			/* 0x0010 */
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04   36  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  @37  	} sar;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   38  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   39  		u64 reg;				/* 0x0014..0x0018 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   40  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   41  			u32 lsb;			/* 0x0014 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   42  			u32 msb;			/* 0x0018 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   43  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  @44  	} dar;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   45  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   46  		u64 reg;				/* 0x001c..0x0020 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   47  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   48  			u32 lsb;			/* 0x001c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   49  			u32 msb;			/* 0x0020 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   50  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  @51  	} llp;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   52  } __packed;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04   53  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04   54  struct dw_edma_v0_ch {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   55  	struct dw_edma_v0_ch_regs wr;			/* 0x0200 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   56  	u32 padding_1[55];				/* 0x0224..0x02fc */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   57  	struct dw_edma_v0_ch_regs rd;			/* 0x0300 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   58  	u32 padding_2[55];				/* 0x0324..0x03fc */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   59  } __packed;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04   60  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04   61  struct dw_edma_v0_unroll {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   62  	u32 padding_1;					/* 0x00f8 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   63  	u32 wr_engine_chgroup;				/* 0x0100 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   64  	u32 rd_engine_chgroup;				/* 0x0104 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   65  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   66  		u64 reg;				/* 0x0108..0x010c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   67  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   68  			u32 lsb;			/* 0x0108 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   69  			u32 msb;			/* 0x010c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   70  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  @71  	} wr_engine_hshake_cnt;
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   72  	u32 padding_2[2];				/* 0x0110..0x0114 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   73  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   74  		u64 reg;				/* 0x0120..0x0124 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   75  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   76  			u32 lsb;			/* 0x0120 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   77  			u32 msb;			/* 0x0124 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18   78  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  @79  	} rd_engine_hshake_cnt;
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   80  	u32 padding_3[2];				/* 0x0120..0x0124 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   81  	u32 wr_ch0_pwr_en;				/* 0x0128 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   82  	u32 wr_ch1_pwr_en;				/* 0x012c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   83  	u32 wr_ch2_pwr_en;				/* 0x0130 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   84  	u32 wr_ch3_pwr_en;				/* 0x0134 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   85  	u32 wr_ch4_pwr_en;				/* 0x0138 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   86  	u32 wr_ch5_pwr_en;				/* 0x013c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   87  	u32 wr_ch6_pwr_en;				/* 0x0140 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   88  	u32 wr_ch7_pwr_en;				/* 0x0144 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   89  	u32 padding_4[8];				/* 0x0148..0x0164 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   90  	u32 rd_ch0_pwr_en;				/* 0x0168 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   91  	u32 rd_ch1_pwr_en;				/* 0x016c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   92  	u32 rd_ch2_pwr_en;				/* 0x0170 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   93  	u32 rd_ch3_pwr_en;				/* 0x0174 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   94  	u32 rd_ch4_pwr_en;				/* 0x0178 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   95  	u32 rd_ch5_pwr_en;				/* 0x018c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   96  	u32 rd_ch6_pwr_en;				/* 0x0180 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   97  	u32 rd_ch7_pwr_en;				/* 0x0184 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   98  	u32 padding_5[30];				/* 0x0188..0x01fc */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18   99  	struct dw_edma_v0_ch ch[EDMA_V0_MAX_NR_CH];	/* 0x0200..0x1120 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  100  } __packed;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  101  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  102  struct dw_edma_v0_legacy {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  103  	u32 viewport_sel;				/* 0x00f8 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  104  	struct dw_edma_v0_ch_regs ch;			/* 0x0100..0x0120 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  105  } __packed;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  106  
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  107  struct dw_edma_v0_regs {
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  108  	/* eDMA global registers */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  109  	u32 ctrl_data_arb_prior;			/* 0x0000 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  110  	u32 padding_1;					/* 0x0004 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  111  	u32 ctrl;					/* 0x0008 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  112  	u32 wr_engine_en;				/* 0x000c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  113  	u32 wr_doorbell;				/* 0x0010 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  114  	u32 padding_2;					/* 0x0014 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  115  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  116  		u64 reg;				/* 0x0018..0x001c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  117  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  118  			u32 lsb;			/* 0x0018 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  119  			u32 msb;			/* 0x001c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  120  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  121  	} wr_ch_arb_weight;
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  122  	u32 padding_3[3];				/* 0x0020..0x0028 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  123  	u32 rd_engine_en;				/* 0x002c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  124  	u32 rd_doorbell;				/* 0x0030 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  125  	u32 padding_4;					/* 0x0034 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  126  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  127  		u64 reg;				/* 0x0038..0x003c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  128  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  129  			u32 lsb;			/* 0x0038 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  130  			u32 msb;			/* 0x003c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  131  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  132  	} rd_ch_arb_weight;
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  133  	u32 padding_5[3];				/* 0x0040..0x0048 */
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  134  	/* eDMA interrupts registers */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  135  	u32 wr_int_status;				/* 0x004c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  136  	u32 padding_6;					/* 0x0050 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  137  	u32 wr_int_mask;				/* 0x0054 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  138  	u32 wr_int_clear;				/* 0x0058 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  139  	u32 wr_err_status;				/* 0x005c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  140  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  141  		u64 reg;				/* 0x0060..0x0064 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  142  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  143  			u32 lsb;			/* 0x0060 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  144  			u32 msb;			/* 0x0064 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  145  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  146  	} wr_done_imwr;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  147  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  148  		u64 reg;				/* 0x0068..0x006c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  149  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  150  			u32 lsb;			/* 0x0068 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  151  			u32 msb;			/* 0x006c */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  152  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  153  	} wr_abort_imwr;
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  154  	u32 wr_ch01_imwr_data;				/* 0x0070 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  155  	u32 wr_ch23_imwr_data;				/* 0x0074 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  156  	u32 wr_ch45_imwr_data;				/* 0x0078 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  157  	u32 wr_ch67_imwr_data;				/* 0x007c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  158  	u32 padding_7[4];				/* 0x0080..0x008c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  159  	u32 wr_linked_list_err_en;			/* 0x0090 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  160  	u32 padding_8[3];				/* 0x0094..0x009c */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  161  	u32 rd_int_status;				/* 0x00a0 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  162  	u32 padding_9;					/* 0x00a4 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  163  	u32 rd_int_mask;				/* 0x00a8 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  164  	u32 rd_int_clear;				/* 0x00ac */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  165  	u32 padding_10;					/* 0x00b0 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  166  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  167  		u64 reg;				/* 0x00b4..0x00b8 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  168  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  169  			u32 lsb;			/* 0x00b4 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  170  			u32 msb;			/* 0x00b8 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  171  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @172  	} rd_err_status;
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  173  	u32 padding_11[2];				/* 0x00bc..0x00c0 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  174  	u32 rd_linked_list_err_en;			/* 0x00c4 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  175  	u32 padding_12;					/* 0x00c8 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  176  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  177  		u64 reg;				/* 0x00cc..0x00d0 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  178  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  179  			u32 lsb;			/* 0x00cc */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  180  			u32 msb;			/* 0x00d0 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  181  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @182  	} rd_done_imwr;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  183  	union {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  184  		u64 reg;				/* 0x00d4..0x00d8 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  185  		struct {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  186  			u32 lsb;			/* 0x00d4 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  187  			u32 msb;			/* 0x00d8 */
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  188  		};
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @189  	} rd_abort_imwr;
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  190  	u32 rd_ch01_imwr_data;				/* 0x00dc */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  191  	u32 rd_ch23_imwr_data;				/* 0x00e0 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  192  	u32 rd_ch45_imwr_data;				/* 0x00e4 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  193  	u32 rd_ch67_imwr_data;				/* 0x00e8 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  194  	u32 padding_13[4];				/* 0x00ec..0x00f8 */
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  195  	/* eDMA channel context grouping */
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  196  	union dw_edma_v0_type {
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  197  		struct dw_edma_v0_legacy legacy;	/* 0x00f8..0x0120 */
+b79f17517ad8c9 Gustavo Pimentel 2021-02-18  198  		struct dw_edma_v0_unroll unroll;	/* 0x00f8..0x1120 */
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  199  	} type;
+04e0a39fc10f82 Gustavo Pimentel 2021-02-18  200  } __packed;
+7e4b8a4fbe2cec Gustavo Pimentel 2019-06-04  201  
+
+:::::: The code at line 37 was first introduced by commit
+:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
+
+:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
+:::::: CC: Vinod Koul <vkoul@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
