@@ -1,123 +1,107 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47E863B6;
-	Mon, 27 Mar 2023 17:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679936422; x=1711472422;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KpSiSJTADRt2+AXtkSI1jnd1/gM6eG11nprHObpr5r4=;
-  b=IP3NHbApJIzTFg+HkhQyQ4lMdXnjDQ1Cnrxd36974xuPlHNubMEoi6ju
-   TReGZ3fNcd+nPLpM1xVU24dpun0tPfs7Qo11eAtfTX4qYnklon85kkObp
-   w3R/MdRyIhesrPyodJjzgMrGbtX254S+BBfwRy2/0FvydGWrkM4xZGXwq
-   EmKEEhQoo2i3HzZE2zVGMOxKoerD1kj0VMBi3+8sDyQDsFPLnnsKa1gm/
-   taVdR8FlX9X5AWiVgXUqLzTtKea6hfARp1k3XuwoZXSHu//L5at4jW2Hd
-   8k8cpOl172CRgJRCYoYMJbaUBN1cEB8MIqaSfjyhVXCtoUGoYd3ZnRtyN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="328768096"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="328768096"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 10:00:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="677048654"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="677048654"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2023 10:00:19 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pgqCg-000HrP-31;
-	Mon, 27 Mar 2023 17:00:18 +0000
-Date: Tue, 28 Mar 2023 01:00:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devel@driverdev.osuosl.org
-Subject: [driver-core:class_cleanup 34/80]
- arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:129:6: error: variable 'ret' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <202303280045.4oaaezcn-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB4963B6
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 17:03:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3048CC433EF;
+	Mon, 27 Mar 2023 17:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679936619;
+	bh=DNwoMAHx/naFTub4e3g7Qvz60taxpwVzggpquY2OoJ0=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=TSLfZXWk/AS39G+IOvNDv9h+VS8ZG2iJMprsb7TBdpu6+HHfhygzsE3nS5ukHZHZA
+	 mlUnFW15tHVhp63v8Xt2oYuSba24MD9o/kZseGNC31rGFcPS6EOnEeuzGsmUT0jZEA
+	 vfdggh4rwIWFCb89PQfUFRNjaYdyTg1oR6RULq/EmdG3vvIMn0yoU5yN0CIoLMl+N9
+	 8qtem2gVxTMYj6On1AEhtyNujuMUiH2ffnkPH0WF7DiuSzK/vuq+Gz51oO/HDKyK20
+	 Ihn1oY+vXxjZ891UVLWughgZ21iJqVy72yrvAPEsgyF72ooO6IRQHPCPe3JS5Rr1QQ
+	 AyNhC+IwqnPjQ==
+From: Kalle Valo <kvalo@kernel.org>
+To: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,  Linus Torvalds <torvalds@linux-foundation.org>,  linux-toolchains@vger.kernel.org,  llvm@lists.linux.dev,  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,  dri-devel@lists.freedesktop.org,  Nathan Chancellor <nathan@kernel.org>,  sedat.dilek@gmail.com
+Subject: Re: Linux 6.3-rc3
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+	<20230320180501.GA598084@dev-arch.thelio-3990X>
+	<CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+	<20230320185337.GA615556@dev-arch.thelio-3990X>
+	<87pm91uf9c.fsf@kernel.org>
+	<CA+icZUUYyqhV2HFzVtpi_KjBoYxjk7OB0UBVd2mX6abjmYhDjg@mail.gmail.com>
+	<CAHk-=whdrvCkSWh=BRrwZwNo3=yLBXXM88NGx8VEpP1VTgmkyQ@mail.gmail.com>
+	<CAK7LNATe7Ah-ow9wYGrtL9i4z-VD=MCo=sJjbC_S0ofEoH6CFQ@mail.gmail.com>
+	<87bkke5g31.fsf@intel.com>
+Date: Mon, 27 Mar 2023 20:03:34 +0300
+In-Reply-To: <87bkke5g31.fsf@intel.com> (Jani Nikula's message of "Mon, 27 Mar
+	2023 19:12:02 +0300")
+Message-ID: <87jzz2cejd.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git class_cleanup
-head:   c6dd61fdeee23ae8743e3ac8234ab05f94bcc601
-commit: c93bd175414ac43d7ea6cb2a17f49eb91af03f00 [34/80] powerpc/fsl: move to use bus_get_dev_root()
-config: powerpc-randconfig-r003-20230326 (https://download.01.org/0day-ci/archive/20230328/202303280045.4oaaezcn-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=c93bd175414ac43d7ea6cb2a17f49eb91af03f00
-        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-        git fetch --no-tags driver-core class_cleanup
-        git checkout c93bd175414ac43d7ea6cb2a17f49eb91af03f00
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/sysdev/
+Jani Nikula <jani.nikula@linux.intel.com> writes:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303280045.4oaaezcn-lkp@intel.com/
+> On Sat, 25 Mar 2023, Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+>> On Thu, Mar 23, 2023 at 1:56=E2=80=AFAM Linus Torvalds
+>> <torvalds@linux-foundation.org> wrote:
+>>>
+>>> On Wed, Mar 22, 2023 at 9:40=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.=
+com> wrote:
+>>> >
+>>> > You have to pass `make LLVM=3D1` in any case... to `oldconfig` or when
+>>> > adding any MAKEFLAGS like -j${number-of-available-cpus}.
+>>>
+>>> I actually think we should look (again) at just making the compiler
+>>> choice (and the prefix) be a Kconfig option.
+>>>
+>>> That would simplify *so* many use cases.
+>>>
+>>> It used to be that gcc was "THE compiler" and anything else was just
+>>> an odd toy special case, but that's clearly not true any more.
+>>>
+>>> So it would be lovely to make the kernel choice a Kconfig choice - so
+>>> you'd set it only at config time, and then after that a kernel build
+>>> wouldn't need special flags any more, and you'd never need to play
+>>> games with GNUmakefile or anything like that.
+>>
+>>
+>> Presumably, this is the right direction.
+>>
+>> To achieve it, Kconfig needs to have some mechanism to evaluate
+>> shell commands dynamically.
+>>
+>> If a user switches the toolchain set between GCC and LLVM
+>> while running the Kconfig, $(cc-option) in Kconfig files must
+>> be re-calculated.
+>>
+>> Currently, Kconfig cannot do it. All macros are static - they are
+>> expanded in the parse stage, and become constant strings.
+>>
+>> Ulf Magnusson and I discussed the dynamic approach a few years back,
+>> but I adopted the static way since it is much simpler.
+>> We need to reconsider the dynamic approach to do this correctly.
+>> I do not think it is too difficult technically.
+>> We just need to come up with a decent syntax.
+>
+> I acknowledge being clueless about mostly everything that requires. But
+> in the mean time, how about just adding something like:
+>
+> -include .env
+>
+> near the beginning of the top Makefile?
+>
+> You could shove the tools or ARCH or output dir etc. there, so you don't
+> have to remember to add them on the command line every time.
 
-All errors (new ones prefixed by >>):
+Yes, please! Something like this, but officially supported, would be
+just perfect for a lazy person like me.
 
->> arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:129:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-           if (dev_root) {
-               ^~~~~~~~
-   arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:136:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:129:2: note: remove the 'if' if its condition is always true
-           if (dev_root) {
-           ^~~~~~~~~~~~~~
-   arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c:120:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 error generated.
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
-vim +129 arch/powerpc/sysdev/fsl_mpic_timer_wakeup.c
-
-   113	
-   114	static struct device_attribute mpic_attributes = __ATTR(timer_wakeup, 0644,
-   115				fsl_timer_wakeup_show, fsl_timer_wakeup_store);
-   116	
-   117	static int __init fsl_wakeup_sys_init(void)
-   118	{
-   119		struct device *dev_root;
-   120		int ret;
-   121	
-   122		fsl_wakeup = kzalloc(sizeof(struct fsl_mpic_timer_wakeup), GFP_KERNEL);
-   123		if (!fsl_wakeup)
-   124			return -ENOMEM;
-   125	
-   126		INIT_WORK(&fsl_wakeup->free_work, fsl_free_resource);
-   127	
-   128		dev_root = bus_get_dev_root(&mpic_subsys);
- > 129		if (dev_root) {
-   130			ret = device_create_file(dev_root, &mpic_attributes);
-   131			put_device(dev_root);
-   132			if (ret)
-   133				kfree(fsl_wakeup);
-   134		}
-   135	
-   136		return ret;
-   137	}
-   138	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes
