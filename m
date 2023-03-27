@@ -1,157 +1,131 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0589F62A;
-	Mon, 27 Mar 2023 02:12:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679883124; x=1711419124;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8S/SepVjMRx72JXxp5dop7Uh13vNqZ05re9q9sjARYo=;
-  b=L3KeGwNpSBu60pAtB7bi77p7hx8IzJYOcdikAi2YHZGM8L0iGrf4eWgY
-   5RRheemUgiwdYt+F/ZZE1A0PtEpO7dp9F14RgLoGQ7TF4DRXfMS7k4yq2
-   1ywiwjGig1UIHf8ylwpYkSRQt167mK5yRjodzjhfl1wcE2fnmyQm55GUt
-   fE1XllRRdu/pCsdlAu4Yy4YQWxzfJBM29rq9PqVhmXU3iC0YL5/hQo3V0
-   d2UDoQZXfQGB/cIIy4W5c9CEeHoZbqX2SqgPfbUB0qmkQITwjh2A96kU3
-   bjw2vgZlWofEXzuwV2bRY0nIwj7pHQuERs9v3DpwQZcFgiFvQtIyCJevE
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="367902106"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="367902106"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2023 19:12:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10661"; a="857502189"
-X-IronPort-AV: E=Sophos;i="5.98,293,1673942400"; 
-   d="scan'208";a="857502189"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Mar 2023 19:12:00 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pgcL2-000HTf-0C;
-	Mon, 27 Mar 2023 02:12:00 +0000
-Date: Mon, 27 Mar 2023 10:11:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Yang <mmyangfl@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Nick Alcock <nick.alcock@oracle.com>
-Subject: Re: [PATCH 4/4] clk: hisilicon: Migrate devm APIs
-Message-ID: <202303271023.do1t8Cfa-lkp@intel.com>
-References: <20230326052757.297551-5-mmyangfl@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A37622
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 02:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAAE7C433A8
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 02:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1679884930;
+	bh=6VzDqX48Vl38IiLh2rkurFRzDn0V2PY1IZwfkVKLHBs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=le+wVaujnmigkIxLcC+BBlb+L/EMpxeO7Na5IaemZUVhnFs3HUxmNZHz7oPcctthu
+	 xKbTOv+VAm17PPXvskg+agwZs0QJhMklxMh7wf3BOpHkVrbgbEILQgzGLzYvOqQGUv
+	 e/poab9zYziebClPUO3ZyGyUhe8NMoonf9lc+0uyfnLM7t9JVXmEnuizf4bL/8xGdR
+	 2OxDPf0urRfD7akRCN+pa3di3mvIwCrXCnhr3DvnDUOx004YT6uAL7fifIWYlgoKVP
+	 Xj+euO8CwKwp5AMM/ca5VYm5y1nAOTrHQEQ4ZnqFpYT701MxbojYvK6BN3G8CgmxFs
+	 qK3ALWFQo7jAA==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-17aaa51a911so7822604fac.5
+        for <llvm@lists.linux.dev>; Sun, 26 Mar 2023 19:42:10 -0700 (PDT)
+X-Gm-Message-State: AAQBX9c91uSz8/UY7eMovPWVZc4ee6Ldv71JbyqltxK/CRPENj6fpSUx
+	/e3Bx1EgYTKGgP7vCH+GukwrBl4ZguaJX1By8uA=
+X-Google-Smtp-Source: AKy350bMxmeywLQZtcIhcbwfTUAlICv85a5HdlyEXx820LhBAGY0y4TcQppgHU2tLzA5NynqOEARjQGH1XU2iOfJIuY=
+X-Received: by 2002:a05:6871:e86:b0:17e:d9e2:a55c with SMTP id
+ vl6-20020a0568710e8600b0017ed9e2a55cmr3302021oab.11.1679884929854; Sun, 26
+ Mar 2023 19:42:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230326052757.297551-5-mmyangfl@gmail.com>
+References: <20230326182120.194541-1-hi@alyssa.is>
+In-Reply-To: <20230326182120.194541-1-hi@alyssa.is>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 27 Mar 2023 11:41:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR6W9=dOwV8E=biPQ_KGF7LXcb2-6PdSevej7H0xs7EUA@mail.gmail.com>
+Message-ID: <CAK7LNAR6W9=dOwV8E=biPQ_KGF7LXcb2-6PdSevej7H0xs7EUA@mail.gmail.com>
+Subject: Re: [PATCH v2] purgatory: fix disabling debug info
+To: Alyssa Ross <hi@alyssa.is>
+Cc: Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on fff5a5e7f528b2ed2c335991399a766c2cf01103]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/clk-hisilicon-Add-helper-functions-for-platform-driver/20230326-133108
-base:   fff5a5e7f528b2ed2c335991399a766c2cf01103
-patch link:    https://lore.kernel.org/r/20230326052757.297551-5-mmyangfl%40gmail.com
-patch subject: [PATCH 4/4] clk: hisilicon: Migrate devm APIs
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20230327/202303271023.do1t8Cfa-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/7fd49da57e4d2205c1f5842dc29fc79c0f89263e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Yang/clk-hisilicon-Add-helper-functions-for-platform-driver/20230326-133108
-        git checkout 7fd49da57e4d2205c1f5842dc29fc79c0f89263e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303271023.do1t8Cfa-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/clk/hisilicon/clk-hi3620.c:435:14: error: use of undeclared identifier 'clks'
-                           __func__, clks[i].name);
-                                     ^
->> drivers/clk/hisilicon/clk-hi3620.c:435:19: error: use of undeclared identifier 'i'
-                           __func__, clks[i].name);
-                                          ^
->> drivers/clk/hisilicon/clk-hi3620.c:436:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct clk_hw *' [-Wint-conversion]
-                   return ret;
-                          ^~~
-   3 errors generated.
---
->> drivers/clk/hisilicon/clk-hix5hd2.c:300:17: error: member reference type 'struct clk_hw_onecell_data *' is a pointer; did you mean to use '->'?
-                   data->clk_data.clks[clks[i].id] = clk;
-                   ~~~~~~~~~~~~~~^
-                                 ->
->> drivers/clk/hisilicon/clk-hix5hd2.c:300:18: error: no member named 'clks' in 'struct clk_hw_onecell_data'
-                   data->clk_data.clks[clks[i].id] = clk;
-                   ~~~~~~~~~~~~~~ ^
-   2 errors generated.
+On Mon, Mar 27, 2023 at 3:23=E2=80=AFAM Alyssa Ross <hi@alyssa.is> wrote:
+>
+> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+> -Wa versions of both of those if building with Clang and GNU as.  As a
+> result, debug info was being generated for the purgatory objects, even
+> though the intention was that it not be.
+>
+> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+> Signed-off-by: Alyssa Ross <hi@alyssa.is>
+> Cc: stable@vger.kernel.org
 
 
-vim +/clks +435 drivers/clk/hisilicon/clk-hi3620.c
 
-   399	
-   400	static struct clk_hw *
-   401	clk_register_hisi_mmc(struct device *dev, const struct hisi_mmc_clock *mmc_clk,
-   402			      void __iomem *base)
-   403	{
-   404		struct clk_mmc *mclk;
-   405		struct clk_init_data init;
-   406		int ret;
-   407	
-   408		mclk = devm_kzalloc(dev, sizeof(*mclk), GFP_KERNEL);
-   409		if (!mclk)
-   410			return ERR_PTR(-ENOMEM);
-   411	
-   412		init.name = mmc_clk->name;
-   413		init.ops = &clk_mmc_ops;
-   414		init.flags = mmc_clk->flags;
-   415		init.parent_names = (mmc_clk->parent_name ? &mmc_clk->parent_name : NULL);
-   416		init.num_parents = (mmc_clk->parent_name ? 1 : 0);
-   417		mclk->hw.init = &init;
-   418	
-   419		mclk->id = mmc_clk->id;
-   420		mclk->clken_reg = base + mmc_clk->clken_reg;
-   421		mclk->clken_bit = mmc_clk->clken_bit;
-   422		mclk->div_reg = base + mmc_clk->div_reg;
-   423		mclk->div_off = mmc_clk->div_off;
-   424		mclk->div_bits = mmc_clk->div_bits;
-   425		mclk->drv_reg = base + mmc_clk->drv_reg;
-   426		mclk->drv_off = mmc_clk->drv_off;
-   427		mclk->drv_bits = mmc_clk->drv_bits;
-   428		mclk->sam_reg = base + mmc_clk->sam_reg;
-   429		mclk->sam_off = mmc_clk->sam_off;
-   430		mclk->sam_bits = mmc_clk->sam_bits;
-   431	
-   432		ret = devm_clk_hw_register(dev, &mclk->hw);
-   433		if (ret) {
-   434			dev_err(dev, "%s: failed to register clock %s\n",
- > 435				__func__, clks[i].name);
- > 436			return ret;
-   437		}
-   438	
-   439		return &mclk->hw;
-   440	}
-   441	
+Thanks, looks good to me.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I can offer to pick this up to my tree later,
+but I will wait for Ack from the arch maintainers
+and other comments.
+
+
+
+
+
+
+
+> ---
+>
+> Difference from v2: replace each AFLAGS_REMOVE_* assignment with a
+> single aflags-remove-y line, and use foreach to add the -Wa versions,
+> as suggested by Masahiro Yamada.
+>
+>  arch/riscv/purgatory/Makefile | 7 +------
+>  arch/x86/purgatory/Makefile   | 3 +--
+>  2 files changed, 2 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefil=
+e
+> index d16bf715a586..5730797a6b40 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -84,12 +84,7 @@ CFLAGS_string.o                      +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_ctype.o          +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_ctype.o                 +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_entry.o          +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memcpy.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memset.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strcmp.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strlen.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strncmp.o                +=3D -Wa,-gdwarf-2
+> +asflags-remove-y               +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5,=
+ $(x) -Wa,$(x))
+>
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 17f09dc26381..82fec66d46d2 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -69,8 +69,7 @@ CFLAGS_sha256.o                       +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_string.o         +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_string.o                        +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_entry64.o                        +=3D -Wa,-gdwarf-2
+> +asflags-remove-y               +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5,=
+ $(x) -Wa,$(x))
+>
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+>
+> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+> --
+> 2.37.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
