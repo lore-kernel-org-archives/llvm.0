@@ -1,231 +1,141 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9B579DD;
-	Mon, 27 Mar 2023 22:09:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679954979; x=1711490979;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6BHbMQs1pxGDMwXVK/xTlLZeRHbo+B3K718wGX0LvpU=;
-  b=mq93P9nwXm9vdhUun9P4HT6PW44hIyBxreZF0RVYReRM2QLR3KOc1Rdx
-   y2587uNNPXG2p3chA8ndtL38tFhsKszUHVVFbi5cIS4iNSbBW84hnZnLd
-   KsU/no84FX1taByPc7hvlc+ZCqqSQBwmPCwTI1v/cF6Ess39wUAlSj7Li
-   FX/09Cq3vfEKpRjIIvzxZZ+TxYsoYa378VhF/Ia4SRRd7KzVxKG5heXv3
-   aaCDrBGnM2agVfb9g8S+/RYCZyexg1btA6RvBRVjuGSMflcLQrpU/4BOE
-   YfyEZi6/fRyqp2HxWSJVObDGuCHwMH2U7Wsgjkhutv8nq5rP4GjwjUqB7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="403005174"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="403005174"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 15:09:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="929624944"
-X-IronPort-AV: E=Sophos;i="5.98,295,1673942400"; 
-   d="scan'208";a="929624944"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Mar 2023 15:09:36 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pgv1z-000I3D-2y;
-	Mon, 27 Mar 2023 22:09:35 +0000
-Date: Tue, 28 Mar 2023 06:08:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Greg Ungerer <gerg@uclinux.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, uclinux-dev@uclinux.org
-Subject: [gerg-m68knommu:armnommu 3/3]
- arch/arm/include/asm/glue-cache.h:126:2: error: Unknown cache maintenance
- model
-Message-ID: <202303280632.SyiLf8ne-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE6379DD
+	for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 22:12:36 +0000 (UTC)
+Received: by mail-pf1-f173.google.com with SMTP id g7so6717698pfu.2
+        for <llvm@lists.linux.dev>; Mon, 27 Mar 2023 15:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679955155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V7ZNQ5vjpwd7R42XQrkWv8310d6dUWZkU3XZU5SoAJo=;
+        b=Q1yKGQLoJfM+HWC7tP5mFSqWLk4J0mVSYBJ2lQf2l3yZQEnGF0+dXkdNTH+MrhfUNM
+         OXLWPIC2xI+XdrAznpFxXQoi6DhZ+FxiafpprzeZIi4YfHHNVOe53bcy1DsOWzEPMfeF
+         PGr/eYKlzUohPyMY31QdHgsBHR6d3QFWSXqKGyClR9cuBLBPtEuogiWZP+B/z5Teo2Dr
+         DYdpl3QQW0z9GZYN+MSUMmlGV7bg+IH1MB2mN+bBiSIYK/6lEGL9OnDB29vLBJNLamH6
+         nWljN0GZfjFF5K5WhenQxTIpJutOrhy+blWEAkArggo0viTvvj177ckimP0gO/eafVwi
+         yvxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679955155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V7ZNQ5vjpwd7R42XQrkWv8310d6dUWZkU3XZU5SoAJo=;
+        b=KGxfnKfXi/u58JqPWxPX/fagRFoj4X7uGqKvRTcMRdDz4XLmweCYl6bYaJP0pMSyC+
+         XgtwDbsSfDM+bwCWpk/3oz4rQlEq5fk/UEdO5mSyfDXXBqvJhZjCppA/lXJjLLpNqGYk
+         bV6yOVgAjOehFRQOlZsQZKQ7wdQ+y17N6aaUeKe/Qu/NSnEgpm4pOqqUHzdB131fZ+1G
+         sANfgWjz2CKhVWl6jYxw/xQtLo6UQXAegRGLStRhjIOne8zwZuU0c67+CEIPKxYBjbpg
+         XvkEy/s9fsVvYrWZIkI6DMacIZ0DfcXZKbsDyT0B23KqSEq0OeqLF2q6siluqy5NN6km
+         AjCQ==
+X-Gm-Message-State: AAQBX9fWV6nNlSAC7/pWGADJ7+djhmVYilXH530541k6u7LK/GcMVgWx
+	7wt+v+M2DSUh7vx1AkxYSH8Zsa1cX8DYOP8Yp0sjoA==
+X-Google-Smtp-Source: AKy350bYwQem0GhjZOScZ9GwtnL6TWyI1IM4jybdrpoYRsAE3bh54QWxNFYp2c1iazl+9mV7SBW0PIgm8yA8LdllWa0=
+X-Received: by 2002:a63:446:0:b0:503:7be3:e81d with SMTP id
+ 67-20020a630446000000b005037be3e81dmr3549449pge.1.1679955155235; Mon, 27 Mar
+ 2023 15:12:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230326182120.194541-1-hi@alyssa.is>
+In-Reply-To: <20230326182120.194541-1-hi@alyssa.is>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 27 Mar 2023 15:12:23 -0700
+Message-ID: <CAKwvOdmTLCqLV8bfXY4X0xgg9eYaVNDEUwzbvNrK-SUTVhuxRQ@mail.gmail.com>
+Subject: Re: [PATCH v2] purgatory: fix disabling debug info
+To: Alyssa Ross <hi@alyssa.is>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+On Sun, Mar 26, 2023 at 11:23=E2=80=AFAM Alyssa Ross <hi@alyssa.is> wrote:
+>
+> Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+> Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+> -Wa versions of both of those if building with Clang and GNU as.  As a
+> result, debug info was being generated for the purgatory objects, even
+> though the intention was that it not be.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Ah, good catch!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git armnommu
-head:   ab3e3486789d73658a4137c4d337e9c57e2be0de
-commit: 7a001f49d2e36c8feef08fec4b9c283af6a71df4 [3/3] ARM: versatile: support configuring versatile machine for no-MMU
-config: arm-randconfig-c002-20230327 (https://download.01.org/0day-ci/archive/20230328/202303280632.SyiLf8ne-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git/commit/?id=7a001f49d2e36c8feef08fec4b9c283af6a71df4
-        git remote add gerg-m68knommu https://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git
-        git fetch --no-tags gerg-m68knommu armnommu
-        git checkout 7a001f49d2e36c8feef08fec4b9c283af6a71df4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm prepare
+>
+> Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+> Signed-off-by: Alyssa Ross <hi@alyssa.is>
+> Cc: stable@vger.kernel.org
+> ---
+>
+> Difference from v2: replace each AFLAGS_REMOVE_* assignment with a
+> single aflags-remove-y line, and use foreach to add the -Wa versions,
+> as suggested by Masahiro Yamada.
+>
+>  arch/riscv/purgatory/Makefile | 7 +------
+>  arch/x86/purgatory/Makefile   | 3 +--
+>  2 files changed, 2 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefil=
+e
+> index d16bf715a586..5730797a6b40 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -84,12 +84,7 @@ CFLAGS_string.o                      +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_ctype.o          +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_ctype.o                 +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_entry.o          +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memcpy.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_memset.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strcmp.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strlen.o         +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_strncmp.o                +=3D -Wa,-gdwarf-2
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303280632.SyiLf8ne-lkp@intel.com/
+Removing the explicit `-Wa,-gdwarf-2` makes sense; nothing ever sets it.
 
-All errors (new ones prefixed by >>):
+> +asflags-remove-y               +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5,=
+ $(x) -Wa,$(x))
 
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:25:
-   In file included from include/linux/atomic.h:7:
-   arch/arm/include/asm/atomic.h:28:5: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if __LINUX_ARM_ARCH__ >= 6
-       ^
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:27:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/arm/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:13:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/arm/include/asm/bug.h:7:
-   In file included from arch/arm/include/asm/opcodes.h:86:
-   In file included from include/linux/swab.h:5:
-   In file included from include/uapi/linux/swab.h:8:
-   In file included from arch/arm/include/asm/swab.h:19:
-   arch/arm/include/uapi/asm/swab.h:27:29: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if !defined(__KERNEL__) || __LINUX_ARM_ARCH__ < 6
-                               ^
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:27:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/arm/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:13:
-   In file included from include/linux/bug.h:5:
-   In file included from arch/arm/include/asm/bug.h:7:
-   In file included from arch/arm/include/asm/opcodes.h:86:
-   In file included from include/linux/swab.h:5:
-   In file included from include/uapi/linux/swab.h:8:
-   arch/arm/include/asm/swab.h:21:5: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if __LINUX_ARM_ARCH__ >= 6
-       ^
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:27:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/arm/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:14:
-   In file included from include/linux/restart_block.h:10:
-   In file included from include/linux/time64.h:5:
-   In file included from include/linux/math64.h:6:
-   In file included from include/linux/math.h:6:
-   In file included from arch/arm/include/asm/div64.h:107:
-   In file included from include/asm-generic/div64.h:55:
-   In file included from include/linux/log2.h:12:
-   In file included from include/linux/bitops.h:68:
-   arch/arm/include/asm/bitops.h:218:5: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if __LINUX_ARM_ARCH__ < 5
-       ^
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:27:
-   In file included from include/linux/preempt.h:78:
-   In file included from ./arch/arm/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/arm/include/asm/thread_info.h:13:
-   arch/arm/include/asm/fpstate.h:29:5: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if __LINUX_ARM_ARCH__ < 6
-       ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:855:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:11:
-   In file included from include/linux/uaccess.h:11:
-   arch/arm/include/asm/uaccess.h:302:5: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if __LINUX_ARM_ARCH__ >= 6
-       ^
-   arch/arm/include/asm/uaccess.h:404:5: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if __LINUX_ARM_ARCH__ >= 6
-       ^
-   In file included from arch/arm/kernel/asm-offsets.c:13:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   arch/arm/include/asm/io.h:53:5: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if __LINUX_ARM_ARCH__ < 6
-       ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from arch/arm/include/asm/cacheflush.h:12:
->> arch/arm/include/asm/glue-cache.h:126:2: error: Unknown cache maintenance model
-   #error Unknown cache maintenance model
-    ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from arch/arm/include/asm/cacheflush.h:14:
-   arch/arm/include/asm/cachetype.h:29:5: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #if __LINUX_ARM_ARCH__ >= 7
-       ^
-   arch/arm/include/asm/cachetype.h:34:7: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #elif __LINUX_ARM_ARCH__ >= 6
-         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   arch/arm/include/asm/cacheflush.h:197:7: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #elif __LINUX_ARM_ARCH__ >= 7 && defined(CONFIG_SMP)
-         ^
-   arch/arm/include/asm/cacheflush.h:199:7: warning: '__LINUX_ARM_ARCH__' is not defined, evaluates to 0 [-Wundef]
-   #elif __LINUX_ARM_ARCH__ == 6 && defined(CONFIG_ARM_ERRATA_411920)
-         ^
-   In file included from arch/arm/kernel/asm-offsets.c:16:
->> arch/arm/include/asm/glue-df.h:96:2: error: Unknown data abort handler type
-   #error Unknown data abort handler type
-    ^
-   In file included from arch/arm/kernel/asm-offsets.c:17:
->> arch/arm/include/asm/glue-pf.h:51:2: error: Unknown prefetch abort handler type
-   #error Unknown prefetch abort handler type
-    ^
-   24 warnings and 3 errors generated.
-   make[2]: *** [scripts/Makefile.build:114: arch/arm/kernel/asm-offsets.s] Error 1
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:1286: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Is it simpler to just append `-g0` to the running list of asflags;
+that should also disable the emission of debug info? Or does that not
+remove debug info from the assembler?
+
+Either way:
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+and thanks for the patch!
+
+>
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+> diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+> index 17f09dc26381..82fec66d46d2 100644
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@ -69,8 +69,7 @@ CFLAGS_sha256.o                       +=3D $(PURGATORY_=
+CFLAGS)
+>  CFLAGS_REMOVE_string.o         +=3D $(PURGATORY_CFLAGS_REMOVE)
+>  CFLAGS_string.o                        +=3D $(PURGATORY_CFLAGS)
+>
+> -AFLAGS_REMOVE_setup-x86_$(BITS).o      +=3D -Wa,-gdwarf-2
+> -AFLAGS_REMOVE_entry64.o                        +=3D -Wa,-gdwarf-2
+> +asflags-remove-y               +=3D $(foreach x, -g -gdwarf-4 -gdwarf-5,=
+ $(x) -Wa,$(x))
+>
+>  $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+>                 $(call if_changed,ld)
+>
+> base-commit: da8e7da11e4ba758caf4c149cc8d8cd555aefe5f
+> --
+> 2.37.1
+>
 
 
-vim +126 arch/arm/include/asm/glue-cache.h
-
-55bdd694116597 Catalin Marinas 2010-05-21  124  
-753790e713d80b Russell King    2011-02-06  125  #if !defined(_CACHE) && !defined(MULTI_CACHE)
-25985edcedea63 Lucas De Marchi 2011-03-30 @126  #error Unknown cache maintenance model
-753790e713d80b Russell King    2011-02-06  127  #endif
-753790e713d80b Russell King    2011-02-06  128  
-
-:::::: The code at line 126 was first introduced by commit
-:::::: 25985edcedea6396277003854657b5f3cb31a628 Fix common misspellings
-
-:::::: TO: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-:::::: CC: Lucas De Marchi <lucas.demarchi@profusion.mobi>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Thanks,
+~Nick Desaulniers
