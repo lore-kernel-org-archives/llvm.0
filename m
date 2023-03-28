@@ -1,84 +1,98 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4269423A1;
-	Tue, 28 Mar 2023 11:36:43 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 01AB65C0151;
-	Tue, 28 Mar 2023 07:36:41 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 28 Mar 2023 07:36:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1680003400; x=1680089800; bh=XV
-	I90BRA2VCb0GKb2J+B4g3wZ/hX5qeVkvOPQlWD9SQ=; b=d2WuWRp5qX6sHjqYNv
-	xPoxgO7gWSQnKlfcCO8oRpcOtQD77IuAzzhb/w6OygGYnzvOtwE3Ip34uNiXPFwS
-	ackZHVo4BSFgXzEGHAel0dUu1ISJXoQXfSmEeexOKsMEO0JYyjJzbFuaub5QmMHb
-	rScKmhg7devqvfUu0J9sWk49Jlk9cKIZkOInE/gilfbDfA+I/HUpBJYcZmDNX5Kc
-	LpB7l4c739+E3pSrJwQeb5M5vQ2t4ODfF34olXzi0XlIch1uYjgmRgdRbcYno+a1
-	qEuO6dMxZebn/Wk+F5s7l2uQDO+3p2xr5GOReItAu+u/LKfKcBrgUTnopwiWN2d9
-	+XJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1680003400; x=1680089800; bh=XVI90BRA2VCb0
-	GKb2J+B4g3wZ/hX5qeVkvOPQlWD9SQ=; b=SjAU2T5me+u6GCDoMgrwcEkhZ5GiJ
-	6mdcmEzNF5V3n3i7+uAkaC00wJ1bqslOfurMjGsTQNSBMBIjBn2PPrHBD36odIJH
-	Hn+mYYQlmH9CQ5tCaCF9zO7YHcTCFUuArZsOpB97aM7fU8V/rmhy0oIJT/MqX9C1
-	21jrBJqM80DOjj5TUSWqRypqXPdgmvbmmzjlhbc8U74wl3WetK9mvayfFlbwwo/s
-	2O2RA3hNbyhcVgA56VED8AQDG3IG7JIrR38Ad57RJv8b/hX8jrQRsSSE/HyDtvzJ
-	TEfDq9fqJl+YhVO4bB/WDlLJKBdcMcRiH9sZ7PlX7EGr4BIzRvtoAOUOA==
-X-ME-Sender: <xms:SNEiZMBmOqitKFSEHtLb2E_Nn6pfXsqvE2eEmMEFYSzslm8ICPwIIA>
-    <xme:SNEiZOhbJJrwlvxlpF-pF3-8Ozk1LBl0wRqcVuLoBpb2zoYF8aH3q1tcUpA-5sYKb
-    iaimncpxUibRXhF_M0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedggeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
-    dtredtreertdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnuges
-    rghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpeffheeugeetiefhgeethfejgfdtue
-    fggeejleehjeeutefhfeeggefhkedtkeetffenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:SNEiZPnpTS1ERzMJ0irUxdwXdNBE2G9VIjDVzkZ0GBRMTNXBMHABhg>
-    <xmx:SNEiZCzB0S5VXBE0gFq-UQ0yZn8BYKYF5BYzCVmLQAWfneMn6AQVAw>
-    <xmx:SNEiZBSMsNu-q94csk0SprK6s2wXA5U3or-UEFnw7LutyP709oErdA>
-    <xmx:SNEiZAJGt6o8SrSapX0ozajr-R0lFlU8bziclwJP2HMwcaui2s9zXA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id C35C3B60092; Tue, 28 Mar 2023 07:36:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE53E4E2;
+	Tue, 28 Mar 2023 11:46:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680003964; x=1711539964;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5uMfLL9cfd44adWmS6DLgxpImuE42n5AsVXhpcSAsmE=;
+  b=D2ptPZBi/U53bxrGCT2K/bcSfTGQKkFMgXA17NrmqLoZcIr3JowYDinu
+   P2PbfFfkjseC1N67FBmBd07nzRS5+VuYjPqDm7ekwZTfBEdHBM1BIHnXe
+   n5iopJ4oGXhWJ9aZVpGPVavYkFYanVBsBQhz9RvN/e2tRslXhe6w0GbHS
+   mtpvV5x+Nxa3UYFJXkQFVoGwUeu0F5e9V4ktAltIGdvmCwIyAL4e6FNmp
+   aOAy5u2RB9YvOUu18WdbSpZFcIps8XGdBrLpVuoeEK4PdfoWu33ysKK62
+   jJg7CIVA7iythJkR9JasYQogxA99LeYZrCRbHlj+QVuzFnXHG97DitfrL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="426806732"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="426806732"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 04:46:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="677345635"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="677345635"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2023 04:46:02 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ph7m6-000IVT-0K;
+	Tue, 28 Mar 2023 11:46:02 +0000
+Date: Tue, 28 Mar 2023 19:45:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org
+Subject: [driver-core:class_cleanup 91/93]
+ drivers/media/usb/pvrusb2/pvrusb2-sysfs.h:20:59: warning: omitting the
+ parameter name in a function definition is a C2x extension
+Message-ID: <202303281905.iWVzgh4f-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <f8741854-1466-4cb6-9c29-c26e7ac4a5de@app.fastmail.com>
-In-Reply-To: <202303281326.s4BXzpx2-lkp@intel.com>
-References: <202303281326.s4BXzpx2-lkp@intel.com>
-Date: Tue, 28 Mar 2023 13:36:20 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "kernel test robot" <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [arnd-asm-generic:dma-sync-rework-v1 22/23]
- arch/arm/mm/dma-mapping.c:1306:31: error: use of undeclared identifier 's'
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Mar 28, 2023, at 07:28, kernel test robot wrote:
->
->>> arch/arm/mm/dma-mapping.c:1306:31: error: use of undeclared identifier 's'
->                    arch_sync_dma_for_cpu(phys, s->length, dir);
->                                                ^
->    arch/arm/mm/dma-mapping.c:1309:29: error: use of undeclared 
-> identifier 's'
->                    arch_dma_mark_clean(phys, s->length);
->                                              ^
->    arch/arm/mm/dma-mapping.c:1436:6: warning: unused variable 'len' 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git class_cleanup
+head:   991be8c8a8ebb755002e43f85cbaa1189a304a8a
+commit: 3cab1d62319b47233794e37d4ff498de86a2a69b [91/93] media: pvrusb2: clean up unneeded complexity in pvrusb2 class logic
+config: x86_64-randconfig-a015-20230327 (https://download.01.org/0day-ci/archive/20230328/202303281905.iWVzgh4f-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=3cab1d62319b47233794e37d4ff498de86a2a69b
+        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+        git fetch --no-tags driver-core class_cleanup
+        git checkout 3cab1d62319b47233794e37d4ff498de86a2a69b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/
 
-Fixed now, thanks for the report.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303281905.iWVzgh4f-lkp@intel.com/
 
-     Arnd
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/usb/pvrusb2/pvrusb2-main.c:19:
+>> drivers/media/usb/pvrusb2/pvrusb2-sysfs.h:20:59: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void pvr2_sysfs_create(struct pvr2_context *) { }
+                                                             ^
+   1 warning generated.
+
+
+vim +20 drivers/media/usb/pvrusb2/pvrusb2-sysfs.h
+
+    12	
+    13	#ifdef CONFIG_VIDEO_PVRUSB2_SYSFS
+    14	void pvr2_sysfs_class_create(void);
+    15	void pvr2_sysfs_class_destroy(void);
+    16	void pvr2_sysfs_create(struct pvr2_context *);
+    17	#else
+    18	static inline void pvr2_sysfs_class_create(void) { }
+    19	static inline void pvr2_sysfs_class_destroy(void) { }
+  > 20	static inline void pvr2_sysfs_create(struct pvr2_context *) { }
+    21	#endif
+    22	
+    23	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
