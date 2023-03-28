@@ -1,126 +1,191 @@
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0391B3D74
-	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:37:54 +0000 (UTC)
-Received: by mail-ua1-f50.google.com with SMTP id i22so9305320uat.8
-        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 09:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680021474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sAgqfmy3+Sdexvx3MtTk8w4OkaEeTrCc0NuiY1qiHGo=;
-        b=aV1GpKIOxu9YUFKPITfmnlrbtURER60HjoFgLTP2d/dB+QwSLaf6KHXNKkOe1QgYJ/
-         PHr15fkkmSOGDcSOK9useKgPkkzomFv1UXp95rWNhExc2EGkzLn2HDlK4jgXhV8jlMy2
-         f3wWaZVGMMjgXBZy7Hpx9E3xt08/IttYYa6Q3ORrQrodgQ09N0Jmt0mQA2q4hs9MF9hO
-         PpiwqD6r7C1eqoLCvtnXTYQBuwz6Qmyaf6hVb+BFBdmvrzo03cfhoE49B/fFrdgRNX3N
-         zx/RRVARXJUnQKHQ0AIlibO5UbGhPJ1rPYgGLyyH6gLZ/61TSJ+2mEZguyIw9WRPkGk2
-         Xn0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680021474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sAgqfmy3+Sdexvx3MtTk8w4OkaEeTrCc0NuiY1qiHGo=;
-        b=M1USlhE4Ar0EDcY0QT2PkbcziWAkwhTPn82cmjr6QiCus34K17P1XZltzHq8QTtGsI
-         nC6j+jF1nKa2zGBrLpLeykVpjV2lQBiZ39cvUcbrDEEqD7Biim03TKn/iFAQoORgsrZs
-         9sdk/u6tvnZXBdcVMc6t4C+fPesKZOD63dmm84KxI5iSfDJa3zWZYTkp45NPhhTGNwDu
-         QCe0zttkNRbSlJKfbIX8S3vCb5mbYnV98UZNn2lgqqyMiPgK/x53dizyV93+Wp53EJEz
-         ifFpFNV2KJpjiHupco9j/4LLBvFjI/w3v6XYAniyQdmyEZXkPHAShGuJSCURqDO//hrk
-         QFiw==
-X-Gm-Message-State: AAQBX9eucUuEq1zXs8N/Vt2UyqXgeXdgmSWvYFCwQ59Sy3d/D5h44sBr
-	2rKRW673bCCZl8iBAUIcVd8ifsnsoamEcszj/JfwAw==
-X-Google-Smtp-Source: AKy350Yt+tNqzzmeb5s50dpmAcB50sxxAS+/O4PEQZqs8OpCwgLX/yhM4sXU4TfO+/MEwUteGCYQjtBe3CxRNzqbMxg=
-X-Received: by 2002:a05:6130:c91:b0:68a:a9d:13f5 with SMTP id
- ch17-20020a0561300c9100b0068a0a9d13f5mr11175613uab.1.1680021473774; Tue, 28
- Mar 2023 09:37:53 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447273D74;
+	Tue, 28 Mar 2023 17:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E436C433D2;
+	Tue, 28 Mar 2023 17:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680023198;
+	bh=mSJs5c0u+mvYERTVXLbz2yaNg7v/fMoz0d2LwP4Amgk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BzVDmw43m60lvH0Y3KjAIrZm6woD7+AuyL5jMqZObEtFgYW0wKZ620dZ4j9la6GKr
+	 VH8ZHy/40ROZYD+wpguyi+Hnrz60lue9UANRUfwDWT/XbZvuIjg+BtjmxcvuJFM0ua
+	 1/dAgwGGnlprh119IPhnzAFOQwKOkEQBbBkalAwVG2eSKm3HK2LifA8O54SAtv0OrM
+	 Q2Imm1uVHmcTk5A4PFzt+qUwbo+dHHPbScXOewUOlstrb1u7MWsTKJsUqKlg2vlWQd
+	 YoFG0MgDzpeekikZ/MLrmC269nUqCEwWEpjubIXnIc3R2OyHsl3hwsR4CkmRyAcYF8
+	 vzeSM9lwScGGA==
+Date: Tue, 28 Mar 2023 10:06:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sui Jingfeng <15330273260@189.cn>
+Cc: kernel test robot <lkp@intel.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian Koenig <christian.koenig@amd.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>
+Subject: Re: [PATCH v8 2/2] drm: add kms driver for loongson display
+ controller
+Message-ID: <20230328170636.GA1986005@dev-arch.thelio-3990X>
+References: <20230320100131.1277034-3-15330273260@189.cn>
+ <202303281754.jWI20j2C-lkp@intel.com>
+ <027cf6d5-6de2-3424-7a81-a43ab689c3d4@189.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202303281539.zzI4vpw1-lkp@intel.com> <20230328122138.GA1275@willie-the-truck>
- <d2de874e-d2e8-435e-a90e-a3aef763f2b3@app.fastmail.com> <86o7ocx51a.wl-maz@kernel.org>
-In-Reply-To: <86o7ocx51a.wl-maz@kernel.org>
-From: Zaid Al-Bassam <zalbassam@google.com>
-Date: Tue, 28 Mar 2023 12:37:42 -0400
-Message-ID: <CALBRaFmmTZSZ+pm-=QKh5x_Pp8iMX_zdF50-u9HPdweq24jmzQ@mail.gmail.com>
-Subject: Re: [linux-next:master 6577/7309] drivers/perf/arm_pmuv3.c:44:2:
- error: use of undeclared identifier 'PERF_MAP_ALL_UNSUPPORTED'
-To: Marc Zyngier <maz@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>, kernel test robot <lkp@intel.com>, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <027cf6d5-6de2-3424-7a81-a43ab689c3d4@189.cn>
 
-Thank you Marc.
+On Tue, Mar 28, 2023 at 11:22:50PM +0800, Sui Jingfeng wrote:
+> HI,
+> 
+> On 2023/3/28 17:27, kernel test robot wrote:
+> > Hi Sui,
+> > 
+> > Thank you for the patch! Perhaps something to improve:
+> > 
+> > [auto build test WARNING on drm-misc/drm-misc-next]
+> > [also build test WARNING on linus/master v6.3-rc4 next-20230328]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
+> > base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+> > patch link:    https://lore.kernel.org/r/20230320100131.1277034-3-15330273260%40189.cn
+> > patch subject: [PATCH v8 2/2] drm: add kms driver for loongson display controller
+> > config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230328/202303281754.jWI20j2C-lkp@intel.com/config)
+> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> > reproduce (this is a W=1 build):
+> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >          chmod +x ~/bin/make.cross
+> >          # https://github.com/intel-lab-lkp/linux/commit/80b4115f44993f4ebf47b1cb9e8f02953575b977
+> >          git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >          git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
+> >          git checkout 80b4115f44993f4ebf47b1cb9e8f02953575b977
+> >          # save the config file
+> >          mkdir build_dir && cp config build_dir/.config
+> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/accel/ drivers/gpu/drm/loongson/ drivers/iio/light/ drivers/media/pci/intel/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Link: https://lore.kernel.org/oe-kbuild-all/202303281754.jWI20j2C-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > > > drivers/gpu/drm/loongson/lsdc_drv.c:232:11: warning: variable 'gpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+> >             else if (descp->chip == CHIP_LS7A2000)
+> >                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >     drivers/gpu/drm/loongson/lsdc_drv.c:235:7: note: uninitialized use occurs here
+> >             if (!gpu) {
+> >                  ^~~
+> >     drivers/gpu/drm/loongson/lsdc_drv.c:232:7: note: remove the 'if' if its condition is always true
+> >             else if (descp->chip == CHIP_LS7A2000)
+> >                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >     drivers/gpu/drm/loongson/lsdc_drv.c:217:21: note: initialize the variable 'gpu' to silence this warning
+> >             struct pci_dev *gpu;
+> >                                ^
+> >                                 = NULL
+> >     1 warning generated.
+> > --
+> 
+> In practice,  either  descp->chip == CHIP_LS7A2000 or descp->chip ==
+> CHIP_LS7A1000 will be happened at runtime.
+> 
+> the variable 'gpu' is guaranteed to be initialized when code run at 
+> drivers/gpu/drm/loongson/lsdc_drv.c:235
+> 
+> This warnning is almost wrong here.
 
-Arnd, Do you want to change your patch to drop [1], or should I create
-a new patch? Btw, Thank you for the patch.
+Clang's semantic analysis happens before optimizations, meaning it does
+not perform interprocedural analysis, so it does not have enough
+information at this point to tell that. Either just initialize gpu to
+NULL and let the existing 'if (!gpu)' handle it or add a separate else
+branch that warns about an unhandled chip value so that it is obvious
+what needs to be done if someone forgets to update this statement when a
+new chip is supported by this driver.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/commit/?=
-id=3D3b16f6268e66
+> > > > drivers/gpu/drm/loongson/lsdc_pll.c:188:14: warning: variable 'diff' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+> >                                     else if (clock_khz < computed)
+> >                                              ^~~~~~~~~~~~~~~~~~~~
+> >     drivers/gpu/drm/loongson/lsdc_pll.c:191:9: note: uninitialized use occurs here
+> >                                     if (diff < min) {
+> >                                         ^~~~
+> >     drivers/gpu/drm/loongson/lsdc_pll.c:188:10: note: remove the 'if' if its condition is always true
+> >                                     else if (clock_khz < computed)
+> >                                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+> >     drivers/gpu/drm/loongson/lsdc_pll.c:177:22: note: initialize the variable 'diff' to silence this warning
+> >                                     unsigned int diff;
+> >                                                      ^
+> >                                                       = 0
+> >     1 warning generated.
+> 
+> Here the robot is also wrong here in practice,
+> 
+> because either  if (clock_khz >= computed) or else if (clock_khz < computed)
+> will be happen.
+> 
+> 'diff' variable is guaranteed to be initialized.
 
-Zaid
+Make that clearer by turning 'else if (clock_khz < computed)' into just
+'else' as the warning suggests? I do not see why the condition is
+specified at all if it is just an 'else' in practice.
 
-On Tue, Mar 28, 2023 at 11:35=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrot=
-e:
->
-> On Tue, 28 Mar 2023 16:29:07 +0100,
-> "Arnd Bergmann" <arnd@arndb.de> wrote:
-> >
-> > On Tue, Mar 28, 2023, at 14:21, Will Deacon wrote:
-> > > On Tue, Mar 28, 2023 at 04:01:49PM +0800, kernel test robot wrote:
-> >
-> > > I think the Kconfig warning is relevant here:
-> > >
-> > >> Kconfig warnings: (for reference only)
-> > >>    WARNING: unmet direct dependencies detected for ARM_PMUV3
-> > >>    Depends on [n]: PERF_EVENTS [=3Dy] && HW_PERF_EVENTS [=3Dn] && (A=
-RM [=3Dy] && CPU_V7 [=3Dy] || ARM64)
-> > >>    Selected by [y]:
-> > >>    - ARCH_VIRT [=3Dy] && ARCH_MULTI_V7 [=3Dy] && PERF_EVENTS [=3Dy]
-> > >
-> > > Since we're selecting an option which has its own dependencies. I thi=
-nk
-> > > the easiest bet is to invert the linkage so that PMUV3 has a dependen=
-cy
-> > > on ARCH_VIRT for 32-bit Arm (diff below).
-> > >
-> > > Marc, Zaid -- what do you think?
-> >
-> > I think dropping the 'select' is best, as this is still a user-visible
-> > option. How about this instead:
-> >
-> > --- a/drivers/perf/Kconfig
-> > +++ b/drivers/perf/Kconfig
-> > @@ -103,7 +103,7 @@ config ARM_SMMU_V3_PMU
-> >  config ARM_PMUV3
-> >         depends on HW_PERF_EVENTS && ((ARM && CPU_V7) || ARM64)
-> >         bool "ARM PMUv3 support" if !ARM64
-> > -       default ARM64
-> > +       default ARM64 || ARCH_VIRT
-> >           help
-> >           Say y if you want to use the ARM performance monitor unit (PM=
-U)
-> >           version 3. The PMUv3 is the CPU performance monitors on ARMv8
-> >
-> > This way, it's still enabled by default for most people, but
-> > there is no dependency problem and it's also possible to
-> > turn it off.
->
-> [removing my old self from the Cc list]
->
-> Either way work for me. Or even drop that patch altogether and let
-> people select PMUv3 if they really want it. This is extremely niche
-> anyway, and most people won't care.
->
-> Thanks,
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+Cheers,
+Nathan
+
+> > 
+> > vim +232 drivers/gpu/drm/loongson/lsdc_drv.c
+> > 
+> >     212	
+> >     213	static int lsdc_get_dedicated_vram(struct lsdc_device *ldev,
+> >     214					   const struct lsdc_desc *descp)
+> >     215	{
+> >     216		struct drm_device *ddev = &ldev->base;
+> >     217		struct pci_dev *gpu;
+> >     218		resource_size_t base, size;
+> >     219	
+> >     220		/*
+> >     221		 * The GPU and display controller in LS7A1000/LS7A2000 are separated
+> >     222		 * PCIE devices, they are two devices not one. The DC does not has a
+> >     223		 * dedicate VRAM bar, because the BIOS engineer choose to assign the
+> >     224		 * VRAM to the GPU device. Sadly, after years application, this form
+> >     225		 * as a convention for loongson integrated graphics. Bar 2 of the GPU
+> >     226		 * device contain the base address and size of the VRAM, both the GPU
+> >     227		 * and the DC can access the on-board VRAM as long as the DMA address
+> >     228		 * emitted fall in [base, base + size).
+> >     229		 */
+> >     230		if (descp->chip == CHIP_LS7A1000)
+> >     231			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A15, NULL);
+> >   > 232		else if (descp->chip == CHIP_LS7A2000)
+> >     233			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A25, NULL);
+> >     234	
+> >     235		if (!gpu) {
+> >     236			drm_warn(ddev, "No GPU device found\n");
+> >     237			return -ENODEV;
+> >     238		}
+> >     239	
+> >     240		base = pci_resource_start(gpu, 2);
+> >     241		size = pci_resource_len(gpu, 2);
+> >     242	
+> >     243		ldev->vram_base = base;
+> >     244		ldev->vram_size = size;
+> >     245	
+> >     246		drm_info(ddev, "dedicated vram start: 0x%llx, size: %uMB\n",
+> >     247			 (u64)base, (u32)(size >> 20));
+> >     248	
+> >     249		return 0;
+> >     250	}
+> >     251	
+> > 
+> 
