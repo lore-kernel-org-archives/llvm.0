@@ -1,94 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A654AAFC1
-	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:17:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF77C433EF
-	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680045466;
-	bh=FhXWBl3/P/hkvn7SURytWrxmi1wOCQCCyLVCHT/AjHg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=blux9YB951/4mf9tSWq1b+PHavxvnDpNH0F+o3W9b9WXGOFlQOQLYOGWpg6+3GDdN
-	 4iXS78ri3vyj1pLjS7eWdqzd30wh3mFZfK14beK70A/+KFcX1kikRtpSLS2Dcyffsk
-	 MzEWAKErbiQv76avCUA52mGfg3Kwygj1KUJ7OqLs9iu5X2f7mQfkmJs/wq1v44pHvY
-	 Nrew6jNidhflVxmCe95zkmhc2QEk7rkTNvQ5iK+mVbmdORMB6aY3Rs5ra+me/b1B31
-	 vDVf1eJZlDuoKFUQ6Ue9u/G9t7d/q00C+dCdTVoFlnH2RvPOXPlQoodbrQBcL8/ZU/
-	 oZ4XN+2ZykvvQ==
-Received: by mail-lj1-f177.google.com with SMTP id o20so11338544ljp.3
-        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:17:46 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ft8TcV4Gvee/x715eTvXu7y7BVRQTuPnmZnob7LOtteGFyI05D
-	dImiqZMadWvgJ3+VTWFfSp/r64jLeipFJPlGUz4=
-X-Google-Smtp-Source: AKy350ZoOmTviqMFDD7yk6Ien8iqOJ+XgAz2HmnZ1y8TuhUngMovHYNfS/rL4IlQRLzEimtw6spi42+fYJOchvvQ4kQ=
-X-Received: by 2002:a2e:9002:0:b0:299:b5e6:4c45 with SMTP id
- h2-20020a2e9002000000b00299b5e64c45mr5368280ljg.5.1680045464363; Tue, 28 Mar
- 2023 16:17:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA4CAFC1
+	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:56:00 +0000 (UTC)
+Received: by mail-yb1-f201.google.com with SMTP id b124-20020a253482000000b00b72947f6a54so13690822yba.14
+        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:56:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680047760;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FqxML7xkN1lg5mLK3PMobUIZG+frNSAW+D2pze+pEWQ=;
+        b=MiMTpQr6+kNRUZmxlErxhLoP4NYq4RrGrVST1Sc3OVwcvCObBqd2kSgsQDG+bUmTEv
+         zRc3wc7zHC2U9nW8W09sAccj5mTFLeyFg19sIFCsLfcid2NfUi9CtYnOJz6WW8d+YP73
+         aNbh/DywCsGlwzC70wPA5lRUvXN+lZkbhcBQvc7w/cDjIyCbKdvTUJLQzDT53LbSL7Mp
+         msgjcpf+q2Yj4npPCuPyhnBYOkE1hvuu1GFd2M0/CJ6lVwlfBlkBxI5G7d8vuAINBgMn
+         az/7l7gylBmd1hogGLjlJnuS6Y9vV1EEjXFma1w5VIDYS8l8MS2XMl02t7+fLQmm1cL5
+         woIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680047760;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FqxML7xkN1lg5mLK3PMobUIZG+frNSAW+D2pze+pEWQ=;
+        b=2doEHTLSjfVG9wk2tgbRISJ+0BV2OW6WgO6qOTbJBdLsQ3yamy/+0S/IdeRTpMW9ia
+         no0oMJ7h2ZiGdQxczMLL3JIALsc+hjOwsjcOnvTWRYWDT1iseTmB/j4QQ6HeirhnDTxS
+         0/+NHjbGn7eCsxskDKATXWQCHtMT2TKTHTTC+pnSPEFmx5qYQPP8KxnJzOBUvVjrSIuX
+         a4E77uer2QyX1K5/h4ET8UOO52myQcDIqNFm1DEd0D7/Y4TWWAUDDRt3VPp9B7WwSN4+
+         WI+AnykNPUcjKdUkIVdwb53nqeH1rtmfKF5nAXJl9dtA7kj9IdyT+ypTCAMpWS7ZGFCE
+         odVw==
+X-Gm-Message-State: AAQBX9ed/+Lgf3mv9K8d7H80ZkmG2BWLn7Q/sHHGltTCoe6qbh5hF/05
+	P09QjeD/T35HGAevpn351qoTxaLiWrGL
+X-Google-Smtp-Source: AKy350ZZ9lVS00jsMGW8v4w4WleLMmPpByGkGSrq2CXRkk9qPGEztz5FAJobs50Rs8EBpLNwRbeAUJVOafcx
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6519:f0d3:9540:5c31])
+ (user=irogers job=sendgmr) by 2002:a25:a323:0:b0:b35:91cc:9e29 with SMTP id
+ d32-20020a25a323000000b00b3591cc9e29mr229665ybi.5.1680047760022; Tue, 28 Mar
+ 2023 16:56:00 -0700 (PDT)
+Date: Tue, 28 Mar 2023 16:55:37 -0700
+Message-Id: <20230328235543.1082207-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230327132324.1769595-1-trix@redhat.com>
-In-Reply-To: <20230327132324.1769595-1-trix@redhat.com>
-From: Song Liu <song@kernel.org>
-Date: Tue, 28 Mar 2023 16:17:32 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6=zpRso=5wPUWTPKO+s1Z0Nf09BDpSnb5sKHkEgizbHg@mail.gmail.com>
-Message-ID: <CAPhsuW6=zpRso=5wPUWTPKO+s1Z0Nf09BDpSnb5sKHkEgizbHg@mail.gmail.com>
-Subject: Re: [PATCH v2] md/raid5: remove unused working_disks variable
-To: Tom Rix <trix@redhat.com>
-Cc: nathan@kernel.org, ndesaulniers@google.com, linux-raid@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v1 0/6] config file/command line for objdump & addr2line
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	James Clark <james.clark@arm.com>, Andi Kleen <ak@linux.intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, German Gomez <german.gomez@arm.com>, 
+	Sandipan Das <sandipan.das@amd.com>, Andres Freund <andres@anarazel.de>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 27, 2023 at 6:23=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/md/raid5.c:7719:6: error: variable 'working_disks'
->   set but not used [-Werror,-Wunused-but-set-variable]
->         int working_disks =3D 0;
->             ^
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Allow objdump to be set as a perf config file variable. As previously
+objdump was set via the command line, the string was owned by
+argv. Now the string must be strdup-ed, so the corresponding logic
+needs changing with an annotation_options__init/exit.
 
-Applied to md-next, with Yu Kuai's Reviewed-by.
+Add command line and config file options for addr2line, set in
+symbol_conf for convenience. This doesn't allow the setting of
+llvm-addr2line due to a bug, but could in the future.
 
-Thanks,
-Song
+Ian Rogers (6):
+  perf annotate: Delete session for debug builds
+  perf report: Additional config warnings
+  perf annotate: Add init/exit to annotation_options remove default
+  perf annotate: Own objdump_path and disassembler_style strings
+  perf annotate: Allow objdump to be set in perfconfig
+  perf symbol: Add command line support for addr2line path
 
-> ---
-> v2: remove brances
-> ---
->  drivers/md/raid5.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> index 7b820b81d8c2..812a12e3e41a 100644
-> --- a/drivers/md/raid5.c
-> +++ b/drivers/md/raid5.c
-> @@ -7716,7 +7716,6 @@ static void raid5_set_io_opt(struct r5conf *conf)
->  static int raid5_run(struct mddev *mddev)
->  {
->         struct r5conf *conf;
-> -       int working_disks =3D 0;
->         int dirty_parity_disks =3D 0;
->         struct md_rdev *rdev;
->         struct md_rdev *journal_dev =3D NULL;
-> @@ -7912,10 +7911,8 @@ static int raid5_run(struct mddev *mddev)
->                         pr_warn("md: cannot handle concurrent replacement=
- and reshape.\n");
->                         goto abort;
->                 }
-> -               if (test_bit(In_sync, &rdev->flags)) {
-> -                       working_disks++;
-> +               if (test_bit(In_sync, &rdev->flags))
->                         continue;
-> -               }
->                 /* This disc is not fully in-sync.  However if it
->                  * just stored parity (beyond the recovery_offset),
->                  * when we don't need to be concerned about the
-> --
-> 2.27.0
->
+ tools/perf/Documentation/perf-annotate.txt |  3 ++
+ tools/perf/Documentation/perf-config.txt   |  8 +++-
+ tools/perf/Documentation/perf-report.txt   |  3 ++
+ tools/perf/Documentation/perf-top.txt      |  6 +++
+ tools/perf/arch/common.c                   |  4 +-
+ tools/perf/arch/common.h                   |  2 +-
+ tools/perf/builtin-annotate.c              | 42 +++++++++++++-------
+ tools/perf/builtin-report.c                | 35 ++++++++++++++---
+ tools/perf/builtin-top.c                   | 27 +++++++++++--
+ tools/perf/util/annotate.c                 | 45 +++++++++++++++++-----
+ tools/perf/util/annotate.h                 |  9 +++--
+ tools/perf/util/srcline.c                  | 26 ++++++++-----
+ tools/perf/util/symbol_conf.h              |  1 +
+ 13 files changed, 163 insertions(+), 48 deletions(-)
+
+-- 
+2.40.0.348.gf938b09366-goog
+
