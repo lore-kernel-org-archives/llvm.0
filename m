@@ -1,169 +1,168 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B1FA44;
-	Tue, 28 Mar 2023 05:59:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679983194; x=1711519194;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PHY7vJA/6nn35tg2GcYfN8n9ZPcx67cw+kTUlxblC8U=;
-  b=AbshE1WQOANDaxUrnVbEu1v7ozA1bwF7p/u68TsbhTaRJ6UvfsTo7KE2
-   6Rg5t1jA7u+m20QgCO4nIu39km7vI+2t5RvxQn8hgFIJgyfTwxkO/WUoO
-   3ljStxgr1tPj060ZqOAIw1aBZKVeY6Wh90JdhxJ4p5rKTl2oLOAQ4yaqr
-   eMQB2VeGuOsdJhmuisKGyO4cOR98NUHOukMFkkjH/vS+zbvS0TuJMuvXQ
-   XOg4mBNbWRACOr7xTya4X2dHbcZj37uCIxwv9CIp/UA4xElmpe8cvU/WM
-   LZFkZZrdiOC/mJw8vNw0FKFDONm3omZ4FuddFDIE2PK6o9tyAY7OZK/Py
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="342889356"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="342889356"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 22:59:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="929732531"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="929732531"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Mar 2023 22:59:51 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ph2N4-000IKF-19;
-	Tue, 28 Mar 2023 05:59:50 +0000
-Date: Tue, 28 Mar 2023 13:59:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Zhigang Shi <Zhigang.Shi@liteon.com>,
-	Shreeya Patel <shreeya.patel@collabora.com>,
-	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-	Paul Gazzillo <paul@pgazz.com>, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH v6 6/7] iio: light: ROHM BU27034 Ambient Light Sensor
-Message-ID: <202303281338.X45nIbaD-lkp@intel.com>
-References: <1b7d3725bf5ae829b12eaf96362204edd29c6966.1679915278.git.mazziesaccount@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C4AEBB
+	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 07:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1679989897;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wvZlomca9f6e9KXPYpGM9vkiGMRu4n8h9Ijy2xybGdQ=;
+	b=RYOPsPtig0X408RLwoE5VsZvKNoDVQnEKM2hWENhSh+jgQJB6jkPzyna5gcQag2vwO1UcZ
+	i4sDqN5VLhb2kWvs0zE6ek0dSya1BothtBdn6Fdm4vfkM/snIqhh1A+daarhFacbea5RSg
+	LH/lbeVO7ugXK7916+LKBiU3A0CzUi0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-32-yOHSX6q-MnCTFAFFYJoN5w-1; Tue, 28 Mar 2023 03:51:36 -0400
+X-MC-Unique: yOHSX6q-MnCTFAFFYJoN5w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE4D03C10690
+	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 07:51:35 +0000 (UTC)
+Received: from [172.64.0.121] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A87BC4042AC0;
+	Tue, 28 Mar 2023 07:51:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 20 of 381): Test report for master
+ (6.3.0-rc4, mainline.kernel.org-clang, 91fe2045)
+Date: Tue, 28 Mar 2023 07:51:35 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b7d3725bf5ae829b12eaf96362204edd29c6966.1679915278.git.mazziesaccount@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <31035.123032803513600173@us-mta-32.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Matti,
+Hi, we tested your kernel and here are the results:
 
-I love your patch! Perhaps something to improve:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on eeac8ede17557680855031c6f305ece2378af326]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matti-Vaittinen/dt-bindings-iio-light-Support-ROHM-BU27034/20230327-193728
-base:   eeac8ede17557680855031c6f305ece2378af326
-patch link:    https://lore.kernel.org/r/1b7d3725bf5ae829b12eaf96362204edd29c6966.1679915278.git.mazziesaccount%40gmail.com
-patch subject: [PATCH v6 6/7] iio: light: ROHM BU27034 Ambient Light Sensor
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230328/202303281338.X45nIbaD-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b824935db7c7734628f11c55cd64dc819be8798f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matti-Vaittinen/dt-bindings-iio-light-Support-ROHM-BU27034/20230327-193728
-        git checkout b824935db7c7734628f11c55cd64dc819be8798f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iio/light/ drivers/media/i2c/ drivers/media/pci/intel/ drivers/net/usb/ net/netfilter/
+Kernel information:
+    Commit message: Merge tag 'platform-drivers-x86-v6.3-3' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303281338.X45nIbaD-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/82135
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: SELinux Custom Module Setup: gcc: error: unrecognized comman=
+d-line option -Wformat-invalid-specifier
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7555720
+            Affected tests:
+                  x86_64 (debug) - kselftest build - bpf
+        Issue: [upstream] RIP: 0010:cooling_device_stats_setup+0xfb/0x110
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2181987
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
->> drivers/iio/light/rohm-bu27034.c:402:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-           val = FIELD_PREP(mask, sel);
-                 ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
-                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
-                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                       ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
-           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
-           __compiletime_assert(condition, msg, prefix, suffix)
-           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
-                   if (!(condition))                                       \
-                         ^~~~~~~~~
-   1 warning generated.
 
 
-vim +402 drivers/iio/light/rohm-bu27034.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   388	
-   389	/* Caller should hold the lock to protect lux reading */
-   390	static int bu27034_write_gain_sel(struct bu27034_data *data, int chan, int sel)
-   391	{
-   392		static const int reg[] = {
-   393			[BU27034_CHAN_DATA0] = BU27034_REG_MODE_CONTROL2,
-   394			[BU27034_CHAN_DATA1] = BU27034_REG_MODE_CONTROL3,
-   395		};
-   396		int mask, val;
-   397	
-   398		if (chan != BU27034_CHAN_DATA0 && chan != BU27034_CHAN_DATA1)
-   399			return -EINVAL;
-   400	
-   401		mask = BU27034_MASK_D01_GAIN;
- > 402		val = FIELD_PREP(mask, sel);
-   403	
-   404		if (chan == BU27034_CHAN_DATA0) {
-   405			/*
-   406			 * We keep the same gain for channel 2 as we set for channel 0
-   407			 * We can't allow them to be individually controlled because
-   408			 * setting one will impact also the other. Also, if we don't
-   409			 * always update both gains we may result unsupported bit
-   410			 * combinations.
-   411			 *
-   412			 * This is not nice but this is yet another place where the
-   413			 * user space must be prepared to surprizes. Namely, see chan 2
-   414			 * gain changed when chan 0 gain is changed.
-   415			 *
-   416			 * This is not fatal for most users though. I don't expect the
-   417			 * channel 2 to be used in any generic cases - the intensity
-   418			 * values provided by the sensor for IR area are not openly
-   419			 * documented. Also, channel 2 is not used for visible light.
-   420			 *
-   421			 * So, if there is application which is written to utilize the
-   422			 * channel 2 - then it is probably specifically targeted to this
-   423			 * sensor and knows how to utilize those values. It is safe to
-   424			 * hope such user can also cope with the gain changes.
-   425			 */
-   426			mask |=  BU27034_MASK_D2_GAIN_LO;
-   427	
-   428			/*
-   429			 * The D2 gain bits are directly the lowest bits of selector.
-   430			 * Just do add those bits to the value
-   431			 */
-   432			val |= sel & BU27034_MASK_D2_GAIN_LO;
-   433		}
-   434	
-   435		return regmap_update_bits(data->regmap, reg[chan], mask, val);
-   436	}
-   437	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
