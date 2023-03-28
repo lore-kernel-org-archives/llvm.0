@@ -1,115 +1,94 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F767E4;
-	Tue, 28 Mar 2023 22:45:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680043520; x=1711579520;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1+wEGh3Bcl16m1AShxxmsnd/Mwww9Np61zhGw8siEdM=;
-  b=Ept7HxA9eLwphnK4kJrWxZo0ZPlntW9kSAJadtEDByx8Gck0Q1+Z1P9u
-   D+cqjWly6J4wswiht0zYvJrmuXWcW2x4xH5cb2jNxU4MX6nOAuizQbk8v
-   EsTTAzczpP+6Lf0ppFFFmTPmIee18xiiplwdzLuwsY9+do2jaqqrfnRxS
-   SgrFhajfYZnKSXgHSMnlp4RZydjPCd0h5UPEXiPxc1Da1RSyfBVFGzjvs
-   W3SNvpwxectYIHkzmkf+XvyRJrKr7BDfXBfZ8ntjxkUZl4zSoj+IzYqbB
-   0Dz4+I2CseJovR3WH4+/ngXxL5ZwTd5tUmn0jAxXPFkpDcvcH7lIuqoLJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="329176660"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="329176660"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 15:45:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="634252158"
-X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="634252158"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Mar 2023 15:42:23 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1phI1G-000Ivy-30;
-	Tue, 28 Mar 2023 22:42:22 +0000
-Date: Wed, 29 Mar 2023 06:42:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 5/5] fs: allow to mount beneath top mount
-Message-ID: <202303290629.d046fvuG-lkp@intel.com>
-References: <20230202-fs-move-mount-replace-v2-5-f53cd31d6392@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A654AAFC1
+	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF77C433EF
+	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:17:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680045466;
+	bh=FhXWBl3/P/hkvn7SURytWrxmi1wOCQCCyLVCHT/AjHg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=blux9YB951/4mf9tSWq1b+PHavxvnDpNH0F+o3W9b9WXGOFlQOQLYOGWpg6+3GDdN
+	 4iXS78ri3vyj1pLjS7eWdqzd30wh3mFZfK14beK70A/+KFcX1kikRtpSLS2Dcyffsk
+	 MzEWAKErbiQv76avCUA52mGfg3Kwygj1KUJ7OqLs9iu5X2f7mQfkmJs/wq1v44pHvY
+	 Nrew6jNidhflVxmCe95zkmhc2QEk7rkTNvQ5iK+mVbmdORMB6aY3Rs5ra+me/b1B31
+	 vDVf1eJZlDuoKFUQ6Ue9u/G9t7d/q00C+dCdTVoFlnH2RvPOXPlQoodbrQBcL8/ZU/
+	 oZ4XN+2ZykvvQ==
+Received: by mail-lj1-f177.google.com with SMTP id o20so11338544ljp.3
+        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:17:46 -0700 (PDT)
+X-Gm-Message-State: AAQBX9ft8TcV4Gvee/x715eTvXu7y7BVRQTuPnmZnob7LOtteGFyI05D
+	dImiqZMadWvgJ3+VTWFfSp/r64jLeipFJPlGUz4=
+X-Google-Smtp-Source: AKy350ZoOmTviqMFDD7yk6Ien8iqOJ+XgAz2HmnZ1y8TuhUngMovHYNfS/rL4IlQRLzEimtw6spi42+fYJOchvvQ4kQ=
+X-Received: by 2002:a2e:9002:0:b0:299:b5e6:4c45 with SMTP id
+ h2-20020a2e9002000000b00299b5e64c45mr5368280ljg.5.1680045464363; Tue, 28 Mar
+ 2023 16:17:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202-fs-move-mount-replace-v2-5-f53cd31d6392@kernel.org>
+References: <20230327132324.1769595-1-trix@redhat.com>
+In-Reply-To: <20230327132324.1769595-1-trix@redhat.com>
+From: Song Liu <song@kernel.org>
+Date: Tue, 28 Mar 2023 16:17:32 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6=zpRso=5wPUWTPKO+s1Z0Nf09BDpSnb5sKHkEgizbHg@mail.gmail.com>
+Message-ID: <CAPhsuW6=zpRso=5wPUWTPKO+s1Z0Nf09BDpSnb5sKHkEgizbHg@mail.gmail.com>
+Subject: Re: [PATCH v2] md/raid5: remove unused working_disks variable
+To: Tom Rix <trix@redhat.com>
+Cc: nathan@kernel.org, ndesaulniers@google.com, linux-raid@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Christian,
+On Mon, Mar 27, 2023 at 6:23=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/md/raid5.c:7719:6: error: variable 'working_disks'
+>   set but not used [-Werror,-Wunused-but-set-variable]
+>         int working_disks =3D 0;
+>             ^
+> This variable is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-I love your patch! Perhaps something to improve:
+Applied to md-next, with Yu Kuai's Reviewed-by.
 
-[auto build test WARNING on 197b6b60ae7bc51dd0814953c562833143b292aa]
+Thanks,
+Song
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Brauner/fs-add-path_mounted/20230329-001618
-base:   197b6b60ae7bc51dd0814953c562833143b292aa
-patch link:    https://lore.kernel.org/r/20230202-fs-move-mount-replace-v2-5-f53cd31d6392%40kernel.org
-patch subject: [PATCH v2 5/5] fs: allow to mount beneath top mount
-config: x86_64-randconfig-a014-20230327 (https://download.01.org/0day-ci/archive/20230329/202303290629.d046fvuG-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/13451428e46188ad86767587daa736968e4cc62c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christian-Brauner/fs-add-path_mounted/20230329-001618
-        git checkout 13451428e46188ad86767587daa736968e4cc62c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303290629.d046fvuG-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/namespace.c:990: warning: expecting prototype for mnt_beneath(). Prototype was for attach_mnt_beneath() instead
-
-
-vim +990 fs/namespace.c
-
-   969	
-   970	/**
-   971	 * mnt_beneath - mount a mount beneath another one, attach to
-   972	 *               @mount_hashtable and parent's list of child mounts
-   973	 *
-   974	 * @new_parent: the source mount
-   975	 * @top_mnt:	the mount beneath which @new_parent is mounted
-   976	 * @new_mp:	the new mountpoint of @top_mnt on @new_parent
-   977	 *
-   978	 * Remove @top_mnt from its current parent and mountpoint and mount it
-   979	 * on @new_mp on @new_parent, and mount @new_parent on the old parent
-   980	 * and old mountpoint of @top_mnt. Finally, attach @new_parent mount to
-   981	 * @mnt_hashtable and @new_parent->mnt_parent->mnt_mounts.
-   982	 *
-   983	 * Note, when we call __attach_mnt() we've already mounted @new_parent
-   984	 * on top of @top_mnt's old parent so @new_parent->mnt_parent will point
-   985	 * to the correct parent.
-   986	 */
-   987	static void attach_mnt_beneath(struct mount *new_parent,
-   988			     struct mount *top_mnt,
-   989			     struct mountpoint *new_mp)
- > 990	{
-   991		mnt_set_mountpoint_beneath(new_parent, top_mnt, new_mp);
-   992		__attach_mnt(new_parent, new_parent->mnt_parent);
-   993	}
-   994	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+> v2: remove brances
+> ---
+>  drivers/md/raid5.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> index 7b820b81d8c2..812a12e3e41a 100644
+> --- a/drivers/md/raid5.c
+> +++ b/drivers/md/raid5.c
+> @@ -7716,7 +7716,6 @@ static void raid5_set_io_opt(struct r5conf *conf)
+>  static int raid5_run(struct mddev *mddev)
+>  {
+>         struct r5conf *conf;
+> -       int working_disks =3D 0;
+>         int dirty_parity_disks =3D 0;
+>         struct md_rdev *rdev;
+>         struct md_rdev *journal_dev =3D NULL;
+> @@ -7912,10 +7911,8 @@ static int raid5_run(struct mddev *mddev)
+>                         pr_warn("md: cannot handle concurrent replacement=
+ and reshape.\n");
+>                         goto abort;
+>                 }
+> -               if (test_bit(In_sync, &rdev->flags)) {
+> -                       working_disks++;
+> +               if (test_bit(In_sync, &rdev->flags))
+>                         continue;
+> -               }
+>                 /* This disc is not fully in-sync.  However if it
+>                  * just stored parity (beyond the recovery_offset),
+>                  * when we don't need to be concerned about the
+> --
+> 2.27.0
+>
