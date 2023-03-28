@@ -1,42 +1,42 @@
 Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADD8AFC1
-	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:56:44 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso13625288ybi.2
-        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:56:44 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F250AFC1
+	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:56:51 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id f66-20020a255145000000b00b714602d43fso13833865ybb.10
+        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680047803;
+        d=google.com; s=20210112; t=1680047810;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=f8oj4Qh8LkL44qDfc+ww/WDT9C93iT4jvbUsjV4OLZU=;
-        b=cRwj07ZHD3+kEgzI1WCsWo0Jn0PxpJhoWIxxnhZ/C7rF6MsGc783MzQ5sULdu71i2j
-         jKqKOI5DzMxXW+0BLJuIMAJdE4wDTOIdWyzoqw1ciQFW3HG375hOaFxHwRs5efHw+CEj
-         n6N1zd/G2NdnRxpXSB5JhmJicJcrK5cCQ3f14MaCMA1iz1tFMbmhlZVM11nQRilyoiHd
-         eNCAeB42smeR++GjJcnlBMEyQc/fOOzn2h/3AV2L0kgNI1Gc9Caw/jCDtScqHcCN2v5z
-         S5XlpUy8e5Lsv74mf9wqVeC3LfgRI3+SS0GSAiBq8gagDMTJ8a5CMreaHWT4KTDWCnBE
-         mVOg==
+        bh=yDSsTwYxjnBxXL6ZIXaxMuMGjJVcQd1t2sonbT61qik=;
+        b=tThQWf8o7mRKmLU99+Ys5G/hVG6Iaa7NDOQLCLqAGn8IfHeEaE11bpjPdJS7YsIfkU
+         CLMiMvT2BDI9uvuHq3azBFNQnfXxHPh4D4Y3/wUsJS6GV/NX1i6fquhAtPd5fhd+mik+
+         UzCL0oAPwDe0mPgJh8j1vCarXeKr5B3V4mc4mc+DZ6uKTibz6f4kl18DVM6ZM1bdJA0D
+         XFe2O94KaSatm7cP1HwWSbiyqt1ex9ukllKv8kbOJ4T4g+mh6W2+NFv2+hrgWMMEtoIL
+         RiOiq2d8sN9dk6njWW4ARKk6MzYuSekvPOqhOlpIkLhwDF9sTohFuTMI8ZbZvLatvZ4u
+         t+1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680047803;
+        d=1e100.net; s=20210112; t=1680047810;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f8oj4Qh8LkL44qDfc+ww/WDT9C93iT4jvbUsjV4OLZU=;
-        b=iybvRodQa3AVVgK9BFbPx6+JPvXCBzOn+c6AhVQj/lwPMhNEWynZN1pBzee4uEe/Ai
-         w5+I1pOa/nSYNKS72KOeuds/fw3t4FyJpKNZpsCzUIJRg2bexbzAnL0bJ+gjrTZKXozU
-         gLaxi4f572Z+d/vIBUQPZYtgX5Jg7yRofjazPWbFmWts46oOi8PzsFdejyz1Io7fU2ls
-         r2AEFrGHa4uFVsXQ1vxWccpCA70YkbXoEWhuoTE8qU6Xac+5wY55voAK7FmGbXi74uHv
-         h3Hr2Xqrf/gKS3JwKf78s7fj6o+wfAoC1PgiOFtPq7QC5ReBF+ih1/2djnCZ27Su1l2q
-         /QgA==
-X-Gm-Message-State: AAQBX9cEhdCumhFSQ1WCgOydpOvGmsPsG6yoJUKWc2wTCvUpK25lDWtH
-	4LHsSvzfMbzuSAWtgWAZ/5zH+83saB/4
-X-Google-Smtp-Source: AKy350bUp5S6wjQC6cWrYY34EcwAiZTBNWURmSqeR/1rTTGdHd3PnQclyh5VuNn5nGYPWejg8XtVkHfkE2gy
+        bh=yDSsTwYxjnBxXL6ZIXaxMuMGjJVcQd1t2sonbT61qik=;
+        b=Cu3mDYmD0RURdjTqxWDmy7uU8EB1Vz5cyGEmHu1lYF+cGuuPnSuMWdaPTYQ0l+LvQG
+         DAsGOWaAH087jLm7ma20TVOvCHVCtnFhu7mMEmSbZwoLbYp8At+YIbtaFF7ovFzRlb3L
+         1ec6Hqj68kdX/w02Yt8oi53UMDEFna3EWW2iuX4rrFuatmCBtsKO/CaTiQMGLXHOwk5S
+         VAxe8HSm6iy5y+SlEMp41Buh0AVB321InldjKZ+e/PAabvQuf0vMedLwtJocy+PYi0VT
+         PcDOBffWBugJVp+S2O/oUeWdxel7LOVBJdo/c7yOmKARbv2mmddHPUCCjw7XXPs1ILw7
+         ZpWQ==
+X-Gm-Message-State: AAQBX9f5rOsdBnqeK9RurkO2dA+jo9XBtcmaizfu22s06YJUGuZp7H7F
+	ojfQVhOJJzdPQdQ+GLkmoX0mzeGFxhnp
+X-Google-Smtp-Source: AKy350bYz2fZS10JwFEhD+dS2mleic5+6OtWAf1qE64PpR5ZyQ91NbiL9aiv3PLYfWuM+xr1e6CSOBj5tdXO
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6519:f0d3:9540:5c31])
- (user=irogers job=sendgmr) by 2002:a05:6902:18d5:b0:b75:3fd4:1b31 with SMTP
- id ck21-20020a05690218d500b00b753fd41b31mr11717269ybb.1.1680047803319; Tue,
- 28 Mar 2023 16:56:43 -0700 (PDT)
-Date: Tue, 28 Mar 2023 16:55:42 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:1003:b0:b1d:5061:98e3 with SMTP
+ id w3-20020a056902100300b00b1d506198e3mr11707003ybt.6.1680047810713; Tue, 28
+ Mar 2023 16:56:50 -0700 (PDT)
+Date: Tue, 28 Mar 2023 16:55:43 -0700
 In-Reply-To: <20230328235543.1082207-1-irogers@google.com>
-Message-Id: <20230328235543.1082207-6-irogers@google.com>
+Message-Id: <20230328235543.1082207-7-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230328235543.1082207-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 5/6] perf annotate: Allow objdump to be set in perfconfig
+Subject: [PATCH v1 6/6] perf symbol: Add command line support for addr2line path
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -60,48 +60,291 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Allow the setting of the objdump command in the perfconfig. Update man
-page for this new option.
+Allow addr2line to be set either on the command line or via the
+perfconfig file. This doesn't currently work with llvm-addr2line as
+the addr2line code emits two things:
+1) the address to decode,
+2) a bogus ',' value.
+The expectation is the bogus value will generate:
+??
+??:0
+that terminates the addr2line reading. However, the output from
+llvm-addr2line is a single line with just the input ',' locking up the
+addr2line reading that is expecting a second line.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Documentation/perf-config.txt | 5 ++++-
- tools/perf/util/annotate.c               | 6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ tools/perf/Documentation/perf-annotate.txt |  3 +++
+ tools/perf/Documentation/perf-config.txt   |  3 +++
+ tools/perf/Documentation/perf-report.txt   |  3 +++
+ tools/perf/Documentation/perf-top.txt      |  6 +++++
+ tools/perf/builtin-annotate.c              |  9 +++++++-
+ tools/perf/builtin-report.c                |  9 +++++++-
+ tools/perf/builtin-top.c                   | 10 +++++++--
+ tools/perf/util/annotate.c                 |  6 +++++
+ tools/perf/util/srcline.c                  | 26 +++++++++++++---------
+ tools/perf/util/symbol_conf.h              |  1 +
+ 10 files changed, 62 insertions(+), 14 deletions(-)
 
+diff --git a/tools/perf/Documentation/perf-annotate.txt b/tools/perf/Documentation/perf-annotate.txt
+index 980fe2c29275..fe168e8165c8 100644
+--- a/tools/perf/Documentation/perf-annotate.txt
++++ b/tools/perf/Documentation/perf-annotate.txt
+@@ -116,6 +116,9 @@ include::itrace.txt[]
+ -M::
+ --disassembler-style=:: Set disassembler style for objdump.
+ 
++--addr2line=<path>::
++        Path to addr2line binary.
++
+ --objdump=<path>::
+         Path to objdump binary.
+ 
 diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
-index 39c890ead2dc..697f7f924545 100644
+index 697f7f924545..e56ae54805a8 100644
 --- a/tools/perf/Documentation/perf-config.txt
 +++ b/tools/perf/Documentation/perf-config.txt
-@@ -250,7 +250,10 @@ annotate.*::
+@@ -250,6 +250,9 @@ annotate.*::
  	These are in control of addresses, jump function, source code
  	in lines of assembly code from a specific program.
  
--	annotate.disassembler_style:
-+	annotate.objdump::
-+		objdump binary to use for disassembly and annotations.
++	annotate.addr2line::
++		addr2line binary to use for file names and line numbers.
 +
-+	annotate.disassembler_style::
- 		Use this to change the default disassembler style to some other value
- 		supported by binutils, such as "intel", see the '-M' option help in the
- 		'objdump' man page.
+ 	annotate.objdump::
+ 		objdump binary to use for disassembly and annotations.
+ 
+diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
+index cfd502f7e6da..af068b4f1e5a 100644
+--- a/tools/perf/Documentation/perf-report.txt
++++ b/tools/perf/Documentation/perf-report.txt
+@@ -381,6 +381,9 @@ OPTIONS
+ 	This allows to examine the path the program took to each sample.
+ 	The data collection must have used -b (or -j) and -g.
+ 
++--addr2line=<path>::
++        Path to addr2line binary.
++
+ --objdump=<path>::
+         Path to objdump binary.
+ 
+diff --git a/tools/perf/Documentation/perf-top.txt b/tools/perf/Documentation/perf-top.txt
+index c60e615b7183..619cc8143ad5 100644
+--- a/tools/perf/Documentation/perf-top.txt
++++ b/tools/perf/Documentation/perf-top.txt
+@@ -161,6 +161,12 @@ Default is to monitor all CPUS.
+ -M::
+ --disassembler-style=:: Set disassembler style for objdump.
+ 
++--addr2line=<path>::
++        Path to addr2line binary.
++
++--objdump=<path>::
++        Path to objdump binary.
++
+ --prefix=PREFIX::
+ --prefix-strip=N::
+         Remove first N entries from source file path names in executables
+diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+index d781639b644f..ec276db3e5dd 100644
+--- a/tools/perf/builtin-annotate.c
++++ b/tools/perf/builtin-annotate.c
+@@ -516,7 +516,7 @@ int cmd_annotate(int argc, const char **argv)
+ 	struct itrace_synth_opts itrace_synth_opts = {
+ 		.set = 0,
+ 	};
+-	const char *disassembler_style = NULL, *objdump_path = NULL;
++	const char *disassembler_style = NULL, *objdump_path = NULL, *addr2line_path = NULL;
+ 	struct option options[] = {
+ 	OPT_STRING('i', "input", &input_name, "file",
+ 		    "input file name"),
+@@ -569,6 +569,8 @@ int cmd_annotate(int argc, const char **argv)
+ 		    "Strip first N entries of source file path name in programs (with --prefix)"),
+ 	OPT_STRING(0, "objdump", &objdump_path, "path",
+ 		   "objdump binary to use for disassembly and annotations"),
++	OPT_STRING(0, "addr2line", &addr2line_path, "path",
++		   "addr2line binary to use for line numbers"),
+ 	OPT_BOOLEAN(0, "demangle", &symbol_conf.demangle,
+ 		    "Enable symbol demangling"),
+ 	OPT_BOOLEAN(0, "demangle-kernel", &symbol_conf.demangle_kernel,
+@@ -628,6 +630,11 @@ int cmd_annotate(int argc, const char **argv)
+ 		if (!annotate.opts.objdump_path)
+ 			return -ENOMEM;
+ 	}
++	if (addr2line_path) {
++		symbol_conf.addr2line_path = strdup(addr2line_path);
++		if (!symbol_conf.addr2line_path)
++			return -ENOMEM;
++	}
+ 
+ 	if (annotate_check_args(&annotate.opts) < 0)
+ 		return -EINVAL;
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index 15b0cf649e1a..4011abc03d0d 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -1226,7 +1226,7 @@ int cmd_report(int argc, const char **argv)
+ 	};
+ 	char *sort_order_help = sort_help("sort by key(s):");
+ 	char *field_order_help = sort_help("output field(s): overhead period sample ");
+-	const char *disassembler_style = NULL, *objdump_path = NULL;
++	const char *disassembler_style = NULL, *objdump_path = NULL, *addr2line_path = NULL;
+ 	const struct option options[] = {
+ 	OPT_STRING('i', "input", &input_name, "file",
+ 		    "input file name"),
+@@ -1344,6 +1344,8 @@ int cmd_report(int argc, const char **argv)
+ 		    "add last branch records to call history"),
+ 	OPT_STRING(0, "objdump", &objdump_path, "path",
+ 		   "objdump binary to use for disassembly and annotations"),
++	OPT_STRING(0, "addr2line", &addr2line_path, "path",
++		   "addr2line binary to use for line numbers"),
+ 	OPT_BOOLEAN(0, "demangle", &symbol_conf.demangle,
+ 		    "Disable symbol demangling"),
+ 	OPT_BOOLEAN(0, "demangle-kernel", &symbol_conf.demangle_kernel,
+@@ -1430,6 +1432,11 @@ int cmd_report(int argc, const char **argv)
+ 		if (!report.annotation_opts.objdump_path)
+ 			return -ENOMEM;
+ 	}
++	if (addr2line_path) {
++		symbol_conf.addr2line_path = strdup(addr2line_path);
++		if (!symbol_conf.addr2line_path)
++			return -ENOMEM;
++	}
+ 
+ 	if (annotate_check_args(&report.annotation_opts) < 0) {
+ 		ret = -EINVAL;
+diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+index 57a273cd03de..82c6c065830d 100644
+--- a/tools/perf/builtin-top.c
++++ b/tools/perf/builtin-top.c
+@@ -1439,7 +1439,7 @@ int cmd_top(int argc, const char **argv)
+ 	};
+ 	struct record_opts *opts = &top.record_opts;
+ 	struct target *target = &opts->target;
+-	const char *disassembler_style = NULL, *objdump_path = NULL;
++	const char *disassembler_style = NULL, *objdump_path = NULL, *addr2line_path = NULL;
+ 	const struct option options[] = {
+ 	OPT_CALLBACK('e', "event", &top.evlist, "event",
+ 		     "event selector. use 'perf list' to list available events",
+@@ -1527,6 +1527,8 @@ int cmd_top(int argc, const char **argv)
+ 	OPT_BOOLEAN(0, "no-bpf-event", &top.record_opts.no_bpf_event, "do not record bpf events"),
+ 	OPT_STRING(0, "objdump", &objdump_path, "path",
+ 		    "objdump binary to use for disassembly and annotations"),
++	OPT_STRING(0, "addr2line", &addr2line_path, "path",
++		   "addr2line binary to use for line numbers"),
+ 	OPT_STRING('M', "disassembler-style", &disassembler_style, "disassembler style",
+ 		   "Specify disassembler style (e.g. -M intel for intel syntax)"),
+ 	OPT_STRING(0, "prefix", &top.annotation_opts.prefix, "prefix",
+@@ -1629,7 +1631,11 @@ int cmd_top(int argc, const char **argv)
+ 		if (!top.annotation_opts.objdump_path)
+ 			return -ENOMEM;
+ 	}
+-
++	if (addr2line_path) {
++		symbol_conf.addr2line_path = strdup(addr2line_path);
++		if (!symbol_conf.addr2line_path)
++			return -ENOMEM;
++	}
+ 
+ 	status = symbol__validate_sym_arguments();
+ 	if (status)
 diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index 7338249dfdd9..3eaa9b2df6c4 100644
+index 3eaa9b2df6c4..3e5df90e11f8 100644
 --- a/tools/perf/util/annotate.c
 +++ b/tools/perf/util/annotate.c
-@@ -3211,6 +3211,12 @@ static int annotation__config(const char *var, const char *value, void *data)
- 			pr_err("Not enough memory for annotate.disassembler_style\n");
+@@ -3217,6 +3217,12 @@ static int annotation__config(const char *var, const char *value, void *data)
+ 			pr_err("Not enough memory for annotate.objdump\n");
  			return -1;
  		}
-+	} else if (!strcmp(var, "annotate.objdump")) {
-+		opt->objdump_path = strdup(value);
-+		if (!opt->objdump_path) {
-+			pr_err("Not enough memory for annotate.objdump\n");
++	} else if (!strcmp(var, "annotate.addr2line")) {
++		symbol_conf.addr2line_path = strdup(value);
++		if (!symbol_conf.addr2line_path) {
++			pr_err("Not enough memory for annotate.addr2line\n");
 +			return -1;
 +		}
  	} else if (!strcmp(var, "annotate.demangle")) {
  		symbol_conf.demangle = perf_config_bool("demangle", value);
  	} else if (!strcmp(var, "annotate.demangle_kernel")) {
+diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+index 33321867416b..f0a96a834e4b 100644
+--- a/tools/perf/util/srcline.c
++++ b/tools/perf/util/srcline.c
+@@ -414,9 +414,14 @@ static void addr2line_subprocess_cleanup(struct a2l_subprocess *a2l)
+ 	free(a2l);
+ }
+ 
+-static struct a2l_subprocess *addr2line_subprocess_init(const char *path)
+-{
+-	const char *argv[] = { "addr2line", "-e", path, "-i", "-f", NULL };
++static struct a2l_subprocess *addr2line_subprocess_init(const char *addr2line_path,
++							const char *binary_path)
++{
++	const char *argv[] = {
++		addr2line_path ?: "addr2line",
++		"-e", binary_path,
++		"-i", "-f", NULL
++	};
+ 	struct a2l_subprocess *a2l = zalloc(sizeof(*a2l));
+ 	int start_command_status = 0;
+ 
+@@ -436,21 +441,22 @@ static struct a2l_subprocess *addr2line_subprocess_init(const char *path)
+ 	a2l->addr2line.argv = NULL; /* it's not used after start_command; avoid dangling pointers */
+ 
+ 	if (start_command_status != 0) {
+-		pr_warning("could not start addr2line for %s: start_command return code %d\n",
+-			   path,
+-			   start_command_status);
++		pr_warning("could not start addr2line (%s) for %s: start_command return code %d\n",
++			addr2line_path, binary_path, start_command_status);
+ 		goto out;
+ 	}
+ 
+ 	a2l->to_child = fdopen(a2l->addr2line.in, "w");
+ 	if (a2l->to_child == NULL) {
+-		pr_warning("could not open write-stream to addr2line of %s\n", path);
++		pr_warning("could not open write-stream to addr2line (%s) of %s\n",
++			addr2line_path, binary_path);
+ 		goto out;
+ 	}
+ 
+ 	a2l->from_child = fdopen(a2l->addr2line.out, "r");
+ 	if (a2l->from_child == NULL) {
+-		pr_warning("could not open read-stream from addr2line of %s\n", path);
++		pr_warning("could not open read-stream from addr2line (%s) of %s\n",
++			addr2line_path, binary_path);
+ 		goto out;
+ 	}
+ 
+@@ -490,7 +496,6 @@ static int read_addr2line_record(struct a2l_subprocess *a2l,
+ 
+ 	if (getline(&line, &line_len, a2l->from_child) < 0 || !line_len)
+ 		goto error;
+-
+ 	if (function != NULL)
+ 		*function = strdup(strim(line));
+ 
+@@ -553,7 +558,8 @@ static int addr2line(const char *dso_name, u64 addr,
+ 		if (!filename__has_section(dso_name, ".debug_line"))
+ 			goto out;
+ 
+-		dso->a2l = addr2line_subprocess_init(dso_name);
++		dso->a2l = addr2line_subprocess_init(symbol_conf.addr2line_path,
++						     dso_name);
+ 		a2l = dso->a2l;
+ 	}
+ 
+diff --git a/tools/perf/util/symbol_conf.h b/tools/perf/util/symbol_conf.h
+index bc3d046fbb63..5accd8e69ad2 100644
+--- a/tools/perf/util/symbol_conf.h
++++ b/tools/perf/util/symbol_conf.h
+@@ -61,6 +61,7 @@ struct symbol_conf {
+ 			*sym_list_str,
+ 			*col_width_list_str,
+ 			*bt_stop_list_str;
++	char		*addr2line_path;
+ 	unsigned long	time_quantum;
+        struct strlist	*dso_list,
+ 			*comm_list,
 -- 
 2.40.0.348.gf938b09366-goog
 
