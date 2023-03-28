@@ -1,52 +1,51 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0301AD30;
-	Tue, 28 Mar 2023 17:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5364CAD30;
+	Tue, 28 Mar 2023 17:45:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680024859; x=1711560859;
+  t=1680025524; x=1711561524;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WTNJQqR6j0Fv4yewPZZeEkwpR+jxknlg6+8TkBHSQ54=;
-  b=NMmF+86zOR8Tw1SDFfPxTMjMBSH/12KYthX7ToPN+iL6EmD1bRIuhsAo
-   NqQQOJoGAevsFVQ13jb1+TlENEyYDicwWMqn37G+5h4o900Gm8SyEXoRr
-   w+NVkGwEIK8vHnesrgDRosbGUTwCrbiXllJXhKB6jTxIWSpGMftONmZNn
-   uCjSDFJwcGr0bEYxKG3HOo/LO62QBUFJi2fv/RhOYCp/0OrHzuSMsSYzk
-   edhziCU4xAxQb91gXU2O5e5CQz18hI++RSoFi3tgYo/VZh1HFQHPKkMnj
-   7/lgkRvE5DoyOSuUV5ugEWt5G0N3sO3cKwO+rWHMIU58K8ujqllhhPkuk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342228788"
+  bh=zqW36/YvRPeOC23O2ZjyjYHiMdp4yJAYygeFlPzj9Zs=;
+  b=Nh8HKsl0UvPUtBefITStNU5ePvvr3T5+tzeTfAuCv5L4nCXo6qKYH5BT
+   FOGchrE4bhS1MciBcDOKTOrEbGsPZ+alAnarfnEIvr+04EoAi8LOwucu6
+   CrNHublxyTOMp18HnaXdmLpNVcRDxVm31yYwYsOOwwwYUIOk4XT842/lx
+   rK2gK/elf4sdLAysdk8calIN0Lap9OmKnuAx/P1YZBoVzhNUHKuRU0vF6
+   n1nWAsAoXGBnkBKLIG2ecM5Hh0l+EB3P1jj8FcT7/5pSZy5TPm04dvrfQ
+   pbzCYi9+hcOcE7G+szzOYqkR4P1N1suMcAS4JsDzrsynL7t8FiS5WqbRB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="320296517"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="342228788"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:34:19 -0700
+   d="scan'208";a="320296517"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:45:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="677452177"
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="827565190"
 X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
-   d="scan'208";a="677452177"
+   d="scan'208";a="827565190"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2023 10:34:15 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 28 Mar 2023 10:45:20 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1phDD4-000IlR-1M;
-	Tue, 28 Mar 2023 17:34:14 +0000
-Date: Wed, 29 Mar 2023 01:33:57 +0800
+	id 1phDNi-000ImF-3C;
+	Tue, 28 Mar 2023 17:45:14 +0000
+Date: Wed, 29 Mar 2023 01:44:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org, linux-block@vger.kernel.org
+To: Wei Chen <harperchen1110@gmail.com>, tiffany.lin@mediatek.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
-	ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-	Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-	Bernd Schubert <bschubert@ddn.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH V5 02/16] io_uring: add IORING_OP_FUSED_CMD
-Message-ID: <202303290112.oiF4LrMI-lkp@intel.com>
-References: <20230328150958.1253547-3-ming.lei@redhat.com>
+	andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+	mchehab@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Wei Chen <harperchen1110@gmail.com>
+Subject: Re: [PATCH] media: mediatek: vcodec: Fix potential array
+ out-of-bounds in decoder queue_setup
+Message-ID: <202303290153.AP9Oe2GL-lkp@intel.com>
+References: <20230328100951.536955-1-harperchen1110@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,114 +54,170 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328150958.1253547-3-ming.lei@redhat.com>
+In-Reply-To: <20230328100951.536955-1-harperchen1110@gmail.com>
 
-Hi Ming,
+Hi Wei,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on axboe-block/for-next]
+[auto build test WARNING on media-tree/master]
 [also build test WARNING on linus/master v6.3-rc4 next-20230328]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/io_uring-increase-io_kiocb-flags-into-64bit/20230328-232554
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20230328150958.1253547-3-ming.lei%40redhat.com
-patch subject: [PATCH V5 02/16] io_uring: add IORING_OP_FUSED_CMD
-config: x86_64-randconfig-a011-20230327 (https://download.01.org/0day-ci/archive/20230329/202303290112.oiF4LrMI-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Chen/media-mediatek-vcodec-Fix-potential-array-out-of-bounds-in-decoder-queue_setup/20230328-181142
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230328100951.536955-1-harperchen1110%40gmail.com
+patch subject: [PATCH] media: mediatek: vcodec: Fix potential array out-of-bounds in decoder queue_setup
+config: s390-randconfig-r044-20230327 (https://download.01.org/0day-ci/archive/20230329/202303290153.AP9Oe2GL-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1cdd7d77287ea8d97834b37825e63a727e860f6c
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/caa43627286fb5f3b0b3af7e01e1baeca5c5f9cc
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ming-Lei/io_uring-increase-io_kiocb-flags-into-64bit/20230328-232554
-        git checkout 1cdd7d77287ea8d97834b37825e63a727e860f6c
+        git fetch --no-tags linux-review Wei-Chen/media-mediatek-vcodec-Fix-potential-array-out-of-bounds-in-decoder-queue_setup/20230328-181142
+        git checkout caa43627286fb5f3b0b3af7e01e1baeca5c5f9cc
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/mediatek/vcodec/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303290112.oiF4LrMI-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303290153.AP9Oe2GL-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/nvme/host/ioctl.c:8:
->> include/linux/io_uring.h:112:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void io_fused_cmd_start_secondary_req(struct io_uring_cmd *,
-                                                                            ^
-   include/linux/io_uring.h:113:57: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-                   unsigned issue_flags, const struct io_uring_bvec_buf *,
-                                                                         ^
-   include/linux/io_uring.h:114:15: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-                   unsigned int,
-                               ^
-   3 warnings generated.
+   In file included from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:9:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:9:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:9:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:759:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+                   else
+                   ^
+   13 warnings generated.
 
 
-vim +112 include/linux/io_uring.h
+vim +759 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
 
-    93	
-    94	static inline void io_uring_files_cancel(void)
-    95	{
-    96		if (current->io_uring) {
-    97			io_uring_unreg_ringfd();
-    98			__io_uring_cancel(false);
-    99		}
-   100	}
-   101	static inline void io_uring_task_cancel(void)
-   102	{
-   103		if (current->io_uring)
-   104			__io_uring_cancel(true);
-   105	}
-   106	static inline void io_uring_free(struct task_struct *tsk)
-   107	{
-   108		if (tsk->io_uring)
-   109			__io_uring_free(tsk);
-   110	}
-   111	#else
- > 112	static inline void io_fused_cmd_start_secondary_req(struct io_uring_cmd *,
-   113			unsigned issue_flags, const struct io_uring_bvec_buf *,
-   114			unsigned int,
-   115			void (*complete_tw_cb)(struct io_uring_cmd *, unsigned))
-   116	{
-   117	}
-   118	static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
-   119				      struct iov_iter *iter, void *ioucmd)
-   120	{
-   121		return -EOPNOTSUPP;
-   122	}
-   123	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
-   124			ssize_t ret2, unsigned issue_flags)
-   125	{
-   126	}
-   127	static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
-   128				void (*task_work_cb)(struct io_uring_cmd *, unsigned))
-   129	{
-   130	}
-   131	static inline struct sock *io_uring_get_socket(struct file *file)
-   132	{
-   133		return NULL;
-   134	}
-   135	static inline void io_uring_task_cancel(void)
-   136	{
-   137	}
-   138	static inline void io_uring_files_cancel(void)
-   139	{
-   140	}
-   141	static inline void io_uring_free(struct task_struct *tsk)
-   142	{
-   143	}
-   144	static inline const char *io_uring_get_opcode(u8 opcode)
-   145	{
-   146		return "";
-   147	}
-   148	#endif
-   149	
+   739	
+   740	int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+   741				    unsigned int *nplanes, unsigned int sizes[],
+   742				    struct device *alloc_devs[])
+   743	{
+   744		struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vq);
+   745		struct mtk_q_data *q_data;
+   746		unsigned int i;
+   747	
+   748		q_data = mtk_vdec_get_q_data(ctx, vq->type);
+   749	
+   750		if (q_data == NULL) {
+   751			mtk_v4l2_err("vq->type=%d err\n", vq->type);
+   752			return -EINVAL;
+   753		}
+   754	
+   755		if (*nplanes) {
+   756			if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
+   757				if (*nplanes != q_data->fmt->num_planes)
+   758					return -EINVAL;
+ > 759			else
+   760				if (*nplanes != 1)
+   761					return -EINVAL;
+   762	
+   763			for (i = 0; i < *nplanes; i++) {
+   764				if (sizes[i] < q_data->sizeimage[i])
+   765					return -EINVAL;
+   766			}
+   767		} else {
+   768			if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
+   769				*nplanes = q_data->fmt->num_planes;
+   770			else
+   771				*nplanes = 1;
+   772	
+   773			for (i = 0; i < *nplanes; i++)
+   774				sizes[i] = q_data->sizeimage[i];
+   775		}
+   776	
+   777		mtk_v4l2_debug(1,
+   778				"[%d]\t type = %d, get %d plane(s), %d buffer(s) of size 0x%x 0x%x ",
+   779				ctx->id, vq->type, *nplanes, *nbuffers,
+   780				sizes[0], sizes[1]);
+   781	
+   782		return 0;
+   783	}
+   784	
 
 -- 
 0-DAY CI Kernel Test Service
