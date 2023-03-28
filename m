@@ -1,191 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447273D74;
-	Tue, 28 Mar 2023 17:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E436C433D2;
-	Tue, 28 Mar 2023 17:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680023198;
-	bh=mSJs5c0u+mvYERTVXLbz2yaNg7v/fMoz0d2LwP4Amgk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BzVDmw43m60lvH0Y3KjAIrZm6woD7+AuyL5jMqZObEtFgYW0wKZ620dZ4j9la6GKr
-	 VH8ZHy/40ROZYD+wpguyi+Hnrz60lue9UANRUfwDWT/XbZvuIjg+BtjmxcvuJFM0ua
-	 1/dAgwGGnlprh119IPhnzAFOQwKOkEQBbBkalAwVG2eSKm3HK2LifA8O54SAtv0OrM
-	 Q2Imm1uVHmcTk5A4PFzt+qUwbo+dHHPbScXOewUOlstrb1u7MWsTKJsUqKlg2vlWQd
-	 YoFG0MgDzpeekikZ/MLrmC269nUqCEwWEpjubIXnIc3R2OyHsl3hwsR4CkmRyAcYF8
-	 vzeSM9lwScGGA==
-Date: Tue, 28 Mar 2023 10:06:36 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sui Jingfeng <15330273260@189.cn>
-Cc: kernel test robot <lkp@intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian Koenig <christian.koenig@amd.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>
-Subject: Re: [PATCH v8 2/2] drm: add kms driver for loongson display
- controller
-Message-ID: <20230328170636.GA1986005@dev-arch.thelio-3990X>
-References: <20230320100131.1277034-3-15330273260@189.cn>
- <202303281754.jWI20j2C-lkp@intel.com>
- <027cf6d5-6de2-3424-7a81-a43ab689c3d4@189.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0301AD30;
+	Tue, 28 Mar 2023 17:34:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680024859; x=1711560859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WTNJQqR6j0Fv4yewPZZeEkwpR+jxknlg6+8TkBHSQ54=;
+  b=NMmF+86zOR8Tw1SDFfPxTMjMBSH/12KYthX7ToPN+iL6EmD1bRIuhsAo
+   NqQQOJoGAevsFVQ13jb1+TlENEyYDicwWMqn37G+5h4o900Gm8SyEXoRr
+   w+NVkGwEIK8vHnesrgDRosbGUTwCrbiXllJXhKB6jTxIWSpGMftONmZNn
+   uCjSDFJwcGr0bEYxKG3HOo/LO62QBUFJi2fv/RhOYCp/0OrHzuSMsSYzk
+   edhziCU4xAxQb91gXU2O5e5CQz18hI++RSoFi3tgYo/VZh1HFQHPKkMnj
+   7/lgkRvE5DoyOSuUV5ugEWt5G0N3sO3cKwO+rWHMIU58K8ujqllhhPkuk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342228788"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="342228788"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:34:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="677452177"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="677452177"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2023 10:34:15 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1phDD4-000IlR-1M;
+	Tue, 28 Mar 2023 17:34:14 +0000
+Date: Wed, 29 Mar 2023 01:33:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org, linux-block@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+	ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+	Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+	Bernd Schubert <bschubert@ddn.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH V5 02/16] io_uring: add IORING_OP_FUSED_CMD
+Message-ID: <202303290112.oiF4LrMI-lkp@intel.com>
+References: <20230328150958.1253547-3-ming.lei@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <027cf6d5-6de2-3424-7a81-a43ab689c3d4@189.cn>
+In-Reply-To: <20230328150958.1253547-3-ming.lei@redhat.com>
 
-On Tue, Mar 28, 2023 at 11:22:50PM +0800, Sui Jingfeng wrote:
-> HI,
-> 
-> On 2023/3/28 17:27, kernel test robot wrote:
-> > Hi Sui,
-> > 
-> > Thank you for the patch! Perhaps something to improve:
-> > 
-> > [auto build test WARNING on drm-misc/drm-misc-next]
-> > [also build test WARNING on linus/master v6.3-rc4 next-20230328]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
-> > base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-> > patch link:    https://lore.kernel.org/r/20230320100131.1277034-3-15330273260%40189.cn
-> > patch subject: [PATCH v8 2/2] drm: add kms driver for loongson display controller
-> > config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230328/202303281754.jWI20j2C-lkp@intel.com/config)
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=1 build):
-> >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >          chmod +x ~/bin/make.cross
-> >          # https://github.com/intel-lab-lkp/linux/commit/80b4115f44993f4ebf47b1cb9e8f02953575b977
-> >          git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >          git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
-> >          git checkout 80b4115f44993f4ebf47b1cb9e8f02953575b977
-> >          # save the config file
-> >          mkdir build_dir && cp config build_dir/.config
-> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-> >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/accel/ drivers/gpu/drm/loongson/ drivers/iio/light/ drivers/media/pci/intel/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Link: https://lore.kernel.org/oe-kbuild-all/202303281754.jWI20j2C-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > > > drivers/gpu/drm/loongson/lsdc_drv.c:232:11: warning: variable 'gpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >             else if (descp->chip == CHIP_LS7A2000)
-> >                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     drivers/gpu/drm/loongson/lsdc_drv.c:235:7: note: uninitialized use occurs here
-> >             if (!gpu) {
-> >                  ^~~
-> >     drivers/gpu/drm/loongson/lsdc_drv.c:232:7: note: remove the 'if' if its condition is always true
-> >             else if (descp->chip == CHIP_LS7A2000)
-> >                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     drivers/gpu/drm/loongson/lsdc_drv.c:217:21: note: initialize the variable 'gpu' to silence this warning
-> >             struct pci_dev *gpu;
-> >                                ^
-> >                                 = NULL
-> >     1 warning generated.
-> > --
-> 
-> In practice,  either  descp->chip == CHIP_LS7A2000 or descp->chip ==
-> CHIP_LS7A1000 will be happened at runtime.
-> 
-> the variable 'gpu' is guaranteed to be initialized when code run at 
-> drivers/gpu/drm/loongson/lsdc_drv.c:235
-> 
-> This warnning is almost wrong here.
+Hi Ming,
 
-Clang's semantic analysis happens before optimizations, meaning it does
-not perform interprocedural analysis, so it does not have enough
-information at this point to tell that. Either just initialize gpu to
-NULL and let the existing 'if (!gpu)' handle it or add a separate else
-branch that warns about an unhandled chip value so that it is obvious
-what needs to be done if someone forgets to update this statement when a
-new chip is supported by this driver.
+I love your patch! Perhaps something to improve:
 
-> > > > drivers/gpu/drm/loongson/lsdc_pll.c:188:14: warning: variable 'diff' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >                                     else if (clock_khz < computed)
-> >                                              ^~~~~~~~~~~~~~~~~~~~
-> >     drivers/gpu/drm/loongson/lsdc_pll.c:191:9: note: uninitialized use occurs here
-> >                                     if (diff < min) {
-> >                                         ^~~~
-> >     drivers/gpu/drm/loongson/lsdc_pll.c:188:10: note: remove the 'if' if its condition is always true
-> >                                     else if (clock_khz < computed)
-> >                                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >     drivers/gpu/drm/loongson/lsdc_pll.c:177:22: note: initialize the variable 'diff' to silence this warning
-> >                                     unsigned int diff;
-> >                                                      ^
-> >                                                       = 0
-> >     1 warning generated.
-> 
-> Here the robot is also wrong here in practice,
-> 
-> because either  if (clock_khz >= computed) or else if (clock_khz < computed)
-> will be happen.
-> 
-> 'diff' variable is guaranteed to be initialized.
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on linus/master v6.3-rc4 next-20230328]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Make that clearer by turning 'else if (clock_khz < computed)' into just
-'else' as the warning suggests? I do not see why the condition is
-specified at all if it is just an 'else' in practice.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/io_uring-increase-io_kiocb-flags-into-64bit/20230328-232554
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230328150958.1253547-3-ming.lei%40redhat.com
+patch subject: [PATCH V5 02/16] io_uring: add IORING_OP_FUSED_CMD
+config: x86_64-randconfig-a011-20230327 (https://download.01.org/0day-ci/archive/20230329/202303290112.oiF4LrMI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1cdd7d77287ea8d97834b37825e63a727e860f6c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ming-Lei/io_uring-increase-io_kiocb-flags-into-64bit/20230328-232554
+        git checkout 1cdd7d77287ea8d97834b37825e63a727e860f6c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
 
-Cheers,
-Nathan
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303290112.oiF4LrMI-lkp@intel.com/
 
-> > 
-> > vim +232 drivers/gpu/drm/loongson/lsdc_drv.c
-> > 
-> >     212	
-> >     213	static int lsdc_get_dedicated_vram(struct lsdc_device *ldev,
-> >     214					   const struct lsdc_desc *descp)
-> >     215	{
-> >     216		struct drm_device *ddev = &ldev->base;
-> >     217		struct pci_dev *gpu;
-> >     218		resource_size_t base, size;
-> >     219	
-> >     220		/*
-> >     221		 * The GPU and display controller in LS7A1000/LS7A2000 are separated
-> >     222		 * PCIE devices, they are two devices not one. The DC does not has a
-> >     223		 * dedicate VRAM bar, because the BIOS engineer choose to assign the
-> >     224		 * VRAM to the GPU device. Sadly, after years application, this form
-> >     225		 * as a convention for loongson integrated graphics. Bar 2 of the GPU
-> >     226		 * device contain the base address and size of the VRAM, both the GPU
-> >     227		 * and the DC can access the on-board VRAM as long as the DMA address
-> >     228		 * emitted fall in [base, base + size).
-> >     229		 */
-> >     230		if (descp->chip == CHIP_LS7A1000)
-> >     231			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A15, NULL);
-> >   > 232		else if (descp->chip == CHIP_LS7A2000)
-> >     233			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A25, NULL);
-> >     234	
-> >     235		if (!gpu) {
-> >     236			drm_warn(ddev, "No GPU device found\n");
-> >     237			return -ENODEV;
-> >     238		}
-> >     239	
-> >     240		base = pci_resource_start(gpu, 2);
-> >     241		size = pci_resource_len(gpu, 2);
-> >     242	
-> >     243		ldev->vram_base = base;
-> >     244		ldev->vram_size = size;
-> >     245	
-> >     246		drm_info(ddev, "dedicated vram start: 0x%llx, size: %uMB\n",
-> >     247			 (u64)base, (u32)(size >> 20));
-> >     248	
-> >     249		return 0;
-> >     250	}
-> >     251	
-> > 
-> 
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/nvme/host/ioctl.c:8:
+>> include/linux/io_uring.h:112:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void io_fused_cmd_start_secondary_req(struct io_uring_cmd *,
+                                                                            ^
+   include/linux/io_uring.h:113:57: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+                   unsigned issue_flags, const struct io_uring_bvec_buf *,
+                                                                         ^
+   include/linux/io_uring.h:114:15: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+                   unsigned int,
+                               ^
+   3 warnings generated.
+
+
+vim +112 include/linux/io_uring.h
+
+    93	
+    94	static inline void io_uring_files_cancel(void)
+    95	{
+    96		if (current->io_uring) {
+    97			io_uring_unreg_ringfd();
+    98			__io_uring_cancel(false);
+    99		}
+   100	}
+   101	static inline void io_uring_task_cancel(void)
+   102	{
+   103		if (current->io_uring)
+   104			__io_uring_cancel(true);
+   105	}
+   106	static inline void io_uring_free(struct task_struct *tsk)
+   107	{
+   108		if (tsk->io_uring)
+   109			__io_uring_free(tsk);
+   110	}
+   111	#else
+ > 112	static inline void io_fused_cmd_start_secondary_req(struct io_uring_cmd *,
+   113			unsigned issue_flags, const struct io_uring_bvec_buf *,
+   114			unsigned int,
+   115			void (*complete_tw_cb)(struct io_uring_cmd *, unsigned))
+   116	{
+   117	}
+   118	static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+   119				      struct iov_iter *iter, void *ioucmd)
+   120	{
+   121		return -EOPNOTSUPP;
+   122	}
+   123	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+   124			ssize_t ret2, unsigned issue_flags)
+   125	{
+   126	}
+   127	static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+   128				void (*task_work_cb)(struct io_uring_cmd *, unsigned))
+   129	{
+   130	}
+   131	static inline struct sock *io_uring_get_socket(struct file *file)
+   132	{
+   133		return NULL;
+   134	}
+   135	static inline void io_uring_task_cancel(void)
+   136	{
+   137	}
+   138	static inline void io_uring_files_cancel(void)
+   139	{
+   140	}
+   141	static inline void io_uring_free(struct task_struct *tsk)
+   142	{
+   143	}
+   144	static inline const char *io_uring_get_opcode(u8 opcode)
+   145	{
+   146		return "";
+   147	}
+   148	#endif
+   149	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
