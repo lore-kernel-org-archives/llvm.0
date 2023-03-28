@@ -1,42 +1,42 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DBFAFC1
-	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:56:10 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-544781e30easo135418297b3.1
-        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:56:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D02AFC1
+	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:56:20 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5417f156cb9so137473247b3.8
+        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680047769;
+        d=google.com; s=20210112; t=1680047780;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QwhWDPXvx6cfkb5reLksh9jCAury04O7LzcSvRbB8Zs=;
-        b=Ltgu8Ff4auNliuT5UliaEkAuq9i2Tzu+5U2BQzip1AZokzyNRdwHBLrr0A1q1TCteh
-         6HA8rQWn2amyDpZCOcWkijg0aV3wa7oBLO7ki4rM6Xzr9cqFtUVrftkblee0rzPjMb+L
-         wJ4eW8t3SAEsbCXRcXZGpnQH05BULFCsjjs0PkcoeeHAo5P4f+L0tmwiyGtOxdqtUqwk
-         lRhAg5051knYmNhbu0rixPc04ElVILRM6fmL1sequabHkJhfYFow2m9eE4OC/NNGI7D5
-         M1zB/Iu+BE5dCWofkvweIXTenU0zYzPftguEROrDBdX8QE4rvu1TaHyUsk4TFKeXBN50
-         OHyg==
+        bh=csE2VZEcuZtBLgmcXXy647e0uSJ8df6i+003V2C0jUw=;
+        b=Yib8I2uNI+WOJsCh1Q4n8uRnhC1tAuAB8JbPeIlcB5nVB46fTnrkZzX4bjrI7UcS16
+         VfeA/8cQUrhsK7bK0usQaCWRJSdq9N9a6c3rcix8RFrv70wWXoK3EUVPDzyU6IvQIMmB
+         kBTGnjt9VijE3efrsi0D/w/HohhQmU1FbnNKlGXND9/+92cwfNbKh9irTfujj/1fJLoJ
+         xjdEZaRcd9mX1MdQRDRM6WEQZj4tF8vGNcBxmsNyWeg0uzmuvmVFgEUxdjRP8xJaEnl5
+         In8K528yb79Cz7HetuZlunZq+rSQcDcPTxHJ9GpRt+WSRtGDjvlhVlwbDju0A9up2zjT
+         Z/Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680047769;
+        d=1e100.net; s=20210112; t=1680047780;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QwhWDPXvx6cfkb5reLksh9jCAury04O7LzcSvRbB8Zs=;
-        b=3IM/nKILwjE+qoFymiLOUGJImdyWRnn54lGKVLY6vgHw1dFeM2YrAWTjsJjb1cEulG
-         CRd/Rhb9S0lqrykSmT4tUgHWbc/GOWAvzIiwj8Wsrm7JyGSd+8vHRY+PLck4YWipb+ra
-         i1/qgC7R5CSDHHGSWlNC8HASMmmv9MCoAZo8MwEoLpvco3hsy/5WmUYX9r8oh/S6AWc/
-         CMfxyKEBZCGqcn87tzDcFmgYH7bX2U5HbRRvs++h9kgxURIlj1OtbK1irOf6QwSomIhj
-         0z2uUVOnDWe8d3umgK3MRdjJkWJueIshcvTl6NFZ/clpv8o+7rciTP99dp63gbZqce/K
-         4LPQ==
-X-Gm-Message-State: AAQBX9cy3JNHSwNIrPVEfWspnUP1Ravq3JDGb/4xcKm55eT3qzO7z7EC
-	9pfdaU3IFAZ/RqPgLkLC1PKtW7DE5Lly
-X-Google-Smtp-Source: AKy350bPHWqR7CBnjrbpMPu6sWr+4djUlu6CbJ9r9CJVXCNAz4PB6GrJeq1BsxI9gq7g43uy2Tw/VjdqKiJY
+        bh=csE2VZEcuZtBLgmcXXy647e0uSJ8df6i+003V2C0jUw=;
+        b=AMAsE0xw1YTnYL5aOMXPZ5RsqT6gdcAFaox+eGIbSXbJttTVFHKdZXic+/PwFYHzg1
+         RIvsWffXn8kwEk45B/p1QWsHODi30h/GzdZtKCXh8V+Gj1ac9oqQguAfGzspJqVsUvjk
+         K0EjOUFDWe3O4DUIbOpv3wElid9KfmkjVOTzCeRvrk1LhWF/OKhOuaC0ee/9gekhZn9k
+         8NUfL6xY1X+UuNbk6C4relRRtvSigV060+hmtaDgLPU3tlsF9hiySwT6zrCRLyBhg6Ha
+         Aa4Kl8sdmR+xvA/7iHUHqu4O28I6RJT1bcoX2g33XuWjidNmUKSSDvoa3N58Nne2Wx1G
+         IxDg==
+X-Gm-Message-State: AAQBX9cWqJh2APbf71RRAf2/RQQOAt5GrIvyzDl1fGYahC49AWS/Gqiu
+	8bxpcvon1LRQ7ObSa5f0WMjXl+fVdDXg
+X-Google-Smtp-Source: AKy350aL9CY1E8m1J8TjEURID2oBqh5mz3wMQUM24lLONZ4M9DkOnMmP+IHYNgSHJ0dcKtyi2L23qYzmmiUX
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6519:f0d3:9540:5c31])
- (user=irogers job=sendgmr) by 2002:a05:6902:1003:b0:b1d:5061:98e3 with SMTP
- id w3-20020a056902100300b00b1d506198e3mr11705976ybt.6.1680047769358; Tue, 28
- Mar 2023 16:56:09 -0700 (PDT)
-Date: Tue, 28 Mar 2023 16:55:38 -0700
+ (user=irogers job=sendgmr) by 2002:a25:db91:0:b0:b75:8ac3:d5d9 with SMTP id
+ g139-20020a25db91000000b00b758ac3d5d9mr10989074ybf.3.1680047779895; Tue, 28
+ Mar 2023 16:56:19 -0700 (PDT)
+Date: Tue, 28 Mar 2023 16:55:39 -0700
 In-Reply-To: <20230328235543.1082207-1-irogers@google.com>
-Message-Id: <20230328235543.1082207-2-irogers@google.com>
+Message-Id: <20230328235543.1082207-3-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230328235543.1082207-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 1/6] perf annotate: Delete session for debug builds
+Subject: [PATCH v1 2/6] perf report: Additional config warnings
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -60,42 +60,37 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Use the debug build indicator as the guide to free the session. This
-implements a behavior described in a comment, which is consequentially
-removed.
+If the default_sort_order isn't correctly strdup-ed warn and return an
+error. Debug warn if no option is matched.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-annotate.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ tools/perf/builtin-report.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 4750fac7bf93..98d1b6379230 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -692,16 +692,12 @@ int cmd_annotate(int argc, const char **argv)
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index 6400615b5e98..500f9d8902e7 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -143,6 +143,10 @@ static int report__config(const char *var, const char *value, void *cb)
  
- out_delete:
- 	/*
--	 * Speed up the exit process, for large files this can
--	 * take quite a while.
--	 *
--	 * XXX Enable this when using valgrind or if we ever
--	 * librarize this command.
--	 *
--	 * Also experiment with obstacks to see how much speed
--	 * up we'll get here.
--	 *
--	 * perf_session__delete(session);
-+	 * Speed up the exit process by only deleting for debug builds. For
-+	 * large files this can save time.
- 	 */
-+#ifndef NDEBUG
-+	perf_session__delete(annotate.session);
-+#endif
-+
- 	return ret;
+ 	if (!strcmp(var, "report.sort_order")) {
+ 		default_sort_order = strdup(value);
++		if (!default_sort_order) {
++			pr_err("Not enough memory for report.sort_order\n");
++			return -1;
++		}
+ 		return 0;
+ 	}
+ 
+@@ -151,6 +155,7 @@ static int report__config(const char *var, const char *value, void *cb)
+ 		return 0;
+ 	}
+ 
++	pr_debug("%s variable unknown, ignoring...", var);
+ 	return 0;
  }
+ 
 -- 
 2.40.0.348.gf938b09366-goog
 
