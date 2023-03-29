@@ -1,43 +1,45 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6540538F;
-	Wed, 29 Mar 2023 17:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB4263D2;
+	Wed, 29 Mar 2023 17:56:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680111906; x=1711647906;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qMOXyDeVzJ3j+xeipcDWucOpeVbJcD6JlDeQMNXmtTs=;
-  b=MxcQhpvOSh9DY6Et/yp200ItmbcDCbmcFmkjF1oTcgY3oPajDR8cfNL9
-   gvep8f2Zw82AJPYaROle38AExfbhgTEgNmCfH6dizkgOJbmPLXkg9utOI
-   oBiXoKfxL0P3j04v/NGe3mOXCs01IB0x1BprpuwvxVt0oRyTK3pan7rre
-   RrY1gbK5HOB0l0gPp+nXjkIadvlM3yapQnPa+pBHIb3z/4zOy5rIjbXsE
-   cMjde5oa/SRSmGdqMt5Wqx4/2ay3/qjFypSm0WkZSJFx1Q9l6sarfprah
-   haK+z6JomdwlcwYynnIuL2dXXB/j9WVlS0D/N0SLAJjCNXMS1bhdzeJR4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="427226832"
+  t=1680112591; x=1711648591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vQpAYLtcgIqzTA0D/TQsRWo20tvZ3wGiqMbjNiM73Zw=;
+  b=a5Vhoh1dw1Q24W0rFprC/rx+gER9oknmBa1FZU0B173654kPVqtVXjWp
+   pVcOE30jIdnMm9uRiTn8o7PI1+YW5JlO32gQ8TOpQOxpmVye+bWwLtb2o
+   dL6A1OZlKHsB0ug0aihPhyeb77iEUSIxFifrU4B1KQnvM93bT/Ox+4y7+
+   +s5MjHLoslCns6iLz6UhTDg09FdhTdj2zEkB03/lmiwtMUY2tvGCp8Fuu
+   lDwVOY9YpFkjoHqiEaJtA/K+DM+8CSh/uJRcLICJfL+Y79E0WfURtE0at
+   uMbjaxDRe+A21DcKLUI5tDKkVSiHacV3N0cK+dRwYGSL+dKi/eNUXWa/b
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="342563692"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="427226832"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 10:45:05 -0700
+   d="scan'208";a="342563692"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 10:55:06 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="773664594"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="714691355"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="773664594"
+   d="scan'208";a="714691355"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 29 Mar 2023 10:45:04 -0700
+  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2023 10:55:04 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1phZr6-000Jlw-04;
-	Wed, 29 Mar 2023 17:45:04 +0000
-Date: Thu, 30 Mar 2023 01:44:30 +0800
+	id 1pha0m-000Jme-1g;
+	Wed, 29 Mar 2023 17:55:04 +0000
+Date: Thu, 30 Mar 2023 01:55:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:iov-sendpage 63/63] net/kcm/kcmsock.c:1883:3: error:
- field designator 'sendpage' does not refer to any field in type 'const
- struct proto_ops'
-Message-ID: <202303300136.kAqovaSa-lkp@intel.com>
+Subject: Re: [Intel-gfx] [PATCH 2/5] drm/debugfs: rework debugfs directory
+ creation v2
+Message-ID: <202303300140.XL9bHF8b-lkp@intel.com>
+References: <20230329132130.105355-2-christian.koenig@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,77 +48,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230329132130.105355-2-christian.koenig@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git iov-sendpage
-head:   39e48c1301bf2fb60a53912fe5870a253256debc
-commit: 39e48c1301bf2fb60a53912fe5870a253256debc [63/63] sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)
-config: s390-randconfig-r044-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300136.kAqovaSa-lkp@intel.com/config)
+Hi Christian,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on drm-tip/drm-tip]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-K-nig/drm-debugfs-rework-debugfs-directory-creation-v2/20230329-212234
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230329132130.105355-2-christian.koenig%40amd.com
+patch subject: [Intel-gfx] [PATCH 2/5] drm/debugfs: rework debugfs directory creation v2
+config: hexagon-randconfig-r045-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300140.XL9bHF8b-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=39e48c1301bf2fb60a53912fe5870a253256debc
-        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
-        git fetch --no-tags dhowells-fs iov-sendpage
-        git checkout 39e48c1301bf2fb60a53912fe5870a253256debc
+        # https://github.com/intel-lab-lkp/linux/commit/5da92df45b1b50f794218f0f494af20ecaf94d19
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christian-K-nig/drm-debugfs-rework-debugfs-directory-creation-v2/20230329-212234
+        git checkout 5da92df45b1b50f794218f0f494af20ecaf94d19
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash net/kcm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300136.kAqovaSa-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303300140.XL9bHF8b-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from net/kcm/kcmsock.c:10:
-   In file included from include/linux/errqueue.h:6:
-   In file included from include/net/ip.h:22:
-   In file included from include/linux/ip.h:16:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
+   In file included from drivers/gpu/drm/drm_atomic.c:32:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __raw_readb(PCI_IOBASE + addr);
                              ~~~~~~~~~~ ^
    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from net/kcm/kcmsock.c:10:
-   In file included from include/linux/errqueue.h:6:
-   In file included from include/net/ip.h:22:
-   In file included from include/linux/ip.h:16:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/gpu/drm/drm_atomic.c:32:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from net/kcm/kcmsock.c:10:
-   In file included from include/linux/errqueue.h:6:
-   In file included from include/net/ip.h:22:
-   In file included from include/linux/ip.h:16:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/gpu/drm/drm_atomic.c:32:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:35:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writeb(value, PCI_IOBASE + addr);
                                ~~~~~~~~~~ ^
@@ -126,63 +143,91 @@ All errors (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> net/kcm/kcmsock.c:1883:3: error: field designator 'sendpage' does not refer to any field in type 'const struct proto_ops'
-           .sendpage =     kcm_sendpage,
-            ^
-   net/kcm/kcmsock.c:1904:3: error: field designator 'sendpage' does not refer to any field in type 'const struct proto_ops'
-           .sendpage =     kcm_sendpage,
-            ^
-   12 warnings and 2 errors generated.
+   In file included from drivers/gpu/drm/drm_atomic.c:47:
+>> drivers/gpu/drm/drm_internal.h:195:8: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   static drm_debugfs_dev_register(struct drm_device *dev)
+   ~~~~~~ ^
+   int
+   6 warnings and 1 error generated.
+--
+   In file included from drivers/gpu/drm/drm_drv.c:38:
+   In file included from include/drm/drm_accel.h:11:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/gpu/drm/drm_drv.c:38:
+   In file included from include/drm/drm_accel.h:11:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/gpu/drm/drm_drv.c:38:
+   In file included from include/drm/drm_accel.h:11:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   In file included from drivers/gpu/drm/drm_drv.c:50:
+>> drivers/gpu/drm/drm_internal.h:195:8: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+   static drm_debugfs_dev_register(struct drm_device *dev)
+   ~~~~~~ ^
+   int
+>> drivers/gpu/drm/drm_drv.c:1011:2: error: call to undeclared function 'drm_debugfs_dev_fini'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           drm_debugfs_dev_fini(dev);
+           ^
+   drivers/gpu/drm/drm_drv.c:1011:2: note: did you mean 'drm_debugfs_dev_init'?
+   include/drm/drm_drv.h:596:13: note: 'drm_debugfs_dev_init' declared here
+   static void drm_debugfs_dev_init(struct drm_device *dev, struct dentry *root)
+               ^
+   6 warnings and 2 errors generated.
 
 
-vim +1883 net/kcm/kcmsock.c
+vim +/int +195 drivers/gpu/drm/drm_internal.h
 
-ab7ac4eb9832e3 Tom Herbert    2016-03-07  1864  
-91687355b92735 Tom Herbert    2016-03-07  1865  static const struct proto_ops kcm_dgram_ops = {
-91687355b92735 Tom Herbert    2016-03-07  1866  	.family =	PF_KCM,
-91687355b92735 Tom Herbert    2016-03-07  1867  	.owner =	THIS_MODULE,
-91687355b92735 Tom Herbert    2016-03-07  1868  	.release =	kcm_release,
-91687355b92735 Tom Herbert    2016-03-07  1869  	.bind =		sock_no_bind,
-91687355b92735 Tom Herbert    2016-03-07  1870  	.connect =	sock_no_connect,
-91687355b92735 Tom Herbert    2016-03-07  1871  	.socketpair =	sock_no_socketpair,
-91687355b92735 Tom Herbert    2016-03-07  1872  	.accept =	sock_no_accept,
-91687355b92735 Tom Herbert    2016-03-07  1873  	.getname =	sock_no_getname,
-a11e1d432b51f6 Linus Torvalds 2018-06-28  1874  	.poll =		datagram_poll,
-91687355b92735 Tom Herbert    2016-03-07  1875  	.ioctl =	kcm_ioctl,
-91687355b92735 Tom Herbert    2016-03-07  1876  	.listen =	sock_no_listen,
-91687355b92735 Tom Herbert    2016-03-07  1877  	.shutdown =	sock_no_shutdown,
-91687355b92735 Tom Herbert    2016-03-07  1878  	.setsockopt =	kcm_setsockopt,
-91687355b92735 Tom Herbert    2016-03-07  1879  	.getsockopt =	kcm_getsockopt,
-91687355b92735 Tom Herbert    2016-03-07  1880  	.sendmsg =	kcm_sendmsg,
-91687355b92735 Tom Herbert    2016-03-07  1881  	.recvmsg =	kcm_recvmsg,
-91687355b92735 Tom Herbert    2016-03-07  1882  	.mmap =		sock_no_mmap,
-f29698fc6b3a45 Tom Herbert    2016-03-07 @1883  	.sendpage =	kcm_sendpage,
-91687355b92735 Tom Herbert    2016-03-07  1884  };
-91687355b92735 Tom Herbert    2016-03-07  1885  
-
-:::::: The code at line 1883 was first introduced by commit
-:::::: f29698fc6b3a45a5c6147eca8379f38be8232117 kcm: Sendpage support
-
-:::::: TO: Tom Herbert <tom@herbertland.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+   180	
+   181	/* drm_debugfs.c drm_debugfs_crc.c */
+   182	#if defined(CONFIG_DEBUG_FS)
+   183	void drm_debugfs_dev_fini(struct drm_device *dev);
+   184	void drm_debugfs_dev_register(struct drm_device *dev);
+   185	int drm_debugfs_register(struct drm_minor *minor, int minor_id,
+   186				 struct dentry *root);
+   187	void drm_debugfs_cleanup(struct drm_minor *minor);
+   188	void drm_debugfs_late_register(struct drm_device *dev);
+   189	void drm_debugfs_connector_add(struct drm_connector *connector);
+   190	void drm_debugfs_connector_remove(struct drm_connector *connector);
+   191	void drm_debugfs_crtc_add(struct drm_crtc *crtc);
+   192	void drm_debugfs_crtc_remove(struct drm_crtc *crtc);
+   193	void drm_debugfs_crtc_crc_add(struct drm_crtc *crtc);
+   194	#else
+ > 195	static drm_debugfs_dev_register(struct drm_device *dev)
+   196	{
+   197	}
+   198	
 
 -- 
 0-DAY CI Kernel Test Service
