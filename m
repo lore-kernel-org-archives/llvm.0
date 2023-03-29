@@ -1,66 +1,59 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1192E1102
-	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 07:00:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A103FC433AC;
-	Wed, 29 Mar 2023 07:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342EB1865
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 08:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CFC5C433EF;
+	Wed, 29 Mar 2023 08:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680073226;
-	bh=o3XMwkKFc/9gw3C2hK2L/IcL6DgEwgMxWrL7BZDVfmk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ZBQtbh8b29TURLpAsY7EgF3z6dQRIIRgy6J7j6DYhzRjp1o8dWPs387fc8tYWOvbJ
-	 qoUQw0iXgpyyfZYzS7tBEPJS5mADsMCMM6JBPXj0CiHK8YzyMaJazYyqec3q1m3PQn
-	 uWXAkUA4rb2dtC5q+14eSYWciNnigB7Jxa9EPmxrsOky7RCpsOIJsRA727yYw/qM+d
-	 UaPbaR9w+zUvdA37JUBWY9y52p/otcNGqKdlAT57taWMRHCL7Ni1tWWPYYHEblFbU4
-	 wu1kSX/SGATcoyirKd4umc2dz9wvbc+/q9nqR0iHXyMKI3MimxM88ndo4XjOjizIIb
-	 8S/h0nGzLkIgQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7A3ECE55B23;
-	Wed, 29 Mar 2023 07:00:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1680079191;
+	bh=MbbUjNHksY2NgnrDrVZWYsUNCTFADXtE1DM3qUt1vac=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=U3pWhUEsCZdsFHNnsoF8CTUf1dF+whckB1hNS7ZpzHvQnuzTdJpXuX230Yk+jEEAo
+	 MoJbiQ11NWC0py1mnPzpQ1z+DfWOqeVt7XoPZHwrrVUTHsBLOQ3OnD7rKVHXxYzZpI
+	 n0J+Mjt//J2WMBMPm+wFhAp+kbMY71sipyK5qsMhqFK0AE0wXXv6xPSWSqNKRGzm1W
+	 DMXi4rjMs0+2qeK3+Vbf6Gz/eNJ6AJchF1dhfDORCFvrbcB/RKdaSxwj7gTZExpRoS
+	 cvogxrNNJ4YaG9bMVlkMijUBn9QaIx0FtHsS1VHb5OV7HXZKhxFg/uIUBrm/jJi1L6
+	 z6guRXp4sjxDA==
+From: Kalle Valo <kvalo@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,  David Airlie <airlied@gmail.com>,  Daniel Vetter <daniel@ffwll.ch>,  dri-devel@lists.freedesktop.org,  linux-toolchains@vger.kernel.org,  llvm@lists.linux.dev
+Subject: Re: Linux 6.3-rc3
+References: <CAHk-=wiPd8R8-zSqTOtJ9KYeZLBByHug7ny3rgP-ZqzpP_KELg@mail.gmail.com>
+	<20230320180501.GA598084@dev-arch.thelio-3990X>
+	<CAHk-=wgSqpdkeJBb92M37JNTdRQJRnRUApraHKE8uGHTqQuu2Q@mail.gmail.com>
+	<20230320185337.GA615556@dev-arch.thelio-3990X>
+	<87pm91uf9c.fsf@kernel.org>
+	<20230322163637.GA918620@dev-arch.thelio-3990X>
+	<87wn36ctdi.fsf@kernel.org>
+	<20230324151150.GC428955@dev-arch.thelio-3990X>
+	<87o7oicgwv.fsf@kernel.org>
+	<20230328190745.GA375033@dev-arch.thelio-3990X>
+Date: Wed, 29 Mar 2023 11:39:45 +0300
+In-Reply-To: <20230328190745.GA375033@dev-arch.thelio-3990X> (Nathan
+	Chancellor's message of "Tue, 28 Mar 2023 12:07:45 -0700")
+Message-ID: <87h6u4t0ha.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: ethernet: 8390: axnet_cs: remove unused xfer_count
- variable
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <168007322649.11543.775880323471781097.git-patchwork-notify@kernel.org>
-Date: Wed, 29 Mar 2023 07:00:26 +0000
-References: <20230327235423.1777590-1-trix@redhat.com>
-In-Reply-To: <20230327235423.1777590-1-trix@redhat.com>
-To: Tom Rix <trix@redhat.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain
 
-Hello:
+Nathan Chancellor <nathan@kernel.org> writes:
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+>> >> And maybe request a similar llvm directory under pub/tools to make it
+>> >> more official? :)
+>
+> We now have https://kernel.org/pub/tools/llvm/, which is about as
+> official as we can get I suppose :)
 
-On Mon, 27 Mar 2023 19:54:23 -0400 you wrote:
-> clang with W=1 reports
-> drivers/net/ethernet/8390/axnet_cs.c:653:9: error: variable
->   'xfer_count' set but not used [-Werror,-Wunused-but-set-variable]
->     int xfer_count = count;
->         ^
-> This variable is not used so remove it.
-> 
-> [...]
+Nice, thanks. Bookmarked and I'll advertise this to wireless devs
+whenever we have clang warnings.
 
-Here is the summary with links:
-  - net: ethernet: 8390: axnet_cs: remove unused xfer_count variable
-    https://git.kernel.org/netdev/net-next/c/e48cefb9c8d1
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
