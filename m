@@ -1,52 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945CA2F30
-	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 16:16:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A58EC433EF;
-	Wed, 29 Mar 2023 16:16:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680106617;
-	bh=TWpPK393k95haP5OmkFSJZSaIGBXcPtCisO7udVorLE=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=mCKVLvP3ZRlmOkHI70rR6kIipm/a/7dK5KUbDGYxs9Gqqhd5gyex8NDtc419bpeT7
-	 3BMU/CHjXAGLydvu8fMhwsvKeynWbYt6PRVO/FbZitHvfMdlHhvf7RL4ka4SfSMzC2
-	 enA+1FU1D7yDaNRDWfWVK3kvdaNbJoKJs3ATVDQzBDMmz7ao4FevWcxlfa5hJ98kiL
-	 Jirn3Loz2fJsBlZ8N4xQzyrbVzkC5xE2UrdAY1MNy4VWs1BmMpNUyCZMfvRkoSNAEt
-	 3PKYjqRl0QEwJuZJI8HQ6QkY3iigioy/9XLX3grIgBDe9zlN40aIfiIOxccoo//YZi
-	 Ok+ClCczVnc1g==
-From: Kalle Valo <kvalo@kernel.org>
-To: Tom Rix <trix@redhat.com>
-Cc: amitkarwar@gmail.com,  ganapathi017@gmail.com,  sharvari.harisangam@nxp.com,  huxinming820@gmail.com,  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,  pabeni@redhat.com,  nathan@kernel.org,  ndesaulniers@google.com,  linux-wireless@vger.kernel.org,  netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,  llvm@lists.linux.dev
-Subject: Re: [PATCH] mwifiex: remove unused evt_buf variable
-References: <20230329131444.1809018-1-trix@redhat.com>
-Date: Wed, 29 Mar 2023 19:16:49 +0300
-In-Reply-To: <20230329131444.1809018-1-trix@redhat.com> (Tom Rix's message of
-	"Wed, 29 Mar 2023 09:14:44 -0400")
-Message-ID: <877cuzcz2m.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D9B7E5
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 17:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680109302;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GuIMljTWlcKgGvsW6d5lMsmw6z32SkuA3+G5r+fiiQI=;
+	b=BQCDpCpsRzLQKIsoaywK6jEW2FDmYUfhmzfQpJ04tBnETAj4ZsxD2dkCxHGL85AFHi5LSk
+	zPvOnGHqEIG2SH83PfOBzuPOA41Vn67BpRCj2bw//9b7AaZEEvhqm4mxpxzQVKo1yiQSvP
+	w6wzMuIArVJ+dzPDyxnBDFHEym/gXFc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-423-wo9WcgZLPSOATa78YkVKCg-1; Wed, 29 Mar 2023 13:01:38 -0400
+X-MC-Unique: wo9WcgZLPSOATa78YkVKCg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6059C3828891
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 17:01:38 +0000 (UTC)
+Received: from [172.64.0.121] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4F564492B00;
+	Wed, 29 Mar 2023 17:01:38 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 18 of 381): Test report for master
+ (6.3.0-rc4, mainline.kernel.org-clang, fcd476ea)
+Date: Wed, 29 Mar 2023 17:01:38 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <69050.123032913013805067@us-mta-423.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Tom Rix <trix@redhat.com> writes:
+Hi, we tested your kernel and here are the results:
 
-> clang with W=1 reports
-> drivers/net/wireless/marvell/mwifiex/11h.c:198:6: error: variable
->   'evt_buf' set but not used [-Werror,-Wunused-but-set-variable]
->         u8 *evt_buf;
->             ^
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-There should be "wifi:" in title, but I can add that during commit.
+Tested-by: CKI Project <cki-project@redhat.com>
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Kernel information:
+    Commit message: Merge tag 'urgent-rcu.2023.03.28a' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/paulmck/linux-rcu
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/82541
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] RIP: 0010:cooling_device_stats_setup+0xfb/0x110
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2181987
+            Affected tests:
+                  x86_64 (debug) - Boot test
+                  x86_64 (debug) - Reboot test
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Internal Network Outage
+            URL: https://docs.cki-project.org/failures/#internal-network-ou=
+tage
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
