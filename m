@@ -1,133 +1,108 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87512582;
-	Wed, 29 Mar 2023 14:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680101340; x=1711637340;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/JwzapEZeOEBEAVO2IFsUIdXBxnyulcntsu8vKQEY0I=;
-  b=PEpHPACXgoLWWEev4d5mOiNasffK/Sbxm0fkkYdUCIWJGsCmqSNSpLy0
-   v3T8EX+qtf1OT7SRX64ApqV1IfPXNdV2RubOpNl/+630gLg8zr4DpHawX
-   A/O2RKxPUNgv8oTLH/SAhXgPRC/DiYoOL60Lt/s2eeLB6nGIWs7/HQeu+
-   eFXXneNpDuk6tTPVb+S6jxgvVGxat73KE/QW54CoLhTAi9Jmmy9Qz5z63
-   YX3KzQk6abDVyuy7WRvti99rZ0WAAnmZFNQnz17KNeMHygcacE9cpniDt
-   JOZRi6+iPrZ43rjdtcM/pDNlEVLL1/InbCvbZNu34nMbOf3TyG6OEedC1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="340916869"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="340916869"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:49:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="748798605"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="748798605"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2023 07:48:56 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1phX6d-000Jdg-1Y;
-	Wed, 29 Mar 2023 14:48:55 +0000
-Date: Wed, 29 Mar 2023 22:48:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zi Yan <zi.yan@sent.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
-	linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Zi Yan <ziy@nvidia.com>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Zach O'Keefe <zokeefe@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] mm: page_owner: add support for splitting to any
- order in split page_owner.
-Message-ID: <202303292237.pg39cTKv-lkp@intel.com>
-References: <20230329011712.3242298-5-zi.yan@sent.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFA3AFF7;
+	Wed, 29 Mar 2023 15:08:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2ED3C433EF;
+	Wed, 29 Mar 2023 15:08:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680102483;
+	bh=sqyJuVOPn12HXs42svFyLzzMir/9VKtRH5dGYB/kq/A=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ecM66mq11hK3JVb5LbtYd2UcdYMEaT6WOpUIGju10bPLRuZXUoC5+7LFGLHf61/Rm
+	 NBDC6y1FYpYt7WDsCrzCRpaBwelMHT0bgO4DnKq+eN7UoNsjAwHYbpwxnx47BqZ/Su
+	 cpLJJyVI4h2wWNG14Ev1nNF8qXOyjjKG0MEbJsHOnSplHXSJsl7IuMls/Ygurb6gMC
+	 SMjgQkDSI1rgxI4sF49G0e2XL+r09bzGzL4CnDNt7mFrtKUApvSQsR4VbJJWa8JKw2
+	 vdOrxQ6R6Q09fZfv/0al2y21rmlN9bEai1TLGwsuNCOBt27DTyI2mPIyOiJvg1/J/l
+	 /GGSXAtiXQnVQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 29 Mar 2023 08:08:01 -0700
+Subject: [PATCH net-next] net: ethernet: ti: Fix format specifier in
+ netcp_create_interface()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329011712.3242298-5-zi.yan@sent.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230329-net-ethernet-ti-wformat-v1-1-83d0f799b553@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFBUJGQC/x2NSwrDMAxErxK0rsC1Sfq5SulCcZVaizhFFmkg5
+ O61u5vH8GZ2KKzCBe7dDsqrFFlyhfOpg5govxnlVRm888EFf8PMhmyJtQUT/E6LzmRIkeg6hN4
+ N/QWqPVJhHJVyTM2fqRhrKz7Kk2z/ywe0kcybwfM4fuMEsgGMAAAA
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+ pabeni@redhat.com
+Cc: nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
+ razor@blackwall.org, kerneljasonxing@gmail.com, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2668; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=sqyJuVOPn12HXs42svFyLzzMir/9VKtRH5dGYB/kq/A=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCkqIUEb55980mla2v5HXet9VBKL975fT6fvv5d29ZNYk
+ soyzz3tHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiG6sYGS6/PJbdt6nv6u9a
+ 7XvB99JdxeYFtS/efudjJqOriOW/8z4M/6yqXKrWPQg7JhvKk1aZ/0Tu38+q1JgVL/Q8nRQUbJe
+ 85gUA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Zi,
+After commit 3948b05950fd ("net: introduce a config option to tweak
+MAX_SKB_FRAGS"), clang warns:
 
-Thank you for the patch! Yet something to improve:
+  drivers/net/ethernet/ti/netcp_core.c:2085:4: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+                          MAX_SKB_FRAGS);
+                          ^~~~~~~~~~~~~
+  include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+          dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                 ~~~     ^~~~~~~~~~~
+  include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                  _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                               ~~~    ^~~~~~~~~~~
+  include/linux/skbuff.h:352:23: note: expanded from macro 'MAX_SKB_FRAGS'
+  #define MAX_SKB_FRAGS CONFIG_MAX_SKB_FRAGS
+                        ^~~~~~~~~~~~~~~~~~~~
+  ./include/generated/autoconf.h:11789:30: note: expanded from macro 'CONFIG_MAX_SKB_FRAGS'
+  #define CONFIG_MAX_SKB_FRAGS 17
+                               ^~
+  1 warning generated.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.3-rc4 next-20230329]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Follow the pattern of the rest of the tree by changing the specifier to
+'%u' and casting MAX_SKB_FRAGS explicitly to 'unsigned int', which
+eliminates the warning.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-memcg-use-order-instead-of-nr-in-split_page_memcg/20230329-091809
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230329011712.3242298-5-zi.yan%40sent.com
-patch subject: [PATCH v2 4/7] mm: page_owner: add support for splitting to any order in split page_owner.
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230329/202303292237.pg39cTKv-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6d1831c0e01a1a742e026454fe6e5643e08c5985
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zi-Yan/mm-memcg-use-order-instead-of-nr-in-split_page_memcg/20230329-091809
-        git checkout 6d1831c0e01a1a742e026454fe6e5643e08c5985
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Fixes: 3948b05950fd ("net: introduce a config option to tweak MAX_SKB_FRAGS")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+I am a little confused as to why the solution for this warning is
+casting to 'unsigned int' rather than just updating all the specifiers
+to be '%d', as I do not see how MAX_SKB_FRAGS can be any type other than
+just 'int' but I figured I would be consistent with the other fixes I
+have seen around this issue.
+---
+ drivers/net/ethernet/ti/netcp_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303292237.pg39cTKv-lkp@intel.com/
+diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/ti/netcp_core.c
+index 1bb596a9d8a2..d829113c16ee 100644
+--- a/drivers/net/ethernet/ti/netcp_core.c
++++ b/drivers/net/ethernet/ti/netcp_core.c
+@@ -2081,8 +2081,8 @@ static int netcp_create_interface(struct netcp_device *netcp_device,
+ 	netcp->tx_pool_region_id = temp[1];
+ 
+ 	if (netcp->tx_pool_size < MAX_SKB_FRAGS) {
+-		dev_err(dev, "tx-pool size too small, must be at least %ld\n",
+-			MAX_SKB_FRAGS);
++		dev_err(dev, "tx-pool size too small, must be at least %u\n",
++			(unsigned int)MAX_SKB_FRAGS);
+ 		ret = -ENODEV;
+ 		goto quit;
+ 	}
 
-All error/warnings (new ones prefixed by >>):
+---
+base-commit: 3b064f541be822dc095991c6dda20a75eb51db5e
+change-id: 20230329-net-ethernet-ti-wformat-acaa86350657
 
->> mm/page_owner.c:226:14: error: implicit declaration of function 'lookup_page_ext' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   page_ext = lookup_page_ext(page + i);
-                              ^
->> mm/page_owner.c:226:12: warning: incompatible integer to pointer conversion assigning to 'struct page_ext *' from 'int' [-Wint-conversion]
-                   page_ext = lookup_page_ext(page + i);
-                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +/lookup_page_ext +226 mm/page_owner.c
-
-   213	
-   214	void __split_page_owner(struct page *page, int old_order, int new_order)
-   215	{
-   216		int i;
-   217		struct page_ext *page_ext = page_ext_get(page);
-   218		struct page_owner *page_owner;
-   219		unsigned int old_nr = 1 << old_order;
-   220		unsigned int new_nr = 1 << new_order;
-   221	
-   222		if (unlikely(!page_ext))
-   223			return;
-   224	
-   225		for (i = 0; i < old_nr; i += new_nr) {
- > 226			page_ext = lookup_page_ext(page + i);
-   227			page_owner = get_page_owner(page_ext);
-   228			page_owner->order = new_order;
-   229		}
-   230		page_ext_put(page_ext);
-   231	}
-   232	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Nathan Chancellor <nathan@kernel.org>
+
