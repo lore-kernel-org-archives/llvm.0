@@ -1,79 +1,107 @@
-Received: from sipsolutions.net (s3.sipsolutions.net [144.76.43.62])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D546FA2;
-	Wed, 29 Mar 2023 19:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=V3nhz2pvP7h7Cz23MObcCMnl1WaF8f98/d7AXl1BRts=;
-	t=1680116458; x=1681326058; b=yTH0zi43MAqnpdDBRBlCXVbDq7Y2Bi9Ia2KY97WSaLiyerA
-	6+J+lhehT8L2cRJ8RcYAfbLCMB5VESx7mWnPIXwVd6bkTBvwzsOVhE4XpU9u5iGsV3udBKmBvlKjw
-	lMhpM/+UBwX8MdHLZHUG42Dj3Kgams0aufExQMrvUb7oaZlpDhiHfcjovG6YHpRSGw9yBuCJxxNFk
-	aMzB4W2d/MKC8ssFPayCly75xa3svV2OCuEV56BkDcfmyCicoAaFLCCPr1TX+hk5vSpeD0hQtkm+H
-	pcwa4bp3Vgj9YOLUXYTweCQ20tvyM65rZJ3s52j5k+QRwXD7K9LmjjCIfuoFwjJg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1phb2O-000CaR-0l;
-	Wed, 29 Mar 2023 21:00:48 +0200
-Message-ID: <465e2312486da2c68f26811884474d080e906d87.camel@sipsolutions.net>
-Subject: Re: [PATCH wireless-next] wifi: iwlwifi: mvm: Avoid 64-bit division
- in iwl_mvm_get_crosstimestamp_fw()
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, gregory.greenman@intel.com, 
- kvalo@kernel.org, trix@redhat.com, avraham.stern@intel.com, 
- krishnanand.prabhu@intel.com, linux-wireless@vger.kernel.org, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-  patches@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>, "kernelci.org bot"
- <bot@kernelci.org>, Craig Topper <craig.topper@sifive.com>
-Date: Wed, 29 Mar 2023 21:00:47 +0200
-In-Reply-To: <CAKwvOdnQ9feXGYV2CUyVwg-FNAOmb4HBmDxMg243v28DzSfLuA@mail.gmail.com>
-References: 
-	<20230329-iwlwifi-ptp-avoid-64-bit-div-v1-1-ad8db8d66bc2@kernel.org>
-	 <9058a032c177e9b04adbf944ad34c5ed8090d9d6.camel@sipsolutions.net>
-	 <CAKwvOdnQ9feXGYV2CUyVwg-FNAOmb4HBmDxMg243v28DzSfLuA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8B06FA2;
+	Wed, 29 Mar 2023 19:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680118812; x=1711654812;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=By82EynRVHlqti61n/b3EYQ78RH1OcO3TWFaSfWcOrU=;
+  b=L8bfcJt45UJ8MbD1RmeQUdnGV33Gd7VlCY9wC/qgxls3uwWU+wuiqHBE
+   mN6/B8xbf+VSHgUzT7URlJvAzZu95gmmdduaMjL73xQTpT458jZBQis9a
+   o0oJwcE3tN+jtYI8+DFY8wWK4umDcwiKGx46kFCRiHJ9jJ2a/Gl0rYC1C
+   3CBHKwUplDE6/IewQwH4h0JeajlVKGGqKPewV4saACY6Rimeqv7GzfCVZ
+   187/c4iSJ+j57JZXE0GgBrBcxNfSUbNQELwOb6pP8CvVVOjsxo368hXeM
+   9hqRCcSiZ7455IHG1OkFtYTS1CkOhms/lNFXhKIQUtvcUO/UWQVJNFsMr
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="329469240"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="329469240"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 12:40:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="858627934"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="858627934"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2023 12:40:10 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1phbeU-000Jsq-0V;
+	Wed, 29 Mar 2023 19:40:10 +0000
+Date: Thu, 30 Mar 2023 03:39:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Herring <robh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [robh:acpi-header-cleanup 1/1] net/rfkill/rfkill-gpio.c:181:21:
+ warning: incompatible integer to pointer conversion initializing 'const
+ struct of_device_id *' with an expression of type 'int'
+Message-ID: <202303300348.JQJwTuYF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 2023-03-29 at 10:30 -0700, Nick Desaulniers wrote:
-> >=20
-> > > Nick pointed out that the result of this division is being
-> > > stored to a 32-bit type anyways, so truncate gp2_10ns first then do t=
-he
-> > > division, which elides the need for libcalls.
-> >=20
-> > That loses ~7 top bits though, no? I'd be more worried about that, than
-> > the time div_u64() takes.
->=20
-> The result is still stored in a u32; there is a loss of precision
-> regardless of use of div_u64 or open coded binary operator /. =C2=A0
->=20
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git acpi-header-cleanup
+head:   333a203a26446521eac7046c6fb7426997569bf8
+commit: 333a203a26446521eac7046c6fb7426997569bf8 [1/1] ACPI: Replace irqdomain.h include with struct declarations
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230330/202303300348.JQJwTuYF-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?id=333a203a26446521eac7046c6fb7426997569bf8
+        git remote add robh https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
+        git fetch --no-tags robh acpi-header-cleanup
+        git checkout 333a203a26446521eac7046c6fb7426997569bf8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/rfkill/
 
-Right, obviously.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303300348.JQJwTuYF-lkp@intel.com/
 
-> So is
-> the loss of precision before the division as tolerable as after the
-> division?
+All warnings (new ones prefixed by >>):
 
-For all I can tell this is meant to be 'gp2' with an additional lower
-bits to reach a unit/granularity of 10ns, basically in FW something like
+   net/rfkill/rfkill-gpio.c:181:21: error: implicit declaration of function 'of_match_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   .of_match_table = of_match_ptr(rfkill_of_match),
+                                     ^
+>> net/rfkill/rfkill-gpio.c:181:21: warning: incompatible integer to pointer conversion initializing 'const struct of_device_id *' with an expression of type 'int' [-Wint-conversion]
+                   .of_match_table = of_match_ptr(rfkill_of_match),
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/rfkill/rfkill-gpio.c:181:21: error: initializer element is not a compile-time constant
+                   .of_match_table = of_match_ptr(rfkill_of_match),
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
-  gp2_10ns =3D gp2 * 100 + subsampling_10ns_unit
 
-(and gp2 in FW is a 32-bit value, so it rolls over eventually).
+vim +181 net/rfkill/rfkill-gpio.c
 
-But I _think_ we want to make a proper division by 100 to obtain back
-the original 'gp2' value here.
+d64c732dfc9edc Philipp Zabel   2023-01-02  174  
+7176ba23f8b589 Rhyland Klein   2011-05-16  175  static struct platform_driver rfkill_gpio_driver = {
+7176ba23f8b589 Rhyland Klein   2011-05-16  176  	.probe = rfkill_gpio_probe,
+9e2b29d0d6ae05 Bill Pemberton  2012-12-03  177  	.remove = rfkill_gpio_remove,
+7176ba23f8b589 Rhyland Klein   2011-05-16  178  	.driver = {
+7176ba23f8b589 Rhyland Klein   2011-05-16  179  		.name = "rfkill_gpio",
+ef91ffaa033001 Heikki Krogerus 2013-10-16  180  		.acpi_match_table = ACPI_PTR(rfkill_acpi_match),
+d64c732dfc9edc Philipp Zabel   2023-01-02 @181  		.of_match_table = of_match_ptr(rfkill_of_match),
+7176ba23f8b589 Rhyland Klein   2011-05-16  182  	},
+7176ba23f8b589 Rhyland Klein   2011-05-16  183  };
+7176ba23f8b589 Rhyland Klein   2011-05-16  184  
 
-johannes
+:::::: The code at line 181 was first introduced by commit
+:::::: d64c732dfc9edcd57feb693c23162117737e426b net: rfkill: gpio: add DT support
+
+:::::: TO: Philipp Zabel <p.zabel@pengutronix.de>
+:::::: CC: Johannes Berg <johannes.berg@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
