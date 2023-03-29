@@ -1,44 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4866FC9;
-	Wed, 29 Mar 2023 19:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A686FCB;
+	Wed, 29 Mar 2023 20:00:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680118814; x=1711654814;
+  t=1680120016; x=1711656016;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uniWf7eUP/yOorG+80eULgmWBombfuyWOO2+GBMZVdw=;
-  b=cSxLZxsWPm+FbE0WQzcfhly4SEYj+zDwVp3JmgnRoqPcXKE3QifE7b5u
-   MqcYDOJpiwgyyW8xJBUX2ti55RUpWSmS6UQFn70agQe5RGPzZXiF/RCrK
-   kDCRKYHKPN/C23aw1dp++63n2VoAegV2uDh/3F7nQ7VBQ4dUAF5FyE3l+
-   xA7SUcqjlb71UqrK2gLSdZf3Los7qUqYkPFT7j64fJQ0oHtYtI6hOeCDB
-   uzUT4bQy0Mwm9Nv2icnY+IqPU5wsovbfSogwc2gPupEJny7XmvNJSEDBb
-   gg5ItQnDihhhNarvF7gXfWA6FPaGP6WOjUAWjwpIar5TpR+uNsIfz31BA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="329469243"
+  bh=l0UwDa1NOJuSFxho1utaSU38jcmXCRp+pccibKJokGo=;
+  b=Xg3IZGTZ18rcJawm3jWBHJtvz+ilx2mKBqqtVrxirUDFBxneKQbOVDfx
+   SAtOIjAsz9tT0+8YoMr5z6qaC1gQGUsWYlGRlLWyIcRTA5VTG3QRQyTnE
+   NQ2MmHBF1DaQO21Uq6r/MFw4IlUkN/vyzEWSRddrn3moqoeivh8x9Md1h
+   MRKq0tLtaqb4Z8N4/zLBMVsCvRqWdk3rZ7IhiU7vJwmWKd327Wwwq8Cfe
+   lKhkSnqHdiIveC+V+RW8UVd0+K/LTKfy0k4E0LipXZ722cdecmUW9zpCE
+   VH3H9tsbPWBHDTeTqcV6Yy9lJ9V+pa6okDv0hooQdouWoviEdt/uywKK8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="403627027"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="329469243"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 12:40:12 -0700
+   d="scan'208";a="403627027"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 13:00:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="858627938"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="717018623"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="858627938"
+   d="scan'208";a="717018623"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2023 12:40:10 -0700
+  by orsmga001.jf.intel.com with ESMTP; 29 Mar 2023 13:00:12 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1phbeU-000Jt1-0v;
-	Wed, 29 Mar 2023 19:40:10 +0000
-Date: Thu, 30 Mar 2023 03:39:22 +0800
+	id 1phbxr-000JuG-0E;
+	Wed, 29 Mar 2023 20:00:11 +0000
+Date: Thu, 30 Mar 2023 03:59:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:acpi-header-cleanup 1/1]
- drivers/staging/iio/resolver/ad2s1210.c:706:21: warning: incompatible
- integer to pointer conversion initializing 'const struct of_device_id *'
- with an expression of type 'int'
-Message-ID: <202303300312.DlVOybTm-lkp@intel.com>
+Subject: [dhowells-fs:iov-sendpage 18/63] lib/iov_iter.c:374:8: warning:
+ variable 'n' is used uninitialized whenever 'if' condition is false
+Message-ID: <202303300317.esnKiNfG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,60 +46,112 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git acpi-header-cleanup
-head:   333a203a26446521eac7046c6fb7426997569bf8
-commit: 333a203a26446521eac7046c6fb7426997569bf8 [1/1] ACPI: Replace irqdomain.h include with struct declarations
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20230330/202303300312.DlVOybTm-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git iov-sendpage
+head:   39e48c1301bf2fb60a53912fe5870a253256debc
+commit: 14ec39b0dd5a3950bdeb86ca4388db31123e083a [18/63] iov_iter: Add an iterator-of-iterators
+config: arm-randconfig-r034-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300317.esnKiNfG-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?id=333a203a26446521eac7046c6fb7426997569bf8
-        git remote add robh https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
-        git fetch --no-tags robh acpi-header-cleanup
-        git checkout 333a203a26446521eac7046c6fb7426997569bf8
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=14ec39b0dd5a3950bdeb86ca4388db31123e083a
+        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
+        git fetch --no-tags dhowells-fs iov-sendpage
+        git checkout 14ec39b0dd5a3950bdeb86ca4388db31123e083a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iio/adc/ drivers/staging/iio/resolver/ io_uring/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300312.DlVOybTm-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303300317.esnKiNfG-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/staging/iio/resolver/ad2s1210.c:706:21: error: implicit declaration of function 'of_match_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   .of_match_table = of_match_ptr(ad2s1210_of_match),
+>> lib/iov_iter.c:374:8: warning: variable 'n' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (part > 0)
+                               ^~~~~~~~
+   lib/iov_iter.c:376:12: note: uninitialized use occurs here
+                           addr += n;
+                                   ^
+   lib/iov_iter.c:374:4: note: remove the 'if' if its condition is always true
+                           if (part > 0)
+                           ^~~~~~~~~~~~~
+   lib/iov_iter.c:372:51: note: initialize the variable 'n' to silence this warning
+                           size_t part = min(bytes, i->iterlist->count), n;
+                                                                          ^
+                                                                           = 0
+   lib/iov_iter.c:410:8: warning: variable 'n' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (part > 0)
+                               ^~~~~~~~
+   lib/iov_iter.c:413:12: note: uninitialized use occurs here
+                           addr += n;
+                                   ^
+   lib/iov_iter.c:410:4: note: remove the 'if' if its condition is always true
+                           if (part > 0)
+                           ^~~~~~~~~~~~~
+   lib/iov_iter.c:408:51: note: initialize the variable 'n' to silence this warning
+                           size_t part = min(bytes, i->iterlist->count), n;
+                                                                          ^
+                                                                           = 0
+   lib/iov_iter.c:588:8: warning: variable 'n' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (part > 0)
+                               ^~~~~~~~
+   lib/iov_iter.c:591:14: note: uninitialized use occurs here
+                           offset += n;
                                      ^
->> drivers/staging/iio/resolver/ad2s1210.c:706:21: warning: incompatible integer to pointer conversion initializing 'const struct of_device_id *' with an expression of type 'int' [-Wint-conversion]
-                   .of_match_table = of_match_ptr(ad2s1210_of_match),
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/iio/resolver/ad2s1210.c:706:21: error: initializer element is not a compile-time constant
-                   .of_match_table = of_match_ptr(ad2s1210_of_match),
-                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+   lib/iov_iter.c:588:4: note: remove the 'if' if its condition is always true
+                           if (part > 0)
+                           ^~~~~~~~~~~~~
+   lib/iov_iter.c:586:51: note: initialize the variable 'n' to silence this warning
+                           size_t part = min(bytes, i->iterlist->count), n;
+                                                                          ^
+                                                                           = 0
+   3 warnings generated.
 
 
-vim +706 drivers/staging/iio/resolver/ad2s1210.c
+vim +374 lib/iov_iter.c
 
-bf52f0591f85ea Jonathan Cameron   2011-10-05  702  
-817e5c65c511d4 Graf Yang          2010-10-27  703  static struct spi_driver ad2s1210_driver = {
-817e5c65c511d4 Graf Yang          2010-10-27  704  	.driver = {
-817e5c65c511d4 Graf Yang          2010-10-27  705  		.name = DRV_NAME,
-382c7fce7005b5 Nishad Kamdar      2018-10-31 @706  		.of_match_table = of_match_ptr(ad2s1210_of_match),
-817e5c65c511d4 Graf Yang          2010-10-27  707  	},
-817e5c65c511d4 Graf Yang          2010-10-27  708  	.probe = ad2s1210_probe,
-bf52f0591f85ea Jonathan Cameron   2011-10-05  709  	.id_table = ad2s1210_id,
-817e5c65c511d4 Graf Yang          2010-10-27  710  };
-ae6ae6fec3f7d6 Lars-Peter Clausen 2011-11-16  711  module_spi_driver(ad2s1210_driver);
-817e5c65c511d4 Graf Yang          2010-10-27  712  
-
-:::::: The code at line 706 was first introduced by commit
-:::::: 382c7fce7005b55f0583cf5905758d2b8def803a staging: iio: ad2s1210: Add device tree table.
-
-:::::: TO: Nishad Kamdar <nishadkamdar@gmail.com>
-:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+   362	
+   363	size_t _copy_from_iter(void *addr, size_t bytes, struct iov_iter *i)
+   364	{
+   365		if (WARN_ON_ONCE(!i->data_source))
+   366			return 0;
+   367	
+   368		if (unlikely(iov_iter_is_iterlist(i))) {
+   369			size_t copied = 0;
+   370	
+   371			while (bytes && i->count) {
+   372				size_t part = min(bytes, i->iterlist->count), n;
+   373	
+ > 374				if (part > 0)
+   375					n = _copy_from_iter(addr, part, i->iterlist);
+   376				addr += n;
+   377				copied += n;
+   378				bytes -= n;
+   379				i->count -= n;
+   380				if (n < part || !bytes)
+   381					break;
+   382				i->iterlist++;
+   383				i->nr_segs--;
+   384			}
+   385			return copied;
+   386		}
+   387	
+   388		if (user_backed_iter(i))
+   389			might_fault();
+   390		iterate_and_advance(i, bytes, base, len, off,
+   391			copyin(addr + off, base, len),
+   392			memcpy(addr + off, base, len)
+   393		)
+   394	
+   395		return bytes;
+   396	}
+   397	EXPORT_SYMBOL(_copy_from_iter);
+   398	
 
 -- 
 0-DAY CI Kernel Test Service
