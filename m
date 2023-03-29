@@ -1,48 +1,57 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E552582;
-	Wed, 29 Mar 2023 14:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87512582;
+	Wed, 29 Mar 2023 14:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680099537; x=1711635537;
+  t=1680101340; x=1711637340;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oLLT1aUrndTTg1LEVUXifWMAK6vq4Cgd7hs41b0j2og=;
-  b=BvbeN2lTOT0AJV2tWklH++49/oaJFOqgHGJpyvdpcmiW/g3Ctzhw80Kg
-   Y9bsIZkDhK4NA3Qq9SfKhYKN6LazvMl0WF8wdrJ7KRDZel7PYcGpTGQ4U
-   dzrIXni7ze/aZDWIeKpcHoH1fDfJcXAIm59qqDIvU2O1b5I1a9JEQnHap
-   aAL4Lwwo6W9YwBYbwHpo5vHZjRvBu10vGQDZOrnzv+Z1dKebKvpSlkXLT
-   sBX3PVxW4fUdSc+/+VpdH3tN+VYzqDsKhZLC7W/s5+zO3t8y7ardHVhax
-   BPbI5FQm+ni1n9t1iy0dwat6yzvJRICvu3phgyGpgoHMY2bwIT/zcEwa7
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="324792161"
+  bh=/JwzapEZeOEBEAVO2IFsUIdXBxnyulcntsu8vKQEY0I=;
+  b=PEpHPACXgoLWWEev4d5mOiNasffK/Sbxm0fkkYdUCIWJGsCmqSNSpLy0
+   v3T8EX+qtf1OT7SRX64ApqV1IfPXNdV2RubOpNl/+630gLg8zr4DpHawX
+   A/O2RKxPUNgv8oTLH/SAhXgPRC/DiYoOL60Lt/s2eeLB6nGIWs7/HQeu+
+   eFXXneNpDuk6tTPVb+S6jxgvVGxat73KE/QW54CoLhTAi9Jmmy9Qz5z63
+   YX3KzQk6abDVyuy7WRvti99rZ0WAAnmZFNQnz17KNeMHygcacE9cpniDt
+   JOZRi6+iPrZ43rjdtcM/pDNlEVLL1/InbCvbZNu34nMbOf3TyG6OEedC1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="340916869"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="324792161"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:18:56 -0700
+   d="scan'208";a="340916869"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 07:49:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="795248317"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="748798605"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="795248317"
+   d="scan'208";a="748798605"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Mar 2023 07:18:54 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2023 07:48:56 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1phWda-000JcS-0D;
-	Wed, 29 Mar 2023 14:18:54 +0000
-Date: Wed, 29 Mar 2023 22:17:58 +0800
+	id 1phX6d-000Jdg-1Y;
+	Wed, 29 Mar 2023 14:48:55 +0000
+Date: Wed, 29 Mar 2023 22:48:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-	linux-kernel@vger.kernel.org
+To: Zi Yan <zi.yan@sent.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+	linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	peterz@infradead.org, surenb@google.com, brauner@kernel.org,
-	chris@chrisdown.name, hannes@cmpxchg.org,
-	Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: Re: [PATCH v3 4/4] sched/psi: allow unprivileged polling of N*2s
- period
-Message-ID: <202303292236.ZXnVaVZr-lkp@intel.com>
-References: <20230329074842.16209-5-cerasuolodomenico@gmail.com>
+	Zi Yan <ziy@nvidia.com>,
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Zach O'Keefe <zokeefe@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] mm: page_owner: add support for splitting to any
+ order in split page_owner.
+Message-ID: <202303292237.pg39cTKv-lkp@intel.com>
+References: <20230329011712.3242298-5-zi.yan@sent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,56 +60,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230329074842.16209-5-cerasuolodomenico@gmail.com>
+In-Reply-To: <20230329011712.3242298-5-zi.yan@sent.com>
 
-Hi Domenico,
+Hi Zi,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on tj-cgroup/for-next vfs-idmapping/for-next linus/master v6.3-rc4 next-20230329]
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.3-rc4 next-20230329]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Domenico-Cerasuolo/sched-psi-rearrange-polling-code-in-preparation/20230329-155205
-patch link:    https://lore.kernel.org/r/20230329074842.16209-5-cerasuolodomenico%40gmail.com
-patch subject: [PATCH v3 4/4] sched/psi: allow unprivileged polling of N*2s period
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230329/202303292236.ZXnVaVZr-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zi-Yan/mm-memcg-use-order-instead-of-nr-in-split_page_memcg/20230329-091809
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230329011712.3242298-5-zi.yan%40sent.com
+patch subject: [PATCH v2 4/7] mm: page_owner: add support for splitting to any order in split page_owner.
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230329/202303292237.pg39cTKv-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6c9f1219e1ccea05926017b359e41bfff24e9bd9
+        # https://github.com/intel-lab-lkp/linux/commit/6d1831c0e01a1a742e026454fe6e5643e08c5985
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Domenico-Cerasuolo/sched-psi-rearrange-polling-code-in-preparation/20230329-155205
-        git checkout 6c9f1219e1ccea05926017b359e41bfff24e9bd9
+        git fetch --no-tags linux-review Zi-Yan/mm-memcg-use-order-instead-of-nr-in-split_page_memcg/20230329-091809
+        git checkout 6d1831c0e01a1a742e026454fe6e5643e08c5985
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303292236.ZXnVaVZr-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303292237.pg39cTKv-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from kernel/sched/build_utility.c:97:
->> kernel/sched/psi.c:1602:9: error: implicit declaration of function 'psi_open' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return psi_open(file, psi_irq_show);
-                  ^
-   1 error generated.
+>> mm/page_owner.c:226:14: error: implicit declaration of function 'lookup_page_ext' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   page_ext = lookup_page_ext(page + i);
+                              ^
+>> mm/page_owner.c:226:12: warning: incompatible integer to pointer conversion assigning to 'struct page_ext *' from 'int' [-Wint-conversion]
+                   page_ext = lookup_page_ext(page + i);
+                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +/psi_open +1602 kernel/sched/psi.c
+vim +/lookup_page_ext +226 mm/page_owner.c
 
-52b1364ba0b105 Chengming Zhou 2022-08-26  1599  
-52b1364ba0b105 Chengming Zhou 2022-08-26  1600  static int psi_irq_open(struct inode *inode, struct file *file)
-52b1364ba0b105 Chengming Zhou 2022-08-26  1601  {
-52b1364ba0b105 Chengming Zhou 2022-08-26 @1602  	return psi_open(file, psi_irq_show);
-52b1364ba0b105 Chengming Zhou 2022-08-26  1603  }
-52b1364ba0b105 Chengming Zhou 2022-08-26  1604  
+   213	
+   214	void __split_page_owner(struct page *page, int old_order, int new_order)
+   215	{
+   216		int i;
+   217		struct page_ext *page_ext = page_ext_get(page);
+   218		struct page_owner *page_owner;
+   219		unsigned int old_nr = 1 << old_order;
+   220		unsigned int new_nr = 1 << new_order;
+   221	
+   222		if (unlikely(!page_ext))
+   223			return;
+   224	
+   225		for (i = 0; i < old_nr; i += new_nr) {
+ > 226			page_ext = lookup_page_ext(page + i);
+   227			page_owner = get_page_owner(page_ext);
+   228			page_owner->order = new_order;
+   229		}
+   230		page_ext_put(page_ext);
+   231	}
+   232	
 
 -- 
 0-DAY CI Kernel Test Service
