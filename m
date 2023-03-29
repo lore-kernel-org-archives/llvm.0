@@ -1,59 +1,64 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C1EAD30
-	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 23:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5A5AD30
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 23:14:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680130997;
+	s=mimecast20190719; t=1680131654;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=dvCH/Q/mYXYnFPxo1Zw9BF/bBxj1AhUZU0zHEiex0ss=;
-	b=ZkEO4aUFx5tIASh+hrH1yVeyWVMLerejs1OERxkhBQ5rRVu483C3a3meBbMCpCTMSHYVEB
-	uxkbZ6TCEQxIu8JUswt34Xf8NhSTyMGQTVy8ueWdUR0JwI6Ay7S8Uol1lJn6IwN8kteTHE
-	itckxo0f/KnXUaU75tHkDxc5A/LyE6I=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=RDa5o+kZyCZFoDwvixD+yMC8DGY8pjS5wLyVr2om2qE=;
+	b=MN7KF1G3kqjyvAM1Zf/cF3ZZCHd1rLB0Iou97JwRbK5SxCoSS8fs+X/MG8cFC67qVQqz3v
+	SnlPJvN9ZJVtwzbDqScm9+IVO848EKuwjtvGqs52o4khwrdhCyDWukthU6JXESHX5wvHzi
+	LMDA+AdT81rh1Gcm0DHY6ewRBGO3/4M=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-330-6n6xurl_PH6fv8PYXduxaw-1; Wed, 29 Mar 2023 19:03:15 -0400
-X-MC-Unique: 6n6xurl_PH6fv8PYXduxaw-1
-Received: by mail-qv1-f72.google.com with SMTP id pe26-20020a056214495a00b005df3eac4c0bso4269868qvb.1
-        for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 16:03:15 -0700 (PDT)
+ us-mta-351-5DQSHudTPzaA5b2yvQocBA-1; Wed, 29 Mar 2023 19:14:12 -0400
+X-MC-Unique: 5DQSHudTPzaA5b2yvQocBA-1
+Received: by mail-qk1-f200.google.com with SMTP id o63-20020a374142000000b007467ef381beso8131145qka.16
+        for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 16:14:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680130995;
+        d=1e100.net; s=20210112; t=1680131652;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dvCH/Q/mYXYnFPxo1Zw9BF/bBxj1AhUZU0zHEiex0ss=;
-        b=xQRz0k7cQP40fGXu0Uga2gmHynQCCFVOwtE6EPwstIV4o5xt51Ivne929gM6SwNQcP
-         gyJ2mM6DwubikLI+emg2UYdJWmGJOLJ2ZutnV4izoYi+As2/QIWHG2cxxDoiafaoQcRZ
-         fUfCn4A78F/LiUZPm7e3A19wtFCxpXPTZyqDJHU9c2I5tnvlQDuCyAD+fhyxmbLYCXWF
-         F55rHYMNPJ9cnGKXD8AjnD1PUezylkGPOxpfVJo3DJUSf2UOwk7NoZu6Zbdffmp1tCIs
-         gqIoarEoEhsuk0uVcLbMH7uYxloPBeGct8IWsvmtPrr2vPVdLBxUG2pxKaZ6nVN4ZsRM
-         jx+g==
-X-Gm-Message-State: AO0yUKXcmJL6d1KXOUAiLQhMlQDdXwLUXr3oKqyO4Sc9lCUicQbsYvkG
-	geoQxrNiASoai6abLVsBJmbI6EhcBaok7pyrk8wmU1CniKwBl1eIEUPWhJwcFDumoaG2qwIh7Wr
-	kOdMeB7RpXecDcw==
-X-Received: by 2002:ac8:5ad1:0:b0:3bd:140c:91f7 with SMTP id d17-20020ac85ad1000000b003bd140c91f7mr35157020qtd.40.1680130995198;
-        Wed, 29 Mar 2023 16:03:15 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z8o7ID5Y2qg2JO2AE3/F9MkoBdJxNI1wNK4jnkhkFlSdNW84WEhZHG+3IOdDu05fJRwkkzYw==
-X-Received: by 2002:ac8:5ad1:0:b0:3bd:140c:91f7 with SMTP id d17-20020ac85ad1000000b003bd140c91f7mr35156994qtd.40.1680130994961;
-        Wed, 29 Mar 2023 16:03:14 -0700 (PDT)
+        bh=RDa5o+kZyCZFoDwvixD+yMC8DGY8pjS5wLyVr2om2qE=;
+        b=wUJwd6FBnmLdIyONQ2/8F/HZOciIDBospGt+oKhcN+Zk80RgGpi6YxrijTWN/tocag
+         frfCCmfNkMw1yv9ZN+ZbXzI8fokVJNvF0FoJk4MXAl0MGY5Z/xeMNsvoxD2Twhynjqka
+         K5kHQ+9SkDWDdolRg9khmPAEVkDCRX3xcZSmBQfQ4OAse0d0Txhjzt4IUd2ACNGZP2r9
+         FIwxUEUMKr3ZQZo2YQAt3xw/rNt3oG0kvLzhGLGBa1bIqSANuCP6Cr/f7WXw7hnqj73e
+         3A2SkO9gIq5hqki7Ps1bu+M1pi6wcHrV1LFrbtXaV+63hCPsaPpF5h9hUGqBXGK0Qf+X
+         iSIQ==
+X-Gm-Message-State: AO0yUKUr31EHjituTOOKF0lFPBoIwgNeEtfofde6L1XmSMtppm6ql4Nh
+	WZy7abUIgxuKq/HszIu9tUWvhYKs01XIXwD3ZsgpH6qsodkU+4B/a3/iPNJf9EMf6rEYuAEmA0W
+	WtqnlvikUgt/u4Q==
+X-Received: by 2002:a05:622a:53:b0:3bf:c3e8:c19b with SMTP id y19-20020a05622a005300b003bfc3e8c19bmr39717906qtw.22.1680131652535;
+        Wed, 29 Mar 2023 16:14:12 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9FAlt8CkZ7gP0dtRURdKafeSyXrPgA0ctSwHl2YRdMc9jHIn4kx1HtMkkz0/D/w1j49owN7A==
+X-Received: by 2002:a05:622a:53:b0:3bf:c3e8:c19b with SMTP id y19-20020a05622a005300b003bfc3e8c19bmr39717885qtw.22.1680131652329;
+        Wed, 29 Mar 2023 16:14:12 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 12-20020a370b0c000000b0074680682acdsm14392346qkl.76.2023.03.29.16.03.14
+        by smtp.gmail.com with ESMTPSA id x16-20020ae9e910000000b007435a646354sm12246105qkf.0.2023.03.29.16.14.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 16:03:14 -0700 (PDT)
+        Wed, 29 Mar 2023 16:14:12 -0700 (PDT)
 From: Tom Rix <trix@redhat.com>
-To: hdegoede@redhat.com,
+To: bskeggs@redhat.com,
+	kherbst@redhat.com,
+	lyude@redhat.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
 	nathan@kernel.org,
 	ndesaulniers@google.com
-Cc: linux-fsdevel@vger.kernel.org,
+Cc: dri-devel@lists.freedesktop.org,
+	nouveau@lists.freedesktop.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] fs: vboxsf: remove unused out_len variable
-Date: Wed, 29 Mar 2023 19:03:10 -0400
-Message-Id: <20230329230310.1816101-1-trix@redhat.com>
+Subject: [PATCH] drm/nouveau/svm: remove unused ret variable
+Date: Wed, 29 Mar 2023 19:14:07 -0400
+Message-Id: <20230329231407.1816570-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -67,45 +72,39 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
 clang with W=1 reports
-fs/vboxsf/utils.c:442:9: error: variable
-  'out_len' set but not used [-Werror,-Wunused-but-set-variable]
-        size_t out_len;
-               ^
+drivers/gpu/drm/nouveau/nouveau_svm.c:929:6: error: variable
+  'ret' set but not used [-Werror,-Wunused-but-set-variable]
+        int ret;
+            ^
 This variable is not used so remove it.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- fs/vboxsf/utils.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/gpu/drm/nouveau/nouveau_svm.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/fs/vboxsf/utils.c b/fs/vboxsf/utils.c
-index dd0ae1188e87..ab0c9b01a0c2 100644
---- a/fs/vboxsf/utils.c
-+++ b/fs/vboxsf/utils.c
-@@ -439,7 +439,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+diff --git a/drivers/gpu/drm/nouveau/nouveau_svm.c b/drivers/gpu/drm/nouveau/nouveau_svm.c
+index a74ba8d84ba7..e072d610f2f9 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_svm.c
++++ b/drivers/gpu/drm/nouveau/nouveau_svm.c
+@@ -926,15 +926,14 @@ nouveau_pfns_map(struct nouveau_svmm *svmm, struct mm_struct *mm,
+ 		 unsigned long addr, u64 *pfns, unsigned long npages)
  {
- 	const char *in;
- 	char *out;
--	size_t out_len;
- 	size_t out_bound_len;
- 	size_t in_bound_len;
+ 	struct nouveau_pfnmap_args *args = nouveau_pfns_to_args(pfns);
+-	int ret;
  
-@@ -447,7 +446,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
- 	in_bound_len = utf8_len;
+ 	args->p.addr = addr;
+ 	args->p.size = npages << PAGE_SHIFT;
  
- 	out = name;
--	out_len = 0;
- 	/* Reserve space for terminating 0 */
- 	out_bound_len = name_bound_len - 1;
+ 	mutex_lock(&svmm->mutex);
  
-@@ -468,7 +466,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+-	ret = nvif_object_ioctl(&svmm->vmm->vmm.object, args,
+-				struct_size(args, p.phys, npages), NULL);
++	nvif_object_ioctl(&svmm->vmm->vmm.object, args,
++			  struct_size(args, p.phys, npages), NULL);
  
- 		out += nb;
- 		out_bound_len -= nb;
--		out_len += nb;
- 	}
- 
- 	*out = 0;
+ 	mutex_unlock(&svmm->mutex);
+ }
 -- 
 2.27.0
 
