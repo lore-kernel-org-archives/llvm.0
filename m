@@ -1,129 +1,104 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2086.outbound.protection.outlook.com [40.107.93.86])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373D13C0A
-	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 21:07:39 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GT9UQ5wy4f7n6fSw2HZcvdpw86VS8/SN5WJyukfO72Iyi1vyT9iMZiiuQPjBYTuCnRDMRnBkGjTlomgJ3XrWj+sm2bkES6eEDcZVx1m3ntVGdApEWsZiBIUOoW7pWXtcwra8RRsmjKy1zLJ0NsDBABsapDMm7DSaWzVTZ9muwjd63CoJkHF86gyySsQh1CEb5Lhijlfmm6C4gxiBBN8EbMIK37jDpPu/urR+056rSG21kbUX1XW308b5TMje8i4NT/DY1IEALDZpoqJ5cfzz5f4rgUyweniEXFkGv+pNjdXyf1wvBZXLKj/SkYgbOCJOfKh3Yyb/0ciEUvxRGkSGKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FUm7tQIct+DU5YVyc9mv2izgRjEEakdvE6LhrRuf6/I=;
- b=NQ1GJprGbebdPzF6Q55GztOH9Wbkj8s9CHONFlA2fx6nYKQO2CAXGZzLdpb02o7w7nBa785mem/gBoGtJ7ke7PMw42PicybEB0fp+SMWn342ELFH2cKbs0uohzYuazYh6W/7Fg+iZTtcJ436hbcyedkPg6o2lRaBlVZMywwV/ytbOlhwQypnBPEE09IvXqYgEKSszlJcc2rg7YDjz1IrJtViqUITa25S0UxM4xDjulENJUmmeLCbU1eez66REReeLqcvkPAolFqnwewUz8RERrce91pYAiOuBmryETKBIGIHMvLlepV++aAL0HwKLDSnYC6aVqF7UbmeZMLI4KAGvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FUm7tQIct+DU5YVyc9mv2izgRjEEakdvE6LhrRuf6/I=;
- b=dkbgToCrEDyGvoaJEKu06O68DbSriSPVeQHtBP/eMGpzma5mkbZSZ3kqmRMgXxsh/FkpHlJIuiwkJC3E1q1T8RpZuilxM8DneZFLwtPzbdItvyhycU6U9JJeUR9ghuAVFvwnglonzHuHGb/l4PmH2DSRl3YU6yHGIWsV9MxZd2npRKeep3APqGa5289CFcyc9qOx95Vu+l7xXjcLZ8qUcbRP4ZLv2xG+LhLDJSPY7T5Ne7SXfpBPX6MHkoonGrG5/0XctOKIqleR2KXr6Z+NnUx4SfagJVIY/yhjMu3kpsfUnZuPjAbWFf1UDuPYw4YAirldzYJB5vhtVxCbletsJw==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by DS0PR12MB8198.namprd12.prod.outlook.com (2603:10b6:8:f2::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.32; Wed, 29 Mar
- 2023 21:07:37 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::9f90:cf3d:d640:a90b]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::9f90:cf3d:d640:a90b%4]) with mapi id 15.20.6222.035; Wed, 29 Mar 2023
- 21:07:37 +0000
-From: Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To: Tom Rix <trix@redhat.com>, "martin.petersen@oracle.com"
-	<martin.petersen@oracle.com>, "nathan@kernel.org" <nathan@kernel.org>,
-	"ndesaulniers@google.com" <ndesaulniers@google.com>
-CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] scsi: target: core: remove unused prod_len variable
-Thread-Topic: [PATCH] scsi: target: core: remove unused prod_len variable
-Thread-Index: AQHZYkIGbUtUzcLmAE2kpRi25oy/tq8SQHUA
-Date: Wed, 29 Mar 2023 21:07:36 +0000
-Message-ID: <6b50e660-f10d-82ae-4a15-86fb575dcab5@nvidia.com>
-References: <20230329132421.1809362-1-trix@redhat.com>
-In-Reply-To: <20230329132421.1809362-1-trix@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|DS0PR12MB8198:EE_
-x-ms-office365-filtering-correlation-id: b4dc0347-a899-4ea0-ef5f-08db30999fa4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- lTDm+wF555bhEgiZTFnmrFndQvx5lfHuvdCUXgzi8BsKh8Kk9yAnBfNBJ8gUAF2E+EaaRbbZ8dTNGlzHKNYaaztD4evMi/0W44ie24jnAq6bP/LX3sYNfMs+nKcxKn93TkCLyJdRdlm0jlk4c5I4ueCdERvmq6BLOIMirbAi6DW0D62NhfERhKRE/xMufhAaaNJzWK6LLfwurVc4Pfdjqa+FZQu14rITDkQFdlZYWwKuiaDQblLksDCx5MUJGtENQqp23xp2r42cLO/3u2hawoqxmCyeFTjijgoSwkErcSrxpV+pMKYXaJUaL8So/zuMZobDziqYwEKPkOiOQ1HSizbanYK0hTfw4rOPWWp/Ek6DhK9uL0BqXkN6KkLWpnaAi9PYv/y5oxLJcwCTsydbJuNz4IVDAUtyVMpArBZ1xQZlct0Ujx/VuGX10947OwWenUY9us8svG/aNa5NKx3/4s9Tx/GgayVTwx9TwFOpAEWrn80UfSJlFzGxDhEo7sr/OPmQQmnU9qzwDCnw6Hx+ithDuFQQfB6+o8CXY7+SWdVxFG9d0eXa5TGmjj2Gpcr5y0ocEKCF0UJ7GvMCnuhHKC/fQC5Th81pTGq3LO9nnvt0fGWGq9rpJc9Q0EH7TKI9c79FzHQ7CGhvC16L4Z7IEyMK3oCL1tiHGzOh40stHTGtockfucSRn+mO5QZ9mUOQ
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(366004)(136003)(39860400002)(451199021)(66446008)(71200400001)(6506007)(478600001)(2616005)(6486002)(26005)(316002)(110136005)(91956017)(31686004)(6512007)(53546011)(186003)(54906003)(76116006)(4326008)(66476007)(64756008)(8676002)(8936002)(5660300002)(122000001)(2906002)(4744005)(41300700001)(38100700002)(36756003)(38070700005)(66556008)(66946007)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?cXdDOGQ2TGpadFlhM3RJWGh3Uk9wbnBFY0Y3ZDFzQnNwK3JhWVlyU3FQQkdN?=
- =?utf-8?B?RWxLNnk3VmhpQ1ZkK0cvU1FEK013alQ3d1RQV2FhMjdtdkFPbm1UUTgycFZn?=
- =?utf-8?B?cVNyeVN1eHlaeTFydlVSSk9UcjdEODBIV1hCYXp2cDQ0L3hsazdmdmVXYWZ1?=
- =?utf-8?B?T0IxRGM2SmNSYU9tYWZrTFhjNzZReStHdVFqVm5pak9Xdml2Ui9VeXUrU1BV?=
- =?utf-8?B?c1hmZklrZjdWUVdqZUJieEFXdGMveWt3emgxaG1ZVXE1NTY1SGl6S1pnaEgr?=
- =?utf-8?B?Z0NRZ1NHYXNvbkZ2WVpmbll6N0tjZUtPZnlEK2JCMmJRZlNQc2dvUGk1OXFM?=
- =?utf-8?B?NXhjYWZGN0xXUnZzbWFDOHBkczNucmowVURram80OFA2bHNkUWs1dnVrYVpY?=
- =?utf-8?B?OTFIU3YwS1ZwWHFPQlhRa3ljcFJhUHpUZFNoWFhmWk85L1EvTE5XbmZteWMr?=
- =?utf-8?B?bnlmY3VnNEdaeWZxMC9NaEJydSsyZ1VST1p5dE80ZGZvc2lFZXNocGs3V1pJ?=
- =?utf-8?B?cnpBTDl5YU5hQ2tTZW41U3NybmFMd0xCV2NtczBmOU9TSDhjWmlIb3ZCbEJw?=
- =?utf-8?B?UG10dEwxeDhkUFgrNmlwc2Q1MEdFcEhlQTNlaGErYjdPeGJPS0FvcmJtUGcv?=
- =?utf-8?B?cHlwT3lPZ0lKU3hMNzl5Y01iTU1EQm9Mc1Frb0tDS3JhSDNiNTlKbVNGUmI0?=
- =?utf-8?B?RDIzMksvc0lUMXFyTWJxdmoraTVOU3Z0Rk9yZmVtR05HckZ0SWVFYVI0MlMy?=
- =?utf-8?B?L3hwMlMxQXluZXR3OTQ3OTVvM0Y3eFlybWR2R0ZVM3FRNVVvRHRDZVI5QWJJ?=
- =?utf-8?B?RHZqWjB5ZGw5US9tbm5zK2tjV040WFVlT2FnTWdBWEFtb3F2aHpyWHlPc1VZ?=
- =?utf-8?B?TEdYY2dnMUx4d3BZbEYrOFR1WXAzVmRJeklsYnozRmIrZ052Z2FDOThKSVdp?=
- =?utf-8?B?SEJieHZBM2NScjVubHpnRkRUdytRRGxORW1YRVRLaGFnY1BiUHZkUmhUY2xn?=
- =?utf-8?B?L1JxOS90aUFGcjd6Wk1QQ3pCcHRvb3l3QXJrS1ZTWEgxS1lJbmJkeFFFYmlZ?=
- =?utf-8?B?S1cwWFhzNm1wTWlNR1Zrc0RFekRHSmZpaGw5RTVnSHlLSnl5c1dJZGlZd0dV?=
- =?utf-8?B?YytKWThhMWRRaWptQk5OQ09tWEJ2WkZod2psb2syVGN1TEpOaTlwcldGOHhz?=
- =?utf-8?B?VjlIM0pqdEhHUUlvNzB1OEQyVDFQdmNFS0NZOWNTNFNRdFowaVdBK1J5RGNx?=
- =?utf-8?B?WTVTdkhtaGhMek9venluZUhBTjYxd2dKUW5kSXNCMEpnaEtMZlhTRDRmZ0Jy?=
- =?utf-8?B?VUNOZGNZTllSdGhZU2ZTelZXNmZyK3psQ1BhS29uazAwWUhIRUM2NXlIMmVL?=
- =?utf-8?B?U2pRWkE4SE81cGFHVWRuYTd2MExTUE00bXVwTUx6dm1yMjFIUStIYVE0NkZh?=
- =?utf-8?B?MjIrSW5ieHMyU3lSdEh2eWxHaFVXSVlYWGJTMHNLNStzQ0J6MDhuMDc2MVkx?=
- =?utf-8?B?ZHAwSmVYS1I5M2ZNbUhQVDVzK25YTFVmY28rVnRvVVh3OVNKNklEeTBaMEFa?=
- =?utf-8?B?emdEcXBuLzhoRjFVSXk0RVd5V0lwMkFvbUNMS2VHNlZxNHBVMTBOVmREank3?=
- =?utf-8?B?c2ExNUNqaEZmdlRLa0lWV1JKQ1FtLyszN0JZM2Y2WHhoRXhoKzVzc0VUVkZL?=
- =?utf-8?B?Y09QY3dDTlRucllUTTJlVHZrczBoRkJkN0Y2NGJOdGNnUzZsVzl0UHdXNVBV?=
- =?utf-8?B?SlhTdmltdGF5OEhOZis4b21JTHEwbExKY3hlanZVSmJLTDF4a1VJMmc3NklX?=
- =?utf-8?B?T0lyaVJ4TWxZczFRMFZtYThKQm9YeFZwektVSVpZSmJteGFxNTNiaDJ5THdh?=
- =?utf-8?B?NVc0bmRyQklRb2hTTjBHRGpZaHlqS0VLYjVrUGFjb3Rab054L3A4RTk1N0Zr?=
- =?utf-8?B?bG04TGIwVThqMWNxcWJ4SGJnQWlldDNUUEM2K3llZ05UdGh1UmJHRDl0N2l4?=
- =?utf-8?B?SW5PaVZYdVJZd2p4dWgySVo0ckVuY3BUSzZSTDRtK0JoZ2JTVlZwRGlIK1RI?=
- =?utf-8?B?bjhDZGoyUE8xVkdoQ2g1bng5M1NQa3VINUdsMGh1ZzhFa3JlOUJ4UitZU29D?=
- =?utf-8?Q?6rgyh2AfBixu0CovoA9ZXVedA?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3995C671BF96A841B1439F034CA2B23B@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7848494
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 21:08:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680124086; x=1711660086;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0WbHcAshlB1DzsXUrQf8jEaAyPq5dNotVV1y6M7Emps=;
+  b=QoEXuGB0sIt/SEO0hJbwdWm8tgKtSoVZR1ccMwPgxa27+fDVCIX2E7Kn
+   6Kh4OOW/DbpJt619+/WlUNq8chsjwYU4nwOa6DXjDgAwq9sRyDVLTuDt8
+   G4INFZcdl6N3Z3+sDtNbZTW8g5xFq9YVev8bJSfLqoq/WYw3DWPsGdO5g
+   KhoyXSl2QerAhEXnqYfyzpx485Sf0QdrYydkVAIQhHb00hMWosp0rQiyV
+   VEulLMzn08Bjgg4Dav9sabIf1edNKta4fP7Zv9iAIccOhWoYAB46gYawS
+   xZdj4XPAJVim7bgb2w3pt8bPWu+GMWRMddt2A9N24QeK7OvhRiyFXTSOV
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="341017782"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="341017782"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 14:08:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="684441300"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="684441300"
+Received: from tinabao-mobl1.amr.corp.intel.com (HELO [10.209.80.72]) ([10.209.80.72])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 14:08:05 -0700
+Message-ID: <e7657d91-38a8-9ee6-43eb-985d6545a0d1@linux.intel.com>
+Date: Wed, 29 Mar 2023 14:08:04 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4dc0347-a899-4ea0-ef5f-08db30999fa4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 21:07:36.9465
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: usK+fzMkJwGYIRLFu/yVO3A2hSxyMzwQPzxfrpVg1sLrBI3WnEVzNvK2+La5BiDKfLdHMSCQfuEaq74z4GE1Ew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8198
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH] PCI/MSI: Provide missing stub for
+ pci_msix_can_alloc_dyn()
+Content-Language: en-US
+To: Reinette Chatre <reinette.chatre@intel.com>, bhelgaas@google.com,
+ nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ tglx@linutronix.de
+Cc: darwi@linutronix.de, kevin.tian@intel.com, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <310ecc4815dae4174031062f525245f0755c70e2.1680119924.git.reinette.chatre@intel.com>
+From: Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <310ecc4815dae4174031062f525245f0755c70e2.1680119924.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-T24gMy8yOS8yMyAwNjoyNCwgVG9tIFJpeCB3cm90ZToNCj4gY2xhbmcgd2l0aCBXPTEgcmVwb3J0
-cw0KPiBkcml2ZXJzL3RhcmdldC90YXJnZXRfY29yZV9zcGMuYzoyMjk6NjogZXJyb3I6IHZhcmlh
-YmxlDQo+ICAgICdwcm9kX2xlbicgc2V0IGJ1dCBub3QgdXNlZCBbLVdlcnJvciwtV3VudXNlZC1i
-dXQtc2V0LXZhcmlhYmxlXQ0KPiAgICAgICAgICB1MzIgcHJvZF9sZW47DQo+ICAgICAgICAgICAg
-ICBeDQo+IFRoaXMgdmFyaWFibGUgaXMgbm90IHVzZWQgc28gcmVtb3ZlIGl0Lg0KPg0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBUb20gUml4IDx0cml4QHJlZGhhdC5jb20+DQo+IC0tLQ0KPg0KDQoNCkxvb2tz
-IGdvb2QuDQoNClJldmlld2VkLWJ5OiBDaGFpdGFueWEgS3Vsa2FybmkgPGtjaEBudmlkaWEuY29t
-Pg0KDQotY2sNCg0KDQo=
+Hi,
+
+On 3/29/23 1:13 PM, Reinette Chatre wrote:
+> pci_msix_can_alloc_dyn() is not declared when CONFIG_PCI_MSI
+> is disabled.
+> 
+> There is no existing user of pci_msix_can_alloc_dyn() but
+> work is in progress to change this. This work encounters
+> the following error when CONFIG_PCI_MSI is disabled:
+> 
+> drivers/vfio/pci/vfio_pci_intrs.c:427:21: error: implicit declaration \
+> 	of function 'pci_msix_can_alloc_dyn' \
+> 	[-Werror=implicit-function-declaration]
+> 
+> Provide definition for pci_msix_can_alloc_dyn() in preparation
+> for users that need to compile when CONFIG_PCI_MSI is disabled.
+> 
+> Fixes: 34026364df8e ("PCI/MSI: Provide post-enable dynamic allocation interfaces for MSI-X")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202303291000.PWFqGCxH-lkp@intel.com/
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> ---
+
+Looks good to me.
+
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+
+> I missed this one in my previous fix. After this all the functions
+> in pci.h's #ifdef CONFIG_PCI_MSI portion have stubs when
+> CONFIG_PCI_MSI is disabled.
+> 
+>  include/linux/pci.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index b50e5c79f7e3..a5dda515fcd1 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1624,6 +1624,8 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+>  					      flags, NULL);
+>  }
+>  
+> +static inline bool pci_msix_can_alloc_dyn(struct pci_dev *dev)
+> +{ return false; }
+>  static inline struct msi_map pci_msix_alloc_irq_at(struct pci_dev *dev, unsigned int index,
+>  						   const struct irq_affinity_desc *affdesc)
+>  {
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
