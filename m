@@ -1,147 +1,129 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2086.outbound.protection.outlook.com [40.107.93.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9973C0A;
-	Wed, 29 Mar 2023 20:31:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680121874; x=1711657874;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MhoV4VjXrS5BMRk/kCdWnDUu2s9zsiCgFBB/jo3vPlk=;
-  b=nKIfe8ZkjhcmfenvpIM2qeqRtxI8/Lc3VVySqluA8/bg4WryRrwL5aSl
-   KNcV5xsKBXobtlon/35Rjen6nD8GooqCVHG0MAFbWxPECxS0Lmgj4JP5+
-   TWNhhMENEtQckguuR0tUKHYqkHZjSl92sG7QwGCnP38Y7QkcnecRoRWgi
-   z5Edg6rwl/Bq78wiIy3ukYfTbRnh7mB3BWCM0Ut7c3s0P5MzHuMQxBmwd
-   h8SR7rEk7yMDa7qDC++siZ7D/O1yc93vK4Fcy0ygPqkAo/Ztx7rIs9dy+
-   neIY681hXEf8cBR2TtKTVFlrk02NOT2NgI6cfW817S4SCrQukLWR6//8J
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="342604579"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="342604579"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 13:31:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="1014174697"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="1014174697"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Mar 2023 13:31:12 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1phcRr-000JvY-2e;
-	Wed, 29 Mar 2023 20:31:11 +0000
-Date: Thu, 30 Mar 2023 04:30:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-scsi-devel:tls-netlink.v8 17/20]
- drivers/nvme/target/tcp.c:1801:1: warning: unused label 'out_free_queue'
-Message-ID: <202303300416.aEtu4DXp-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373D13C0A
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 21:07:39 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GT9UQ5wy4f7n6fSw2HZcvdpw86VS8/SN5WJyukfO72Iyi1vyT9iMZiiuQPjBYTuCnRDMRnBkGjTlomgJ3XrWj+sm2bkES6eEDcZVx1m3ntVGdApEWsZiBIUOoW7pWXtcwra8RRsmjKy1zLJ0NsDBABsapDMm7DSaWzVTZ9muwjd63CoJkHF86gyySsQh1CEb5Lhijlfmm6C4gxiBBN8EbMIK37jDpPu/urR+056rSG21kbUX1XW308b5TMje8i4NT/DY1IEALDZpoqJ5cfzz5f4rgUyweniEXFkGv+pNjdXyf1wvBZXLKj/SkYgbOCJOfKh3Yyb/0ciEUvxRGkSGKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FUm7tQIct+DU5YVyc9mv2izgRjEEakdvE6LhrRuf6/I=;
+ b=NQ1GJprGbebdPzF6Q55GztOH9Wbkj8s9CHONFlA2fx6nYKQO2CAXGZzLdpb02o7w7nBa785mem/gBoGtJ7ke7PMw42PicybEB0fp+SMWn342ELFH2cKbs0uohzYuazYh6W/7Fg+iZTtcJ436hbcyedkPg6o2lRaBlVZMywwV/ytbOlhwQypnBPEE09IvXqYgEKSszlJcc2rg7YDjz1IrJtViqUITa25S0UxM4xDjulENJUmmeLCbU1eez66REReeLqcvkPAolFqnwewUz8RERrce91pYAiOuBmryETKBIGIHMvLlepV++aAL0HwKLDSnYC6aVqF7UbmeZMLI4KAGvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FUm7tQIct+DU5YVyc9mv2izgRjEEakdvE6LhrRuf6/I=;
+ b=dkbgToCrEDyGvoaJEKu06O68DbSriSPVeQHtBP/eMGpzma5mkbZSZ3kqmRMgXxsh/FkpHlJIuiwkJC3E1q1T8RpZuilxM8DneZFLwtPzbdItvyhycU6U9JJeUR9ghuAVFvwnglonzHuHGb/l4PmH2DSRl3YU6yHGIWsV9MxZd2npRKeep3APqGa5289CFcyc9qOx95Vu+l7xXjcLZ8qUcbRP4ZLv2xG+LhLDJSPY7T5Ne7SXfpBPX6MHkoonGrG5/0XctOKIqleR2KXr6Z+NnUx4SfagJVIY/yhjMu3kpsfUnZuPjAbWFf1UDuPYw4YAirldzYJB5vhtVxCbletsJw==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by DS0PR12MB8198.namprd12.prod.outlook.com (2603:10b6:8:f2::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.32; Wed, 29 Mar
+ 2023 21:07:37 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::9f90:cf3d:d640:a90b]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::9f90:cf3d:d640:a90b%4]) with mapi id 15.20.6222.035; Wed, 29 Mar 2023
+ 21:07:37 +0000
+From: Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To: Tom Rix <trix@redhat.com>, "martin.petersen@oracle.com"
+	<martin.petersen@oracle.com>, "nathan@kernel.org" <nathan@kernel.org>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>
+CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+	"target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH] scsi: target: core: remove unused prod_len variable
+Thread-Topic: [PATCH] scsi: target: core: remove unused prod_len variable
+Thread-Index: AQHZYkIGbUtUzcLmAE2kpRi25oy/tq8SQHUA
+Date: Wed, 29 Mar 2023 21:07:36 +0000
+Message-ID: <6b50e660-f10d-82ae-4a15-86fb575dcab5@nvidia.com>
+References: <20230329132421.1809362-1-trix@redhat.com>
+In-Reply-To: <20230329132421.1809362-1-trix@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|DS0PR12MB8198:EE_
+x-ms-office365-filtering-correlation-id: b4dc0347-a899-4ea0-ef5f-08db30999fa4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ lTDm+wF555bhEgiZTFnmrFndQvx5lfHuvdCUXgzi8BsKh8Kk9yAnBfNBJ8gUAF2E+EaaRbbZ8dTNGlzHKNYaaztD4evMi/0W44ie24jnAq6bP/LX3sYNfMs+nKcxKn93TkCLyJdRdlm0jlk4c5I4ueCdERvmq6BLOIMirbAi6DW0D62NhfERhKRE/xMufhAaaNJzWK6LLfwurVc4Pfdjqa+FZQu14rITDkQFdlZYWwKuiaDQblLksDCx5MUJGtENQqp23xp2r42cLO/3u2hawoqxmCyeFTjijgoSwkErcSrxpV+pMKYXaJUaL8So/zuMZobDziqYwEKPkOiOQ1HSizbanYK0hTfw4rOPWWp/Ek6DhK9uL0BqXkN6KkLWpnaAi9PYv/y5oxLJcwCTsydbJuNz4IVDAUtyVMpArBZ1xQZlct0Ujx/VuGX10947OwWenUY9us8svG/aNa5NKx3/4s9Tx/GgayVTwx9TwFOpAEWrn80UfSJlFzGxDhEo7sr/OPmQQmnU9qzwDCnw6Hx+ithDuFQQfB6+o8CXY7+SWdVxFG9d0eXa5TGmjj2Gpcr5y0ocEKCF0UJ7GvMCnuhHKC/fQC5Th81pTGq3LO9nnvt0fGWGq9rpJc9Q0EH7TKI9c79FzHQ7CGhvC16L4Z7IEyMK3oCL1tiHGzOh40stHTGtockfucSRn+mO5QZ9mUOQ
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(366004)(136003)(39860400002)(451199021)(66446008)(71200400001)(6506007)(478600001)(2616005)(6486002)(26005)(316002)(110136005)(91956017)(31686004)(6512007)(53546011)(186003)(54906003)(76116006)(4326008)(66476007)(64756008)(8676002)(8936002)(5660300002)(122000001)(2906002)(4744005)(41300700001)(38100700002)(36756003)(38070700005)(66556008)(66946007)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?cXdDOGQ2TGpadFlhM3RJWGh3Uk9wbnBFY0Y3ZDFzQnNwK3JhWVlyU3FQQkdN?=
+ =?utf-8?B?RWxLNnk3VmhpQ1ZkK0cvU1FEK013alQ3d1RQV2FhMjdtdkFPbm1UUTgycFZn?=
+ =?utf-8?B?cVNyeVN1eHlaeTFydlVSSk9UcjdEODBIV1hCYXp2cDQ0L3hsazdmdmVXYWZ1?=
+ =?utf-8?B?T0IxRGM2SmNSYU9tYWZrTFhjNzZReStHdVFqVm5pak9Xdml2Ui9VeXUrU1BV?=
+ =?utf-8?B?c1hmZklrZjdWUVdqZUJieEFXdGMveWt3emgxaG1ZVXE1NTY1SGl6S1pnaEgr?=
+ =?utf-8?B?Z0NRZ1NHYXNvbkZ2WVpmbll6N0tjZUtPZnlEK2JCMmJRZlNQc2dvUGk1OXFM?=
+ =?utf-8?B?NXhjYWZGN0xXUnZzbWFDOHBkczNucmowVURram80OFA2bHNkUWs1dnVrYVpY?=
+ =?utf-8?B?OTFIU3YwS1ZwWHFPQlhRa3ljcFJhUHpUZFNoWFhmWk85L1EvTE5XbmZteWMr?=
+ =?utf-8?B?bnlmY3VnNEdaeWZxMC9NaEJydSsyZ1VST1p5dE80ZGZvc2lFZXNocGs3V1pJ?=
+ =?utf-8?B?cnpBTDl5YU5hQ2tTZW41U3NybmFMd0xCV2NtczBmOU9TSDhjWmlIb3ZCbEJw?=
+ =?utf-8?B?UG10dEwxeDhkUFgrNmlwc2Q1MEdFcEhlQTNlaGErYjdPeGJPS0FvcmJtUGcv?=
+ =?utf-8?B?cHlwT3lPZ0lKU3hMNzl5Y01iTU1EQm9Mc1Frb0tDS3JhSDNiNTlKbVNGUmI0?=
+ =?utf-8?B?RDIzMksvc0lUMXFyTWJxdmoraTVOU3Z0Rk9yZmVtR05HckZ0SWVFYVI0MlMy?=
+ =?utf-8?B?L3hwMlMxQXluZXR3OTQ3OTVvM0Y3eFlybWR2R0ZVM3FRNVVvRHRDZVI5QWJJ?=
+ =?utf-8?B?RHZqWjB5ZGw5US9tbm5zK2tjV040WFVlT2FnTWdBWEFtb3F2aHpyWHlPc1VZ?=
+ =?utf-8?B?TEdYY2dnMUx4d3BZbEYrOFR1WXAzVmRJeklsYnozRmIrZ052Z2FDOThKSVdp?=
+ =?utf-8?B?SEJieHZBM2NScjVubHpnRkRUdytRRGxORW1YRVRLaGFnY1BiUHZkUmhUY2xn?=
+ =?utf-8?B?L1JxOS90aUFGcjd6Wk1QQ3pCcHRvb3l3QXJrS1ZTWEgxS1lJbmJkeFFFYmlZ?=
+ =?utf-8?B?S1cwWFhzNm1wTWlNR1Zrc0RFekRHSmZpaGw5RTVnSHlLSnl5c1dJZGlZd0dV?=
+ =?utf-8?B?YytKWThhMWRRaWptQk5OQ09tWEJ2WkZod2psb2syVGN1TEpOaTlwcldGOHhz?=
+ =?utf-8?B?VjlIM0pqdEhHUUlvNzB1OEQyVDFQdmNFS0NZOWNTNFNRdFowaVdBK1J5RGNx?=
+ =?utf-8?B?WTVTdkhtaGhMek9venluZUhBTjYxd2dKUW5kSXNCMEpnaEtMZlhTRDRmZ0Jy?=
+ =?utf-8?B?VUNOZGNZTllSdGhZU2ZTelZXNmZyK3psQ1BhS29uazAwWUhIRUM2NXlIMmVL?=
+ =?utf-8?B?U2pRWkE4SE81cGFHVWRuYTd2MExTUE00bXVwTUx6dm1yMjFIUStIYVE0NkZh?=
+ =?utf-8?B?MjIrSW5ieHMyU3lSdEh2eWxHaFVXSVlYWGJTMHNLNStzQ0J6MDhuMDc2MVkx?=
+ =?utf-8?B?ZHAwSmVYS1I5M2ZNbUhQVDVzK25YTFVmY28rVnRvVVh3OVNKNklEeTBaMEFa?=
+ =?utf-8?B?emdEcXBuLzhoRjFVSXk0RVd5V0lwMkFvbUNMS2VHNlZxNHBVMTBOVmREank3?=
+ =?utf-8?B?c2ExNUNqaEZmdlRLa0lWV1JKQ1FtLyszN0JZM2Y2WHhoRXhoKzVzc0VUVkZL?=
+ =?utf-8?B?Y09QY3dDTlRucllUTTJlVHZrczBoRkJkN0Y2NGJOdGNnUzZsVzl0UHdXNVBV?=
+ =?utf-8?B?SlhTdmltdGF5OEhOZis4b21JTHEwbExKY3hlanZVSmJLTDF4a1VJMmc3NklX?=
+ =?utf-8?B?T0lyaVJ4TWxZczFRMFZtYThKQm9YeFZwektVSVpZSmJteGFxNTNiaDJ5THdh?=
+ =?utf-8?B?NVc0bmRyQklRb2hTTjBHRGpZaHlqS0VLYjVrUGFjb3Rab054L3A4RTk1N0Zr?=
+ =?utf-8?B?bG04TGIwVThqMWNxcWJ4SGJnQWlldDNUUEM2K3llZ05UdGh1UmJHRDl0N2l4?=
+ =?utf-8?B?SW5PaVZYdVJZd2p4dWgySVo0ckVuY3BUSzZSTDRtK0JoZ2JTVlZwRGlIK1RI?=
+ =?utf-8?B?bjhDZGoyUE8xVkdoQ2g1bng5M1NQa3VINUdsMGh1ZzhFa3JlOUJ4UitZU29D?=
+ =?utf-8?Q?6rgyh2AfBixu0CovoA9ZXVedA?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3995C671BF96A841B1439F034CA2B23B@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4dc0347-a899-4ea0-ef5f-08db30999fa4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2023 21:07:36.9465
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: usK+fzMkJwGYIRLFu/yVO3A2hSxyMzwQPzxfrpVg1sLrBI3WnEVzNvK2+La5BiDKfLdHMSCQfuEaq74z4GE1Ew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8198
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-netlink.v8
-head:   b160cccb84362674ac09fb349ab21bd2339eb28e
-commit: 1cf4b56e63dd687ede53ffa0d0766afa5e1f6cc2 [17/20] nvmet-tcp: enable TLS handshake upcall
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230330/202303300416.aEtu4DXp-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=1cf4b56e63dd687ede53ffa0d0766afa5e1f6cc2
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-netlink.v8
-        git checkout 1cf4b56e63dd687ede53ffa0d0766afa5e1f6cc2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cpufreq/ drivers/nvme/target/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300416.aEtu4DXp-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/nvme/target/tcp.c:1801:1: warning: unused label 'out_free_queue' [-Wunused-label]
-   out_free_queue:
-   ^~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/out_free_queue +1801 drivers/nvme/target/tcp.c
-
-1368784072dae6 Hannes Reinecke 2023-03-04  1748  
-44f331a630bdc7 Sagi Grimberg   2022-02-14  1749  	queue->idx = ida_alloc(&nvmet_tcp_queue_ida, GFP_KERNEL);
-872d26a391da92 Sagi Grimberg   2018-12-03  1750  	if (queue->idx < 0) {
-872d26a391da92 Sagi Grimberg   2018-12-03  1751  		ret = queue->idx;
-1368784072dae6 Hannes Reinecke 2023-03-04  1752  		goto out_sock;
-872d26a391da92 Sagi Grimberg   2018-12-03  1753  	}
-872d26a391da92 Sagi Grimberg   2018-12-03  1754  
-872d26a391da92 Sagi Grimberg   2018-12-03  1755  	ret = nvmet_tcp_alloc_cmd(queue, &queue->connect);
-872d26a391da92 Sagi Grimberg   2018-12-03  1756  	if (ret)
-872d26a391da92 Sagi Grimberg   2018-12-03  1757  		goto out_ida_remove;
-872d26a391da92 Sagi Grimberg   2018-12-03  1758  
-872d26a391da92 Sagi Grimberg   2018-12-03  1759  	ret = nvmet_sq_init(&queue->nvme_sq);
-872d26a391da92 Sagi Grimberg   2018-12-03  1760  	if (ret)
-872d26a391da92 Sagi Grimberg   2018-12-03  1761  		goto out_free_connect;
-872d26a391da92 Sagi Grimberg   2018-12-03  1762  
-872d26a391da92 Sagi Grimberg   2018-12-03  1763  	nvmet_prepare_receive_pdu(queue);
-872d26a391da92 Sagi Grimberg   2018-12-03  1764  
-872d26a391da92 Sagi Grimberg   2018-12-03  1765  	mutex_lock(&nvmet_tcp_queue_mutex);
-872d26a391da92 Sagi Grimberg   2018-12-03  1766  	list_add_tail(&queue->queue_list, &nvmet_tcp_queue_list);
-872d26a391da92 Sagi Grimberg   2018-12-03  1767  	mutex_unlock(&nvmet_tcp_queue_mutex);
-872d26a391da92 Sagi Grimberg   2018-12-03  1768  
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1769  #ifdef CONFIG_NVME_TLS
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1770  	if (queue->state == NVMET_TCP_Q_TLS_HANDSHAKE) {
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1771  		struct sock *sk = queue->sock->sk;
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1772  
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1773  		/* Restore the default callbacks before starting upcall */
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1774  		read_lock_bh(&sk->sk_callback_lock);
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1775  		sk->sk_user_data = NULL;
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1776  		sk->sk_data_ready = port->data_ready;
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1777  		read_unlock_bh(&sk->sk_callback_lock);
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1778  		if (!nvmet_tcp_tls_handshake(queue))
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1779  			return;
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1780  
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1781  		/* TLS handshake failed, terminate the connection */
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1782  		goto out_destroy_sq;
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1783  	}
-1cf4b56e63dd68 Hannes Reinecke 2023-02-14  1784  #endif
-872d26a391da92 Sagi Grimberg   2018-12-03  1785  	ret = nvmet_tcp_set_queue_sock(queue);
-872d26a391da92 Sagi Grimberg   2018-12-03  1786  	if (ret)
-872d26a391da92 Sagi Grimberg   2018-12-03  1787  		goto out_destroy_sq;
-872d26a391da92 Sagi Grimberg   2018-12-03  1788  
-1368784072dae6 Hannes Reinecke 2023-03-04  1789  	return;
-872d26a391da92 Sagi Grimberg   2018-12-03  1790  out_destroy_sq:
-872d26a391da92 Sagi Grimberg   2018-12-03  1791  	mutex_lock(&nvmet_tcp_queue_mutex);
-872d26a391da92 Sagi Grimberg   2018-12-03  1792  	list_del_init(&queue->queue_list);
-872d26a391da92 Sagi Grimberg   2018-12-03  1793  	mutex_unlock(&nvmet_tcp_queue_mutex);
-872d26a391da92 Sagi Grimberg   2018-12-03  1794  	nvmet_sq_destroy(&queue->nvme_sq);
-872d26a391da92 Sagi Grimberg   2018-12-03  1795  out_free_connect:
-872d26a391da92 Sagi Grimberg   2018-12-03  1796  	nvmet_tcp_free_cmd(&queue->connect);
-872d26a391da92 Sagi Grimberg   2018-12-03  1797  out_ida_remove:
-44f331a630bdc7 Sagi Grimberg   2022-02-14  1798  	ida_free(&nvmet_tcp_queue_ida, queue->idx);
-1368784072dae6 Hannes Reinecke 2023-03-04  1799  out_sock:
-1368784072dae6 Hannes Reinecke 2023-03-04  1800  	nvmet_tcp_close_sock(queue);
-872d26a391da92 Sagi Grimberg   2018-12-03 @1801  out_free_queue:
-872d26a391da92 Sagi Grimberg   2018-12-03  1802  	kfree(queue);
-1368784072dae6 Hannes Reinecke 2023-03-04  1803  	pr_err("failed to allocate queue");
-872d26a391da92 Sagi Grimberg   2018-12-03  1804  }
-872d26a391da92 Sagi Grimberg   2018-12-03  1805  
-
-:::::: The code at line 1801 was first introduced by commit
-:::::: 872d26a391da92ed8f0c0f5cb5fef428067b7f30 nvmet-tcp: add NVMe over TCP target driver
-
-:::::: TO: Sagi Grimberg <sagi@lightbitslabs.com>
-:::::: CC: Christoph Hellwig <hch@lst.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+T24gMy8yOS8yMyAwNjoyNCwgVG9tIFJpeCB3cm90ZToNCj4gY2xhbmcgd2l0aCBXPTEgcmVwb3J0
+cw0KPiBkcml2ZXJzL3RhcmdldC90YXJnZXRfY29yZV9zcGMuYzoyMjk6NjogZXJyb3I6IHZhcmlh
+YmxlDQo+ICAgICdwcm9kX2xlbicgc2V0IGJ1dCBub3QgdXNlZCBbLVdlcnJvciwtV3VudXNlZC1i
+dXQtc2V0LXZhcmlhYmxlXQ0KPiAgICAgICAgICB1MzIgcHJvZF9sZW47DQo+ICAgICAgICAgICAg
+ICBeDQo+IFRoaXMgdmFyaWFibGUgaXMgbm90IHVzZWQgc28gcmVtb3ZlIGl0Lg0KPg0KPiBTaWdu
+ZWQtb2ZmLWJ5OiBUb20gUml4IDx0cml4QHJlZGhhdC5jb20+DQo+IC0tLQ0KPg0KDQoNCkxvb2tz
+IGdvb2QuDQoNClJldmlld2VkLWJ5OiBDaGFpdGFueWEgS3Vsa2FybmkgPGtjaEBudmlkaWEuY29t
+Pg0KDQotY2sNCg0KDQo=
