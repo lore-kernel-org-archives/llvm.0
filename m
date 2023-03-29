@@ -1,107 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2119.outbound.protection.outlook.com [40.107.244.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFD21C2B
-	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 13:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680096291;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rtS7QVAtuYQjDEY7nXHnoqbfop6chvBfZPGcSLcnwDU=;
-	b=RrVPoJffelg0NamurChdQj7LP4Ob/0oRPe6BmCfzhQhflYifOU1lcnpB4rK6V7lMwpSKLq
-	yL4DtKnjllh1K3ajfrbPsOCqpkXgHE3I2WFcWzgyI/VGPdipuBoold6wX1PACWRQw2AxIF
-	lglRLPMuy/mIYh7+QxXKIob6OI/hVfI=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-650-WMoAf33kNLaEQxz-Xhcb7w-1; Wed, 29 Mar 2023 09:24:50 -0400
-X-MC-Unique: WMoAf33kNLaEQxz-Xhcb7w-1
-Received: by mail-qt1-f197.google.com with SMTP id l2-20020ac87242000000b003bfecc6d046so10254590qtp.17
-        for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 06:24:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680096290;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rtS7QVAtuYQjDEY7nXHnoqbfop6chvBfZPGcSLcnwDU=;
-        b=K6GCzlLmw11WsbMkK0pc6Nk4JOsoALiGHIy8IPC0BLUZ5jxe4NztK5pxcdMLln+yPa
-         DWfVnPl9GaTi/Slesb5q0+8JsvR4Y6wAtL+eUi1fippkkEELdpeUl4+4WE78vhpOksCK
-         QVHKXu4Oh/UWcchL2uxzXukNfd2G95sx25Lm1sE+Jh32SrzNY/3Um6ZgHLix9ytelSkH
-         istN+s2P8uXCHHyfhYJ5aM+vDOgNhhigCes4S4Bgdf8Gy8eBW9BIt+6/4sRH6LwghH2/
-         phCN5GtK+RDbO/j8z1foxDlutZX1muBcCDL0TBx2W6BT/kCWAuLEs4Ac3r4apmnm6ZFI
-         CnsA==
-X-Gm-Message-State: AO0yUKUdKg4CDdC5kN0R0hGuoK7mZG3lSCZID7hRlo5fDvOE3NJeayby
-	6IaYkLclgWyv0fp88o3dCAYIjVayjEGgn/Jbz4JyxqcnN70mFYczbrJCqyW2EOpGia1xhTS4kfA
-	3akHGY3QQatCokA==
-X-Received: by 2002:a05:622a:1903:b0:3e3:982b:f535 with SMTP id w3-20020a05622a190300b003e3982bf535mr35038328qtc.33.1680096290103;
-        Wed, 29 Mar 2023 06:24:50 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/pxHT+zYmnDLN7+oI3EGOeAUDzDtVHPAhTMokbOjOy3WQMS3mqH9rtro9CtstXRdGMpp050g==
-X-Received: by 2002:a05:622a:1903:b0:3e3:982b:f535 with SMTP id w3-20020a05622a190300b003e3982bf535mr35038289qtc.33.1680096289729;
-        Wed, 29 Mar 2023 06:24:49 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id l6-20020ac848c6000000b003bfb0ea8094sm9803279qtr.83.2023.03.29.06.24.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 06:24:49 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: martin.petersen@oracle.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: target: core: remove unused prod_len variable
-Date: Wed, 29 Mar 2023 09:24:21 -0400
-Message-Id: <20230329132421.1809362-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC021C32
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 13:41:37 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E19gZbu5frkuQWcZi+a22hAtB5uIfSAQntkX7c9VbZUSrFJ866qxvnJMpeoRh2uuleAvPw/msqND5B7RWSAJ4Ngcb7CoDZ+33hZGT526K1QRyoJXso4xYAmHm+xUULTU9+cAObBm7uLWkluo1Z6y/74Su/oS9xCkIACOFSYp0TxaSsONN8qAal0agoi+gPIXWZw9Ex4oyKKHDH1PSos2Fz4IZeX6S5oqDR9p0T3Ng4V0+KMGIwalALdW9mik7X9h1FLa+V7iy0PyJf16k7RGfeUFupOQLY8EJzNHDwUrPNEC7K/bzICT4XRhWMlM/vlsPee+tnhR98sKK1ygOqa2JA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xYhLdOr4JCH+8cH4MHMQemhqRcE2NSTuVjYCSVXnmLg=;
+ b=JzmyfKFRrpZgx2HD0axrmhby1kF5WevHU9KOHMyFFaizHnOE21MEJhsoCXhraZw+3P0a3VWR20A6TQmcXwnRa1g0cBszrev8CDYW94rE4xi3oE+aA1a09PasXHtncKipMZz3EsBZgfLMCbyOa+faYgQKjoCwDXLOKvCQQRxqJfKU+KfX5bPB1z7Wrgq48a0EEgxQjfGJFPF6dq5tnjlITSvAkeojgTL2ZTlschum+SK/M2OBtN4PpJUmeYexZj10sIrbonQpnAY6U0tq4QyHSfOhlcKuply98Qy4HaHpLPuR9nPbH2Wxt8P8P1/N/ltVcbohkbZDSY2X3MdvxHNH0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xYhLdOr4JCH+8cH4MHMQemhqRcE2NSTuVjYCSVXnmLg=;
+ b=QqqyJVsu47BTRNd8hWGaC+ZxIejWKYBRgbYjFOpA0xw1b65/CBTbJE2vY/aFohtk9dFposuitx3Q5keDiPYNaZoo0Apd/QZkunVNeuQ7X3pF4AOM608e3E50+NBkvQbZs6/HzXGak9dyVSRzgFVJUR8k8V2wWUXBrbyjBfPRpY4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH0PR13MB5281.namprd13.prod.outlook.com (2603:10b6:510:f1::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.30; Wed, 29 Mar
+ 2023 13:41:33 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::c506:5243:557e:82cb]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::c506:5243:557e:82cb%4]) with mapi id 15.20.6222.028; Wed, 29 Mar 2023
+ 13:41:33 +0000
+Date: Wed, 29 Mar 2023 15:41:26 +0200
+From: Simon Horman <simon.horman@corigine.com>
+To: Tom Rix <trix@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+	petrm@nvidia.com, leon@kernel.org, shayagr@amazon.com,
+	wsa+renesas@sang-engineering.com, yangyingliang@huawei.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] net: ksz884x: remove unused change variable
+Message-ID: <ZCRABhzLVCwfEgeQ@corigine.com>
+References: <20230329125929.1808420-1-trix@redhat.com>
+ <ZCQ70Rb311WzqPIJ@corigine.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZCQ70Rb311WzqPIJ@corigine.com>
+X-ClientProxiedBy: AM0PR03CA0094.eurprd03.prod.outlook.com
+ (2603:10a6:208:69::35) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5281:EE_
+X-MS-Office365-Filtering-Correlation-Id: 64cf0b1e-e9eb-4410-4715-08db305b4f3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Fu0Bcd4ZTDzNhRbbXexsu1YdFc4X4y3advQ3YTbgYMD2OnVQVG7qG0WTH7eXuwayKS88bAFRhlAQSSKdDJEhYBjZMF/bk9CmzEULZGvc5ewPnfQSuolxW8OoGCeDoAmSzy2GIdGLM+RGSD+Fnu3MtV6fmzHNaMRSDm6JkplZXDSLg0+2MYVTxQKwL3NW6316XORUzAVyarp1e5HSaMVCLhXB4kIoIH5ar/xHFQL1UWrnHfX41Iqj8a0QJ0Ah4g+EaHLhX1iAqMGEZty5WxiUJOkTNYiFtRdsPEHXhnNJs5Zi9OtS67W9dkz2mNvo24ULeatXdFlsiSfF/OxNkaesrwhgxeT0wzHDExgwVH+O0ZFTAB5Xt4YudCdp5GN7uF+ixpigVd7sc1aYN4osmXTVEQ/mGajnia7vfrqX78fLMVIb+Sh5Mh5cYw3wZAKtsSL7Po1PR/9/38a73WtXe7AqMaVPuBnWNYlMRz569FPnuG1ip/Er5ECOvP8/tiZn0DhZ7o0HerlLoUtQQg+z78ZU0TBQ+LRLsuSU0AkJ9npcYlroR4J9+nL6weeBv9Fcrgni
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(39840400004)(346002)(396003)(376002)(451199021)(6506007)(6512007)(316002)(6486002)(4326008)(6666004)(186003)(66946007)(66476007)(6916009)(8676002)(66556008)(478600001)(41300700001)(7416002)(4744005)(5660300002)(44832011)(38100700002)(2906002)(36756003)(83380400001)(2616005)(86362001)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?0vRObrZW6VBiu7UYgXxXhbPyxTRC7nePpmmmt++INGt8MxS/O3hUUajJfq92?=
+ =?us-ascii?Q?zAWgHdlRP67452hQ0CA2InIhVUsA7bdnQNebviWVVfYWn0Rrwze2TDbxZVgZ?=
+ =?us-ascii?Q?pOG6vWF1krXQ9d4iDQGnY7TwDefqXtIk7F5xOJ3DhGAjCKMasOHbMwiL8f3f?=
+ =?us-ascii?Q?fE+g+Wel44Jxw4hFCWy4N123xwcPiz0TMnlVZw0Jfsj5uPE8yZCXFDo/2CBk?=
+ =?us-ascii?Q?KYFEvJp1jZEn1cq/hWNmhFUou5wgBa+ZiP5ukAw+vwCkT3YNIPuRZZ2bMXL5?=
+ =?us-ascii?Q?Vu2QP3z+vxVRHfZCM9f6w63q5hDqR1lWQnAzTW5yA7lL2lIDZKVTFYrDwZxj?=
+ =?us-ascii?Q?LGS00uBvFrxfFTc5SqZEP2U3jBPCBhAM0ilddTVE4HgdFG5fNYShH53hBTRS?=
+ =?us-ascii?Q?vbytTWRnylyzqMvjJFRi3L0hJQYoflbPOE6ihd2d5lCej3RezUozyX35MU60?=
+ =?us-ascii?Q?54NYFySlAPeNNTBD1buogxziJFSiWd1g8xVViZ28GtxNLLM/Upnglfy493Yi?=
+ =?us-ascii?Q?BB+6+gPTfVFCcMSAEcE8Sk5EN57548b+f/6ccyz+XYlp90j+18AnWLwmg/VY?=
+ =?us-ascii?Q?HT/MKCd3sFFHkfH/c0vZ9d87A9ErZO9pkip82CR71i7gWvldq1HaiEeqrM5V?=
+ =?us-ascii?Q?RXjJ/zRcSW/WSJoZ2pP8nb9+7/NCODlduhG3IupvEndJnG6cBdCgoWT9O8fp?=
+ =?us-ascii?Q?eRda3S6b3FvhmH9aNxAq1FiHGWEaEMKJXOl63VsGr3UCOaARvXgf3gsDtA1A?=
+ =?us-ascii?Q?08HxK5ILEDpR1u2vODQ8cWnHRIhbpAaVVpBDgApNXv9Ese4ePIvHuuJLbxtN?=
+ =?us-ascii?Q?gBLWu8S1GG+QYu+clQ61q/Gou2xbMRUU51gKAE/1HrSV4dy2zDo07XTrEBRn?=
+ =?us-ascii?Q?G4OiFBbuQ8DVWCWg7KNgyrheICiH16qOWxhFQNua6pMQvKkhQ44bGtU3Z7V5?=
+ =?us-ascii?Q?ExgmwdJVYLrXfsVDVvsrK5z8GoA7SMOsEIJ35GF7rML3iMbJlq0FjqH30dMK?=
+ =?us-ascii?Q?Ns2OwUU/csrNLMpUR/FrgtUKn2pTlJ3st50vFUOp0wM76wDIOooJrrcMUTM0?=
+ =?us-ascii?Q?1xnB7zs5PK+97NHAIGFMap/lqKRvLC590wZiPJfmJh5R5rwjLjCQFYEzN4L+?=
+ =?us-ascii?Q?VWQYXTveQzJ+Fn7mzL0oMP4NaGPEA0YlC7k6th+KWlc72wnO+g1QVZ+hai2o?=
+ =?us-ascii?Q?jQ+YWfth6PHqwsIS+P86D7OF3iChQT63ueHKXo/BUnavWBBW+4RtSPBKuD26?=
+ =?us-ascii?Q?rDx4vaOGW8BpwiRdDso6UfniW58JbQ4QqeOWTZ0asnz44nQ89Afct0LEZNXp?=
+ =?us-ascii?Q?ZjHdEbuChw/8GPXhY7BiHzb3VVKAJYA7EUrnbJwPvGCfxZsEKL59ENPXTQ6O?=
+ =?us-ascii?Q?8ch9jKhjnB5yuVbSMCS/2Wo/sGBfgAyYI5Vb08hPNjSNGsFQAL8VSi5jglbp?=
+ =?us-ascii?Q?ZlS/vKd0aTW+7E8C5la5ZOvYukLw3R1jEzGDFvR0/Gue2uff0UdTqnf+tEqc?=
+ =?us-ascii?Q?SqZR2ro2HSr1Mf+VCWcdZcV/4g5Anjf87z2RSiMiGqNsPLBpQgXYOzREw+qk?=
+ =?us-ascii?Q?QkBuFdB8j77FP1FzDihtnKKhRRyXSGn9PiXbY6RMW1L3x1cNenSJ/6iPtPVI?=
+ =?us-ascii?Q?fWtwqkGDvmvVN2G8JlOuJOVgLHTYVtNVyTMJWsx42UvvopWg2wdorIXQd9SY?=
+ =?us-ascii?Q?aKTrxQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64cf0b1e-e9eb-4410-4715-08db305b4f3f
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2023 13:41:33.4329
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /k9RNY1IUUbncntAAn/kyGlfFhGk00NdGTVgtCSoZNCnt2e53xxQHvBgnN0XsWbsizLd/VovCpEuxXrTWII+NhPAfPpLlwQv/zne4AwmHCY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5281
 
-clang with W=1 reports
-drivers/target/target_core_spc.c:229:6: error: variable
-  'prod_len' set but not used [-Werror,-Wunused-but-set-variable]
-        u32 prod_len;
-            ^
-This variable is not used so remove it.
+On Wed, Mar 29, 2023 at 03:23:38PM +0200, Simon Horman wrote:
+> On Wed, Mar 29, 2023 at 08:59:29AM -0400, Tom Rix wrote:
+> > clang with W=1 reports
+> > drivers/net/ethernet/micrel/ksz884x.c:3216:6: error: variable
+> >   'change' set but not used [-Werror,-Wunused-but-set-variable]
+> >         int change = 0;
+> >             ^
+> > This variable is not used so remove it.
+> > 
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> 
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/target/target_core_spc.c | 5 -----
- 1 file changed, 5 deletions(-)
+Hi Tom,
 
-diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
-index 5bae45c3fb65..89c0d56294cc 100644
---- a/drivers/target/target_core_spc.c
-+++ b/drivers/target/target_core_spc.c
-@@ -226,7 +226,6 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned char *buf)
- 	struct t10_alua_lu_gp_member *lu_gp_mem;
- 	struct t10_alua_tg_pt_gp *tg_pt_gp;
- 	unsigned char *prod = &dev->t10_wwn.model[0];
--	u32 prod_len;
- 	u32 off = 0;
- 	u16 len = 0, id_len;
- 
-@@ -267,10 +266,6 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned char *buf)
- 	 * T10 Vendor Identifier Page, see spc4r17 section 7.7.3.4
- 	 */
- 	id_len = 8; /* For Vendor field */
--	prod_len = 4; /* For VPD Header */
--	prod_len += 8; /* For Vendor field */
--	prod_len += strlen(prod);
--	prod_len++; /* For : */
- 
- 	if (dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL)
- 		id_len += sprintf(&buf[off+12], "%s:%s", prod,
--- 
-2.27.0
+I notice a very large number of unused functions in ksz884x.c.
+And I think this means some corresponding #defines can also be removed.
 
+I'm wondering if you happen to be looking at this.
+If not, I'll see about preparing a patch.
