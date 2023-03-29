@@ -1,23 +1,23 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8D71C32
-	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 13:18:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF1DC43321;
-	Wed, 29 Mar 2023 13:18:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06B68187C
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 13:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C577C433D2;
+	Wed, 29 Mar 2023 13:20:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680095893;
-	bh=0kws+d9Nmkb4SZo6HGrrZaRdbgyyJEYMqGYIL1EJG+Q=;
+	s=k20201202; t=1680096018;
+	bh=Vp7Tk9FZto6rCmf812cmUkq4T6NxSn9CdcRG6uBna6Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QztLpmc+Q5DKUUvHOYSENPRc98tzx/hhOu6lJ1d6I9qpVZT26qGVSp49GnAAiz+sg
-	 55GtTS6RhMyFouLI2CJbzzZcWwnSPo3rRjRTF+fR3qcTWXVzOnfa8k3/NR7A+/gvjM
-	 Z0Y9bXrpiOxg66k3dy1IwHG+WDeVRlEKalykiVJivfEYi8nRbQ1uoM8XEMEMcRc26y
-	 ujaaZC6OWc3EliSgIbaDTKoV0ugw8TYmVcZHsSghKSZEQtCumQmvp8ZTBPfgO/0br1
-	 kyQ4VoWf3UNUOTaqrdrQXrfcVkvC1TJ9m7RQ+V5JwR+oD4wmr5hHYRd0jhxZlv/M4z
-	 /Q84b0E+Wzrkw==
+	b=IPx1XTCJhoNO96hDi+jLdysiRWDplquD4sU4MIQ8fKqJiKaYpNwXU2HwTFzzubRW+
+	 ZrrFDHqCBLPAem8lJd7TNN3wbHYNJsbrRHw3tE4/C4lbXLaWKjYlvN+uIsa46jEG4Y
+	 Pw7wEr4MJE7sXLiN0SBA1A86QzWC1JHBtSOa93ZHY7lva2afGbwDMTWgmUWsyROQrx
+	 9+d299HDPbTpo+JQRpr6J97CPXN4bIuzYOS8kxdv9NaTxTtaRNyLDJZ8yBPLzdI+Xh
+	 ih86RP5992Z5ewvhn1eotK+nwJM0YJbcYdaqPLzkWwv37IEHzIx4ZKi0WyLoXVo/oX
+	 UZt8EdHH4oslg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-	id D678B4052D; Wed, 29 Mar 2023 10:18:10 -0300 (-03)
-Date: Wed, 29 Mar 2023 10:18:10 -0300
+	id 5F5A84052D; Wed, 29 Mar 2023 10:20:16 -0300 (-03)
+Date: Wed, 29 Mar 2023 10:20:16 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Ian Rogers <irogers@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -35,11 +35,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Andres Freund <andres@anarazel.de>,
 	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v1 1/6] perf annotate: Delete session for debug builds
-Message-ID: <ZCQ6kqhODsxSCXdP@kernel.org>
+Subject: Re: [PATCH v1 0/6] config file/command line for objdump & addr2line
+Message-ID: <ZCQ7EG1+/emX0ZZW@kernel.org>
 References: <20230328235543.1082207-1-irogers@google.com>
- <20230328235543.1082207-2-irogers@google.com>
- <ZCQ4nERbit/f6yhh@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,53 +47,60 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZCQ4nERbit/f6yhh@kernel.org>
+In-Reply-To: <20230328235543.1082207-1-irogers@google.com>
 X-Url: http://acmel.wordpress.com
 
-Em Wed, Mar 29, 2023 at 10:09:48AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Mar 28, 2023 at 04:55:38PM -0700, Ian Rogers escreveu:
-> > Use the debug build indicator as the guide to free the session. This
-> > implements a behavior described in a comment, which is consequentially
-> > removed.
-> > 
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/builtin-annotate.c | 16 ++++++----------
-> >  1 file changed, 6 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-> > index 4750fac7bf93..98d1b6379230 100644
-> > --- a/tools/perf/builtin-annotate.c
-> > +++ b/tools/perf/builtin-annotate.c
-> > @@ -692,16 +692,12 @@ int cmd_annotate(int argc, const char **argv)
-> >  
-> >  out_delete:
-> >  	/*
-> > -	 * Speed up the exit process, for large files this can
-> > -	 * take quite a while.
-> > -	 *
-> > -	 * XXX Enable this when using valgrind or if we ever
-> > -	 * librarize this command.
-> > -	 *
-> > -	 * Also experiment with obstacks to see how much speed
-> > -	 * up we'll get here.
-> > -	 *
-> > -	 * perf_session__delete(session);
-> > +	 * Speed up the exit process by only deleting for debug builds. For
-> > +	 * large files this can save time.
-> >  	 */
-> > +#ifndef NDEBUG
-> > +	perf_session__delete(annotate.session);
-> > +#endif
-> 
-> So now, but default, we will call this, as we don't have this defined
-> only if DEBUG=1 is set, right?
-> 
-> ⬢[acme@toolbox perf-tools-next]$ find tools/perf/ -type f | xargs grep NDEBUG
-> tools/perf/util/mutex.c:#ifndef NDEBUG
-> ⬢[acme@toolbox perf-tools-next]$
+Em Tue, Mar 28, 2023 at 04:55:37PM -0700, Ian Rogers escreveu:
+> Allow objdump to be set as a perf config file variable. As previously
+> objdump was set via the command line, the string was owned by
+> argv. Now the string must be strdup-ed, so the corresponding logic
+> needs changing with an annotation_options__init/exit.
 
-We can discuss this later, applied the series with just that zfree()
-change to annotation_options__exit().
+ui/gtk/annotate.c: In function ‘symbol__gtk_annotate’:
+ui/gtk/annotate.c:177:44: error: ‘annotation__default_options’ undeclared (first use in this function); did you mean ‘annotation_options’?
+  177 |         err = symbol__annotate(ms, evsel, &annotation__default_options, NULL);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                            annotation_options
+ui/gtk/annotate.c:177:44: note: each undeclared identifier is reported only once for each function it appears in
+make[6]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:97: ui/gtk/annotate.o] Error 1
+make[6]: *** Waiting for unfinished jobs....
+
+
+I'll fix this later...
+
+- Arnaldo
+ 
+> Add command line and config file options for addr2line, set in
+> symbol_conf for convenience. This doesn't allow the setting of
+> llvm-addr2line due to a bug, but could in the future.
+> 
+> Ian Rogers (6):
+>   perf annotate: Delete session for debug builds
+>   perf report: Additional config warnings
+>   perf annotate: Add init/exit to annotation_options remove default
+>   perf annotate: Own objdump_path and disassembler_style strings
+>   perf annotate: Allow objdump to be set in perfconfig
+>   perf symbol: Add command line support for addr2line path
+> 
+>  tools/perf/Documentation/perf-annotate.txt |  3 ++
+>  tools/perf/Documentation/perf-config.txt   |  8 +++-
+>  tools/perf/Documentation/perf-report.txt   |  3 ++
+>  tools/perf/Documentation/perf-top.txt      |  6 +++
+>  tools/perf/arch/common.c                   |  4 +-
+>  tools/perf/arch/common.h                   |  2 +-
+>  tools/perf/builtin-annotate.c              | 42 +++++++++++++-------
+>  tools/perf/builtin-report.c                | 35 ++++++++++++++---
+>  tools/perf/builtin-top.c                   | 27 +++++++++++--
+>  tools/perf/util/annotate.c                 | 45 +++++++++++++++++-----
+>  tools/perf/util/annotate.h                 |  9 +++--
+>  tools/perf/util/srcline.c                  | 26 ++++++++-----
+>  tools/perf/util/symbol_conf.h              |  1 +
+>  13 files changed, 163 insertions(+), 48 deletions(-)
+> 
+> -- 
+> 2.40.0.348.gf938b09366-goog
+> 
+
+-- 
 
 - Arnaldo
