@@ -1,243 +1,232 @@
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0245AA44;
-	Wed, 29 Mar 2023 02:32:03 +0000 (UTC)
-HMM_SOURCE_IP:10.64.8.43:60248.2003268682
-HMM_ATTACHE_NUM:0000
-HMM_SOURCE_TYPE:SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-	by 189.cn (HERMES) with SMTP id 73AE21002BE;
-	Wed, 29 Mar 2023 10:26:54 +0800 (CST)
-Received: from  ([114.242.206.180])
-	by gateway-151646-dep-7b48884fd-tj646 with ESMTP id aa981a0edace4612916c58baf46d0016 for nathan@kernel.org;
-	Wed, 29 Mar 2023 10:26:58 CST
-X-Transaction-ID: aa981a0edace4612916c58baf46d0016
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <207dfcfa-0fae-ffaa-3e2d-9dbd944a9ad2@189.cn>
-Date: Wed, 29 Mar 2023 10:26:53 +0800
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83891EB8;
+	Wed, 29 Mar 2023 02:58:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680058717; x=1711594717;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5LePkkYiHZYDqDkNtKAdQySugvf94qLRBMhTgjYplz4=;
+  b=Sdprw4IkP6eXsDtitufSUx/MssjGP2aXQRLiQTq87YpmO+NQ/vOqRaYR
+   BhEHYNyeNRYLAfH8QQs0CgO0CJTnqEVmnuFXOHOVTaTiBEAToniJGQe1/
+   FaXiZ8tFshk1MN0sadh3e75+AyN+qoA26VroQshG5cim4xG61Rzs/7GB+
+   F/CdmqqQCoNxdBY7i7biusuWtIpZIDVxtACgpTtxbRb6/LB9rZ8xajSjR
+   Kl6aFqKNZs+LoPtRS/IpcuGu6EWEdEtkB0Gtg/2k68STuj5c28s8Q/FOo
+   /2cjkqgqj4o7kO4Mu1dCpOB4tsgh0T287HRaaIQbt2aArdS/7erXG24EX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342349270"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="342349270"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 19:58:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="827709542"
+X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
+   d="scan'208";a="827709542"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Mar 2023 19:58:33 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1phM1A-000J83-0g;
+	Wed, 29 Mar 2023 02:58:32 +0000
+Date: Wed, 29 Mar 2023 10:58:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Reinette Chatre <reinette.chatre@intel.com>, jgg@nvidia.com,
+	yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
+	kevin.tian@intel.com, alex.williamson@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@linutronix.de,
+	darwi@linutronix.de, kvm@vger.kernel.org, dave.jiang@intel.com,
+	jing2.liu@intel.com, ashok.raj@intel.com, fenghua.yu@intel.com,
+	tom.zanussi@linux.intel.com, reinette.chatre@intel.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 7/8] vfio/pci: Support dynamic MSI-x
+Message-ID: <202303291023.2Kc7CcsV-lkp@intel.com>
+References: <419f3ba2f732154d8ae079b3deb02d0fdbe3e258.1680038771.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v8 2/2] drm: add kms driver for loongson display
- controller
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- Christian Koenig <christian.koenig@amd.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, Li Yi <liyi@loongson.cn>
-References: <20230320100131.1277034-3-15330273260@189.cn>
- <202303281754.jWI20j2C-lkp@intel.com>
- <027cf6d5-6de2-3424-7a81-a43ab689c3d4@189.cn>
- <20230328170636.GA1986005@dev-arch.thelio-3990X>
-Content-Language: en-US
-From: Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20230328170636.GA1986005@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <419f3ba2f732154d8ae079b3deb02d0fdbe3e258.1680038771.git.reinette.chatre@intel.com>
+
+Hi Reinette,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on 197b6b60ae7bc51dd0814953c562833143b292aa]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Reinette-Chatre/vfio-pci-Consolidate-irq-cleanup-on-MSI-MSI-X-disable/20230329-055735
+base:   197b6b60ae7bc51dd0814953c562833143b292aa
+patch link:    https://lore.kernel.org/r/419f3ba2f732154d8ae079b3deb02d0fdbe3e258.1680038771.git.reinette.chatre%40intel.com
+patch subject: [PATCH V2 7/8] vfio/pci: Support dynamic MSI-x
+config: i386-randconfig-a014-20230327 (https://download.01.org/0day-ci/archive/20230329/202303291023.2Kc7CcsV-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/420198d6ba9227a0ef81a2192ca35019fa6439cf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Reinette-Chatre/vfio-pci-Consolidate-irq-cleanup-on-MSI-MSI-X-disable/20230329-055735
+        git checkout 420198d6ba9227a0ef81a2192ca35019fa6439cf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/vfio/pci/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303291023.2Kc7CcsV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/vfio/pci/vfio_pci_intrs.c:427:14: error: implicit declaration of function 'pci_msix_can_alloc_dyn' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           if (msix && pci_msix_can_alloc_dyn(vdev->pdev))
+                       ^
+   1 error generated.
 
 
-On 2023/3/29 01:06, Nathan Chancellor wrote:
-> On Tue, Mar 28, 2023 at 11:22:50PM +0800, Sui Jingfeng wrote:
->> HI,
->>
->> On 2023/3/28 17:27, kernel test robot wrote:
->>> Hi Sui,
->>>
->>> Thank you for the patch! Perhaps something to improve:
->>>
->>> [auto build test WARNING on drm-misc/drm-misc-next]
->>> [also build test WARNING on linus/master v6.3-rc4 next-20230328]
->>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>> And when submitting patch, we suggest to use '--base' as documented in
->>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>
->>> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
->>> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
->>> patch link:    https://lore.kernel.org/r/20230320100131.1277034-3-15330273260%40189.cn
->>> patch subject: [PATCH v8 2/2] drm: add kms driver for loongson display controller
->>> config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230328/202303281754.jWI20j2C-lkp@intel.com/config)
->>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
->>> reproduce (this is a W=1 build):
->>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>           chmod +x ~/bin/make.cross
->>>           # https://github.com/intel-lab-lkp/linux/commit/80b4115f44993f4ebf47b1cb9e8f02953575b977
->>>           git remote add linux-review https://github.com/intel-lab-lkp/linux
->>>           git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230320-180408
->>>           git checkout 80b4115f44993f4ebf47b1cb9e8f02953575b977
->>>           # save the config file
->>>           mkdir build_dir && cp config build_dir/.config
->>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/accel/ drivers/gpu/drm/loongson/ drivers/iio/light/ drivers/media/pci/intel/
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Link: https://lore.kernel.org/oe-kbuild-all/202303281754.jWI20j2C-lkp@intel.com/
->>>
->>> All warnings (new ones prefixed by >>):
->>>
->>>>> drivers/gpu/drm/loongson/lsdc_drv.c:232:11: warning: variable 'gpu' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->>>              else if (descp->chip == CHIP_LS7A2000)
->>>                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>      drivers/gpu/drm/loongson/lsdc_drv.c:235:7: note: uninitialized use occurs here
->>>              if (!gpu) {
->>>                   ^~~
->>>      drivers/gpu/drm/loongson/lsdc_drv.c:232:7: note: remove the 'if' if its condition is always true
->>>              else if (descp->chip == CHIP_LS7A2000)
->>>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>      drivers/gpu/drm/loongson/lsdc_drv.c:217:21: note: initialize the variable 'gpu' to silence this warning
->>>              struct pci_dev *gpu;
->>>                                 ^
->>>                                  = NULL
->>>      1 warning generated.
->>> --
->> In practice,  either  descp->chip == CHIP_LS7A2000 or descp->chip ==
->> CHIP_LS7A1000 will be happened at runtime.
->>
->> the variable 'gpu' is guaranteed to be initialized when code run at
->> drivers/gpu/drm/loongson/lsdc_drv.c:235
->>
->> This warnning is almost wrong here.
-> Clang's semantic analysis happens before optimizations, meaning it does
-> not perform interprocedural analysis, so it does not have enough
-> information at this point to tell that. Either just initialize gpu to
-> NULL and let the existing 'if (!gpu)' handle it or add a separate else
-> branch that warns about an unhandled chip value so that it is obvious
-> what needs to be done if someone forgets to update this statement when a
-> new chip is supported by this driver.
+vim +/pci_msix_can_alloc_dyn +427 drivers/vfio/pci/vfio_pci_intrs.c
 
-Right,  I overlook the point you mentioned previously.
+   413	
+   414	static int vfio_msi_set_vector_signal(struct vfio_pci_core_device *vdev,
+   415					      unsigned int vector, int fd, bool msix)
+   416	{
+   417		struct pci_dev *pdev = vdev->pdev;
+   418		struct vfio_pci_irq_ctx *ctx;
+   419		struct msi_map msix_map = {};
+   420		bool allow_dyn_alloc = false;
+   421		struct eventfd_ctx *trigger;
+   422		bool new_ctx = false;
+   423		int irq, ret;
+   424		u16 cmd;
+   425	
+   426		/* Only MSI-X allows dynamic allocation. */
+ > 427		if (msix && pci_msix_can_alloc_dyn(vdev->pdev))
+   428			allow_dyn_alloc = true;
+   429	
+   430		ctx = vfio_irq_ctx_get(vdev, vector);
+   431		if (!ctx && !allow_dyn_alloc)
+   432			return -EINVAL;
+   433	
+   434		irq = pci_irq_vector(pdev, vector);
+   435		/* Context and interrupt are always allocated together. */
+   436		WARN_ON((ctx && irq == -EINVAL) || (!ctx && irq != -EINVAL));
+   437	
+   438		if (ctx && ctx->trigger) {
+   439			irq_bypass_unregister_producer(&ctx->producer);
+   440	
+   441			cmd = vfio_pci_memory_lock_and_enable(vdev);
+   442			free_irq(irq, ctx->trigger);
+   443			if (allow_dyn_alloc) {
+   444				msix_map.index = vector;
+   445				msix_map.virq = irq;
+   446				pci_msix_free_irq(pdev, msix_map);
+   447				irq = -EINVAL;
+   448			}
+   449			vfio_pci_memory_unlock_and_restore(vdev, cmd);
+   450			kfree(ctx->name);
+   451			eventfd_ctx_put(ctx->trigger);
+   452			ctx->trigger = NULL;
+   453			if (allow_dyn_alloc) {
+   454				vfio_irq_ctx_free(vdev, ctx, vector);
+   455				ctx = NULL;
+   456			}
+   457		}
+   458	
+   459		if (fd < 0)
+   460			return 0;
+   461	
+   462		if (!ctx) {
+   463			ctx = vfio_irq_ctx_alloc_single(vdev, vector);
+   464			if (!ctx)
+   465				return -ENOMEM;
+   466			new_ctx = true;
+   467		}
+   468	
+   469		ctx->name = kasprintf(GFP_KERNEL_ACCOUNT, "vfio-msi%s[%d](%s)",
+   470				      msix ? "x" : "", vector, pci_name(pdev));
+   471		if (!ctx->name) {
+   472			ret = -ENOMEM;
+   473			goto out_free_ctx;
+   474		}
+   475	
+   476		trigger = eventfd_ctx_fdget(fd);
+   477		if (IS_ERR(trigger)) {
+   478			ret = PTR_ERR(trigger);
+   479			goto out_free_name;
+   480		}
+   481	
+   482		cmd = vfio_pci_memory_lock_and_enable(vdev);
+   483		if (msix) {
+   484			if (irq == -EINVAL) {
+   485				msix_map = pci_msix_alloc_irq_at(pdev, vector, NULL);
+   486				if (msix_map.index < 0) {
+   487					vfio_pci_memory_unlock_and_restore(vdev, cmd);
+   488					ret = msix_map.index;
+   489					goto out_put_eventfd_ctx;
+   490				}
+   491				irq = msix_map.virq;
+   492			} else {
+   493				/*
+   494				 * The MSIx vector table resides in device memory which
+   495				 * may be cleared via backdoor resets. We don't allow
+   496				 * direct access to the vector table so even if a
+   497				 * userspace driver attempts to save/restore around
+   498				 * such a reset it would be unsuccessful. To avoid
+   499				 * this, restore the cached value of the message prior
+   500				 * to enabling.
+   501				 */
+   502				struct msi_msg msg;
+   503	
+   504				get_cached_msi_msg(irq, &msg);
+   505				pci_write_msi_msg(irq, &msg);
+   506			}
+   507		}
+   508	
+   509		ret = request_irq(irq, vfio_msihandler, 0, ctx->name, trigger);
+   510		if (ret)
+   511			goto out_free_irq_locked;
+   512	
+   513		vfio_pci_memory_unlock_and_restore(vdev, cmd);
+   514	
+   515		ctx->producer.token = trigger;
+   516		ctx->producer.irq = irq;
+   517		ret = irq_bypass_register_producer(&ctx->producer);
+   518		if (unlikely(ret)) {
+   519			dev_info(&pdev->dev,
+   520			"irq bypass producer (token %p) registration fails: %d\n",
+   521			ctx->producer.token, ret);
+   522	
+   523			ctx->producer.token = NULL;
+   524		}
+   525		ctx->trigger = trigger;
+   526	
+   527		return 0;
+   528	
+   529	out_free_irq_locked:
+   530		if (allow_dyn_alloc && new_ctx) {
+   531			msix_map.index = vector;
+   532			msix_map.virq = irq;
+   533			pci_msix_free_irq(pdev, msix_map);
+   534		}
+   535		vfio_pci_memory_unlock_and_restore(vdev, cmd);
+   536	out_put_eventfd_ctx:
+   537		eventfd_ctx_put(trigger);
+   538	out_free_name:
+   539		kfree(ctx->name);
+   540		ctx->name = NULL;
+   541	out_free_ctx:
+   542		if (allow_dyn_alloc && new_ctx)
+   543			vfio_irq_ctx_free(vdev, ctx, vector);
+   544		return ret;
+   545	}
+   546	
 
-And I just have a new idea,  using pci_get_domain_bus_and_slot function
-
-to handle this.  the DC and the GPU have the same pci bus number and  
-domain number.
-
-The slot number of the dc and gpu is also same(6), only the function 
-number is different.
-
-
-For ls7a1000,  what lspci -t -nnn -vvv show is:
-
--[0000:00]-+-00.0  Loongson Technology LLC Hyper Transport Bridge 
-Controller [0014:7a00]
-
-            ...
-
-            +-06.0  Loongson Technology LLC Vivante GPU (Graphics 
-Processing Unit) [0014:7a15]
-            +-06.1  Loongson Technology LLC DC (Display Controller) 
-[0014:7a06]
-
-            ...
-
-
-For ls7a2000, what lspci -t -nnn -vvv show is:
-
--[0000:00]-+-00.0  Loongson Technology LLC Hyper Transport Bridge 
-Controller [0014:7a00]
-            +-00.1  Loongson Technology LLC Hyper Transport Bridge 
-Controller [0014:7a10]
-            ...
-            +-06.0  Loongson Technology LLC LoongGPU Device [0014:7a25]
-            +-06.1  Loongson Technology LLC DC (Display Controller) 
-Device [0014:7a36]
-            +-06.2  Loongson Technology LLC Audio Device [0014:7a37]
-
-             ...
-
-So
-
-pdev_gpu = pci_get_domain_bus_and_slot(pci_domain_nr(pdev_dc->bus),
-                            pdev_dc->bus->number,
-                            PCI_DEVFN(6, 0));
-
-
-can help to handle all case, will this be ok?
-
-
->>>>> drivers/gpu/drm/loongson/lsdc_pll.c:188:14: warning: variable 'diff' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->>>                                      else if (clock_khz < computed)
->>>                                               ^~~~~~~~~~~~~~~~~~~~
->>>      drivers/gpu/drm/loongson/lsdc_pll.c:191:9: note: uninitialized use occurs here
->>>                                      if (diff < min) {
->>>                                          ^~~~
->>>      drivers/gpu/drm/loongson/lsdc_pll.c:188:10: note: remove the 'if' if its condition is always true
->>>                                      else if (clock_khz < computed)
->>>                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
->>>      drivers/gpu/drm/loongson/lsdc_pll.c:177:22: note: initialize the variable 'diff' to silence this warning
->>>                                      unsigned int diff;
->>>                                                       ^
->>>                                                        = 0
->>>      1 warning generated.
->> Here the robot is also wrong here in practice,
->>
->> because either  if (clock_khz >= computed) or else if (clock_khz < computed)
->> will be happen.
->>
->> 'diff' variable is guaranteed to be initialized.
-> Make that clearer by turning 'else if (clock_khz < computed)' into just
-> 'else' as the warning suggests? I do not see why the condition is
-> specified at all if it is just an 'else' in practice.
-
-Yes, you are right.
-
-The test robot do find something,  i will fix this at next version.
-
-> Cheers,
-> Nathan
->
->>> vim +232 drivers/gpu/drm/loongson/lsdc_drv.c
->>>
->>>      212	
->>>      213	static int lsdc_get_dedicated_vram(struct lsdc_device *ldev,
->>>      214					   const struct lsdc_desc *descp)
->>>      215	{
->>>      216		struct drm_device *ddev = &ldev->base;
->>>      217		struct pci_dev *gpu;
->>>      218		resource_size_t base, size;
->>>      219	
->>>      220		/*
->>>      221		 * The GPU and display controller in LS7A1000/LS7A2000 are separated
->>>      222		 * PCIE devices, they are two devices not one. The DC does not has a
->>>      223		 * dedicate VRAM bar, because the BIOS engineer choose to assign the
->>>      224		 * VRAM to the GPU device. Sadly, after years application, this form
->>>      225		 * as a convention for loongson integrated graphics. Bar 2 of the GPU
->>>      226		 * device contain the base address and size of the VRAM, both the GPU
->>>      227		 * and the DC can access the on-board VRAM as long as the DMA address
->>>      228		 * emitted fall in [base, base + size).
->>>      229		 */
->>>      230		if (descp->chip == CHIP_LS7A1000)
->>>      231			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A15, NULL);
->>>    > 232		else if (descp->chip == CHIP_LS7A2000)
->>>      233			gpu = pci_get_device(PCI_VENDOR_ID_LOONGSON, 0x7A25, NULL);
->>>      234	
->>>      235		if (!gpu) {
->>>      236			drm_warn(ddev, "No GPU device found\n");
->>>      237			return -ENODEV;
->>>      238		}
->>>      239	
->>>      240		base = pci_resource_start(gpu, 2);
->>>      241		size = pci_resource_len(gpu, 2);
->>>      242	
->>>      243		ldev->vram_base = base;
->>>      244		ldev->vram_size = size;
->>>      245	
->>>      246		drm_info(ddev, "dedicated vram start: 0x%llx, size: %uMB\n",
->>>      247			 (u64)base, (u32)(size >> 20));
->>>      248	
->>>      249		return 0;
->>>      250	}
->>>      251	
->>>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
