@@ -1,350 +1,91 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F250AFC1
-	for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 23:56:51 +0000 (UTC)
-Received: by mail-yb1-f202.google.com with SMTP id f66-20020a255145000000b00b714602d43fso13833865ybb.10
-        for <llvm@lists.linux.dev>; Tue, 28 Mar 2023 16:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680047810;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yDSsTwYxjnBxXL6ZIXaxMuMGjJVcQd1t2sonbT61qik=;
-        b=tThQWf8o7mRKmLU99+Ys5G/hVG6Iaa7NDOQLCLqAGn8IfHeEaE11bpjPdJS7YsIfkU
-         CLMiMvT2BDI9uvuHq3azBFNQnfXxHPh4D4Y3/wUsJS6GV/NX1i6fquhAtPd5fhd+mik+
-         UzCL0oAPwDe0mPgJh8j1vCarXeKr5B3V4mc4mc+DZ6uKTibz6f4kl18DVM6ZM1bdJA0D
-         XFe2O94KaSatm7cP1HwWSbiyqt1ex9ukllKv8kbOJ4T4g+mh6W2+NFv2+hrgWMMEtoIL
-         RiOiq2d8sN9dk6njWW4ARKk6MzYuSekvPOqhOlpIkLhwDF9sTohFuTMI8ZbZvLatvZ4u
-         t+1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680047810;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yDSsTwYxjnBxXL6ZIXaxMuMGjJVcQd1t2sonbT61qik=;
-        b=Cu3mDYmD0RURdjTqxWDmy7uU8EB1Vz5cyGEmHu1lYF+cGuuPnSuMWdaPTYQ0l+LvQG
-         DAsGOWaAH087jLm7ma20TVOvCHVCtnFhu7mMEmSbZwoLbYp8At+YIbtaFF7ovFzRlb3L
-         1ec6Hqj68kdX/w02Yt8oi53UMDEFna3EWW2iuX4rrFuatmCBtsKO/CaTiQMGLXHOwk5S
-         VAxe8HSm6iy5y+SlEMp41Buh0AVB321InldjKZ+e/PAabvQuf0vMedLwtJocy+PYi0VT
-         PcDOBffWBugJVp+S2O/oUeWdxel7LOVBJdo/c7yOmKARbv2mmddHPUCCjw7XXPs1ILw7
-         ZpWQ==
-X-Gm-Message-State: AAQBX9f5rOsdBnqeK9RurkO2dA+jo9XBtcmaizfu22s06YJUGuZp7H7F
-	ojfQVhOJJzdPQdQ+GLkmoX0mzeGFxhnp
-X-Google-Smtp-Source: AKy350bYz2fZS10JwFEhD+dS2mleic5+6OtWAf1qE64PpR5ZyQ91NbiL9aiv3PLYfWuM+xr1e6CSOBj5tdXO
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:6519:f0d3:9540:5c31])
- (user=irogers job=sendgmr) by 2002:a05:6902:1003:b0:b1d:5061:98e3 with SMTP
- id w3-20020a056902100300b00b1d506198e3mr11707003ybt.6.1680047810713; Tue, 28
- Mar 2023 16:56:50 -0700 (PDT)
-Date: Tue, 28 Mar 2023 16:55:43 -0700
-In-Reply-To: <20230328235543.1082207-1-irogers@google.com>
-Message-Id: <20230328235543.1082207-7-irogers@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1C57B
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 00:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD99C433EF;
+	Wed, 29 Mar 2023 00:08:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680048512;
+	bh=3WcLfPtzwae60OgYt8w2UUmVi5MZ0pntGg6lh7c8c0g=;
+	h=From:Subject:Date:To:Cc:From;
+	b=MkUiaEunlf0RfwvHRvsgdbcDTuS1UTjZQkyctTPtaa/B3dLXW+WPZKSWaIss2UnzI
+	 aLG2lqW3c47zaiti7+ESdVFnqCBzEPD0d+zE4oCzfkmhxaZtJBCVviygCJ3vb1vYJV
+	 PlN+/Icj3JU3y623Q653BkLDzLwoTeqXaMn8Cw91XsI/qT97tuOcskGSrPXgJ7jTO0
+	 nrGGlisY12jjpLG5N18TgG39Hj2ixNfsQte/WTqQvj1KHnC0kY8M011uJ1gyxlRb9K
+	 qyPTZ3yH4vgp3bOKULnsJipC3JH6ikIOQbz8fRGLgWblz87dzwMD3E0m0TdqV59rkq
+	 W2tSkNSOrIQ9g==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 5.10 0/4] Backport of e89c2e815e76 to linux-5.10.y
+Date: Tue, 28 Mar 2023 17:08:28 -0700
+Message-Id: <20230328-riscv-zifencei-zicsr-5-10-v1-0-bccb3e16dc46@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20230328235543.1082207-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 6/6] perf symbol: Add command line support for addr2line path
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	James Clark <james.clark@arm.com>, Andi Kleen <ak@linux.intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, German Gomez <german.gomez@arm.com>, 
-	Sandipan Das <sandipan.das@amd.com>, Andres Freund <andres@anarazel.de>, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHyBI2QC/x2NwQ7CMAxDf2XKmUxdp06MX0EcupCySKigRJsG0
+ /6dlpufLds7GKuwwaXZQXkVk1cu0J0aoDnmB6PcC4N3vne9P6OK0YpfSZyJpQgyxYCdwyGEcUi
+ eIo0MpT9FY5w0ZprrwlPysmFoO9d+avxWTrL9r69Qbbgdxw9zQ+8+kAAAAA==
+To: gregkh@linuxfoundation.org, sashal@kernel.org
+Cc: conor@kernel.org, stable@vger.kernel.org, llvm@lists.linux.dev, 
+ Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Palmer Dabbelt <palmer@rivosinc.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1558; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=3WcLfPtzwae60OgYt8w2UUmVi5MZ0pntGg6lh7c8c0g=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCnKjXWdFqd3fr72sfPkfDc50wC5Sn6n6uLvblnvwhada
+ o3/EFzaUcLCIMbBICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbiysvwPW+ld6emhXLMOuHc
+ 7xMUkmUyD+9t1Ty49MHC5xszWYy1GP6HZzrOfufr+cpo53nrWdIt889rJUULs5tUdU2Z9ONMXxw
+ DAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Allow addr2line to be set either on the command line or via the
-perfconfig file. This doesn't currently work with llvm-addr2line as
-the addr2line code emits two things:
-1) the address to decode,
-2) a bogus ',' value.
-The expectation is the bogus value will generate:
-??
-??:0
-that terminates the addr2line reading. However, the output from
-llvm-addr2line is a single line with just the input ',' locking up the
-addr2line reading that is expecting a second line.
+Hi all,
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+This series is a backport of upstream commit e89c2e815e76 ("riscv:
+Handle zicsr/zifencei issues between clang and binutils") to
+linux-5.10.y, with the necessary machinery for CONFIG_AS_IS_GNU and
+CONFIG_AS_VERSION, which that commit requires.
+
+While the middle two patches are not strictly necessary, they are good
+clean ups that ensure consistency with mainline. The first three changes
+are already present in 5.15, so there is no risk of a regression moving
+forward.
+
+If there are any issues, please let me know.
+
+NOTE: I am sending this series with 'b4 send', as that is what I am used
+to at this point. Please accept my apologies if this causes any issues.
+
 ---
- tools/perf/Documentation/perf-annotate.txt |  3 +++
- tools/perf/Documentation/perf-config.txt   |  3 +++
- tools/perf/Documentation/perf-report.txt   |  3 +++
- tools/perf/Documentation/perf-top.txt      |  6 +++++
- tools/perf/builtin-annotate.c              |  9 +++++++-
- tools/perf/builtin-report.c                |  9 +++++++-
- tools/perf/builtin-top.c                   | 10 +++++++--
- tools/perf/util/annotate.c                 |  6 +++++
- tools/perf/util/srcline.c                  | 26 +++++++++++++---------
- tools/perf/util/symbol_conf.h              |  1 +
- 10 files changed, 62 insertions(+), 14 deletions(-)
+Masahiro Yamada (2):
+      kbuild: check the minimum assembler version in Kconfig
+      kbuild: check CONFIG_AS_IS_LLVM instead of LLVM_IAS
 
-diff --git a/tools/perf/Documentation/perf-annotate.txt b/tools/perf/Documentation/perf-annotate.txt
-index 980fe2c29275..fe168e8165c8 100644
---- a/tools/perf/Documentation/perf-annotate.txt
-+++ b/tools/perf/Documentation/perf-annotate.txt
-@@ -116,6 +116,9 @@ include::itrace.txt[]
- -M::
- --disassembler-style=:: Set disassembler style for objdump.
- 
-+--addr2line=<path>::
-+        Path to addr2line binary.
-+
- --objdump=<path>::
-         Path to objdump binary.
- 
-diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
-index 697f7f924545..e56ae54805a8 100644
---- a/tools/perf/Documentation/perf-config.txt
-+++ b/tools/perf/Documentation/perf-config.txt
-@@ -250,6 +250,9 @@ annotate.*::
- 	These are in control of addresses, jump function, source code
- 	in lines of assembly code from a specific program.
- 
-+	annotate.addr2line::
-+		addr2line binary to use for file names and line numbers.
-+
- 	annotate.objdump::
- 		objdump binary to use for disassembly and annotations.
- 
-diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
-index cfd502f7e6da..af068b4f1e5a 100644
---- a/tools/perf/Documentation/perf-report.txt
-+++ b/tools/perf/Documentation/perf-report.txt
-@@ -381,6 +381,9 @@ OPTIONS
- 	This allows to examine the path the program took to each sample.
- 	The data collection must have used -b (or -j) and -g.
- 
-+--addr2line=<path>::
-+        Path to addr2line binary.
-+
- --objdump=<path>::
-         Path to objdump binary.
- 
-diff --git a/tools/perf/Documentation/perf-top.txt b/tools/perf/Documentation/perf-top.txt
-index c60e615b7183..619cc8143ad5 100644
---- a/tools/perf/Documentation/perf-top.txt
-+++ b/tools/perf/Documentation/perf-top.txt
-@@ -161,6 +161,12 @@ Default is to monitor all CPUS.
- -M::
- --disassembler-style=:: Set disassembler style for objdump.
- 
-+--addr2line=<path>::
-+        Path to addr2line binary.
-+
-+--objdump=<path>::
-+        Path to objdump binary.
-+
- --prefix=PREFIX::
- --prefix-strip=N::
-         Remove first N entries from source file path names in executables
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index d781639b644f..ec276db3e5dd 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -516,7 +516,7 @@ int cmd_annotate(int argc, const char **argv)
- 	struct itrace_synth_opts itrace_synth_opts = {
- 		.set = 0,
- 	};
--	const char *disassembler_style = NULL, *objdump_path = NULL;
-+	const char *disassembler_style = NULL, *objdump_path = NULL, *addr2line_path = NULL;
- 	struct option options[] = {
- 	OPT_STRING('i', "input", &input_name, "file",
- 		    "input file name"),
-@@ -569,6 +569,8 @@ int cmd_annotate(int argc, const char **argv)
- 		    "Strip first N entries of source file path name in programs (with --prefix)"),
- 	OPT_STRING(0, "objdump", &objdump_path, "path",
- 		   "objdump binary to use for disassembly and annotations"),
-+	OPT_STRING(0, "addr2line", &addr2line_path, "path",
-+		   "addr2line binary to use for line numbers"),
- 	OPT_BOOLEAN(0, "demangle", &symbol_conf.demangle,
- 		    "Enable symbol demangling"),
- 	OPT_BOOLEAN(0, "demangle-kernel", &symbol_conf.demangle_kernel,
-@@ -628,6 +630,11 @@ int cmd_annotate(int argc, const char **argv)
- 		if (!annotate.opts.objdump_path)
- 			return -ENOMEM;
- 	}
-+	if (addr2line_path) {
-+		symbol_conf.addr2line_path = strdup(addr2line_path);
-+		if (!symbol_conf.addr2line_path)
-+			return -ENOMEM;
-+	}
- 
- 	if (annotate_check_args(&annotate.opts) < 0)
- 		return -EINVAL;
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 15b0cf649e1a..4011abc03d0d 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -1226,7 +1226,7 @@ int cmd_report(int argc, const char **argv)
- 	};
- 	char *sort_order_help = sort_help("sort by key(s):");
- 	char *field_order_help = sort_help("output field(s): overhead period sample ");
--	const char *disassembler_style = NULL, *objdump_path = NULL;
-+	const char *disassembler_style = NULL, *objdump_path = NULL, *addr2line_path = NULL;
- 	const struct option options[] = {
- 	OPT_STRING('i', "input", &input_name, "file",
- 		    "input file name"),
-@@ -1344,6 +1344,8 @@ int cmd_report(int argc, const char **argv)
- 		    "add last branch records to call history"),
- 	OPT_STRING(0, "objdump", &objdump_path, "path",
- 		   "objdump binary to use for disassembly and annotations"),
-+	OPT_STRING(0, "addr2line", &addr2line_path, "path",
-+		   "addr2line binary to use for line numbers"),
- 	OPT_BOOLEAN(0, "demangle", &symbol_conf.demangle,
- 		    "Disable symbol demangling"),
- 	OPT_BOOLEAN(0, "demangle-kernel", &symbol_conf.demangle_kernel,
-@@ -1430,6 +1432,11 @@ int cmd_report(int argc, const char **argv)
- 		if (!report.annotation_opts.objdump_path)
- 			return -ENOMEM;
- 	}
-+	if (addr2line_path) {
-+		symbol_conf.addr2line_path = strdup(addr2line_path);
-+		if (!symbol_conf.addr2line_path)
-+			return -ENOMEM;
-+	}
- 
- 	if (annotate_check_args(&report.annotation_opts) < 0) {
- 		ret = -EINVAL;
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 57a273cd03de..82c6c065830d 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1439,7 +1439,7 @@ int cmd_top(int argc, const char **argv)
- 	};
- 	struct record_opts *opts = &top.record_opts;
- 	struct target *target = &opts->target;
--	const char *disassembler_style = NULL, *objdump_path = NULL;
-+	const char *disassembler_style = NULL, *objdump_path = NULL, *addr2line_path = NULL;
- 	const struct option options[] = {
- 	OPT_CALLBACK('e', "event", &top.evlist, "event",
- 		     "event selector. use 'perf list' to list available events",
-@@ -1527,6 +1527,8 @@ int cmd_top(int argc, const char **argv)
- 	OPT_BOOLEAN(0, "no-bpf-event", &top.record_opts.no_bpf_event, "do not record bpf events"),
- 	OPT_STRING(0, "objdump", &objdump_path, "path",
- 		    "objdump binary to use for disassembly and annotations"),
-+	OPT_STRING(0, "addr2line", &addr2line_path, "path",
-+		   "addr2line binary to use for line numbers"),
- 	OPT_STRING('M', "disassembler-style", &disassembler_style, "disassembler style",
- 		   "Specify disassembler style (e.g. -M intel for intel syntax)"),
- 	OPT_STRING(0, "prefix", &top.annotation_opts.prefix, "prefix",
-@@ -1629,7 +1631,11 @@ int cmd_top(int argc, const char **argv)
- 		if (!top.annotation_opts.objdump_path)
- 			return -ENOMEM;
- 	}
--
-+	if (addr2line_path) {
-+		symbol_conf.addr2line_path = strdup(addr2line_path);
-+		if (!symbol_conf.addr2line_path)
-+			return -ENOMEM;
-+	}
- 
- 	status = symbol__validate_sym_arguments();
- 	if (status)
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index 3eaa9b2df6c4..3e5df90e11f8 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -3217,6 +3217,12 @@ static int annotation__config(const char *var, const char *value, void *data)
- 			pr_err("Not enough memory for annotate.objdump\n");
- 			return -1;
- 		}
-+	} else if (!strcmp(var, "annotate.addr2line")) {
-+		symbol_conf.addr2line_path = strdup(value);
-+		if (!symbol_conf.addr2line_path) {
-+			pr_err("Not enough memory for annotate.addr2line\n");
-+			return -1;
-+		}
- 	} else if (!strcmp(var, "annotate.demangle")) {
- 		symbol_conf.demangle = perf_config_bool("demangle", value);
- 	} else if (!strcmp(var, "annotate.demangle_kernel")) {
-diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-index 33321867416b..f0a96a834e4b 100644
---- a/tools/perf/util/srcline.c
-+++ b/tools/perf/util/srcline.c
-@@ -414,9 +414,14 @@ static void addr2line_subprocess_cleanup(struct a2l_subprocess *a2l)
- 	free(a2l);
- }
- 
--static struct a2l_subprocess *addr2line_subprocess_init(const char *path)
--{
--	const char *argv[] = { "addr2line", "-e", path, "-i", "-f", NULL };
-+static struct a2l_subprocess *addr2line_subprocess_init(const char *addr2line_path,
-+							const char *binary_path)
-+{
-+	const char *argv[] = {
-+		addr2line_path ?: "addr2line",
-+		"-e", binary_path,
-+		"-i", "-f", NULL
-+	};
- 	struct a2l_subprocess *a2l = zalloc(sizeof(*a2l));
- 	int start_command_status = 0;
- 
-@@ -436,21 +441,22 @@ static struct a2l_subprocess *addr2line_subprocess_init(const char *path)
- 	a2l->addr2line.argv = NULL; /* it's not used after start_command; avoid dangling pointers */
- 
- 	if (start_command_status != 0) {
--		pr_warning("could not start addr2line for %s: start_command return code %d\n",
--			   path,
--			   start_command_status);
-+		pr_warning("could not start addr2line (%s) for %s: start_command return code %d\n",
-+			addr2line_path, binary_path, start_command_status);
- 		goto out;
- 	}
- 
- 	a2l->to_child = fdopen(a2l->addr2line.in, "w");
- 	if (a2l->to_child == NULL) {
--		pr_warning("could not open write-stream to addr2line of %s\n", path);
-+		pr_warning("could not open write-stream to addr2line (%s) of %s\n",
-+			addr2line_path, binary_path);
- 		goto out;
- 	}
- 
- 	a2l->from_child = fdopen(a2l->addr2line.out, "r");
- 	if (a2l->from_child == NULL) {
--		pr_warning("could not open read-stream from addr2line of %s\n", path);
-+		pr_warning("could not open read-stream from addr2line (%s) of %s\n",
-+			addr2line_path, binary_path);
- 		goto out;
- 	}
- 
-@@ -490,7 +496,6 @@ static int read_addr2line_record(struct a2l_subprocess *a2l,
- 
- 	if (getline(&line, &line_len, a2l->from_child) < 0 || !line_len)
- 		goto error;
--
- 	if (function != NULL)
- 		*function = strdup(strim(line));
- 
-@@ -553,7 +558,8 @@ static int addr2line(const char *dso_name, u64 addr,
- 		if (!filename__has_section(dso_name, ".debug_line"))
- 			goto out;
- 
--		dso->a2l = addr2line_subprocess_init(dso_name);
-+		dso->a2l = addr2line_subprocess_init(symbol_conf.addr2line_path,
-+						     dso_name);
- 		a2l = dso->a2l;
- 	}
- 
-diff --git a/tools/perf/util/symbol_conf.h b/tools/perf/util/symbol_conf.h
-index bc3d046fbb63..5accd8e69ad2 100644
---- a/tools/perf/util/symbol_conf.h
-+++ b/tools/perf/util/symbol_conf.h
-@@ -61,6 +61,7 @@ struct symbol_conf {
- 			*sym_list_str,
- 			*col_width_list_str,
- 			*bt_stop_list_str;
-+	char		*addr2line_path;
- 	unsigned long	time_quantum;
-        struct strlist	*dso_list,
- 			*comm_list,
+Nathan Chancellor (2):
+      kbuild: Switch to 'f' variants of integrated assembler flag
+      riscv: Handle zicsr/zifencei issues between clang and binutils
+
+ Makefile                |  8 +++---
+ arch/riscv/Kconfig      | 22 ++++++++++++++++
+ arch/riscv/Makefile     | 12 +++++----
+ init/Kconfig            | 12 +++++++++
+ scripts/Kconfig.include |  6 +++++
+ scripts/as-version.sh   | 69 +++++++++++++++++++++++++++++++++++++++++++++++++
+ scripts/dummy-tools/gcc |  6 +++++
+ 7 files changed, 127 insertions(+), 8 deletions(-)
+---
+base-commit: ca9787bdecfa2174b0a169a54916e22b89b0ef5b
+change-id: 20230328-riscv-zifencei-zicsr-5-10-65596f2cac9e
+
+Best regards,
 -- 
-2.40.0.348.gf938b09366-goog
+Nathan Chancellor <nathan@kernel.org>
 
