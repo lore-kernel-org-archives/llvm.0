@@ -1,108 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFA3AFF7;
-	Wed, 29 Mar 2023 15:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2ED3C433EF;
-	Wed, 29 Mar 2023 15:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680102483;
-	bh=sqyJuVOPn12HXs42svFyLzzMir/9VKtRH5dGYB/kq/A=;
-	h=From:Date:Subject:To:Cc:From;
-	b=ecM66mq11hK3JVb5LbtYd2UcdYMEaT6WOpUIGju10bPLRuZXUoC5+7LFGLHf61/Rm
-	 NBDC6y1FYpYt7WDsCrzCRpaBwelMHT0bgO4DnKq+eN7UoNsjAwHYbpwxnx47BqZ/Su
-	 cpLJJyVI4h2wWNG14Ev1nNF8qXOyjjKG0MEbJsHOnSplHXSJsl7IuMls/Ygurb6gMC
-	 SMjgQkDSI1rgxI4sF49G0e2XL+r09bzGzL4CnDNt7mFrtKUApvSQsR4VbJJWa8JKw2
-	 vdOrxQ6R6Q09fZfv/0al2y21rmlN9bEai1TLGwsuNCOBt27DTyI2mPIyOiJvg1/J/l
-	 /GGSXAtiXQnVQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 29 Mar 2023 08:08:01 -0700
-Subject: [PATCH net-next] net: ethernet: ti: Fix format specifier in
- netcp_create_interface()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C201E2F30;
+	Wed, 29 Mar 2023 16:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680105728; x=1711641728;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=agpdi5xj6PEqJgMmgE/91PwMeriot5GLiWkFuZx+35M=;
+  b=aP1YPEBOFEovgLUYcsuM+FQJWkQ8xD7LpQKjWkyODfuSGO7TkIKbvCTD
+   1dRRh3KxMP/PjwCkfQjOoe7rUxpL13M/rw4lLSos3zkNJ1v6bMGS5Bllv
+   LxRyiHDrLxPhw/k+Mxm3d+XKydvCdwOklOzkSWzyYw0WpYFeyhKGbehrj
+   /hVDPrW9r4CA464UPYpWiRaoLDa/MQz6huGNoxVaYUGfCdIHrr6KhmCMK
+   1g2qv23PbmGVNa0fbwx8oTbFCtB9uwDqNW0HlU4xgFKNtT3DCI+NcGdtJ
+   /PExJPZpjYrW/ByoGhpkvHizsNqI/sAhKG+qd9/cS4owyCO4FrGGzqJ5z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="340943256"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="340943256"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 09:02:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="748823865"
+X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
+   d="scan'208";a="748823865"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2023 09:01:59 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1phYFL-000Jh2-0B;
+	Wed, 29 Mar 2023 16:01:59 +0000
+Date: Thu, 30 Mar 2023 00:01:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhu Lingshan <lingshan.zhu@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ls-zhu:refactor 5/7] drivers/vdpa/ifcvf/ifcvf_main.c:439:24:
+ warning: variable 'adapter' set but not used
+Message-ID: <202303292340.yEcx9I77-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-net-ethernet-ti-wformat-v1-1-83d0f799b553@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFBUJGQC/x2NSwrDMAxErxK0rsC1Sfq5SulCcZVaizhFFmkg5
- O61u5vH8GZ2KKzCBe7dDsqrFFlyhfOpg5govxnlVRm888EFf8PMhmyJtQUT/E6LzmRIkeg6hN4
- N/QWqPVJhHJVyTM2fqRhrKz7Kk2z/ywe0kcybwfM4fuMEsgGMAAAA
-To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
- pabeni@redhat.com
-Cc: nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
- razor@blackwall.org, kerneljasonxing@gmail.com, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2668; i=nathan@kernel.org;
- h=from:subject:message-id; bh=sqyJuVOPn12HXs42svFyLzzMir/9VKtRH5dGYB/kq/A=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCkqIUEb55980mla2v5HXet9VBKL975fT6fvv5d29ZNYk
- soyzz3tHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiG6sYGS6/PJbdt6nv6u9a
- 7XvB99JdxeYFtS/efudjJqOriOW/8z4M/6yqXKrWPQg7JhvKk1aZ/0Tu38+q1JgVL/Q8nRQUbJe
- 85gUA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After commit 3948b05950fd ("net: introduce a config option to tweak
-MAX_SKB_FRAGS"), clang warns:
+tree:   https://github.com/ls-zhu/linux refactor
+head:   eec40a854a7617076952ac5dfc273a9f3ed10bf0
+commit: e07aed8d27dc17ff4587560d7e484de57870e970 [5/7] retire ifcvf_add_status, ifcvf_start_hw and ifcvf_start_datapath
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230329/202303292340.yEcx9I77-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ls-zhu/linux/commit/e07aed8d27dc17ff4587560d7e484de57870e970
+        git remote add ls-zhu https://github.com/ls-zhu/linux
+        git fetch --no-tags ls-zhu refactor
+        git checkout e07aed8d27dc17ff4587560d7e484de57870e970
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/vdpa/ifcvf/
 
-  drivers/net/ethernet/ti/netcp_core.c:2085:4: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                          MAX_SKB_FRAGS);
-                          ^~~~~~~~~~~~~
-  include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-          dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                 ~~~     ^~~~~~~~~~~
-  include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                  _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                               ~~~    ^~~~~~~~~~~
-  include/linux/skbuff.h:352:23: note: expanded from macro 'MAX_SKB_FRAGS'
-  #define MAX_SKB_FRAGS CONFIG_MAX_SKB_FRAGS
-                        ^~~~~~~~~~~~~~~~~~~~
-  ./include/generated/autoconf.h:11789:30: note: expanded from macro 'CONFIG_MAX_SKB_FRAGS'
-  #define CONFIG_MAX_SKB_FRAGS 17
-                               ^~
-  1 warning generated.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303292340.yEcx9I77-lkp@intel.com/
 
-Follow the pattern of the rest of the tree by changing the specifier to
-'%u' and casting MAX_SKB_FRAGS explicitly to 'unsigned int', which
-eliminates the warning.
+All warnings (new ones prefixed by >>):
 
-Fixes: 3948b05950fd ("net: introduce a config option to tweak MAX_SKB_FRAGS")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-I am a little confused as to why the solution for this warning is
-casting to 'unsigned int' rather than just updating all the specifiers
-to be '%d', as I do not see how MAX_SKB_FRAGS can be any type other than
-just 'int' but I figured I would be consistent with the other fixes I
-have seen around this issue.
----
- drivers/net/ethernet/ti/netcp_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>> drivers/vdpa/ifcvf/ifcvf_main.c:439:24: warning: variable 'adapter' set but not used [-Wunused-but-set-variable]
+           struct ifcvf_adapter *adapter;
+                                 ^
+   1 warning generated.
 
-diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/ti/netcp_core.c
-index 1bb596a9d8a2..d829113c16ee 100644
---- a/drivers/net/ethernet/ti/netcp_core.c
-+++ b/drivers/net/ethernet/ti/netcp_core.c
-@@ -2081,8 +2081,8 @@ static int netcp_create_interface(struct netcp_device *netcp_device,
- 	netcp->tx_pool_region_id = temp[1];
- 
- 	if (netcp->tx_pool_size < MAX_SKB_FRAGS) {
--		dev_err(dev, "tx-pool size too small, must be at least %ld\n",
--			MAX_SKB_FRAGS);
-+		dev_err(dev, "tx-pool size too small, must be at least %u\n",
-+			(unsigned int)MAX_SKB_FRAGS);
- 		ret = -ENODEV;
- 		goto quit;
- 	}
 
----
-base-commit: 3b064f541be822dc095991c6dda20a75eb51db5e
-change-id: 20230329-net-ethernet-ti-wformat-acaa86350657
+vim +/adapter +439 drivers/vdpa/ifcvf/ifcvf_main.c
 
-Best regards,
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  436  
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  437  static void ifcvf_vdpa_set_status(struct vdpa_device *vdpa_dev, u8 status)
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  438  {
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26 @439  	struct ifcvf_adapter *adapter;
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  440  	struct ifcvf_hw *vf;
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  441  	u8 status_old;
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  442  	int ret;
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  443  
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  444  	vf  = vdpa_to_vf(vdpa_dev);
+6b5df347c6482f drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2021-08-12  445  	adapter = vdpa_to_adapter(vdpa_dev);
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  446  	status_old = ifcvf_get_status(vf);
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  447  
+bb02e6e63d0e71 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-06-05  448  	if (status_old == status)
+bb02e6e63d0e71 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-06-05  449  		return;
+bb02e6e63d0e71 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-06-05  450  
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  451  	if ((status & VIRTIO_CONFIG_S_DRIVER_OK) &&
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  452  	    !(status_old & VIRTIO_CONFIG_S_DRIVER_OK)) {
+7cfd36b7e8be6b drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2022-11-25  453  		ret = ifcvf_request_irq(vf);
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  454  		if (ret) {
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  455  			status = ifcvf_get_status(vf);
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  456  			status |= VIRTIO_CONFIG_S_FAILED;
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  457  			ifcvf_set_status(vf, status);
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  458  			return;
+7dd793f37e2ab4 drivers/vdpa/ifcvf/ifcvf_main.c        Zhu Lingshan 2020-05-12  459  		}
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  460  	}
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  461  
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  462  	ifcvf_set_status(vf, status);
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  463  }
+5a2414bc454e89 drivers/virtio/vdpa/ifcvf/ifcvf_main.c Zhu Lingshan 2020-03-26  464  
+
+:::::: The code at line 439 was first introduced by commit
+:::::: 5a2414bc454e89e0515b47500734a65aa40cf9fe virtio: Intel IFC VF driver for VDPA
+
+:::::: TO: Zhu Lingshan <lingshan.zhu@intel.com>
+:::::: CC: Michael S. Tsirkin <mst@redhat.com>
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
