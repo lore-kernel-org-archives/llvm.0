@@ -1,123 +1,111 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C9FAD30;
-	Wed, 29 Mar 2023 22:46:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680129977; x=1711665977;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Jf77cf4zG48zuTGn7CMDjSXp5Q9zGuHWoUhPFdH5TSo=;
-  b=DpEHnUEHcfgDy0/9hj9ujTI7F0ub78PobkXBgzOdHnX9vaIQj1GbUTbC
-   QzANATRF3rr/EFeUi37fjJ0AMedpyPuKci9iUZNldCN2BikqmyycDFuyN
-   FHK+MGc0DUz/8NvMF+IbtlMr5hlqkfEzdpiNK/1tohgRq4/XF/uBwCP2i
-   YjfR3RInlF3nrSj1u3tdZe+c1Jyi9uNpxM3/E5F+s1qI7yEndMdqRXzyh
-   sMzBYRWxm0G2vtiiCBGCBB9dkTHWZQRoYjRCx1hbr0wbC3sNrCs5EVPt8
-   w09kunVk7r+XH+mguXTlbMVoVbstX9/K06OzQw8wWjSAySgOtQGg773np
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="339739217"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="339739217"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 15:46:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="748940491"
-X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="748940491"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2023 15:46:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pheYY-000K1N-39;
-	Wed, 29 Mar 2023 22:46:14 +0000
-Date: Thu, 30 Mar 2023 06:45:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-scsi-devel:tls-netlink.v8 18/20]
- drivers/nvme/target/tcp.c:653:24: error: no member named 'tls_psk' in
- 'struct nvmet_tcp_queue'
-Message-ID: <202303300627.eP6f2RpR-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C1EAD30
+	for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 23:03:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680130997;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dvCH/Q/mYXYnFPxo1Zw9BF/bBxj1AhUZU0zHEiex0ss=;
+	b=ZkEO4aUFx5tIASh+hrH1yVeyWVMLerejs1OERxkhBQ5rRVu483C3a3meBbMCpCTMSHYVEB
+	uxkbZ6TCEQxIu8JUswt34Xf8NhSTyMGQTVy8ueWdUR0JwI6Ay7S8Uol1lJn6IwN8kteTHE
+	itckxo0f/KnXUaU75tHkDxc5A/LyE6I=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-330-6n6xurl_PH6fv8PYXduxaw-1; Wed, 29 Mar 2023 19:03:15 -0400
+X-MC-Unique: 6n6xurl_PH6fv8PYXduxaw-1
+Received: by mail-qv1-f72.google.com with SMTP id pe26-20020a056214495a00b005df3eac4c0bso4269868qvb.1
+        for <llvm@lists.linux.dev>; Wed, 29 Mar 2023 16:03:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680130995;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dvCH/Q/mYXYnFPxo1Zw9BF/bBxj1AhUZU0zHEiex0ss=;
+        b=xQRz0k7cQP40fGXu0Uga2gmHynQCCFVOwtE6EPwstIV4o5xt51Ivne929gM6SwNQcP
+         gyJ2mM6DwubikLI+emg2UYdJWmGJOLJ2ZutnV4izoYi+As2/QIWHG2cxxDoiafaoQcRZ
+         fUfCn4A78F/LiUZPm7e3A19wtFCxpXPTZyqDJHU9c2I5tnvlQDuCyAD+fhyxmbLYCXWF
+         F55rHYMNPJ9cnGKXD8AjnD1PUezylkGPOxpfVJo3DJUSf2UOwk7NoZu6Zbdffmp1tCIs
+         gqIoarEoEhsuk0uVcLbMH7uYxloPBeGct8IWsvmtPrr2vPVdLBxUG2pxKaZ6nVN4ZsRM
+         jx+g==
+X-Gm-Message-State: AO0yUKXcmJL6d1KXOUAiLQhMlQDdXwLUXr3oKqyO4Sc9lCUicQbsYvkG
+	geoQxrNiASoai6abLVsBJmbI6EhcBaok7pyrk8wmU1CniKwBl1eIEUPWhJwcFDumoaG2qwIh7Wr
+	kOdMeB7RpXecDcw==
+X-Received: by 2002:ac8:5ad1:0:b0:3bd:140c:91f7 with SMTP id d17-20020ac85ad1000000b003bd140c91f7mr35157020qtd.40.1680130995198;
+        Wed, 29 Mar 2023 16:03:15 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Z8o7ID5Y2qg2JO2AE3/F9MkoBdJxNI1wNK4jnkhkFlSdNW84WEhZHG+3IOdDu05fJRwkkzYw==
+X-Received: by 2002:ac8:5ad1:0:b0:3bd:140c:91f7 with SMTP id d17-20020ac85ad1000000b003bd140c91f7mr35156994qtd.40.1680130994961;
+        Wed, 29 Mar 2023 16:03:14 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 12-20020a370b0c000000b0074680682acdsm14392346qkl.76.2023.03.29.16.03.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 16:03:14 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: hdegoede@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] fs: vboxsf: remove unused out_len variable
+Date: Wed, 29 Mar 2023 19:03:10 -0400
+Message-Id: <20230329230310.1816101-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-netlink.v8
-head:   b160cccb84362674ac09fb349ab21bd2339eb28e
-commit: 6f832c87e83768f104444dbfc3945a8ee2e24b65 [18/20] nvmet-tcp: rework sendpage for kTLS
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230330/202303300627.eP6f2RpR-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=6f832c87e83768f104444dbfc3945a8ee2e24b65
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-netlink.v8
-        git checkout 6f832c87e83768f104444dbfc3945a8ee2e24b65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cpufreq/ drivers/nvme/target/
+clang with W=1 reports
+fs/vboxsf/utils.c:442:9: error: variable
+  'out_len' set but not used [-Werror,-Wunused-but-set-variable]
+        size_t out_len;
+               ^
+This variable is not used so remove it.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300627.eP6f2RpR-lkp@intel.com/
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ fs/vboxsf/utils.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> drivers/nvme/target/tcp.c:653:24: error: no member named 'tls_psk' in 'struct nvmet_tcp_queue'
-           else if (!cmd->queue->tls_psk)
-                     ~~~~~~~~~~  ^
-   drivers/nvme/target/tcp.c:681:24: error: no member named 'tls_psk' in 'struct nvmet_tcp_queue'
-           else if (!cmd->queue->tls_psk)
-                     ~~~~~~~~~~  ^
-   drivers/nvme/target/tcp.c:711:24: error: no member named 'tls_psk' in 'struct nvmet_tcp_queue'
-           else if (!cmd->queue->tls_psk)
-                     ~~~~~~~~~~  ^
-   drivers/nvme/target/tcp.c:1801:1: warning: unused label 'out_free_queue' [-Wunused-label]
-   out_free_queue:
-   ^~~~~~~~~~~~~~~
-   1 warning and 3 errors generated.
-
-
-vim +653 drivers/nvme/target/tcp.c
-
-   642	
-   643	static int nvmet_try_send_response(struct nvmet_tcp_cmd *cmd,
-   644			bool last_in_batch)
-   645	{
-   646		u8 hdgst = nvmet_tcp_hdgst_len(cmd->queue);
-   647		int left = sizeof(*cmd->rsp_pdu) - cmd->offset + hdgst;
-   648		int flags = MSG_DONTWAIT;
-   649		int ret;
-   650	
-   651		if (!last_in_batch && cmd->queue->send_list_len)
-   652			flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
- > 653		else if (!cmd->queue->tls_psk)
-   654			flags |= MSG_EOR;
-   655	
-   656		ret = kernel_sendpage(cmd->queue->sock, virt_to_page(cmd->rsp_pdu),
-   657			offset_in_page(cmd->rsp_pdu) + cmd->offset, left, flags);
-   658		if (ret <= 0)
-   659			return ret;
-   660		cmd->offset += ret;
-   661		left -= ret;
-   662	
-   663		if (left)
-   664			return -EAGAIN;
-   665	
-   666		nvmet_tcp_free_cmd_buffers(cmd);
-   667		cmd->queue->snd_cmd = NULL;
-   668		nvmet_tcp_put_cmd(cmd);
-   669		return 1;
-   670	}
-   671	
-
+diff --git a/fs/vboxsf/utils.c b/fs/vboxsf/utils.c
+index dd0ae1188e87..ab0c9b01a0c2 100644
+--- a/fs/vboxsf/utils.c
++++ b/fs/vboxsf/utils.c
+@@ -439,7 +439,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+ {
+ 	const char *in;
+ 	char *out;
+-	size_t out_len;
+ 	size_t out_bound_len;
+ 	size_t in_bound_len;
+ 
+@@ -447,7 +446,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+ 	in_bound_len = utf8_len;
+ 
+ 	out = name;
+-	out_len = 0;
+ 	/* Reserve space for terminating 0 */
+ 	out_bound_len = name_bound_len - 1;
+ 
+@@ -468,7 +466,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+ 
+ 		out += nb;
+ 		out_bound_len -= nb;
+-		out_len += nb;
+ 	}
+ 
+ 	*out = 0;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
