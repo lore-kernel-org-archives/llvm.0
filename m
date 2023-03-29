@@ -1,45 +1,49 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905EAEB8;
-	Wed, 29 Mar 2023 02:59:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEB2EB8;
+	Wed, 29 Mar 2023 03:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680058774; x=1711594774;
+  t=1680060582; x=1711596582;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vFfLMYQYE2Pg+dIIDGRYSEF9qXiPQtYcWMkrLSU63mM=;
-  b=Jsybza/yHEAawE2/NweR/XopOeTX4l3yNsEb+O/1cE4LfRguAI3il9jt
-   YWuMKgwyLwxdbbUxMD063OM5bEBhhz323qLTGa8OSZwCAgNA7E2QdXWpW
-   xd/SDqJZK664x9MMoS1prwd2uwGCxTc5ShVbRtVkQdsRnveSgGvbX4vkf
-   qjC4zdYPkrzipUMXD9Ecv3Z8B6BEC1Qi9UMMKg3N1RZNnpYUrYgdQblwU
-   WiN+WLqsowinZeqfpFfbI/VYQpRYsKcwBVWV4dSEWnhxjFrGm0WF20S17
-   y24PIJbBL+BPngPLGfXEcaI8LMJO62wTTyG6GOaAvLdEBj+eGAcioR7F9
+  bh=zux2cGUIRDkE6Z2IVIQOmNv5GDDvZe8t52R5ff09Pnc=;
+  b=Cv3O0WExDU7a747t/vfnU81U3HsATfzfwmIAh+GzNYQfVMq02XKAFDhh
+   jbOLwm9ssaWT7QGZ3oBVOuRiF7zQwB6fMwYSdRa2fZZKdgB2KUqr0BxGT
+   YSChHZWz1bdL/bqXUMiY1I16/UFvzQlzGa0pqU9oBe89TFtWYAn3TCyOK
+   l0aIiiA3i/Um+G7UdxtDS5nT750hD7CEGrPHlSknz5m3FxntkL589yaz/
+   05poVXZLulQyYKdFznPvKmSKPKK0X9RknaX6AUiiUv9PUCnueplD0w2DS
+   TG5GbgiLMJ0xPEPHzjwVkt+Bfmr/JE/DO5ksb538s/8mZCD69hzXJyglM
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="343172101"
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="329226702"
 X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
-   d="scan'208";a="343172101"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 19:59:34 -0700
+   d="scan'208";a="329226702"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 20:29:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="677607825"
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="686660204"
 X-IronPort-AV: E=Sophos;i="5.98,299,1673942400"; 
-   d="scan'208";a="677607825"
+   d="scan'208";a="686660204"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2023 19:59:32 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 28 Mar 2023 20:29:37 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1phM28-000J87-0m;
-	Wed, 29 Mar 2023 02:59:32 +0000
-Date: Wed, 29 Mar 2023 10:58:31 +0800
+	id 1phMVD-000JB9-0G;
+	Wed, 29 Mar 2023 03:29:35 +0000
+Date: Wed, 29 Mar 2023 11:29:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: kan.liang@linux.intel.com, mingo@redhat.com,
+To: Reinette Chatre <reinette.chatre@intel.com>, jgg@nvidia.com,
+	yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
+	kevin.tian@intel.com, alex.williamson@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@linutronix.de,
+	darwi@linutronix.de, kvm@vger.kernel.org, dave.jiang@intel.com,
+	jing2.liu@intel.com, ashok.raj@intel.com, fenghua.yu@intel.com,
+	tom.zanussi@linux.intel.com, reinette.chatre@intel.com,
 	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ak@linux.intel.com,
-	eranian@google.com, Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH 2/2] perf/x86/intel/ds: Use the size from each PEBS record
-Message-ID: <202303291028.3Xe9Gdlp-lkp@intel.com>
-References: <20230328222735.1367829-2-kan.liang@linux.intel.com>
+Subject: Re: [PATCH V2 8/8] vfio/pci: Clear VFIO_IRQ_INFO_NORESIZE for MSI-X
+Message-ID: <202303291158.UlMhtYCO-lkp@intel.com>
+References: <81a6066c0f0d6dfa06f41c016abfb7152064e33e.1680038771.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,110 +52,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328222735.1367829-2-kan.liang@linux.intel.com>
+In-Reply-To: <81a6066c0f0d6dfa06f41c016abfb7152064e33e.1680038771.git.reinette.chatre@intel.com>
 
-Hi,
+Hi Reinette,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on tip/perf/core]
-[also build test WARNING on acme/perf/core linus/master v6.3-rc4 next-20230328]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 197b6b60ae7bc51dd0814953c562833143b292aa]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/kan-liang-linux-intel-com/perf-x86-intel-ds-Use-the-size-from-each-PEBS-record/20230329-064258
-patch link:    https://lore.kernel.org/r/20230328222735.1367829-2-kan.liang%40linux.intel.com
-patch subject: [PATCH 2/2] perf/x86/intel/ds: Use the size from each PEBS record
-config: i386-randconfig-a013-20230327 (https://download.01.org/0day-ci/archive/20230329/202303291028.3Xe9Gdlp-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Reinette-Chatre/vfio-pci-Consolidate-irq-cleanup-on-MSI-MSI-X-disable/20230329-055735
+base:   197b6b60ae7bc51dd0814953c562833143b292aa
+patch link:    https://lore.kernel.org/r/81a6066c0f0d6dfa06f41c016abfb7152064e33e.1680038771.git.reinette.chatre%40intel.com
+patch subject: [PATCH V2 8/8] vfio/pci: Clear VFIO_IRQ_INFO_NORESIZE for MSI-X
+config: i386-randconfig-a014-20230327 (https://download.01.org/0day-ci/archive/20230329/202303291158.UlMhtYCO-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a5988003cfa30fb0c88507d2d124eb551d42e1a6
+        # https://github.com/intel-lab-lkp/linux/commit/39bc54993b029037b12b4a7e947d6cd500065c6b
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review kan-liang-linux-intel-com/perf-x86-intel-ds-Use-the-size-from-each-PEBS-record/20230329-064258
-        git checkout a5988003cfa30fb0c88507d2d124eb551d42e1a6
+        git fetch --no-tags linux-review Reinette-Chatre/vfio-pci-Consolidate-irq-cleanup-on-MSI-MSI-X-disable/20230329-055735
+        git checkout 39bc54993b029037b12b4a7e947d6cd500065c6b
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/events/intel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/vfio/pci/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303291028.3Xe9Gdlp-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303291158.UlMhtYCO-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/events/intel/ds.c:2042:24: warning: unused variable 'cpuc' [-Wunused-variable]
-           struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-                                 ^
-   1 warning generated.
+>> drivers/vfio/pci/vfio_pci_core.c:1116:6: error: implicit declaration of function 'pci_msix_can_alloc_dyn' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                     !pci_msix_can_alloc_dyn(vdev->pdev)))
+                      ^
+   1 error generated.
 
 
-vim +/cpuc +2042 arch/x86/events/intel/ds.c
+vim +/pci_msix_can_alloc_dyn +1116 drivers/vfio/pci/vfio_pci_core.c
 
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2029  
-9dfa9a5c9bae34 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2030  static __always_inline void
-9dfa9a5c9bae34 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2031  __intel_pmu_pebs_event(struct perf_event *event,
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2032  		       struct pt_regs *iregs,
-9dfa9a5c9bae34 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2033  		       struct perf_sample_data *data,
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2034  		       void *base, void *top,
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02  2035  		       int bit, int count,
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02  2036  		       void (*setup_sample)(struct perf_event *,
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02  2037  					    struct pt_regs *,
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02  2038  					    void *,
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02  2039  					    struct perf_sample_data *,
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02  2040  					    struct pt_regs *))
-43cf76312faefe arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2041  {
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02 @2042  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2043  	struct hw_perf_event *hwc = &event->hw;
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02  2044  	struct x86_perf_regs perf_regs;
-c22497f5838c23 arch/x86/events/intel/ds.c                Kan Liang      2019-04-02  2045  	struct pt_regs *regs = &perf_regs.regs;
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2046  	void *at = get_next_pebs_record_by_bit(base, top, bit);
-e506d1dac0edb2 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2047  	static struct pt_regs dummy_iregs;
-43cf76312faefe arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2048  
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2049  	if (hwc->flags & PERF_X86_EVENT_AUTO_RELOAD) {
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2050  		/*
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2051  		 * Now, auto-reload is only enabled in fixed period mode.
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2052  		 * The reload value is always hwc->sample_period.
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2053  		 * May need to change it, if auto-reload is enabled in
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2054  		 * freq mode later.
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2055  		 */
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2056  		intel_pmu_save_and_restart_reload(event, count);
-d31fc13fdcb20e arch/x86/events/intel/ds.c                Kan Liang      2018-02-12  2057  	} else if (!intel_pmu_save_and_restart(event))
-43cf76312faefe arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2058  		return;
-43cf76312faefe arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2059  
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2060  	if (!iregs)
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2061  		iregs = &dummy_iregs;
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2062  
-a3d86542de8850 arch/x86/kernel/cpu/perf_event_intel_ds.c Peter Zijlstra 2015-05-12  2063  	while (count > 1) {
-9dfa9a5c9bae34 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2064  		setup_sample(event, iregs, at, data, regs);
-9dfa9a5c9bae34 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2065  		perf_event_output(event, data, regs);
-a5988003cfa30f arch/x86/events/intel/ds.c                Kan Liang      2023-03-28  2066  		at += get_pebs_size(at);
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2067  		at = get_next_pebs_record_by_bit(at, top, bit);
-a3d86542de8850 arch/x86/kernel/cpu/perf_event_intel_ds.c Peter Zijlstra 2015-05-12  2068  		count--;
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2069  	}
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2070  
-9dfa9a5c9bae34 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2071  	setup_sample(event, iregs, at, data, regs);
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2072  	if (iregs == &dummy_iregs) {
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2073  		/*
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2074  		 * The PEBS records may be drained in the non-overflow context,
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2075  		 * e.g., large PEBS + context switch. Perf should treat the
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2076  		 * last record the same as other PEBS records, and doesn't
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2077  		 * invoke the generic overflow handler.
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2078  		 */
-9dfa9a5c9bae34 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2079  		perf_event_output(event, data, regs);
-35d1ce6bec1336 arch/x86/events/intel/ds.c                Kan Liang      2020-09-02  2080  	} else {
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2081  		/*
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2082  		 * All but the last records are processed.
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2083  		 * The last one is left to be able to call the overflow handler.
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2084  		 */
-9dfa9a5c9bae34 arch/x86/events/intel/ds.c                Peter Zijlstra 2020-10-30  2085  		if (perf_event_overflow(event, data, regs))
-a4eaf7f14675cb arch/x86/kernel/cpu/perf_event_intel_ds.c Peter Zijlstra 2010-06-16  2086  			x86_pmu_stop(event, 0);
-21509084f999d7 arch/x86/kernel/cpu/perf_event_intel_ds.c Yan, Zheng     2015-05-06  2087  	}
-2b0b5c6fe9b383 arch/x86/kernel/cpu/perf_event_intel_ds.c Peter Zijlstra 2010-04-08  2088  }
-2b0b5c6fe9b383 arch/x86/kernel/cpu/perf_event_intel_ds.c Peter Zijlstra 2010-04-08  2089  
+  1082	
+  1083	static int vfio_pci_ioctl_get_irq_info(struct vfio_pci_core_device *vdev,
+  1084					       struct vfio_irq_info __user *arg)
+  1085	{
+  1086		unsigned long minsz = offsetofend(struct vfio_irq_info, count);
+  1087		struct vfio_irq_info info;
+  1088	
+  1089		if (copy_from_user(&info, arg, minsz))
+  1090			return -EFAULT;
+  1091	
+  1092		if (info.argsz < minsz || info.index >= VFIO_PCI_NUM_IRQS)
+  1093			return -EINVAL;
+  1094	
+  1095		switch (info.index) {
+  1096		case VFIO_PCI_INTX_IRQ_INDEX ... VFIO_PCI_MSIX_IRQ_INDEX:
+  1097		case VFIO_PCI_REQ_IRQ_INDEX:
+  1098			break;
+  1099		case VFIO_PCI_ERR_IRQ_INDEX:
+  1100			if (pci_is_pcie(vdev->pdev))
+  1101				break;
+  1102			fallthrough;
+  1103		default:
+  1104			return -EINVAL;
+  1105		}
+  1106	
+  1107		info.flags = VFIO_IRQ_INFO_EVENTFD;
+  1108	
+  1109		info.count = vfio_pci_get_irq_count(vdev, info.index);
+  1110	
+  1111		if (info.index == VFIO_PCI_INTX_IRQ_INDEX)
+  1112			info.flags |=
+  1113				(VFIO_IRQ_INFO_MASKABLE | VFIO_IRQ_INFO_AUTOMASKED);
+  1114		else if ((info.index != VFIO_PCI_MSIX_IRQ_INDEX) ||
+  1115			 (info.index == VFIO_PCI_MSIX_IRQ_INDEX &&
+> 1116			  !pci_msix_can_alloc_dyn(vdev->pdev)))
+  1117			info.flags |= VFIO_IRQ_INFO_NORESIZE;
+  1118	
+  1119		return copy_to_user(arg, &info, minsz) ? -EFAULT : 0;
+  1120	}
+  1121	
 
 -- 
 0-DAY CI Kernel Test Service
