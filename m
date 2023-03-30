@@ -1,65 +1,60 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD6279C6
-	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 15:21:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6419E79C6
+	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 15:36:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680189668;
+	s=mimecast20190719; t=1680190574;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=PzFkckvDWfLP+fS3N43jVyaoo/K7ZKGXS7ytUztG/V8=;
-	b=TAFDuZBiGZY/bnAYnq6+tguYCX3PWyuRngh5bamM0mGnWGVx/GRXgO2NQygaJDnv0z9g8n
-	Lcr2CPapNMdgWGLnWUsdNmVH7OSaJEqCsh7SqEzNiJmdmMX8d1aK9orkoesCqCBX12Oq/F
-	zy1YhtYqnScpz7x/ej3leWnmiNYYTPU=
+	bh=Mb7nuWgkDOaubTvnFO5OdcmmhR8tNP6kd6NFt0+SpiE=;
+	b=PSQKlwwmVxKOYigoUEfu7Lf+35Thin6E8rvFflb9oic7XubXvbBTGGe4nsI5yeFKgFEq7k
+	NownLjJKwYJZxVK2yixx/+DL2/f7Ray5d+WGW0rLqVrgaNgVZz9ByWjr0MgaN0CCrlm9hx
+	2RrwrH1Xxbes1U9yXsVlHKFIj+kCIr4=
 Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
  [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-108-cxA-8vCaMBGQjPf7OwnUwQ-1; Thu, 30 Mar 2023 11:21:02 -0400
-X-MC-Unique: cxA-8vCaMBGQjPf7OwnUwQ-1
-Received: by mail-qv1-f69.google.com with SMTP id g14-20020ad457ae000000b005aab630eb8eso8420144qvx.13
-        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 08:21:02 -0700 (PDT)
+ us-mta-590-SG3zeQktOaOBsTJgSY03OQ-1; Thu, 30 Mar 2023 11:36:13 -0400
+X-MC-Unique: SG3zeQktOaOBsTJgSY03OQ-1
+Received: by mail-qv1-f69.google.com with SMTP id y19-20020ad445b3000000b005a5123cb627so8372138qvu.20
+        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 08:36:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680189662;
+        d=1e100.net; s=20210112; t=1680190572;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PzFkckvDWfLP+fS3N43jVyaoo/K7ZKGXS7ytUztG/V8=;
-        b=o3FtdiJNjNklE+98XlV87DIbvfXjEQD+DJ5laCmu3XsX/R6rEw3xXHl/Rp0W36Hct9
-         6OX/WdJ+iKNvstMBigKF4C/Pwdd10SetmYm6Tg+Ruw5mp783uz4rlvNokFHcXpmBZkPR
-         iNp9v3KmpFWb3yUy1u1fgyeF+als+ucavcV1zduKaHLf6Uuz7r4tfWUVvxfFiL8q0FSN
-         9qbz8jGmV8/cLq9xIYBAmv+z/t82dQsmt2N1kMYo3PwKmf4ukRlMNFLgySMJmNn7JMfa
-         J7kNEP9WUoOOwk8E7GEJGv+YK+L4ODftxEwq/OSAW/K8zLppaH9HKwZ/de9kYvI2jgjQ
-         X5Xg==
-X-Gm-Message-State: AAQBX9f/qTBdZX7bBLYYi2sVRxvOMQna17Do2HuupHMm4KoPMltqhafB
-	QMuBxKWOFd0Z1ixbTRM9CLBuoKnIYbCNUrUs7bkrq/kHqERy8bXrQZkrm9dcM9CgCZ/iq2FOFLI
-	lkXaZaYAlMOwagg==
-X-Received: by 2002:a05:6214:1243:b0:56e:b1c8:381b with SMTP id r3-20020a056214124300b0056eb1c8381bmr43628861qvv.31.1680189662022;
-        Thu, 30 Mar 2023 08:21:02 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bnlSDboIbJVBw8O6nujKKyr0Y08gCZuIWQYE9jVjpUWoFJ1aWyINmV1swnxyoxwYXTAvU/Jw==
-X-Received: by 2002:a05:6214:1243:b0:56e:b1c8:381b with SMTP id r3-20020a056214124300b0056eb1c8381bmr43628820qvv.31.1680189661785;
-        Thu, 30 Mar 2023 08:21:01 -0700 (PDT)
+        bh=Mb7nuWgkDOaubTvnFO5OdcmmhR8tNP6kd6NFt0+SpiE=;
+        b=6NQFfNHC+mfbGbU/v5uRWulhOITYkCEE/FpgiqXdKEqMGZy3GEZ6LipB60LK2M7N4r
+         ypwdRLsnyNfnsOR/OERQwqdItxrvH5suCO8MQN+7/MhKX3VZlR+gToD30ge3OOTYUcIX
+         o7Z15qaF4Mg7TGgpIncy5PB0GSCpWCfcUtgO0L7tVkKAFEmmrdniwZm4pjdqQq4nDKAf
+         JjlsfoLHtRF6i1aieK9oPAKhYj7AR+t5emjsN8u6ukLsk4MCL3Ork6ZM5QH9WJKGhrgn
+         t/EO/pU9BAY7y7TT7ui16cROM3xsa0Ypr4qQK0cdRp7Gyo9XC7/txjIJyU7BAzSPIWoE
+         rm4Q==
+X-Gm-Message-State: AAQBX9fq//cLl1wS4ns9vM3/ENYYznD+4AsPfsLT+D+ZlZmi4z+4LFBm
+	ga31T4iu0FMrbka5aiQauBmSmAJ9QVYs/fms8lry65fe+/haGxFC0rGkIA/li4RSMaHv0pca0Nd
+	3kqbxSriHVtM5HQ==
+X-Received: by 2002:a05:6214:3002:b0:5df:5533:6fb3 with SMTP id ke2-20020a056214300200b005df55336fb3mr8308392qvb.5.1680190572557;
+        Thu, 30 Mar 2023 08:36:12 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZxnliOeH26xtjwgD2x1M5kHN0/tinm4772AhLlyfC8256JgzS/09VWGCpsmcHxshLjBJzC+A==
+X-Received: by 2002:a05:6214:3002:b0:5df:5533:6fb3 with SMTP id ke2-20020a056214300200b005df55336fb3mr8308365qvb.5.1680190572308;
+        Thu, 30 Mar 2023 08:36:12 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id d17-20020a0cc691000000b005dd8b9345absm2264239qvj.67.2023.03.30.08.20.59
+        by smtp.gmail.com with ESMTPSA id mg18-20020a056214561200b005dd8b93457dsm5456912qvb.21.2023.03.30.08.36.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 08:21:00 -0700 (PDT)
+        Thu, 30 Mar 2023 08:36:11 -0700 (PDT)
 From: Tom Rix <trix@redhat.com>
-To: Felix.Kuehling@amd.com,
-	alexander.deucher@amd.com,
-	christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
+To: leon@kernel.org,
+	jgg@ziepe.ca,
 	nathan@kernel.org,
 	ndesaulniers@google.com
-Cc: amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
+Cc: linux-rdma@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amdkfd: remove unused sq_int_priv variable
-Date: Thu, 30 Mar 2023 11:20:40 -0400
-Message-Id: <20230330152040.1838353-1-trix@redhat.com>
+Subject: [PATCH] RDMA/mlx5: remove unused num_alloc_xa_entries variable
+Date: Thu, 30 Mar 2023 11:36:07 -0400
+Message-Id: <20230330153607.1838750-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -73,44 +68,37 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
 clang with W=1 reports
-drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_int_process_v11.c:282:38: error: variable
-  'sq_int_priv' set but not used [-Werror,-Wunused-but-set-variable]
-        uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
-                                            ^
+drivers/infiniband/hw/mlx5/devx.c:1996:6: error: variable
+  'num_alloc_xa_entries' set but not used [-Werror,-Wunused-but-set-variable]
+        int num_alloc_xa_entries = 0;
+            ^
 This variable is not used so remove it.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/infiniband/hw/mlx5/devx.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c b/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-index 0d53f6067422..bbd646c0dee7 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_int_process_v11.c
-@@ -279,7 +279,7 @@ static void event_interrupt_wq_v11(struct kfd_dev *dev,
- {
- 	uint16_t source_id, client_id, ring_id, pasid, vmid;
- 	uint32_t context_id0, context_id1;
--	uint8_t sq_int_enc, sq_int_errtype, sq_int_priv;
-+	uint8_t sq_int_enc, sq_int_errtype;
- 	struct kfd_vm_fault_info info = {0};
- 	struct kfd_hsa_memory_exception_data exception_data;
+diff --git a/drivers/infiniband/hw/mlx5/devx.c b/drivers/infiniband/hw/mlx5/devx.c
+index 2211a0be16f3..07037b829c7e 100644
+--- a/drivers/infiniband/hw/mlx5/devx.c
++++ b/drivers/infiniband/hw/mlx5/devx.c
+@@ -1993,7 +1993,6 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_SUBSCRIBE_EVENT)(
+ 	int redirect_fd;
+ 	bool use_eventfd = false;
+ 	int num_events;
+-	int num_alloc_xa_entries = 0;
+ 	u16 obj_type = 0;
+ 	u64 cookie = 0;
+ 	u32 obj_id = 0;
+@@ -2075,7 +2074,6 @@ static int UVERBS_HANDLER(MLX5_IB_METHOD_DEVX_SUBSCRIBE_EVENT)(
+ 		if (err)
+ 			goto err;
  
-@@ -348,13 +348,6 @@ static void event_interrupt_wq_v11(struct kfd_dev *dev,
- 				break;
- 			case SQ_INTERRUPT_WORD_ENCODING_INST:
- 				print_sq_intr_info_inst(context_id0, context_id1);
--				sq_int_priv = REG_GET_FIELD(context_id0,
--						SQ_INTERRUPT_WORD_WAVE_CTXID0, PRIV);
--				/*if (sq_int_priv && (kfd_set_dbg_ev_from_interrupt(dev, pasid,
--						KFD_CTXID0_DOORBELL_ID(context_id0),
--						KFD_CTXID0_TRAP_CODE(context_id0),
--						NULL, 0)))
--					return;*/
- 				break;
- 			case SQ_INTERRUPT_WORD_ENCODING_ERROR:
- 				print_sq_intr_info_error(context_id0, context_id1);
+-		num_alloc_xa_entries++;
+ 		event_sub = kzalloc(sizeof(*event_sub), GFP_KERNEL);
+ 		if (!event_sub) {
+ 			err = -ENOMEM;
 -- 
 2.27.0
 
