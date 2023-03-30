@@ -1,34 +1,22 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E59F1C05;
-	Thu, 30 Mar 2023 06:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680158744; x=1711694744;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UD6xKhK18vCA1GM5zVFX4AuWTlEus36ykX89c8krd+8=;
-  b=draopZMEnbA7u9dMFatniilejEh5XoTjTfO4dtFa+9YcTXRivfwLaug5
-   hobzW+j6bIPWgAMP1pOz+pLQ153RLFgdpyMj6uGcMzas1MdnhfyX1vApt
-   Yu4QZ5Y9K8s+BKPLEdLdnvjSbDS2QEGEpV/P6bqlR03sim00cq3DLKeXw
-   0xqD0x0y4/hiVDoelcM6XU4h0C2MsNHYXMxCoj2MfDBgRpYgwp1zIXKGf
-   VUjOGcUAkMW5K5ILjkDHVsl0bpNSp5eFTEho4HabCwPftRPaq7L4IGP1K
-   bACUnJG6Tqwi6O92YNWLPxv/KS9qXfaBEPb/y2T/DKwepb9fEHwSpwWdx
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="320736745"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="320736745"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 23:45:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="808516064"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="808516064"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga004.jf.intel.com with ESMTP; 29 Mar 2023 23:45:40 -0700
-Message-ID: <0c1c42ee-240f-d1a7-416f-4d9b6040f32a@linux.intel.com>
-Date: Thu, 30 Mar 2023 14:45:56 +0800
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C4AA1C05;
+	Thu, 30 Mar 2023 06:47:00 +0000 (UTC)
+HMM_SOURCE_IP:10.64.8.43:49992.1004970275
+HMM_ATTACHE_NUM:0000
+HMM_SOURCE_TYPE:SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+	by 189.cn (HERMES) with SMTP id 05A171002CF;
+	Thu, 30 Mar 2023 14:46:51 +0800 (CST)
+Received: from  ([114.242.206.180])
+	by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 8848f98944564ef38c37ea117c5c5e46 for lkp@intel.com;
+	Thu, 30 Mar 2023 14:46:53 CST
+X-Transaction-ID: 8848f98944564ef38c37ea117c5c5e46
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <83c392c9-52de-d819-70e5-651106341f20@189.cn>
+Date: Thu, 30 Mar 2023 14:46:50 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -36,35 +24,158 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc: baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
- Nicolin Chen <nicolinc@nvidia.com>
-Subject: Re: [PATCH v2 08/14] iommu: Make iommu_group_do_dma_first_attach()
- work with owned groups
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v9 2/2] drm: add kms driver for loongson display
+ controller
+To: kernel test robot <lkp@intel.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ suijingfeng <suijingfeng@loongson.cn>, Sumit Semwal
+ <sumit.semwal@linaro.org>, Christian Koenig <christian.koenig@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+ Li Yi <liyi@loongson.cn>, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, nathan@kernel.org,
+ linux-media@vger.kernel.org
+References: <20230329155033.1303550-3-15330273260@189.cn>
+ <202303301403.lRjtbd5K-lkp@intel.com>
 Content-Language: en-US
-To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
- Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
- Will Deacon <will@kernel.org>
-References: <8-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <8-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
+From: Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <202303301403.lRjtbd5K-lkp@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/30/23 7:40 AM, Jason Gunthorpe wrote:
-> If the group is already owned then defered attach should not be done and
-> the device should be directly connected to the correct domain.
-> 
-> Owned means that some driver is already bound to devices in the group and
-> is operating the group possibly without DMA API support. In this case
-> there would be no way to correct the mismatched domain.
-> 
-> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+On 2023/3/30 14:28, kernel test robot wrote:
+> Hi Sui,
+>
+> I love your patch! Perhaps something to improve:
+>
+> [auto build test WARNING on drm-misc/drm-misc-next]
+> [also build test WARNING on linus/master v6.3-rc4 next-20230329]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230329-235338
+> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+> patch link:    https://lore.kernel.org/r/20230329155033.1303550-3-15330273260%40189.cn
+> patch subject: [PATCH v9 2/2] drm: add kms driver for loongson display controller
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230330/202303301403.lRjtbd5K-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/ed6a57085a2dc87999193a71c28399a56e29097b
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Sui-Jingfeng/MAINTAINERS-add-maintainers-for-DRM-LOONGSON-driver/20230329-235338
+>          git checkout ed6a57085a2dc87999193a71c28399a56e29097b
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/fpga/ drivers/gpu/drm/loongson/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303301403.lRjtbd5K-lkp@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> drivers/gpu/drm/loongson/lsdc_drv.c:342:11: warning: variable 'ddev' is uninitialized when used here [-Wuninitialized]
+>                     drm_err(ddev, "Not known device, the driver need update!\n");
+>                             ^~~~
+>     include/drm/drm_print.h:469:16: note: expanded from macro 'drm_err'
+>             __drm_printk((drm), err,, "*ERROR* " fmt, ##__VA_ARGS__)
+>                           ^~~
+>     include/drm/drm_print.h:456:21: note: expanded from macro '__drm_printk'
+>             dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+>                                ^~~
+>     include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
+>             dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                       ^~~
+>     include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+>                     _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                             ^~~
+>     drivers/gpu/drm/loongson/lsdc_drv.c:326:25: note: initialize the variable 'ddev' to silence this warning
+>             struct drm_device *ddev;
+>                                    ^
+>                                     = NULL
+>     1 warning generated.
+>
+>
+> vim +/ddev +342 drivers/gpu/drm/loongson/lsdc_drv.c
+>
+>     321	
+>     322	static int lsdc_pci_probe(struct pci_dev *pdev,
+>     323				  const struct pci_device_id *ent)
+>     324	{
+>     325		const struct lsdc_desc *descp;
+>     326		struct drm_device *ddev;
+>     327		struct lsdc_device *ldev;
+>     328		int ret;
+>     329	
+>     330		ret = pcim_enable_device(pdev);
+>     331		if (ret)
+>     332			return ret;
+>     333	
+>     334		pci_set_master(pdev);
+>     335	
+>     336		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
+>     337		if (ret)
+>     338			return ret;
+>     339	
+>     340		descp = lsdc_detect_chip(pdev, ent);
+>     341		if (IS_ERR_OR_NULL(descp)) {
+>   > 342			drm_err(ddev, "Not known device, the driver need update!\n");
+>     343			return -ENODEV;
+>     344		}
+>     345	
 
-Best regards,
-baolu
+Right, i admit this.
+
+
+I move  lsdc_detect_chip() function out from lsdc_create_device() to 
+here in v9.
+
+Since i think the chip probe should be run as early as possible.
+
+Remove  line 342 `drm_err(ddev, "Not known device, the driver need 
+update!\n");` would solve the problem.
+
+This time robot win.
+
+I will wait one or two day before send next version, ok?
+
+>     346		dev_info(&pdev->dev, "%s found, revision: %u",
+>     347			 chip_to_str(descp->chip), pdev->revision);
+>     348	
+>     349		ldev = lsdc_create_device(pdev, descp, &lsdc_drm_driver);
+>     350		if (IS_ERR(ldev))
+>     351			return PTR_ERR(ldev);
+>     352	
+>     353		ddev = &ldev->base;
+>     354	
+>     355		pci_set_drvdata(pdev, ddev);
+>     356	
+>     357		ret = devm_request_irq(&pdev->dev,
+>     358				       pdev->irq,
+>     359				       lsdc_get_irq_handler(descp),
+>     360				       IRQF_SHARED,
+>     361				       dev_name(&pdev->dev),
+>     362				       ddev);
+>     363		if (ret) {
+>     364			drm_err(ddev, "Failed to register interrupt: %d\n", ret);
+>     365			return ret;
+>     366		}
+>     367	
+>     368		ret = drm_dev_register(ddev, 0);
+>     369		if (ret)
+>     370			return ret;
+>     371	
+>     372		drm_fbdev_generic_setup(ddev, 32);
+>     373	
+>     374		return 0;
+>     375	}
+>     376	
+>
