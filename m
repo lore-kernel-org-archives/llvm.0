@@ -1,145 +1,138 @@
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1116F8BE6
-	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 18:55:47 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 796255C0140;
-	Thu, 30 Mar 2023 14:55:43 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 30 Mar 2023 14:55:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm1; t=1680202543; x=1680288943; bh=TDo5jZQU9I
-	C6sywgEGOqzPOxZ7aUBvX49rI+0P5qm4M=; b=YUUnIRZLMok8GCi4FocI0W8ffH
-	OCnwU3bxzlbM5/7WDWYUo45uJ1bg8XOdyeuze5G16V52Aww+hYfVu1D0PKbBAgH4
-	zkQXOQaKQu0SXIqtObwFme1g4B4Vbp8uEdBqnFseJxGS4n1MLuwtaP6waWwLfOXr
-	KgxghKpkpR2g622ml3kXoBaZj0/vFGdIaERQxhoy8oQOtb7TcNlxFQ0140bFdmeq
-	q4qRzIJFVyzlV1TUN9sSIOyC/GtalhQKMWBKU4gZi/m/RE6N9Syg55ZRBglmvZIg
-	wxsNmk4zolUakgbsBB/gI5bRS/PGP/PFGwZY4n4CHSnGq4agNBujAg5iFgOw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1680202543; x=1680288943; bh=TDo5jZQU9IC6s
-	ywgEGOqzPOxZ7aUBvX49rI+0P5qm4M=; b=ajTGmETHYzYFDrstGf22x7WNZofkA
-	NT8vzSXDCiLD64FmeN/IdTu7WOv2vl2NLzFTlpGQgZMavTYMrp2CRo5a2/mWZPWO
-	qz6v3pqocDBXEFJs+6Oxckah37XAJmfcHedQpQ2cpoL/2pqwuEhYyXWr76IEIkBK
-	iQJYf+7jIxDyPDZn1bPB6kq6thoItnnyGI9cmckDzjFM6hk1SLoCgzByblbLUfH2
-	mAxGgmqKJRnGOhZiPfMqh7/HcZqV9/+hgmF0RKwMR3qIqrLftdCDznRDzwL0FEDv
-	Ep39owL9m34YQLVXatTtxG/szBiYeRit+YG5WJWnpQ/qDpmnBtFMZaJ1Q==
-X-ME-Sender: <xms:LtslZH6_F25VBTpOAFRk0gSKxli1GSUkbbQWyUndO95RF6Y56khtWA>
-    <xme:LtslZM7YRUqU_xB5XRYRQo5T3gPE1pkQiR2XdfMRzIbA4b72YjFqW8shok9IKKd7y
-    dN5u-9Dr9V45t3r1w>
-X-ME-Received: <xmr:LtslZOe7ztlwA7GxRLBUrrirh73AZD4Sv3XAqDKBNh1LVp3_5Tda48DjHBMLL84JHgIF028L9UExtIG1wqtC6UO3ut-_uwwK>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehledgfeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlhihsshgr
-    ucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepueefie
-    dvheffveegieejjeevgfejjeduveekffeiveeuvedvtedvhfelieeutdfgnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehhihesrghlhihsshgrrdhish
-X-ME-Proxy: <xmx:LtslZIL3rkl7TX1GDdSypybenFWILqzROWAeeos8jvsYoI13L-PK-Q>
-    <xmx:LtslZLLy-bW9CXCjyB7dTbzS5NpayGemdVvygt9DAykZGpggMXaKaw>
-    <xmx:LtslZBzedqTWGZ0FoZ-wkJLpp6DPC74p5DUGlfrYSGHSm1oc7aTIgA>
-    <xmx:L9slZAdMAkfdHmY_WUtkjG1bTdRT_nNFH5DIHtHYZPftdRVLemcgPw>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Mar 2023 14:55:42 -0400 (EDT)
-Received: by x220.qyliss.net (Postfix, from userid 1000)
-	id 3BF532412; Thu, 30 Mar 2023 18:55:41 +0000 (UTC)
-From: Alyssa Ross <hi@alyssa.is>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Cao <nickcao@nichi.co>,
-	linux-kbuild@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461578BE6;
+	Thu, 30 Mar 2023 19:01:06 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kPchAsmfcTYK/SPFd89mom3Yr77K/iL8YheYyY35FDjv8xpIwMDlVqbMXGEA9hTumr3pnwFwQ0IAd68Dm0gc049I8I+yLl2nJpZrYfvMATh8Oa1xNFIbgMy7mswERXnzCehr4KmGKI1oMhetot0wzJFKoDR9ms678UrdNlW2qqMJ4K+r1eigWmlmuXy8HJepteJASO+UYrvDur3tC2caUBEP4NErcxckpA/9TGpHOvjsI0EK0a6ETKX3ZEDXh1K+kr3XDvi/fuQZFRBN9ZpjgeA+I6ZVOE6bHF1W/OReccM6PsYo43MWrDI179auyfjRWnk1/HjKWX/yVyjAye3bnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NEE4ajZfw1uh95hjxa5uZlG677e71ci+PQJJQzdq1GQ=;
+ b=OFFT+Z683v/rMsyWsJEfJmV/UFiZUdNoxIyfjzzVK132CiTxtnCD2rqUvEu6EB4SWISxboCZKtzupRSkHk4GVC0uz8ERFlBpPVcJZAirJoo1kZYJwm2EXSVvgzt3+T/iDlz0WsiqsZ+c+9bE1Wb83QrzqQ9ArLiBxPasVRystFlVM1wFC/WRC4DgNMqucIG02CT1wuZIZ1KAZIAkoqaiSPDUSASmghQGyD78PGkaP7nPKinTxhSVZjkrzaXJIP3VIJlNKRlhmVKYHpX96YMH4FPg/VJi0a+OfczQTIP5WsA5c9q2CHqAWAijXJe6HWgr+gmBWh76Iw/DNqR9BGr8eQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NEE4ajZfw1uh95hjxa5uZlG677e71ci+PQJJQzdq1GQ=;
+ b=c7HeI5Ey1gLMMA8rOpaGXdjVoCjFTmeEVxmfU3/2JRsmbDSk7P2NHmk+/xrMk7ga97KCjbR2A359g9/ZQOf2T1eYLdgj0ZdbkArPBsrzoqe4W3yujvB3HYrUH/R3j28Z4q540Gaoswd1jSTTKxZ9KzY2Czg3pJPH270vq1w+K2uerAllx2LOlRWKcYY/2CELrkPjjtmv7ooxdHXlYy6l4zhgIaQiuCYlHNICHhPvAIXtGoMaIFmBzC7m5OF51fqSamOgIGbE6pKcy4qPEXZ6UTspXI0NukWaVgNQsQBU/UQ0HScWzHEtFEN8HQLsOwackhuP22mapHQDqF8sGbpgNg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM6PR12MB4547.namprd12.prod.outlook.com (2603:10b6:5:2a9::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22; Thu, 30 Mar
+ 2023 19:01:04 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Thu, 30 Mar 2023
+ 19:01:04 +0000
+Date: Thu, 30 Mar 2023 16:01:03 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: Baolu Lu <baolu.lu@linux.intel.com>, iommu@lists.linux.dev,
+	Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
 	Nathan Chancellor <nathan@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	Tom Rix <trix@redhat.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Alyssa Ross <hi@alyssa.is>,
-	stable@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v3] purgatory: fix disabling debug info
-Date: Thu, 30 Mar 2023 18:22:24 +0000
-Message-Id: <20230330182223.181775-1-hi@alyssa.is>
-X-Mailer: git-send-email 2.37.1
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Tom Rix <trix@redhat.com>,
+	Will Deacon <will@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
+	Nicolin Chen <nicolinc@nvidia.com>
+Subject: Re: [PATCH v2 12/14] iommu: Consolidate the default_domain setup to
+ one function
+Message-ID: <ZCXcbxLfilYKAb60@nvidia.com>
+Reply-To: "group, target_type" <eq_type=iommu_get_default_domain_type@nvidia.com>
+References: <12-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
+ <19197c52-139e-c3c5-2771-42323d38c045@linux.intel.com>
+ <ZCWsdjM/21IPvjKi@nvidia.com>
+ <5966bdf2-2a1a-2970-9f18-784b88f2f687@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5966bdf2-2a1a-2970-9f18-784b88f2f687@arm.com>
+X-ClientProxiedBy: MN2PR15CA0044.namprd15.prod.outlook.com
+ (2603:10b6:208:237::13) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4547:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2fe7be80-5fda-49d8-59ff-08db31511c28
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	F82unYpGIG11o3H0AGbtND5KhfZ/n0E0Zihs+uGmNsQYf9j4r5Da2/kls+gWFHh5L45GBBQFlWxmpXoPubTVDL6y16Rl+mesr00HC3uBn1bU5UbSxrlCP26fwOP0aCAP80/b3zlH+pNBrknvu7mDCBx2ePDqmL797L05v8nA/OwngxpdAXHhZsoTsHmvTmIIb7h5ZGRl75sU2brgLI4YFYbuH8BxHRcD/IgnCAx8iNXb9gg1A5qqXKLKvpVyNlMvui6JtJbzu+BF3u8zX4UMuA9tTcM1lbHTAYOLRhUEz5te87sUVGMTTGK81IRr/N6OEl24DJVAItJrNT/rJS+WHWxwAdgUaiK3J58MND/j/eE3NMSM1XYqEJq9g1AfZueaQhRDA5RjtzpayYLgC/hrqRRUb9DEoHklKN3hiNBi4UTdNz0M8oq56aSDP4Hv4Gr3IXeMRiQLzBExDKR310DVtL/r/7sBSJ/ymcnqywl3wk87zLY2d4K15WDxIMRmm8EJlpr4hBf3m7qVjJk2kBwulYlZsq2/2D+UC46JuIgZHS8JXDh0O3721AljXOErqfTL
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(366004)(39860400002)(136003)(451199021)(41300700001)(5660300002)(2906002)(7416002)(38100700002)(8936002)(4744005)(86362001)(36756003)(316002)(6486002)(54906003)(26005)(6506007)(107886003)(6512007)(2616005)(478600001)(4326008)(8676002)(6916009)(66476007)(66946007)(66556008)(186003)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?c93zXEBFbzoExgwTOXtlbAJfisuc3KoRdooKsb8vkzMFJyn7ybD1C/ZzribT?=
+ =?us-ascii?Q?NLt559nfLmu7zWZq7buz6bhCcQGonv4+pRSGzOm0qo7143WHyiavEyO5ylSR?=
+ =?us-ascii?Q?whZBO0vRJMwaZpp24/V+nI2cJkqJw+xs9UMosDWDtaE0u4pHVZYFsTXYXJmH?=
+ =?us-ascii?Q?NrfvDAyf/rhTGhnYhx9Xt7NfN9A5bqOQn8nEN9WBRU0SEf81dVjmrUoe/5/D?=
+ =?us-ascii?Q?Y8H0HYA2XeglYPgbAfdxx/91nyoGmPzL+udZz455Ssl9FZ7mTXiHMNt7Xw1f?=
+ =?us-ascii?Q?XgmSYKxFeASLo3H14O8lVaK/0Z4tZsTj/5yPDAajkLAEcB5vz2MtYCphCQpy?=
+ =?us-ascii?Q?yy9PsRpkozXZD7zoZveQVSLgSShbp02oOGSwQ9Q35vkWfqu4VWVwI3+rqWlR?=
+ =?us-ascii?Q?lntWyiFVt7Odb8CZzGEBZHCqnthsSHfm/t04idKRdpkNOS5FxbdEZj5vs4M6?=
+ =?us-ascii?Q?PAveVCmFQk5oKYC8TEDAX+llJV4I56w+jEXrjvaYS5Ak6236ivAh7v4Q0Emm?=
+ =?us-ascii?Q?yERe0FqReKH0pL5jA45S+evdn5yDbr/99qtjMTJKYM6ZYfFJfgJ3hIrTFrfh?=
+ =?us-ascii?Q?XNa1ImnEvpRzY7L7xP/kIDwdU+doCV7S+cT3GjBFUgcpXAzu5xoA+6LqSWjP?=
+ =?us-ascii?Q?WU8TL8Ll+nhXbwtKrcSdzIV8UBgoLQHJ15n+ob2X+aJE7Q7YRf2Zxy/vesOl?=
+ =?us-ascii?Q?QtAhTVutvd+g9uzz2f0dYBo0GHqnJX9fwukNbBlUEJg4yGcrOX5uY8UoakVt?=
+ =?us-ascii?Q?VSVmfUKX40Dfu1X2REwkuffLi7zV91onOBRV6PsfZwT24opIuhrl82sFp9jJ?=
+ =?us-ascii?Q?LHQFUS/q4LCiZyChF3+QWXsM+D5wjdCdPsP/nB/hIjAsgtqdRYvlYXlR18g3?=
+ =?us-ascii?Q?6YLGWiQ75zmzUjZD9hmdJkx16JRnr3ScM45bTMNiQKguNTVgkIPW6+dePdGS?=
+ =?us-ascii?Q?cB2InVKyeq5kwo6VfbobbS7mK3OCfI6+dcA2AtxqivM072a5TopZXplqGriv?=
+ =?us-ascii?Q?sVoShLlI4FlCIIlWKMGwgavbx+FiGivVz8t/CuT5GXmI1f9KCOCm59gnQ0/T?=
+ =?us-ascii?Q?1PHRPBwCm+d0oB0Plu0gxr8samWsYD24VQRr3pid54KLxIL1Nuvz78K3nDcy?=
+ =?us-ascii?Q?mMpDSjhy+lxJBfaaeIzjHOjsCaNbsj/hztjs1PV0P2WNGQ7kY0E9NTHfJ0aC?=
+ =?us-ascii?Q?ksBp5A4s1F8iM3eS3iyusZ9wWOjDUy2Q9R8E4RuQ/QuGEyvw4onAvWCaWjRD?=
+ =?us-ascii?Q?xf58AtMqBnaOyGByEXc+m0TfdVFAp8INScP1C+x3NGyXGhyu9xbM0ZT0qWFQ?=
+ =?us-ascii?Q?SKYV6VPdOrR4aL31X5BodrGvt4DtzrbpEwHtR9fpVIZeaENVaGWQyNczIVHp?=
+ =?us-ascii?Q?LNEHIeyG+z0A1oXfhzd3ENqEuSQm45NXYjAIvL7BuptbzVvim0CVA5oq6k+/?=
+ =?us-ascii?Q?mdRZy93xRhyRvNgg/VW1j8DfGLP25pPA7CmtHiO30TaLDYe1Sm7vYiHlVjJl?=
+ =?us-ascii?Q?BN4b0bejK0aoH7RQ4wKbSX6lRE9ocIDMDCmlFNF7NYdxb+TFnkb5TlrFelj1?=
+ =?us-ascii?Q?lPode4wfVRDvbuHzthu3U0X6NELbGpP8WEr9qBD1?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fe7be80-5fda-49d8-59ff-08db31511c28
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 19:01:04.0075
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TR9f+lIxLOJMWiNnpZF/qvzuz9Pdm8PR42kim54tCB/b/c+NnHVZGdIAZyAo3xVq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4547
 
-Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
--Wa versions of both of those if building with Clang and GNU as.  As a
-result, debug info was being generated for the purgatory objects, even
-though the intention was that it not be.
+On Thu, Mar 30, 2023 at 07:23:56PM +0100, Robin Murphy wrote:
 
-Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Cc: stable@vger.kernel.org
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
----
-v2: https://lore.kernel.org/r/20230326182120.194541-1-hi@alyssa.is
+> > I changed it like this:
+> > 
+> > 	dom = __iommu_domain_alloc(bus, req_type);
+> > 	if (!dom && !target_type &&
+> > 	    (req_type == IOMMU_DOMAIN_IDENTITY ||
+> > 	     req_type == IOMMU_DOMAIN_DMA_FQ)) {
+> > 		dom = __iommu_domain_alloc(bus, IOMMU_DOMAIN_DMA);
+> > 
+> > So the auto selection only happens if the target_type is not automatic.
+> 
+> You mean "is automatic"?
 
-Difference from v2: replaced asflags-remove-y with every possible
-debug flag with asflags-y += -g0, as suggested by Nick Desaulniers.
+Yep
 
-Additionally, I've CCed the x86 maintainers this time, since Masahiro
-said he would like acks from subsystem maintainers, and
-get_maintainer.pl didn't pick them the first time around.
+> I'm missing how target_type and req_type are
+> related here, but the general principle should be that if we have derived
+> the type from iommu_def_domain_type, because we had nothing more specific
+> from either a sysfs request or iommu_get_def_domain_type(), then a
+> !IOMMU_DOMAIN_DMA failure can retry with IOMMU_DOMAIN_DMA. Otherwise any
+> failure should be final.
 
- arch/riscv/purgatory/Makefile | 7 +------
- arch/x86/purgatory/Makefile   | 3 +--
- 2 files changed, 2 insertions(+), 8 deletions(-)
+Ok, can do
 
-diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-index d16bf715a586..9c1e71853ee7 100644
---- a/arch/riscv/purgatory/Makefile
-+++ b/arch/riscv/purgatory/Makefile
-@@ -84,12 +84,7 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
-+asflags-y			+= -g0
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index 17f09dc26381..8e6c81b1c8f7 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -69,8 +69,7 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
- CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
- 
--AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
--AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
-+asflags-y			+= -g0
- 
- $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
--- 
-2.37.1
-
+Jason
