@@ -1,158 +1,145 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8568C09;
-	Thu, 30 Mar 2023 18:24:09 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53C3C2F4;
-	Thu, 30 Mar 2023 11:24:47 -0700 (PDT)
-Received: from [10.57.54.254] (unknown [10.57.54.254])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D3F33F663;
-	Thu, 30 Mar 2023 11:24:01 -0700 (PDT)
-Message-ID: <5966bdf2-2a1a-2970-9f18-784b88f2f687@arm.com>
-Date: Thu, 30 Mar 2023 19:23:56 +0100
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1116F8BE6
+	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 18:55:47 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 796255C0140;
+	Thu, 30 Mar 2023 14:55:43 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 30 Mar 2023 14:55:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1680202543; x=1680288943; bh=TDo5jZQU9I
+	C6sywgEGOqzPOxZ7aUBvX49rI+0P5qm4M=; b=YUUnIRZLMok8GCi4FocI0W8ffH
+	OCnwU3bxzlbM5/7WDWYUo45uJ1bg8XOdyeuze5G16V52Aww+hYfVu1D0PKbBAgH4
+	zkQXOQaKQu0SXIqtObwFme1g4B4Vbp8uEdBqnFseJxGS4n1MLuwtaP6waWwLfOXr
+	KgxghKpkpR2g622ml3kXoBaZj0/vFGdIaERQxhoy8oQOtb7TcNlxFQ0140bFdmeq
+	q4qRzIJFVyzlV1TUN9sSIOyC/GtalhQKMWBKU4gZi/m/RE6N9Syg55ZRBglmvZIg
+	wxsNmk4zolUakgbsBB/gI5bRS/PGP/PFGwZY4n4CHSnGq4agNBujAg5iFgOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1680202543; x=1680288943; bh=TDo5jZQU9IC6s
+	ywgEGOqzPOxZ7aUBvX49rI+0P5qm4M=; b=ajTGmETHYzYFDrstGf22x7WNZofkA
+	NT8vzSXDCiLD64FmeN/IdTu7WOv2vl2NLzFTlpGQgZMavTYMrp2CRo5a2/mWZPWO
+	qz6v3pqocDBXEFJs+6Oxckah37XAJmfcHedQpQ2cpoL/2pqwuEhYyXWr76IEIkBK
+	iQJYf+7jIxDyPDZn1bPB6kq6thoItnnyGI9cmckDzjFM6hk1SLoCgzByblbLUfH2
+	mAxGgmqKJRnGOhZiPfMqh7/HcZqV9/+hgmF0RKwMR3qIqrLftdCDznRDzwL0FEDv
+	Ep39owL9m34YQLVXatTtxG/szBiYeRit+YG5WJWnpQ/qDpmnBtFMZaJ1Q==
+X-ME-Sender: <xms:LtslZH6_F25VBTpOAFRk0gSKxli1GSUkbbQWyUndO95RF6Y56khtWA>
+    <xme:LtslZM7YRUqU_xB5XRYRQo5T3gPE1pkQiR2XdfMRzIbA4b72YjFqW8shok9IKKd7y
+    dN5u-9Dr9V45t3r1w>
+X-ME-Received: <xmr:LtslZOe7ztlwA7GxRLBUrrirh73AZD4Sv3XAqDKBNh1LVp3_5Tda48DjHBMLL84JHgIF028L9UExtIG1wqtC6UO3ut-_uwwK>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehledgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehlhihsshgr
+    ucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepueefie
+    dvheffveegieejjeevgfejjeduveekffeiveeuvedvtedvhfelieeutdfgnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehhihesrghlhihsshgrrdhish
+X-ME-Proxy: <xmx:LtslZIL3rkl7TX1GDdSypybenFWILqzROWAeeos8jvsYoI13L-PK-Q>
+    <xmx:LtslZLLy-bW9CXCjyB7dTbzS5NpayGemdVvygt9DAykZGpggMXaKaw>
+    <xmx:LtslZBzedqTWGZ0FoZ-wkJLpp6DPC74p5DUGlfrYSGHSm1oc7aTIgA>
+    <xmx:L9slZAdMAkfdHmY_WUtkjG1bTdRT_nNFH5DIHtHYZPftdRVLemcgPw>
+Feedback-ID: i12284293:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Mar 2023 14:55:42 -0400 (EDT)
+Received: by x220.qyliss.net (Postfix, from userid 1000)
+	id 3BF532412; Thu, 30 Mar 2023 18:55:41 +0000 (UTC)
+From: Alyssa Ross <hi@alyssa.is>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nick Cao <nickcao@nichi.co>,
+	linux-kbuild@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	Tom Rix <trix@redhat.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Alyssa Ross <hi@alyssa.is>,
+	stable@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v3] purgatory: fix disabling debug info
+Date: Thu, 30 Mar 2023 18:22:24 +0000
+Message-Id: <20230330182223.181775-1-hi@alyssa.is>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 12/14] iommu: Consolidate the default_domain setup to
- one function
-Content-Language: en-GB
-To: Jason Gunthorpe <jgg@nvidia.com>, Baolu Lu <baolu.lu@linux.intel.com>
-Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
- Kevin Tian <kevin.tian@intel.com>, Nicolin Chen <nicolinc@nvidia.com>
-References: <12-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
- <19197c52-139e-c3c5-2771-42323d38c045@linux.intel.com>
- <ZCWsdjM/21IPvjKi@nvidia.com>
-From: Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ZCWsdjM/21IPvjKi@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2023-03-30 16:36, Jason Gunthorpe wrote:
-> On Thu, Mar 30, 2023 at 08:37:16PM +0800, Baolu Lu wrote:
->> On 2023/3/30 7:40, Jason Gunthorpe wrote:
->>> +/**
->>> + * iommu_setup_default_domain - Set the default_domain for the group
->>> + * @group: Group to change
->>> + * @target_type: Domain type to set as the default_domain
->>> + *
->>> + * Allocate a default domain and set it as the current domain on the group. If
->>> + * the group already has a default domain it will be changed to the target_type.
->>> + * When target_type is 0 the default domain is selected based on driver and
->>> + * system preferences.
->>> + */
->>> +static int iommu_setup_default_domain(struct iommu_group *group,
->>> +				      int target_type)
->>> +{
->>> +	struct group_device *gdev;
->>> +	struct iommu_domain *dom;
->>> +	struct bus_type *bus =
->>> +		list_first_entry(&group->devices, struct group_device, list)
->>> +			->dev->bus;
->>> +	int ret;
->>> +
->>> +	lockdep_assert_held(&group->mutex);
->>> +
->>> +	target_type = iommu_get_default_domain_type(group, target_type);
->>> +	if (target_type < 0)
->>> +		return -EINVAL;
->>> +
->>> +	if (group->default_domain && group->default_domain->type == target_type)
->>> +		return 0;
->>> +
->>> +	dom = __iommu_domain_alloc(bus, target_type);
->>> +	if (!dom && target_type != IOMMU_DOMAIN_DMA) {
->>> +		dom = __iommu_domain_alloc(bus, IOMMU_DOMAIN_DMA);
->>> +		if (dom)
->>> +			pr_warn("Failed to allocate default IOMMU domain of type %u for group %s - Falling back to IOMMU_DOMAIN_DMA",
->>> +				target_type, group->name);
->>> +	}
->>
->> The background of the code above is that some ARM IOMMU drivers only
->> support DMA mapping domain and do not support identity domain.
->> Therefore, during boot, if the allocation of identity domain fails, a
->> DMA mapping domain is used instead.
-> 
-> Er, this is doing two things then because it also allows DMA_FQ to
-> degrade to just DMA..
+Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
+Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
+-Wa versions of both of those if building with Clang and GNU as.  As a
+result, debug info was being generated for the purgatory objects, even
+though the intention was that it not be.
 
-Same thing really; generally the point is that any of the more "special" 
-default domain types set with the broad brush of Kconfig or command-line 
-can cleanly fall back to the basic type wherever it turns out that 
-there's a less-capable driver (or, eventually, IOMMU instance) present.
+Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S files")
+Signed-off-by: Alyssa Ross <hi@alyssa.is>
+Cc: stable@vger.kernel.org
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+v2: https://lore.kernel.org/r/20230326182120.194541-1-hi@alyssa.is
 
-> I changed it like this:
-> 
-> 	dom = __iommu_domain_alloc(bus, req_type);
-> 	if (!dom && !target_type &&
-> 	    (req_type == IOMMU_DOMAIN_IDENTITY ||
-> 	     req_type == IOMMU_DOMAIN_DMA_FQ)) {
-> 		dom = __iommu_domain_alloc(bus, IOMMU_DOMAIN_DMA);
-> 
-> So the auto selection only happens if the target_type is not automatic.
+Difference from v2: replaced asflags-remove-y with every possible
+debug flag with asflags-y += -g0, as suggested by Nick Desaulniers.
 
-You mean "is automatic"? I'm missing how target_type and req_type are 
-related here, but the general principle should be that if we have 
-derived the type from iommu_def_domain_type, because we had nothing more 
-specific from either a sysfs request or iommu_get_def_domain_type(), 
-then a !IOMMU_DOMAIN_DMA failure can retry with IOMMU_DOMAIN_DMA. 
-Otherwise any failure should be final.
+Additionally, I've CCed the x86 maintainers this time, since Masahiro
+said he would like acks from subsystem maintainers, and
+get_maintainer.pl didn't pick them the first time around.
 
-Strictly that's not quite what the current code does, since 
-iommu_alloc_default_domain() is losing the iommu_get_def_domain_type() 
-vs. iommu_def_domain_type distinction, but in the former case a driver's 
-.def_domain_type should definitely not be returning a type which that 
-driver doesn't support, thus allocation failure would only really 
-represent unexpected OOM conditions, where the retry would likely fail 
-as well, and the whole system is probably dying anyway. If we're 
-refactoring the whole lot, though, we may as well make it logically 
-consistent.
+ arch/riscv/purgatory/Makefile | 7 +------
+ arch/x86/purgatory/Makefile   | 3 +--
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-Thanks,
-Robin.
+diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+index d16bf715a586..9c1e71853ee7 100644
+--- a/arch/riscv/purgatory/Makefile
++++ b/arch/riscv/purgatory/Makefile
+@@ -84,12 +84,7 @@ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+ CFLAGS_REMOVE_ctype.o		+= $(PURGATORY_CFLAGS_REMOVE)
+ CFLAGS_ctype.o			+= $(PURGATORY_CFLAGS)
+ 
+-AFLAGS_REMOVE_entry.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_memcpy.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_memset.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strcmp.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strlen.o		+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_strncmp.o		+= -Wa,-gdwarf-2
++asflags-y			+= -g0
+ 
+ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+ 		$(call if_changed,ld)
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index 17f09dc26381..8e6c81b1c8f7 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -69,8 +69,7 @@ CFLAGS_sha256.o			+= $(PURGATORY_CFLAGS)
+ CFLAGS_REMOVE_string.o		+= $(PURGATORY_CFLAGS_REMOVE)
+ CFLAGS_string.o			+= $(PURGATORY_CFLAGS)
+ 
+-AFLAGS_REMOVE_setup-x86_$(BITS).o	+= -Wa,-gdwarf-2
+-AFLAGS_REMOVE_entry64.o			+= -Wa,-gdwarf-2
++asflags-y			+= -g0
+ 
+ $(obj)/purgatory.ro: $(PURGATORY_OBJS) FORCE
+ 		$(call if_changed,ld)
+-- 
+2.37.1
 
->> However, this does not apply to use cases that change the default domain
->> through sysfs. In such cases, it seems that we should directly return
->> failure (-ENODEV) and tell the user that the iommu driver does not
->> support identity domain.
-> 
-> And with the fix below it will return ENODEV rather than autoselect DMA.
-> 
->>> +	/*
->>> +	 * There are still some drivers which don't support default domains, so
->>> +	 * we ignore the failure and leave group->default_domain NULL.
->>> +	 *
->>> +	 * We assume that the iommu driver starts up the device in
->>> +	 * 'set_platform_dma_ops' mode if it does not support default domains.
->>> +	 */
->>> +	if (!dom) {
->>> +		ret = 0;
->>> +		goto out_set;
->>> +	}
->>
->> Should we call set_platform_dma_ops here?
-> 
-> It could be done and should be harmless, but the driver is supposed to
-> start up in that mode so don't need to explicitly enter it when
-> plugging the device.. I kept things as-is
-> 
->> The existing default domain
->> (if exists) will be freed below. But the iommu driver doesn't know about
->> this. It probably will create a UAF case?
-> 
-> This is a bug:
-> 
-> 	if (!dom) {
-> 		/* Once in default_domain mode we never leave */
-> 		if (group->default_domain)
-> 			return -ENODEV;
-> 
-> So default_domain is either NULL forever or set to something forever.
-> 
-> Jason
