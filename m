@@ -1,43 +1,43 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DD81105;
-	Thu, 30 Mar 2023 01:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CDE1105;
+	Thu, 30 Mar 2023 01:42:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680139942; x=1711675942;
+  t=1680140543; x=1711676543;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6AQp9StkLohSl/JIGg2zXeTxE47rvWyE9rmFLpPSf5g=;
-  b=Ras4OMRLvl/yOFg8ouX3o2gj7RE/fVX5fLzmQ+4/dEvhO5c/FYFNY/7o
-   HXOVH4yplhKc8wJIehX9hq03sIzxo1OwVCXgNGTTyOYuYoaHCUA2mSPLM
-   bvK13tkRHk6M94HuP2G3A0Yu0oCpuUbtsHIJamTEOQpsac2KjdzGJ5v0e
-   s2vy6CLWpvc80T8TZ+sIi0uEp8KHeY/VvdTQpoZCkn3olV2BDMQNTv/Y8
-   +AIy/VBngeu0qNdl4LV6c9ftyo5my4FRkPdnuU9PWTy3F1LiCTGtTkrZ+
-   7Q4g0lU/MA5n5mB2+xJeORGVZQrU73yhxmL0wGx8G/lDJ4efgsQHZRgUr
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="405999289"
+  bh=wqM16PXGK3G2Z/chCtvTEKodOBKogFynv+Zes8sDfZg=;
+  b=CfggtIKef4OI+62qrE534PDTwk4nHuP8Cg8po9mrQS96bB+sb4fPT4N2
+   EnHd1xYyPR+wcJcZaYkbFFIIhfrEJMmSyUlRjMH09E6s4br8IUTwx/xrc
+   MC5na7Z91TNtSP27IwmpveG4ChWQjLgNWgT7os22gLdpyx3A2BcRyv4lU
+   EeIX+401NQNhT7UL/lxDaw86reqyvJOCIkd99NrYY3nKaGAoRTihQBHj6
+   fFVtcc8vrMHsZdyk0lAZj/uGGSy5peZhyCGgtfrpzACUxL+K5tICMWlAt
+   W5171dBTTVIosrB9V+2TJ2vWGeZYWbLAefdY60NGwws+yp6pChgNF12zz
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="321429728"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="405999289"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 18:32:21 -0700
+   d="scan'208";a="321429728"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 18:42:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="634686606"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="858722244"
 X-IronPort-AV: E=Sophos;i="5.98,301,1673942400"; 
-   d="scan'208";a="634686606"
+   d="scan'208";a="858722244"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 29 Mar 2023 18:32:20 -0700
+  by orsmga005.jf.intel.com with ESMTP; 29 Mar 2023 18:42:20 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1phh9H-000K8Y-2j;
-	Thu, 30 Mar 2023 01:32:19 +0000
-Date: Thu, 30 Mar 2023 09:31:25 +0800
+	id 1phhIy-000K8y-0B;
+	Thu, 30 Mar 2023 01:42:20 +0000
+Date: Thu, 30 Mar 2023 09:41:36 +0800
 From: kernel test robot <lkp@intel.com>
 To: Chuck Lever <chuck.lever@oracle.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [cel:topic-shmem-stable-dir-cookies 1/1] mm/shmem.c:4038:3: error:
  call to undeclared function 'shmem_dirent_destroy'; ISO C99 and later do not
  support implicit function declarations
-Message-ID: <202303300953.ow1IwVln-lkp@intel.com>
+Message-ID: <202303300926.xbyhb5hO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,28 +50,77 @@ Content-Disposition: inline
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-shmem-stable-dir-cookies
 head:   f24b5311a9ec85e941a370942947ce0ef018f7e3
 commit: f24b5311a9ec85e941a370942947ce0ef018f7e3 [1/1] shmem: stable directory cookies
-config: riscv-randconfig-r014-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300953.ow1IwVln-lkp@intel.com/config)
+config: hexagon-randconfig-r045-20230329 (https://download.01.org/0day-ci/archive/20230330/202303300926.xbyhb5hO-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
         # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=f24b5311a9ec85e941a370942947ce0ef018f7e3
         git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
         git fetch --no-tags cel topic-shmem-stable-dir-cookies
         git checkout f24b5311a9ec85e941a370942947ce0ef018f7e3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303300953.ow1IwVln-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303300926.xbyhb5hO-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
+   In file included from mm/shmem.c:29:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from mm/shmem.c:29:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from mm/shmem.c:29:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
 >> mm/shmem.c:4038:3: error: call to undeclared function 'shmem_dirent_destroy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
                    shmem_dirent_destroy(inode);
                    ^
@@ -81,7 +130,7 @@ All errors (new ones prefixed by >>):
 >> mm/shmem.c:4116:20: error: use of undeclared identifier 'shmem_readdir'
            .iterate_shared = shmem_readdir,
                              ^
-   3 errors generated.
+   6 warnings and 3 errors generated.
 
 
 vim +/shmem_dirent_destroy +4038 mm/shmem.c
