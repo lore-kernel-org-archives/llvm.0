@@ -1,116 +1,145 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DBA1C16;
-	Thu, 30 Mar 2023 06:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F161C05;
+	Thu, 30 Mar 2023 06:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680157733; x=1711693733;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wD8GKP3B56Z03DGtVse0/Ba7FvgZ/IA3mt3zB6FExL4=;
-  b=WaPIrW9y11NDiJNJD5SdAcNbVnCddLw/NCjqNl76V5DOwJpNMb+CSEra
-   B0qAFHzOdakXN6EVGO1mZ2X7cxegNS2qROxkEU2uReGk9d/hRCW7S3zvK
-   YmAPNwMthP9OFxiGHxRYQ6WFxMLibXQ9To4tkD65O9QKxHzE9sh61rQTI
-   LKIePFcV7jr/ZEvNO+UPKfbzwu4rOLhw6XprYPIju1WbLukh7+Vvx9TlR
-   GDRhQ890NvusJUIQWRFIEKrTNMuJNwthhHZuWNX3DiT2l+rIpwexhOaMh
-   a0d62d6miDygkSd4AMzvEj2PRvMGRBXYLxHd9fBGXn0ki0oQvHexlz862
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="325003989"
+  t=1680158528; x=1711694528;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gn+qFcyVhmhsUaueh9YWCs/Iyn5ar9YHFrSAcq0taU4=;
+  b=ceNqXDjMoCocbD7qaeGEWrYpyYywMtZmWzajvqrT9kSGLAMorYhqOm5M
+   94aiqzaOOWqJHwkN6S7Om9AQgAdwJqp65liXfpk5/xD9jg+3ipA1nHdox
+   k4i9rXxBdr0/ZVBxYpjKBflOBT/nN7jG60FdbE1Tc6dxheARJX6KdgsED
+   X2F8GqMSdu2sq1+k8FMsw7fqdWDocmtjvw00T9OST6tMYwN9fKdJLoBH2
+   r1yWEK3NgXvfHef8WzlRf5DBIoLMnfwRQkQl+YuQxN6r2jgTjEdgS4KA4
+   aSzbqkpIWD66QFuEhzvKmZ/e4gEF9qVikmYXTPRKkXimswSUPS17I5ZgA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="339807291"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="325003989"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 23:28:42 -0700
+   d="scan'208";a="339807291"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2023 23:42:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="753872393"
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="634758620"
 X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="753872393"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Mar 2023 23:28:39 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1phllx-000KRS-38;
-	Thu, 30 Mar 2023 06:28:33 +0000
-Date: Thu, 30 Mar 2023 14:28:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Brenda Streiff <brenda.streiff@ni.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Brenda Streiff <brenda.streiff@ni.com>,
-	Gratian Crisan <gratian.crisan@ni.com>,
-	Jason Smith <jason.smith@ni.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH tty-next 2/2] serial: 8250: add driver for NI UARTs
-Message-ID: <202303301456.qfo36qC0-lkp@intel.com>
-References: <20230329154235.615349-3-brenda.streiff@ni.com>
+   d="scan'208";a="634758620"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga003.jf.intel.com with ESMTP; 29 Mar 2023 23:42:03 -0700
+Message-ID: <5a249f94-7742-a2c8-2eff-88821783a6f2@linux.intel.com>
+Date: Thu, 30 Mar 2023 14:42:20 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329154235.615349-3-brenda.streiff@ni.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc: baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
+ Nicolin Chen <nicolinc@nvidia.com>
+Subject: Re: [PATCH v2 07/14] iommu: Make iommu_group_do_dma_first_attach()
+ simpler
+Content-Language: en-US
+To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
+ Will Deacon <will@kernel.org>
+References: <7-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <7-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Brenda,
+On 3/30/23 7:40 AM, Jason Gunthorpe wrote:
+> It should always attach to the current group->domain, so don't take in a
+> domain parameter. Use the __iommu_device_set_domain() common code to
+> handle the attach.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>   drivers/iommu/iommu.c | 22 +++++++++-------------
+>   1 file changed, 9 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index af3af752c255e4..c68cf551d05dc4 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -105,6 +105,10 @@ enum {
+>   	IOMMU_SET_DOMAIN_WITH_DEFERRED = 1 << 1,
+>   };
+>   
+> +static int __iommu_device_set_domain(struct iommu_group *group,
+> +				     struct device *dev,
+> +				     struct iommu_domain *new_domain,
+> +				     unsigned int flags);
+>   static int __iommu_group_set_domain_internal(struct iommu_group *group,
+>   					     struct iommu_domain *new_domain,
+>   					     unsigned int flags);
+> @@ -405,18 +409,10 @@ static bool iommu_is_attach_deferred(struct device *dev)
+>   	return false;
+>   }
+>   
+> -static int iommu_group_do_dma_first_attach(struct device *dev, void *data)
+> +static int iommu_group_do_dma_first_attach(struct iommu_group *group, struct device *dev)
+>   {
+> -	struct iommu_domain *domain = data;
+> -
+> -	lockdep_assert_held(&dev->iommu_group->mutex);
+> -
+> -	if (iommu_is_attach_deferred(dev)) {
+> -		dev->iommu->attach_deferred = 1;
+> -		return 0;
+> -	}
+> -
+> -	return __iommu_attach_device(domain, dev);
+> +	return __iommu_device_set_domain(group, dev, group->domain,
+> +					 IOMMU_SET_DOMAIN_WITH_DEFERRED);
 
-I love your patch! Perhaps something to improve:
+Just out of curiosity, why is this group->domain instead of
+group->default_domain?
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus linus/master v6.3-rc4 next-20230330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>   }
+>   
+>   int iommu_probe_device(struct device *dev)
+> @@ -449,7 +445,7 @@ int iommu_probe_device(struct device *dev)
+>   	 * attach the default domain.
+>   	 */
+>   	if (group->default_domain && !group->owner) {
+> -		ret = iommu_group_do_dma_first_attach(dev, group->default_domain);
+> +		ret = iommu_group_do_dma_first_attach(group, dev);
+>   		if (ret) {
+>   			mutex_unlock(&group->mutex);
+>   			iommu_group_put(group);
+> @@ -1117,7 +1113,7 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
+>   	mutex_lock(&group->mutex);
+>   	list_add_tail(&device->list, &group->devices);
+>   	if (group->domain)
+> -		ret = iommu_group_do_dma_first_attach(dev, group->domain);
+> +		ret = iommu_group_do_dma_first_attach(group, dev);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Brenda-Streiff/serial-8250-add-driver-for-NI-UARTs/20230330-010726
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20230329154235.615349-3-brenda.streiff%40ni.com
-patch subject: [PATCH tty-next 2/2] serial: 8250: add driver for NI UARTs
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230330/202303301456.qfo36qC0-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/6c50983e6760b2db288e3f8b7254cea537c0f052
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Brenda-Streiff/serial-8250-add-driver-for-NI-UARTs/20230330-010726
-        git checkout 6c50983e6760b2db288e3f8b7254cea537c0f052
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/tty/serial/8250/
+I am wondering whether we need to do dma first attach here.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303301456.qfo36qC0-lkp@intel.com/
+iommu_group_add_device() is called from
 
-All warnings (new ones prefixed by >>):
+1) drivers/vfio/group.c
+    The deferred attachment is only used for kdump. In the kdump capture
+    kernel, vfio should not be used. Or not?
 
->> drivers/tty/serial/8250/8250_ni.c:423:36: warning: unused variable 'ni16550_acpi_match' [-Wunused-const-variable]
-   static const struct acpi_device_id ni16550_acpi_match[] = {
-                                      ^
-   1 warning generated.
+2) arch/powerpc/kernel/iommu.c
+    Is powerpc iommu implementation compatible with the generic IOMMU
+    framework and provide a is_attach_deferred op? If not, no need for
+    dma first attach either.
 
+If above are true, perhaps we could simply call
+__iommu_group_set_domain() here?
 
-vim +/ni16550_acpi_match +423 drivers/tty/serial/8250/8250_ni.c
+>   	mutex_unlock(&group->mutex);
+>   	if (ret)
+>   		goto err_put_group;
 
-   422	
- > 423	static const struct acpi_device_id ni16550_acpi_match[] = {
-   424		{ "NIC7750",	(kernel_ulong_t)&nic7750 },
-   425		{ "NIC7772",	(kernel_ulong_t)&nic7772 },
-   426		{ "NIC792B",	(kernel_ulong_t)&nic792b },
-   427		{ "NIC7A69",	(kernel_ulong_t)&nic7a69 },
-   428		{ },
-   429	};
-   430	MODULE_DEVICE_TABLE(acpi, ni16550_acpi_match);
-   431	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+baolu
