@@ -1,480 +1,176 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BE98BE6
-	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 19:04:07 +0000 (UTC)
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-3e632769c5eso156101cf.1
-        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 12:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680203047;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GX0HXca3OW+CJPo9SapO/wTafSRfJje5Kvdyj97JV2c=;
-        b=RXWL6ygqKU36pwQgcQ/WpXQm+4SWj2n948Dq/5ar01zssOvTpIzwxyaPFGk7Dzrm0V
-         dtW2H5F+qltTJw/F5wDRWrTXU6nuWdUpEkzR9UJ1IWb0pqgn8L26UYyG4Ej4PKeE8oYM
-         GGT0JR3Qxapirn1k2E4ymzUY0ohKLWAIO+oIvyYqrwdE2iI5sSDjYsDvogQCgWNUc/B+
-         sdEQVsJR/uPr0vCvlBW6xhOcuLVVuiJ6Cfg2gRGAivk4Ws0EZ1XzbF07pKYtzvBrovPs
-         Q+IwRO3JdDPCAwdrs/yGEqd0qwK57NtJsYnY6Z2c+w/s2DkxpXXewuuVgldXEGfCsfJM
-         caBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680203047;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GX0HXca3OW+CJPo9SapO/wTafSRfJje5Kvdyj97JV2c=;
-        b=zSOiYJaqfe4TaPIOPLAHo+zXGRaEyJDkUWh2fSwsVh5uj+pbAXkevWTVv4sY4T1x89
-         zrJgI34cmXw68FtqGNOHjc2Q7/IVZSWYtMdWEe11+SXl6/Sz1GFDvQ1D/iQJ49Ybl2g6
-         ha0elDTmv0Nluq4Go92jLw0JgT5/zYdiojYtqxkL44VTy/d7QosZwD/yKkYPSK7bThlA
-         ZbFsMoLp4lCMB9hnW2764hGjYHDMa62GQjdKf6jqCQsD0wmu1FEadXX4s+vNyzi4pxD6
-         2XRuTXohnOoE9gF8d0FbX+uezV9B4YpYH9Gf2LSmrqnB8eaNmBwMIpoSIoKg4+2m2Mi7
-         xEMg==
-X-Gm-Message-State: AAQBX9f0nusdKKihIsZE9iFLrNLHE8iGPZpef2rNGK2mOG+1emC0BbxU
-	WXxkalfHQTFAKGrCqHS25qs3sr6C5FrdKtd7gaaPbQ==
-X-Google-Smtp-Source: AKy350Z1Vw1bwPLHd5cAWMdKVgviiIsXyoz/voOUJeURguYJXcjPTafQUCR1vMv+Do0UHweYCqxR7fj1BioButk003o=
-X-Received: by 2002:a05:622a:1ba2:b0:3de:1aaa:42f5 with SMTP id
- bp34-20020a05622a1ba200b003de1aaa42f5mr24216qtb.15.1680203046601; Thu, 30 Mar
- 2023 12:04:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36038BE6;
+	Thu, 30 Mar 2023 19:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680203531; x=1711739531;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PVsH6t0x9DNFwUwtIqKlNz5rIcZnOQ0ggpYZkHYAmik=;
+  b=WeTaKdNkdnlm6K9KObnaRvUiiRG2puYrSx+fY3iNw5ZO/Rfzrrz7zFsA
+   RjbZakzPDP1eBggvq83u8FWnPf42KqMEa6E/xJbV7C7nic8IZZAbHLMHb
+   +Oc1adXZL60/YGzPnyeoUo20f3wm6FqgGcal4XaSmlJPe+oaBX+myblBj
+   3mJ+nC744gQ/b2o7KGbkMqQJwHlDf1XaklApZUeMuQPoPej5vRjYbfCYl
+   +J1Z8C46MurDgu8BNLJ2ltlmfMfmXWfr4SnN5Y/DySj+oHFNynHhJ3w22
+   a29HBWyUpIqTRp2sTAIL57Rsj2IyPVMJ4kD1ePQsKzgF+7KpGV0A3xtRu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="329786401"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="329786401"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 12:12:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="687373432"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="687373432"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Mar 2023 12:12:08 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1phxgs-000L86-0U;
+	Thu, 30 Mar 2023 19:12:06 +0000
+Date: Fri, 31 Mar 2023 03:12:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [isilence:optimise-rsrc-update 10/17] io_uring/io_uring.c:1119:13:
+ warning: no previous prototype for function 'io_free_req_tw'
+Message-ID: <202303310350.wb4yjmCt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230311065753.3012826-1-irogers@google.com> <20230311065753.3012826-10-irogers@google.com>
- <f8298af8-4d29-5cbd-cb5f-d33b3fdd641c@arm.com> <CAP-5=fV3HPjXqHm1m-HB3rJU=emV16bUby1Xt-5x4+zjdPRnsg@mail.gmail.com>
-In-Reply-To: <CAP-5=fV3HPjXqHm1m-HB3rJU=emV16bUby1Xt-5x4+zjdPRnsg@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 30 Mar 2023 12:03:53 -0700
-Message-ID: <CAP-5=fWYHyJbZicrsj6UnOBVTFX8NheL+GPGQbC8NMQv2G1WcA@mail.gmail.com>
-Subject: Re: [PATCH v1 09/13] perf symbol: Add abi::__cxa_demangle C++
- demangling support
-To: James Clark <james.clark@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Stephane Eranian <eranian@google.com>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Quentin Monnet <quentin@isovalent.com>, 
-	Andres Freund <andres@anarazel.de>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Pavithra Gurushankar <gpavithrasha@gmail.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Leo Yan <leo.yan@linaro.org>, 
-	=?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Mar 30, 2023 at 9:50=E2=80=AFAM Ian Rogers <irogers@google.com> wro=
-te:
->
-> On Thu, Mar 30, 2023 at 7:08=E2=80=AFAM James Clark <james.clark@arm.com>=
- wrote:
-> >
-> >
-> >
-> > On 11/03/2023 06:57, Ian Rogers wrote:
-> > > Refactor C++ demangling out of symbol-elf into its own files similar
-> > > to other languages. Add abi::__cxa_demangle support. As the other
-> > > demanglers are not shippable with distributions, this brings back C++
-> > > demangling in a common case. It isn't perfect as the support for
-> > > optionally demangling arguments and modifiers isn't present.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/Makefile.config       | 29 +++++++++---------
-> > >  tools/perf/util/Build            |  1 +
-> > >  tools/perf/util/demangle-cxx.cpp | 50 ++++++++++++++++++++++++++++++=
-++
-> > >  tools/perf/util/demangle-cxx.h   | 16 ++++++++++
-> > >  tools/perf/util/symbol-elf.c     | 37 +++++------------------
-> > >  5 files changed, 88 insertions(+), 45 deletions(-)
-> > >  create mode 100644 tools/perf/util/demangle-cxx.cpp
-> > >  create mode 100644 tools/perf/util/demangle-cxx.h
-> > >
-> > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> > > index 5756498248e0..fdeca45cf15f 100644
-> > > --- a/tools/perf/Makefile.config
-> > > +++ b/tools/perf/Makefile.config
-> > > @@ -906,6 +906,7 @@ ifdef BUILD_NONDISTRO
-> > >    endif
-> > >
-> > >    CFLAGS +=3D -DHAVE_LIBBFD_SUPPORT
-> > > +  CXXFLAGS +=3D -DHAVE_LIBBFD_SUPPORT
-> > >    ifeq ($(feature-libbfd-buildid), 1)
-> > >      CFLAGS +=3D -DHAVE_LIBBFD_BUILDID_SUPPORT
-> > >    else
-> > > @@ -913,26 +914,24 @@ ifdef BUILD_NONDISTRO
-> > >    endif
-> > >  endif
-> > >
-> > > -ifdef NO_DEMANGLE
-> > > -  CFLAGS +=3D -DNO_DEMANGLE
-> > > -else
-> > > +ifndef NO_DEMANGLE
-> > > +  $(call feature_check,cxa-demangle)
-> > > +  ifeq ($(feature-cxa-demangle), 1)
-> > > +    EXTLIBS +=3D -lstdc++
-> >
-> > Hi Ian,
-> >
-> > I think cross compilation for arm on x86 isn't working after this chang=
-e
-> > (at least on Ubuntu).
-> >
-> > Even with all of the arm64 libstdc++ stuff installed, you can only link
-> > to it using g++, but the perf build tries to link to it using gcc. Not
-> > sure it's some quirk with the search paths on Ubuntu or something else:
-> >
-> >   $ aarch64-linux-gnu-gcc -lstdc++
-> >
-> >    /usr/lib/gcc-cross/aarch64-linux-gnu/12/../../../../aarch64-linux-
-> > gnu/bin/ld: cannot find -lstdc++: No such file or directory
-> >   collect2: error: ld returned 1 exit status
-> >
-> > g++ gets further:
-> >
-> >   $ aarch64-linux-gnu-g++ -lstdc++
-> >
-> >   ...
-> >   (.text+0x20): undefined reference to `main'
-> > collect2: error: ld returned 1 exit status
-> >
-> > At the end of the perf build it looks like something similar is
-> > happening (with all the non interesting bits deleted):
-> >
-> >    $ make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- -C tools/perf
-> > NO_BPF_SKEL=3D1 V=3D1
-> >
-> >   aarch64-linux-gnu-gcc ... -o perf
-> >
-> > /usr/lib/gcc-cross/aarch64-linux-gnu/12/../../../../aarch64-linux-gnu/b=
-in/ld:
-> > cannot find -lstdc++: No such file or directory
-> >
-> > If I build with NO_DEMANGLE=3D1 then the build works, but I think it wo=
-uld
-> > at be best to autodetect rather than have to do this. Or maybe even lin=
-k
-> > at the end with g++ if we're going to use libstdc++?
->
-> Hi James,
->
-> sorry for the problems you are having, I'll see if I can get a repo. I
-> did add a feature test with this change in the same set:
-> https://lore.kernel.org/lkml/20230311065753.3012826-9-irogers@google.com/
-> So it should be feature testing and only enabling when
-> HAVE_CXA_DEMANGLE_SUPPORT is present. Obviously something is up, so
-> I'll have a think about it.
->
-> Thanks,
-> Ian
+tree:   https://github.com/isilence/linux optimise-rsrc-update
+head:   d4c9d4791c934fb40e17c69529de78afe241cd6b
+commit: 80b814f83c1030a35052e02e313109e9c9167ea8 [10/17] io_uring: io_free_req() via tw
+config: s390-randconfig-r014-20230329 (https://download.01.org/0day-ci/archive/20230331/202303310350.wb4yjmCt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/isilence/linux/commit/80b814f83c1030a35052e02e313109e9c9167ea8
+        git remote add isilence https://github.com/isilence/linux
+        git fetch --no-tags isilence optimise-rsrc-update
+        git checkout 80b814f83c1030a35052e02e313109e9c9167ea8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Sorry to say I couldn't repro on Debian:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303310350.wb4yjmCt-lkp@intel.com/
 
-$ make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- -C tools/perf
-NO_LIBELF=3D1 NO_LIBTRACEEVENT=3D1
-make: Entering directory '/home/irogers/kernel.org/tools/perf'
- BUILD:   Doing 'make -j16' parallel build
-Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs
-from latest version at 'include/uapi/linux/in.h'
-diff -u tools/include/uapi/linux/in.h include/uapi/linux/in.h
-Warning: Kernel ABI header at
-'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version
-at 'arch/x86/include/asm/cpufeatures.h'
-diff -u tools/arch/x86/include/asm/cpufeatures.h
-arch/x86/include/asm/cpufeatures.h
-Warning: Kernel ABI header at
-'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest
-version at 'arch/arm64/include/uapi/asm/perf_regs.h'
-diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h
-arch/arm64/include/uapi/asm/perf_regs.h
-Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h'
-differs from latest version at 'include/linux/coresight-pmu.h'
-diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
-Makefile.config:588: No sys/sdt.h found, no SDT events are defined,
-please install systemtap-sdt-devel or systemtap-sdt-dev
-Makefile.config:679: Disabling post unwind, no support found.
-Makefile.config:747: No libcrypto.h found, disables jitted code
-injection, please install openssl-devel or libssl-dev
-Makefile.config:759: slang not found, disables TUI support. Please
-install slang-devel, libslang-devor libslang2-dev
-Makefile.config:806: Missing perl devel files. Disabling perl
-scripting support, please install perl-ExtUtils-Embed/libperl-dev
-Makefile.config:846: No 'Python.h' was found: disables Python support
-- please install python-devel/python-dev
-Makefile.config:951: No liblzma found, disables xz kernel module
-decompression, please install xz-devel/liblzma-dev
-Makefile.config:964: No libzstd found, disables trace compression,
-please install libzstd-dev[el] and/or set LIBZSTD_DIR
-Makefile.config:975: No libcap found, disables capability support,
-please install libcap-devel/libcap-dev
-Makefile.config:988: No numa.h found, disables 'perf bench numa mem'
-benchmark, please install numactl-devel/libnuma-devel/libnuma-dev
-Makefile.config:1047: No libbabeltrace found, disables 'perf data' CTF
-format support, please install
-libbabeltrace-dev[el]/libbabeltrace-ctf-dev
-Makefile.config:1138: libpfm4 not found, disables libpfm4 support.
-Please install libpfm4-dev
+All warnings (new ones prefixed by >>):
 
-Auto-detecting system features:
-...                                   dwarf: [ OFF ]
-...                      dwarf_getlocations: [ OFF ]
-...                                   glibc: [ on  ]
-...                                  libbfd: [ OFF ]
-...                          libbfd-buildid: [ OFF ]
-...                                  libcap: [ OFF ]
-...                                  libelf: [ OFF ]
-...                                 libnuma: [ OFF ]
-...                  numa_num_possible_cpus: [ OFF ]
-...                                 libperl: [ OFF ]
-...                               libpython: [ OFF ]
-...                               libcrypto: [ OFF ]
-...                               libunwind: [ OFF ]
-...                      libdw-dwarf-unwind: [ OFF ]
-...                                    zlib: [ OFF ]
-...                                    lzma: [ OFF ]
-...                               get_cpuid: [ OFF ]
-...                                     bpf: [ on  ]
-...                                  libaio: [ on  ]
-...                                 libzstd: [ OFF ]
+   In file included from io_uring/io_uring.c:61:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from io_uring/io_uring.c:61:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from io_uring/io_uring.c:61:
+   In file included from include/net/sock.h:46:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> io_uring/io_uring.c:1119:13: warning: no previous prototype for function 'io_free_req_tw' [-Wmissing-prototypes]
+   __cold void io_free_req_tw(struct io_kiocb *req, struct io_tw_state *ts)
+               ^
+   io_uring/io_uring.c:1119:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   __cold void io_free_req_tw(struct io_kiocb *req, struct io_tw_state *ts)
+          ^
+          static 
+   13 warnings generated.
 
- INSTALL libsubcmd_headers
- INSTALL libsymbol_headers
- INSTALL libapi_headers
- INSTALL libperf_headers
- FLEX    util/parse-events-flex.c
- FLEX    util/pmu-flex.c
- CC      util/pmu-bison.o
- FLEX    util/expr-flex.c
- CC      util/expr-bison.o
- CXX     util/demangle-cxx.o
- CC      util/demangle-ocaml.o
- CC      util/demangle-java.o
- CC      util/demangle-rust.o
- CC      util/perf-hooks.o
- CC      util/parse-events.o
- CC      util/parse-events-flex.o
- CC      util/pmu.o
- CC      util/pmu-flex.o
- CC      util/expr-flex.o
- CC      util/expr.o
- LD      util/perf-in.o
- LD      perf-in.o
- LINK    perf
-make: Leaving directory '.../tools/perf'
 
-Thanks,
-Ian
+vim +/io_free_req_tw +1119 io_uring/io_uring.c
 
-> > Thanks
-> > James
-> >
-> > > +    CFLAGS +=3D -DHAVE_CXA_DEMANGLE_SUPPORT
-> > > +    CXXFLAGS +=3D -DHAVE_CXA_DEMANGLE_SUPPORT
-> > > +  endif
-> > >    ifdef BUILD_NONDISTRO
-> > >      ifeq ($(filter -liberty,$(EXTLIBS)),)
-> > > -      ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
-> > > +      $(call feature_check,cplus-demangle)
-> > > +      ifeq ($(feature-cplus-demangle), 1)
-> > >          EXTLIBS +=3D -liberty
-> > > -      else
-> > > -        $(call feature_check,cplus-demangle)
-> > > -        ifeq ($(feature-cplus-demangle), 1)
-> > > -          EXTLIBS +=3D -liberty
-> > > -        endif
-> > >        endif
-> > >      endif
-> > > -  endif
-> > > -
-> > > -  ifneq ($(filter -liberty,$(EXTLIBS)),)
-> > > -    CFLAGS +=3D -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> > > -  else
-> > > -    CFLAGS +=3D -DNO_DEMANGLE
-> > > +    ifneq ($(filter -liberty,$(EXTLIBS)),)
-> > > +      CFLAGS +=3D -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> > > +      CXXFLAGS +=3D -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> > > +    endif
-> > >    endif
-> > >  endif
-> > >
-> > > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> > > index 918b501f9bd8..8607575183a9 100644
-> > > --- a/tools/perf/util/Build
-> > > +++ b/tools/perf/util/Build
-> > > @@ -211,6 +211,7 @@ perf-$(CONFIG_ZSTD) +=3D zstd.o
-> > >
-> > >  perf-$(CONFIG_LIBCAP) +=3D cap.o
-> > >
-> > > +perf-y +=3D demangle-cxx.o
-> > >  perf-y +=3D demangle-ocaml.o
-> > >  perf-y +=3D demangle-java.o
-> > >  perf-y +=3D demangle-rust.o
-> > > diff --git a/tools/perf/util/demangle-cxx.cpp b/tools/perf/util/deman=
-gle-cxx.cpp
-> > > new file mode 100644
-> > > index 000000000000..8708bcafd370
-> > > --- /dev/null
-> > > +++ b/tools/perf/util/demangle-cxx.cpp
-> > > @@ -0,0 +1,50 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +#include "demangle-cxx.h"
-> > > +#include <stdlib.h>
-> > > +#include <string.h>
-> > > +#include <linux/compiler.h>
-> > > +
-> > > +#ifdef HAVE_LIBBFD_SUPPORT
-> > > +#define PACKAGE 'perf'
-> > > +#include <bfd.h>
-> > > +#endif
-> > > +
-> > > +#ifdef HAVE_CXA_DEMANGLE_SUPPORT
-> > > +#include <cxxabi.h>
-> > > +#endif
-> > > +
-> > > +#if defined(HAVE_LIBBFD_SUPPORT) || defined(HAVE_CPLUS_DEMANGLE_SUPP=
-ORT)
-> > > +#ifndef DMGL_PARAMS
-> > > +#define DMGL_PARAMS     (1 << 0)  /* Include function args */
-> > > +#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
-> > > +#endif
-> > > +#endif
-> > > +
-> > > +/*
-> > > + * Demangle C++ function signature
-> > > + *
-> > > + * Note: caller is responsible for freeing demangled string
-> > > + */
-> > > +extern "C"
-> > > +char *cxx_demangle_sym(const char *str, bool params __maybe_unused,
-> > > +                       bool modifiers __maybe_unused)
-> > > +{
-> > > +#ifdef HAVE_LIBBFD_SUPPORT
-> > > +        int flags =3D (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL=
-_ANSI : 0);
-> > > +
-> > > +        return bfd_demangle(NULL, str, flags);
-> > > +#elif defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
-> > > +        int flags =3D (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL=
-_ANSI : 0);
-> > > +
-> > > +        return cplus_demangle(str, flags);
-> > > +#elif defined(HAVE_CXA_DEMANGLE_SUPPORT)
-> > > +        size_t len =3D strlen(str);
-> > > +        char *output =3D (char*)malloc(len);
-> > > +        int status;
-> > > +
-> > > +        output =3D abi::__cxa_demangle(str, output, &len, &status);
-> > > +        return output;
-> > > +#else
-> > > +        return NULL;
-> > > +#endif
-> > > +}
-> > > diff --git a/tools/perf/util/demangle-cxx.h b/tools/perf/util/demangl=
-e-cxx.h
-> > > new file mode 100644
-> > > index 000000000000..26b5b66c0b4e
-> > > --- /dev/null
-> > > +++ b/tools/perf/util/demangle-cxx.h
-> > > @@ -0,0 +1,16 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +#ifndef __PERF_DEMANGLE_CXX
-> > > +#define __PERF_DEMANGLE_CXX 1
-> > > +
-> > > +#ifdef __cplusplus
-> > > +extern "C" {
-> > > +#endif
-> > > +
-> > > +char *cxx_demangle_sym(const char *str, bool params, bool modifiers)=
-;
-> > > +
-> > > +#ifdef __cplusplus
-> > > +}
-> > > +#endif
-> > > +
-> > > +
-> > > +#endif /* __PERF_DEMANGLE_CXX */
-> > > diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-el=
-f.c
-> > > index 41882ae8452e..c0a2de42c51b 100644
-> > > --- a/tools/perf/util/symbol-elf.c
-> > > +++ b/tools/perf/util/symbol-elf.c
-> > > @@ -12,6 +12,7 @@
-> > >  #include "maps.h"
-> > >  #include "symbol.h"
-> > >  #include "symsrc.h"
-> > > +#include "demangle-cxx.h"
-> > >  #include "demangle-ocaml.h"
-> > >  #include "demangle-java.h"
-> > >  #include "demangle-rust.h"
-> > > @@ -25,6 +26,11 @@
-> > >  #include <symbol/kallsyms.h>
-> > >  #include <internal/lib.h>
-> > >
-> > > +#ifdef HAVE_LIBBFD_SUPPORT
-> > > +#define PACKAGE 'perf'
-> > > +#include <bfd.h>
-> > > +#endif
-> > > +
-> > >  #ifndef EM_AARCH64
-> > >  #define EM_AARCH64   183  /* ARM 64 bit */
-> > >  #endif
-> > > @@ -45,34 +51,6 @@
-> > >
-> > >  typedef Elf64_Nhdr GElf_Nhdr;
-> > >
-> > > -#ifndef DMGL_PARAMS
-> > > -#define DMGL_NO_OPTS     0              /* For readability... */
-> > > -#define DMGL_PARAMS      (1 << 0)       /* Include function args */
-> > > -#define DMGL_ANSI        (1 << 1)       /* Include const, volatile, =
-etc */
-> > > -#endif
-> > > -
-> > > -#ifdef HAVE_LIBBFD_SUPPORT
-> > > -#define PACKAGE 'perf'
-> > > -#include <bfd.h>
-> > > -#else
-> > > -#ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
-> > > -extern char *cplus_demangle(const char *, int);
-> > > -
-> > > -static inline char *bfd_demangle(void __maybe_unused *v, const char =
-*c, int i)
-> > > -{
-> > > -     return cplus_demangle(c, i);
-> > > -}
-> > > -#else
-> > > -#ifdef NO_DEMANGLE
-> > > -static inline char *bfd_demangle(void __maybe_unused *v,
-> > > -                              const char __maybe_unused *c,
-> > > -                              int __maybe_unused i)
-> > > -{
-> > > -     return NULL;
-> > > -}
-> > > -#endif
-> > > -#endif
-> > > -#endif
-> > >
-> > >  #ifndef HAVE_ELF_GETPHDRNUM_SUPPORT
-> > >  static int elf_getphdrnum(Elf *elf, size_t *dst)
-> > > @@ -295,7 +273,6 @@ static bool want_demangle(bool is_kernel_sym)
-> > >
-> > >  static char *demangle_sym(struct dso *dso, int kmodule, const char *=
-elf_name)
-> > >  {
-> > > -     int demangle_flags =3D verbose > 0 ? (DMGL_PARAMS | DMGL_ANSI) =
-: DMGL_NO_OPTS;
-> > >       char *demangled =3D NULL;
-> > >
-> > >       /*
-> > > @@ -306,7 +283,7 @@ static char *demangle_sym(struct dso *dso, int km=
-odule, const char *elf_name)
-> > >       if (!want_demangle(dso->kernel || kmodule))
-> > >           return demangled;
-> > >
-> > > -     demangled =3D bfd_demangle(NULL, elf_name, demangle_flags);
-> > > +     demangled =3D cxx_demangle_sym(elf_name, verbose > 0, verbose >=
- 0);
-> > >       if (demangled =3D=3D NULL) {
-> > >               demangled =3D ocaml_demangle_sym(elf_name);
-> > >               if (demangled =3D=3D NULL) {
+  1118	
+> 1119	__cold void io_free_req_tw(struct io_kiocb *req, struct io_tw_state *ts)
+  1120	{
+  1121		struct io_ring_ctx *ctx = req->ctx;
+  1122	
+  1123		io_put_rsrc_node(req->rsrc_node);
+  1124		io_dismantle_req(req);
+  1125		io_put_task_remote(req->task, 1);
+  1126	
+  1127		spin_lock(&ctx->completion_lock);
+  1128		wq_list_add_head(&req->comp_list, &ctx->locked_free_list);
+  1129		ctx->locked_free_nr++;
+  1130		spin_unlock(&ctx->completion_lock);
+  1131	}
+  1132	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
