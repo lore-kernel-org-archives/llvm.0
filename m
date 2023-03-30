@@ -1,327 +1,148 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AA82F3E
-	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 14:08:23 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B5C12F4;
-	Thu, 30 Mar 2023 07:09:07 -0700 (PDT)
-Received: from [192.168.1.158] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 691093F663;
-	Thu, 30 Mar 2023 07:08:20 -0700 (PDT)
-Message-ID: <f8298af8-4d29-5cbd-cb5f-d33b3fdd641c@arm.com>
-Date: Thu, 30 Mar 2023 15:08:15 +0100
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2082.outbound.protection.outlook.com [40.107.212.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C47D6D24;
+	Thu, 30 Mar 2023 14:28:11 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gRem06aEl/MXTDViweD8d0P6B+SEK9lJn3pF/vD3WyHbRnLki+ruj3FAqQtC1p+CZw7UPEYrqL9RYumvU+qgeDyp9ifOTraFAdHOdcedtA/2U+Rck9DR6TwAPyXtq8Xo7bIBHPcZWIxZKtCGB1OUYjCIXX2qeuJHJ2/M4mHMlFGuvP0WbmP933LMhPcSISCWD/GVD6M7slPsnGocE1EJyBpzDU+tgQAyY9XehgJLrZrhuf2/RczRHNPcUSfj0qPINj7aBzLgqCOp14c5fHcw2dV6E24ibS337+LIXbn5pdOJAR58MHwAluZsXURXMdAL4OXPmhX8jOZFGCGyUx5MFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i8sGFtBJFB8FJQ9TN+r754A7VK/ftgrhKwXBosPXajw=;
+ b=Yai6Qfm8F1fLHlUzsRkepzNjof0gspVHfuVIBJ2mtDvmjAxpfDa7FdLWf+jJUkCbeiPv+EpJ5vEO5hDSreWuIg2EnnjVAqof3FiAuY6JStfGR/v3r3LdpRSPJq2uJX6jr0z8lJHqu7D2fkLU2UbvoWoZZyh1jkae+AQZEIib7ms6ULkLgALgmGBkwKMpTUa7m4NYwfp0vdeX42r84bDoY9INedRfbN4XqjD7T/TVhr1pf9FyAUv3SP+Io96uAuFmW3heeznBIVjZr6PA0Kkq7X8iOvEM4RCkUGs3a4TAiZkCDGJZ02yhF9mtEYjTHk1LeM1+k0FEXU+Jo6SaRIvl9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i8sGFtBJFB8FJQ9TN+r754A7VK/ftgrhKwXBosPXajw=;
+ b=rM+49d+sxgjIVYQhKBDvE40nzDGrWf3R7AkBpHZiivEls6Z/jvuGi1RbOCJRCKp7V0LQB9pUUQ6j4MHJXfU+9W56C3qHuGMAloXAVdCH4A5+J7L6pnkGV72roe3HmnvUH5AUQNNOcOL5eKqJtIwVCWznqz51AMlC7eSjAdmniuRTdgEO20hD5rYqYfbAl+/zESlCQMn3oJev+EIwnxi1Eu/eTmq4dmlj8uMB0R+46QU4PGWJOWJcAP4bkrWhn3iJ7BP60vn8h06zWxjgPkj8hpgzGvxjxl1kkYZ2B7PCWioegjwsdBbxvxM9oxmyAZCHfDIi4qQcrBlBI+e0FJ/C0Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW4PR12MB7168.namprd12.prod.outlook.com (2603:10b6:303:22d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22; Thu, 30 Mar
+ 2023 14:28:08 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.037; Thu, 30 Mar 2023
+ 14:28:08 +0000
+Date: Thu, 30 Mar 2023 11:28:07 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
+	Will Deacon <will@kernel.org>, Lu Baolu <baolu.lu@linux.intel.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Nicolin Chen <nicolinc@nvidia.com>
+Subject: Re: [PATCH v2 02/14] iommu: Add for_each_group_device()
+Message-ID: <ZCWcd5FkGhpYhCUi@nvidia.com>
+References: <0-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
+ <2-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
+ <CANiq72m4sGq10s==TPTjN4L28xgHk1dYsq+o1ves7_c6pho_pw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72m4sGq10s==TPTjN4L28xgHk1dYsq+o1ves7_c6pho_pw@mail.gmail.com>
+X-ClientProxiedBy: BL1PR13CA0414.namprd13.prod.outlook.com
+ (2603:10b6:208:2c2::29) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 09/13] perf symbol: Add abi::__cxa_demangle C++
- demangling support
-Content-Language: en-US
-To: Ian Rogers <irogers@google.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Stephane Eranian <eranian@google.com>, Mark Rutland
- <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Quentin Monnet <quentin@isovalent.com>, Andres Freund <andres@anarazel.de>,
- Tiezhu Yang <yangtiezhu@loongson.cn>,
- Pavithra Gurushankar <gpavithrasha@gmail.com>,
- Yang Jihong <yangjihong1@huawei.com>, Adrian Hunter
- <adrian.hunter@intel.com>, Leo Yan <leo.yan@linaro.org>,
- =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>
-References: <20230311065753.3012826-1-irogers@google.com>
- <20230311065753.3012826-10-irogers@google.com>
-From: James Clark <james.clark@arm.com>
-In-Reply-To: <20230311065753.3012826-10-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB7168:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5514ad1-2d34-4709-7f95-08db312afb7c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	mJA1c5W2j1lbc1U2Shurij04iofZEra1iWH7iFdoiCOjsbgLcCchbTCdNDj81Lxyq81J127rYj3KSy50j7KXYzhsOPBAB/53bhDJkYpH6udrAQUW2g9BbsKSxExcTWHe8qYFkmdr1KXY8oSVLBxXgF1hVDK/9UcQvq1lq2ePIQ5PmGToUt38Bw09h6smdgBqRExl6N0kWwuMq6stmOpwXOkNgW3Js1kneChN4lXUk98KUf1xjLy92LD9TqdfsCHfQUyL2AgGoHF70Ew75PazOIWHIUSws/WnMhw5jzYMF78UkAlCh7NN4ySaM9eY3HwctdzlArcxICE6MGgXa7eWcPVjW7s9UHPiF1Cbln1ha/Ug1qHkYKjsDXShkgIbBZiPEYgIq1h+7JYiAcH2BySaxiysxePzmPcYT8LWqAvLliQZ7eR9GZIa2ANDzLYYOjBADunMpk+WuFFwVXY3dnNU7fMgaQC6hhQ7D7pwW8gMyJqKEgQswYEzuLtdSDYTpCO1ffIvO4I1+E2TfTqiBY5IYhxmOBrNdHBGLrpR54aaMxTrTxgmf3Q++fQKJGQ58wdW
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(396003)(39860400002)(136003)(451199021)(41300700001)(186003)(4326008)(6916009)(66476007)(36756003)(66946007)(66556008)(2906002)(4744005)(83380400001)(7416002)(86362001)(38100700002)(2616005)(8676002)(8936002)(5660300002)(6486002)(6512007)(6506007)(26005)(54906003)(107886003)(478600001)(316002)(53546011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dFdSVXoxMmk0NVpjVFZWWkdwQ203YjZxdEwyWHNzZHZLcXdCSDlVUUwzd0p3?=
+ =?utf-8?B?VTBYK0V4eHVXRElTSC9JOFhnZFgwbDRaKzNBUmI3WkREUk9hL0VBeTBmWTh4?=
+ =?utf-8?B?TUM2QXJ0Y0ZadVBqdk9tTjRCRWJWV2xkQVNHUmg1T1ROcjdGRjN1VUpoMng4?=
+ =?utf-8?B?OS9pQk0xS3lBSTBoNlFIU05IamJ0RkVTSlhpMFVjTHJvK2d6ZUkyUnVNd3E3?=
+ =?utf-8?B?d3R0RVVpdDAxNmtnTkxnTnlPRUg2ekxiZFRoUTRQQysvcktrUVB0VTRlZ0dB?=
+ =?utf-8?B?cXM3ZEtGMkxEcHB0REFnT2h1TFFNK0ZuL3FoT1JvUW41Ukg0aXNIT0l4a3hw?=
+ =?utf-8?B?VVcvZ21hMDUzL2NWV08xWS9GaklkYzQwSmdkbmtFMWFaSUVRQlF6U01oSU11?=
+ =?utf-8?B?TFA2OU9vSTltOUZXVm9uT3V1SlpIN1psdDJ3N2FlT2grazg5c3B5Mjc5cXd3?=
+ =?utf-8?B?YzN1Ym94S2lwRm5lekh2NEdZYU9PalRHdVJMM0UrSXE3SUNsNFg0R0xRUUFE?=
+ =?utf-8?B?VW9zN3hTZ3FrdGptNndIcHRNenFJK1RjSjBFRUdQT1VsMkswN0g1NmI3QW53?=
+ =?utf-8?B?WVBJQU9FZThMRGFiZ2xXM3VlZkUyNzMwK0FiNEYydDAxVzlCa1pBck9lTlhD?=
+ =?utf-8?B?bDBqSDdRcldCR2s2ZjJ1UEZIeWJPRDhoQ2NkTnJZM1NYUU8yS1Z6WFJGc0Zn?=
+ =?utf-8?B?MFI5WUN0bWZsWENpb1o1UktuWkhsWGdXb3RkRGxaZVpwVHJSOTJlaE1YcmFB?=
+ =?utf-8?B?Z1lvNGQzbmtVcG1Mb0hVeHBDbVE4dnpxYnhEcy9iRngyRzRldzI3MHNmOElB?=
+ =?utf-8?B?cGllclhXWGZRNnNaQ3U1alVNYTJMdk56RVNUUlQxb1VnQmRKSVdSZU5oRnlI?=
+ =?utf-8?B?NW1pR010QysxdU5Cb2xVNVZrZkx0eXFJbmlINGx2Z1JQVFVtdWlpV1FRRHp4?=
+ =?utf-8?B?RVZiUzRmRi83dENDanVvN3k3NFZiaU1RNloxNjUveFNEZXA3SEpNcjBPMDA4?=
+ =?utf-8?B?TkR4OFMwdzJ3S3BGc3M0bitybnNpNWNGZmNEMmJ4aFEvb3ZWOU43U3VUQlpO?=
+ =?utf-8?B?M1hTQ2d3QTVheVh5dGxXN1BESDFXUHFoaEFKYk95UUpwNlpzeTBrdkZwV0xF?=
+ =?utf-8?B?Sit6NjFZOXFQM3Nmd21zamJidDE0RnJuODc4aDMyTHBiY2xyUm5aYVdjYkpo?=
+ =?utf-8?B?SVJ1aFc0ZmRPQy9iS2ZWMkhGZ25aU1ZoRnFvaVdja3BKN2dBYnJNL3hSbjFk?=
+ =?utf-8?B?Vi83SmxaN0QxRFNKb1BKaVdIMVRnUEtqSWgrc2sySE40c2VEQ2NnQ01PSmZ1?=
+ =?utf-8?B?TUkvL3poUnZxZHZRQitFVWVmQmUzcnJORGl4SFFzemZDRHFOUzBCTU1NcnBi?=
+ =?utf-8?B?R2lKdi9mVS9RMno3Nkt6azgzOUxsOE9BVHdUUXdZYllXVGkzNFRHN1U1eEdJ?=
+ =?utf-8?B?eXU0N1picEJtRU9nZnJpbWs3QlZVdFdCOUZhdERoVWkraVBkaElpd2lDMlBN?=
+ =?utf-8?B?VkpKLzJqWm5OUnlSdWdCSW5Lb0VDejRZa3pWcDNPeVZvV3RBTjVseFVabERB?=
+ =?utf-8?B?NG1PTHVENWNVdXNIR2ZVZjRGcWdNTVRxN0QzYU8rMU1kd3RKdXdSYzJZSWNV?=
+ =?utf-8?B?OCttTWJVeWllN3F1eG9YTFhCaE5DemNSQ3ljeXBHWk1sa1BHWS9yZEpNWlhT?=
+ =?utf-8?B?b1RNYkIrVVRWYTM4cDFyME1BeTZzSyt0ZFJveWtVREQ5bXUvUUF5dDFpWXNn?=
+ =?utf-8?B?RjZQWVRLdHIzSzV5c2h0U0QzaEthSHpxOWxhZXVKcXZJcUZyWkhYb1JLYmhY?=
+ =?utf-8?B?YjhsdFBQazMyTVlnQ1NZTGIwaW9BNnhlMDNBS2IrS0tpM2gzOWxSMW9qN1No?=
+ =?utf-8?B?b3MvS0kwR2xld3JVbEEyUzdudWZmRGMyTE82R3hWdHJxa1lxaHVJUks1b0k1?=
+ =?utf-8?B?ajA5S0NXQ0FRVU5tMGNuK3c4Z1FLem14T3lPc0Nac0RuT1U4MEVOU0Z2b0lv?=
+ =?utf-8?B?NjdlT0kvZmFyZkNTNTdYcWNJUHZLNTZZMHc5UjZObW84L0YrOXNKREVQTXZU?=
+ =?utf-8?B?UjRlQk8zSnM2eHQweEpWOGI2LzFCWnd4dFJOR2NxRUErYkF5NjBRM3pNVktX?=
+ =?utf-8?Q?RTpqZ3L7nlK13xzVbodpGpQgx?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5514ad1-2d34-4709-7f95-08db312afb7c
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2023 14:28:08.3184
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zi677g7QtvYoYp/0JDsPoIjrKoX1XGQd8tTurrm+BC58mcGiz6PpTMoZwoZ8hIzA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7168
 
-
-
-On 11/03/2023 06:57, Ian Rogers wrote:
-> Refactor C++ demangling out of symbol-elf into its own files similar
-> to other languages. Add abi::__cxa_demangle support. As the other
-> demanglers are not shippable with distributions, this brings back C++
-> demangling in a common case. It isn't perfect as the support for
-> optionally demangling arguments and modifiers isn't present.
+On Thu, Mar 30, 2023 at 01:52:15AM +0200, Miguel Ojeda wrote:
+> On Thu, Mar 30, 2023 at 1:40 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >
+> > diff --git a/.clang-format b/.clang-format
+> > index d988e9fa9b2653..bece1995f2c159 100644
+> > --- a/.clang-format
+> > +++ b/.clang-format
+> > @@ -254,6 +254,7 @@ ForEachMacros:
+> >    - 'for_each_free_mem_range'
+> >    - 'for_each_free_mem_range_reverse'
+> >    - 'for_each_func_rsrc'
+> > +  - 'for_each_group_device'
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/Makefile.config       | 29 +++++++++---------
->  tools/perf/util/Build            |  1 +
->  tools/perf/util/demangle-cxx.cpp | 50 ++++++++++++++++++++++++++++++++
->  tools/perf/util/demangle-cxx.h   | 16 ++++++++++
->  tools/perf/util/symbol-elf.c     | 37 +++++------------------
->  5 files changed, 88 insertions(+), 45 deletions(-)
->  create mode 100644 tools/perf/util/demangle-cxx.cpp
->  create mode 100644 tools/perf/util/demangle-cxx.h
-> 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 5756498248e0..fdeca45cf15f 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -906,6 +906,7 @@ ifdef BUILD_NONDISTRO
->    endif
->  
->    CFLAGS += -DHAVE_LIBBFD_SUPPORT
-> +  CXXFLAGS += -DHAVE_LIBBFD_SUPPORT
->    ifeq ($(feature-libbfd-buildid), 1)
->      CFLAGS += -DHAVE_LIBBFD_BUILDID_SUPPORT
->    else
-> @@ -913,26 +914,24 @@ ifdef BUILD_NONDISTRO
->    endif
->  endif
->  
-> -ifdef NO_DEMANGLE
-> -  CFLAGS += -DNO_DEMANGLE
-> -else
-> +ifndef NO_DEMANGLE
-> +  $(call feature_check,cxa-demangle)
-> +  ifeq ($(feature-cxa-demangle), 1)
-> +    EXTLIBS += -lstdc++
+> We currently only go through `include/` and `tools/` to generate that
+> list, so this could easily get deleted on an update. But we discussed
+> going through more files, or we could have some extra explicit items,
+> etc.
 
-Hi Ian,
+That would be nice..
 
-I think cross compilation for arm on x86 isn't working after this change
-(at least on Ubuntu).
+> Since you added it manually (i.e. vs. renaming some entries), does it
+> mean you are already using `clang-format` for this?
 
-Even with all of the arm64 libstdc++ stuff installed, you can only link
-to it using g++, but the perf build tries to link to it using gcc. Not
-sure it's some quirk with the search paths on Ubuntu or something else:
+Yes!
 
-  $ aarch64-linux-gnu-gcc -lstdc++
+clang-format and clangd have really transformed how I'm working!
 
-   /usr/lib/gcc-cross/aarch64-linux-gnu/12/../../../../aarch64-linux-
-gnu/bin/ld: cannot find -lstdc++: No such file or directory
-  collect2: error: ld returned 1 exit status
-
-g++ gets further:
-
-  $ aarch64-linux-gnu-g++ -lstdc++
-
-  ...
-  (.text+0x20): undefined reference to `main'
-collect2: error: ld returned 1 exit status
-
-At the end of the perf build it looks like something similar is
-happening (with all the non interesting bits deleted):
-
-   $ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C tools/perf
-NO_BPF_SKEL=1 V=1
-
-  aarch64-linux-gnu-gcc ... -o perf
-
-/usr/lib/gcc-cross/aarch64-linux-gnu/12/../../../../aarch64-linux-gnu/bin/ld:
-cannot find -lstdc++: No such file or directory
-
-If I build with NO_DEMANGLE=1 then the build works, but I think it would
-at be best to autodetect rather than have to do this. Or maybe even link
-at the end with g++ if we're going to use libstdc++?
-
-Thanks
-James
-
-> +    CFLAGS += -DHAVE_CXA_DEMANGLE_SUPPORT
-> +    CXXFLAGS += -DHAVE_CXA_DEMANGLE_SUPPORT
-> +  endif
->    ifdef BUILD_NONDISTRO
->      ifeq ($(filter -liberty,$(EXTLIBS)),)
-> -      ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
-> +      $(call feature_check,cplus-demangle)
-> +      ifeq ($(feature-cplus-demangle), 1)
->          EXTLIBS += -liberty
-> -      else
-> -        $(call feature_check,cplus-demangle)
-> -        ifeq ($(feature-cplus-demangle), 1)
-> -          EXTLIBS += -liberty
-> -        endif
->        endif
->      endif
-> -  endif
-> -
-> -  ifneq ($(filter -liberty,$(EXTLIBS)),)
-> -    CFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> -  else
-> -    CFLAGS += -DNO_DEMANGLE
-> +    ifneq ($(filter -liberty,$(EXTLIBS)),)
-> +      CFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> +      CXXFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> +    endif
->    endif
->  endif
->  
-> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> index 918b501f9bd8..8607575183a9 100644
-> --- a/tools/perf/util/Build
-> +++ b/tools/perf/util/Build
-> @@ -211,6 +211,7 @@ perf-$(CONFIG_ZSTD) += zstd.o
->  
->  perf-$(CONFIG_LIBCAP) += cap.o
->  
-> +perf-y += demangle-cxx.o
->  perf-y += demangle-ocaml.o
->  perf-y += demangle-java.o
->  perf-y += demangle-rust.o
-> diff --git a/tools/perf/util/demangle-cxx.cpp b/tools/perf/util/demangle-cxx.cpp
-> new file mode 100644
-> index 000000000000..8708bcafd370
-> --- /dev/null
-> +++ b/tools/perf/util/demangle-cxx.cpp
-> @@ -0,0 +1,50 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "demangle-cxx.h"
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <linux/compiler.h>
-> +
-> +#ifdef HAVE_LIBBFD_SUPPORT
-> +#define PACKAGE 'perf'
-> +#include <bfd.h>
-> +#endif
-> +
-> +#ifdef HAVE_CXA_DEMANGLE_SUPPORT
-> +#include <cxxabi.h>
-> +#endif
-> +
-> +#if defined(HAVE_LIBBFD_SUPPORT) || defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
-> +#ifndef DMGL_PARAMS
-> +#define DMGL_PARAMS     (1 << 0)  /* Include function args */
-> +#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
-> +#endif
-> +#endif
-> +
-> +/*
-> + * Demangle C++ function signature
-> + *
-> + * Note: caller is responsible for freeing demangled string
-> + */
-> +extern "C"
-> +char *cxx_demangle_sym(const char *str, bool params __maybe_unused,
-> +                       bool modifiers __maybe_unused)
-> +{
-> +#ifdef HAVE_LIBBFD_SUPPORT
-> +        int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
-> +
-> +        return bfd_demangle(NULL, str, flags);
-> +#elif defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
-> +        int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
-> +
-> +        return cplus_demangle(str, flags);
-> +#elif defined(HAVE_CXA_DEMANGLE_SUPPORT)
-> +        size_t len = strlen(str);
-> +        char *output = (char*)malloc(len);
-> +        int status;
-> +
-> +        output = abi::__cxa_demangle(str, output, &len, &status);
-> +        return output;
-> +#else
-> +        return NULL;
-> +#endif
-> +}
-> diff --git a/tools/perf/util/demangle-cxx.h b/tools/perf/util/demangle-cxx.h
-> new file mode 100644
-> index 000000000000..26b5b66c0b4e
-> --- /dev/null
-> +++ b/tools/perf/util/demangle-cxx.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __PERF_DEMANGLE_CXX
-> +#define __PERF_DEMANGLE_CXX 1
-> +
-> +#ifdef __cplusplus
-> +extern "C" {
-> +#endif
-> +
-> +char *cxx_demangle_sym(const char *str, bool params, bool modifiers);
-> +
-> +#ifdef __cplusplus
-> +}
-> +#endif
-> +
-> +
-> +#endif /* __PERF_DEMANGLE_CXX */
-> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-> index 41882ae8452e..c0a2de42c51b 100644
-> --- a/tools/perf/util/symbol-elf.c
-> +++ b/tools/perf/util/symbol-elf.c
-> @@ -12,6 +12,7 @@
->  #include "maps.h"
->  #include "symbol.h"
->  #include "symsrc.h"
-> +#include "demangle-cxx.h"
->  #include "demangle-ocaml.h"
->  #include "demangle-java.h"
->  #include "demangle-rust.h"
-> @@ -25,6 +26,11 @@
->  #include <symbol/kallsyms.h>
->  #include <internal/lib.h>
->  
-> +#ifdef HAVE_LIBBFD_SUPPORT
-> +#define PACKAGE 'perf'
-> +#include <bfd.h>
-> +#endif
-> +
->  #ifndef EM_AARCH64
->  #define EM_AARCH64	183  /* ARM 64 bit */
->  #endif
-> @@ -45,34 +51,6 @@
->  
->  typedef Elf64_Nhdr GElf_Nhdr;
->  
-> -#ifndef DMGL_PARAMS
-> -#define DMGL_NO_OPTS     0              /* For readability... */
-> -#define DMGL_PARAMS      (1 << 0)       /* Include function args */
-> -#define DMGL_ANSI        (1 << 1)       /* Include const, volatile, etc */
-> -#endif
-> -
-> -#ifdef HAVE_LIBBFD_SUPPORT
-> -#define PACKAGE 'perf'
-> -#include <bfd.h>
-> -#else
-> -#ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
-> -extern char *cplus_demangle(const char *, int);
-> -
-> -static inline char *bfd_demangle(void __maybe_unused *v, const char *c, int i)
-> -{
-> -	return cplus_demangle(c, i);
-> -}
-> -#else
-> -#ifdef NO_DEMANGLE
-> -static inline char *bfd_demangle(void __maybe_unused *v,
-> -				 const char __maybe_unused *c,
-> -				 int __maybe_unused i)
-> -{
-> -	return NULL;
-> -}
-> -#endif
-> -#endif
-> -#endif
->  
->  #ifndef HAVE_ELF_GETPHDRNUM_SUPPORT
->  static int elf_getphdrnum(Elf *elf, size_t *dst)
-> @@ -295,7 +273,6 @@ static bool want_demangle(bool is_kernel_sym)
->  
->  static char *demangle_sym(struct dso *dso, int kmodule, const char *elf_name)
->  {
-> -	int demangle_flags = verbose > 0 ? (DMGL_PARAMS | DMGL_ANSI) : DMGL_NO_OPTS;
->  	char *demangled = NULL;
->  
->  	/*
-> @@ -306,7 +283,7 @@ static char *demangle_sym(struct dso *dso, int kmodule, const char *elf_name)
->  	if (!want_demangle(dso->kernel || kmodule))
->  	    return demangled;
->  
-> -	demangled = bfd_demangle(NULL, elf_name, demangle_flags);
-> +	demangled = cxx_demangle_sym(elf_name, verbose > 0, verbose > 0);
->  	if (demangled == NULL) {
->  		demangled = ocaml_demangle_sym(elf_name);
->  		if (demangled == NULL) {
+Jason
