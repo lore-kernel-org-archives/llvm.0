@@ -1,72 +1,57 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB771FAD;
-	Thu, 30 Mar 2023 11:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680177100; x=1711713100;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aCmf4rglJvXNejCmojYMvYzgNhY4IBiSgtP09G4LG7w=;
-  b=O8TDhO8bWcVz7FzOLAyCk/gwn3Em+vtzzN2wR7R4+awKNuKnB+p7Vgsm
-   o4K4BZaAWkgpLv4QEheNz1fMyJER0Mk+eyKXsNSWf/kMBEy7a4rU2OnMM
-   u1Vu6Dk88Q2yTx9QSqPyPYZNa4DHYl6EQ8PEuA2DvU2T8HIcjD05Mr8IC
-   qrAewjhWF1GPTxU7zDElpbCQ76rC2o0QJBz6mzCA6AivSWLDk9oOemBqV
-   bPFbD2LjDErQM0ZQfUtlGdoienHCdOqAbMLOoanjuN/4EzlcYlx8ANrZi
-   IRmpns20N1UJlQkDdK9iw7py333fdPhhxFBy8VU2UVJ+OVrPSSRUiGJph
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="427421036"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="427421036"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:51:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="687205871"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="687205871"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.30.251]) ([10.255.30.251])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 04:51:35 -0700
-Message-ID: <7f667a25-8dbb-2012-871d-acf2665bdf58@linux.intel.com>
-Date: Thu, 30 Mar 2023 19:51:30 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE06510E9
+	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 12:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2767C433EF;
+	Thu, 30 Mar 2023 12:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680179705;
+	bh=y+2gCE8/Cx3zjDhG3ki9NXZfOdNfIYHBd/3JGB6uaN8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cp6aBBHtwV3qcj9lLsSRv592j/zDoiXol/xJlrebkCiGucvZc8NaB9TBp+GFWXotV
+	 0UXL9RsflBhWhnQEO3CtDQD8DuHlAOsN1OrlX16EX0EHLu45mnk4Zfo055ugiLtyVF
+	 AzbWZAMM7hb/1H/KKx3wGtFg0YS+0AoX2bvifG2tf1ABoIDsNs8uZkCNjlJ51j1PCh
+	 Kjm0JzTyzTuUkYKUKm+42O/N4vw8mqYTxRHdKNFWTTe+0ePBwfJUio+LyllE33HRCu
+	 eXohTgchQwJxLUGJlJetQJaard0E6ljRoIZ0WwHSwdkiMxu98BDq+Jrzu1DIfTqqiD
+	 omBwPg+jlYTtg==
+Date: Thu, 30 Mar 2023 13:35:00 +0100
+From: Lee Jones <lee@kernel.org>
+To: Tom Rix <trix@redhat.com>
+Cc: tony@atomide.com, nathan@kernel.org, ndesaulniers@google.com,
+	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] mfd: twl-core: remove unused add_child and
+ add_numbered_child functions
+Message-ID: <20230330123500.GG434339@google.com>
+References: <20230322115838.2569414-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc: baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
- Nicolin Chen <nicolinc@nvidia.com>
-Subject: Re: [PATCH v2 11/14] iommu: Consolidate the code to calculate the
- target default domain type
-Content-Language: en-US
-To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
- Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
- Will Deacon <will@kernel.org>
-References: <11-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <11-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230322115838.2569414-1-trix@redhat.com>
 
-On 2023/3/30 7:40, Jason Gunthorpe wrote:
-> Put all the code to calculate the default domain type into one
-> function. Make the function able to handle the
-> iommu_change_dev_def_domain() by taking in the target domain type and
-> erroring out if the target type isn't reachable.
-> 
-> This makes it really clear that specifying a 0 type during
-> iommu_change_dev_def_domain() will have the same outcome as the normal
-> probe path.
-> 
-> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
+On Wed, 22 Mar 2023, Tom Rix wrote:
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+> clang with W=1 reports
+> drivers/mfd/twl-core.c:654:30: error: unused function 'add_child' [-Werror,-Wunused-function]
+> static inline struct device *add_child(unsigned mod_no, const char *name,
+>                              ^
+> add_numbered_child and its only caller add_child are not used, so remove them.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/mfd/twl-core.c | 65 ------------------------------------------
+> 1 file changed, 65 deletions(-)
 
-Best regards,
-baolu
+I chopped around the commit message a bit and:
+
+Applied, thanks
+
+--
+Lee Jones [李琼斯]
