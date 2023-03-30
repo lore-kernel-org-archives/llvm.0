@@ -1,124 +1,148 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13248BEE;
-	Thu, 30 Mar 2023 16:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680195549; x=1711731549;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A3swVtIESmOhzKOGg7B046CX41e8Q+Fc20bjH7hHWTg=;
-  b=eYqXGv/Dped9AnWXR6eA6uEUUIEKwltBzG9rBt5l2Xdkb8CiL3rT6ogr
-   vNMfmmVwqS7e1yk5H2dCpjBSGuMLxx9N40Nj07uG4YP2+Gj9cnlvJ5dcL
-   7c7Lv1Sf8pjLSg26gIcFuiOHwRp8Thunwm7mEnTAYBmGxCA1FZwaOCfnS
-   Htyelz5vfSfm8ya2H8Os6sv8Eg8IQMukK5+1OAsx3XkisEpbts9CpjfZi
-   ljBVRxMsjsz9XyVJAl3X9AvgLI64If3xjBUJEM92PFiPMsAqGGKgq4xJE
-   7jdOccQSn14QiPC6JANMs+Xy6ytyiKvbnNmxyJEJ/uvhWPJaiHdYv8cXT
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="339952118"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="339952118"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 09:59:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="715078940"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="715078940"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2023 09:59:02 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1phvc5-000L1i-2e;
-	Thu, 30 Mar 2023 16:59:01 +0000
-Date: Fri, 31 Mar 2023 00:58:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chen Zhongjin <chenzhongjin@huawei.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	chenzhongjin@huawei.com, mingo@redhat.com, peterz@infradead.org,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	rmk+kernel@armlinux.org.uk, geert@linux-m68k.org,
-	keescook@chromium.org
-Subject: Re: [PATCH] wchan: Fix get_wchan() when task in schedule
-Message-ID: <202303310019.uMAqiUA4-lkp@intel.com>
-References: <20230330121238.176534-1-chenzhongjin@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C368BEE
+	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 16:59:23 +0000 (UTC)
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-3e390e23f83so530781cf.1
+        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 09:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680195562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K7akp0Ej3ybKTtSvJmlVCO91f+z9Y4B731b6732Wg8Y=;
+        b=kj8zI+ocoSj82Je2zA1JoXvjC2y0OvYJkSAoLrdeg8HrwyJ6I5YZVj/yjENQUYAtHQ
+         ehTSTFDKnH2VBA5wUGZTxh9uOgN03WLqbWJTaKq+oq/rXgj+xw2JLn41QSDiCZmPsxgo
+         +Qau9sjscmvkVy3C8hlQJlourjG728IMl2I5QBdEKLMWg6MPxywQ4cRTAEbLGJOAuVNm
+         P42bRwImN32orsZKDwrqwGG4o2xLyfdFhf7N2j75D4f8Kzv9IAV34c7UYgBmBxKHRmfQ
+         ICt3CY0I3p6LnJwWIR26tybK90sQnMcXEmZz2p/Y7nmfMk0X+dtDmoqq12WtJ8E65GzG
+         hyKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680195562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K7akp0Ej3ybKTtSvJmlVCO91f+z9Y4B731b6732Wg8Y=;
+        b=JyEm+4gcXY5Aa7y1syc1VYwVo1OESp8WRB82+LAu1LPEBDewFVAHOmDbrSKVVl0TMt
+         rUph+RcRE7AI2PXzBAcFFqVvGxESNXIFnOqGfONbbRubW+cIQLbW6D7DrA3Bvhv7OwRK
+         ZvbQUJxL8OhDq1yyDMyuKqvTPfU1OPu0B2pat7SxmeyyFzyrCuRz3abjKhjrH5Vx0Ac8
+         WhL+/4PcaIeB6LchYoUJlm29/be/hfm1SEXWrUfzKPIntSpOQCTVIg3IgScvTSfM1Vn9
+         2SiV1DpbCZQ7cT0W9kTNwt7/qdTOjvadjOaEu/s0Wg8OrbJSVoIbmuQp+mjVNT+I4+6v
+         EfYg==
+X-Gm-Message-State: AAQBX9e5w6sbwlP+rwgpLeeJ+Hjv/fbU8aIG6/gsX6t/kwSJ7+SNioTf
+	Z2/3TQ4pVCrSEToLt2aGWDCGblYZ8cmW1zLZOpKGxg==
+X-Google-Smtp-Source: AKy350YmGF+RklGr0Q9QWyeuDfLojVGr4FVRoQSQ0Mlc6cG6w5SKVlN9G+P0VVnFT0LTzmOcP7YDX0QA2529VJmwK5g=
+X-Received: by 2002:a05:622a:1309:b0:3b9:f660:be05 with SMTP id
+ v9-20020a05622a130900b003b9f660be05mr327826qtk.18.1680195562424; Thu, 30 Mar
+ 2023 09:59:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330121238.176534-1-chenzhongjin@huawei.com>
+References: <20230328235543.1082207-1-irogers@google.com> <20230328235543.1082207-2-irogers@google.com>
+ <ZCQ4nERbit/f6yhh@kernel.org> <ZCQ6kqhODsxSCXdP@kernel.org>
+ <CAM9d7cjSEx_=UTMpDHMwGb=5H6Yf8UdHTMt1xO=4CVToh60oSA@mail.gmail.com> <ZCVxXTc0kyRAQ+XA@kernel.org>
+In-Reply-To: <ZCVxXTc0kyRAQ+XA@kernel.org>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 30 Mar 2023 09:59:08 -0700
+Message-ID: <CAP-5=fWZpfo62iN3YWWKm_VZZqMFCyddyg_JQTGe7j6nV+DbmQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/6] perf annotate: Delete session for debug builds
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	James Clark <james.clark@arm.com>, Andi Kleen <ak@linux.intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, German Gomez <german.gomez@arm.com>, 
+	Sandipan Das <sandipan.das@amd.com>, Andres Freund <andres@anarazel.de>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Chen,
+On Thu, Mar 30, 2023 at 4:24=E2=80=AFAM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Wed, Mar 29, 2023 at 05:13:17PM -0700, Namhyung Kim escreveu:
+> > On Wed, Mar 29, 2023 at 6:18=E2=80=AFAM Arnaldo Carvalho de Melo
+> > <acme@kernel.org> wrote:
+> > >
+> > > Em Wed, Mar 29, 2023 at 10:09:48AM -0300, Arnaldo Carvalho de Melo es=
+creveu:
+> > > > Em Tue, Mar 28, 2023 at 04:55:38PM -0700, Ian Rogers escreveu:
+> > > > > Use the debug build indicator as the guide to free the session. T=
+his
+> > > > > implements a behavior described in a comment, which is consequent=
+ially
+> > > > > removed.
+> > > > >
+> > > > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > > > ---
+> > > > >  tools/perf/builtin-annotate.c | 16 ++++++----------
+> > > > >  1 file changed, 6 insertions(+), 10 deletions(-)
+> > > > >
+> > > > > diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-a=
+nnotate.c
+> > > > > index 4750fac7bf93..98d1b6379230 100644
+> > > > > --- a/tools/perf/builtin-annotate.c
+> > > > > +++ b/tools/perf/builtin-annotate.c
+> > > > > @@ -692,16 +692,12 @@ int cmd_annotate(int argc, const char **arg=
+v)
+> > > > >
+> > > > >  out_delete:
+> > > > >     /*
+> > > > > -    * Speed up the exit process, for large files this can
+> > > > > -    * take quite a while.
+> > > > > -    *
+> > > > > -    * XXX Enable this when using valgrind or if we ever
+> > > > > -    * librarize this command.
+> > > > > -    *
+> > > > > -    * Also experiment with obstacks to see how much speed
+> > > > > -    * up we'll get here.
+> > > > > -    *
+> > > > > -    * perf_session__delete(session);
+> > > > > +    * Speed up the exit process by only deleting for debug build=
+s. For
+> > > > > +    * large files this can save time.
+> > > > >      */
+> > > > > +#ifndef NDEBUG
+> > > > > +   perf_session__delete(annotate.session);
+> > > > > +#endif
+> > > >
+> > > > So now, but default, we will call this, as we don't have this defin=
+ed
+> > > > only if DEBUG=3D1 is set, right?
+> > > >
+> > > > =E2=AC=A2[acme@toolbox perf-tools-next]$ find tools/perf/ -type f |=
+ xargs grep NDEBUG
+> > > > tools/perf/util/mutex.c:#ifndef NDEBUG
+> > > > =E2=AC=A2[acme@toolbox perf-tools-next]$
+> > >
+> > > We can discuss this later, applied the series with just that zfree()
+> > > change to annotation_options__exit().
+> >
+> > I don't think it's just an issue in the perf annotate.  Maybe we can
+> > do the same for perf report and so on.
+>
+> Yes, I thought at some point of setting some flag, perf_exiting, and
+> then we would stop releasing memory, zfree comes to mind, but then we
+> would still be traversing data structures, taking locks, etc.
+>
+> And we can't just exit() as we may need to flush caches, etc.
+>
+> IIRC this specific case appeared in profiles, so was commented out.
+>
+> > Anyway we could define NDEBUG=3D1 for release builds from now on.
+>
+> Yes, we should do it.
 
-Thank you for the patch! Yet something to improve:
+I'll send out a patch. Just a heads up that this will also disable
+asserts for non-debug builds.
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on linus/master v6.3-rc4 next-20230330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Ian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Zhongjin/wchan-Fix-get_wchan-when-task-in-schedule/20230330-201555
-patch link:    https://lore.kernel.org/r/20230330121238.176534-1-chenzhongjin%40huawei.com
-patch subject: [PATCH] wchan: Fix get_wchan() when task in schedule
-config: mips-randconfig-r006-20230329 (https://download.01.org/0day-ci/archive/20230331/202303310019.uMAqiUA4-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/d5fd727a071ab3c2241f858e77c2ae5bb3cec6f3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chen-Zhongjin/wchan-Fix-get_wchan-when-task-in-schedule/20230330-201555
-        git checkout d5fd727a071ab3c2241f858e77c2ae5bb3cec6f3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303310019.uMAqiUA4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/sched/core.c:2060:23: error: no member named 'on_cpu' in 'struct task_struct'
-               !p->on_rq && !p->on_cpu)
-                             ~  ^
-   1 error generated.
-
-
-vim +2060 kernel/sched/core.c
-
-  2046	
-  2047	unsigned long get_wchan(struct task_struct *p)
-  2048	{
-  2049		unsigned long ip = 0;
-  2050		unsigned int state;
-  2051	
-  2052		if (!p || p == current)
-  2053			return 0;
-  2054	
-  2055		/* Only get wchan if task is blocked and we can keep it that way. */
-  2056		raw_spin_lock_irq(&p->pi_lock);
-  2057		state = READ_ONCE(p->__state);
-  2058		smp_rmb(); /* see try_to_wake_up() */
-  2059		if (state != TASK_RUNNING && state != TASK_WAKING &&
-> 2060		    !p->on_rq && !p->on_cpu)
-  2061			ip = __get_wchan(p);
-  2062		raw_spin_unlock_irq(&p->pi_lock);
-  2063	
-  2064		return ip;
-  2065	}
-  2066	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> - Arnaldo
