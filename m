@@ -1,122 +1,208 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3314C2EA
-	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 09:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C021C31;
+	Thu, 30 Mar 2023 10:02:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680167534; x=1711703534;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680170570; x=1711706570;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ro+17oDK7rnlBrMsXFzotd23YydUQ9691qY+Ptq0G7I=;
-  b=2lOg1V9L5Qx19sCL99rggfbk+LfSCwcrGah7K7VuWIlvjbbC/K+5yBl5
-   ef2lmTJoy7u5MwyQYPNuDTuFhv54UPe6hPEPOg4qeH9WQmSgW12045Jrk
-   J46vCrDPqFKHlVS8l/cAmX3ttv1LYNs8CAaVWRbEa/aHhdg58tuHQY3ul
-   1WmPmioNpfRgN100MILPQFFNYqxVVYlVUBD5/IUjceBc3xMbx4DbfHc60
-   6MVgIQSxp/HafHTKZH5/Fl1eAcYT4RdOo005OGLilkhPz0uj7v1hfrNtn
-   gLBV6uVRBC9QjuAjWzRodoBaEfSyUEUDnF7wGz3LujUvpKznUjgWslV8o
+  bh=UwiIvFDGOSeFTFp9xrmlY+lVix6S4aniU0xTa6dOGNY=;
+  b=cu2gpsIGel13NgcI/7JQ84chaopdJBBg4uRyebNeLZcngq6Xt4fRpaKj
+   DEOV5oDNN/LYeYHBHB/OzRPQoHq46BzuZD4GYLPK5WeQwStKdYq4KDdid
+   gQuui6vX8OfTaJIjZfdulAvR0TRSq8JdC+tk3YeGpJ7NDbHFEIyr2Rtde
+   +NTl0GF6p7TT3G98dyWwJxVl65avZeTgxuNfIbGOFE7PNLdPDNCbH4V9/
+   l3UNsU1uVyr0gVc6TliGd5M1ZXs0/cjxl/01YaRZ9rTAzfJO2kL40PftQ
+   0t86m0KCZsoePTKpN3OFe6RwdLhKQ5sciUWjaHt+Qezl8ohWftPxDqSmF
    Q==;
-X-IronPort-AV: E=Sophos;i="5.98,303,1673938800"; 
-   d="asc'?scan'208";a="218661930"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Mar 2023 02:12:10 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 30 Mar 2023 02:12:10 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 30 Mar 2023 02:12:07 -0700
-Date: Thu, 30 Mar 2023 10:11:53 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC: <linux-riscv@lists.infradead.org>, <conor@kernel.org>, Miguel Ojeda
-	<ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho
-	<wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
-	<gary@garyguo.net>, =?iso-8859-1?Q?Bj=F6rn?= Roy Baron
-	<bjorn3_gh@protonmail.com>, Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-Message-ID: <b5fba6b3-177c-4325-905a-8f9f633a592a@spud>
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <CANiq72=i9je2864iTvZBFnhVLhF7Cema7EPCcdWOJ3mr62SqDg@mail.gmail.com>
- <a6220e52-9934-422b-9b05-95705b8fd684@spud>
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="403775151"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="403775151"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:02:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="930673602"
+X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
+   d="scan'208";a="930673602"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2023 03:02:47 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1php7H-000KjA-0F;
+	Thu, 30 Mar 2023 10:02:47 +0000
+Date: Thu, 30 Mar 2023 18:02:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Manish Mandlik <mmandlik@google.com>, marcel@holtmann.org,
+	luiz.dentz@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	chromeos-bluetooth-upstreaming@chromium.org,
+	linux-bluetooth@vger.kernel.org,
+	Manish Mandlik <mmandlik@google.com>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 2/4] Bluetooth: Add vhci devcoredump support
+Message-ID: <202303301735.9Keuj1Mu-lkp@intel.com>
+References: <20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="3sMGWrE3WbodPTsC"
-Content-Disposition: inline
-In-Reply-To: <a6220e52-9934-422b-9b05-95705b8fd684@spud>
-
---3sMGWrE3WbodPTsC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
 
-On Thu, Mar 30, 2023 at 09:23:45AM +0100, Conor Dooley wrote:
-> On Tue, Mar 07, 2023 at 12:07:29PM +0100, Miguel Ojeda wrote:
+Hi Manish,
 
-> > By the way, like for the Arm patch set, if you end up doing a v2,
-> > could you please add the `BINDGEN_TARGET_*` in `rust/Makefile` (GCC
-> > builds are really experimental, but since they are there anyway, it is
-> > best to be consistent and add it).
+Thank you for the patch! Yet something to improve:
 
-Hmm, so I came across this commit while looking at that:
-https://github.com/Rust-for-Linux/linux/commit/cfc17fed52b9585e2f19e2381bfb7094561b8027a
-(rust: bindgen: ignore RISC-V extensions for GCC builds)
+[auto build test ERROR on bluetooth/master]
+[also build test ERROR on bluetooth-next/master linus/master v6.3-rc4 next-20230330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I don't want to add even more workarounds for this sort of thing,
-especially as in this case it is outside of arch/riscv.
-The extension stuff when mixing compilers is such a massive pain & given
-this one requires Rust it's even less likely to be tested when someone
-comes along and adds some additional extension support that appears in
--march :(
+url:    https://github.com/intel-lab-lkp/linux/commits/Manish-Mandlik/Bluetooth-Add-vhci-devcoredump-support/20230330-140719
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+patch link:    https://lore.kernel.org/r/20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc%40changeid
+patch subject: [PATCH v12 2/4] Bluetooth: Add vhci devcoredump support
+config: hexagon-randconfig-r045-20230329 (https://download.01.org/0day-ci/archive/20230330/202303301735.9Keuj1Mu-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a96b21e272af3d91f47b77b297f1289c867259b4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Manish-Mandlik/Bluetooth-Add-vhci-devcoredump-support/20230330-140719
+        git checkout a96b21e272af3d91f47b77b297f1289c867259b4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/ lib/
 
-I'd rather do this in the RISC-V Makefile so that it does not get
-forgotten.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303301735.9Keuj1Mu-lkp@intel.com/
 
-If my understanding of bindgen is correct, we don't actually need to be
-honest to it about what extensions the rest of the kernel is compiled
-with, only make sure that it is not called with arguments it does not
-understand?
+All errors (new ones prefixed by >>):
 
-| bindgen_c_flags_patsubst1 = $(patsubst -march=rv%_zicbom,-march=rv%,$(bindgen_c_flags_patsubst2))
+   In file included from drivers/bluetooth/hci_vhci.c:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/bluetooth/hci_vhci.c:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/bluetooth/hci_vhci.c:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/bluetooth/hci_vhci.c:334:9: error: no member named 'dump' in 'struct hci_dev'
+                   hdev->dump.timeout = msecs_to_jiffies(dump_data.timeout * 1000);
+                   ~~~~  ^
+   6 warnings and 1 error generated.
 
-This one is no longer needed as of 9a5c09dd9701 ("Merge patch series
-"Remove toolchain dependencies for Zicbom"").
 
-| bindgen_c_flags_patsubst  = $(patsubst -march=rv%_zicsr_zifencei,-march=rv%,$(bindgen_c_flags_patsubst1))
+vim +334 drivers/bluetooth/hci_vhci.c
 
-Oh and clang-17 is going to support both of these, and Nathan and I
-already spent a bunch of time fixing the fallout from that!
-It still functions correctly without having them passed, but I have
-heard requiring these may become the default at some point too.
-What's done here may end up needing to be dynamic, but that bridge can be
-crossed if/when we come to it.
+   310	
+   311	static ssize_t force_devcd_write(struct file *file, const char __user *user_buf,
+   312					 size_t count, loff_t *ppos)
+   313	{
+   314		struct vhci_data *data = file->private_data;
+   315		struct hci_dev *hdev = data->hdev;
+   316		struct sk_buff *skb = NULL;
+   317		struct devcoredump_test_data dump_data;
+   318		int ret;
+   319	
+   320		ret = simple_write_to_buffer(&dump_data, sizeof(dump_data), ppos,
+   321					     user_buf, count);
+   322		if (ret < count)
+   323			return ret;
+   324	
+   325		skb = alloc_skb(sizeof(dump_data.data), GFP_ATOMIC);
+   326		if (!skb)
+   327			return -ENOMEM;
+   328		skb_put_data(skb, &dump_data.data, sizeof(dump_data.data));
+   329	
+   330		hci_devcd_register(hdev, vhci_coredump, vhci_coredump_hdr, NULL);
+   331	
+   332		/* Force the devcoredump timeout */
+   333		if (dump_data.timeout)
+ > 334			hdev->dump.timeout = msecs_to_jiffies(dump_data.timeout * 1000);
+   335	
+   336		ret = hci_devcd_init(hdev, skb->len);
+   337		if (ret) {
+   338			BT_ERR("Failed to generate devcoredump");
+   339			kfree_skb(skb);
+   340			return ret;
+   341		}
+   342	
+   343		hci_devcd_append(hdev, skb);
+   344	
+   345		switch (dump_data.state) {
+   346		case HCI_DEVCOREDUMP_DONE:
+   347			hci_devcd_complete(hdev);
+   348			break;
+   349		case HCI_DEVCOREDUMP_ABORT:
+   350			hci_devcd_abort(hdev);
+   351			break;
+   352		case HCI_DEVCOREDUMP_TIMEOUT:
+   353			/* Do nothing */
+   354			break;
+   355		default:
+   356			return -EINVAL;
+   357		}
+   358	
+   359		return count;
+   360	}
+   361	
 
-What version of GCC do I need to replicate this? I can build tip-of-tree
-gcc if needs be.
-
-Cheers,
-Conor.
-
---3sMGWrE3WbodPTsC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCVSWQAKCRB4tDGHoIJi
-0qpsAQD93N6ZELaSuCLnFRRrVX6KqM1buvhJrxpnIPixxEBkYgEAtdX2bVK2gcK0
-Nb8PM/km+TWTR+ljihbHfIH7vEsl0AE=
-=NGwF
------END PGP SIGNATURE-----
-
---3sMGWrE3WbodPTsC--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
