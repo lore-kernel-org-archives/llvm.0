@@ -1,376 +1,124 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E74F29B0
-	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 16:50:22 +0000 (UTC)
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-3e0965f70ecso530941cf.0
-        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 09:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680195021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p/FCVT8pjnQlaEXCyw0RIWbqk31GFiyTZmtv3Hci8Xw=;
-        b=mdd3A89xFS/UXD4CEvKqBUpBNPb3hEulmratv1DXHQuP2vWGlwzaSih3DwD4MxsYS2
-         t0nUfVFsxPOpt63YihPpB+KmM5Excd9HxuHNvGwVFXmEzQWIAgcbQwa1YUals8RBvFMQ
-         +y8aDEioiEVrw1+OPSVovqC26tGXE6EfhYF3vJXeJ6ZB8fL8VT3ZZldxhtlyFa2JtJVA
-         jde4IM8125i1twncWTjmcXv9hppjqRgCe/D+KWSuZM0qDeZ/NCZfR0SF8xUxRGnD0Mqg
-         C2bsmPgZDBZVkf0JhnhNmgmS33OQr/wxzwFJMMT+V9km3t8P/lvNYSZiMtrMaqs4DMg2
-         JKLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680195021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p/FCVT8pjnQlaEXCyw0RIWbqk31GFiyTZmtv3Hci8Xw=;
-        b=XHQrPfO9pmpA7NZ+1AzXf+YohYFkrQWMJZF+TbvASkaUYbKcv/2+Yjgv++Xnqn0Ick
-         hWB13U9uqbO86e4yAZygXisNyCVOtcaur001ExBViseEZDTLD1ApaksjzSG2EusKssf2
-         RQV/etTNmJEIXyLkMmZOqPXBthAkft8NaETlxLsWg0e5kqfiffJQPFWZpvAs4KMLfjXe
-         dY28+aNyaXF5jztMDntx4cX0Rm5v8oZYfaEhRdirMN/qJOd1vIxDmRrV8bP8hJU7MEjI
-         i7XHZxmRg8By8DP7BbkcKlnymOObLXQlwKNR8sjV1KX7r0Qj77vuPogD9DbvAnGhb55f
-         0oTg==
-X-Gm-Message-State: AAQBX9fKmHvNhm2oQn/KNcOYXd9vYgLUeeBv3oIV2QPL5zvnpKPxjmLu
-	QxUb/yxUcGLjY9u9ARhGbQfSzcrDKh7ilyrKHk+kTQ==
-X-Google-Smtp-Source: AKy350Z+q9Wp92RQdt/uj6HK23zaL0HJ06v+xuSTF6LNTwJqTPOlkoVuP0jBPQ3C8A+yEFoTqzSyTVjseBRDU/TpWyI=
-X-Received: by 2002:a05:622a:1a86:b0:3bd:17d6:e04c with SMTP id
- s6-20020a05622a1a8600b003bd17d6e04cmr400268qtc.2.1680195020817; Thu, 30 Mar
- 2023 09:50:20 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13248BEE;
+	Thu, 30 Mar 2023 16:59:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680195549; x=1711731549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A3swVtIESmOhzKOGg7B046CX41e8Q+Fc20bjH7hHWTg=;
+  b=eYqXGv/Dped9AnWXR6eA6uEUUIEKwltBzG9rBt5l2Xdkb8CiL3rT6ogr
+   vNMfmmVwqS7e1yk5H2dCpjBSGuMLxx9N40Nj07uG4YP2+Gj9cnlvJ5dcL
+   7c7Lv1Sf8pjLSg26gIcFuiOHwRp8Thunwm7mEnTAYBmGxCA1FZwaOCfnS
+   Htyelz5vfSfm8ya2H8Os6sv8Eg8IQMukK5+1OAsx3XkisEpbts9CpjfZi
+   ljBVRxMsjsz9XyVJAl3X9AvgLI64If3xjBUJEM92PFiPMsAqGGKgq4xJE
+   7jdOccQSn14QiPC6JANMs+Xy6ytyiKvbnNmxyJEJ/uvhWPJaiHdYv8cXT
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="339952118"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="339952118"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 09:59:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="715078940"
+X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
+   d="scan'208";a="715078940"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2023 09:59:02 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1phvc5-000L1i-2e;
+	Thu, 30 Mar 2023 16:59:01 +0000
+Date: Fri, 31 Mar 2023 00:58:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chen Zhongjin <chenzhongjin@huawei.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	chenzhongjin@huawei.com, mingo@redhat.com, peterz@infradead.org,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	rmk+kernel@armlinux.org.uk, geert@linux-m68k.org,
+	keescook@chromium.org
+Subject: Re: [PATCH] wchan: Fix get_wchan() when task in schedule
+Message-ID: <202303310019.uMAqiUA4-lkp@intel.com>
+References: <20230330121238.176534-1-chenzhongjin@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230311065753.3012826-1-irogers@google.com> <20230311065753.3012826-10-irogers@google.com>
- <f8298af8-4d29-5cbd-cb5f-d33b3fdd641c@arm.com>
-In-Reply-To: <f8298af8-4d29-5cbd-cb5f-d33b3fdd641c@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 30 Mar 2023 09:50:06 -0700
-Message-ID: <CAP-5=fV3HPjXqHm1m-HB3rJU=emV16bUby1Xt-5x4+zjdPRnsg@mail.gmail.com>
-Subject: Re: [PATCH v1 09/13] perf symbol: Add abi::__cxa_demangle C++
- demangling support
-To: James Clark <james.clark@arm.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Stephane Eranian <eranian@google.com>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Quentin Monnet <quentin@isovalent.com>, 
-	Andres Freund <andres@anarazel.de>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Pavithra Gurushankar <gpavithrasha@gmail.com>, Yang Jihong <yangjihong1@huawei.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Leo Yan <leo.yan@linaro.org>, 
-	=?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330121238.176534-1-chenzhongjin@huawei.com>
 
-On Thu, Mar 30, 2023 at 7:08=E2=80=AFAM James Clark <james.clark@arm.com> w=
-rote:
->
->
->
-> On 11/03/2023 06:57, Ian Rogers wrote:
-> > Refactor C++ demangling out of symbol-elf into its own files similar
-> > to other languages. Add abi::__cxa_demangle support. As the other
-> > demanglers are not shippable with distributions, this brings back C++
-> > demangling in a common case. It isn't perfect as the support for
-> > optionally demangling arguments and modifiers isn't present.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/Makefile.config       | 29 +++++++++---------
-> >  tools/perf/util/Build            |  1 +
-> >  tools/perf/util/demangle-cxx.cpp | 50 ++++++++++++++++++++++++++++++++
-> >  tools/perf/util/demangle-cxx.h   | 16 ++++++++++
-> >  tools/perf/util/symbol-elf.c     | 37 +++++------------------
-> >  5 files changed, 88 insertions(+), 45 deletions(-)
-> >  create mode 100644 tools/perf/util/demangle-cxx.cpp
-> >  create mode 100644 tools/perf/util/demangle-cxx.h
-> >
-> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> > index 5756498248e0..fdeca45cf15f 100644
-> > --- a/tools/perf/Makefile.config
-> > +++ b/tools/perf/Makefile.config
-> > @@ -906,6 +906,7 @@ ifdef BUILD_NONDISTRO
-> >    endif
-> >
-> >    CFLAGS +=3D -DHAVE_LIBBFD_SUPPORT
-> > +  CXXFLAGS +=3D -DHAVE_LIBBFD_SUPPORT
-> >    ifeq ($(feature-libbfd-buildid), 1)
-> >      CFLAGS +=3D -DHAVE_LIBBFD_BUILDID_SUPPORT
-> >    else
-> > @@ -913,26 +914,24 @@ ifdef BUILD_NONDISTRO
-> >    endif
-> >  endif
-> >
-> > -ifdef NO_DEMANGLE
-> > -  CFLAGS +=3D -DNO_DEMANGLE
-> > -else
-> > +ifndef NO_DEMANGLE
-> > +  $(call feature_check,cxa-demangle)
-> > +  ifeq ($(feature-cxa-demangle), 1)
-> > +    EXTLIBS +=3D -lstdc++
->
-> Hi Ian,
->
-> I think cross compilation for arm on x86 isn't working after this change
-> (at least on Ubuntu).
->
-> Even with all of the arm64 libstdc++ stuff installed, you can only link
-> to it using g++, but the perf build tries to link to it using gcc. Not
-> sure it's some quirk with the search paths on Ubuntu or something else:
->
->   $ aarch64-linux-gnu-gcc -lstdc++
->
->    /usr/lib/gcc-cross/aarch64-linux-gnu/12/../../../../aarch64-linux-
-> gnu/bin/ld: cannot find -lstdc++: No such file or directory
->   collect2: error: ld returned 1 exit status
->
-> g++ gets further:
->
->   $ aarch64-linux-gnu-g++ -lstdc++
->
->   ...
->   (.text+0x20): undefined reference to `main'
-> collect2: error: ld returned 1 exit status
->
-> At the end of the perf build it looks like something similar is
-> happening (with all the non interesting bits deleted):
->
->    $ make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- -C tools/perf
-> NO_BPF_SKEL=3D1 V=3D1
->
->   aarch64-linux-gnu-gcc ... -o perf
->
-> /usr/lib/gcc-cross/aarch64-linux-gnu/12/../../../../aarch64-linux-gnu/bin=
-/ld:
-> cannot find -lstdc++: No such file or directory
->
-> If I build with NO_DEMANGLE=3D1 then the build works, but I think it woul=
-d
-> at be best to autodetect rather than have to do this. Or maybe even link
-> at the end with g++ if we're going to use libstdc++?
+Hi Chen,
 
-Hi James,
+Thank you for the patch! Yet something to improve:
 
-sorry for the problems you are having, I'll see if I can get a repo. I
-did add a feature test with this change in the same set:
-https://lore.kernel.org/lkml/20230311065753.3012826-9-irogers@google.com/
-So it should be feature testing and only enabling when
-HAVE_CXA_DEMANGLE_SUPPORT is present. Obviously something is up, so
-I'll have a think about it.
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on linus/master v6.3-rc4 next-20230330]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Ian
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Zhongjin/wchan-Fix-get_wchan-when-task-in-schedule/20230330-201555
+patch link:    https://lore.kernel.org/r/20230330121238.176534-1-chenzhongjin%40huawei.com
+patch subject: [PATCH] wchan: Fix get_wchan() when task in schedule
+config: mips-randconfig-r006-20230329 (https://download.01.org/0day-ci/archive/20230331/202303310019.uMAqiUA4-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/d5fd727a071ab3c2241f858e77c2ae5bb3cec6f3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chen-Zhongjin/wchan-Fix-get_wchan-when-task-in-schedule/20230330-201555
+        git checkout d5fd727a071ab3c2241f858e77c2ae5bb3cec6f3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash kernel/
 
-> Thanks
-> James
->
-> > +    CFLAGS +=3D -DHAVE_CXA_DEMANGLE_SUPPORT
-> > +    CXXFLAGS +=3D -DHAVE_CXA_DEMANGLE_SUPPORT
-> > +  endif
-> >    ifdef BUILD_NONDISTRO
-> >      ifeq ($(filter -liberty,$(EXTLIBS)),)
-> > -      ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
-> > +      $(call feature_check,cplus-demangle)
-> > +      ifeq ($(feature-cplus-demangle), 1)
-> >          EXTLIBS +=3D -liberty
-> > -      else
-> > -        $(call feature_check,cplus-demangle)
-> > -        ifeq ($(feature-cplus-demangle), 1)
-> > -          EXTLIBS +=3D -liberty
-> > -        endif
-> >        endif
-> >      endif
-> > -  endif
-> > -
-> > -  ifneq ($(filter -liberty,$(EXTLIBS)),)
-> > -    CFLAGS +=3D -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> > -  else
-> > -    CFLAGS +=3D -DNO_DEMANGLE
-> > +    ifneq ($(filter -liberty,$(EXTLIBS)),)
-> > +      CFLAGS +=3D -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> > +      CXXFLAGS +=3D -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> > +    endif
-> >    endif
-> >  endif
-> >
-> > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> > index 918b501f9bd8..8607575183a9 100644
-> > --- a/tools/perf/util/Build
-> > +++ b/tools/perf/util/Build
-> > @@ -211,6 +211,7 @@ perf-$(CONFIG_ZSTD) +=3D zstd.o
-> >
-> >  perf-$(CONFIG_LIBCAP) +=3D cap.o
-> >
-> > +perf-y +=3D demangle-cxx.o
-> >  perf-y +=3D demangle-ocaml.o
-> >  perf-y +=3D demangle-java.o
-> >  perf-y +=3D demangle-rust.o
-> > diff --git a/tools/perf/util/demangle-cxx.cpp b/tools/perf/util/demangl=
-e-cxx.cpp
-> > new file mode 100644
-> > index 000000000000..8708bcafd370
-> > --- /dev/null
-> > +++ b/tools/perf/util/demangle-cxx.cpp
-> > @@ -0,0 +1,50 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +#include "demangle-cxx.h"
-> > +#include <stdlib.h>
-> > +#include <string.h>
-> > +#include <linux/compiler.h>
-> > +
-> > +#ifdef HAVE_LIBBFD_SUPPORT
-> > +#define PACKAGE 'perf'
-> > +#include <bfd.h>
-> > +#endif
-> > +
-> > +#ifdef HAVE_CXA_DEMANGLE_SUPPORT
-> > +#include <cxxabi.h>
-> > +#endif
-> > +
-> > +#if defined(HAVE_LIBBFD_SUPPORT) || defined(HAVE_CPLUS_DEMANGLE_SUPPOR=
-T)
-> > +#ifndef DMGL_PARAMS
-> > +#define DMGL_PARAMS     (1 << 0)  /* Include function args */
-> > +#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
-> > +#endif
-> > +#endif
-> > +
-> > +/*
-> > + * Demangle C++ function signature
-> > + *
-> > + * Note: caller is responsible for freeing demangled string
-> > + */
-> > +extern "C"
-> > +char *cxx_demangle_sym(const char *str, bool params __maybe_unused,
-> > +                       bool modifiers __maybe_unused)
-> > +{
-> > +#ifdef HAVE_LIBBFD_SUPPORT
-> > +        int flags =3D (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_A=
-NSI : 0);
-> > +
-> > +        return bfd_demangle(NULL, str, flags);
-> > +#elif defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
-> > +        int flags =3D (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_A=
-NSI : 0);
-> > +
-> > +        return cplus_demangle(str, flags);
-> > +#elif defined(HAVE_CXA_DEMANGLE_SUPPORT)
-> > +        size_t len =3D strlen(str);
-> > +        char *output =3D (char*)malloc(len);
-> > +        int status;
-> > +
-> > +        output =3D abi::__cxa_demangle(str, output, &len, &status);
-> > +        return output;
-> > +#else
-> > +        return NULL;
-> > +#endif
-> > +}
-> > diff --git a/tools/perf/util/demangle-cxx.h b/tools/perf/util/demangle-=
-cxx.h
-> > new file mode 100644
-> > index 000000000000..26b5b66c0b4e
-> > --- /dev/null
-> > +++ b/tools/perf/util/demangle-cxx.h
-> > @@ -0,0 +1,16 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef __PERF_DEMANGLE_CXX
-> > +#define __PERF_DEMANGLE_CXX 1
-> > +
-> > +#ifdef __cplusplus
-> > +extern "C" {
-> > +#endif
-> > +
-> > +char *cxx_demangle_sym(const char *str, bool params, bool modifiers);
-> > +
-> > +#ifdef __cplusplus
-> > +}
-> > +#endif
-> > +
-> > +
-> > +#endif /* __PERF_DEMANGLE_CXX */
-> > diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.=
-c
-> > index 41882ae8452e..c0a2de42c51b 100644
-> > --- a/tools/perf/util/symbol-elf.c
-> > +++ b/tools/perf/util/symbol-elf.c
-> > @@ -12,6 +12,7 @@
-> >  #include "maps.h"
-> >  #include "symbol.h"
-> >  #include "symsrc.h"
-> > +#include "demangle-cxx.h"
-> >  #include "demangle-ocaml.h"
-> >  #include "demangle-java.h"
-> >  #include "demangle-rust.h"
-> > @@ -25,6 +26,11 @@
-> >  #include <symbol/kallsyms.h>
-> >  #include <internal/lib.h>
-> >
-> > +#ifdef HAVE_LIBBFD_SUPPORT
-> > +#define PACKAGE 'perf'
-> > +#include <bfd.h>
-> > +#endif
-> > +
-> >  #ifndef EM_AARCH64
-> >  #define EM_AARCH64   183  /* ARM 64 bit */
-> >  #endif
-> > @@ -45,34 +51,6 @@
-> >
-> >  typedef Elf64_Nhdr GElf_Nhdr;
-> >
-> > -#ifndef DMGL_PARAMS
-> > -#define DMGL_NO_OPTS     0              /* For readability... */
-> > -#define DMGL_PARAMS      (1 << 0)       /* Include function args */
-> > -#define DMGL_ANSI        (1 << 1)       /* Include const, volatile, et=
-c */
-> > -#endif
-> > -
-> > -#ifdef HAVE_LIBBFD_SUPPORT
-> > -#define PACKAGE 'perf'
-> > -#include <bfd.h>
-> > -#else
-> > -#ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
-> > -extern char *cplus_demangle(const char *, int);
-> > -
-> > -static inline char *bfd_demangle(void __maybe_unused *v, const char *c=
-, int i)
-> > -{
-> > -     return cplus_demangle(c, i);
-> > -}
-> > -#else
-> > -#ifdef NO_DEMANGLE
-> > -static inline char *bfd_demangle(void __maybe_unused *v,
-> > -                              const char __maybe_unused *c,
-> > -                              int __maybe_unused i)
-> > -{
-> > -     return NULL;
-> > -}
-> > -#endif
-> > -#endif
-> > -#endif
-> >
-> >  #ifndef HAVE_ELF_GETPHDRNUM_SUPPORT
-> >  static int elf_getphdrnum(Elf *elf, size_t *dst)
-> > @@ -295,7 +273,6 @@ static bool want_demangle(bool is_kernel_sym)
-> >
-> >  static char *demangle_sym(struct dso *dso, int kmodule, const char *el=
-f_name)
-> >  {
-> > -     int demangle_flags =3D verbose > 0 ? (DMGL_PARAMS | DMGL_ANSI) : =
-DMGL_NO_OPTS;
-> >       char *demangled =3D NULL;
-> >
-> >       /*
-> > @@ -306,7 +283,7 @@ static char *demangle_sym(struct dso *dso, int kmod=
-ule, const char *elf_name)
-> >       if (!want_demangle(dso->kernel || kmodule))
-> >           return demangled;
-> >
-> > -     demangled =3D bfd_demangle(NULL, elf_name, demangle_flags);
-> > +     demangled =3D cxx_demangle_sym(elf_name, verbose > 0, verbose > 0=
-);
-> >       if (demangled =3D=3D NULL) {
-> >               demangled =3D ocaml_demangle_sym(elf_name);
-> >               if (demangled =3D=3D NULL) {
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303310019.uMAqiUA4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/sched/core.c:2060:23: error: no member named 'on_cpu' in 'struct task_struct'
+               !p->on_rq && !p->on_cpu)
+                             ~  ^
+   1 error generated.
+
+
+vim +2060 kernel/sched/core.c
+
+  2046	
+  2047	unsigned long get_wchan(struct task_struct *p)
+  2048	{
+  2049		unsigned long ip = 0;
+  2050		unsigned int state;
+  2051	
+  2052		if (!p || p == current)
+  2053			return 0;
+  2054	
+  2055		/* Only get wchan if task is blocked and we can keep it that way. */
+  2056		raw_spin_lock_irq(&p->pi_lock);
+  2057		state = READ_ONCE(p->__state);
+  2058		smp_rmb(); /* see try_to_wake_up() */
+  2059		if (state != TASK_RUNNING && state != TASK_WAKING &&
+> 2060		    !p->on_rq && !p->on_cpu)
+  2061			ip = __get_wchan(p);
+  2062		raw_spin_unlock_irq(&p->pi_lock);
+  2063	
+  2064		return ip;
+  2065	}
+  2066	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
