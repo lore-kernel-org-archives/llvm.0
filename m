@@ -1,158 +1,158 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E2C8C02;
-	Thu, 30 Mar 2023 17:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680198007; x=1711734007;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sqgOwOsqqyepaLfZuCrGHGV3YpOJJxs0Oj6uM3Ok6mI=;
-  b=IdQ7+uNDhgwZNpmMpPopIOggggVhjXXciSJaXG6GR9Sx8HWD/Q8p5Fiz
-   UWreJ7kTPfPCy68peKpXBepBaO4CMDYFIrEfVr6Sf50E6eU5nMRVKtKEZ
-   o6ZKu7X7d4uo2eOnXQjI00xaR96UAFWvDJdxnerGgLPFsd1aAhFW9SWPh
-   KtgMGgkJDOPGnsZRv/zpwbNSMQHiZStHrCUxuCCJreaKnKNzgyWn2yALq
-   V3nnk0CCAnkP4qnLPj4I18jlHYTudTZqMrXEsSvfJV/2nndzY9dLyqwRf
-   vGIBbyD4SrYEGNG6/Cc3e0MUClxW0EGJMmglis7sJAQwA6hScLOXSD3F8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343736489"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="343736489"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 10:40:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="808739829"
-X-IronPort-AV: E=Sophos;i="5.98,305,1673942400"; 
-   d="scan'208";a="808739829"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 Mar 2023 10:40:03 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1phwFn-000L3Y-0c;
-	Thu, 30 Mar 2023 17:40:03 +0000
-Date: Fri, 31 Mar 2023 01:39:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Piyush Malgujar <pmalgujar@marvell.com>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, wsa@kernel.org, rric@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jannadurai@marvell.com, cchavva@marvell.com,
-	Suneel Garapati <sgarapati@marvell.com>,
-	Piyush Malgujar <pmalgujar@marvell.com>
-Subject: Re: [PATCH 2/3] i2c: thunderx: Add support for High speed mode
-Message-ID: <202303310153.yx2xXH8s-lkp@intel.com>
-References: <20230330133953.21074-3-pmalgujar@marvell.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8568C09;
+	Thu, 30 Mar 2023 18:24:09 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53C3C2F4;
+	Thu, 30 Mar 2023 11:24:47 -0700 (PDT)
+Received: from [10.57.54.254] (unknown [10.57.54.254])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D3F33F663;
+	Thu, 30 Mar 2023 11:24:01 -0700 (PDT)
+Message-ID: <5966bdf2-2a1a-2970-9f18-784b88f2f687@arm.com>
+Date: Thu, 30 Mar 2023 19:23:56 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330133953.21074-3-pmalgujar@marvell.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 12/14] iommu: Consolidate the default_domain setup to
+ one function
+Content-Language: en-GB
+To: Jason Gunthorpe <jgg@nvidia.com>, Baolu Lu <baolu.lu@linux.intel.com>
+Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+ Kevin Tian <kevin.tian@intel.com>, Nicolin Chen <nicolinc@nvidia.com>
+References: <12-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
+ <19197c52-139e-c3c5-2771-42323d38c045@linux.intel.com>
+ <ZCWsdjM/21IPvjKi@nvidia.com>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZCWsdjM/21IPvjKi@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Piyush,
+On 2023-03-30 16:36, Jason Gunthorpe wrote:
+> On Thu, Mar 30, 2023 at 08:37:16PM +0800, Baolu Lu wrote:
+>> On 2023/3/30 7:40, Jason Gunthorpe wrote:
+>>> +/**
+>>> + * iommu_setup_default_domain - Set the default_domain for the group
+>>> + * @group: Group to change
+>>> + * @target_type: Domain type to set as the default_domain
+>>> + *
+>>> + * Allocate a default domain and set it as the current domain on the group. If
+>>> + * the group already has a default domain it will be changed to the target_type.
+>>> + * When target_type is 0 the default domain is selected based on driver and
+>>> + * system preferences.
+>>> + */
+>>> +static int iommu_setup_default_domain(struct iommu_group *group,
+>>> +				      int target_type)
+>>> +{
+>>> +	struct group_device *gdev;
+>>> +	struct iommu_domain *dom;
+>>> +	struct bus_type *bus =
+>>> +		list_first_entry(&group->devices, struct group_device, list)
+>>> +			->dev->bus;
+>>> +	int ret;
+>>> +
+>>> +	lockdep_assert_held(&group->mutex);
+>>> +
+>>> +	target_type = iommu_get_default_domain_type(group, target_type);
+>>> +	if (target_type < 0)
+>>> +		return -EINVAL;
+>>> +
+>>> +	if (group->default_domain && group->default_domain->type == target_type)
+>>> +		return 0;
+>>> +
+>>> +	dom = __iommu_domain_alloc(bus, target_type);
+>>> +	if (!dom && target_type != IOMMU_DOMAIN_DMA) {
+>>> +		dom = __iommu_domain_alloc(bus, IOMMU_DOMAIN_DMA);
+>>> +		if (dom)
+>>> +			pr_warn("Failed to allocate default IOMMU domain of type %u for group %s - Falling back to IOMMU_DOMAIN_DMA",
+>>> +				target_type, group->name);
+>>> +	}
+>>
+>> The background of the code above is that some ARM IOMMU drivers only
+>> support DMA mapping domain and do not support identity domain.
+>> Therefore, during boot, if the allocation of identity domain fails, a
+>> DMA mapping domain is used instead.
+> 
+> Er, this is doing two things then because it also allows DMA_FQ to
+> degrade to just DMA..
 
-Thank you for the patch! Yet something to improve:
+Same thing really; generally the point is that any of the more "special" 
+default domain types set with the broad brush of Kconfig or command-line 
+can cleanly fall back to the basic type wherever it turns out that 
+there's a less-capable driver (or, eventually, IOMMU instance) present.
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v6.3-rc4 next-20230330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> I changed it like this:
+> 
+> 	dom = __iommu_domain_alloc(bus, req_type);
+> 	if (!dom && !target_type &&
+> 	    (req_type == IOMMU_DOMAIN_IDENTITY ||
+> 	     req_type == IOMMU_DOMAIN_DMA_FQ)) {
+> 		dom = __iommu_domain_alloc(bus, IOMMU_DOMAIN_DMA);
+> 
+> So the auto selection only happens if the target_type is not automatic.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Piyush-Malgujar/i2c-thunderx-Clock-divisor-logic-changes/20230330-214626
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/20230330133953.21074-3-pmalgujar%40marvell.com
-patch subject: [PATCH 2/3] i2c: thunderx: Add support for High speed mode
-config: riscv-randconfig-r042-20230329 (https://download.01.org/0day-ci/archive/20230331/202303310153.yx2xXH8s-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/c7866465c9142bf77cc1bc651704bfbfc9b0b411
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Piyush-Malgujar/i2c-thunderx-Clock-divisor-logic-changes/20230330-214626
-        git checkout c7866465c9142bf77cc1bc651704bfbfc9b0b411
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/i2c/busses/
+You mean "is automatic"? I'm missing how target_type and req_type are 
+related here, but the general principle should be that if we have 
+derived the type from iommu_def_domain_type, because we had nothing more 
+specific from either a sysfs request or iommu_get_def_domain_type(), 
+then a !IOMMU_DOMAIN_DMA failure can retry with IOMMU_DOMAIN_DMA. 
+Otherwise any failure should be final.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303310153.yx2xXH8s-lkp@intel.com/
+Strictly that's not quite what the current code does, since 
+iommu_alloc_default_domain() is losing the iommu_get_def_domain_type() 
+vs. iommu_def_domain_type distinction, but in the former case a driver's 
+.def_domain_type should definitely not be returning a type which that 
+driver doesn't support, thus allocation failure would only really 
+represent unexpected OOM conditions, where the retry would likely fail 
+as well, and the whole system is probably dying anyway. If we're 
+refactoring the whole lot, though, we may as well make it logically 
+consistent.
 
-All errors (new ones prefixed by >>):
+Thanks,
+Robin.
 
->> drivers/i2c/busses/i2c-octeon-core.c:74:5: error: call to undeclared function '__udelay'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                   __udelay(1);
-                                   ^
-   drivers/i2c/busses/i2c-octeon-core.c:74:5: note: did you mean '__delay'?
-   arch/riscv/include/asm/delay.h:18:13: note: '__delay' declared here
-   extern void __delay(unsigned long cycles);
-               ^
-   1 error generated.
-
-
-vim +/__udelay +74 drivers/i2c/busses/i2c-octeon-core.c
-
-    39	
-    40	/**
-    41	 * octeon_i2c_wait - wait for the IFLG to be set
-    42	 * @i2c: The struct octeon_i2c
-    43	 *
-    44	 * Returns 0 on success, otherwise a negative errno.
-    45	 */
-    46	static int octeon_i2c_wait(struct octeon_i2c *i2c)
-    47	{
-    48		long time_left;
-    49	
-    50		/*
-    51		 * Some chip revisions don't assert the irq in the interrupt
-    52		 * controller. So we must poll for the IFLG change.
-    53		 */
-    54		if (i2c->broken_irq_mode) {
-    55			u64 end = get_jiffies_64() + i2c->adap.timeout;
-    56	
-    57			while (!octeon_i2c_test_iflg(i2c) &&
-    58			       time_before64(get_jiffies_64(), end))
-    59				usleep_range(I2C_OCTEON_EVENT_WAIT / 2, I2C_OCTEON_EVENT_WAIT);
-    60	
-    61			return octeon_i2c_test_iflg(i2c) ? 0 : -ETIMEDOUT;
-    62		}
-    63	
-    64		if (IS_LS_FREQ(i2c->twsi_freq)) {
-    65			i2c->int_enable(i2c);
-    66			time_left = wait_event_timeout(i2c->queue,
-    67						       octeon_i2c_test_iflg(i2c),
-    68						       i2c->adap.timeout);
-    69			i2c->int_disable(i2c);
-    70		} else {
-    71			time_left = 1000; /* 1ms */
-    72			do {
-    73				if (time_left--)
-  > 74					__udelay(1);
-    75			} while (!octeon_i2c_test_iflg(i2c) && time_left);
-    76		}
-    77	
-    78		if (i2c->broken_irq_check && !time_left &&
-    79		    octeon_i2c_test_iflg(i2c)) {
-    80			dev_err(i2c->dev, "broken irq connection detected, switching to polling mode.\n");
-    81			i2c->broken_irq_mode = true;
-    82			return 0;
-    83		}
-    84	
-    85		if (!time_left)
-    86			return -ETIMEDOUT;
-    87	
-    88		return 0;
-    89	}
-    90	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>> However, this does not apply to use cases that change the default domain
+>> through sysfs. In such cases, it seems that we should directly return
+>> failure (-ENODEV) and tell the user that the iommu driver does not
+>> support identity domain.
+> 
+> And with the fix below it will return ENODEV rather than autoselect DMA.
+> 
+>>> +	/*
+>>> +	 * There are still some drivers which don't support default domains, so
+>>> +	 * we ignore the failure and leave group->default_domain NULL.
+>>> +	 *
+>>> +	 * We assume that the iommu driver starts up the device in
+>>> +	 * 'set_platform_dma_ops' mode if it does not support default domains.
+>>> +	 */
+>>> +	if (!dom) {
+>>> +		ret = 0;
+>>> +		goto out_set;
+>>> +	}
+>>
+>> Should we call set_platform_dma_ops here?
+> 
+> It could be done and should be harmless, but the driver is supposed to
+> start up in that mode so don't need to explicitly enter it when
+> plugging the device.. I kept things as-is
+> 
+>> The existing default domain
+>> (if exists) will be freed below. But the iommu driver doesn't know about
+>> this. It probably will create a UAF case?
+> 
+> This is a bug:
+> 
+> 	if (!dom) {
+> 		/* Once in default_domain mode we never leave */
+> 		if (group->default_domain)
+> 			return -ENODEV;
+> 
+> So default_domain is either NULL forever or set to something forever.
+> 
+> Jason
