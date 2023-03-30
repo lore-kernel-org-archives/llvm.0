@@ -1,208 +1,122 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C021C31;
-	Thu, 30 Mar 2023 10:02:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680170570; x=1711706570;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UwiIvFDGOSeFTFp9xrmlY+lVix6S4aniU0xTa6dOGNY=;
-  b=cu2gpsIGel13NgcI/7JQ84chaopdJBBg4uRyebNeLZcngq6Xt4fRpaKj
-   DEOV5oDNN/LYeYHBHB/OzRPQoHq46BzuZD4GYLPK5WeQwStKdYq4KDdid
-   gQuui6vX8OfTaJIjZfdulAvR0TRSq8JdC+tk3YeGpJ7NDbHFEIyr2Rtde
-   +NTl0GF6p7TT3G98dyWwJxVl65avZeTgxuNfIbGOFE7PNLdPDNCbH4V9/
-   l3UNsU1uVyr0gVc6TliGd5M1ZXs0/cjxl/01YaRZ9rTAzfJO2kL40PftQ
-   0t86m0KCZsoePTKpN3OFe6RwdLhKQ5sciUWjaHt+Qezl8ohWftPxDqSmF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="403775151"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="403775151"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 03:02:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10664"; a="930673602"
-X-IronPort-AV: E=Sophos;i="5.98,303,1673942400"; 
-   d="scan'208";a="930673602"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Mar 2023 03:02:47 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1php7H-000KjA-0F;
-	Thu, 30 Mar 2023 10:02:47 +0000
-Date: Thu, 30 Mar 2023 18:02:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manish Mandlik <mmandlik@google.com>, marcel@holtmann.org,
-	luiz.dentz@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	chromeos-bluetooth-upstreaming@chromium.org,
-	linux-bluetooth@vger.kernel.org,
-	Manish Mandlik <mmandlik@google.com>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 2/4] Bluetooth: Add vhci devcoredump support
-Message-ID: <202303301735.9Keuj1Mu-lkp@intel.com>
-References: <20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6296FC2F9
+	for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 11:24:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BABC4339B;
+	Thu, 30 Mar 2023 11:24:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680175456;
+	bh=xFvfkDhlD42bbhG0/jmteNSsxN7TAyt6/qTM1+Zrp4Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AhDEVRDKsT0plQhsp+zjgwto8GumsWvEMq4PGtlbWZaLJRcR+QMecqf7zrZk1cBer
+	 ArUUBYmcABR6qGwsvOmSh95C/sASEPyqvbQliNh30X1pXcaHWLQp3pwxgMbmMiclu4
+	 dLBVKFikm6lTMrJZ4tn4byNbaYMszWu2QJDqnKRviROJg7r6ZNmslle4HMgaNQjPKn
+	 D6n7yh9NCwZD4XR2hKt9qvKGVDYKOL559qYQTM5Ceyh2+2Tp99TnTIFl5H2CNdY4Gj
+	 tOfWSSA4GmtCF95FoUxQaCWW7s7LAa0afiC1a0zXKK5YVsCPx4oBsUeywZkR/tNPXx
+	 uWRZLDCCOLX9w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id BBEE74052D; Thu, 30 Mar 2023 08:24:13 -0300 (-03)
+Date: Thu, 30 Mar 2023 08:24:13 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, James Clark <james.clark@arm.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	German Gomez <german.gomez@arm.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	Andres Freund <andres@anarazel.de>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v1 1/6] perf annotate: Delete session for debug builds
+Message-ID: <ZCVxXTc0kyRAQ+XA@kernel.org>
+References: <20230328235543.1082207-1-irogers@google.com>
+ <20230328235543.1082207-2-irogers@google.com>
+ <ZCQ4nERbit/f6yhh@kernel.org>
+ <ZCQ6kqhODsxSCXdP@kernel.org>
+ <CAM9d7cjSEx_=UTMpDHMwGb=5H6Yf8UdHTMt1xO=4CVToh60oSA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc@changeid>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7cjSEx_=UTMpDHMwGb=5H6Yf8UdHTMt1xO=4CVToh60oSA@mail.gmail.com>
+X-Url: http://acmel.wordpress.com
 
-Hi Manish,
+Em Wed, Mar 29, 2023 at 05:13:17PM -0700, Namhyung Kim escreveu:
+> On Wed, Mar 29, 2023 at 6:18 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Wed, Mar 29, 2023 at 10:09:48AM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > Em Tue, Mar 28, 2023 at 04:55:38PM -0700, Ian Rogers escreveu:
+> > > > Use the debug build indicator as the guide to free the session. This
+> > > > implements a behavior described in a comment, which is consequentially
+> > > > removed.
+> > > >
+> > > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > > ---
+> > > >  tools/perf/builtin-annotate.c | 16 ++++++----------
+> > > >  1 file changed, 6 insertions(+), 10 deletions(-)
+> > > >
+> > > > diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+> > > > index 4750fac7bf93..98d1b6379230 100644
+> > > > --- a/tools/perf/builtin-annotate.c
+> > > > +++ b/tools/perf/builtin-annotate.c
+> > > > @@ -692,16 +692,12 @@ int cmd_annotate(int argc, const char **argv)
+> > > >
+> > > >  out_delete:
+> > > >     /*
+> > > > -    * Speed up the exit process, for large files this can
+> > > > -    * take quite a while.
+> > > > -    *
+> > > > -    * XXX Enable this when using valgrind or if we ever
+> > > > -    * librarize this command.
+> > > > -    *
+> > > > -    * Also experiment with obstacks to see how much speed
+> > > > -    * up we'll get here.
+> > > > -    *
+> > > > -    * perf_session__delete(session);
+> > > > +    * Speed up the exit process by only deleting for debug builds. For
+> > > > +    * large files this can save time.
+> > > >      */
+> > > > +#ifndef NDEBUG
+> > > > +   perf_session__delete(annotate.session);
+> > > > +#endif
+> > >
+> > > So now, but default, we will call this, as we don't have this defined
+> > > only if DEBUG=1 is set, right?
+> > >
+> > > ⬢[acme@toolbox perf-tools-next]$ find tools/perf/ -type f | xargs grep NDEBUG
+> > > tools/perf/util/mutex.c:#ifndef NDEBUG
+> > > ⬢[acme@toolbox perf-tools-next]$
+> >
+> > We can discuss this later, applied the series with just that zfree()
+> > change to annotation_options__exit().
+> 
+> I don't think it's just an issue in the perf annotate.  Maybe we can
+> do the same for perf report and so on.
 
-Thank you for the patch! Yet something to improve:
+Yes, I thought at some point of setting some flag, perf_exiting, and
+then we would stop releasing memory, zfree comes to mind, but then we
+would still be traversing data structures, taking locks, etc.
 
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master linus/master v6.3-rc4 next-20230330]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+And we can't just exit() as we may need to flush caches, etc.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Manish-Mandlik/Bluetooth-Add-vhci-devcoredump-support/20230330-140719
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20230329230447.v12.2.Ief9a81a3643d2291f6db2b3695c3a6e0159467dc%40changeid
-patch subject: [PATCH v12 2/4] Bluetooth: Add vhci devcoredump support
-config: hexagon-randconfig-r045-20230329 (https://download.01.org/0day-ci/archive/20230330/202303301735.9Keuj1Mu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a96b21e272af3d91f47b77b297f1289c867259b4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Manish-Mandlik/Bluetooth-Add-vhci-devcoredump-support/20230330-140719
-        git checkout a96b21e272af3d91f47b77b297f1289c867259b4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/ lib/
+IIRC this specific case appeared in profiles, so was commented out.
+ 
+> Anyway we could define NDEBUG=1 for release builds from now on.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303301735.9Keuj1Mu-lkp@intel.com/
+Yes, we should do it.
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/bluetooth/hci_vhci.c:22:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/bluetooth/hci_vhci.c:22:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/bluetooth/hci_vhci.c:22:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/bluetooth/hci_vhci.c:334:9: error: no member named 'dump' in 'struct hci_dev'
-                   hdev->dump.timeout = msecs_to_jiffies(dump_data.timeout * 1000);
-                   ~~~~  ^
-   6 warnings and 1 error generated.
-
-
-vim +334 drivers/bluetooth/hci_vhci.c
-
-   310	
-   311	static ssize_t force_devcd_write(struct file *file, const char __user *user_buf,
-   312					 size_t count, loff_t *ppos)
-   313	{
-   314		struct vhci_data *data = file->private_data;
-   315		struct hci_dev *hdev = data->hdev;
-   316		struct sk_buff *skb = NULL;
-   317		struct devcoredump_test_data dump_data;
-   318		int ret;
-   319	
-   320		ret = simple_write_to_buffer(&dump_data, sizeof(dump_data), ppos,
-   321					     user_buf, count);
-   322		if (ret < count)
-   323			return ret;
-   324	
-   325		skb = alloc_skb(sizeof(dump_data.data), GFP_ATOMIC);
-   326		if (!skb)
-   327			return -ENOMEM;
-   328		skb_put_data(skb, &dump_data.data, sizeof(dump_data.data));
-   329	
-   330		hci_devcd_register(hdev, vhci_coredump, vhci_coredump_hdr, NULL);
-   331	
-   332		/* Force the devcoredump timeout */
-   333		if (dump_data.timeout)
- > 334			hdev->dump.timeout = msecs_to_jiffies(dump_data.timeout * 1000);
-   335	
-   336		ret = hci_devcd_init(hdev, skb->len);
-   337		if (ret) {
-   338			BT_ERR("Failed to generate devcoredump");
-   339			kfree_skb(skb);
-   340			return ret;
-   341		}
-   342	
-   343		hci_devcd_append(hdev, skb);
-   344	
-   345		switch (dump_data.state) {
-   346		case HCI_DEVCOREDUMP_DONE:
-   347			hci_devcd_complete(hdev);
-   348			break;
-   349		case HCI_DEVCOREDUMP_ABORT:
-   350			hci_devcd_abort(hdev);
-   351			break;
-   352		case HCI_DEVCOREDUMP_TIMEOUT:
-   353			/* Do nothing */
-   354			break;
-   355		default:
-   356			return -EINVAL;
-   357		}
-   358	
-   359		return count;
-   360	}
-   361	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+- Arnaldo
