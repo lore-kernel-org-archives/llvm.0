@@ -1,179 +1,77 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4032F37
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 13:31:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680269501;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=v9EvhR8ZNyQ392NhX8eX7QdTyxbLtt8IhJXzH3lSLlQ=;
-	b=XjVPCOslW8hednEQBLk5G/2K567spZk6f1oixo6iJLbWjcJEwoOjI+rOZosffi2nWfTdJT
-	b3bfHR6+mvIYtPO7R8tdcfJTqR8iWBfYWtLYNA3PbOMnQJU3T3krb6O15NXkqggOrshrO3
-	h++jcKS+nMYtQGkAIhIoXejd12qe/J4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149-AexpbbX_N5OTOZiXFDLBzQ-1; Fri, 31 Mar 2023 09:31:39 -0400
-X-MC-Unique: AexpbbX_N5OTOZiXFDLBzQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7EBDD88B776
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 13:31:39 +0000 (UTC)
-Received: from [172.64.0.121] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 6D262492C3E;
-	Fri, 31 Mar 2023 13:31:39 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 381): Test report for master
- (6.3.0-rc4, mainline.kernel.org-clang, b2bc47e9)
-Date: Fri, 31 Mar 2023 13:31:39 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B60F2F37
+	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 13:39:47 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id b18so27432267ybp.1
+        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 06:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680269986;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p8HyCR6qUgL2YL9MIarBVNh91rgqxInYdUkkRv7lzCA=;
+        b=nRQVT9ShE0pExTB54GDQVPUoE5xeg0yZISdISWCkiaC/z9HRj31sfeE6I5mTha44sY
+         FqPQHA8gp7feZ2Ap/WXLKcka4qprU9xOlYAwx/PsdGZrVMjzLZqi2emdau+nG0Hbv0C3
+         3/kWmtGI/xWfhv3DXsK6HXxEZX3kBUw71sF2+RvpC1SgGXf/T9LO5ytk9j8HSurCFxee
+         8IykdnR/8W6eifFOBjLc/iLlqTguUMNQnQ6jcxlYoujxYzVJa5RTq3wnT+T4zjX/HXub
+         ROpXfaWDFJ+FMzmoEHNv30WTzud50vzxa8ncXd6vRq1MBzStrtfx2oA3T2JFefm8Cyoo
+         i9+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680269986;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p8HyCR6qUgL2YL9MIarBVNh91rgqxInYdUkkRv7lzCA=;
+        b=V0cEBeR4Mdztqdvw7xwIUAqTTdl03uuLgT47oP5cPU603uwzUWtgHGCNOF8EicUZ/w
+         8KhomkFr6QKEZBt7KJsp0lTJcFTuOCsPsGh3XM0IsNejKdHKjNwxdBvZJXN35a3i1vQP
+         /UsBRZET//YwgEymV0kZRA86FCP6ToQ+xvCgSNzALXHTLCBb6Y7wMQe8cT8cEmrhjNZq
+         ZEX8fhta5WO7mfY6wOpLYvSyrXzftPl40FzPb4/eD5BjVY4QAAmmhz+tgIm7tNb/miG7
+         e/wLekmxWItRoKPTeG6midutFdQj6On1XSd2TrWbBoGShZOTNw0N1/TSisGzghqzbcPn
+         OWHQ==
+X-Gm-Message-State: AAQBX9eib1eI84t/xosDkTJzeHSmKveUgD3AhitWogz5UCPw55jP5b2k
+	WWHyOW3Z0s9dlcuvE2VgmOJ6SJOzSGSJF6URCfo=
+X-Google-Smtp-Source: AKy350apgoEPMUQxWR00klwXYYscnIAK0OZLPQx0ko6VrOlHD0pJFBErJN002gXBJZ2Hpee+HGT0ekYIUQKFrIQIx4Q=
+X-Received: by 2002:a25:2f84:0:b0:b6e:d788:eba0 with SMTP id
+ v126-20020a252f84000000b00b6ed788eba0mr17842248ybv.11.1680269986074; Fri, 31
+ Mar 2023 06:39:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <58705.123033109313901083@us-mta-149.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20230318041555.4192172-1-davidgow@google.com>
+In-Reply-To: <20230318041555.4192172-1-davidgow@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 31 Mar 2023 15:39:35 +0200
+Message-ID: <CANiq72==YbpCJPLOkCBGRkTYCOokLrEUNASn_JUpY2Ndw1sHfw@mail.gmail.com>
+Subject: Re: [PATCH] arch:um: Only disable SSE on clang to work around old GCC bugs
+To: David Gow <davidgow@google.com>
+Cc: Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, SeongJae Park <sj@kernel.org>, 
+	linux-um@lists.infradead.org, x86@kernel.org, llvm@lists.linux.dev, 
+	rust-for-linux@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Sat, Mar 18, 2023 at 5:16=E2=80=AFAM David Gow <davidgow@google.com> wro=
+te:
+>
+> Nevertheless, only disable SSE on clang setups, as that's a simple way
+> of working around everyone's bugs.
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Sounds good to me. If GCC >=3D 11 has fixed it, should we instead test
+for GCC < 11, i.e. it could help catching future new regressions like
+the linked GCC bug, if I understand correctly, right? Of course, that
+could be done for the next cycle, since this one minimizes the
+original change w.r.t. v6.2.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+By the way, missing space on the title (`arch:um`).
 
-Kernel information:
-    Commit message: Merge tag 'net-6.3-rc5' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/83022
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] RIP: 0010:cooling_device_stats_setup+0xfb/0x110
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2181987
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1612
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2137631
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-                 ppc64le - kdump - file-load
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Miguel
