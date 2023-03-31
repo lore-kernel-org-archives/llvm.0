@@ -1,230 +1,91 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B70C10E7;
-	Fri, 31 Mar 2023 00:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680222628; x=1711758628;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=291iR8fs89AY3P1z/Ojn7EHb26WDXguxsSvangQrPS4=;
-  b=ZrWcomVeImflRNd7wbezdICfLICWxVjDmc9LItUAoOaLkRlOYeJBYQO4
-   JIZvGjWXjty+5HWKcV2hwDKSXadEWYt4bacTotDS/ivTYEnov+/VJJZMi
-   JUqvmBz0Ftt7jti7amwBLf+d1PtcltxiArdRna3Rsft7CNEdxwCTbSrRY
-   ZPNV8pb4CjAY1+rqd2pHlf4zdRH/X3NKmM70zs5P2KLSqTRnPUNxwJN9n
-   xErJ5HcYH1cxHliwLWXZ8O/wp8Z+7BuFa/TNMPkSPsbLMofd1NpUH28EB
-   3QbDCWRLrzhi85KmIu5Ymycz/b+56qb/QBTM4zrCH2lmiIXXD7iUezjjB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="329844018"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="329844018"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 17:30:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="715219715"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="715219715"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2023 17:30:22 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pi2em-000LLc-2j;
-	Fri, 31 Mar 2023 00:30:16 +0000
-Date: Fri, 31 Mar 2023 08:29:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-	arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-	Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v6 11/12] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-Message-ID: <202303310829.6uVozWbB-lkp@intel.com>
-References: <20230328021912.177301-12-ychuang570808@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51ED110E7
+	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 00:49:06 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5417f156cb9so205494667b3.8
+        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 17:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680223745;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=84rSN6Ht+1euIPSdyCBZjcpP/EwF+4yl0XpMXRK6K0o=;
+        b=eO6h9idthBFhW8xHGMhl0AqUg17HLN8tPAnocKihroIpMCiEdvoP7m53EnwCd6qkil
+         /VdUBw0S0LW3Up3c3CksxNzX9QdrmWn5A/gx2Adl7JL69alaBGvIwktXbBtn+tlZaHev
+         oUy5D1Gaf4NfMEdt82MYjcTfZ3NUHiWVRdTh5GEFUlI9ydHHt274KcVg0NEA89ls4xrd
+         /LrPI9XkMqokZ5VHiOj26fuf1KeoAJ3YQv6EeoCS4ekdkhbO2IpQxbze4xZEdWbLzOnt
+         DzcNk6+gM1UK5vqx9L4VxEdm72G4ESKxu94dtHGldRzIQTchr1HDm9YkgJzK6juTIG2f
+         M51g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680223745;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=84rSN6Ht+1euIPSdyCBZjcpP/EwF+4yl0XpMXRK6K0o=;
+        b=xoLscCBQaWFTIoSz6YbkvSDlto+6cMxKvBBJagF3HLtk817eBHNsIGjY6mNXokI+Ap
+         jJzAmBo41tf9+Iq12ysu8CCdVOi00t4xQiZAkeCLvL6w4KB03HZA79tMMefzbcRRAznc
+         A1X7Flgr2TLavt6/ySpuxOpoDg8F1QF+9JnevRfMlfIG/w7eQ22dkJJ05yCDUwrzGWCt
+         dBZX9pTjAl031nwZunlMVFEN6ZfPmg1YqOem3o2xjtzBfDYBGdOmqwowtSwxriX7Vszl
+         txa/cbdARFrtxWxQsFRgzYpLP91ShXIzXk6RQNUz4S9vLjdEqRAWVBPcPkPBAWISryXq
+         ZAzw==
+X-Gm-Message-State: AAQBX9fD3NZ7KUc3ilqyLUv6eiKYj1M2VjeNLxFUEWqRP6UXMD2rNdfF
+	XSv1k1gBh+5L0q4RpBW2TXp3y3Pmh1Mg
+X-Google-Smtp-Source: AKy350YTjGn40/rJlWyDU+AGPuezI4eGj7Nq1IkN4RT41dxlR0XFQQOcf00oGq/k4FZ24S9I75hMIlV8MuF2
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:11ea:eb75:e48c:2c04])
+ (user=irogers job=sendgmr) by 2002:a05:6902:154e:b0:b77:d2db:5f8f with SMTP
+ id r14-20020a056902154e00b00b77d2db5f8fmr16389779ybu.12.1680223745258; Thu,
+ 30 Mar 2023 17:49:05 -0700 (PDT)
+Date: Thu, 30 Mar 2023 17:48:40 -0700
+Message-Id: <20230331004844.1592789-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328021912.177301-12-ychuang570808@gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v1 0/4] Support for llvm-addr2line
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jacky,
+The addr2line command is started and then addresses piped to it. In
+order to determine the end of a addr2lines output a ',' it output with
+an expectation to get '??\n??:0\n' as a reply. llvm-addr2line differs
+in that ',' generates a reply of ','.
 
-Thank you for the patch! Perhaps something to improve:
+The approach detects and then caches the addr2line style. When records
+are read the sentinel is detected appropriately.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on clk/clk-next linus/master]
-[cannot apply to pza/reset/next pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Comparing the output there is a little more inline data on my machine
+with llvm-addr2line:
+$ sudo perf record -a -g sleep 1
+$ sudo perf report --addr2line=addr2line > a.txt
+$ sudo perf report --addr2line=llvm-addr2line > b.txt
+$ wc -l a.txt b.txt
+  12386 a.txt
+  12477 b.txt
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230328-102245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230328021912.177301-12-ychuang570808%40gmail.com
-patch subject: [PATCH v6 11/12] tty: serial: Add Nuvoton ma35d1 serial driver support
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230331/202303310829.6uVozWbB-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/380d83a62e873855024ca4c660865c654a62748a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230328-102245
-        git checkout 380d83a62e873855024ca4c660865c654a62748a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/tty/serial/
+Some other small changes, switching to the api/io code to avoid file
+streams wrapping the command's stdin/stdout. Ignore SIGPIPE for when
+addr2line exits and writes fail.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303310829.6uVozWbB-lkp@intel.com/
+Ian Rogers (4):
+  tools api: Add io__getline
+  perf srcline: Simplify addr2line subprocess
+  perf srcline: Support for llvm-addr2line
+  perf srcline: Avoid addr2line SIGPIPEs
 
-All warnings (new ones prefixed by >>):
-
->> drivers/tty/serial/ma35d1_serial.c:672:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (pdev->dev.of_node) {
-               ^~~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:679:27: note: uninitialized use occurs here
-           up = &ma35d1serial_ports[ret];
-                                    ^~~
-   drivers/tty/serial/ma35d1_serial.c:672:2: note: remove the 'if' if its condition is always true
-           if (pdev->dev.of_node) {
-           ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:668:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
->> drivers/tty/serial/ma35d1_serial.c:730:6: warning: variable 'i' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (dev->dev.of_node)
-               ^~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:732:6: note: uninitialized use occurs here
-           if (i < 0) {
-               ^
-   drivers/tty/serial/ma35d1_serial.c:730:2: note: remove the 'if' if its condition is always true
-           if (dev->dev.of_node)
-           ^~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:727:7: note: initialize the variable 'i' to silence this warning
-           int i;
-                ^
-                 = 0
-   drivers/tty/serial/ma35d1_serial.c:750:6: warning: variable 'i' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (dev->dev.of_node)
-               ^~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:752:6: note: uninitialized use occurs here
-           if (i < 0) {
-               ^
-   drivers/tty/serial/ma35d1_serial.c:750:2: note: remove the 'if' if its condition is always true
-           if (dev->dev.of_node)
-           ^~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/ma35d1_serial.c:747:7: note: initialize the variable 'i' to silence this warning
-           int i;
-                ^
-                 = 0
-   3 warnings generated.
-
-
-vim +672 drivers/tty/serial/ma35d1_serial.c
-
-   658	
-   659	/*
-   660	 * Register a set of serial devices attached to a platform device.
-   661	 * The list is terminated with a zero flags entry, which means we expect
-   662	 * all entries to have at least UPF_BOOT_AUTOCONF set.
-   663	 */
-   664	static int ma35d1serial_probe(struct platform_device *pdev)
-   665	{
-   666		struct resource *res_mem;
-   667		struct uart_ma35d1_port *up;
-   668		int ret;
-   669		struct clk *clk;
-   670		int err;
-   671	
- > 672		if (pdev->dev.of_node) {
-   673			ret = of_alias_get_id(pdev->dev.of_node, "serial");
-   674			if (ret < 0) {
-   675				dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
-   676				return ret;
-   677			}
-   678		}
-   679		up = &ma35d1serial_ports[ret];
-   680		up->port.line = ret;
-   681		res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-   682		if (!res_mem)
-   683			return -ENODEV;
-   684	
-   685		up->port.iobase = res_mem->start;
-   686		up->port.membase = ioremap(up->port.iobase, UART_REG_SIZE);
-   687		up->port.ops = &ma35d1serial_ops;
-   688	
-   689		spin_lock_init(&up->port.lock);
-   690	
-   691		clk = of_clk_get(pdev->dev.of_node, 0);
-   692		if (IS_ERR(clk)) {
-   693			err = PTR_ERR(clk);
-   694			dev_err(&pdev->dev, "failed to get core clk: %d\n", err);
-   695			return -ENOENT;
-   696		}
-   697		err = clk_prepare_enable(clk);
-   698		if (err)
-   699			return -ENOENT;
-   700	
-   701		if (up->port.line != 0)
-   702			up->port.uartclk = clk_get_rate(clk);
-   703		up->port.irq = platform_get_irq(pdev, 0);
-   704		up->port.dev = &pdev->dev;
-   705		up->port.flags = UPF_BOOT_AUTOCONF;
-   706		ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
-   707		platform_set_drvdata(pdev, up);
-   708		return 0;
-   709	}
-   710	
-   711	/*
-   712	 * Remove serial ports registered against a platform device.
-   713	 */
-   714	static int ma35d1serial_remove(struct platform_device *dev)
-   715	{
-   716		struct uart_port *port = platform_get_drvdata(dev);
-   717	
-   718		if (port) {
-   719			uart_remove_one_port(&ma35d1serial_reg, port);
-   720			free_irq(port->irq, port);
-   721		}
-   722		return 0;
-   723	}
-   724	
-   725	static int ma35d1serial_suspend(struct platform_device *dev, pm_message_t state)
-   726	{
-   727		int i;
-   728		struct uart_ma35d1_port *up;
-   729	
- > 730		if (dev->dev.of_node)
-   731			i = of_alias_get_id(dev->dev.of_node, "serial");
-   732		if (i < 0) {
-   733			dev_err(&dev->dev, "failed to get alias/pdev id, errno %d\n", i);
-   734			return i;
-   735		}
-   736		up = &ma35d1serial_ports[i];
-   737		if (i == 0) {
-   738			up->console_baud_rate = serial_in(up, UART_REG_BAUD);
-   739			up->console_line = serial_in(up, UART_REG_LCR);
-   740			up->console_int = serial_in(up, UART_REG_IER);
-   741		}
-   742		return 0;
-   743	}
-   744	
+ tools/lib/api/io.h        |  40 ++++++++++
+ tools/perf/tests/api-io.c |  36 +++++++++
+ tools/perf/util/srcline.c | 162 +++++++++++++++++++++++---------------
+ 3 files changed, 174 insertions(+), 64 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0.348.gf938b09366-goog
+
