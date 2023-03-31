@@ -1,48 +1,30 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAB2256F;
-	Fri, 31 Mar 2023 12:15:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680264941; x=1711800941;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MDqfavBp0xhE9zr6CTvKsp9hMprvzZOnmnyhz/PHj+8=;
-  b=NF96LxiTprFr47GgBYtZ575vx1hQXsurzRZ3fCfjPE1P42OnoDz1jH2h
-   qASbbL1/8YXSlxupxjol2oQUFnbO9q/DRrrMLW5ixTImkLSDSt1LmA3sf
-   GHHZoO+vJnLkmhdD79paA9/0D/ZDsPzWY1fMldzAf1Ewh0/5JP/8nhi6Y
-   d6Zu9SDk2e57gz9AbbwfpaLtaAdsIHXB66nAAcTS4e6P2I9lV0Iuc075u
-   xj9UV5xwwK0ciJ8Ab4YXtmjl3C1KkbSqUu6CQoX/aGTEShs5fvMYWs2Ks
-   4mS1QkgZ17yz3ArDuwUCgWgD/emUvHaz4OWzndHLKhAbwRDVncf4XaEPl
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="404155579"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="404155579"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 05:15:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="809018313"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="809018313"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2023 05:15:36 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1piDfL-000LlO-1i;
-	Fri, 31 Mar 2023 12:15:35 +0000
-Date: Fri, 31 Mar 2023 20:14:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, abelvesa@kernel.org,
-	abel.vesa@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-	festevam@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-imx@nxp.com,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 4/6] clk: imx: fracn-gppll: support integer pll
-Message-ID: <202303312017.I9c9cLVj-lkp@intel.com>
-References: <20230331064629.2475338-5-peng.fan@oss.nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D882256F
+	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 12:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 006BAC433EF;
+	Fri, 31 Mar 2023 12:21:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680265288;
+	bh=qjxhFHgRDKgQd0YZIE0gdI9Qd2axFPOwPWgUbDSQUaA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mjfOzE6l1QTG4/mErNaWoZBjJ1alTHmmqTbWlj+5N5HCCooR637lHTBfQHwEeFt4D
+	 vFGQhHaBZrNjWvp9vTdQxKhhu16ybMT0JOUWFoGHJk1kKZmP22DF5JExOyCQeQ2ZWh
+	 ldx8cQqIlk+32qX7cItCeZ5ghpVN7/iAcL2qDhOsdcM+ZYc38/l0Q3wSmB8HV5tz9C
+	 OYd8gnolfbdxFl3IV6GfRZt4/B+Sp8MiHkc9Hdul58p9biodYvaZyu9vkUWISrCGU5
+	 5ORZvdqa6C79BB4N8yxxXwXXhSlgZSmWqEGCNyNGvEDrGldPKlR4WUiD38iNWhwqEg
+	 7zMd2cwPOsfFA==
+Date: Fri, 31 Mar 2023 17:51:24 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Tom Rix <trix@redhat.com>
+Cc: ldewangan@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
+	nathan@kernel.org, ndesaulniers@google.com,
+	dmaengine@vger.kernel.org, linux-tegra@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] dmaengine: tegra-apb: remove unused tdma_read function
+Message-ID: <ZCbQRE9MS1Jg43uP@matsya>
+References: <20230322121001.2569909-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,125 +33,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230331064629.2475338-5-peng.fan@oss.nxp.com>
+In-Reply-To: <20230322121001.2569909-1-trix@redhat.com>
 
-Hi Peng,
+On 22-03-23, 08:10, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/dma/tegra20-apb-dma.c:236:19: error: unused function
+>   'tdma_read' [-Werror,-Wunused-function]
+> static inline u32 tdma_read(struct tegra_dma *tdma, u32 reg)
+>                   ^
+> This function is not used so remove it.
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on abelvesa/clk/imx]
-[also build test WARNING on linus/master v6.3-rc4 next-20230331]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/clk-imx-fracn-gppll-fix-the-rate-table/20230331-144314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git clk/imx
-patch link:    https://lore.kernel.org/r/20230331064629.2475338-5-peng.fan%40oss.nxp.com
-patch subject: [PATCH 4/6] clk: imx: fracn-gppll: support integer pll
-config: hexagon-randconfig-r045-20230329 (https://download.01.org/0day-ci/archive/20230331/202303312017.I9c9cLVj-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b80cff81a332a2005b90c5c1fbab96e732c03494
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/clk-imx-fracn-gppll-fix-the-rate-table/20230331-144314
-        git checkout b80cff81a332a2005b90c5c1fbab96e732c03494
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303312017.I9c9cLVj-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/clk/imx/clk-fracn-gppll.c:340:16: warning: no previous prototype for function '_imx_clk_fracn_gppll' [-Wmissing-prototypes]
-   struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-                  ^
-   drivers/clk/imx/clk-fracn-gppll.c:340:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-   ^
-   static 
-   7 warnings generated.
-
-
-vim +/_imx_clk_fracn_gppll +340 drivers/clk/imx/clk-fracn-gppll.c
-
-   339	
- > 340	struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-   341					    const struct imx_fracn_gppll_clk *pll_clk, u32 pll_flags)
-   342	{
-   343		struct clk_fracn_gppll *pll;
-   344		struct clk_hw *hw;
-   345		struct clk_init_data init;
-   346		int ret;
-   347	
-   348		pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-   349		if (!pll)
-   350			return ERR_PTR(-ENOMEM);
-   351	
-   352		init.name = name;
-   353		init.flags = pll_clk->flags;
-   354		init.parent_names = &parent_name;
-   355		init.num_parents = 1;
-   356		init.ops = &clk_fracn_gppll_ops;
-   357	
-   358		pll->base = base;
-   359		pll->hw.init = &init;
-   360		pll->rate_table = pll_clk->rate_table;
-   361		pll->rate_count = pll_clk->rate_count;
-   362		pll->flags = pll_flags;
-   363	
-   364		hw = &pll->hw;
-   365	
-   366		ret = clk_hw_register(NULL, hw);
-   367		if (ret) {
-   368			pr_err("%s: failed to register pll %s %d\n", __func__, name, ret);
-   369			kfree(pll);
-   370			return ERR_PTR(ret);
-   371		}
-   372	
-   373		return hw;
-   374	}
-   375	
+Applied, thanks
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+~Vinod
