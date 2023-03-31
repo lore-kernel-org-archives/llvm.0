@@ -1,267 +1,107 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB1A15A8;
-	Fri, 31 Mar 2023 02:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EC015A8;
+	Fri, 31 Mar 2023 02:21:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680228746; x=1711764746;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NvoE4ltrq5Gb6epjN6i/CUJhKuUjc7MSsoc0Zzssf34=;
-  b=VCk2k2A7Gz5aL6Wms+CfO2gqm53jCAbdmS/J1DvRwT71bDsdtCE35TXA
-   02Zwgx11Ryjt3zyUDBRwwZ/1ravTHNf9LcYGzlgq1pnMHzLbCQ9ZnjieP
-   erC4+ljxSEanOX+w0BNHS3oeCoA0uX1QMhyt7eSigl98mSxQBI+PYb4cy
-   S8+YsGq+0D+irRp92TFN8c7lkj7lmjhvE2IKMmIcAbvOow8anK8743Fkg
-   XbMt+EjHLCQFd3GJUeNv05X4A0ZdY6+UWQjY7hDFfNyH4Ia2LUVFiYX5m
-   4+Ff6FsFhsTRvqdAxm1WG09wR8bipu/WqS1uSh+1F+vWJ52YmJev2GesI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="406336892"
+  t=1680229291; x=1711765291;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=orr6xqCdjVUNwW1o1J9QySot3FwRNobGMrB1NVthcEw=;
+  b=BTU6kxFYX9xiUbO40E1W0WHWEJPm4462ByWbzFLiLZm3MKHdVcaNeChQ
+   AykAntuRZ+urbUbS44IAUS94VyhJPt/sGzo1KDXkr2l6rm39BfFKdL/Dv
+   71Q942D/6b/eIGsJjwd8h1BuigXvGSzTifTw1aMnaNoLvX9eQ24uoFu73
+   CU2RC87dhszSQdvCrHb4blk+mCPcIxdtxx/0YgEhtKN0N3g0OG7ShUlBX
+   exJF7rGRei3YXE22uGbsgKAlAXP44NBXMPXqoB2mqu7zzfFqxTkzX/xmU
+   fyaOz96kHCz+aC+978FUjstN1kivlL7xbe+fBG0X4/ag4UbXqNkdDIgcc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="325293552"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="406336892"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 19:12:25 -0700
+   d="scan'208";a="325293552"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 19:21:30 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="687479918"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="795925958"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="687479918"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Mar 2023 19:12:25 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pi4FX-000LQ2-1f;
-	Fri, 31 Mar 2023 02:12:19 +0000
-Date: Fri, 31 Mar 2023 10:11:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 3/328]
- arch/powerpc/include/asm/kvm_ppc.h:276:50: error: declaration of 'struct
- kvm_gfn_range' will not be visible outside of this function
-Message-ID: <202303311027.LESxjihK-lkp@intel.com>
+   d="scan'208";a="795925958"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Mar 2023 19:21:27 -0700
+Message-ID: <496c9a7f-41ea-1f06-e8ce-437854916f3b@linux.intel.com>
+Date: Fri, 31 Mar 2023 10:21:42 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc: baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
+ Will Deacon <will@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
+ Nicolin Chen <nicolinc@nvidia.com>
+Subject: Re: [PATCH v2 07/14] iommu: Make iommu_group_do_dma_first_attach()
+ simpler
+Content-Language: en-US
+To: Jason Gunthorpe <jgg@nvidia.com>
+References: <7-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
+ <5a249f94-7742-a2c8-2eff-88821783a6f2@linux.intel.com>
+ <ZCWfomPrtmG08s9F@nvidia.com>
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZCWfomPrtmG08s9F@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   694338d50183e3371330efb5291e044153c7c615
-commit: bb72ed07492f05296b21ad7c7802fafe7e54841d [3/328] KVM: Convert KVM_ARCH_WANT_MMU_NOTIFIER to CONFIG_KVM_GENERIC_MMU_NOTIFIER
-config: powerpc-randconfig-r026-20230329 (https://download.01.org/0day-ci/archive/20230331/202303311027.LESxjihK-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel/tdx/commit/bb72ed07492f05296b21ad7c7802fafe7e54841d
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout bb72ed07492f05296b21ad7c7802fafe7e54841d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+On 3/30/23 10:41 PM, Jason Gunthorpe wrote:
+> On Thu, Mar 30, 2023 at 02:42:20PM +0800, Baolu Lu wrote:
+> 
+>>> @@ -405,18 +409,10 @@ static bool iommu_is_attach_deferred(struct device *dev)
+>>>    	return false;
+>>>    }
+>>> -static int iommu_group_do_dma_first_attach(struct device *dev, void *data)
+>>> +static int iommu_group_do_dma_first_attach(struct iommu_group *group, struct device *dev)
+>>>    {
+>>> -	struct iommu_domain *domain = data;
+>>> -
+>>> -	lockdep_assert_held(&dev->iommu_group->mutex);
+>>> -
+>>> -	if (iommu_is_attach_deferred(dev)) {
+>>> -		dev->iommu->attach_deferred = 1;
+>>> -		return 0;
+>>> -	}
+>>> -
+>>> -	return __iommu_attach_device(domain, dev);
+>>> +	return __iommu_device_set_domain(group, dev, group->domain,
+>>> +					 IOMMU_SET_DOMAIN_WITH_DEFERRED);
+>> Just out of curiosity, why is this group->domain instead of
+>> group->default_domain?
+> The overall invariant is that all devices are attached to
+> group->domain, whatever it is.
+> 
+> Devices are not attached to the default_domain, the default_domain is
+> made the current group->domain which changes all the devices.
+> 
+> Eventually the caller is made to look like:
+> 
+>          if (group->domain) {
+>                  ret = iommu_group_do_dma_first_attach(group, dev);
+>                  if (ret)
+>                          goto err_unlock;
+>                  iommu_create_device_direct_mappings(group->domain, dev);
+>          } else if (!group->default_domain) {
+>                  ret = iommu_setup_default_domain(group, 0);
+>                  if (ret)
+>                          goto err_unlock;
+>          }
+> 
+> Which makes it clear we can't assume that default_domain == domain at
+> this point.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303311027.LESxjihK-lkp@intel.com/
+Yeah! That's clearer.
 
-All errors (new ones prefixed by >>):
-
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:217:1: note: expanded from here
-   __do_insb
-   ^
-   arch/powerpc/include/asm/io.h:577:56: note: expanded from macro '__do_insb'
-   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/dbell.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:45:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:219:1: note: expanded from here
-   __do_insw
-   ^
-   arch/powerpc/include/asm/io.h:578:56: note: expanded from macro '__do_insw'
-   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/dbell.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:221:1: note: expanded from here
-   __do_insl
-   ^
-   arch/powerpc/include/asm/io.h:579:56: note: expanded from macro '__do_insl'
-   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
-                                          ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/dbell.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:223:1: note: expanded from here
-   __do_outsb
-   ^
-   arch/powerpc/include/asm/io.h:580:58: note: expanded from macro '__do_outsb'
-   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/dbell.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:225:1: note: expanded from here
-   __do_outsw
-   ^
-   arch/powerpc/include/asm/io.h:581:58: note: expanded from macro '__do_outsw'
-   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/dbell.c:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/powerpc/include/asm/io.h:640:
-   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/include/asm/io.h:637:3: note: expanded from macro 'DEF_PCI_AC_NORET'
-                   __do_##name al;                                 \
-                   ^~~~~~~~~~~~~~
-   <scratch space>:227:1: note: expanded from here
-   __do_outsl
-   ^
-   arch/powerpc/include/asm/io.h:582:58: note: expanded from macro '__do_outsl'
-   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
-                                           ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from arch/powerpc/kernel/dbell.c:14:
-   In file included from arch/powerpc/include/asm/dbell.h:17:
->> arch/powerpc/include/asm/kvm_ppc.h:276:50: error: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Werror,-Wvisibility]
-           bool (*unmap_gfn_range)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                           ^
-   arch/powerpc/include/asm/kvm_ppc.h:277:42: error: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Werror,-Wvisibility]
-           bool (*age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                   ^
-   arch/powerpc/include/asm/kvm_ppc.h:278:47: error: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Werror,-Wvisibility]
-           bool (*test_age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                        ^
-   arch/powerpc/include/asm/kvm_ppc.h:279:47: error: declaration of 'struct kvm_gfn_range' will not be visible outside of this function [-Werror,-Wvisibility]
-           bool (*set_spte_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-                                                        ^
-   10 errors generated.
-
-
-vim +276 arch/powerpc/include/asm/kvm_ppc.h
-
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  249  
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  250  struct kvmppc_ops {
-cbbc58d4fdfab1 Aneesh Kumar K.V     2013-10-07  251  	struct module *owner;
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  252  	int (*get_sregs)(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  253  	int (*set_sregs)(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  254  	int (*get_one_reg)(struct kvm_vcpu *vcpu, u64 id,
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  255  			   union kvmppc_one_reg *val);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  256  	int (*set_one_reg)(struct kvm_vcpu *vcpu, u64 id,
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  257  			   union kvmppc_one_reg *val);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  258  	void (*vcpu_load)(struct kvm_vcpu *vcpu, int cpu);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  259  	void (*vcpu_put)(struct kvm_vcpu *vcpu);
-87a45e07a5abfe Nicholas Piggin      2019-10-02  260  	void (*inject_interrupt)(struct kvm_vcpu *vcpu, int vec, u64 srr1_flags);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  261  	void (*set_msr)(struct kvm_vcpu *vcpu, u64 msr);
-8c99d34578628b Tianjia Zhang        2020-04-27  262  	int (*vcpu_run)(struct kvm_vcpu *vcpu);
-ff030fdf557322 Sean Christopherson  2019-12-18  263  	int (*vcpu_create)(struct kvm_vcpu *vcpu);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  264  	void (*vcpu_free)(struct kvm_vcpu *vcpu);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  265  	int (*check_requests)(struct kvm_vcpu *vcpu);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  266  	int (*get_dirty_log)(struct kvm *kvm, struct kvm_dirty_log *log);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  267  	void (*flush_memslot)(struct kvm *kvm, struct kvm_memory_slot *memslot);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  268  	int (*prepare_memory_region)(struct kvm *kvm,
-537a17b3149300 Sean Christopherson  2021-12-06  269  				     const struct kvm_memory_slot *old,
-537a17b3149300 Sean Christopherson  2021-12-06  270  				     struct kvm_memory_slot *new,
-82307e676f9d88 Sean Christopherson  2020-02-18  271  				     enum kvm_mr_change change);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  272  	void (*commit_memory_region)(struct kvm *kvm,
-537a17b3149300 Sean Christopherson  2021-12-06  273  				     struct kvm_memory_slot *old,
-f032b73459eed4 Bharata B Rao        2018-12-12  274  				     const struct kvm_memory_slot *new,
-f032b73459eed4 Bharata B Rao        2018-12-12  275  				     enum kvm_mr_change change);
-b1c5356e873cc4 Sean Christopherson  2021-04-01 @276  	bool (*unmap_gfn_range)(struct kvm *kvm, struct kvm_gfn_range *range);
-b1c5356e873cc4 Sean Christopherson  2021-04-01  277  	bool (*age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-b1c5356e873cc4 Sean Christopherson  2021-04-01  278  	bool (*test_age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-b1c5356e873cc4 Sean Christopherson  2021-04-01  279  	bool (*set_spte_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
-e96c81ee89d80e Sean Christopherson  2020-02-18  280  	void (*free_memslot)(struct kvm_memory_slot *slot);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  281  	int (*init_vm)(struct kvm *kvm);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  282  	void (*destroy_vm)(struct kvm *kvm);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  283  	int (*get_smmu_info)(struct kvm *kvm, struct kvm_ppc_smmu_info *info);
-8c99d34578628b Tianjia Zhang        2020-04-27  284  	int (*emulate_op)(struct kvm_vcpu *vcpu,
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  285  			  unsigned int inst, int *advance);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  286  	int (*emulate_mtspr)(struct kvm_vcpu *vcpu, int sprn, ulong spr_val);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  287  	int (*emulate_mfspr)(struct kvm_vcpu *vcpu, int sprn, ulong *spr_val);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  288  	void (*fast_vcpu_kick)(struct kvm_vcpu *vcpu);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  289  	long (*arch_vm_ioctl)(struct file *filp, unsigned int ioctl,
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  290  			      unsigned long arg);
-ae2113a4f1a6cd Paul Mackerras       2014-06-02  291  	int (*hcall_implemented)(unsigned long hcall);
-9576730d0e6e30 Suresh Warrier       2016-08-19  292  	int (*irq_bypass_add_producer)(struct irq_bypass_consumer *,
-9576730d0e6e30 Suresh Warrier       2016-08-19  293  				       struct irq_bypass_producer *);
-9576730d0e6e30 Suresh Warrier       2016-08-19  294  	void (*irq_bypass_del_producer)(struct irq_bypass_consumer *,
-9576730d0e6e30 Suresh Warrier       2016-08-19  295  					struct irq_bypass_producer *);
-c9270132271168 Paul Mackerras       2017-01-30  296  	int (*configure_mmu)(struct kvm *kvm, struct kvm_ppc_mmuv3_cfg *cfg);
-c9270132271168 Paul Mackerras       2017-01-30  297  	int (*get_rmmu_info)(struct kvm *kvm, struct kvm_ppc_rmmu_info *info);
-3c313524605a6a Paul Mackerras       2017-02-06  298  	int (*set_smt_mode)(struct kvm *kvm, unsigned long mode,
-3c313524605a6a Paul Mackerras       2017-02-06  299  			    unsigned long flags);
-2e6baa46b4ae78 Simon Guo            2018-05-21  300  	void (*giveup_ext)(struct kvm_vcpu *vcpu, ulong msr);
-aa069a996951f3 Paul Mackerras       2018-09-21  301  	int (*enable_nested)(struct kvm *kvm);
-dceadcf91b2e09 Suraj Jitindar Singh 2018-12-14  302  	int (*load_from_eaddr)(struct kvm_vcpu *vcpu, ulong *eaddr, void *ptr,
-dceadcf91b2e09 Suraj Jitindar Singh 2018-12-14  303  			       int size);
-dceadcf91b2e09 Suraj Jitindar Singh 2018-12-14  304  	int (*store_to_eaddr)(struct kvm_vcpu *vcpu, ulong *eaddr, void *ptr,
-dceadcf91b2e09 Suraj Jitindar Singh 2018-12-14  305  			      int size);
-9a5788c615f52f Paul Mackerras       2020-03-19  306  	int (*enable_svm)(struct kvm *kvm);
-22945688acd4d0 Bharata B Rao        2019-11-25  307  	int (*svm_off)(struct kvm *kvm);
-d9a47edabc4f94 Ravi Bangoria        2020-12-16  308  	int (*enable_dawr1)(struct kvm *kvm);
-a722076e947023 Fabiano Rosas        2021-02-05  309  	bool (*hash_v3_possible)(void);
-faf01aef057075 Alexey Kardashevskiy 2022-01-11  310  	int (*create_vm_debugfs)(struct kvm *kvm);
-faf01aef057075 Alexey Kardashevskiy 2022-01-11  311  	int (*create_vcpu_debugfs)(struct kvm_vcpu *vcpu, struct dentry *debugfs_dentry);
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  312  };
-3a167beac07cba Aneesh Kumar K.V     2013-10-07  313  
-
-:::::: The code at line 276 was first introduced by commit
-:::::: b1c5356e873cc4fcbb8f58965e0cd910f3ee37a9 KVM: PPC: Convert to the gfn-based MMU notifier callbacks
-
-:::::: TO: Sean Christopherson <seanjc@google.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+baolu
