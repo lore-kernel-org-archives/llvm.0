@@ -1,100 +1,80 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5483415B8;
-	Fri, 31 Mar 2023 02:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680231204; x=1711767204;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vwqZAqAZoSYXFCqKevohRNTUhZWRXAV9uVnJi7jz5vQ=;
-  b=EZcNvUHMGmaAbsH5xM7Q/95o5MbZ3mPKkcRit9bOv+aV/+sOw+XAE7UC
-   lb/xLSTNDomFLNLFtsJmScs6Nhxf/So4dTafXdluFJzd7G7C9nYDoPCiY
-   BB0LPHzrU/VJEmOfIGwuIafj4n9G1PhqkX/Y/Z5ko/vvtqqP2BtyOJWSi
-   YVilfkSl0S0ipu43Usau+5w4n8gNT1ldUnO2zFlpWn2/YaGX356hTDgZe
-   8L8SGaLGWoOy/NPPOggzTmqTLEe+JgbHwP9WEUZDcyeoSVwjmkUebPpWE
-   YxtFb7VxKK6BuzIew4dVuMnIpeD14Mh7NXt3GwQRcTUWSYwiyqxdnDQ4t
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="320990725"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="320990725"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 19:53:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="684933787"
-X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="684933787"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 30 Mar 2023 19:53:21 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pi4tE-000LRQ-10;
-	Fri, 31 Mar 2023 02:53:20 +0000
-Date: Fri, 31 Mar 2023 10:52:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aditi Ghag <aditi.ghag@isovalent.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kafai@fb.com,
-	sdf@google.com, edumazet@google.com, aditi.ghag@isovalent.com
-Subject: Re: [PATCH v5 bpf-next 3/7] udp: seq_file: Helper function to match
- socket attributes
-Message-ID: <202303311022.2GVz6yAt-lkp@intel.com>
-References: <20230330151758.531170-4-aditi.ghag@isovalent.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE287ED8;
+	Fri, 31 Mar 2023 06:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 54A24C4339C;
+	Fri, 31 Mar 2023 06:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680244220;
+	bh=oVNrIse3VEoOTwiJCZSaD19tmzueBrN/XPGjwvdI2fQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=obV1cb54LwI/ig5zUv5OjGv5bgPZatX/pcn1cwoEvj5DJReOh06kNZlkf03iazlAu
+	 M1ptqUnRz5ZPihbtmWSfMHUnO+xDINmr/Z9AKKvjuGBVsFig6UdPhAn8LDnIfBEhBt
+	 WLTWnwzI4JYVt5mEcE5fFbsjAv6HSRvttjWKDUpIrLLWkEtWNy01xwazWkzhApPLCd
+	 tGOkQLBxtyxMAPnvblsE0N+YWt8o0GZWCGic9yNKLGwwibEqQnuKb+M8AQNXQPqqvg
+	 tUJ0e1FmDBolx/LyBV3Rjk/JqFuGz3QaTwY0TNHI0eBpbiu0mC0JVvC5BiuLpzVtxT
+	 zwZJ9th+ePurQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2B776C0C40E;
+	Fri, 31 Mar 2023 06:30:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330151758.531170-4-aditi.ghag@isovalent.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: ethernet: ti: Fix format specifier in
+ netcp_create_interface()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <168024422016.32019.3404856022157277759.git-patchwork-notify@kernel.org>
+Date: Fri, 31 Mar 2023 06:30:20 +0000
+References: <20230329-net-ethernet-ti-wformat-v1-1-83d0f799b553@kernel.org>
+In-Reply-To: <20230329-net-ethernet-ti-wformat-v1-1-83d0f799b553@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, ndesaulniers@google.com, trix@redhat.com,
+ razor@blackwall.org, kerneljasonxing@gmail.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
 
-Hi Aditi,
+Hello:
 
-Thank you for the patch! Perhaps something to improve:
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test WARNING on bpf-next/master]
+On Wed, 29 Mar 2023 08:08:01 -0700 you wrote:
+> After commit 3948b05950fd ("net: introduce a config option to tweak
+> MAX_SKB_FRAGS"), clang warns:
+> 
+>   drivers/net/ethernet/ti/netcp_core.c:2085:4: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+>                           MAX_SKB_FRAGS);
+>                           ^~~~~~~~~~~~~
+>   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+>           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                  ~~~     ^~~~~~~~~~~
+>   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                                ~~~    ^~~~~~~~~~~
+>   include/linux/skbuff.h:352:23: note: expanded from macro 'MAX_SKB_FRAGS'
+>   #define MAX_SKB_FRAGS CONFIG_MAX_SKB_FRAGS
+>                         ^~~~~~~~~~~~~~~~~~~~
+>   ./include/generated/autoconf.h:11789:30: note: expanded from macro 'CONFIG_MAX_SKB_FRAGS'
+>   #define CONFIG_MAX_SKB_FRAGS 17
+>                                ^~
+>   1 warning generated.
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aditi-Ghag/bpf-tcp-Avoid-taking-fast-sock-lock-in-iterator/20230330-232137
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230330151758.531170-4-aditi.ghag%40isovalent.com
-patch subject: [PATCH v5 bpf-next 3/7] udp: seq_file: Helper function to match socket attributes
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230331/202303311022.2GVz6yAt-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/66cc617bebf6cb3d2162587d6e248d86bc59c1c2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Aditi-Ghag/bpf-tcp-Avoid-taking-fast-sock-lock-in-iterator/20230330-232137
-        git checkout 66cc617bebf6cb3d2162587d6e248d86bc59c1c2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv4/
+Here is the summary with links:
+  - [net-next] net: ethernet: ti: Fix format specifier in netcp_create_interface()
+    https://git.kernel.org/netdev/net-next/c/3292004c90c8
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303311022.2GVz6yAt-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/ipv4/udp.c:2986:20: warning: function 'seq_sk_match' has internal linkage but is not defined [-Wundefined-internal]
-   static inline bool seq_sk_match(struct seq_file *seq, const struct sock *sk);
-                      ^
-   net/ipv4/udp.c:3015:8: note: used here
-                           if (seq_sk_match(seq, sk))
-                               ^
-   1 warning generated.
-
-
-vim +/seq_sk_match +2986 net/ipv4/udp.c
-
-  2985	
-> 2986	static inline bool seq_sk_match(struct seq_file *seq, const struct sock *sk);
-  2987	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
