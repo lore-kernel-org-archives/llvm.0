@@ -1,101 +1,230 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17627C
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 00:12:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680221534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=fOkGCDSj8lCYrOV3T53RqMyXeDPosCHIFZ+HCuqViiM=;
-	b=W3cP/HjJkGEghiBn2bxlTQ7SvtU44guWYxsY34q4timUu9hMvRPpF5Dtvak8R3KCh3eo+K
-	iz3+14wE8ZWeRkVGaMlawAcHgcWQU9VDzdDT9Qx2S0ErwMaum06f48JTe6+2F4Tjawesot
-	TKTqvVqTmmVfyxuAS9l1JiN2WoAuzVA=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-355-E07fmiojPUW91VlN7YskRQ-1; Thu, 30 Mar 2023 20:12:12 -0400
-X-MC-Unique: E07fmiojPUW91VlN7YskRQ-1
-Received: by mail-qt1-f200.google.com with SMTP id h6-20020ac85846000000b003e3c23d562aso13542820qth.1
-        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 17:12:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680221532;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fOkGCDSj8lCYrOV3T53RqMyXeDPosCHIFZ+HCuqViiM=;
-        b=GQ4Lvjg1KaZi07k4tL1IoL07B14XjD04QFMBA+PQ83W4C1QE+6Mfe7qENURF5s4i8V
-         WoTMi/LEoJmoS3+9OVMzd5DJor2C7/zkZI/n83n/H/hL97DWlw9lBEC5pnL/HrCgTz1D
-         qzDX7DfO8H1FRQH3mnRBU9gOGH20D2G0cXJxLGNF9Atpgib6c4BMyi2qk4h2YbIcjN16
-         wy7QK6+xC2/1xSIaPoBfjiNfZU3jb/exJOUP8kghCfD6T3Dqy7E1/BTqMfaGLMibYzf2
-         5XdTJjYFxe1WjsyAnd5QG39YSWwnJQ1QH9S00rAIfoMaK9+x+JNhJ4kygw9nUjObYmkl
-         vK7A==
-X-Gm-Message-State: AAQBX9dnIqxQ9LTzHUEnBu7yN+eWMm+OcY28v01bJI49dhyy1Movis5E
-	zDMOx8LeNinfRcRFkhvHlclPCToeOgLaX+cA8XnhfuIhjpHTRc6EHj+sDXAHXshm3uyMaNrLCVw
-	iw81RN+wWc52rIQ==
-X-Received: by 2002:ad4:5ccc:0:b0:5aa:fd43:1fcd with SMTP id iu12-20020ad45ccc000000b005aafd431fcdmr41762434qvb.42.1680221532170;
-        Thu, 30 Mar 2023 17:12:12 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bjRsivYicxZuXm5irkBw31aCOlUFuwEjWTIzCh6ugnPYhFkVi1a8AdrrculeonWtsS1vJHsQ==
-X-Received: by 2002:ad4:5ccc:0:b0:5aa:fd43:1fcd with SMTP id iu12-20020ad45ccc000000b005aafd431fcdmr41762413qvb.42.1680221531952;
-        Thu, 30 Mar 2023 17:12:11 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id ny8-20020a056214398800b005dd8b934584sm216973qvb.28.2023.03.30.17.12.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 17:12:11 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: stuyoder@gmail.com,
-	laurentiu.tudor@nxp.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] bus: fsl-mc: remove unused free_count variable
-Date: Thu, 30 Mar 2023 20:12:08 -0400
-Message-Id: <20230331001208.1846731-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B70C10E7;
+	Fri, 31 Mar 2023 00:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680222628; x=1711758628;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=291iR8fs89AY3P1z/Ojn7EHb26WDXguxsSvangQrPS4=;
+  b=ZrWcomVeImflRNd7wbezdICfLICWxVjDmc9LItUAoOaLkRlOYeJBYQO4
+   JIZvGjWXjty+5HWKcV2hwDKSXadEWYt4bacTotDS/ivTYEnov+/VJJZMi
+   JUqvmBz0Ftt7jti7amwBLf+d1PtcltxiArdRna3Rsft7CNEdxwCTbSrRY
+   ZPNV8pb4CjAY1+rqd2pHlf4zdRH/X3NKmM70zs5P2KLSqTRnPUNxwJN9n
+   xErJ5HcYH1cxHliwLWXZ8O/wp8Z+7BuFa/TNMPkSPsbLMofd1NpUH28EB
+   3QbDCWRLrzhi85KmIu5Ymycz/b+56qb/QBTM4zrCH2lmiIXXD7iUezjjB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="329844018"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="329844018"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 17:30:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="715219715"
+X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
+   d="scan'208";a="715219715"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2023 17:30:22 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pi2em-000LLc-2j;
+	Fri, 31 Mar 2023 00:30:16 +0000
+Date: Fri, 31 Mar 2023 08:29:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+	Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v6 11/12] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+Message-ID: <202303310829.6uVozWbB-lkp@intel.com>
+References: <20230328021912.177301-12-ychuang570808@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328021912.177301-12-ychuang570808@gmail.com>
 
-clang with W=1 reports
-drivers/bus/fsl-mc/fsl-mc-allocator.c:560:6: error: variable
-  'free_count' set but not used [-Werror,-Wunused-but-set-variable]
-        int free_count = 0;
-            ^
-This variable is not used so remove it.
+Hi Jacky,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/bus/fsl-mc/fsl-mc-allocator.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Thank you for the patch! Perhaps something to improve:
 
-diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-index dced427ca8ba..f1351237a9d5 100644
---- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
-+++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-@@ -557,12 +557,9 @@ static void fsl_mc_cleanup_resource_pool(struct fsl_mc_device *mc_bus_dev,
- 	struct fsl_mc_bus *mc_bus = to_fsl_mc_bus(mc_bus_dev);
- 	struct fsl_mc_resource_pool *res_pool =
- 					&mc_bus->resource_pools[pool_type];
--	int free_count = 0;
- 
--	list_for_each_entry_safe(resource, next, &res_pool->free_list, node) {
--		free_count++;
-+	list_for_each_entry_safe(resource, next, &res_pool->free_list, node)
- 		devm_kfree(&mc_bus_dev->dev, resource);
--	}
- }
- 
- void fsl_mc_cleanup_all_resource_pools(struct fsl_mc_device *mc_bus_dev)
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on clk/clk-next linus/master]
+[cannot apply to pza/reset/next pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230328-102245
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230328021912.177301-12-ychuang570808%40gmail.com
+patch subject: [PATCH v6 11/12] tty: serial: Add Nuvoton ma35d1 serial driver support
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20230331/202303310829.6uVozWbB-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/380d83a62e873855024ca4c660865c654a62748a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230328-102245
+        git checkout 380d83a62e873855024ca4c660865c654a62748a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/tty/serial/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303310829.6uVozWbB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/tty/serial/ma35d1_serial.c:672:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (pdev->dev.of_node) {
+               ^~~~~~~~~~~~~~~~~
+   drivers/tty/serial/ma35d1_serial.c:679:27: note: uninitialized use occurs here
+           up = &ma35d1serial_ports[ret];
+                                    ^~~
+   drivers/tty/serial/ma35d1_serial.c:672:2: note: remove the 'if' if its condition is always true
+           if (pdev->dev.of_node) {
+           ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/tty/serial/ma35d1_serial.c:668:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+>> drivers/tty/serial/ma35d1_serial.c:730:6: warning: variable 'i' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (dev->dev.of_node)
+               ^~~~~~~~~~~~~~~~
+   drivers/tty/serial/ma35d1_serial.c:732:6: note: uninitialized use occurs here
+           if (i < 0) {
+               ^
+   drivers/tty/serial/ma35d1_serial.c:730:2: note: remove the 'if' if its condition is always true
+           if (dev->dev.of_node)
+           ^~~~~~~~~~~~~~~~~~~~~
+   drivers/tty/serial/ma35d1_serial.c:727:7: note: initialize the variable 'i' to silence this warning
+           int i;
+                ^
+                 = 0
+   drivers/tty/serial/ma35d1_serial.c:750:6: warning: variable 'i' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (dev->dev.of_node)
+               ^~~~~~~~~~~~~~~~
+   drivers/tty/serial/ma35d1_serial.c:752:6: note: uninitialized use occurs here
+           if (i < 0) {
+               ^
+   drivers/tty/serial/ma35d1_serial.c:750:2: note: remove the 'if' if its condition is always true
+           if (dev->dev.of_node)
+           ^~~~~~~~~~~~~~~~~~~~~
+   drivers/tty/serial/ma35d1_serial.c:747:7: note: initialize the variable 'i' to silence this warning
+           int i;
+                ^
+                 = 0
+   3 warnings generated.
+
+
+vim +672 drivers/tty/serial/ma35d1_serial.c
+
+   658	
+   659	/*
+   660	 * Register a set of serial devices attached to a platform device.
+   661	 * The list is terminated with a zero flags entry, which means we expect
+   662	 * all entries to have at least UPF_BOOT_AUTOCONF set.
+   663	 */
+   664	static int ma35d1serial_probe(struct platform_device *pdev)
+   665	{
+   666		struct resource *res_mem;
+   667		struct uart_ma35d1_port *up;
+   668		int ret;
+   669		struct clk *clk;
+   670		int err;
+   671	
+ > 672		if (pdev->dev.of_node) {
+   673			ret = of_alias_get_id(pdev->dev.of_node, "serial");
+   674			if (ret < 0) {
+   675				dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
+   676				return ret;
+   677			}
+   678		}
+   679		up = &ma35d1serial_ports[ret];
+   680		up->port.line = ret;
+   681		res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   682		if (!res_mem)
+   683			return -ENODEV;
+   684	
+   685		up->port.iobase = res_mem->start;
+   686		up->port.membase = ioremap(up->port.iobase, UART_REG_SIZE);
+   687		up->port.ops = &ma35d1serial_ops;
+   688	
+   689		spin_lock_init(&up->port.lock);
+   690	
+   691		clk = of_clk_get(pdev->dev.of_node, 0);
+   692		if (IS_ERR(clk)) {
+   693			err = PTR_ERR(clk);
+   694			dev_err(&pdev->dev, "failed to get core clk: %d\n", err);
+   695			return -ENOENT;
+   696		}
+   697		err = clk_prepare_enable(clk);
+   698		if (err)
+   699			return -ENOENT;
+   700	
+   701		if (up->port.line != 0)
+   702			up->port.uartclk = clk_get_rate(clk);
+   703		up->port.irq = platform_get_irq(pdev, 0);
+   704		up->port.dev = &pdev->dev;
+   705		up->port.flags = UPF_BOOT_AUTOCONF;
+   706		ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
+   707		platform_set_drvdata(pdev, up);
+   708		return 0;
+   709	}
+   710	
+   711	/*
+   712	 * Remove serial ports registered against a platform device.
+   713	 */
+   714	static int ma35d1serial_remove(struct platform_device *dev)
+   715	{
+   716		struct uart_port *port = platform_get_drvdata(dev);
+   717	
+   718		if (port) {
+   719			uart_remove_one_port(&ma35d1serial_reg, port);
+   720			free_irq(port->irq, port);
+   721		}
+   722		return 0;
+   723	}
+   724	
+   725	static int ma35d1serial_suspend(struct platform_device *dev, pm_message_t state)
+   726	{
+   727		int i;
+   728		struct uart_ma35d1_port *up;
+   729	
+ > 730		if (dev->dev.of_node)
+   731			i = of_alias_get_id(dev->dev.of_node, "serial");
+   732		if (i < 0) {
+   733			dev_err(&dev->dev, "failed to get alias/pdev id, errno %d\n", i);
+   734			return i;
+   735		}
+   736		up = &ma35d1serial_ports[i];
+   737		if (i == 0) {
+   738			up->console_baud_rate = serial_in(up, UART_REG_BAUD);
+   739			up->console_line = serial_in(up, UART_REG_LCR);
+   740			up->console_int = serial_in(up, UART_REG_IER);
+   741		}
+   742		return 0;
+   743	}
+   744	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
