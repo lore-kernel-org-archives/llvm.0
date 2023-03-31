@@ -1,107 +1,100 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66EC015A8;
-	Fri, 31 Mar 2023 02:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5483415B8;
+	Fri, 31 Mar 2023 02:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680229291; x=1711765291;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=orr6xqCdjVUNwW1o1J9QySot3FwRNobGMrB1NVthcEw=;
-  b=BTU6kxFYX9xiUbO40E1W0WHWEJPm4462ByWbzFLiLZm3MKHdVcaNeChQ
-   AykAntuRZ+urbUbS44IAUS94VyhJPt/sGzo1KDXkr2l6rm39BfFKdL/Dv
-   71Q942D/6b/eIGsJjwd8h1BuigXvGSzTifTw1aMnaNoLvX9eQ24uoFu73
-   CU2RC87dhszSQdvCrHb4blk+mCPcIxdtxx/0YgEhtKN0N3g0OG7ShUlBX
-   exJF7rGRei3YXE22uGbsgKAlAXP44NBXMPXqoB2mqu7zzfFqxTkzX/xmU
-   fyaOz96kHCz+aC+978FUjstN1kivlL7xbe+fBG0X4/ag4UbXqNkdDIgcc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="325293552"
+  t=1680231204; x=1711767204;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vwqZAqAZoSYXFCqKevohRNTUhZWRXAV9uVnJi7jz5vQ=;
+  b=EZcNvUHMGmaAbsH5xM7Q/95o5MbZ3mPKkcRit9bOv+aV/+sOw+XAE7UC
+   lb/xLSTNDomFLNLFtsJmScs6Nhxf/So4dTafXdluFJzd7G7C9nYDoPCiY
+   BB0LPHzrU/VJEmOfIGwuIafj4n9G1PhqkX/Y/Z5ko/vvtqqP2BtyOJWSi
+   YVilfkSl0S0ipu43Usau+5w4n8gNT1ldUnO2zFlpWn2/YaGX356hTDgZe
+   8L8SGaLGWoOy/NPPOggzTmqTLEe+JgbHwP9WEUZDcyeoSVwjmkUebPpWE
+   YxtFb7VxKK6BuzIew4dVuMnIpeD14Mh7NXt3GwQRcTUWSYwiyqxdnDQ4t
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="320990725"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="325293552"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 19:21:30 -0700
+   d="scan'208";a="320990725"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2023 19:53:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="795925958"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="684933787"
 X-IronPort-AV: E=Sophos;i="5.98,306,1673942400"; 
-   d="scan'208";a="795925958"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Mar 2023 19:21:27 -0700
-Message-ID: <496c9a7f-41ea-1f06-e8ce-437854916f3b@linux.intel.com>
-Date: Fri, 31 Mar 2023 10:21:42 +0800
+   d="scan'208";a="684933787"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 30 Mar 2023 19:53:21 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pi4tE-000LRQ-10;
+	Fri, 31 Mar 2023 02:53:20 +0000
+Date: Fri, 31 Mar 2023 10:52:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aditi Ghag <aditi.ghag@isovalent.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kafai@fb.com,
+	sdf@google.com, edumazet@google.com, aditi.ghag@isovalent.com
+Subject: Re: [PATCH v5 bpf-next 3/7] udp: seq_file: Helper function to match
+ socket attributes
+Message-ID: <202303311022.2GVz6yAt-lkp@intel.com>
+References: <20230330151758.531170-4-aditi.ghag@isovalent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc: baolu.lu@linux.intel.com, iommu@lists.linux.dev,
- Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
- Will Deacon <will@kernel.org>, Kevin Tian <kevin.tian@intel.com>,
- Nicolin Chen <nicolinc@nvidia.com>
-Subject: Re: [PATCH v2 07/14] iommu: Make iommu_group_do_dma_first_attach()
- simpler
-Content-Language: en-US
-To: Jason Gunthorpe <jgg@nvidia.com>
-References: <7-v2-cd32667d2ba6+70bd1-iommu_err_unwind_jgg@nvidia.com>
- <5a249f94-7742-a2c8-2eff-88821783a6f2@linux.intel.com>
- <ZCWfomPrtmG08s9F@nvidia.com>
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <ZCWfomPrtmG08s9F@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330151758.531170-4-aditi.ghag@isovalent.com>
 
-On 3/30/23 10:41 PM, Jason Gunthorpe wrote:
-> On Thu, Mar 30, 2023 at 02:42:20PM +0800, Baolu Lu wrote:
-> 
->>> @@ -405,18 +409,10 @@ static bool iommu_is_attach_deferred(struct device *dev)
->>>    	return false;
->>>    }
->>> -static int iommu_group_do_dma_first_attach(struct device *dev, void *data)
->>> +static int iommu_group_do_dma_first_attach(struct iommu_group *group, struct device *dev)
->>>    {
->>> -	struct iommu_domain *domain = data;
->>> -
->>> -	lockdep_assert_held(&dev->iommu_group->mutex);
->>> -
->>> -	if (iommu_is_attach_deferred(dev)) {
->>> -		dev->iommu->attach_deferred = 1;
->>> -		return 0;
->>> -	}
->>> -
->>> -	return __iommu_attach_device(domain, dev);
->>> +	return __iommu_device_set_domain(group, dev, group->domain,
->>> +					 IOMMU_SET_DOMAIN_WITH_DEFERRED);
->> Just out of curiosity, why is this group->domain instead of
->> group->default_domain?
-> The overall invariant is that all devices are attached to
-> group->domain, whatever it is.
-> 
-> Devices are not attached to the default_domain, the default_domain is
-> made the current group->domain which changes all the devices.
-> 
-> Eventually the caller is made to look like:
-> 
->          if (group->domain) {
->                  ret = iommu_group_do_dma_first_attach(group, dev);
->                  if (ret)
->                          goto err_unlock;
->                  iommu_create_device_direct_mappings(group->domain, dev);
->          } else if (!group->default_domain) {
->                  ret = iommu_setup_default_domain(group, 0);
->                  if (ret)
->                          goto err_unlock;
->          }
-> 
-> Which makes it clear we can't assume that default_domain == domain at
-> this point.
+Hi Aditi,
 
-Yeah! That's clearer.
+Thank you for the patch! Perhaps something to improve:
 
-Best regards,
-baolu
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aditi-Ghag/bpf-tcp-Avoid-taking-fast-sock-lock-in-iterator/20230330-232137
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230330151758.531170-4-aditi.ghag%40isovalent.com
+patch subject: [PATCH v5 bpf-next 3/7] udp: seq_file: Helper function to match socket attributes
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230331/202303311022.2GVz6yAt-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/66cc617bebf6cb3d2162587d6e248d86bc59c1c2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aditi-Ghag/bpf-tcp-Avoid-taking-fast-sock-lock-in-iterator/20230330-232137
+        git checkout 66cc617bebf6cb3d2162587d6e248d86bc59c1c2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv4/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303311022.2GVz6yAt-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/ipv4/udp.c:2986:20: warning: function 'seq_sk_match' has internal linkage but is not defined [-Wundefined-internal]
+   static inline bool seq_sk_match(struct seq_file *seq, const struct sock *sk);
+                      ^
+   net/ipv4/udp.c:3015:8: note: used here
+                           if (seq_sk_match(seq, sk))
+                               ^
+   1 warning generated.
+
+
+vim +/seq_sk_match +2986 net/ipv4/udp.c
+
+  2985	
+> 2986	static inline bool seq_sk_match(struct seq_file *seq, const struct sock *sk);
+  2987	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
