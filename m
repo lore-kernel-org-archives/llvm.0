@@ -1,43 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496DE23D5;
-	Fri, 31 Mar 2023 11:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D93A2567;
+	Fri, 31 Mar 2023 11:23:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680260616; x=1711796616;
+  t=1680261817; x=1711797817;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CqGq16r+WhUCCe8o3EBhHV7UO5Ioe/7Y+/Y8CVKBX6A=;
-  b=jTpf8XK2fXVFfVj1fUcswZtPQpItcZ3R6zC4lwUdIrFbde5dImXTBPco
-   xUX1zYYhZIdL3L9tOfYklAroMsPFYlmvFEtdgMQIDm41OQb4XS+FX31gD
-   FW45ru8FfchRCl5KGKoV3W+2opXjEkZ/wUnUcY1AE0L0K6MFwR6bKdHzi
-   ak7tymovBcxAMMyzUecqN1V35HCwxYEi1lzotcl+zu+S5rcaTzLvDngvc
-   nmgFa+9BtFkknl3oQT4kZDiLt41qdrfggVMpOl6X7KkLwpxx/DHPqEKpF
-   ju1cUCgDYiIjULhOofU/8ZfyzLmYy/PCJd+ZkwjJGvhmdj+sVSoSSq+De
+  bh=z36CHYi9VawtgCb7Ha04cbvgpw/cdf5acXOLJYWoYKk=;
+  b=X/XsNIAqVSV1KjlcJ0zQn6bhYXecijNXwiMZ5JKttwuJhCao18wkg+XQ
+   0wkL/RkbjHRx7hlEmjgBoslTUax8xAtZCIRND0U+r5GqI+O+cMWrJ113B
+   z4EyIJp1TYaA+zze2HOIUUEfz6oEMMta5514RCTRVJa6flSCklBhD5/D8
+   y8yYnRXxrpf5c648nR+ezJHp43pZRoXa4d7cm8vmIBdieWCabRdeTbUgl
+   DQfIvsJmjdRZLEj1qoad7/4qOVpJ5bxi+goFpqIx6bEaPNKrcoxvXqlxu
+   hkIj/kTP9khlZsNj0qWgBvFrv6Ap5kJb6EKkryNiEX86PbNBJNtkzFRsu
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="369213275"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="343087890"
 X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="369213275"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 04:03:35 -0700
+   d="scan'208";a="343087890"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 04:23:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="754377819"
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="859294517"
 X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="754377819"
+   d="scan'208";a="859294517"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 31 Mar 2023 04:03:33 -0700
+  by orsmga005.jf.intel.com with ESMTP; 31 Mar 2023 04:23:34 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1piCXc-000Lhi-1S;
-	Fri, 31 Mar 2023 11:03:32 +0000
-Date: Fri, 31 Mar 2023 19:02:38 +0800
+	id 1piCqz-000LiW-0B;
+	Fri, 31 Mar 2023 11:23:33 +0000
+Date: Fri, 31 Mar 2023 19:23:17 +0800
 From: kernel test robot <lkp@intel.com>
 To: arinc9.unal@gmail.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: Re: [RFC PATCH] USB: serial: option: add UNISOC vendor and TOZED
  LT70C product
-Message-ID: <202303311813.Ev5JpBZl-lkp@intel.com>
+Message-ID: <202303311952.GiH63cOx-lkp@intel.com>
 References: <20230331062639.11725-1-arinc.unal@arinc9.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,32 +62,81 @@ url:    https://github.com/intel-lab-lkp/linux/commits/arinc9-unal-gmail-com/USB
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git usb-next
 patch link:    https://lore.kernel.org/r/20230331062639.11725-1-arinc.unal%40arinc9.com
 patch subject: [RFC PATCH] USB: serial: option: add UNISOC vendor and TOZED LT70C product
-config: riscv-randconfig-r014-20230329 (https://download.01.org/0day-ci/archive/20230331/202303311813.Ev5JpBZl-lkp@intel.com/config)
+config: hexagon-buildonly-randconfig-r001-20230329 (https://download.01.org/0day-ci/archive/20230331/202303311952.GiH63cOx-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/004640a30a0a1ad1ee595135a2e4c270d30a9f11
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review arinc9-unal-gmail-com/USB-serial-option-add-UNISOC-vendor-and-TOZED-LT70C-product/20230331-142728
         git checkout 004640a30a0a1ad1ee595135a2e4c270d30a9f11
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/serial/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/serial/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303311813.Ev5JpBZl-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303311952.GiH63cOx-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
+   In file included from drivers/usb/serial/option.c:34:
+   In file included from include/linux/tty.h:12:
+   In file included from include/linux/tty_port.h:5:
+   In file included from include/linux/kfifo.h:42:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/usb/serial/option.c:34:
+   In file included from include/linux/tty.h:12:
+   In file included from include/linux/tty_port.h:5:
+   In file included from include/linux/kfifo.h:42:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/usb/serial/option.c:34:
+   In file included from include/linux/tty.h:12:
+   In file included from include/linux/tty_port.h:5:
+   In file included from include/linux/kfifo.h:42:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
 >> drivers/usb/serial/option.c:2223:33: error: use of undeclared identifier 'UNISOC_PRODUCT_LT70C'
            { USB_DEVICE(UNISOC_VENDOR_ID, UNISOC_PRODUCT_LT70C) },
                                           ^
-   1 error generated.
+>> drivers/usb/serial/option.c:2226:1: error: definition of variable with array type needs an explicit size or an initializer
+   MODULE_DEVICE_TABLE(usb, option_ids);
+   ^
+   include/linux/module.h:243:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
+   extern typeof(name) __mod_##type##__##name##_device_table               \
+                       ^
+   <scratch space>:118:1: note: expanded from here
+   __mod_usb__option_ids_device_table
+   ^
+   6 warnings and 2 errors generated.
 
 
 vim +/UNISOC_PRODUCT_LT70C +2223 drivers/usb/serial/option.c
@@ -1699,7 +1748,7 @@ vim +/UNISOC_PRODUCT_LT70C +2223 drivers/usb/serial/option.c
 > 2223		{ USB_DEVICE(UNISOC_VENDOR_ID, UNISOC_PRODUCT_LT70C) },
   2224		{ } /* Terminating entry */
   2225	};
-  2226	MODULE_DEVICE_TABLE(usb, option_ids);
+> 2226	MODULE_DEVICE_TABLE(usb, option_ids);
   2227	
 
 -- 
