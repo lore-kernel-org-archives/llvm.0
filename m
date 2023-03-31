@@ -1,42 +1,42 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8B610E7
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 00:49:31 +0000 (UTC)
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5416d3a321eso205468827b3.12
-        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 17:49:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15A910E7
+	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 00:49:39 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id w5-20020a253005000000b00aedd4305ff2so20602187ybw.13
+        for <llvm@lists.linux.dev>; Thu, 30 Mar 2023 17:49:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680223771;
+        d=google.com; s=20210112; t=1680223779;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7oxd+W11NuknN5NF+IipV44WcyCkZNF/Dx6bcDvAiT8=;
-        b=KsdyLKvSEFbnoBYCu2r2O888p0VE6efe0Pok+IhIFZthAU349DLJX2KPXHXB/YmZ7v
-         mqWXRt6Cui7RbnAl+H+RBTwTdjrkrkoOdWmkqGI60wgpg/VK4A0DjJkm1PxmV5wmsOx1
-         /TeYIQRcpu8HeSdv+xV9cGuDj+CPMoM2H8xJezT2JtwjmZHXevlnRAxN2onqgLnXMkeA
-         EJDZ/Nl86FZA8YtiYDFWL2Jm/bKeDJQwcYdL68R3O+T3zup/3G56JVWmzwmNq/aDsw+n
-         uwF5zl6K2NJEFZLTHkC4NMlAfkl8xzX0aeG22x4iUU1azRjNX2TV5k4/fX69Dedt2TWV
-         xFeQ==
+        bh=ZjS2ubyipVi2ZMDZ77od8b4DQTs3LsPG+UyJYia9quE=;
+        b=Z3sRXpowh/3nWuTnA9ABQqlwKz9e/xaBcX8rB1G+JuHoqvIkDMhppRkNVRu2bUEHZD
+         DcC346N6icjGxjlxtlLeXPBaAoXHoIDXDh/8n1hZk1rYidPWX5OaeuTCkDt50Bv0q+Lu
+         80Xjxt8eqOOsrqHIuSE0bNDLJRDkZXu6yTVVZ62h9kqTeGsLVb9Yo0Ov9CtNO8orwV9A
+         0LmbNG+Wz6nzzMPQ19TvVwytQedxgKy0Nm7IRaiblHe2QebEnrZhCIxN1WOuvKyBciAi
+         d/wPJXHFQHM9MVHHwCPIjIIKK7gCJj02pIeZBIQipfsYZR+VBL4ws1tnoHf+kPTyKWXD
+         gnRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680223771;
+        d=1e100.net; s=20210112; t=1680223779;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7oxd+W11NuknN5NF+IipV44WcyCkZNF/Dx6bcDvAiT8=;
-        b=wrajlzntP5QLYvbf04U9M7ayLWXC5+ApzTUtv6WxHFbSy5wsPw4+ps9nspgksYTG59
-         Rl0Ntq/6YcownIV0UbVK3AMyv6JUQutYGK0CtE7U91xe6g6lJZBZunwc/A13ma/tsUXo
-         tqdFENJtIShdlncEq4EIfGSkpcK0sfExsb5saSXMn8mw0FZQe3KeTNrwwYc+5p88Kr5s
-         h7wJyGhTwnsX5yM6pRfgsP9AV3P9KwWGNFdTLW1WzKw0uQMgHfZ1zWE5Ot0GNhvDPFus
-         oQ1muYDFOxxFDsUjUKcpl5p2Zl4KFi4WtJDxz0KaVhN7qPpppaR0hfuMRx8dbDKAHfZ6
-         pIyA==
-X-Gm-Message-State: AAQBX9eW1pdxpX+Fjj93Agknu7V0ECS9Uzn/S+K7otMvqC8KsQLg3Nwb
-	+DFJiQdC3ad0T1x3HeUva6mr3GG2f1Dd
-X-Google-Smtp-Source: AKy350bDVwr8m1Oc+vefnZXhKJxJxJ5yTGusejTrFkjb+CBfOpCsR2pfVEtuUYmLYwF0e9gCesDEytfcOd9V
+        bh=ZjS2ubyipVi2ZMDZ77od8b4DQTs3LsPG+UyJYia9quE=;
+        b=oAWJfYHQB4ILkuP0iK0A+2cbPv4S+FW81xxSabLpPONvVzCyUb/BL1KTMhRJj/uwFg
+         +wR9gpKk/TXuqs5USLEmdthF9XhkjGk9b2lzaXiq6n0kq7W5401JnA9rwbuJL5v560KR
+         M0SKui/WLwVzGWhuuIEQzpvhj+Efburyj+UpqhOECxeaGvjzgPzjMfk9jCRY4RULjtjP
+         KugitW9QKoqm7BMfVm3r2KnXi/WSFsEvZGvRCDs3g2Ws3j/KfCxeRvmCw9iRDCzUEFE1
+         JtDbbKGfJ4+fCIzk/gqSKd6jF5WVAiTVYigLQQ8U5/1gTvBRbx9R54nbRGkwlf7LYVa8
+         lqaw==
+X-Gm-Message-State: AAQBX9cFRT2RwOs8RrZtUQnCszt6Lqk5r5rEZ91zaIvfg7E/Zehdn/Nq
+	N5dv7epUvfCs1GSSWMO3jRXDHnwFe4dI
+X-Google-Smtp-Source: AKy350a3m5BHFnMmj6UwcvTHHQb2LbUjX3nn1IHOfBofEyRM+5fd1eyYoe8wYYAs+1wdFn70nEN5YmCfcHDW
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:11ea:eb75:e48c:2c04])
- (user=irogers job=sendgmr) by 2002:a05:6902:18cd:b0:b78:45fd:5f01 with SMTP
- id ck13-20020a05690218cd00b00b7845fd5f01mr15780898ybb.7.1680223770977; Thu,
- 30 Mar 2023 17:49:30 -0700 (PDT)
-Date: Thu, 30 Mar 2023 17:48:43 -0700
+ (user=irogers job=sendgmr) by 2002:a81:ac64:0:b0:545:6106:5334 with SMTP id
+ z36-20020a81ac64000000b0054561065334mr12667656ywj.8.1680223779432; Thu, 30
+ Mar 2023 17:49:39 -0700 (PDT)
+Date: Thu, 30 Mar 2023 17:48:44 -0700
 In-Reply-To: <20230331004844.1592789-1-irogers@google.com>
-Message-Id: <20230331004844.1592789-4-irogers@google.com>
+Message-Id: <20230331004844.1592789-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20230331004844.1592789-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Subject: [PATCH v1 3/4] perf srcline: Support for llvm-addr2line
+Subject: [PATCH v1 4/4] perf srcline: Avoid addr2line SIGPIPEs
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -56,140 +56,26 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-The sentinel value differs for llvm-addr2line. Configure this once and
-then detect when reading records.
+Ignore SIGPIPEs when addr2line is configured.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/srcline.c | 65 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 62 insertions(+), 3 deletions(-)
+ tools/perf/util/srcline.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-index 2da86e57215d..423ddf3967b0 100644
+index 423ddf3967b0..bc3e48afe054 100644
 --- a/tools/perf/util/srcline.c
 +++ b/tools/perf/util/srcline.c
-@@ -435,7 +435,50 @@ static struct child_process *addr2line_subprocess_init(const char *addr2line_pat
- 	return a2l;
+@@ -473,6 +473,8 @@ static enum a2l_style addr2line_configure(struct child_process *a2l)
+ 				ch = io__get_char(&io);
+ 			} while (ch > 0 && ch != '\n');
+ 		}
++		/* Ignore SIGPIPE in the event addr2line exits. */
++		signal(SIGPIPE, SIG_IGN);
+ 	}
+ 	return style;
  }
- 
-+enum a2l_style {
-+	BROKEN,
-+	GNU_BINUTILS,
-+	LLVM,
-+};
-+
-+static enum a2l_style addr2line_configure(struct child_process *a2l)
-+{
-+	static bool cached;
-+	static enum a2l_style style;
-+
-+	if (!cached) {
-+		char buf[128];
-+		struct io io;
-+		int ch;
-+
-+		if (write(a2l->in, ",\n", 2) != 2)
-+			return BROKEN;
-+
-+		io__init(&io, a2l->out, buf, sizeof(buf));
-+		ch = io__get_char(&io);
-+		if (ch == ',') {
-+			style = LLVM;
-+			cached = true;
-+		} else if (ch == '?') {
-+			style = GNU_BINUTILS;
-+			cached = true;
-+		} else {
-+			style = BROKEN;
-+		}
-+		do {
-+			ch = io__get_char(&io);
-+		} while (ch > 0 && ch != '\n');
-+		if (style == GNU_BINUTILS) {
-+			do {
-+				ch = io__get_char(&io);
-+			} while (ch > 0 && ch != '\n');
-+		}
-+	}
-+	return style;
-+}
-+
- static int read_addr2line_record(struct io *io,
-+				 enum a2l_style style,
- 				 char **function,
- 				 char **filename,
- 				 unsigned int *line_nr)
-@@ -462,6 +505,12 @@ static int read_addr2line_record(struct io *io,
- 
- 	if (io__getline(&line, &line_len, io) < 0 || !line_len)
- 		goto error;
-+
-+	if (style == LLVM && line_len == 2 && line[0] == ',') {
-+		zfree(&line);
-+		return 0;
-+	}
-+
- 	if (function != NULL)
- 		*function = strdup(strim(line));
- 
-@@ -471,7 +520,8 @@ static int read_addr2line_record(struct io *io,
- 	if (io__getline(&line, &line_len, io) < 0 || !line_len)
- 		goto error;
- 
--	if (filename_split(line, line_nr == NULL ? &dummy_line_nr : line_nr) == 0) {
-+	if (filename_split(line, line_nr == NULL ? &dummy_line_nr : line_nr) == 0 &&
-+	    style == GNU_BINUTILS) {
- 		ret = 0;
- 		goto error;
- 	}
-@@ -523,6 +573,7 @@ static int addr2line(const char *dso_name, u64 addr,
- 	char buf[128];
- 	ssize_t written;
- 	struct io io;
-+	enum a2l_style a2l_style;
- 
- 	if (!a2l) {
- 		if (!filename__has_section(dso_name, ".debug_line"))
-@@ -538,6 +589,12 @@ static int addr2line(const char *dso_name, u64 addr,
- 			pr_warning("%s %s: addr2line_subprocess_init failed\n", __func__, dso_name);
- 		goto out;
- 	}
-+	a2l_style = addr2line_configure(a2l);
-+	if (a2l_style == BROKEN) {
-+		if (!symbol_conf.disable_add2line_warn)
-+			pr_warning("%s: addr2line configuration failed\n", __func__);
-+		goto out;
-+	}
- 
- 	/*
- 	 * Send our request and then *deliberately* send something that can't be interpreted as
-@@ -557,7 +614,8 @@ static int addr2line(const char *dso_name, u64 addr,
- 	}
- 	io__init(&io, a2l->out, buf, sizeof(buf));
- 
--	switch (read_addr2line_record(&io, &record_function, &record_filename, &record_line_nr)) {
-+	switch (read_addr2line_record(&io, a2l_style,
-+				      &record_function, &record_filename, &record_line_nr)) {
- 	case -1:
- 		if (!symbol_conf.disable_add2line_warn)
- 			pr_warning("%s %s: could not read first record\n", __func__, dso_name);
-@@ -567,7 +625,7 @@ static int addr2line(const char *dso_name, u64 addr,
- 		 * The first record was invalid, so return failure, but first read another
- 		 * record, since we asked a junk question and have to clear the answer out.
- 		 */
--		switch (read_addr2line_record(&io, NULL, NULL, NULL)) {
-+		switch (read_addr2line_record(&io, a2l_style, NULL, NULL, NULL)) {
- 		case -1:
- 			if (!symbol_conf.disable_add2line_warn)
- 				pr_warning("%s %s: could not read delimiter record\n",
-@@ -606,6 +664,7 @@ static int addr2line(const char *dso_name, u64 addr,
- 
- 	/* We have to read the records even if we don't care about the inline info. */
- 	while ((record_status = read_addr2line_record(&io,
-+						      a2l_style,
- 						      &record_function,
- 						      &record_filename,
- 						      &record_line_nr)) == 1) {
 -- 
 2.40.0.348.gf938b09366-goog
 
