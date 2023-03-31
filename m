@@ -1,65 +1,64 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E250628FE
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 20:42:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDD78F54
+	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 20:55:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680295335;
+	s=mimecast20190719; t=1680296152;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=dpVbBRCiJ4We7LHm9u8gIxfqs0WEGOfu+33bncRZNio=;
-	b=haFJkNwPItkcxwZgeXKoN0CaBppjIeYBoBJQP0JRgurjTGlWmGZAtEws4/8X5DeOc30jd1
-	eq/32GGWMuqjOhJGBN05HRQ6J3Etstki4hwh9le7cT/85MD7p+YUbjFQSCgBIqzE3n4Tmr
-	JyMW30wKH+wE0kIO0cCs++er/Ls2FeY=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=4iXEOFNILcUMsIjcydKfmGYblvwSUsIqK+R28wpgVSw=;
+	b=bP2w9VckhFMfUjAMjeLH1fZ1b2HSeeqFMMUuU+TYLy8uUSNAr6KQGvfwDKWwblG0Gb9GSq
+	urOwLvU8NwbIkHxGey7xtxyD5ccLeMF0UQ3KPB35LsNYk1allNrcynlc/ugLE8VHXumtgd
+	jqtqMb6vt0qq/1QkWm/NU+lbw5jqgQE=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-120-4arEnG6YOcSWBqWTv_HzwA-1; Fri, 31 Mar 2023 16:42:14 -0400
-X-MC-Unique: 4arEnG6YOcSWBqWTv_HzwA-1
-Received: by mail-qv1-f72.google.com with SMTP id dl18-20020ad44e12000000b005a4d5420bc6so10285368qvb.11
-        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 13:42:14 -0700 (PDT)
+ us-mta-404-DtDy6kSDO1ecF6Vac4tZIQ-1; Fri, 31 Mar 2023 16:55:49 -0400
+X-MC-Unique: DtDy6kSDO1ecF6Vac4tZIQ-1
+Received: by mail-qt1-f200.google.com with SMTP id h6-20020a05622a170600b003e22c6de617so15459324qtk.13
+        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 13:55:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680295333;
+        d=1e100.net; s=20210112; t=1680296149;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dpVbBRCiJ4We7LHm9u8gIxfqs0WEGOfu+33bncRZNio=;
-        b=MyoGGmk47V2XJXmhTq4sqXUNRGXVWpKYxAj6a9L+Z9LydLoUCrp3ck7YLzQov7lNAs
-         r63uu/TnVG5ODFegX/UoVv2LzKDay70lB3PgQmTRnwu0N6yz53KooCTpTAttcfgtfTaj
-         VH7sNX5dT0jQQ9XYiaZShadfXaUA6iY2kHhvZ+/tD4FeG+44bZFdXmXjKGDN64BAFFfV
-         y1XTZveVZC0uuVczPdWebuC7LADvlxqFJRQ45EisbcZYsDkc5fqWeHIMHILjQeJViAgu
-         M9fN2PQgZeVQ6jSFhshGKpykRoKp42jymioDiK2FBeGLNBBPODV14WqMnGB/QVIkrrwQ
-         RQkg==
-X-Gm-Message-State: AO0yUKVfx+SK0KelrEdRdYxpAJ1IFsBVlftAYyOXzuBX1kn5P1wNuHYD
-	glv/on9JbK/6PKEa7BzxHHwB6imt8tFMsWc7aQloWlJeuBdnJl+qEQimgc/NgukntwFAadCKFH6
-	q/cUzuPfmz84TnQ==
-X-Received: by 2002:a05:622a:1d5:b0:3b8:6ae9:b107 with SMTP id t21-20020a05622a01d500b003b86ae9b107mr45596238qtw.17.1680295333579;
-        Fri, 31 Mar 2023 13:42:13 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/mIthcjf+qNMnYSZIwwm7EuAYx4smtbfumckwe21E1gR7bqyHXH49VRfud0h3afzJGf56gqA==
-X-Received: by 2002:a05:622a:1d5:b0:3b8:6ae9:b107 with SMTP id t21-20020a05622a01d500b003b86ae9b107mr45596209qtw.17.1680295333331;
-        Fri, 31 Mar 2023 13:42:13 -0700 (PDT)
+        bh=4iXEOFNILcUMsIjcydKfmGYblvwSUsIqK+R28wpgVSw=;
+        b=u2HsE9uxMhY9n80i1loNoOaEsCBiYyrMdEdiG9KaV60rE/EjXdSb/oDINYC7+9QKch
+         LrMtQ+7o34G1JPatk24V7Kgm1uIshgtEOaSI9S2P9oA2y0Ua3ypEL/vq1hKwN75HCjkj
+         wW0WOg8kq+E9CuuVRnWiwTW78mnjsnurQKb6uUggl34bnWKAM7WUKvNJOZk+k2Zte9t5
+         T6eZcPV+UpJJfgd2LV3cX7wFuI0smDGKOZwHBMA4EPaDW2bR0M3q6nBdeu9ieQkjNP3U
+         ilrKNQWHeCZTE6IBEr2Fk5+FcXj+R5pIEVYRgnFK1atln0y9L6IkQA4KMAEZzGGzmi9o
+         IbLQ==
+X-Gm-Message-State: AAQBX9dUF7oh/PpYIiQN4GWLRQbEOz2FBQIJNVU7uMPE66kK3a+GaCI+
+	w9tmZg08D3Q5j2d5JcZDfEjp7f+ygnPHk6TMBOWAPDb9/YWHYlaZAC5XET+zURpcYszMSPnUYaV
+	LlANjQFtwmHHWvA==
+X-Received: by 2002:a05:6214:d83:b0:5df:3310:c1f9 with SMTP id e3-20020a0562140d8300b005df3310c1f9mr28014875qve.5.1680296149145;
+        Fri, 31 Mar 2023 13:55:49 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b7lU6rfvonQF6UvzHAg1z9y6+ns7pWBTCXqEidZmccRyfV4/pcAgSDviIOorQpDT9jgOtcwg==
+X-Received: by 2002:a05:6214:d83:b0:5df:3310:c1f9 with SMTP id e3-20020a0562140d8300b005df3310c1f9mr28014849qve.5.1680296148838;
+        Fri, 31 Mar 2023 13:55:48 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id r194-20020a3744cb000000b007465ee178a3sm910309qka.96.2023.03.31.13.42.11
+        by smtp.gmail.com with ESMTPSA id o6-20020a0c9006000000b005e0cd3c21c8sm875543qvo.13.2023.03.31.13.55.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:42:12 -0700 (PDT)
+        Fri, 31 Mar 2023 13:55:48 -0700 (PDT)
 From: Tom Rix <trix@redhat.com>
-To: bskeggs@redhat.com,
-	kherbst@redhat.com,
-	lyude@redhat.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
+To: jes@trained-monkey.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
 	nathan@kernel.org,
-	ndesaulniers@google.com,
-	gsamaiya@nvidia.com
-Cc: dri-devel@lists.freedesktop.org,
-	nouveau@lists.freedesktop.org,
+	ndesaulniers@google.com
+Cc: linux-acenic@sunsite.dk,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/nouveau/acr: remove unused loc variable
-Date: Fri, 31 Mar 2023 16:42:09 -0400
-Message-Id: <20230331204209.1863060-1-trix@redhat.com>
+Subject: [PATCH] net: alteon: remove unused len variable
+Date: Fri, 31 Mar 2023 16:55:45 -0400
+Message-Id: <20230331205545.1863496-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -73,37 +72,37 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
 clang with W=1 reports
-drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c:221:7: error: variable
-  'loc' set but not used [-Werror,-Wunused-but-set-variable]
-                u32 loc, sig, cnt, *meta;
-                    ^
+drivers/net/ethernet/alteon/acenic.c:2438:10: error: variable
+  'len' set but not used [-Werror,-Wunused-but-set-variable]
+                int i, len = 0;
+                       ^
 This variable is not used so remove it.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c | 3 +--
+ drivers/net/ethernet/alteon/acenic.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
-index f36a359d4531..bd104a030243 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
-@@ -218,7 +218,7 @@ nvkm_acr_lsfw_load_sig_image_desc_v2(struct nvkm_subdev *subdev,
- 		const struct firmware *hsbl;
- 		const struct nvfw_ls_hsbl_bin_hdr *hdr;
- 		const struct nvfw_ls_hsbl_hdr *hshdr;
--		u32 loc, sig, cnt, *meta;
-+		u32 sig, cnt, *meta;
+diff --git a/drivers/net/ethernet/alteon/acenic.c b/drivers/net/ethernet/alteon/acenic.c
+index d7762da8b2c0..eafef84fe3be 100644
+--- a/drivers/net/ethernet/alteon/acenic.c
++++ b/drivers/net/ethernet/alteon/acenic.c
+@@ -2435,7 +2435,7 @@ static netdev_tx_t ace_start_xmit(struct sk_buff *skb,
+ 	} else {
+ 		dma_addr_t mapping;
+ 		u32 vlan_tag = 0;
+-		int i, len = 0;
++		int i;
  
- 		ret = nvkm_firmware_load_name(subdev, path, "hs_bl_sig", ver, &hsbl);
- 		if (ret)
-@@ -227,7 +227,6 @@ nvkm_acr_lsfw_load_sig_image_desc_v2(struct nvkm_subdev *subdev,
- 		hdr = nvfw_ls_hsbl_bin_hdr(subdev, hsbl->data);
- 		hshdr = nvfw_ls_hsbl_hdr(subdev, hsbl->data + hdr->header_offset);
- 		meta = (u32 *)(hsbl->data + hshdr->meta_data_offset);
--		loc = *(u32 *)(hsbl->data + hshdr->patch_loc);
- 		sig = *(u32 *)(hsbl->data + hshdr->patch_sig);
- 		cnt = *(u32 *)(hsbl->data + hshdr->num_sig);
+ 		mapping = ace_map_tx_skb(ap, skb, NULL, idx);
+ 		flagsize = (skb_headlen(skb) << 16);
+@@ -2454,7 +2454,6 @@ static netdev_tx_t ace_start_xmit(struct sk_buff *skb,
+ 			const skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+ 			struct tx_ring_info *info;
+ 
+-			len += skb_frag_size(frag);
+ 			info = ap->skb->tx_skbuff + idx;
+ 			desc = ap->tx_ring + idx;
  
 -- 
 2.27.0
