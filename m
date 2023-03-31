@@ -1,107 +1,175 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C42256F
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 12:03:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680264211;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Wx3vtf0mWAsv14OEzo/oiyKAqTl2ZYLXwnoN7IpbtAc=;
-	b=jPtFV/eZ0Cqc9uqmfrKdosLWsRoVDVc0YrhtDwTo6HqRHlsj8LZY0UvZ/XFS+Qk6G5tbpL
-	Cyy9Yf/ZqOiaNAbumd2hr4fWsoXqfoy5vP6dwHklxgDsjuzq1mjy4jpimJ3q+OxF1jhJRZ
-	EvvnqGDv1M7g1A+dFFUrviz8WyR6rKY=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-662-iV2goxZSPJGJKfnstdcOVg-1; Fri, 31 Mar 2023 08:03:30 -0400
-X-MC-Unique: iV2goxZSPJGJKfnstdcOVg-1
-Received: by mail-qt1-f199.google.com with SMTP id r4-20020ac867c4000000b003bfefb6dd58so14593887qtp.2
-        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 05:03:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680264208;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wx3vtf0mWAsv14OEzo/oiyKAqTl2ZYLXwnoN7IpbtAc=;
-        b=MQlkqJGPxeE4MESXYLSw9Q2iQnrbYWYfBEt4BQS7fWchXI+9pB905fnH3wxhfNi/Ja
-         K0XKA9ig5+pdBatelc5O2UYoVxU1BTyqcyeMnASeS3+0+afqL+aVU+4b7ftDxCD8qUZC
-         aqHPR9znFCLnQlXGNOd5AgGpSXLeaM304ne7iYBox41/+hMejZllYDqbJeYkZBCTF553
-         l7a/2OIWVDrAyILSQE/RnUJCvdlOH2oV1jUBa3P4pC0ZtH5kjXgbG4gDLiu4LeXX3jv5
-         3pkCWOelKpSfGEWzPE+v1jNkYDbjMV/dm7NUO9pzhvWODHEMdgMUsWwap6cPz7J+rYRf
-         LwfA==
-X-Gm-Message-State: AO0yUKXqkEh+qnRlU0zavm2V6+OKxvXeCArcyhG2zxnuArbZ+Bcs8//h
-	pKUPuJqYPIC79mM8oAnJ70jTP/q3KJzEx1FjTLgEbCIHeq4bbQjeryBQDiL2vr+cjU8ivOeM9T5
-	fgM7ppMIn2/QBYw==
-X-Received: by 2002:a05:622a:b:b0:3d7:960e:5387 with SMTP id x11-20020a05622a000b00b003d7960e5387mr43506117qtw.35.1680264208201;
-        Fri, 31 Mar 2023 05:03:28 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/ZpMzqAp6V4PuHglmLJBY+O32MWZXvMJwJo0y3JPh1yW5xOStZL/VMELHuwC+qx1W8VX1z1A==
-X-Received: by 2002:a05:622a:b:b0:3d7:960e:5387 with SMTP id x11-20020a05622a000b00b003d7960e5387mr43506086qtw.35.1680264207923;
-        Fri, 31 Mar 2023 05:03:27 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id x20-20020ac84a14000000b003e635f80e72sm575569qtq.48.2023.03.31.05.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 05:03:27 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: nathan@kernel.org,
-	ndesaulniers@google.com,
-	axboe@kernel.dk,
-	akpm@linux-foundation.org,
-	bvanassche@acm.org,
-	jack@suse.cz,
-	yi.zhang@huawei.com
-Cc: reiserfs-devel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] reiserfs: remove unused iter variable
-Date: Fri, 31 Mar 2023 08:03:25 -0400
-Message-Id: <20230331120325.1855111-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAB2256F;
+	Fri, 31 Mar 2023 12:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680264941; x=1711800941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MDqfavBp0xhE9zr6CTvKsp9hMprvzZOnmnyhz/PHj+8=;
+  b=NF96LxiTprFr47GgBYtZ575vx1hQXsurzRZ3fCfjPE1P42OnoDz1jH2h
+   qASbbL1/8YXSlxupxjol2oQUFnbO9q/DRrrMLW5ixTImkLSDSt1LmA3sf
+   GHHZoO+vJnLkmhdD79paA9/0D/ZDsPzWY1fMldzAf1Ewh0/5JP/8nhi6Y
+   d6Zu9SDk2e57gz9AbbwfpaLtaAdsIHXB66nAAcTS4e6P2I9lV0Iuc075u
+   xj9UV5xwwK0ciJ8Ab4YXtmjl3C1KkbSqUu6CQoX/aGTEShs5fvMYWs2Ks
+   4mS1QkgZ17yz3ArDuwUCgWgD/emUvHaz4OWzndHLKhAbwRDVncf4XaEPl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="404155579"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="404155579"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 05:15:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="809018313"
+X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
+   d="scan'208";a="809018313"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2023 05:15:36 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1piDfL-000LlO-1i;
+	Fri, 31 Mar 2023 12:15:35 +0000
+Date: Fri, 31 Mar 2023 20:14:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, abelvesa@kernel.org,
+	abel.vesa@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-imx@nxp.com,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 4/6] clk: imx: fracn-gppll: support integer pll
+Message-ID: <202303312017.I9c9cLVj-lkp@intel.com>
+References: <20230331064629.2475338-5-peng.fan@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230331064629.2475338-5-peng.fan@oss.nxp.com>
 
-clang with W=1 reports
-fs/reiserfs/stree.c:1265:6: error: variable
-  'iter' set but not used [-Werror,-Wunused-but-set-variable]
-        int iter = 0;
-            ^
-This variable is not used so remove it.
+Hi Peng,
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/reiserfs/stree.c | 2 --
- 1 file changed, 2 deletions(-)
+I love your patch! Perhaps something to improve:
 
-diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
-index 84c12a1947b2..ce5003986789 100644
---- a/fs/reiserfs/stree.c
-+++ b/fs/reiserfs/stree.c
-@@ -1262,7 +1262,6 @@ int reiserfs_delete_item(struct reiserfs_transaction_handle *th,
- 
- #ifdef CONFIG_REISERFS_CHECK
- 	char mode;
--	int iter = 0;
- #endif
- 
- 	BUG_ON(!th->t_trans_id);
-@@ -1274,7 +1273,6 @@ int reiserfs_delete_item(struct reiserfs_transaction_handle *th,
- 		removed = 0;
- 
- #ifdef CONFIG_REISERFS_CHECK
--		iter++;
- 		mode =
- #endif
- 		    prepare_for_delete_or_cut(th, inode, path,
+[auto build test WARNING on abelvesa/clk/imx]
+[also build test WARNING on linus/master v6.3-rc4 next-20230331]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/clk-imx-fracn-gppll-fix-the-rate-table/20230331-144314
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git clk/imx
+patch link:    https://lore.kernel.org/r/20230331064629.2475338-5-peng.fan%40oss.nxp.com
+patch subject: [PATCH 4/6] clk: imx: fracn-gppll: support integer pll
+config: hexagon-randconfig-r045-20230329 (https://download.01.org/0day-ci/archive/20230331/202303312017.I9c9cLVj-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b80cff81a332a2005b90c5c1fbab96e732c03494
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peng-Fan-OSS/clk-imx-fracn-gppll-fix-the-rate-table/20230331-144314
+        git checkout b80cff81a332a2005b90c5c1fbab96e732c03494
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303312017.I9c9cLVj-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/clk/imx/clk-fracn-gppll.c:340:16: warning: no previous prototype for function '_imx_clk_fracn_gppll' [-Wmissing-prototypes]
+   struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
+                  ^
+   drivers/clk/imx/clk-fracn-gppll.c:340:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
+   ^
+   static 
+   7 warnings generated.
+
+
+vim +/_imx_clk_fracn_gppll +340 drivers/clk/imx/clk-fracn-gppll.c
+
+   339	
+ > 340	struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
+   341					    const struct imx_fracn_gppll_clk *pll_clk, u32 pll_flags)
+   342	{
+   343		struct clk_fracn_gppll *pll;
+   344		struct clk_hw *hw;
+   345		struct clk_init_data init;
+   346		int ret;
+   347	
+   348		pll = kzalloc(sizeof(*pll), GFP_KERNEL);
+   349		if (!pll)
+   350			return ERR_PTR(-ENOMEM);
+   351	
+   352		init.name = name;
+   353		init.flags = pll_clk->flags;
+   354		init.parent_names = &parent_name;
+   355		init.num_parents = 1;
+   356		init.ops = &clk_fracn_gppll_ops;
+   357	
+   358		pll->base = base;
+   359		pll->hw.init = &init;
+   360		pll->rate_table = pll_clk->rate_table;
+   361		pll->rate_count = pll_clk->rate_count;
+   362		pll->flags = pll_flags;
+   363	
+   364		hw = &pll->hw;
+   365	
+   366		ret = clk_hw_register(NULL, hw);
+   367		if (ret) {
+   368			pr_err("%s: failed to register pll %s %d\n", __func__, name, ret);
+   369			kfree(pll);
+   370			return ERR_PTR(ret);
+   371		}
+   372	
+   373		return hw;
+   374	}
+   375	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
