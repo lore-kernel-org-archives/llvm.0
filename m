@@ -1,244 +1,110 @@
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040A18C1E
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 20:27:22 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id A134F320093C;
-	Fri, 31 Mar 2023 16:27:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 31 Mar 2023 16:27:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm1; t=1680294440; x=1680380840; bh=2K
-	aDfnSCtOWrHyBu2V1/Tu+MXWIzeMCyWkOEPXXvaWk=; b=Ag5zGN9HSqPjMK4d+J
-	SRuD/Aofhi3GL1NozAFav0isdGswvhAsuTvf9WXQjyVKxhuTHAPkJ5i/SvIKrMK/
-	I9qeI/57PTOYFuXw1AmV5R3IlgSc/NULBuSC1OxgnR7yScwLmjQSd3vMeFpk8fMr
-	xkHvFtgcDWyN8RalB8dpO2GWgb/VNc7MFi36Mcj5Dfd9+Zb1AjnpCI/m6IaUOzay
-	5jBHMcFLOBmqTXzxMPHFoDlB14+O7iuOornUqUYpbKGJ57i0ESxKE2qI6nV4Wgs9
-	6sp2atONQadMr/fc98sW36Pu/nVqfcXJdc57usGJZR5RWcvCEY2wzM/OA2krp2/7
-	4Veg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1680294440; x=1680380840; bh=2KaDfnSCtOWrH
-	yBu2V1/Tu+MXWIzeMCyWkOEPXXvaWk=; b=fg10GJqfHss8Y4g1bY36F2aDEtYTi
-	L742C5MmvJffl5sJ92cltSCkfrrNCe8uDuV/vHYcT75ZTT7p4stCwKPAzkyhe52F
-	YpdbhOQCehgSFxOZOv6wIukj6ryNcNz6jyk4YIv3ISrcd3sGXOB/ZGx5kLTGxuEK
-	+swhhMrj/vRQKiCyPFJs85Qfy3HjMSvBQ67+9scaJWklXZRh7cP+AKmSsmBAaB/2
-	YHvfmBn/eCWM8F2WOYlxt+16cbDf8PNQY9ZnPXrr8DcghZf7pdIKWAJa576jwFk7
-	aXCF8ubT6tE73SucJVKZDkW7rHWyssawSLzlq5LGOg37m/5aRhuDTANjg==
-X-ME-Sender: <xms:J0InZAPLQO0KWnEOCP-3GcptVAT08wX26Jh7xrtEbAiLttsSCcknkA>
-    <xme:J0InZG8-tUOug5IKHBWMmCPic9XGsUmf5gLpNO3QaMviw_izDUaVnTQb37L9UrpHJ
-    wvFMTTGdQdPn5fVhQ>
-X-ME-Received: <xmr:J0InZHSn93Ek-YysWXC_I_AROdjuJoOA2Ohkda_HiLHKY3JvtpWyai0LC8IM97etGSNnkp9sK2kOcX3RxzyTnhebYGNTrXuHVA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiuddgudegjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeetlhih
-    shhsrgcutfhoshhsuceohhhisegrlhihshhsrgdrihhsqeenucggtffrrghtthgvrhhnpe
-    egjeeigeejhffgffehueeludevhfeiffefudegvdegudfhudejheefhfeugfeghfenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehhihesrghlhi
-    hsshgrrdhish
-X-ME-Proxy: <xmx:J0InZIvwt0KcRCWd6HWcpIOqUUwob02rP7b2N5LjRs4jAMHtzaA0yg>
-    <xmx:J0InZIcR1jDsKNWi-fHf9UNTVv4QSIFKmBFcM-xiEnWJrHgC_SujAg>
-    <xmx:J0InZM1cP9r8YKs_NuGHideaTAJXAJLCwURTCdg6eaJvqxhXxKqybw>
-    <xmx:KEInZHCZhvt-BdM-NL_5v8GNpyZPkhbet07f0zLPijisZxryCHFN1w>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 31 Mar 2023 16:27:18 -0400 (EDT)
-Received: by x220.qyliss.net (Postfix, from userid 1000)
-	id 47FB924C6; Fri, 31 Mar 2023 20:27:16 +0000 (UTC)
-Date: Fri, 31 Mar 2023 20:27:16 +0000
-From: Alyssa Ross <hi@alyssa.is>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Cao <nickcao@nichi.co>,
-	linux-kbuild@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-riscv@lists.infradead.org, Tom Rix <trix@redhat.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>, stable@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v3] purgatory: fix disabling debug info
-Message-ID: <20230331202716.mvny65ybaat3wsmm@x220>
-References: <20230330182223.181775-1-hi@alyssa.is>
- <20230330222928.GA644044@dev-arch.thelio-3990X>
- <CAK7LNARU444UrZXVodNftud-scy5KKUjdtTM0GOrxHB9pyKmkg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E250628FE
+	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 20:42:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680295335;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dpVbBRCiJ4We7LHm9u8gIxfqs0WEGOfu+33bncRZNio=;
+	b=haFJkNwPItkcxwZgeXKoN0CaBppjIeYBoBJQP0JRgurjTGlWmGZAtEws4/8X5DeOc30jd1
+	eq/32GGWMuqjOhJGBN05HRQ6J3Etstki4hwh9le7cT/85MD7p+YUbjFQSCgBIqzE3n4Tmr
+	JyMW30wKH+wE0kIO0cCs++er/Ls2FeY=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-120-4arEnG6YOcSWBqWTv_HzwA-1; Fri, 31 Mar 2023 16:42:14 -0400
+X-MC-Unique: 4arEnG6YOcSWBqWTv_HzwA-1
+Received: by mail-qv1-f72.google.com with SMTP id dl18-20020ad44e12000000b005a4d5420bc6so10285368qvb.11
+        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 13:42:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680295333;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dpVbBRCiJ4We7LHm9u8gIxfqs0WEGOfu+33bncRZNio=;
+        b=MyoGGmk47V2XJXmhTq4sqXUNRGXVWpKYxAj6a9L+Z9LydLoUCrp3ck7YLzQov7lNAs
+         r63uu/TnVG5ODFegX/UoVv2LzKDay70lB3PgQmTRnwu0N6yz53KooCTpTAttcfgtfTaj
+         VH7sNX5dT0jQQ9XYiaZShadfXaUA6iY2kHhvZ+/tD4FeG+44bZFdXmXjKGDN64BAFFfV
+         y1XTZveVZC0uuVczPdWebuC7LADvlxqFJRQ45EisbcZYsDkc5fqWeHIMHILjQeJViAgu
+         M9fN2PQgZeVQ6jSFhshGKpykRoKp42jymioDiK2FBeGLNBBPODV14WqMnGB/QVIkrrwQ
+         RQkg==
+X-Gm-Message-State: AO0yUKVfx+SK0KelrEdRdYxpAJ1IFsBVlftAYyOXzuBX1kn5P1wNuHYD
+	glv/on9JbK/6PKEa7BzxHHwB6imt8tFMsWc7aQloWlJeuBdnJl+qEQimgc/NgukntwFAadCKFH6
+	q/cUzuPfmz84TnQ==
+X-Received: by 2002:a05:622a:1d5:b0:3b8:6ae9:b107 with SMTP id t21-20020a05622a01d500b003b86ae9b107mr45596238qtw.17.1680295333579;
+        Fri, 31 Mar 2023 13:42:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/mIthcjf+qNMnYSZIwwm7EuAYx4smtbfumckwe21E1gR7bqyHXH49VRfud0h3afzJGf56gqA==
+X-Received: by 2002:a05:622a:1d5:b0:3b8:6ae9:b107 with SMTP id t21-20020a05622a01d500b003b86ae9b107mr45596209qtw.17.1680295333331;
+        Fri, 31 Mar 2023 13:42:13 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id r194-20020a3744cb000000b007465ee178a3sm910309qka.96.2023.03.31.13.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 13:42:12 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: bskeggs@redhat.com,
+	kherbst@redhat.com,
+	lyude@redhat.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	gsamaiya@nvidia.com
+Cc: dri-devel@lists.freedesktop.org,
+	nouveau@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/nouveau/acr: remove unused loc variable
+Date: Fri, 31 Mar 2023 16:42:09 -0400
+Message-Id: <20230331204209.1863060-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="axvolp336zjbpvuu"
-Content-Disposition: inline
-In-Reply-To: <CAK7LNARU444UrZXVodNftud-scy5KKUjdtTM0GOrxHB9pyKmkg@mail.gmail.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
+clang with W=1 reports
+drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c:221:7: error: variable
+  'loc' set but not used [-Werror,-Wunused-but-set-variable]
+                u32 loc, sig, cnt, *meta;
+                    ^
+This variable is not used so remove it.
 
---axvolp336zjbpvuu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-On Sat, Apr 01, 2023 at 12:42:13AM +0900, Masahiro Yamada wrote:
-> On Fri, Mar 31, 2023 at 7:29=E2=80=AFAM Nathan Chancellor <nathan@kernel.=
-org> wrote:
-> >
-> > On Thu, Mar 30, 2023 at 06:22:24PM +0000, Alyssa Ross wrote:
-> > > Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAGS.
-> > > Instead, it includes -g, the appropriate -gdwarf-* flag, and also the
-> > > -Wa versions of both of those if building with Clang and GNU as.  As a
-> > > result, debug info was being generated for the purgatory objects, even
-> > > though the intention was that it not be.
-> > >
-> > > Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S fil=
-es")
-> > > Signed-off-by: Alyssa Ross <hi@alyssa.is>
-> > > Cc: stable@vger.kernel.org
-> > > Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > This is definitely more future proof.
-> >
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
->
->
->
-> I prefer v3 since it is cleaner, but unfortunately
-> it does not work for Clang+GAS.
->
->
-> With v3 applied, I still see the debug info.
->
->
->
-> $ make LLVM=3D1 LLVM_IAS=3D0  arch/x86/purgatory/setup-x86_64.o
->   UPD     include/config/kernel.release
->   UPD     include/generated/utsrelease.h
->   CALL    scripts/checksyscalls.sh
->   DESCEND objtool
->   INSTALL libsubcmd_headers
->   AS      arch/x86/purgatory/setup-x86_64.o
-> $ readelf -S arch/x86/purgatory/setup-x86_64.o
-> There are 18 section headers, starting at offset 0x14d8:
->
-> Section Headers:
->   [Nr] Name              Type             Address           Offset
->        Size              EntSize          Flags  Link  Info  Align
->   [ 0]                   NULL             0000000000000000  00000000
->        0000000000000000  0000000000000000           0     0     0
->   [ 1] .text             PROGBITS         0000000000000000  00000040
->        0000000000000027  0000000000000000  AX       0     0     16
->   [ 2] .rela.text        RELA             0000000000000000  000012f8
->        0000000000000060  0000000000000018   I      15     1     8
->   [ 3] .data             PROGBITS         0000000000000000  00000067
->        0000000000000000  0000000000000000  WA       0     0     1
->   [ 4] .bss              NOBITS           0000000000000000  00001000
->        0000000000001000  0000000000000000  WA       0     0     4096
->   [ 5] .rodata           PROGBITS         0000000000000000  00001000
->        0000000000000020  0000000000000000   A       0     0     16
->   [ 6] .rela.rodata      RELA             0000000000000000  00001358
->        0000000000000018  0000000000000018   I      15     5     8
->   [ 7] .debug_line       PROGBITS         0000000000000000  00001020
->        000000000000005f  0000000000000000           0     0     1
->   [ 8] .rela.debug_line  RELA             0000000000000000  00001370
->        0000000000000018  0000000000000018   I      15     7     8
->   [ 9] .debug_info       PROGBITS         0000000000000000  0000107f
->        0000000000000027  0000000000000000           0     0     1
->   [10] .rela.debug_info  RELA             0000000000000000  00001388
->        0000000000000090  0000000000000018   I      15     9     8
->   [11] .debug_abbrev     PROGBITS         0000000000000000  000010a6
->        0000000000000014  0000000000000000           0     0     1
->   [12] .debug_aranges    PROGBITS         0000000000000000  000010c0
->        0000000000000030  0000000000000000           0     0     16
->   [13] .rela.debug_[...] RELA             0000000000000000  00001418
->        0000000000000030  0000000000000018   I      15    12     8
->   [14] .debug_str        PROGBITS         0000000000000000  000010f0
->        0000000000000054  0000000000000001  MS       0     0     1
->   [15] .symtab           SYMTAB           0000000000000000  00001148
->        0000000000000168  0000000000000018          16    12     8
->   [16] .strtab           STRTAB           0000000000000000  000012b0
->        0000000000000041  0000000000000000           0     0     1
->   [17] .shstrtab         STRTAB           0000000000000000  00001448
->        000000000000008d  0000000000000000           0     0     1
-> Key to Flags:
->   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
->   L (link order), O (extra OS processing required), G (group), T (TLS),
->   C (compressed), x (unknown), o (OS specific), E (exclude),
->   D (mbind), l (large), p (processor specific)
->
->
->
->
->
->
-> With -g0 given, GCC stops passing -g -gdwarf-4 down to GAS.
->
->
-> Clang does not do anything about -g0 for the external assembler.
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
+index f36a359d4531..bd104a030243 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
+@@ -218,7 +218,7 @@ nvkm_acr_lsfw_load_sig_image_desc_v2(struct nvkm_subdev *subdev,
+ 		const struct firmware *hsbl;
+ 		const struct nvfw_ls_hsbl_bin_hdr *hdr;
+ 		const struct nvfw_ls_hsbl_hdr *hshdr;
+-		u32 loc, sig, cnt, *meta;
++		u32 sig, cnt, *meta;
+ 
+ 		ret = nvkm_firmware_load_name(subdev, path, "hs_bl_sig", ver, &hsbl);
+ 		if (ret)
+@@ -227,7 +227,6 @@ nvkm_acr_lsfw_load_sig_image_desc_v2(struct nvkm_subdev *subdev,
+ 		hdr = nvfw_ls_hsbl_bin_hdr(subdev, hsbl->data);
+ 		hshdr = nvfw_ls_hsbl_hdr(subdev, hsbl->data + hdr->header_offset);
+ 		meta = (u32 *)(hsbl->data + hshdr->meta_data_offset);
+-		loc = *(u32 *)(hsbl->data + hshdr->patch_loc);
+ 		sig = *(u32 *)(hsbl->data + hshdr->patch_sig);
+ 		cnt = *(u32 *)(hsbl->data + hshdr->num_sig);
+ 
+-- 
+2.27.0
 
-You're right.  Thank you for your thoughtful testing =E2=80=94 I forgot to =
-check
-LLVM for v3.  I thought maybe adding -Wa,-g0 would be enough, but it
-turns out that GAS doesn't support that.  If -g has been specified,
-there doesn't seem to be any way to disable debug info again later in
-the command line.
-
-So we probably can't do better than v2 while LLVM_IAS=3D0 is supported.
-The only other option I see is (untested):
-
-asflags-y			+=3D -g0
-asflags-remove-y		+=3D -Wa,-g -Wa,-gdwarf-4 -Wa,-gdwarf-5
-
-But I don't like that option, because it means there are two completely
-different ways of doing it depending on the compiler setup, and it makes
-it even less likely anybody would remember to update asflags-remove-y
-when DWARF 6 comes around or whatever.
-
-> I was thinking of dropping LLVM_IAS=3D0 support.
-> When we decide to give up -fno-integrated-as,
-> we can clean up the code in various places.
->
->
-> Anyway, v3 does not work in the current situation.
->
->
-> V2 works for all usecases.
->
->
->
->
-> --
-> Best Regards
-> Masahiro Yamada
-
---axvolp336zjbpvuu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEH9wgcxqlHM/ARR3h+dvtSFmyccAFAmQnQhsACgkQ+dvtSFmy
-ccCgJg//Up2UwsM19Z7EQMr2CXFVXfpkdNdPwIbsFsakWJPwjEuK8BEjyOliDTMn
-5o887uImSJut/XhOgX9uYxUUIK13gHjC5dUZX9Mf854ms67RqcPsSpBQGfwozcOK
-m13N9Mfoqs6KG99zdiYQYfN5IGHotyf6u9HL03fWadH1DJf8iqRXBEx2+H1H+N8x
-63ZKWfHope/vBtNS/SvATS8icIJWB99xzMy+N46eeICxqF9SMbECXVWBjXWNjSr9
-brrQVbDOOQq/7enXtKHJOm+7FYAZRtbwwf48oNuK2PLW01QUQmti7JdiBujCrkUB
-4wL3mlUrcRAn1Ui6YUjXxQTvoRduJHdXUV1MEI/u7d3v/UcPyxVlguFEnNzRbuhY
-tyvTmc0Nq5R0zWMnbuCJuWUY1gvxi3Iyp57zrTN9GD8tY7BNhgKvkDNXLlu/f4tV
-E3CKOpWVk3fSjMoImNbQmh9q6pJnJb/EU801H5duqE8O0++DeESLVWVnXRBz5kGw
-tqkS74PvGbvFICkZLwKPrqJ0Dea16KA2KlhECczTt4nxTJ8BP7wMo1E0/D/UsakB
-t6PlK6UwdiBn1WxQ8cW4T23FK6+3YxrwIFry/0Jrp9DRoiN0IxoEbKXvREAhSseS
-gRxnmgn4Mk2jp/xxR5g1eZLW0510YtnZT0L1MeCFVUOSe0oG798=
-=U0tH
------END PGP SIGNATURE-----
-
---axvolp336zjbpvuu--
