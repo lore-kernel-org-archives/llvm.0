@@ -1,109 +1,125 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDD78F54
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 20:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772AD8F54
+	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 21:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680296152;
+	s=mimecast20190719; t=1680296636;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4iXEOFNILcUMsIjcydKfmGYblvwSUsIqK+R28wpgVSw=;
-	b=bP2w9VckhFMfUjAMjeLH1fZ1b2HSeeqFMMUuU+TYLy8uUSNAr6KQGvfwDKWwblG0Gb9GSq
-	urOwLvU8NwbIkHxGey7xtxyD5ccLeMF0UQ3KPB35LsNYk1allNrcynlc/ugLE8VHXumtgd
-	jqtqMb6vt0qq/1QkWm/NU+lbw5jqgQE=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bUtpTfIhZLUJQRzvjQdCDBe9iqr/rmYVzQ4AMz2vCfE=;
+	b=J4uh3W02asn8suAf+SujfVohG5j8CyZCgeaJ6VkTHhV4Ts/EjwuDn7bYwRzGFq50GClFmk
+	nhrumIsR1WSpgLhZcPKHAH7gVa6K4zn4JZvzZZrhbxEWO8MxWCFF3bYyeFCIx8hg4QMF00
+	0gkAdXNiJaqBOJ8pA7QHsvWy03zIg/U=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-404-DtDy6kSDO1ecF6Vac4tZIQ-1; Fri, 31 Mar 2023 16:55:49 -0400
-X-MC-Unique: DtDy6kSDO1ecF6Vac4tZIQ-1
-Received: by mail-qt1-f200.google.com with SMTP id h6-20020a05622a170600b003e22c6de617so15459324qtk.13
-        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 13:55:49 -0700 (PDT)
+ us-mta-492-MegdJrYcPUu9p7IBrVIlWg-1; Fri, 31 Mar 2023 17:03:54 -0400
+X-MC-Unique: MegdJrYcPUu9p7IBrVIlWg-1
+Received: by mail-qv1-f70.google.com with SMTP id a10-20020a0ccdca000000b005d70160fbb0so10273513qvn.21
+        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 14:03:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680296149;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4iXEOFNILcUMsIjcydKfmGYblvwSUsIqK+R28wpgVSw=;
-        b=u2HsE9uxMhY9n80i1loNoOaEsCBiYyrMdEdiG9KaV60rE/EjXdSb/oDINYC7+9QKch
-         LrMtQ+7o34G1JPatk24V7Kgm1uIshgtEOaSI9S2P9oA2y0Ua3ypEL/vq1hKwN75HCjkj
-         wW0WOg8kq+E9CuuVRnWiwTW78mnjsnurQKb6uUggl34bnWKAM7WUKvNJOZk+k2Zte9t5
-         T6eZcPV+UpJJfgd2LV3cX7wFuI0smDGKOZwHBMA4EPaDW2bR0M3q6nBdeu9ieQkjNP3U
-         ilrKNQWHeCZTE6IBEr2Fk5+FcXj+R5pIEVYRgnFK1atln0y9L6IkQA4KMAEZzGGzmi9o
-         IbLQ==
-X-Gm-Message-State: AAQBX9dUF7oh/PpYIiQN4GWLRQbEOz2FBQIJNVU7uMPE66kK3a+GaCI+
-	w9tmZg08D3Q5j2d5JcZDfEjp7f+ygnPHk6TMBOWAPDb9/YWHYlaZAC5XET+zURpcYszMSPnUYaV
-	LlANjQFtwmHHWvA==
-X-Received: by 2002:a05:6214:d83:b0:5df:3310:c1f9 with SMTP id e3-20020a0562140d8300b005df3310c1f9mr28014875qve.5.1680296149145;
-        Fri, 31 Mar 2023 13:55:49 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b7lU6rfvonQF6UvzHAg1z9y6+ns7pWBTCXqEidZmccRyfV4/pcAgSDviIOorQpDT9jgOtcwg==
-X-Received: by 2002:a05:6214:d83:b0:5df:3310:c1f9 with SMTP id e3-20020a0562140d8300b005df3310c1f9mr28014849qve.5.1680296148838;
-        Fri, 31 Mar 2023 13:55:48 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id o6-20020a0c9006000000b005e0cd3c21c8sm875543qvo.13.2023.03.31.13.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 13:55:48 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680296634;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bUtpTfIhZLUJQRzvjQdCDBe9iqr/rmYVzQ4AMz2vCfE=;
+        b=ODV926XqFJgjaBf5ibJmVjkC3I2BVVB/Jly3Kuc0D1JelkaoeKI2hNeJRXMdap7G+6
+         OYNS4bSHRdeZsM8M5sYoPPYAOCFpm2v/YTdDorl3hpL2mNdCZ1Gkho91Uax+s5kD9KnF
+         3LHrcwX9TVEHQRHKlE3gZz45BgeoxGnVR8/QbxfWVzju7YwpENcIismF67K7VvrHx7M1
+         V+0B9ISk1H0U3liAWWL4DAYyp5cIAwOCaNu+ZEwYwb7bCNVzHijdvwt9X+Kku7DKi7gx
+         S61P5nREARuSElY7ipRe2UjTS3Wln1oUoLN+jUglbJ7ZnlOLAoln3PbfsS73Yji26s3t
+         QDow==
+X-Gm-Message-State: AAQBX9doZ/FIvtoAI/GTwQ4RmKco3EVPJOtPxwaZImehqyAUWFeG9ldb
+	5QwH+ymjwFmNpHmnl556V/glR+UTDXBq6h5VsbmJKvV4UcmfK7Yk0oD4tbo/6OwtBRNbaxRPiC2
+	Y1t0qATuRnIENbzGWhyoqW6OOwJNFGCXik9RUnPeg4fbHacIwwhDo1kfS18Kevt2yJqJG
+X-Received: by 2002:a05:6214:23c8:b0:5c6:ab93:6112 with SMTP id hr8-20020a05621423c800b005c6ab936112mr41644758qvb.30.1680296634316;
+        Fri, 31 Mar 2023 14:03:54 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZJNrNr28ojgFbGTSKPoyvzjJNzlkeUYYlq7VX0czWlVa+idoT5bjB8pmq4W/nFI4r3SgHHsw==
+X-Received: by 2002:a05:6214:23c8:b0:5c6:ab93:6112 with SMTP id hr8-20020a05621423c800b005c6ab936112mr41644711qvb.30.1680296633897;
+        Fri, 31 Mar 2023 14:03:53 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id nd13-20020a056214420d00b005dd8b9345absm847628qvb.67.2023.03.31.14.03.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 14:03:53 -0700 (PDT)
+Subject: Re: [PATCH] scsi: message: fusion: remove unused timeleft variable
+To: Bill Wendling <morbo@google.com>
+Cc: sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+ suganath-prabu.subramani@broadcom.com, nathan@kernel.org,
+ ndesaulniers@google.com, MPT-FusionLinux.pdl@broadcom.com,
+ linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20230331162617.1858394-1-trix@redhat.com>
+ <CAGG=3QUYibiR2FLkLWBzr-j9X9nXLJVvmi5WqF=WmRZfgW3tRw@mail.gmail.com>
 From: Tom Rix <trix@redhat.com>
-To: jes@trained-monkey.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-acenic@sunsite.dk,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] net: alteon: remove unused len variable
-Date: Fri, 31 Mar 2023 16:55:45 -0400
-Message-Id: <20230331205545.1863496-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+Message-ID: <0afb4c99-63d9-0d53-8dfc-1a07cc562764@redhat.com>
+Date: Fri, 31 Mar 2023 14:03:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <CAGG=3QUYibiR2FLkLWBzr-j9X9nXLJVvmi5WqF=WmRZfgW3tRw@mail.gmail.com>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Language: en-US
 
-clang with W=1 reports
-drivers/net/ethernet/alteon/acenic.c:2438:10: error: variable
-  'len' set but not used [-Werror,-Wunused-but-set-variable]
-                int i, len = 0;
-                       ^
-This variable is not used so remove it.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/ethernet/alteon/acenic.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 3/31/23 12:40 PM, Bill Wendling wrote:
+> On Fri, Mar 31, 2023 at 9:26 AM Tom Rix <trix@redhat.com> wrote:
+>> clang with W=1 reports
+>> drivers/message/fusion/mptsas.c:4796:17: error: variable
+>>    'timeleft' set but not used [-Werror,-Wunused-but-set-variable]
+>>          unsigned long    timeleft;
+>>                           ^
+>> This variable is not used so remove it.
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   drivers/message/fusion/mptsas.c | 3 ---
+>>   1 file changed, 3 deletions(-)
+>>
+>> diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
+>> index 86f16f3ea478..d458665e2fc9 100644
+>> --- a/drivers/message/fusion/mptsas.c
+>> +++ b/drivers/message/fusion/mptsas.c
+>> @@ -4793,7 +4793,6 @@ mptsas_issue_tm(MPT_ADAPTER *ioc, u8 type, u8 channel, u8 id, u64 lun,
+>>          MPT_FRAME_HDR   *mf;
+>>          SCSITaskMgmt_t  *pScsiTm;
+>>          int              retval;
+>> -       unsigned long    timeleft;
+>>
+>>          *issue_reset = 0;
+>>          mf = mpt_get_msg_frame(mptsasDeviceResetCtx, ioc);
+>> @@ -4829,8 +4828,6 @@ mptsas_issue_tm(MPT_ADAPTER *ioc, u8 type, u8 channel, u8 id, u64 lun,
+>>          mpt_put_msg_frame_hi_pri(mptsasDeviceResetCtx, ioc, mf);
+>>
+>>          /* Now wait for the command to complete */
+>> -       timeleft = wait_for_completion_timeout(&ioc->taskmgmt_cmds.done,
+>> -           timeout*HZ);
+> It looks bad to remove the call to wait_for_completion_timeout(). Is
+> it truly not needed? If it's needed, the "timeleft" should be checked
+> or a comment left to explain why it's not checked.
 
-diff --git a/drivers/net/ethernet/alteon/acenic.c b/drivers/net/ethernet/alteon/acenic.c
-index d7762da8b2c0..eafef84fe3be 100644
---- a/drivers/net/ethernet/alteon/acenic.c
-+++ b/drivers/net/ethernet/alteon/acenic.c
-@@ -2435,7 +2435,7 @@ static netdev_tx_t ace_start_xmit(struct sk_buff *skb,
- 	} else {
- 		dma_addr_t mapping;
- 		u32 vlan_tag = 0;
--		int i, len = 0;
-+		int i;
- 
- 		mapping = ace_map_tx_skb(ap, skb, NULL, idx);
- 		flagsize = (skb_headlen(skb) << 16);
-@@ -2454,7 +2454,6 @@ static netdev_tx_t ace_start_xmit(struct sk_buff *skb,
- 			const skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
- 			struct tx_ring_info *info;
- 
--			len += skb_frag_size(frag);
- 			info = ap->skb->tx_skbuff + idx;
- 			desc = ap->tx_ring + idx;
- 
--- 
-2.27.0
+Yeah. this is a screw up on my part, sorry.
+
+T
+
+>
+> -bw
+>
+>>          if (!(ioc->taskmgmt_cmds.status & MPT_MGMT_STATUS_COMMAND_GOOD)) {
+>>                  retval = -1; /* return failure */
+>>                  dtmprintk(ioc, printk(MYIOC_s_ERR_FMT
+>> --
+>> 2.27.0
+>>
+>>
 
