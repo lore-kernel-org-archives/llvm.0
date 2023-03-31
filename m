@@ -1,169 +1,59 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7784AA20
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 14:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680273646;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xekT61UCJuLTH1YfBMTMrcyVrTtDbx7PHmiYMSMtpPk=;
-	b=Kdotc4hVxymtD+SMBZJ4tgMDWay5HsGwAVFd5xZyZh/IPG0St/GfB/oUsaPdn4YW37NJjd
-	SkaU5zJbR1OU/mvl7f8XQT5xY6/cHv/VP/Woug+ygKST8ccQZbKlZYDrYw0O2Mcl6pQp2a
-	21JTDeO5y9JNtwIFC2dV1N2RdwIn3lQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-507-kTa1gaUbNZCU3xQJpEAC2A-1; Fri, 31 Mar 2023 10:40:45 -0400
-X-MC-Unique: kTa1gaUbNZCU3xQJpEAC2A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B0EC510334A4
-	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 14:40:44 +0000 (UTC)
-Received: from [172.64.0.121] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9A17B202701F;
-	Fri, 31 Mar 2023 14:40:44 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 381): Test report for master
- (6.3.0-rc4, mainline.kernel.org-clang, 62bad54b)
-Date: Fri, 31 Mar 2023 14:40:44 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3213C0C
+	for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 14:44:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6929CC433D2;
+	Fri, 31 Mar 2023 14:44:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680273851;
+	bh=AyJEp8Qrm14ORPXi2o2SkZpKu/1ofjd+BttEkyNYbbQ=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=BOSTvjk3Eyg/zSTEqcBKdxfrAwTuhzo/pnnqXMJ/G1m7/jLYyIxJBjX5OXdYwjr68
+	 TUl9YJGKG0nWiiY6C+To+3rKz8kQL9RLSEn97Qi8w9RulQAxJA3jGWO87x1M+2FcoP
+	 AXa7qWI13KT45fkq4bnmKWkoVaPr2U+zrd7FusmBeq45K5UkUrbR64fO1TpSOuY/hj
+	 ea1UfN/NnUN+RVIVv9OnPOY8B/yEAXM9sL6wv4upNgO9EDu7N1Qh2COwVTR6wpAQh+
+	 7FAh9NIJo04MyGjvttCB3SmlSG3Z670oq70AIAfNQbGvrr1fB7qToaPRgAAdZoaZuk
+	 09blVBvFi4Ixg==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <47696.123033110404500123@us-mta-507.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Subject: Re: wifi: ipw2x00: remove unused _ipw_read16 function
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230319135418.1703380-1-trix@redhat.com>
+References: <20230319135418.1703380-1-trix@redhat.com>
+To: Tom Rix <trix@redhat.com>
+Cc: stas.yakovlev@gmail.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+ ndesaulniers@google.com, linux-wireless@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Tom Rix <trix@redhat.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168027384396.32751.618340608472919445.kvalo@kernel.org>
+Date: Fri, 31 Mar 2023 14:44:08 +0000 (UTC)
 
-Hi, we tested your kernel and here are the results:
+Tom Rix <trix@redhat.com> wrote:
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+> clang with W=1 reports
+> drivers/net/wireless/intel/ipw2x00/ipw2200.c:381:19: error:
+>   unused function '_ipw_read16' [-Werror,-Wunused-function]
+> static inline u16 _ipw_read16(struct ipw_priv *ipw, unsigned long ofs)
+>                   ^
+> This function and its wrapping marco are not used, so remove them.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Patch applied to wireless-next.git, thanks.
 
-Kernel information:
-    Commit message: Merge tag 'dma-mapping-6.3-2023-03-31' of git://git.inf=
-radead.org/users/hch/dma-mapping
+c7e39d70613c wifi: ipw2x00: remove unused _ipw_read16 function
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/83036
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230319135418.1703380-1-trix@redhat.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] RIP: 0010:cooling_device_stats_setup+0xfb/0x110
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2181987
-            Affected tests:
-                  x86_64 (debug) - Boot test
-                  x86_64 (debug) - Reboot test
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1612
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
