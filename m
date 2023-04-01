@@ -1,106 +1,188 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5EA7C
-	for <llvm@lists.linux.dev>; Sat,  1 Apr 2023 01:05:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680311102;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZezcjhdJnPBqT5fIkJeXVlzuTEM0bkI2yB633mRrHn4=;
-	b=WWYsUX5Du3q1fMuMhJw63LuscufeHWV5WysdAKoBAh1D5SZHSSD6rhDUbWTiqzUl18EhWz
-	1TLaIPqp4xsOyuSRGZ/gBhsCEQwYFa1dmkde/wv85DWFyvlAFITkvX3MCUvzBG4obEILgw
-	bOxIPwbgsIt6+RMVUB34qisIFGq0IF8=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-160-zEe23DmSPWS8660x9JiNUQ-1; Fri, 31 Mar 2023 21:05:00 -0400
-X-MC-Unique: zEe23DmSPWS8660x9JiNUQ-1
-Received: by mail-qt1-f197.google.com with SMTP id v7-20020a05622a188700b003e0e27bbc2eso15685579qtc.8
-        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 18:05:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680311100;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZezcjhdJnPBqT5fIkJeXVlzuTEM0bkI2yB633mRrHn4=;
-        b=P0ze8O3Sf94dbqkFnDuF+cmrtoMaMevInfirvr+m25jQhGcmhEdGrrai9T/F5i97IV
-         1GUF0Ke3qvohQGKOWLUwM0xA7gqOsI9eLk4BFCR5JHKcS6mY6EBVPJJxXnoz9fD1s7+l
-         5WT7driJ3/SrsHUoQBwVfdmKrzDRItBgaCH7vbEYwmxo6IFuBVCSbwAsjUVpQj4mPhqg
-         96/FCS/MCL7pXvR0MLoc8UJ+5yNC1MnFVuUzjxfzVlHGdiTJSgPz1yAGVUDC9UJTWlYp
-         VkinUmzmGTMnpW3JchxP5aOXtVfnNDyGLmuKKc+R+Wsk8WU7Las/xdnDNvPLawPspdW3
-         Eq+A==
-X-Gm-Message-State: AO0yUKWX6RpRyI0ncSvfHhANy2U5YAfpfym0fYiCDgttubyCq9o3aJEA
-	vN3bwESXTpt1M8DCu7L74O1PB91vufnRW45aBtwNxq2HzKQBrlMU1cZ2OzldUYhZMo5cxlJ2qmb
-	3pYbwornYGylkMg==
-X-Received: by 2002:a05:622a:594:b0:3bf:db0a:c105 with SMTP id c20-20020a05622a059400b003bfdb0ac105mr47836555qtb.6.1680311100444;
-        Fri, 31 Mar 2023 18:05:00 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9G4/WUx6L3PsHLq2UxivRskDVehlN2TbR8kJzcUk6OcCVFU7GWx4dbSv+XR5SXUmN8++dfFA==
-X-Received: by 2002:a05:622a:594:b0:3bf:db0a:c105 with SMTP id c20-20020a05622a059400b003bfdb0ac105mr47836535qtb.6.1680311100209;
-        Fri, 31 Mar 2023 18:05:00 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i187-20020a3786c4000000b006f9f3c0c63csm1061634qkd.32.2023.03.31.18.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 18:04:59 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: mchehab@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] [media] mb86a20s: remove unused active_layers variable
-Date: Fri, 31 Mar 2023 21:04:56 -0400
-Message-Id: <20230401010456.1866555-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F567C
+	for <llvm@lists.linux.dev>; Sat,  1 Apr 2023 01:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB811C433AE
+	for <llvm@lists.linux.dev>; Sat,  1 Apr 2023 01:09:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680311355;
+	bh=/LTUz3eEbeLJ0Mp6IRD/RWbRrFGs0YZv3TWcnSN0CV0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=lqX2jOkISgAicmlN3IB0/2Xe7FK88Yr8f6O2Vcn1f7VBk92gJ34hJ03ZUjg2X1O2w
+	 MXyMILjQhdjZUGAN8EqK9PbxIXdOarz/nOStjk3jyujc64UrBY3NxliGICbkiWOLeD
+	 tESbK0fSdiitrGY8qn70TV3day/iRt7TQWxxLH6aeKyGIbEXQPDPfeLcOCKHBbRCGd
+	 kPtXKukgdaHmAbR62dbTXUDRHHWYFDqubsY023yacltLnh7xSTTFwGeWv8IRmcEofA
+	 ZgLx++fmhFB5xBUtIZ86Pca07pCzaG9Tn59xmMf1X57+SIGxgWeJtnDV7+SA5X+ro7
+	 sL9fm4QxIzRkA==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-17786581fe1so24958865fac.10
+        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 18:09:15 -0700 (PDT)
+X-Gm-Message-State: AAQBX9d1CtP97TrjB2qQuJD8RIkqHt5ZV994SZAn3trm69ntWmrIyGBE
+	KP1b9sf+f/63H5hWjIfFWRq4FpLKmTtsQYSuNBI=
+X-Google-Smtp-Source: AKy350ZGV1y0Nf0JZUb3XIQPYwf+PbORdDoVmjq9Gbwo2taA1C6i3WK4Xuu0kG0Hz6DIl7RRQWz6KWjQN65WQgfG23k=
+X-Received: by 2002:a05:6870:d20f:b0:16e:8993:9d7c with SMTP id
+ g15-20020a056870d20f00b0016e89939d7cmr5363652oac.1.1680311354924; Fri, 31 Mar
+ 2023 18:09:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+References: <20230330182223.181775-1-hi@alyssa.is> <20230330222928.GA644044@dev-arch.thelio-3990X>
+ <CAK7LNARU444UrZXVodNftud-scy5KKUjdtTM0GOrxHB9pyKmkg@mail.gmail.com> <20230331202716.mvny65ybaat3wsmm@x220>
+In-Reply-To: <20230331202716.mvny65ybaat3wsmm@x220>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 1 Apr 2023 10:08:37 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATN7hQFXx+Y5PguD9mvcP0-jadXxU_5WP4YQuHgKeyD1w@mail.gmail.com>
+Message-ID: <CAK7LNATN7hQFXx+Y5PguD9mvcP0-jadXxU_5WP4YQuHgKeyD1w@mail.gmail.com>
+Subject: Re: [PATCH v3] purgatory: fix disabling debug info
+To: Alyssa Ross <hi@alyssa.is>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Cao <nickcao@nichi.co>, linux-kbuild@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	Tom Rix <trix@redhat.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, stable@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-clang with W=1 reports
-drivers/media/dvb-frontends/mb86a20s.c:1572:6: error: variable
-  'active_layers' set but not used [-Werror,-Wunused-but-set-variable]
-        int active_layers = 0, pre_ber_layers = 0, post_ber_layers = 0;
-            ^
-This variable is not used so remove it.
+On Sat, Apr 1, 2023 at 5:27=E2=80=AFAM Alyssa Ross <hi@alyssa.is> wrote:
+>
+> On Sat, Apr 01, 2023 at 12:42:13AM +0900, Masahiro Yamada wrote:
+> > On Fri, Mar 31, 2023 at 7:29=E2=80=AFAM Nathan Chancellor <nathan@kerne=
+l.org> wrote:
+> > >
+> > > On Thu, Mar 30, 2023 at 06:22:24PM +0000, Alyssa Ross wrote:
+> > > > Since 32ef9e5054ec, -Wa,-gdwarf-2 is no longer used in KBUILD_AFLAG=
+S.
+> > > > Instead, it includes -g, the appropriate -gdwarf-* flag, and also t=
+he
+> > > > -Wa versions of both of those if building with Clang and GNU as.  A=
+s a
+> > > > result, debug info was being generated for the purgatory objects, e=
+ven
+> > > > though the intention was that it not be.
+> > > >
+> > > > Fixes: 32ef9e5054ec ("Makefile.debug: re-enable debug info for .S f=
+iles")
+> > > > Signed-off-by: Alyssa Ross <hi@alyssa.is>
+> > > > Cc: stable@vger.kernel.org
+> > > > Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+> > >
+> > > This is definitely more future proof.
+> > >
+> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> >
+> >
+> >
+> > I prefer v3 since it is cleaner, but unfortunately
+> > it does not work for Clang+GAS.
+> >
+> >
+> > With v3 applied, I still see the debug info.
+> >
+> >
+> >
+> > $ make LLVM=3D1 LLVM_IAS=3D0  arch/x86/purgatory/setup-x86_64.o
+> >   UPD     include/config/kernel.release
+> >   UPD     include/generated/utsrelease.h
+> >   CALL    scripts/checksyscalls.sh
+> >   DESCEND objtool
+> >   INSTALL libsubcmd_headers
+> >   AS      arch/x86/purgatory/setup-x86_64.o
+> > $ readelf -S arch/x86/purgatory/setup-x86_64.o
+> > There are 18 section headers, starting at offset 0x14d8:
+> >
+> > Section Headers:
+> >   [Nr] Name              Type             Address           Offset
+> >        Size              EntSize          Flags  Link  Info  Align
+> >   [ 0]                   NULL             0000000000000000  00000000
+> >        0000000000000000  0000000000000000           0     0     0
+> >   [ 1] .text             PROGBITS         0000000000000000  00000040
+> >        0000000000000027  0000000000000000  AX       0     0     16
+> >   [ 2] .rela.text        RELA             0000000000000000  000012f8
+> >        0000000000000060  0000000000000018   I      15     1     8
+> >   [ 3] .data             PROGBITS         0000000000000000  00000067
+> >        0000000000000000  0000000000000000  WA       0     0     1
+> >   [ 4] .bss              NOBITS           0000000000000000  00001000
+> >        0000000000001000  0000000000000000  WA       0     0     4096
+> >   [ 5] .rodata           PROGBITS         0000000000000000  00001000
+> >        0000000000000020  0000000000000000   A       0     0     16
+> >   [ 6] .rela.rodata      RELA             0000000000000000  00001358
+> >        0000000000000018  0000000000000018   I      15     5     8
+> >   [ 7] .debug_line       PROGBITS         0000000000000000  00001020
+> >        000000000000005f  0000000000000000           0     0     1
+> >   [ 8] .rela.debug_line  RELA             0000000000000000  00001370
+> >        0000000000000018  0000000000000018   I      15     7     8
+> >   [ 9] .debug_info       PROGBITS         0000000000000000  0000107f
+> >        0000000000000027  0000000000000000           0     0     1
+> >   [10] .rela.debug_info  RELA             0000000000000000  00001388
+> >        0000000000000090  0000000000000018   I      15     9     8
+> >   [11] .debug_abbrev     PROGBITS         0000000000000000  000010a6
+> >        0000000000000014  0000000000000000           0     0     1
+> >   [12] .debug_aranges    PROGBITS         0000000000000000  000010c0
+> >        0000000000000030  0000000000000000           0     0     16
+> >   [13] .rela.debug_[...] RELA             0000000000000000  00001418
+> >        0000000000000030  0000000000000018   I      15    12     8
+> >   [14] .debug_str        PROGBITS         0000000000000000  000010f0
+> >        0000000000000054  0000000000000001  MS       0     0     1
+> >   [15] .symtab           SYMTAB           0000000000000000  00001148
+> >        0000000000000168  0000000000000018          16    12     8
+> >   [16] .strtab           STRTAB           0000000000000000  000012b0
+> >        0000000000000041  0000000000000000           0     0     1
+> >   [17] .shstrtab         STRTAB           0000000000000000  00001448
+> >        000000000000008d  0000000000000000           0     0     1
+> > Key to Flags:
+> >   W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
+> >   L (link order), O (extra OS processing required), G (group), T (TLS),
+> >   C (compressed), x (unknown), o (OS specific), E (exclude),
+> >   D (mbind), l (large), p (processor specific)
+> >
+> >
+> >
+> >
+> >
+> >
+> > With -g0 given, GCC stops passing -g -gdwarf-4 down to GAS.
+> >
+> >
+> > Clang does not do anything about -g0 for the external assembler.
+>
+> You're right.  Thank you for your thoughtful testing =E2=80=94 I forgot t=
+o check
+> LLVM for v3.  I thought maybe adding -Wa,-g0 would be enough, but it
+> turns out that GAS doesn't support that.  If -g has been specified,
+> there doesn't seem to be any way to disable debug info again later in
+> the command line.
+>
+> So we probably can't do better than v2 while LLVM_IAS=3D0 is supported.
+> The only other option I see is (untested):
+>
+> asflags-y                       +=3D -g0
+> asflags-remove-y                +=3D -Wa,-g -Wa,-gdwarf-4 -Wa,-gdwarf-5
+>
+> But I don't like that option, because it means there are two completely
+> different ways of doing it depending on the compiler setup, and it makes
+> it even less likely anybody would remember to update asflags-remove-y
+> when DWARF 6 comes around or whatever.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/media/dvb-frontends/mb86a20s.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/mb86a20s.c b/drivers/media/dvb-frontends/mb86a20s.c
-index b74b9afed9a2..125fed4891ba 100644
---- a/drivers/media/dvb-frontends/mb86a20s.c
-+++ b/drivers/media/dvb-frontends/mb86a20s.c
-@@ -1569,7 +1569,7 @@ static int mb86a20s_get_stats(struct dvb_frontend *fe, int status_nr)
- 	u32 t_post_bit_error = 0, t_post_bit_count = 0;
- 	u32 block_error = 0, block_count = 0;
- 	u32 t_block_error = 0, t_block_count = 0;
--	int active_layers = 0, pre_ber_layers = 0, post_ber_layers = 0;
-+	int pre_ber_layers = 0, post_ber_layers = 0;
- 	int per_layers = 0;
- 
- 	dev_dbg(&state->i2c->dev, "%s called.\n", __func__);
-@@ -1589,9 +1589,6 @@ static int mb86a20s_get_stats(struct dvb_frontend *fe, int status_nr)
- 
- 	for (layer = 0; layer < NUM_LAYERS; layer++) {
- 		if (c->isdbt_layer_enabled & (1 << layer)) {
--			/* Layer is active and has rc segments */
--			active_layers++;
--
- 			/* Handle BER before vterbi */
- 			rc = mb86a20s_get_pre_ber(fe, layer,
- 						  &bit_error, &bit_count);
--- 
-2.27.0
+Agree.
+This is uglier than v2.
 
+
+
+If nobody comes up with a better idea,
+I will pick up v2.
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
