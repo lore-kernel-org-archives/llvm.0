@@ -1,125 +1,93 @@
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [85.214.55.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07C017FA
-	for <llvm@lists.linux.dev>; Sat,  1 Apr 2023 20:30:37 +0000 (UTC)
-Received: from mercury (unknown [185.209.196.239])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 77EBA66030C4;
-	Sat,  1 Apr 2023 21:30:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1680381029;
-	bh=YzmZJzLAOt9Kefz8r1tk+YrbDj+ypz+EkDt0+WX3YpA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lKi4CdANBtbKhg0xQoFMSHXZcwmziR9fMMChivQ0oyM4iVY/Jfen9Q0BYeafYXJSO
-	 h3TDxA1UFtbHk6EaWlFeGsAjtEpY/U+WU2OK7Mow562NQuuenTNaCNNgrjsm8t1DGM
-	 8apySrygtU6RQ6gRyKzU8CqbvBkqn9rpAjkhl8wjfAF1TBh/vpNZQuUhBa6QuW722C
-	 LiBUhyuhU0bpgyJq9UeHiH0uCsIS7sVAufIDem3wsQAk+McE+NE1q9DKEKQvHnQgJp
-	 LSiP8dj4Z4veg87Os6q5Dz7Rok9IIPDetdXaB1b4gHdOEJDlo98oZh1BClWiS+qB/O
-	 KzU+ab3OEnhTw==
-Received: by mercury (Postfix, from userid 1000)
-	id EA5EE1062746; Sat,  1 Apr 2023 22:30:26 +0200 (CEST)
-Date: Sat, 1 Apr 2023 22:30:26 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Tom Rix <trix@redhat.com>
-Cc: nathan@kernel.org, ndesaulniers@google.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Andreas Kemnade <andreas@kemnade.info>,
-	"H. Nikolaus Schaller" <hns@goldelico.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC078F66
+	for <llvm@lists.linux.dev>; Sat,  1 Apr 2023 21:54:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=nq+wVlpePRQY2WWVL6tQTzkVmNZ7Jw4IvnL2MwD+skY=; b=hL1OEayWzlSO6rrTZwbNOwx0/T
+	YhLh0NO8HA8DFC3rLBud7OjpuWCdBhNM0fJ6zdowLldJnCqfS0eCPakKPeJYHXjhDvf1c2Bqh88kP
+	bnQrlP/8jbVZUdg8T2oOZ8h1vq23zzhpwfyT++peQsXMKbhnvd1x9NAgj4si36UjiENgsmcuSSJmq
+	wmZ6B+DTkMyeHAKDzcoFSbnswdjesb2/vFTUQdNjvJJt20mMyIImU2A19Foa5Kq14jxFOkbO35POJ
+	u+aix5ypPMQr4jS0YYHA5kfMRx4wrsMfJjcMQvrX+Mz12FN2JNqI0y+n2tsBF4h70Q5y97RZJJjTt
+	kRDQ+kaA==;
+Received: from p200300ccff2d4a001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2d:4a00:1a3d:a2ff:febf:d33a] helo=aktux)
+	by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.89)
+	(envelope-from <andreas@kemnade.info>)
+	id 1piiwP-0000Aw-8q; Sat, 01 Apr 2023 23:39:17 +0200
+Date: Sat, 1 Apr 2023 23:39:16 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Tom Rix <trix@redhat.com>, nathan@kernel.org, ndesaulniers@google.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, "H. Nikolaus Schaller" <hns@goldelico.com>
 Subject: Re: [PATCH] power: supply: twl4030-charger: remove unused cur_reg
  variable
-Message-ID: <20230401203026.nzk4aygv7sr7quhe@mercury.elektranox.org>
+Message-ID: <20230401233916.374ffe1a@aktux>
+In-Reply-To: <20230401203026.nzk4aygv7sr7quhe@mercury.elektranox.org>
 References: <20230401113432.1873847-1-trix@redhat.com>
+	<20230401203026.nzk4aygv7sr7quhe@mercury.elektranox.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mfptafjvzvw5h7cx"
-Content-Disposition: inline
-In-Reply-To: <20230401113432.1873847-1-trix@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 
+On Sat, 1 Apr 2023 22:30:26 +0200
+Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
 
---mfptafjvzvw5h7cx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hi,
+> 
+> On Sat, Apr 01, 2023 at 07:34:32AM -0400, Tom Rix wrote:
+> > clang with W=1 reports
+> > drivers/power/supply/twl4030_charger.c:242:16: error: variable
+> >   'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
+> >         unsigned reg, cur_reg;
+> >                       ^
+> > This variable is not used so remove it.
+> > 
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  drivers/power/supply/twl4030_charger.c | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
+> > index 7adfd69fe649..5fa5b2311330 100644
+> > --- a/drivers/power/supply/twl4030_charger.c
+> > +++ b/drivers/power/supply/twl4030_charger.c
+> > @@ -239,7 +239,7 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
+> >  {
+> >  	int status;
+> >  	int cur;
+> > -	unsigned reg, cur_reg;
+> > +	unsigned reg;
+> >  	u8 bcictl1, oldreg, fullreg;
+> >  	bool cgain = false;
+> >  	u8 boot_bci;
+> > @@ -357,11 +357,9 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
+> >  	status = twl4030_bci_read(TWL4030_BCIIREF1, &oldreg);
+> >  	if (status < 0)
+> >  		return status;
+> > -	cur_reg = oldreg;
+> >  	status = twl4030_bci_read(TWL4030_BCIIREF2, &oldreg);
+> >  	if (status < 0)
+> >  		return status;
+> > -	cur_reg |= oldreg << 8;
+> >  	if (reg != oldreg) {  
+> 
+> I think the correct fix would be checking for (reg != cur_reg) here.
+> 
+yes, makes more sense.
 
-Hi,
-
-On Sat, Apr 01, 2023 at 07:34:32AM -0400, Tom Rix wrote:
-> clang with W=3D1 reports
-> drivers/power/supply/twl4030_charger.c:242:16: error: variable
->   'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
->         unsigned reg, cur_reg;
->                       ^
-> This variable is not used so remove it.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/power/supply/twl4030_charger.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/suppl=
-y/twl4030_charger.c
-> index 7adfd69fe649..5fa5b2311330 100644
-> --- a/drivers/power/supply/twl4030_charger.c
-> +++ b/drivers/power/supply/twl4030_charger.c
-> @@ -239,7 +239,7 @@ static int twl4030_charger_update_current(struct twl4=
-030_bci *bci)
->  {
->  	int status;
->  	int cur;
-> -	unsigned reg, cur_reg;
-> +	unsigned reg;
->  	u8 bcictl1, oldreg, fullreg;
->  	bool cgain =3D false;
->  	u8 boot_bci;
-> @@ -357,11 +357,9 @@ static int twl4030_charger_update_current(struct twl=
-4030_bci *bci)
->  	status =3D twl4030_bci_read(TWL4030_BCIIREF1, &oldreg);
->  	if (status < 0)
->  		return status;
-> -	cur_reg =3D oldreg;
->  	status =3D twl4030_bci_read(TWL4030_BCIIREF2, &oldreg);
->  	if (status < 0)
->  		return status;
-> -	cur_reg |=3D oldreg << 8;
->  	if (reg !=3D oldreg) {
-
-I think the correct fix would be checking for (reg !=3D cur_reg) here.
-
--- Sebastian
-
->  		/* disable write protection for one write access for
->  		 * BCIIREF */
-> --=20
-> 2.27.0
->=20
-
---mfptafjvzvw5h7cx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQolF4ACgkQ2O7X88g7
-+poTpw/4qkx6YJ+9tkZXsBoUZCdHoevMWeMg4FDt6d351ZoMDrZQyLWkrrQglRt6
-rwnpaReLsWPt3q9TmZwsQ5892JZOZw5QMOUHyfGhlCBPp7wiY35PQ0Ihff0NyzoJ
-KermMpArXyjcL4meLX8Q5NRlanU4TpDJwN03SmJziryemQI5ytwGxjBBXOcvq2hB
-ck2Py7rSk8FgBAtNAA2tjV05eJL6rVRcD3JknZicSQ1F1CissdhlJS72OdUhRDVj
-ydmiXywW1jTEMCMrXG92x3COR0Niv/MH0PjlMakYKrjUlD0hMXUsNLq4CRjknhRu
-QnGF1kGtBSd15ANhNNcqOmSTyC7uWzvQTOnE1Ge0wbMNVXSNeHFvieRxN5EOEAC0
-6Yt9xUDMQtMIVoBgzUk3GAdwSvW+mYBXC14UlTFzfRKh0GozhZSuG8Ee+rtEdovn
-xqdTx/mxR75AWTiL/JsbAzrkCv3+Yt7sSwvcsz5CseNXxWvuWt/W7apC9HSvEd7O
-L7eR1iaB42II2oJJBtZra0Lp4bscslMwmXK7B9/Zjkdn5SnD0vttBuBAEpgksU/4
-thNJUNt8jtS0WSKbAjeJEWpFwxo9Yha1grP4wXqDgGpuEYZjUFLqp+C/HgSoS4sO
-Onf5LmXisLayRqToKWUUEmRfOa+a/xTicUvyxrxeOVdmLOolbg==
-=28ub
------END PGP SIGNATURE-----
-
---mfptafjvzvw5h7cx--
+Regards,
+Andreas
