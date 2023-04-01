@@ -1,108 +1,139 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FCC2CAB
-	for <llvm@lists.linux.dev>; Sat,  1 Apr 2023 11:34:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680348877;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J5VnVhbHSvcA014php78QLEnB2oArEoTP1K4/6SYEVc=;
-	b=gx//TVuFumWTJhEcPzeHRMZJff+MVvQPbi7Tf8Z8dopFOl5Ln2dbASo768KKY0ZtnpFBK2
-	C16/PYgpoq/c/1K4Hjb9JwfkH5GSShaxIik+Nym9KAICy6cju/l+QVduUg56xlZASMnZBE
-	0xP/rYC7A25/L6z/4uCWpqj8OD1GPt8=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-668-l4BJdMqVP666mV3sN_G7-Q-1; Sat, 01 Apr 2023 07:34:36 -0400
-X-MC-Unique: l4BJdMqVP666mV3sN_G7-Q-1
-Received: by mail-qv1-f69.google.com with SMTP id j15-20020a0cc34f000000b005c824064b10so11002132qvi.17
-        for <llvm@lists.linux.dev>; Sat, 01 Apr 2023 04:34:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680348876;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J5VnVhbHSvcA014php78QLEnB2oArEoTP1K4/6SYEVc=;
-        b=jqUYEzOARwhBNwB/OuNwB2wfSzH1C+Z52HKbz+3vL0A1XDCAAEA6JVwdW7m3ACjR/4
-         1HglVayiqwrIZ30g/13OEpt0DUh8GIo3dqxQi/ahwn1Zbsmq8efvKdXhS5RnVs4/5TyR
-         j5gDS3Rsx+wwRbihTKdX1cnSre4pxYVXktMt3YZun7Yj4j+JRc9wTtWBfdrFVEl8W76Z
-         iyfLKjTukLmyyW99vcdDkItE7FJyBGb1aTGy3cnO37ACueWlMq21CT5W3OUvdeCQuiNV
-         jZlHwASe+9pzynm2q6uRFMDTNvLJGGiIuV/Gq02OBsqd8SO2e0FhCjhIIq3lMW8l1rXQ
-         +ZpQ==
-X-Gm-Message-State: AAQBX9f+i+zZD4PEBkGAB4PJMPfya+QLJwNAnEHL2izFpGLVuA2e+FqO
-	7GWD3dWk+iiRCtXrVR7OZgc47R0IXGHXd6q+oKZntTSKSZYlErDj0zk08VafUoy/3oWAN1eFsag
-	SZwDXGssYvBgCuw==
-X-Received: by 2002:a05:6214:501e:b0:584:8c13:3041 with SMTP id jo30-20020a056214501e00b005848c133041mr18549533qvb.24.1680348875817;
-        Sat, 01 Apr 2023 04:34:35 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZH/PIz9aT1vkMeJPCy77zunA2Q4o1S573i0+gKG+HwMtgD6hdQufuIhPWM0rPxuQRAce5LcQ==
-X-Received: by 2002:a05:6214:501e:b0:584:8c13:3041 with SMTP id jo30-20020a056214501e00b005848c133041mr18549509qvb.24.1680348875582;
-        Sat, 01 Apr 2023 04:34:35 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id s11-20020ad4524b000000b005dd8b9345d8sm1230100qvq.112.2023.04.01.04.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Apr 2023 04:34:35 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: sre@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] power: supply: twl4030-charger: remove unused cur_reg variable
-Date: Sat,  1 Apr 2023 07:34:32 -0400
-Message-Id: <20230401113432.1873847-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF0D199;
+	Sat,  1 Apr 2023 12:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680353191; x=1711889191;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Bc/9wjX009TLkMWBZIjUN1BUEB7xRsZJXr60NxT9jR4=;
+  b=jN8UMENYENRvgMbcWdmcpdsaPsCp0SNSV3i8mJUZxVuomqNkMbucGs5X
+   GBw0TWgWxszEr8lmtNcA8zOrguFmeJkeP3+a/tiYVhDgOkF7zwvIGEgek
+   2foB6BiVrAW3yktbO8QfLME/wxqtzAWOPFBvM0M62TfiCKA5mBzKgzm4y
+   wy/x2+MSsgAMKa8dOld9c4gKviroKaWwSnmK1LsHlv6mTTtbU7vnUxzBG
+   1BW2SDBMi51sfgj8N/CE526Tq/LWTmdM3N4frMTl1MUI7WeI0TnF1AfF2
+   y7w7Qxi48wpt/bPNY/8fmFn+zp39n6BnxQo2d2sbjgH0H8kuh4nLLpIHD
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="339145479"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="339145479"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2023 05:46:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10667"; a="635592974"
+X-IronPort-AV: E=Sophos;i="5.98,310,1673942400"; 
+   d="scan'208";a="635592974"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 Apr 2023 05:46:27 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1piack-000Mlt-1S;
+	Sat, 01 Apr 2023 12:46:26 +0000
+Date: Sat, 1 Apr 2023 20:46:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [hverkuil-media-tree:tmp 16/25]
+ drivers/media/platform/ti/omap3isp/isp.c:1968:2: error: call to undeclared
+ function 'v4l2_async_notifier_cleanup'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202304012004.FvPBBgmU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-clang with W=1 reports
-drivers/power/supply/twl4030_charger.c:242:16: error: variable
-  'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
-        unsigned reg, cur_reg;
-                      ^
-This variable is not used so remove it.
+tree:   git://linuxtv.org/hverkuil/media_tree.git tmp
+head:   42249987f00786a33526b973c650743bc49681c2
+commit: d53fa8dcae176a268e39d8d14f778268d8d22d0a [16/25] omap3isp: Release the isp device struct by media device callback
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20230401/202304012004.FvPBBgmU-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree tmp
+        git checkout d53fa8dcae176a268e39d8d14f778268d8d22d0a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/ti/omap3isp/
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/power/supply/twl4030_charger.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304012004.FvPBBgmU-lkp@intel.com/
 
-diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
-index 7adfd69fe649..5fa5b2311330 100644
---- a/drivers/power/supply/twl4030_charger.c
-+++ b/drivers/power/supply/twl4030_charger.c
-@@ -239,7 +239,7 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
- {
- 	int status;
- 	int cur;
--	unsigned reg, cur_reg;
-+	unsigned reg;
- 	u8 bcictl1, oldreg, fullreg;
- 	bool cgain = false;
- 	u8 boot_bci;
-@@ -357,11 +357,9 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
- 	status = twl4030_bci_read(TWL4030_BCIIREF1, &oldreg);
- 	if (status < 0)
- 		return status;
--	cur_reg = oldreg;
- 	status = twl4030_bci_read(TWL4030_BCIIREF2, &oldreg);
- 	if (status < 0)
- 		return status;
--	cur_reg |= oldreg << 8;
- 	if (reg != oldreg) {
- 		/* disable write protection for one write access for
- 		 * BCIIREF */
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/ti/omap3isp/isp.c:46:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/media/platform/ti/omap3isp/isp.c:46:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/media/platform/ti/omap3isp/isp.c:46:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/media/platform/ti/omap3isp/isp.c:1968:2: error: call to undeclared function 'v4l2_async_notifier_cleanup'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           v4l2_async_notifier_cleanup(&isp->notifier);
+           ^
+   drivers/media/platform/ti/omap3isp/isp.c:1968:2: note: did you mean 'v4l2_async_nf_cleanup'?
+   include/media/v4l2-async.h:277:6: note: 'v4l2_async_nf_cleanup' declared here
+   void v4l2_async_nf_cleanup(struct v4l2_async_notifier *notifier);
+        ^
+   6 warnings and 1 error generated.
+
+
+vim +/v4l2_async_notifier_cleanup +1968 drivers/media/platform/ti/omap3isp/isp.c
+
+  1959	
+  1960	static void isp_release(struct media_device *mdev)
+  1961	{
+  1962		struct isp_device *isp =
+  1963			container_of(mdev, struct isp_device, media_dev);
+  1964	
+  1965		isp_cleanup_modules(isp);
+  1966	
+  1967		media_entity_enum_cleanup(&isp->crashed);
+> 1968		v4l2_async_notifier_cleanup(&isp->notifier);
+  1969	
+  1970		kfree(isp);
+  1971	}
+  1972	
+
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
