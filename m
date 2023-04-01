@@ -1,40 +1,40 @@
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF260179
-	for <llvm@lists.linux.dev>; Sat,  1 Apr 2023 00:19:18 +0000 (UTC)
-Received: by mail-ua1-f43.google.com with SMTP id v48so17266536uad.6
-        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 17:19:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EBB179
+	for <llvm@lists.linux.dev>; Sat,  1 Apr 2023 00:29:46 +0000 (UTC)
+Received: by mail-ua1-f44.google.com with SMTP id p91so126266uap.1
+        for <llvm@lists.linux.dev>; Fri, 31 Mar 2023 17:29:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680308358; x=1682900358;
+        d=1e100.net; s=20210112; t=1680308986; x=1682900986;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3kN1OI426ezj2MWajyPtGNRa8U4BJeq5PITvMLQQ1/Y=;
-        b=tuArFal04mMujZ2jMh9CRhIJTeZyxnneIt7vL+IoiC9DSfIqH/i6Aq2s8RSZYDZb72
-         PJTLRpFe2MjLZ6ThUTBmzCK5BH251VVrllAjkotebi3rMZs/+NM4gsy0JTatEvAUV4RB
-         9serzut97qjVvPmHRIRzUqcIwxgopmjc1sHIlGXzL6JEI4Uz/aokVUJeZGXwi2Mo2+90
-         JQZ78UF1z2pj4+BNpYxxcYLvh17xG1MdQTZTT7Mq0H4m7FKict0b5qLEppjFYfDPXL2T
-         F/cAy4vVTS3zR5IjF0lnBMCw4+G6XHlJ0zE4MYMyMyR3VgOSAyrih+5bR3HIuHaSWDrE
-         F8GA==
-X-Gm-Message-State: AAQBX9fuTXZiUXJXc0u1e3mQrJSZeA5WYdhNGqXQMMqBwEISRVvLesVf
-	0hNB+t5FaPAukvB1tl/zoPOxKJLGNqb0aXmWs5M=
-X-Google-Smtp-Source: AKy350aS07PTliXHfT/6Fq04P4riBefEIEVNi71XSk6owR1j8k7Nb0TCatxE3WstsfhhsfpiDIWmIjP0RuLipcCwExM=
-X-Received: by 2002:a05:6122:2e9:b0:400:f286:4e07 with SMTP id
- b9-20020a05612202e900b00400f2864e07mr11620548vko.9.1680308357755; Fri, 31 Mar
- 2023 17:19:17 -0700 (PDT)
+        bh=OBlyoCG5LrraHZ99yJ0ZxyQWhF4R6c4+6bmaGeRq1gw=;
+        b=VOvNiOCX/hHBZragGGW64j4rSioqg9mPt/P0JV6Rj203R4Q+DyfBYOqtDnbaHZnk7I
+         JHXcFkGhyWLC/fxl/gmy8ZuBY6wNlOqape99jz3Z/GLViw/cNOvValBPssXWlVm709ml
+         mHpY6yh4FrF5gMQUkKPnFXDfAuD9ELehiNUc9jl++XTLfKs6ysmjp0B1Shr3x7C+nOHC
+         iPuBTIPIVmjdZLXS2mbnyyjAyqMNwaNOnWqSMuRv399gBsuEE2KW86sjYYZb9imodbyH
+         Y8XjFSfYs5h3/FcwQvLhS8zDXMj1B2/PjkYvLJSa0akIPQoy4HjHKTUgStdr8FsW2jea
+         xatA==
+X-Gm-Message-State: AAQBX9dhZy3U55f3JPO166NeRKvnxxJINRMd+C4///IpSQbIAKm4WbQC
+	8psUFRPSuD/JjXliLBR+ZzVDc+/t+ggKRY5q810=
+X-Google-Smtp-Source: AKy350b+UdbtNsbeWTDuQqjj0QTeUrVOfKAec9umZoelcs51P97qffJSP5Eyk5kH+sVF/2qMlW+KV9vHGDkcD3E4/z8=
+X-Received: by 2002:a1f:2d11:0:b0:410:329:baaf with SMTP id
+ t17-20020a1f2d11000000b004100329baafmr9888056vkt.16.1680308985712; Fri, 31
+ Mar 2023 17:29:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230331004844.1592789-1-irogers@google.com> <20230331004844.1592789-2-irogers@google.com>
-In-Reply-To: <20230331004844.1592789-2-irogers@google.com>
+References: <20230331004844.1592789-1-irogers@google.com> <20230331004844.1592789-4-irogers@google.com>
+In-Reply-To: <20230331004844.1592789-4-irogers@google.com>
 From: Namhyung Kim <namhyung@kernel.org>
-Date: Fri, 31 Mar 2023 17:19:06 -0700
-Message-ID: <CAM9d7cjXGO-xd1tKDUHUrYtG=94aXnubRrUNe6EmyuGwo3=okA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] tools api: Add io__getline
+Date: Fri, 31 Mar 2023 17:29:34 -0700
+Message-ID: <CAM9d7cgRw0mHykCAwZvNP8oAXYUPzEXXaMwvg_krBnyPgrF-3w@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] perf srcline: Support for llvm-addr2line
 To: Ian Rogers <irogers@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
@@ -45,147 +45,172 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Ian,
-
 On Thu, Mar 30, 2023 at 5:49=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
 te:
 >
-> Reads a line to allocated memory up to a newline following the getline
-> API.
+> The sentinel value differs for llvm-addr2line. Configure this once and
+> then detect when reading records.
+
+Thanks for fixing this!
+
 >
 > Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  tools/lib/api/io.h        | 40 +++++++++++++++++++++++++++++++++++++++
->  tools/perf/tests/api-io.c | 36 +++++++++++++++++++++++++++++++++++
->  2 files changed, 76 insertions(+)
+>  tools/perf/util/srcline.c | 65 +++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 62 insertions(+), 3 deletions(-)
 >
-> diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
-> index 777c20f6b604..d874e8fa8b07 100644
-> --- a/tools/lib/api/io.h
-> +++ b/tools/lib/api/io.h
-> @@ -7,7 +7,9 @@
->  #ifndef __API_IO__
->  #define __API_IO__
->
-> +#include <errno.h>
->  #include <stdlib.h>
-> +#include <string.h>
->  #include <unistd.h>
->
->  struct io {
-> @@ -112,4 +114,42 @@ static inline int io__get_dec(struct io *io, __u64 *=
-dec)
->         }
+> diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+> index 2da86e57215d..423ddf3967b0 100644
+> --- a/tools/perf/util/srcline.c
+> +++ b/tools/perf/util/srcline.c
+> @@ -435,7 +435,50 @@ static struct child_process *addr2line_subprocess_in=
+it(const char *addr2line_pat
+>         return a2l;
 >  }
 >
-> +/* Read up to and including the first newline following the pattern of g=
-etline. */
-> +static inline ssize_t io__getline(char **line_out, size_t *line_len_out,=
- struct io *io)
+> +enum a2l_style {
+> +       BROKEN,
+> +       GNU_BINUTILS,
+> +       LLVM,
+> +};
+> +
+> +static enum a2l_style addr2line_configure(struct child_process *a2l)
 > +{
-> +       char buf[128];
-> +       int buf_pos =3D 0;
-> +       char *line =3D NULL;
-> +       size_t line_len =3D 0;
-> +       int ch =3D 0;
+> +       static bool cached;
+> +       static enum a2l_style style;
 > +
-> +       /* TODO: reuse previously allocated memory. */
-> +       free(*line_out);
-> +       while (ch !=3D '\n') {
-> +               ch =3D io__get_char(io);
+> +       if (!cached) {
+> +               char buf[128];
+> +               struct io io;
+> +               int ch;
 > +
-> +               if (ch < 0)
-> +                       break;
+> +               if (write(a2l->in, ",\n", 2) !=3D 2)
+> +                       return BROKEN;
 > +
-> +               if (buf_pos =3D=3D sizeof(buf)) {
-> +                       line =3D realloc(line, line_len + sizeof(buf));
-> +                       if (!line)
-> +                               return -ENOMEM;
-
-We can use a temp variable for the failure case, and also free
-the original line before returning the error.
-
-
-> +                       memcpy(&line[line_len], buf, sizeof(buf));
-> +                       line_len +=3D sizeof(buf);
-> +                       buf_pos =3D 0;
+> +               io__init(&io, a2l->out, buf, sizeof(buf));
+> +               ch =3D io__get_char(&io);
+> +               if (ch =3D=3D ',') {
+> +                       style =3D LLVM;
+> +                       cached =3D true;
+> +               } else if (ch =3D=3D '?') {
+> +                       style =3D GNU_BINUTILS;
+> +                       cached =3D true;
+> +               } else {
+> +                       style =3D BROKEN;
 > +               }
-> +               buf[buf_pos++] =3D (char)ch;
-> +       }
-> +       line =3D realloc(line, line_len + buf_pos + 1);
-> +       if (!line)
-> +               return -ENOMEM;
+> +               do {
+> +                       ch =3D io__get_char(&io);
+> +               } while (ch > 0 && ch !=3D '\n');
 
-Ditto.
+Maybe better to io__getline() ?
+
+> +               if (style =3D=3D GNU_BINUTILS) {
+> +                       do {
+> +                               ch =3D io__get_char(&io);
+> +                       } while (ch > 0 && ch !=3D '\n');
+> +               }
+> +       }
+> +       return style;
+> +}
+> +
+>  static int read_addr2line_record(struct io *io,
+> +                                enum a2l_style style,
+>                                  char **function,
+>                                  char **filename,
+>                                  unsigned int *line_nr)
+> @@ -462,6 +505,12 @@ static int read_addr2line_record(struct io *io,
+>
+>         if (io__getline(&line, &line_len, io) < 0 || !line_len)
+>                 goto error;
+> +
+> +       if (style =3D=3D LLVM && line_len =3D=3D 2 && line[0] =3D=3D ',')=
+ {
+> +               zfree(&line);
+> +               return 0;
+> +       }
+> +
+>         if (function !=3D NULL)
+>                 *function =3D strdup(strim(line));
+>
+> @@ -471,7 +520,8 @@ static int read_addr2line_record(struct io *io,
+>         if (io__getline(&line, &line_len, io) < 0 || !line_len)
+>                 goto error;
+>
+> -       if (filename_split(line, line_nr =3D=3D NULL ? &dummy_line_nr : l=
+ine_nr) =3D=3D 0) {
+> +       if (filename_split(line, line_nr =3D=3D NULL ? &dummy_line_nr : l=
+ine_nr) =3D=3D 0 &&
+> +           style =3D=3D GNU_BINUTILS) {
+>                 ret =3D 0;
+>                 goto error;
+>         }
+> @@ -523,6 +573,7 @@ static int addr2line(const char *dso_name, u64 addr,
+>         char buf[128];
+>         ssize_t written;
+>         struct io io;
+> +       enum a2l_style a2l_style;
+>
+>         if (!a2l) {
+>                 if (!filename__has_section(dso_name, ".debug_line"))
+> @@ -538,6 +589,12 @@ static int addr2line(const char *dso_name, u64 addr,
+>                         pr_warning("%s %s: addr2line_subprocess_init fail=
+ed\n", __func__, dso_name);
+>                 goto out;
+>         }
+> +       a2l_style =3D addr2line_configure(a2l);
+> +       if (a2l_style =3D=3D BROKEN) {
+> +               if (!symbol_conf.disable_add2line_warn)
+> +                       pr_warning("%s: addr2line configuration failed\n"=
+, __func__);
+> +               goto out;
+> +       }
+>
+>         /*
+>          * Send our request and then *deliberately* send something that c=
+an't be interpreted as
+
+Can you please update the comment about the LLVM behavior?
 
 Thanks,
 Namhyung
 
 
-> +       memcpy(&line[line_len], buf, buf_pos);
-> +       line[line_len + buf_pos] =3D '\0';
-> +       line_len +=3D buf_pos;
-> +       *line_out =3D line;
-> +       *line_len_out =3D line_len;
-> +       return line_len;
-> +}
-> +
->  #endif /* __API_IO__ */
-> diff --git a/tools/perf/tests/api-io.c b/tools/perf/tests/api-io.c
-> index e91cf2c127f1..0ff39cdfcb01 100644
-> --- a/tools/perf/tests/api-io.c
-> +++ b/tools/perf/tests/api-io.c
-> @@ -289,6 +289,40 @@ static int test_get_dec(void)
->         return ret;
->  }
+> @@ -557,7 +614,8 @@ static int addr2line(const char *dso_name, u64 addr,
+>         }
+>         io__init(&io, a2l->out, buf, sizeof(buf));
 >
-> +static int test_get_line(void)
-> +{
-> +       char path[PATH_MAX];
-> +       struct io io;
-> +       char test_string[1024];
-> +       char *line =3D NULL;
-> +       size_t i, line_len =3D 0;
-> +       size_t buf_size =3D 128;
-> +       int ret =3D 0;
-> +
-> +       for (i =3D 0; i < 512; i++)
-> +               test_string[i] =3D 'a';
-> +       test_string[512] =3D '\n';
-> +       for (i =3D 513; i < 1023; i++)
-> +               test_string[i] =3D 'b';
-> +       test_string[1023] =3D '\0';
-> +
-> +       if (setup_test(path, test_string, buf_size, &io))
-> +               return -1;
-> +
-> +       EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 513);
-> +       EXPECT_EQUAL((int)strlen(line), 513);
-> +       for (i =3D 0; i < 512; i++)
-> +               EXPECT_EQUAL(line[i], 'a');
-> +       EXPECT_EQUAL(line[512], '\n');
-> +       EXPECT_EQUAL((int)io__getline(&line, &line_len, &io), 510);
-> +       for (i =3D 0; i < 510; i++)
-> +               EXPECT_EQUAL(line[i], 'b');
-> +
-> +       free(line);
-> +       cleanup_test(path, &io);
-> +       return ret;
-> +}
-> +
->  static int test__api_io(struct test_suite *test __maybe_unused,
->                         int subtest __maybe_unused)
->  {
-> @@ -300,6 +334,8 @@ static int test__api_io(struct test_suite *test __may=
-be_unused,
->                 ret =3D TEST_FAIL;
->         if (test_get_dec())
->                 ret =3D TEST_FAIL;
-> +       if (test_get_line())
-> +               ret =3D TEST_FAIL;
->         return ret;
->  }
+> -       switch (read_addr2line_record(&io, &record_function, &record_file=
+name, &record_line_nr)) {
+> +       switch (read_addr2line_record(&io, a2l_style,
+> +                                     &record_function, &record_filename,=
+ &record_line_nr)) {
+>         case -1:
+>                 if (!symbol_conf.disable_add2line_warn)
+>                         pr_warning("%s %s: could not read first record\n"=
+, __func__, dso_name);
+> @@ -567,7 +625,7 @@ static int addr2line(const char *dso_name, u64 addr,
+>                  * The first record was invalid, so return failure, but f=
+irst read another
+>                  * record, since we asked a junk question and have to cle=
+ar the answer out.
+>                  */
+> -               switch (read_addr2line_record(&io, NULL, NULL, NULL)) {
+> +               switch (read_addr2line_record(&io, a2l_style, NULL, NULL,=
+ NULL)) {
+>                 case -1:
+>                         if (!symbol_conf.disable_add2line_warn)
+>                                 pr_warning("%s %s: could not read delimit=
+er record\n",
+> @@ -606,6 +664,7 @@ static int addr2line(const char *dso_name, u64 addr,
 >
+>         /* We have to read the records even if we don't care about the in=
+line info. */
+>         while ((record_status =3D read_addr2line_record(&io,
+> +                                                     a2l_style,
+>                                                       &record_function,
+>                                                       &record_filename,
+>                                                       &record_line_nr)) =
+=3D=3D 1) {
 > --
 > 2.40.0.348.gf938b09366-goog
 >
