@@ -1,47 +1,31 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A76612E;
-	Mon,  3 Apr 2023 14:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680531676; x=1712067676;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TSZZY4s/HxNN3z2RGTWKu6jFoqAp/p6Cwq9YHG0bmng=;
-  b=L1o4ri3FVgfr3rsJEzoZkHUQ52Cc0VUrcuTspInXy20xlcC+ZxjTFwXy
-   3iIOgG2zI+/b5l/+K7hre7ucMhUnrfhxRb4OurxpQsYq+/KxSwDUnL2LP
-   8nhhUFkxG2m7UIvTaKD7hVmiIwYVPQm/ymomSUTASXCuMnpPobn0LtByt
-   mM32Z0G66iX8OSechUt1E9AiTS770delVf/fgF8ekyLhekCAuTEoG166a
-   ZSbrVel2FEFN7rokqKUhab4N2pD4Vq0xyWXo28rWlnPUq+SBky+K2qAvl
-   4vjEjLY1Uc7XqLRQLQUpIxb9nTr9o+PZTt738halLz/W2fr3d8R1+gBOu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="344461728"
-X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
-   d="scan'208";a="344461728"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 07:21:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="718559467"
-X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
-   d="scan'208";a="718559467"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 03 Apr 2023 07:21:13 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pjL3Y-000OOD-0R;
-	Mon, 03 Apr 2023 14:21:12 +0000
-Date: Mon, 3 Apr 2023 22:20:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sagi Grimberg <sagi@grimberg.me>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Max Gurtovoy <mgurtovoy@nvidia.com>,
-	Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-	Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.4.y 5319/9999] ld.lld: error:
- drivers/nvme/host/core.o: contains a compressed section, but zlib is not
- available
-Message-ID: <202304032219.jG1sChqf-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9DC6FA1
+	for <llvm@lists.linux.dev>; Mon,  3 Apr 2023 14:48:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A87B9C433EF;
+	Mon,  3 Apr 2023 14:48:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680533281;
+	bh=zkc/nP67akDuNsbOZzMSQGZOjO7R1abCnH7seOXz224=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mQcv7fpEp/XLXHVw9beM+Y0yFOf8DK/VBzBKESdNgC1rd2Ol9f57uxJV6m4/BvWtS
+	 sWDM/YOn30RcwBdb64sOCDeDmjelSo+auLcb4LvsNSMM4uBJzv6EPSKWO3EoRjSYVw
+	 eTaCha+6az0nyeQ5FqBbIL5apUhW+BqbJg8fr6aLrB0dtWqpd0a7x4Uvu+4rBp5PmA
+	 CIRWuybasgjZTrBxHS3QgjkC7rml99JepMie/umMNwQOZErGVcqR4PIF6uKBRJ747T
+	 FJtvvvv0Li8x1y99+Qmw2Sicsll7Dui9LFvSuQffpDlWuR2PDpMU037XhK/cSAxaNB
+	 FHZHw/2n05Ylw==
+Date: Mon, 3 Apr 2023 07:47:58 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>
+Subject: Re: [PATCH] kbuild: clang: do not use CROSS_COMPILE for target triple
+Message-ID: <20230403144758.GA3460665@dev-arch.thelio-3990X>
+References: <20230401170117.1580840-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,56 +34,64 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230401170117.1580840-1-masahiroy@kernel.org>
 
-Hi Sagi,
+On Sun, Apr 02, 2023 at 02:01:17AM +0900, Masahiro Yamada wrote:
+> The target triple is overridden by the user-supplied CROSS_COMPILE,
+> but I do not see a good reason to support it. Users can use a new
+> architecture without adding CLANG_TARGET_FLAGS_*, but that would be
+> a rare case.
+> 
+> Use the hard-coded and deterministic target triple all the time.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-First bad commit (maybe != root cause):
+I know of one bug where the value of '--target' matters:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
-head:   09b1a76e7879184fb35d71a221cae9451b895fff
-commit: 3e9aa125f69c0006d10f101898932acedc942b59 [5319/9999] nvme-tcp: remove incorrect Kconfig dep in BLK_DEV_NVME
-config: x86_64-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230403/202304032219.jG1sChqf-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=3e9aa125f69c0006d10f101898932acedc942b59
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.4.y
-        git checkout 3e9aa125f69c0006d10f101898932acedc942b59
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/
+https://github.com/ClangBuiltLinux/linux/issues/1244
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304032219.jG1sChqf-lkp@intel.com/
+This was fixed in LLVM 12.0.0. We are not testing this in our CI though,
+so we would not get bit by this (we could bump the minimum supported
+version of LLVM to 12.0.0 for this, we have talked recently about doing
+it for other reasons).
 
-All errors (new ones prefixed by >>):
+I guess I cannot really think of a good reason not to do this aside from
+that; the target triple should only affect code generation, rather than
+tool selection (i.e., this does not take away the ability to use a
+custom set of binutils with clang).
 
->> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
->> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
-   ld.lld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
+However, Nick is currently OOO and I would like his opinion voiced
+before we commit to this. Consider this a tentative:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+> 
+>  scripts/Makefile.clang | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 70b354fa1cb4..9076cc939e87 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -13,15 +13,11 @@ CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
+>  CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
+>  CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>  
+> -ifeq ($(CROSS_COMPILE),)
+>  ifeq ($(CLANG_TARGET_FLAGS),)
+> -$(error Specify CROSS_COMPILE or add '--target=' option to scripts/Makefile.clang)
+> +$(error add '--target=' option to scripts/Makefile.clang)
+>  else
+>  CLANG_FLAGS	+= --target=$(CLANG_TARGET_FLAGS)
+> -endif # CLANG_TARGET_FLAGS
+> -else
+> -CLANG_FLAGS	+= --target=$(notdir $(CROSS_COMPILE:%-=%))
+> -endif # CROSS_COMPILE
+> +endif
+>  
+>  ifeq ($(LLVM_IAS),0)
+>  CLANG_FLAGS	+= -fno-integrated-as
+> -- 
+> 2.37.2
+> 
