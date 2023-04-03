@@ -1,97 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9DC6FA1
-	for <llvm@lists.linux.dev>; Mon,  3 Apr 2023 14:48:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A87B9C433EF;
-	Mon,  3 Apr 2023 14:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680533281;
-	bh=zkc/nP67akDuNsbOZzMSQGZOjO7R1abCnH7seOXz224=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mQcv7fpEp/XLXHVw9beM+Y0yFOf8DK/VBzBKESdNgC1rd2Ol9f57uxJV6m4/BvWtS
-	 sWDM/YOn30RcwBdb64sOCDeDmjelSo+auLcb4LvsNSMM4uBJzv6EPSKWO3EoRjSYVw
-	 eTaCha+6az0nyeQ5FqBbIL5apUhW+BqbJg8fr6aLrB0dtWqpd0a7x4Uvu+4rBp5PmA
-	 CIRWuybasgjZTrBxHS3QgjkC7rml99JepMie/umMNwQOZErGVcqR4PIF6uKBRJ747T
-	 FJtvvvv0Li8x1y99+Qmw2Sicsll7Dui9LFvSuQffpDlWuR2PDpMU037XhK/cSAxaNB
-	 FHZHw/2n05Ylw==
-Date: Mon, 3 Apr 2023 07:47:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>
-Subject: Re: [PATCH] kbuild: clang: do not use CROSS_COMPILE for target triple
-Message-ID: <20230403144758.GA3460665@dev-arch.thelio-3990X>
-References: <20230401170117.1580840-1-masahiroy@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23666FA1
+	for <llvm@lists.linux.dev>; Mon,  3 Apr 2023 15:40:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680536446;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3MmXFlZdR18k3EP/e45kF7NCB3Dew2X6VtgEinDw8B8=;
+	b=fR9FiwoTixCM9rjCdj/ogKl181/1jLdGJMD9kR+h34zFJa7GNZWIGcQcpCre2Tos4P9y8m
+	BnH7iev/f2ljDNasdalERlwdtGY/+7s8+H9mwnLXo1i5UMOStHW2b42T6tCLa7DrkSO5oZ
+	XZjj7wKzxWdnqyw0FKh7dd+IM0sddkE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-386-ualin0C8PseqpI2PdqIK_A-1; Mon, 03 Apr 2023 11:40:44 -0400
+X-MC-Unique: ualin0C8PseqpI2PdqIK_A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5351F385556C
+	for <llvm@lists.linux.dev>; Mon,  3 Apr 2023 15:40:44 +0000 (UTC)
+Received: from [172.64.0.121] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3F94240C83A9;
+	Mon,  3 Apr 2023 15:40:44 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 381): Test report for master
+ (6.3.0-rc5, mainline.kernel.org-clang, 7e364e56)
+Date: Mon, 03 Apr 2023 15:40:44 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230401170117.1580840-1-masahiroy@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <13395.123040311404407040@us-mta-386.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 02, 2023 at 02:01:17AM +0900, Masahiro Yamada wrote:
-> The target triple is overridden by the user-supplied CROSS_COMPILE,
-> but I do not see a good reason to support it. Users can use a new
-> architecture without adding CLANG_TARGET_FLAGS_*, but that would be
-> a rare case.
-> 
-> Use the hard-coded and deterministic target triple all the time.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hi, we tested your kernel and here are the results:
 
-I know of one bug where the value of '--target' matters:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-https://github.com/ClangBuiltLinux/linux/issues/1244
+Tested-by: CKI Project <cki-project@redhat.com>
 
-This was fixed in LLVM 12.0.0. We are not testing this in our CI though,
-so we would not get bit by this (we could bump the minimum supported
-version of LLVM to 12.0.0 for this, we have talked recently about doing
-it for other reasons).
+Kernel information:
+    Commit message: Linux 6.3-rc5
 
-I guess I cannot really think of a good reason not to do this aside from
-that; the target triple should only affect code generation, rather than
-tool selection (i.e., this does not take away the ability to use a
-custom set of binutils with clang).
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/83346
 
-However, Nick is currently OOO and I would like his opinion voiced
-before we commit to this. Consider this a tentative:
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: Storage - software RAID testing: mkfs -t xfs /dev/md1: TIMEO=
+UT
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1374
+            Affected tests:
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: Storage - software RAID testing: hit test timeout
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1382
+            Affected tests:
+                  x86_64 (debug) - Storage - software RAID testing
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
+ waiting the udev queue being empty
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1470
+            Affected tests:
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-> ---
-> 
->  scripts/Makefile.clang | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 70b354fa1cb4..9076cc939e87 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -13,15 +13,11 @@ CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
->  CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
->  CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
->  
-> -ifeq ($(CROSS_COMPILE),)
->  ifeq ($(CLANG_TARGET_FLAGS),)
-> -$(error Specify CROSS_COMPILE or add '--target=' option to scripts/Makefile.clang)
-> +$(error add '--target=' option to scripts/Makefile.clang)
->  else
->  CLANG_FLAGS	+= --target=$(CLANG_TARGET_FLAGS)
-> -endif # CLANG_TARGET_FLAGS
-> -else
-> -CLANG_FLAGS	+= --target=$(notdir $(CROSS_COMPILE:%-=%))
-> -endif # CROSS_COMPILE
-> +endif
->  
->  ifeq ($(LLVM_IAS),0)
->  CLANG_FLAGS	+= -fno-integrated-as
-> -- 
-> 2.37.2
-> 
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
