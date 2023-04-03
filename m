@@ -1,37 +1,37 @@
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F0F33D2;
-	Mon,  3 Apr 2023 11:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705D433D2;
+	Mon,  3 Apr 2023 11:27:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680521227; x=1712057227;
+  t=1680521229; x=1712057229;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=xv0B4zJILC1oRw/Z05WDuw1ZcoENMLOsdRoOnVSHtDk=;
-  b=FZiJDnJGtm1uGlHahkK5Nszx0j63S/CEKHZL30L0jy76uPahHZFrcXe/
-   GSSAHMdpfCy0VvXG/NUWqZOd0VJC9RkDazxAmF0JqmsZlaR2ooUfNH7j9
-   DOCoGkKy08syq8B9ebZyg6ttfd2f3tYoJrJEv792BfQtNzeJ77nVTKh5V
-   qafsVPOituLdTWSMFquzfAV43tKDyOWLSYDejTu9uKj/A0gLn+bXyggdR
-   aodFqQP+y2fzpNULaCxOEV15azDIGIkp6Edt+qj4phiGCwtxlrMx5eAyI
-   WZ+uzI96d4bM1CFnxdlRRqk9BH3DYPC7IY0gp/s2vJBN1t2xTPqMwyDWH
+  bh=TpJaxxgvyYIwwvsbOp+DaMX5nbWFA+YkO5xwdnPiHiU=;
+  b=NYqbvoGwaCdISbt3TOfrGI3LnmljeQ9yxfYZMk2PN1ahDKMBAwyfepkB
+   t7H5j0ZaDuHLB/cmT21+5pMi8tu9AICp68Xf8JoFiHmsj2qa/R98NnXcB
+   fVqA3ZqApBmFUbnxJyqKbOfXWpGt0e60y9zQOw9sJU2tgvkrc0dhdIk2T
+   MuCdu4xRJ5JgTORB7qtfbh+IPuB2WrNGqG88lIY4mDxK2cmhZvzspB3lg
+   /B6x6D/gWrAT9R8WqOOa8weP7EvaugL68F55fbvBU6rcTuD9tGHSsNL5L
+   wXrZsBgH8Ivn3/AJD8vnmJdAE5AYz5mmogofiZJVJHsBJrM/AFCgO0fRH
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="344423525"
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="344423529"
 X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
-   d="scan'208";a="344423525"
+   d="scan'208";a="344423529"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 04:27:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="750447103"
+X-IronPort-AV: E=McAfee;i="6600,9927,10668"; a="750447104"
 X-IronPort-AV: E=Sophos;i="5.98,314,1673942400"; 
-   d="scan'208";a="750447103"
+   d="scan'208";a="750447104"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
   by fmsmga008.fm.intel.com with ESMTP; 03 Apr 2023 04:27:04 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pjIL1-000OEL-03;
+	id 1pjIL1-000OEN-0N;
 	Mon, 03 Apr 2023 11:27:03 +0000
-Date: Mon, 3 Apr 2023 19:26:58 +0800
+Date: Mon, 3 Apr 2023 19:26:59 +0800
 From: kernel test robot <lkp@intel.com>
 To: Viresh Kumar <viresh.kumar@linaro.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>
@@ -40,7 +40,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Yajun Deng <yajun.deng@linux.dev>, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] cpufreq: drivers with target_index() must set freq_table
-Message-ID: <202304031904.mo4oksHT-lkp@intel.com>
+Message-ID: <202304031955.76jRZiQR-lkp@intel.com>
 References: <53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -66,23 +66,25 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Viresh-Kumar/cpufreq-driv
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
 patch link:    https://lore.kernel.org/r/53d4ed4e5b18a59a48790434f8146fb207e11c49.1680494945.git.viresh.kumar%40linaro.org
 patch subject: [PATCH] cpufreq: drivers with target_index() must set freq_table
-config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230403/202304031904.mo4oksHT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: riscv-randconfig-r003-20230403 (https://download.01.org/0day-ci/archive/20230403/202304031955.76jRZiQR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/3b521388b742e3d7b9bbba198655408c6d152579
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Viresh-Kumar/cpufreq-drivers-with-target_index-must-set-freq_table/20230403-121021
         git checkout 3b521388b742e3d7b9bbba198655408c6d152579
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cpufreq/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cpufreq/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304031904.mo4oksHT-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304031955.76jRZiQR-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
