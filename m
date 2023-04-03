@@ -1,60 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D99E747B
-	for <llvm@lists.linux.dev>; Mon,  3 Apr 2023 18:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26910C433EF;
-	Mon,  3 Apr 2023 18:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680546245;
-	bh=UeZr5YfS0Yaf22ilGxKJbw+QT9yD62PihrxxHaRSgTg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=TCdSd8Wrnkf00o30c4E3aJ09Rbsc6zlmDsTZli3Wi6n8Ivqomk473wt8qV58OLDMH
-	 rYL8OqMCoSK5mXr590SCgS+QS88RB5/Zg5LW/qhvWxkSOJ4+tubYDcNB5PstwvvcU6
-	 5ypEfCmQRciO72a52CuWZx29YIyN7DyYtyPWn+a+ADcauaM2KlHMSCt3xFotT/qmH2
-	 DHjkGVHFUHvxsHBMMkU+F28BzpsX+0kbf8+ZUqIKJ0zwE1vJagU0/96w2gISGlsyNe
-	 tFlcz4vIwA4vYTqjLuT0igvId0tpmhvfCjqttM883erTnpTjxlFS0HN4E+HcbOvz3X
-	 liEKe4ltb4JaA==
-From: Leon Romanovsky <leon@kernel.org>
-To: dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca, nathan@kernel.org,
- ndesaulniers@google.com, Tom Rix <trix@redhat.com>
-Cc: linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-In-Reply-To: <20230330235800.1845815-1-trix@redhat.com>
-References: <20230330235800.1845815-1-trix@redhat.com>
-Subject: Re: [PATCH] IB/qib: remove unused cnt variable
-Message-Id: <168054624148.6296.6352837498286911660.b4-ty@kernel.org>
-Date: Mon, 03 Apr 2023 21:24:01 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD9D191
+	for <llvm@lists.linux.dev>; Mon,  3 Apr 2023 18:40:45 +0000 (UTC)
+Received: by mail-pf1-f202.google.com with SMTP id y15-20020a62f24f000000b00627dd180a30so13600460pfl.6
+        for <llvm@lists.linux.dev>; Mon, 03 Apr 2023 11:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680547245;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=l7KXY8lY6kh4yGHJrlGOwQN4b74JegDEme6RD0OCgco=;
+        b=MmY3StUttrl+Dl0KtrfiUBQYX1fBd6olu28lJlPxriJAesyrYGeWv6rxB4igcoDrrS
+         uCxzoybWGwVCrc4KwE7tXIatVHRsynan93kGhqKUPlW8el7kw8FlXpbKl6K13DlBtDto
+         XlL9eWWTT8IqQPo+92gSOLxNTUA283A7elT3V3+K1t7iDtr/f+02Z6BM4G5/44Fp0j63
+         z/eBYq3xcA8Yf4hFF1seNWEB+EXU3+BFcuSPJPk6Zu/5FCiugkgJjThlQcBlNWI0AuCv
+         JuqiPg6gKulnsFOgJgblvM7b9R9mcszWjoCokybbHOgaJ1QFwMrmoVZHrAat7+GRGwVO
+         UkYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680547245;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l7KXY8lY6kh4yGHJrlGOwQN4b74JegDEme6RD0OCgco=;
+        b=zoTKqlPF6RO5eK1dEa+SwadgaqKx/7gVJjCe58IMEJCxiJrd+phYygw05bdJ4zMRXI
+         YBzO+TDJ+tsK2OapuuT7wKbNSj9wz66EisSK1iH/4Mstm7QiZvmky5BcfbRc/794O5Pq
+         7AZOVy1q0fQoByPs0msFzkUJ2U+M/hBgo/9UAzwf8djd099x2TXkvnPy5yy2OAuzcX9H
+         X/fYXduRCLZZ+gNGo2NwILk/Ob9h3Rq+7sORSsdZe10qs2UU1TjRNlcsfkF/QdrzGdEY
+         JH3sQ1dl9U6JY082z5pJt6qsM2Q9bAvG6dwv3G56Kbxtd1p469zvOBLOlOBsZy+Emy7N
+         1tLA==
+X-Gm-Message-State: AAQBX9dLTmmQkzGqKSJi8TCr/vHAsF5GRJVOLpYbDSk5Q7dPImQy/48C
+	gbjaM2z3SJ1lz+P+156lrHFtQ0+lC+n+
+X-Google-Smtp-Source: AKy350ZZdr2WR9ZcTjWW1hUH12pOOyW8M+tD+hF6gzQBIwL78qeJrSAkQU0Lm7teFIKEXeaZuysvtGqqeaPZ
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9dc:a977:817d:341])
+ (user=irogers job=sendgmr) by 2002:a17:903:1358:b0:19f:3cc1:e3bd with SMTP id
+ jl24-20020a170903135800b0019f3cc1e3bdmr28764plb.4.1680547244921; Mon, 03 Apr
+ 2023 11:40:44 -0700 (PDT)
+Date: Mon,  3 Apr 2023 11:40:29 -0700
+Message-Id: <20230403184033.1836023-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-a055d
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v2 0/4] Support for llvm-addr2line
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+The addr2line command is started and then addresses piped to it. In
+order to determine the end of a addr2lines output a ',' it output with
+an expectation to get '??\n??:0\n' as a reply. llvm-addr2line differs
+in that ',' generates a reply of ','.
 
-On Thu, 30 Mar 2023 19:58:00 -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/infiniband/hw/qib/qib_file_ops.c:487:20: error: variable
->   'cnt' set but not used [-Werror,-Wunused-but-set-variable]
->         u32 tid, ctxttid, cnt, limit, tidcnt;
->                           ^
-> drivers/infiniband/hw/qib/qib_file_ops.c:1771:9: error: variable
->   'cnt' set but not used [-Werror,-Wunused-but-set-variable]
->         int i, cnt = 0, maxtid = ctxt_tidbase + dd->rcvtidcnt;
->                ^
-> This variable is not used so remove it.
-> 
-> [...]
+The approach detects and then caches the addr2line style. When records
+are read the sentinel is detected appropriately.
 
-Applied, thanks!
+Comparing the output there is a little more inline data on my machine
+with llvm-addr2line:
+$ sudo perf record -a -g sleep 1
+$ sudo perf report --addr2line=addr2line > a.txt
+$ sudo perf report --addr2line=llvm-addr2line > b.txt
+$ wc -l a.txt b.txt
+  12386 a.txt
+  12477 b.txt
 
-[1/1] IB/qib: remove unused cnt variable
-      https://git.kernel.org/rdma/rdma/c/e7706c4bbfe88f
+Some other small changes, switching to the api/io code to avoid file
+streams wrapping the command's stdin/stdout. Ignore SIGPIPE for when
+addr2line exits and writes fail.
 
-Best regards,
+v2. Address review comments from Arnaldo and Namhyung, fixing a
+    realloc error path, argument ordering and a comment.
+
+Ian Rogers (4):
+  tools api: Add io__getline
+  perf srcline: Simplify addr2line subprocess
+  perf srcline: Support for llvm-addr2line
+  perf srcline: Avoid addr2line SIGPIPEs
+
+ tools/lib/api/io.h        |  45 ++++++++++
+ tools/perf/tests/api-io.c |  36 ++++++++
+ tools/perf/util/srcline.c | 171 +++++++++++++++++++++++---------------
+ 3 files changed, 184 insertions(+), 68 deletions(-)
+
 -- 
-Leon Romanovsky <leon@kernel.org>
+2.40.0.348.gf938b09366-goog
+
