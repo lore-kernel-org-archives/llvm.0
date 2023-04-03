@@ -1,186 +1,108 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23666FA1
-	for <llvm@lists.linux.dev>; Mon,  3 Apr 2023 15:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680536446;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3MmXFlZdR18k3EP/e45kF7NCB3Dew2X6VtgEinDw8B8=;
-	b=fR9FiwoTixCM9rjCdj/ogKl181/1jLdGJMD9kR+h34zFJa7GNZWIGcQcpCre2Tos4P9y8m
-	BnH7iev/f2ljDNasdalERlwdtGY/+7s8+H9mwnLXo1i5UMOStHW2b42T6tCLa7DrkSO5oZ
-	XZjj7wKzxWdnqyw0FKh7dd+IM0sddkE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-ualin0C8PseqpI2PdqIK_A-1; Mon, 03 Apr 2023 11:40:44 -0400
-X-MC-Unique: ualin0C8PseqpI2PdqIK_A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5351F385556C
-	for <llvm@lists.linux.dev>; Mon,  3 Apr 2023 15:40:44 +0000 (UTC)
-Received: from [172.64.0.121] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 3F94240C83A9;
-	Mon,  3 Apr 2023 15:40:44 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 381): Test report for master
- (6.3.0-rc5, mainline.kernel.org-clang, 7e364e56)
-Date: Mon, 03 Apr 2023 15:40:44 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2156FA1;
+	Mon,  3 Apr 2023 16:02:33 +0000 (UTC)
+Received: by mail-wm1-f53.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso20198144wmb.0;
+        Mon, 03 Apr 2023 09:02:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680537752;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/V8WveeNDBzp0IHh+qSCFbEW9k3MTm/mzkbEoM7fhfQ=;
+        b=Jtv6ucwvOmGZXzie86bJG6CS053Hulw3IYuW+qbwAyruvTco8Wa7rL2hpX7YhyKU8o
+         PhtJFOBHcWkLPsZmDaThgUWtMivKU7TsmZ5dPyqp5InX6XFtJou+83KgPvAqUnwNKnca
+         IfgVkZoBK8obBtiTi5D2mf52U1GwuUTADnWUwFb8G64TSGufl+zyHkw0RTsCfauu1Bse
+         AY7DSPnjtF9zENqC7VNEGF7jFz5YiDktAniSjt7TMFjrZZzD16WATQJYB+dpBothQW1X
+         dqboe0Ry8pTuzj+eP5OaKqz1cOupZLS0tpjL7CMF+7UlcHE/xRDz6JMWWVAWS4bGklOs
+         0VSA==
+X-Gm-Message-State: AAQBX9cXrbeECZjBkt5HFQvWeLH8ubjubbmPuMnwWH3OJieShgd74Dsa
+	OGikz0Q9fiuaHJcLlrXxXEc=
+X-Google-Smtp-Source: AKy350bpGt64rQyufEOfS3Vxn5FImqXlXF3n1YNY09Pluio1lQlVpu2fVxIMyeRFrxpZdb94vAGqYQ==
+X-Received: by 2002:a05:600c:3b99:b0:3ed:2a41:8529 with SMTP id n25-20020a05600c3b9900b003ed2a418529mr18952wms.2.1680537751715;
+        Mon, 03 Apr 2023 09:02:31 -0700 (PDT)
+Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id r8-20020a5d4e48000000b002c70e60abd4sm10166853wrt.2.2023.04.03.09.02.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 09:02:31 -0700 (PDT)
+Message-ID: <27cc24d8-c7f4-66b8-954c-d3cb11b5764f@grimberg.me>
+Date: Mon, 3 Apr 2023 19:02:30 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <13395.123040311404407040@us-mta-386.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Linux 6.3-rc5
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/83346
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Storage - software RAID testing: mkfs -t xfs /dev/md1: TIMEO=
-UT
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1374
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: Storage - software RAID testing: hit test timeout
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1382
-            Affected tests:
-                  x86_64 (debug) - Storage - software RAID testing
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1612
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
- waiting the udev queue being empty
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1470
-            Affected tests:
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [stable:linux-5.4.y 5319/9999] ld.lld: error:
+ drivers/nvme/host/core.o: contains a compressed section, but zlib is not
+ available
+Content-Language: en-US
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Max Gurtovoy <mgurtovoy@nvidia.com>,
+ Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+ Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+References: <202304032219.jG1sChqf-lkp@intel.com>
+From: Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <202304032219.jG1sChqf-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
+> Hi Sagi,
+> 
+> First bad commit (maybe != root cause):
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+> head:   09b1a76e7879184fb35d71a221cae9451b895fff
+> commit: 3e9aa125f69c0006d10f101898932acedc942b59 [5319/9999] nvme-tcp: remove incorrect Kconfig dep in BLK_DEV_NVME
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+The failure looks unrelated to the commit IMO. Is it maybe some issue
+with clang linkage with zlib?
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> config: x86_64-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230403/202304032219.jG1sChqf-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=3e9aa125f69c0006d10f101898932acedc942b59
+>          git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+>          git fetch --no-tags stable linux-5.4.y
+>          git checkout 3e9aa125f69c0006d10f101898932acedc942b59
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304032219.jG1sChqf-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/core.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/trace.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>>> ld.lld: error: drivers/nvme/host/multipath.o: contains a compressed section, but zlib is not available
+>     ld.lld: error: too many errors emitted, stopping now (use -error-limit=0 to see all errors)
+> 
