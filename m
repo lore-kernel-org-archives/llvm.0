@@ -1,182 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0FF7F3
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 07:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680592241;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wnfSKVF+NDXzTJz+3rTMukupfGOWf/h15mErxAlhz70=;
-	b=CJza+EP9PtNLIxjPkmCYee3OX4LTSJINcqe9NQ81wmm8f2l3XqlqWtOioAUZPpqG7cRfRg
-	ll78Koxxcsc/4A48fpSqO6UwU9s+9bhOE5iqFHFNlqWjK9U2ifWdWsIFcwdaNnQSVQxtS9
-	DbgGzqT3E9FFYOj7H92VcGzye8cYepg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-8-tM3bnrKGNX-8Gg5oEUCubQ-1; Tue, 04 Apr 2023 03:10:39 -0400
-X-MC-Unique: tM3bnrKGNX-8Gg5oEUCubQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D4713823A00
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 07:10:39 +0000 (UTC)
-Received: from [172.64.0.121] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 690E4140EBF4;
-	Tue,  4 Apr 2023 07:10:39 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 381): Test report for master
- (6.3.0-rc5, mainline.kernel.org-clang, 148341f0)
-Date: Tue, 04 Apr 2023 07:10:39 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782567F3;
+	Tue,  4 Apr 2023 07:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680592446; x=1712128446;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fs9ICErJMuFJLYufHC7Tzkwk+zfF6AjFHSEBP32HYIQ=;
+  b=FFcT8NS1HD8ffmZGmtHqmF8pzb6Madfc3uYZzdzNr/hfyIwhJjcK3Brc
+   mp/8HCaYzuhwDJ0aeQSTrYAs2c4p+sQxZjlSdxOWWug6+7GeHwHYKefaP
+   jFohYRkeMWoKwyKyPML0hoFlU6A8UVzg7cwNPOo0mxUNMr+0+xI1ZuaJ5
+   N4IltE5Ldk0KU6GrzcjjcwVDOPM0oU9T6hrQsguaEQmq+54DFuycDI3ge
+   3Ny/UtANj5DBxigp4ByIVXgAZGjakzkRULXtg0/1rya4krgNvOoFpO4Vy
+   rqreiM7X+N7l8TscIyS0W7M8uUgNrIrxax/e74hd5yuuxcFOShbc4NDzH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="428396680"
+X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
+   d="scan'208";a="428396680"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 00:14:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="679784416"
+X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
+   d="scan'208";a="679784416"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 04 Apr 2023 00:13:59 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pjare-000PJV-2r;
+	Tue, 04 Apr 2023 07:13:58 +0000
+Date: Tue, 4 Apr 2023 15:13:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Brian Masney <bmasney@redhat.com>, jic23@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	andriy.shevchenko@linux.intel.com, trix@redhat.com, lars@metafoo.de,
+	nathan@kernel.org, ndesaulniers@google.com,
+	u.kleine-koenig@pengutronix.de, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, hslester96@gmail.com
+Subject: Re: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from
+ device tree
+Message-ID: <202304041451.gj8oasQp-lkp@intel.com>
+References: <20230404011455.339454-1-bmasney@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <60912.123040403103900636@us-mta-8.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404011455.339454-1-bmasney@redhat.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Brian,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on linus/master v6.3-rc5 next-20230403]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'vfs.misc.fixes.v6.3-rc6' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/vfs/idmapping
+url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/iio-light-tsl2772-fix-reading-proximity-diodes-from-device-tree/20230404-091630
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20230404011455.339454-1-bmasney%40redhat.com
+patch subject: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from device tree
+config: x86_64-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041451.gj8oasQp-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9701bd10d6409568197894b603f8a1e23280e82b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Brian-Masney/iio-light-tsl2772-fix-reading-proximity-diodes-from-device-tree/20230404-091630
+        git checkout 9701bd10d6409568197894b603f8a1e23280e82b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/light/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/83456
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304041451.gj8oasQp-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
-and cifs.idmap
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1525
-            Affected tests:
-                 aarch64 - CIFS Connectathon
-                 ppc64le - CIFS Connectathon
-                   s390x - CIFS Connectathon
-                  x86_64 - CIFS Connectathon
-                  x86_64 (debug) - CIFS Connectathon
-        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
-atus: 3
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1543
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1612
-            Affected tests:
-                  x86_64 - Usex - version 1.9-29
-                  x86_64 (debug) - Usex - version 1.9-29
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: generic/129: ./xfstests-run.sh: line 55:=
- results/generic/129.dmesg: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1407
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: generic/132: FAIL: tee: results/generi=
-c/generic-132.log: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1491
-            Affected tests:
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
- waiting the udev queue being empty
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1470
-            Affected tests:
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+All errors (new ones prefixed by >>):
+
+>> drivers/iio/light/tsl2772.c:599:30: error: use of undeclared identifier 'prox_diode_mask'; did you mean 'protnone_mask'?
+           chip->settings.prox_diode = prox_diode_mask;
+                                       ^~~~~~~~~~~~~~~
+                                       protnone_mask
+   arch/x86/include/asm/pgtable-invert.h:22:19: note: 'protnone_mask' declared here
+   static inline u64 protnone_mask(u64 val)
+                     ^
+   1 error generated.
 
 
+vim +599 drivers/iio/light/tsl2772.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   572	
+   573	static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+   574	{
+   575		struct device *dev = &chip->client->dev;
+   576		int i, ret, num_leds;
+   577		u32 leds[TSL2772_MAX_PROX_LEDS];
+   578	
+   579		ret = device_property_count_u32(dev, "amstaos,proximity-diodes");
+   580		if (ret < 0)
+   581			return ret;
+   582	
+   583		num_leds = ret;
+   584		if (num_leds > TSL2772_MAX_PROX_LEDS)
+   585			num_leds = TSL2772_MAX_PROX_LEDS;
+   586	
+   587		ret = device_property_read_u32_array(dev, "amstaos,proximity-diodes", leds, num_leds);
+   588		if (ret < 0) {
+   589			dev_err(dev, "Invalid value for amstaos,proximity-diodes: %d.\n", ret);
+   590			return ret;
+   591		}
+   592	
+   593		for (i = 0; i < num_leds; i++) {
+   594			if (leds[i] > 1) {
+   595				dev_err(dev, "Invalid value %d in amstaos,proximity-diodes.\n", leds[i]);
+   596				return -EINVAL;
+   597			}
+   598		}
+ > 599		chip->settings.prox_diode = prox_diode_mask;
+   600	
+   601		return 0;
+   602	}
+   603	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
