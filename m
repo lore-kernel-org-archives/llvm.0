@@ -1,107 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80CC323B;
-	Tue,  4 Apr 2023 20:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12DB6C433EF;
-	Tue,  4 Apr 2023 20:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECC6C95B
+	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 20:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FF1C433EF;
+	Tue,  4 Apr 2023 20:46:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680640476;
-	bh=f9Q8RUBPEhru4mIukWyfEJKWB60FsQHSyVQLD8Udw4U=;
-	h=From:Date:Subject:To:Cc:From;
-	b=u3R9NrCRrcuZ7/L9eefkJ4kEf+pzrwn6XBpm5mqe41QMMLmWM+JZmSvSk7VYKuj0R
-	 6aRckSK5Q4ok6wbjGWf5dbmpWssokXJPr4dvQMm2+75qL6nDywarVNz3UieHT++JT7
-	 1d924nKlNGjCGXicl3cXCxukgc5mx7GqxGtWtiXV7nOr26ktmoabUZ70iFkqB3ypKv
-	 TFSgmD8yNS2i7djmDpKOxW3OWkVpDUqDj8DkckDe7PgoE+g+PvC4PrtV0q+rIeDHOU
-	 U2WvBi8OaTPCff/2Goe05ZmJQVFKDIAUd7hLCPw6zSsUvHyW37sdOpNRtbs8oWrf9W
-	 yGZbRVz4n9hxA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 04 Apr 2023 13:34:21 -0700
-Subject: [PATCH] riscv: Adjust dependencies of HAVE_DYNAMIC_FTRACE
- selection
+	s=k20201202; t=1680641221;
+	bh=M7AEWkhrz5m+HYdpjj6qhbiE8Cg4ln7oJCOBbFTIiRM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XKSVKmxvX+In5+aTFI38lD3mTwWpaROD+kYBh9cbnPJJlG3HlwLgZUz9omWVs9Ixr
+	 bruMbiboP0WvSmcfxUXXTJ4jZSZKstsJmEs66wU1pV7eQ6vEkAjBy3wYs489g5Gt77
+	 BteQHqtKWc2qqQaQmF8UyZX3irxIPZYxj2UeBS7GIXTuJjg+zHo/IM6Yi7thekeHrw
+	 R7+jl9kAL9xldbbtpzij3Q6BWjM4Ph7bgidogmBKQGiDvrXaGj6zpNU7XQirvkUyuD
+	 IZawGhwRO/Pp617SDrAWVKWBcrVNdcVvtiarwAekDRjP77OX+oq8QTewmM8N2FyfGT
+	 Qy2lX1fAAXYTg==
+Date: Tue, 4 Apr 2023 21:46:54 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	llvm@lists.linux.dev, Weili Qian <qianweili@huawei.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Herbert Xu <herbert@gondor.apana.org.au>, Tom Rix <trix@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Mark Gross <markgross@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Zhou Wang <wangzhou1@hisilicon.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH V4 12/23] RISC-V: cpufeature: Avoid calling
+ riscv_of_processor_hartid()
+Message-ID: <20230404-pavestone-skinless-2f466941a95b@spud>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-13-sunilvl@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230404-riscv-dynamic-ftrace-checks-clang-v1-1-0ce296b7d423@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMyJLGQC/x2N0QrCMAxFf2X02UA7i4q/Ij6kWWqDrkoyxmTs3
- +18PBzuuaszVmFz1251yrOYvGuDcOgcFawPBhkau973Rx99BBWjGYZvxVEI8qRIDFSYngb0ags
- 4nS8hxUAx5OxaJ6ExJMVKZS+NaBPrLj7KWZb/+e2+bT9L0tUljAAAAA==
-To: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu
-Cc: ndesaulniers@google.com, trix@redhat.com, 
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2416; i=nathan@kernel.org;
- h=from:subject:message-id; bh=f9Q8RUBPEhru4mIukWyfEJKWB60FsQHSyVQLD8Udw4U=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDCk6nbe3RkkYagm8N/koavlrkr9OyM7A1A97Flz9vt4xJ
- f+q+orYjlIWBjEOBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCR6VKMDKe/1Wq4RSxXb5Oa
- dJzfUfWOWLKy+/YnibztGw/rFxelSTIynMlzFPd9l/r5hf++XWGfru83Vp75561C4dqMAofStiW
- tLAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="kgJ+/uDheNc4jGb7"
+Content-Disposition: inline
+In-Reply-To: <20230404182037.863533-13-sunilvl@ventanamicro.com>
 
-When building allmodconfig with clang and its integrated assembler and
-linking with a version of GNU ld prior to 2.36, the following link error
-occurs:
 
-  riscv64-linux-gnu-ld: .init.data has both ordered [`__patchable_function_entries' in init/main.o] and unordered [`.init_array.0' in kernel/trace/trace_benchmark.o] sections
-  riscv64-linux-gnu-ld: final link failed: bad value
+--kgJ+/uDheNc4jGb7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is the same error addressed by commit 45bd8951806e ("arm64: Improve
-HAVE_DYNAMIC_FTRACE_WITH_REGS selection for clang") for arm64. See that
-changelog for a full description of why this error occurs with this
-combination of tools.
+On Tue, Apr 04, 2023 at 11:50:26PM +0530, Sunil V L wrote:
+> riscv_fill_hwcap() finds hartid of each cpu but never really uses
+> it. So, remove this unnecessary call.
 
-In a similar manner as that change, restrict the
-CONFIG_HAVE_DYNAMIC_FTRACE selection to combinations of tools known to
-work so that there are no errors.
+"Never uses it" or "never really uses it"?
+This commit message misses the point though I think - is this here to
+get the hartid, or is it here to do all the property validation that
+riscv_of_processor_hartid() does for a cpu node?
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1817
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/riscv/Kconfig | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+This was added all the way back in 4.20 in commit 732e8e4130ff ("RISC-V:
+properly determine hardware caps").
+As the loop is a for_each_of_cpu_node(), I don't think this change is
+actually valid - there's no guarantee that the cpu we are iterating over
+is actually available and the riscv_of_processor_hartid() check is used
+to skip "bad" cpus AFAICT.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index eb7f29a412f8..4b82838ac870 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -136,12 +136,23 @@ config RISCV
- 	select TRACE_IRQFLAGS_SUPPORT
- 	select UACCESS_MEMCPY if !MMU
- 	select ZONE_DMA32 if 64BIT
--	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
-+	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && (CLANG_SUPPORTS_DYNAMIC_FTRACE || GCC_SUPPORTS_DYNAMIC_FTRACE)
- 	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
- 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
- 
-+config CLANG_SUPPORTS_DYNAMIC_FTRACE
-+	def_bool CC_IS_CLANG
-+	# https://github.com/llvm/llvm-project/commit/6ab8927931851bb42b2c93a00801dc499d7d9b1e
-+	depends on CLANG_VERSION >= 130000
-+	# https://github.com/ClangBuiltLinux/linux/issues/1817
-+	depends on AS_IS_GNU || (AS_IS_LLVM && (LD_IS_LLD || LD_VERSION >= 23600))
-+
-+config GCC_SUPPORTS_DYNAMIC_FTRACE
-+	def_bool CC_IS_GCC
-+	depends on $(cc-option,-fpatchable-function-entry=8)
-+
- config ARCH_MMAP_RND_BITS_MIN
- 	default 18 if 64BIT
- 	default 8
+Perhaps I am missing something, I don't think you can do this until you
+switch the loop to use something that only uses cpus that you know are
+valid.
 
----
-base-commit: 4622f159098e098611f393cccf73d52b007e70bc
-change-id: 20230404-riscv-dynamic-ftrace-checks-clang-6781b41c41ff
+Cheers,
+Conor.
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> ---
+>  arch/riscv/kernel/cpufeature.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>=20
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index 59d58ee0f68d..63e56ce04162 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -91,7 +91,6 @@ void __init riscv_fill_hwcap(void)
+>  	char print_str[NUM_ALPHA_EXTS + 1];
+>  	int i, j, rc;
+>  	unsigned long isa2hwcap[26] =3D {0};
+> -	unsigned long hartid;
+> =20
+>  	isa2hwcap['i' - 'a'] =3D COMPAT_HWCAP_ISA_I;
+>  	isa2hwcap['m' - 'a'] =3D COMPAT_HWCAP_ISA_M;
+> @@ -109,10 +108,6 @@ void __init riscv_fill_hwcap(void)
+>  		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
+>  		const char *temp;
+> =20
+> -		rc =3D riscv_of_processor_hartid(node, &hartid);
+> -		if (rc < 0)
+> -			continue;
+> -
+>  		if (of_property_read_string(node, "riscv,isa", &isa)) {
+>  			pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
+>  			continue;
+> --=20
+> 2.34.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
+--kgJ+/uDheNc4jGb7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCyMvQAKCRB4tDGHoIJi
+0hpGAP4pgJiMrwEE4MqFKel0RfYzkzWShHChGkcaYXuq9E+PjwEA5j0+IIN4EnD3
+iGmXBcTRH2L8dBKnu+t39ju3V81nRQs=
+=z9Dv
+-----END PGP SIGNATURE-----
+
+--kgJ+/uDheNc4jGb7--
