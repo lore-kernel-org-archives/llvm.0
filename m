@@ -1,44 +1,62 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC297E;
-	Tue,  4 Apr 2023 00:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726717E;
+	Tue,  4 Apr 2023 02:12:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680569933; x=1712105933;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=t/8M52oZNpmJ0rYrT21nM2K3sasgaKzMUWvh/T0RiMY=;
-  b=FTVbO4hsk8Q4WxjoITwzIWvIlKhrsQ3orceohU70BbyX1+XQg8u3xyWZ
-   WL+rhws5DgvLIVbRHCRWHSTRoNAYIjTXbK7BOO13UEOvVdFf/YzU5ODkF
-   riCBZUM376MGiJOfF44VK8nFdg8O3mW8J1CnZP4LooLIHNGxhxRwHp/MI
-   da02TrD5FrmatP2wUGgI/yGW+ogju7GE28SkfLsyVQ863/B3J8I6w8PgO
-   MVv7vPVZnXESl4a683LRrQiCf39d0lsbyYBXUDGmyzZ9+HYTRVnG3iV4I
-   FM+Zu6+QueMmuK64BqBkLh6vQs5MXfHh+Ay1/J66slaBa0BS4IB/szH/+
+  t=1680574320; x=1712110320;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TDGMjXEoOdfdpc8A+QvPYHDfLyIq7uSVZktWfPFiqD8=;
+  b=bWrXh4bZ4EDJuTt+64E8ouMUc3RY3Sg8YXg6ClLmwWDXqWm4+gqqjL3b
+   qB95Q5+AMN11ZyBDy9t9jCTRzxlt/WqqWWdKo5LWr1fWPcCG0TEsnG6BO
+   1W/FQjv6pmaqZBed6nVNtptfUSLRUKlQJJpsRSSEm8DFkYO8HA0emu381
+   vin9tOGg2sgIHsmjnLGRxYfBHePCTtKY4+fPLIjlEd/fyB22LD9eWJBvA
+   QcB5ACjpKEGSAzomFltVV7EzBahfN4Srv1qijURIt/ZxoELXbKxsZqDhN
+   eCaLalqy1WUKPmcYCF+cszbsXWaEhsoC9debvP93MieN/CoEE1sVGZ8Hx
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="407116884"
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="326085973"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="407116884"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 17:58:52 -0700
+   d="scan'208";a="326085973"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 19:11:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="663397229"
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="686188904"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="663397229"
+   d="scan'208";a="686188904"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Apr 2023 17:58:50 -0700
+  by orsmga002.jf.intel.com with ESMTP; 03 Apr 2023 19:11:53 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pjV0b-000Oyw-2D;
-	Tue, 04 Apr 2023 00:58:49 +0000
-Date: Tue, 4 Apr 2023 08:58:15 +0800
+	id 1pjW9I-000P2K-2P;
+	Tue, 04 Apr 2023 02:11:52 +0000
+Date: Tue, 4 Apr 2023 10:10:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [linux-next:master 932/8744] arch/mips/ar7/gpio.c:19:19: error:
- field has incomplete type 'struct gpio_chip'
-Message-ID: <202304040830.kPrP1Qew-lkp@intel.com>
+	netdev@vger.kernel.org, Dmitry Safonov <dima@arista.com>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Bob Gilligan <gilligan@arista.com>,
+	Dan Carpenter <error27@gmail.com>,
+	David Laight <David.Laight@aculab.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Francesco Ruggeri <fruggeri05@gmail.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+	Ivan Delalande <colona@arista.com>,
+	Leonard Crestez <cdleonard@gmail.com>,
+	Salam Noureddine <noureddine@arista.com>
+Subject: Re: [PATCH v5 01/21] [draft] net/tcp: Prepare tcp_md5sig_pool for
+ TCP-AO
+Message-ID: <202304040916.I3rkyzLG-lkp@intel.com>
+References: <20230403213420.1576559-2-dima@arista.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,117 +65,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230403213420.1576559-2-dima@arista.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   31bd35b66249699343d2416658f57e97314a433a
-commit: 21d9526d13b5467b0a6532e5a8b0eb04c01ce326 [932/8744] gpiolib: Make the legacy <linux/gpio.h> consumer-only
-config: mips-randconfig-r035-20230402 (https://download.01.org/0day-ci/archive/20230404/202304040830.kPrP1Qew-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+Hi Dmitry,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 7e364e56293bb98cae1b55fd835f5991c4e96e7d]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230404-054020
+base:   7e364e56293bb98cae1b55fd835f5991c4e96e7d
+patch link:    https://lore.kernel.org/r/20230403213420.1576559-2-dima%40arista.com
+patch subject: [PATCH v5 01/21] [draft] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230404/202304040916.I3rkyzLG-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=21d9526d13b5467b0a6532e5a8b0eb04c01ce326
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 21d9526d13b5467b0a6532e5a8b0eb04c01ce326
+        # https://github.com/intel-lab-lkp/linux/commit/94408bb4cf5cbcc772ab4d70eeb73bda183c6124
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230404-054020
+        git checkout 94408bb4cf5cbcc772ab4d70eeb73bda183c6124
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv4/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304040830.kPrP1Qew-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304040916.I3rkyzLG-lkp@intel.com/
 
-Note: the linux-next/master HEAD 31bd35b66249699343d2416658f57e97314a433a builds fine.
-      It may have been fixed somewhere.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
->> arch/mips/ar7/gpio.c:19:19: error: field has incomplete type 'struct gpio_chip'
-           struct gpio_chip        chip;
-                                   ^
-   arch/mips/ar7/gpio.c:19:9: note: forward declaration of 'struct gpio_chip'
-           struct gpio_chip        chip;
-                  ^
->> arch/mips/ar7/gpio.c:24:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                        ^
->> arch/mips/ar7/gpio.c:24:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/ar7/gpio.c:32:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                        ^
-   arch/mips/ar7/gpio.c:32:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/ar7/gpio.c:42:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                        ^
-   arch/mips/ar7/gpio.c:42:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/ar7/gpio.c:55:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                        ^
-   arch/mips/ar7/gpio.c:55:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/ar7/gpio.c:68:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                        ^
-   arch/mips/ar7/gpio.c:68:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/ar7/gpio.c:78:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                        ^
-   arch/mips/ar7/gpio.c:78:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/ar7/gpio.c:93:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                        ^
-   arch/mips/ar7/gpio.c:93:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/ar7/gpio.c:105:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                        ^
-   arch/mips/ar7/gpio.c:105:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
-           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
->> arch/mips/ar7/gpio.c:318:8: error: call to undeclared function 'gpiochip_add_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = gpiochip_add_data(&gpch->chip, gpch);
-                 ^
-   18 errors generated.
+>> net/ipv4/tcp_sigpool.c:63:9: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof (__scratch_size) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+           size = max(size, __scratch_size);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:74:19: note: expanded from macro 'max'
+   #define max(x, y)       __careful_cmp(x, y, >)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +19 arch/mips/ar7/gpio.c
+vim +63 net/ipv4/tcp_sigpool.c
 
-7ca5dc145bc7da Florian Fainelli 2009-06-24  16  
-5f3c909881d5de Florian Fainelli 2010-01-03  17  struct ar7_gpio_chip {
-5f3c909881d5de Florian Fainelli 2010-01-03  18  	void __iomem		*regs;
-5f3c909881d5de Florian Fainelli 2010-01-03 @19  	struct gpio_chip	chip;
-5f3c909881d5de Florian Fainelli 2010-01-03  20  };
-7ca5dc145bc7da Florian Fainelli 2009-06-24  21  
-5f3c909881d5de Florian Fainelli 2010-01-03  22  static int ar7_gpio_get_value(struct gpio_chip *chip, unsigned gpio)
-7ca5dc145bc7da Florian Fainelli 2009-06-24  23  {
-1b2766fb496c46 Linus Walleij    2015-12-08 @24  	struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
-5f3c909881d5de Florian Fainelli 2010-01-03  25  	void __iomem *gpio_in = gpch->regs + AR7_GPIO_INPUT;
-7ca5dc145bc7da Florian Fainelli 2009-06-24  26  
-249e573d99ab59 Linus Walleij    2015-12-22  27  	return !!(readl(gpio_in) & (1 << gpio));
-5f3c909881d5de Florian Fainelli 2010-01-03  28  }
-5f3c909881d5de Florian Fainelli 2010-01-03  29  
-
-:::::: The code at line 19 was first introduced by commit
-:::::: 5f3c909881d5deebb9a3ddc836a15937e76daefc MIPS: AR7: Implement gpiolib
-
-:::::: TO: Florian Fainelli <florian@openwrt.org>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+    43	
+    44	/*
+    45	 * sigpool_reserve_scratch - re-allocates scratch buffer, slow-path
+    46	 * @size: request size for the scratch/temp buffer
+    47	 */
+    48	static int sigpool_reserve_scratch(size_t size)
+    49	{
+    50		struct scratches_to_free *stf;
+    51		size_t stf_sz = struct_size(stf, scratches, num_possible_cpus());
+    52		int cpu, err = 0;
+    53	
+    54		lockdep_assert_held(&cpool_mutex);
+    55		if (__scratch_size >= size)
+    56			return 0;
+    57	
+    58		stf = kmalloc(stf_sz, GFP_KERNEL);
+    59		if (!stf)
+    60			return -ENOMEM;
+    61		stf->cnt = 0;
+    62	
+  > 63		size = max(size, __scratch_size);
+    64		cpus_read_lock();
+    65		for_each_possible_cpu(cpu) {
+    66			void *scratch, *old_scratch;
+    67	
+    68			scratch = kmalloc_node(size, GFP_KERNEL, cpu_to_node(cpu));
+    69			if (!scratch) {
+    70				err = -ENOMEM;
+    71				break;
+    72			}
+    73	
+    74			old_scratch = rcu_replace_pointer(per_cpu(sigpool_scratch, cpu), scratch, lockdep_is_held(&cpool_mutex));
+    75			if (!cpu_online(cpu) || !old_scratch) {
+    76				kfree(old_scratch);
+    77				continue;
+    78			}
+    79			stf->scratches[stf->cnt++] = old_scratch;
+    80		}
+    81		cpus_read_unlock();
+    82		if (!err)
+    83			__scratch_size = size;
+    84	
+    85		call_rcu(&stf->rcu, free_old_scratches);
+    86		return err;
+    87	}
+    88	
 
 -- 
 0-DAY CI Kernel Test Service
