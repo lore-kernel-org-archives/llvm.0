@@ -1,43 +1,43 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFF6C951
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 18:21:50 +0000 (UTC)
-Received: by mail-pf1-f180.google.com with SMTP id dw14so22050194pfb.6
-        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 11:21:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AFDC951
+	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 18:21:57 +0000 (UTC)
+Received: by mail-pf1-f182.google.com with SMTP id u20so22040151pfk.12
+        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 11:21:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680632510;
+        d=ventanamicro.com; s=google; t=1680632517;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RenGaqLG2E6+auHKmyF3E2Rjbj5BNhOsGGRACP9B8RM=;
-        b=TuA3n41rWKIn+1w0F07Xg/33CGu819heRvJl0tJHNjZBNPvekJAYrjvZmlARrstVNS
-         9JiAecUe0diJ7nehf0NDIl0xCr8gxtk0bRHYbTXJ9E079tIxWGcaIICIDEuMftov4wc0
-         NYCPeaipVjFiGbgXQpftzSHOO8V1unZABt7Tmz2X0AV4jnjXoBJz0GPBn+SfrQWmpupa
-         wo4wLY5P4R9OUhWbBQ0jWJtmFC8HkWlU+b8UKVvhfeEFAHZRYoThs4z9oTh+sSi1KMZw
-         gCijmsosS1DO93uDQdPk1SqrnBAa5CtHcA6FQyMYFSoFLnEDQixAHvRyRb9iIx7qTvUe
-         Drng==
+        bh=5pi8xH0IxXrFGj4CxsC9boyEOiTx1Qa4CmKA7c/Mr88=;
+        b=NrI6ACm7UZOJVCJyBc7mGJGBLfdlM/PTYp6L1vM45ahDVRivroqAt1FE0VHGOEA6E6
+         80auVy44DFfVDm1tzMTK6mVz+Jlugq9sYp5hzIoM7XQr7unFo44/VWi2WLq3y8UPCnjZ
+         T7oz5OeLMLXiQXUo2ZYgOJ3jQzLVq4z6Z80U3D+fvhU5arvqAPwfwFuONY8dWxgFahDr
+         aiwy5PM+qx3mahRPtLj0zuXUwGdgcUPzLxiSXBW7+4RUzVr09/9rUtmt81/t75mueG5t
+         yTMGMn5wiW6RERH+pnqQAqUsMYQh8ESCsnkuTVukq1xoZhVaG+3NZq8dZ92Om5J54M2B
+         P/OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680632510;
+        d=1e100.net; s=20210112; t=1680632517;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RenGaqLG2E6+auHKmyF3E2Rjbj5BNhOsGGRACP9B8RM=;
-        b=30KgXzmD0LeZ1Ejj3k/UZdS3GL6yQMUYfBMADoJE27H/FLtrv8CmpbpGE5xvX0AIit
-         4MVytvvUAwIs13h2uqTdO3w/OlqT7vfS7EPBpQqrLxzMzHkiYQ0fCAVtkcXlJaQkABgc
-         St1Sq7/n0awhxsRXj2Go8bcudIa9Jd5MhnbclOvTZohe8HoFYsPQNQdB+wbzdsOcU4DY
-         HcTEfEq6rrndoWEeX5YB6MbGaLTaZlNh/MzdXotvm4ANN7osGi7ry/OAa0Fqc1NCtHBo
-         MymMyXbfwizVwgdcPnwp0u/JVhyR3yo3o8V8+r4hhz3dHBLLNorFt0sDWFuDObQVD99C
-         lcYg==
-X-Gm-Message-State: AAQBX9cayQ606f3dFLCJD/JOZ/SAwxfhfcwUbQucboz4SD5R+wybGhs9
-	hJ1taBGm5/j3nfiPWGwH9XBmAA==
-X-Google-Smtp-Source: AKy350YVkjcmOvkdjrEBigr7bqKPZTIUrjorvgx+5YWJ46o5RnMoxyjt69Ybu6TkskScsRRg1xKfPg==
-X-Received: by 2002:a62:cfc1:0:b0:625:ebc3:b26c with SMTP id b184-20020a62cfc1000000b00625ebc3b26cmr3089010pfg.22.1680632510428;
-        Tue, 04 Apr 2023 11:21:50 -0700 (PDT)
+        bh=5pi8xH0IxXrFGj4CxsC9boyEOiTx1Qa4CmKA7c/Mr88=;
+        b=hTlBJaSoZAsOFHK2CJV/BFA5Fp4GqPho84oAMMiRabEFdIjID1OGXFRrIXVWFxVTn2
+         Wyxb09L/j+CYJPsZ46cOZv/k4OreUi+acTNCaVt9I1eUDEhITW3j0hai4XnhLxUAp+a0
+         9Bik0hQpBSaklmXDqddY8k+iPRiKtgvO40yyXuI5D3uC6MvBU1EdiOlPzP2tqoax/OTu
+         bC/PunRg94hB1ppRWdI1iV021AMAxoaPF6iDFEcpYO9g8x8eVVDQwfBxA+VvU+KVulEx
+         JhfWk2jiNwSItOg+FgIAyJwrw3f6CYdwTPrzjb/GCYbUoqLUjaZYgxSnAzmaYJ2px+ke
+         5+Wg==
+X-Gm-Message-State: AAQBX9e/6zY0v2AEzZjMvk6ps5IwYf29c3OvVjguj7kaBa8mvN2T2Xjn
+	yK3ZTmihDvpZS4iMeUvZa6Aerw==
+X-Google-Smtp-Source: AKy350ZrQVyDLMzwqmQeO3KOVb6JBRZ2K0v5xylw2uRxzU82JnTGfnCZ5VoqlPFlxj3azLCOP54Dfw==
+X-Received: by 2002:a62:1cc7:0:b0:622:dd9b:e2d8 with SMTP id c190-20020a621cc7000000b00622dd9be2d8mr3363135pfc.3.1680632517560;
+        Tue, 04 Apr 2023 11:21:57 -0700 (PDT)
 Received: from localhost.localdomain ([106.51.184.50])
-        by smtp.gmail.com with ESMTPSA id o12-20020a056a001bcc00b0062dcf5c01f9sm9018524pfw.36.2023.04.04.11.21.43
+        by smtp.gmail.com with ESMTPSA id o12-20020a056a001bcc00b0062dcf5c01f9sm9018524pfw.36.2023.04.04.11.21.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 11:21:49 -0700 (PDT)
+        Tue, 04 Apr 2023 11:21:57 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -67,10 +67,11 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	"David S . Miller" <davem@davemloft.net>,
 	Sunil V L <sunilvl@ventanamicro.com>,
 	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
 	Andrew Jones <ajones@ventanamicro.com>
-Subject: [PATCH V4 09/23] drivers/acpi: RISC-V: Add RHCT related code
-Date: Tue,  4 Apr 2023 23:50:23 +0530
-Message-Id: <20230404182037.863533-10-sunilvl@ventanamicro.com>
+Subject: [PATCH V4 10/23] RISC-V: smpboot: Create wrapper smp_setup()
+Date: Tue,  4 Apr 2023 23:50:24 +0530
+Message-Id: <20230404182037.863533-11-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230404182037.863533-1-sunilvl@ventanamicro.com>
 References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
@@ -82,149 +83,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RHCT is a new table defined for RISC-V to communicate the
-features of the CPU to the OS. Create a new architecture folder
-in drivers/acpi and add RHCT parsing code.
+smp_setup() currently assumes DT-based platforms. To enable ACPI,
+first make this a wrapper function and move existing code to
+a separate DT-specific function.
 
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- arch/riscv/include/asm/acpi.h |  9 ++++
- drivers/acpi/Makefile         |  2 +
- drivers/acpi/riscv/Makefile   |  2 +
- drivers/acpi/riscv/rhct.c     | 83 +++++++++++++++++++++++++++++++++++
- 4 files changed, 96 insertions(+)
- create mode 100644 drivers/acpi/riscv/Makefile
- create mode 100644 drivers/acpi/riscv/rhct.c
+ arch/riscv/kernel/smpboot.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-index 1606dce8992e..2b3e78d5a13b 100644
---- a/arch/riscv/include/asm/acpi.h
-+++ b/arch/riscv/include/asm/acpi.h
-@@ -61,6 +61,15 @@ static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+index 00b53913d4c6..26214ddefaa4 100644
+--- a/arch/riscv/kernel/smpboot.c
++++ b/arch/riscv/kernel/smpboot.c
+@@ -70,7 +70,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+ 	}
+ }
  
- struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
- u32 get_acpi_id_for_cpu(int cpu);
-+int acpi_get_riscv_isa(struct acpi_table_header *table,
-+		       unsigned int cpu, const char **isa);
-+#else
-+static inline int acpi_get_riscv_isa(struct acpi_table_header *table,
-+				     unsigned int cpu, const char **isa)
+-void __init setup_smp(void)
++static void __init of_parse_and_init_cpus(void)
+ {
+ 	struct device_node *dn;
+ 	unsigned long hart;
+@@ -116,6 +116,11 @@ void __init setup_smp(void)
+ 	}
+ }
+ 
++void __init setup_smp(void)
 +{
-+	return -EINVAL;
++	of_parse_and_init_cpus();
 +}
 +
- #endif /* CONFIG_ACPI */
- 
- #endif /*_ASM_ACPI_H*/
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index feb36c0b9446..3fc5a0d54f6e 100644
---- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -131,3 +131,5 @@ obj-y				+= dptf/
- obj-$(CONFIG_ARM64)		+= arm64/
- 
- obj-$(CONFIG_ACPI_VIOT)		+= viot.o
-+
-+obj-$(CONFIG_RISCV)		+= riscv/
-diff --git a/drivers/acpi/riscv/Makefile b/drivers/acpi/riscv/Makefile
-new file mode 100644
-index 000000000000..8b3b126e0b94
---- /dev/null
-+++ b/drivers/acpi/riscv/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-y 	+= rhct.o
-diff --git a/drivers/acpi/riscv/rhct.c b/drivers/acpi/riscv/rhct.c
-new file mode 100644
-index 000000000000..ea78d906a0fe
---- /dev/null
-+++ b/drivers/acpi/riscv/rhct.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022-2023, Ventana Micro Systems Inc
-+ *	Author: Sunil V L <sunilvl@ventanamicro.com>
-+ *
-+ */
-+
-+#define pr_fmt(fmt)	"ACPI: RHCT: " fmt
-+
-+#include <linux/acpi.h>
-+
-+static struct acpi_table_header *acpi_get_rhct(void)
-+{
-+	static struct acpi_table_header *rhct;
-+	acpi_status status;
-+
-+	/*
-+	 * RHCT will be used at runtime on every CPU, so we
-+	 * don't need to call acpi_put_table() to release the table mapping.
-+	 */
-+	if (!rhct) {
-+		status = acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
-+		if (ACPI_FAILURE(status)) {
-+			pr_warn_once("No RHCT table found\n");
-+			return NULL;
-+		}
-+	}
-+
-+	return rhct;
-+}
-+
-+/*
-+ * During early boot, the caller should call acpi_get_table() and pass its pointer to
-+ * these functions(and free up later). At run time, since this table can be used
-+ * multiple times, NULL may be passed in order to use the cached table.
-+ */
-+int acpi_get_riscv_isa(struct acpi_table_header *table, unsigned int cpu, const char **isa)
-+{
-+	struct acpi_rhct_node_header *node, *ref_node, *end;
-+	u32 size_hdr = sizeof(struct acpi_rhct_node_header);
-+	u32 size_hartinfo = sizeof(struct acpi_rhct_hart_info);
-+	struct acpi_rhct_hart_info *hart_info;
-+	struct acpi_rhct_isa_string *isa_node;
-+	struct acpi_table_rhct *rhct;
-+	u32 *hart_info_node_offset;
-+	u32 acpi_cpu_id = get_acpi_id_for_cpu(cpu);
-+
-+	BUG_ON(acpi_disabled);
-+
-+	if (!table) {
-+		rhct = (struct acpi_table_rhct *)acpi_get_rhct();
-+		if (!rhct)
-+			return -ENOENT;
-+	} else {
-+		rhct = (struct acpi_table_rhct *)table;
-+	}
-+
-+	end = ACPI_ADD_PTR(struct acpi_rhct_node_header, rhct, rhct->header.length);
-+
-+	for (node = ACPI_ADD_PTR(struct acpi_rhct_node_header, rhct, rhct->node_offset);
-+	     node < end;
-+	     node = ACPI_ADD_PTR(struct acpi_rhct_node_header, node, node->length)) {
-+		if (node->type == ACPI_RHCT_NODE_TYPE_HART_INFO) {
-+			hart_info = ACPI_ADD_PTR(struct acpi_rhct_hart_info, node, size_hdr);
-+			hart_info_node_offset = ACPI_ADD_PTR(u32, hart_info, size_hartinfo);
-+			if (acpi_cpu_id != hart_info->uid)
-+				continue;
-+
-+			for (int i = 0; i < hart_info->num_offsets; i++) {
-+				ref_node = ACPI_ADD_PTR(struct acpi_rhct_node_header,
-+							rhct, hart_info_node_offset[i]);
-+				if (ref_node->type == ACPI_RHCT_NODE_TYPE_ISA_STRING) {
-+					isa_node = ACPI_ADD_PTR(struct acpi_rhct_isa_string,
-+								ref_node, size_hdr);
-+					*isa = isa_node->isa;
-+					return 0;
-+				}
-+			}
-+		}
-+	}
-+
-+	return -1;
-+}
+ static int start_secondary_cpu(int cpu, struct task_struct *tidle)
+ {
+ 	if (cpu_ops[cpu]->cpu_start)
 -- 
 2.34.1
 
