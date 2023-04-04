@@ -1,147 +1,162 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513407C
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 10:53:21 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so33519999pjz.1
-        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 03:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680605600;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=AFMNv6e50Eo9GlYqb9XCB1dwGA0gALY2KZgJZCJOV0M=;
-        b=b40dHQcwqpUx/XafpW0EKeZo3gMwRiWdKnEEzIYrIyyNU1RBLjO8Q4b2IN9y06jmmZ
-         mjMjIv4Lag6SHx7vKz+e2vg3kqlOdJKf5zyxWMuvczCJQpDj6hgG2wOrmqjbL46mXVir
-         tIU9H35oOxwoHCME/uT81fPnWDPRwx0lcmUpcdkg8ulbnpH8aQtkMWoipq6D6oHuwdz4
-         foGW+8YTHhILVyLMAw49OM1adSvRvA1Hs5Q2PBkvRRyxjOqJpHT24YnD4tb1D/uX/cUd
-         O0MbuHs2IZJh0AhQh/NSyONWu/ykmGp3Em8VXRkdGqgVHCn2QsDj+ZsQovVUtMUTF6s6
-         12SQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6BB6AA1
+	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 11:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680606789;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=G+vCrGsG4EGlFPdvDqtaQU8ToAjG1wpvWgMdAwD4jDE=;
+	b=Ki49OWuQvREPvvug9nMqnPnbZbesmDlykKoXH4Zv1HH23ka2PBA1CuH/DdNbUYgSF/45xq
+	1Ni5BcklVgy0uRNaPXag1jsCyAZCACLzhmwX56Yd4s/gxdEgUGTmWM6DAzGaQELqwsnzbb
+	kAeMx08oVMGwY/UaXIB5jb4XN/GNnkg=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-487-_0Uy99ndNKutHAkzX0B3_A-1; Tue, 04 Apr 2023 07:13:08 -0400
+X-MC-Unique: _0Uy99ndNKutHAkzX0B3_A-1
+Received: by mail-yb1-f198.google.com with SMTP id p12-20020a25420c000000b00b6eb3c67574so31537500yba.11
+        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 04:13:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680605600;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AFMNv6e50Eo9GlYqb9XCB1dwGA0gALY2KZgJZCJOV0M=;
-        b=uhOEQDyWcBYn4iSRaTgslfUd1OUUdljlfoORlIznFp5tP4fruQr09aw15I9/i8yPAY
-         bQKQAZcRoQ8ZhKkObnLk15nQ5MkVicMFY+t1XXsWjWPiK6pli9VKzg6I7H9eYGELSr7Q
-         adVlvLpVR+nkqoG+fU0g6fcAk5/gEQcgF83VOAaRHQGbSABUvjaT0xT8v8KzgCxSv87i
-         sORIKSFzHvEsdSST9NsZYBYqVMEplPhdyS4VzDAyrNu1mut52n6CK3ue9S790EFNCoE6
-         hgB1Wn1ECJrLwQ49cyrLQmPGxr0Z1lwBJBDfk4phHInolBBiOOe89gnukZPpFN0SRHjk
-         yx+w==
-X-Gm-Message-State: AAQBX9fl70Jq4i8z6/pcjRT9NIwuIn3WHu5LzJUH1nmd2gRD0Z/UWMW6
-	yP1ODEmJgAl1geyEbD/fsCSB+Um8AWqsuBlocEJFjg==
-X-Google-Smtp-Source: AKy350aYCX0hWT/ZVCtC17hCXdexdUmk36d0QJRdgESXU7Qxz4oaEsCCcsGwjceNeEXcG3H2m2cv/w==
-X-Received: by 2002:a17:90b:4f42:b0:23f:84b9:d7a9 with SMTP id pj2-20020a17090b4f4200b0023f84b9d7a9mr2164742pjb.18.1680605600558;
-        Tue, 04 Apr 2023 03:53:20 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id in18-20020a17090b439200b00234115a2221sm7587599pjb.39.2023.04.04.03.53.16
-        for <llvm@lists.linux.dev>
+        d=1e100.net; s=20210112; t=1680606787;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G+vCrGsG4EGlFPdvDqtaQU8ToAjG1wpvWgMdAwD4jDE=;
+        b=S4vx2enzc5koSZy5dAN0r8xa95boHLNZFXTxYFksO+aerSVLAyKZZBnf3wDx7KUCnZ
+         T8ArGSJNy217FI4VKmJRKTIX7vGIVs7IRt+Sak/7Krd8M5mFSJ6liW4zoZ8gpXlJlgAz
+         RXsY03fjo4kd1wm/qHwwuEvOXdwba1uN0kVMG32vL66gZZp4vM+yKYMawmVElsD6gEBa
+         K5DClphZUSCR03EFO1ukPX7vz7wqDyLkTp+PE1blVTJiKYemmUtqeJm7fsrxmNOWK7N3
+         bkmYw+jStUDjZF3nxu6v1VVHy6E6jqN1DPGx5i+/pkqf870RBkjz3cqYP6pcfDOTBENY
+         aiKA==
+X-Gm-Message-State: AAQBX9dPlHK1Xup6qOPd0Qm+XKcJQ3+IR1G/H8HJEEQNPqonGcf5a5Ba
+	FwfqXWFDZ52Tu7XGl0IEuW6AFTl55/u4ngoNinVFZ2ksu7WitWm1IlUH3908Taqm/24aKiNvDm8
+	9fFRqRplF2MCMOA==
+X-Received: by 2002:a81:de53:0:b0:541:978c:5d2 with SMTP id o19-20020a81de53000000b00541978c05d2mr1814303ywl.10.1680606787339;
+        Tue, 04 Apr 2023 04:13:07 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y96Ha20GEcd6uktYakCn5N8OghHenjtSfQerSC/XyJhNsXG37WCXbO5Be6es9Di9Vy8mgtdA==
+X-Received: by 2002:a81:de53:0:b0:541:978c:5d2 with SMTP id o19-20020a81de53000000b00541978c05d2mr1814280ywl.10.1680606787038;
+        Tue, 04 Apr 2023 04:13:07 -0700 (PDT)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id cd8-20020a05690c088800b00545a08184f6sm3114810ywb.134.2023.04.04.04.13.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 03:53:20 -0700 (PDT)
-Message-ID: <642c01a0.170a0220.89230.e8bd@mx.google.com>
-Date: Tue, 04 Apr 2023 03:53:20 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 04 Apr 2023 04:13:06 -0700 (PDT)
+Date: Tue, 4 Apr 2023 07:13:03 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: kernel test robot <lkp@intel.com>
+Cc: jic23@kernel.org, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	andriy.shevchenko@linux.intel.com, trix@redhat.com, lars@metafoo.de,
+	nathan@kernel.org, ndesaulniers@google.com,
+	u.kleine-koenig@pengutronix.de, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, hslester96@gmail.com
+Subject: Re: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from
+ device tree
+Message-ID: <ZCwGP6rBLgbDGvkv@x1>
+References: <20230404011455.339454-1-bmasney@redhat.com>
+ <202304041451.gj8oasQp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20230404
-Subject: next/master build: 12 builds: 0 failed, 12 passed (next-20230404)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <202304041451.gj8oasQp-lkp@intel.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-next/master build: 12 builds: 0 failed, 12 passed (next-20230404)
+Hi kernel test robot maintainers,
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230404/
+On Tue, Apr 04, 2023 at 03:13:24PM +0800, kernel test robot wrote:
+> Hi Brian,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on jic23-iio/togreg]
+> [also build test ERROR on linus/master v6.3-rc5 next-20230403]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Masney/iio-light-tsl2772-fix-reading-proximity-diodes-from-device-tree/20230404-091630
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+> patch link:    https://lore.kernel.org/r/20230404011455.339454-1-bmasney%40redhat.com
+> patch subject: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from device tree
+> config: x86_64-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041451.gj8oasQp-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/9701bd10d6409568197894b603f8a1e23280e82b
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Brian-Masney/iio-light-tsl2772-fix-reading-proximity-diodes-from-device-tree/20230404-091630
+>         git checkout 9701bd10d6409568197894b603f8a1e23280e82b
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iio/light/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304041451.gj8oasQp-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/iio/light/tsl2772.c:599:30: error: use of undeclared identifier 'prox_diode_mask'; did you mean 'protnone_mask'?
+>            chip->settings.prox_diode = prox_diode_mask;
+>                                        ^~~~~~~~~~~~~~~
+>                                        protnone_mask
+>    arch/x86/include/asm/pgtable-invert.h:22:19: note: 'protnone_mask' declared here
+>    static inline u64 protnone_mask(u64 val)
+>                      ^
+>    1 error generated.
+> 
+> 
+> vim +599 drivers/iio/light/tsl2772.c
+> 
+>    572	
+>    573	static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
+>    574	{
+>    575		struct device *dev = &chip->client->dev;
+>    576		int i, ret, num_leds;
+>    577		u32 leds[TSL2772_MAX_PROX_LEDS];
+>    578	
+>    579		ret = device_property_count_u32(dev, "amstaos,proximity-diodes");
+>    580		if (ret < 0)
+>    581			return ret;
+>    582	
+>    583		num_leds = ret;
+>    584		if (num_leds > TSL2772_MAX_PROX_LEDS)
+>    585			num_leds = TSL2772_MAX_PROX_LEDS;
+>    586	
+>    587		ret = device_property_read_u32_array(dev, "amstaos,proximity-diodes", leds, num_leds);
+>    588		if (ret < 0) {
+>    589			dev_err(dev, "Invalid value for amstaos,proximity-diodes: %d.\n", ret);
+>    590			return ret;
+>    591		}
+>    592	
+>    593		for (i = 0; i < num_leds; i++) {
+>    594			if (leds[i] > 1) {
+>    595				dev_err(dev, "Invalid value %d in amstaos,proximity-diodes.\n", leds[i]);
+>    596				return -EINVAL;
+>    597			}
+>    598		}
+>  > 599		chip->settings.prox_diode = prox_diode_mask;
+>    600	
+>    601		return 0;
+>    602	}
+>    603	
 
-Tree: next
-Branch: master
-Git Describe: next-20230404
-Git Commit: 6a53bda3aaf3de5edeea27d0b1d8781d067640b6
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
+This doesn't contain the code that's in iio/togreg [1], and that's why
+the build failed. I originally developed / built this against
+next-20230330. I just checked linus/master, next-20230404, iio/testing,
+and all have the expected code that defines prox_diode_mask.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/tree/drivers/iio/light/tsl2772.c?h=togreg#n593
 
-Detailed per-defconfig build reports:
+Brian
 
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
-es
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
-rnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
