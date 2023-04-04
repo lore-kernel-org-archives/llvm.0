@@ -1,124 +1,147 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C8133DA;
-	Tue,  4 Apr 2023 10:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680603014; x=1712139014;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2WpOwPpwAvS3ja0wM80XZdqT10gY15brihXwIR0tEyM=;
-  b=lv5/E6is4Yd/jKKeDx/3N76yaR9zA+4bHw+4SOHyACmd/DcNT1UwmAHX
-   KuHu0QJEOr7rMHkxRWYifh9Lugc2IqE9+lY3+/n8t3jee9m8hdzjvqE0t
-   XSy4bH906UCUymmxqvjuClVWi83BxHrfBhFADXCXmBK4DD0/RIQvSmTft
-   MTa9zjA+n54DzknjXjVV9PdvbklkxOvQyxXTMwaA4nbS4CjEjiFbGOT+D
-   t9MCumU5Im06BUxdCoMJGC2op+k/94pHdCgeJ8utzi7ghLzWLUj9/bWb3
-   grRnZM5oTuCi+OM+EzC0pgdY5FAjCaZ34vHvInBRghnEXwxk04T1ggKeq
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="321798534"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="321798534"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 03:10:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="688839750"
-X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="688839750"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Apr 2023 03:10:12 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pjdcB-000PWw-2B;
-	Tue, 04 Apr 2023 10:10:11 +0000
-Date: Tue, 4 Apr 2023 18:09:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Triplett <josh@joshtriplett.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH] prctl: Add PR_GET_AUXV to copy auxv to userspace
-Message-ID: <202304041710.JYcSAmPL-lkp@intel.com>
-References: <b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh@joshtriplett.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513407C
+	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 10:53:21 +0000 (UTC)
+Received: by mail-pj1-f53.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so33519999pjz.1
+        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 03:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112; t=1680605600;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=AFMNv6e50Eo9GlYqb9XCB1dwGA0gALY2KZgJZCJOV0M=;
+        b=b40dHQcwqpUx/XafpW0EKeZo3gMwRiWdKnEEzIYrIyyNU1RBLjO8Q4b2IN9y06jmmZ
+         mjMjIv4Lag6SHx7vKz+e2vg3kqlOdJKf5zyxWMuvczCJQpDj6hgG2wOrmqjbL46mXVir
+         tIU9H35oOxwoHCME/uT81fPnWDPRwx0lcmUpcdkg8ulbnpH8aQtkMWoipq6D6oHuwdz4
+         foGW+8YTHhILVyLMAw49OM1adSvRvA1Hs5Q2PBkvRRyxjOqJpHT24YnD4tb1D/uX/cUd
+         O0MbuHs2IZJh0AhQh/NSyONWu/ykmGp3Em8VXRkdGqgVHCn2QsDj+ZsQovVUtMUTF6s6
+         12SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680605600;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AFMNv6e50Eo9GlYqb9XCB1dwGA0gALY2KZgJZCJOV0M=;
+        b=uhOEQDyWcBYn4iSRaTgslfUd1OUUdljlfoORlIznFp5tP4fruQr09aw15I9/i8yPAY
+         bQKQAZcRoQ8ZhKkObnLk15nQ5MkVicMFY+t1XXsWjWPiK6pli9VKzg6I7H9eYGELSr7Q
+         adVlvLpVR+nkqoG+fU0g6fcAk5/gEQcgF83VOAaRHQGbSABUvjaT0xT8v8KzgCxSv87i
+         sORIKSFzHvEsdSST9NsZYBYqVMEplPhdyS4VzDAyrNu1mut52n6CK3ue9S790EFNCoE6
+         hgB1Wn1ECJrLwQ49cyrLQmPGxr0Z1lwBJBDfk4phHInolBBiOOe89gnukZPpFN0SRHjk
+         yx+w==
+X-Gm-Message-State: AAQBX9fl70Jq4i8z6/pcjRT9NIwuIn3WHu5LzJUH1nmd2gRD0Z/UWMW6
+	yP1ODEmJgAl1geyEbD/fsCSB+Um8AWqsuBlocEJFjg==
+X-Google-Smtp-Source: AKy350aYCX0hWT/ZVCtC17hCXdexdUmk36d0QJRdgESXU7Qxz4oaEsCCcsGwjceNeEXcG3H2m2cv/w==
+X-Received: by 2002:a17:90b:4f42:b0:23f:84b9:d7a9 with SMTP id pj2-20020a17090b4f4200b0023f84b9d7a9mr2164742pjb.18.1680605600558;
+        Tue, 04 Apr 2023 03:53:20 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id in18-20020a17090b439200b00234115a2221sm7587599pjb.39.2023.04.04.03.53.16
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 03:53:20 -0700 (PDT)
+Message-ID: <642c01a0.170a0220.89230.e8bd@mx.google.com>
+Date: Tue, 04 Apr 2023 03:53:20 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh@joshtriplett.org>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: next-20230404
+Subject: next/master build: 12 builds: 0 failed, 12 passed (next-20230404)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Josh,
+next/master build: 12 builds: 0 failed, 12 passed (next-20230404)
 
-kernel test robot noticed the following build warnings:
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230404/
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc5]
-[cannot apply to akpm-mm/mm-everything next-20230404]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tree: next
+Branch: master
+Git Describe: next-20230404
+Git Commit: 6a53bda3aaf3de5edeea27d0b1d8781d067640b6
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 3 unique architectures
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Triplett/prctl-Add-PR_GET_AUXV-to-copy-auxv-to-userspace/20230404-140043
-patch link:    https://lore.kernel.org/r/b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh%40joshtriplett.org
-patch subject: [PATCH] prctl: Add PR_GET_AUXV to copy auxv to userspace
-config: arm-randconfig-r025-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041710.JYcSAmPL-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/4323f9bd6c2ecbfd6be4f8a3830ea47a89558314
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Josh-Triplett/prctl-Add-PR_GET_AUXV-to-copy-auxv-to-userspace/20230404-140043
-        git checkout 4323f9bd6c2ecbfd6be4f8a3830ea47a89558314
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304041710.JYcSAmPL-lkp@intel.com/
+Detailed per-defconfig build reports:
 
-All warnings (new ones prefixed by >>):
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
+ (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatch=
+es
 
->> kernel/sys.c:2383:23: warning: comparison of distinct pointer types ('typeof (sizeof (mm->saved_auxv)) *' (aka 'unsigned int *') and 'typeof (len) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           unsigned long size = min(sizeof(mm->saved_auxv), len);
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:67:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
 
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
+ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
+tches
 
-vim +2383 kernel/sys.c
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
+ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
 
-  2379	
-  2380	static int prctl_get_auxv(void __user *addr, unsigned long len)
-  2381	{
-  2382		struct mm_struct *mm = current->mm;
-> 2383		unsigned long size = min(sizeof(mm->saved_auxv), len);
-  2384	
-  2385		if (size && copy_to_user(addr, mm->saved_auxv, size))
-  2386			return -EFAULT;
-  2387		return sizeof(mm->saved_auxv);
-  2388	}
-  2389	
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
+=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
+3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
+omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
+mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
+ (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
+hes
+
+---------------------------------------------------------------------------=
+-----
+defconfig+arm64-chromebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
+, 0 warnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
