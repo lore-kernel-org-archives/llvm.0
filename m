@@ -1,80 +1,219 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3D4C951;
-	Tue,  4 Apr 2023 18:02:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680631343; x=1712167343;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tg/22cCtXZi7LMFOOorcG1s2zDE8W8Ws9IZHGMkDjBg=;
-  b=MwVXeMMEtjYdAlD6EezYTdFQK75UBVAOAEBJ6v8M42oxXWEBvlYovfde
-   sxj6LdLl7Gn3v2368zQTdq+vVkQ+KiFvYOvAMK+NIgP2gj9W/MEzCx114
-   AJ7chJuCsAiHyN7qN3KuKX6gmCSBOMF5DRook42T5p+VhrHcDc1lDosTT
-   JQRs497g2jIy/YtGffCo031TsSq0eqAgIew/8k7BINJEIWz7ATL+MsmWs
-   IXqmV+FDiqBpkMbiFlOHjaCXdofq/BiI4f9/n90dYf1N5C5w3BbTgp6Gq
-   XO4p8qMQhydgDgRiAqwk+T061bYSE/5jwigu/RT7f2PIDWcwbxF4i45ZB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="428547949"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="428547949"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 11:01:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="636617349"
-X-IronPort-AV: E=Sophos;i="5.98,318,1673942400"; 
-   d="scan'208";a="636617349"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Apr 2023 11:01:39 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pjkyQ-000Py4-27;
-	Tue, 04 Apr 2023 18:01:38 +0000
-Date: Wed, 5 Apr 2023 02:01:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chuck Lever <chuck.lever@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [cel:topic-rpc-with-tls-upcall 3/19] ERROR: modpost:
- "handshake_req_hash_lookup" [net/handshake/kunit-test.ko] undefined!
-Message-ID: <202304050102.Ux7TQge0-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B50FC951
+	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 18:20:48 +0000 (UTC)
+Received: by mail-pg1-f182.google.com with SMTP id y35so20219362pgl.4
+        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 11:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680632448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a8QsXaZPHEAsPoW0flCc0TOSQrLjDGzZjDEO/EvIfsw=;
+        b=mpiCxWKuWoSzlX40nQKfKAaOH87Uuf9nu3eXg7EdGg557PNonvadIn6JVXiN/uM9Wy
+         phW/msttEsKDnZh1vVFo1bN9XZtZKEUa4wk/18xxEDCarICge5UwlYnQAxJzm03rXFSI
+         DJBprbDLPojSOI3lW4sui5GKgMuD72aL4oaagoTPk8faAqerVaiDZ6mu538E2hh9oqF7
+         0oK8ht9mRNdYe4sIkdaSTzl6G8Fs9E31epNQi3UPNlN8wJObdPa2hsumipAUSGbg3eKo
+         jvrjjdXwkTaMmkoq5VnpbS/FL/eFSGqJVfftsC93axZyll8/J5G4pPsWk+JEQJidr9Ym
+         fv7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680632448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a8QsXaZPHEAsPoW0flCc0TOSQrLjDGzZjDEO/EvIfsw=;
+        b=KZDZHEucJN+JAto3ICmQy8Rspy/Ntsaw7y9GdYcG/NOCVkSiQT9275ojkHcNagFAik
+         GIucckdlzSlfj+CJdvcP7RTRt4tR8VFZ4alGzq4ZDAofV1V+cReebNnRL6eIm/5UIMV5
+         +y8rjeqtNz+A3zZXXTRf8Tm+KPkwkQ5z8FTNrRpzlj5Zu34uwVLgPEv6+/8MZGGqioJf
+         tL8wYE7t49n+me/x5UBO2v+CJUXScjZ6V9HTdDJ6ozgYhsoC7SnQYUJfOYqCQo1lRJnH
+         UsDBpYX3+gBvGLlDGlKs5HGuYid39pk6HQapJlywDN6tvBSqPCvcg/iXlHxECzI7sRCf
+         z38g==
+X-Gm-Message-State: AAQBX9e+8i3Sxh+4YwQxf1pACdpYFnVb/NzteMe0rOsLOjwMAKgJiqsZ
+	QhG7PxPX3ONozNEs+xuYzTfUdw==
+X-Google-Smtp-Source: AKy350ZueCB8uPytSB434Qm4r5EaO+Vwyt0FglDeSJ0S0BeLW50LyieSkwwAgxgd1F0EJCZ+ZvbMfw==
+X-Received: by 2002:a62:1d41:0:b0:62a:4503:53b8 with SMTP id d62-20020a621d41000000b0062a450353b8mr3341665pfd.1.1680632447664;
+        Tue, 04 Apr 2023 11:20:47 -0700 (PDT)
+Received: from localhost.localdomain ([106.51.184.50])
+        by smtp.gmail.com with ESMTPSA id o12-20020a056a001bcc00b0062dcf5c01f9sm9018524pfw.36.2023.04.04.11.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 11:20:47 -0700 (PDT)
+From: Sunil V L <sunilvl@ventanamicro.com>
+To: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-acpi@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Len Brown <lenb@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Weili Qian <qianweili@huawei.com>,
+	Zhou Wang <wangzhou1@hisilicon.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Marc Zyngier <maz@kernel.org>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Sunil V L <sunilvl@ventanamicro.com>
+Subject: [PATCH V4 00/23] Add basic ACPI support for RISC-V
+Date: Tue,  4 Apr 2023 23:50:14 +0530
+Message-Id: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux topic-rpc-with-tls-upcall
-head:   6de0228981b3b408d3e4a3c69a3afa65b2c86112
-commit: 99109f219c5fa71dab2d5412d78d90487ffbcdeb [3/19] net/handshake: Add Kunit tests for the handshake consumer API
-config: x86_64-randconfig-a004-20230403 (https://download.01.org/0day-ci/archive/20230405/202304050102.Ux7TQge0-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=99109f219c5fa71dab2d5412d78d90487ffbcdeb
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel topic-rpc-with-tls-upcall
-        git checkout 99109f219c5fa71dab2d5412d78d90487ffbcdeb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+This patch series enables the basic ACPI infrastructure for RISC-V.
+Supporting external interrupt controllers is in progress and hence it is
+tested using poll based HVC SBI console and RAM disk.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304050102.Ux7TQge0-lkp@intel.com/
+The first patch in this series is one of the patch from Jisheng's
+series [1] which is not merged yet. This patch is required to support
+ACPI since efi_init() which gets called before sbi_init() can enable
+static branches and hits a panic.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Patch 2 and 3 are ACPICA patches which are merged now into acpica
+but not yet pulled into the linux sources. They exist in this patch set
+as reference. This series can be merged only after those ACPICA patches
+are pulled into linux.
 
-WARNING: modpost: vmlinux.o: section mismatch in reference: handshake_exit (section: .exit.text) -> handshake_genl_net_ops (section: .init.data)
->> ERROR: modpost: "handshake_req_hash_lookup" [net/handshake/kunit-test.ko] undefined!
->> ERROR: modpost: "handshake_pernet" [net/handshake/kunit-test.ko] undefined!
->> ERROR: modpost: "handshake_req_next" [net/handshake/kunit-test.ko] undefined!
->> ERROR: modpost: "handshake_complete" [net/handshake/kunit-test.ko] undefined!
+Below are two ECRs approved by ASWG.
+RINTC - https://drive.google.com/file/d/1R6k4MshhN3WTT-hwqAquu5nX6xSEqK2l/view
+RHCT - https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR-tia/view
+
+
+Based-on: 20230328035223.1480939-1-apatel@ventanamicro.com
+(https://lore.kernel.org/lkml/20230328035223.1480939-1-apatel@ventanamicro.com/)
+
+[1] https://lore.kernel.org/all/20220821140918.3613-1-jszhang@kernel.org/
+
+Changes since V3:
+	1) Added two more driver patches to workaround allmodconfig build failure.
+	2) Separated removal of riscv_of_processor_hartid() to a different patch.
+	3) Addressed Conor's feedback.
+	4) Rebased to v6.3-rc5 and added latest tags
+
+Changes since V2:
+	1) Dropped ACPI_PROCESSOR patch.
+	2) Added new patch to print debug info of RISC-V INTC in MADT
+	3) Addressed other comments from Drew.
+	4) Rebased and updated tags
+
+Changes since V1:
+	1) Dropped PCI changes and instead added dummy interfaces just to enable
+	   building ACPI core when CONFIG_PCI is enabled. Actual PCI changes will
+	   be added in future along with external interrupt controller support
+	   in ACPI.
+	2) Squashed couple of patches so that new code added gets built in each
+	   commit.
+	3) Fixed the missing wake_cpu code in timer refactor patch as pointed by
+	   Conor
+	4) Fixed an issue with SMP disabled.
+	5) Addressed other comments from Conor.
+	6) Updated documentation patch as per feedback from Sanjaya.
+	7) Fixed W=1 and checkpatch --strict issues.
+	8) Added ACK/RB tags
+
+These changes are available at
+https://github.com/vlsunil/linux/commits/acpi_b1_us_review_ipi17_V4
+
+Testing:
+1) Build latest Qemu 
+
+2) Build EDK2 as per instructions in
+https://github.com/vlsunil/riscv-uefi-edk2-docs/wiki/RISC-V-Qemu-Virt-support
+
+3) Build Linux after enabling SBI HVC and SBI earlycon
+CONFIG_RISCV_SBI_V01=y
+CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
+CONFIG_HVC_RISCV_SBI=y
+
+4) Build buildroot.
+
+Run with below command.
+qemu-system-riscv64   -nographic \
+-drive file=Build/RiscVVirtQemu/RELEASE_GCC5/FV/RISCV_VIRT.fd,if=pflash,format=raw,unit=1 \
+-machine virt -smp 16 -m 2G \
+-kernel arch/riscv/boot/Image \
+-initrd buildroot/output/images/rootfs.cpio \
+-append "root=/dev/ram ro console=hvc0 earlycon=sbi"
+
+
+Jisheng Zhang (1):
+  riscv: move sbi_init() earlier before jump_label_init()
+
+Sunil V L (22):
+  ACPICA: MADT: Add RISC-V INTC interrupt controller
+  ACPICA: Add structure definitions for RISC-V RHCT
+  ACPI: tables: Print RINTC information when MADT is parsed
+  ACPI: OSL: Make should_use_kmap() 0 for RISC-V
+  RISC-V: Add support to build the ACPI core
+  ACPI: processor_core: RISC-V: Enable mapping processor to the hartid
+  RISC-V: ACPI: Cache and retrieve the RINTC structure
+  drivers/acpi: RISC-V: Add RHCT related code
+  RISC-V: smpboot: Create wrapper smp_setup()
+  RISC-V: smpboot: Add ACPI support in smp_setup()
+  RISC-V: cpufeature: Avoid calling riscv_of_processor_hartid()
+  RISC-V: cpufeature: Add ACPI support in riscv_fill_hwcap()
+  RISC-V: cpu: Enable cpuinfo for ACPI systems
+  irqchip/riscv-intc: Add ACPI support
+  clocksource/timer-riscv: Refactor riscv_timer_init_dt()
+  clocksource/timer-riscv: Add ACPI support
+  RISC-V: time.c: Add ACPI support for time_init()
+  RISC-V: Add ACPI initialization in setup_arch()
+  RISC-V: Enable ACPI in defconfig
+  MAINTAINERS: Add entry for drivers/acpi/riscv
+  platform/surface: Disable for RISC-V
+  crypto: hisilicon/qm: Workaround to enable build with RISC-V clang
+
+ .../admin-guide/kernel-parameters.txt         |   8 +-
+ MAINTAINERS                                   |   8 +
+ arch/riscv/Kconfig                            |   5 +
+ arch/riscv/configs/defconfig                  |   1 +
+ arch/riscv/include/asm/acenv.h                |  11 +
+ arch/riscv/include/asm/acpi.h                 |  77 +++++
+ arch/riscv/include/asm/cpu.h                  |   8 +
+ arch/riscv/kernel/Makefile                    |   2 +
+ arch/riscv/kernel/acpi.c                      | 266 ++++++++++++++++++
+ arch/riscv/kernel/cpu.c                       |  30 +-
+ arch/riscv/kernel/cpufeature.c                |  44 ++-
+ arch/riscv/kernel/setup.c                     |  27 +-
+ arch/riscv/kernel/smpboot.c                   |  77 ++++-
+ arch/riscv/kernel/time.c                      |  25 +-
+ drivers/acpi/Makefile                         |   2 +
+ drivers/acpi/osl.c                            |   2 +-
+ drivers/acpi/processor_core.c                 |  29 ++
+ drivers/acpi/riscv/Makefile                   |   2 +
+ drivers/acpi/riscv/rhct.c                     |  83 ++++++
+ drivers/acpi/tables.c                         |  10 +
+ drivers/clocksource/timer-riscv.c             |  92 +++---
+ drivers/crypto/hisilicon/qm.c                 |  13 +-
+ drivers/irqchip/irq-riscv-intc.c              |  74 ++++-
+ drivers/platform/surface/aggregator/Kconfig   |   2 +-
+ include/acpi/actbl2.h                         |  69 ++++-
+ 25 files changed, 867 insertions(+), 100 deletions(-)
+ create mode 100644 arch/riscv/include/asm/acenv.h
+ create mode 100644 arch/riscv/include/asm/acpi.h
+ create mode 100644 arch/riscv/include/asm/cpu.h
+ create mode 100644 arch/riscv/kernel/acpi.c
+ create mode 100644 drivers/acpi/riscv/Makefile
+ create mode 100644 drivers/acpi/riscv/rhct.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
