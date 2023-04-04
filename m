@@ -1,37 +1,37 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F4C33DE;
-	Tue,  4 Apr 2023 09:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C8133DA;
+	Tue,  4 Apr 2023 10:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680602358; x=1712138358;
+  t=1680603014; x=1712139014;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sWw4FO/jFyMRxxBXknWut7zEzlnQFR4CIDRAC5E0jKE=;
-  b=G3SjuQEs76hQLX+Ps8H7lcEAuP8aGRn96AI+NS7KJxF3Bu/I2A4r5o+D
-   TImyHBqk9DKKOsb7464Z19Olg0OnU4/pWLfUnEOyJRHMQqG7ug2JYLh61
-   hclcQKjOyxBxbroB2tu+jShUyVslZzb4K0qk6albO2QS8wEQc6BjO79p4
-   swgXk3WO79IT/mBuN1kP34/tWFwpCXtNpVvhKqTA/+fQ6tJcBHY9fbpvP
-   douSd1HcqqBmCfNU4DIeBxfd3xKJwL6RuNtXpXwdqqktkmEnD0N/I8/Pe
-   M97pa48lPacpAVc/tOTfkFDdt+jhcneRES+WiUQaIgond90lPCP3m6T2W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="407199926"
+  bh=2WpOwPpwAvS3ja0wM80XZdqT10gY15brihXwIR0tEyM=;
+  b=lv5/E6is4Yd/jKKeDx/3N76yaR9zA+4bHw+4SOHyACmd/DcNT1UwmAHX
+   KuHu0QJEOr7rMHkxRWYifh9Lugc2IqE9+lY3+/n8t3jee9m8hdzjvqE0t
+   XSy4bH906UCUymmxqvjuClVWi83BxHrfBhFADXCXmBK4DD0/RIQvSmTft
+   MTa9zjA+n54DzknjXjVV9PdvbklkxOvQyxXTMwaA4nbS4CjEjiFbGOT+D
+   t9MCumU5Im06BUxdCoMJGC2op+k/94pHdCgeJ8utzi7ghLzWLUj9/bWb3
+   grRnZM5oTuCi+OM+EzC0pgdY5FAjCaZ34vHvInBRghnEXwxk04T1ggKeq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="321798534"
 X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="407199926"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 02:59:13 -0700
+   d="scan'208";a="321798534"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 03:10:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="750861005"
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="688839750"
 X-IronPort-AV: E=Sophos;i="5.98,317,1673942400"; 
-   d="scan'208";a="750861005"
+   d="scan'208";a="688839750"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Apr 2023 02:59:11 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 04 Apr 2023 03:10:12 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pjdRX-000PW8-0U;
-	Tue, 04 Apr 2023 09:59:11 +0000
-Date: Tue, 4 Apr 2023 17:58:51 +0800
+	id 1pjdcB-000PWw-2B;
+	Tue, 04 Apr 2023 10:10:11 +0000
+Date: Tue, 4 Apr 2023 18:09:16 +0800
 From: kernel test robot <lkp@intel.com>
 To: Josh Triplett <josh@joshtriplett.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
@@ -39,7 +39,7 @@ To: Josh Triplett <josh@joshtriplett.org>,
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Linux Memory Management List <linux-mm@kvack.org>
 Subject: Re: [PATCH] prctl: Add PR_GET_AUXV to copy auxv to userspace
-Message-ID: <202304041715.c3b7aJd4-lkp@intel.com>
+Message-ID: <202304041710.JYcSAmPL-lkp@intel.com>
 References: <b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh@joshtriplett.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -65,23 +65,25 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Triplett/prctl-Add-PR_GET_AUXV-to-copy-auxv-to-userspace/20230404-140043
 patch link:    https://lore.kernel.org/r/b11a591e085f1cd06adb454b1f7cde676d317318.1680585798.git.josh%40joshtriplett.org
 patch subject: [PATCH] prctl: Add PR_GET_AUXV to copy auxv to userspace
-config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041715.c3b7aJd4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: arm-randconfig-r025-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041710.JYcSAmPL-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
         # https://github.com/intel-lab-lkp/linux/commit/4323f9bd6c2ecbfd6be4f8a3830ea47a89558314
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Josh-Triplett/prctl-Add-PR_GET_AUXV-to-copy-auxv-to-userspace/20230404-140043
         git checkout 4323f9bd6c2ecbfd6be4f8a3830ea47a89558314
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304041715.c3b7aJd4-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304041710.JYcSAmPL-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
