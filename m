@@ -1,164 +1,182 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D437361
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 06:54:40 +0000 (UTC)
-Received: by mail-pj1-f47.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso35175378pjb.0
-        for <llvm@lists.linux.dev>; Mon, 03 Apr 2023 23:54:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680591280;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=X8KDVnrh1hTXgmg9cUX613HBU/NpNhOGn+tvPjKzddU=;
-        b=mXZSLWXYtv4n06LIlK6QFnQlklY/sKxaWTQU/vvO7qcfsgXLGGlGcwuCO19fKY6qQy
-         efdh/b+0BcOjkIB2FxAoBZJ+N4ssU99ayNpww5SqKt7jOFgp5lClD7Ls81ZUiB3b5/Io
-         s1QdUxXGmLS90t3QGktGbGlny60/DldtJ2R9m5GEfPJdo5b1RtLvsnDMEuI+bmuta/qW
-         NjubZGOwRTbD/l4rfxV/adLRRcaGNHhIFZOKtewu25VMxkayhdNFMa32IxzRQ+d3k7AQ
-         6lI26mcYjTEuZBZnichASEWZZ4Riyn9b6mh0dOzRN51KiyLfvoPGA0q3sr5Jlq2YiUrt
-         oC2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680591280;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X8KDVnrh1hTXgmg9cUX613HBU/NpNhOGn+tvPjKzddU=;
-        b=CWkGtmRzfo3eBCs7QZhsRrwp3wDgLM3Ne7R9QhsUioN/UfOApkw2DFaMzbjeM0kL/+
-         79xc+gdoDVJa3ubHNgzpVWUYdLIjpTM/i+LjI0/lwBnsy2Q8r2Gx+39XPUvs+SLv7T8p
-         Yd1PvIZif1Y0CFBAg7eKKrthPiOwVUAmrMfZawbfe8tNqu+CvMIy+yM4hDPundhmaMDn
-         L629ztx5vJVOLlrC32HCzf0wSuq2rihMfmGcDUlC2MTaWycxnA4cjsv3prL5SFAIphRB
-         8eguqccEp1WsGfxeUKdX2OotdUkqEFjr59NYCggAylXt0jt+TUk0sr7Oq2/5dYwPy+GP
-         aCbg==
-X-Gm-Message-State: AAQBX9eNWUQgJDdqQ1Q8+aYMAHA1mDbV5fpVEPjJOcbTjwLZDeAx/SEx
-	9R3UHkZmwyI9gkdVvAOCLyuAWg==
-X-Google-Smtp-Source: AKy350YUeMS566kGavT5Mb5UZSOA1ZJfQBdGmEvc/mlk3U8V7ucrzM0EIRt/rKThA++zZN9GdXImaQ==
-X-Received: by 2002:a17:902:e494:b0:1a2:952b:27e0 with SMTP id i20-20020a170902e49400b001a2952b27e0mr1572818ple.8.1680591280254;
-        Mon, 03 Apr 2023 23:54:40 -0700 (PDT)
-Received: from sunil-laptop ([106.51.184.50])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170902748700b0019f0ef910f7sm7626350pll.123.2023.04.03.23.54.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 23:54:39 -0700 (PDT)
-Date: Tue, 4 Apr 2023 12:24:30 +0530
-From: Sunil V L <sunilvl@ventanamicro.com>
-To: Ley Foon Tan <lftan@kernel.org>
-Cc: Conor Dooley <conor@kernel.org>,
-	linux-riscv <linux-riscv@lists.infradead.org>,
-	linux-acpi@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	linux-doc@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Marc Zyngier <maz@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Atish Patra <atishp@rivosinc.com>,
-	Conor Dooley <conor.dooley@microchip.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
-Message-ID: <ZCvJpnNZYzrIcfPe@sunil-laptop>
-References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
- <16007014-c5f2-4b07-baec-e19952236aa5@spud>
- <ZAbGSA6F0kfv9YYw@sunil-laptop>
- <E7FB4927-1FE6-435A-914E-9615C2AD9D34@kernel.org>
- <a9823561-2e32-49e8-b6c9-73e4b8f8cf8d@spud>
- <ZAfeaO52pnYhiyLN@sunil-laptop>
- <CAFiDJ58bRo6R1qOFaSSNgAdbQJZ3xDY6Wth-t8M8XKRFbig2hA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0FF7F3
+	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 07:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680592241;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wnfSKVF+NDXzTJz+3rTMukupfGOWf/h15mErxAlhz70=;
+	b=CJza+EP9PtNLIxjPkmCYee3OX4LTSJINcqe9NQ81wmm8f2l3XqlqWtOioAUZPpqG7cRfRg
+	ll78Koxxcsc/4A48fpSqO6UwU9s+9bhOE5iqFHFNlqWjK9U2ifWdWsIFcwdaNnQSVQxtS9
+	DbgGzqT3E9FFYOj7H92VcGzye8cYepg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-8-tM3bnrKGNX-8Gg5oEUCubQ-1; Tue, 04 Apr 2023 03:10:39 -0400
+X-MC-Unique: tM3bnrKGNX-8Gg5oEUCubQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D4713823A00
+	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 07:10:39 +0000 (UTC)
+Received: from [172.64.0.121] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 690E4140EBF4;
+	Tue,  4 Apr 2023 07:10:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 5 of 381): Test report for master
+ (6.3.0-rc5, mainline.kernel.org-clang, 148341f0)
+Date: Tue, 04 Apr 2023 07:10:39 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFiDJ58bRo6R1qOFaSSNgAdbQJZ3xDY6Wth-t8M8XKRFbig2hA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <60912.123040403103900636@us-mta-8.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 04, 2023 at 02:35:19PM +0800, Ley Foon Tan wrote:
-> On Wed, Mar 8, 2023 at 9:08 AM Sunil V L <sunilvl@ventanamicro.com> wrote:
-> >
-> > On Tue, Mar 07, 2023 at 06:44:35PM +0000, Conor Dooley wrote:
-> > > On Tue, Mar 07, 2023 at 06:13:22AM +0000, Conor Dooley wrote:
-> > > >
-> > > >
-> > > > On 7 March 2023 05:06:16 GMT, Sunil V L <sunilvl@ventanamicro.com> wrote:
-> > > > >On Mon, Mar 06, 2023 at 09:51:09PM +0000, Conor Dooley wrote:
-> > > > >> Hey Sunil,
-> > > > >>
-> > > > >> On Fri, Mar 03, 2023 at 07:06:27PM +0530, Sunil V L wrote:
-> > > > >> > This patch series enables the basic ACPI infrastructure for RISC-V.
-> > > > >> > Supporting external interrupt controllers is in progress and hence it is
-> > > > >> > tested using poll based HVC SBI console and RAM disk.
-> > > > >> >
-> > > > >> > The first patch in this series is one of the patch from Jisheng's
-> > > > >> > series [1] which is not merged yet. This patch is required to support
-> > > > >> > ACPI since efi_init() which gets called before sbi_init() can enable
-> > > > >> > static branches and hits a panic.
-> > > > >> >
-> > > > >> > Patch 2 and 3 are ACPICA patches which are not merged into acpica yet
-> > > > >> > but a PR is raised already.
-> > > > >> >
-> > > > >> > Below are two ECRs approved by ASWG.
-> > > > >> > RINTC - https://drive.google.com/file/d/1R6k4MshhN3WTT-hwqAquu5nX6xSEqK2l/view
-> > > > >> > RHCT - https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR-tia/view
-> > > > >> >
-> > > > >> > The series depends on Anup's IPI improvement series [2].
-> > > > >> >
-> > > > >> > [1] https://lore.kernel.org/all/20220821140918.3613-1-jszhang@kernel.org/
-> > > > >> > [2] https://lore.kernel.org/lkml/20230103141221.772261-7-apatel@ventanamicro.com/T/
-> > > > >>
-> > > > >> Building a clang-15 allmodconfig (I didn't try gcc) with this series, and
-> > > > >> Anup's IPI bits, results in a broken build, due to failings in cmpxchg:
-> > > > >>
-> > > > >> /stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error: call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BUG failed
-> > > > >>         while (unlikely((ret = cmpxchg(&c->value, old, new)) != old)) {
-> > > > >>                                ^
-> > >
-> > > > > I am able to build without any of these issues using clang-15. I am
-> > > > > wondering whether the base is proper. I had rebased on top of the master
-> > > > > and couple of patches from IPI series were already merged in the master.
-> > > > >
-> > > > > Do you mind verifying with my branch
-> > > > > https://github.com/vlsunil/linux/commits/acpi_b1_us_review_ipi17_V3?
-> > > >
-> > > > I can check that later I suppose.
-> > >
-> > > That's broken too.
-> > >
-> > > > > Or if you could provide me your branch details, I can look further.
-> > > >
-> > > > 6.3-rc1, with both series applied, sans Anups applied patches.
-> > >
-> > > I've pushed my stuff here, but unlikely that it makes any odds since
-> > > your branch experiences the same build issue.
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ borked-acpi-surface
-> > >
-> > > My build commands are wrapped in a script, but it's an LLVM=1
-> > > allmodconfig run w/ clang-15(.0.7) etc.
-> > >
-> > Ahh allmodconfig. Thank you very much!. I can reproduce the failure. Let
-> > me look further and fix in next revision.
-> >
-> > Thanks!
-> > Sunil
-> 
-> Hi Sunil
-> 
-> One question regarding PMU in ACPI flow.
-> 
-> We use DT to decode the supported HPM counters/events for the
-> different platforms now.
-> How do we enable PMU (drivers/perf/riscv_pmu_sbi.c) when using ACPI method?
-> Note, this might be in separate patch series.
-> 
-Hi Lay Foon,
+Hi, we tested your kernel and here are the results:
 
-This driver uses SBI calls and hence should work in case of ACPI also.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-There is one minor change required in this driver for overflow
-interrupt. I have a patch for that in future series.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Thanks,
-Sunil
+Kernel information:
+    Commit message: Merge tag 'vfs.misc.fixes.v6.3-rc6' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/vfs/idmapping
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/83456
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: CIFS Connectathon: SELinux prevents mount.cifs, request-key =
+and cifs.idmap
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1525
+            Affected tests:
+                 aarch64 - CIFS Connectathon
+                 ppc64le - CIFS Connectathon
+                   s390x - CIFS Connectathon
+                  x86_64 - CIFS Connectathon
+                  x86_64 (debug) - CIFS Connectathon
+        Issue: Usex - version 1.9-29: FATAL ERROR: zipinfo returned exit st=
+atus: 3
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1543
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: Usex - version 1.9-29 - BIN TEST 1: FAIL
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1612
+            Affected tests:
+                  x86_64 - Usex - version 1.9-29
+                  x86_64 (debug) - Usex - version 1.9-29
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: generic/129: ./xfstests-run.sh: line 55:=
+ results/generic/129.dmesg: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1407
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: generic/132: FAIL: tee: results/generi=
+c/generic-132.log: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1491
+            Affected tests:
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
+ waiting the udev queue being empty
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1470
+            Affected tests:
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
+found
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1235
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
