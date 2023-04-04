@@ -1,62 +1,48 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079AD7E;
-	Tue,  4 Apr 2023 02:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E33C7C;
+	Tue,  4 Apr 2023 03:13:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680574920; x=1712110920;
+  t=1680577982; x=1712113982;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=S9jlvO03mnmm15rtkefUHtXNrIuNeFHbwAHrntbkPhg=;
-  b=meDCQ1v9NNmcry5e+Ximq9jKBDK+y2uQTAic1r0QRpt+bP4RElvsYn3D
-   QSWDyQJ1iwphbbxzfoJO+QP9jR/EMwWUOJaJtI80MlsROk4JFAwW+vaCM
-   X9HbKrU/yVurOrlBy+rzBkV/rdkk4pm5MbSnd/2MJtnC/4aJuGa8/imk5
-   ar80+24c9rYT2iosuJPV+FpG3h+Wf8REvP7Yqnf3ops1Xqm84j2TJy4Ds
-   pZwrmL1iSm2bAQLPv2lEMVh943XwVHayEE3Qetl3XoqFd8v3M6WuSo8na
-   uCm9QjD4ELdO4xRglD9QHkHyjV9hFs0L4TszadnhGx1dI6JmN8EVZUn4b
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="340801866"
+  bh=Q3PIxfZjiQSnFPBrlx/lqbr6BF+fp9eU24opAoDCnow=;
+  b=E6HfTP8MLLua1PNfFbpdo5aQhz34BOHBEQPcdHiCR7OhpSBOYPSeXwGl
+   Wi/4/ImF3at5+b2iuu3uK1YEIp4Ocefv3tZ9I8mAyfbg5nibzRZs0JAKJ
+   B+qWa3jIQ2bpAThrLg8kfgwPDSfzaugySr3dMdBP+yNnBeqxFrS7CYHJJ
+   zMBYUFd96rps8hBxwQXwU2kwu+X40x7anvrR38ArkyYs++6UbNJSEQJDG
+   FzEeDyf65GdAhoC1+X9RGnp8qbIJ5z5JQUjMgWTVNw26NRAJh0BQx13cL
+   vlKrO/SEFoWOtLJX82KoQefwCrqKATuXHhpdCpAYhi8OeNFMJyoEgmWVT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="326093987"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="340801866"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 19:21:59 -0700
+   d="scan'208";a="326093987"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 20:13:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="810056483"
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="718779016"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="810056483"
+   d="scan'208";a="718779016"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 Apr 2023 19:21:53 -0700
+  by orsmga001.jf.intel.com with ESMTP; 03 Apr 2023 20:12:57 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pjWIy-000P2g-3A;
-	Tue, 04 Apr 2023 02:21:52 +0000
-Date: Tue, 4 Apr 2023 10:21:14 +0800
+	id 1pjX6O-000P62-2I;
+	Tue, 04 Apr 2023 03:12:56 +0000
+Date: Tue, 4 Apr 2023 11:12:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>
+To: John Fastabend <john.fastabend@gmail.com>, cong.wang@bytedance.com,
+	jakub@cloudflare.com, daniel@iogearbox.net, lmb@isovalent.com,
+	edumazet@google.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Dmitry Safonov <dima@arista.com>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Bob Gilligan <gilligan@arista.com>,
-	Dan Carpenter <error27@gmail.com>,
-	David Laight <David.Laight@aculab.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Francesco Ruggeri <fruggeri05@gmail.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-	Ivan Delalande <colona@arista.com>,
-	Leonard Crestez <cdleonard@gmail.com>,
-	Salam Noureddine <noureddine@arista.com>
-Subject: Re: [PATCH v5 01/21] [draft] net/tcp: Prepare tcp_md5sig_pool for
- TCP-AO
-Message-ID: <202304041030.rTLITKDY-lkp@intel.com>
-References: <20230403213420.1576559-2-dima@arista.com>
+	john.fastabend@gmail.com, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	will@isovalent.com
+Subject: Re: [PATCH bpf v3 07/12] bpf: sockmap incorrectly handling copied_seq
+Message-ID: <202304041028.XAQryEFM-lkp@intel.com>
+References: <20230403200138.937569-8-john.fastabend@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,44 +51,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230403213420.1576559-2-dima@arista.com>
+In-Reply-To: <20230403200138.937569-8-john.fastabend@gmail.com>
 
-Hi Dmitry,
+Hi John,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 7e364e56293bb98cae1b55fd835f5991c4e96e7d]
+[auto build test ERROR on bpf/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230404-054020
-base:   7e364e56293bb98cae1b55fd835f5991c4e96e7d
-patch link:    https://lore.kernel.org/r/20230403213420.1576559-2-dima%40arista.com
-patch subject: [PATCH v5 01/21] [draft] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
-config: hexagon-randconfig-r041-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041030.rTLITKDY-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Fastabend/bpf-sockmap-pass-skb-ownership-through-read_skb/20230404-040431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20230403200138.937569-8-john.fastabend%40gmail.com
+patch subject: [PATCH bpf v3 07/12] bpf: sockmap incorrectly handling copied_seq
+config: hexagon-randconfig-r041-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041028.XAQryEFM-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/94408bb4cf5cbcc772ab4d70eeb73bda183c6124
+        # https://github.com/intel-lab-lkp/linux/commit/fbafbc850ec4ef5aa7e5c39d8133f291ec4c0bb8
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230404-054020
-        git checkout 94408bb4cf5cbcc772ab4d70eeb73bda183c6124
+        git fetch --no-tags linux-review John-Fastabend/bpf-sockmap-pass-skb-ownership-through-read_skb/20230404-040431
+        git checkout fbafbc850ec4ef5aa7e5c39d8133f291ec4c0bb8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ipv4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/core/ net/ipv4/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304041030.rTLITKDY-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304041028.XAQryEFM-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from net/ipv4/tcp_sigpool.c:10:
-   In file included from include/net/tcp.h:20:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
+   In file included from net/core/skmsg.c:4:
+   In file included from include/linux/skmsg.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
    In file included from include/asm-generic/hardirq.h:17:
@@ -118,12 +105,13 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
                                                      ^
-   In file included from net/ipv4/tcp_sigpool.c:10:
-   In file included from include/net/tcp.h:20:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
+   In file included from net/core/skmsg.c:4:
+   In file included from include/linux/skmsg.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
    In file included from include/asm-generic/hardirq.h:17:
@@ -136,12 +124,13 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
                                                      ^
-   In file included from net/ipv4/tcp_sigpool.c:10:
-   In file included from include/net/tcp.h:20:
-   In file included from include/linux/tcp.h:17:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
+   In file included from net/core/skmsg.c:4:
+   In file included from include/linux/skmsg.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
    In file included from include/linux/hardirq.h:11:
    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
    In file included from include/asm-generic/hardirq.h:17:
@@ -157,72 +146,177 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
->> net/ipv4/tcp_sigpool.c:63:9: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof (__scratch_size) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-           size = max(size, __scratch_size);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:74:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+>> net/core/skmsg.c:1056:3: error: call to undeclared function 'tcp_eat_skb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   tcp_eat_skb(psock->sk, skb);
+                   ^
+   net/core/skmsg.c:1056:3: note: did you mean 'tcp_read_skb'?
+   include/net/tcp.h:682:5: note: 'tcp_read_skb' declared here
+   int tcp_read_skb(struct sock *sk, skb_read_actor_t recv_actor);
+       ^
+   net/core/skmsg.c:1216:3: error: call to undeclared function 'tcp_eat_skb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   tcp_eat_skb(sk, skb);
+                   ^
+   6 warnings and 2 errors generated.
+--
+   In file included from net/ipv4/tcp_bpf.c:4:
+   In file included from include/linux/skmsg.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from net/ipv4/tcp_bpf.c:4:
+   In file included from include/linux/skmsg.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from net/ipv4/tcp_bpf.c:4:
+   In file included from include/linux/skmsg.h:7:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> net/ipv4/tcp_bpf.c:14:6: warning: no previous prototype for function 'tcp_eat_skb' [-Wmissing-prototypes]
+   void tcp_eat_skb(struct sock *sk, struct sk_buff *skb)
+        ^
+   net/ipv4/tcp_bpf.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void tcp_eat_skb(struct sock *sk, struct sk_buff *skb)
+   ^
+   static 
    7 warnings generated.
 
 
-vim +63 net/ipv4/tcp_sigpool.c
+vim +/tcp_eat_skb +1056 net/core/skmsg.c
 
-    43	
-    44	/*
-    45	 * sigpool_reserve_scratch - re-allocates scratch buffer, slow-path
-    46	 * @size: request size for the scratch/temp buffer
-    47	 */
-    48	static int sigpool_reserve_scratch(size_t size)
-    49	{
-    50		struct scratches_to_free *stf;
-    51		size_t stf_sz = struct_size(stf, scratches, num_possible_cpus());
-    52		int cpu, err = 0;
-    53	
-    54		lockdep_assert_held(&cpool_mutex);
-    55		if (__scratch_size >= size)
-    56			return 0;
-    57	
-    58		stf = kmalloc(stf_sz, GFP_KERNEL);
-    59		if (!stf)
-    60			return -ENOMEM;
-    61		stf->cnt = 0;
-    62	
-  > 63		size = max(size, __scratch_size);
-    64		cpus_read_lock();
-    65		for_each_possible_cpu(cpu) {
-    66			void *scratch, *old_scratch;
-    67	
-    68			scratch = kmalloc_node(size, GFP_KERNEL, cpu_to_node(cpu));
-    69			if (!scratch) {
-    70				err = -ENOMEM;
-    71				break;
-    72			}
-    73	
-    74			old_scratch = rcu_replace_pointer(per_cpu(sigpool_scratch, cpu), scratch, lockdep_is_held(&cpool_mutex));
-    75			if (!cpu_online(cpu) || !old_scratch) {
-    76				kfree(old_scratch);
-    77				continue;
-    78			}
-    79			stf->scratches[stf->cnt++] = old_scratch;
-    80		}
-    81		cpus_read_unlock();
-    82		if (!err)
-    83			__scratch_size = size;
-    84	
-    85		call_rcu(&stf->rcu, free_old_scratches);
-    86		return err;
-    87	}
-    88	
+   986	
+   987	static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
+   988					  int verdict)
+   989	{
+   990		struct sk_psock_work_state *state;
+   991		struct sock *sk_other;
+   992		int err = 0;
+   993		u32 len, off;
+   994	
+   995		switch (verdict) {
+   996		case __SK_PASS:
+   997			err = -EIO;
+   998			sk_other = psock->sk;
+   999			if (sock_flag(sk_other, SOCK_DEAD) ||
+  1000			    !sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
+  1001				skb_bpf_redirect_clear(skb);
+  1002				goto out_free;
+  1003			}
+  1004	
+  1005			skb_bpf_set_ingress(skb);
+  1006	
+  1007			/* We need to grab mutex here because in-flight skb is in one of
+  1008			 * the following states: either on ingress_skb, in psock->state
+  1009			 * or being processed by backlog and neither in state->skb and
+  1010			 * ingress_skb may be also empty. The troublesome case is when
+  1011			 * the skb has been dequeued from ingress_skb list or taken from
+  1012			 * state->skb because we can not easily test this case. Maybe we
+  1013			 * could be clever with flags and resolve this but being clever
+  1014			 * got us here in the first place and we note this is done under
+  1015			 * sock lock and backlog conditions mean we are already running
+  1016			 * into ENOMEM or other performance hindering cases so lets do
+  1017			 * the obvious thing and grab the mutex.
+  1018			 */
+  1019			mutex_lock(&psock->work_mutex);
+  1020			state = &psock->work_state;
+  1021	
+  1022			/* If the queue is empty then we can submit directly
+  1023			 * into the msg queue. If its not empty we have to
+  1024			 * queue work otherwise we may get OOO data. Otherwise,
+  1025			 * if sk_psock_skb_ingress errors will be handled by
+  1026			 * retrying later from workqueue.
+  1027			 */
+  1028			if (skb_queue_empty(&psock->ingress_skb) && likely(!state->skb)) {
+  1029				len = skb->len;
+  1030				off = 0;
+  1031				if (skb_bpf_strparser(skb)) {
+  1032					struct strp_msg *stm = strp_msg(skb);
+  1033	
+  1034					off = stm->offset;
+  1035					len = stm->full_len;
+  1036				}
+  1037				err = sk_psock_skb_ingress_self(psock, skb, off, len);
+  1038			}
+  1039			if (err < 0) {
+  1040				spin_lock_bh(&psock->ingress_lock);
+  1041				if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
+  1042					skb_queue_tail(&psock->ingress_skb, skb);
+  1043					schedule_delayed_work(&psock->work, 0);
+  1044					err = 0;
+  1045				}
+  1046				spin_unlock_bh(&psock->ingress_lock);
+  1047				if (err < 0) {
+  1048					skb_bpf_redirect_clear(skb);
+  1049					mutex_unlock(&psock->work_mutex);
+  1050					goto out_free;
+  1051				}
+  1052			}
+  1053			mutex_unlock(&psock->work_mutex);
+  1054			break;
+  1055		case __SK_REDIRECT:
+> 1056			tcp_eat_skb(psock->sk, skb);
+  1057			err = sk_psock_skb_redirect(psock, skb);
+  1058			break;
+  1059		case __SK_DROP:
+  1060		default:
+  1061	out_free:
+  1062			tcp_eat_skb(psock->sk, skb);
+  1063			skb_bpf_redirect_clear(skb);
+  1064			sock_drop(psock->sk, skb);
+  1065		}
+  1066	
+  1067		return err;
+  1068	}
+  1069	
 
 -- 
 0-DAY CI Kernel Test Service
