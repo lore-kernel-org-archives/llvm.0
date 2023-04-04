@@ -1,43 +1,43 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A31C951
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 18:21:08 +0000 (UTC)
-Received: by mail-pf1-f174.google.com with SMTP id q20so10905275pfs.2
-        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 11:21:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FCFC951
+	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 18:21:15 +0000 (UTC)
+Received: by mail-pf1-f171.google.com with SMTP id u20so22038993pfk.12
+        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 11:21:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680632467;
+        d=ventanamicro.com; s=google; t=1680632475;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b3qZ67y38AFkmcquwwQ+jCEdL0KsuQFOs2StQrvk1r4=;
-        b=XNL5wXfoQpA8JsGSjQuuq5wSUIpDur/gFmvmgAhrVBcqxN0sZ7ILN08tIz7feSsspz
-         ZgbCYW7Oj5TG/XPo/GlGOOTCVPQvrVI4DQ8lbbTyKz6HIn2aemsBMb+T0hx87Cei4nl8
-         Rew1Fs1jNngJ2L3xig4oSohNtjluWLOjVmYvF4Un2Goahq3aSJc6R6M3UdIPShqpaUoc
-         GqVXWXy1n48x/C3ZJx6nlep571O9amcOnmFi7AWFmX9T3hkv1aGeV00MMWvyTruilF+0
-         u0dFJpxCaJt00eocdVaREbn90Dn/FqHHxy7PX/33GkL/I8OH2YaG61/S4jJz2NN6hOSn
-         kktw==
+        bh=1wcGbfhUP5NrwGCYl7Q1yL0FMzRdJBr1PIlnUSkktJs=;
+        b=aYnlk3BgOfMNMmnnhaJrZqutCOgYZzErmuUTfDAmJFbvnkoL40ha8ijOrqYPZBnsvX
+         ycgrTCK+kybVGhevfZFf/SGdnPx4JTrEY/3nEoA07S7d5HXOb2elq4hnDxEyN6ynebyX
+         pxRENZLVc0MVnk0sqIXk0LiheSEXSJfSZYELyQaaaESNbrIvTGzzFGa80tp0dixJwm26
+         MFd72Gyap2rcWTEzOB7E2LJyMrSviE1LMGX1n+TmEeB9vhYzg8cDk7jRSGhYZbMxL/6K
+         AK4NCOD4Jkn6qi9PR3YhUp4EKjjdlwzOK8m4HBMWjFa/5J0IG6nZymCMMx2rvgDS4P3m
+         8OdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680632467;
+        d=1e100.net; s=20210112; t=1680632475;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b3qZ67y38AFkmcquwwQ+jCEdL0KsuQFOs2StQrvk1r4=;
-        b=amuc9zKhI99TJ3Qp3nRXQsLoIPvIptzfuuvMEcNO6W1b4UoT7v9Pjo52+VzrsDCZ3K
-         /a7ln76PE/cMP1juyvnq9nBpT02Dm/EVgl2sYLPOC0DYOhtHhLm24F7ZSeNIK+s5Qglz
-         EjTic7wClvQgDPLwEo77DZS3f7I9hzyGS2uLi8EXXOaakL39v9jsLOgerErDCjAyJdAD
-         xzHgRsMX6gMkFBRLemY0qQnJXI+QhqDt8P4AEJEqC+gINhsvvipYRGTWiuV4Mfzy6UgN
-         ULGThQP4KMm3ayxpZFkqEaWJh/cAo9Amx1WpQe5ITr1XIRWx4jW0NBcRzWj3rNiEuvE9
-         ZUrg==
-X-Gm-Message-State: AAQBX9fUx0HynJShHd4uaoQJWcBCkrllOoPboxkhK7dxksSNKaUNa5a1
-	W2EAeDPSst7pmv7iUEwa4SrXFA==
-X-Google-Smtp-Source: AKy350aJ11cfvfuinWgzemdLN2e0YGrThp1w/tWD+sQXOlzKFnn6WTki0m658NPy4mdIa7czviajYw==
-X-Received: by 2002:aa7:9a07:0:b0:62b:47fc:a968 with SMTP id w7-20020aa79a07000000b0062b47fca968mr3052337pfj.8.1680632467769;
-        Tue, 04 Apr 2023 11:21:07 -0700 (PDT)
+        bh=1wcGbfhUP5NrwGCYl7Q1yL0FMzRdJBr1PIlnUSkktJs=;
+        b=u0ThZrZ2MJr0+QjxqQRHoJN5AvnXdNcSP8BiqEqYveu+Stsf9x9x4zoktnPWeCWJY3
+         6n7iJIAB/kEgI0EJXyrI/HKrrodYAMNGwe/ZD3O/1Cgm8wA+N/74B4PshoFcmcgVuQnP
+         SzSbDH6iCYLY+6o74EWpQ1ZjZFVIrdEBTg/j7CkG3wb9784/wJzvXGh98npiEu0FZBBD
+         Wx/MDCG4ieqTclB0/rnHTpBMXeHCkRTgjXWDZ6XkDzFJ35OaqImY6l8kPDDRhORwDLbZ
+         8rexmuQDJFPDo//MOduuT6B4F/E/8QfJtGa5ytJnHuFqHRR9ZEOYRslnfz7Blt5xjkQk
+         OHFg==
+X-Gm-Message-State: AAQBX9cmTj3ztTTwa0mlh8fhpC/rUc+cantvLxxBuGdhPsdvcRtZIad/
+	6Ed6aTzyNxuaodFi7qZj8RtZRg==
+X-Google-Smtp-Source: AKy350bk0wFBRLbn4XAN/Q3xySFnNlV3qYKkPkqFm43h5C2tri1AqLTnk71cXWF8+MbPS5+mwyzFrg==
+X-Received: by 2002:a62:7bc7:0:b0:625:c048:2f81 with SMTP id w190-20020a627bc7000000b00625c0482f81mr3438951pfc.32.1680632474822;
+        Tue, 04 Apr 2023 11:21:14 -0700 (PDT)
 Received: from localhost.localdomain ([106.51.184.50])
-        by smtp.gmail.com with ESMTPSA id o12-20020a056a001bcc00b0062dcf5c01f9sm9018524pfw.36.2023.04.04.11.21.01
+        by smtp.gmail.com with ESMTPSA id o12-20020a056a001bcc00b0062dcf5c01f9sm9018524pfw.36.2023.04.04.11.21.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 11:21:07 -0700 (PDT)
+        Tue, 04 Apr 2023 11:21:14 -0700 (PDT)
 From: Sunil V L <sunilvl@ventanamicro.com>
 To: linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -65,10 +65,12 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Tom Rix <trix@redhat.com>,
 	"Rafael J . Wysocki" <rafael@kernel.org>,
 	"David S . Miller" <davem@davemloft.net>,
-	Sunil V L <sunilvl@ventanamicro.com>
-Subject: [PATCH V4 03/23] ACPICA: Add structure definitions for RISC-V RHCT
-Date: Tue,  4 Apr 2023 23:50:17 +0530
-Message-Id: <20230404182037.863533-4-sunilvl@ventanamicro.com>
+	Sunil V L <sunilvl@ventanamicro.com>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	Andrew Jones <ajones@ventanamicro.com>
+Subject: [PATCH V4 04/23] ACPI: tables: Print RINTC information when MADT is parsed
+Date: Tue,  4 Apr 2023 23:50:18 +0530
+Message-Id: <20230404182037.863533-5-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230404182037.863533-1-sunilvl@ventanamicro.com>
 References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
@@ -80,85 +82,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ACPICA commit 82afd0434e79f74b96a6be88115ddc8343a1ba40
+When MADT is parsed, print RINTC information as below:
 
-RISC-V Hart Capabilities Table (RHCT) is a new static table.
-The ECR to add RHCT is approved by the UEFI forum and will be
-available in the next version of the ACPI spec.
+ACPI: RISC-V INTC (acpi_uid[0x0000] hart_id[0x0] enabled)
+ACPI: RISC-V INTC (acpi_uid[0x0001] hart_id[0x1] enabled)
+...
+ACPI: RISC-V INTC (acpi_uid[0x000f] hart_id[0xf] enabled)
 
-Link: https://github.com/acpica/acpica/commit/82afd043
-Reference: Mantis: 2349
+This debug information will be very helpful during bring up.
+
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- include/acpi/actbl2.h | 48 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ drivers/acpi/tables.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
-index c432fd15db65..86bb79fdfa62 100644
---- a/include/acpi/actbl2.h
-+++ b/include/acpi/actbl2.h
-@@ -47,6 +47,7 @@
- #define ACPI_SIG_PRMT           "PRMT"	/* Platform Runtime Mechanism Table */
- #define ACPI_SIG_RASF           "RASF"	/* RAS Feature table */
- #define ACPI_SIG_RGRT           "RGRT"	/* Regulatory Graphics Resource Table */
-+#define ACPI_SIG_RHCT           "RHCT"	/* RISC-V Hart Capabilities Table */
- #define ACPI_SIG_SBST           "SBST"	/* Smart Battery Specification Table */
- #define ACPI_SIG_SDEI           "SDEI"	/* Software Delegated Exception Interface Table */
- #define ACPI_SIG_SDEV           "SDEV"	/* Secure Devices table */
-@@ -2604,6 +2605,53 @@ enum acpi_rgrt_image_type {
- 	ACPI_RGRT_TYPE_RESERVED = 2	/* 2 and greater are reserved */
- };
+diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
+index 7b4680da57d7..8ab0a82b4da4 100644
+--- a/drivers/acpi/tables.c
++++ b/drivers/acpi/tables.c
+@@ -220,6 +220,16 @@ void acpi_table_print_madt_entry(struct acpi_subtable_header *header)
+ 		}
+ 		break;
  
-+/*******************************************************************************
-+ *
-+ * RHCT - RISC-V Hart Capabilities Table
-+ *        Version 1
-+ *
-+ ******************************************************************************/
++	case ACPI_MADT_TYPE_RINTC:
++		{
++			struct acpi_madt_rintc *p = (struct acpi_madt_rintc *)header;
 +
-+struct acpi_table_rhct {
-+	struct acpi_table_header header;	/* Common ACPI table header */
-+	u32 reserved;
-+	u64 time_base_freq;
-+	u32 node_count;
-+	u32 node_offset;
-+};
++			pr_debug("RISC-V INTC (acpi_uid[0x%04x] hart_id[0x%llx] %s)\n",
++				 p->uid, p->hart_id,
++				 (p->flags & ACPI_MADT_ENABLED) ? "enabled" : "disabled");
++		}
++		break;
 +
-+/*
-+ * RHCT subtables
-+ */
-+struct acpi_rhct_node_header {
-+	u16 type;
-+	u16 length;
-+	u16 revision;
-+};
-+
-+/* Values for RHCT subtable Type above */
-+
-+enum acpi_rhct_node_type {
-+	ACPI_RHCT_NODE_TYPE_ISA_STRING = 0x0000,
-+	ACPI_RHCT_NODE_TYPE_HART_INFO = 0xFFFF,
-+};
-+
-+/*
-+ * RHCT node specific subtables
-+ */
-+
-+/* ISA string node structure */
-+struct acpi_rhct_isa_string {
-+	u16 isa_length;
-+	char isa[];
-+};
-+
-+/* Hart Info node structure */
-+struct acpi_rhct_hart_info {
-+	u16 num_offsets;
-+	u32 uid;		/* ACPI processor UID */
-+};
-+
- /*******************************************************************************
-  *
-  * SBST - Smart Battery Specification Table
+ 	default:
+ 		pr_warn("Found unsupported MADT entry (type = 0x%x)\n",
+ 			header->type);
 -- 
 2.34.1
 
