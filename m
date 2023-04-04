@@ -1,106 +1,117 @@
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A6864F
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 05:18:59 +0000 (UTC)
-Received: by mail-io1-f51.google.com with SMTP id h187so12130643iof.7
-        for <llvm@lists.linux.dev>; Mon, 03 Apr 2023 22:18:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680585538; x=1683177538;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n+z2DtIXlnX8JchPJicDuk6IiWR6KVUfDtLG8QXJzFo=;
-        b=KhVmA5qC1CJ1Y1izNgEHbUwO2SSlI7F5yZK7JzvpEMaENUcLtsHl2qv3YEcoPuiiFR
-         4/O1e1zZFErztdz+4igXjSCOlVuKCo6wIH5LbSS5U3P5tTy2myAWpX8WrznurBK5+Gm5
-         fYxQDpThyFs2svoPVtG99X6Sy+SqmvncjmRDwu5GHxQBBIntShcU4arGZPfylYeRXfsW
-         GKswAOm63p0IG/xOtufsR3SetA0BHARg3nhqA5mlsmaXiNk3kZ8JmHti0eTbQhanDXfy
-         Qe+5Quyr9dArLX384soBLztsHUPyG3hvvE89wt6PHquiDpQaXqdCrWy4N7fgtz5/DRP3
-         BhHg==
-X-Gm-Message-State: AAQBX9c87md2skA58eg0UF4Hil+cuvGV0njc5UyRSVBNJGUVNP25X9ix
-	lcFm8nVEr7ICB4nSofV9LUEvECMoXrqHGuTQtQM=
-X-Google-Smtp-Source: AKy350bBvTyWsO4MYoAA2TbNVAjasEfvOmD1ErXgo3dwhUR1n6WX/4f4etHN0Prhw4chjc8ELJOPyhM4X69infy65mU=
-X-Received: by 2002:a6b:7e03:0:b0:753:568:358e with SMTP id
- i3-20020a6b7e03000000b007530568358emr1416961iom.20.1680585538552; Mon, 03 Apr
- 2023 22:18:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90E3648;
+	Tue,  4 Apr 2023 05:19:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680585548; x=1712121548;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dbD2zuIbnHKqtf47u9gwxhoZVCQymgrOX9EDx70lyTs=;
+  b=WNgGoakWQN02MkirwQbdi0xJfSggbk8aDixgdUojlkqc3IL7Qze2/6XP
+   rnKSd7en8l0bfIu6g8auH5ucjOuQpZY17DkpuD7f+RR0I5zZiTfCxAdew
+   qgAaW8uoGEUXZB2qujgMIY3Qii+QSwMkQSyCxwJvqOuJQdTbCZCss74z6
+   Q6fhj3IQftK9CahSx1uujFOjhBi3GuAhJ0WF3tZH7wWha90fmhGfRhO4n
+   jsyXOa1TrI945dbePuGDuel9FQ5+L/WNwJhmYwlDYGbeCQ+C3bdy4d7ow
+   eyOItI1JkRY/K5+9ObvUXHZb1g6KcMbGXF/MhmypL5dwXCryhgT0xzI5P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="342115161"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="342115161"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 22:19:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="829838812"
+X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
+   d="scan'208";a="829838812"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Apr 2023 22:19:06 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pjZ4T-000PE9-32;
+	Tue, 04 Apr 2023 05:19:05 +0000
+Date: Tue, 4 Apr 2023 13:18:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matthew Brost <matthew.brost@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 08/10] dma-buf/dma-fence: Introduce long-running
+ completion fences
+Message-ID: <202304041357.LFldN2km-lkp@intel.com>
+References: <20230404002211.3611376-9-matthew.brost@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230403184033.1836023-1-irogers@google.com> <ZCs1/skb2XqDYrYF@kernel.org>
-In-Reply-To: <ZCs1/skb2XqDYrYF@kernel.org>
-From: Namhyung Kim <namhyung@kernel.org>
-Date: Mon, 3 Apr 2023 22:18:47 -0700
-Message-ID: <CAM9d7chDz9dNpB+vywLMNxyc9p=wLaJp4qUYwfu6y88tEDYLLw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Support for llvm-addr2line
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404002211.3611376-9-matthew.brost@intel.com>
 
-Hi,
+Hi Matthew,
 
-On Mon, Apr 3, 2023 at 1:24=E2=80=AFPM Arnaldo Carvalho de Melo <acme@kerne=
-l.org> wrote:
->
-> Em Mon, Apr 03, 2023 at 11:40:29AM -0700, Ian Rogers escreveu:
-> > The addr2line command is started and then addresses piped to it. In
-> > order to determine the end of a addr2lines output a ',' it output with
-> > an expectation to get '??\n??:0\n' as a reply. llvm-addr2line differs
-> > in that ',' generates a reply of ','.
-> >
-> > The approach detects and then caches the addr2line style. When records
-> > are read the sentinel is detected appropriately.
-> >
-> > Comparing the output there is a little more inline data on my machine
-> > with llvm-addr2line:
-> > $ sudo perf record -a -g sleep 1
-> > $ sudo perf report --addr2line=3Daddr2line > a.txt
-> > $ sudo perf report --addr2line=3Dllvm-addr2line > b.txt
-> > $ wc -l a.txt b.txt
-> >   12386 a.txt
-> >   12477 b.txt
-> >
-> > Some other small changes, switching to the api/io code to avoid file
-> > streams wrapping the command's stdin/stdout. Ignore SIGPIPE for when
-> > addr2line exits and writes fail.
-> >
-> > v2. Address review comments from Arnaldo and Namhyung, fixing a
-> >     realloc error path, argument ordering and a comment.
->
-> Added to local repo, build testing, will be in tmp.perf-tools-next soon.
->
-> - Arnaldo
->
-> > Ian Rogers (4):
-> >   tools api: Add io__getline
-> >   perf srcline: Simplify addr2line subprocess
-> >   perf srcline: Support for llvm-addr2line
-> >   perf srcline: Avoid addr2line SIGPIPEs
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on linus/master v6.3-rc5 next-20230403]
+[cannot apply to drm-misc/drm-misc-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Namhyung
+url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Brost/drm-sched-Convert-drm-scheduler-to-use-a-work-queue-rather-than-kthread/20230404-082438
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230404002211.3611376-9-matthew.brost%40intel.com
+patch subject: [RFC PATCH 08/10] dma-buf/dma-fence: Introduce long-running completion fences
+config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041357.LFldN2km-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/94ca4354f6c367597cebe876cbe493c8c0802dff
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Matthew-Brost/drm-sched-Convert-drm-scheduler-to-use-a-work-queue-rather-than-kthread/20230404-082438
+        git checkout 94ca4354f6c367597cebe876cbe493c8c0802dff
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/dma-buf/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304041357.LFldN2km-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/dma-buf/dma-fence.c:376: warning: expecting prototype for dma_fence_lr begin_signalling - begin a critical long(). Prototype was for dma_fence_lr_begin_signalling() instead
 
 
-> >
-> >  tools/lib/api/io.h        |  45 ++++++++++
-> >  tools/perf/tests/api-io.c |  36 ++++++++
-> >  tools/perf/util/srcline.c | 171 +++++++++++++++++++++++---------------
-> >  3 files changed, 184 insertions(+), 68 deletions(-)
-> >
-> > --
-> > 2.40.0.348.gf938b09366-goog
-> >
->
-> --
->
-> - Arnaldo
+vim +376 drivers/dma-buf/dma-fence.c
+
+   360	
+   361	/**
+   362	 * dma_fence_lr begin_signalling - begin a critical long-running DMA fence
+   363	 * signalling section
+   364	 *
+   365	 * Drivers should use this to annotate the beginning of any code section
+   366	 * required to eventually complete &dma_fence by calling dma_fence_signal().
+   367	 *
+   368	 * The end of these critical sections are annotated with
+   369	 * dma_fence_lr_end_signalling(). Ideally the section should encompass all
+   370	 * locks that are ever required to signal a long-running dma-fence.
+   371	 *
+   372	 * Return: An opaque cookie needed by the implementation, which needs to be
+   373	 * passed to dma_fence_lr end_signalling().
+   374	 */
+   375	bool dma_fence_lr_begin_signalling(void)
+ > 376	{
+   377		return __dma_fence_begin_signalling(&dma_fence_lr_lockdep_map);
+   378	}
+   379	EXPORT_SYMBOL(dma_fence_lr_begin_signalling);
+   380	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
