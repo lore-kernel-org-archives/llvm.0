@@ -1,166 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7950CD2F2
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 21:59:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FBDC433D2;
-	Tue,  4 Apr 2023 21:59:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680645589;
-	bh=oVb/3Yv6tCP2RVhr47u84gv2ub6ZCrD3LzM01ty7vrk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=srKJzP4unsO7VCYXuoEw/yp2w/Da1xNjdL6eqfAk4O4BXMGD2eDCasq2ri+OolkBN
-	 +GLaCazAspMZrawj5jRSVVbHh/ydzuyqxqlNRhly+PDdZoGwVCd7uh0tqPkODHY0ME
-	 gIlPw1yX+155k4I850he81of9BweX0/iu3+xLsqqymbfQEJ/J7hYXwqaTx+2f4r9m4
-	 0f6vOhJfrDXrQVgMUMOyd1w3HFg0/LW8qj8fftiRTNPyttBrosP2Cg8nb6j8nxaNLs
-	 8rN7SYSWMf9zpCBnQ73B2PG8sF9Szly9Ro0J7A+wOXpUf9iwAvolFdy2TgSWY7Vz6w
-	 gHTAwvOsIsnPw==
-Date: Tue, 4 Apr 2023 22:59:41 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Sunil V L <sunilvl@ventanamicro.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	llvm@lists.linux.dev, Weili Qian <qianweili@huawei.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Herbert Xu <herbert@gondor.apana.org.au>, Tom Rix <trix@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Mark Gross <markgross@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Zhou Wang <wangzhou1@hisilicon.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH V4 23/23] crypto: hisilicon/qm: Workaround to enable
- build with RISC-V clang
-Message-ID: <20230404-viewpoint-shank-674a8940809a@spud>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-24-sunilvl@ventanamicro.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C6FD2F2;
+	Tue,  4 Apr 2023 22:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680645961; x=1712181961;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Sx1Df8zRzu2lBXbsGavKpvQNQMu0/c/0lVd4Tj/TiwU=;
+  b=RQ07D6NfgkaJwF78bNxaCeZkUcZZE539t6PhsPDIY744SbMr52BljoWf
+   urKcdn6Fs2i1ftAS/gbHrbWBzjG3F86+Q1cOY2f3o/gUXzDIsO+zxm2Bx
+   vpEdQErQ9jQoDoFoNjqC3GCjUcSz8FtxvO/G5jJsQqVl2LOh/KRqVrIR+
+   +vBDAiiwO7eD36Os3j+9bEhBl1gL5ijHFO1a6Q5uqiz2PmaARmY3Zsl2/
+   uyeehIxry8PwB86JlQxHakaqaYJIxOdPL9ZFjo1f3izlXrk6h6kEBtQnv
+   Ql5w05St9rfN9xBdtYmYq5+46WjzPNiAfyIcTlk2yiwKep0PNBe2GtCKP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="326350750"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="326350750"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 15:05:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="810420448"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="810420448"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2023 15:05:48 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pjomh-000Q4U-0p;
+	Tue, 04 Apr 2023 22:05:47 +0000
+Date: Wed, 5 Apr 2023 06:05:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>, agross@kernel.org,
+	andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, broonie@kernel.org,
+	vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+	swboyd@chromium.org, quic_vtanuku@quicinc.com,
+	Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: Re: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
+Message-ID: <202304050512.MN2oNY9Z-lkp@intel.com>
+References: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="g2rJHKXDBniPI9UF"
-Content-Disposition: inline
-In-Reply-To: <20230404182037.863533-24-sunilvl@ventanamicro.com>
-
-
---g2rJHKXDBniPI9UF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
 
-Hey Sunil,
+Hi Vijaya,
 
-This one made me scratch my head for a bit..
+kernel test robot noticed the following build warnings:
 
-On Tue, Apr 04, 2023 at 11:50:37PM +0530, Sunil V L wrote:
-> With CONFIG_ACPI enabled for RISC-V, this driver gets enabled in
-> allmodconfig build. The gcc tool chain builds this driver removing the
-> inline arm64 assembly code. However, clang for RISC-V tries to build
-> the arm64 assembly and below error is seen.
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on robh/for-next broonie-sound/for-next linus/master v6.3-rc5 next-20230404]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-There's actually nothing RISC-V specific about that behaviour, that's
-just how clang works. Quoting Nathan:
-"Clang performs semantic analysis (i.e., validates assembly) before
-dead code elimination, so IS_ENABLED() is not sufficient for avoiding
-that error."
+url:    https://github.com/intel-lab-lkp/linux/commits/Vijaya-Krishna-Nivarthi/arm64-dts-qcom-sc7280-Add-stream-id-of-qspi-to-iommus/20230405-020430
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/1680631400-28865-3-git-send-email-quic_vnivarth%40quicinc.com
+patch subject: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
+config: arm64-randconfig-r001-20230403 (https://download.01.org/0day-ci/archive/20230405/202304050512.MN2oNY9Z-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/72895c4ce2b53c096fa03c9f56211df21faad6dd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vijaya-Krishna-Nivarthi/arm64-dts-qcom-sc7280-Add-stream-id-of-qspi-to-iommus/20230405-020430
+        git checkout 72895c4ce2b53c096fa03c9f56211df21faad6dd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/spi/
 
-> drivers/crypto/hisilicon/qm.c:627:10: error: invalid output constraint '+=
-Q' in asm
->                        "+Q" (*((char __iomem *)fun_base))
->                        ^
-> It appears that RISC-V clang is not smart enough to detect
-> IS_ENABLED(CONFIG_ARM64) and remove the dead code.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304050512.MN2oNY9Z-lkp@intel.com/
 
-So I think this statement is just not true, it can remove dead code, but
-only after it has done the semantic analysis.
+All warnings (new ones prefixed by >>):
 
-The reason that this has not been seen before, again quoting Nathan, is:
-"arm64 and x86_64 both support the Q constraint, we cannot build
-LoongArch yet (although it does not have support for Q either so same
-boat as RISC-V), and ia64 is dead/unsupported in LLVM. Those are the
-only architectures that support ACPI, so I guess that explains why we
-have seen no issues aside from RISC-V so far."
+>> drivers/spi/spi-qcom-qspi.c:333:5: warning: no previous prototype for function 'qcom_qspi_alloc_desc' [-Wmissing-prototypes]
+   int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
+       ^
+   drivers/spi/spi-qcom-qspi.c:333:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
+   ^
+   static 
+   1 warning generated.
 
-> As a workaround, move this check to preprocessing stage which works
-> with the RISC-V clang tool chain.
 
-I don't think there's much else you can do!
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+vim +/qcom_qspi_alloc_desc +333 drivers/spi/spi-qcom-qspi.c
 
-Perhaps it is also worth adding:
-Link: https://github.com/ClangBuiltLinux/linux/issues/999
+   332	
+ > 333	int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
+   334				dma_addr_t dma_ptr, uint32_t n_bytes)
+   335	{
+   336		struct qspi_cmd_desc *virt_cmd_desc, *prev;
+   337		uint8_t *virt_data_desc;
+   338		dma_addr_t dma_cmd_desc, dma_data_desc;
+   339	
+   340		if (virt_ptr && n_bytes >= QSPI_ALIGN_REQ) {
+   341			dev_err(ctrl->dev,
+   342				"Exiting to avert memory overwrite, n_bytes-%d\n", n_bytes);
+   343			return -ENOMEM;
+   344		}
+   345	
+   346		/* allocate for dma cmd descriptor */
+   347		virt_cmd_desc = (struct qspi_cmd_desc *)dma_pool_alloc(ctrl->dma_cmd_pool,
+   348			GFP_KERNEL, &dma_cmd_desc);
+   349		if (!virt_cmd_desc) {
+   350			dev_err(ctrl->dev,
+   351				"Could not allocate for cmd_desc\n");
+   352			return -ENOMEM;
+   353		}
+   354		ctrl->virt_cmd_desc[ctrl->n_cmd_desc] = virt_cmd_desc;
+   355		ctrl->dma_cmd_desc[ctrl->n_cmd_desc] = dma_cmd_desc;
+   356		ctrl->n_cmd_desc++;
+   357	
+   358		/* allocate for dma data descriptor if unaligned else use pre-aligned */
+   359		if (virt_ptr) {
+   360			virt_data_desc = (uint8_t *)dma_pool_zalloc(ctrl->dma_data_pool,
+   361				GFP_KERNEL, &dma_data_desc);
+   362			if (!virt_data_desc) {
+   363				dev_err(ctrl->dev,
+   364					"Could not allocate for data_desc\n");
+   365				return -ENOMEM;
+   366			}
+   367			ctrl->virt_data_desc[ctrl->n_data_desc] = virt_data_desc;
+   368			ctrl->dma_data_desc[ctrl->n_data_desc] = dma_data_desc;
+   369			ctrl->n_data_desc++;
+   370	
+   371			/*
+   372			 * for tx copy xfer data into allocated buffer
+   373			 * for rx setup bounce info to copy after xfer
+   374			 */
+   375			if (ctrl->xfer.dir == QSPI_WRITE) {
+   376				memcpy(virt_data_desc, virt_ptr, n_bytes);
+   377			} else {
+   378				virt_cmd_desc->bounce_src = virt_data_desc;
+   379				virt_cmd_desc->bounce_dst = virt_ptr;
+   380				virt_cmd_desc->bounce_length = n_bytes;
+   381			}
+   382		} else {
+   383			dma_data_desc = dma_ptr;
+   384		}
+   385	
+   386		/* setup cmd descriptor */
+   387		virt_cmd_desc->data_address = (uint32_t)(uintptr_t)(dma_data_desc);
+   388		virt_cmd_desc->next_descriptor = 0;
+   389		virt_cmd_desc->direction = ctrl->xfer.dir;
+   390		virt_cmd_desc->multi_io_mode = ctrl->iomode;
+   391		virt_cmd_desc->reserved1 = 0;
+   392		virt_cmd_desc->fragment = 0;
+   393		virt_cmd_desc->reserved2 = 0;
+   394		virt_cmd_desc->length = n_bytes;
+   395	
+   396		/* update previous descriptor */
+   397		if (ctrl->n_cmd_desc >= 2) {
+   398			prev = (ctrl->virt_cmd_desc)[ctrl->n_cmd_desc - 2];
+   399			prev->next_descriptor = dma_cmd_desc;
+   400			prev->fragment = 1;
+   401		}
+   402	
+   403		return 0;
+   404	}
+   405	
 
-Cheers,
-Conor.
-
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> ---
->  drivers/crypto/hisilicon/qm.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-> index e4c84433a88a..a5f521529ab2 100644
-> --- a/drivers/crypto/hisilicon/qm.c
-> +++ b/drivers/crypto/hisilicon/qm.c
-> @@ -611,13 +611,9 @@ EXPORT_SYMBOL_GPL(hisi_qm_wait_mb_ready);
->  static void qm_mb_write(struct hisi_qm *qm, const void *src)
->  {
->  	void __iomem *fun_base =3D qm->io_base + QM_MB_CMD_SEND_BASE;
-> -	unsigned long tmp0 =3D 0, tmp1 =3D 0;
-> =20
-> -	if (!IS_ENABLED(CONFIG_ARM64)) {
-> -		memcpy_toio(fun_base, src, 16);
-> -		dma_wmb();
-> -		return;
-> -	}
-> +#if IS_ENABLED(CONFIG_ARM64)
-> +	unsigned long tmp0 =3D 0, tmp1 =3D 0;
-> =20
->  	asm volatile("ldp %0, %1, %3\n"
->  		     "stp %0, %1, %2\n"
-> @@ -627,6 +623,11 @@ static void qm_mb_write(struct hisi_qm *qm, const vo=
-id *src)
->  		       "+Q" (*((char __iomem *)fun_base))
->  		     : "Q" (*((char *)src))
->  		     : "memory");
-> +#else
-> +	memcpy_toio(fun_base, src, 16);
-> +	dma_wmb();
-> +#endif
-> +
->  }
-> =20
->  static int qm_mb_nolock(struct hisi_qm *qm, struct qm_mailbox *mailbox)
-> --=20
-> 2.34.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
---g2rJHKXDBniPI9UF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCydzQAKCRB4tDGHoIJi
-0kS+APwI9urufiYlmUkAYkyAnD4XxPqkVAgS1QApjqn9spoehQD9GoxZzTCmlOmj
-V0HIsqbbKh/l2SrUpOETJlfKaSTkhwE=
-=P4m+
------END PGP SIGNATURE-----
-
---g2rJHKXDBniPI9UF--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
