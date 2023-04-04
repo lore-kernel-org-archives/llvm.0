@@ -1,49 +1,44 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4AF7E;
-	Tue,  4 Apr 2023 00:47:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC297E;
+	Tue,  4 Apr 2023 00:58:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680569274; x=1712105274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RXv6nnvuAvYkBkDjFqAcvYEGLIrMuHjL2t3Rp8C34WY=;
-  b=Wwplf3cJ+JRu6szOpC0G3QqbYbAVRAgdbZ0EAhU/kISz1FvxUImmgN1C
-   KaoerO5H0K3NnSoGurQuXvQYqL3IE9+oC9qyS4EPadmIww4iLZ4PjEhDF
-   8qva7v3ptxAcKPGO+5JL5sDufBgOdOc2RICKJqOfskL9E2KvVoqfmQWDW
-   uygpbp69/4lC6ACSBsy906alUuTDXSjdIQzSXptflbcBRbIio80TKFA8s
-   xg8nG+d1eS00czCiEGb06FtfhGQByubLRHkV59BoYPX0LL8AEkdsspitJ
-   MvtcRyGeqtE4/1zqgB+rEwUVdC5loxQ5lrNFAWW5gIlKL7YLQsVKpc4Hw
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="321710750"
+  t=1680569933; x=1712105933;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=t/8M52oZNpmJ0rYrT21nM2K3sasgaKzMUWvh/T0RiMY=;
+  b=FTVbO4hsk8Q4WxjoITwzIWvIlKhrsQ3orceohU70BbyX1+XQg8u3xyWZ
+   WL+rhws5DgvLIVbRHCRWHSTRoNAYIjTXbK7BOO13UEOvVdFf/YzU5ODkF
+   riCBZUM376MGiJOfF44VK8nFdg8O3mW8J1CnZP4LooLIHNGxhxRwHp/MI
+   da02TrD5FrmatP2wUGgI/yGW+ogju7GE28SkfLsyVQ863/B3J8I6w8PgO
+   MVv7vPVZnXESl4a683LRrQiCf39d0lsbyYBXUDGmyzZ9+HYTRVnG3iV4I
+   FM+Zu6+QueMmuK64BqBkLh6vQs5MXfHh+Ay1/J66slaBa0BS4IB/szH/+
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="407116884"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="321710750"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 17:47:53 -0700
+   d="scan'208";a="407116884"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 17:58:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="686167807"
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="663397229"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="686167807"
+   d="scan'208";a="663397229"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Apr 2023 17:47:50 -0700
+  by orsmga006.jf.intel.com with ESMTP; 03 Apr 2023 17:58:50 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pjUpx-000Oyk-1l;
-	Tue, 04 Apr 2023 00:47:49 +0000
-Date: Tue, 4 Apr 2023 08:47:37 +0800
+	id 1pjV0b-000Oyw-2D;
+	Tue, 04 Apr 2023 00:58:49 +0000
+Date: Tue, 4 Apr 2023 08:58:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Biju Das <biju.das.jz@bp.renesas.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Biju Das <biju.das.jz@bp.renesas.com>, linux-clk@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] drivers: clk: Add support for versa3 clock driver
-Message-ID: <202304040800.ncpvZq1s-lkp@intel.com>
-References: <20230403103257.328954-3-biju.das.jz@bp.renesas.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [linux-next:master 932/8744] arch/mips/ar7/gpio.c:19:19: error:
+ field has incomplete type 'struct gpio_chip'
+Message-ID: <202304040830.kPrP1Qew-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,102 +47,117 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230403103257.328954-3-biju.das.jz@bp.renesas.com>
 
-Hi Biju,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on next-20230403]
-[cannot apply to geert-renesas-devel/next robh/for-next linus/master v6.3-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Biju-Das/dt-bindings-clock-Add-Renesas-versa3-clock-generator-bindings/20230403-183501
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230403103257.328954-3-biju.das.jz%40bp.renesas.com
-patch subject: [PATCH v3 2/3] drivers: clk: Add support for versa3 clock driver
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20230404/202304040800.ncpvZq1s-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   31bd35b66249699343d2416658f57e97314a433a
+commit: 21d9526d13b5467b0a6532e5a8b0eb04c01ce326 [932/8744] gpiolib: Make the legacy <linux/gpio.h> consumer-only
+config: mips-randconfig-r035-20230402 (https://download.01.org/0day-ci/archive/20230404/202304040830.kPrP1Qew-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bd1f4d06603f7dc65276411a65078a8ffaf5b844
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Biju-Das/dt-bindings-clock-Add-Renesas-versa3-clock-generator-bindings/20230403-183501
-        git checkout bd1f4d06603f7dc65276411a65078a8ffaf5b844
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=21d9526d13b5467b0a6532e5a8b0eb04c01ce326
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 21d9526d13b5467b0a6532e5a8b0eb04c01ce326
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/clk/ drivers/gpio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304040800.ncpvZq1s-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304040830.kPrP1Qew-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Note: the linux-next/master HEAD 31bd35b66249699343d2416658f57e97314a433a builds fine.
+      It may have been fixed somewhere.
 
->> drivers/clk/clk-versaclock3.c:263:8: warning: variable 'premul' is uninitialized when used here [-Wuninitialized]
-                           if (premul & VC3_PLL2_MDIV_DOUBLER)
-                               ^~~~~~
-   drivers/clk/clk-versaclock3.c:244:29: note: initialize the variable 'premul' to silence this warning
-           unsigned int prediv, premul;
-                                      ^
-                                       = 0
-   1 warning generated.
+All errors (new ones prefixed by >>):
+
+>> arch/mips/ar7/gpio.c:19:19: error: field has incomplete type 'struct gpio_chip'
+           struct gpio_chip        chip;
+                                   ^
+   arch/mips/ar7/gpio.c:19:9: note: forward declaration of 'struct gpio_chip'
+           struct gpio_chip        chip;
+                  ^
+>> arch/mips/ar7/gpio.c:24:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                        ^
+>> arch/mips/ar7/gpio.c:24:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/ar7/gpio.c:32:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                        ^
+   arch/mips/ar7/gpio.c:32:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/ar7/gpio.c:42:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                        ^
+   arch/mips/ar7/gpio.c:42:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/ar7/gpio.c:55:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                        ^
+   arch/mips/ar7/gpio.c:55:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/ar7/gpio.c:68:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                        ^
+   arch/mips/ar7/gpio.c:68:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/ar7/gpio.c:78:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                        ^
+   arch/mips/ar7/gpio.c:78:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/ar7/gpio.c:93:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                        ^
+   arch/mips/ar7/gpio.c:93:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/ar7/gpio.c:105:31: error: call to undeclared function 'gpiochip_get_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                        ^
+   arch/mips/ar7/gpio.c:105:24: error: incompatible integer to pointer conversion initializing 'struct ar7_gpio_chip *' with an expression of type 'int' [-Wint-conversion]
+           struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+                                 ^      ~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/mips/ar7/gpio.c:318:8: error: call to undeclared function 'gpiochip_add_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = gpiochip_add_data(&gpch->chip, gpch);
+                 ^
+   18 errors generated.
 
 
-vim +/premul +263 drivers/clk/clk-versaclock3.c
+vim +19 arch/mips/ar7/gpio.c
 
-   238	
-   239	static unsigned long vc3_pfd_recalc_rate(struct clk_hw *hw,
-   240						 unsigned long parent_rate)
-   241	{
-   242		struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-   243		const struct vc3_pfd_data *pfd = vc3->data;
-   244		unsigned int prediv, premul;
-   245		unsigned long rate;
-   246		u8 mdiv;
-   247	
-   248		regmap_read(vc3->regmap, pfd->offs, &prediv);
-   249		if (pfd->num == VC3_PFD1) {
-   250			/* The bypass_prediv is set, PLL fed from Ref_in directly. */
-   251			if (prediv & pfd->mdiv1_bitmsk) {
-   252				/* check doubler is set or not */
-   253				regmap_read(vc3->regmap, VC3_PLL1_CTRL_OUTDIV5, &premul);
-   254				if (premul & VC3_PLL1_CTRL_OUTDIV5_PLL1_MDIV_DOUBLER)
-   255					parent_rate *= 2;
-   256				return parent_rate;
-   257			}
-   258			mdiv = VC3_PLL1_M_DIV(prediv);
-   259		} else if (pfd->num == VC3_PFD2) {
-   260			/* The bypass_prediv is set, PLL fed from Ref_in directly. */
-   261			if (prediv & pfd->mdiv1_bitmsk) {
-   262				/* check doubler is set or not */
- > 263				if (premul & VC3_PLL2_MDIV_DOUBLER)
-   264					parent_rate *= 2;
-   265				return parent_rate;
-   266			}
-   267	
-   268			mdiv = VC3_PLL2_M_DIV(prediv);
-   269		} else {
-   270			/* The bypass_prediv is set, PLL fed from Ref_in directly. */
-   271			if (prediv & pfd->mdiv1_bitmsk)
-   272				return parent_rate;
-   273	
-   274			mdiv = VC3_PLL3_M_DIV(prediv);
-   275		}
-   276	
-   277		if (prediv & pfd->mdiv2_bitmsk)
-   278			rate = parent_rate / 2;
-   279		else
-   280			rate = parent_rate / mdiv;
-   281	
-   282		return rate;
-   283	}
-   284	
+7ca5dc145bc7da Florian Fainelli 2009-06-24  16  
+5f3c909881d5de Florian Fainelli 2010-01-03  17  struct ar7_gpio_chip {
+5f3c909881d5de Florian Fainelli 2010-01-03  18  	void __iomem		*regs;
+5f3c909881d5de Florian Fainelli 2010-01-03 @19  	struct gpio_chip	chip;
+5f3c909881d5de Florian Fainelli 2010-01-03  20  };
+7ca5dc145bc7da Florian Fainelli 2009-06-24  21  
+5f3c909881d5de Florian Fainelli 2010-01-03  22  static int ar7_gpio_get_value(struct gpio_chip *chip, unsigned gpio)
+7ca5dc145bc7da Florian Fainelli 2009-06-24  23  {
+1b2766fb496c46 Linus Walleij    2015-12-08 @24  	struct ar7_gpio_chip *gpch = gpiochip_get_data(chip);
+5f3c909881d5de Florian Fainelli 2010-01-03  25  	void __iomem *gpio_in = gpch->regs + AR7_GPIO_INPUT;
+7ca5dc145bc7da Florian Fainelli 2009-06-24  26  
+249e573d99ab59 Linus Walleij    2015-12-22  27  	return !!(readl(gpio_in) & (1 << gpio));
+5f3c909881d5de Florian Fainelli 2010-01-03  28  }
+5f3c909881d5de Florian Fainelli 2010-01-03  29  
+
+:::::: The code at line 19 was first introduced by commit
+:::::: 5f3c909881d5deebb9a3ddc836a15937e76daefc MIPS: AR7: Implement gpiolib
+
+:::::: TO: Florian Fainelli <florian@openwrt.org>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 -- 
 0-DAY CI Kernel Test Service
