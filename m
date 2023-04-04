@@ -1,51 +1,47 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C6FD2F2;
-	Tue,  4 Apr 2023 22:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F3AD2F2;
+	Tue,  4 Apr 2023 22:26:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680645961; x=1712181961;
+  t=1680647214; x=1712183214;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Sx1Df8zRzu2lBXbsGavKpvQNQMu0/c/0lVd4Tj/TiwU=;
-  b=RQ07D6NfgkaJwF78bNxaCeZkUcZZE539t6PhsPDIY744SbMr52BljoWf
-   urKcdn6Fs2i1ftAS/gbHrbWBzjG3F86+Q1cOY2f3o/gUXzDIsO+zxm2Bx
-   vpEdQErQ9jQoDoFoNjqC3GCjUcSz8FtxvO/G5jJsQqVl2LOh/KRqVrIR+
-   +vBDAiiwO7eD36Os3j+9bEhBl1gL5ijHFO1a6Q5uqiz2PmaARmY3Zsl2/
-   uyeehIxry8PwB86JlQxHakaqaYJIxOdPL9ZFjo1f3izlXrk6h6kEBtQnv
-   Ql5w05St9rfN9xBdtYmYq5+46WjzPNiAfyIcTlk2yiwKep0PNBe2GtCKP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="326350750"
+  bh=0ax22KGbVbyXQaj8xCo9cOEoM//pO00szdw2sbA9zkg=;
+  b=NdLfUDwWhjceo1jtkmJQ5CfsFMSmHUQSpGXRsuxXhXN5ffX8eChdv9Ov
+   rWHPdthixOl3fFDvXcc/CXpw8THRqfcVJyKkF3pvet36g8QJ+Nexg65eY
+   4hwi2GNJHpexRBfL1wtNDEbgth4ISL6pbtN2EgpPpYrFTld1TKlQp1vif
+   9aw8HS0cyIqyIpPG5S9d6qdAkI1oSLrnXgxRowwt502J4EtLgYc3gnOs6
+   sg474ny4hiMwChJhDKppVdUqBl4/RNrwpSk4wHu+TL1+PxLXKMefkRo/I
+   h2pqgUcg9MazgwGfiggg4gfjbydtmhLRa/yA0YjLbPZO+HN3W57WE5uvN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="428604983"
 X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="326350750"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 15:05:53 -0700
+   d="scan'208";a="428604983"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 15:26:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="810420448"
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="755805994"
 X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="810420448"
+   d="scan'208";a="755805994"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2023 15:05:48 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 04 Apr 2023 15:26:48 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pjomh-000Q4U-0p;
-	Tue, 04 Apr 2023 22:05:47 +0000
-Date: Wed, 5 Apr 2023 06:05:37 +0800
+	id 1pjp72-000Q5H-07;
+	Tue, 04 Apr 2023 22:26:48 +0000
+Date: Wed, 5 Apr 2023 06:26:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>, agross@kernel.org,
-	andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, broonie@kernel.org,
-	vkoul@kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-	swboyd@chromium.org, quic_vtanuku@quicinc.com,
-	Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: Re: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
-Message-ID: <202304050512.MN2oNY9Z-lkp@intel.com>
-References: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
+To: Thiago Becker <tbecker@redhat.com>, sfrench@samba.org,
+	linux-cifs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pc@cjr.nz,
+	lsahlber@redhat.com, sprasad@microsoft.com, tom@talpey.com,
+	trbecker@gmail.com, samba-technical@lists.samba.org,
+	Thiago Becker <tbecker@redhat.com>
+Subject: Re: [PATCH] cifs: sanitize paths in cifs_update_super_prepath.
+Message-ID: <202304050627.7O0sKgk8-lkp@intel.com>
+References: <20230404185908.993738-1-tbecker@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,130 +50,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1680631400-28865-3-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <20230404185908.993738-1-tbecker@redhat.com>
 
-Hi Vijaya,
+Hi Thiago,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on robh/for-next broonie-sound/for-next linus/master v6.3-rc5 next-20230404]
+[auto build test WARNING on cifs/for-next]
+[also build test WARNING on linus/master v6.3-rc5 next-20230404]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vijaya-Krishna-Nivarthi/arm64-dts-qcom-sc7280-Add-stream-id-of-qspi-to-iommus/20230405-020430
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/1680631400-28865-3-git-send-email-quic_vnivarth%40quicinc.com
-patch subject: [PATCH 2/2] spi: spi-qcom-qspi: Add DMA mode support
-config: arm64-randconfig-r001-20230403 (https://download.01.org/0day-ci/archive/20230405/202304050512.MN2oNY9Z-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thiago-Becker/cifs-sanitize-paths-in-cifs_update_super_prepath/20230405-030114
+base:   git://git.samba.org/sfrench/cifs-2.6.git for-next
+patch link:    https://lore.kernel.org/r/20230404185908.993738-1-tbecker%40redhat.com
+patch subject: [PATCH] cifs: sanitize paths in cifs_update_super_prepath.
+config: x86_64-randconfig-a003-20230403 (https://download.01.org/0day-ci/archive/20230405/202304050627.7O0sKgk8-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/72895c4ce2b53c096fa03c9f56211df21faad6dd
+        # https://github.com/intel-lab-lkp/linux/commit/4d179c3f90c01aab96bf6a02f70cc111da39d61c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vijaya-Krishna-Nivarthi/arm64-dts-qcom-sc7280-Add-stream-id-of-qspi-to-iommus/20230405-020430
-        git checkout 72895c4ce2b53c096fa03c9f56211df21faad6dd
+        git fetch --no-tags linux-review Thiago-Becker/cifs-sanitize-paths-in-cifs_update_super_prepath/20230405-030114
+        git checkout 4d179c3f90c01aab96bf6a02f70cc111da39d61c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/spi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304050512.MN2oNY9Z-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304050627.7O0sKgk8-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/spi/spi-qcom-qspi.c:333:5: warning: no previous prototype for function 'qcom_qspi_alloc_desc' [-Wmissing-prototypes]
-   int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
-       ^
-   drivers/spi/spi-qcom-qspi.c:333:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
+>> fs/cifs/fs_context.c:448:7: warning: no previous prototype for function 'sanitize_path' [-Wmissing-prototypes]
+   char *sanitize_path(char *path, gfp_t gfp)
+         ^
+   fs/cifs/fs_context.c:448:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   char *sanitize_path(char *path, gfp_t gfp)
    ^
    static 
    1 warning generated.
 
 
-vim +/qcom_qspi_alloc_desc +333 drivers/spi/spi-qcom-qspi.c
+vim +/sanitize_path +448 fs/cifs/fs_context.c
 
-   332	
- > 333	int qcom_qspi_alloc_desc(struct qcom_qspi *ctrl, uint8_t *virt_ptr,
-   334				dma_addr_t dma_ptr, uint32_t n_bytes)
-   335	{
-   336		struct qspi_cmd_desc *virt_cmd_desc, *prev;
-   337		uint8_t *virt_data_desc;
-   338		dma_addr_t dma_cmd_desc, dma_data_desc;
-   339	
-   340		if (virt_ptr && n_bytes >= QSPI_ALIGN_REQ) {
-   341			dev_err(ctrl->dev,
-   342				"Exiting to avert memory overwrite, n_bytes-%d\n", n_bytes);
-   343			return -ENOMEM;
-   344		}
-   345	
-   346		/* allocate for dma cmd descriptor */
-   347		virt_cmd_desc = (struct qspi_cmd_desc *)dma_pool_alloc(ctrl->dma_cmd_pool,
-   348			GFP_KERNEL, &dma_cmd_desc);
-   349		if (!virt_cmd_desc) {
-   350			dev_err(ctrl->dev,
-   351				"Could not allocate for cmd_desc\n");
-   352			return -ENOMEM;
-   353		}
-   354		ctrl->virt_cmd_desc[ctrl->n_cmd_desc] = virt_cmd_desc;
-   355		ctrl->dma_cmd_desc[ctrl->n_cmd_desc] = dma_cmd_desc;
-   356		ctrl->n_cmd_desc++;
-   357	
-   358		/* allocate for dma data descriptor if unaligned else use pre-aligned */
-   359		if (virt_ptr) {
-   360			virt_data_desc = (uint8_t *)dma_pool_zalloc(ctrl->dma_data_pool,
-   361				GFP_KERNEL, &dma_data_desc);
-   362			if (!virt_data_desc) {
-   363				dev_err(ctrl->dev,
-   364					"Could not allocate for data_desc\n");
-   365				return -ENOMEM;
-   366			}
-   367			ctrl->virt_data_desc[ctrl->n_data_desc] = virt_data_desc;
-   368			ctrl->dma_data_desc[ctrl->n_data_desc] = dma_data_desc;
-   369			ctrl->n_data_desc++;
-   370	
-   371			/*
-   372			 * for tx copy xfer data into allocated buffer
-   373			 * for rx setup bounce info to copy after xfer
-   374			 */
-   375			if (ctrl->xfer.dir == QSPI_WRITE) {
-   376				memcpy(virt_data_desc, virt_ptr, n_bytes);
-   377			} else {
-   378				virt_cmd_desc->bounce_src = virt_data_desc;
-   379				virt_cmd_desc->bounce_dst = virt_ptr;
-   380				virt_cmd_desc->bounce_length = n_bytes;
-   381			}
-   382		} else {
-   383			dma_data_desc = dma_ptr;
-   384		}
-   385	
-   386		/* setup cmd descriptor */
-   387		virt_cmd_desc->data_address = (uint32_t)(uintptr_t)(dma_data_desc);
-   388		virt_cmd_desc->next_descriptor = 0;
-   389		virt_cmd_desc->direction = ctrl->xfer.dir;
-   390		virt_cmd_desc->multi_io_mode = ctrl->iomode;
-   391		virt_cmd_desc->reserved1 = 0;
-   392		virt_cmd_desc->fragment = 0;
-   393		virt_cmd_desc->reserved2 = 0;
-   394		virt_cmd_desc->length = n_bytes;
-   395	
-   396		/* update previous descriptor */
-   397		if (ctrl->n_cmd_desc >= 2) {
-   398			prev = (ctrl->virt_cmd_desc)[ctrl->n_cmd_desc - 2];
-   399			prev->next_descriptor = dma_cmd_desc;
-   400			prev->fragment = 1;
-   401		}
-   402	
-   403		return 0;
-   404	}
-   405	
+   438	
+   439	/*
+   440	 * Remove duplicate path delimiters. Windows is supposed to do that
+   441	 * but there are some bugs that prevent rename from working if there are
+   442	 * multiple delimiters.
+   443	 *
+   444	 * Returns a sanitized duplicate of @path. The caller is responsible for
+   445	 * cleaning up the original.
+   446	 */
+   447	#define IS_DELIM(c) ((c) == '/' || (c) == '\\')
+ > 448	char *sanitize_path(char *path, gfp_t gfp)
+   449	{
+   450		char *cursor1 = path, *cursor2 = path;
+   451	
+   452		/* skip all prepended delimiters */
+   453		while (IS_DELIM(*cursor1))
+   454			cursor1++;
+   455	
+   456		/* copy the first letter */
+   457		*cursor2 = *cursor1;
+   458	
+   459		/* copy the remainder... */
+   460		while (*(cursor1++)) {
+   461			/* ... skipping all duplicated delimiters */
+   462			if (IS_DELIM(*cursor1) && IS_DELIM(*cursor2))
+   463				continue;
+   464			*(++cursor2) = *cursor1;
+   465		}
+   466	
+   467		/* if the last character is a delimiter, skip it */
+   468		if (IS_DELIM(*(cursor2 - 1)))
+   469			cursor2--;
+   470	
+   471		*(cursor2) = '\0';
+   472		return kstrdup(path, gfp);
+   473	}
+   474	
 
 -- 
 0-DAY CI Kernel Test Service
