@@ -1,37 +1,37 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726717E;
-	Tue,  4 Apr 2023 02:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079AD7E;
+	Tue,  4 Apr 2023 02:21:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680574320; x=1712110320;
+  t=1680574920; x=1712110920;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TDGMjXEoOdfdpc8A+QvPYHDfLyIq7uSVZktWfPFiqD8=;
-  b=bWrXh4bZ4EDJuTt+64E8ouMUc3RY3Sg8YXg6ClLmwWDXqWm4+gqqjL3b
-   qB95Q5+AMN11ZyBDy9t9jCTRzxlt/WqqWWdKo5LWr1fWPcCG0TEsnG6BO
-   1W/FQjv6pmaqZBed6nVNtptfUSLRUKlQJJpsRSSEm8DFkYO8HA0emu381
-   vin9tOGg2sgIHsmjnLGRxYfBHePCTtKY4+fPLIjlEd/fyB22LD9eWJBvA
-   QcB5ACjpKEGSAzomFltVV7EzBahfN4Srv1qijURIt/ZxoELXbKxsZqDhN
-   eCaLalqy1WUKPmcYCF+cszbsXWaEhsoC9debvP93MieN/CoEE1sVGZ8Hx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="326085973"
+  bh=S9jlvO03mnmm15rtkefUHtXNrIuNeFHbwAHrntbkPhg=;
+  b=meDCQ1v9NNmcry5e+Ximq9jKBDK+y2uQTAic1r0QRpt+bP4RElvsYn3D
+   QSWDyQJ1iwphbbxzfoJO+QP9jR/EMwWUOJaJtI80MlsROk4JFAwW+vaCM
+   X9HbKrU/yVurOrlBy+rzBkV/rdkk4pm5MbSnd/2MJtnC/4aJuGa8/imk5
+   ar80+24c9rYT2iosuJPV+FpG3h+Wf8REvP7Yqnf3ops1Xqm84j2TJy4Ds
+   pZwrmL1iSm2bAQLPv2lEMVh943XwVHayEE3Qetl3XoqFd8v3M6WuSo8na
+   uCm9QjD4ELdO4xRglD9QHkHyjV9hFs0L4TszadnhGx1dI6JmN8EVZUn4b
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="340801866"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="326085973"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 19:11:59 -0700
+   d="scan'208";a="340801866"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2023 19:21:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="686188904"
+X-IronPort-AV: E=McAfee;i="6600,9927,10669"; a="810056483"
 X-IronPort-AV: E=Sophos;i="5.98,316,1673942400"; 
-   d="scan'208";a="686188904"
+   d="scan'208";a="810056483"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 Apr 2023 19:11:53 -0700
+  by orsmga004.jf.intel.com with ESMTP; 03 Apr 2023 19:21:53 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pjW9I-000P2K-2P;
-	Tue, 04 Apr 2023 02:11:52 +0000
-Date: Tue, 4 Apr 2023 10:10:55 +0800
+	id 1pjWIy-000P2g-3A;
+	Tue, 04 Apr 2023 02:21:52 +0000
+Date: Tue, 4 Apr 2023 10:21:14 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
 	David Ahern <dsahern@kernel.org>,
@@ -55,7 +55,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Salam Noureddine <noureddine@arista.com>
 Subject: Re: [PATCH v5 01/21] [draft] net/tcp: Prepare tcp_md5sig_pool for
  TCP-AO
-Message-ID: <202304040916.I3rkyzLG-lkp@intel.com>
+Message-ID: <202304041030.rTLITKDY-lkp@intel.com>
 References: <20230403213420.1576559-2-dima@arista.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -77,8 +77,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Pr
 base:   7e364e56293bb98cae1b55fd835f5991c4e96e7d
 patch link:    https://lore.kernel.org/r/20230403213420.1576559-2-dima%40arista.com
 patch subject: [PATCH v5 01/21] [draft] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
-config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230404/202304040916.I3rkyzLG-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: hexagon-randconfig-r041-20230403 (https://download.01.org/0day-ci/archive/20230404/202304041030.rTLITKDY-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -88,15 +88,75 @@ reproduce (this is a W=1 build):
         git checkout 94408bb4cf5cbcc772ab4d70eeb73bda183c6124
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ipv4/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304040916.I3rkyzLG-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304041030.rTLITKDY-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
+   In file included from net/ipv4/tcp_sigpool.c:10:
+   In file included from include/net/tcp.h:20:
+   In file included from include/linux/tcp.h:17:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from net/ipv4/tcp_sigpool.c:10:
+   In file included from include/net/tcp.h:20:
+   In file included from include/linux/tcp.h:17:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from net/ipv4/tcp_sigpool.c:10:
+   In file included from include/net/tcp.h:20:
+   In file included from include/linux/tcp.h:17:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
 >> net/ipv4/tcp_sigpool.c:63:9: warning: comparison of distinct pointer types ('typeof (size) *' (aka 'unsigned int *') and 'typeof (__scratch_size) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
            size = max(size, __scratch_size);
                   ^~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,7 +172,7 @@ All warnings (new ones prefixed by >>):
    include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
            (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
                       ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
+   7 warnings generated.
 
 
 vim +63 net/ipv4/tcp_sigpool.c
