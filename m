@@ -1,101 +1,192 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D1C7F3
-	for <llvm@lists.linux.dev>; Tue,  4 Apr 2023 22:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680647818;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s/FbBasFGKXho73GYLTBPrVyQLxAhNzEHS05zhrQhKI=;
-	b=EJzNiTT5nTBN1UZblHDj3Z4uZDQLGL1yaln1r8T5RMCKVTcTF9XHuivHA5grcKNTy3XBLn
-	1ODsMDk/QlrrJy68UBqbFArORPqaS4uIWkbQJNq0Mnki05farbwF2pn/JpMjyp95lntij/
-	Ycsr5U3QCvarQgU7lnRh16RbHPKM1sQ=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-625-PD75XZJ2Pt2LHYTGAD_wHA-1; Tue, 04 Apr 2023 18:36:57 -0400
-X-MC-Unique: PD75XZJ2Pt2LHYTGAD_wHA-1
-Received: by mail-yb1-f198.google.com with SMTP id b124-20020a253482000000b00b72947f6a54so33628651yba.14
-        for <llvm@lists.linux.dev>; Tue, 04 Apr 2023 15:36:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680647817;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s/FbBasFGKXho73GYLTBPrVyQLxAhNzEHS05zhrQhKI=;
-        b=pB0T7aW5w7fEi8F0bhUWyvoWxI8/JTu8u6Axq8DtPyjubmQcMOiuZK4oIR7rdcVm5J
-         iZspbjIhna+NAiOU3pWQ0cDMct3xFINEFuWBjrxZ43haMyJmqOsQk5FY7XP6Mdd+oG+U
-         kahHDNDkm7refMifAq1YVpDQaUwYj3hsXoSOfqY9WdcLgpdSO6PmTF8yJoIS4Lk6RzPj
-         DQSRsNEAEQjmC09VXex+ksfV44s8QLotVumVFCeRGjFDRbbA4mbMxlqC0V1CEJw+Izx2
-         5APIdPSESOKYlLR4fahqLhxj41/r0qrwfDTWjoJzyh5ju/mZp0cyTFuhL4j72+ZkBzUF
-         twWg==
-X-Gm-Message-State: AAQBX9dTjFFOTkSXniPs1HDDe6E1lMzCMKRR8hNXVnpwvLg/BEwVSLaw
-	0PCiH8F7PpdKS/1M5kLl1dtjL3UGCKZxvZ7nmFgHnhBaj+B0E823U2+vB0kJ7RxtNjbeNK1dfk6
-	LPDSf2JR20B8U1g==
-X-Received: by 2002:a25:5ec4:0:b0:b38:fad9:e1f4 with SMTP id s187-20020a255ec4000000b00b38fad9e1f4mr4523214ybb.27.1680647817158;
-        Tue, 04 Apr 2023 15:36:57 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z+Y1glYqpspXbrweNu5K2lTRooFyGui/4SyHZmHEz9m05Pv+DeGb42aYVw1FPLAl3eznsFiw==
-X-Received: by 2002:a25:5ec4:0:b0:b38:fad9:e1f4 with SMTP id s187-20020a255ec4000000b00b38fad9e1f4mr4523202ybb.27.1680647816864;
-        Tue, 04 Apr 2023 15:36:56 -0700 (PDT)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id d206-20020a251dd7000000b00b7767ca748asm3633950ybd.39.2023.04.04.15.36.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 15:36:56 -0700 (PDT)
-Date: Tue, 4 Apr 2023 18:36:53 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: kernel test robot <lkp@intel.com>, jic23@kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	andriy.shevchenko@linux.intel.com, trix@redhat.com, lars@metafoo.de,
-	nathan@kernel.org, ndesaulniers@google.com,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	hslester96@gmail.com
-Subject: Re: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from
- device tree
-Message-ID: <ZCymhaDkRkfzk2kP@x1>
-References: <20230404011455.339454-1-bmasney@redhat.com>
- <202304041451.gj8oasQp-lkp@intel.com>
- <ZCwGP6rBLgbDGvkv@x1>
- <20230404123544.6m5juesxwf4tklkm@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042177C;
+	Wed,  5 Apr 2023 00:58:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680656335; x=1712192335;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x1L7LOkF2wLKWWv1RDFx3tipAAKEUKAHWT2Y0z2x5x8=;
+  b=aUf4etqvXXDYV9tTPsQN5KoGzUnlh1escyCW+zBcEEC6l+wmW4VJLpLY
+   ri0kE0ACx6+2UqmUrfcWOEwij/n+fjJR360DOgtowjsljR9dauoGgvTf/
+   sTGKUTZJB+pwVWtRFmn5XXSPKvUXvkpEVd+b2ntny440IPQBT/xhLqbcp
+   3q4k0qLnk/W4avX27rej6HI0FTuaALXnkK7hS2S1vMm46d72mMJ/+sc3Q
+   TiIx04B+HnU0OeTzkWFnb4PgS7A0DTvN8Hx5GnAosxSNrwqGLDA9m8L2E
+   5l7KYepLBYuf6Dg6lTcxr1lQ/AA9HLAcRhaHPA2y+th8cs5d+L2ZqFEMI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="339835060"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="339835060"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 17:58:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="755838896"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="755838896"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Apr 2023 17:58:51 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pjrUB-000Q9U-0B;
+	Wed, 05 Apr 2023 00:58:51 +0000
+Date: Wed, 5 Apr 2023 08:58:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ryder Lee <ryder.lee@mediatek.com>, Felix Fietkau <nbd@nbd.name>,
+	linux-wireless@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+	Shayne Chen <shayne.chen@mediatek.com>,
+	Evelyn Tsai <evelyn.tsai@mediatek.com>,
+	linux-mediatek@lists.infradead.org,
+	Ryder Lee <ryder.lee@mediatek.com>, Bo Jiao <Bo.Jiao@mediatek.com>
+Subject: Re: [PATCH 2/3] wifi: mt76: mt7996: add full system reset knobs into
+ debugfs
+Message-ID: <202304050840.BZZpVG7z-lkp@intel.com>
+References: <cb71efc424029e909866e1c86cce712dbf2cc9ef.1680638324.git.ryder.lee@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20230404123544.6m5juesxwf4tklkm@pengutronix.de>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb71efc424029e909866e1c86cce712dbf2cc9ef.1680638324.git.ryder.lee@mediatek.com>
 
-On Tue, Apr 04, 2023 at 02:35:44PM +0200, Uwe Kleine-König wrote:
-> Hello Brian,
-> 
-> On Tue, Apr 04, 2023 at 07:13:03AM -0400, Brian Masney wrote:
-> > This doesn't contain the code that's in iio/togreg [1], and that's why
-> > the build failed. I originally developed / built this against
-> > next-20230330. I just checked linus/master, next-20230404, iio/testing,
-> > and all have the expected code that defines prox_diode_mask.
-> > 
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/tree/drivers/iio/light/tsl2772.c?h=togreg#n593
-> 
-> You might want to make use of the --base parameter to git format-patch
-> for you next submission. With that the auto builders have a chance to
-> test on the right tree.
+Hi Ryder,
 
-I'll add the --base parameter next time. However, I think the issue is
-that this compiler error is triggered by this patch [1] that's not in
-any maintainer trees. I suspect the kernel test robot still has that in
-it's local tree from a previous round of testing against this driver.
+kernel test robot noticed the following build errors:
 
-[1] https://lore.kernel.org/lkml/20230327120823.1369700-1-trix@redhat.com/
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v6.3-rc5 next-20230404]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Brian
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryder-Lee/wifi-mt76-mt7996-add-full-system-reset-knobs-into-debugfs/20230405-040602
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/cb71efc424029e909866e1c86cce712dbf2cc9ef.1680638324.git.ryder.lee%40mediatek.com
+patch subject: [PATCH 2/3] wifi: mt76: mt7996: add full system reset knobs into debugfs
+config: x86_64-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230405/202304050840.BZZpVG7z-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8764f35bb4f80294bf2164552514cfd312c5feb3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ryder-Lee/wifi-mt76-mt7996-add-full-system-reset-knobs-into-debugfs/20230405-040602
+        git checkout 8764f35bb4f80294bf2164552514cfd312c5feb3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/mediatek/mt76/mt7996/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304050840.BZZpVG7z-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:3742:5: warning: no previous prototype for function 'mt7996_mcu_trigger_assert' [-Wmissing-prototypes]
+   int mt7996_mcu_trigger_assert(struct mt7996_dev *dev)
+       ^
+   drivers/net/wireless/mediatek/mt76/mt7996/mcu.c:3742:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int mt7996_mcu_trigger_assert(struct mt7996_dev *dev)
+   ^
+   static 
+   1 warning generated.
+--
+>> drivers/net/wireless/mediatek/mt76/mt7996/debugfs.c:114:9: error: implicit declaration of function 'mt7996_mcu_trigger_assert' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ret = mt7996_mcu_trigger_assert(dev);
+                         ^
+   1 error generated.
+
+
+vim +/mt7996_mcu_trigger_assert +114 drivers/net/wireless/mediatek/mt76/mt7996/debugfs.c
+
+    45	
+    46	DEFINE_DEBUGFS_ATTRIBUTE(fops_implicit_txbf, mt7996_implicit_txbf_get,
+    47				 mt7996_implicit_txbf_set, "%lld\n");
+    48	
+    49	/* test knob of system error recovery */
+    50	static ssize_t
+    51	mt7996_sys_recovery_set(struct file *file, const char __user *user_buf,
+    52				size_t count, loff_t *ppos)
+    53	{
+    54		struct mt7996_phy *phy = file->private_data;
+    55		struct mt7996_dev *dev = phy->dev;
+    56		bool band = phy->mt76->band_idx;
+    57		char buf[16];
+    58		int ret = 0;
+    59		u16 val;
+    60	
+    61		if (count >= sizeof(buf))
+    62			return -EINVAL;
+    63	
+    64		if (copy_from_user(buf, user_buf, count))
+    65			return -EFAULT;
+    66	
+    67		if (count && buf[count - 1] == '\n')
+    68			buf[count - 1] = '\0';
+    69		else
+    70			buf[count] = '\0';
+    71	
+    72		if (kstrtou16(buf, 0, &val))
+    73			return -EINVAL;
+    74	
+    75		switch (val) {
+    76		/*
+    77		 * 0: grab firmware current SER state.
+    78		 * 1: trigger & enable system error L1 recovery.
+    79		 * 2: trigger & enable system error L2 recovery.
+    80		 * 3: trigger & enable system error L3 rx abort.
+    81		 * 4: trigger & enable system error L3 tx abort
+    82		 * 5: trigger & enable system error L3 tx disable.
+    83		 * 6: trigger & enable system error L3 bf recovery.
+    84		 * 7: trigger & enable system error L4 mdp recovery.
+    85		 * 8: trigger & enable system error full recovery.
+    86		 * 9: trigger firmware crash.
+    87		 */
+    88		case UNI_CMD_SER_QUERY:
+    89			ret = mt7996_mcu_set_ser(dev, UNI_CMD_SER_QUERY, 0, band);
+    90			break;
+    91		case UNI_CMD_SER_SET_RECOVER_L1:
+    92		case UNI_CMD_SER_SET_RECOVER_L2:
+    93		case UNI_CMD_SER_SET_RECOVER_L3_RX_ABORT:
+    94		case UNI_CMD_SER_SET_RECOVER_L3_TX_ABORT:
+    95		case UNI_CMD_SER_SET_RECOVER_L3_TX_DISABLE:
+    96		case UNI_CMD_SER_SET_RECOVER_L3_BF:
+    97		case UNI_CMD_SER_SET_RECOVER_L4_MDP:
+    98			ret = mt7996_mcu_set_ser(dev, UNI_CMD_SER_SET, BIT(val), band);
+    99			if (ret)
+   100				return ret;
+   101	
+   102			ret = mt7996_mcu_set_ser(dev, UNI_CMD_SER_TRIGGER, val, band);
+   103			break;
+   104	
+   105		/* enable full chip reset */
+   106		case UNI_CMD_SER_SET_RECOVER_FULL:
+   107			mt76_set(dev, MT_WFDMA0_MCU_HOST_INT_ENA, MT_MCU_CMD_WDT_MASK);
+   108			dev->recovery.state |= MT_MCU_CMD_WDT_MASK;
+   109			mt7996_reset(dev);
+   110			break;
+   111	
+   112		/* WARNING: trigger firmware crash */
+   113		case UNI_CMD_SER_SET_SYSTEM_ASSERT:
+ > 114			ret = mt7996_mcu_trigger_assert(dev);
+   115			if (ret)
+   116				return ret;
+   117			break;
+   118		default:
+   119			break;
+   120		}
+   121	
+   122		return ret ? ret : count;
+   123	}
+   124	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
