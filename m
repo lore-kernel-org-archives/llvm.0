@@ -1,43 +1,73 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B6F2C9A;
-	Wed,  5 Apr 2023 13:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680700637; x=1712236637;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o6iaTetbjiUdoRZJuS0vqf9xr0ZuVRU9nLo/8+Z2o8A=;
-  b=BLQYPIPPo6JCYeZTsaIkaIqIU+oiuHijdxcJYVF89GQxQjg25W56y/oz
-   FUALl7FxH6Is240CHLwczLOguoQjl4b3HGwNuaMDw3WqMjbNhTdFfVNDj
-   oQtsIF+amVltCzvlwKkipiyuiGqTwAqG9Wi23yo6vjAjk4tc9CMdmI0T5
-   ComKJu+1IzO5cJBLkaZgjUykcN9GmglWW4oow+PUDPPROkO/zKNfXXHq4
-   xj68qIO/4kchOlLMvtD53Ah4BejuC5dk9QJZk8iNzVi8w4t6RM4SZpo1R
-   rIu4u0UmCMgmtLUHS6XTj2kEIds8bl4du4EosSt56rhq078uXPrfSTLTM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="345028483"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="345028483"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 06:17:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="680278301"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="680278301"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 05 Apr 2023 06:17:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pk30k-000QYM-15;
-	Wed, 05 Apr 2023 13:17:14 +0000
-Date: Wed, 5 Apr 2023 21:16:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mcgrof:20230404-module-alloc-opts 39/41]
- kernel/module/stats.c:306:2: warning: variable 'len' is uninitialized when
- used here
-Message-ID: <202304052124.ayGRoau1-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6682C9A
+	for <llvm@lists.linux.dev>; Wed,  5 Apr 2023 13:35:55 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id x15so33948902pjk.2
+        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 06:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680701755;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JIHDYxgUdzzSqTP2brP/Gv5M90CrOXKIjgMsPWUPa3E=;
+        b=CKTKF4kpb7ZHTt5WzSMSNpO/YiANGdZvzrrD77G3R2AwcXrky8I6y4ejU+fBNRkbFN
+         lryZ+EIvfsuH2rhE1cSkHr2YVlmsBsCIb8FDF1XSoF0GPIMefcCmWeKloUJDFICHi6eb
+         7MRvsY+ChHOJQlUMZypaYAaLEZHVZ0W99yx9LtAckYSxsCvWLVnwy22p6QBxC6+q6Wm5
+         UhgAmuMSveoY6oR2rnXWLS00Sqg1O+H6+VjZvXkfNBpXmNdo6GRt3ztEp6czta8goSwK
+         oRSWcq7xRdYhdRHeqG+fJZwC0rkHEmiTgcIOzCeYaKuTbI1JTB78nUaYlT1a1CD4IDgf
+         bc6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680701755;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JIHDYxgUdzzSqTP2brP/Gv5M90CrOXKIjgMsPWUPa3E=;
+        b=yEK91gZ4bdDTHhAmrJXMcURoSSZ6DnUZrT5AF8WSUyBBmBNOecjT1zDfFJpYspA6Q3
+         Rsp9wRJRxE0Tym+BBcXPbuexo/gOe2Nb96FT4hDuxnbIJwiFWkGG4tqIgw03VGecHEMD
+         NtCsGLBKmrIPc/FCJaPxx4iFjklijI69J0G+nQdNx8qGE/VFgY9/iE+GkHTeN50Z35dk
+         vYRy1oQjGiE421XotZ6/VeT13K67lAYIEDV8ZAWxh/llr84m810Olz5qPP30BdNL8z80
+         RECC1D7y4T7lF1KYN8tsJzHWVNlXBvBavyatyDoxzYvtxvcNdri1Bci+8CLsBDL1vjLt
+         44dQ==
+X-Gm-Message-State: AAQBX9fbESe0oB6x4qHE58gF36n6Q46sOWpQlPFErd5fmx2zasnCX1I8
+	xgsYQSRPoCfPgctm+HauKevl8g==
+X-Google-Smtp-Source: AKy350YakjU97DwbNOaHnJ7tP50TtKQnFHAXGnpEmklEn/OYjSLROKhCvPK2o+vvLvZ4pWgOW/ApXw==
+X-Received: by 2002:a17:902:e891:b0:1a1:f413:70b1 with SMTP id w17-20020a170902e89100b001a1f41370b1mr7345803plg.18.1680701754753;
+        Wed, 05 Apr 2023 06:35:54 -0700 (PDT)
+Received: from sunil-laptop ([106.51.184.50])
+        by smtp.gmail.com with ESMTPSA id 19-20020a170902c11300b0019cad2de86bsm10131129pli.156.2023.04.05.06.35.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 06:35:54 -0700 (PDT)
+Date: Wed, 5 Apr 2023 19:05:42 +0530
+From: Sunil V L <sunilvl@ventanamicro.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	llvm@lists.linux.dev,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, Tom Rix <trix@redhat.com>,
+	Weili Qian <qianweili@huawei.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Mark Gross <markgross@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Zhou Wang <wangzhou1@hisilicon.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Len Brown <lenb@kernel.org>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH V4 13/23] RISC-V: cpufeature: Add ACPI support in
+ riscv_fill_hwcap()
+Message-ID: <ZC15LqYqLzmiVdcr@sunil-laptop>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-14-sunilvl@ventanamicro.com>
+ <20230404-promotion-scarce-7c69ff7e5f99@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,182 +76,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230404-promotion-scarce-7c69ff7e5f99@spud>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230404-module-alloc-opts
-head:   972a42717ab4ae90acc80cae25d97860a7d04184
-commit: 3cd12ffc14eea5599e4511e011f04a5045ed8041 [39/41] module: add debug stats to help identify memory pressure
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230405/202304052124.ayGRoau1-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=3cd12ffc14eea5599e4511e011f04a5045ed8041
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20230404-module-alloc-opts
-        git checkout 3cd12ffc14eea5599e4511e011f04a5045ed8041
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/module/
+On Tue, Apr 04, 2023 at 09:57:19PM +0100, Conor Dooley wrote:
+> On Tue, Apr 04, 2023 at 11:50:27PM +0530, Sunil V L wrote:
+> > On ACPI based systems, the information about the hart
+> > like ISA is provided by the RISC-V Hart Capabilities Table (RHCT).
+> > Enable filling up hwcap structure based on the information in RHCT.
+> > 
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > ---
+> >  arch/riscv/kernel/cpufeature.c | 39 ++++++++++++++++++++++++++++++----
+> >  1 file changed, 35 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index 63e56ce04162..5d2065b937e5 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -6,6 +6,7 @@
+> >   * Copyright (C) 2017 SiFive
+> >   */
+> >  
+> > +#include <linux/acpi.h>
+> >  #include <linux/bitmap.h>
+> >  #include <linux/ctype.h>
+> >  #include <linux/libfdt.h>
+> > @@ -13,6 +14,8 @@
+> >  #include <linux/memory.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> > +#include <linux/of_device.h>
+> > +#include <asm/acpi.h>
+> >  #include <asm/alternative.h>
+> >  #include <asm/cacheflush.h>
+> >  #include <asm/errata_list.h>
+> > @@ -91,6 +94,9 @@ void __init riscv_fill_hwcap(void)
+> >  	char print_str[NUM_ALPHA_EXTS + 1];
+> >  	int i, j, rc;
+> >  	unsigned long isa2hwcap[26] = {0};
+> > +	struct acpi_table_header *rhct;
+> > +	acpi_status status;
+> > +	unsigned int cpu;
+> >  
+> >  	isa2hwcap['i' - 'a'] = COMPAT_HWCAP_ISA_I;
+> >  	isa2hwcap['m' - 'a'] = COMPAT_HWCAP_ISA_M;
+> > @@ -103,14 +109,36 @@ void __init riscv_fill_hwcap(void)
+> >  
+> >  	bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
+> >  
+> > -	for_each_of_cpu_node(node) {
+> > +	if (!acpi_disabled) {
+> > +		status = acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
+> > +		if (ACPI_FAILURE(status))
+> > +			return;
+> > +	}
+> > +
+> > +	for_each_possible_cpu(cpu) {
+> >  		unsigned long this_hwcap = 0;
+> >  		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
+> >  		const char *temp;
+> >  
+> > -		if (of_property_read_string(node, "riscv,isa", &isa)) {
+> > -			pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
+> > -			continue;
+> > +		if (acpi_disabled) {
+> > +			node = of_cpu_device_node_get(cpu);
+> > +			if (node) {
+> > +				rc = of_property_read_string(node, "riscv,isa", &isa);
+> 
+> Hmm, after digging in the previous patch, I think this is actually not
+> possible to fail? We already validated it when setting up the mask of
+> possible cpus, but I think leaving the error handling here makes things
+> a lot more obvious.
+> 
+Yeah, do you prefer to merge these patches again since only in this
+patch, we change the loop to for_each_possible_cpu() from
+for_each_of_cpu_node() which actually makes riscv_of_processor_hartid()
+not useful?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304052124.ayGRoau1-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/module/stats.c:306:2: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-           len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods ever loaded", live_mod_count);
-           ^~~
-   kernel/module/stats.c:278:18: note: initialize the variable 'len' to silence this warning
-           unsigned int len, size, count_failed = 0;
-                           ^
-                            = 0
-   1 warning generated.
-
-
-vim +/len +306 kernel/module/stats.c
-
-   264	
-   265	/*
-   266	 * At 64 bytes per module and assuming a 1024 bytes preamble we can fit the
-   267	 * 112 module prints within 8k.
-   268	 *
-   269	 * 1024 + (64*112) = 8k
-   270	 */
-   271	#define MAX_PREAMBLE 1024
-   272	#define MAX_FAILED_MOD_PRINT 112
-   273	#define MAX_BYTES_PER_MOD 64
-   274	static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
-   275					   size_t count, loff_t *ppos)
-   276	{
-   277		struct mod_fail_load *mod_fail;
-   278		unsigned int len, size, count_failed = 0;
-   279		char *buf;
-   280		u32 live_mod_count, fkreads, fdecompress, fbecoming, floads;
-   281		u64 total_size, text_size, ikread_bytes, ibecoming_bytes, idecompress_bytes, imod_bytes,
-   282		    total_virtual_lost;
-   283	
-   284		live_mod_count = atomic_read(&modcount);
-   285		fkreads = atomic_read(&failed_kreads);
-   286		fdecompress = atomic_read(&failed_decompress);
-   287		fbecoming = atomic_read(&failed_becoming);
-   288		floads = atomic_read(&failed_load_modules);
-   289	
-   290		total_size = atomic64_read(&total_mod_size);
-   291		text_size = atomic64_read(&total_text_size);
-   292		ikread_bytes = atomic64_read(&invalid_kread_bytes);
-   293		idecompress_bytes = atomic64_read(&invalid_decompress_bytes);
-   294		ibecoming_bytes = atomic64_read(&invalid_mod_becoming_bytes);
-   295		imod_bytes = atomic64_read(&invalid_mod_bytes);
-   296	
-   297		total_virtual_lost = ikread_bytes + idecompress_bytes + ibecoming_bytes + imod_bytes;
-   298	
-   299		size = MAX_PREAMBLE + min((unsigned int)(floads + fbecoming) * MAX_BYTES_PER_MOD,
-   300				  (unsigned int) MAX_FAILED_MOD_PRINT * MAX_BYTES_PER_MOD);
-   301		buf = kzalloc(size, GFP_KERNEL);
-   302		if (buf == NULL)
-   303			return -ENOMEM;
-   304	
-   305		/* The beginning of our debug preamble */
- > 306		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods ever loaded", live_mod_count);
-   307	
-   308		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on kread", fkreads);
-   309	
-   310		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on decompress",
-   311				 fdecompress);
-   312		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on becoming", fbecoming);
-   313	
-   314		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on load", floads);
-   315	
-   316		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Total module size", total_size);
-   317		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Total mod text size", text_size);
-   318	
-   319		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed kread bytes", ikread_bytes);
-   320	
-   321		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed decompress bytes",
-   322				 idecompress_bytes);
-   323	
-   324		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed becoming bytes", ibecoming_bytes);
-   325	
-   326		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed kmod bytes", imod_bytes);
-   327	
-   328		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Virtual mem wasted bytes", total_virtual_lost);
-   329	
-   330		if (live_mod_count && total_size) {
-   331			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod size",
-   332					 DIV_ROUND_UP(total_size, live_mod_count));
-   333		}
-   334	
-   335		if (live_mod_count && text_size) {
-   336			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod text size",
-   337					 DIV_ROUND_UP(text_size, live_mod_count));
-   338		}
-   339	
-   340		/*
-   341		 * We use WARN_ON_ONCE() for the counters to ensure we always have parity
-   342		 * for keeping tabs on a type of failure with one type of byte counter.
-   343		 * The counters for imod_bytes does not increase for fkreads failures
-   344		 * for example, and so on.
-   345		 */
-   346	
-   347		WARN_ON_ONCE(ikread_bytes && !fkreads);
-   348		if (fkreads && ikread_bytes) {
-   349			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail kread bytes",
-   350					 DIV_ROUND_UP(ikread_bytes, fkreads));
-   351		}
-   352	
-   353		WARN_ON_ONCE(ibecoming_bytes && !fbecoming);
-   354		if (fbecoming && ibecoming_bytes) {
-   355			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail becoming bytes",
-   356					 DIV_ROUND_UP(ibecoming_bytes, fbecoming));
-   357		}
-   358	
-   359		WARN_ON_ONCE(idecompress_bytes && !fdecompress);
-   360		if (fdecompress && idecompress_bytes) {
-   361			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail decomp bytes",
-   362					 DIV_ROUND_UP(idecompress_bytes, fdecompress));
-   363		}
-   364	
-   365		WARN_ON_ONCE(imod_bytes && !floads);
-   366		if (floads && imod_bytes) {
-   367			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average fail load bytes",
-   368					 DIV_ROUND_UP(imod_bytes, floads));
-   369		}
-   370	
-   371		/* End of our debug preamble header. */
-   372	
-   373		/* Catch when we've gone beyond our expected preamble */
-   374		WARN_ON_ONCE(len >= MAX_PREAMBLE);
-   375	
-   376		if (list_empty(&dup_failed_modules))
-   377			goto out;
-   378	
-   379		len += scnprintf(buf + len, size - len, "Duplicate failed modules:\n");
-   380		len += scnprintf(buf + len, size - len, "%25s\t%15s\t%25s\n",
-   381				 "module-name", "How-many-times", "Reason");
-   382		mutex_lock(&module_mutex);
-   383	
-   384	
-   385		list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list) {
-   386			if (WARN_ON_ONCE(++count_failed >= MAX_FAILED_MOD_PRINT))
-   387				goto out_unlock;
-   388			len += scnprintf(buf + len, size - len, "%25s\t%15llu\t%25s\n", mod_fail->name,
-   389					 atomic64_read(&mod_fail->count), mod_fail_to_str(mod_fail));
-   390		}
-   391	out_unlock:
-   392		mutex_unlock(&module_mutex);
-   393	out:
-   394		kfree(buf);
-   395	        return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-   396	}
-   397	#undef MAX_PREAMBLE
-   398	#undef MAX_FAILED_MOD_PRINT
-   399	#undef MAX_BYTES_PER_MOD
-   400	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> I'd swear I gave you a (conditional) R-b on v3 though, no?
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+Thanks,
+Sunil
