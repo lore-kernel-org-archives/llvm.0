@@ -1,58 +1,144 @@
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41DC77F5;
-	Wed,  5 Apr 2023 09:15:27 +0000 (UTC)
-Received: from uucp (helo=alpha)
-	by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-	id 1pjyVe-0007pG-01; Wed, 05 Apr 2023 10:28:50 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id D9339C2160; Wed,  5 Apr 2023 10:26:25 +0200 (CEST)
-Date: Wed, 5 Apr 2023 10:26:25 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, trix@redhat.com, linux-mips@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] MIPS: Drop unused positional parameter in
- local_irq_{dis,en}able
-Message-ID: <20230405082625.GB5556@alpha.franken.de>
-References: <20230404-mips-unused-named-parameters-v1-1-71d6c656f1de@kernel.org>
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85E0A4A
+	for <llvm@lists.linux.dev>; Wed,  5 Apr 2023 09:33:03 +0000 (UTC)
+Received: by mail-wr1-f54.google.com with SMTP id i9so35527281wrp.3
+        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 02:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680687182;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+m6lntKXuHckes3DfOCLKyfUm4RY1tSieGlGMdRdeCg=;
+        b=ovQ3eb1eiAQwqbo5Ec1rsGTce+Hz+32WrCzTCV6aKN7VzI1t4WTQw+oi5Fjm2tx9ED
+         U2PLKAiosMdQeR7Kkq4DSD9rqJjesQPtz0iZSEb7eXbSbTNSow2QT+s6rufHSiuQosKa
+         BBYiEAEslILdu1TIp0BUOeiJSb1WUTPzbKIV26qCpu4lIhlb/AcewWwRltj5jdlAzBZ5
+         /n6V3UzQce7EFM/A/DlgNUEX5Iq0veIkKxpe/lw9Z594oiA4n/TAkEb7ebKyjKkVcFUq
+         JcXG+bAOF2T3hOwYu4OUr5B6YAZw0RkrUJEmwBPsQiySJx/lS0eoCWjMoLpGDbByT/Kf
+         MxJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680687182;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+m6lntKXuHckes3DfOCLKyfUm4RY1tSieGlGMdRdeCg=;
+        b=hhKbMbiR8PM4dOYIWezE/vBZAJVIOlFLrqt/tB1FrCuHfZP7eo3LYrFbNs8EkdA1ij
+         I3H9IB4ZYiVOzTKNqwP0e0GBd3dIG14Micbd+hvMEldK9YJdCS4iXKy9TBkiEN6NS3ns
+         YpvwNvD6n1Paa7ARfynw798jpO20Qh5DWMrxirTO62iVtZUBOWrW8hALsQSwC18cnyOp
+         tPqvj3nHmc1DYRpzIUCgkilHWYHIGBaX7So6FCRZ95kKxRZ3pwoIb3Xyp5tnkaFEfizk
+         bcVatJn8bMPzmfFz66FW0j/dUM5xeLm0jgpczIxeE+FXT7WjLUoypq3IHfBbu1cJYI+2
+         LRkA==
+X-Gm-Message-State: AAQBX9eSm3N7Twggtv5sciexEk4U6cpy2ABgaQcu5mDT+xRW5mcjGAgC
+	q0YXdeBm4+OY/lUE7Up9CAU=
+X-Google-Smtp-Source: AKy350bEmXKhbpOLml2JKednF6JyosoF9/Y0Oyj1dYtb90pMMFwBNblSBshHAYOgh5VmCXkMUWMlIQ==
+X-Received: by 2002:adf:dc01:0:b0:2cf:9889:8428 with SMTP id t1-20020adfdc01000000b002cf98898428mr3327565wri.35.1680687181685;
+        Wed, 05 Apr 2023 02:33:01 -0700 (PDT)
+Received: from [192.168.2.202] (pd9e5a520.dip0.t-ipconnect.de. [217.229.165.32])
+        by smtp.gmail.com with ESMTPSA id y5-20020a1c4b05000000b003ede06f3178sm1599550wma.31.2023.04.05.02.33.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 02:33:01 -0700 (PDT)
+Message-ID: <0c433e15-640e-280f-fcb0-a8fe081d1bcc@gmail.com>
+Date: Wed, 5 Apr 2023 11:33:00 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404-mips-unused-named-parameters-v1-1-71d6c656f1de@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V4 22/23] platform/surface: Disable for RISC-V
+To: Sunil V L <sunilvl@ventanamicro.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Weili Qian <qianweili@huawei.com>,
+ Zhou Wang <wangzhou1@hisilicon.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>, Marc Zyngier <maz@kernel.org>,
+ Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ "David S . Miller" <davem@davemloft.net>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-23-sunilvl@ventanamicro.com>
+Content-Language: en-US
+From: Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20230404182037.863533-23-sunilvl@ventanamicro.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 04, 2023 at 02:18:41PM -0700, Nathan Chancellor wrote:
-> When building with clang's integrated assembler, it points out that the
-> CONFIG_CPU_HAS_DIEI versions of local_irq_enable and local_irq_disable
-> have a named parameter that is not used in the body of the macro and it
-> thinks that $8 is a positional parameter, rather than a register:
+On 4/4/23 20:20, Sunil V L wrote:
+> With CONFIG_ACPI enabled for RISC-V, this driver gets enabled
+> in allmodconfig build. However, RISC-V doesn't support sub-word
+> atomics which is used by this driver. Due to this, the build fails
+> with below error.
 > 
->   arch/mips/include/asm/asmmacro.h:48:2: warning: macro defined with named parameters which are not used in macro body, possible positional parameter found in body which will have no effect
->    .macro local_irq_enable reg=$8
->    ^
+> In function â€˜ssh_seq_nextâ€™,
+>      inlined from â€˜ssam_request_write_dataâ€™ at drivers/platform/surface/aggregator/controller.c:1483:8:
+> ././include/linux/compiler_types.h:399:45: error: call to â€˜__compiletime_assert_335â€™ declared with attribute error: BUILD_BUG failed
+>    399 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>        |                                             ^
+> ./include/linux/compiler.h:78:45: note: in definition of macro â€˜unlikelyâ€™
+>     78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>        |                                             ^
+> ././include/linux/compiler_types.h:387:9: note: in expansion of macro â€˜__compiletime_assertâ€™
+>    387 |         __compiletime_assert(condition, msg, prefix, suffix)
+>        |         ^~~~~~~~~~~~~~~~~~~~
+> ././include/linux/compiler_types.h:399:9: note: in expansion of macro â€˜_compiletime_assertâ€™
+>    399 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>        |         ^~~~~~~~~~~~~~~~~~~
+> ./include/linux/build_bug.h:39:37: note: in expansion of macro â€˜compiletime_assertâ€™
+>     39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>        |                                     ^~~~~~~~~~~~~~~~~~
+> ./include/linux/build_bug.h:59:21: note: in expansion of macro â€˜BUILD_BUG_ON_MSGâ€™
+>     59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+>        |                     ^~~~~~~~~~~~~~~~
+> ./arch/riscv/include/asm/cmpxchg.h:335:17: note: in expansion of macro â€˜BUILD_BUGâ€™
+>    335 |                 BUILD_BUG();                                            \
+>        |                 ^~~~~~~~~
+> ./arch/riscv/include/asm/cmpxchg.h:344:30: note: in expansion of macro â€˜__cmpxchgâ€™
+>    344 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>        |                              ^~~~~~~~~
+> ./include/linux/atomic/atomic-instrumented.h:1916:9: note: in expansion of macro â€˜arch_cmpxchgâ€™
+>   1916 |         arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>        |         ^~~~~~~~~~~~
+> drivers/platform/surface/aggregator/controller.c:61:32: note: in expansion of macro â€˜cmpxchgâ€™
+>     61 |         while (unlikely((ret = cmpxchg(&c->value, old, new)) != old)) {
+>        |                                ^~~~~~~
 > 
-> The comment above the function that performs this check in LLVM notes
-> that the warning may trigger in this case, even though it is not
-> problematic. It is easy enough to clean this up by just omitting the
-> named parameter for this version of the macro, as it is entirely unused.
-> 
-> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1415
-> Link: https://github.com/llvm/llvm-project/commit/81c944cadb7f9e55b3517b7423a820e2577b9279
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> So, disable this driver for RISC-V even when ACPI is enabled for now.
+
+CONFIG_SURFACE_PLATFORMS should be enabled for ARM64 || X86 || COMPILE_TEST only,
+so I guess the issue only happens when compiling with the latter enabled?
+
+I'm not aware of any current plans of MS to release RISC-V-based Surface
+devices, so you could maybe also just explicitly disable CONFIG_SURFACE_PLATFORMS.
+In any case, I don't see any issues with disabling the whole platform/surface
+or only individual drivers for RISC-V, so for either solution:
+
+Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
+
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 > ---
->  arch/mips/include/asm/asmmacro.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-applied to mips-next.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+>   drivers/platform/surface/aggregator/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/surface/aggregator/Kconfig b/drivers/platform/surface/aggregator/Kconfig
+> index c114f9dd5fe1..88afc38ffdc5 100644
+> --- a/drivers/platform/surface/aggregator/Kconfig
+> +++ b/drivers/platform/surface/aggregator/Kconfig
+> @@ -4,7 +4,7 @@
+>   menuconfig SURFACE_AGGREGATOR
+>   	tristate "Microsoft Surface System Aggregator Module Subsystem and Drivers"
+>   	depends on SERIAL_DEV_BUS
+> -	depends on ACPI
+> +	depends on ACPI && !RISCV
+>   	select CRC_CCITT
+>   	help
+>   	  The Surface System Aggregator Module (Surface SAM or SSAM) is an
