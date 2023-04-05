@@ -1,118 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553D47470;
-	Wed,  5 Apr 2023 17:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E091C433D2;
-	Wed,  5 Apr 2023 17:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680717400;
-	bh=jVAC+4ymjcbvNsupEft+6hBzdRCfnsofg1xrrfqn2EE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VtGkj96fnXFRhZOFW35CsBKWfZ1/hZZH22iSRV99oWKoubYmnccIzXR0hKMt3LRNV
-	 YCF7wADFu0UjIdtw/et1GgDXbcfonja4xyX97aUkHEKffk/VbfeJrwEGwyflIiYqjP
-	 o4cYJ3hrSJp695Jkk7u6UuuKeZHM8oXWOP7v78C9PsmpY6/AC190FdW57Wk7WXAszk
-	 zgBUnuWdUR/s57car2zRtQIuxBJJvuCy4njGmveVwu/Yc/YLRDD3qG1gam/ol7JgTj
-	 xnMEaLC/V3zH1VtaAcytv1ZReq7Q5Du3WPmo9CHK5xcuBupoB3YC3KLYlv6RlOnQw2
-	 eTCAQCaIkYZBg==
-Date: Wed, 5 Apr 2023 18:56:36 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	ndesaulniers@google.com, trix@redhat.com,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] riscv: Adjust dependencies of HAVE_DYNAMIC_FTRACE
- selection
-Message-ID: <20230405-dejected-unending-28e29d89f206@spud>
-References: <20230404-riscv-dynamic-ftrace-checks-clang-v1-1-0ce296b7d423@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B3C7494;
+	Wed,  5 Apr 2023 20:37:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680727045; x=1712263045;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ahUIaEx13TeKBsFO2p9JLrbqnJ0M8kqDbOJOvvsxitM=;
+  b=ggfnwmhXceuiMw07LfAUUzJY5a/QQsb4BWo1TroNiTZbQ4mLz9tK7cAl
+   HtLU750JKlCuUr2iVZptPbnBcVmo8ditGWSWGRoL9meRziOp6MUIIq86Z
+   kaTpC6gCOKFgpn2eGDqlaEQPzlAn7UcsUUt2hzqPKQP7N5U/f6BqNsJuu
+   3rfvHj008uhQgWKisIyLhXgHGThEFiuBndMFMc2y9XN7SGdbqMl10gB/b
+   Mj0vfI9rf5jYSkITsMuluUs4danvkQ0IWPhPur5cK7ftM29UUgRSZF3EA
+   QhxhA0Pj7aN3gnby7XDI6Jg8j5wh/i/2RvASL3AE0aYoEcE1m1NSGwSeU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="345151485"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="345151485"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 13:37:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="664164032"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="664164032"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2023 13:37:23 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pk9sh-000Qlu-0a;
+	Wed, 05 Apr 2023 20:37:23 +0000
+Date: Thu, 6 Apr 2023 04:36:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mcgrof:20230405-module-alloc-opts 38/40]
+ kernel/module/main.c:2513:15: warning: variable 'text_size' set but not used
+Message-ID: <202304060408.bPYYaQoz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Y/qRivkW8sHyiGgn"
-Content-Disposition: inline
-In-Reply-To: <20230404-riscv-dynamic-ftrace-checks-clang-v1-1-0ce296b7d423@kernel.org>
-
-
---Y/qRivkW8sHyiGgn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 04, 2023 at 01:34:21PM -0700, Nathan Chancellor wrote:
-> When building allmodconfig with clang and its integrated assembler and
-> linking with a version of GNU ld prior to 2.36, the following link error
-> occurs:
->=20
->   riscv64-linux-gnu-ld: .init.data has both ordered [`__patchable_functio=
-n_entries' in init/main.o] and unordered [`.init_array.0' in kernel/trace/t=
-race_benchmark.o] sections
->   riscv64-linux-gnu-ld: final link failed: bad value
->=20
-> This is the same error addressed by commit 45bd8951806e ("arm64: Improve
-> HAVE_DYNAMIC_FTRACE_WITH_REGS selection for clang") for arm64. See that
-> changelog for a full description of why this error occurs with this
-> combination of tools.
->=20
-> In a similar manner as that change, restrict the
-> CONFIG_HAVE_DYNAMIC_FTRACE selection to combinations of tools known to
-> work so that there are no errors.
->=20
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1817
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/riscv/Kconfig | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index eb7f29a412f8..4b82838ac870 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -136,12 +136,23 @@ config RISCV
->  	select TRACE_IRQFLAGS_SUPPORT
->  	select UACCESS_MEMCPY if !MMU
->  	select ZONE_DMA32 if 64BIT
-> -	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatch=
-able-function-entry=3D8)
-> +	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && (CLANG_SUPPORTS_DYN=
-AMIC_FTRACE || GCC_SUPPORTS_DYNAMIC_FTRACE)
->  	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
->  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->  	select HAVE_FUNCTION_GRAPH_TRACER
->  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
-> =20
-> +config CLANG_SUPPORTS_DYNAMIC_FTRACE
-> +	def_bool CC_IS_CLANG
-> +	# https://github.com/llvm/llvm-project/commit/6ab8927931851bb42b2c93a00=
-801dc499d7d9b1e
-> +	depends on CLANG_VERSION >=3D 130000
-> +	# https://github.com/ClangBuiltLinux/linux/issues/1817
-> +	depends on AS_IS_GNU || (AS_IS_LLVM && (LD_IS_LLD || LD_VERSION >=3D 23=
-600))
-> +
-> +config GCC_SUPPORTS_DYNAMIC_FTRACE
-> +	def_bool CC_IS_GCC
-> +	depends on $(cc-option,-fpatchable-function-entry=3D8)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230405-module-alloc-opts
+head:   df3d0d8eab2e52ef53c9c95e45275904397cb19a
+commit: 91f048af0cadf1b14de4c0be5481de5e34bbac2b [38/40] module: add debug stats to help identify memory pressure
+config: x86_64-randconfig-a003-20230403 (https://download.01.org/0day-ci/archive/20230406/202304060408.bPYYaQoz-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=91f048af0cadf1b14de4c0be5481de5e34bbac2b
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof 20230405-module-alloc-opts
+        git checkout 91f048af0cadf1b14de4c0be5481de5e34bbac2b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/module/
 
-I thought about merging these, but I think you just end up with
-something that is difficult to grok. Explanation in the arm64 is pretty
-good & the change follows.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304060408.bPYYaQoz-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/module/main.c:2513:15: warning: variable 'text_size' set but not used [-Wunused-but-set-variable]
+           unsigned int text_size = 0, total_size = 0;
+                        ^
+>> kernel/module/main.c:2513:30: warning: variable 'total_size' set but not used [-Wunused-but-set-variable]
+           unsigned int text_size = 0, total_size = 0;
+                                       ^
+   2 warnings generated.
 
 
---Y/qRivkW8sHyiGgn
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/text_size +2513 kernel/module/main.c
 
------BEGIN PGP SIGNATURE-----
+  2502	
+  2503	/*
+  2504	 * This is where the real work happens.
+  2505	 *
+  2506	 * Keep it uninlined to provide a reliable breakpoint target, e.g. for the gdb
+  2507	 * helper command 'lx-symbols'.
+  2508	 */
+  2509	static noinline int do_init_module(struct module *mod)
+  2510	{
+  2511		int ret = 0;
+  2512		struct mod_initfree *freeinit;
+> 2513		unsigned int text_size = 0, total_size = 0;
+  2514	
+  2515		for_each_mod_mem_type(type) {
+  2516			const struct module_memory *mod_mem = &mod->mem[type];
+  2517			if (mod_mem->size) {
+  2518				total_size += mod_mem->size;
+  2519				if (type == MOD_TEXT || type == MOD_INIT_TEXT)
+  2520					text_size += mod->mem[type].size;
+  2521			}
+  2522		}
+  2523	
+  2524		freeinit = kmalloc(sizeof(*freeinit), GFP_KERNEL);
+  2525		if (!freeinit) {
+  2526			ret = -ENOMEM;
+  2527			goto fail;
+  2528		}
+  2529		freeinit->init_text = mod->mem[MOD_INIT_TEXT].base;
+  2530		freeinit->init_data = mod->mem[MOD_INIT_DATA].base;
+  2531		freeinit->init_rodata = mod->mem[MOD_INIT_RODATA].base;
+  2532	
+  2533		do_mod_ctors(mod);
+  2534		/* Start the module */
+  2535		if (mod->init != NULL)
+  2536			ret = do_one_initcall(mod->init);
+  2537		if (ret < 0) {
+  2538			goto fail_free_freeinit;
+  2539		}
+  2540		if (ret > 0) {
+  2541			pr_warn("%s: '%s'->init suspiciously returned %d, it should "
+  2542				"follow 0/-E convention\n"
+  2543				"%s: loading module anyway...\n",
+  2544				__func__, mod->name, ret, __func__);
+  2545			dump_stack();
+  2546		}
+  2547	
+  2548		/* Now it's a first class citizen! */
+  2549		mod->state = MODULE_STATE_LIVE;
+  2550		blocking_notifier_call_chain(&module_notify_list,
+  2551					     MODULE_STATE_LIVE, mod);
+  2552	
+  2553		/* Delay uevent until module has finished its init routine */
+  2554		kobject_uevent(&mod->mkobj.kobj, KOBJ_ADD);
+  2555	
+  2556		/*
+  2557		 * We need to finish all async code before the module init sequence
+  2558		 * is done. This has potential to deadlock if synchronous module
+  2559		 * loading is requested from async (which is not allowed!).
+  2560		 *
+  2561		 * See commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
+  2562		 * request_module() from async workers") for more details.
+  2563		 */
+  2564		if (!mod->async_probe_requested)
+  2565			async_synchronize_full();
+  2566	
+  2567		ftrace_free_mem(mod, mod->mem[MOD_INIT_TEXT].base,
+  2568				mod->mem[MOD_INIT_TEXT].base + mod->mem[MOD_INIT_TEXT].size);
+  2569		mutex_lock(&module_mutex);
+  2570		/* Drop initial reference. */
+  2571		module_put(mod);
+  2572		trim_init_extable(mod);
+  2573	#ifdef CONFIG_KALLSYMS
+  2574		/* Switch to core kallsyms now init is done: kallsyms may be walking! */
+  2575		rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
+  2576	#endif
+  2577		module_enable_ro(mod, true);
+  2578		mod_tree_remove_init(mod);
+  2579		module_arch_freeing_init(mod);
+  2580		for_class_mod_mem_type(type, init) {
+  2581			mod->mem[type].base = NULL;
+  2582			mod->mem[type].size = 0;
+  2583		}
+  2584	
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC22VAAKCRB4tDGHoIJi
-0p76AP9x5WZy9i0kDAHbGvogZ6rJrVgolnqAW0uZIAwGqZdHPAD8Ds6dJzr3hChp
-JMo2BHpHOC9Dn+Zzu8NxlXecUBFqAgc=
-=4TDW
------END PGP SIGNATURE-----
-
---Y/qRivkW8sHyiGgn--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
