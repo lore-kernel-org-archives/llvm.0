@@ -1,45 +1,23 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6682C9A
-	for <llvm@lists.linux.dev>; Wed,  5 Apr 2023 13:35:55 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id x15so33948902pjk.2
-        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 06:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680701755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JIHDYxgUdzzSqTP2brP/Gv5M90CrOXKIjgMsPWUPa3E=;
-        b=CKTKF4kpb7ZHTt5WzSMSNpO/YiANGdZvzrrD77G3R2AwcXrky8I6y4ejU+fBNRkbFN
-         lryZ+EIvfsuH2rhE1cSkHr2YVlmsBsCIb8FDF1XSoF0GPIMefcCmWeKloUJDFICHi6eb
-         7MRvsY+ChHOJQlUMZypaYAaLEZHVZ0W99yx9LtAckYSxsCvWLVnwy22p6QBxC6+q6Wm5
-         UhgAmuMSveoY6oR2rnXWLS00Sqg1O+H6+VjZvXkfNBpXmNdo6GRt3ztEp6czta8goSwK
-         oRSWcq7xRdYhdRHeqG+fJZwC0rkHEmiTgcIOzCeYaKuTbI1JTB78nUaYlT1a1CD4IDgf
-         bc6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680701755;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JIHDYxgUdzzSqTP2brP/Gv5M90CrOXKIjgMsPWUPa3E=;
-        b=yEK91gZ4bdDTHhAmrJXMcURoSSZ6DnUZrT5AF8WSUyBBmBNOecjT1zDfFJpYspA6Q3
-         Rsp9wRJRxE0Tym+BBcXPbuexo/gOe2Nb96FT4hDuxnbIJwiFWkGG4tqIgw03VGecHEMD
-         NtCsGLBKmrIPc/FCJaPxx4iFjklijI69J0G+nQdNx8qGE/VFgY9/iE+GkHTeN50Z35dk
-         vYRy1oQjGiE421XotZ6/VeT13K67lAYIEDV8ZAWxh/llr84m810Olz5qPP30BdNL8z80
-         RECC1D7y4T7lF1KYN8tsJzHWVNlXBvBavyatyDoxzYvtxvcNdri1Bci+8CLsBDL1vjLt
-         44dQ==
-X-Gm-Message-State: AAQBX9fbESe0oB6x4qHE58gF36n6Q46sOWpQlPFErd5fmx2zasnCX1I8
-	xgsYQSRPoCfPgctm+HauKevl8g==
-X-Google-Smtp-Source: AKy350YakjU97DwbNOaHnJ7tP50TtKQnFHAXGnpEmklEn/OYjSLROKhCvPK2o+vvLvZ4pWgOW/ApXw==
-X-Received: by 2002:a17:902:e891:b0:1a1:f413:70b1 with SMTP id w17-20020a170902e89100b001a1f41370b1mr7345803plg.18.1680701754753;
-        Wed, 05 Apr 2023 06:35:54 -0700 (PDT)
-Received: from sunil-laptop ([106.51.184.50])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170902c11300b0019cad2de86bsm10131129pli.156.2023.04.05.06.35.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 06:35:54 -0700 (PDT)
-Date: Wed, 5 Apr 2023 19:05:42 +0530
-From: Sunil V L <sunilvl@ventanamicro.com>
-To: Conor Dooley <conor@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7E123DA
+	for <llvm@lists.linux.dev>; Wed,  5 Apr 2023 14:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ACCAC4339B;
+	Wed,  5 Apr 2023 14:31:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680705092;
+	bh=zSAJvHpnJ4t5+N5rlPStNtw8kt3Pvqahl38JBpYY8G0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UA05BQCDFOlATRVQf6u1KpRp0bUorSfIjan7xcEWrovcLCtG6gNGf4096NaaFpr2s
+	 /NErwGnTgYtFy7ZdM1i3tquxq7hjpC7wmlV/TgnIJRKIV1zF9lu4CP5c8oe5KWAPHQ
+	 77r0V/i0nWcoazrEjCoyt7/BUVuUxRkvmgtkAr2FDL554YVLCeL8LL8MAUxVvd56xW
+	 HSEjZG/XTAXMZ8qANPYHf87Ju78DBpuPGv0tiGZtDTnsJuQVELo9YGtEi7XFG0cTuO
+	 7prRmTBPrYhuaCNo5CQeQaue1Clx1elgq7OvAyjF9XJ8U7qcdmsWp05Vs6w78hkng0
+	 eI+P4ShYUl+zQ==
+Date: Wed, 5 Apr 2023 15:31:24 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Sunil V L <sunilvl@ventanamicro.com>
 Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
 	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
@@ -64,100 +42,130 @@ Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
 	"David S . Miller" <davem@davemloft.net>
 Subject: Re: [PATCH V4 13/23] RISC-V: cpufeature: Add ACPI support in
  riscv_fill_hwcap()
-Message-ID: <ZC15LqYqLzmiVdcr@sunil-laptop>
+Message-ID: <20230405-compel-slinky-2fe11b4bf0b3@spud>
 References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
  <20230404182037.863533-14-sunilvl@ventanamicro.com>
  <20230404-promotion-scarce-7c69ff7e5f99@spud>
+ <ZC15LqYqLzmiVdcr@sunil-laptop>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="G5/7scijW3x9IuES"
+Content-Disposition: inline
+In-Reply-To: <ZC15LqYqLzmiVdcr@sunil-laptop>
+
+
+--G5/7scijW3x9IuES
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404-promotion-scarce-7c69ff7e5f99@spud>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 04, 2023 at 09:57:19PM +0100, Conor Dooley wrote:
-> On Tue, Apr 04, 2023 at 11:50:27PM +0530, Sunil V L wrote:
-> > On ACPI based systems, the information about the hart
-> > like ISA is provided by the RISC-V Hart Capabilities Table (RHCT).
-> > Enable filling up hwcap structure based on the information in RHCT.
-> > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > ---
-> >  arch/riscv/kernel/cpufeature.c | 39 ++++++++++++++++++++++++++++++----
-> >  1 file changed, 35 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > index 63e56ce04162..5d2065b937e5 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -6,6 +6,7 @@
-> >   * Copyright (C) 2017 SiFive
-> >   */
-> >  
-> > +#include <linux/acpi.h>
-> >  #include <linux/bitmap.h>
-> >  #include <linux/ctype.h>
-> >  #include <linux/libfdt.h>
-> > @@ -13,6 +14,8 @@
-> >  #include <linux/memory.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > +#include <linux/of_device.h>
-> > +#include <asm/acpi.h>
-> >  #include <asm/alternative.h>
-> >  #include <asm/cacheflush.h>
-> >  #include <asm/errata_list.h>
-> > @@ -91,6 +94,9 @@ void __init riscv_fill_hwcap(void)
-> >  	char print_str[NUM_ALPHA_EXTS + 1];
-> >  	int i, j, rc;
-> >  	unsigned long isa2hwcap[26] = {0};
-> > +	struct acpi_table_header *rhct;
-> > +	acpi_status status;
-> > +	unsigned int cpu;
-> >  
-> >  	isa2hwcap['i' - 'a'] = COMPAT_HWCAP_ISA_I;
-> >  	isa2hwcap['m' - 'a'] = COMPAT_HWCAP_ISA_M;
-> > @@ -103,14 +109,36 @@ void __init riscv_fill_hwcap(void)
-> >  
-> >  	bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
-> >  
-> > -	for_each_of_cpu_node(node) {
-> > +	if (!acpi_disabled) {
-> > +		status = acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
-> > +		if (ACPI_FAILURE(status))
-> > +			return;
-> > +	}
-> > +
-> > +	for_each_possible_cpu(cpu) {
-> >  		unsigned long this_hwcap = 0;
-> >  		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
-> >  		const char *temp;
-> >  
-> > -		if (of_property_read_string(node, "riscv,isa", &isa)) {
-> > -			pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
-> > -			continue;
-> > +		if (acpi_disabled) {
-> > +			node = of_cpu_device_node_get(cpu);
-> > +			if (node) {
-> > +				rc = of_property_read_string(node, "riscv,isa", &isa);
-> 
-> Hmm, after digging in the previous patch, I think this is actually not
-> possible to fail? We already validated it when setting up the mask of
-> possible cpus, but I think leaving the error handling here makes things
-> a lot more obvious.
-> 
-Yeah, do you prefer to merge these patches again since only in this
-patch, we change the loop to for_each_possible_cpu() from
-for_each_of_cpu_node() which actually makes riscv_of_processor_hartid()
-not useful?
+On Wed, Apr 05, 2023 at 07:05:42PM +0530, Sunil V L wrote:
+> On Tue, Apr 04, 2023 at 09:57:19PM +0100, Conor Dooley wrote:
+> > On Tue, Apr 04, 2023 at 11:50:27PM +0530, Sunil V L wrote:
+> > > On ACPI based systems, the information about the hart
+> > > like ISA is provided by the RISC-V Hart Capabilities Table (RHCT).
+> > > Enable filling up hwcap structure based on the information in RHCT.
+> > >=20
+> > > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > > ---
+> > >  arch/riscv/kernel/cpufeature.c | 39 ++++++++++++++++++++++++++++++--=
+--
+> > >  1 file changed, 35 insertions(+), 4 deletions(-)
+> > >=20
+> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufe=
+ature.c
+> > > index 63e56ce04162..5d2065b937e5 100644
+> > > --- a/arch/riscv/kernel/cpufeature.c
+> > > +++ b/arch/riscv/kernel/cpufeature.c
+> > > @@ -6,6 +6,7 @@
+> > >   * Copyright (C) 2017 SiFive
+> > >   */
+> > > =20
+> > > +#include <linux/acpi.h>
+> > >  #include <linux/bitmap.h>
+> > >  #include <linux/ctype.h>
+> > >  #include <linux/libfdt.h>
+> > > @@ -13,6 +14,8 @@
+> > >  #include <linux/memory.h>
+> > >  #include <linux/module.h>
+> > >  #include <linux/of.h>
+> > > +#include <linux/of_device.h>
+> > > +#include <asm/acpi.h>
+> > >  #include <asm/alternative.h>
+> > >  #include <asm/cacheflush.h>
+> > >  #include <asm/errata_list.h>
+> > > @@ -91,6 +94,9 @@ void __init riscv_fill_hwcap(void)
+> > >  	char print_str[NUM_ALPHA_EXTS + 1];
+> > >  	int i, j, rc;
+> > >  	unsigned long isa2hwcap[26] =3D {0};
+> > > +	struct acpi_table_header *rhct;
+> > > +	acpi_status status;
+> > > +	unsigned int cpu;
+> > > =20
+> > >  	isa2hwcap['i' - 'a'] =3D COMPAT_HWCAP_ISA_I;
+> > >  	isa2hwcap['m' - 'a'] =3D COMPAT_HWCAP_ISA_M;
+> > > @@ -103,14 +109,36 @@ void __init riscv_fill_hwcap(void)
+> > > =20
+> > >  	bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
+> > > =20
+> > > -	for_each_of_cpu_node(node) {
+> > > +	if (!acpi_disabled) {
+> > > +		status =3D acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
+> > > +		if (ACPI_FAILURE(status))
+> > > +			return;
+> > > +	}
+> > > +
+> > > +	for_each_possible_cpu(cpu) {
+> > >  		unsigned long this_hwcap =3D 0;
+> > >  		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
+> > >  		const char *temp;
+> > > =20
+> > > -		if (of_property_read_string(node, "riscv,isa", &isa)) {
+> > > -			pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
+> > > -			continue;
+> > > +		if (acpi_disabled) {
+> > > +			node =3D of_cpu_device_node_get(cpu);
+> > > +			if (node) {
+> > > +				rc =3D of_property_read_string(node, "riscv,isa", &isa);
+> >=20
+> > Hmm, after digging in the previous patch, I think this is actually not
+> > possible to fail? We already validated it when setting up the mask of
+> > possible cpus, but I think leaving the error handling here makes things
+> > a lot more obvious.
+> >=20
+> Yeah, do you prefer to merge these patches again since only in this
+> patch, we change the loop to for_each_possible_cpu() from
+> for_each_of_cpu_node() which actually makes riscv_of_processor_hartid()
+> not useful?
 
-> I'd swear I gave you a (conditional) R-b on v3 though, no?
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-Thanks,
-Sunil
+Yah, all 3 of us mistakenly thought that that was an unrelated cleanup
+on the last revision, but clearly it is not.
+Squash it back IMO, sorry for my part in the extra work generated.
+
+Cheers,
+Conor.
+
+>=20
+> > I'd swear I gave you a (conditional) R-b on v3 though, no?
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+
+--G5/7scijW3x9IuES
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC2GOAAKCRB4tDGHoIJi
+0rnsAP0cgFLWkLbUrSntzAuLfoBAltCrodxxTLrayMe+WsSAOgEA0umoMwKzM2ox
+W+uIW/1axAfQExBp1IRIgO1BnHHRKAE=
+=CYcq
+-----END PGP SIGNATURE-----
+
+--G5/7scijW3x9IuES--
