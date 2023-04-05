@@ -1,144 +1,157 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85E0A4A
-	for <llvm@lists.linux.dev>; Wed,  5 Apr 2023 09:33:03 +0000 (UTC)
-Received: by mail-wr1-f54.google.com with SMTP id i9so35527281wrp.3
-        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 02:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680687182;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+m6lntKXuHckes3DfOCLKyfUm4RY1tSieGlGMdRdeCg=;
-        b=ovQ3eb1eiAQwqbo5Ec1rsGTce+Hz+32WrCzTCV6aKN7VzI1t4WTQw+oi5Fjm2tx9ED
-         U2PLKAiosMdQeR7Kkq4DSD9rqJjesQPtz0iZSEb7eXbSbTNSow2QT+s6rufHSiuQosKa
-         BBYiEAEslILdu1TIp0BUOeiJSb1WUTPzbKIV26qCpu4lIhlb/AcewWwRltj5jdlAzBZ5
-         /n6V3UzQce7EFM/A/DlgNUEX5Iq0veIkKxpe/lw9Z594oiA4n/TAkEb7ebKyjKkVcFUq
-         JcXG+bAOF2T3hOwYu4OUr5B6YAZw0RkrUJEmwBPsQiySJx/lS0eoCWjMoLpGDbByT/Kf
-         MxJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680687182;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+m6lntKXuHckes3DfOCLKyfUm4RY1tSieGlGMdRdeCg=;
-        b=hhKbMbiR8PM4dOYIWezE/vBZAJVIOlFLrqt/tB1FrCuHfZP7eo3LYrFbNs8EkdA1ij
-         I3H9IB4ZYiVOzTKNqwP0e0GBd3dIG14Micbd+hvMEldK9YJdCS4iXKy9TBkiEN6NS3ns
-         YpvwNvD6n1Paa7ARfynw798jpO20Qh5DWMrxirTO62iVtZUBOWrW8hALsQSwC18cnyOp
-         tPqvj3nHmc1DYRpzIUCgkilHWYHIGBaX7So6FCRZ95kKxRZ3pwoIb3Xyp5tnkaFEfizk
-         bcVatJn8bMPzmfFz66FW0j/dUM5xeLm0jgpczIxeE+FXT7WjLUoypq3IHfBbu1cJYI+2
-         LRkA==
-X-Gm-Message-State: AAQBX9eSm3N7Twggtv5sciexEk4U6cpy2ABgaQcu5mDT+xRW5mcjGAgC
-	q0YXdeBm4+OY/lUE7Up9CAU=
-X-Google-Smtp-Source: AKy350bEmXKhbpOLml2JKednF6JyosoF9/Y0Oyj1dYtb90pMMFwBNblSBshHAYOgh5VmCXkMUWMlIQ==
-X-Received: by 2002:adf:dc01:0:b0:2cf:9889:8428 with SMTP id t1-20020adfdc01000000b002cf98898428mr3327565wri.35.1680687181685;
-        Wed, 05 Apr 2023 02:33:01 -0700 (PDT)
-Received: from [192.168.2.202] (pd9e5a520.dip0.t-ipconnect.de. [217.229.165.32])
-        by smtp.gmail.com with ESMTPSA id y5-20020a1c4b05000000b003ede06f3178sm1599550wma.31.2023.04.05.02.33.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 02:33:01 -0700 (PDT)
-Message-ID: <0c433e15-640e-280f-fcb0-a8fe081d1bcc@gmail.com>
-Date: Wed, 5 Apr 2023 11:33:00 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BE2A4A;
+	Wed,  5 Apr 2023 09:54:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680688450; x=1712224450;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2/OTwjVKqgrnKWGIdha9aXaIU5L4xTXV6YaueFUYFYE=;
+  b=Qb0hZN0trmh4RiIK/C1ur9uvvAgHO55PaTt39hU8YEl7YwMNKsiFnuob
+   oTEJowzuABIu2RPOXIg9fy1nzfYp5+B/99AOqhtWvfzdqiGSQm6f7hUH+
+   GGH+n8w+tJ2j0rZ2+yGJGWpmNULTj4gcDCALc3Sez1BtHV6fYf0l73EQe
+   qodPgGQ0NbgKg78hJV5cCCggEtlqktT1JpOtIIvupM1ywhcP93PHO4jqg
+   xV+RLQekEeAjOJK9MY2/6vMdyea/s+vpRxkkUL728A210TEH5gGOl0u4i
+   CT1dhB6bOIAAJ93O3DcSvI6PPAmIpqVvtPT1DLr3YeBdNtnTGCgtQA3GM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="428698905"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="428698905"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 02:54:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="716970891"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="716970891"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 05 Apr 2023 02:54:08 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pjzqB-000QRy-1Z;
+	Wed, 05 Apr 2023 09:54:07 +0000
+Date: Wed, 5 Apr 2023 17:53:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Takahiro Kuwano <Takahiro.Kuwano@infineon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [ambarus:s25hx02gt-v3 31/31] drivers/mtd/spi-nor/spansion.c:584:16:
+ error: no member named 'num_of_dice' in 'struct spi_nor_flash_parameter'
+Message-ID: <202304051714.u6XHcn1j-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V4 22/23] platform/surface: Disable for RISC-V
-To: Sunil V L <sunilvl@ventanamicro.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
- platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Thomas Gleixner <tglx@linutronix.de>, Weili Qian <qianweili@huawei.com>,
- Zhou Wang <wangzhou1@hisilicon.com>, Herbert Xu
- <herbert@gondor.apana.org.au>, Marc Zyngier <maz@kernel.org>,
- Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "David S . Miller" <davem@davemloft.net>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-23-sunilvl@ventanamicro.com>
-Content-Language: en-US
-From: Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20230404182037.863533-23-sunilvl@ventanamicro.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 4/4/23 20:20, Sunil V L wrote:
-> With CONFIG_ACPI enabled for RISC-V, this driver gets enabled
-> in allmodconfig build. However, RISC-V doesn't support sub-word
-> atomics which is used by this driver. Due to this, the build fails
-> with below error.
-> 
-> In function â€˜ssh_seq_nextâ€™,
->      inlined from â€˜ssam_request_write_dataâ€™ at drivers/platform/surface/aggregator/controller.c:1483:8:
-> ././include/linux/compiler_types.h:399:45: error: call to â€˜__compiletime_assert_335â€™ declared with attribute error: BUILD_BUG failed
->    399 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->        |                                             ^
-> ./include/linux/compiler.h:78:45: note: in definition of macro â€˜unlikelyâ€™
->     78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
->        |                                             ^
-> ././include/linux/compiler_types.h:387:9: note: in expansion of macro â€˜__compiletime_assertâ€™
->    387 |         __compiletime_assert(condition, msg, prefix, suffix)
->        |         ^~~~~~~~~~~~~~~~~~~~
-> ././include/linux/compiler_types.h:399:9: note: in expansion of macro â€˜_compiletime_assertâ€™
->    399 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->        |         ^~~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:39:37: note: in expansion of macro â€˜compiletime_assertâ€™
->     39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->        |                                     ^~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:59:21: note: in expansion of macro â€˜BUILD_BUG_ON_MSGâ€™
->     59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
->        |                     ^~~~~~~~~~~~~~~~
-> ./arch/riscv/include/asm/cmpxchg.h:335:17: note: in expansion of macro â€˜BUILD_BUGâ€™
->    335 |                 BUILD_BUG();                                            \
->        |                 ^~~~~~~~~
-> ./arch/riscv/include/asm/cmpxchg.h:344:30: note: in expansion of macro â€˜__cmpxchgâ€™
->    344 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
->        |                              ^~~~~~~~~
-> ./include/linux/atomic/atomic-instrumented.h:1916:9: note: in expansion of macro â€˜arch_cmpxchgâ€™
->   1916 |         arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
->        |         ^~~~~~~~~~~~
-> drivers/platform/surface/aggregator/controller.c:61:32: note: in expansion of macro â€˜cmpxchgâ€™
->     61 |         while (unlikely((ret = cmpxchg(&c->value, old, new)) != old)) {
->        |                                ^~~~~~~
-> 
-> So, disable this driver for RISC-V even when ACPI is enabled for now.
+tree:   https://github.com/ambarus/linux-0day s25hx02gt-v3
+head:   17262634676fc89ea1fff217ed2cdebc15fc2f11
+commit: 17262634676fc89ea1fff217ed2cdebc15fc2f11 [31/31] mtd: spi-nor: spansion: Add support for Infineon
+config: hexagon-randconfig-r041-20230403 (https://download.01.org/0day-ci/archive/20230405/202304051714.u6XHcn1j-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ambarus/linux-0day/commit/17262634676fc89ea1fff217ed2cdebc15fc2f11
+        git remote add ambarus https://github.com/ambarus/linux-0day
+        git fetch --no-tags ambarus s25hx02gt-v3
+        git checkout 17262634676fc89ea1fff217ed2cdebc15fc2f11
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mtd/spi-nor/
 
-CONFIG_SURFACE_PLATFORMS should be enabled for ARM64 || X86 || COMPILE_TEST only,
-so I guess the issue only happens when compiling with the latter enabled?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304051714.u6XHcn1j-lkp@intel.com/
 
-I'm not aware of any current plans of MS to release RISC-V-based Surface
-devices, so you could maybe also just explicitly disable CONFIG_SURFACE_PLATFORMS.
-In any case, I don't see any issues with disabling the whole platform/surface
-or only individual drivers for RISC-V, so for either solution:
+All errors (new ones prefixed by >>):
 
-Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
+   In file included from drivers/mtd/spi-nor/spansion.c:7:
+   In file included from include/linux/mtd/spi-nor.h:11:
+   In file included from include/linux/spi/spi-mem.h:14:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/mtd/spi-nor/spansion.c:7:
+   In file included from include/linux/mtd/spi-nor.h:11:
+   In file included from include/linux/spi/spi-mem.h:14:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/mtd/spi-nor/spansion.c:7:
+   In file included from include/linux/mtd/spi-nor.h:11:
+   In file included from include/linux/spi/spi-mem.h:14:
+   In file included from include/linux/spi/spi.h:15:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/mtd/spi-nor/spansion.c:584:16: error: no member named 'num_of_dice' in 'struct spi_nor_flash_parameter'
+                   nor->params->num_of_dice = 2;
+                   ~~~~~~~~~~~  ^
+   6 warnings and 1 error generated.
 
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> ---
->   drivers/platform/surface/aggregator/Kconfig | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/surface/aggregator/Kconfig b/drivers/platform/surface/aggregator/Kconfig
-> index c114f9dd5fe1..88afc38ffdc5 100644
-> --- a/drivers/platform/surface/aggregator/Kconfig
-> +++ b/drivers/platform/surface/aggregator/Kconfig
-> @@ -4,7 +4,7 @@
->   menuconfig SURFACE_AGGREGATOR
->   	tristate "Microsoft Surface System Aggregator Module Subsystem and Drivers"
->   	depends on SERIAL_DEV_BUS
-> -	depends on ACPI
-> +	depends on ACPI && !RISCV
->   	select CRC_CCITT
->   	help
->   	  The Surface System Aggregator Module (Surface SAM or SSAM) is an
+
+vim +584 drivers/mtd/spi-nor/spansion.c
+
+   558	
+   559	static int s25hx_t_post_sfdp_fixup(struct spi_nor *nor)
+   560	{
+   561		struct spi_nor_erase_type *erase_type =
+   562						nor->params->erase_map.erase_type;
+   563		unsigned int i;
+   564	
+   565		/*
+   566		 * In some parts, 3byte erase opcodes are advertised by 4BAIT.
+   567		 * Convert them to 4byte erase opcodes.
+   568		 */
+   569		for (i = 0; i < SNOR_ERASE_TYPE_MAX; i++) {
+   570			switch (erase_type[i].opcode) {
+   571			case SPINOR_OP_SE:
+   572				erase_type[i].opcode = SPINOR_OP_SE_4B;
+   573				break;
+   574			case SPINOR_OP_BE_4K:
+   575				erase_type[i].opcode = SPINOR_OP_BE_4K_4B;
+   576				break;
+   577			default:
+   578				break;
+   579			}
+   580		}
+   581	
+   582		/* The 2 Gb parts duplicate info and advertise 4 dice instead of 2. */
+   583		if (nor->params->size == SZ_256M)
+ > 584			nor->params->num_of_dice = 2;
+   585	
+   586		return cypress_nor_get_page_size(nor);
+   587	}
+   588	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
