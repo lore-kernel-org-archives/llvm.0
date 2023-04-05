@@ -1,42 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32213ECD;
-	Wed,  5 Apr 2023 11:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B6F2C9A;
+	Wed,  5 Apr 2023 13:17:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680695774; x=1712231774;
+  t=1680700637; x=1712236637;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ANZCLi5l5qsYFLdw5XACQuEzqZXmwZeLscIOZ2nD8Gc=;
-  b=UagGbLtsY5920XldVyRUPOFbimcciC6gelLXfBBb/dVWvkpr1eE4ZnYI
-   c0E7ZTYG0emFAh7Q8CKrAoagK37x54lfA8cygqbQ3eZAue9OvMy8HLPI1
-   ZkG2uQs69H746K0J8aLyTkOcE+n5H6hZAf+DZftJbBwQrJ7STmL2m7pgK
-   3J1EBsexmDTg9GEa6DoIyiRc1Nf6lFSN/G/TnJ/IdjEn/YsNXGXIn0avu
-   wZBC1BhCKYhX2Kh6tKobjOKF03b9cnTEEZsTBuKfRMnnOj9Mrud7AxTWH
-   1+vzgZ7GTRur8DzpOUCFRcn0bkyW6+BhaIZpftDte3phlt81LySKNAQDi
+  bh=o6iaTetbjiUdoRZJuS0vqf9xr0ZuVRU9nLo/8+Z2o8A=;
+  b=BLQYPIPPo6JCYeZTsaIkaIqIU+oiuHijdxcJYVF89GQxQjg25W56y/oz
+   FUALl7FxH6Is240CHLwczLOguoQjl4b3HGwNuaMDw3WqMjbNhTdFfVNDj
+   oQtsIF+amVltCzvlwKkipiyuiGqTwAqG9Wi23yo6vjAjk4tc9CMdmI0T5
+   ComKJu+1IzO5cJBLkaZgjUykcN9GmglWW4oow+PUDPPROkO/zKNfXXHq4
+   xj68qIO/4kchOlLMvtD53Ah4BejuC5dk9QJZk8iNzVi8w4t6RM4SZpo1R
+   rIu4u0UmCMgmtLUHS6XTj2kEIds8bl4du4EosSt56rhq078uXPrfSTLTM
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="405209308"
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="345028483"
 X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="405209308"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 04:56:13 -0700
+   d="scan'208";a="345028483"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 06:17:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="932828627"
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="680278301"
 X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="932828627"
+   d="scan'208";a="680278301"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Apr 2023 04:56:11 -0700
+  by orsmga007.jf.intel.com with ESMTP; 05 Apr 2023 06:17:15 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pk1kI-000QVm-2W;
-	Wed, 05 Apr 2023 11:56:10 +0000
-Date: Wed, 5 Apr 2023 19:55:33 +0800
+	id 1pk30k-000QYM-15;
+	Wed, 05 Apr 2023 13:17:14 +0000
+Date: Wed, 5 Apr 2023 21:16:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:core/softirq 8/8] kernel/rcu/tree_nocb.h:954:18:
- error: too few arguments to function call, expected 2, have 1
-Message-ID: <202304051913.H2SgzUHR-lkp@intel.com>
+Subject: [mcgrof:20230404-module-alloc-opts 39/41]
+ kernel/module/stats.c:306:2: warning: variable 'len' is uninitialized when
+ used here
+Message-ID: <202304052124.ayGRoau1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,130 +47,180 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/softirq
-head:   699a5cde1ff88fe951e546e174de96b274eb6d48
-commit: 699a5cde1ff88fe951e546e174de96b274eb6d48 [8/8] softirq,rcu: Use softirq_needs_break()
-config: riscv-randconfig-r032-20230403 (https://download.01.org/0day-ci/archive/20230405/202304051913.H2SgzUHR-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230404-module-alloc-opts
+head:   972a42717ab4ae90acc80cae25d97860a7d04184
+commit: 3cd12ffc14eea5599e4511e011f04a5045ed8041 [39/41] module: add debug stats to help identify memory pressure
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230405/202304052124.ayGRoau1-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=699a5cde1ff88fe951e546e174de96b274eb6d48
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue core/softirq
-        git checkout 699a5cde1ff88fe951e546e174de96b274eb6d48
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=3cd12ffc14eea5599e4511e011f04a5045ed8041
+        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
+        git fetch --no-tags mcgrof 20230404-module-alloc-opts
+        git checkout 3cd12ffc14eea5599e4511e011f04a5045ed8041
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/module/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304051913.H2SgzUHR-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304052124.ayGRoau1-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/rcu/tree.c:4937:
->> kernel/rcu/tree_nocb.h:954:18: error: too few arguments to function call, expected 2, have 1
-           rcu_do_batch(rdp);
-           ~~~~~~~~~~~~    ^
-   kernel/rcu/tree.c:2046:13: note: 'rcu_do_batch' declared here
-   static void rcu_do_batch(struct softirq_action *h, struct rcu_data *rdp)
-               ^
-   1 error generated.
+>> kernel/module/stats.c:306:2: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
+           len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods ever loaded", live_mod_count);
+           ^~~
+   kernel/module/stats.c:278:18: note: initialize the variable 'len' to silence this warning
+           unsigned int len, size, count_failed = 0;
+                           ^
+                            = 0
+   1 warning generated.
 
 
-vim +954 kernel/rcu/tree_nocb.h
+vim +/len +306 kernel/module/stats.c
 
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  917  
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  918  /*
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  919   * Invoke any ready callbacks from the corresponding no-CBs CPU,
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  920   * then, if there are no more, wait for more to appear.
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  921   */
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  922  static void nocb_cb_wait(struct rcu_data *rdp)
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  923  {
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  924  	struct rcu_segcblist *cblist = &rdp->cblist;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  925  	unsigned long cur_gp_seq;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  926  	unsigned long flags;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  927  	bool needwake_state = false;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  928  	bool needwake_gp = false;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  929  	bool can_sleep = true;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  930  	struct rcu_node *rnp = rdp->mynode;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  931  
-8d9703964697340 Frederic Weisbecker 2021-11-23  932  	do {
-8d9703964697340 Frederic Weisbecker 2021-11-23  933  		swait_event_interruptible_exclusive(rdp->nocb_cb_wq,
-8d9703964697340 Frederic Weisbecker 2021-11-23  934  						    nocb_cb_wait_cond(rdp));
-8d9703964697340 Frederic Weisbecker 2021-11-23  935  
-8d9703964697340 Frederic Weisbecker 2021-11-23  936  		// VVV Ensure CB invocation follows _sleep test.
-8d9703964697340 Frederic Weisbecker 2021-11-23  937  		if (smp_load_acquire(&rdp->nocb_cb_sleep)) { // ^^^
-8d9703964697340 Frederic Weisbecker 2021-11-23  938  			WARN_ON(signal_pending(current));
-8d9703964697340 Frederic Weisbecker 2021-11-23  939  			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("WokeEmpty"));
-8d9703964697340 Frederic Weisbecker 2021-11-23  940  		}
-8d9703964697340 Frederic Weisbecker 2021-11-23  941  	} while (!nocb_cb_can_run(rdp));
-8d9703964697340 Frederic Weisbecker 2021-11-23  942  
-8d9703964697340 Frederic Weisbecker 2021-11-23  943  
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  944  	local_irq_save(flags);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  945  	rcu_momentary_dyntick_idle();
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  946  	local_irq_restore(flags);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  947  	/*
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  948  	 * Disable BH to provide the expected environment.  Also, when
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  949  	 * transitioning to/from NOCB mode, a self-requeuing callback might
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  950  	 * be invoked from softirq.  A short grace period could cause both
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  951  	 * instances of this callback would execute concurrently.
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  952  	 */
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  953  	local_bh_disable();
-dfcb27540213e80 Frederic Weisbecker 2021-05-19 @954  	rcu_do_batch(rdp);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  955  	local_bh_enable();
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  956  	lockdep_assert_irqs_enabled();
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  957  	rcu_nocb_lock_irqsave(rdp, flags);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  958  	if (rcu_segcblist_nextgp(cblist, &cur_gp_seq) &&
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  959  	    rcu_seq_done(&rnp->gp_seq, cur_gp_seq) &&
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  960  	    raw_spin_trylock_rcu_node(rnp)) { /* irqs already disabled. */
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  961  		needwake_gp = rcu_advance_cbs(rdp->mynode, rdp);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  962  		raw_spin_unlock_rcu_node(rnp); /* irqs remain disabled. */
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  963  	}
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  964  
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  965  	if (rcu_segcblist_test_flags(cblist, SEGCBLIST_OFFLOADED)) {
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  966  		if (!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB)) {
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  967  			rcu_segcblist_set_flags(cblist, SEGCBLIST_KTHREAD_CB);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  968  			if (rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP))
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  969  				needwake_state = true;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  970  		}
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  971  		if (rcu_segcblist_ready_cbs(cblist))
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  972  			can_sleep = false;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  973  	} else {
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  974  		/*
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  975  		 * De-offloading. Clear our flag and notify the de-offload worker.
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  976  		 * We won't touch the callbacks and keep sleeping until we ever
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  977  		 * get re-offloaded.
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  978  		 */
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  979  		WARN_ON_ONCE(!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_CB));
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  980  		rcu_segcblist_clear_flags(cblist, SEGCBLIST_KTHREAD_CB);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  981  		if (!rcu_segcblist_test_flags(cblist, SEGCBLIST_KTHREAD_GP))
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  982  			needwake_state = true;
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  983  	}
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  984  
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  985  	WRITE_ONCE(rdp->nocb_cb_sleep, can_sleep);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  986  
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  987  	if (rdp->nocb_cb_sleep)
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  988  		trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("CBSleep"));
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  989  
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  990  	rcu_nocb_unlock_irqrestore(rdp, flags);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  991  	if (needwake_gp)
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  992  		rcu_gp_kthread_wake();
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  993  
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  994  	if (needwake_state)
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  995  		swake_up_one(&rdp->nocb_state_wq);
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  996  }
-dfcb27540213e80 Frederic Weisbecker 2021-05-19  997  
-
-:::::: The code at line 954 was first introduced by commit
-:::::: dfcb27540213e8061ecffacd4bd8ed54a310a7b0 rcu/nocb: Start moving nocb code to its own plugin file
-
-:::::: TO: Frederic Weisbecker <frederic@kernel.org>
-:::::: CC: Paul E. McKenney <paulmck@kernel.org>
+   264	
+   265	/*
+   266	 * At 64 bytes per module and assuming a 1024 bytes preamble we can fit the
+   267	 * 112 module prints within 8k.
+   268	 *
+   269	 * 1024 + (64*112) = 8k
+   270	 */
+   271	#define MAX_PREAMBLE 1024
+   272	#define MAX_FAILED_MOD_PRINT 112
+   273	#define MAX_BYTES_PER_MOD 64
+   274	static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
+   275					   size_t count, loff_t *ppos)
+   276	{
+   277		struct mod_fail_load *mod_fail;
+   278		unsigned int len, size, count_failed = 0;
+   279		char *buf;
+   280		u32 live_mod_count, fkreads, fdecompress, fbecoming, floads;
+   281		u64 total_size, text_size, ikread_bytes, ibecoming_bytes, idecompress_bytes, imod_bytes,
+   282		    total_virtual_lost;
+   283	
+   284		live_mod_count = atomic_read(&modcount);
+   285		fkreads = atomic_read(&failed_kreads);
+   286		fdecompress = atomic_read(&failed_decompress);
+   287		fbecoming = atomic_read(&failed_becoming);
+   288		floads = atomic_read(&failed_load_modules);
+   289	
+   290		total_size = atomic64_read(&total_mod_size);
+   291		text_size = atomic64_read(&total_text_size);
+   292		ikread_bytes = atomic64_read(&invalid_kread_bytes);
+   293		idecompress_bytes = atomic64_read(&invalid_decompress_bytes);
+   294		ibecoming_bytes = atomic64_read(&invalid_mod_becoming_bytes);
+   295		imod_bytes = atomic64_read(&invalid_mod_bytes);
+   296	
+   297		total_virtual_lost = ikread_bytes + idecompress_bytes + ibecoming_bytes + imod_bytes;
+   298	
+   299		size = MAX_PREAMBLE + min((unsigned int)(floads + fbecoming) * MAX_BYTES_PER_MOD,
+   300				  (unsigned int) MAX_FAILED_MOD_PRINT * MAX_BYTES_PER_MOD);
+   301		buf = kzalloc(size, GFP_KERNEL);
+   302		if (buf == NULL)
+   303			return -ENOMEM;
+   304	
+   305		/* The beginning of our debug preamble */
+ > 306		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods ever loaded", live_mod_count);
+   307	
+   308		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on kread", fkreads);
+   309	
+   310		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on decompress",
+   311				 fdecompress);
+   312		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on becoming", fbecoming);
+   313	
+   314		len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on load", floads);
+   315	
+   316		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Total module size", total_size);
+   317		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Total mod text size", text_size);
+   318	
+   319		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed kread bytes", ikread_bytes);
+   320	
+   321		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed decompress bytes",
+   322				 idecompress_bytes);
+   323	
+   324		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed becoming bytes", ibecoming_bytes);
+   325	
+   326		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Failed kmod bytes", imod_bytes);
+   327	
+   328		len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Virtual mem wasted bytes", total_virtual_lost);
+   329	
+   330		if (live_mod_count && total_size) {
+   331			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod size",
+   332					 DIV_ROUND_UP(total_size, live_mod_count));
+   333		}
+   334	
+   335		if (live_mod_count && text_size) {
+   336			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average mod text size",
+   337					 DIV_ROUND_UP(text_size, live_mod_count));
+   338		}
+   339	
+   340		/*
+   341		 * We use WARN_ON_ONCE() for the counters to ensure we always have parity
+   342		 * for keeping tabs on a type of failure with one type of byte counter.
+   343		 * The counters for imod_bytes does not increase for fkreads failures
+   344		 * for example, and so on.
+   345		 */
+   346	
+   347		WARN_ON_ONCE(ikread_bytes && !fkreads);
+   348		if (fkreads && ikread_bytes) {
+   349			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail kread bytes",
+   350					 DIV_ROUND_UP(ikread_bytes, fkreads));
+   351		}
+   352	
+   353		WARN_ON_ONCE(ibecoming_bytes && !fbecoming);
+   354		if (fbecoming && ibecoming_bytes) {
+   355			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail becoming bytes",
+   356					 DIV_ROUND_UP(ibecoming_bytes, fbecoming));
+   357		}
+   358	
+   359		WARN_ON_ONCE(idecompress_bytes && !fdecompress);
+   360		if (fdecompress && idecompress_bytes) {
+   361			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Avg fail decomp bytes",
+   362					 DIV_ROUND_UP(idecompress_bytes, fdecompress));
+   363		}
+   364	
+   365		WARN_ON_ONCE(imod_bytes && !floads);
+   366		if (floads && imod_bytes) {
+   367			len += scnprintf(buf + len, size - len, "%25s\t%llu\n", "Average fail load bytes",
+   368					 DIV_ROUND_UP(imod_bytes, floads));
+   369		}
+   370	
+   371		/* End of our debug preamble header. */
+   372	
+   373		/* Catch when we've gone beyond our expected preamble */
+   374		WARN_ON_ONCE(len >= MAX_PREAMBLE);
+   375	
+   376		if (list_empty(&dup_failed_modules))
+   377			goto out;
+   378	
+   379		len += scnprintf(buf + len, size - len, "Duplicate failed modules:\n");
+   380		len += scnprintf(buf + len, size - len, "%25s\t%15s\t%25s\n",
+   381				 "module-name", "How-many-times", "Reason");
+   382		mutex_lock(&module_mutex);
+   383	
+   384	
+   385		list_for_each_entry_rcu(mod_fail, &dup_failed_modules, list) {
+   386			if (WARN_ON_ONCE(++count_failed >= MAX_FAILED_MOD_PRINT))
+   387				goto out_unlock;
+   388			len += scnprintf(buf + len, size - len, "%25s\t%15llu\t%25s\n", mod_fail->name,
+   389					 atomic64_read(&mod_fail->count), mod_fail_to_str(mod_fail));
+   390		}
+   391	out_unlock:
+   392		mutex_unlock(&module_mutex);
+   393	out:
+   394		kfree(buf);
+   395	        return simple_read_from_buffer(user_buf, count, ppos, buf, len);
+   396	}
+   397	#undef MAX_PREAMBLE
+   398	#undef MAX_FAILED_MOD_PRINT
+   399	#undef MAX_BYTES_PER_MOD
+   400	
 
 -- 
 0-DAY CI Kernel Test Service
