@@ -1,47 +1,49 @@
 Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38E8EC5
-	for <llvm@lists.linux.dev>; Wed,  5 Apr 2023 11:48:50 +0000 (UTC)
-Received: by mail-pj1-f43.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso36951127pjb.3
-        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 04:48:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE1AEC5
+	for <llvm@lists.linux.dev>; Wed,  5 Apr 2023 11:49:27 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so36975658pjt.5
+        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 04:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680695330;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WTsmdblHPYajB+3qczYhTQWyrb6fly5Dk4QPH+tzONA=;
-        b=gB7rd4W7Gl5XVMiDYxgFsOVckNNSwU82k/ZjQkQT/QUsholqIcv8o2EFrO2eChuzqJ
-         /E1Nom6E9OqVZjG1oCeeXIpyYlMTX83oUbH+vrAMBiljmxwpY1NMErmGtwM/4kR1FfAf
-         hbb9rumIaGK3o0a+t85nZ9QLJzQAsq6NOQbKus/TppZZYT7cDoYxhqijELG68+PKgXwa
-         AW3rV864e3GUeXTY8t245RZh1MUTn2PaCC0EPwp9Ewm661bd+y79Rq+2tRDeDmVVuB2D
-         aodRwaRPoLayJHjaBUnU95IZjyqTIp4kVX3Wtfm5NE0FJUdRCcMjEXw7XvCpkJDPa2te
-         dhgQ==
+        d=gmail.com; s=20210112; t=1680695367;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1BOAPHjvwBZc8su+MgbgVVdFrkx9EshhGySuq8Rik0=;
+        b=Bt3SQPjIlscA+YIQGeFDeWCjFaY/IR7cWnrRvQAR6vJkLhPdBaa1HtFhU5RDFhLPFS
+         FgPhiqGgarOmcstcwvnrj1unU+Oq0zSOgn/hF9ZmgnSuicgEVf7yUrvwF2Nq+uPydIXo
+         Z8ar3S5OvmK/sytW1z6tji3TXij9oF89N6PEFZSldNA9UB6Bi35y85z74Ao5P1ZbjIFL
+         eQxx4+xBUmbD8ii8AbLRXjF51uAXluK/BR6Ntz8wilstrllzXtlmFTgB9vsFqdg3w6w0
+         I5bdIMV+HtJ64KrfmNnKPZfNjlb1mQhWlImR42Pv0HEKYXXOOla/rObROI06I5Abhv+8
+         Ii9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680695330;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WTsmdblHPYajB+3qczYhTQWyrb6fly5Dk4QPH+tzONA=;
-        b=opZ1xuJw57ktzzyR7XTI8+nJnlMFJuyQ3q8zBUv6aZLcNcb7FWVZ31WS2qrin7rwYS
-         E6KHgLUVblmj4ALzNwts1L+2DNmxnCjxTvDkUvnFH4fx63tLSVaEL2ZypmGUNv2y+ofJ
-         UdLvyxoveaVdfRAndlO+bcSX3sVmz59zOSf++7Z0KLanZ4O9VCC48OyR5fsGC7wVHNbg
-         heqGrL4pNSEpt5FXj5Ir9A3bJyxXpYAIFl+lMghzn/TpasoO+FTe2BFMiEQ4tTckKDjo
-         G9J2HrDYNn9kbACQOc7xQzYovBMfTHESiWCQ7Nodb8wCzW9Io49kaEzYZvxl1nR+aZcD
-         bNsA==
-X-Gm-Message-State: AAQBX9fHP/NpAItSEch1EhHb76n63mVPjGQsd1l62tLFfpB7N7DXlWcc
-	38N/1quExyYe2IooyqmyFMc=
-X-Google-Smtp-Source: AKy350bcdEP3B4h5AyJ/RqXHOvANV432V+AKzzoYSsJ3l0S4OxqL2NCwOgdI7rMZqe9lklSr4+t97g==
-X-Received: by 2002:a17:90b:1e49:b0:23f:ef7:7897 with SMTP id pi9-20020a17090b1e4900b0023f0ef77897mr6177640pjb.49.1680695330032;
-        Wed, 05 Apr 2023 04:48:50 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680695367;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w1BOAPHjvwBZc8su+MgbgVVdFrkx9EshhGySuq8Rik0=;
+        b=jXZh+Xi1kO42X1xGPirqbHRB+4HXdedDGehdIZMeftyTsWxMYFc+S/5UyT2qXuFBXy
+         U4w5KP18Jnlq8OVFmDpINz91I6WiqwWW+E3hESWXq4/p0iC2VaWvNpEoo7+/RTkICCQG
+         WNnHgpZ7jK/aKxvwFsj5jb/TjrhBut4eX1KBM0YHkNDfT//3N7RhTdv8eQXXd+ww3uAI
+         X8yD9l3lF457lHIEi+ocStZxI3U62HBkKQZ9uICRTzXIB0AUwj9yO1oF+3/veVFMv8Ky
+         7lVbRYMCxvq5vEBsBoznsgF2hr2LuDRFNH/T3JzuL0fPwCgE4gs7Rl9fLETE6NGCEsIE
+         SvEA==
+X-Gm-Message-State: AAQBX9fTg7LU7w9Ub1Swpz0EkA8jQcGu8DjJl8DAewVXzm3m2zLLiB48
+	vh7nixB9X2L35XeRfnuMX1c=
+X-Google-Smtp-Source: AKy350bSLOSqLBm8ShGZT00MxdAH6lu+lyUWEYbCEe4/MMf46RL/sqlXgZqYxCwRurEr1EetQSWcYQ==
+X-Received: by 2002:a17:902:e494:b0:19c:a866:6a76 with SMTP id i20-20020a170902e49400b0019ca8666a76mr5179345ple.42.1680695367063;
+        Wed, 05 Apr 2023 04:49:27 -0700 (PDT)
 Received: from localhost ([103.152.220.91])
-        by smtp.gmail.com with ESMTPSA id ha15-20020a17090af3cf00b00233acae2ce6sm1212364pjb.23.2023.04.05.04.48.48
+        by smtp.gmail.com with ESMTPSA id g8-20020a170902868800b0019cbabf127dsm9938617plo.182.2023.04.05.04.49.26
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Apr 2023 04:48:49 -0700 (PDT)
-Date: Wed, 5 Apr 2023 04:48:46 -0700
+        Wed, 05 Apr 2023 04:49:26 -0700 (PDT)
+Date: Wed, 5 Apr 2023 04:49:24 -0700
 From: Dan Li <ashimida.1990@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Aaron Tomlin <atomlin@redhat.com>,
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Aaron Tomlin <atomlin@redhat.com>,
 	Alexander Potapenko <glider@google.com>,
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
 	Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -79,47 +81,59 @@ Cc: Aaron Tomlin <atomlin@redhat.com>,
 	Nicolas Schier <nicolas@fjasle.eu>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Richard Sandiford <richard.sandiford@arm.com>,
-	Sami Tolvanen <samitolvanen@google.com>, Song Liu <song@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Tom Rix <trix@redhat.com>,
-	Uros Bizjak <ubizjak@gmail.com>, Will Deacon <will@kernel.org>,
-	x86@kernel.org, Yuntao Wang <ytcoode@gmail.com>,
-	Yu Zhao <yuzhao@google.com>, Zhen Lei <thunder.leizhen@huawei.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-perf-users@vger.kernel.org
+	Song Liu <song@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>,
+	Will Deacon <will@kernel.org>, x86@kernel.org,
+	Yuntao Wang <ytcoode@gmail.com>, Yu Zhao <yuzhao@google.com>,
+	Zhen Lei <thunder.leizhen@huawei.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
 Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
-Message-ID: <20230405114846.udm4yf3xc6wdyexz@ubuntu>
+Message-ID: <20230405114924.v7p76tzwmecquz2q@ubuntu>
 References: <20221219061758.23321-1-ashimida.1990@gmail.com>
  <20230325085416.95191-1-ashimida.1990@gmail.com>
  <20230327093016.GB4253@hirez.programming.kicks-ass.net>
+ <CABCJKueH6ohH27xCPz9a_ndRR26Na_mo=MGF3eqjwV2=gJy+wQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230327093016.GB4253@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABCJKueH6ohH27xCPz9a_ndRR26Na_mo=MGF3eqjwV2=gJy+wQ@mail.gmail.com>
 User-Agent: NeoMutt/20171215
 
-On 03/27, Peter Zijlstra wrote:
-> On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
+On 03/27, Sami Tolvanen wrote:
+> On Mon, Mar 27, 2023 at 2:30 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
+> >
+> > > In the compiler part[4], most of the content is the same as Sami's
+> > > implementation[3], except for some minor differences, mainly including:
+> > >
+> > > 1. The function typeid is calculated differently and it is difficult
+> > > to be consistent.
+> >
+> > This means there is an effective ABI break between the compilers, which
+> > is sad :-( Is there really nothing to be done about this?
 > 
-> > In the compiler part[4], most of the content is the same as Sami's
-> > implementation[3], except for some minor differences, mainly including:
-> > 
-> > 1. The function typeid is calculated differently and it is difficult
-> > to be consistent.
+> I agree, this would be unfortunate, and would also be a compatibility
+> issue with rustc where there's ongoing work to support
+> clang-compatible CFI type hashes:
 > 
-> This means there is an effective ABI break between the compilers, which
-> is sad :-( Is there really nothing to be done about this?
+> https://github.com/rust-lang/rust/pull/105452
+> 
+> Sami
 
-Hi Peter,
+Hi Sami,
 
-I'm not so sure right now. According to Sami's tip, I need to learn more about
-related patches. I'll make it ABI compatible in the next version if possible :)
+Thanks for the info, I need to learn about it :)
+Is there anything else that needs to be improved?
 
 Thanks,
 Dan
