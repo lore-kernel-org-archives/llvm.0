@@ -1,169 +1,84 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B3C7494;
-	Wed,  5 Apr 2023 20:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680727045; x=1712263045;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ahUIaEx13TeKBsFO2p9JLrbqnJ0M8kqDbOJOvvsxitM=;
-  b=ggfnwmhXceuiMw07LfAUUzJY5a/QQsb4BWo1TroNiTZbQ4mLz9tK7cAl
-   HtLU750JKlCuUr2iVZptPbnBcVmo8ditGWSWGRoL9meRziOp6MUIIq86Z
-   kaTpC6gCOKFgpn2eGDqlaEQPzlAn7UcsUUt2hzqPKQP7N5U/f6BqNsJuu
-   3rfvHj008uhQgWKisIyLhXgHGThEFiuBndMFMc2y9XN7SGdbqMl10gB/b
-   Mj0vfI9rf5jYSkITsMuluUs4danvkQ0IWPhPur5cK7ftM29UUgRSZF3EA
-   QhxhA0Pj7aN3gnby7XDI6Jg8j5wh/i/2RvASL3AE0aYoEcE1m1NSGwSeU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="345151485"
-X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
-   d="scan'208";a="345151485"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 13:37:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="664164032"
-X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
-   d="scan'208";a="664164032"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2023 13:37:23 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pk9sh-000Qlu-0a;
-	Wed, 05 Apr 2023 20:37:23 +0000
-Date: Thu, 6 Apr 2023 04:36:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mcgrof:20230405-module-alloc-opts 38/40]
- kernel/module/main.c:2513:15: warning: variable 'text_size' set but not used
-Message-ID: <202304060408.bPYYaQoz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6568B79CC;
+	Wed,  5 Apr 2023 20:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F30CC433EF;
+	Wed,  5 Apr 2023 20:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680727481;
+	bh=HM42jy9mV3T5mKNjxd6eAXa1sP1hyHMBCh9v69nIN2o=;
+	h=From:Date:Subject:To:Cc:From;
+	b=j2D5zuYKWtCpeuSPAei2jXjEslYrj3lg/aswR2lOlTM6Z2kDVMLJVyQvuDEFEP3Qj
+	 WqdAUqMvoHdyyoiOXv7DszWJY2GFqv8yokJCKKXOgTQCydbGXzV5ptb11xjrnAM3/j
+	 8dFPWrsbPxU9jeiOBVbJuPUtKsCECYu5tu4S6nVv30ZHntN8m/H8PNrhiCRBSIRdh/
+	 uYeENdBK0vRBBivPCAOBWpaeZkUkOtgStMqXdJvPatVP0i3kbj4L8c6kDr6hthYjev
+	 KxCwU6cL8WnxJPFt0Z2/pFiW7hM14DgIXCMhLpTrC7Dsq3osoqdLGhjXJ/GOAK5d9L
+	 83gOGGqwwT8kw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 05 Apr 2023 13:44:28 -0700
+Subject: [PATCH] Documentation/llvm: Add a note about prebuilt kernel.org
+ toolchains
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230405-korg-llvm-tc-docs-v1-1-420849b2e025@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKvdLWQC/x2NywqDMBAAf0X23IX4gtBfKT0k61aXalJ2RQTx3
+ 409DsMwBxirsMGzOkB5E5OcCtSPCmgKaWSUoTA0rmld53r8Zh1xnrcFV8Ihk6HvimHv60g9lC4
+ GY4waEk13uQRbWW/xU/7I/p+93ud5AXmHlOd8AAAA
+To: ndesaulniers@google.com, masahiroy@kernel.org, corbet@lwn.net
+Cc: arnd@arndb.de, keescook@chromium.org, trix@redhat.com, 
+ nicolas@fjasle.eu, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1310; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=HM42jy9mV3T5mKNjxd6eAXa1sP1hyHMBCh9v69nIN2o=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCm6d3dYvz4csqOw7/VmxV3L/3T11B4TXONVE6ixyCX3/
+ rdHHEEMHaUsDGIcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAibDWMDK+LP29i87qio3L3
+ R9KshWE/ws3ePN1wujNId1rnmq1/tu1hZGiQO7IsS/zBROcLhVZTVbM2h5yyS+64JXiB9+olQQb
+ nMn4A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git 20230405-module-alloc-opts
-head:   df3d0d8eab2e52ef53c9c95e45275904397cb19a
-commit: 91f048af0cadf1b14de4c0be5481de5e34bbac2b [38/40] module: add debug stats to help identify memory pressure
-config: x86_64-randconfig-a003-20230403 (https://download.01.org/0day-ci/archive/20230406/202304060408.bPYYaQoz-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=91f048af0cadf1b14de4c0be5481de5e34bbac2b
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof 20230405-module-alloc-opts
-        git checkout 91f048af0cadf1b14de4c0be5481de5e34bbac2b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/module/
+I recently started uploading prebuilt stable versions of LLVM to
+kernel.org, which should make building the kernel with LLVM more
+accessible to maintainers and developers. Link them in the LLVM
+documentation to make this more visible.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304060408.bPYYaQoz-lkp@intel.com/
+Link: https://lore.kernel.org/20230319235619.GA18547@dev-arch.thelio-3990X/
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ Documentation/kbuild/llvm.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-All warnings (new ones prefixed by >>):
+diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+index bfb51685073c..3e1f67b05ca6 100644
+--- a/Documentation/kbuild/llvm.rst
++++ b/Documentation/kbuild/llvm.rst
+@@ -171,6 +171,10 @@ Getting Help
+ Getting LLVM
+ -------------
+ 
++We provide prebuilt stable versions of LLVM on `kernel.org <https://kernel.org/pub/tools/llvm/>`_.
++Below are links that may be useful for building LLVM from source or procurring
++it through a distribution's package manager.
++
+ - https://releases.llvm.org/download.html
+ - https://github.com/llvm/llvm-project
+ - https://llvm.org/docs/GettingStarted.html
 
->> kernel/module/main.c:2513:15: warning: variable 'text_size' set but not used [-Wunused-but-set-variable]
-           unsigned int text_size = 0, total_size = 0;
-                        ^
->> kernel/module/main.c:2513:30: warning: variable 'total_size' set but not used [-Wunused-but-set-variable]
-           unsigned int text_size = 0, total_size = 0;
-                                       ^
-   2 warnings generated.
+---
+base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
+change-id: 20230405-korg-llvm-tc-docs-84304e881bc5
 
-
-vim +/text_size +2513 kernel/module/main.c
-
-  2502	
-  2503	/*
-  2504	 * This is where the real work happens.
-  2505	 *
-  2506	 * Keep it uninlined to provide a reliable breakpoint target, e.g. for the gdb
-  2507	 * helper command 'lx-symbols'.
-  2508	 */
-  2509	static noinline int do_init_module(struct module *mod)
-  2510	{
-  2511		int ret = 0;
-  2512		struct mod_initfree *freeinit;
-> 2513		unsigned int text_size = 0, total_size = 0;
-  2514	
-  2515		for_each_mod_mem_type(type) {
-  2516			const struct module_memory *mod_mem = &mod->mem[type];
-  2517			if (mod_mem->size) {
-  2518				total_size += mod_mem->size;
-  2519				if (type == MOD_TEXT || type == MOD_INIT_TEXT)
-  2520					text_size += mod->mem[type].size;
-  2521			}
-  2522		}
-  2523	
-  2524		freeinit = kmalloc(sizeof(*freeinit), GFP_KERNEL);
-  2525		if (!freeinit) {
-  2526			ret = -ENOMEM;
-  2527			goto fail;
-  2528		}
-  2529		freeinit->init_text = mod->mem[MOD_INIT_TEXT].base;
-  2530		freeinit->init_data = mod->mem[MOD_INIT_DATA].base;
-  2531		freeinit->init_rodata = mod->mem[MOD_INIT_RODATA].base;
-  2532	
-  2533		do_mod_ctors(mod);
-  2534		/* Start the module */
-  2535		if (mod->init != NULL)
-  2536			ret = do_one_initcall(mod->init);
-  2537		if (ret < 0) {
-  2538			goto fail_free_freeinit;
-  2539		}
-  2540		if (ret > 0) {
-  2541			pr_warn("%s: '%s'->init suspiciously returned %d, it should "
-  2542				"follow 0/-E convention\n"
-  2543				"%s: loading module anyway...\n",
-  2544				__func__, mod->name, ret, __func__);
-  2545			dump_stack();
-  2546		}
-  2547	
-  2548		/* Now it's a first class citizen! */
-  2549		mod->state = MODULE_STATE_LIVE;
-  2550		blocking_notifier_call_chain(&module_notify_list,
-  2551					     MODULE_STATE_LIVE, mod);
-  2552	
-  2553		/* Delay uevent until module has finished its init routine */
-  2554		kobject_uevent(&mod->mkobj.kobj, KOBJ_ADD);
-  2555	
-  2556		/*
-  2557		 * We need to finish all async code before the module init sequence
-  2558		 * is done. This has potential to deadlock if synchronous module
-  2559		 * loading is requested from async (which is not allowed!).
-  2560		 *
-  2561		 * See commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
-  2562		 * request_module() from async workers") for more details.
-  2563		 */
-  2564		if (!mod->async_probe_requested)
-  2565			async_synchronize_full();
-  2566	
-  2567		ftrace_free_mem(mod, mod->mem[MOD_INIT_TEXT].base,
-  2568				mod->mem[MOD_INIT_TEXT].base + mod->mem[MOD_INIT_TEXT].size);
-  2569		mutex_lock(&module_mutex);
-  2570		/* Drop initial reference. */
-  2571		module_put(mod);
-  2572		trim_init_extable(mod);
-  2573	#ifdef CONFIG_KALLSYMS
-  2574		/* Switch to core kallsyms now init is done: kallsyms may be walking! */
-  2575		rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
-  2576	#endif
-  2577		module_enable_ro(mod, true);
-  2578		mod_tree_remove_init(mod);
-  2579		module_arch_freeing_init(mod);
-  2580		for_class_mod_mem_type(type, init) {
-  2581			mod->mem[type].base = NULL;
-  2582			mod->mem[type].size = 0;
-  2583		}
-  2584	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Nathan Chancellor <nathan@kernel.org>
+
