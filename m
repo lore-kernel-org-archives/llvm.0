@@ -1,143 +1,113 @@
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10954D2F7;
-	Thu,  6 Apr 2023 20:59:59 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.west.internal (Postfix) with ESMTP id E5A66320046E;
-	Thu,  6 Apr 2023 16:59:58 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 06 Apr 2023 16:59:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1680814798; x=1680901198; bh=LzMVC3NxIS1wZ9+dcFS3lcTR3V8rRxm6xRh
-	y3mczdjo=; b=GA5xsF9bKiWkVkgOl1uZnTYogXy3EKXT0AvlEEHtj6orRhSSBsz
-	HTOaHIn1YXR/WJDiHM39NTREbyPlCnFtoyosFKcpWyUtSHv+8ogdffcUzjQvs3zl
-	FaR6wrkEoaFBNgaSFcpHUUK0ZKBEY6CwMuAZeIvbM4ju5Ng0xk7vY85A+iaSPXEv
-	RCwHuAZjTgEm0+bCdPUxzuqPAE7qLjTMzTUusVsi8lGCvCIUJCHE71HEs+q1x0Y4
-	bFtm1Ff2/p6X8Wml3mfaaIXBfQ0ufOEed41Pmer/F5g3n3VXQ9XwFZB/9dbLznG4
-	i5AeJlyPz8reswMhxddPVoBeXsoeZaVg+/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1680814798; x=1680901198; bh=LzMVC3NxIS1wZ9+dcFS3lcTR3V8rRxm6xRh
-	y3mczdjo=; b=UHFGnl7B7NEDR+LnuRmDFfnp413zmSRC72u5gbZA0vMzgoGc0t7
-	qbycFu13BMEyOlQzf3ebEdokqWqLC+z+Pv6ibCd+KmiAztZiyWDyYubeHoHmDzQE
-	YnpxYUfSXnHbfAN2Ly48s6STy1ukeg4nIPbN7QFZ1I5AolCNAsPoeZNmP70OvoNm
-	ymUeFgyuURPq6uJfaLG14QjIfrPSF838H/y9SKQ/XXOcIiAqtG6EEVl9nPT4zfV1
-	ELIShuflv9PsQ3rGRu61rW2ef8YpAEFDQsZl39C4k4TRhX6XGGWn2aUGYW3GhWi9
-	zMbT4klZn8DJRj3hAUgiM+6I9rtqDm4yLQw==
-X-ME-Sender: <xms:zTIvZDw0kIsl2UfTQ6KY1aU0hs_X-81egLVd008L19GwjxDdX_E4tg>
-    <xme:zTIvZLRBmnL8jX87XblPlebKsca9y6wKSbpbWwi1KC2cxKlmxP_Dh4REhUWNrn9tQ
-    Dh5_6HYWSIcHwl9bls>
-X-ME-Received: <xmr:zTIvZNUJBgRxMKNfBjwji6luXHuJqZprN-_6rBxYdnZO-dL09aKc1LU00NJeksPsNXLy>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgudehgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:zTIvZNj5pi42hVPo61Jq2lw3bWXQtrKllG94IrL6__bsOgE4B6e2Fg>
-    <xmx:zTIvZFA19MBlAVL-q-UrcGvZcrDYrdq5UhNiVfCfRkhU7XSVHEY0nw>
-    <xmx:zTIvZGIvh5YxKR4AQgKf6xogO9ZTwXr0eTc0todofB4v3VIbj9QdLg>
-    <xmx:zjIvZENfrfqNYajb1YHql7D5l_-Hj2uInCnCwJ0m9Y802Kczu3I5Gg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Apr 2023 16:59:56 -0400 (EDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5978D2F7;
+	Thu,  6 Apr 2023 21:07:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680815234; x=1712351234;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z7sV9fgfh3NvaO9Y31rSyQ96j2EHREVjYSeE8EQzjR0=;
+  b=hoenU+tqlmd/gssT3oHcjilQqbue/I+wVs685ltNmdufcfcAx3+m+sAw
+   fjKtSLaLY7xWMjL2F2uN0yQC7vs0bD+YmDql3PCYlrqb9JXE7Ykx9SId0
+   BSyssQhVTkwiQZEhGXqJwzzxU2pi8rmm+Gs0oSguJTkPbp1zCGLu7tfZr
+   9H1AIH3ZnVIzUXxpBp86obpFz8hyXXVJGfZFyRTvTet6QXAUfLbxl1XOs
+   zN8wsDvEDLU8hak/SvGNEBWx+ZaH8/Xl6+m3RgwAYPzveVys7xKhoPUAO
+   a5KYAtEpf1iiI8hOjFHdtqDmnJvDukZvEo/iSw0QMmT1EvkpIhO8Zh0d9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="344609889"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="344609889"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 14:07:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="798477281"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="798477281"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Apr 2023 14:07:12 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pkWp5-000RmE-1e;
+	Thu, 06 Apr 2023 21:07:11 +0000
+Date: Fri, 7 Apr 2023 05:06:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: "D. Wythe" <alibuda@linux.alibaba.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH bpf-next 4/5] bpf: add smc negotiator support in BPF
+ struct_ops
+Message-ID: <202304070405.Zgl8WMAW-lkp@intel.com>
+References: <1680795034-86384-5-git-send-email-alibuda@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH] MIPS: generic: Do not select CPUs that are unsupported in
- clang
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230406-mips-clang-generic-selects-fix-v1-1-811690c9fb69@kernel.org>
-Date: Thu, 6 Apr 2023 21:59:45 +0100
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- llvm@lists.linux.dev,
- patches@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AAAAB6A1-81EE-42A8-84F7-CF8D0DA16456@flygoat.com>
-References: <20230406-mips-clang-generic-selects-fix-v1-1-811690c9fb69@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1680795034-86384-5-git-send-email-alibuda@linux.alibaba.com>
+
+Hi Wythe,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/D-Wythe/net-smc-move-smc_sock-related-structure-definition/20230406-233148
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/1680795034-86384-5-git-send-email-alibuda%40linux.alibaba.com
+patch subject: [RFC PATCH bpf-next 4/5] bpf: add smc negotiator support in BPF struct_ops
+config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230407/202304070405.Zgl8WMAW-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4b65a6397e28b562750d5c411994667c30002963
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review D-Wythe/net-smc-move-smc_sock-related-structure-definition/20230406-233148
+        git checkout 4b65a6397e28b562750d5c411994667c30002963
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304070405.Zgl8WMAW-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/bpf/bpf_struct_ops.c:85:
+>> kernel/bpf/bpf_struct_ops_types.h:14:1: error: field has incomplete type 'struct smc_sock_negotiator_ops'
+   BPF_STRUCT_OPS_TYPE(smc_sock_negotiator_ops)
+   ^
+   kernel/bpf/bpf_struct_ops.c:83:15: note: expanded from macro 'BPF_STRUCT_OPS_TYPE'
+           struct _name data ____cacheline_aligned_in_smp;         \
+                        ^
+   include/net/smc.h:299:15: note: forward declaration of 'struct smc_sock_negotiator_ops'
+           const struct smc_sock_negotiator_ops *negotiator_ops;
+                        ^
+   1 error generated.
 
 
+vim +14 kernel/bpf/bpf_struct_ops_types.h
 
-> 2023=E5=B9=B44=E6=9C=886=E6=97=A5 21:09=EF=BC=8CNathan Chancellor =
-<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> When building allnoconfig with clang after commit de34007751aa ("MIPS:
-> generic: Enable all CPUs supported by virt board in Kconfig"), the
-> following error occurs:
->=20
->  error: unknown target CPU 'r4600'
->  note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5, =
-mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, =
-mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
->=20
-> Working around that, there are similar errors for 'loongson2e' and
-> 'loongson2f'.
->=20
-> These CPUs are not supported in clang/LLVM, so do not select support =
-for
-> them in MIPS_GENERIC_KERNEL when building with clang.
->=20
-> Fixes: de34007751aa ("MIPS: generic: Enable all CPUs supported by virt =
-board in Kconfig")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+     3	
+     4	#ifdef CONFIG_BPF_JIT
+     5	#ifdef CONFIG_NET
+     6	BPF_STRUCT_OPS_TYPE(bpf_dummy_ops)
+     7	#endif
+     8	#ifdef CONFIG_INET
+     9	#include <net/tcp.h>
+    10	BPF_STRUCT_OPS_TYPE(tcp_congestion_ops)
+    11	#endif
+    12	#if IS_ENABLED(CONFIG_SMC)
+    13	#include <net/smc.h>
+  > 14	BPF_STRUCT_OPS_TYPE(smc_sock_negotiator_ops)
 
-Thanks for the patch.
-
-Actually there is no need for any special support for those CPUs.
-We should be able to build those kernels with -march=3Dmips3.
-
-I think something like:
-
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -150,7 +150,7 @@ cflags-y +=3D $(call =
-cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
- #
- cflags-$(CONFIG_CPU_R3000)     +=3D -march=3Dr3000
- cflags-$(CONFIG_CPU_R4300)     +=3D -march=3Dr4300 -Wa,--trap
--cflags-$(CONFIG_CPU_R4X00)     +=3D -march=3Dr4600 -Wa,--trap
-+cflags-$(CONFIG_CPU_R4X00)     +=3D $(call =
-cc-option,-march=3Dr4600,-march=3Dmips3) -Wa,--trap
- cflags-$(CONFIG_CPU_TX49XX)    +=3D -march=3Dr4600 -Wa,--trap
- cflags-$(CONFIG_CPU_MIPS32_R1) +=3D -march=3Dmips32 -Wa,--trap
- cflags-$(CONFIG_CPU_MIPS32_R2) +=3D -march=3Dmips32r2 -Wa,--trap
-@@ -181,8 +181,8 @@ endif
- cflags-$(CONFIG_CAVIUM_CN63XXP1) +=3D -Wa,-mfix-cn63xxp1
- cflags-$(CONFIG_CPU_BMIPS)     +=3D -march=3Dmips32 -Wa,-mips32 =
--Wa,--trap
-=20
--cflags-$(CONFIG_CPU_LOONGSON2E) +=3D -march=3Dloongson2e -Wa,--trap
--cflags-$(CONFIG_CPU_LOONGSON2F) +=3D -march=3Dloongson2f -Wa,--trap
-+cflags-$(CONFIG_CPU_LOONGSON2E) +=3D $(call =
-cc-option,-march=3Dloongson2e,-march=3Dmips3) -Wa,--trap
-+cflags-$(CONFIG_CPU_LOONGSON2F) +=3D $(call =
-cc-option,-march=3Dloongson2f,-march=3Dmips3) -Wa,--trap
- # Some -march=3D flags enable MMI instructions, and GCC complains about =
-that
- # support being enabled alongside -msoft-float. Thus explicitly disable =
-MMI.
- cflags-$(CONFIG_CPU_LOONGSON2EF) +=3D $(call =
-cc-option,-mno-loongson-mmi)
-
-Will make them build.
-
-Thanks
-- Jiaxun=
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
