@@ -1,61 +1,54 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E849B6FD0
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 13:57:02 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id D6544225FF;
-	Thu,  6 Apr 2023 13:57:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1680789420; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JuI7rEXVAd5Io13zAc2gN/AbKEUjXYbUadrLZJs7G7I=;
-	b=WoQVQrTyFaKXRHQ6iNlVrkJacxZ6iPuOSlwv8FUO79mXniCR7F9KJ7FZLAnZMg3XfoJo+D
-	TQbwwjFidMIJu2OaeaYCg5kZdTzt/UU17Pe9/xutwnGcSUh84GxYzy8SXx/iJS2OBbTnQ9
-	tAjLcs8mYcatRmdu3jgboima/pORdq0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1680789420;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JuI7rEXVAd5Io13zAc2gN/AbKEUjXYbUadrLZJs7G7I=;
-	b=oQQ8i5x9muTG5IRPWHI/lZ59dWsyEuxxxsZtmpvMsqc+NcJfWSr5ttQUDlnB7X42A/toTH
-	wtozsY0g9vbLWfCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF57A1351F;
-	Thu,  6 Apr 2023 13:57:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id AHP4LazPLmRcGwAAMHmgww
-	(envelope-from <chrubis@suse.cz>); Thu, 06 Apr 2023 13:57:00 +0000
-Date: Thu, 6 Apr 2023 15:58:12 +0200
-From: Cyril Hrubis <chrubis@suse.cz>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Petr Vorel <pvorel@suse.cz>, Naresh Kamboju <naresh.kamboju@linaro.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	LTP List <ltp@lists.linux.it>, llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-	Benjamin Copeland <ben.copeland@linaro.org>,
-	Tudor Cretu <tudor.cretu@arm.com>
-Subject: Re: LTP: list of failures on 32bit and compat mode
-Message-ID: <ZC7P9BgW1CTFAMjB@yuki>
-References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
- <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
- <20230406105646.GB1545779@pevik>
- <7234b8ab-db5c-4f4a-bb9e-ddef9f1a50d3@app.fastmail.com>
- <20230406124812.GA1589248@pevik>
- <3c2ba6f9-bea1-4510-8fbb-6521fab74a9d@app.fastmail.com>
- <20230406131755.GA1608262@pevik>
- <c2a6d31f-173b-4d08-b377-e31748f33443@app.fastmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A784C6FD0;
+	Thu,  6 Apr 2023 14:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680791357; x=1712327357;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OpYHkeX595afcgkzZpsu41PvdqQrhRD1hTWyXGZwSZQ=;
+  b=VWpy1TuKtAlfR7W9sz2MeM9tK5QqxFZWkb80bySS2HHnxyGQROVKkUMj
+   PaW/DBN5N99HMy0x5GJCZro7pibrYLO8tT0zYel4RSN70mqdzRy2CBmak
+   W38XBeD+hfLiPmverYCsIY/nZz/3qmHKfa+tac4BPqlafMoImsDsIhU21
+   WG8WBxiRerVH7Fhq/5B9CjTv6Go31R2kLMNUL2lV/lKI1gu/vJNiwN+ly
+   HXp2w81f7cwjBbM6yG5h2CpXJi2cGBKPhamK+UsJopLxMsnkT4MfUK2+n
+   +WOv99Mw8ntksk0xPUnUFBIqUgZrskQgDG9zyVQYvgBB3Gyx1pKMJKqCg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="342754598"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="342754598"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 07:29:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="751659355"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="751659355"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2023 07:26:00 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pkQYk-000RQq-2Z;
+	Thu, 06 Apr 2023 14:25:54 +0000
+Date: Thu, 6 Apr 2023 22:25:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gautam Dawar <gautam.dawar@amd.com>, linux-net-drivers@amd.com,
+	jasowang@redhat.com, Edward Cree <ecree.xilinx@gmail.com>,
+	Martin Habets <habetsm.xilinx@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, eperezma@redhat.com, harpreet.anand@amd.com,
+	tanuj.kamde@amd.com, koushik.dutta@amd.com,
+	Gautam Dawar <gautam.dawar@amd.com>
+Subject: Re: [PATCH net-next v3 06/14] sfc: implement vDPA management device
+ operations
+Message-ID: <202304062258.oIHz9siw-lkp@intel.com>
+References: <20230406065706.59664-7-gautam.dawar@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,24 +57,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c2a6d31f-173b-4d08-b377-e31748f33443@app.fastmail.com>
+In-Reply-To: <20230406065706.59664-7-gautam.dawar@amd.com>
 
-Hi!
-> > Thanks! I've just searched in musl as well, because it didn't make sense to me
-> > it'd be a code for LTP.
-> >
-> > "to catch the fault on ltp" I wonder if it's not actually musl bug.
-> 
-> No, musl is fine here. The problem is that ltp passes an invalid pointer,
-> expecting to get -EFAULT from the kernel when that faults in
-> copy_to_user().
-> 
-> There is nothing wrong with musl sanitizing the data behind that
-> pointer, but then you get a signal instead of the EFAULT error.
+Hi Gautam,
 
-That's actually quite common, usually we fix that by running the test in
-a child and treating SEGFAULT as a PASS.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gautam-Dawar/sfc-add-function-personality-support-for-EF100-devices/20230406-151436
+patch link:    https://lore.kernel.org/r/20230406065706.59664-7-gautam.dawar%40amd.com
+patch subject: [PATCH net-next v3 06/14] sfc: implement vDPA management device operations
+config: x86_64-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230406/202304062258.oIHz9siw-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0887a40c60d1983214d417491dc9ef46191ab1ac
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Gautam-Dawar/sfc-add-function-personality-support-for-EF100-devices/20230406-151436
+        git checkout 0887a40c60d1983214d417491dc9ef46191ab1ac
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/sfc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304062258.oIHz9siw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/sfc/ef100_vdpa.c:184:12: warning: variable 'efx' is uninitialized when used here [-Wuninitialized]
+                           pci_err(efx->pci_dev, "Invalid MAC address %pM\n",
+                                   ^~~
+   include/linux/pci.h:2548:46: note: expanded from macro 'pci_err'
+   #define pci_err(pdev, fmt, arg...)      dev_err(&(pdev)->dev, fmt, ##arg)
+                                                     ^~~~
+   include/linux/dev_printk.h:144:44: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                     ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                           ^~~
+   drivers/net/ethernet/sfc/ef100_vdpa.c:179:21: note: initialize the variable 'efx' to silence this warning
+           struct efx_nic *efx;
+                              ^
+                               = NULL
+   1 warning generated.
+
+
+vim +/efx +184 drivers/net/ethernet/sfc/ef100_vdpa.c
+
+   171	
+   172	static int ef100_vdpa_net_dev_add(struct vdpa_mgmt_dev *mgmt_dev,
+   173					  const char *name,
+   174					  const struct vdpa_dev_set_config *config)
+   175	{
+   176		struct ef100_vdpa_nic *vdpa_nic;
+   177		struct ef100_nic_data *nic_data;
+   178		const u8 *mac = NULL;
+   179		struct efx_nic *efx;
+   180		int rc, err;
+   181	
+   182		if (config->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR)) {
+   183			if (!is_valid_ether_addr(config->net.mac)) {
+ > 184				pci_err(efx->pci_dev, "Invalid MAC address %pM\n",
+   185					config->net.mac);
+   186				return -EINVAL;
+   187			}
+   188			mac = (const u8 *)config->net.mac;
+   189		}
+   190	
+   191		efx = pci_get_drvdata(to_pci_dev(mgmt_dev->device));
+   192		if (efx->vdpa_nic) {
+   193			pci_warn(efx->pci_dev,
+   194				 "vDPA device already exists on this VF\n");
+   195			return -EEXIST;
+   196		}
+   197	
+   198		nic_data = efx->nic_data;
+   199	
+   200		rc = efx_ef100_set_bar_config(efx, EF100_BAR_CONFIG_VDPA);
+   201		if (rc) {
+   202			pci_err(efx->pci_dev,
+   203				"set_bar_config vDPA failed, err: %d\n", rc);
+   204			goto err_set_bar_config;
+   205		}
+   206	
+   207		vdpa_nic = ef100_vdpa_create(efx, name, EF100_VDPA_CLASS_NET, mac);
+   208		if (IS_ERR(vdpa_nic)) {
+   209			pci_err(efx->pci_dev,
+   210				"vDPA device creation failed, vf: %u, err: %ld\n",
+   211				nic_data->vf_index, PTR_ERR(vdpa_nic));
+   212			rc = PTR_ERR(vdpa_nic);
+   213			goto err_set_bar_config;
+   214		} else {
+   215			pci_dbg(efx->pci_dev,
+   216				"vdpa net device created, vf: %u\n",
+   217				nic_data->vf_index);
+   218		}
+   219	
+   220		return 0;
+   221	
+   222	err_set_bar_config:
+   223		err = efx_ef100_set_bar_config(efx, EF100_BAR_CONFIG_EF100);
+   224		if (err)
+   225			pci_err(efx->pci_dev,
+   226				"set_bar_config EF100 failed, err: %d\n", err);
+   227	
+   228		return rc;
+   229	}
+   230	
 
 -- 
-Cyril Hrubis
-chrubis@suse.cz
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
