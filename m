@@ -1,209 +1,75 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B085A21
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 03:47:47 +0000 (UTC)
-Received: by mail-oo1-f42.google.com with SMTP id n6-20020a4abd06000000b0053b59893660so6009549oop.0
-        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 20:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680752866; x=1683344866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YOQyXiF6H32qjkbnMHBLAnQGR5UU6PO5KDbekZHdUSo=;
-        b=HJTZeaB3FWyeKAWAaoBXmGAq3xziEUF0GuRnpfvm6j4J4qHmlC76aYg3Sby0RPiigC
-         nIxmToYWBSZn6qx8L0udvCx/Zj/VeP3MB3xREKMduoBAY/ws2ndZKtY7hh7AuUlVmnCu
-         i5eHBVnyZe877m6WyTMryR806FB5XFZsWRx5sXP0BSSDDIa+2Ol5RgXw8zFpWp4/dkcJ
-         J60mskmq1TPD0JSqGqrFzFV1kjwJ3Uw8l4i/qaV9AsX5ngf78v32HDqkz1NwxvT9lomI
-         aOYlqLKIDEq3dqH1FmJHRK87ICzOfor25rbAvuzC1Ry2KdPbNaDn21jRpkxLsHKL3etx
-         Yzkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680752866; x=1683344866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YOQyXiF6H32qjkbnMHBLAnQGR5UU6PO5KDbekZHdUSo=;
-        b=cSmy0vRbN4VhYAqKYBRzH6NhWcSjFhsfw776HkthsF0PGFHnQ1ltPvTwq0EwL6hA94
-         2nETsaQ2CDUrveLpbDfb7QVYwIKPuGm85Uhz/9kMlbuPWiQAxQVIU9Gbs+spIiFi5JEL
-         FDuO72l8GqolQNKXIhEHlZCgEE+lj66eEYOR+cvGLNq3PsE6pqKv0vJvbBJ02BfTl/oh
-         aVymKZas8GSk9AqcydWOdIu8iI8fJftk3koed0qF1Fj9SomoWH9qzuRtmClIsjkaiRpA
-         9O0UNza4+b6QPyuw0SnPLIvPQ1LSNgx9pxuwi4jSqbid252WcYxkErE6R+MRbHiGXj5A
-         PAQg==
-X-Gm-Message-State: AAQBX9eOAnrfHcOPxazQFmkwWmE0SSJvWMtKP1Se9G+XTLpB6WrMWC4D
-	6BYJ/w+KwqVOFxSYqJy/oxi/HQ==
-X-Google-Smtp-Source: AKy350ZkL5S/RfJe6PTFOfG3x5lJGeLEQLGO93kjuxHnHTjvtMezmwr1ISkQU/V4CeeOWnC/nvBXXA==
-X-Received: by 2002:a4a:414c:0:b0:538:4d29:30cb with SMTP id x73-20020a4a414c000000b005384d2930cbmr4467173ooa.8.1680752866306;
-        Wed, 05 Apr 2023 20:47:46 -0700 (PDT)
-Received: from sunil-laptop ([106.51.83.242])
-        by smtp.gmail.com with ESMTPSA id w127-20020a4a5d85000000b00525398a1144sm88871ooa.32.2023.04.05.20.47.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 20:47:46 -0700 (PDT)
-Date: Thu, 6 Apr 2023 09:17:34 +0530
-From: Sunil V L <sunilvl@ventanamicro.com>
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Weili Qian <qianweili@huawei.com>,
-	Zhou Wang <wangzhou1@hisilicon.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Marc Zyngier <maz@kernel.org>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Gross <markgross@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH V4 15/23] irqchip/riscv-intc: Add ACPI support
-Message-ID: <ZC5A1oBOhOn4R0tm@sunil-laptop>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-16-sunilvl@ventanamicro.com>
- <qxftlofleo2bpyqa5lyshiluc5cd37u4hljn4bh7noxv7g5pno@ldvh6gkyrlzu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9019AA21;
+	Thu,  6 Apr 2023 03:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680753227; x=1712289227;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=R2SCAp1rnJv8siVz44WW8dQ1n5FlYjG1RN2XpmcPq94=;
+  b=n/BfFkAWxiZtTq0kp2NIx3LAhjKVD71nba1klSC7x3k9B4NXckc9WXaZ
+   exj+GI/Dg7xcXzunamRdEYCSbL/RY/4qzfV+PBJM624uYkauuxUglqjdu
+   NkIHkWaFQ7IeonCepbiphLScvInm6cVNO6AA8uN6jgU6bUoXjUoxiLl/d
+   naQbeCSf0mQ+3BdRJ3jkf4FyDSkOs4hTIN4wkjdi7SKA74uW+OgYBPzhI
+   9m3GaCO2oHpRZp0I4qOh8YKz8Rjifmv5R3hjYNYAKOvfB0AvJH8z3Pu6w
+   1lEileXucD8gLIuKKnJ2c5uGqmp80e4TXZVAZ4bzpT3AX0gSoA4pr384A
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="405415763"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="405415763"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 20:53:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="861233846"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="861233846"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga005.jf.intel.com with ESMTP; 05 Apr 2023 20:53:43 -0700
+Message-ID: <b5c854ae-a877-3ac4-ffa1-e91309a358f4@linux.intel.com>
+Date: Thu, 6 Apr 2023 11:53:53 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <qxftlofleo2bpyqa5lyshiluc5cd37u4hljn4bh7noxv7g5pno@ldvh6gkyrlzu>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc: baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
+ Nicolin Chen <nicolinc@nvidia.com>
+Subject: Re: [PATCH v3 15/17] iommu: Allow IOMMU_RESV_DIRECT to work on ARM
+Content-Language: en-US
+To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
+ Will Deacon <will@kernel.org>
+References: <15-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <15-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 05, 2023 at 05:48:47PM +0200, Andrew Jones wrote:
-> On Tue, Apr 04, 2023 at 11:50:29PM +0530, Sunil V L wrote:
-> > Add support for initializing the RISC-V INTC driver on ACPI
-> > platforms.
-> > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  drivers/irqchip/irq-riscv-intc.c | 74 ++++++++++++++++++++++++++------
-> >  1 file changed, 61 insertions(+), 13 deletions(-)
-> > 
-> > diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-> > index f229e3e66387..6b476fa356c0 100644
-> > --- a/drivers/irqchip/irq-riscv-intc.c
-> > +++ b/drivers/irqchip/irq-riscv-intc.c
-> > @@ -6,6 +6,7 @@
-> >   */
-> >  
-> >  #define pr_fmt(fmt) "riscv-intc: " fmt
-> > +#include <linux/acpi.h>
-> >  #include <linux/atomic.h>
-> >  #include <linux/bits.h>
-> >  #include <linux/cpu.h>
-> > @@ -112,6 +113,30 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
-> >  	return intc_domain->fwnode;
-> >  }
-> >  
-> > +static int __init riscv_intc_init_common(struct fwnode_handle *fn)
-> > +{
-> > +	int rc;
-> > +
-> > +	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
-> > +					       &riscv_intc_domain_ops, NULL);
-> > +	if (!intc_domain) {
-> > +		pr_err("unable to add IRQ domain\n");
-> > +		return -ENXIO;
-> > +	}
-> > +
-> > +	rc = set_handle_irq(&riscv_intc_irq);
-> > +	if (rc) {
-> > +		pr_err("failed to set irq handler\n");
-> > +		return rc;
-> > +	}
-> > +
-> > +	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> > +
-> > +	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int __init riscv_intc_init(struct device_node *node,
-> >  				  struct device_node *parent)
-> >  {
-> > @@ -133,24 +158,47 @@ static int __init riscv_intc_init(struct device_node *node,
-> >  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
-> >  		return 0;
-> >  
-> > -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
-> > -					    &riscv_intc_domain_ops, NULL);
-> > -	if (!intc_domain) {
-> > -		pr_err("unable to add IRQ domain\n");
-> > -		return -ENXIO;
-> > -	}
-> > -
-> > -	rc = set_handle_irq(&riscv_intc_irq);
-> > +	rc = riscv_intc_init_common(of_node_to_fwnode(node));
-> >  	if (rc) {
-> > -		pr_err("failed to set irq handler\n");
-> > +		pr_err("failed to initialize INTC\n");
+On 4/6/23 7:38 AM, Jason Gunthorpe wrote:
+> For now several ARM drivers do not allow mappings to be created until a
+> domain is attached. This means they do not technically support
+> IOMMU_RESV_DIRECT as it requires the 1:1 maps to work continuously.
 > 
-> The ACPI version doesn't output this error when riscv_intc_init_common()
-> fails. It should probably be consistent. Either removing it here, if the
-> errors output within riscv_intc_init_common() are sufficient, or adding
-> it to the ACPI version.
+> Currently if the platform requests these maps on ARM systems they are
+> silently ignored.
 > 
-> >  		return rc;
-> >  	}
-> >  
-> > -	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> > -
-> > -	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> > -
-> >  	return 0;
-> >  }
-> >  
-> >  IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
-> > +
-> > +#ifdef CONFIG_ACPI
-> > +
-> > +static int __init riscv_intc_acpi_init(union acpi_subtable_headers *header,
-> > +				       const unsigned long end)
-> > +{
-> > +	int rc;
-> > +	struct fwnode_handle *fn;
-> > +	struct acpi_madt_rintc *rintc;
-> > +
-> > +	rintc = (struct acpi_madt_rintc *)header;
-> > +
-> > +	/*
-> > +	 * The ACPI MADT will have one INTC for each CPU (or HART)
-> > +	 * so riscv_intc_acpi_init() function will be called once
-> > +	 * for each INTC. We only do INTC initialization
-> > +	 * for the INTC belonging to the boot CPU (or boot HART).
-> > +	 */
-> > +	if (riscv_hartid_to_cpuid(rintc->hart_id) != smp_processor_id())
-> > +		return 0;
-> > +
-> > +	fn = irq_domain_alloc_named_fwnode("RISCV-INTC");
-> > +	if (!fn) {
-> > +		pr_err("unable to allocate INTC FW node\n");
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	rc = riscv_intc_init_common(fn);
-> > +	return rc;
+> Work around this by trying again to establish the direct mappings after
+> the domain is attached if the pre-attach attempt failed.
 > 
-> nit: If we don't add the error message here, then rc can be removed and we
-> can just do
+> In the long run the drivers will be fixed to fully setup domains when they
+> are created without waiting for attachment.
 > 
->   return riscv_intc_init_common(fn);
-> 
-> And, if we remove the error above, then we reduce the return there too.
-> 
-Make sense. Thanks!. Will update in next revision.
+> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
 
-Thanks,
-Sunil
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Best regards,
+baolu
