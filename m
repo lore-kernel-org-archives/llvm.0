@@ -1,14 +1,14 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84CE8BE0;
-	Thu,  6 Apr 2023 15:45:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DC18F53;
+	Thu,  6 Apr 2023 15:58:33 +0000 (UTC)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 368D5169E;
-	Thu,  6 Apr 2023 08:45:48 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70A1A169E;
+	Thu,  6 Apr 2023 08:59:17 -0700 (PDT)
 Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CD0A3F762;
-	Thu,  6 Apr 2023 08:45:02 -0700 (PDT)
-Message-ID: <51111b86-97af-b3d2-d3e8-5cebc350f37f@arm.com>
-Date: Thu, 6 Apr 2023 16:44:57 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 195823F6C4;
+	Thu,  6 Apr 2023 08:58:29 -0700 (PDT)
+Message-ID: <b1cb0567-5c60-22ce-220d-65302b9f36ad@arm.com>
+Date: Thu, 6 Apr 2023 16:58:27 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -17,8 +17,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v3 07/17] iommu: Make iommu_group_do_dma_first_attach()
- simpler
+Subject: Re: [PATCH v3 06/17] iommu: Replace __iommu_group_dma_first_attach()
+ with set_domain
 Content-Language: en-GB
 To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
  Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
@@ -27,100 +27,88 @@ To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
  Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
 Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
  Nicolin Chen <nicolinc@nvidia.com>
-References: <7-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
+References: <6-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
 From: Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <7-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
+In-Reply-To: <6-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 06/04/2023 12:38 am, Jason Gunthorpe wrote:
-> It should always attach to the current group->domain, so don't take in a
-> domain parameter. Use the __iommu_device_set_domain() common code to
-> handle the attach.
+> Prepare for removing the group->domain set from
+> iommu_group_alloc_default_domain() by calling
+> __iommu_group_set_domain_internal() to set the group->domain.
+> 
+> Add IOMMU_SET_DOMAIN_WITH_DEFERRED to allow it to do the attach_deferred
+> logic.
 
-Hmm, why do we still end up with this in two places, and potentially 
-called twice in the same path?
+This is way overcomplicated; if we evaluate iommu_is_attach_deferred() 
+earlier in the probe_device path, then the rest of the handling at the 
+point of attach should simply reduce to:
 
-iommu_probe_device()
-   __iommu_probe_device()
-     iommu_group_get_for_dev()
-       iommu_group_add_device()
-         iommu_group_do_dma_first_attach()
-   iommu_create_device_direct_mappings()
-   iommu_group_do_dma_first_attach()
+	if (dev->iommu->attach_deferred && iommu_is_dma_domain(domain))
+		return 0;
 
-Seems off to me... at best it's confusing, but at worst it's plain wrong 
-(it's the one in iommu_group_add_device() that I'm most suspicious of)
-
-Not to mention the slightly different open-coded variant we still seem 
-to have in iommu_setup_default_domain() via the "else if 
-(!group->default_domain)" path :/
-
-(BTW if any comments seem misplaced, it's because I'm really looking at 
-the end result at the cover-letter commit in your branch, rather than 
-trying to review each patch independently)
+No magical flags required, and especially not the confusing thing with 
+group-owner because the thing that still says it's for attaching the 
+default domain now might also be attaching a non-default domain.
 
 Thanks,
 Robin.
 
+> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 > ---
->   drivers/iommu/iommu.c | 22 +++++++++-------------
->   1 file changed, 9 insertions(+), 13 deletions(-)
+>   drivers/iommu/iommu.c | 18 +++++++++++-------
+>   1 file changed, 11 insertions(+), 7 deletions(-)
 > 
 > diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index af3af752c255e4..c68cf551d05dc4 100644
+> index cd75d7405a3051..af3af752c255e4 100644
 > --- a/drivers/iommu/iommu.c
 > +++ b/drivers/iommu/iommu.c
-> @@ -105,6 +105,10 @@ enum {
->   	IOMMU_SET_DOMAIN_WITH_DEFERRED = 1 << 1,
+> @@ -102,6 +102,7 @@ static int __iommu_attach_group(struct iommu_domain *domain,
+>   
+>   enum {
+>   	IOMMU_SET_DOMAIN_MUST_SUCCEED = 1 << 0,
+> +	IOMMU_SET_DOMAIN_WITH_DEFERRED = 1 << 1,
 >   };
 >   
-> +static int __iommu_device_set_domain(struct iommu_group *group,
-> +				     struct device *dev,
-> +				     struct iommu_domain *new_domain,
-> +				     unsigned int flags);
 >   static int __iommu_group_set_domain_internal(struct iommu_group *group,
->   					     struct iommu_domain *new_domain,
->   					     unsigned int flags);
-> @@ -405,18 +409,10 @@ static bool iommu_is_attach_deferred(struct device *dev)
->   	return false;
+> @@ -1855,12 +1856,6 @@ static void probe_alloc_default_domain(struct bus_type *bus,
+>   
 >   }
 >   
-> -static int iommu_group_do_dma_first_attach(struct device *dev, void *data)
-> +static int iommu_group_do_dma_first_attach(struct iommu_group *group, struct device *dev)
+> -static int __iommu_group_dma_first_attach(struct iommu_group *group)
+> -{
+> -	return __iommu_group_for_each_dev(group, group->default_domain,
+> -					  iommu_group_do_dma_first_attach);
+> -}
+> -
+>   static int iommu_group_do_probe_finalize(struct device *dev, void *data)
 >   {
-> -	struct iommu_domain *domain = data;
-> -
-> -	lockdep_assert_held(&dev->iommu_group->mutex);
-> -
-> -	if (iommu_is_attach_deferred(dev)) {
-> -		dev->iommu->attach_deferred = 1;
-> -		return 0;
-> -	}
-> -
-> -	return __iommu_attach_device(domain, dev);
-> +	return __iommu_device_set_domain(group, dev, group->domain,
-> +					 IOMMU_SET_DOMAIN_WITH_DEFERRED);
->   }
+>   	const struct iommu_ops *ops = dev_iommu_ops(dev);
+> @@ -1923,7 +1918,10 @@ int bus_iommu_probe(struct bus_type *bus)
 >   
->   int iommu_probe_device(struct device *dev)
-> @@ -449,7 +445,7 @@ int iommu_probe_device(struct device *dev)
->   	 * attach the default domain.
->   	 */
->   	if (group->default_domain && !group->owner) {
-> -		ret = iommu_group_do_dma_first_attach(dev, group->default_domain);
-> +		ret = iommu_group_do_dma_first_attach(group, dev);
->   		if (ret) {
->   			mutex_unlock(&group->mutex);
->   			iommu_group_put(group);
-> @@ -1117,7 +1113,7 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
->   	mutex_lock(&group->mutex);
->   	list_add_tail(&device->list, &group->devices);
->   	if (group->domain)
-> -		ret = iommu_group_do_dma_first_attach(dev, group->domain);
-> +		ret = iommu_group_do_dma_first_attach(group, dev);
->   	mutex_unlock(&group->mutex);
->   	if (ret)
->   		goto err_put_group;
+>   		iommu_group_create_direct_mappings(group);
+>   
+> -		ret = __iommu_group_dma_first_attach(group);
+> +		group->domain = NULL;
+> +		ret = __iommu_group_set_domain_internal(
+> +			group, group->default_domain,
+> +			IOMMU_SET_DOMAIN_WITH_DEFERRED);
+>   
+>   		mutex_unlock(&group->mutex);
+>   
+> @@ -2218,6 +2216,12 @@ static int __iommu_device_set_domain(struct iommu_group *group,
+>   {
+>   	int ret;
+>   
+> +	if ((flags & IOMMU_SET_DOMAIN_WITH_DEFERRED) &&
+> +	    iommu_is_attach_deferred(dev)) {
+> +		dev->iommu->attach_deferred = 1;
+> +		return 0;
+> +	}
+> +
+>   	ret = __iommu_attach_device(new_domain, dev);
+>   	if (ret) {
+>   		/*
