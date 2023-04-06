@@ -1,248 +1,115 @@
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0947D533;
-	Thu,  6 Apr 2023 21:30:35 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.west.internal (Postfix) with ESMTP id C51783200A6A;
-	Thu,  6 Apr 2023 17:30:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 06 Apr 2023 17:30:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1680816634; x=1680903034; bh=6WVpbx6zgP8y2bseGHPdug1N1ke5pDhH3B9
-	9UC+uihE=; b=kzeAqry5E+Sz5FkvXjM5YclXfrMnu1f4vbBA6id41iuS8GRrNsh
-	8Laf4EvUtWNscLoGuPlJK7oblvmS3PtGUwM+49oMDkKMbhhCCv7YLC3wKe5wbuoS
-	P+RO/M+ST2AmqqSTVCcj1p6v3EoKqYa88hR5UgvNXvpIma37AtMuws1SvyIhaDTx
-	XK5O6ftSalbUW7z10F9waIEKCDkMk+olkXin+kGQkgVgjFvYt6CsJ9NMWdxI60hO
-	DobYgVz6NEsLpJPXNVI8qEoTOE/dcDFZOd8bsSpnXJ1WerPF8qwy7vhag1AopceB
-	iUdUJUgKXOQinqhoWsqu7yOGpSY8bHZXK+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1680816634; x=1680903034; bh=6WVpbx6zgP8y2bseGHPdug1N1ke5pDhH3B9
-	9UC+uihE=; b=CMtInbduQrwqcfVeNPU7SD7fti4Kuj4c5tGu5ojEypP3LwV/BAs
-	fznSkxJUBvY+MTEZ6AqBM+eAtQserDW8w37InKN7dwcpg/DrKtrE1eybwP8Xqo4p
-	hnFcbFEF/I7mvTIVHZkFUdm1KbRzAHBIYV+c+LCqfDunXabOc0ucs/uaWfm/EIHs
-	qtJYlplFixmi4Lw9MXxL//D0bEUQ+WDN88cr1zCd7khQHH+0SHfJIWoIJyLZ9ZuU
-	ujV37M9x3naue3N23v5/xXpShTENFr81Y2Hxe5RpuhfxL9A22H9atl3q0QmPGI0f
-	rBF0o2Zo4V1+DZSsNdETIsNGSdYF7xlMF5g==
-X-ME-Sender: <xms:-jkvZC8wtozsqEsf4XlE0PgtoPvJTOlmQQe-EvOlGZH3_j8j7GA_KQ>
-    <xme:-jkvZCvaJg5mNUxJQZ-8SjcaxO8ilUwj6N7Po-HEZVK5bt_51AEUGeeVQHqGjZBoJ
-    fs8GQd8z2SEfxwPYwg>
-X-ME-Received: <xmr:-jkvZIDekU-sUEwKVzhNwn4EUw8o3-1boiwjgPiL7lfAoWAu0zdnAgtu0h1ahDdjF0Y4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgudeitdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeeuhfevudelffegteegiedttdejtdejfedvveeltefgvdev
-    udetledtgeejgfeggeenucffohhmrghinheplhhlvhhmrdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:-jkvZKco5lFou0GO0o7oHSSrBn0DPoINTb39sZqy1HtEW0C_yIZZsQ>
-    <xmx:-jkvZHMdvS-NHZoJDqMtSXY5iWWrxmO4b_Np9NacLnphJC2zPpjJgQ>
-    <xmx:-jkvZEl45ZzY4fbs8XXexdWSKUqJm8gvxmotQrk0RgDV86AWVZQBpA>
-    <xmx:-jkvZAo-f17elXyFtgZWzmMZNfQXG3uefwLkpkr2he2fFtTHYoeUUg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Apr 2023 17:30:33 -0400 (EDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FC1D533
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 21:31:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B66C4339B;
+	Thu,  6 Apr 2023 21:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680816694;
+	bh=HelVz4kZbXm+Rah9vhJsCLUNIR4bUm6nFIAmLLiqkbk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lYTjVd7ywbGnEhbcl/2fL2KfwQuymIsZ12J9dzXUJHlq2XaswYhR83+D5ASKktb3/
+	 1RlaEQyMvPpyMrgnCQTfuMEhat2SkkcDZ5rqGxtmshO5Qg92R0+DrE6uGRszPqz9KN
+	 iCI874zc0TPXflOIOAgvaTv9q2u/n7IPseMnVuoYp0KVWNIjYp+SfZo6hgxaloibjh
+	 cJHgr9ja/hY2Fd/7EwNWHt4iTji/qTjXuGd9YIvFyc4GDim43k8yWJX1YFRpS+DrVu
+	 Q49+reVSQKb6UxpQIQnzcb+LMJ9kkj3/G9BCxksEcD6R0T24Rf+OgBnW5TZRpRgvd+
+	 Q9Q68OaYKr/1Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+	id 12E164052D; Thu,  6 Apr 2023 18:31:32 -0300 (-03)
+Date: Thu, 6 Apr 2023 18:31:32 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH] tools: Rename __fallthrough to fallthrough
+Message-ID: <ZC86NOtaBPi1lhtI@kernel.org>
+References: <20221125154947.2163498-1-Liam.Howlett@oracle.com>
+ <CANiq72ntFXb+ZhBqgBAMu2n8wcgJLZRZC1rmBVvL5m+K1Nhw2w@mail.gmail.com>
+ <20230406195830.ieiozetmk7qjllol@revolver>
+ <CANiq72=C4OCcbX4C-ap3YTm5Ni6RdskQ67rt4iWs0_1hTe1rkw@mail.gmail.com>
+ <ZC81Z4p8WnYtVwFT@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH] MIPS: generic: Do not select CPUs that are unsupported in
- clang
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <EBE3E940-B8EE-4682-A1F6-1CCF98EAC2E6@flygoat.com>
-Date: Thu, 6 Apr 2023 22:30:22 +0100
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- llvm@lists.linux.dev,
- patches@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6B77736C-1015-45A7-A48A-92E4CBE95ACA@flygoat.com>
-References: <20230406-mips-clang-generic-selects-fix-v1-1-811690c9fb69@kernel.org>
- <AAAAB6A1-81EE-42A8-84F7-CF8D0DA16456@flygoat.com>
- <20230406210953.GA53516@dev-arch.thelio-3990X>
- <EBE3E940-B8EE-4682-A1F6-1CCF98EAC2E6@flygoat.com>
-To: Nathan Chancellor <nathan@kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZC81Z4p8WnYtVwFT@kernel.org>
+X-Url: http://acmel.wordpress.com
+
+Em Thu, Apr 06, 2023 at 06:11:03PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, Apr 06, 2023 at 10:02:57PM +0200, Miguel Ojeda escreveu:
+> > On Thu, Apr 6, 2023 at 9:58 PM Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+> > >
+> > > Any chance of this being accepted?  I'm looking to use this in the radix
+> > > test suite and would rather not duplicate code.
+> > 
+> > That would be up to the `tools/perf/` maintainers.
+> 
+> Thanks, applied,
+
+So, I noticed some missing conversions, fixed that, but then when trying
+to test build it with:
+
+	make -C tools/perf build-test
+
+I stumbled on this:
+
+             make_with_gtk2: cd . && make GTK2=1 -j32  DESTDIR=/tmp/tmp.5AP8tPJgiT
+cd . && make GTK2=1 -j32 DESTDIR=/tmp/tmp.5AP8tPJgiT
+  BUILD:   Doing 'make -j32' parallel build
+  HOSTCC  fixdep.o
+  HOSTLD  fixdep-in.o
+<SNIP>
+  CC      trace/beauty/ioctl.o
+In file included from /usr/lib64/glib-2.0/include/glibconfig.h:9,
+                 from /usr/include/glib-2.0/glib/gtypes.h:34,
+                 from /usr/include/glib-2.0/glib/galloca.h:34,
+                 from /usr/include/glib-2.0/glib.h:32,
+                 from /usr/include/glib-2.0/gobject/gbinding.h:30,
+                 from /usr/include/glib-2.0/glib-object.h:24,
+                 from /usr/include/glib-2.0/gio/gioenums.h:30,
+                 from /usr/include/glib-2.0/gio/giotypes.h:30,
+                 from /usr/include/glib-2.0/gio/gio.h:28,
+                 from /usr/include/gtk-2.0/gdk/gdkapplaunchcontext.h:30,
+                 from /usr/include/gtk-2.0/gdk/gdk.h:32,
+                 from /usr/include/gtk-2.0/gtk/gtk.h:32,
+                 from ui/gtk/gtk.h:8,
+                 from ui/gtk/helpline.c:6:
+/usr/include/glib-2.0/glib/gmacros.h:637:28: error: missing ')' after "__has_attribute"
+  637 | #if g_macro__has_attribute(fallthrough)
+      |                            ^~~~~~~~~~~
+In file included from /var/home/acme/git/perf-tools-next/tools/include/linux/compiler_types.h:36,
+                 from /var/home/acme/git/perf-tools-next/tools/include/linux/compiler.h:5,
+                 from /var/home/acme/git/perf-tools-next/tools/include/linux/build_bug.h:5,
+                 from /var/home/acme/git/perf-tools-next/tools/include/linux/kernel.h:8,
+                 from ui/gtk/helpline.c:4:
+/var/home/acme/git/perf-tools-next/tools/include/linux/compiler-gcc.h:16:55: error: missing binary operator before token "("
+   16 | # define fallthrough                    __attribute__((__fallthrough__))
+      |                                                       ^
+/usr/include/glib-2.0/glib/gmacros.h:637:28: note: in expansion of macro ‘fallthrough’
+  637 | #if g_macro__has_attribute(fallthrough)
+      |                            ^~~~~~~~~~~
+  CC      trace/beauty/kcmp.o
+  CC      bench/sched-messaging.o
+  CC      trace/beauty/mount_flags.o
 
 
+I'm trying to fix this now...
 
-> 2023=E5=B9=B44=E6=9C=886=E6=97=A5 22:19=EF=BC=8CJiaxun Yang =
-<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
->=20
->=20
->> 2023=E5=B9=B44=E6=9C=886=E6=97=A5 22:09=EF=BC=8CNathan Chancellor =
-<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
->>=20
->> On Thu, Apr 06, 2023 at 09:59:45PM +0100, Jiaxun Yang wrote:
->>>=20
->>>=20
->>>> 2023=E5=B9=B44=E6=9C=886=E6=97=A5 21:09=EF=BC=8CNathan Chancellor =
-<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
->>>>=20
->>>> When building allnoconfig with clang after commit de34007751aa =
-("MIPS:
->>>> generic: Enable all CPUs supported by virt board in Kconfig"), the
->>>> following error occurs:
->>>>=20
->>>> error: unknown target CPU 'r4600'
->>>> note: valid target CPU values are: mips1, mips2, mips3, mips4, =
-mips5, mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2, =
-mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
->>>>=20
->>>> Working around that, there are similar errors for 'loongson2e' and
->>>> 'loongson2f'.
->>>>=20
->>>> These CPUs are not supported in clang/LLVM, so do not select =
-support for
->>>> them in MIPS_GENERIC_KERNEL when building with clang.
->>>>=20
->>>> Fixes: de34007751aa ("MIPS: generic: Enable all CPUs supported by =
-virt board in Kconfig")
->>>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->>>=20
->>> Thanks for the patch.
->>>=20
->>> Actually there is no need for any special support for those CPUs.
->>> We should be able to build those kernels with -march=3Dmips3.
->>>=20
->>> I think something like:
->>>=20
->>> --- a/arch/mips/Makefile
->>> +++ b/arch/mips/Makefile
->>> @@ -150,7 +150,7 @@ cflags-y +=3D $(call =
-cc-option,-Wa$(comma)-mno-fix-loongson3-llsc,)
->>> #
->>> cflags-$(CONFIG_CPU_R3000)     +=3D -march=3Dr3000
->>> cflags-$(CONFIG_CPU_R4300)     +=3D -march=3Dr4300 -Wa,--trap
->>> -cflags-$(CONFIG_CPU_R4X00)     +=3D -march=3Dr4600 -Wa,--trap
->>> +cflags-$(CONFIG_CPU_R4X00)     +=3D $(call =
-cc-option,-march=3Dr4600,-march=3Dmips3) -Wa,--trap
->>> cflags-$(CONFIG_CPU_TX49XX)    +=3D -march=3Dr4600 -Wa,--trap
->>> cflags-$(CONFIG_CPU_MIPS32_R1) +=3D -march=3Dmips32 -Wa,--trap
->>> cflags-$(CONFIG_CPU_MIPS32_R2) +=3D -march=3Dmips32r2 -Wa,--trap
->>> @@ -181,8 +181,8 @@ endif
->>> cflags-$(CONFIG_CAVIUM_CN63XXP1) +=3D -Wa,-mfix-cn63xxp1
->>> cflags-$(CONFIG_CPU_BMIPS)     +=3D -march=3Dmips32 -Wa,-mips32 =
--Wa,--trap
->>>=20
->>> -cflags-$(CONFIG_CPU_LOONGSON2E) +=3D -march=3Dloongson2e -Wa,--trap
->>> -cflags-$(CONFIG_CPU_LOONGSON2F) +=3D -march=3Dloongson2f -Wa,--trap
->>> +cflags-$(CONFIG_CPU_LOONGSON2E) +=3D $(call =
-cc-option,-march=3Dloongson2e,-march=3Dmips3) -Wa,--trap
->>> +cflags-$(CONFIG_CPU_LOONGSON2F) +=3D $(call =
-cc-option,-march=3Dloongson2f,-march=3Dmips3) -Wa,--trap
->>> # Some -march=3D flags enable MMI instructions, and GCC complains =
-about that
->>> # support being enabled alongside -msoft-float. Thus explicitly =
-disable MMI.
->>> cflags-$(CONFIG_CPU_LOONGSON2EF) +=3D $(call =
-cc-option,-mno-loongson-mmi)
->>>=20
->>> Will make them build.
->>=20
->> Thank you for taking a look and the suggestion! I applied it and =
-tried
->> to build allnoconfig but I get
->>=20
->> error: ABI 'o32' is not supported on CPU 'mips3'
->>=20
->> immediately, which could certainly be a bug in clang...
->=20
-> There is a clang patch:
-> https://reviews.llvm.org/D146269
->=20
-> I=E2=80=99ve seen this warning with CONFIG_MIPS32_O32 enabled, but I =
-think that=E2=80=99s not the case for allnoconfig...
-
-
-Oh I see, it=E2=80=99s trying to build a o32 kernel.
-
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -1579,7 +1579,7 @@ config CPU_R4300
-config CPU_R4X00
-bool "R4x00"
-depends on SYS_HAS_CPU_R4X00
-- select CPU_SUPPORTS_32BIT_KERNEL
-+ select CPU_SUPPORTS_32BIT_KERNEL if CC_SUPPORTS_O32_WITH_64BIT_ARCH
-select CPU_SUPPORTS_64BIT_KERNEL
-select CPU_SUPPORTS_HUGEPAGES
-help
-@@ -1743,9 +1743,11 @@ config CPU_MIPS32_R5_XPA
-if CPU_LOONGSON2F
-config CPU_NOP_WORKAROUNDS
-bool
-+ depends on $(cc-option,-Wa,-mfix-loongson2f-nop)
-config CPU_JUMP_WORKAROUNDS
-bool
-+ depends on $(cc-option,-Wa,-mfix-loongson2f-jump)
-config CPU_LOONGSON2F_WORKAROUNDS
-bool "Loongson 2F Workarounds"
-@@ -2497,6 +2499,7 @@ config CPU_HAS_SYNC
-# "MIPS R4400MC Errata, Processor Revision 1.0", erratum #5
-config CPU_DADDI_WORKAROUNDS
-bool
-+ depends on $(cc-option,-mno-daddi)
-# Work around certain R4000 CPU errata (as implemented by GCC):
-#
-@@ -2518,6 +2521,7 @@ config CPU_DADDI_WORKAROUNDS
-# erratum #52
-config CPU_R4000_WORKAROUNDS
-bool
-+ depends on $(cc-option,-mfix-r4000)
-select CPU_R4400_WORKAROUNDS
-# Work around certain R4400 CPU errata (as implemented by GCC):
-@@ -2528,6 +2532,7 @@ config CPU_R4000_WORKAROUNDS
-# "MIPS R4400MC Errata, Processor Revision 2.0 & 3.0", erratum #4
-config CPU_R4400_WORKAROUNDS
-bool
-+ depends on $(cc-option,-mfix-r4400)
-config CPU_R4X00_BUGS64
-bool
-@@ -3174,6 +3179,7 @@ config COMPAT
-config MIPS32_O32
-bool "Kernel support for o32 binaries"
-depends on 64BIT
-+ depends on CC_SUPPORTS_O32_WITH_64BIT_ARCH
-select ARCH_WANT_OLD_COMPAT_IPC
-select COMPAT
-select MIPS32_COMPAT
-@@ -3206,6 +3212,9 @@ config CC_HAS_MNO_BRANCH_LIKELY
-config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
-def_bool y if CC_IS_CLANG
-+config CC_SUPPORTS_O32_WITH_64BIT_ARCH
-+ def_bool y if $(cc-option,-march=3Dmips3 -mabi=3Do32)
-+
-menu "Power management options"
-config ARCH_HIBERNATION_POSSIBLE
-
-This will prevent clang build 32bit kernel in case it doesn=E2=80=99t =
-support o32 ABI with 64bit CPU.
-
-Thanks
-Jiaxun
-
->=20
-> Thanks
-> Jiaxun
->=20
->>=20
->> Cheers,
->> Nathan
-
-
+- Arnaldo
