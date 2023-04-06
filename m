@@ -1,114 +1,57 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DC18F53;
-	Thu,  6 Apr 2023 15:58:33 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70A1A169E;
-	Thu,  6 Apr 2023 08:59:17 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 195823F6C4;
-	Thu,  6 Apr 2023 08:58:29 -0700 (PDT)
-Message-ID: <b1cb0567-5c60-22ce-220d-65302b9f36ad@arm.com>
-Date: Thu, 6 Apr 2023 16:58:27 +0100
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA5D8F53
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 16:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFED1C433D2;
+	Thu,  6 Apr 2023 16:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680796819;
+	bh=ELdjobZUwN0S5iaF8cGFZlGAlFMZltDdUslPPwoMRqU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=RI+sEZ+T7zfkRdxytqpk96uESK7eouKgArnPeVGmDbSoHakLqZytXiFeRgu5IWVBG
+	 7w5sE0XfNBW2tnBEUjLGJrVZjd6M1OiPVXV9xocnb8OsJjar9+PjlHh0tANjre8n/A
+	 u70ByU3DRny44T3fAhjA2Vn6zPI+0kkRJ451ocmoZup1lrmf4Td1Yfp8qgyVP77lYd
+	 /QcDqPJYWvfFNN4Co0jhhZ5u6BcnyDI8pH+fP9uQFE3j40uXwqFGhP5sTUi6DITUWp
+	 nKdJS8pRjt2c/eIopdzno7ANzxFKNCJRBZFI9qrFJPMLvyxLsPzS+pJHmeBZBylW6S
+	 6IAZY1UgQmUWw==
+Date: Thu, 6 Apr 2023 09:00:17 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next 2/3] ksz884x: remove unused #defines
+Message-ID: <20230406090017.0fc0ae34@kernel.org>
+In-Reply-To: <454a61709e442f717fbde4b0ebb8b4c3fdfb515e.camel@redhat.com>
+References: <20230405-ksz884x-unused-code-v1-0-a3349811d5ef@kernel.org>
+	<20230405-ksz884x-unused-code-v1-2-a3349811d5ef@kernel.org>
+	<454a61709e442f717fbde4b0ebb8b4c3fdfb515e.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 06/17] iommu: Replace __iommu_group_dma_first_attach()
- with set_domain
-Content-Language: en-GB
-To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
- Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
- Nicolin Chen <nicolinc@nvidia.com>
-References: <6-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
-From: Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <6-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 06/04/2023 12:38 am, Jason Gunthorpe wrote:
-> Prepare for removing the group->domain set from
-> iommu_group_alloc_default_domain() by calling
-> __iommu_group_set_domain_internal() to set the group->domain.
+On Thu, 06 Apr 2023 15:37:36 +0200 Paolo Abeni wrote:
+> On Wed, 2023-04-05 at 10:39 +0200, Simon Horman wrote:
+> > Remove unused #defines from ksz884x driver.
+> > 
+> > These #defines may have some value in documenting the hardware.
+> > But that information may be accessed via scm history.  
 > 
-> Add IOMMU_SET_DOMAIN_WITH_DEFERRED to allow it to do the attach_deferred
-> logic.
-
-This is way overcomplicated; if we evaluate iommu_is_attach_deferred() 
-earlier in the probe_device path, then the rest of the handling at the 
-point of attach should simply reduce to:
-
-	if (dev->iommu->attach_deferred && iommu_is_dma_domain(domain))
-		return 0;
-
-No magical flags required, and especially not the confusing thing with 
-group-owner because the thing that still says it's for attaching the 
-default domain now might also be attaching a non-default domain.
-
-Thanks,
-Robin.
-
-> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> ---
->   drivers/iommu/iommu.c | 18 +++++++++++-------
->   1 file changed, 11 insertions(+), 7 deletions(-)
+> I personally have a slight preference for keeping these definitions in
+> the sources (for doc purposes), but it's not a big deal. 
 > 
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index cd75d7405a3051..af3af752c255e4 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -102,6 +102,7 @@ static int __iommu_attach_group(struct iommu_domain *domain,
->   
->   enum {
->   	IOMMU_SET_DOMAIN_MUST_SUCCEED = 1 << 0,
-> +	IOMMU_SET_DOMAIN_WITH_DEFERRED = 1 << 1,
->   };
->   
->   static int __iommu_group_set_domain_internal(struct iommu_group *group,
-> @@ -1855,12 +1856,6 @@ static void probe_alloc_default_domain(struct bus_type *bus,
->   
->   }
->   
-> -static int __iommu_group_dma_first_attach(struct iommu_group *group)
-> -{
-> -	return __iommu_group_for_each_dev(group, group->default_domain,
-> -					  iommu_group_do_dma_first_attach);
-> -}
-> -
->   static int iommu_group_do_probe_finalize(struct device *dev, void *data)
->   {
->   	const struct iommu_ops *ops = dev_iommu_ops(dev);
-> @@ -1923,7 +1918,10 @@ int bus_iommu_probe(struct bus_type *bus)
->   
->   		iommu_group_create_direct_mappings(group);
->   
-> -		ret = __iommu_group_dma_first_attach(group);
-> +		group->domain = NULL;
-> +		ret = __iommu_group_set_domain_internal(
-> +			group, group->default_domain,
-> +			IOMMU_SET_DOMAIN_WITH_DEFERRED);
->   
->   		mutex_unlock(&group->mutex);
->   
-> @@ -2218,6 +2216,12 @@ static int __iommu_device_set_domain(struct iommu_group *group,
->   {
->   	int ret;
->   
-> +	if ((flags & IOMMU_SET_DOMAIN_WITH_DEFERRED) &&
-> +	    iommu_is_attach_deferred(dev)) {
-> +		dev->iommu->attach_deferred = 1;
-> +		return 0;
-> +	}
-> +
->   	ret = __iommu_attach_device(new_domain, dev);
->   	if (ret) {
->   		/*
+> Any 3rd opinion more then welcome!
+
+I had the same reaction, FWIW.
+
+Cleaning up unused "code" macros, pure software stuff makes perfect
+sense. But I feel a bit ambivalent about removing definitions of HW
+registers and bits.
