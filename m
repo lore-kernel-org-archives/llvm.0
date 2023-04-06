@@ -1,101 +1,159 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89ED9A21;
-	Thu,  6 Apr 2023 03:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680752405; x=1712288405;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bd4lSU0TDGlzogkI2gzL0DzWzBcpIdg7ITg7I+ReG2Y=;
-  b=m0gRW5/+oW5TwOeZIbsECR9Lc0zkNwVeTkowme3FTm+Fl5s4XCySHRPk
-   wGAd/3Wx6C2R1/c3rpAOH75bO8GfQnahqRMJPVii4sUJ0DUEtZJrzFxNd
-   L3OVkiEDac1JKeyWGoFvDB3VV9GoAtNa4YeU9ugh8e5jl98sLwPqa3Unh
-   uxR8HTqjTXUZQZ9ztyZgOTnTzD1uwwR2KibH54xkswd/rBANrCucBYxq1
-   C9v7f4GxMRBN5qlRyGAtZUXqfzFVKhpbL0AcYc8v89PzST7GavJ485sqg
-   EC3I4mkTGPs9Ik1LYD3rEYN54Ghkf+nwaBqVxY2BB2NeQP/LLZ7tXvYt6
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="407721844"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="407721844"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 20:40:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="689523749"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="689523749"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Apr 2023 20:40:01 -0700
-Message-ID: <c7d5273e-5621-b681-bd6f-2e044e6db6ff@linux.intel.com>
-Date: Thu, 6 Apr 2023 11:40:12 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B028A21
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 03:46:44 +0000 (UTC)
+Received: by mail-oi1-f182.google.com with SMTP id r16so28126063oij.5
+        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 20:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680752803; x=1683344803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2HC8P/hmf80QzMRLst56jAGHCnOy19Nb1SfXkyKnng=;
+        b=OdCYn4+VByG1SRoySM17nK1AXgMbZVRXlJ5uIqR+tfwGuKggZw222F7duYA9Vb89YK
+         27pnFjed1vkAWjIH3w9kqNNxzyvrRs3I40xpJc8gABvfqFbm84Ah6fCAVV+EpDcHKNEM
+         T6LqevGxh7v6QeMq8lX+Fn0O2uSvDEMaPjduq6COs02ZgwWQq7TWFyzEWjpUoxp8g7/W
+         HeDHWwDs5YlngSYn9Y4eEcJFWPL1d9LCI5B4h6ljv4T9xfXx5ZEmdJDMYKPLEVyc5Sh4
+         e44ljucW2T/N/BZX5bfGqLHRrTCgxLP8TCM5oFflHLmQC3TPZL8Zpd5lDO1iSTWcWsjf
+         DH2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680752803; x=1683344803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e2HC8P/hmf80QzMRLst56jAGHCnOy19Nb1SfXkyKnng=;
+        b=aetfJtoJntRtfrvX9cXqufquf/lv54MsOYbvTJIl8vFeBzGls1G55xH7K8Hi7RUU5B
+         ijm1Yh6+XuFIeog3bNeZyHNA5jK+fAypzhf96U8vvb5eAaqP4WT0VClCFwanM83yTv0s
+         rPGMoE3d7s3lr28o83OXxI35zflJSa9Z/rcCKh88FVz8KQaasRJiMBw518F+IQpEx8rL
+         4OpTombiWrgkbtyK5ya0ftmCuXil7q1xc0jMu5apOTAdMVh33HGiaPMXJkp9eNY/pWxl
+         5SvhOTHpcE6ibHhs7CIae1rM8lNNUMPEFqd+t1w8eFTAW2OdsDCL2Jtt8dJJkl/2HGRc
+         +MHw==
+X-Gm-Message-State: AAQBX9db2L6wbbVRCTKcZ8jjXlqA2k46wZ/f8jw7+08v+t6r3/u+uJzw
+	Y+fwxf/Lrne/cGkSikCbqQznLw==
+X-Google-Smtp-Source: AKy350aAm5JE1r76kf6Lxl9p5V+N5sZaj6KFuUrSbX6DgQQJMad992E4+fIEGKxtn2iiwPmCcOOrnA==
+X-Received: by 2002:aca:d17:0:b0:388:f4de:1ed7 with SMTP id 23-20020aca0d17000000b00388f4de1ed7mr3555483oin.1.1680752803481;
+        Wed, 05 Apr 2023 20:46:43 -0700 (PDT)
+Received: from sunil-laptop ([106.51.83.242])
+        by smtp.gmail.com with ESMTPSA id en12-20020a056808394c00b003898ebb8be0sm215967oib.48.2023.04.05.20.46.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 20:46:43 -0700 (PDT)
+Date: Thu, 6 Apr 2023 09:16:31 +0530
+From: Sunil V L <sunilvl@ventanamicro.com>
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Weili Qian <qianweili@huawei.com>,
+	Zhou Wang <wangzhou1@hisilicon.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Marc Zyngier <maz@kernel.org>,
+	Maximilian Luz <luzmaximilian@gmail.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Gross <markgross@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V4 08/23] RISC-V: ACPI: Cache and retrieve the RINTC
+ structure
+Message-ID: <ZC5Al3swBGK1WP0g@sunil-laptop>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-9-sunilvl@ventanamicro.com>
+ <h4wgl5pc4bptxsmlmf7ggohq2y2uwk6ecaoytyywbwhf2ubnzj@ojanwytq5lrk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc: baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
- Nicolin Chen <nicolinc@nvidia.com>
-Subject: Re: [PATCH v3 13/17] iommu: Revise iommu_group_alloc_default_domain()
-Content-Language: en-US
-To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
- Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
- Will Deacon <will@kernel.org>
-References: <13-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <13-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <h4wgl5pc4bptxsmlmf7ggohq2y2uwk6ecaoytyywbwhf2ubnzj@ojanwytq5lrk>
 
-On 4/6/23 7:38 AM, Jason Gunthorpe wrote:
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index 8623d3edc61014..5f6aecfd92c657 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -91,8 +91,9 @@ static const char * const iommu_group_resv_type_string[] = {
->   
->   static int iommu_bus_notifier(struct notifier_block *nb,
->   			      unsigned long action, void *data);
-> -static int iommu_alloc_default_domain(struct iommu_group *group,
-> -				      struct device *dev);
-> +static struct iommu_domain *
-> +iommu_group_alloc_default_domain(struct iommu_group *group, int req_type);
-> +static int iommu_get_def_domain_type(struct device *dev);
->   static struct iommu_domain *__iommu_domain_alloc(struct bus_type *bus,
->   						 unsigned type);
->   static int __iommu_attach_device(struct iommu_domain *domain,
-> @@ -444,13 +445,16 @@ int iommu_probe_device(struct device *dev)
->   		 * support default domains, so the return value is not yet
->   		 * checked.
->   		 */
-> -		iommu_alloc_default_domain(group, dev);
-> -		if (group->default_domain) {
-> -			iommu_create_device_direct_mappings(group, dev);
-> -			ret = __iommu_group_set_domain_internal(
-> -				group, group->default_domain,
-> -				IOMMU_SET_DOMAIN_WITH_DEFERRED);
-> +		group->default_domain = iommu_group_alloc_default_domain(
-> +			group, iommu_get_def_domain_type(dev));
-> +		if (!group->default_domain) {
-> +			ret = -EINVAL;
-> +			goto err_unlock;
->   		}
+On Wed, Apr 05, 2023 at 05:17:48PM +0200, Andrew Jones wrote:
+> On Tue, Apr 04, 2023 at 11:50:22PM +0530, Sunil V L wrote:
+> > RINTC structures in the MADT provide mapping between the hartid
+> > and the CPU. This is required many times even at run time like
+> > cpuinfo. So, instead of parsing the ACPI table every time, cache
+> > the RINTC structures and provide a function to get the correct
+> > RINTC structure for a given cpu.
+> > 
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  arch/riscv/include/asm/acpi.h |  2 ++
+> >  arch/riscv/kernel/acpi.c      | 60 +++++++++++++++++++++++++++++++++++
+> >  2 files changed, 62 insertions(+)
+> > 
+> > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
+> > index 9be52b6ffae1..1606dce8992e 100644
+> > --- a/arch/riscv/include/asm/acpi.h
+> > +++ b/arch/riscv/include/asm/acpi.h
+> > @@ -59,6 +59,8 @@ static inline bool acpi_has_cpu_in_madt(void)
+> >  
+> >  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+> >  
+> > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
+> > +u32 get_acpi_id_for_cpu(int cpu);
+> >  #endif /* CONFIG_ACPI */
+> >  
+> >  #endif /*_ASM_ACPI_H*/
+> > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+> > index 81d448c41714..40ab55309c70 100644
+> > --- a/arch/riscv/kernel/acpi.c
+> > +++ b/arch/riscv/kernel/acpi.c
+> > @@ -24,6 +24,66 @@ EXPORT_SYMBOL(acpi_disabled);
+> >  int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
+> >  EXPORT_SYMBOL(acpi_pci_disabled);
+> >  
+> > +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
+> > +
+> > +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
+> > +{
+> > +	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
+> > +	int cpuid;
+> > +
+> > +	if (!(rintc->flags & ACPI_MADT_ENABLED))
+> > +		return 0;
+> > +
+> > +	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
+> > +	/*
+> > +	 * When CONFIG_SMP is disabled, mapping won't be created for
+> > +	 * all cpus.
+> > +	 * CPUs more than NR_CPUS, will be ignored.
+> > +	 */
+> > +	if (cpuid >= 0 && cpuid < NR_CPUS)
+> > +		cpu_madt_rintc[cpuid] = *rintc;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int acpi_init_rintc_array(void)
+> > +{
+> > +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) > 0)
+> > +		return 0;
+> > +
+> > +	return -ENODEV;
+> 
+> As Conor pointed out, the errors could be propagated from
+> acpi_table_parse_madt(), which could reduce this function to
+> 
+>  return acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0);
+> 
+> where the '< 0' check would be in the caller below. That sounds good to
+> me, but then I'd take that a step further and just drop this helper
+> altogether.
+> 
+Thanks, Conor, Drew. I used similar to how others have used
+acpi_table_parse_madt(). But your suggestion makes sense. Will remove
+the wrapper function also.
 
-There are still some drivers that don't support default domains. It was
-allowed previously, but above seems to change that behavior. The
-iommu_probe_device() fails now on those platforms. Or perhaps I
-overlooked anything?
-
-> +		iommu_create_device_direct_mappings(group, dev);
-> +		ret = __iommu_group_set_domain_internal(
-> +			group, group->default_domain,
-> +			IOMMU_SET_DOMAIN_WITH_DEFERRED);
-
-Best regards,
-baolu
+Thanks,
+Sunil
