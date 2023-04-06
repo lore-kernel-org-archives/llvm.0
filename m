@@ -1,153 +1,127 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4273214;
-	Thu,  6 Apr 2023 12:01:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680782519; x=1712318519;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y0+dFDwT+bRH/eVHXMTL+q8aR+Moi88tLPH/nkhsKhc=;
-  b=k7NMxIclscihtDfx1R66YJauVNvAwbn5Sj/5G2OhfpGlJNjuIdAPCY6r
-   kzYdY+3Mxg/sxNMqM1TKn3UsEobVgP3WtYf+QDb6f0BG90IG5OeveCCfx
-   a2Zf9n/oDkj20QKRCl2kq36iuguIuyx/4hSsvitX4DuCDoYBlH64xmjzq
-   2AWfNjZUuXWhjjmq3t+xTkrYxxUvYdESC0udbGZ57iK+0nGwbEh4VAF97
-   PGHgwfaiDfmjOmdiHPaFk4WZZzuh0ZhMAHN/w0P8qI43yHUlknRkLEoPX
-   4FzvIMuC7yPSQIAOB7Bh+BNR68tvRJDFeSUoAw28epRK4cbKyZQZ3O3mM
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="429001076"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="429001076"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 05:01:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="1016843428"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="1016843428"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Apr 2023 05:01:50 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pkOJJ-000RLK-1Z;
-	Thu, 06 Apr 2023 12:01:49 +0000
-Date: Thu, 6 Apr 2023 20:00:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-	Andrei Vagin <avagin@gmail.com>,
-	Danylo Mocherniuk <mdanylo@google.com>,
-	Paul Gofman <pgofman@codeweavers.com>,
-	Cyrill Gorcunov <gorcunov@gmail.com>,
-	Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Yang Shi <shy828301@gmail.com>, Vlastimil Babka <vbabka@suse.cz>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Yun Zhou <yun.zhou@windriver.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Alex Sierra <alex.sierra@amd.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <202304061924.m0OL9fIj-lkp@intel.com>
-References: <20230406074005.1784728-3-usama.anjum@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE1929A1
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 12:48:22 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 73ED21F895;
+	Thu,  6 Apr 2023 12:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1680785294;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3C5gkwQ1NumD7u6UGVet6+3BAdJ6qwcljpnsMyFFlyE=;
+	b=zFfqBs79etl2Qew8xWUBpcjC2YS5HzeKEFhoTzDEQH5kMmk2GU6+LPw0Eq31I1eW90hc0y
+	aEfQn7ClQNJjUW8oL1NXz8/iU+ZQA2CSJqNQIGleAfTC3NThSCgieTVUFa1FnQTjHb0ep2
+	S4XuviF68XyNDON0ax6khKM05AAm+II=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1680785294;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3C5gkwQ1NumD7u6UGVet6+3BAdJ6qwcljpnsMyFFlyE=;
+	b=wnaEcb4fdgIUGmurtLSE0lUWHOr+VemWMxldkBQXiEYlfRcjgxScXFYI/OWp1z44Osrn/g
+	HVe7ilsTwNwMzeCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 25723133E5;
+	Thu,  6 Apr 2023 12:48:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id 6CsDCI6/LmTPcwAAMHmgww
+	(envelope-from <pvorel@suse.cz>); Thu, 06 Apr 2023 12:48:14 +0000
+Date: Thu, 6 Apr 2023 14:48:12 +0200
+From: Petr Vorel <pvorel@suse.cz>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	LTP List <ltp@lists.linux.it>, llvm@lists.linux.dev,
+	chrubis <chrubis@suse.cz>, Nathan Chancellor <nathan@kernel.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Daniel =?iso-8859-2?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+	Benjamin Copeland <ben.copeland@linaro.org>,
+	Tudor Cretu <tudor.cretu@arm.com>
+Subject: Re: LTP: list of failures on 32bit and compat mode
+Message-ID: <20230406124812.GA1589248@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
+ <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
+ <20230406105646.GB1545779@pevik>
+ <7234b8ab-db5c-4f4a-bb9e-ddef9f1a50d3@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230406074005.1784728-3-usama.anjum@collabora.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7234b8ab-db5c-4f4a-bb9e-ddef9f1a50d3@app.fastmail.com>
 
-Hi Muhammad,
+Hi all,
 
-kernel test robot noticed the following build errors:
+> On Thu, Apr 6, 2023, at 12:56, Petr Vorel wrote:
+> >> On Thu, Apr 6, 2023, at 11:11, Naresh Kamboju wrote:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on next-20230406]
-[cannot apply to linus/master v6.3-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >> > mq_timedreceive01
+> >> > mq_timedreceive01.c:197: TPASS: mq_timedreceive() failed expectedly: EINTR (4)
+> >> > tst_test.c:1581: TBROK: Test killed by SIGSEGV!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230406-154314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230406074005.1784728-3-usama.anjum%40collabora.com
-patch subject: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-config: arm-randconfig-r021-20230405 (https://download.01.org/0day-ci/archive/20230406/202304061924.m0OL9fIj-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/f13abb36f64c77913509da8ca157512d2fb9f031
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230406-154314
-        git checkout f13abb36f64c77913509da8ca157512d2fb9f031
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/
+> >> I think this is the same problem as fstatfs02, where ltp passes
+> >> an invalid pointer and expects EFAULT, but musl touches the data
+> >> first in order to do the time64 conversion. Needs the same fix.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304061924.m0OL9fIj-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/proc/task_mmu.c:1965:47: error: too few arguments to function call, expected 5, have 4
-                       uffd_wp_range(vma, addr, PAGE_SIZE, true) < 0)
-                       ~~~~~~~~~~~~~                           ^
-   include/linux/userfaultfd_k.h:215:20: note: 'uffd_wp_range' declared here
-   static inline long uffd_wp_range(struct mm_struct *dst_mm,
-                      ^
-   1 error generated.
+> > FYI mq_timedreceive01 is broken on 32bit systems with glibc
+> > (in current LTP master):
 
 
-vim +1965 fs/proc/task_mmu.c
+> > EINTR (4)
+> > tst_test.c:1618: TBROK: Test killed by SIGSEGV!
 
-  1948	
-  1949		for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
-  1950			pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-  1951	
-  1952			is_written = !is_pte_uffd_wp(*pte);
-  1953			is_file = vma->vm_file;
-  1954			is_present = pte_present(*pte);
-  1955			is_swap = is_swap_pte(*pte);
-  1956	
-  1957			pte_unmap_unlock(pte, ptl);
-  1958	
-  1959			ret = pagemap_scan_output(is_written, is_file, is_present,
-  1960						  is_swap, p, addr, 1);
-  1961			if (ret < 0)
-  1962				return ret;
-  1963	
-  1964			if (is_written && PM_SCAN_OP_IS_WP(p) &&
-> 1965			    uffd_wp_range(vma, addr, PAGE_SIZE, true) < 0)
-  1966				return -EINVAL;
-  1967		}
-  1968	
-  1969		cond_resched();
-  1970		return ret;
-  1971	}
-  1972	
+> Right, I see this has the same time64 logic as musl now.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> >> > recvmmsg01.c:92: TPASS: recvmmsg() overflow in nanoseconds in timeout
+> >> > : EINVAL (22)
+> >> > tst_test.c:1581: TBROK: Test killed by SIGSEGV!
+
+> >> Same time64 conversion issue as above.
+
+> > Besides the same problem with shm permissions on musl I see SIGSEGV also on
+> > 64bit musl on current LTP master.
+
+> Ah, I see. This must be the padding code then, not the time64
+> conversion:
+
+> +int recvmmsg(int fd, struct mmsghdr *msgvec, unsigned int vlen, unsigned int flags, struct timespec *timeout)
+> +{
+> +#if LONG_MAX > INT_MAX
+> +       struct mmsghdr *mh = msgvec;
+> +       unsigned int i;
+> +       for (i = vlen; i; i--, mh++)
+> +               mh->msg_hdr.__pad1 = mh->msg_hdr.__pad2 = 0;
+> +#endif
+
+I suppose this is a suggestion for fix in LTP. I'd expect is should go into
+testcases/kernel/syscalls/sendmmsg/sendmmsg_var.h into static inline int
+sys_recvmmsg(...)
+
+But that at least on glibc 64bit compilation does not see __pad1 member:
+
+../sendmmsg/sendmmsg_var.h: In function ‘sys_recvmmsg’:
+../sendmmsg/sendmmsg_var.h:47:28: error: ‘struct msghdr’ has no member named ‘__pad1’
+   47 |                 mh->msg_hdr.__pad1 = mh->msg_hdr.__pad2 = 0;
+      |                            ^
+
+Kind regards,
+Petr
+
+>        Arnd
