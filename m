@@ -1,126 +1,122 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7D63211;
-	Thu,  6 Apr 2023 11:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680780061; x=1712316061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MXRWgeeeuucicATdvWXdJpi4j7VRWmOq+LFsppDD6zQ=;
-  b=QMvNfontuoxMTnlqhUM6O2dqHzz+IDOpwbOrrUTidjzJUH9Z7ayN3Y32
-   nMbeyqy7E7hJtLvzjg7GImyCJaN8KFsNXQZ9A3KTnj4m5WQf2NZXjPAoD
-   UEZp52l4zrqHERNzaV+Bzekkr/MRHOu3dO2Itf9UFbIlBFHyXzOWtReDo
-   ovQVlDLt0u3NNup6K5bPQw/+oL8z1ZuscD0Z5N99QCHGoY23qQR29WpI/
-   E5c1SPKvJSUfY8qQn8tZPA6XWERPYxi7ITpr468se9GvFEdxMIiR/jJqZ
-   rq432M2/fL0JZRlUnuCUKbwhWqvYCF7euWeo+d/kOhOa2Y5wLtiVw/fvH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="370543800"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="370543800"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 04:20:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="664406087"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="664406087"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2023 04:20:49 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pkNfc-000RKI-2a;
-	Thu, 06 Apr 2023 11:20:48 +0000
-Date: Thu, 6 Apr 2023 19:19:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kees Cook <keescook@chromium.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Cezary Rojewski <cezary.rojewski@intel.com>,
-	Puyou Lu <puyou.lu@gmail.com>, Mark Brown <broonie@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Liam Howlett <liam.howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Yury Norov <yury.norov@gmail.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Sander Vanheule <sander@svanheule.net>,
-	Eric Biggers <ebiggers@google.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH 6/9] fortify: Split reporting and avoid passing string
- pointer
-Message-ID: <202304061930.4Au0PASm-lkp@intel.com>
-References: <20230406000212.3442647-6-keescook@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7C32F38
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 11:24:19 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 2FF9E5C00C9;
+	Thu,  6 Apr 2023 07:24:18 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Apr 2023 07:24:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1680780258; x=1680866658; bh=Gq
+	C0msXUkih9ZXzN6e7GwneaPTqnO4vnHWEtU6Y291I=; b=CXXIGJFVUBMwtAjLnp
+	kmF10Zfxfr631SRdhfKgwQh+ULwP+arHVY/Q2o5d+Sz9uZu2foTRaLB5dXiW1yyx
+	SkodDp49FghSHp2I8e0VygrKOLHRqPFizdJy7Y7UuZEZHLvKELp+3i5crOAjVGhg
+	oml7+vH8jkpaoTcv4jqVNC83UCeuSp3+LOjjLgDPmcNjiiitNBPFfA3Vj2Xav8pk
+	Qxg3zvT45pmTWyIwM+iUgg1yWO9X4Fntvw9Ouf6uPd/5sBsfaeH3/i9i6UJOqsCh
+	Xn1OpYeXhPGPls+mlVenzOilPj7ansHZgCR/8/aCJQp9qbmB3s7qgkwJjuxOL99v
+	ZLKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1680780258; x=1680866658; bh=GqC0msXUkih9Z
+	XzN6e7GwneaPTqnO4vnHWEtU6Y291I=; b=DzBgP5N9tzBpd8kNcfqKNGyFddW34
+	dOLdkdA0dILtzyrrPHBWH+tf+b9sHy1ux2zBy9YT+Zz6JzcQOJ/g4amaBuj7HI8D
+	//Yj4Pm8FCtr6aGMRIVwhGJXvetGTQR6ZCcO0a2ECuT57r3Nr6/XSrPXovuCe0XF
+	HG7IR9EVuGrMX/KaeZG/4ehe07+eIfjcYL9VN6tNXUNvXawVKOdt/Is/4rjVwhE/
+	XsgAmyI7ZOSmaDOiAHJ5Y3qMF45DF6K3G/EXiAziQuF+YMIV6PO1xZaZu02/iS4t
+	KfEt5wdETeseQaptyGMLauoZ2hZ3gWXnqIqC6zHHgsW3mulVig34dw3Yw==
+X-ME-Sender: <xms:4asuZLbu6dbDL9QI-ji9iiGUeSqq0nGIef2_G7_s9gQHBTYucDJF6g>
+    <xme:4asuZKZD0NnnHWyn_zhNSJgGUHgtq14tnGDtGJJ6z-JGFe4F8YUg3gVQVQ2BGu4xL
+    6kdgEqpUaXtEv9xKxU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgfeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:4asuZN9J3CLK4Qj7D861SnSnFB20ziqnzGrk6yFlarwexWbCqU3hhQ>
+    <xmx:4asuZBo6oYJ_pTS0dpGyz10SA2oOBmPR4EccqPZWOic7bCx9rhHwOg>
+    <xmx:4asuZGrdFNHgtx9VB1uwx1NPsGB3gw6PSWyz7pEZ2hQjY-E0LjfiIg>
+    <xmx:4qsuZCdoPeP9U9PXBpKPVsKJTITTWGudzVUURAGbxFvw0xTFSXLEUQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 961AEB60093; Thu,  6 Apr 2023 07:24:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406000212.3442647-6-keescook@chromium.org>
+Mime-Version: 1.0
+Message-Id: <7234b8ab-db5c-4f4a-bb9e-ddef9f1a50d3@app.fastmail.com>
+In-Reply-To: <20230406105646.GB1545779@pevik>
+References: 
+ <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
+ <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
+ <20230406105646.GB1545779@pevik>
+Date: Thu, 06 Apr 2023 13:23:57 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Petr Vorel" <pvorel@suse.cz>,
+ "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Cc: "open list" <linux-kernel@vger.kernel.org>,
+ "LTP List" <ltp@lists.linux.it>, llvm@lists.linux.dev,
+ chrubis <chrubis@suse.cz>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Anders Roxell" <anders.roxell@linaro.org>,
+ =?UTF-8?Q?Daniel_D=C3=ADaz?= <daniel.diaz@linaro.org>,
+ "Benjamin Copeland" <ben.copeland@linaro.org>,
+ "Tudor Cretu" <tudor.cretu@arm.com>
+Subject: Re: LTP: list of failures on 32bit and compat mode
+Content-Type: text/plain
 
-Hi Kees,
+On Thu, Apr 6, 2023, at 12:56, Petr Vorel wrote:
+>> On Thu, Apr 6, 2023, at 11:11, Naresh Kamboju wrote:
+>
+>> > mq_timedreceive01
+>> > mq_timedreceive01.c:197: TPASS: mq_timedreceive() failed expectedly: EINTR (4)
+>> > tst_test.c:1581: TBROK: Test killed by SIGSEGV!
+>
+>> I think this is the same problem as fstatfs02, where ltp passes
+>> an invalid pointer and expects EFAULT, but musl touches the data
+>> first in order to do the time64 conversion. Needs the same fix.
+>
+> FYI mq_timedreceive01 is broken on 32bit systems with glibc
+> (in current LTP master):
+>
 
-kernel test robot noticed the following build errors:
+> EINTR (4)
+> tst_test.c:1618: TBROK: Test killed by SIGSEGV!
 
-[auto build test ERROR on kees/for-next/hardening]
-[also build test ERROR on kees/for-next/pstore kees/for-next/kspp akpm-mm/mm-everything linus/master v6.3-rc5 next-20230406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Right, I see this has the same time64 logic as musl now.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kees-Cook/kunit-tool-Enable-CONFIG_FORTIFY_SOURCE-under-UML/20230406-081014
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
-patch link:    https://lore.kernel.org/r/20230406000212.3442647-6-keescook%40chromium.org
-patch subject: [PATCH 6/9] fortify: Split reporting and avoid passing string pointer
-config: arm-randconfig-r025-20230403 (https://download.01.org/0day-ci/archive/20230406/202304061930.4Au0PASm-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/4fd520e6ee549e1ffe8859e26e57ea64b48e78ea
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kees-Cook/kunit-tool-Enable-CONFIG_FORTIFY_SOURCE-under-UML/20230406-081014
-        git checkout 4fd520e6ee549e1ffe8859e26e57ea64b48e78ea
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+>> > recvmmsg01.c:92: TPASS: recvmmsg() overflow in nanoseconds in timeout
+>> > : EINVAL (22)
+>> > tst_test.c:1581: TBROK: Test killed by SIGSEGV!
+>
+>> Same time64 conversion issue as above.
+>
+> Besides the same problem with shm permissions on musl I see SIGSEGV also on
+> 64bit musl on current LTP master.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304061930.4Au0PASm-lkp@intel.com/
+Ah, I see. This must be the padding code then, not the time64
+conversion:
 
-All errors (new ones prefixed by >>):
++int recvmmsg(int fd, struct mmsghdr *msgvec, unsigned int vlen, unsigned int flags, struct timespec *timeout)
++{
++#if LONG_MAX > INT_MAX
++       struct mmsghdr *mh = msgvec;
++       unsigned int i;
++       for (i = vlen; i; i--, mh++)
++               mh->msg_hdr.__pad1 = mh->msg_hdr.__pad2 = 0;
++#endif
 
->> ld.lld: error: undefined symbol: __fortify_panic
-   >>> referenced by fortify-string.h:208 (include/linux/fortify-string.h:208)
-   >>>               arch/arm/boot/compressed/fdt_ro.o:(fdt_stringlist_count)
-   >>> referenced by fortify-string.h:208 (include/linux/fortify-string.h:208)
-   >>>               arch/arm/boot/compressed/fdt_ro.o:(fdt_stringlist_search)
-   >>> referenced by fortify-string.h:208 (include/linux/fortify-string.h:208)
-   >>>               arch/arm/boot/compressed/fdt_ro.o:(fdt_stringlist_get)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+       Arnd
