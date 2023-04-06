@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914383214
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 11:31:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC54C433D2;
-	Thu,  6 Apr 2023 11:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B00A63214
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 11:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5472C433D2;
+	Thu,  6 Apr 2023 11:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680780705;
+	s=k20201202; t=1680780744;
 	bh=cfJ073jZWuUKyB8yTPziOXBTwqVge2u8UtgBTT4+M2w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ke9T55bE9PEIRdLT98NiZeP2bb07OFwofuV8GEso27h5qCugw5D4b20+ULA8n1qaB
-	 qL8b4DDYZRWCG3P6/CzOaRSxRtbOxFkRCnQj6hmMMBRt1g8oPAyDKK4zA/9Fcl+Njs
-	 nkppIPQpKMeIHltAmzpIV9Wqt/auWZSMurSb7LayRFqZupRnMLApBjwJF9cZnEbvwr
-	 4bZcEpkyhzjN9k/LICcudUEBS+IBS2AdzlCww1aVE2g8sN44aUqubDQShGcBze8En9
-	 7b7LkxPXx4sx3vbhcLls+ASGK+lUcEriuKoqVLWjcvrdF5zUZalzIsNZG9piVZrzBm
-	 LG2+EpZyX5Icw==
+	b=GDBG78mvAznbcy21pp7RgEymGMhnjG/twqI9CN5yRBrPXrXYWiLiJHhsaX69kLd75
+	 mvCfmdpDVbEyHH7ck0252QZ8035hgUi3P+jiXOm4IrZm/X83W1s0OEMma3K70TUf5S
+	 ZS+ccYdpeKU1QArB+GdEOpzdJ6uBM5ZgvP4OqM/iP5wq2RK/idy+y3qWaxORqZdZC7
+	 PVMf3a/X8S9RXfR5ERUpAlWsbs0YIa3jgq4bXP+MFcr+qVUuN5ixJ2m6BwoAmi+gPW
+	 cUEkMvtgMgyrU2qt1dLbT1FPgYtxiYOM2YnWIgf6//CEBNm2C7WJqUBfqYa/VMrUMZ
+	 KXfLio6aL87Cg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -34,12 +34,12 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	linux-riscv@lists.infradead.org,
 	linux-csky@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.2 04/17] selftests: sigaltstack: fix -Wuninitialized
-Date: Thu,  6 Apr 2023 07:31:18 -0400
-Message-Id: <20230406113131.648213-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 04/17] selftests: sigaltstack: fix -Wuninitialized
+Date: Thu,  6 Apr 2023 07:31:58 -0400
+Message-Id: <20230406113211.648424-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406113131.648213-1-sashal@kernel.org>
-References: <20230406113131.648213-1-sashal@kernel.org>
+In-Reply-To: <20230406113211.648424-1-sashal@kernel.org>
+References: <20230406113211.648424-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
