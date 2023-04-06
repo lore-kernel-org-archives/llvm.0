@@ -1,140 +1,83 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9317D6FD0
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 13:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9136FD0
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 13:37:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680787936;
+	s=mimecast20190719; t=1680788262;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SasBf2rvWM3dg/vi/aHoGf+GAr4DymaUwKCQF4tAkUQ=;
-	b=KmEdbx58u1uC+KQgD61cwVZP4FfYGZD1CpM7KHRZKwR4UICQ1h2jht9LR68GOfUj0hXGiT
-	ntk+8mlPdp7Qld0Pv/hL/nMea6TEJVGjQi4iwJFYPVpuigky62kCoWrOD8DeFym97qzwzc
-	T3QcZsF1/d8zoVzi3sBBYcRjonfTtVU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-ZRaOq1iNOjy_FjaJhvy5-g-1; Thu, 06 Apr 2023 09:32:14 -0400
-X-MC-Unique: ZRaOq1iNOjy_FjaJhvy5-g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F53D3801FE6
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 13:32:14 +0000 (UTC)
-Received: from [172.64.0.121] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 795FD492C14;
-	Thu,  6 Apr 2023 13:32:14 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 47 of 358): Test report for master
- (6.3.0-rc5, mainline.kernel.org-clang, 99ddf225)
-Date: Thu, 06 Apr 2023 13:32:14 -0000
-To: llvm@lists.linux.dev, omosnace@redhat.com, mmalik@redhat.com
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ug0yLlYuZVuJbOjWeIVJpNIZdkAxhZuiOq+dou/hw8A=;
+	b=YxC6Pomk15o6C6K2htFr1y2WW94xIi+oedFlTbMyUUdKBNYK/m26SrYCftkblAgp2Y7b63
+	BW80qS0+gvoR0/qBYrCWfcKBLO8vqLnEfUev9WU9D7Of/OhX3v+PcdVvMMfXcwjRZGXMlo
+	N1xkDhtvsy4lxqBKKl2hyx5s1Up1TE4=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-187-eEw4Mw16MTKsgxabxfMipw-1; Thu, 06 Apr 2023 09:37:40 -0400
+X-MC-Unique: eEw4Mw16MTKsgxabxfMipw-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-746bae78af3so122148085a.1
+        for <llvm@lists.linux.dev>; Thu, 06 Apr 2023 06:37:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680788260;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ug0yLlYuZVuJbOjWeIVJpNIZdkAxhZuiOq+dou/hw8A=;
+        b=78wquNT+6AlxhJZu9DbAoQaNBgizJcJjuZLZqmLYIsQx63Ef7BbOwEviRNT5ZVOXFc
+         wdbkerbriG427vr7JRV2yBl0brivMF01DyVDhdL7MrDVK0SvBVWVle3rf2H6wuWjjW85
+         RWYQ0UEGyzI97La/WfzljVeGMcV8CkvdsPfHgen9uIQQpKUf+QPmDt/Vw/AM+cMQPlVi
+         v4cyYQ27YZhBUJUgD2BnrLYpLSq0lQ85VMg4oiSxlKWYpicA95kqK84XwZHKgtYFf9Zi
+         GmYiMyNzGZzPGQk/1Hug9rtpbzwTACOiVEFbg3aLC3LqsTJLkNKo7VWbw917e1Y8uahA
+         ou2A==
+X-Gm-Message-State: AAQBX9e0f5mOloRstWEYKxdPcafFQTAi7CSnj6mRuKDDit47JEGuMOHC
+	Lny4q+jgbLyAxriLj3McX6q8W0GaBzCywT8Mc0kS4BgpJ+7paIPLVzMG7DZuTDtt4r0ckwNPBK2
+	w2O+La2AIU8sG2A==
+X-Received: by 2002:a05:622a:1a24:b0:3e6:707e:d3c2 with SMTP id f36-20020a05622a1a2400b003e6707ed3c2mr12279749qtb.0.1680788260024;
+        Thu, 06 Apr 2023 06:37:40 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bl0coyuBidkvHOT2/BIT7X0OyQAMODwQcShZMFhboQW68IVl2ZVchaTloj3/oC6ckiUmHLyA==
+X-Received: by 2002:a05:622a:1a24:b0:3e6:707e:d3c2 with SMTP id f36-20020a05622a1a2400b003e6707ed3c2mr12279705qtb.0.1680788259720;
+        Thu, 06 Apr 2023 06:37:39 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-227-151.dyn.eolo.it. [146.241.227.151])
+        by smtp.gmail.com with ESMTPSA id 10-20020a370a0a000000b007422fa6376bsm470773qkk.77.2023.04.06.06.37.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 06:37:39 -0700 (PDT)
+Message-ID: <454a61709e442f717fbde4b0ebb8b4c3fdfb515e.camel@redhat.com>
+Subject: Re: [PATCH net-next 2/3] ksz884x: remove unused #defines
+From: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ netdev@vger.kernel.org,  linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Date: Thu, 06 Apr 2023 15:37:36 +0200
+In-Reply-To: <20230405-ksz884x-unused-code-v1-2-a3349811d5ef@kernel.org>
+References: <20230405-ksz884x-unused-code-v1-0-a3349811d5ef@kernel.org>
+	 <20230405-ksz884x-unused-code-v1-2-a3349811d5ef@kernel.org>
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <88704.123040609321402147@us-mta-512.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Wed, 2023-04-05 at 10:39 +0200, Simon Horman wrote:
+> Remove unused #defines from ksz884x driver.
+>=20
+> These #defines may have some value in documenting the hardware.
+> But that information may be accessed via scm history.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I personally have a slight preference for keeping these definitions in
+the sources (for doc purposes), but it's not a big deal.=20
 
+Any 3rd opinion more then welcome!
 
-Kernel information:
-    Commit message: Merge tag 'trace-v6.3-rc5' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/trace/linux-trace
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/83729
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7719207
-         ppc64le - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7719051
-           s390x - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7718907
-          x86_64 - selinux-policy: serge-testsuite
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7718991
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: Internal Network Outage
-            URL: https://docs.cki-project.org/failures/#internal-network-ou=
-tage
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-                   s390x - Storage - blktests - blk
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: modinfo: ERROR: Module efi_runtime not =
-found
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1235
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Paolo
 
