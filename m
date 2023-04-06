@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF073214
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 11:33:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBF5AC433EF;
-	Thu,  6 Apr 2023 11:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEE43214
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 11:33:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC69C43443;
+	Thu,  6 Apr 2023 11:33:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680780808;
-	bh=3j6+VoxGChxs/a8JSRyVc96gPjF6/uzX1RsGIUklct0=;
+	s=k20201202; t=1680780831;
+	bh=ic5M+WBk/A6QoKKdXZiMgu7UjhhgBghwgfBK5+s0omQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=d2n/c/kNzyRy7VVpBWqBNVUvoVkZu+AyGIMyNGvW14gnSz6kjNZEGcAS4rZm2jn1f
-	 8av5yRJFmWU5oMdu3tgMwvSpEM1ubPWq46Fm75kYcD26v066vVOGE33amGUzU+LMjf
-	 g8t7DwlSoDOifte+BdSRSPNUWdZZLOsBJb7podVZalG8U9CU+PoU/615+MUQc+v9BH
-	 PmuoCBdbcOmwskNx0eOQT7HBdrDZgEWtXg2mzFn12boPFvK/nA/hLPOsDDwMD+5ydK
-	 VRmv2Fq13sgeY0McpW6JnWzGmu1Ai2gSOsSMf4vzQ2svFeJzSpp6ps6UvsIn4rEYA5
-	 VAeeUVmqTzd2w==
+	b=jvWTpYKfPUoic92z430c0wnnrBJz9mV5mWkZ/nvYAaNHUO/zgjIfGAk5x9eCog0qb
+	 Pp1uCzWbc/wdrk3o8RcTHI5Dp79DB/X92gP1kU4TGkyD6yNtG+s/khQZyxsFH+8ueV
+	 cWOk2+G80cuRoBrvnAEjUpWbNlF31T8qcuUx8/RpaPH+a4yDsm2xv6ppzd0ZVc+s06
+	 NLJfRK9u87VvQjT/ncuW7pBYIEucCDwUxPV1DoElDemGlSztiWm1DxH/p1ujYakxCo
+	 NsUmAs5KQPwN1YBALIgE7cCOS0+AwrdG0LS4nTA+5aGAXmZeRvfxBuRW+mAOmRFzMd
+	 c60nZMPpjI7nA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -34,12 +34,12 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>,
 	linux-riscv@lists.infradead.org,
 	linux-csky@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 3/9] selftests: sigaltstack: fix -Wuninitialized
-Date: Thu,  6 Apr 2023 07:33:09 -0400
-Message-Id: <20230406113315.648777-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 3/9] selftests: sigaltstack: fix -Wuninitialized
+Date: Thu,  6 Apr 2023 07:33:31 -0400
+Message-Id: <20230406113337.648916-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406113315.648777-1-sashal@kernel.org>
-References: <20230406113315.648777-1-sashal@kernel.org>
+In-Reply-To: <20230406113337.648916-1-sashal@kernel.org>
+References: <20230406113337.648916-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -113,7 +113,7 @@ index 0000000000000..ea9bdf3a90b16
 +#error "implement current_stack_pointer equivalent"
 +#endif
 diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
-index 8934a3766d207..41646c22384a2 100644
+index ad0f8df2ca0af..6e60545994916 100644
 --- a/tools/testing/selftests/sigaltstack/sas.c
 +++ b/tools/testing/selftests/sigaltstack/sas.c
 @@ -19,6 +19,7 @@
