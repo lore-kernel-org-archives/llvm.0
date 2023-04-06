@@ -1,93 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5599C320D
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 18:48:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAA31C433EF;
-	Thu,  6 Apr 2023 18:48:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680806901;
-	bh=pl57oZSe0jdCMT2RcmKFvtRgHAztuw1b3LYiVrGLo1Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=QrjN0P04y167ErdLcmrfdZi9m+PVvpY+NzG4FbaVDNQy4pOq0eRKDFUmekp2dc9Sw
-	 766jRVRlaP0+w5GumM7tHcLFzk4zBP3VbFaaZ8gmmw6cf4pFlp1YbcPaY5i5cWI/PQ
-	 /b2t69beJjuqCjdCD7gQJ9g0hW0TIh1GLIpNepqYJaTq8zpCmZd4oYKGT00/jR3MBa
-	 qXRs/zdejMp7iK5GVA7s7ulqlLE3104zbX12THwUXOuSLhrWmllmDc6xP3M1B1t2S9
-	 4EzClRHoBwg2U0CbBkKTSDOr/dQTokGUpTAAJua96kt8/D8RAcKSVZgHQUB21OyB73
-	 xayIgNDU0iIMQ==
-Date: Thu, 6 Apr 2023 13:48:19 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Reinette Chatre <reinette.chatre@intel.com>
-Cc: bhelgaas@google.com, nathan@kernel.org, ndesaulniers@google.com,
-	trix@redhat.com, tglx@linutronix.de, darwi@linutronix.de,
-	kevin.tian@intel.com, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Marc Zyngier <maz@kernel.org>, Ira Weiny <ira.weiny@intel.com>,
-	Shay Drory <shayd@nvidia.com>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	Eli Cohen <elic@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
-Subject: Re: [PATCH] PCI/MSI: Provide missing stub for
- pci_msix_can_alloc_dyn()
-Message-ID: <20230406184819.GA3722907@bhelgaas>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8021DAD47;
+	Thu,  6 Apr 2023 19:05:19 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB61F169E;
+	Thu,  6 Apr 2023 12:06:02 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E3FD3F73F;
+	Thu,  6 Apr 2023 12:05:17 -0700 (PDT)
+Message-ID: <b5bfb532-3387-8020-7c29-3559d312fa94@arm.com>
+Date: Thu, 6 Apr 2023 20:05:12 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <310ecc4815dae4174031062f525245f0755c70e2.1680119924.git.reinette.chatre@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 07/17] iommu: Make iommu_group_do_dma_first_attach()
+ simpler
+Content-Language: en-GB
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+ Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
+ Nicolin Chen <nicolinc@nvidia.com>
+References: <7-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
+ <51111b86-97af-b3d2-d3e8-5cebc350f37f@arm.com> <ZC7utpUloineTYaV@nvidia.com>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZC7utpUloineTYaV@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-[+cc folks from Arnd's similar patch]
+On 06/04/2023 5:09 pm, Jason Gunthorpe wrote:
+> On Thu, Apr 06, 2023 at 04:44:57PM +0100, Robin Murphy wrote:
+>> On 06/04/2023 12:38 am, Jason Gunthorpe wrote:
+>>> It should always attach to the current group->domain, so don't take in a
+>>> domain parameter. Use the __iommu_device_set_domain() common code to
+>>> handle the attach.
+>>
+>> Hmm, why do we still end up with this in two places, and potentially called
+>> twice in the same path?
+>>
+>> iommu_probe_device()
+>>    __iommu_probe_device()
+>>      iommu_group_get_for_dev()
+>>        iommu_group_add_device()
+>>          iommu_group_do_dma_first_attach()
+>>    iommu_create_device_direct_mappings()
+>>    iommu_group_do_dma_first_attach()
+>>
+>> Seems off to me... at best it's confusing, but at worst it's plain wrong
+>> (it's the one in iommu_group_add_device() that I'm most suspicious of)
+> 
+> Lu and Kevin pointed to this as well, it started out that way.
+> 
+> I made a whole other series tidying the probe related flows just based
+> on this observation..
+> 
+> I can pull one patch into here since this seems to catch everyone.
+> 
+> AFIACT it is harmless at this point since we can safely call
+> first_attach twice?
 
-On Wed, Mar 29, 2023 at 01:13:11PM -0700, Reinette Chatre wrote:
-> pci_msix_can_alloc_dyn() is not declared when CONFIG_PCI_MSI
-> is disabled.
-> 
-> There is no existing user of pci_msix_can_alloc_dyn() but
-> work is in progress to change this. This work encounters
-> the following error when CONFIG_PCI_MSI is disabled:
-> 
-> drivers/vfio/pci/vfio_pci_intrs.c:427:21: error: implicit declaration \
-> 	of function 'pci_msix_can_alloc_dyn' \
-> 	[-Werror=implicit-function-declaration]
-> 
-> Provide definition for pci_msix_can_alloc_dyn() in preparation
-> for users that need to compile when CONFIG_PCI_MSI is disabled.
-> 
-> Fixes: 34026364df8e ("PCI/MSI: Provide post-enable dynamic allocation interfaces for MSI-X")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303291000.PWFqGCxH-lkp@intel.com/
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Possibly; the other attach paths usually check and avoid calling into 
+the driver to reattach the currently-attached domain, so at worst it 
+could conceivably cause refcounting or data corruption issues inside a 
+driver which tracks a current domain pointer internally and assumes it 
+won't alias the new one. However I guess in practice either our current 
+drivers don't mind, or any which do aren't seeing multi-device groups.
 
-Applied with Sathy's reviewed-by to for-linus for v6.3, thanks!
+ From a quick history dive, it seems that the iommu_group_add_device() 
+one was in fact the original default domain attach site, but things 
+diverged in 6e1aa2049154 ("iommu: Move default domain allocation to 
+iommu_probe_device()"), where IIRC we still had to deal with a mix of 
+drivers calling iommu_group_add_device() and/or 
+iommu_group_get_for_dev() plus the new probe_device path, so it may have 
+still been needed (or at least seemed risky to remove) at that point, 
+but then it was overlooked for cleanup after the whole probe_device 
+conversion was finished?
 
-I also added the Fixes: line for mlx5 from Arnd's patch.
+Thanks,
+Robin.
 
-> ---
-> I missed this one in my previous fix. After this all the functions
-> in pci.h's #ifdef CONFIG_PCI_MSI portion have stubs when
-> CONFIG_PCI_MSI is disabled.
+>> Not to mention the slightly different open-coded variant we still seem to
+>> have in iommu_setup_default_domain() via the "else if
+>> (!group->default_domain)" path :/
 > 
->  include/linux/pci.h | 2 ++
->  1 file changed, 2 insertions(+)
+> Yes.. Humm. More parts could be moved into a function but I think it
+> would obfuscates what iommu_setup_default_domain() does.
 > 
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index b50e5c79f7e3..a5dda515fcd1 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -1624,6 +1624,8 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
->  					      flags, NULL);
->  }
->  
-> +static inline bool pci_msix_can_alloc_dyn(struct pci_dev *dev)
-> +{ return false; }
->  static inline struct msi_map pci_msix_alloc_irq_at(struct pci_dev *dev, unsigned int index,
->  						   const struct irq_affinity_desc *affdesc)
->  {
-> -- 
-> 2.34.1
+> Oh, I see another mistake:
 > 
+> 	if (group->domain) {
+> 		iommu_create_device_direct_mappings(group->domain, dev);
+>                                                    ^^^^^^^^^^^^^^^
+> 
+> iommu_create_device_direct_mappings should only be called on the
+> default domain.
+> 
+>> (BTW if any comments seem misplaced, it's because I'm really looking at the
+>> end result at the cover-letter commit in your branch, rather than trying to
+>> review each patch independently)
+> 
+> That is probably best. The patches are OK but it is hard to see the
+> final arrangment
+> 
+> Thanks,
+> Jason
