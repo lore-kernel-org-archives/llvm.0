@@ -1,260 +1,248 @@
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4CBEBF
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 09:11:46 +0000 (UTC)
-Received: by mail-vs1-f53.google.com with SMTP id cu36so33816118vsb.7
-        for <llvm@lists.linux.dev>; Thu, 06 Apr 2023 02:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680772306;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nt5MWSzb3FbZtU+1uNYJNNSGTYcpJLDBXRXOFdKZxAk=;
-        b=p0j/QrwKvGKeFXsTyQ8axk6zXJEsMnXjgqXaEcSxDEP5OgnoRYpJaAwAdgk2/2V2JZ
-         X6lHoK/y5PKvufkguLAZ8w+Q+jugSLOw0uRgFOyRDt5hAKGd0Q3HU7jBCTj+o/UgziSy
-         a5vcKYQsdqDcVHUwCJcFhyyS7ay6Gl8OMUcDF/WQDGIybh/0DzgmpzeUsgHqEL/O0cx6
-         z0kqxXb356FphA3G1mEpbTLfebS3BmaRL8iBKnvJOpbuV6Xmk8zTJXoGaJWMjHnDQQoB
-         0EWMmLDvyNHv1FYasyCGbk2aouSDcWcK3+thdXeFD4l9Al+S3+BAip+SqPnUanjqr4Og
-         plMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680772306;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nt5MWSzb3FbZtU+1uNYJNNSGTYcpJLDBXRXOFdKZxAk=;
-        b=jk9YpI40U7GL1XGtxbmgeFm5Dyk50gTv9G12s9eWqQuEnOULPK70byz4Djay/Nng38
-         s0dIENn7zB7/aYraiwqm8nKImfL4bu9nl5H23uTXZqG4bMS1dEIldUASpCnBAwilyJsh
-         pN4vIx/rd8IqGi/Q4G+vj3r/sRihFRClwDW5lM32OIR0mMiw1G+BHERXNHfTtLnybRIo
-         Qts/q9AESBTSWBnKyGOZ+vSnqGqKLaY0NBVJ77wdiArCbx6KBG5v9qQYmpOozew7Aigc
-         YisXzA41LgJN3lHl3S4kGLotB9cuXZU3yMP0+xtt6Y9g91tOl2WHnl9yI9Fq89DnT2xH
-         iw3Q==
-X-Gm-Message-State: AAQBX9dUjw30BEaVu/WKTtlqFlXhQ1JrfwwS6xoOK0rIT6G7x8+vOe9E
-	TVI8qRNWYs9sZIJTqdVZEadkkjsuvUkXvDNk/Bn9pQ==
-X-Google-Smtp-Source: AKy350awbraktxUP5NPvPDY0O+gIHkJEnPyy5aZIhINoyPDxCVeaUMIQwJCYF1O9ZSiV15O+GLo+8potamG+HP54I30=
-X-Received: by 2002:a67:d20f:0:b0:426:392a:92bc with SMTP id
- y15-20020a67d20f000000b00426392a92bcmr6977769vsi.1.1680772305562; Thu, 06 Apr
- 2023 02:11:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E05EBF;
+	Thu,  6 Apr 2023 09:16:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680772609; x=1712308609;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=sqGmj3a2tDCvGA3OtpRq+9dCzXeSI0k9rvhzi55zoQM=;
+  b=G5ui3FRWtjiVWwfND2eOvNEkSSbQcpOliDZFrr4ORNTZ6VjTS6F344YA
+   irwvWyiPcfiE2pqgPC8Au+mYCM9MfRg4jU3i4RIoCxSKzAJPVCOwvkXpd
+   LGxbY9aV5Rbthth5xlW7BPz7TO9mhg4PIeq87MIT9O/fIcdcQPT+NBsJ5
+   JVk6r20YDFRveWq+Q4Xp2TPCrzt03VFUcDkiCHNcquJx++OHgTn0oKLGU
+   7DWnjX1XtY98Bbw5MCQzBlTSDD450QDWGdAgb7Whb8a0I9krENbgVxgcm
+   uK3jwDykm2BYn6Ywc0fl9SOJCYBO9/RTMkSrCOyS5H8B1YJzF0yRnMxOE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="405474559"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="405474559"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 02:16:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="717379718"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="717379718"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 Apr 2023 02:16:46 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pkLjZ-000RGA-2W;
+	Thu, 06 Apr 2023 09:16:45 +0000
+Date: Thu, 6 Apr 2023 17:16:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ashutosh Dixit <ashutosh.dixit@intel.com>,
+	intel-gfx@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: Re: [Intel-gfx] [PATCH 2/3] drm/i915/guc: Disable PL1 power limit
+ when loading GuC firmware
+Message-ID: <202304061654.yjntbbxy-lkp@intel.com>
+References: <20230406044522.3108359-3-ashutosh.dixit@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 6 Apr 2023 14:41:34 +0530
-Message-ID: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
-Subject: LTP: list of failures on 32bit and compat mode
-To: open list <linux-kernel@vger.kernel.org>, LTP List <ltp@lists.linux.it>, 
-	llvm@lists.linux.dev
-Cc: chrubis <chrubis@suse.cz>, pvorel@suse.cz, Nathan Chancellor <nathan@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>, 
-	=?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>, 
-	Benjamin Copeland <ben.copeland@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230406044522.3108359-3-ashutosh.dixit@intel.com>
 
-Following LTP syscalls failed on the i386 and arm environments with
-Linux next / mainline kernels. The userspace is coming from Open
-Embedded kirkstone.
+Hi Ashutosh,
 
-Anyone seeing this problem on 32-bit i386 or arm ?
-You get to see "segfault" in the following logs that have been noticed
-on i386 only.
+kernel test robot noticed the following build warnings:
 
-This is not a new problem. We have been noticing these failures for a
-really long time.
-Would it be worth investigating the reason for failures on 32bit architectures ?
+[auto build test WARNING on drm-tip/drm-tip]
 
-Test logs,
------
-[    0.000000] Linux version 6.3.0-rc5-next-20230406 (tuxmake@tuxmake)
-(i686-linux-gnu-gcc (Debian 11.3.0-11) 11.3.0, GNU ld (GNU Binutils
-for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1680759389
+url:    https://github.com/intel-lab-lkp/linux/commits/Ashutosh-Dixit/drm-i915-hwmon-Get-mutex-and-rpm-ref-just-once-in-hwm_power_max_write/20230406-124659
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230406044522.3108359-3-ashutosh.dixit%40intel.com
+patch subject: [Intel-gfx] [PATCH 2/3] drm/i915/guc: Disable PL1 power limit when loading GuC firmware
+config: i386-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230406/202304061654.yjntbbxy-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b4aa935db7f0b46437cdaa39f0149ad835ceb73c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ashutosh-Dixit/drm-i915-hwmon-Get-mutex-and-rpm-ref-just-once-in-hwm_power_max_write/20230406-124659
+        git checkout b4aa935db7f0b46437cdaa39f0149ad835ceb73c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304061654.yjntbbxy-lkp@intel.com/
 
-Test environment: i386
-Suite: ltp-syscalls
-Toolchain: gcc-11
+All warnings (new ones prefixed by >>):
 
-
-fstatfs02
-fstatfs02    1  TPASS  :  expected failure - errno = 9 : Bad file descriptor
-fstatfs02    2  TBROK  :  tst_sig.c:232: unexpected signal SIGSEGV(11)
-received (pid = 17841).
-fstatfs02    3  TBROK  :  tst_sig.c:232: Remaining cases broken
-
----
-ioctl03
-ioctl03.c:85: TFAIL: (UNKNOWN 0x40)
-
-
-----
-mq_timedreceive01
-
-[  283.875014] mq_timedreceive[2354]: segfault at b7f5a004 ip b7dc1b0f
-sp bfc4dde0 error 4 in libc.so.6[b7d52000+175000] likely on CPU 2
-(core 2, socket 0)
-[  283.894804] Code: 65 c7 07 4b 00 00 00 b8 ff ff ff ff e9 7b fe ff
-ff 8d b4 26 00 00 00 00 8d 76 00 f3 0f 1e fb 83 ec 1c 8b 44 24 30 85
-c0 74 1d <8b> 50 04 c7 44 24 0c 00 00 00 00 8b 00 89 54 24 08 89 04 24
-c1 f8
-[  283.913703] audit: type=1701 audit(1680761716.789:31):
-auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=2354
-comm=\"mq_timedreceive\"
-exe=\"/opt/ltp/testcases/bin/mq_timedreceive01\" sig=11 res=1
-   0
-
-mq_timedreceive01
-mq_timedreceive01.c:197: TPASS: mq_timedreceive() failed expectedly: EINTR (4)
-tst_test.c:1581: TBROK: Test killed by SIGSEGV!
+>> drivers/gpu/drm/i915/gt/uc/intel_uc.c:484:6: warning: variable 'pl1en' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (ret)
+               ^~~
+   drivers/gpu/drm/i915/gt/uc/intel_uc.c:573:41: note: uninitialized use occurs here
+           i915_hwmon_power_max_restore(gt->i915, pl1en);
+                                                  ^~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_uc.c:484:2: note: remove the 'if' if its condition is always false
+           if (ret)
+           ^~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_uc.c:475:6: warning: variable 'pl1en' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+           if (!intel_uc_fw_is_loadable(&guc->fw)) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_uc.c:573:41: note: uninitialized use occurs here
+           i915_hwmon_power_max_restore(gt->i915, pl1en);
+                                                  ^~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_uc.c:475:2: note: remove the 'if' if its condition is always false
+           if (!intel_uc_fw_is_loadable(&guc->fw)) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/gt/uc/intel_uc.c:465:12: note: initialize the variable 'pl1en' to silence this warning
+           bool pl1en;
+                     ^
+                      = 0
+   2 warnings generated.
 
 
-----
-mq_timedsend01
+vim +484 drivers/gpu/drm/i915/gt/uc/intel_uc.c
 
-[  283.982220] mq_timedsend01[2357]: segfault at b7f06004 ip b7d6dd6f
-sp bfb58fe0 error 4 in libc.so.6[b7cfe000+175000] likely on CPU 0
-(core 0, socket 0)
-[  283.996745] Code: 65 c7 07 4b 00 00 00 b8 ff ff ff ff e9 7b fe ff
-ff 8d b4 26 00 00 00 00 8d 76 00 f3 0f 1e fb 83 ec 1c 8b 44 24 30 85
-c0 74 1d <8b> 50 04 c7 44 24 0c 00 00 00 00 8b 00 89 54 24 08 89 04 24
-c1 f8
-lls/mq_notify/..[  284.015564] audit: type=1701
-audit(1680761716.891:32): auid=4294967295 uid=0 gid=0 ses=4294967295
-subj=kernel pid=2357 comm=\"mq_timedsend01\"
-exe=\"/opt/ltp/testcases/bin/mq_timedsend01\" sig=11 res=1
-/utils/mq.h:70: TINFO: receive 1/1 message
+afd088ac05f120d drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2022-01-06  457  
+6fbeda0bfd210f9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2020-01-10  458  static int __uc_init_hw(struct intel_uc *uc)
+6fbeda0bfd210f9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2020-01-10  459  {
+2f8c06cb6622b55 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2023-01-28  460  	struct intel_gt *gt = uc_to_gt(uc);
+2f8c06cb6622b55 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2023-01-28  461  	struct drm_i915_private *i915 = gt->i915;
+6fbeda0bfd210f9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2020-01-10  462  	struct intel_guc *guc = &uc->guc;
+6fbeda0bfd210f9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2020-01-10  463  	struct intel_huc *huc = &uc->huc;
+6fbeda0bfd210f9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2020-01-10  464  	int ret, attempts;
+b4aa935db7f0b46 drivers/gpu/drm/i915/gt/uc/intel_uc.c Ashutosh Dixit         2023-04-05  465  	bool pl1en;
+6fbeda0bfd210f9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2020-01-10  466  
+6fbeda0bfd210f9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2020-01-10  467  	GEM_BUG_ON(!intel_uc_supports_guc(uc));
+bfe5a40a7b9a967 drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2020-02-18  468  	GEM_BUG_ON(!intel_uc_wants_guc(uc));
+356c484822e6ac9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-16  469  
+2f8c06cb6622b55 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2023-01-28  470  	print_fw_ver(gt, &guc->fw);
+afd088ac05f120d drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2022-01-06  471  
+afd088ac05f120d drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2022-01-06  472  	if (intel_uc_uses_huc(uc))
+2f8c06cb6622b55 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2023-01-28  473  		print_fw_ver(gt, &huc->fw);
+afd088ac05f120d drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2022-01-06  474  
+42f96e5bd41e91f drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2020-02-18  475  	if (!intel_uc_fw_is_loadable(&guc->fw)) {
+6fbeda0bfd210f9 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2020-01-10  476  		ret = __uc_check_hw(uc) ||
+ee402140274e870 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  477  		      intel_uc_fw_is_overridden(&guc->fw) ||
+202c98e71692484 drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2020-02-18  478  		      intel_uc_wants_guc_submission(uc) ?
+ee402140274e870 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  479  		      intel_uc_fw_status_to_error(guc->fw.status) : 0;
+ae7a3166a708bee drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-11  480  		goto err_out;
+ae7a3166a708bee drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-11  481  	}
+ae7a3166a708bee drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-11  482  
+63064d822c964c0 drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2019-07-30  483  	ret = uc_init_wopcm(uc);
+63064d822c964c0 drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2019-07-30 @484  	if (ret)
+63064d822c964c0 drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2019-07-30  485  		goto err_out;
+63064d822c964c0 drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2019-07-30  486  
+e5a1ad035938e60 drivers/gpu/drm/i915/gt/uc/intel_uc.c Matthew Brost          2021-07-26  487  	intel_guc_reset_interrupts(guc);
+61b5c1587dd82a8 drivers/gpu/drm/i915/intel_uc.c       Michał Winiarski       2017-12-13  488  
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  489  	/* WaEnableuKernelHeaderValidFix:skl */
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  490  	/* WaEnableGuCBootHashCheckNotSet:skl,bxt,kbl */
+c816723b6b8a627 drivers/gpu/drm/i915/gt/uc/intel_uc.c Lucas De Marchi        2021-06-05  491  	if (GRAPHICS_VER(i915) == 9)
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  492  		attempts = 3;
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  493  	else
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  494  		attempts = 1;
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  495  
+b4aa935db7f0b46 drivers/gpu/drm/i915/gt/uc/intel_uc.c Ashutosh Dixit         2023-04-05  496  	/* Disable a potentially low PL1 power limit to allow freq to be raised */
+b4aa935db7f0b46 drivers/gpu/drm/i915/gt/uc/intel_uc.c Ashutosh Dixit         2023-04-05  497  	i915_hwmon_power_max_disable(gt->i915, &pl1en);
+b4aa935db7f0b46 drivers/gpu/drm/i915/gt/uc/intel_uc.c Ashutosh Dixit         2023-04-05  498  
+1c40d40f6835cde drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-12-16  499  	intel_rps_raise_unslice(&uc_to_gt(uc)->rps);
+1c40d40f6835cde drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-12-16  500  
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  501  	while (attempts--) {
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  502  		/*
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  503  		 * Always reset the GuC just before (re)loading, so
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  504  		 * that the state and timing are fairly predictable
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  505  		 */
+771051eaa74661f drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-02  506  		ret = __uc_sanitize(uc);
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  507  		if (ret)
+61b5c1587dd82a8 drivers/gpu/drm/i915/intel_uc.c       Michał Winiarski       2017-12-13  508  			goto err_out;
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  509  
+a8dc0f6d187bccc drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  510  		intel_huc_fw_upload(huc);
+386e300fe9fae7e drivers/gpu/drm/i915/intel_uc.c       Michal Wajdeczko       2019-05-27  511  		intel_guc_ads_reset(guc);
+2bf8fb39eb70b6c drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2019-07-24  512  		intel_guc_write_params(guc);
+e8668bbcb0f91c7 drivers/gpu/drm/i915/intel_uc.c       Michal Wajdeczko       2017-10-16  513  		ret = intel_guc_fw_upload(guc);
+52b832606038c5b drivers/gpu/drm/i915/intel_uc.c       Robert M. Fosha        2019-03-29  514  		if (ret == 0)
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  515  			break;
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  516  
+2f8c06cb6622b55 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2023-01-28  517  		gt_dbg(gt, "GuC fw load failed (%pe) will reset and retry %d more time(s)\n",
+2f8c06cb6622b55 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2023-01-28  518  		       ERR_PTR(ret), attempts);
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  519  	}
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  520  
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  521  	/* Did we succeded or run out of retries? */
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  522  	if (ret)
+ac58d2ab0ad9c8b drivers/gpu/drm/i915/intel_uc.c       Daniele Ceraolo Spurio 2017-05-22  523  		goto err_log_capture;
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  524  
+789a625158b0c0c drivers/gpu/drm/i915/intel_uc.c       Michal Wajdeczko       2017-05-02  525  	ret = guc_enable_communication(guc);
+789a625158b0c0c drivers/gpu/drm/i915/intel_uc.c       Michal Wajdeczko       2017-05-02  526  	if (ret)
+ac58d2ab0ad9c8b drivers/gpu/drm/i915/intel_uc.c       Daniele Ceraolo Spurio 2017-05-22  527  		goto err_log_capture;
+789a625158b0c0c drivers/gpu/drm/i915/intel_uc.c       Michal Wajdeczko       2017-05-02  528  
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  529  	/*
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  530  	 * GSC-loaded HuC is authenticated by the GSC, so we don't need to
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  531  	 * trigger the auth here. However, given that the HuC loaded this way
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  532  	 * survive GT reset, we still need to update our SW bookkeeping to make
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  533  	 * sure it reflects the correct HW status.
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  534  	 */
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  535  	if (intel_huc_is_loaded_by_gsc(huc))
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  536  		intel_huc_update_auth_status(huc);
+6f67930af78f10a drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2022-05-04  537  	else
+a8dc0f6d187bccc drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  538  		intel_huc_auth(huc);
+0dfa1cee613e03c drivers/gpu/drm/i915/intel_uc.c       Michal Wajdeczko       2017-12-06  539  
+cd414f4f59f64d7 drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2023-02-17  540  	if (intel_uc_uses_guc_submission(uc)) {
+cd414f4f59f64d7 drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2023-02-17  541  		ret = intel_guc_submission_enable(guc);
+cd414f4f59f64d7 drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2023-02-17  542  		if (ret)
+cd414f4f59f64d7 drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2023-02-17  543  			goto err_log_capture;
+cd414f4f59f64d7 drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2023-02-17  544  	}
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  545  
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  546  	if (intel_uc_uses_guc_slpc(uc)) {
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  547  		ret = intel_guc_slpc_enable(&guc->slpc);
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  548  		if (ret)
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  549  			goto err_submission;
+1c40d40f6835cde drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-12-16  550  	} else {
+1c40d40f6835cde drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-12-16  551  		/* Restore GT back to RPn for non-SLPC path */
+1c40d40f6835cde drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-12-16  552  		intel_rps_lower_unslice(&uc_to_gt(uc)->rps);
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  553  	}
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  554  
+b4aa935db7f0b46 drivers/gpu/drm/i915/gt/uc/intel_uc.c Ashutosh Dixit         2023-04-05  555  	i915_hwmon_power_max_restore(gt->i915, pl1en);
+b4aa935db7f0b46 drivers/gpu/drm/i915/gt/uc/intel_uc.c Ashutosh Dixit         2023-04-05  556  
+4fd4fde8e42e164 drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2023-02-06  557  	guc_info(guc, "submission %s\n", str_enabled_disabled(intel_uc_uses_guc_submission(uc)));
+4fd4fde8e42e164 drivers/gpu/drm/i915/gt/uc/intel_uc.c John Harrison          2023-02-06  558  	guc_info(guc, "SLPC %s\n", str_enabled_disabled(intel_uc_uses_guc_slpc(uc)));
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  559  
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  560  	return 0;
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  561  
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  562  	/*
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  563  	 * We've failed to load the firmware :(
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  564  	 */
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  565  err_submission:
+63c0eb30bfe9269 drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-07-30  566  	intel_guc_submission_disable(guc);
+ac58d2ab0ad9c8b drivers/gpu/drm/i915/intel_uc.c       Daniele Ceraolo Spurio 2017-05-22  567  err_log_capture:
+32ff76e80c2400c drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-02  568  	__uc_capture_load_err_log(uc);
+121981fafe699d9 drivers/gpu/drm/i915/intel_uc.c       Michal Wajdeczko       2017-12-06  569  err_out:
+1c40d40f6835cde drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-12-16  570  	/* Return GT back to RPn */
+1c40d40f6835cde drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-12-16  571  	intel_rps_lower_unslice(&uc_to_gt(uc)->rps);
+1c40d40f6835cde drivers/gpu/drm/i915/gt/uc/intel_uc.c Vinay Belgaumkar       2021-12-16  572  
+b4aa935db7f0b46 drivers/gpu/drm/i915/gt/uc/intel_uc.c Ashutosh Dixit         2023-04-05  573  	i915_hwmon_power_max_restore(gt->i915, pl1en);
+b4aa935db7f0b46 drivers/gpu/drm/i915/gt/uc/intel_uc.c Ashutosh Dixit         2023-04-05  574  
+ca7b2c1bbede618 drivers/gpu/drm/i915/gt/uc/intel_uc.c Daniele Ceraolo Spurio 2019-07-13  575  	__uc_sanitize(uc);
+89195bab5d8c540 drivers/gpu/drm/i915/intel_uc.c       Michal Wajdeczko       2019-05-22  576  
+ee402140274e870 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  577  	if (!ret) {
+2f8c06cb6622b55 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2023-01-28  578  		gt_notice(gt, "GuC is uninitialized\n");
+ee402140274e870 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  579  		/* We want to run without GuC submission */
+ee402140274e870 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  580  		return 0;
+ee402140274e870 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  581  	}
+ee402140274e870 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-18  582  
+2f8c06cb6622b55 drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2023-01-28  583  	gt_probe_error(gt, "GuC initialization failed %pe\n", ERR_PTR(ret));
+a5f978c3609f02a drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-11  584  
+a5f978c3609f02a drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-11  585  	/* We want to keep KMS alive */
+a5f978c3609f02a drivers/gpu/drm/i915/gt/uc/intel_uc.c Michal Wajdeczko       2019-08-11  586  	return -EIO;
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  587  }
+6cd5a72c357732e drivers/gpu/drm/i915/intel_uc.c       Arkadiusz Hiler        2017-03-14  588  
 
-mq_timedsend01.c:210: TPASS: mq_timedsend() failed expectedly: EFAULT (14)
-tst_test.c:1581: TBROK: Test killed by SIGSEGV!
-
----
-
-pread02_64
-
-tst_test.c:1524: TINFO: Timeout per run is 0h 05m 00s
-pread02.[  319.705083] /dev/zero: Can't open blockdev
-c:44: TPASS: pread(3, 1024, 0) (null) : ESPIPE (29)
-tst_test.c:1581: TBROK: Test killed by SIGSEGV!
-
----
-recvmmsg01
-
-[  369.451748] recvmmsg01[3821]: segfault at b7cb1004 ip b7dd7413 sp
-bf992430 error 4 in libc.so.6[b7cda000+175000] likely on CPU 3 (core
-3, socket 0)
-[  369.466232] Code: 26 00 00 00 00 66 90 f3 0f 1e fb 55 57 56 53 83
-ec 2c 8b 5c 24 50 8b 44 24 40 8b 54 24 44 8b 4c 24 48 8b 74 24 4c 85
-db 74 55 <8b> 7b 04 c7 44 24 1c 00 00 00 00 83 ec 08 8b 2b 89 7c 24 14
-8b 7c
-[  369.485043] audit: type=1701 audit(1680761802.360:44):
-auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=3821
-comm=\"recvmmsg01\" exe=\"/opt/ltp/testcases/bin/recvmmsg01\" sig=11
-res=1
-[  369.496491] mmap: remap_file_page (3822) uses deprecated
-remap_file_pages() syscall. See Documentation/mm/remap_file_pages.rst.
-
-
-recvmmsg01.c:92: TPASS: recvmmsg() overflow in nanoseconds in timeout
-: EINVAL (22)
-tst_test.c:1581: TBROK: Test killed by SIGSEGV!
-
-
----
-semctl03
-
-[  441.271399] semctl03[6093]: segfault at 0 ip b7e53fc0 sp bf93c0a0
-error 4 in libc.so.6[b7d56000+175000] likely on CPU 1 (core 1, socket
-0)
-[  441.284432] Code: 24 5c ff 74 24 5c e8 cf fd ff ff 83 c4 10 85 c0
-78 0e ba 04 00 14 00 0f a3 fa 0f 82 ba 00 00 00 83 c4 40 5b 5e 5f c3
-8d 76 00 <8b> 03 31 d2 89 e6 66 0f 6e ca 89 04 24 8b 43 04 89 44 24 04
-8b 43
-[  441.303267] audit: type=1701 audit(1680761874.178:46):
-auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=6093
-comm=\"semctl03\" exe=\"/opt/ltp/testcases/bin/semctl03\" sig=11 res=1
-
-
-
-semctl03.c:73: TPASS: semctl() with invalid IPC command : EINVAL (22)
-tst_test.c:1581: TBROK: Test killed by SIGSEGV!
-
-semctl04
-semctl04.c:69: TBROK: semget(1628514830, 10, 600) failed: EEXIST (17)
-
-semctl05
-semctl05.c:54: TBROK: semget(1628514830, 10, 780) failed: EEXIST (17)
-
-semctl07
-semctl07.c:41: TFAIL: sem_nsems = 10, expected 1
-
-----
-sigtimedwait01
-
-
-[  486.624973] sigtimedwait01[6644]: segfault at 5 ip b7d9758f sp
-bfda7290 error 4 in libc.so.6[b7d80000+175000] likely on CPU 1 (core
-1, socket 0)
-[  486.639052] Code: c7 03 4b 00 00 00 b8 ff ff ff ff e9 3b fe ff ff
-8d b4 26 00 00 00 00 8d 74 26 00 f3 0f 1e fb 83 ec 1c 8b 44 24 28 85
-c0 74 1d <8b> 50 04 c7 44 24 0c 00 00 00 00 8b 00 89 54 24 08 89 04 24
-c1 f8
-[  486.659213] audit: type=1701 audit(1680761919.535:49):
-auid=4294967295 uid=0 gid=0 ses=4294967295 subj=kernel pid=6644
-comm=\"sigtimedwait01\" exe=\"/opt/ltp/testcases/bin/sigtimedwait01\"
-sig=11 res=1
-
-
-sigwait.c:344: TPASS: Child exited with expected code
-tst_test.c:1581: TBROK: Test killed by SIGSEGV!
-
----
-
-
-statfs02
-
-statfs02    4  TPASS  :  expected failure: TEST_ERRNO=EFAULT(14): Bad address
-statfs02    5  TBROK  :  tst_sig.c:232: unexpected signal SIGSEGV(11)
-received (pid = 6728).
-statfs02    6  TBROK  :  tst_sig.c:232: Remaining cases broken
-
----
-
-statx01
-
-statx01.c:138: TPASS: stx_nlink(1) is c[  833.666410] /dev/zero: Can't
-open blockdev
-orrect
-statx01.c:82: TFAIL: statx.stx_mnt_id(421) is different from
-mount_id(34280324422697381)[  833.678950] /dev/zero: Can't open
-blockdev
- in /proc/self/mountinfo
-statx01.c:88: TPASS: /proc/12304/fdinfo/3 mnt_id: = 421
-
----
-ustat01
-
-tst_test.c:1524: TINFO: Timeout per run is 0h 05m 00s
-ustat01.c:39: TBROK: stat(/,0xbfb96278) failed: EOVERFLOW (75)
-
-tst_test.c:1524: TINFO: Timeout per run is 0h 05m 00s
-ustat02.c:57: TBROK: stat(/,0xbfa11098) failed: EOVERFLOW (75)
-
-
-
-Details log:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119999/suite/ltp-syscalls/test/fstatfs02/log
-
-List of test cases failed:
-i386:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119999/suite/ltp-syscalls/tests/
-
-arm - x15 device logs:
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16120012/suite/ltp-syscalls/tests/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16120012/suite/ltp-syscalls/test/fstatfs02/log
-
-Test environment: qemu_x86_64-compat
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119789/suite/ltp-syscalls/tests/
-
-Test environment: juno-r2-compat
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16120000/suite/ltp-syscalls/tests/
-
-- Naresh
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
