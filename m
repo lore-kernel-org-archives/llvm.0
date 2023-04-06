@@ -1,122 +1,142 @@
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7C32F38
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 11:24:19 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 2FF9E5C00C9;
-	Thu,  6 Apr 2023 07:24:18 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 06 Apr 2023 07:24:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1680780258; x=1680866658; bh=Gq
-	C0msXUkih9ZXzN6e7GwneaPTqnO4vnHWEtU6Y291I=; b=CXXIGJFVUBMwtAjLnp
-	kmF10Zfxfr631SRdhfKgwQh+ULwP+arHVY/Q2o5d+Sz9uZu2foTRaLB5dXiW1yyx
-	SkodDp49FghSHp2I8e0VygrKOLHRqPFizdJy7Y7UuZEZHLvKELp+3i5crOAjVGhg
-	oml7+vH8jkpaoTcv4jqVNC83UCeuSp3+LOjjLgDPmcNjiiitNBPFfA3Vj2Xav8pk
-	Qxg3zvT45pmTWyIwM+iUgg1yWO9X4Fntvw9Ouf6uPd/5sBsfaeH3/i9i6UJOqsCh
-	Xn1OpYeXhPGPls+mlVenzOilPj7ansHZgCR/8/aCJQp9qbmB3s7qgkwJjuxOL99v
-	ZLKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1680780258; x=1680866658; bh=GqC0msXUkih9Z
-	XzN6e7GwneaPTqnO4vnHWEtU6Y291I=; b=DzBgP5N9tzBpd8kNcfqKNGyFddW34
-	dOLdkdA0dILtzyrrPHBWH+tf+b9sHy1ux2zBy9YT+Zz6JzcQOJ/g4amaBuj7HI8D
-	//Yj4Pm8FCtr6aGMRIVwhGJXvetGTQR6ZCcO0a2ECuT57r3Nr6/XSrPXovuCe0XF
-	HG7IR9EVuGrMX/KaeZG/4ehe07+eIfjcYL9VN6tNXUNvXawVKOdt/Is/4rjVwhE/
-	XsgAmyI7ZOSmaDOiAHJ5Y3qMF45DF6K3G/EXiAziQuF+YMIV6PO1xZaZu02/iS4t
-	KfEt5wdETeseQaptyGMLauoZ2hZ3gWXnqIqC6zHHgsW3mulVig34dw3Yw==
-X-ME-Sender: <xms:4asuZLbu6dbDL9QI-ji9iiGUeSqq0nGIef2_G7_s9gQHBTYucDJF6g>
-    <xme:4asuZKZD0NnnHWyn_zhNSJgGUHgtq14tnGDtGJJ6z-JGFe4F8YUg3gVQVQ2BGu4xL
-    6kdgEqpUaXtEv9xKxU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgfeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:4asuZN9J3CLK4Qj7D861SnSnFB20ziqnzGrk6yFlarwexWbCqU3hhQ>
-    <xmx:4asuZBo6oYJ_pTS0dpGyz10SA2oOBmPR4EccqPZWOic7bCx9rhHwOg>
-    <xmx:4asuZGrdFNHgtx9VB1uwx1NPsGB3gw6PSWyz7pEZ2hQjY-E0LjfiIg>
-    <xmx:4qsuZCdoPeP9U9PXBpKPVsKJTITTWGudzVUURAGbxFvw0xTFSXLEUQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 961AEB60093; Thu,  6 Apr 2023 07:24:17 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914383214
+	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 11:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC54C433D2;
+	Thu,  6 Apr 2023 11:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680780705;
+	bh=cfJ073jZWuUKyB8yTPziOXBTwqVge2u8UtgBTT4+M2w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ke9T55bE9PEIRdLT98NiZeP2bb07OFwofuV8GEso27h5qCugw5D4b20+ULA8n1qaB
+	 qL8b4DDYZRWCG3P6/CzOaRSxRtbOxFkRCnQj6hmMMBRt1g8oPAyDKK4zA/9Fcl+Njs
+	 nkppIPQpKMeIHltAmzpIV9Wqt/auWZSMurSb7LayRFqZupRnMLApBjwJF9cZnEbvwr
+	 4bZcEpkyhzjN9k/LICcudUEBS+IBS2AdzlCww1aVE2g8sN44aUqubDQShGcBze8En9
+	 7b7LkxPXx4sx3vbhcLls+ASGK+lUcEriuKoqVLWjcvrdF5zUZalzIsNZG9piVZrzBm
+	 LG2+EpZyX5Icw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	shuah@kernel.org,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	guoren@kernel.org,
+	nathan@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.2 04/17] selftests: sigaltstack: fix -Wuninitialized
+Date: Thu,  6 Apr 2023 07:31:18 -0400
+Message-Id: <20230406113131.648213-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230406113131.648213-1-sashal@kernel.org>
+References: <20230406113131.648213-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <7234b8ab-db5c-4f4a-bb9e-ddef9f1a50d3@app.fastmail.com>
-In-Reply-To: <20230406105646.GB1545779@pevik>
-References: 
- <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
- <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
- <20230406105646.GB1545779@pevik>
-Date: Thu, 06 Apr 2023 13:23:57 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Petr Vorel" <pvorel@suse.cz>,
- "Naresh Kamboju" <naresh.kamboju@linaro.org>
-Cc: "open list" <linux-kernel@vger.kernel.org>,
- "LTP List" <ltp@lists.linux.it>, llvm@lists.linux.dev,
- chrubis <chrubis@suse.cz>, "Nathan Chancellor" <nathan@kernel.org>,
- "Anders Roxell" <anders.roxell@linaro.org>,
- =?UTF-8?Q?Daniel_D=C3=ADaz?= <daniel.diaz@linaro.org>,
- "Benjamin Copeland" <ben.copeland@linaro.org>,
- "Tudor Cretu" <tudor.cretu@arm.com>
-Subject: Re: LTP: list of failures on 32bit and compat mode
-Content-Type: text/plain
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 6, 2023, at 12:56, Petr Vorel wrote:
->> On Thu, Apr 6, 2023, at 11:11, Naresh Kamboju wrote:
->
->> > mq_timedreceive01
->> > mq_timedreceive01.c:197: TPASS: mq_timedreceive() failed expectedly: EINTR (4)
->> > tst_test.c:1581: TBROK: Test killed by SIGSEGV!
->
->> I think this is the same problem as fstatfs02, where ltp passes
->> an invalid pointer and expects EFAULT, but musl touches the data
->> first in order to do the time64 conversion. Needs the same fix.
->
-> FYI mq_timedreceive01 is broken on 32bit systems with glibc
-> (in current LTP master):
->
+From: Nick Desaulniers <ndesaulniers@google.com>
 
-> EINTR (4)
-> tst_test.c:1618: TBROK: Test killed by SIGSEGV!
+[ Upstream commit 05107edc910135d27fe557267dc45be9630bf3dd ]
 
-Right, I see this has the same time64 logic as musl now.
+Building sigaltstack with clang via:
+$ ARCH=x86 make LLVM=1 -C tools/testing/selftests/sigaltstack/
 
->> > recvmmsg01.c:92: TPASS: recvmmsg() overflow in nanoseconds in timeout
->> > : EINVAL (22)
->> > tst_test.c:1581: TBROK: Test killed by SIGSEGV!
->
->> Same time64 conversion issue as above.
->
-> Besides the same problem with shm permissions on musl I see SIGSEGV also on
-> 64bit musl on current LTP master.
+produces the following warning:
+  warning: variable 'sp' is uninitialized when used here [-Wuninitialized]
+  if (sp < (unsigned long)sstack ||
+      ^~
 
-Ah, I see. This must be the padding code then, not the time64
-conversion:
+Clang expects these to be declared at global scope; we've fixed this in
+the kernel proper by using the macro `current_stack_pointer`. This is
+defined in different headers for different target architectures, so just
+create a new header that defines the arch-specific register names for
+the stack pointer register, and define it for more targets (at least the
+ones that support current_stack_pointer/ARCH_HAS_CURRENT_STACK_POINTER).
 
-+int recvmmsg(int fd, struct mmsghdr *msgvec, unsigned int vlen, unsigned int flags, struct timespec *timeout)
-+{
-+#if LONG_MAX > INT_MAX
-+       struct mmsghdr *mh = msgvec;
-+       unsigned int i;
-+       for (i = vlen; i; i--, mh++)
-+               mh->msg_hdr.__pad1 = mh->msg_hdr.__pad2 = 0;
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Link: https://lore.kernel.org/lkml/CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com/
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Tested-by: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../sigaltstack/current_stack_pointer.h       | 23 +++++++++++++++++++
+ tools/testing/selftests/sigaltstack/sas.c     |  7 +-----
+ 2 files changed, 24 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/sigaltstack/current_stack_pointer.h
+
+diff --git a/tools/testing/selftests/sigaltstack/current_stack_pointer.h b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
+new file mode 100644
+index 0000000000000..ea9bdf3a90b16
+--- /dev/null
++++ b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#if __alpha__
++register unsigned long sp asm("$30");
++#elif __arm__ || __aarch64__ || __csky__ || __m68k__ || __mips__ || __riscv
++register unsigned long sp asm("sp");
++#elif __i386__
++register unsigned long sp asm("esp");
++#elif __loongarch64
++register unsigned long sp asm("$sp");
++#elif __ppc__
++register unsigned long sp asm("r1");
++#elif __s390x__
++register unsigned long sp asm("%15");
++#elif __sh__
++register unsigned long sp asm("r15");
++#elif __x86_64__
++register unsigned long sp asm("rsp");
++#elif __XTENSA__
++register unsigned long sp asm("a1");
++#else
++#error "implement current_stack_pointer equivalent"
 +#endif
+diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
+index c53b070755b65..98d37cb744fb2 100644
+--- a/tools/testing/selftests/sigaltstack/sas.c
++++ b/tools/testing/selftests/sigaltstack/sas.c
+@@ -20,6 +20,7 @@
+ #include <sys/auxv.h>
+ 
+ #include "../kselftest.h"
++#include "current_stack_pointer.h"
+ 
+ #ifndef SS_AUTODISARM
+ #define SS_AUTODISARM  (1U << 31)
+@@ -46,12 +47,6 @@ void my_usr1(int sig, siginfo_t *si, void *u)
+ 	stack_t stk;
+ 	struct stk_data *p;
+ 
+-#if __s390x__
+-	register unsigned long sp asm("%15");
+-#else
+-	register unsigned long sp asm("sp");
+-#endif
+-
+ 	if (sp < (unsigned long)sstack ||
+ 			sp >= (unsigned long)sstack + stack_size) {
+ 		ksft_exit_fail_msg("SP is not on sigaltstack\n");
+-- 
+2.39.2
 
-
-       Arnd
