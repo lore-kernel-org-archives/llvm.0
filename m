@@ -1,186 +1,135 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C957B7E9
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 02:45:28 +0000 (UTC)
-Received: by mail-pj1-f53.google.com with SMTP id j14-20020a17090a7e8e00b002448c0a8813so739955pjl.0
-        for <llvm@lists.linux.dev>; Wed, 05 Apr 2023 19:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680749128; x=1683341128;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JdNJO4mfN64m2Db82GYHXGm3NSR4lZ1G8dlNVBocSIQ=;
-        b=ll2bMfcK89gAizgPPSIn5T8e949Q/JnqEcpbsQeH1VY1J/1iiYgC9aALL2CEf2+ES4
-         ZEfM5usiEug7lR0+bioA+yXiHLk0FoNBuiyQPCe6cp18ck+MXIAA4O6uAZP7vSNm18fI
-         6XQu02i5KwSFYotIxb6lE9G70vRd285inqAelYvMppyeO4qHqhrDZnvLg4p3Z/StW5ry
-         sZ1TjWivLeTE7tQ1e5vH6hFsdArzA7VVTxqGGiztJjaGJ0qw2i24+Kd+nnRCEkjj/vTb
-         Jem7EpjPp+9NRxyKrKOVITzJ3bMS+uYgyJ6VqhKZhh5SwSEbk4Ct3Lo7TzFbAznDeiQk
-         OEIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680749128; x=1683341128;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JdNJO4mfN64m2Db82GYHXGm3NSR4lZ1G8dlNVBocSIQ=;
-        b=RDJp3c+zdjEgmgQaegMmEn7Imzdykv78BPh5MseK4a2KiU6XKKja8oWshQxqJM2Lya
-         dQFpZzaqxwkFGYwT2PtsNHdbbz/s1H9d/G3vQ/eap7QlflSKHgOHRsCnaH1jvp/5ocEf
-         7NoJuPwcEC4z+jhebu6XEnBurMtyCge8nYO1GAmHq1Fsomwa5M7kCg1uLA/F9ee/Z3RJ
-         cn2jVlib4jgTXhNnnxwoHShklh+DI6pK5nDaUJBTjoND3Y/f3161Qd+oXK7sskdRGTni
-         6UuLWh1i6XJmz9+cLEEgDzScHCbmpe+Vvqn8Fq1PIXjLNAjeTVYyJZMzJ7kf7pcUlGiB
-         geDA==
-X-Gm-Message-State: AAQBX9cZIKWv1W0w7TFUWUMjDQHVlOgnDwYZsgAk/O4LrZU/NzPo9fS1
-	QG8IaNWr4kCuLVEqyKV4ya74z4qETEFOUqWCzi6DMA==
-X-Google-Smtp-Source: AKy350YjCKHwdcmt1MAwwhk34guKHZvpB05RdPBqo7FPZRGnCR0kw248IBXLZjoyZJA7B5VFYot4iQ1xdvgYwcXR1cE=
-X-Received: by 2002:a17:903:248:b0:19f:3b0f:4d8d with SMTP id
- j8-20020a170903024800b0019f3b0f4d8dmr3546362plh.7.1680749127966; Wed, 05 Apr
- 2023 19:45:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0467E9;
+	Thu,  6 Apr 2023 02:58:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680749916; x=1712285916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s3Z9sjVGEob/GoGVts3nOrJ90YUTU0Ho1Ex+8S/Ozyc=;
+  b=fxC8lwBdqVLM0HDr+LkfC/+vd6GtKFvobtvyyxsjXB8qRzVTJ7SE2De2
+   GxJG7wga11rsl7Yyj+Mjng+vAdUjDYK0lgVIrp16AJuE+/hLh5jbVv6Mt
+   L/lqwfwpzR5VW7YOoe/Zo2BZ6RqUCGh70HH6rncW1zVuhQIjsSXIeX42J
+   RbWPuLTE5/jrP+xTxPUXKf+FcMHpyg4ugw9q3x0U0LaQLxdqgRjNclJCK
+   tSSCN3PCFGHlhsnVFSTi8x2xEHZRk1+Npkq2Zgi6Ax/gVL7vc/ikjbLy9
+   VZ0NrYB8ya2wspHfb7kKEXhNS35Lb29SKwGw4S7hw/RUgZSiK8IAUwrsW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="428912602"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="428912602"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 19:58:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="719527475"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="719527475"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2023 19:58:34 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pkFpZ-000Qzu-21;
+	Thu, 06 Apr 2023 02:58:33 +0000
+Date: Thu, 6 Apr 2023 10:58:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH net-next] net: dsa: replace
+ NETDEV_PRE_CHANGE_HWTSTAMP notifier with a stub
+Message-ID: <202304061058.ZYSqgL8r-lkp@intel.com>
+References: <20230405165115.3744445-1-vladimir.oltean@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
- <16007014-c5f2-4b07-baec-e19952236aa5@spud> <ZAbGSA6F0kfv9YYw@sunil-laptop>
- <E7FB4927-1FE6-435A-914E-9615C2AD9D34@kernel.org> <a9823561-2e32-49e8-b6c9-73e4b8f8cf8d@spud>
- <ZAfeaO52pnYhiyLN@sunil-laptop> <CAFiDJ58bRo6R1qOFaSSNgAdbQJZ3xDY6Wth-t8M8XKRFbig2hA@mail.gmail.com>
- <ZCvJpnNZYzrIcfPe@sunil-laptop>
-In-Reply-To: <ZCvJpnNZYzrIcfPe@sunil-laptop>
-From: Atish Kumar Patra <atishp@rivosinc.com>
-Date: Thu, 6 Apr 2023 08:15:16 +0530
-Message-ID: <CAHBxVyHA8ZouSUnqHaZTa=uMQxx61RqZuSBHx15Hg8+AVYLXZg@mail.gmail.com>
-Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
-To: Sunil V L <sunilvl@ventanamicro.com>
-Cc: Ley Foon Tan <lftan@kernel.org>, Conor Dooley <conor@kernel.org>, 
-	linux-riscv <linux-riscv@lists.infradead.org>, linux-acpi@vger.kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Anup Patel <apatel@ventanamicro.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Conor Dooley <conor.dooley@microchip.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405165115.3744445-1-vladimir.oltean@nxp.com>
 
-On Tue, Apr 4, 2023 at 12:24=E2=80=AFPM Sunil V L <sunilvl@ventanamicro.com=
-> wrote:
->
-> On Tue, Apr 04, 2023 at 02:35:19PM +0800, Ley Foon Tan wrote:
-> > On Wed, Mar 8, 2023 at 9:08=E2=80=AFAM Sunil V L <sunilvl@ventanamicro.=
-com> wrote:
-> > >
-> > > On Tue, Mar 07, 2023 at 06:44:35PM +0000, Conor Dooley wrote:
-> > > > On Tue, Mar 07, 2023 at 06:13:22AM +0000, Conor Dooley wrote:
-> > > > >
-> > > > >
-> > > > > On 7 March 2023 05:06:16 GMT, Sunil V L <sunilvl@ventanamicro.com=
-> wrote:
-> > > > > >On Mon, Mar 06, 2023 at 09:51:09PM +0000, Conor Dooley wrote:
-> > > > > >> Hey Sunil,
-> > > > > >>
-> > > > > >> On Fri, Mar 03, 2023 at 07:06:27PM +0530, Sunil V L wrote:
-> > > > > >> > This patch series enables the basic ACPI infrastructure for =
-RISC-V.
-> > > > > >> > Supporting external interrupt controllers is in progress and=
- hence it is
-> > > > > >> > tested using poll based HVC SBI console and RAM disk.
-> > > > > >> >
-> > > > > >> > The first patch in this series is one of the patch from Jish=
-eng's
-> > > > > >> > series [1] which is not merged yet. This patch is required t=
-o support
-> > > > > >> > ACPI since efi_init() which gets called before sbi_init() ca=
-n enable
-> > > > > >> > static branches and hits a panic.
-> > > > > >> >
-> > > > > >> > Patch 2 and 3 are ACPICA patches which are not merged into a=
-cpica yet
-> > > > > >> > but a PR is raised already.
-> > > > > >> >
-> > > > > >> > Below are two ECRs approved by ASWG.
-> > > > > >> > RINTC - https://drive.google.com/file/d/1R6k4MshhN3WTT-hwqAq=
-uu5nX6xSEqK2l/view
-> > > > > >> > RHCT - https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6=
-123DCZKR-tia/view
-> > > > > >> >
-> > > > > >> > The series depends on Anup's IPI improvement series [2].
-> > > > > >> >
-> > > > > >> > [1] https://lore.kernel.org/all/20220821140918.3613-1-jszhan=
-g@kernel.org/
-> > > > > >> > [2] https://lore.kernel.org/lkml/20230103141221.772261-7-apa=
-tel@ventanamicro.com/T/
-> > > > > >>
-> > > > > >> Building a clang-15 allmodconfig (I didn't try gcc) with this =
-series, and
-> > > > > >> Anup's IPI bits, results in a broken build, due to failings in=
- cmpxchg:
-> > > > > >>
-> > > > > >> /stuff/linux/drivers/platform/surface/aggregator/controller.c:=
-61:25: error: call to __compiletime_assert_335 declared with 'error' attrib=
-ute: BUILD_BUG failed
-> > > > > >>         while (unlikely((ret =3D cmpxchg(&c->value, old, new))=
- !=3D old)) {
-> > > > > >>                                ^
-> > > >
-> > > > > > I am able to build without any of these issues using clang-15. =
-I am
-> > > > > > wondering whether the base is proper. I had rebased on top of t=
-he master
-> > > > > > and couple of patches from IPI series were already merged in th=
-e master.
-> > > > > >
-> > > > > > Do you mind verifying with my branch
-> > > > > > https://github.com/vlsunil/linux/commits/acpi_b1_us_review_ipi1=
-7_V3?
-> > > > >
-> > > > > I can check that later I suppose.
-> > > >
-> > > > That's broken too.
-> > > >
-> > > > > > Or if you could provide me your branch details, I can look furt=
-her.
-> > > > >
-> > > > > 6.3-rc1, with both series applied, sans Anups applied patches.
-> > > >
-> > > > I've pushed my stuff here, but unlikely that it makes any odds sinc=
-e
-> > > > your branch experiences the same build issue.
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ bo=
-rked-acpi-surface
-> > > >
-> > > > My build commands are wrapped in a script, but it's an LLVM=3D1
-> > > > allmodconfig run w/ clang-15(.0.7) etc.
-> > > >
-> > > Ahh allmodconfig. Thank you very much!. I can reproduce the failure. =
-Let
-> > > me look further and fix in next revision.
-> > >
-> > > Thanks!
-> > > Sunil
-> >
-> > Hi Sunil
-> >
-> > One question regarding PMU in ACPI flow.
-> >
-> > We use DT to decode the supported HPM counters/events for the
-> > different platforms now.
-> > How do we enable PMU (drivers/perf/riscv_pmu_sbi.c) when using ACPI met=
-hod?
-> > Note, this might be in separate patch series.
-> >
-> Hi Lay Foon,
->
-> This driver uses SBI calls and hence should work in case of ACPI also.
->
-> There is one minor change required in this driver for overflow
-> interrupt. I have a patch for that in future series.
+Hi Vladimir,
 
-Just to add further clarification: OpenSBI will continue to use the
-device tree so that
-the firmware will have access to all the PMU details.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
->
-> Thanks,
-> Sunil
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Oltean/net-dsa-replace-NETDEV_PRE_CHANGE_HWTSTAMP-notifier-with-a-stub/20230406-005302
+patch link:    https://lore.kernel.org/r/20230405165115.3744445-1-vladimir.oltean%40nxp.com
+patch subject: [RFC PATCH net-next] net: dsa: replace NETDEV_PRE_CHANGE_HWTSTAMP notifier with a stub
+config: arm-randconfig-r023-20230403 (https://download.01.org/0day-ci/archive/20230406/202304061058.ZYSqgL8r-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/4788a6c004ab7f7210b1d27777e733eab85db17e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vladimir-Oltean/net-dsa-replace-NETDEV_PRE_CHANGE_HWTSTAMP-notifier-with-a-stub/20230406-005302
+        git checkout 4788a6c004ab7f7210b1d27777e733eab85db17e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/dsa/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304061058.ZYSqgL8r-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from net/dsa/stubs.c:7:
+>> include/net/dsa_stubs.h:33:2: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (dsa_stubs)
+           ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/dsa_stubs.h:38:9: note: uninitialized use occurs here
+           return err;
+                  ^~~
+   include/net/dsa_stubs.h:33:2: note: remove the 'if' if its condition is always true
+           if (dsa_stubs)
+           ^~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   include/net/dsa_stubs.h:26:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +33 include/net/dsa_stubs.h
+
+    21	
+    22	static inline int dsa_master_hwtstamp_validate(struct net_device *dev,
+    23						       const struct kernel_hwtstamp_config *config,
+    24						       struct netlink_ext_ack *extack)
+    25	{
+    26		int err;
+    27	
+    28		if (!netdev_uses_dsa(dev))
+    29			return 0;
+    30	
+    31		mutex_lock(&dsa_stubs_lock);
+    32	
+  > 33		if (dsa_stubs)
+    34			err = dsa_stubs->master_hwtstamp_validate(dev, config, extack);
+    35	
+    36		mutex_unlock(&dsa_stubs_lock);
+    37	
+    38		return err;
+    39	}
+    40	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
