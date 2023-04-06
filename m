@@ -1,67 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641BE8F53
-	for <llvm@lists.linux.dev>; Thu,  6 Apr 2023 16:12:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B63EC433EF;
-	Thu,  6 Apr 2023 16:12:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680797574;
-	bh=f0G5GtMX0Vww/OBGVTVkEPr8cy3Z6qlQlEOKio6hNl4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cSVvcg3zFbmG5sAGzQ/ByO5aATJV9Jy3CgKyWjtejL0e0hiHVolxQUjvfrKNbI788
-	 58wCx9Mpgl0C1GI/r7cJznw69HenWorG+KLMRmlKkb/2s857HcIPYsucgf9k9cvskb
-	 w453mC+m6QV/47w4xpKDw/bunrg11fc7K2Xrg/wFFpSnqKOyalGDl97nR5Lx3lPA0X
-	 aAk2iN0TXv8s1aJ0AtfJ5NEEptKr+/m3yru6Fee4i6Chl5evcANy2mJnwoa7RP3Vbj
-	 O58JOUv8IVELYUF4WthY5mXEUSbkvlVY6R97TTRNQa1Y4/ttYqGKSXEtKA92v4PL4D
-	 ngbfD1b//l7Bg==
-Date: Thu, 6 Apr 2023 18:12:49 +0200
-From: Simon Horman <horms@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next 2/3] ksz884x: remove unused #defines
-Message-ID: <ZC7vgRFmqAjGQyss@kernel.org>
-References: <20230405-ksz884x-unused-code-v1-0-a3349811d5ef@kernel.org>
- <20230405-ksz884x-unused-code-v1-2-a3349811d5ef@kernel.org>
- <454a61709e442f717fbde4b0ebb8b4c3fdfb515e.camel@redhat.com>
- <20230406090017.0fc0ae34@kernel.org>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F8A320B;
+	Thu,  6 Apr 2023 16:38:10 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E844153B;
+	Thu,  6 Apr 2023 09:38:54 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B1DBD3F6C4;
+	Thu,  6 Apr 2023 09:38:01 -0700 (PDT)
+Message-ID: <db92f18c-e2ed-78d0-db7e-83d8ee8a4dce@arm.com>
+Date: Thu, 6 Apr 2023 17:37:57 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406090017.0fc0ae34@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 08/17] iommu: Make iommu_group_do_dma_first_attach()
+ work with owned groups
+Content-Language: en-GB
+To: Jason Gunthorpe <jgg@nvidia.com>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
+Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
+ Nicolin Chen <nicolinc@nvidia.com>
+References: <8-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <8-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 06, 2023 at 09:00:17AM -0700, Jakub Kicinski wrote:
-> On Thu, 06 Apr 2023 15:37:36 +0200 Paolo Abeni wrote:
-> > On Wed, 2023-04-05 at 10:39 +0200, Simon Horman wrote:
-> > > Remove unused #defines from ksz884x driver.
-> > > 
-> > > These #defines may have some value in documenting the hardware.
-> > > But that information may be accessed via scm history.  
-> > 
-> > I personally have a slight preference for keeping these definitions in
-> > the sources (for doc purposes), but it's not a big deal. 
-> > 
-> > Any 3rd opinion more then welcome!
+On 06/04/2023 12:38 am, Jason Gunthorpe wrote:
+> If the group is already owned then defered attach should not be done and
+> the device should be directly connected to the correct domain.
 > 
-> I had the same reaction, FWIW.
+> Owned means that some driver is already bound to devices in the group and
+> is operating the group possibly without DMA API support. In this case
+> there would be no way to correct the mismatched domain.
+
+Looking more closely at the current code, it seems we just skip any 
+attach at all in this case. Thus although there can be technically be a 
+mismatch (physically, the device will be either partly or fully assigned 
+to the current domain if it is grouped by ID aliasing, or in limbo if it 
+is grouped for ACS reasons), it *should* be corrected whenever the 
+current owner next detaches its domain. This shouldn't actually be a 
+problem in the usual case, since the new device generally won't do 
+anything if the existing ownership prevents its driver from binding.
+
+I don't have a particularly strong opinion on changing this behaviour, 
+but I guess what's nagging me is that we could do a better job of 
+calling out that it *is* a behaviour change, and its implications. 
+Namely that they are slightly better if the device binds to the same 
+owner, in that it could rely use the current domain straight off without 
+the risk of being in ACS limbo, but also slightly worse in that if the 
+attach fails for any reason, it will now trash aliased RIDs of devices 
+that *were* working OK. It also means that the device could bind to any 
+*other* driver with driver_managed_dma and have a much better guarantee 
+of having access to the other owner's domain, with all the pitfalls 
+therein, but that's only a strengthening of a pre-existing problem :)
+
+Thanks,
+Robin.
+
+> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>   drivers/iommu/iommu.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> Cleaning up unused "code" macros, pure software stuff makes perfect
-> sense. But I feel a bit ambivalent about removing definitions of HW
-> registers and bits.
-
-I guess that it two down-votes for removing the #defines.
-
-Would it be acceptable if I reworked the series to only remove
-the dead code - which would leave only subset of patch 3/3 ?
-
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index c68cf551d05dc4..6fe8bc78db2016 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -411,8 +411,9 @@ static bool iommu_is_attach_deferred(struct device *dev)
+>   
+>   static int iommu_group_do_dma_first_attach(struct iommu_group *group, struct device *dev)
+>   {
+> -	return __iommu_device_set_domain(group, dev, group->domain,
+> -					 IOMMU_SET_DOMAIN_WITH_DEFERRED);
+> +	return __iommu_device_set_domain(
+> +		group, dev, group->domain,
+> +		group->owner ? 0 : IOMMU_SET_DOMAIN_WITH_DEFERRED);
+>   }
+>   
+>   int iommu_probe_device(struct device *dev)
