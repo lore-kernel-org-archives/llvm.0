@@ -1,29 +1,71 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E9AA95E
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 18:57:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4759EC433EF;
-	Fri,  7 Apr 2023 18:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680893845;
-	bh=08+PB7IhGQqaFjr+KLD52Zlv7Sd6C4hfxKhbAzJO4IU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NCSMEZw4LDCwlX9jKhErbWA1BZySwMKpH7aSQvPvWo9oxScgqaE4B5WvU1TVmkDtV
-	 3/uRxzD6Uq+kh0l6Ibr4jCat2pXYuk0iWKQZX9OhDj+10S3cUBWDEAlYca95WWUsdy
-	 Q6DNCYxozyN48JFLMavgFVdorPxdbkvIauL33MLpi9EjQmFVMjmRyV0vWvQod/sROe
-	 l/DhDW3yVrpDtK14vUt0BAgO/fY4r2KTFk6UycD5xdq8HQgA4k8rWW51c59SRyLB+C
-	 nvM8E1qlD7BsxHwSNS51sKKIf/+BLZnLdC6P0OeZaUsln7iPKCKvyvas609fBIEMNw
-	 T9AbRB6tzm6ig==
-Date: Fri, 7 Apr 2023 11:57:23 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org, llvm@lists.linux.dev,
-	tsbogend@alpha.franken.de, ndesaulniers@google.com
-Subject: Re: [PATCH 1/5] MIPS: Move various toolchain ASE check to Kconfig
-Message-ID: <20230407185723.GA1511753@dev-arch.thelio-3990X>
-References: <20230407102721.14814-1-jiaxun.yang@flygoat.com>
- <20230407102721.14814-2-jiaxun.yang@flygoat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A854AD22
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 19:07:07 +0000 (UTC)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7D7AD3F230
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 19:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1680894422;
+	bh=NxU5wo4yJIlxfUu7luiA0zDVsYB5pwNg6QbXIvPeaIU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:In-Reply-To;
+	b=cK4CyA+nkxRjfkIiBT3d9mrBSW4AhvxF6qF0VmS2jeCqxCE5N6nZSCvxdYM0oItQk
+	 XPI+qa7eKZ4CFmAvCSuDhQdVV42jOpDn3fRjYQJQoe3dD24xxrprMEF95Mrw/is+S1
+	 4gebfDAIDNije/soas3vlC05HW8ETpWkM/7Ndqgl7WqgkIerYsu3P58HnDQG5M9NCx
+	 VD50b4RRddr079YJl6Z47H6giSXNy7oPtMZUC9zzB+CMtod2o8dBw0zUgcqGlyEZHG
+	 43peCz4R+4zawTtIiL+9YRbowTAByEkyxFBhbyY4Vv/2DoSjIvOdC4b3pdz56KNliJ
+	 7u5maRzV2FPfg==
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-93071a2c49dso135747666b.2
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 12:07:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680894422; x=1683486422;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NxU5wo4yJIlxfUu7luiA0zDVsYB5pwNg6QbXIvPeaIU=;
+        b=44SM/SiY7+5eJPaZ7+a8e3RFig4gC32gTImrC+emH2aayZwyR1lFTanfryUFuABqdC
+         5CGygUNpJcOM/ETnk77XIeyecp6Zt9dVmuYQI3HkQc9ZmfFNB1gkbQgW3hJjgm/qNe8m
+         vxL3X3HnVVHONsF8Ym8iWYTmId9Vs725Xr6GO1tHovNOBzeEHkSA0GVloEFxRX9mqbGI
+         DDcLW9YiaGEBAsQn4z66OaQRItcXFrHT+jpU8Y20i3t8V1g97yVVnrzwn44gEjkSOKmH
+         1q6wlOYos8L0Dbm3yXFTOV3Lr3J6v7dI6p+P62bHTYdkujLHrZgnVVF8wh6+Xj8bS/H8
+         rpFA==
+X-Gm-Message-State: AAQBX9eTgBUMdzsbdoQ1OGGIANpwgiHX2BxS7DmRfXcsT55E+H33KkXh
+	XmdIsTh+rk7pgO0O5ItaH3bQARYXccbBnVXSoasBTKQxHOAoDio+U/e14fCRTkLfcGcga/ElrlA
+	SJWhCxLN8xI6MydMNSpTR5arGjSLCKoY=
+X-Received: by 2002:aa7:c6cf:0:b0:504:8738:9758 with SMTP id b15-20020aa7c6cf000000b0050487389758mr639102eds.16.1680894422106;
+        Fri, 07 Apr 2023 12:07:02 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y+tYyDiSKosZ5ldvA/H/HGaVnXTlxmZ8wichKKXSZ50KMbwudz4TFE8q0RJqP9YJxlGWNrJA==
+X-Received: by 2002:aa7:c6cf:0:b0:504:8738:9758 with SMTP id b15-20020aa7c6cf000000b0050487389758mr639079eds.16.1680894421788;
+        Fri, 07 Apr 2023 12:07:01 -0700 (PDT)
+Received: from localhost (host-79-33-132-140.retail.telecomitalia.it. [79.33.132.140])
+        by smtp.gmail.com with ESMTPSA id k13-20020a50ce4d000000b00504872a5288sm163126edj.35.2023.04.07.12.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 12:07:01 -0700 (PDT)
+Date: Fri, 7 Apr 2023 21:07:00 +0200
+From: Andrea Righi <andrea.righi@canonical.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+	Eric Curtin <ecurtin@redhat.com>,
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>, Neal Gompa <neal@gompa.dev>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
+Message-ID: <ZDBp1PaVL7KoqOdD@righiandr-XPS-13-7390>
+References: <20230407070517.204676-1-andrea.righi@canonical.com>
+ <20230407175318.GA1018455@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,287 +74,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407102721.14814-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20230407175318.GA1018455@dev-arch.thelio-3990X>
 
-Hi Jiaxun,
-
-On Fri, Apr 07, 2023 at 11:27:17AM +0100, Jiaxun Yang wrote:
-> Use Kconfig to perform Kconfig toolchain feature check, so we will
-> be able to have toolchain feature availablility information in Kconfig
-> to guard relevant options.
+On Fri, Apr 07, 2023 at 10:53:18AM -0700, Nathan Chancellor wrote:
+> On Fri, Apr 07, 2023 at 09:05:17AM +0200, Andrea Righi wrote:
+> > Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> > introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+> > to enable RUST.
+> > 
+> > With this constraint we don't need is_rust_module.sh anymore, because
+> > 'pahole --lang_exclude=rust' already has the capability to exclude Rust
+> > CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+> > then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+> > isn't used as well.
+> > 
+> > In any case is_rust_module.sh is obsolete and we can just drop it.
+> > 
+> > Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
+> > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 > 
-
-First of all, thank you a lot for this series! I applied them on top of
-mips-next and my allnoconfig issue appears to be gone. However, with
-this change, 32r1{,el}_defconfig is broken for arch/mips/kernel/traps.c.
-
-$ make -skj"$(nproc)" ARCH=mips CROSS_COMPILE=mips-linux-gnu- LLVM=1 LLVM_IAS=0 O=build mrproper 32r1_defconfig arch/mips/kernel/traps.o
-...
-/tmp/traps-f8ea56.s: Assembler messages:
-/tmp/traps-f8ea56.s:8227: Error: `fp=64' used with a 32-bit fpu
-/tmp/traps-f8ea56.s:8228: Error: `fp=64' used with a 32-bit fpu
-/tmp/traps-f8ea56.s:8228: Warning: the `msa' extension requires MIPS32 revision 2 or greater
-clang: error: assembler command failed with exit code 1 (use -v to see invocation)
-...
-
-In case it matters:
-
-$ clang --version | head -1
-ClangBuiltLinux clang version 16.0.1
-
-$ mips-linux-gnu-as --version | head -1
-GNU assembler (GNU Binutils) 2.40
-
-A few comments below, I have not tested anything beyond this.
-
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  arch/mips/Kconfig                | 27 +++++++++++++++++++++++++++
->  arch/mips/Makefile               | 29 +++--------------------------
->  arch/mips/crypto/crc32-mips.c    |  4 ++--
->  arch/mips/include/asm/asmmacro.h |  8 ++++----
->  arch/mips/include/asm/ginvt.h    |  2 +-
->  arch/mips/include/asm/mipsregs.h | 10 +++++-----
->  arch/mips/include/asm/msa.h      |  4 ++--
->  7 files changed, 44 insertions(+), 40 deletions(-)
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 770d098b11bf..c52401c155a4 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -3157,6 +3157,12 @@ config MIPS32_N32
->  
->  	  If unsure, say N.
->  
-> +config CC_HAS_SMARTMIPS
-> +	def_bool $(cc-option,-mmicromips)
-
--msmartmips?
-
-> +
-> +config CC_HAS_MICROMIPS
-> +	def_bool $(cc-option,-mmicromips)
-
-Neither of these configurations are used in this change. Should they be
-moved to the next change in the series?
-
->  config CC_HAS_MNO_BRANCH_LIKELY
->  	def_bool y
->  	depends on $(cc-option,-mno-branch-likely)
-> @@ -3165,6 +3171,27 @@ config CC_HAS_MNO_BRANCH_LIKELY
->  config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
->  	def_bool y if CC_IS_CLANG
->  
-> +config AS_HAS_MSA
-> +	def_bool $(cc-option,-Wa$(comma)-mmsa)
-> +
-> +config AS_HAS_VIRT
-> +	def_bool $(cc-option,-Wa$(comma)-mvirt)
-> +
-> +# For -mmicromips, use -Wa,-fatal-warnings to catch unsupported -mxpa which
-> +# only warns
-> +config AS_HAS_XPA
-> +	def_bool $(cc-option,-Wa$(comma)-mxpa) if !CPU_MICROMIPS
-> +	def_bool $(cc-option,-mmicromips -Wa$(comma)-fatal-warnings -Wa$(comma)-mxpa) if CPU_MICROMIPS
-> +
-> +config AS_HAS_CRC
-> +	def_bool $(cc-option,-Wa$(comma)-mcrc)
-> +
-> +config AS_HAS_DSP
-> +	def_bool $(cc-option,-Wa$(comma)-mdsp)
-> +
-> +config AS_HAS_GINV
-> +	def_bool $(cc-option,-Wa$(comma)-mginv)
-> +
->  menu "Power management options"
->  
->  config ARCH_HIBERNATION_POSSIBLE
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index a7a4ee66a9d3..3aa0f9d4ceb6 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -233,32 +233,9 @@ cflags-$(CONFIG_CPU_LOONGSON64)	+= $(call as-option,-Wa$(comma)-mno-fix-loongson
->  # Pass -Wa,--no-warn to disable all assembler warnings until the kernel code has
->  # been fixed properly.
->  mips-cflags				:= $(cflags-y)
-> -ifeq ($(CONFIG_CPU_HAS_SMARTMIPS),y)
-> -smartmips-ase				:= $(call cc-option-yn,$(mips-cflags) -msmartmips)
-> -cflags-$(smartmips-ase)			+= -msmartmips -Wa,--no-warn
-> -endif
-> -ifeq ($(CONFIG_CPU_MICROMIPS),y)
-> -micromips-ase				:= $(call cc-option-yn,$(mips-cflags) -mmicromips)
-> -cflags-$(micromips-ase)			+= -mmicromips
-> -endif
-> -ifeq ($(CONFIG_CPU_HAS_MSA),y)
-> -toolchain-msa				:= $(call cc-option-yn,$(mips-cflags) -mhard-float -mfp64 -Wa$(comma)-mmsa)
-> -cflags-$(toolchain-msa)			+= -DTOOLCHAIN_SUPPORTS_MSA
-> -endif
-> -toolchain-virt				:= $(call cc-option-yn,$(mips-cflags) -mvirt)
-> -cflags-$(toolchain-virt)		+= -DTOOLCHAIN_SUPPORTS_VIRT
-> -# For -mmicromips, use -Wa,-fatal-warnings to catch unsupported -mxpa which
-> -# only warns
-> -xpa-cflags-y				:= $(mips-cflags)
-> -xpa-cflags-$(micromips-ase)		+= -mmicromips -Wa$(comma)-fatal-warnings
-> -toolchain-xpa				:= $(call cc-option-yn,$(xpa-cflags-y) -mxpa)
-> -cflags-$(toolchain-xpa)			+= -DTOOLCHAIN_SUPPORTS_XPA
-> -toolchain-crc				:= $(call cc-option-yn,$(mips-cflags) -Wa$(comma)-mcrc)
-> -cflags-$(toolchain-crc)			+= -DTOOLCHAIN_SUPPORTS_CRC
-> -toolchain-dsp				:= $(call cc-option-yn,$(mips-cflags) -Wa$(comma)-mdsp)
-> -cflags-$(toolchain-dsp)			+= -DTOOLCHAIN_SUPPORTS_DSP
-> -toolchain-ginv				:= $(call cc-option-yn,$(mips-cflags) -Wa$(comma)-mginv)
-> -cflags-$(toolchain-ginv)		+= -DTOOLCHAIN_SUPPORTS_GINV
-> +
-> +cflags-$(CONFIG_CPU_HAS_SMARTMIPS)	+= -msmartmips -Wa,--no-warn
-> +cflags-$(CONFIG_CPU_MICROMIPS)		+= -mmicromips
->  
->  #
->  # Firmware support
-> diff --git a/arch/mips/crypto/crc32-mips.c b/arch/mips/crypto/crc32-mips.c
-> index 3e4f5ba104f8..54bbcfae06d5 100644
-> --- a/arch/mips/crypto/crc32-mips.c
-> +++ b/arch/mips/crypto/crc32-mips.c
-> @@ -27,7 +27,7 @@ enum crc_type {
->  	crc32c,
->  };
->  
-> -#ifndef TOOLCHAIN_SUPPORTS_CRC
-> +#ifndef CONFIG_AS_HAS_CRC
->  #define _ASM_SET_CRC(OP, SZ, TYPE)					  \
->  _ASM_MACRO_3R(OP, rt, rs, rt2,						  \
->  	".ifnc	\\rt, \\rt2\n\t"					  \
-> @@ -38,7 +38,7 @@ _ASM_MACRO_3R(OP, rt, rs, rt2,						  \
->  	_ASM_INSN32_IF_MM(0x00000030 | (__rs << 16) | (__rt << 21) |	  \
->  			  ((SZ) << 14) | ((TYPE) << 3)))
->  #define _ASM_UNSET_CRC(op, SZ, TYPE) ".purgem " #op "\n\t"
-> -#else /* !TOOLCHAIN_SUPPORTS_CRC */
-> +#else /* !CONFIG_AS_HAS_CRC */
->  #define _ASM_SET_CRC(op, SZ, TYPE) ".set\tcrc\n\t"
->  #define _ASM_UNSET_CRC(op, SZ, TYPE)
->  #endif
-> diff --git a/arch/mips/include/asm/asmmacro.h b/arch/mips/include/asm/asmmacro.h
-> index 067a635d3bc8..74c2dedc55b4 100644
-> --- a/arch/mips/include/asm/asmmacro.h
-> +++ b/arch/mips/include/asm/asmmacro.h
-> @@ -239,7 +239,7 @@
->  	 .word	0x41800000 | (\rt << 16) | (\rd << 11) | (\u << 5) | (\sel)
->  	.endm
->  
-> -#ifdef TOOLCHAIN_SUPPORTS_MSA
-> +#ifdef CONFIG_AS_HAS_MSA
->  	.macro	_cfcmsa	rd, cs
->  	.set	push
->  	.set	mips32r2
-> @@ -507,7 +507,7 @@
->  	.endm
->  #endif
->  
-> -#ifdef TOOLCHAIN_SUPPORTS_MSA
-> +#ifdef CONFIG_AS_HAS_MSA
->  #define FPR_BASE_OFFS	THREAD_FPR0
->  #define FPR_BASE	$1
->  #else
-> @@ -518,7 +518,7 @@
->  	.macro	msa_save_all	thread
->  	.set	push
->  	.set	noat
-> -#ifdef TOOLCHAIN_SUPPORTS_MSA
-> +#ifdef CONFIG_AS_HAS_MSA
->  	PTR_ADDU FPR_BASE, \thread, FPR_BASE_OFFS
->  #endif
->  	st_d	 0, THREAD_FPR0  - FPR_BASE_OFFS, FPR_BASE
-> @@ -565,7 +565,7 @@
->  	.set	hardfloat
->  	lw	$1, THREAD_MSA_CSR(\thread)
->  	_ctcmsa	MSA_CSR, $1
-> -#ifdef TOOLCHAIN_SUPPORTS_MSA
-> +#ifdef CONFIG_AS_HAS_MSA
->  	PTR_ADDU FPR_BASE, \thread, FPR_BASE_OFFS
->  #endif
->  	ld_d	 0, THREAD_FPR0  - FPR_BASE_OFFS, FPR_BASE
-> diff --git a/arch/mips/include/asm/ginvt.h b/arch/mips/include/asm/ginvt.h
-> index 87b2974ffc53..20244a622552 100644
-> --- a/arch/mips/include/asm/ginvt.h
-> +++ b/arch/mips/include/asm/ginvt.h
-> @@ -10,7 +10,7 @@ enum ginvt_type {
->  	GINVT_MMID,
->  };
->  
-> -#ifdef TOOLCHAIN_SUPPORTS_GINV
-> +#ifdef CONFIG_AS_HAS_GINV
->  # define _ASM_SET_GINV	".set	ginv\n"
->  # define _ASM_UNSET_GINV
->  #else
-> diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-> index 2d53704d9f24..8f0ebc399338 100644
-> --- a/arch/mips/include/asm/mipsregs.h
-> +++ b/arch/mips/include/asm/mipsregs.h
-> @@ -1604,7 +1604,7 @@ do {									\
->  	local_irq_restore(__flags);					\
->  } while (0)
->  
-> -#ifndef TOOLCHAIN_SUPPORTS_XPA
-> +#ifndef CONFIG_AS_HAS_XPA
->  #define _ASM_SET_MFHC0							\
->  	_ASM_MACRO_2R_1S(mfhc0, rt, rs, sel,				\
->  			 _ASM_INSN_IF_MIPS(0x40400000 | __rt << 16 | __rs << 11 | \\sel)	\
-> @@ -1615,7 +1615,7 @@ do {									\
->  			 _ASM_INSN_IF_MIPS(0x40c00000 | __rt << 16 | __rd << 11 | \\sel)	\
->  			 _ASM_INSN32_IF_MM(0x000002f4 | __rt << 21 | __rd << 16 | \\sel << 11))
->  #define _ASM_UNSET_MTHC0 ".purgem mthc0\n\t"
-> -#else	/* !TOOLCHAIN_SUPPORTS_XPA */
-> +#else	/* !CONFIG_AS_HAS_XPA */
->  #define _ASM_SET_MFHC0 ".set\txpa\n\t"
->  #define _ASM_SET_MTHC0 ".set\txpa\n\t"
->  #define _ASM_UNSET_MFHC0
-> @@ -2040,7 +2040,7 @@ do {									\
->   * Macros to access the guest system control coprocessor
->   */
->  
-> -#ifndef TOOLCHAIN_SUPPORTS_VIRT
-> +#ifndef CONFIG_AS_HAS_VIRT
->  #define _ASM_SET_MFGC0							\
->  	_ASM_MACRO_2R_1S(mfgc0, rt, rs, sel,				\
->  			 _ASM_INSN_IF_MIPS(0x40600000 | __rt << 16 | __rs << 11 | \\sel)	\
-> @@ -2077,7 +2077,7 @@ do {									\
->  #define __tlbginvf()							\
->  		_ASM_INSN_IF_MIPS(0x4200000c)				\
->  		_ASM_INSN32_IF_MM(0x0000517c)
-> -#else	/* !TOOLCHAIN_SUPPORTS_VIRT */
-> +#else	/* !CONFIG_AS_HAS_VIRT */
->  #define _ASM_SET_VIRT ".set\tvirt\n\t"
->  #define _ASM_SET_MFGC0	_ASM_SET_VIRT
->  #define _ASM_SET_DMFGC0	_ASM_SET_VIRT
-> @@ -2395,7 +2395,7 @@ do {									\
->  	: : "r" (val));							\
->  } while (0)
->  
-> -#ifdef TOOLCHAIN_SUPPORTS_DSP
-> +#ifdef CONFIG_AS_HAS_DSP
->  #define rddsp(mask)							\
->  ({									\
->  	unsigned int __dspctl;						\
-> diff --git a/arch/mips/include/asm/msa.h b/arch/mips/include/asm/msa.h
-> index 236a49ee2e3e..a9ca57e3f780 100644
-> --- a/arch/mips/include/asm/msa.h
-> +++ b/arch/mips/include/asm/msa.h
-> @@ -156,7 +156,7 @@ static inline void init_msa_upper(void)
->  	_init_msa_upper();
->  }
->  
-> -#ifndef TOOLCHAIN_SUPPORTS_MSA
-> +#ifndef CONFIG_AS_HAS_MSA
->  /*
->   * Define assembler macros using .word for the c[ft]cmsa instructions in order
->   * to allow compilation with toolchains that do not support MSA. Once all
-> @@ -173,7 +173,7 @@ static inline void init_msa_upper(void)
->  		      _ASM_INSN_IF_MIPS(0x783e0019 | __rs << 11 | __cd << 6)	\
->  		      _ASM_INSN32_IF_MM(0x583e0016 | __rs << 11 | __cd << 6))
->  #define _ASM_UNSET_CTCMSA ".purgem ctcmsa\n\t"
-> -#else /* TOOLCHAIN_SUPPORTS_MSA */
-> +#else /* CONFIG_AS_HAS_MSA */
->  #define _ASM_SET_CFCMSA						\
->  		".set\tfp=64\n\t"				\
->  		".set\tmsa\n\t"
-> -- 
-> 2.39.2 (Apple Git-143)
+> > ---
+> >  rust/macros/module.rs     |  2 +-
+> >  scripts/Makefile.modfinal |  2 --
+> >  scripts/is_rust_module.sh | 16 ----------------
+> >  3 files changed, 1 insertion(+), 19 deletions(-)
+> >  delete mode 100755 scripts/is_rust_module.sh
+> > 
+> > diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> > index a7e363c2b044..608406f33a70 100644
+> > --- a/rust/macros/module.rs
+> > +++ b/rust/macros/module.rs
+> > @@ -179,7 +179,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+> >              /// Used by the printing macros, e.g. [`info!`].
+> >              const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
+> >  
+> > -            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
+> > +            /// The \"Rust loadable module\" mark.
+> >              //
+> >              // This may be best done another way later on, e.g. as a new modinfo
+> >              // key or a new section. For the moment, keep it simple.
 > 
+> It seems like this whole section can be dropped? I only see
+> __IS_RUST_MODULE used in scripts/is_rust_module.sh, as the comment
+> states.
+
+In the scope of the kernel, yes, only is_rust_module.sh used that, but
+outside the kernel "something" may still rely on this section. Keeping
+it seems safer for now, to avoid potential user-space breakage.
+
+Thanks,
+-Andrea
