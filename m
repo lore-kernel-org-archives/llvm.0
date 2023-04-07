@@ -1,126 +1,153 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C42847C
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 17:49:56 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1a071225561so1170575ad.1
-        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 10:49:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680889796; x=1683481796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YOYR5yl6ypiXPPEsw9LGpTcARLtmR0joIO+5Gy/Ym7k=;
-        b=gSjbHOfHvFZTwg2Y8sJqAABr4qbOs+k2r0fQ+0VSOZk6KDkWrDRTPyg4C52MCNHNE1
-         mBU7V9D/2Md0WXYZkvllimMI1smpQ1C1kFfkReM4r8ktSoI3kxRfchhJRzDwgRFuoOlt
-         vbOvICGQVOBv1Qn70leZLT6df/AwluazWABijBn2vcVMO1zE/lo9kQiJeI00WteSuQzO
-         4E7JC3dixEOti4CtUDh751L3OUzUjfxsuq57/AW2RnR6Le3p9lCuvLXaMRlsFskWX/9J
-         owh1Fitcsrv4fXxFYKplshFL978dzQ3D+fBn9bMuWz/gIKi76FWckOOCuAdt9sSYV7S2
-         Fb2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680889796; x=1683481796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YOYR5yl6ypiXPPEsw9LGpTcARLtmR0joIO+5Gy/Ym7k=;
-        b=YEtXx+gyhL9uhRF7x4Y24dUJuqQdCI04hkOo2jiZ3HE/i34mgDV6On7SC96PSVTeIc
-         H5E0+OVRVEhtfglXdKu1i96iS+C62J/EYZ2LMsQPD9Yw1A/v3bsDSuws+7snIEc0DO3F
-         7DDlkhqSSmCChXryr52PgJvK6tH1THNu4n0xxxCQ+x5yVqgpMD+WTfb/Anb8ohdTBTqc
-         C/x0QeusiwdotjSJKjKRBCuk2oNCjjg/lIE0O7t3DOuToCySPA12S3EGvZ46dEm2BNgn
-         yCqIIwk2p8X1uXHo2HIQxfHDelKCotlJmeKfZjXSImM7Km9EIsgAbi5SjHI9yZK6elxN
-         vnxQ==
-X-Gm-Message-State: AAQBX9cm6uHzXhHJZDBLyBhIizKi5TUit6TZaSWDsp9UW+/pX7/njQ/1
-	F2As9Ge0UIzdLrAn0fyVuHJxqOqJqMUnBw9RThsTqw==
-X-Google-Smtp-Source: AKy350YcyBmqWjxSDZIDUgohnwuC5OCKa+DcG7pxNN+qXdDBC9rHkNcGfLqqt8MDPERyF6go6jpkdZN6egNSE+y9cQE=
-X-Received: by 2002:a05:6a00:2d88:b0:625:c832:6a10 with SMTP id
- fb8-20020a056a002d8800b00625c8326a10mr1535733pfb.4.1680889795599; Fri, 07 Apr
- 2023 10:49:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B1F847C;
+	Fri,  7 Apr 2023 17:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680889861; x=1712425861;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Wvdh74Ze/lO9z8MlCW8OYB17q39BBQMGmPBzQpjSwF4=;
+  b=IulllKJVlSXEbTLG8Qf3r/R/oLYaH/9zdZiyzR8tHDDyIEw3RmYWOZ44
+   VckOTI2kJjzZSHZknskxser6PDgLp+7U2nx9xR/TQD9OwJmV5AgdwXLop
+   HXlxfk3EE5QUiZ2u3q1qgi0wgN41KQ4+0drkGtBlwX2dlkkXD52Y+01Wr
+   +SBbi2FT/4Yb3jHyPlTRVKqiIV3Hlel527wcLRNBeXnUtyQZiIYWgSFZ/
+   JLR2LbiVfiaus4YHd7L3FinMrLW2HWdR1lldlhlsI7fDfB4AXhkSqblPs
+   fBNPYHb2QUteoNwYgHUmr/onFV/YcGog2/g00b9MjUFySJ7haQXTmlzc8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="405859431"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="405859431"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 10:50:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="717911679"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="717911679"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Apr 2023 10:50:57 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pkqEj-000Skb-08;
+	Fri, 07 Apr 2023 17:50:57 +0000
+Date: Sat, 8 Apr 2023 01:50:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
+Message-ID: <202304080110.v5LLFwT4-lkp@intel.com>
+References: <20230407150306.80141-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230324195403.2655148-1-trix@redhat.com>
-In-Reply-To: <20230324195403.2655148-1-trix@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Apr 2023 10:49:44 -0700
-Message-ID: <CAKwvOdndQiSbMK6a7nU01HiovY-Bdjt4m4gOO5m5A36y8qQ8=A@mail.gmail.com>
-Subject: Re: [PATCH] drm/vmwgfx: remove unused mksstat_init_record function
-To: Tom Rix <trix@redhat.com>
-Cc: zackr@vmware.com, linux-graphics-maintainer@vmware.com, airlied@gmail.com, 
-	daniel@ffwll.ch, nathan@kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407150306.80141-1-krzysztof.kozlowski@linaro.org>
 
-On Fri, Mar 24, 2023 at 12:54=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/gpu/drm/vmwgfx/vmwgfx_msg.c:716:21: error: unused function
->   'mksstat_init_record' [-Werror,-Wunused-function]
-> static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
->                     ^
-> This function is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 26 --------------------------
->  1 file changed, 26 deletions(-)
->
-> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx=
-/vmwgfx_msg.c
-> index e76976a95a1e..ca1a3fe44fa5 100644
-> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
-> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
-> @@ -702,32 +702,6 @@ static inline void hypervisor_ppn_remove(PPN64 pfn)
->  /* Header to the text description of mksGuestStat instance descriptor */
->  #define MKSSTAT_KERNEL_DESCRIPTION "vmwgfx"
->
-> -/**
-> - * mksstat_init_record: Initializes an MKSGuestStatCounter-based record
-> - * for the respective mksGuestStat index.
-> - *
-> - * @stat_idx: Index of the MKSGuestStatCounter-based mksGuestStat record=
-.
-> - * @pstat: Pointer to array of MKSGuestStatCounterTime.
-> - * @pinfo: Pointer to array of MKSGuestStatInfoEntry.
-> - * @pstrs: Pointer to current end of the name/description sequence.
-> - * Return: Pointer to the new end of the names/description sequence.
-> - */
-> -
-> -static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
-> -       MKSGuestStatCounterTime *pstat, MKSGuestStatInfoEntry *pinfo, cha=
-r *pstrs)
-> -{
-> -       char *const pstrd =3D pstrs + strlen(mksstat_kern_name_desc[stat_=
-idx][0]) + 1;
-> -       strcpy(pstrs, mksstat_kern_name_desc[stat_idx][0]);
-> -       strcpy(pstrd, mksstat_kern_name_desc[stat_idx][1]);
-> -
-> -       pinfo[stat_idx].name.s =3D pstrs;
-> -       pinfo[stat_idx].description.s =3D pstrd;
-> -       pinfo[stat_idx].flags =3D MKS_GUEST_STAT_FLAG_NONE;
+Hi Krzysztof,
 
-This was the last user of MKS_GUEST_STAT_FLAG_NONE, is there anything
-else to clean up there?  Otherwise LGTM.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+kernel test robot noticed the following build errors:
 
-> -       pinfo[stat_idx].stat.counter =3D (MKSGuestStatCounter *)&pstat[st=
-at_idx];
-> -
-> -       return pstrd + strlen(mksstat_kern_name_desc[stat_idx][1]) + 1;
-> -}
-> -
->  /**
->   * mksstat_init_record_time: Initializes an MKSGuestStatCounterTime-base=
-d record
->   * for the respective mksGuestStat index.
-> --
-> 2.27.0
->
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krzysztof-Kozlowski/rtc-ds3232-constify-pointers-to-hwmon_channel_info/20230407-231346
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20230407150306.80141-1-krzysztof.kozlowski%40linaro.org
+patch subject: [PATCH 1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
+config: hexagon-buildonly-randconfig-r001-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080110.v5LLFwT4-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2b39e4ff9f9bbc04c31fa2819e09754ca5001669
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krzysztof-Kozlowski/rtc-ds3232-constify-pointers-to-hwmon_channel_info/20230407-231346
+        git checkout 2b39e4ff9f9bbc04c31fa2819e09754ca5001669
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/rtc/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080110.v5LLFwT4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/rtc/rtc-ab-eoz9.c:9:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/rtc/rtc-ab-eoz9.c:9:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/rtc/rtc-ab-eoz9.c:9:
+   In file included from include/linux/rtc.h:17:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/rtc/rtc-ab-eoz9.c:471:10: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const[3]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           .info = abeoz9_info,
+                   ^~~~~~~~~~~
+   6 warnings and 1 error generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +471 drivers/rtc/rtc-ab-eoz9.c
+
+67075b63cce26c Artem Panfilov 2019-02-17  468  
+67075b63cce26c Artem Panfilov 2019-02-17  469  static const struct hwmon_chip_info abeoz9_chip_info = {
+67075b63cce26c Artem Panfilov 2019-02-17  470  	.ops = &abeoz9_hwmon_ops,
+67075b63cce26c Artem Panfilov 2019-02-17 @471  	.info = abeoz9_info,
+67075b63cce26c Artem Panfilov 2019-02-17  472  };
+67075b63cce26c Artem Panfilov 2019-02-17  473  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
