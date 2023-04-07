@@ -1,169 +1,152 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C838E110E;
-	Fri,  7 Apr 2023 06:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680850356; x=1712386356;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=avlNllpfBNmaoPYrWuLFtuBkbN+pnFsMxdE+AmyQJEA=;
-  b=Zds+Rat5HuEZDYx86UsAApao2Cc2lQfOjn2mQqtCoA46oynQ82oO0Wl3
-   2bymItz9ZL281ND6dbxYwKv19zhaaX23rkkVqZybKKq2De/YeUQiWStbq
-   F7bYsyKNV+Bx91gpUz2l9xs+qhkcVsYc0wsoLUotlVgTVZ6up87uPlG4a
-   f0K6/BUuvwWvyGN6R7zSAzBjQjrlVA/5Kyrj4qMBoRGC2FcHnXnZ1BXuK
-   tn+o3dEv7xWOlUx5BHwC0exggcb/y9nrW9MpiOuJdApevx3RgucScFYoB
-   Kh315iZXv6ciwW3JD3GeMw2uTzxFFjAwBq5k8gawkIkVBLFIzOiTGKxQC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="342945249"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="342945249"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 23:52:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="687435135"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="687435135"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 06 Apr 2023 23:52:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pkfxX-000SDC-1f;
-	Fri, 07 Apr 2023 06:52:31 +0000
-Date: Fri, 7 Apr 2023 14:51:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 15/16] zram: fix synchronous reads
-Message-ID: <202304071443.4xWaXjV6-lkp@intel.com>
-References: <20230406144102.149231-16-hch@lst.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E9A110E
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 07:12:50 +0000 (UTC)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4161E3F04B
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 07:05:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1680851147;
+	bh=7wCvsU3M9Fv6Z9EHNIgdooWMu4RgxKEfVO+unBDF31s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=ANQ4GMe/v5ozCnem/VXwddG15K/fgWHlJrrMgJwMixrP51E3+a+vxG3ae0U2Vk4g4
+	 o5YaT0krqaF0KyYIMymPmA2joUw1+eFnPZ64bCaPLngkQmGpgQMsUX8bqTnyDG3ZPn
+	 MkiY4Jfl7U03gaaHznxKegO7ZB+PDepiRsAQaWG+WIJZNIzPMUYkbZGlGCIELXMikm
+	 okMrdT3+c69Thn5zRNSBaeZbizJmY61ZRgVrNR0pTafnfjaKZDLsO9AUUd+7KZR9qS
+	 q6sYFz/RBwQm+aWgYv6Z1xm5sQYC/fVcxHQmGGICGipB+5qIR58H5LRACGdt+3tDWy
+	 wUx6CuyLVoWwA==
+Received: by mail-wm1-f71.google.com with SMTP id o1-20020a05600c4fc100b003edecc610abso445930wmq.7
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 00:05:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680851147; x=1683443147;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7wCvsU3M9Fv6Z9EHNIgdooWMu4RgxKEfVO+unBDF31s=;
+        b=MU1x6Bje9RIPu0hRjDagN9SIZkMuB+5gekym2PF7HMBQ1qRkVJ4yII7Lgu8WVxqml0
+         9JpckDl77pkkidFJRa40VU3nNPMsdXd3n3gqaDygN5+KCFfJsjhwlj2xXpLOwbXpB8RA
+         lh/VTB31o2lUNVmGsXDUDgGKxnNvbrbMuC3+jswtgMb2sb+wUIsAKDhAaBqho2oxKYoO
+         TJvdWfWeFoIv4yrTlfrx6sw0g0aokz7ge6pzRkcoPY3ZWOKHfMM62F47HJLmEdcE2uYt
+         bX8j6Z3GvzTUQlLJcMHeq3gsbPLz7ommR4u5oe4NmqAO4NvVYDU0mDPmQEo1HMXXQRdY
+         DnhA==
+X-Gm-Message-State: AAQBX9cmYtXfxBfhfiqOIo/saluVvNOrKpXepsb01qBUNrSr0EIyBOn/
+	WNIzVOf/YnWG6KBEwbIhrsXBq6FJV4Ji4ggaRkSdL748nlY/xIF6pS8qrKTwHMNNWVzsJlv5jhQ
+	sD1BF2nSQyuVDCSa1KOMNQPC2H+D5iwM=
+X-Received: by 2002:a17:906:66c1:b0:878:711d:9310 with SMTP id k1-20020a17090666c100b00878711d9310mr1273968ejp.1.1680851126441;
+        Fri, 07 Apr 2023 00:05:26 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bzjSQgbr52e5pu0pxHM3+EK8myuLmAkwr/R04rHg5N7fdgj3sVGTxfmYaqxI5wPSe/V3+Jxg==
+X-Received: by 2002:a17:906:66c1:b0:878:711d:9310 with SMTP id k1-20020a17090666c100b00878711d9310mr1273943ejp.1.1680851126066;
+        Fri, 07 Apr 2023 00:05:26 -0700 (PDT)
+Received: from localhost.localdomain (host-79-33-132-140.retail.telecomitalia.it. [79.33.132.140])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170906a18700b00929fc8d264dsm1766736ejy.17.2023.04.07.00.05.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 00:05:25 -0700 (PDT)
+From: Andrea Righi <andrea.righi@canonical.com>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Tom Rix <trix@redhat.com>,
+	Eric Curtin <ecurtin@redhat.com>,
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Neal Gompa <neal@gompa.dev>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	rust-for-linux@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] scripts: rust: drop is_rust_module.sh
+Date: Fri,  7 Apr 2023 09:05:17 +0200
+Message-Id: <20230407070517.204676-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406144102.149231-16-hch@lst.de>
+Content-Transfer-Encoding: 8bit
 
-Hi Christoph,
+Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+to enable RUST.
 
-kernel test robot noticed the following build errors:
+With this constraint we don't need is_rust_module.sh anymore, because
+'pahole --lang_exclude=rust' already has the capability to exclude Rust
+CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+isn't used as well.
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on linus/master v6.3-rc5 next-20230406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+In any case is_rust_module.sh is obsolete and we can just drop it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/zram-make-zram_bio_discard-more-self-contained/20230406-234133
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20230406144102.149231-16-hch%40lst.de
-patch subject: [PATCH 15/16] zram: fix synchronous reads
-config: hexagon-randconfig-r024-20230405 (https://download.01.org/0day-ci/archive/20230407/202304071443.4xWaXjV6-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e4596d7c2cf157f5b3d566cb2cc0769c9232a728
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christoph-Hellwig/zram-make-zram_bio_discard-more-self-contained/20230406-234133
-        git checkout e4596d7c2cf157f5b3d566cb2cc0769c9232a728
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/block/zram/
+Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ rust/macros/module.rs     |  2 +-
+ scripts/Makefile.modfinal |  2 --
+ scripts/is_rust_module.sh | 16 ----------------
+ 3 files changed, 1 insertion(+), 19 deletions(-)
+ delete mode 100755 scripts/is_rust_module.sh
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304071443.4xWaXjV6-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/block/zram/zram_drv.c:20:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/block/zram/zram_drv.c:20:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/block/zram/zram_drv.c:20:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/block/zram/zram_drv.c:778:18: error: variable has incomplete type 'struct bio_bvec'
-           struct bio_bvec bv;
-                           ^
-   drivers/block/zram/zram_drv.c:778:9: note: forward declaration of 'struct bio_bvec'
-           struct bio_bvec bv;
-                  ^
-   6 warnings and 1 error generated.
-
-
-vim +778 drivers/block/zram/zram_drv.c
-
-   774	
-   775	static void zram_sync_read(struct work_struct *work)
-   776	{
-   777		struct zram_work *zw = container_of(work, struct zram_work, work);
- > 778		struct bio_bvec bv;
-   779		struct bio bio;
-   780	
-   781		bio_init(&bio, zw->zram->bdev, &bv, 1, REQ_OP_READ);
-   782		bio.bi_iter.bi_sector = zw->entry * (PAGE_SIZE >> 9);
-   783		__bio_add_page(&bio, zw->page, PAGE_SIZE, 0);
-   784		submit_bio_wait(&bio);
-   785	}
-   786	
-
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index a7e363c2b044..608406f33a70 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -179,7 +179,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+             /// Used by the printing macros, e.g. [`info!`].
+             const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
+ 
+-            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
++            /// The \"Rust loadable module\" mark.
+             //
+             // This may be best done another way later on, e.g. as a new modinfo
+             // key or a new section. For the moment, keep it simple.
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 4703f652c009..e6f8fa3c9b8d 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -41,8 +41,6 @@ quiet_cmd_btf_ko = BTF [M] $@
+       cmd_btf_ko = 							\
+ 	if [ ! -f vmlinux ]; then					\
+ 		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+-	elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module.sh $@; then 		\
+-		printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
+ 	else								\
+ 		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
+ 		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
+diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
+deleted file mode 100755
+index 28b3831a7593..000000000000
+--- a/scripts/is_rust_module.sh
++++ /dev/null
+@@ -1,16 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# is_rust_module.sh module.ko
+-#
+-# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
+-
+-set -e
+-
+-# Using the `16_` prefix ensures other symbols with the same substring
+-# are not picked up (even if it would be unlikely). The last part is
+-# used just in case LLVM decides to use the `.` suffix.
+-#
+-# In the future, checking for the `.comment` section may be another
+-# option, see https://github.com/rust-lang/rust/pull/97550.
+-${NM} "$*" | grep -qE '^[0-9a-fA-F]+ r _R[^[:space:]]+16___IS_RUST_MODULE[^[:space:]]*$'
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2
+
