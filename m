@@ -1,110 +1,131 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51EE16FBD
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 17:34:57 +0000 (UTC)
-Received: by mail-pj1-f52.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so43892587pjb.0
-        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 10:34:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70686FBD
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 17:36:42 +0000 (UTC)
+Received: by mail-pg1-f176.google.com with SMTP id d22so24874279pgw.2
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 10:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680888897; x=1683480897;
+        d=google.com; s=20210112; t=1680889002; x=1683481002;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CL8XT2dmegghAeYpKyssd1/mU3F1iBt8lThUBp5c4gY=;
-        b=QWyy+rpanfpbOQipdK4S0IuAPz4YxLzjaGmsTfT+dojd/dx5oCHxpkZmWzrh3J93ZM
-         k896UTgn1JLv25w/ht3L4yDtHyRgX12VNGz2wet1zb1IyjvC48JIpm6YRR5zOHlvYpyp
-         vg/NuD08IwdhtiyPjudoTrzqBmmgyigyV8fDswWrB3eTk4f4yKz5fkjaUV4UlxdQd2z+
-         d4I7MvDi3NTWFDrNqDYA7oEL8CXAv9Lk67oe6OXhYYMzmBXuygmurYSrXIiZHSa/qbad
-         wgsPc6MG4Yg9DQdgn54u6IUkJeGPyHRBJmqz2mQbIV18xthIetTpt81WmwcUEFUMLDhN
-         wHJg==
+        bh=EKQ/0jGnOo/TaPpGUaml4IRy69MNIBKloNhJZjKlyT0=;
+        b=KD6ZnfzfidIvC2otpuKywoCEsPFpclOlyGbsChbiRW+NoHLgvlIIgbDR4G+StlGoIH
+         70V+Xb3tH88TdmFrqGplFBGXqlCuzUxbpiYDRXsLBoXwoTz2W/3cDhHDXwaLaBxXrYgF
+         HoyNSRrWgdMunOUk6NYADKkEMctFlUeJ1Iki7CFRPojkLCxojNZhXIY4q/yC9rhMflBI
+         HVPtR1t3cZu8XwM35jE6pq6TIb9CglNvwwY1HkADONdXRkNJsKn9yWoPfVIRjtounOsv
+         vbp2pu43LZzeofyFbChgOgo1nVZLGY29Dl835qQC8chqq9E88SUh/NyYFrzZxEKcCFHk
+         R1hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680888897; x=1683480897;
+        d=1e100.net; s=20210112; t=1680889002; x=1683481002;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CL8XT2dmegghAeYpKyssd1/mU3F1iBt8lThUBp5c4gY=;
-        b=6AKZKUVpQqVpzc8dGb7TVoIOJ/ck769hqsAZ3autrW92EVqP9XMmqfEeQBN+MhMRv5
-         HByL8GiU6CLwcyLXie6cGCrOIkAGBSW18nHeMs7tuoZl2W+4vspszKuHvlqSh/5OSbGd
-         0pY7o1WA+N3JsOaaWKp7UpFt7ZX+iMI/095lqbbIY2NTUnZwoQPeQe/XaxJ813Ii3LKR
-         aSjcUWRptcvdxjBzJnP0q4hGZmCERI/8R0VmV9xwqlXYiJ7ybqD8RLvmEfj7yZbWUIhp
-         xgrmr4IB9EQ9eiTGOymkP/hsqbH1fLxqVgptA5ah/5Y5ZQWytx2E6UjKIm1xBgwCPBvU
-         cKTA==
-X-Gm-Message-State: AAQBX9fHwKF1lSi5IaoTOAjVW4Sc/d2ucyBC6UlA6+OCO2hSR0VzTyQL
-	KqJx/jHftHBJAIQE8xJHN6DXggVlBtcioXajVVZ8Kg==
-X-Google-Smtp-Source: AKy350Y3+tyc2y5AqmX+ezlQ/w8+BR5lVu9JAdgHFRIjCTIVUzXOhXQ3/IkTS6gnhNWCbqRBOnYyquPB8sl9mA83s1Y=
-X-Received: by 2002:a17:902:6b81:b0:1a0:4aa3:3a9a with SMTP id
- p1-20020a1709026b8100b001a04aa33a9amr1129540plk.2.1680888896519; Fri, 07 Apr
- 2023 10:34:56 -0700 (PDT)
+        bh=EKQ/0jGnOo/TaPpGUaml4IRy69MNIBKloNhJZjKlyT0=;
+        b=kLMxhrFFXyxhXIWBKOnxYIIqtE1Ny6jMY/RWuSnG5c0QSDX3nIOs8hyvNkcqP+2QsF
+         xekydiIgiuEcly+4bQZ1xO/RlmzCse23lY6jtSYms/n1Rw6hgAFc9nnW+ENZYx/BSPRv
+         Xz1F7uWwUcY4jFbrJC6jUnZOtGQ3U0iVyd349FGI6/WRf/tGqDi2EC1eb08ffDEAr1tb
+         x9+yg8KbxIIG0SXhR0Oa5+xeO1YMHnZQJSq+2lj8fvZfnTtDHzW+f8My/d2j8xEW1NUl
+         /y0F2Ja/0+AHod2Cn+cvg97of/KLLE2bfE9swtPYwbqi/3K2QcE18UMgA9jKllgvoD16
+         Zz2Q==
+X-Gm-Message-State: AAQBX9eHMV13TShMyfRWlwD4yhqHUuxAOOreLfJI9tG2XPfMuj9Yv7Dj
+	fY8GKIdbr9B+ZCCB16GtKA9ocfSZ5mn57tL2pKbrcg==
+X-Google-Smtp-Source: AKy350aSeVgPhP3/iHKIqEYixpWTIqJFHUyWjp2+JIS3RbQGz3Zhh/BGeX+aSZcOD/B9rL3bBeCHzbu+p557vPjtJzU=
+X-Received: by 2002:a65:578e:0:b0:513:a488:f05f with SMTP id
+ b14-20020a65578e000000b00513a488f05fmr620379pgr.1.1680889001970; Fri, 07 Apr
+ 2023 10:36:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230307151239.1994179-1-trix@redhat.com>
-In-Reply-To: <20230307151239.1994179-1-trix@redhat.com>
+References: <20230318133952.1684907-1-trix@redhat.com>
+In-Reply-To: <20230318133952.1684907-1-trix@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Apr 2023 10:34:45 -0700
-Message-ID: <CAKwvOdnGnGVk21Yh2GsH-fNx_M48f9CU05nnHSbnJd_Zq3En2A@mail.gmail.com>
-Subject: Re: [PATCH] bpf: extend btf id list
+Date: Fri, 7 Apr 2023 10:36:30 -0700
+Message-ID: <CAKwvOdk=TGUTJMN1Am6EayVd1M9NRy_SwpUQBFWCb=+5KyMeXQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/kmb: remove unused set_test_mode_src_osc_freq_target_low,hi_bits
+ functions
 To: Tom Rix <trix@redhat.com>
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
-	nathan@kernel.org, joannelkoong@gmail.com, bpf@vger.kernel.org, 
+Cc: anitha.chrisanthus@intel.com, edmund.j.dea@intel.com, airlied@gmail.com, 
+	daniel@ffwll.ch, nathan@kernel.org, dri-devel@lists.freedesktop.org, 
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 7, 2023 at 7:13=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+On Sat, Mar 18, 2023 at 6:39=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
 >
-> With clang and W=3D1, there is this error
+> clang with W=3D1 reports
+> drivers/gpu/drm/kmb/kmb_dsi.c:822:2: error: unused function
+>   'set_test_mode_src_osc_freq_target_low_bits' [-Werror,-Wunused-function=
+]
+>         set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_ds=
+i,
+>         ^
+> drivers/gpu/drm/kmb/kmb_dsi.c:834:2: error: unused function
+>   'set_test_mode_src_osc_freq_target_hi_bits' [-Werror,-Wunused-function]
+>         set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi=
+,
+>         ^
+> These static functions are not used, so remove them.
 >
-> kernel/bpf/verifier.c:10298:24: error: array index 16 is past
->  the end of the array (that has type 'u32[16]'
->  (aka 'unsigned int[16]')) [-Werror,-Warray-bounds]
->     meta.func_id =3D=3D special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
->                     ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
-> kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared h=
-ere
-> BTF_ID_LIST(special_kfunc_list)
-> ^
-> ./include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
->  #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
->
-> When KF_bpf_dynptr_slice_rdwr was added to the enum special_kfunc_type
-> the total exceeded 16.  Increase the array size to 32.
->
-> Fixes: 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr=
-")
-
-Looks like Nathan's patch got picked up.
-commit 2d5bcdcda879 ("bpf: Increase size of BTF_ID_LIST without
-CONFIG_DEBUG_INFO_BTF again")
-https://lore.kernel.org/bpf/20230307-bpf-kfuncs-warray-bounds-v1-1-00ad3191=
-f3a6@kernel.org/
-
 > Signed-off-by: Tom Rix <trix@redhat.com>
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 > ---
->  include/linux/btf_ids.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/gpu/drm/kmb/kmb_dsi.c | 28 ----------------------------
+>  1 file changed, 28 deletions(-)
 >
-> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-> index 3a4f7cd882ca..166c387b48f7 100644
-> --- a/include/linux/btf_ids.h
-> +++ b/include/linux/btf_ids.h
-> @@ -204,7 +204,7 @@ extern struct btf_id_set8 name;
+> diff --git a/drivers/gpu/drm/kmb/kmb_dsi.c b/drivers/gpu/drm/kmb/kmb_dsi.=
+c
+> index cf7cf0b07541..ed99b14375aa 100644
+> --- a/drivers/gpu/drm/kmb/kmb_dsi.c
+> +++ b/drivers/gpu/drm/kmb/kmb_dsi.c
+> @@ -818,34 +818,6 @@ static void test_mode_send(struct kmb_dsi *kmb_dsi, =
+u32 dphy_no,
+>         }
+>  }
 >
->  #else
->
-> -#define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
-> +#define BTF_ID_LIST(name) static u32 __maybe_unused name[32];
->  #define BTF_ID(prefix, name)
->  #define BTF_ID_FLAGS(prefix, name, ...)
->  #define BTF_ID_UNUSED
+> -static inline void
+> -       set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_ds=
+i,
+> -                                                  u32 dphy_no,
+> -                                                  u32 freq)
+> -{
+> -       /* Typical rise/fall time=3D166, refer Table 1207 databook,
+> -        * sr_osc_freq_target[7:0]
+> -        */
+> -       test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES,
+> -                      (freq & 0x7f));
+> -}
+> -
+> -static inline void
+> -       set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi=
+,
+> -                                                 u32 dphy_no,
+> -                                                 u32 freq)
+> -{
+> -       u32 data;
+> -
+> -       /* Flag this as high nibble */
+> -       data =3D ((freq >> 6) & 0x1f) | (1 << 7);
+> -
+> -       /* Typical rise/fall time=3D166, refer Table 1207 databook,
+> -        * sr_osc_freq_target[11:7]
+> -        */
+> -       test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES, =
+data);
+> -}
+> -
+>  static void mipi_tx_get_vco_params(struct vco_params *vco)
+>  {
+>         int i;
 > --
 > 2.27.0
->
 >
 
 
