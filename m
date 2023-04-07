@@ -1,165 +1,112 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896478494;
-	Fri,  7 Apr 2023 18:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680891122; x=1712427122;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V57JsY7Mvm++kH2IO/0KrWsC57mQQSwpe9M6ha823Us=;
-  b=IC8lQOrNNQN2F3KMSjB6jB0P/lxV5P+y3EgmdDISODyKLTIWU8xZc8UJ
-   8PZob5YOSPAXKpBhPvFDP75yJNSgVC6fVAwKNsKdveTFAMyoe2AYp/KIP
-   UkyuEeomBJ2flyagcvtV8ni6MltiURR9bursuoIZ9E9U4V/7Pz1bVjfPy
-   ivqOR2NZmp8/SimBN4Y12gBEc5k65XMJvwvu7Lt22VGtCLmhHdbL5ZVDq
-   IEle1aBj48TRwpFK07kcRNej28GfFrw0wLplmd+X4mO1XgWYJOlbnlLbQ
-   jMHTPhbSsmpG6Dqd4bldy24Ulz6QruTwa32yvgrz0rfb0ABIFHSvxF5Em
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="345693806"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="345693806"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 11:11:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="717916022"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="717916022"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Apr 2023 11:11:58 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pkqZ3-000Slc-20;
-	Fri, 07 Apr 2023 18:11:57 +0000
-Date: Sat, 8 Apr 2023 02:11:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] ufs: hwmon: constify pointers to hwmon_channel_info
-Message-ID: <202304080236.gChYf5FS-lkp@intel.com>
-References: <20230407150137.79947-1-krzysztof.kozlowski@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70609848E
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 18:14:07 +0000 (UTC)
+Received: by mail-pl1-f169.google.com with SMTP id ji2so1016571plb.0
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 11:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680891247; x=1683483247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iR5vun52tcsHLu1HJ14aemGaEMgXlWM8Oo3dvfzO2C0=;
+        b=pVC015NAFlm36VYuUzCVo7FdrkP9+B47UDv1WQ1JPnMH/MjAtw3BfDGoGD3UvUBZjC
+         aMC9N8wJZ/c5RfgQZldgZ48Zg5D/Up2C0Orm7M+3bUN/lT3bpUZQpfF+QQ3v06aqkJ3B
+         yv1VUtMc3cQdGv1TX+i81BtOLFy78JMXUxY0L8GRuZGZTUD2DWHR15kXfHR27IfYHP5h
+         b3/IKGz8GhmAtVFbYtPYtIaO8WNxuS6rmizR23p3tycGPLnEHn9rwo30JDEff6qXAeIC
+         yRe8434Ae3ve7S7J+JIO6mrEJOorbPE3mhC205z91p0k0+dbPSy/YTMW4uWIbBR29DXW
+         EtzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680891247; x=1683483247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iR5vun52tcsHLu1HJ14aemGaEMgXlWM8Oo3dvfzO2C0=;
+        b=SyV6NlV2Qre4hTIb+IVL+tUaD1B71bH4qapovaB1zNp1Tx+IHFoZIog4h336+Ijnsi
+         svL7hW2JOPU9Fg+p7Nfhcw6DhcxGksh0Z44huYtBKktAojIDSXwYlQxM4jsvokEoFoN6
+         l2h4VnQH3LUXT9GmAtNFHg61tauWxq+NIWd44SVDcAX0/bGfS1HBvmcmSIUjAO4s8POk
+         iydgN9Re9Mnl8XWN4mXk1v3LZIAOPJAo0IA3RitRgAmpvnC1p3sNqTgGtqp98RzrHPFr
+         5s+V5zSLwlvRWkz/og1/mJJt51Q7yMAatRixtrFsGkv6Lyh2qwtmYGPP+UGaKUmn41lj
+         1yTQ==
+X-Gm-Message-State: AAQBX9ef4h34qewfwSyKVwQC79MgHoa22bGqIjQUM24VLcv/wOTR1a29
+	uk3jk3IGpLBnVT/KXs+ShIzwgj+owC7uuQVtW9xGSw==
+X-Google-Smtp-Source: AKy350aU/IB5VaFU/u0WokhO/SJsHANiJN00OQm3BFmMJ5+gRJY7lFGGFFaR/6e05KbtL6SErczy8rwQ7E/M0c3HNSw=
+X-Received: by 2002:a17:90b:3641:b0:244:987c:a873 with SMTP id
+ nh1-20020a17090b364100b00244987ca873mr822309pjb.7.1680891246608; Fri, 07 Apr
+ 2023 11:14:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407150137.79947-1-krzysztof.kozlowski@linaro.org>
+References: <20230331001208.1846731-1-trix@redhat.com>
+In-Reply-To: <20230331001208.1846731-1-trix@redhat.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 7 Apr 2023 11:13:55 -0700
+Message-ID: <CAKwvOdmBu_foPCtXBNoA+ZDd-kU4X5-c65NVJb-MSrgoMKNJxw@mail.gmail.com>
+Subject: Re: [PATCH] bus: fsl-mc: remove unused free_count variable
+To: Tom Rix <trix@redhat.com>
+Cc: stuyoder@gmail.com, laurentiu.tudor@nxp.com, nathan@kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Krzysztof,
+On Thu, Mar 30, 2023 at 5:12=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/bus/fsl-mc/fsl-mc-allocator.c:560:6: error: variable
+>   'free_count' set but not used [-Werror,-Wunused-but-set-variable]
+>         int free_count =3D 0;
+>             ^
+> This variable is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-kernel test robot noticed the following build errors:
+Thanks for the patch!
 
-[auto build test ERROR on mkp-scsi/for-next]
-[also build test ERROR on jejb-scsi/for-next linus/master v6.3-rc5 next-20230406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: commit d8e026a44919 ("staging: fsl-mc: remove some superfluous WARN_=
+ONs")
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krzysztof-Kozlowski/ufs-hwmon-constify-pointers-to-hwmon_channel_info/20230407-231053
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230407150137.79947-1-krzysztof.kozlowski%40linaro.org
-patch subject: [PATCH] ufs: hwmon: constify pointers to hwmon_channel_info
-config: hexagon-randconfig-r045-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080236.gChYf5FS-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7697d4619c62de396a373d422e59846af320e552
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krzysztof-Kozlowski/ufs-hwmon-constify-pointers-to-hwmon_channel_info/20230407-231053
-        git checkout 7697d4619c62de396a373d422e59846af320e552
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ufs/core/
+Check out
+commit 364069556901 ("staging: fsl-mc: move resource pool init/cleanup
+into allocator")
+to see the original logic.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304080236.gChYf5FS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/ufs/core/ufs-hwmon.c:10:
-   In file included from include/ufs/ufshcd.h:16:
-   In file included from include/linux/blk-crypto-profile.h:9:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/ufs/core/ufs-hwmon.c:10:
-   In file included from include/ufs/ufshcd.h:16:
-   In file included from include/linux/blk-crypto-profile.h:9:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/ufs/core/ufs-hwmon.c:10:
-   In file included from include/ufs/ufshcd.h:16:
-   In file included from include/linux/blk-crypto-profile.h:9:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/ufs/core/ufs-hwmon.c:162:10: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const[2]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           .info   = ufs_hwmon_info,
-                     ^~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
+> ---
+>  drivers/bus/fsl-mc/fsl-mc-allocator.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/f=
+sl-mc-allocator.c
+> index dced427ca8ba..f1351237a9d5 100644
+> --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> @@ -557,12 +557,9 @@ static void fsl_mc_cleanup_resource_pool(struct fsl_=
+mc_device *mc_bus_dev,
+>         struct fsl_mc_bus *mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
+>         struct fsl_mc_resource_pool *res_pool =3D
+>                                         &mc_bus->resource_pools[pool_type=
+];
+> -       int free_count =3D 0;
+>
+> -       list_for_each_entry_safe(resource, next, &res_pool->free_list, no=
+de) {
+> -               free_count++;
+> +       list_for_each_entry_safe(resource, next, &res_pool->free_list, no=
+de)
+>                 devm_kfree(&mc_bus_dev->dev, resource);
+> -       }
+>  }
+>
+>  void fsl_mc_cleanup_all_resource_pools(struct fsl_mc_device *mc_bus_dev)
+> --
+> 2.27.0
+>
 
 
-vim +162 drivers/ufs/core/ufs-hwmon.c
-
-e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  159  
-e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  160  static const struct hwmon_chip_info ufs_hwmon_hba_info = {
-e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  161  	.ops	= &ufs_hwmon_ops,
-e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15 @162  	.info	= ufs_hwmon_info,
-e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  163  };
-e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  164  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Thanks,
+~Nick Desaulniers
