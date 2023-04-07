@@ -1,127 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359088482
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 17:53:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44C8C433EF;
-	Fri,  7 Apr 2023 17:53:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680890001;
-	bh=WDnPJrUPigMG4kgGFxEWGDX8QIBiZEaMWytf2/KBaNw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jhp47INhV14wk/HBh87pOS4Egghqrpl9vNTbseUTx+J0gIw3blwBF7wOey8f6748o
-	 7Gpb8iJv62wr4dbl6aJi8G+3/edYS8dUXpHLHuxGw/kXra0sWHMzsMq/9O1UBi0P25
-	 /qXAiHyk48fo3bYM/oNaRoTZVgA4WI1dRKSMWgrW+2bev8bAKA7K36UPaQ+t8HULD6
-	 6ef1tI7wSW5/jwc1GsCoZspNMLYfiC8Ssbq6Q8eVEGcsiuCKd0ZeW0PtNq/S7xlVFc
-	 ipd0EXrUi1FN4aEkENO0MV1hrQK06wICo08ApLocQhgN/nR9bRDSLJU7PXFrEGiCsQ
-	 DwdjEIgR5zk0g==
-Date: Fri, 7 Apr 2023 10:53:18 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andrea Righi <andrea.righi@canonical.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-	Eric Curtin <ecurtin@redhat.com>,
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>, Neal Gompa <neal@gompa.dev>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
-Message-ID: <20230407175318.GA1018455@dev-arch.thelio-3990X>
-References: <20230407070517.204676-1-andrea.righi@canonical.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E008482
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 18:01:31 +0000 (UTC)
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-50bf6f29601so150797a12.0
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 11:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680890491; x=1683482491;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q77ZcgCYnodZClKQX1HhPOSoqs2rfxGtOfBwRswul/4=;
+        b=b8gKd+6rbeWwg8r+DFOMum1BwImUQSQAJBPrje68ohZORJXaU6x2Xjwzkhvjx0zkBd
+         5h5bRrw74dAx8oRlL3w74Jr9fcAfAvcocqj/1iJERl3gENUbwc4NGQ55i5HQ+b+0ZP09
+         0rez9y9Qa5huxDLtpYeke3L8uF9vTMjRiL+vSbvl9/TsWbbjtrZCUB3oXEknJi7Yhk47
+         JXF9nbuPR2gdw5dq4TaBv2MF+VCKznTZ3GqXyMZ37PRQS5m96O2D+EIpIAaQFlYoGbdz
+         WsWo06NQmP1P4MIKU9TIsU4519oxYzv7nhhKpZgz+FnI+GxMuVQaX78O9G7tHEuj/+r8
+         t6sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680890491; x=1683482491;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q77ZcgCYnodZClKQX1HhPOSoqs2rfxGtOfBwRswul/4=;
+        b=UwC5L33DFADn0kxv8uOnxkLT70dJr6WfKa8va/8Ub9dwVWGNx/FHS79OncauqiH72Q
+         QcvsXjHTWXviGzlD7pAPwhHKxlFEEsWJMsOhK+UvKZ2mMf9Jj4W5uXYhiv93o1UjO0kF
+         BxszXF1+Id2pz09hQRwCU+YWSqyfL+j7+QlCCb/sPcHvSk+J4jdO6D+cqG58iHEgXyz6
+         RXT7qsHmkNz8p2xX4gPq+jmCR7NwUw1mmxO8AuWjShjIgQ2pkH3/iu0sj9RV7G7xNeo7
+         GnidWTsGgNY041FyGBq0oxccbcoTLH4IXIQWtVUmb0xsP4BzZlBhEQzDHVKvdFvrnpyC
+         /v7Q==
+X-Gm-Message-State: AAQBX9fa5Wf1xjYRUz+5Ua1V/ePyze9kFXQaTtLEN9xH9tAzftOZenlm
+	6wLJd83DAWxopwbNZ+FsyLRVERtLXOmMBKl+vFZFhA==
+X-Google-Smtp-Source: AKy350ZHpTLUkU+XPnuqC13BzSbCyuTyl9RXM3G4Em3Qru7EkrOtM+34INuQ/mLJt+FyJN0GtVAS94TF68VaGc2rObc=
+X-Received: by 2002:a05:6a00:2e28:b0:625:c55f:bc66 with SMTP id
+ fc40-20020a056a002e2800b00625c55fbc66mr1615956pfb.4.1680890490979; Fri, 07
+ Apr 2023 11:01:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
+References: <20230329231407.1816570-1-trix@redhat.com>
+In-Reply-To: <20230329231407.1816570-1-trix@redhat.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 7 Apr 2023 11:01:19 -0700
+Message-ID: <CAKwvOdnQCVZ+gqOWzsRvkSKbYFJdh5yAJEN-TT+7MC4e8tdu8A@mail.gmail.com>
+Subject: Re: [PATCH] drm/nouveau/svm: remove unused ret variable
+To: Tom Rix <trix@redhat.com>
+Cc: bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com, 
+	airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org, 
+	dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 07, 2023 at 09:05:17AM +0200, Andrea Righi wrote:
-> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
-> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
-> to enable RUST.
-> 
-> With this constraint we don't need is_rust_module.sh anymore, because
-> 'pahole --lang_exclude=rust' already has the capability to exclude Rust
-> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
-> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
-> isn't used as well.
-> 
-> In any case is_rust_module.sh is obsolete and we can just drop it.
-> 
-> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
+On Wed, Mar 29, 2023 at 4:14=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/gpu/drm/nouveau/nouveau_svm.c:929:6: error: variable
+>   'ret' set but not used [-Werror,-Wunused-but-set-variable]
+>         int ret;
+>             ^
+> This variable is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  rust/macros/module.rs     |  2 +-
->  scripts/Makefile.modfinal |  2 --
->  scripts/is_rust_module.sh | 16 ----------------
->  3 files changed, 1 insertion(+), 19 deletions(-)
->  delete mode 100755 scripts/is_rust_module.sh
-> 
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index a7e363c2b044..608406f33a70 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -179,7 +179,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
->              /// Used by the printing macros, e.g. [`info!`].
->              const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
->  
-> -            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
-> +            /// The \"Rust loadable module\" mark.
->              //
->              // This may be best done another way later on, e.g. as a new modinfo
->              // key or a new section. For the moment, keep it simple.
+>  drivers/gpu/drm/nouveau/nouveau_svm.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_svm.c b/drivers/gpu/drm/nouv=
+eau/nouveau_svm.c
+> index a74ba8d84ba7..e072d610f2f9 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_svm.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_svm.c
+> @@ -926,15 +926,14 @@ nouveau_pfns_map(struct nouveau_svmm *svmm, struct =
+mm_struct *mm,
+>                  unsigned long addr, u64 *pfns, unsigned long npages)
+>  {
+>         struct nouveau_pfnmap_args *args =3D nouveau_pfns_to_args(pfns);
+> -       int ret;
+>
+>         args->p.addr =3D addr;
+>         args->p.size =3D npages << PAGE_SHIFT;
+>
+>         mutex_lock(&svmm->mutex);
+>
+> -       ret =3D nvif_object_ioctl(&svmm->vmm->vmm.object, args,
+> -                               struct_size(args, p.phys, npages), NULL);
+> +       nvif_object_ioctl(&svmm->vmm->vmm.object, args,
+> +                         struct_size(args, p.phys, npages), NULL);
 
-It seems like this whole section can be dropped? I only see
-__IS_RUST_MODULE used in scripts/is_rust_module.sh, as the comment
-states.
+nvif_object_ioctl() may return -ENOSYS.  Seeing other call sites have
+comments like:
+114     /*XXX: warn? */
+134     /*XXX: warn? */
 
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-x> index 4703f652c009..e6f8fa3c9b8d 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -41,8 +41,6 @@ quiet_cmd_btf_ko = BTF [M] $@
->        cmd_btf_ko = 							\
->  	if [ ! -f vmlinux ]; then					\
->  		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
-> -	elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module.sh $@; then 		\
-> -		printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
->  	else								\
->  		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
->  		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
-> diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
-> deleted file mode 100755
-> index 28b3831a7593..000000000000
-> --- a/scripts/is_rust_module.sh
-> +++ /dev/null
-> @@ -1,16 +0,0 @@
-> -#!/bin/sh
-> -# SPDX-License-Identifier: GPL-2.0
-> -#
-> -# is_rust_module.sh module.ko
-> -#
-> -# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
-> -
-> -set -e
-> -
-> -# Using the `16_` prefix ensures other symbols with the same substring
-> -# are not picked up (even if it would be unlikely). The last part is
-> -# used just in case LLVM decides to use the `.` suffix.
-> -#
-> -# In the future, checking for the `.comment` section may be another
-> -# option, see https://github.com/rust-lang/rust/pull/97550.
-> -${NM} "$*" | grep -qE '^[0-9a-fA-F]+ r _R[^[:space:]]+16___IS_RUST_MODULE[^[:space:]]*$'
-> -- 
-> 2.39.2
-> 
+or other places where the return code isn't checked makes me think
+that a better approach would be to
+1. plumb error codes back up through nouveau_pfns_map() (and other
+call sites of nvif_object_ioctl)
+2. consider making nvif_object_ioctl __must_check
+
+>
+>         mutex_unlock(&svmm->mutex);
+>  }
+> --
+> 2.27.0
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
