@@ -1,107 +1,79 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BABA3AFD1
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 20:26:05 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id kq3so40829179plb.13
-        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 13:26:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680899165; x=1683491165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0Qml57ez/12DBtRR0XUBgkJY5NbIgppt8GcAw2X+wm0=;
-        b=jlgKUkeNPYv1Sx63l6pSLH05wzmw2SWFRyWDkpSerSMRZzUnhFrk8FOzW6ty1OTs6L
-         aXSBgLux/7ZwSrneXsDFZbbiYQiPP7OI6g6m/MGb2unwyuEkTzzkg2QAUr6ogIjeJ7Lp
-         Cjl59RvTqPlFUCfxWUu4a2KyiSqwC7yD8tkQlaGOgCeHily1ZCjmq5zx2dFUtkAQkyt2
-         ofNSaKqyJH9oQKNCgW2JfziuzJmVEo0BaqKZSLKnhzVMBPgVXX6aNSNhnj+tnBF9Zl4x
-         L4vMjrmtrsI5lWBuKo+P48RflUkXdUbdnIEVuPhiUHdfNt4HZo/63R5Kglb1f75B6G8T
-         wG/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680899165; x=1683491165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0Qml57ez/12DBtRR0XUBgkJY5NbIgppt8GcAw2X+wm0=;
-        b=z+0W26qQ4zcFotJT4ne9iWnuMQcxQ46268WzX9/eBJ7x8y/22WSPztZqVT650A0J3m
-         eP6mfLi2no8qcnzX6cH64GHUe65hxMsR28Ki3DSWpNAx5PZA3AR9ynAbv5FYFMc4W1Dr
-         /YmdNzvXX8AhxwRkxSFy310/czgfLiu4QS2LDRhnYEtHXGM9oI+HVjez5mFXpU4UYbGW
-         CAiUdlZkrlQgh2YlNRo/Kx7IZVHgs8q3mu2b4DXPS9iWWfC0hvb6sjrW1yd5HA67mjyB
-         mAJc9J/TbTeyD0NyCbB0gutdiXnXh1bqa3SzZlh5ADOhNx75FWgW3+SV2Y30bGsi8tMJ
-         sakw==
-X-Gm-Message-State: AAQBX9eE1k/fCs7rTpRo/N1Vs9elN0S6GOGHtcXOaeSf98jMxXMsMtD7
-	RRHY9/4Ngmzriy1Fx1L3DwoeGH148AB6ypxYVVJGgw==
-X-Google-Smtp-Source: AKy350aM6xwPlVLA5rPYKoB5RhjF3PEYNPlYrCd4ZkeeIS0YPdjjoUxwDWIT0Z1yKwTOSaz5gJVMKt7qI9B2Hn4F8Ks=
-X-Received: by 2002:a17:902:a50b:b0:1a2:6e31:73cb with SMTP id
- s11-20020a170902a50b00b001a26e3173cbmr1247076plq.2.1680899164994; Fri, 07 Apr
- 2023 13:26:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3D92582;
+	Fri,  7 Apr 2023 21:09:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680901747; x=1712437747;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=vI5hyg2nZUIAdwPZ62JpGCRbd1qveFnCNFPE4G+dbzs=;
+  b=Vdt1KqPcqIta2aLROr2aFdn/C3RVBcBIfyfPdOiWPvyx5rF30yIubWvM
+   PYwDm8s2v02OLGBCGq9P39t5OmcEzbdfJAV+pLDpNY9WlLTrVbf+iKsWf
+   ye/Ec8Y4JF19NVcr+B8xSP1UEh7atbq9uwOqCEC828dT6bCG0XWbv5jrd
+   LGqy/cZb8Af/7ROUrXXHl3n3yXSQdTbS7jckaXQEvcxFqKIPf4u0F83Uc
+   dBm5I3Vxq6eKPi3w4nGzKfVz2AiZgGEw7vqAjkyAFZQOIWF5AMVK53RsM
+   y2zaBjXPnAdoJLuhc/2LkzztTdR2ISFfsIUTZmn1o2/QMGxX6/OW3rs9N
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="405890958"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="405890958"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 14:09:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="1017369897"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="1017369897"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Apr 2023 14:09:06 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pktKT-000StA-1i;
+	Fri, 07 Apr 2023 21:09:05 +0000
+Date: Sat, 8 Apr 2023 05:08:11 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [tip:objtool/core 22/23] kernel/sched/build_policy.o: warning:
+ objtool: do_idle() falls through to next function cpu_startup_entry()
+Message-ID: <202304080536.WJdtDBwF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230308115243.82592-1-masahiroy@kernel.org> <20230308115243.82592-8-masahiroy@kernel.org>
-In-Reply-To: <20230308115243.82592-8-masahiroy@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Apr 2023 13:25:53 -0700
-Message-ID: <CAKwvOdmdKo-ZtUZH=4R1G9DgxoRaWa_peyx_uHHKYqFXbuKeBw@mail.gmail.com>
-Subject: Re: [PATCH 8/8] scripts/kallsyms: update the usage in the comment block
-To: Masahiro Yamada <masahiroy@kernel.org>, Zhen Lei <thunder.leizhen@huawei.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Mar 8, 2023 at 3:53=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> Commit 010a0aad39fc ("kallsyms: Correctly sequence symbols when
-> CONFIG_LTO_CLANG=3Dy") added --lto-clang, and updated the usage()
-> function, but not the comment. Update it in the same way.
+CC: linux-kernel@vger.kernel.org
+CC: x86@kernel.org
+TO: Josh Poimboeuf <jpoimboe@kernel.org>
 
-I'm surprised to not recall that commit.  Was our mailing list cc'ed?
-Looking at https://lore.kernel.org/lkml/20221102084921.1615-4-thunder.leizh=
-en@huawei.com/,
-it looks like "no."
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool/core
+head:   fb799447ae2974a07907906dff5bd4b9e47b7123
+commit: 071c44e4278156f18a6a56958617223b6bffa6ab [22/23] sched/idle: Mark arch_cpu_idle_dead() __noreturn
+config: x86_64-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080536.WJdtDBwF-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=071c44e4278156f18a6a56958617223b6bffa6ab
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip objtool/core
+        git checkout 071c44e4278156f18a6a56958617223b6bffa6ab
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/
 
-Zhen, Luis, please make sure to use scripts/get_maintainer.pl when
-sending patches.  You can put Cc: below the fold of the commit message
-in the patch file even when sending a series and git send-email will
-use those just for that commit.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080536.WJdtDBwF-lkp@intel.com/
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+All warnings (new ones prefixed by >>):
 
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/kallsyms.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 937900823fa8..0d2db41177b2 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -6,7 +6,7 @@
->   * of the GNU General Public License, incorporated herein by reference.
->   *
->   * Usage: kallsyms [--all-symbols] [--absolute-percpu]
-> - *                         [--base-relative] in.map > out.S
-> + *                         [--base-relative] [--lto-clang] in.map > out.=
-S
->   *
->   *      Table compression uses all the unused char codes on the symbols =
-and
->   *  maps these to the most used substrings (tokens). For instance, it mi=
-ght
-> --
-> 2.34.1
->
+>> kernel/sched/build_policy.o: warning: objtool: do_idle() falls through to next function cpu_startup_entry()
 
-
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
