@@ -1,43 +1,43 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96C7EA2;
-	Fri,  7 Apr 2023 02:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BF5EBC;
+	Fri,  7 Apr 2023 04:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680834326; x=1712370326;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IkQlA+e3iZ26ASAMebzAqKFWu8GJ3V2PTYzUC7izelw=;
-  b=EPUH/KljI8SGbF5ea0m2FwSln7f0tjm02/IypaUpssfeiN6vc9UGAMpZ
-   Rz4XKKQsHV6GKzGFgVMwYYzrLkM1ZN/pOfC8mvjFpktWSy+B4LILhmDwk
-   JANUaLN2Xf1ETUgep4g8gFzcoVgMMOG2m03cPWUqP99nvNXb0XAzJbt8y
-   /zRkwPPa86FJs+fBiXjD3n92mr9Zd5IZmBa2/+iQRpwgfrcN/0SGv7I2q
-   +fPX9pF/Cwf+WCh2Hb8mv45uD/L3sXpmd4gyancgkcsly3t8t63dqL7zH
-   H60efwMvcun19mSdNJCbGy8XmfukufE4DlskaWsbl2KgAuRney3V+4n81
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="405724285"
+  t=1680841109; x=1712377109;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GIHjzAPg982+LywILSJjcA6riK6gR/WWQJGurfTO+dA=;
+  b=hvB7+L8ezB++Vz1XSXK00z6iHZlVsLQqdRKJfpBsmTaenRwD+DM8HVxe
+   cahcF+SnXGA/2UbvFL65AvreNH6jCHqJuVhBfEv73R+7FL4JbVvlyOs54
+   iMQNnI9HhalQWTXiS6pCJ9d40W/JylFOxW0y7UBRGeIiIDn3mTJGMlVAv
+   jkirjfRiNed+OzGAJz/Ybiss4ZSdLYKqbFHJKnWbjLvKPNNaGkR1A+SZQ
+   M9fALgS+pWVDhcsvuoNEwZQZ1khfeuvL93N0ioJaLpsWGiV1JmrYLe+0v
+   28Ggn7Oo/07NtGydy4t2flJ/w7gwHeJCVI2Ku68h1J4TIcCkk67w9V+LF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="341674626"
 X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="405724285"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 19:25:26 -0700
+   d="scan'208";a="341674626"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 21:18:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="798559017"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="719946054"
 X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="798559017"
+   d="scan'208";a="719946054"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Apr 2023 19:25:24 -0700
+  by orsmga001.jf.intel.com with ESMTP; 06 Apr 2023 21:18:27 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pkbn1-000S2i-2Y;
-	Fri, 07 Apr 2023 02:25:23 +0000
-Date: Fri, 7 Apr 2023 10:25:00 +0800
+	id 1pkdYQ-000S7G-1l;
+	Fri, 07 Apr 2023 04:18:26 +0000
+Date: Fri, 7 Apr 2023 12:17:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 55/335]
- arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type
-Message-ID: <202304071045.PzgBSvjX-lkp@intel.com>
+To: Rob Clark <robdclark@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC 1/2] drm: Add fdinfo memory stats
+Message-ID: <202304071241.sHlGa8UH-lkp@intel.com>
+References: <20230406215917.1475704-2-robdclark@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,113 +46,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230406215917.1475704-2-robdclark@gmail.com>
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   9b1b005c63f21cbc8dc4f1691b05964c90240385
-commit: 1a6c8c8864885c1d1ca944cd674c493141a7537f [55/335] KVM: TDX: Add C wrapper functions for SEAMCALLs to the TDX module
-config: i386-randconfig-a004-20230403 (https://download.01.org/0day-ci/archive/20230407/202304071045.PzgBSvjX-lkp@intel.com/config)
+Hi Rob,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/drm-Add-fdinfo-memory-stats/20230407-060118
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230406215917.1475704-2-robdclark%40gmail.com
+patch subject: [RFC 1/2] drm: Add fdinfo memory stats
+config: i386-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230407/202304071241.sHlGa8UH-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/1a6c8c8864885c1d1ca944cd674c493141a7537f
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 1a6c8c8864885c1d1ca944cd674c493141a7537f
+        # https://github.com/intel-lab-lkp/linux/commit/eebbb3ec0a196240e1084554563ac4ae7e85dbb3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rob-Clark/drm-Add-fdinfo-memory-stats/20230407-060118
+        git checkout eebbb3ec0a196240e1084554563ac4ae7e85dbb3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304071045.PzgBSvjX-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304071241.sHlGa8UH-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/cpu/common.c:32:
-   In file included from arch/x86/include/asm/hypervisor.h:37:
-   In file included from arch/x86/include/asm/kvm_para.h:10:
->> arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type [-Wshift-count-overflow]
-                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
-                                                                        ^~~~~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:24:28: note: expanded from macro 'TDX_SEAMCALL_UD'
-   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
-                                            ^~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:20:25: note: expanded from macro 'TDX_SW_ERROR'
-   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
-                                            ^~~~~~~~~
-   arch/x86/include/asm/tdx.h:19:21: note: expanded from macro 'TDX_ERROR'
-   #define TDX_ERROR                       _BITUL(63)
-                                           ^~~~~~~~~~
-   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
-   #define _BITUL(x)       (_UL(1) << (x))
-                                   ^  ~~~
-   1 warning generated.
---
-   In file included from arch/x86/platform/pvh/enlighten.c:7:
-   In file included from arch/x86/include/asm/hypervisor.h:37:
-   In file included from arch/x86/include/asm/kvm_para.h:10:
->> arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type [-Wshift-count-overflow]
-                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
-                                                                        ^~~~~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:24:28: note: expanded from macro 'TDX_SEAMCALL_UD'
-   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
-                                            ^~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:20:25: note: expanded from macro 'TDX_SW_ERROR'
-   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
-                                            ^~~~~~~~~
-   arch/x86/include/asm/tdx.h:19:21: note: expanded from macro 'TDX_ERROR'
-   #define TDX_ERROR                       _BITUL(63)
-                                           ^~~~~~~~~~
-   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
-   #define _BITUL(x)       (_UL(1) << (x))
-                                   ^  ~~~
-   arch/x86/platform/pvh/enlighten.c:120:13: warning: no previous prototype for function 'xen_prepare_pvh' [-Wmissing-prototypes]
-   void __init xen_prepare_pvh(void)
-               ^
-   arch/x86/platform/pvh/enlighten.c:120:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init xen_prepare_pvh(void)
-   ^
-   static 
-   2 warnings generated.
---
-   In file included from arch/x86/kernel/asm-offsets.c:22:
->> arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type [-Wshift-count-overflow]
-                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
-                                                                        ^~~~~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:24:28: note: expanded from macro 'TDX_SEAMCALL_UD'
-   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
-                                            ^~~~~~~~~~~~
-   arch/x86/include/asm/tdx.h:20:25: note: expanded from macro 'TDX_SW_ERROR'
-   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
-                                            ^~~~~~~~~
-   arch/x86/include/asm/tdx.h:19:21: note: expanded from macro 'TDX_ERROR'
-   #define TDX_ERROR                       _BITUL(63)
-                                           ^~~~~~~~~~
-   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
-   #define _BITUL(x)       (_UL(1) << (x))
-                                   ^  ~~~
+>> drivers/gpu/drm/drm_file.c:883:39: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+           drm_printf(p, "%s:\t%lu %s\n", stat, sz, units[u]);
+                               ~~~              ^~
+                               %zu
    1 warning generated.
 
 
-vim +114 arch/x86/include/asm/tdx.h
+vim +883 drivers/gpu/drm/drm_file.c
 
-   102	
-   103	#ifdef CONFIG_INTEL_TDX_HOST
-   104	bool platform_tdx_enabled(void);
-   105	int tdx_cpu_enable(void);
-   106	int tdx_enable(void);
-   107	u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
-   108		       struct tdx_module_output *out);
-   109	#else	/* !CONFIG_INTEL_TDX_HOST */
-   110	static inline bool platform_tdx_enabled(void) { return false; }
-   111	static inline int tdx_cpu_enable(void) { return -EINVAL; }
-   112	static inline int tdx_enable(void)  { return -EINVAL; }
-   113	static inline u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
- > 114				     struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
-   115	#endif	/* CONFIG_INTEL_TDX_HOST */
-   116	
+   871	
+   872	static void print_size(struct drm_printer *p, const char *stat, size_t sz)
+   873	{
+   874		const char *units[] = {"B", "KiB", "MiB", "GiB"};
+   875		unsigned u;
+   876	
+   877		for (u = 0; u < ARRAY_SIZE(units) - 1; u++) {
+   878			if (sz < SZ_1K)
+   879				break;
+   880			sz /= SZ_1K;
+   881		}
+   882	
+ > 883		drm_printf(p, "%s:\t%lu %s\n", stat, sz, units[u]);
+   884	}
+   885	
 
 -- 
 0-DAY CI Kernel Test Service
