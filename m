@@ -1,169 +1,131 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EA86ADB
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 22:52:07 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.nyi.internal (Postfix) with ESMTP id 66B2B5C005E;
-	Fri,  7 Apr 2023 18:52:06 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 07 Apr 2023 18:52:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1680907926; x=1680994326; bh=saxvszkaK5MFMNOYc3N7Z2cVULTVdeuh+Hy
-	Sof/af28=; b=4E783XAq58q3e4NNBUNomQ2pNScK2RnHf1mBgyFjpEQn02rnnhu
-	tE3dS52vvbShiSjqU/c2Ef0P2NTJBiHke57auH/T5qJvTxgcJ+i6+EGD2Ncl4HT0
-	acCscs8gZuRJb3mXKacaHPc6IspHvBKk3J6YabT9ir+FSKS2Gwf3jMdYYdzA0lEB
-	AIt9lqoqGMiJER0VfL2fU/8KTJJaYgY9THJjKYBZP0G2nJRJJ5JJmYtk5m7GjgxZ
-	kMj4XxAQc523wU/AY+wpQsvM0euhoxHB1rufoksL4fIA0kQeF+Yj5U3E1Vp0cenQ
-	WagJ3wRTnE9vNFaegXqR4+jLphK7Jpqs4Dg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1680907926; x=1680994326; bh=saxvszkaK5MFMNOYc3N7Z2cVULTVdeuh+Hy
-	Sof/af28=; b=U4f6r7RrmnuXCiIOSc24TK8UmfzdOWaH2iouea3OE9LjerJZDvi
-	m/BALg3+P4cWAteiidlNSkFYrmKz6iPCWJRWdo0Y3lj7iaOKjykVlYtLQiLTCC+2
-	pQk/1UPq/qaIO/abGokfou2cch+5Z9zlplSkfU41B98MHHWyl/71CfOdP+DBfzk5
-	2fFkySz+NMk5v7EX3ld/z1F0JVAbDTYxPiVRxJl8quMJc5DZoz+ZDC91/1NBwfYK
-	yP1C1sKR6yIWOrnQL4Hilx51G0VB9KJmF2upf4A75DnbX7iOWZnC6QIysEg9jIzh
-	ItoEdXheDtgR33YbtTgce3gQFOKGHLlxG0g==
-X-ME-Sender: <xms:lp4wZJnntqqo-FHs3vh8qMCiakYyzO2WYqdv90QToUJl0WG8MHNMzA>
-    <xme:lp4wZE0u9npFCI0kzZLdy-SqE3CS_TfURR5brb2wOH-boR7i-tn9JvyuxDcJhCUHM
-    ASh5ZgCOObPlY6nMqI>
-X-ME-Received: <xmr:lp4wZPo8x_RkAOfpavqwjSweLC8yv2DrCcRlJ67jvzaTa9tVKd4VYD4lLXR_u__21t8F>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejiedguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:lp4wZJn--IDougsJTCh-YidJSF_otD9cBMRmpm2mu0t7Za1R1QLAqg>
-    <xmx:lp4wZH2hET6_XXoCTI4ZRzX4UlwLGEGxZkddoTTw82Snk7MTlufPtg>
-    <xmx:lp4wZIusugrpGbGLDNECwhiw-jikASwKCCdLRSiZZhE1widjGHocVA>
-    <xmx:lp4wZIz4-X0zYbpJqtWcv-JBMMFuCny7ei_EXIcx5_whP4i8VN1u-g>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 7 Apr 2023 18:52:05 -0400 (EDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD616ADB
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 23:22:48 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1a25ea73d3dso2095135ad.3
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 16:22:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680909767; x=1683501767;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=njPybTaOp1vfFxl9sNrZg/wsVvOfoZpdPujnFpOpMQA=;
+        b=Vt5cGuMIp/txoyJYLtEZ9dC+RpJrsinP5mQDIKekwD6nvyST7tXyhGxLGL3Z/M4BHL
+         YFf8GiX9Fh4tjiQtNiW6yw9042t0+qbszTDR7yNaw1In2q93zzBUeag2fN++T7f+2SSO
+         mYiSVqW3ikHB9B21Lqi8J8xL7fext5RlMpNhrFwdmnzrn/Bg3Vk8cSLVkFC/HZw24r+S
+         +Kujk+EHG8CGkKC5eNtr/tRJybBPG+Q4wOvR2BLQmEOYTaTos8m/pQs78tPFU4aKWSaB
+         e9oGkOODEFlAIv7rPaMXnrblaHO5Qm6fS70uBtRfFtfbmnE5Wyk0GaGO95IRt8LeppyG
+         mLWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680909767; x=1683501767;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=njPybTaOp1vfFxl9sNrZg/wsVvOfoZpdPujnFpOpMQA=;
+        b=tf48vTXTLmgbWc7/p+7RbEiDRLoAMNVrpROjPGVHfeYj9q5ARrqIkvJeEnp+CV1yWa
+         nt8tWc4N+qW+UlD2fZuBPz7v6o+kHUmcu1MIgFpgr6EruuL5X5X2MeD6/HKhkx2v0Szi
+         G86DC0Gs3IL9XsMncOylgc22eV+5ycuFBUkhv7Pjy59wcmZvLbO2gdSTn2y/FNmWF7f/
+         7DHxUfmE9f5wlYuP5+Up5I5QZzqSg7Ug6rggOeHVYdnsT8Jzwab2Yf1yEfZYpoytxcpx
+         +lRWdtZQdh+DKPnr/TU98Yf7GglAEitKUNPnLDwHyZ8Hx5kuMbsDUQE35+tAfl5nJTO/
+         DslQ==
+X-Gm-Message-State: AAQBX9fUktaT4BJr87xwyscsrIcD15s88pCTQjHr/lk3sF4W1WuLvdXU
+	IopgqO4RlgQNLojhdTx7Ea70Xz+W54GEqlRXJx9Elw==
+X-Google-Smtp-Source: AKy350bTVYi1UIgGoXP+cqF81jwaO+c2w357t2GB7id9Pg6AAkRKqAVvHygDDMoVBsekCEUGRFhlgAYliVFtq4CaHB0=
+X-Received: by 2002:a05:6a00:2e28:b0:625:c55f:bc66 with SMTP id
+ fc40-20020a056a002e2800b00625c55fbc66mr1911037pfb.4.1680909767332; Fri, 07
+ Apr 2023 16:22:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 1/5] MIPS: Move various toolchain ASE check to Kconfig
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230407185723.GA1511753@dev-arch.thelio-3990X>
-Date: Fri, 7 Apr 2023 23:51:54 +0100
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- llvm@lists.linux.dev,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Nick Desaulniers <ndesaulniers@google.com>
+MIME-Version: 1.0
+References: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
+ <20230321-kexec_clang16-v5-2-5563bf7c4173@chromium.org> <20230330111523.4b98c8ce@gandalf.local.home>
+ <20230330151826.GDZCWoQkQBj4BYbwWw@fat_crate.local> <20230330113127.3011e021@gandalf.local.home>
+ <20230330160017.GEZCWyEXQVQZRBbYif@fat_crate.local>
+In-Reply-To: <20230330160017.GEZCWyEXQVQZRBbYif@fat_crate.local>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 7 Apr 2023 16:22:36 -0700
+Message-ID: <CAKwvOdkULKxoifiVO4H4yomt1DHQxw0ntdO6QgMXk2BpM-urRg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] x86/purgatory: Add linker script
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Eric Biederman <ebiederm@xmission.com>, 
+	Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>, 
+	Simon Horman <horms@kernel.org>, "x86@kernel.org" <x86@kernel.org>, linux-toolchains@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>, Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <A8685C0F-1EFE-42EF-A33D-2517E061E453@flygoat.com>
-References: <20230407102721.14814-1-jiaxun.yang@flygoat.com>
- <20230407102721.14814-2-jiaxun.yang@flygoat.com>
- <20230407185723.GA1511753@dev-arch.thelio-3990X>
-To: Nathan Chancellor <nathan@kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
+
+Hi Ricardo,
+Thanks for the patch!  Please make sure to cc our mailing list
+<llvm@lists.linux.dev> for llvm specific issues.
+scripts/get_maintainer.pl should recommend it, or you can find it from
+clangbuiltlinux.github.io.  You can also ping me internally for
+toolchain related issues.
+
+Start of thread.
+https://lore.kernel.org/lkml/20230321-kexec_clang16-v5-0-5563bf7c4173@chrom=
+ium.org/
+
+On Thu, Mar 30, 2023 at 9:00=E2=80=AFAM Borislav Petkov <bp@alien8.de> wrot=
+e:
+>
+> On Thu, Mar 30, 2023 at 11:31:27AM -0400, Steven Rostedt wrote:
+> > On Thu, 30 Mar 2023 17:18:26 +0200
+> > Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > > On Thu, Mar 30, 2023 at 11:15:23AM -0400, Steven Rostedt wrote:
+> > > > > Make sure that the .text section is not divided in multiple overl=
+apping
+> > > > > sections. This is not supported by kexec_file.
+
+Perhaps this is related to CrOS' use of AutoFDO creating .text.hot?
+If so, it's probably more straightforward to straight up disable PGO
+for kexec. See also:
+
+commit bde971a83bbf ("KVM: arm64: nvhe: Fix build with profile optimization=
+")
+
+> > >
+> > > And?
+> > >
+> > > What is the failure scenario? Why are you fixing it? Why do we care?
+> > >
+> > > This is way too laconic.
+> > >
+> >
+> > Yeah, I think the change log in patch 1 needs to be in this patch too,
+> > which gives better context.
+>
+> Just read it.
+>
+> Why did it work with clang version < 16?
+
+I'll bet if we bisect llvm, we can spot what might have changed, which
+may give us a clue on how to get the old behavior back; maybe without
+the need for a linker script.
+
+Ricardo, how did you verify that your fix was correct? Surely we can
+check using command line utilities without needing a full blown kexec
+setup? If you can share more info, I can bisect llvm quickly.  If it
+requires profile data, you'll need to share it, since CrOS engineers
+still have not posted public documentation on AutoFDO as I have
+repeatedly asked for.
+
+>
+> + toolchains ML.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
 
 
 
-> 2023=E5=B9=B44=E6=9C=887=E6=97=A5 19:57=EF=BC=8CNathan Chancellor =
-<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi Jiaxun,
->=20
-> On Fri, Apr 07, 2023 at 11:27:17AM +0100, Jiaxun Yang wrote:
->> Use Kconfig to perform Kconfig toolchain feature check, so we will
->> be able to have toolchain feature availablility information in =
-Kconfig
->> to guard relevant options.
->>=20
->=20
-> First of all, thank you a lot for this series! I applied them on top =
-of
-> mips-next and my allnoconfig issue appears to be gone. However, with
-> this change, 32r1{,el}_defconfig is broken for =
-arch/mips/kernel/traps.c.
->=20
-> $ make -skj"$(nproc)" ARCH=3Dmips CROSS_COMPILE=3Dmips-linux-gnu- =
-LLVM=3D1 LLVM_IAS=3D0 O=3Dbuild mrproper 32r1_defconfig =
-arch/mips/kernel/traps.o
-> ...
-> /tmp/traps-f8ea56.s: Assembler messages:
-> /tmp/traps-f8ea56.s:8227: Error: `fp=3D64' used with a 32-bit fpu
-> /tmp/traps-f8ea56.s:8228: Error: `fp=3D64' used with a 32-bit fpu
-> /tmp/traps-f8ea56.s:8228: Warning: the `msa' extension requires MIPS32 =
-revision 2 or greater
-> clang: error: assembler command failed with exit code 1 (use -v to see =
-invocation)
-> ...
-
-
-Oh that=E2=80=99s actually a problem in code.
-Will add a patch to address this in v2.
-
->=20
-> In case it matters:
->=20
-> $ clang --version | head -1
-> ClangBuiltLinux clang version 16.0.1
->=20
-> $ mips-linux-gnu-as --version | head -1
-> GNU assembler (GNU Binutils) 2.40
->=20
-> A few comments below, I have not tested anything beyond this.
->=20
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->> arch/mips/Kconfig                | 27 +++++++++++++++++++++++++++
->> arch/mips/Makefile               | 29 +++--------------------------
->> arch/mips/crypto/crc32-mips.c    |  4 ++--
->> arch/mips/include/asm/asmmacro.h |  8 ++++----
->> arch/mips/include/asm/ginvt.h    |  2 +-
->> arch/mips/include/asm/mipsregs.h | 10 +++++-----
->> arch/mips/include/asm/msa.h      |  4 ++--
->> 7 files changed, 44 insertions(+), 40 deletions(-)
->>=20
->> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
->> index 770d098b11bf..c52401c155a4 100644
->> --- a/arch/mips/Kconfig
->> +++ b/arch/mips/Kconfig
->> @@ -3157,6 +3157,12 @@ config MIPS32_N32
->>=20
->>   If unsure, say N.
->>=20
->> +config CC_HAS_SMARTMIPS
->> + def_bool $(cc-option,-mmicromips)
->=20
-> -msmartmips?
-
-Good catch :-D
-
->=20
->> +
->> +config CC_HAS_MICROMIPS
->> + def_bool $(cc-option,-mmicromips)
->=20
-> Neither of these configurations are used in this change. Should they =
-be
-> moved to the next change in the series?
-
-Hmm I=E2=80=99d prefer leave them here because this patch tracks all =
-compiler checks that
-we have in Makefile.
-
-
-Thanks
-- Jiaxun
-
-
+--=20
+Thanks,
+~Nick Desaulniers
