@@ -1,134 +1,104 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70686FBD
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 17:36:42 +0000 (UTC)
-Received: by mail-pg1-f176.google.com with SMTP id d22so24874279pgw.2
-        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 10:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680889002; x=1683481002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EKQ/0jGnOo/TaPpGUaml4IRy69MNIBKloNhJZjKlyT0=;
-        b=KD6ZnfzfidIvC2otpuKywoCEsPFpclOlyGbsChbiRW+NoHLgvlIIgbDR4G+StlGoIH
-         70V+Xb3tH88TdmFrqGplFBGXqlCuzUxbpiYDRXsLBoXwoTz2W/3cDhHDXwaLaBxXrYgF
-         HoyNSRrWgdMunOUk6NYADKkEMctFlUeJ1Iki7CFRPojkLCxojNZhXIY4q/yC9rhMflBI
-         HVPtR1t3cZu8XwM35jE6pq6TIb9CglNvwwY1HkADONdXRkNJsKn9yWoPfVIRjtounOsv
-         vbp2pu43LZzeofyFbChgOgo1nVZLGY29Dl835qQC8chqq9E88SUh/NyYFrzZxEKcCFHk
-         R1hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680889002; x=1683481002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EKQ/0jGnOo/TaPpGUaml4IRy69MNIBKloNhJZjKlyT0=;
-        b=kLMxhrFFXyxhXIWBKOnxYIIqtE1Ny6jMY/RWuSnG5c0QSDX3nIOs8hyvNkcqP+2QsF
-         xekydiIgiuEcly+4bQZ1xO/RlmzCse23lY6jtSYms/n1Rw6hgAFc9nnW+ENZYx/BSPRv
-         Xz1F7uWwUcY4jFbrJC6jUnZOtGQ3U0iVyd349FGI6/WRf/tGqDi2EC1eb08ffDEAr1tb
-         x9+yg8KbxIIG0SXhR0Oa5+xeO1YMHnZQJSq+2lj8fvZfnTtDHzW+f8My/d2j8xEW1NUl
-         /y0F2Ja/0+AHod2Cn+cvg97of/KLLE2bfE9swtPYwbqi/3K2QcE18UMgA9jKllgvoD16
-         Zz2Q==
-X-Gm-Message-State: AAQBX9eHMV13TShMyfRWlwD4yhqHUuxAOOreLfJI9tG2XPfMuj9Yv7Dj
-	fY8GKIdbr9B+ZCCB16GtKA9ocfSZ5mn57tL2pKbrcg==
-X-Google-Smtp-Source: AKy350aSeVgPhP3/iHKIqEYixpWTIqJFHUyWjp2+JIS3RbQGz3Zhh/BGeX+aSZcOD/B9rL3bBeCHzbu+p557vPjtJzU=
-X-Received: by 2002:a65:578e:0:b0:513:a488:f05f with SMTP id
- b14-20020a65578e000000b00513a488f05fmr620379pgr.1.1680889001970; Fri, 07 Apr
- 2023 10:36:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1486D847C;
+	Fri,  7 Apr 2023 17:39:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680889199; x=1712425199;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sVmvD+c+qiDCUBkB7ICKdefv+FiLhFKVnBX7iQ02glg=;
+  b=RGyEPw3pNtq+03A72Cn0tW8X1eizhnnx7hLQFUQ64CjUqwI3gb/QgrL/
+   EaaiJyaabSV62injVCMc7HLAyIQxg84nep3DkJOj40PJjKh+DP9KtD95K
+   xVU86Iy0fUsuuaQ7Yd147VHKmwhK6gRyuAH6QDV0A8IkFNBEzPcjnyH1t
+   k1jZd0whu6CBBA9SxYn2yeq/Eyk/vD0D6d4RYQvZNbq7D63FeEFap7w4d
+   qgCU2olld77TwZJquYxyEZQmPZREe/z6rKAqbBzHQjZcSLTn1pt/r6PSe
+   yBHOKgTNzLlvHH2tJvHA2XJTz/sKbEDmCPXF7Q1+jICk33XCYvPAVRFr1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="405857432"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="405857432"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 10:39:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="717909755"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="717909755"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Apr 2023 10:39:57 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pkq44-000Sk6-29;
+	Fri, 07 Apr 2023 17:39:56 +0000
+Date: Sat, 8 Apr 2023 01:39:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] fpga: dfl-fme: constify pointers to hwmon_channel_info
+Message-ID: <202304080159.eAU0ksuS-lkp@intel.com>
+References: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230318133952.1684907-1-trix@redhat.com>
-In-Reply-To: <20230318133952.1684907-1-trix@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Apr 2023 10:36:30 -0700
-Message-ID: <CAKwvOdk=TGUTJMN1Am6EayVd1M9NRy_SwpUQBFWCb=+5KyMeXQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/kmb: remove unused set_test_mode_src_osc_freq_target_low,hi_bits
- functions
-To: Tom Rix <trix@redhat.com>
-Cc: anitha.chrisanthus@intel.com, edmund.j.dea@intel.com, airlied@gmail.com, 
-	daniel@ffwll.ch, nathan@kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
 
-On Sat, Mar 18, 2023 at 6:39=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/gpu/drm/kmb/kmb_dsi.c:822:2: error: unused function
->   'set_test_mode_src_osc_freq_target_low_bits' [-Werror,-Wunused-function=
-]
->         set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_ds=
-i,
->         ^
-> drivers/gpu/drm/kmb/kmb_dsi.c:834:2: error: unused function
->   'set_test_mode_src_osc_freq_target_hi_bits' [-Werror,-Wunused-function]
->         set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi=
-,
->         ^
-> These static functions are not used, so remove them.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi Krzysztof,
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+kernel test robot noticed the following build errors:
 
-> ---
->  drivers/gpu/drm/kmb/kmb_dsi.c | 28 ----------------------------
->  1 file changed, 28 deletions(-)
->
-> diff --git a/drivers/gpu/drm/kmb/kmb_dsi.c b/drivers/gpu/drm/kmb/kmb_dsi.=
-c
-> index cf7cf0b07541..ed99b14375aa 100644
-> --- a/drivers/gpu/drm/kmb/kmb_dsi.c
-> +++ b/drivers/gpu/drm/kmb/kmb_dsi.c
-> @@ -818,34 +818,6 @@ static void test_mode_send(struct kmb_dsi *kmb_dsi, =
-u32 dphy_no,
->         }
->  }
->
-> -static inline void
-> -       set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_ds=
-i,
-> -                                                  u32 dphy_no,
-> -                                                  u32 freq)
-> -{
-> -       /* Typical rise/fall time=3D166, refer Table 1207 databook,
-> -        * sr_osc_freq_target[7:0]
-> -        */
-> -       test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES,
-> -                      (freq & 0x7f));
-> -}
-> -
-> -static inline void
-> -       set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi=
-,
-> -                                                 u32 dphy_no,
-> -                                                 u32 freq)
-> -{
-> -       u32 data;
-> -
-> -       /* Flag this as high nibble */
-> -       data =3D ((freq >> 6) & 0x1f) | (1 << 7);
-> -
-> -       /* Typical rise/fall time=3D166, refer Table 1207 databook,
-> -        * sr_osc_freq_target[11:7]
-> -        */
-> -       test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES, =
-data);
-> -}
-> -
->  static void mipi_tx_get_vco_params(struct vco_params *vco)
->  {
->         int i;
-> --
-> 2.27.0
->
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krzysztof-Kozlowski/fpga-dfl-fme-constify-pointers-to-hwmon_channel_info/20230407-230805
+patch link:    https://lore.kernel.org/r/20230407150112.79854-1-krzysztof.kozlowski%40linaro.org
+patch subject: [PATCH] fpga: dfl-fme: constify pointers to hwmon_channel_info
+config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080159.eAU0ksuS-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5b9bcef28b40b20ec5539bacbe0a8ae6e063bfa8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krzysztof-Kozlowski/fpga-dfl-fme-constify-pointers-to-hwmon_channel_info/20230407-230805
+        git checkout 5b9bcef28b40b20ec5539bacbe0a8ae6e063bfa8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/fpga/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080159.eAU0ksuS-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/fpga/dfl-fme-main.c:277:10: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const[2]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           .info = thermal_hwmon_info,
+                   ^~~~~~~~~~~~~~~~~~
+   drivers/fpga/dfl-fme-main.c:477:10: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const[2]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           .info = power_hwmon_info,
+                   ^~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +277 drivers/fpga/dfl-fme-main.c
+
+4284c65a9fda9d Wu Hao 2019-10-14  274  
+4284c65a9fda9d Wu Hao 2019-10-14  275  static const struct hwmon_chip_info thermal_hwmon_chip_info = {
+4284c65a9fda9d Wu Hao 2019-10-14  276  	.ops = &thermal_hwmon_ops,
+4284c65a9fda9d Wu Hao 2019-10-14 @277  	.info = thermal_hwmon_info,
+4284c65a9fda9d Wu Hao 2019-10-14  278  };
+4284c65a9fda9d Wu Hao 2019-10-14  279  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
