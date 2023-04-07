@@ -1,57 +1,56 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944E2AFE7
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 22:26:30 +0000 (UTC)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id 60D1E5C0050;
-	Fri,  7 Apr 2023 18:26:29 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 07 Apr 2023 18:26:29 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EA86ADB
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 22:52:07 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.nyi.internal (Postfix) with ESMTP id 66B2B5C005E;
+	Fri,  7 Apr 2023 18:52:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 07 Apr 2023 18:52:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1680906389; x=1680992789; bh=gc3XWq5jxArvj2x8fpaY8lG7l6GGRwfF874
-	q4v46klg=; b=xDNucmv0vh3gjObDAVZyegTcCVZXlSrmF/U4kwWQe4QK6kUkQJV
-	yfutlJZdoQ6v7bh8DaF8GeS9kQlZNO6qzGfFnOpRFjM7cY7jMil6U/qJGCfBP70F
-	mvuSO80RalffG4hOxvMZfx0H9sPKmklfBfOh0uF0o1KIcd95zTQYoUSNFSAy8J9K
-	NsLWit89YT8faCpyd6s7LczAx2H0kNiif537HWNKc5yWhxcJGH/DixAkNg7DapjL
-	vVk52YymI1eJlcuRf57ZWjXiIfXcc4bB7zUBZpTDk3VKqWSNHfllUmHtVeUaUSEK
-	RfQ/PfeqZL/wthTPGpomMbUjzwic8W1gNLA==
+	1680907926; x=1680994326; bh=saxvszkaK5MFMNOYc3N7Z2cVULTVdeuh+Hy
+	Sof/af28=; b=4E783XAq58q3e4NNBUNomQ2pNScK2RnHf1mBgyFjpEQn02rnnhu
+	tE3dS52vvbShiSjqU/c2Ef0P2NTJBiHke57auH/T5qJvTxgcJ+i6+EGD2Ncl4HT0
+	acCscs8gZuRJb3mXKacaHPc6IspHvBKk3J6YabT9ir+FSKS2Gwf3jMdYYdzA0lEB
+	AIt9lqoqGMiJER0VfL2fU/8KTJJaYgY9THJjKYBZP0G2nJRJJ5JJmYtk5m7GjgxZ
+	kMj4XxAQc523wU/AY+wpQsvM0euhoxHB1rufoksL4fIA0kQeF+Yj5U3E1Vp0cenQ
+	WagJ3wRTnE9vNFaegXqR4+jLphK7Jpqs4Dg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
 	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1680906389; x=1680992789; bh=gc3XWq5jxArvj2x8fpaY8lG7l6GGRwfF874
-	q4v46klg=; b=cyXAAkkoYh10vTAECEA3AVLPhD/TikQ2KjG9RjAGGL6nB5rk6ZN
-	/aq76nI+P25k/PwGOwq7tJIQzhuGIZ585VXI10RLfnznJCbetIfgwZRSSMIm3CeV
-	sOgD+1MdiEdBoFq47ftmo7CrAQiPMtVy+2aR07uW7gyjtCsAUS0QruoQ1ZuKRedM
-	1ZY5vfiKSkC8YEoODyvVST+L+uJYR6i44+uKO1coAJ/h9eluS+M4apuvaHSvZzwW
-	SScxfwKqgm7vgjFSblRNP032FOob6Kl/ZWloLT0ooUUj8W3Z+bETQlF8jdUhzxLV
-	f7ompP8z3JBbABj6FbraHqXtYZmoIUpx/PQ==
-X-ME-Sender: <xms:lJgwZHR0BDHcGXHjarZVQ4gFxt5URNKhFLyTStacM8UzATF-YdxcPQ>
-    <xme:lJgwZIzpaxp1QI90UZwQ5ClvvG-6VxEbB_21p2ptjBRSVvtBSyNuKXZ-bd9XXGeKM
-    7nBUVCqzBpV_KND-2E>
-X-ME-Received: <xmr:lJgwZM2QNuDDc346lBwNS2LAqVuy5P4c6ap4vXnKRvzBMYtcuOtDpNaAxIAbM0wdxYix>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejiedgtdejucetufdoteggodetrfdotf
+	1680907926; x=1680994326; bh=saxvszkaK5MFMNOYc3N7Z2cVULTVdeuh+Hy
+	Sof/af28=; b=U4f6r7RrmnuXCiIOSc24TK8UmfzdOWaH2iouea3OE9LjerJZDvi
+	m/BALg3+P4cWAteiidlNSkFYrmKz6iPCWJRWdo0Y3lj7iaOKjykVlYtLQiLTCC+2
+	pQk/1UPq/qaIO/abGokfou2cch+5Z9zlplSkfU41B98MHHWyl/71CfOdP+DBfzk5
+	2fFkySz+NMk5v7EX3ld/z1F0JVAbDTYxPiVRxJl8quMJc5DZoz+ZDC91/1NBwfYK
+	yP1C1sKR6yIWOrnQL4Hilx51G0VB9KJmF2upf4A75DnbX7iOWZnC6QIysEg9jIzh
+	ItoEdXheDtgR33YbtTgce3gQFOKGHLlxG0g==
+X-ME-Sender: <xms:lp4wZJnntqqo-FHs3vh8qMCiakYyzO2WYqdv90QToUJl0WG8MHNMzA>
+    <xme:lp4wZE0u9npFCI0kzZLdy-SqE3CS_TfURR5brb2wOH-boR7i-tn9JvyuxDcJhCUHM
+    ASh5ZgCOObPlY6nMqI>
+X-ME-Received: <xmr:lp4wZPo8x_RkAOfpavqwjSweLC8yv2DrCcRlJ67jvzaTa9tVKd4VYD4lLXR_u__21t8F>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejiedguddvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
     gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepueetvdettdduhedtfeevteegjefhffelgefhtdejhfefleev
-    gfeuuddvleefvdeunecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhg
-    sehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:lJgwZHBBMwUv8Nve-CZD-khG_OnyBUWFioX-6cUgyk0allFrPKj1Pg>
-    <xmx:lJgwZAhBIfN1DkB5bRNmegQlDUoB_U-M_fcbDLJqukzGFYyuQ63YIQ>
-    <xmx:lJgwZLp83MncOrxULRmq-b851Q_YSy4EiEYhKkW53BQVt0c_n557qw>
-    <xmx:lZgwZKb3EW5LrAesRtKoiPPDeas2L52gveUiJPjOehsSkTqYBYrUKg>
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:lp4wZJn--IDougsJTCh-YidJSF_otD9cBMRmpm2mu0t7Za1R1QLAqg>
+    <xmx:lp4wZH2hET6_XXoCTI4ZRzX4UlwLGEGxZkddoTTw82Snk7MTlufPtg>
+    <xmx:lp4wZIusugrpGbGLDNECwhiw-jikASwKCCdLRSiZZhE1widjGHocVA>
+    <xmx:lp4wZIz4-X0zYbpJqtWcv-JBMMFuCny7ei_EXIcx5_whP4i8VN1u-g>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 7 Apr 2023 18:26:27 -0400 (EDT)
+ 7 Apr 2023 18:52:05 -0400 (EDT)
 Content-Type: text/plain;
 	charset=utf-8
 Precedence: bulk
@@ -60,115 +59,111 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 4/5] MIPS: Detect toolchain support of o32 ABI with 64 bit
- CPU
+Subject: Re: [PATCH 1/5] MIPS: Move various toolchain ASE check to Kconfig
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <CAKwvOd=2ChEH1goXpi=nYTcouwLgKP1fnkN31AuqROKj0uc2kg@mail.gmail.com>
-Date: Fri, 7 Apr 2023 23:26:16 +0100
+In-Reply-To: <20230407185723.GA1511753@dev-arch.thelio-3990X>
+Date: Fri, 7 Apr 2023 23:51:54 +0100
 Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
  llvm@lists.linux.dev,
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Nathan Chancellor <nathan@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+ Nick Desaulniers <ndesaulniers@google.com>
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <959A8C19-2005-4C5A-91A8-F692AACCA329@flygoat.com>
+Message-Id: <A8685C0F-1EFE-42EF-A33D-2517E061E453@flygoat.com>
 References: <20230407102721.14814-1-jiaxun.yang@flygoat.com>
- <20230407102721.14814-5-jiaxun.yang@flygoat.com>
- <CAKwvOd=2ChEH1goXpi=nYTcouwLgKP1fnkN31AuqROKj0uc2kg@mail.gmail.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
+ <20230407102721.14814-2-jiaxun.yang@flygoat.com>
+ <20230407185723.GA1511753@dev-arch.thelio-3990X>
+To: Nathan Chancellor <nathan@kernel.org>
 X-Mailer: Apple Mail (2.3731.500.231)
 
 
 
-> 2023=E5=B9=B44=E6=9C=887=E6=97=A5 23:19=EF=BC=8CNick Desaulniers =
-<ndesaulniers@google.com> =E5=86=99=E9=81=93=EF=BC=9A
+> 2023=E5=B9=B44=E6=9C=887=E6=97=A5 19:57=EF=BC=8CNathan Chancellor =
+<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
 >=20
-> On Fri, Apr 7, 2023 at 3:27=E2=80=AFAM Jiaxun Yang =
-<jiaxun.yang@flygoat.com> wrote:
+> Hi Jiaxun,
+>=20
+> On Fri, Apr 07, 2023 at 11:27:17AM +0100, Jiaxun Yang wrote:
+>> Use Kconfig to perform Kconfig toolchain feature check, so we will
+>> be able to have toolchain feature availablility information in =
+Kconfig
+>> to guard relevant options.
 >>=20
->> LLVM is not happy with using o32 ABI on 64 bit CPU, thus build 32 bit
->> kernel is unsupported.
->>=20
->> Detect this in Kconfig to prevent user select 32 bit kernel with
->> unsupported toolchain.
->>=20
->> Reported-by: Nathan Chancellor <nathan@kernel.org>
+>=20
+> First of all, thank you a lot for this series! I applied them on top =
+of
+> mips-next and my allnoconfig issue appears to be gone. However, with
+> this change, 32r1{,el}_defconfig is broken for =
+arch/mips/kernel/traps.c.
+>=20
+> $ make -skj"$(nproc)" ARCH=3Dmips CROSS_COMPILE=3Dmips-linux-gnu- =
+LLVM=3D1 LLVM_IAS=3D0 O=3Dbuild mrproper 32r1_defconfig =
+arch/mips/kernel/traps.o
+> ...
+> /tmp/traps-f8ea56.s: Assembler messages:
+> /tmp/traps-f8ea56.s:8227: Error: `fp=3D64' used with a 32-bit fpu
+> /tmp/traps-f8ea56.s:8228: Error: `fp=3D64' used with a 32-bit fpu
+> /tmp/traps-f8ea56.s:8228: Warning: the `msa' extension requires MIPS32 =
+revision 2 or greater
+> clang: error: assembler command failed with exit code 1 (use -v to see =
+invocation)
+> ...
+
+
+Oh that=E2=80=99s actually a problem in code.
+Will add a patch to address this in v2.
+
+>=20
+> In case it matters:
+>=20
+> $ clang --version | head -1
+> ClangBuiltLinux clang version 16.0.1
+>=20
+> $ mips-linux-gnu-as --version | head -1
+> GNU assembler (GNU Binutils) 2.40
+>=20
+> A few comments below, I have not tested anything beyond this.
+>=20
 >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->=20
-> I suspect this may fix:
-> Link: https://github.com/ClangBuiltLinux/linux/issues/884
->=20
 >> ---
->> arch/mips/Kconfig | 7 ++++++-
->> 1 file changed, 6 insertions(+), 1 deletion(-)
+>> arch/mips/Kconfig                | 27 +++++++++++++++++++++++++++
+>> arch/mips/Makefile               | 29 +++--------------------------
+>> arch/mips/crypto/crc32-mips.c    |  4 ++--
+>> arch/mips/include/asm/asmmacro.h |  8 ++++----
+>> arch/mips/include/asm/ginvt.h    |  2 +-
+>> arch/mips/include/asm/mipsregs.h | 10 +++++-----
+>> arch/mips/include/asm/msa.h      |  4 ++--
+>> 7 files changed, 44 insertions(+), 40 deletions(-)
 >>=20
 >> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
->> index d896af492da6..5e399a5ac3b3 100644
+>> index 770d098b11bf..c52401c155a4 100644
 >> --- a/arch/mips/Kconfig
 >> +++ b/arch/mips/Kconfig
->> @@ -2016,6 +2016,7 @@ choice
->> config 32BIT
->>        bool "32-bit kernel"
->>        depends on CPU_SUPPORTS_32BIT_KERNEL && =
-SYS_SUPPORTS_32BIT_KERNEL
->> +       depends on CC_HAS_O32_ABI
->=20
-> Does this disable 32b mips builds with clang?
-
-It disable 32bit kernel build for 64bit CPU with clang.
-
-i.e.: 32bit kernel for R4000, 32bit kernel for MIPS64R2 is disabled, but =
-you can still build 32 bit
-kernel for mips32r2.
-
->=20
->>        select TRAD_SIGNALS
->>        help
->>          Select this option if you want to build a 32-bit kernel.
->> @@ -3136,7 +3137,7 @@ config COMPAT
+>> @@ -3157,6 +3157,12 @@ config MIPS32_N32
 >>=20
->> config MIPS32_O32
->>        bool "Kernel support for o32 binaries"
->> -       depends on 64BIT
->> +       depends on 64BIT && CC_HAS_O32_ABI
->>        select ARCH_WANT_OLD_COMPAT_IPC
->>        select COMPAT
->>        select MIPS32_COMPAT
->> @@ -3184,6 +3185,10 @@ config CC_HAS_DADDI_WORKAROUNDS
->> config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
->>        def_bool y if CC_IS_CLANG
+>>   If unsure, say N.
 >>=20
->> +config CC_HAS_O32_ABI
->> +       def_bool y
->> +       depends on !CPU_SUPPORTS_64BIT_KERNEL || =
-$(cc-option,-march=3Dmips3 -mabi=3D32)
+>> +config CC_HAS_SMARTMIPS
+>> + def_bool $(cc-option,-mmicromips)
 >=20
-> Should this be
-> def_bool $(cc-option,-march=3Dmips3 -mabi=3D32)
-> depends on !CPU_SUPPORTS_64BIT_KERNEL
+> -msmartmips?
 
-Hmm, the logic is to enable CC_HAS_O32_ABI if CPU is 32bit only =
-(!CPU_SUPPORTS_64BIT_KERNEL)
-or toolchain supports 64bit CPU with o32 ABI combination.
+Good catch :-D
 
-Thanks
-Jiaxun
-
->=20
-> ?
 >=20
 >> +
->> config AS_HAS_MSA
->>        def_bool $(cc-option,-Wa$(comma)-mmsa)
->>=20
->> --
->> 2.39.2 (Apple Git-143)
->>=20
+>> +config CC_HAS_MICROMIPS
+>> + def_bool $(cc-option,-mmicromips)
 >=20
->=20
-> --=20
-> Thanks,
-> ~Nick Desaulniers
+> Neither of these configurations are used in this change. Should they =
+be
+> moved to the next change in the series?
+
+Hmm I=E2=80=99d prefer leave them here because this patch tracks all =
+compiler checks that
+we have in Makefile.
+
+
+Thanks
+- Jiaxun
 
 
