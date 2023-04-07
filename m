@@ -1,43 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE40B7B;
-	Fri,  7 Apr 2023 00:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681C77B;
+	Fri,  7 Apr 2023 00:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680826294; x=1712362294;
+  t=1680826895; x=1712362895;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pP4+FshVJEgWwZdKzwCEFqeDE9IRI/YeH7ABqpTFAVM=;
-  b=cHEK1nw5lHENVTJHmTtUOf+GJbcl2D1vx1J1mUkHMthCZqWpuMy40GcO
-   k9S+Qm+5aifJqFDUqP5R+2c3e2JA2O0ajE0yQX2usIk9FCygfvP2dC1/W
-   hvzC5bwy10+i+TufTmh3mxC9UOfJsjmJogmnxpSBcrs6i3KwI4XrVdoGn
-   ntyf9DWglXUp6HgR3glthZrdDwHnsCyyf/La+Amr3YUqjYZ6fkWByjChT
-   kb59UvqCuJpwSfbuBLzram973NndEOl1FjtyagK8Ma078bgLjSO6xNgG2
-   yXMCqH5hYVJB6QXv/7bqN8hmgLT4AoS0X7ObsGI7KQ54CWQvN95Iafbb+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="429164966"
+  bh=nS3Gh8ZxD4GHgrogqXDXTvL72tTzLa3KPHQbn8WpZhI=;
+  b=kFze9xmlqY2Q3EQxYGvTflgftIlPPAmatv3RjBd6V1/sA0ZzN05x2LHZ
+   3VMzf3o9q67fx6mGhGpT44xCLBMFlJHcQJ/R0k5Lx7aGnGJW/3Rd81EX1
+   bVFkkddn6kqHvzuZUchh8Bys6t8hLxLpbhAqkzjvLQ/WlvBED9LLpZf/e
+   g+3nFkS+bc6V3SHqkNy5wk6h6WKXpQuNqZQ23iyJfFaRe/iPkXykNhMA5
+   MfKLGZHcjxmhVxMAW7ln22WRbpqkl5anPnWFZHpRWB0s7DzU+ZfOOEPfz
+   Td5cRH4hSBDTIgzRVsd/w6R9CVjb6P4U03XtaigSBrvclGDFWGI7dQfG4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="340367853"
 X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="429164966"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 17:11:21 -0700
+   d="scan'208";a="340367853"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 17:21:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="664697716"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="680852079"
 X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="664697716"
+   d="scan'208";a="680852079"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2023 17:11:18 -0700
+  by orsmga007.jf.intel.com with ESMTP; 06 Apr 2023 17:21:23 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pkZhG-000RvK-0R;
-	Fri, 07 Apr 2023 00:11:18 +0000
-Date: Fri, 7 Apr 2023 08:10:34 +0800
+	id 1pkZqw-000RvY-0m;
+	Fri, 07 Apr 2023 00:21:18 +0000
+Date: Fri, 7 Apr 2023 08:21:11 +0800
 From: kernel test robot <lkp@intel.com>
 To: Isaku Yamahata <isaku.yamahata@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [intel-tdx:kvm-upstream-workaround 312/335]
  arch/x86/kvm/mmu/mmu.c:713:5: warning: no previous prototype for function
  'kvm_mmu_topup_memory_cache_for_split'
-Message-ID: <202304070850.Ellbx2T4-lkp@intel.com>
+Message-ID: <202304070804.xlAhNFOq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ Content-Disposition: inline
 tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
 head:   9b1b005c63f21cbc8dc4f1691b05964c90240385
 commit: 775207f6d101d7d963d98bf833323efcec435c4d [312/335] [REVERTME] KVM: TDX, x86/tdp_mmu: Protect Secure-EPT page
-config: x86_64-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230407/202304070850.Ellbx2T4-lkp@intel.com/config)
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230407/202304070804.xlAhNFOq-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -61,15 +61,36 @@ reproduce (this is a W=1 build):
         git checkout 775207f6d101d7d963d98bf833323efcec435c4d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304070850.Ellbx2T4-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304070804.xlAhNFOq-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
+   In file included from arch/x86/kvm/mmu/mmu.c:19:
+   In file included from arch/x86/kvm/irq.h:15:
+   In file included from include/linux/kvm_host.h:42:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/x86/include/asm/kvm_para.h:10:
+   arch/x86/include/asm/tdx.h:188:49: warning: shift count >= width of type [-Wshift-count-overflow]
+                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+                                                                        ^~~~~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:26:28: note: expanded from macro 'TDX_SEAMCALL_UD'
+   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
+                                            ^~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:21:25: note: expanded from macro 'TDX_SW_ERROR'
+   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
+                                            ^~~~~~~~~
+   arch/x86/include/asm/tdx.h:20:21: note: expanded from macro 'TDX_ERROR'
+   #define TDX_ERROR                       _BITUL(TDX_ERROR_BIT)
+                                           ^~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
+   #define _BITUL(x)       (_UL(1) << (x))
+                                   ^  ~~~
 >> arch/x86/kvm/mmu/mmu.c:713:5: warning: no previous prototype for function 'kvm_mmu_topup_memory_cache_for_split' [-Wmissing-prototypes]
    int kvm_mmu_topup_memory_cache_for_split(struct kvm *kvm)
        ^
@@ -77,7 +98,7 @@ All warnings (new ones prefixed by >>):
    int kvm_mmu_topup_memory_cache_for_split(struct kvm *kvm)
    ^
    static 
-   1 warning generated.
+   2 warnings generated.
 
 
 vim +/kvm_mmu_topup_memory_cache_for_split +713 arch/x86/kvm/mmu/mmu.c
