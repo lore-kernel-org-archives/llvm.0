@@ -1,172 +1,127 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B12CAFD1;
-	Fri,  7 Apr 2023 20:07:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680898026; x=1712434026;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xXvTAqJj9svAoE+MVxC3V9BfmP7zGcPSNhmLnGVfEOk=;
-  b=e1s7S5bvVlawrhR0XwykSefKMUb18VN3LIvRrJjaHR3syHSE5PkkJ2qx
-   ICWAiyHJ8SZw2TGC+e8ee/J6Z8CeIynXf8gsKetI8G6m3Xe3OVz/351hB
-   mdma0xwVa9pPzHCdjBMXoZde2cOYOIANG5pfPemayCgpD7b+BcFSqLEFu
-   ijPTF5hebqjngR33AGOe1BrZNx9C/lXNunylLa/HzzcSlJCISXLJYmeXi
-   r6rGR4IKhXHrGCtzwDTsrtg6ituRPBn50n9xa904eJXza2lrzRjaHsVy5
-   lUNsLU4ajHNAjrnMp9DZfnknU+Pm/y8QG+BWXLcoJUowDWIB2NnrU+33j
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="343066030"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="343066030"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 13:07:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="756825427"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="756825427"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Apr 2023 13:07:03 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pksMR-000SqM-0h;
-	Fri, 07 Apr 2023 20:07:03 +0000
-Date: Sat, 8 Apr 2023 04:06:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 3/4] rtc: isl12022: constify pointers to
- hwmon_channel_info
-Message-ID: <202304080345.wtksgffl-lkp@intel.com>
-References: <20230407150306.80141-3-krzysztof.kozlowski@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EBAAFD1
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 20:07:37 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id bt19so27047546pfb.3
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 13:07:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680898057; x=1683490057;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YkOEhQNrIBFDHu7KAVwRblXldBrOwOumrazSx2PHct0=;
+        b=mJE8l6pA+2PT6E5N5sbq9oZWU6MFGh4WrHvDXlxWedKbAYSpCmaQscbYlmnvGF8lXB
+         nhvqJmlRNTThO0BlZysjCSmIzK0wH0URUyIMIbEYqL9mIW9i06SBWe/5D39t7X+02w3F
+         lx/C9e3beaemoSIpaWak5PdZtdzQAEWmirLoDeKgOiC2EEoDCOKycNQHZWM4V62PWECi
+         /uVHNUfr6gkaeoeKVFEckRq1iwsVxASE3y+N8cKrpjD4Jzh8P3a41eTGxa9dNpX3iu2y
+         ICXq3yLhX+IFRWRPWCZjWy7pN62ht+k8bqrLvnhahCS61wmP9eFrvug0ZK0/pFyBetiX
+         RIWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680898057; x=1683490057;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YkOEhQNrIBFDHu7KAVwRblXldBrOwOumrazSx2PHct0=;
+        b=00oFSgNZ4a8WIK14z9XuJ1elFzUxNgjyoyd/yduRfAvN9WxBi794qDVQvl0XT+H+bn
+         2+hArTbqRGYJ3Fl+ao0XE/iTp+JRhhAQRQ2HNBoudUsn8+jxXF0lHjrFOrAI9fAZgU1e
+         VVZBKc9CJ/CMB/z9knLXWG+GafZmG8lwF8+A00NvHTPg1hxo/3i1PfLmATzuNwl0MEIY
+         RKkfCq0F20sjvgeSzv17JUhCXV7ehnEuH7gnLF5+PdVc+oaF5+7tDBK1pmlUXocmExQF
+         riS8d1bDWl9MnOrzyI4iLjLTr8VPM4yLF+dknGOYQqeX67gTIIhTSqMzPG5R0IWsGJOe
+         bMWQ==
+X-Gm-Message-State: AAQBX9cRzLEdrbNd91ERLDOda+nL3svOuWUGb08CWyUmSVsy/jia2Heb
+	g55Ue3fyb2zI6CrgtNMTMeUNg1ijhEAUztt8VrkAiA==
+X-Google-Smtp-Source: AKy350ZodAE1kFxaDIP59bG96aIVjkJ5nBYb13hi5XnQQ0LKgyr6AqX0Jjr5lrWDDS0eoVNk6zG3x7nSzNx62dkuwrg=
+X-Received: by 2002:a63:d65:0:b0:513:6b94:8907 with SMTP id
+ 37-20020a630d65000000b005136b948907mr703540pgn.1.1680898056858; Fri, 07 Apr
+ 2023 13:07:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407150306.80141-3-krzysztof.kozlowski@linaro.org>
+References: <CAK_uB7iP=6Rjo6hGbDC9tq8+NE1ip=Zu-LwUDG=94sD4A-zKZA@mail.gmail.com>
+ <CAKwvOdm9m8UtUVF1xYoheSnk_mHzZKDa68QJP2biF+ax_1mP6w@mail.gmail.com>
+ <CAK_uB7iqftfEgX+GWMtcFwJhfMDCHZwdO26R-dXCL-ChR2SgtQ@mail.gmail.com>
+ <CAKwvOdne=8KXzkn_jDfjqFTcu1SYyTrCTPe1BtCVj+8F3sk7UA@mail.gmail.com> <CAGG=3QVCziOMitp5DenE-TfJv8spOL0KW-9eZ3OAVZ9+NBd97w@mail.gmail.com>
+In-Reply-To: <CAGG=3QVCziOMitp5DenE-TfJv8spOL0KW-9eZ3OAVZ9+NBd97w@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 7 Apr 2023 13:07:25 -0700
+Message-ID: <CAKwvOdmKmtzSqEk6L8ru+sj7G9zFUxWQ4qqHwzuAj1RAEMFj-g@mail.gmail.com>
+Subject: Re: How to compile Linux kernel to llvm bitcodes?
+To: Bill Wendling <morbo@google.com>, Sami Tolvanen <samitolvanen@google.com>
+Cc: tr4v3ler <0xtr4v3ler@gmail.com>, clang-built-linux <llvm@lists.linux.dev>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Krzysztof,
+On Fri, Apr 7, 2023 at 1:02=E2=80=AFPM Bill Wendling <morbo@google.com> wro=
+te:
+>
+> On Fri, Apr 7, 2023 at 1:00=E2=80=AFPM Nick Desaulniers <ndesaulniers@goo=
+gle.com> wrote:
+> >
+> > On Mon, Mar 20, 2023 at 7:14=E2=80=AFPM tr4v3ler <0xtr4v3ler@gmail.com>=
+ wrote:
+> > >
+> > > I would like to compile all C files into. ll or. bc to facilitate ana=
+lyzing the entire kernel.
+> >
+> > So there's a make target compile_commands.json. That will give you a
+> > json list of triples that contain the exact command used to compile
+> > the kernel. It's probably 10 lines of python to parse that, then rerun
+> > the exact command used the build each translation unit with -emit-llvm
+> > and -S (or not depending on if you want .ll or .bc).  That will give
+> > you a .ll/.bc for everything that's built as part of your config for
+> > that configuration.
+> >
+> > Otherwise, kbuild has rules to do:
+> >
+> > $ make LLVM=3D1 lib/string.ll
+> >
+> > There's no support for .bc (would be trivial to add) because you
+> > typically end up running llvm-dis on .bc files to get .ll files
+> > anyways.  I almost never use .bc files.
+> >
+> If LTO is enabled, then the .o files are LLVM bitcode files by default.
 
-kernel test robot noticed the following build errors:
+Ah right!
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on linus/master v6.3-rc5 next-20230406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+(I wonder what would break if we changed this to use the expected file
+extension of .bc rather than .o.)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krzysztof-Kozlowski/rtc-ds3232-constify-pointers-to-hwmon_channel_info/20230407-231346
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20230407150306.80141-3-krzysztof.kozlowski%40linaro.org
-patch subject: [PATCH 3/4] rtc: isl12022: constify pointers to hwmon_channel_info
-config: hexagon-buildonly-randconfig-r001-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080345.wtksgffl-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/06644d5f5c3ff3ed4bbd7a34c68421f80095e616
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krzysztof-Kozlowski/rtc-ds3232-constify-pointers-to-hwmon_channel_info/20230407-231346
-        git checkout 06644d5f5c3ff3ed4bbd7a34c68421f80095e616
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/rtc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304080345.wtksgffl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/rtc/rtc-isl12022.c:14:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/rtc/rtc-isl12022.c:14:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/rtc/rtc-isl12022.c:14:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/rtc/rtc-isl12022.c:104:10: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const[2]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           .info = isl12022_hwmon_info,
-                   ^~~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
+>
+> -bw
+>
+> > > Nick Desaulniers <ndesaulniers@google.com> =E4=BA=8E 2023=E5=B9=B43=
+=E6=9C=8821=E6=97=A5=E5=91=A8=E4=BA=8C 01:12=E5=86=99=E9=81=93=EF=BC=9A
+> > >>
+> > >> On Mon, Mar 20, 2023 at 2:53=E2=80=AFAM tr4v3ler <0xtr4v3ler@gmail.c=
+om> wrote:
+> > >> >
+> > >> > Hi=EF=BC=8CI found the following compilation targets in the makefi=
+le(https://github.com/torvalds/linux/blob/master/scripts/Makefile.build#L13=
+6) of the Linux kernel. However, I don't know how to make this goal effecti=
+ve, compile the Linux kernel, and generate llvm bitcodes. Do I need to spec=
+ify specific parameters for the make command? Or through environment variab=
+les?
+> > >>
+> > >> What precisely are you looking for? A single .ll file? A single .bc
+> > >> file? .ll or .bc files for every translation unit?
+> > >> --
+> > >> Thanks,
+> > >> ~Nick Desaulniers
+> >
+> >
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+> >
 
 
-vim +104 drivers/rtc/rtc-isl12022.c
 
-8d816c1eaa7525 Rasmus Villemoes 2022-11-04  101  
-8d816c1eaa7525 Rasmus Villemoes 2022-11-04  102  static const struct hwmon_chip_info isl12022_hwmon_chip_info = {
-8d816c1eaa7525 Rasmus Villemoes 2022-11-04  103  	.ops = &isl12022_hwmon_ops,
-8d816c1eaa7525 Rasmus Villemoes 2022-11-04 @104  	.info = isl12022_hwmon_info,
-8d816c1eaa7525 Rasmus Villemoes 2022-11-04  105  };
-8d816c1eaa7525 Rasmus Villemoes 2022-11-04  106  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Thanks,
+~Nick Desaulniers
