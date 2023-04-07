@@ -1,131 +1,165 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9A9881F
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 18:08:36 +0000 (UTC)
-Received: by mail-pj1-f43.google.com with SMTP id v9so4314393pjk.0
-        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 11:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680890916; x=1683482916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ij7uDQEt7OoC3gzgZ3tZqjFkRTxGVdbzCD/wwJBh2J8=;
-        b=hE2DhnNSpPajoDvpOYpiauf89G3UWZgVogAuZERwD5b973PhQ/lYeA5LQjcGdeZvLo
-         DzwwgTiYYzH/QnmdD6fUMUDwXNtH5+4YGzBKJIA6a0bItAJWMgifHs//9gk3RV10v0qX
-         HJVgRFYThdjQmEX4v8BZHS/0WfVSr6SH5PmJW7Mo9oIJ28Sx4PRdVuspoV87+7hx0aPA
-         Tx5adPyHrknuwf6s1WXxgHbB3907910x/01tmgpW9Gzuut6f5rKdEwIt8RVYiGk9rzwW
-         mCpSthyEK95vDdQIfMCesO/oW0v+Tn3rkwDAQRCO44mJEesOz6OSzIG597LKgT7vZo1J
-         Vb0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680890916; x=1683482916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ij7uDQEt7OoC3gzgZ3tZqjFkRTxGVdbzCD/wwJBh2J8=;
-        b=2CmJq4L89idWqcVPrh92sEPRF1dWsIo7rBbKDw4oW+uAjkpN6yC+rcpQ1jd17MBFKq
-         TdLS1ADfeCBpXxkr1tCyXWxPX9oYMu9ibV2mYA2TCSHm88k/BLJKVsGXvU4tLcN2FfjZ
-         KzItq3BB03eaglCc6qp1jeT0AeAk7VPfXwbcQhnUZupscsqNvc37FZwmYsjNB367xFsz
-         o7vNG6S0q0evwcwQ05syUUdxrixHgJjJMVUuglzrTtk5q4EyZpI8h+KTUHOU46QSza6q
-         5Vdl7IRKvuO2HM1E5fr74HQPmWli6XTaLMxAewaIMNKQ9IX6aFcmrsu7pMNOvgFeqvXM
-         Sv9w==
-X-Gm-Message-State: AAQBX9dNxxygT4LfjybIrk8AP2bkUG0jMhHhoAlxsJob4iTE91z/XxkO
-	uPuCXuZDgTCWyflBMDjGyMqUU+rk6tQGiqrXBYVQuw==
-X-Google-Smtp-Source: AKy350ZEWjuFoz+sL7oAnHomo0iHyqQI1Sm5L+Ii9IqLyzhBmLJPQvFAtHbFOlXt/tvMV1txjQqW/7K5sxOi9yfnuT0=
-X-Received: by 2002:a17:90a:5997:b0:244:9b8f:c3bf with SMTP id
- l23-20020a17090a599700b002449b8fc3bfmr807289pji.7.1680890915820; Fri, 07 Apr
- 2023 11:08:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896478494;
+	Fri,  7 Apr 2023 18:12:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680891122; x=1712427122;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V57JsY7Mvm++kH2IO/0KrWsC57mQQSwpe9M6ha823Us=;
+  b=IC8lQOrNNQN2F3KMSjB6jB0P/lxV5P+y3EgmdDISODyKLTIWU8xZc8UJ
+   8PZob5YOSPAXKpBhPvFDP75yJNSgVC6fVAwKNsKdveTFAMyoe2AYp/KIP
+   UkyuEeomBJ2flyagcvtV8ni6MltiURR9bursuoIZ9E9U4V/7Pz1bVjfPy
+   ivqOR2NZmp8/SimBN4Y12gBEc5k65XMJvwvu7Lt22VGtCLmhHdbL5ZVDq
+   IEle1aBj48TRwpFK07kcRNej28GfFrw0wLplmd+X4mO1XgWYJOlbnlLbQ
+   jMHTPhbSsmpG6Dqd4bldy24Ulz6QruTwa32yvgrz0rfb0ABIFHSvxF5Em
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="345693806"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="345693806"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 11:11:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="717916022"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="717916022"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Apr 2023 11:11:58 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pkqZ3-000Slc-20;
+	Fri, 07 Apr 2023 18:11:57 +0000
+Date: Sat, 8 Apr 2023 02:11:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] ufs: hwmon: constify pointers to hwmon_channel_info
+Message-ID: <202304080236.gChYf5FS-lkp@intel.com>
+References: <20230407150137.79947-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230330132114.1826399-1-trix@redhat.com>
-In-Reply-To: <20230330132114.1826399-1-trix@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Apr 2023 11:08:24 -0700
-Message-ID: <CAKwvOdkim2tY3VvR_ejCuzVivEH3iadZYFE_dnMS1shXfJ5eUA@mail.gmail.com>
-Subject: Re: [PATCH] fs: dlm: remove unused count_match variable
-To: Tom Rix <trix@redhat.com>
-Cc: ccaulfie@redhat.com, teigland@redhat.com, nathan@kernel.org, 
-	cluster-devel@redhat.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407150137.79947-1-krzysztof.kozlowski@linaro.org>
 
-On Thu, Mar 30, 2023 at 6:21=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> fs/dlm/dir.c:67:26: error: variable
->   'count_match' set but not used [-Werror,-Wunused-but-set-variable]
->         unsigned int count =3D 0, count_match =3D 0, count_bad =3D 0, cou=
-nt_add =3D 0;
->                                 ^
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi Krzysztof,
 
-Fixes: commit c04fecb4d9f7 ("dlm: use rsbtbl as resource directory")
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+kernel test robot noticed the following build errors:
 
-I can't help but wonder what this logic originally intended, but this
-was introduced back in 2012, so guessing no one cares/remembers/hits
-related issues.
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on jejb-scsi/for-next linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The condition above is
-149         if (result =3D=3D DLM_LU_MATCH &&
-150             nodeid !=3D memb->nodeid) {
+url:    https://github.com/intel-lab-lkp/linux/commits/Krzysztof-Kozlowski/ufs-hwmon-constify-pointers-to-hwmon_channel_info/20230407-231053
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230407150137.79947-1-krzysztof.kozlowski%40linaro.org
+patch subject: [PATCH] ufs: hwmon: constify pointers to hwmon_channel_info
+config: hexagon-randconfig-r045-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080236.gChYf5FS-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7697d4619c62de396a373d422e59846af320e552
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krzysztof-Kozlowski/ufs-hwmon-constify-pointers-to-hwmon_channel_info/20230407-231053
+        git checkout 7697d4619c62de396a373d422e59846af320e552
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/ufs/core/
 
-which looks like the condition you removed could have been folded into
-that originally:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080236.gChYf5FS-lkp@intel.com/
 
-if (result =3D=3D DLM_LU_MATCH) {
-  if (nodeid =3D=3D memb->nodeid)
-    ++count_match;
-  else {
-    ...
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/ufs/core/ufs-hwmon.c:10:
+   In file included from include/ufs/ufshcd.h:16:
+   In file included from include/linux/blk-crypto-profile.h:9:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/ufs/core/ufs-hwmon.c:10:
+   In file included from include/ufs/ufshcd.h:16:
+   In file included from include/linux/blk-crypto-profile.h:9:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/ufs/core/ufs-hwmon.c:10:
+   In file included from include/ufs/ufshcd.h:16:
+   In file included from include/linux/blk-crypto-profile.h:9:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/ufs/core/ufs-hwmon.c:162:10: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const[2]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           .info   = ufs_hwmon_info,
+                     ^~~~~~~~~~~~~~
+   6 warnings and 1 error generated.
 
 
-> ---
->  fs/dlm/dir.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
->
-> diff --git a/fs/dlm/dir.c b/fs/dlm/dir.c
-> index fb1981654bb2..982f7a5570fe 100644
-> --- a/fs/dlm/dir.c
-> +++ b/fs/dlm/dir.c
-> @@ -64,7 +64,7 @@ int dlm_recover_directory(struct dlm_ls *ls)
->         char *b, *last_name =3D NULL;
->         int error =3D -ENOMEM, last_len, nodeid, result;
->         uint16_t namelen;
-> -       unsigned int count =3D 0, count_match =3D 0, count_bad =3D 0, cou=
-nt_add =3D 0;
-> +       unsigned int count =3D 0, count_bad =3D 0, count_add =3D 0;
->
->         log_rinfo(ls, "dlm_recover_directory");
->
-> @@ -158,14 +158,6 @@ int dlm_recover_directory(struct dlm_ls *ls)
->                                                              b, namelen);
->                                 }
->
-> -                               /* The name was found in rsbtbl, and the
-> -                                * master nodeid matches memb->nodeid. */
-> -
-> -                               if (result =3D=3D DLM_LU_MATCH &&
-> -                                   nodeid =3D=3D memb->nodeid) {
-> -                                       count_match++;
-> -                               }
-> -
->                                 /* The name was not found in rsbtbl and w=
-as
->                                  * added with memb->nodeid as the master.=
- */
->
-> --
-> 2.27.0
->
+vim +162 drivers/ufs/core/ufs-hwmon.c
 
+e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  159  
+e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  160  static const struct hwmon_chip_info ufs_hwmon_hba_info = {
+e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  161  	.ops	= &ufs_hwmon_ops,
+e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15 @162  	.info	= ufs_hwmon_info,
+e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  163  };
+e88e2d32200a17 drivers/scsi/ufs/ufs-hwmon.c Avri Altman 2021-09-15  164  
 
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
