@@ -1,203 +1,111 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22323882E;
-	Fri,  7 Apr 2023 18:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680891787; x=1712427787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DydUZtz/GhGz8ydOChRYHR+rrl4V0bkzfHEu5HgIPzI=;
-  b=BwlYuv5da+h+R7GCPZ9xKKxr736YZOzNMRhIOTcy/RgLRIuKKpuTGRNu
-   75U76QKy852ru2U+HXL2GbBc/W9MyQ0KJRqEUHZ40XizRhCnEf2kzW24Q
-   X/jR+atO2vh8RwykawHLHrXEe42BbNpILdZg72PmoG9CefyndguRDtLE5
-   CTRphjkAUTPsIrDTEK587nKJij+PvKKcFfv/aIvWOvq2/T6+eaPq3myX2
-   UWGV31S0g+76381yO0AxpMCuUjB//agiRLAdiNC/HR07jLnl6q/aBNPyn
-   OtxSxADyRUHIuZFX/LgDJ3K98qMqcIM9eJnrj6FvkQP95bJPBQ5TFX/Ah
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="343050182"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="343050182"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 11:23:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="756803347"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="756803347"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Apr 2023 11:23:04 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pkqji-000Smc-0R;
-	Fri, 07 Apr 2023 18:22:58 +0000
-Date: Sat, 8 Apr 2023 02:22:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
-	chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] erofs: enable long extended attribute name prefixes
-Message-ID: <202304080206.t45iYSop-lkp@intel.com>
-References: <20230407141710.113882-8-jefflexu@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E72882C
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 18:25:02 +0000 (UTC)
+Received: by mail-pj1-f46.google.com with SMTP id d22-20020a17090a111600b0023d1b009f52so2022643pja.2
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 11:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680891902; x=1683483902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YqDA4WRbqZ8pZx3U3y6YYJyg8kkdxxYYCziSSoMs6f4=;
+        b=IxJT4QMtg5r1G4F+GoM/q1tJVSZvAIzcvgcNYRgfVw3xxAXMfzR1j8kFIJQ5+3LOP1
+         3YHWb+PmbJpffDwUvHHaOXgcH2jW/vRq4CF9OWiUG3Yw3QmAQYL8j8U1clL3OB9jmSOy
+         OyqeP0yvsylVpyedaCAmYyRhVhsHlrqYdOQkm6zEPNpcuTzw6LZR0eNjDkzB3H5FNkR2
+         wu7pPND7ZoQbJtAPGlxSLa4vkDjlLenKV/r5RHZaltDRU/HzSi58qR/dbY+sR1VRcn3Y
+         RBguN4BK97kV/rDwV1gdLloP/3QNpzjoWbdXoWTvO7wu3ee35i1j5aMXZ8rUuik0aKWR
+         rCjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680891902; x=1683483902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YqDA4WRbqZ8pZx3U3y6YYJyg8kkdxxYYCziSSoMs6f4=;
+        b=dnR7VegBg4HSk8mqsWsd4RjxLXEvJDX6OVW6Ccx7Xro5DeRbvHjEIxR0u7SjWyguWX
+         gltiWm/qIir/VJ0O4bCINVPwMhVcO9e3E3eO2gFs6VYzW6EQ1gtoJBqi8bkP9vcyhS7B
+         x+ndSkm60eeBAnjalUOIwpQucDKocj3IN4ruBrClQMxWUnlSidUXrWftlnNq99VEgKDr
+         XH7KoNQvjHwDAKdwu9mLxfzAoGLoKUbt7aoTomBEfmj3LZUqheMC7hVCcRmo6x/mnaIm
+         iKxFUh6BBSU5NCNoHyFh0DaiQoaz2j7AbtxTodbp4kcNN4H94A9T0We0vi5+6zpT0Mvp
+         RSSg==
+X-Gm-Message-State: AAQBX9cr0X7TBGpzfHlFEq6wU8HmRMvBkItKlbeL6ghCyeCtDsBNpqwg
+	29cjjX2coBkphSPUx5NAm5IsPyB+IvcVyKGY+9b3Lw==
+X-Google-Smtp-Source: AKy350bXQUYcPYmDw9ucdCsVzHEhLhSxuODvj2EavnS9lslRG5I8VtiLzyQAXkkbbqqxnfc/IY218hVz5XmMfH2ovNY=
+X-Received: by 2002:a17:902:e54d:b0:19e:f660:81ee with SMTP id
+ n13-20020a170902e54d00b0019ef66081eemr1104963plf.2.1680891902021; Fri, 07 Apr
+ 2023 11:25:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407141710.113882-8-jefflexu@linux.alibaba.com>
+References: <20230331204209.1863060-1-trix@redhat.com>
+In-Reply-To: <20230331204209.1863060-1-trix@redhat.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 7 Apr 2023 11:24:50 -0700
+Message-ID: <CAKwvOdmkyXgii52gyD5uO7=BwYu0iJ9QZtbOcusE2PeH24f6uw@mail.gmail.com>
+Subject: Re: [PATCH] drm/nouveau/acr: remove unused loc variable
+To: Tom Rix <trix@redhat.com>
+Cc: bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com, 
+	airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org, gsamaiya@nvidia.com, 
+	dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jingbo,
+On Fri, Mar 31, 2023 at 1:42=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c:221:7: error: variable
+>   'loc' set but not used [-Werror,-Wunused-but-set-variable]
+>                 u32 loc, sig, cnt, *meta;
+>                     ^
+> This variable is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-kernel test robot noticed the following build errors:
+Ben, any idea if this was supposed to be used somewhere? If not:
 
-[auto build test ERROR on xiang-erofs/dev-test]
-[also build test ERROR on xiang-erofs/dev]
-[cannot apply to xiang-erofs/fixes linus/master v6.3-rc5 next-20230406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: 4b569ded09fd ("drm/nouveau/acr/ga102: initial support")
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jingbo-Xu/erofs-keep-meta-inode-into-erofs_buf/20230407-221839
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
-patch link:    https://lore.kernel.org/r/20230407141710.113882-8-jefflexu%40linux.alibaba.com
-patch subject: [PATCH 7/7] erofs: enable long extended attribute name prefixes
-config: x86_64-randconfig-a005-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080206.t45iYSop-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8cd5bbc6f857d54388099c30c3e3a48fdb15c283
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jingbo-Xu/erofs-keep-meta-inode-into-erofs_buf/20230407-221839
-        git checkout 8cd5bbc6f857d54388099c30c3e3a48fdb15c283
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304080206.t45iYSop-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/erofs/super.c:394:7: error: no member named 'xattr_prefix_start' in 'struct erofs_sb_info'
-           sbi->xattr_prefix_start = le32_to_cpu(dsb->xattr_prefix_start);
-           ~~~  ^
->> fs/erofs/super.c:395:7: error: no member named 'xattr_prefix_count' in 'struct erofs_sb_info'
-           sbi->xattr_prefix_count = dsb->xattr_prefix_count;
-           ~~~  ^
-   2 errors generated.
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c b/drivers/gpu=
+/drm/nouveau/nvkm/subdev/acr/lsfw.c
+> index f36a359d4531..bd104a030243 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
+> @@ -218,7 +218,7 @@ nvkm_acr_lsfw_load_sig_image_desc_v2(struct nvkm_subd=
+ev *subdev,
+>                 const struct firmware *hsbl;
+>                 const struct nvfw_ls_hsbl_bin_hdr *hdr;
+>                 const struct nvfw_ls_hsbl_hdr *hshdr;
+> -               u32 loc, sig, cnt, *meta;
+> +               u32 sig, cnt, *meta;
+>
+>                 ret =3D nvkm_firmware_load_name(subdev, path, "hs_bl_sig"=
+, ver, &hsbl);
+>                 if (ret)
+> @@ -227,7 +227,6 @@ nvkm_acr_lsfw_load_sig_image_desc_v2(struct nvkm_subd=
+ev *subdev,
+>                 hdr =3D nvfw_ls_hsbl_bin_hdr(subdev, hsbl->data);
+>                 hshdr =3D nvfw_ls_hsbl_hdr(subdev, hsbl->data + hdr->head=
+er_offset);
+>                 meta =3D (u32 *)(hsbl->data + hshdr->meta_data_offset);
+> -               loc =3D *(u32 *)(hsbl->data + hshdr->patch_loc);
+>                 sig =3D *(u32 *)(hsbl->data + hshdr->patch_sig);
+>                 cnt =3D *(u32 *)(hsbl->data + hshdr->num_sig);
+>
+> --
+> 2.27.0
+>
 
 
-vim +394 fs/erofs/super.c
-
-   333	
-   334	static int erofs_read_superblock(struct super_block *sb)
-   335	{
-   336		struct erofs_sb_info *sbi;
-   337		struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
-   338		struct erofs_super_block *dsb;
-   339		void *data;
-   340		int ret;
-   341	
-   342		data = erofs_read_metabuf(&buf, sb, 0, EROFS_KMAP);
-   343		if (IS_ERR(data)) {
-   344			erofs_err(sb, "cannot read erofs superblock");
-   345			return PTR_ERR(data);
-   346		}
-   347	
-   348		sbi = EROFS_SB(sb);
-   349		dsb = (struct erofs_super_block *)(data + EROFS_SUPER_OFFSET);
-   350	
-   351		ret = -EINVAL;
-   352		if (le32_to_cpu(dsb->magic) != EROFS_SUPER_MAGIC_V1) {
-   353			erofs_err(sb, "cannot find valid erofs superblock");
-   354			goto out;
-   355		}
-   356	
-   357		sbi->blkszbits  = dsb->blkszbits;
-   358		if (sbi->blkszbits < 9 || sbi->blkszbits > PAGE_SHIFT) {
-   359			erofs_err(sb, "blkszbits %u isn't supported", sbi->blkszbits);
-   360			goto out;
-   361		}
-   362		if (dsb->dirblkbits) {
-   363			erofs_err(sb, "dirblkbits %u isn't supported", dsb->dirblkbits);
-   364			goto out;
-   365		}
-   366	
-   367		sbi->feature_compat = le32_to_cpu(dsb->feature_compat);
-   368		if (erofs_sb_has_sb_chksum(sbi)) {
-   369			ret = erofs_superblock_csum_verify(sb, data);
-   370			if (ret)
-   371				goto out;
-   372		}
-   373	
-   374		ret = -EINVAL;
-   375		if (!check_layout_compatibility(sb, dsb))
-   376			goto out;
-   377	
-   378		sbi->sb_size = 128 + dsb->sb_extslots * EROFS_SB_EXTSLOT_SIZE;
-   379		if (sbi->sb_size > PAGE_SIZE - EROFS_SUPER_OFFSET) {
-   380			erofs_err(sb, "invalid sb_extslots %u (more than a fs block)",
-   381				  sbi->sb_size);
-   382			goto out;
-   383		}
-   384		sbi->primarydevice_blocks = le32_to_cpu(dsb->blocks);
-   385		sbi->meta_blkaddr = le32_to_cpu(dsb->meta_blkaddr);
-   386	#ifdef CONFIG_EROFS_FS_XATTR
-   387		sbi->xattr_blkaddr = le32_to_cpu(dsb->xattr_blkaddr);
-   388	#endif
-   389		sbi->islotbits = ilog2(sizeof(struct erofs_inode_compact));
-   390		sbi->root_nid = le16_to_cpu(dsb->root_nid);
-   391		sbi->packed_nid = le64_to_cpu(dsb->packed_nid);
-   392		sbi->inos = le64_to_cpu(dsb->inos);
-   393	
- > 394		sbi->xattr_prefix_start = le32_to_cpu(dsb->xattr_prefix_start);
- > 395		sbi->xattr_prefix_count = dsb->xattr_prefix_count;
-   396	
-   397		sbi->build_time = le64_to_cpu(dsb->build_time);
-   398		sbi->build_time_nsec = le32_to_cpu(dsb->build_time_nsec);
-   399	
-   400		memcpy(&sb->s_uuid, dsb->uuid, sizeof(dsb->uuid));
-   401	
-   402		ret = strscpy(sbi->volume_name, dsb->volume_name,
-   403			      sizeof(dsb->volume_name));
-   404		if (ret < 0) {	/* -E2BIG */
-   405			erofs_err(sb, "bad volume name without NIL terminator");
-   406			ret = -EFSCORRUPTED;
-   407			goto out;
-   408		}
-   409	
-   410		/* parse on-disk compression configurations */
-   411		if (erofs_sb_has_compr_cfgs(sbi))
-   412			ret = erofs_load_compr_cfgs(sb, dsb);
-   413		else
-   414			ret = z_erofs_load_lz4_config(sb, dsb, NULL, 0);
-   415		if (ret < 0)
-   416			goto out;
-   417	
-   418		/* handle multiple devices */
-   419		ret = erofs_scan_devices(sb, dsb);
-   420	
-   421		if (erofs_sb_has_ztailpacking(sbi))
-   422			erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
-   423		if (erofs_is_fscache_mode(sb))
-   424			erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
-   425		if (erofs_sb_has_fragments(sbi))
-   426			erofs_info(sb, "EXPERIMENTAL compressed fragments feature in use. Use at your own risk!");
-   427		if (erofs_sb_has_dedupe(sbi))
-   428			erofs_info(sb, "EXPERIMENTAL global deduplication feature in use. Use at your own risk!");
-   429	out:
-   430		erofs_put_metabuf(&buf);
-   431		return ret;
-   432	}
-   433	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Thanks,
+~Nick Desaulniers
