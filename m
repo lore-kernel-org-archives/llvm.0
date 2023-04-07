@@ -1,43 +1,43 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F79D7B;
-	Fri,  7 Apr 2023 06:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C838E110E;
+	Fri,  7 Apr 2023 06:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680847897; x=1712383897;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qzAlK0ivIggH2wn9zvrYSrovXixKAq2wiQzJo8CUZUU=;
-  b=AL2USQF6pXIAtwJhf6n04f+iIhikypkHhNnv/5Xm6F+Im2qhcHdbqyUZ
-   O3TYNIShXGt96Yt+62bSan2P0nk7X/7Tq0Z2OfjyvbvAVb/vKn7ScnZIJ
-   bGxAiJaanhVWlbpvG4SjUdf/ynCiRnn/bHdzjD0Vf0dZkEzZ1ujRXkMHe
-   vH+W/Jmp+FVIqi06MMgWKDaAqkis23pPDYqriswwjPw4X32M/NNwiNLGD
-   QEEsmNUVgfvo2oNyBWoF9cyKACBc8RaQpeeJk+CKqRETYnAthDOZUSwMO
-   kU8ZBx4Azi4jVK6ahspkYMlWYYHVfobKHXXqQgDQqvm+N+T4Lc8Xfu138
+  t=1680850356; x=1712386356;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=avlNllpfBNmaoPYrWuLFtuBkbN+pnFsMxdE+AmyQJEA=;
+  b=Zds+Rat5HuEZDYx86UsAApao2Cc2lQfOjn2mQqtCoA46oynQ82oO0Wl3
+   2bymItz9ZL281ND6dbxYwKv19zhaaX23rkkVqZybKKq2De/YeUQiWStbq
+   F7bYsyKNV+Bx91gpUz2l9xs+qhkcVsYc0wsoLUotlVgTVZ6up87uPlG4a
+   f0K6/BUuvwWvyGN6R7zSAzBjQjrlVA/5Kyrj4qMBoRGC2FcHnXnZ1BXuK
+   tn+o3dEv7xWOlUx5BHwC0exggcb/y9nrW9MpiOuJdApevx3RgucScFYoB
+   Kh315iZXv6ciwW3JD3GeMw2uTzxFFjAwBq5k8gawkIkVBLFIzOiTGKxQC
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="429220904"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="342945249"
 X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="429220904"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 23:11:37 -0700
+   d="scan'208";a="342945249"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 23:52:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="689962882"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="687435135"
 X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="689962882"
+   d="scan'208";a="687435135"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Apr 2023 23:11:35 -0700
+  by orsmga002.jf.intel.com with ESMTP; 06 Apr 2023 23:52:32 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pkfJq-000SBS-0p;
-	Fri, 07 Apr 2023 06:11:30 +0000
-Date: Fri, 7 Apr 2023 14:11:12 +0800
+	id 1pkfxX-000SDC-1f;
+	Fri, 07 Apr 2023 06:52:31 +0000
+Date: Fri, 7 Apr 2023 14:51:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
+To: Christoph Hellwig <hch@lst.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:hotplug 24/43] kernel/cpu.c:1296:2: error: call to
- undeclared function 'cpuhp_bp_sync_dead'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202304071432.tXvtpDvx-lkp@intel.com>
+Subject: Re: [PATCH 15/16] zram: fix synchronous reads
+Message-ID: <202304071443.4xWaXjV6-lkp@intel.com>
+References: <20230406144102.149231-16-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,96 +46,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230406144102.149231-16-hch@lst.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
-head:   3675258f0132b4f3fd39917e9d5a53f5e23094b5
-commit: ff7f55f1e7002f73f7f233062dca4e5f1f47c931 [24/43] cpu/hotplug: Add CPU state tracking and synchronization
-config: riscv-randconfig-r012-20230406 (https://download.01.org/0day-ci/archive/20230407/202304071432.tXvtpDvx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+Hi Christoph,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/zram-make-zram_bio_discard-more-self-contained/20230406-234133
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230406144102.149231-16-hch%40lst.de
+patch subject: [PATCH 15/16] zram: fix synchronous reads
+config: hexagon-randconfig-r024-20230405 (https://download.01.org/0day-ci/archive/20230407/202304071443.4xWaXjV6-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=ff7f55f1e7002f73f7f233062dca4e5f1f47c931
-        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
-        git fetch --no-tags tglx-devel hotplug
-        git checkout ff7f55f1e7002f73f7f233062dca4e5f1f47c931
+        # https://github.com/intel-lab-lkp/linux/commit/e4596d7c2cf157f5b3d566cb2cc0769c9232a728
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christoph-Hellwig/zram-make-zram_bio_discard-more-self-contained/20230406-234133
+        git checkout e4596d7c2cf157f5b3d566cb2cc0769c9232a728
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/block/zram/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304071432.tXvtpDvx-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304071443.4xWaXjV6-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/cpu.c:1296:2: error: call to undeclared function 'cpuhp_bp_sync_dead'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           cpuhp_bp_sync_dead(cpu);
-           ^
-   kernel/cpu.c:1296:2: note: did you mean 'cpuhp_bp_sync_alive'?
-   kernel/cpu.c:452:19: note: 'cpuhp_bp_sync_alive' declared here
-   static inline int cpuhp_bp_sync_alive(unsigned int cpu) { return 0; }
-                     ^
-   1 error generated.
+   In file included from drivers/block/zram/zram_drv.c:20:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/block/zram/zram_drv.c:20:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/block/zram/zram_drv.c:20:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/block/zram/zram_drv.c:778:18: error: variable has incomplete type 'struct bio_bvec'
+           struct bio_bvec bv;
+                           ^
+   drivers/block/zram/zram_drv.c:778:9: note: forward declaration of 'struct bio_bvec'
+           struct bio_bvec bv;
+                  ^
+   6 warnings and 1 error generated.
 
 
-vim +/cpuhp_bp_sync_dead +1296 kernel/cpu.c
+vim +778 drivers/block/zram/zram_drv.c
 
-  1251	
-  1252	static int takedown_cpu(unsigned int cpu)
-  1253	{
-  1254		struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
-  1255		int err;
-  1256	
-  1257		/* Park the smpboot threads */
-  1258		kthread_park(st->thread);
-  1259	
-  1260		/*
-  1261		 * Prevent irq alloc/free while the dying cpu reorganizes the
-  1262		 * interrupt affinities.
-  1263		 */
-  1264		irq_lock_sparse();
-  1265	
-  1266		/*
-  1267		 * So now all preempt/rcu users must observe !cpu_active().
-  1268		 */
-  1269		err = stop_machine_cpuslocked(take_cpu_down, NULL, cpumask_of(cpu));
-  1270		if (err) {
-  1271			/* CPU refused to die */
-  1272			irq_unlock_sparse();
-  1273			/* Unpark the hotplug thread so we can rollback there */
-  1274			kthread_unpark(st->thread);
-  1275			return err;
-  1276		}
-  1277		BUG_ON(cpu_online(cpu));
-  1278	
-  1279		/*
-  1280		 * The teardown callback for CPUHP_AP_SCHED_STARTING will have removed
-  1281		 * all runnable tasks from the CPU, there's only the idle task left now
-  1282		 * that the migration thread is done doing the stop_machine thing.
-  1283		 *
-  1284		 * Wait for the stop thread to go away.
-  1285		 */
-  1286		wait_for_ap_thread(st, false);
-  1287		BUG_ON(st->state != CPUHP_AP_IDLE_DEAD);
-  1288	
-  1289		/* Interrupts are moved away from the dying cpu, reenable alloc/free */
-  1290		irq_unlock_sparse();
-  1291	
-  1292		hotplug_cpu__broadcast_tick_pull(cpu);
-  1293		/* This actually kills the CPU. */
-  1294		__cpu_die(cpu);
-  1295	
-> 1296		cpuhp_bp_sync_dead(cpu);
-  1297	
-  1298		tick_cleanup_dead_cpu(cpu);
-  1299		rcutree_migrate_callbacks(cpu);
-  1300		return 0;
-  1301	}
-  1302	
+   774	
+   775	static void zram_sync_read(struct work_struct *work)
+   776	{
+   777		struct zram_work *zw = container_of(work, struct zram_work, work);
+ > 778		struct bio_bvec bv;
+   779		struct bio bio;
+   780	
+   781		bio_init(&bio, zw->zram->bdev, &bv, 1, REQ_OP_READ);
+   782		bio.bi_iter.bi_sector = zw->entry * (PAGE_SIZE >> 9);
+   783		__bio_add_page(&bio, zw->page, PAGE_SIZE, 0);
+   784		submit_bio_wait(&bio);
+   785	}
+   786	
 
 -- 
 0-DAY CI Kernel Test Service
