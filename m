@@ -1,43 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15E92F33;
-	Fri,  7 Apr 2023 11:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BE02F33;
+	Fri,  7 Apr 2023 11:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680865667; x=1712401667;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KVCXfhw1zDj7376xpqJwLkfww4Vdi8YGdqQSaX7hiGc=;
-  b=eL/s54j2Csfq64o+EJ0zNJ6lkk4ZDfQKCs+1EzKsTAqTZei7MjWWnS7t
-   kyyVsfQiZ0GHxTpd28cilociY2GomzcdxoHelC3nAq+LF81hDF85KOuSm
-   Hrbf5FEnXh041XzXwlo5dHTNQ+1QN9n2GeIYK0+SLt0uHbMQdx3gMEmmD
-   rNoykSXpJW5rLUmVyNfGGktdybSsjH5rlVPmfstsDGG5nhhoaUZFKatuN
-   U18Qk1rgN5W+F1W6LanXIHCHLyy+1rCsAWoRBJP82oQfe/YMs0lfkVOwq
-   lNelVipLZ/k8hMAt1/cJPgTZV1V43Ux1H41kzXwXetm3cnmvEEKutcJ9w
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="341721025"
+  t=1680866930; x=1712402930;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3cd0xBqmZLwCm19Q3/0HNGu6ZRBFjmnCA9agGLJ4pq0=;
+  b=aIRGT2D4Lup7ak0Yc02YCtK+MQt7TpSxlvL+cnyP3epYYcJ7hcS+JFrK
+   XDa0t8L63/iH0Sc8sWHbOVp6YvHQx53Lv54LkDMTdAGmx99/wOvd8z87e
+   sXnagoSzjipZx7AvJkX9jNZauaOCl+HKGkPvQJ9pN8VKTtOUDXGDdDRs0
+   uuph9FDtdgb71clWbSeH2BWCJLqXLjMj12j7ZsLzlfs5Eu5hyhxjbbkwS
+   9GTElD0OXbFEZwYSptTlP3GlEQ1fi1Kj7T4KCyVAWQ60oHxBVO1VTDIrs
+   KBePyGnc/UFu79uleIY+TLs0hSZTwEF6d+jb1Jmy2kvKv0xYdnh/933f3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="322612301"
 X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="341721025"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 04:07:43 -0700
+   d="scan'208";a="322612301"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 04:28:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="756686509"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="637676759"
 X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="756686509"
+   d="scan'208";a="637676759"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Apr 2023 04:07:42 -0700
+  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2023 04:28:48 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pkjwT-000SQ2-2k;
-	Fri, 07 Apr 2023 11:07:41 +0000
-Date: Fri, 7 Apr 2023 19:07:33 +0800
+	id 1pkkGp-000SRY-0A;
+	Fri, 07 Apr 2023 11:28:43 +0000
+Date: Fri, 7 Apr 2023 19:28:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:hotplug 32/43] arch/riscv/kernel/cpu-hotplug.c:75:2:
- error: call to undeclared function 'cpuhp_ap_report_death'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202304071802.QnfMJdbf-lkp@intel.com>
+To: zhongjun@uniontech.com, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	zhongjun <zhongjun@uniontech.com>
+Subject: Re: [PATCH] BPF: replace low-entropy member with macro
+Message-ID: <202304071944.aYRCuc4u-lkp@intel.com>
+References: <20230407033418.2295-1-zhongjun@uniontech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,63 +47,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230407033418.2295-1-zhongjun@uniontech.com>
 
-Hi Thomas,
+Hi,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
-head:   ddd73f1b6ab5c834f6d98521dcedd9ddd56a9659
-commit: 71622e99f16217b2be66e87b63b7521c8ec697af [32/43] riscv: Switch to hotplug core state synchronization
-config: riscv-randconfig-r012-20230406 (https://download.01.org/0day-ci/archive/20230407/202304071802.QnfMJdbf-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+[auto build test ERROR on 919e659ed12568b5b8ba6c2ffdd82d8d31fc28af]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/zhongjun-uniontech-com/BPF-replace-low-entropy-member-with-macro/20230407-113614
+base:   919e659ed12568b5b8ba6c2ffdd82d8d31fc28af
+patch link:    https://lore.kernel.org/r/20230407033418.2295-1-zhongjun%40uniontech.com
+patch subject: [PATCH] BPF: replace low-entropy member with macro
+config: x86_64-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230407/202304071944.aYRCuc4u-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=71622e99f16217b2be66e87b63b7521c8ec697af
-        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
-        git fetch --no-tags tglx-devel hotplug
-        git checkout 71622e99f16217b2be66e87b63b7521c8ec697af
+        # https://github.com/intel-lab-lkp/linux/commit/f8ee7d5ddcfe866f9b9b4f18dff368764ea854e5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review zhongjun-uniontech-com/BPF-replace-low-entropy-member-with-macro/20230407-113614
+        git checkout f8ee7d5ddcfe866f9b9b4f18dff368764ea854e5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/netronome/nfp/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304071802.QnfMJdbf-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304071944.aYRCuc4u-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   arch/riscv/kernel/cpu-hotplug.c:55:6: error: redefinition of 'arch_cpuhp_cleanup_dead_cpu'
-   void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
-        ^
-   include/linux/cpuhotplug.h:531:20: note: previous definition is here
-   static inline void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu) { }
-                      ^
->> arch/riscv/kernel/cpu-hotplug.c:75:2: error: call to undeclared function 'cpuhp_ap_report_death'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           cpuhp_ap_report_death();
-           ^
-   arch/riscv/kernel/cpu-hotplug.c:75:2: note: did you mean 'cpuhp_ap_report_dead'?
-   include/linux/cpuhotplug.h:530:20: note: 'cpuhp_ap_report_dead' declared here
-   static inline void cpuhp_ap_report_dead(void) { }
-                      ^
-   2 errors generated.
+>> drivers/net/ethernet/netronome/nfp/bpf/verifier.c:814:57: error: no member named 'orig_idx' in 'struct bpf_insn_aux_data'
+           meta = nfp_bpf_goto_meta(nfp_prog, meta, aux_data[off].orig_idx);
+                                                    ~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:827:52: error: no member named 'orig_idx' in 'struct bpf_insn_aux_data'
+                   } else if (meta->jmp_dst->n != aux_data[tgt_off].orig_idx) {
+                                                  ~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:830:23: error: no member named 'orig_idx' in 'struct bpf_insn_aux_data'
+                                   aux_data[tgt_off].orig_idx);
+                                   ~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:17:46: note: expanded from macro 'pr_vlog'
+           bpf_verifier_log_write(env, "[nfp] " fmt, ##__VA_ARGS__)
+                                                       ^~~~~~~~~~~
+   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:848:57: error: no member named 'orig_idx' in 'struct bpf_insn_aux_data'
+           meta = nfp_bpf_goto_meta(nfp_prog, meta, aux_data[off].orig_idx);
+                                                    ~~~~~~~~~~~~~ ^
+   4 errors generated.
 
 
-vim +/cpuhp_ap_report_death +75 arch/riscv/kernel/cpu-hotplug.c
+vim +814 drivers/net/ethernet/netronome/nfp/bpf/verifier.c
 
-    67	
-    68	/*
-    69	 * Called from the idle thread for the CPU which has been shutdown.
-    70	 */
-    71	void arch_cpu_idle_dead(void)
-    72	{
-    73		idle_task_exit();
-    74	
-  > 75		cpuhp_ap_report_death();
+a32014b351662f Jakub Kicinski 2019-01-22  806  
+a32014b351662f Jakub Kicinski 2019-01-22  807  int nfp_bpf_opt_replace_insn(struct bpf_verifier_env *env, u32 off,
+a32014b351662f Jakub Kicinski 2019-01-22  808  			     struct bpf_insn *insn)
+a32014b351662f Jakub Kicinski 2019-01-22  809  {
+a32014b351662f Jakub Kicinski 2019-01-22  810  	struct nfp_prog *nfp_prog = env->prog->aux->offload->dev_priv;
+a32014b351662f Jakub Kicinski 2019-01-22  811  	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
+a32014b351662f Jakub Kicinski 2019-01-22  812  	struct nfp_insn_meta *meta = nfp_prog->verifier_meta;
+a32014b351662f Jakub Kicinski 2019-01-22  813  
+a32014b351662f Jakub Kicinski 2019-01-22 @814  	meta = nfp_bpf_goto_meta(nfp_prog, meta, aux_data[off].orig_idx);
+a32014b351662f Jakub Kicinski 2019-01-22  815  	nfp_prog->verifier_meta = meta;
+a32014b351662f Jakub Kicinski 2019-01-22  816  
+a32014b351662f Jakub Kicinski 2019-01-22  817  	/* conditional jump to jump conversion */
+a32014b351662f Jakub Kicinski 2019-01-22  818  	if (is_mbpf_cond_jump(meta) &&
+a32014b351662f Jakub Kicinski 2019-01-22  819  	    insn->code == (BPF_JMP | BPF_JA | BPF_K)) {
+a32014b351662f Jakub Kicinski 2019-01-22  820  		unsigned int tgt_off;
+a32014b351662f Jakub Kicinski 2019-01-22  821  
+a32014b351662f Jakub Kicinski 2019-01-22  822  		tgt_off = off + insn->off + 1;
+a32014b351662f Jakub Kicinski 2019-01-22  823  
+a32014b351662f Jakub Kicinski 2019-01-22  824  		if (!insn->off) {
+a32014b351662f Jakub Kicinski 2019-01-22  825  			meta->jmp_dst = list_next_entry(meta, l);
+a32014b351662f Jakub Kicinski 2019-01-22  826  			meta->jump_neg_op = false;
+a32014b351662f Jakub Kicinski 2019-01-22  827  		} else if (meta->jmp_dst->n != aux_data[tgt_off].orig_idx) {
+a32014b351662f Jakub Kicinski 2019-01-22  828  			pr_vlog(env, "branch hard wire at %d changes target %d -> %d\n",
+a32014b351662f Jakub Kicinski 2019-01-22  829  				off, meta->jmp_dst->n,
+a32014b351662f Jakub Kicinski 2019-01-22  830  				aux_data[tgt_off].orig_idx);
+a32014b351662f Jakub Kicinski 2019-01-22  831  			return -EINVAL;
+a32014b351662f Jakub Kicinski 2019-01-22  832  		}
+a32014b351662f Jakub Kicinski 2019-01-22  833  		return 0;
+a32014b351662f Jakub Kicinski 2019-01-22  834  	}
+a32014b351662f Jakub Kicinski 2019-01-22  835  
+a32014b351662f Jakub Kicinski 2019-01-22  836  	pr_vlog(env, "unsupported instruction replacement %hhx -> %hhx\n",
+a32014b351662f Jakub Kicinski 2019-01-22  837  		meta->insn.code, insn->code);
+a32014b351662f Jakub Kicinski 2019-01-22  838  	return -EINVAL;
+a32014b351662f Jakub Kicinski 2019-01-22  839  }
+9a06927e778bc4 Jakub Kicinski 2019-01-22  840  
 
 -- 
 0-DAY CI Kernel Test Service
