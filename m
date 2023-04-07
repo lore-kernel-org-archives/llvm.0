@@ -1,124 +1,103 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BABE9848E
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 18:21:43 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id o11so40636416ple.1
-        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 11:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680891703; x=1683483703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6ZdRaKow9MiJw77AIs6HNE5L6Bt+Axun0Z6165dll/w=;
-        b=o3WtKycKtV542XSaicFZz0CZ/dev938aAn+qeeNOY8WRyHVIze4YnJcFgiiCsWaJxV
-         Ajd71OA0ng3Iisqa/ZJw1jna4z9PJi5fh7kAxvyGHi1kAoeLTxecd7HJsNnkjtM/ct+x
-         emcM3MoywW3r3eCx1wcYy4wWI2bv+DS9v1sL47O7H1elmMk597W7oAgHNauc5/iOBFpH
-         6Wnov6/4+cfjUr6gNj+wyBLCt4+2Xk9D7yEQQESblpkSTIwBCJElhNz6OS5Rj33wpnKO
-         cnOUzmdDfEz++ahqDKTY62TN4cPZL+eaoeUJJFSxTblMU2G2LmxcljBt5McsPw1BoSWu
-         m72g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680891703; x=1683483703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6ZdRaKow9MiJw77AIs6HNE5L6Bt+Axun0Z6165dll/w=;
-        b=SgFpCca0l0F5B1zKn+5Cx3IqABXFzj29oc/bvJKyGYnu1ScxA32UhsEw1CWLzIj6Ro
-         qXt8kxZDAB6WhjKOVz6Ei/vsXchobwOz5lCT6Pzx8ZeSMbDJWJ3INKJ3ZD+wOR1koogK
-         qfaAaI3SYCW+FBzreU61+y1suKkEMINEyL9FPH571MMamMJ8+XjPvXHUFMUpwkMvxHc4
-         SdC3Urpz1RGmFCxXAoUI2P+7PtKSVK++aC07wT+uzrjbYHg5812xnLqVMX+DB8ZDkpUc
-         6ilRoLgHP59tHCxz5cpoFNx3sOCNCwZ4yjlBI9KmVGEuOcFk1I7YztDFJapcemhaVJFw
-         CvVg==
-X-Gm-Message-State: AAQBX9fd88NlhJVOG1dR7qXxJ3MSeHuTu30xjoZv8hArUeOKKeJvly/K
-	aVMH9fl5Wm2MtvATWZBvmRSjdNSiVsg+ohYp4TI0lg==
-X-Google-Smtp-Source: AKy350bi6/Eqyz2r683FnPvRwH6NTPyo8wV2nEG2rf8+C/NqkAczhLhuqlNMO7AwVBgrZzZVxiS/kkIt6VR0vqaeXZs=
-X-Received: by 2002:a17:902:da85:b0:19f:2aa4:b1e5 with SMTP id
- j5-20020a170902da8500b0019f2aa4b1e5mr1212280plx.2.1680891702918; Fri, 07 Apr
- 2023 11:21:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78578827;
+	Fri,  7 Apr 2023 18:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680891786; x=1712427786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ozu99prPogYikRTx0qweufnuXrpSlZTOnvmH/k0JhkM=;
+  b=WhxwgmIZ53rnPCiI4hDJJv0zwAid+jFyw6dz5DHCnrdQ9/pUi9lSnXte
+   Bp+Dz603QU6wa3569UrRy0UIJS21B+7PZ60kI/tfMysU+TFnMuZJlN7hc
+   Qf65gx05w8za43Hr7I9Li3c1lsRMQqhxLa9pf8bbSYlqgjEdSdzXoKuLt
+   7B/L/1IJxUVgsz94ct50NkuSfhr+edYq/h3khbycdCxIyKkt9D8OOOznh
+   nu3b6RZo3V////Fzl1/f2kLDdOb3heyomDjoK7PSpIOW+XqvVNh/Ep3/g
+   vAmiug8sfs+lTSTSE43QA0CUzWVCnkFT30GrmwxTGoYKRb4a4GimLBdGf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="343050178"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="343050178"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 11:23:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="776915020"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="776915020"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Apr 2023 11:23:03 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pkqji-000SmY-0M;
+	Fri, 07 Apr 2023 18:22:58 +0000
+Date: Sat, 8 Apr 2023 02:22:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] nvme: host: hwmon: constify pointers to
+ hwmon_channel_info
+Message-ID: <202304080224.0YKfRdwi-lkp@intel.com>
+References: <20230407145845.79557-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230331172423.1860083-1-trix@redhat.com>
-In-Reply-To: <20230331172423.1860083-1-trix@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Apr 2023 11:21:31 -0700
-Message-ID: <CAKwvOdkoYTVYeN9G-YB5ADq1Lt35d265pJHCOcy-Ro-22PFM4Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/qxl: remove unused num_relocs variable
-To: Tom Rix <trix@redhat.com>
-Cc: airlied@redhat.com, kraxel@redhat.com, airlied@gmail.com, daniel@ffwll.ch, 
-	nathan@kernel.org, virtualization@lists.linux-foundation.org, 
-	spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, fziglio@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407145845.79557-1-krzysztof.kozlowski@linaro.org>
 
-On Fri, Mar 31, 2023 at 10:24=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/gpu/drm/qxl/qxl_ioctl.c:149:14: error: variable
->   'num_relocs' set but not used [-Werror,-Wunused-but-set-variable]
->         int i, ret, num_relocs;
->                     ^
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi Krzysztof,
 
-Thanks for the patch!
-Fixes: 74d9a6335dce ("drm/qxl: Simplify cleaning qxl processing command")
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+kernel test robot noticed the following build errors:
 
-That commit should also have removed the label out_free_bos IMO since
-having two labels for the same statement is a code smell.  Tom, do you
-mind sending a v2 with that folded in?
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on axboe-block/for-next linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> ---
->  drivers/gpu/drm/qxl/qxl_ioctl.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/qxl/qxl_ioctl.c b/drivers/gpu/drm/qxl/qxl_io=
-ctl.c
-> index 30f58b21372a..3422206d59d4 100644
-> --- a/drivers/gpu/drm/qxl/qxl_ioctl.c
-> +++ b/drivers/gpu/drm/qxl/qxl_ioctl.c
-> @@ -146,7 +146,7 @@ static int qxl_process_single_command(struct qxl_devi=
-ce *qdev,
->         struct qxl_release *release;
->         struct qxl_bo *cmd_bo;
->         void *fb_cmd;
-> -       int i, ret, num_relocs;
-> +       int i, ret;
->         int unwritten;
->
->         switch (cmd->type) {
-> @@ -201,7 +201,6 @@ static int qxl_process_single_command(struct qxl_devi=
-ce *qdev,
->         }
->
->         /* fill out reloc info structs */
-> -       num_relocs =3D 0;
->         for (i =3D 0; i < cmd->relocs_num; ++i) {
->                 struct drm_qxl_reloc reloc;
->                 struct drm_qxl_reloc __user *u =3D u64_to_user_ptr(cmd->r=
-elocs);
-> @@ -231,7 +230,6 @@ static int qxl_process_single_command(struct qxl_devi=
-ce *qdev,
->                         reloc_info[i].dst_bo =3D cmd_bo;
->                         reloc_info[i].dst_offset =3D reloc.dst_offset + r=
-elease->release_offset;
->                 }
-> -               num_relocs++;
->
->                 /* reserve and validate the reloc dst bo */
->                 if (reloc.reloc_type =3D=3D QXL_RELOC_TYPE_BO || reloc.sr=
-c_handle) {
-> --
-> 2.27.0
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Krzysztof-Kozlowski/nvme-host-hwmon-constify-pointers-to-hwmon_channel_info/20230407-230001
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230407145845.79557-1-krzysztof.kozlowski%40linaro.org
+patch subject: [PATCH] nvme: host: hwmon: constify pointers to hwmon_channel_info
+config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080224.0YKfRdwi-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a92019809fb469cc9c9f751cee4cfaad054ddb48
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Krzysztof-Kozlowski/nvme-host-hwmon-constify-pointers-to-hwmon_channel_info/20230407-230001
+        git checkout a92019809fb469cc9c9f751cee4cfaad054ddb48
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/nvme/host/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080224.0YKfRdwi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/nvme/host/hwmon.c:221:10: error: initializing 'const struct hwmon_channel_info **' with an expression of type 'const struct hwmon_channel_info *const[3]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+           .info   = nvme_hwmon_info,
+                     ^~~~~~~~~~~~~~~
+   1 error generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +221 drivers/nvme/host/hwmon.c
+
+400b6a7b13a3fd Guenter Roeck 2019-11-06  218  
+400b6a7b13a3fd Guenter Roeck 2019-11-06  219  static const struct hwmon_chip_info nvme_hwmon_chip_info = {
+400b6a7b13a3fd Guenter Roeck 2019-11-06  220  	.ops	= &nvme_hwmon_ops,
+400b6a7b13a3fd Guenter Roeck 2019-11-06 @221  	.info	= nvme_hwmon_info,
+400b6a7b13a3fd Guenter Roeck 2019-11-06  222  };
+400b6a7b13a3fd Guenter Roeck 2019-11-06  223  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
