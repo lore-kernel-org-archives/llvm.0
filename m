@@ -1,107 +1,116 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70609848E
-	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 18:14:07 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id ji2so1016571plb.0
-        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 11:14:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545B0848E
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 18:17:15 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-62ddb232ddaso1036237b3a.1
+        for <llvm@lists.linux.dev>; Fri, 07 Apr 2023 11:17:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680891247; x=1683483247;
+        d=google.com; s=20210112; t=1680891435; x=1683483435;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iR5vun52tcsHLu1HJ14aemGaEMgXlWM8Oo3dvfzO2C0=;
-        b=pVC015NAFlm36VYuUzCVo7FdrkP9+B47UDv1WQ1JPnMH/MjAtw3BfDGoGD3UvUBZjC
-         aMC9N8wJZ/c5RfgQZldgZ48Zg5D/Up2C0Orm7M+3bUN/lT3bpUZQpfF+QQ3v06aqkJ3B
-         yv1VUtMc3cQdGv1TX+i81BtOLFy78JMXUxY0L8GRuZGZTUD2DWHR15kXfHR27IfYHP5h
-         b3/IKGz8GhmAtVFbYtPYtIaO8WNxuS6rmizR23p3tycGPLnEHn9rwo30JDEff6qXAeIC
-         yRe8434Ae3ve7S7J+JIO6mrEJOorbPE3mhC205z91p0k0+dbPSy/YTMW4uWIbBR29DXW
-         EtzA==
+        bh=NuwimqlPO9HpY2//fLh7FzFmSEeSG4CgWKNzgwGf5e0=;
+        b=Pxebkcm9CczGaHvPx5PvvvRnR6vaeDp6HKms/KgNAqJQXvWemgVDWj5OCZHUEsr5j3
+         G9LMgv/KajspUvAGyGLQ7Iszic6kbG9P2k5NSjI2veF2IMW/awCFrSItQeZmJWK2XLZ8
+         i6eaSk3xj2bQYr9/oCtHhhg4bWIW25XK+DRij7sRFBY0PrKPBfd43oe3kVErQiVRHnnP
+         rBC1NfOjx2peA67xPLFCrmXLrsiOeHJW2kZXiKf92yzvKxgztNNJ4tJanifs/JMLrTin
+         Iun3CcwO27658Fb0advMSuPzDrAVtKjlY5wElw8gSey5BR3sb1CzIGcoUtpUEIO4NNiT
+         hDXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680891247; x=1683483247;
+        d=1e100.net; s=20210112; t=1680891435; x=1683483435;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iR5vun52tcsHLu1HJ14aemGaEMgXlWM8Oo3dvfzO2C0=;
-        b=SyV6NlV2Qre4hTIb+IVL+tUaD1B71bH4qapovaB1zNp1Tx+IHFoZIog4h336+Ijnsi
-         svL7hW2JOPU9Fg+p7Nfhcw6DhcxGksh0Z44huYtBKktAojIDSXwYlQxM4jsvokEoFoN6
-         l2h4VnQH3LUXT9GmAtNFHg61tauWxq+NIWd44SVDcAX0/bGfS1HBvmcmSIUjAO4s8POk
-         iydgN9Re9Mnl8XWN4mXk1v3LZIAOPJAo0IA3RitRgAmpvnC1p3sNqTgGtqp98RzrHPFr
-         5s+V5zSLwlvRWkz/og1/mJJt51Q7yMAatRixtrFsGkv6Lyh2qwtmYGPP+UGaKUmn41lj
-         1yTQ==
-X-Gm-Message-State: AAQBX9ef4h34qewfwSyKVwQC79MgHoa22bGqIjQUM24VLcv/wOTR1a29
-	uk3jk3IGpLBnVT/KXs+ShIzwgj+owC7uuQVtW9xGSw==
-X-Google-Smtp-Source: AKy350aU/IB5VaFU/u0WokhO/SJsHANiJN00OQm3BFmMJ5+gRJY7lFGGFFaR/6e05KbtL6SErczy8rwQ7E/M0c3HNSw=
-X-Received: by 2002:a17:90b:3641:b0:244:987c:a873 with SMTP id
- nh1-20020a17090b364100b00244987ca873mr822309pjb.7.1680891246608; Fri, 07 Apr
- 2023 11:14:06 -0700 (PDT)
+        bh=NuwimqlPO9HpY2//fLh7FzFmSEeSG4CgWKNzgwGf5e0=;
+        b=a1xQqOhy2YPsc0kTywEh4HPPBCf5w8EYG2SEmbZw1+kHXHFL6snRcrnJwfLC3yS0G6
+         n63UKQAfsI3uJzXy4T25+T/t0WUVwpnTER9fRjJVdNf1qKrZlZhxsA/VcLcEMIykKMyQ
+         JSCCGUmHwU4nzKYurg8+nG1OIHRQDV3Ld7wDfR0KRv07dK2i4dMuGtdOR1ttBVdAMr+z
+         p3QkkLkPlQjN/r5hsjueO2JkEUvoX5quQ5UHmZveBTgtNyYk1lJXMbUYjKQUSRPids3A
+         4n3YZSzZmzfvr11n0hTXEPL6i1syoUVTVhPM7446Cur8eQ7YfWHjQlBbKDSLGUP17qhZ
+         L2yA==
+X-Gm-Message-State: AAQBX9cgP0TRZReEcQrFdOxh35Qjdc9b02H8yTCmby90vRGcshLXfVlv
+	jAKb0lhSU/Bp2wNB1wjLpGvTslYKWvW08rdigxp+tA==
+X-Google-Smtp-Source: AKy350Y6wWEggvCrlIf1bje2atujKhf9qMM/qxlunzgcridw/Fvst4ed6hVP1rP9DeneT/1K3zn48LLIF486O17fgc0=
+X-Received: by 2002:a05:6a00:2ea8:b0:61c:67d2:a332 with SMTP id
+ fd40-20020a056a002ea800b0061c67d2a332mr1427088pfb.3.1680891434554; Fri, 07
+ Apr 2023 11:17:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230331001208.1846731-1-trix@redhat.com>
-In-Reply-To: <20230331001208.1846731-1-trix@redhat.com>
+References: <20230331164041.1859088-1-trix@redhat.com>
+In-Reply-To: <20230331164041.1859088-1-trix@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 7 Apr 2023 11:13:55 -0700
-Message-ID: <CAKwvOdmBu_foPCtXBNoA+ZDd-kU4X5-c65NVJb-MSrgoMKNJxw@mail.gmail.com>
-Subject: Re: [PATCH] bus: fsl-mc: remove unused free_count variable
+Date: Fri, 7 Apr 2023 11:17:03 -0700
+Message-ID: <CAKwvOd=5Uw=6_8erAq0gt_-URUqXgK2ZvtCv5Ch_VZdk01sayQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/pm: remove unused num_of_active_display variable
 To: Tom Rix <trix@redhat.com>
-Cc: stuyoder@gmail.com, laurentiu.tudor@nxp.com, nathan@kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: evan.quan@amd.com, alexander.deucher@amd.com, christian.koenig@amd.com, 
+	Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org, 
+	Hawking.Zhang@amd.com, kenneth.feng@amd.com, lijo.lazar@amd.com, 
+	KevinYang.Wang@amd.com, tim.huang@amd.com, andrealmeid@igalia.com, 
+	Kun.Liu2@amd.com, mario.limonciello@amd.com, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 30, 2023 at 5:12=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+On Fri, Mar 31, 2023 at 9:40=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
 >
 > clang with W=3D1 reports
-> drivers/bus/fsl-mc/fsl-mc-allocator.c:560:6: error: variable
->   'free_count' set but not used [-Werror,-Wunused-but-set-variable]
->         int free_count =3D 0;
+> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:1700:6: error: variab=
+le
+>   'num_of_active_display' set but not used [-Werror,-Wunused-but-set-vari=
+able]
+>         int num_of_active_display =3D 0;
 >             ^
 > This variable is not used so remove it.
 >
 > Signed-off-by: Tom Rix <trix@redhat.com>
 
 Thanks for the patch!
-
-Fixes: commit d8e026a44919 ("staging: fsl-mc: remove some superfluous WARN_=
-ONs")
+Fixes: commit 75145aab7a0d ("drm/amdgpu/swsmu: clean up a bunch of
+stale interfaces")
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Check out
-commit 364069556901 ("staging: fsl-mc: move resource pool init/cleanup
-into allocator")
-to see the original logic.
-
 > ---
->  drivers/bus/fsl-mc/fsl-mc-allocator.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+>  drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 7 -------
+>  1 file changed, 7 deletions(-)
 >
-> diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/f=
-sl-mc-allocator.c
-> index dced427ca8ba..f1351237a9d5 100644
-> --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> @@ -557,12 +557,9 @@ static void fsl_mc_cleanup_resource_pool(struct fsl_=
-mc_device *mc_bus_dev,
->         struct fsl_mc_bus *mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
->         struct fsl_mc_resource_pool *res_pool =3D
->                                         &mc_bus->resource_pools[pool_type=
-];
-> -       int free_count =3D 0;
+> diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c b/drivers/gpu/drm/=
+amd/pm/swsmu/amdgpu_smu.c
+> index b5d64749990e..f93f7a9ed631 100644
+> --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+> @@ -1696,8 +1696,6 @@ static int smu_display_configuration_change(void *h=
+andle,
+>                                             const struct amd_pp_display_c=
+onfiguration *display_config)
+>  {
+>         struct smu_context *smu =3D handle;
+> -       int index =3D 0;
+> -       int num_of_active_display =3D 0;
 >
-> -       list_for_each_entry_safe(resource, next, &res_pool->free_list, no=
-de) {
-> -               free_count++;
-> +       list_for_each_entry_safe(resource, next, &res_pool->free_list, no=
-de)
->                 devm_kfree(&mc_bus_dev->dev, resource);
+>         if (!smu->pm_enabled || !smu->adev->pm.dpm_enabled)
+>                 return -EOPNOTSUPP;
+> @@ -1708,11 +1706,6 @@ static int smu_display_configuration_change(void *=
+handle,
+>         smu_set_min_dcef_deep_sleep(smu,
+>                                     display_config->min_dcef_deep_sleep_s=
+et_clk / 100);
+>
+> -       for (index =3D 0; index < display_config->num_path_including_non_=
+display; index++) {
+> -               if (display_config->displays[index].controller_id !=3D 0)
+> -                       num_of_active_display++;
 > -       }
+> -
+>         return 0;
 >  }
 >
->  void fsl_mc_cleanup_all_resource_pools(struct fsl_mc_device *mc_bus_dev)
 > --
 > 2.27.0
 >
