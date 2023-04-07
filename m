@@ -1,44 +1,43 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BE02F33;
-	Fri,  7 Apr 2023 11:28:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CC25380;
+	Fri,  7 Apr 2023 14:04:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680866930; x=1712402930;
+  t=1680876245; x=1712412245;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3cd0xBqmZLwCm19Q3/0HNGu6ZRBFjmnCA9agGLJ4pq0=;
-  b=aIRGT2D4Lup7ak0Yc02YCtK+MQt7TpSxlvL+cnyP3epYYcJ7hcS+JFrK
-   XDa0t8L63/iH0Sc8sWHbOVp6YvHQx53Lv54LkDMTdAGmx99/wOvd8z87e
-   sXnagoSzjipZx7AvJkX9jNZauaOCl+HKGkPvQJ9pN8VKTtOUDXGDdDRs0
-   uuph9FDtdgb71clWbSeH2BWCJLqXLjMj12j7ZsLzlfs5Eu5hyhxjbbkwS
-   9GTElD0OXbFEZwYSptTlP3GlEQ1fi1Kj7T4KCyVAWQ60oHxBVO1VTDIrs
-   KBePyGnc/UFu79uleIY+TLs0hSZTwEF6d+jb1Jmy2kvKv0xYdnh/933f3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="322612301"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="322612301"
+  bh=7ZpNeIRWAtQNsCeB1CoRHTg3ws6c5Srn8z/AMh8Cm2Y=;
+  b=VIMoPbpnkYJZfqCdpM3JC/1ohu85yFcDwDQkc8STpzQSMBaUEvKT4Zvj
+   9CyRvrSSEP3Vgcld7Rgejj0Dk3i8g3o+FLOeKp2nu0x8/2CJcMtNgoXby
+   1x1uO3Smyl1Zz8xqOmVENHrzM/bQgd7pUOa6qDOXs7FMdRWZMd90nxeLa
+   3f8vankoaBFVb7DHSIjhUEdBz5FZCJhg2NlB+OC2IschymJ5c6N+7jj+8
+   EgmYlWQgn9pYTi+eVJ1lxhdJL4UiQAk4SJAJqnrvJ/AXnDq6jN8pVbpcN
+   wAP7iLXwgh2MGCFYdMbV7Rg2AAWlR/YBjQ1ICrTG/MVrnbFrg2AnnA+k4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="408122545"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="408122545"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 04:28:50 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 07:03:49 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="637676759"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="637676759"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="637713486"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="637713486"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2023 04:28:48 -0700
+  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2023 07:03:48 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pkkGp-000SRY-0A;
-	Fri, 07 Apr 2023 11:28:43 +0000
-Date: Fri, 7 Apr 2023 19:28:20 +0800
+	id 1pkmgt-000SZP-1Z;
+	Fri, 07 Apr 2023 14:03:47 +0000
+Date: Fri, 7 Apr 2023 22:03:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: zhongjun@uniontech.com, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	zhongjun <zhongjun@uniontech.com>
-Subject: Re: [PATCH] BPF: replace low-entropy member with macro
-Message-ID: <202304071944.aYRCuc4u-lkp@intel.com>
-References: <20230407033418.2295-1-zhongjun@uniontech.com>
+To: "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] mm: introduce defer free for cma
+Message-ID: <202304072120.1qQfF86Z-lkp@intel.com>
+References: <1680864131-4675-1-git-send-email-zhaoyang.huang@unisoc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,93 +46,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407033418.2295-1-zhongjun@uniontech.com>
+In-Reply-To: <1680864131-4675-1-git-send-email-zhaoyang.huang@unisoc.com>
 
-Hi,
+Hi zhaoyang.huang,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on 919e659ed12568b5b8ba6c2ffdd82d8d31fc28af]
+[auto build test WARNING on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/zhongjun-uniontech-com/BPF-replace-low-entropy-member-with-macro/20230407-113614
-base:   919e659ed12568b5b8ba6c2ffdd82d8d31fc28af
-patch link:    https://lore.kernel.org/r/20230407033418.2295-1-zhongjun%40uniontech.com
-patch subject: [PATCH] BPF: replace low-entropy member with macro
-config: x86_64-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230407/202304071944.aYRCuc4u-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/zhaoyang-huang/mm-introduce-defer-free-for-cma/20230407-184459
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/1680864131-4675-1-git-send-email-zhaoyang.huang%40unisoc.com
+patch subject: [RFC PATCH] mm: introduce defer free for cma
+config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230407/202304072120.1qQfF86Z-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f8ee7d5ddcfe866f9b9b4f18dff368764ea854e5
+        # https://github.com/intel-lab-lkp/linux/commit/7abee7e8d17803e68bfff3de73df6a1dff270ff6
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review zhongjun-uniontech-com/BPF-replace-low-entropy-member-with-macro/20230407-113614
-        git checkout f8ee7d5ddcfe866f9b9b4f18dff368764ea854e5
+        git fetch --no-tags linux-review zhaoyang-huang/mm-introduce-defer-free-for-cma/20230407-184459
+        git checkout 7abee7e8d17803e68bfff3de73df6a1dff270ff6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/netronome/nfp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304071944.aYRCuc4u-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304072120.1qQfF86Z-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/netronome/nfp/bpf/verifier.c:814:57: error: no member named 'orig_idx' in 'struct bpf_insn_aux_data'
-           meta = nfp_bpf_goto_meta(nfp_prog, meta, aux_data[off].orig_idx);
-                                                    ~~~~~~~~~~~~~ ^
-   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:827:52: error: no member named 'orig_idx' in 'struct bpf_insn_aux_data'
-                   } else if (meta->jmp_dst->n != aux_data[tgt_off].orig_idx) {
-                                                  ~~~~~~~~~~~~~~~~~ ^
-   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:830:23: error: no member named 'orig_idx' in 'struct bpf_insn_aux_data'
-                                   aux_data[tgt_off].orig_idx);
-                                   ~~~~~~~~~~~~~~~~~ ^
-   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:17:46: note: expanded from macro 'pr_vlog'
-           bpf_verifier_log_write(env, "[nfp] " fmt, ##__VA_ARGS__)
-                                                       ^~~~~~~~~~~
-   drivers/net/ethernet/netronome/nfp/bpf/verifier.c:848:57: error: no member named 'orig_idx' in 'struct bpf_insn_aux_data'
-           meta = nfp_bpf_goto_meta(nfp_prog, meta, aux_data[off].orig_idx);
-                                                    ~~~~~~~~~~~~~ ^
-   4 errors generated.
+>> mm/cma.c:165:19: warning: operator '<<' has lower precedence than '-'; '-' will be evaluated first [-Wshift-op-parentheses]
+           val = cma->count - (u64)used << cma->order_per_bit;
+                 ~~~~~~~~~~~^~~~~~~~~~~ ~~
+   mm/cma.c:165:19: note: place parentheses around the '-' expression to silence this warning
+           val = cma->count - (u64)used << cma->order_per_bit;
+                            ^
+                 (                     )
+   mm/cma.c:157:22: warning: unused function 'cma_free_get' [-Wunused-function]
+   static unsigned long cma_free_get(struct cma *cma)
+                        ^
+   2 warnings generated.
 
 
-vim +814 drivers/net/ethernet/netronome/nfp/bpf/verifier.c
+vim +165 mm/cma.c
 
-a32014b351662f Jakub Kicinski 2019-01-22  806  
-a32014b351662f Jakub Kicinski 2019-01-22  807  int nfp_bpf_opt_replace_insn(struct bpf_verifier_env *env, u32 off,
-a32014b351662f Jakub Kicinski 2019-01-22  808  			     struct bpf_insn *insn)
-a32014b351662f Jakub Kicinski 2019-01-22  809  {
-a32014b351662f Jakub Kicinski 2019-01-22  810  	struct nfp_prog *nfp_prog = env->prog->aux->offload->dev_priv;
-a32014b351662f Jakub Kicinski 2019-01-22  811  	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
-a32014b351662f Jakub Kicinski 2019-01-22  812  	struct nfp_insn_meta *meta = nfp_prog->verifier_meta;
-a32014b351662f Jakub Kicinski 2019-01-22  813  
-a32014b351662f Jakub Kicinski 2019-01-22 @814  	meta = nfp_bpf_goto_meta(nfp_prog, meta, aux_data[off].orig_idx);
-a32014b351662f Jakub Kicinski 2019-01-22  815  	nfp_prog->verifier_meta = meta;
-a32014b351662f Jakub Kicinski 2019-01-22  816  
-a32014b351662f Jakub Kicinski 2019-01-22  817  	/* conditional jump to jump conversion */
-a32014b351662f Jakub Kicinski 2019-01-22  818  	if (is_mbpf_cond_jump(meta) &&
-a32014b351662f Jakub Kicinski 2019-01-22  819  	    insn->code == (BPF_JMP | BPF_JA | BPF_K)) {
-a32014b351662f Jakub Kicinski 2019-01-22  820  		unsigned int tgt_off;
-a32014b351662f Jakub Kicinski 2019-01-22  821  
-a32014b351662f Jakub Kicinski 2019-01-22  822  		tgt_off = off + insn->off + 1;
-a32014b351662f Jakub Kicinski 2019-01-22  823  
-a32014b351662f Jakub Kicinski 2019-01-22  824  		if (!insn->off) {
-a32014b351662f Jakub Kicinski 2019-01-22  825  			meta->jmp_dst = list_next_entry(meta, l);
-a32014b351662f Jakub Kicinski 2019-01-22  826  			meta->jump_neg_op = false;
-a32014b351662f Jakub Kicinski 2019-01-22  827  		} else if (meta->jmp_dst->n != aux_data[tgt_off].orig_idx) {
-a32014b351662f Jakub Kicinski 2019-01-22  828  			pr_vlog(env, "branch hard wire at %d changes target %d -> %d\n",
-a32014b351662f Jakub Kicinski 2019-01-22  829  				off, meta->jmp_dst->n,
-a32014b351662f Jakub Kicinski 2019-01-22  830  				aux_data[tgt_off].orig_idx);
-a32014b351662f Jakub Kicinski 2019-01-22  831  			return -EINVAL;
-a32014b351662f Jakub Kicinski 2019-01-22  832  		}
-a32014b351662f Jakub Kicinski 2019-01-22  833  		return 0;
-a32014b351662f Jakub Kicinski 2019-01-22  834  	}
-a32014b351662f Jakub Kicinski 2019-01-22  835  
-a32014b351662f Jakub Kicinski 2019-01-22  836  	pr_vlog(env, "unsupported instruction replacement %hhx -> %hhx\n",
-a32014b351662f Jakub Kicinski 2019-01-22  837  		meta->insn.code, insn->code);
-a32014b351662f Jakub Kicinski 2019-01-22  838  	return -EINVAL;
-a32014b351662f Jakub Kicinski 2019-01-22  839  }
-9a06927e778bc4 Jakub Kicinski 2019-01-22  840  
+   156	
+   157	static unsigned long cma_free_get(struct cma *cma)
+   158	{
+   159		unsigned long used;
+   160		unsigned long val;
+   161	
+   162		spin_lock_irq(&cma->lock);
+   163		/* pages counter is smaller than sizeof(int) */
+   164		used = bitmap_weight(cma->bitmap, (int)cma_bitmap_maxno(cma));
+ > 165		val = cma->count - (u64)used << cma->order_per_bit;
+   166		spin_unlock_irq(&cma->lock);
+   167	
+   168		return val;
+   169	}
+   170	
 
 -- 
 0-DAY CI Kernel Test Service
