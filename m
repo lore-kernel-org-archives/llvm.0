@@ -1,115 +1,139 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CC25380;
-	Fri,  7 Apr 2023 14:04:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680876245; x=1712412245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7ZpNeIRWAtQNsCeB1CoRHTg3ws6c5Srn8z/AMh8Cm2Y=;
-  b=VIMoPbpnkYJZfqCdpM3JC/1ohu85yFcDwDQkc8STpzQSMBaUEvKT4Zvj
-   9CyRvrSSEP3Vgcld7Rgejj0Dk3i8g3o+FLOeKp2nu0x8/2CJcMtNgoXby
-   1x1uO3Smyl1Zz8xqOmVENHrzM/bQgd7pUOa6qDOXs7FMdRWZMd90nxeLa
-   3f8vankoaBFVb7DHSIjhUEdBz5FZCJhg2NlB+OC2IschymJ5c6N+7jj+8
-   EgmYlWQgn9pYTi+eVJ1lxhdJL4UiQAk4SJAJqnrvJ/AXnDq6jN8pVbpcN
-   wAP7iLXwgh2MGCFYdMbV7Rg2AAWlR/YBjQ1ICrTG/MVrnbFrg2AnnA+k4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="408122545"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="408122545"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 07:03:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="637713486"
-X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
-   d="scan'208";a="637713486"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2023 07:03:48 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pkmgt-000SZP-1Z;
-	Fri, 07 Apr 2023 14:03:47 +0000
-Date: Fri, 7 Apr 2023 22:03:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] mm: introduce defer free for cma
-Message-ID: <202304072120.1qQfF86Z-lkp@intel.com>
-References: <1680864131-4675-1-git-send-email-zhaoyang.huang@unisoc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B554D2F4E
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 14:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680878489;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dPYy3KTCa2fehm7RD7pbQD9qs80ABUJzB3SJ3jyUXbc=;
+	b=SMdQZIegYDQ7xm6yzRsO76h/HGxOAbS4mCKS1NcmAgMm/UPlewrUDR4iyYed7fT5AcSmPm
+	KGHEN2TK7Yo+PncCCEygDadSMkAzCTfbkfiWjR1hC1qvOaF5Dbjo22IUIwIxieKP1kmL1I
+	53KbAxGQoWeu6St9H+4gE7Ru8evPCsA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-OKRz5EtzO4mlRoRc2JKedg-1; Fri, 07 Apr 2023 10:41:28 -0400
+X-MC-Unique: OKRz5EtzO4mlRoRc2JKedg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA84E185A78F
+	for <llvm@lists.linux.dev>; Fri,  7 Apr 2023 14:41:27 +0000 (UTC)
+Received: from [172.64.0.121] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id A4B6451FF;
+	Fri,  7 Apr 2023 14:41:27 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 35 of 358): Test report for master
+ (6.3.0-rc5, mainline.kernel.org-clang, f2afccfe)
+Date: Fri, 07 Apr 2023 14:41:27 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1680864131-4675-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <74530.123040710412800708@us-mta-658.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi zhaoyang.huang,
+Hi, we tested your kernel and here are the results:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test WARNING on akpm-mm/mm-everything]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/zhaoyang-huang/mm-introduce-defer-free-for-cma/20230407-184459
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/1680864131-4675-1-git-send-email-zhaoyang.huang%40unisoc.com
-patch subject: [RFC PATCH] mm: introduce defer free for cma
-config: i386-randconfig-a001-20230403 (https://download.01.org/0day-ci/archive/20230407/202304072120.1qQfF86Z-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7abee7e8d17803e68bfff3de73df6a1dff270ff6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review zhaoyang-huang/mm-introduce-defer-free-for-cma/20230407-184459
-        git checkout 7abee7e8d17803e68bfff3de73df6a1dff270ff6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Kernel information:
+    Commit message: Merge tag 'net-6.3-rc6-2' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/netdev/net
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304072120.1qQfF86Z-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/83914
 
-All warnings (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Internal Network Outage
+            URL: https://docs.cki-project.org/failures/#internal-network-ou=
+tage
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: [Rawhide] kdump - kexec_boot: [ ERROR ] :: Kexec boot failed=
+. Expect to see newkerneloption in kernel boot options
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2057391
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: kdump - kexec-file-load: Kexec boot failed as fileloadoption=
+ is not seen in kernel boot options
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1433
+            Affected tests:
+                  x86_64 - kdump - kexec-file-load
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
->> mm/cma.c:165:19: warning: operator '<<' has lower precedence than '-'; '-' will be evaluated first [-Wshift-op-parentheses]
-           val = cma->count - (u64)used << cma->order_per_bit;
-                 ~~~~~~~~~~~^~~~~~~~~~~ ~~
-   mm/cma.c:165:19: note: place parentheses around the '-' expression to silence this warning
-           val = cma->count - (u64)used << cma->order_per_bit;
-                            ^
-                 (                     )
-   mm/cma.c:157:22: warning: unused function 'cma_free_get' [-Wunused-function]
-   static unsigned long cma_free_get(struct cma *cma)
-                        ^
-   2 warnings generated.
 
 
-vim +165 mm/cma.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   156	
-   157	static unsigned long cma_free_get(struct cma *cma)
-   158	{
-   159		unsigned long used;
-   160		unsigned long val;
-   161	
-   162		spin_lock_irq(&cma->lock);
-   163		/* pages counter is smaller than sizeof(int) */
-   164		used = bitmap_weight(cma->bitmap, (int)cma_bitmap_maxno(cma));
- > 165		val = cma->count - (u64)used << cma->order_per_bit;
-   166		spin_unlock_irq(&cma->lock);
-   167	
-   168		return val;
-   169	}
-   170	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
