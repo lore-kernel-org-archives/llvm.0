@@ -1,288 +1,154 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8D81841;
-	Sat,  8 Apr 2023 10:28:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680949727; x=1712485727;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=emUaPXjolatX/naX88XTVOBBru240o6qprtoaBZ73nk=;
-  b=hcNsSeLrd7Cau6wtVwqSRmp+7uT+GRgPfH9waxMR96eYSgKrY3lXs15S
-   sZTMx8vuJYP/NMJw7K11t47put1xVx9wM0sY721Rc+jiinlQAKDAeBFtg
-   AvAb42zQCf680biXWG+6nLb4smTKsCyTS/3YKum2GYJu0o0V5iX8zh+Vk
-   LKSOTr0VbiLnHlvuh7PYw2g0LoXX/cHaLNB2+xu78R9RcekVPInfkQpRQ
-   xQDXZj2n0CBMnGio8kVdoXFk8WLhwnXtgmQNcw7VYQWD2GRfIFz28HDL1
-   l+LioCQvxWu0HlPwwJtwuwQwz25hPY3JFT/SqXRDawmz4Gndp7nT47lRJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="408266623"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="408266623"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 03:28:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="687764609"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="687764609"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 08 Apr 2023 03:28:44 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pl5oK-000TdR-04;
-	Sat, 08 Apr 2023 10:28:44 +0000
-Date: Sat, 8 Apr 2023 18:28:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dexuan Cui <decui@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dcui-tdx:decui/michaelv7dda/tdx/v4-dda 4/14]
- drivers/hv/vmbus_drv.c:2178:74: warning: format specifies type 'unsigned
- long long' but the argument has type 'resource_size_t' (aka 'unsigned int')
-Message-ID: <202304081846.o784t1UW-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5DF1841
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 10:28:51 +0000 (UTC)
+Received: by mail-ej1-f54.google.com with SMTP id qb20so1632684ejc.6
+        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 03:28:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680949729; x=1683541729;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5prd9jiPY6aPPA4NHCME6A4G1D5JLdJePd4hvf7GCtE=;
+        b=zvhbUyJAiKycOvsOg/A6u2Ux/CvTxib8JCoAYzPG8C1VXvHzIkG+Dod0+EO/8qN6EN
+         /ETC38O9GhDav+zXwtADWCLlP84FrgF1MEi65YYZ/d2t5BmEbe1p0Zk/GHZ5qzUo51+G
+         rH7hc4AXltGE7pn5P/CFeXmCspZVsX/lA+Hyenkbd06Hg6M+0m1rs7fquaMu2eL8LEnH
+         QsB7mI6WFiR27PNkDGU+oVRSayj0gflrprSIgZbJOHSTmy9yUtRo3ucZMZEj4O5Ah4ki
+         rYGNDhhzuesh8eUmjpK0qxju3uJR2vxeyLpGrJLyYpI2HB/Is95H/r1yt9NU7WEZsjWL
+         7LLg==
+X-Gm-Message-State: AAQBX9eFZwQymTFoyZWlg3h/yaSMSLsOO1MyypRBK+GD7qjvJblY1Rlp
+	iya43PP75tV+0qLvablnLAwNgCp+BpZH/ZnB
+X-Google-Smtp-Source: AKy350a4JqDDkjRuEPSqzg9gHozgV3z4xpcEp4iI+4H2nQwlDXT+lrsa9tB/idYp+T76hlTeH5MQeg==
+X-Received: by 2002:a17:906:4904:b0:92f:f655:cc78 with SMTP id b4-20020a170906490400b0092ff655cc78mr1844309ejq.53.1680949728944;
+        Sat, 08 Apr 2023 03:28:48 -0700 (PDT)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id u1-20020a17090617c100b00930b13f6abdsm3027148eje.98.2023.04.08.03.28.48
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Apr 2023 03:28:48 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-94a35b0ec77so20303866b.3
+        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 03:28:48 -0700 (PDT)
+X-Received: by 2002:a50:d0d9:0:b0:4fb:f19:87f with SMTP id g25-20020a50d0d9000000b004fb0f19087fmr2476755edf.3.1680949727831;
+ Sat, 08 Apr 2023 03:28:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230407070517.204676-1-andrea.righi@canonical.com>
+In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
+From: Neal Gompa <neal@gompa.dev>
+Date: Sat, 8 Apr 2023 06:28:11 -0400
+X-Gmail-Original-Message-ID: <CAEg-Je8X4mCq7wCD5ASOafQR_Wap2uQsgTwAVGH221CGXfiT9w@mail.gmail.com>
+Message-ID: <CAEg-Je8X4mCq7wCD5ASOafQR_Wap2uQsgTwAVGH221CGXfiT9w@mail.gmail.com>
+Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
+To: Andrea Righi <andrea.righi@canonical.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	Eric Curtin <ecurtin@redhat.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Arnaldo Carvalho de Melo <acme@redhat.com>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/dcui/tdx decui/michaelv7dda/tdx/v4-dda
-head:   bd34cfc6af2bd56b3f4bf2fe22aa6f293ae223cd
-commit: 4435a855896b597991789663945665c8a59a1316 [4/14] [Workaround for DDA]: hardcode MMIO _CRS in vmbus_walk_resources() for now
-config: i386-randconfig-a004-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081846.o784t1UW-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/dcui/tdx/commit/4435a855896b597991789663945665c8a59a1316
-        git remote add dcui-tdx https://github.com/dcui/tdx
-        git fetch --no-tags dcui-tdx decui/michaelv7dda/tdx/v4-dda
-        git checkout 4435a855896b597991789663945665c8a59a1316
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hv/
+On Fri, Apr 7, 2023 at 3:05=E2=80=AFAM Andrea Righi <andrea.righi@canonical=
+.com> wrote:
+>
+> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+> to enable RUST.
+>
+> With this constraint we don't need is_rust_module.sh anymore, because
+> 'pahole --lang_exclude=3Drust' already has the capability to exclude Rust
+> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+> isn't used as well.
+>
+> In any case is_rust_module.sh is obsolete and we can just drop it.
+>
+> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390=
+/
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> ---
+>  rust/macros/module.rs     |  2 +-
+>  scripts/Makefile.modfinal |  2 --
+>  scripts/is_rust_module.sh | 16 ----------------
+>  3 files changed, 1 insertion(+), 19 deletions(-)
+>  delete mode 100755 scripts/is_rust_module.sh
+>
+> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> index a7e363c2b044..608406f33a70 100644
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@ -179,7 +179,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream =
+{
+>              /// Used by the printing macros, e.g. [`info!`].
+>              const __LOG_PREFIX: &[u8] =3D b\"{name}\\0\";
+>
+> -            /// The \"Rust loadable module\" mark, for `scripts/is_rust_=
+module.sh`.
+> +            /// The \"Rust loadable module\" mark.
+>              //
+>              // This may be best done another way later on, e.g. as a new=
+ modinfo
+>              // key or a new section. For the moment, keep it simple.
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 4703f652c009..e6f8fa3c9b8d 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -41,8 +41,6 @@ quiet_cmd_btf_ko =3D BTF [M] $@
+>        cmd_btf_ko =3D                                                    =
+ \
+>         if [ ! -f vmlinux ]; then                                       \
+>                 printf "Skipping BTF generation for %s due to unavailabil=
+ity of vmlinux\n" $@ 1>&2; \
+> -       elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module=
+.sh $@; then           \
+> -               printf "Skipping BTF generation for %s because it's a Rus=
+t module\n" $@ 1>&2; \
+>         else                                                            \
+>                 LLVM_OBJCOPY=3D"$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) =
+--btf_base vmlinux $@; \
+>                 $(RESOLVE_BTFIDS) -b vmlinux $@;                        \
+> diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
+> deleted file mode 100755
+> index 28b3831a7593..000000000000
+> --- a/scripts/is_rust_module.sh
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -#
+> -# is_rust_module.sh module.ko
+> -#
+> -# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
+> -
+> -set -e
+> -
+> -# Using the `16_` prefix ensures other symbols with the same substring
+> -# are not picked up (even if it would be unlikely). The last part is
+> -# used just in case LLVM decides to use the `.` suffix.
+> -#
+> -# In the future, checking for the `.comment` section may be another
+> -# option, see https://github.com/rust-lang/rust/pull/97550.
+> -${NM} "$*" | grep -qE '^[0-9a-fA-F]+ r _R[^[:space:]]+16___IS_RUST_MODUL=
+E[^[:space:]]*$'
+> --
+> 2.39.2
+>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081846.o784t1UW-lkp@intel.com/
+LGTM.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/hv/vmbus_drv.c:2178:74: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-                                                             ~~~~           ^~~~~
-                                                             %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2178:81: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-                                                                   ~~~~            ^~~
-                                                                   %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2181:76: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-                                                               ~~~~           ^~~~~
-                                                               %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2181:83: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-                                                                     ~~~~            ^~~
-                                                                     %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2187:74: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-                                                             ~~~~           ^~~~~
-                                                             %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2187:81: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-                                                                   ~~~~            ^~~
-                                                                   %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2190:76: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-                                                               ~~~~           ^~~~~
-                                                               %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2190:83: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-                                                                     ~~~~            ^~~
-                                                                     %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
->> drivers/hv/vmbus_drv.c:2188:25: warning: implicit conversion from 'long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68182605824 to 3758096384 [-Wconstant-conversion]
-                   start = 0xfe0000000;
-                         ~ ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2189:23: warning: implicit conversion from 'long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68719476735 to 4294967295 [-Wconstant-conversion]
-                   end = 0xfffffffff;
-                       ~ ^~~~~~~~~~~
-   10 warnings generated.
+Reviewed-by: Neal Gompa <neal@gompa.dev>
 
 
-vim +2178 drivers/hv/vmbus_drv.c
 
-  2153	
-  2154	
-  2155	/*
-  2156	 * VMBUS is an acpi enumerated device. Get the information we
-  2157	 * need from DSDT.
-  2158	 */
-  2159	static acpi_status vmbus_walk_resources(struct acpi_resource *res, void *ctx)
-  2160	{
-  2161		resource_size_t start = 0;
-  2162		resource_size_t end = 0;
-  2163		struct resource *new_res;
-  2164		struct resource **old_res = &hyperv_mmio;
-  2165		struct resource **prev_res = NULL;
-  2166		struct resource r;
-  2167	
-  2168		switch (res->type) {
-  2169	
-  2170		/*
-  2171		 * "Address" descriptors are for bus windows. Ignore
-  2172		 * "memory" descriptors, which are for registers on
-  2173		 * devices.
-  2174		 */
-  2175		case ACPI_RESOURCE_TYPE_ADDRESS32:
-  2176			start = res->data.address32.address.minimum;
-  2177			end = res->data.address32.address.maximum;
-> 2178	                printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-  2179	                start = 0xf8000000;
-  2180	                end = 0xffffffff;
-  2181	                printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-  2182			break;
-  2183	
-  2184		case ACPI_RESOURCE_TYPE_ADDRESS64:
-  2185			start = res->data.address64.address.minimum;
-  2186			end = res->data.address64.address.maximum;
-  2187	                printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-> 2188	                start = 0xfe0000000;
-  2189	                end = 0xfffffffff;
-  2190	                printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-  2191			break;
-  2192	
-  2193		/*
-  2194		 * The IRQ information is needed only on ARM64, which Hyper-V
-  2195		 * sets up in the extended format. IRQ information is present
-  2196		 * on x86/x64 in the non-extended format but it is not used by
-  2197		 * Linux. So don't bother checking for the non-extended format.
-  2198		 */
-  2199		case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
-  2200			if (!acpi_dev_resource_interrupt(res, 0, &r)) {
-  2201				pr_err("Unable to parse Hyper-V ACPI interrupt\n");
-  2202				return AE_ERROR;
-  2203			}
-  2204			/* ARM64 INTID for VMbus */
-  2205			vmbus_interrupt = res->data.extended_irq.interrupts[0];
-  2206			/* Linux IRQ number */
-  2207			vmbus_irq = r.start;
-  2208	               printk("cdx: vmbus_walk_resources: irq=%d\n", vmbus_irq);
-  2209			return AE_OK;
-  2210	
-  2211		default:
-  2212			/* Unused resource type */
-  2213	               printk("cdx: vmbus_walk_resources: default type=%d\n", res->type);
-  2214			return AE_OK;
-  2215	
-  2216		}
-  2217		/*
-  2218		 * Ignore ranges that are below 1MB, as they're not
-  2219		 * necessary or useful here.
-  2220		 */
-  2221		if (end < 0x100000)
-  2222			return AE_OK;
-  2223	
-  2224		new_res = kzalloc(sizeof(*new_res), GFP_ATOMIC);
-  2225		if (!new_res)
-  2226			return AE_NO_MEMORY;
-  2227	
-  2228		/* If this range overlaps the virtual TPM, truncate it. */
-  2229		if (end > VTPM_BASE_ADDRESS && start < VTPM_BASE_ADDRESS)
-  2230			end = VTPM_BASE_ADDRESS;
-  2231	
-  2232		new_res->name = "hyperv mmio";
-  2233		new_res->flags = IORESOURCE_MEM;
-  2234		new_res->start = start;
-  2235		new_res->end = end;
-  2236	
-  2237		/*
-  2238		 * If two ranges are adjacent, merge them.
-  2239		 */
-  2240		do {
-  2241			if (!*old_res) {
-  2242				*old_res = new_res;
-  2243				break;
-  2244			}
-  2245	
-  2246			if (((*old_res)->end + 1) == new_res->start) {
-  2247				(*old_res)->end = new_res->end;
-  2248				kfree(new_res);
-  2249				break;
-  2250			}
-  2251	
-  2252			if ((*old_res)->start == new_res->end + 1) {
-  2253				(*old_res)->start = new_res->start;
-  2254				kfree(new_res);
-  2255				break;
-  2256			}
-  2257	
-  2258			if ((*old_res)->start > new_res->end) {
-  2259				new_res->sibling = *old_res;
-  2260				if (prev_res)
-  2261					(*prev_res)->sibling = new_res;
-  2262				*old_res = new_res;
-  2263				break;
-  2264			}
-  2265	
-  2266			prev_res = old_res;
-  2267			old_res = &(*old_res)->sibling;
-  2268	
-  2269		} while (1);
-  2270	
-  2271		return AE_OK;
-  2272	}
-  2273	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--
+=E7=9C=9F=E5=AE=9F=E3=81=AF=E3=81=84=E3=81=A4=E3=82=82=E4=B8=80=E3=81=A4=EF=
+=BC=81/ Always, there's only one truth!
