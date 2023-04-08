@@ -1,154 +1,149 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5DF1841
-	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 10:28:51 +0000 (UTC)
-Received: by mail-ej1-f54.google.com with SMTP id qb20so1632684ejc.6
-        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 03:28:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680949729; x=1683541729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5prd9jiPY6aPPA4NHCME6A4G1D5JLdJePd4hvf7GCtE=;
-        b=zvhbUyJAiKycOvsOg/A6u2Ux/CvTxib8JCoAYzPG8C1VXvHzIkG+Dod0+EO/8qN6EN
-         /ETC38O9GhDav+zXwtADWCLlP84FrgF1MEi65YYZ/d2t5BmEbe1p0Zk/GHZ5qzUo51+G
-         rH7hc4AXltGE7pn5P/CFeXmCspZVsX/lA+Hyenkbd06Hg6M+0m1rs7fquaMu2eL8LEnH
-         QsB7mI6WFiR27PNkDGU+oVRSayj0gflrprSIgZbJOHSTmy9yUtRo3ucZMZEj4O5Ah4ki
-         rYGNDhhzuesh8eUmjpK0qxju3uJR2vxeyLpGrJLyYpI2HB/Is95H/r1yt9NU7WEZsjWL
-         7LLg==
-X-Gm-Message-State: AAQBX9eFZwQymTFoyZWlg3h/yaSMSLsOO1MyypRBK+GD7qjvJblY1Rlp
-	iya43PP75tV+0qLvablnLAwNgCp+BpZH/ZnB
-X-Google-Smtp-Source: AKy350a4JqDDkjRuEPSqzg9gHozgV3z4xpcEp4iI+4H2nQwlDXT+lrsa9tB/idYp+T76hlTeH5MQeg==
-X-Received: by 2002:a17:906:4904:b0:92f:f655:cc78 with SMTP id b4-20020a170906490400b0092ff655cc78mr1844309ejq.53.1680949728944;
-        Sat, 08 Apr 2023 03:28:48 -0700 (PDT)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
-        by smtp.gmail.com with ESMTPSA id u1-20020a17090617c100b00930b13f6abdsm3027148eje.98.2023.04.08.03.28.48
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Apr 2023 03:28:48 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-94a35b0ec77so20303866b.3
-        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 03:28:48 -0700 (PDT)
-X-Received: by 2002:a50:d0d9:0:b0:4fb:f19:87f with SMTP id g25-20020a50d0d9000000b004fb0f19087fmr2476755edf.3.1680949727831;
- Sat, 08 Apr 2023 03:28:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D20F1107;
+	Sat,  8 Apr 2023 10:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680950327; x=1712486327;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eKHqVAL32smantM3k8Lt5d+MUOKLe+OaL0Irr/VIGVA=;
+  b=ZYKUeOx++lCxMX0ixPV8tSm4qXLs09rkgFhJISaudFRvEDHZ4A1O+7b0
+   gn1gX6lHFfgq7YVE4dXRK/Rqn3vPR+go/451s3uPbslAXFnU+n1/qjB4Q
+   A3Fco+h95jMTzixICcRazCZAeyZbeHs7o+UUEGgJojNjmLZvXLTYnBhNr
+   dt+AuprgBbsEhzhFbtUJIpzV4wqxm0xhjgmwuI76P4wH010pYUBsxxrVk
+   JSLVmZrazOJB0HNghdhRqcTMLq33ZP4Er2Nf3Jto+bUXt+hF5RkAUWs2U
+   f1NTWy+Z9FanQF8YvQaVl64RFxCT3vfA0QNirq4HTsfc9N3hLNdz7JrTs
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="344911148"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="344911148"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 03:38:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="665149570"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="665149570"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Apr 2023 03:38:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pl5y0-000Tdd-0X;
+	Sat, 08 Apr 2023 10:38:44 +0000
+Date: Sat, 8 Apr 2023 18:38:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Robert Elliott <elliott@hpe.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Herbert Xu <herbert@gondor.apana.org.au>
+Subject: arch/arm/crypto/sha1_neon_glue.c:43:8: warning: cast from 'void
+ (*)(void *, const char *, unsigned int)' to 'sha1_block_fn *' (aka 'void
+ (*)(struct sha1_state *, const unsigned char *, int)') converts to
+ incompatible function type
+Message-ID: <202304081828.zjGcFUyE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230407070517.204676-1-andrea.righi@canonical.com>
-In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
-From: Neal Gompa <neal@gompa.dev>
-Date: Sat, 8 Apr 2023 06:28:11 -0400
-X-Gmail-Original-Message-ID: <CAEg-Je8X4mCq7wCD5ASOafQR_Wap2uQsgTwAVGH221CGXfiT9w@mail.gmail.com>
-Message-ID: <CAEg-Je8X4mCq7wCD5ASOafQR_Wap2uQsgTwAVGH221CGXfiT9w@mail.gmail.com>
-Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
-To: Andrea Righi <andrea.righi@canonical.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
-	Eric Curtin <ecurtin@redhat.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Arnaldo Carvalho de Melo <acme@redhat.com>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Apr 7, 2023 at 3:05=E2=80=AFAM Andrea Righi <andrea.righi@canonical=
-.com> wrote:
->
-> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
-> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
-> to enable RUST.
->
-> With this constraint we don't need is_rust_module.sh anymore, because
-> 'pahole --lang_exclude=3Drust' already has the capability to exclude Rust
-> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
-> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
-> isn't used as well.
->
-> In any case is_rust_module.sh is obsolete and we can just drop it.
->
-> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390=
-/
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> ---
->  rust/macros/module.rs     |  2 +-
->  scripts/Makefile.modfinal |  2 --
->  scripts/is_rust_module.sh | 16 ----------------
->  3 files changed, 1 insertion(+), 19 deletions(-)
->  delete mode 100755 scripts/is_rust_module.sh
->
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index a7e363c2b044..608406f33a70 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -179,7 +179,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream =
-{
->              /// Used by the printing macros, e.g. [`info!`].
->              const __LOG_PREFIX: &[u8] =3D b\"{name}\\0\";
->
-> -            /// The \"Rust loadable module\" mark, for `scripts/is_rust_=
-module.sh`.
-> +            /// The \"Rust loadable module\" mark.
->              //
->              // This may be best done another way later on, e.g. as a new=
- modinfo
->              // key or a new section. For the moment, keep it simple.
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index 4703f652c009..e6f8fa3c9b8d 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -41,8 +41,6 @@ quiet_cmd_btf_ko =3D BTF [M] $@
->        cmd_btf_ko =3D                                                    =
- \
->         if [ ! -f vmlinux ]; then                                       \
->                 printf "Skipping BTF generation for %s due to unavailabil=
-ity of vmlinux\n" $@ 1>&2; \
-> -       elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module=
-.sh $@; then           \
-> -               printf "Skipping BTF generation for %s because it's a Rus=
-t module\n" $@ 1>&2; \
->         else                                                            \
->                 LLVM_OBJCOPY=3D"$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) =
---btf_base vmlinux $@; \
->                 $(RESOLVE_BTFIDS) -b vmlinux $@;                        \
-> diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
-> deleted file mode 100755
-> index 28b3831a7593..000000000000
-> --- a/scripts/is_rust_module.sh
-> +++ /dev/null
-> @@ -1,16 +0,0 @@
-> -#!/bin/sh
-> -# SPDX-License-Identifier: GPL-2.0
-> -#
-> -# is_rust_module.sh module.ko
-> -#
-> -# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
-> -
-> -set -e
-> -
-> -# Using the `16_` prefix ensures other symbols with the same substring
-> -# are not picked up (even if it would be unlikely). The last part is
-> -# used just in case LLVM decides to use the `.` suffix.
-> -#
-> -# In the future, checking for the `.comment` section may be another
-> -# option, see https://github.com/rust-lang/rust/pull/97550.
-> -${NM} "$*" | grep -qE '^[0-9a-fA-F]+ r _R[^[:space:]]+16___IS_RUST_MODUL=
-E[^[:space:]]*$'
-> --
-> 2.39.2
->
+Hi Robert,
 
-LGTM.
+FYI, the error/warning still remains.
 
-Reviewed-by: Neal Gompa <neal@gompa.dev>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aa318c48808c0aa73216bd94c54c4553d3663add
+commit: 4a329fecc9aaebb27a53fa7abfa53bbc2ee42f3f crypto: Kconfig - submenus for arm and arm64
+date:   8 months ago
+config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20230408/202304081828.zjGcFUyE-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4a329fecc9aaebb27a53fa7abfa53bbc2ee42f3f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4a329fecc9aaebb27a53fa7abfa53bbc2ee42f3f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/boot/compressed/ arch/arm/crypto/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081828.zjGcFUyE-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
+>> arch/arm/crypto/sha1_neon_glue.c:43:8: warning: cast from 'void (*)(void *, const char *, unsigned int)' to 'sha1_block_fn *' (aka 'void (*)(struct sha1_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                               (sha1_block_fn *)sha1_transform_neon);
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm/crypto/sha1_neon_glue.c:58:9: warning: cast from 'void (*)(void *, const char *, unsigned int)' to 'sha1_block_fn *' (aka 'void (*)(struct sha1_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                                       (sha1_block_fn *)sha1_transform_neon);
+                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm/crypto/sha1_neon_glue.c:59:30: warning: cast from 'void (*)(void *, const char *, unsigned int)' to 'sha1_block_fn *' (aka 'void (*)(struct sha1_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+           sha1_base_do_finalize(desc, (sha1_block_fn *)sha1_transform_neon);
+                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
 --
-=E7=9C=9F=E5=AE=9F=E3=81=AF=E3=81=84=E3=81=A4=E3=82=82=E4=B8=80=E3=81=A4=EF=
-=BC=81/ Always, there's only one truth!
+>> arch/arm/crypto/sha256_neon_glue.c:38:4: warning: cast from 'void (*)(u32 *, const void *, unsigned int)' (aka 'void (*)(unsigned int *, const void *, unsigned int)') to 'sha256_block_fn *' (aka 'void (*)(struct sha256_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                           (sha256_block_fn *)sha256_block_data_order_neon);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm/crypto/sha256_neon_glue.c:53:4: warning: cast from 'void (*)(u32 *, const void *, unsigned int)' (aka 'void (*)(unsigned int *, const void *, unsigned int)') to 'sha256_block_fn *' (aka 'void (*)(struct sha256_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                           (sha256_block_fn *)sha256_block_data_order_neon);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm/crypto/sha256_neon_glue.c:55:4: warning: cast from 'void (*)(u32 *, const void *, unsigned int)' (aka 'void (*)(unsigned int *, const void *, unsigned int)') to 'sha256_block_fn *' (aka 'void (*)(struct sha256_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                           (sha256_block_fn *)sha256_block_data_order_neon);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+--
+>> arch/arm/crypto/sha512-neon-glue.c:37:3: warning: cast from 'void (*)(u64 *, const u8 *, int)' (aka 'void (*)(unsigned long long *, const unsigned char *, int)') to 'sha512_block_fn *' (aka 'void (*)(struct sha512_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   (sha512_block_fn *)sha512_block_data_order_neon);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm/crypto/sha512-neon-glue.c:52:4: warning: cast from 'void (*)(u64 *, const u8 *, int)' (aka 'void (*)(unsigned long long *, const unsigned char *, int)') to 'sha512_block_fn *' (aka 'void (*)(struct sha512_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                           (sha512_block_fn *)sha512_block_data_order_neon);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm/crypto/sha512-neon-glue.c:54:3: warning: cast from 'void (*)(u64 *, const u8 *, int)' (aka 'void (*)(unsigned long long *, const unsigned char *, int)') to 'sha512_block_fn *' (aka 'void (*)(struct sha512_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
+                   (sha512_block_fn *)sha512_block_data_order_neon);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +43 arch/arm/crypto/sha1_neon_glue.c
+
+604682551aa511e Jussi Kivilinna 2014-07-29  28  
+604682551aa511e Jussi Kivilinna 2014-07-29  29  asmlinkage void sha1_transform_neon(void *state_h, const char *data,
+604682551aa511e Jussi Kivilinna 2014-07-29  30  				    unsigned int rounds);
+604682551aa511e Jussi Kivilinna 2014-07-29  31  
+604682551aa511e Jussi Kivilinna 2014-07-29  32  static int sha1_neon_update(struct shash_desc *desc, const u8 *data,
+604682551aa511e Jussi Kivilinna 2014-07-29  33  			  unsigned int len)
+604682551aa511e Jussi Kivilinna 2014-07-29  34  {
+604682551aa511e Jussi Kivilinna 2014-07-29  35  	struct sha1_state *sctx = shash_desc_ctx(desc);
+604682551aa511e Jussi Kivilinna 2014-07-29  36  
+99680c5e9182945 Eric Biggers    2019-03-12  37  	if (!crypto_simd_usable() ||
+51e515faa887e40 Ard Biesheuvel  2015-04-09  38  	    (sctx->count % SHA1_BLOCK_SIZE) + len < SHA1_BLOCK_SIZE)
+51e515faa887e40 Ard Biesheuvel  2015-04-09  39  		return sha1_update_arm(desc, data, len);
+604682551aa511e Jussi Kivilinna 2014-07-29  40  
+604682551aa511e Jussi Kivilinna 2014-07-29  41  	kernel_neon_begin();
+51e515faa887e40 Ard Biesheuvel  2015-04-09  42  	sha1_base_do_update(desc, data, len,
+51e515faa887e40 Ard Biesheuvel  2015-04-09 @43  			    (sha1_block_fn *)sha1_transform_neon);
+604682551aa511e Jussi Kivilinna 2014-07-29  44  	kernel_neon_end();
+604682551aa511e Jussi Kivilinna 2014-07-29  45  
+604682551aa511e Jussi Kivilinna 2014-07-29  46  	return 0;
+604682551aa511e Jussi Kivilinna 2014-07-29  47  }
+604682551aa511e Jussi Kivilinna 2014-07-29  48  
+
+:::::: The code at line 43 was first introduced by commit
+:::::: 51e515faa887e40e7e30a3e13607ea6be418e4c4 crypto: arm/sha1_neon - move SHA-1 NEON implementation to base layer
+
+:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
