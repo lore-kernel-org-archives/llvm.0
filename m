@@ -1,47 +1,51 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C567C2D3;
-	Sat,  8 Apr 2023 05:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D481841;
+	Sat,  8 Apr 2023 06:13:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680931897; x=1712467897;
+  t=1680934418; x=1712470418;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/LYeyFsXqvORZJLlT+nzpX9FMrn9jcR1VIBaRG2zbf8=;
-  b=CAU0GS5Szqiy9FUlZWKOAp+QXMCxsWAnzCKnpYt2i2gfddCznXAToR2n
-   8gz1iJ11hA5ZyCH805gJkF0T8q/b45Clwh6g4yPS2Hp2aHVHhSJ0NrHCQ
-   ZR5G+Jzj2Fpco3IFlopWcbpC36ANsJrIuBpcCKE7+oeRKpDoAzu0M6zDD
-   aS7FMaX8BSQfiZPPTw+0IHN638QDWpRECMew3y4GzR/EDXHfQmBxomKfL
-   ZtLgBEcRBo5NEJ0b/yjS/d6y6YKrOo4eu6Gbh0Qb8b99yLh4h24/82M2F
-   TlaLAiInijHzZ8D4Hv4BPTHyJzmUxKn8D75g8nqvtae40zPmdvQCi0ReM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="429400781"
+  bh=3pSwex2GTRoIwzE9M/rgXMQbLMvVYq457TO/GzodD5c=;
+  b=dQMdUbUfNiQeM9FSn1M5uF4RUwI7Ao1sDincxhmrhUOwY+YVqEInD2aI
+   GQXNBY/ms530RiwRobh6ZCRjXsGHl0kA4yOAkhiiI7yybVzwr0nttg+FR
+   WhcVW35jyTn7h5QVC65uc1wWbptoKtOJPHFJ8AWp2KCniJsE8Jnd0pLTi
+   U96yuVJ2EKDS1rd3Nu5aNc9Sy3CLU1eYgl/wN1c3GpInY5jn+n5huBf2g
+   /SuIXQmYZBOef0v9LyoHVn77XNxP9tUKxxea82sc/G6Yamj71geJ+no+l
+   zn8l+DC4EiI5+8an5v0GXQC5x6E15Q7tcZ3HX5fJg2/UDMt+x3TqtMONO
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="341867455"
 X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="429400781"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 22:31:36 -0700
+   d="scan'208";a="341867455"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 23:13:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="665103064"
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="861970833"
 X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="665103064"
+   d="scan'208";a="861970833"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Apr 2023 22:31:32 -0700
+  by orsmga005.jf.intel.com with ESMTP; 07 Apr 2023 23:13:35 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pl1Ai-000TNj-2o;
-	Sat, 08 Apr 2023 05:31:32 +0000
-Date: Sat, 8 Apr 2023 13:31:23 +0800
+	id 1pl1pN-000TPJ-2u;
+	Sat, 08 Apr 2023 06:13:33 +0000
+Date: Sat, 8 Apr 2023 14:12:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: "David E. Box" <david.e.box@linux.intel.com>,
-	srinivas.pandruvada@linux.intel.com, irenic.rajneesh@gmail.com,
-	david.e.box@intel.com, hdegoede@redhat.com, markgross@kernel.org,
-	rjw@rjwysocki.net
+To: Keguang Zhang <keguang.zhang@gmail.com>, linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
-Message-ID: <202304081356.jXr7C3fH-lkp@intel.com>
-References: <20230408022629.727721-1-david.e.box@linux.intel.com>
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Yang Ling <gnaygnil@gmail.com>,
+	Keguang Zhang <keguang.zhang@gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
+Message-ID: <202304081301.6Ukja1z0-lkp@intel.com>
+References: <20230407110025.516405-3-keguang.zhang@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,73 +54,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230408022629.727721-1-david.e.box@linux.intel.com>
+In-Reply-To: <20230407110025.516405-3-keguang.zhang@gmail.com>
 
-Hi David,
+Hi Keguang,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a]
+[auto build test ERROR on cf3be7e82b129ed34f811f116f2b113f6299d449]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-E-Box/platform-x86-intel-pmc-mtl-Put-GNA-IPU-VPU-devices-in-D3/20230408-102651
-base:   4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a
-patch link:    https://lore.kernel.org/r/20230408022629.727721-1-david.e.box%40linux.intel.com
-patch subject: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
-config: i386-randconfig-a003-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081356.jXr7C3fH-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang/dt-bindings-watchdog-Add-Loongson-1-watchdog/20230407-190222
+base:   cf3be7e82b129ed34f811f116f2b113f6299d449
+patch link:    https://lore.kernel.org/r/20230407110025.516405-3-keguang.zhang%40gmail.com
+patch subject: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
+config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20230408/202304081301.6Ukja1z0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/04453d42ee1b0c97f9fa68644c6234f7b9e2d14a
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/26b8fbfd577b41f39d6af516ef7c49cbffa05117
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-E-Box/platform-x86-intel-pmc-mtl-Put-GNA-IPU-VPU-devices-in-D3/20230408-102651
-        git checkout 04453d42ee1b0c97f9fa68644c6234f7b9e2d14a
+        git fetch --no-tags linux-review Keguang-Zhang/dt-bindings-watchdog-Add-Loongson-1-watchdog/20230407-190222
+        git checkout 26b8fbfd577b41f39d6af516ef7c49cbffa05117
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/intel/pmc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081356.jXr7C3fH-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081301.6Ukja1z0-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/platform/x86/intel/pmc/mtl.c:52:6: warning: no previous prototype for function 'mtl_set_device_d3' [-Wmissing-prototypes]
-   void mtl_set_device_d3(unsigned int device)
-        ^
-   drivers/platform/x86/intel/pmc/mtl.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void mtl_set_device_d3(unsigned int device)
-   ^
-   static 
-   1 warning generated.
+>> drivers/watchdog/loongson1_wdt.c:158:21: error: use of undeclared identifier 'ls1x_wdt_dt_ids'
+                   .of_match_table = ls1x_wdt_dt_ids,
+                                     ^
+   1 error generated.
 
 
-vim +/mtl_set_device_d3 +52 drivers/platform/x86/intel/pmc/mtl.c
+vim +/ls1x_wdt_dt_ids +158 drivers/watchdog/loongson1_wdt.c
 
-    48	
-    49	#define MTL_GNA_PCI_DEV	0x7e4c
-    50	#define MTL_IPU_PCI_DEV	0x7d19
-    51	#define MTL_VPU_PCI_DEV	0x7d1d
-  > 52	void mtl_set_device_d3(unsigned int device)
-    53	{
-    54		struct pci_dev *pcidev;
-    55	
-    56		pcidev = pci_get_device(PCI_VENDOR_ID_INTEL, device, NULL);
-    57		if (pcidev) {
-    58			if (!device_trylock(&pcidev->dev)) {
-    59				pci_dev_put(pcidev);
-    60				return;
-    61			}
-    62			if (!pcidev->dev.driver) {
-    63				dev_info(&pcidev->dev, "Setting to D3hot\n");
-    64				pci_set_power_state(pcidev, PCI_D3hot);
-    65			}
-    66			device_unlock(&pcidev->dev);
-    67			pci_dev_put(pcidev);
-    68		}
-    69	}
-    70	
+   153	
+   154	static struct platform_driver ls1x_wdt_driver = {
+   155		.probe = ls1x_wdt_probe,
+   156		.driver = {
+   157			.name = "ls1x-wdt",
+ > 158			.of_match_table = ls1x_wdt_dt_ids,
+   159		},
+   160	};
+   161	
 
 -- 
 0-DAY CI Kernel Test Service
