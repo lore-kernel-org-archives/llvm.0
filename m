@@ -1,56 +1,62 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387D429B0
-	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 21:45:39 +0000 (UTC)
-Received: by mail-pj1-f43.google.com with SMTP id pc4-20020a17090b3b8400b0024676052044so1613986pjb.1
-        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 14:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680990338; x=1683582338;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zqgSPZYBsDtVwiEZJVoDEmESaLU5H7DMz1BSoSn2S1Y=;
-        b=mSJ/X1rr3c3vVPHxFoGeOmsi6zaCi+/+edXfzwes87BlIz/bdb4KVwCpsAogLkEECe
-         H6FQLGTn8KB+93PdqO6eDEMypOPMpiVhXpRRuSCABL+waC1lujqqI8kO7eC+mqqDXbOf
-         VkrdcDUSM/E758jYGxcj+lFncSdPQmn9mShx0nPK6hZTgsEzv8SY5ngjuqGyh5iaHbMg
-         sDH/6uTCb8YCLZKmpujxpog07gJAhEeHLDUW99I6XiP6icQSyI0sY8u6cbjbdbPs9H3U
-         OUUDM2C3G0I+H8BXAav2HpVuaS/92Ay35V+8b825chzgZfM3iGRm5tBSUFdh4G6p2jNC
-         xgLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680990338; x=1683582338;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zqgSPZYBsDtVwiEZJVoDEmESaLU5H7DMz1BSoSn2S1Y=;
-        b=HP95y0y24dMHgaAtifdXHksD8ub7qK/NsUtyihU79dmoNEGYRYmexCLmupPnLtnERC
-         6ZU3jsBLorKUkimW/xmM5uS/ClY3K7CaIm6RNLLm0sz8mrO2OK+iPYBcpqFAyJEjMox5
-         /NlYASTmD4cBAM6uKfy09PX37fKHeXkmWGgwjM9Dn61mD84R76afsYYX5kU0YIqzQuHK
-         9J8neJcqe1aKlxaqt66bD893THH2hWU/Xv1KqjkLaHzr+fIS3+mHdzrQlU6/mMMHWsqU
-         NLNYM+gA1lr2Jmsd3BtzMuKE+/PWaG2dReG6YeHNxq8jJuTg+H5iOky8T/V5o1DrrKZc
-         L5rw==
-X-Gm-Message-State: AAQBX9eb4tixnDa3rkhYdT3j4RpWuz22YfOrD/QgZNP0D7Kx9NStWEX9
-	GdmPMZt7qUjc52C/c5Lq2E0=
-X-Google-Smtp-Source: AKy350YeQ+EjOvH0//H82sraUYKe/H1jY2NGbOgELoyt7GUy4+kORmVMIBbchbzc/x3LIarUd4YXuA==
-X-Received: by 2002:a17:90b:1e0f:b0:23f:ebf2:d3e9 with SMTP id pg15-20020a17090b1e0f00b0023febf2d3e9mr7851623pjb.6.1680990338393;
-        Sat, 08 Apr 2023 14:45:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g15-20020a17090a7d0f00b002309279baf8sm6586668pjl.43.2023.04.08.14.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 14:45:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 8 Apr 2023 14:45:36 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Tom Rix <trix@redhat.com>
-Cc: krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-	wim@linux-watchdog.org, nathan@kernel.org, ndesaulniers@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] watchdog: s3c2410: remove unused freq_to_wdt and
- s3c2410wdt_is_running functions
-Message-ID: <72a085ff-172f-4378-8ee2-5bf1e47958bf@roeck-us.net>
-References: <20230321183439.1826823-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B311FA5;
+	Sat,  8 Apr 2023 23:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680996984; x=1712532984;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xwiP4VE57FTwb07fPwNW+BJYOxDNqzuKlCX9F6LAa0E=;
+  b=bivWk58fL5n4Itp0HikB05KrOW7tK0fjvkmCS3scHTadVMgRD1zL9n8Y
+   117+aMAOorCczt36zAYY8XoPZ3pDC7DCg+XstHBCB/m7cx5z3dMYFjVX4
+   9WEopSKCMO66M6dgp4gpjGsTBhrmaBkFPeoU73JunJSncaBbW/LuGhJab
+   hy5xGuW2Gsb3DQTR6QhgIdpRpwasdjs07pFwBn+kTl3paEZSNch2dMQd8
+   CZSIYtnUczKQUki4aXjYDIL/kS+gh7XVqjcnDsDachySqv3mz78R7/3wk
+   vrDUNcTDiq+0ZD3L6bAs7jwnUmEE0JPn3VSCaNysLRmjFQYdUelcRw0SI
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10674"; a="344953997"
+X-IronPort-AV: E=Sophos;i="5.98,330,1673942400"; 
+   d="scan'208";a="344953997"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 16:36:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10674"; a="811742432"
+X-IronPort-AV: E=Sophos;i="5.98,330,1673942400"; 
+   d="scan'208";a="811742432"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2023 16:36:17 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1plI6T-000UD7-02;
+	Sat, 08 Apr 2023 23:36:17 +0000
+Date: Sun, 9 Apr 2023 07:35:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abel Vesa <abel.vesa@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"James E . J . Bottomley" <jejb@linux.ibm.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Biggers <ebiggers@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v7 2/3] scsi: ufs: ufs-qcom: Switch to the new ICE API
+Message-ID: <202304090708.EDYvW6wb-lkp@intel.com>
+References: <20230408214041.533749-3-abel.vesa@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,54 +65,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321183439.1826823-1-trix@redhat.com>
+In-Reply-To: <20230408214041.533749-3-abel.vesa@linaro.org>
 
-On Tue, Mar 21, 2023 at 02:34:39PM -0400, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/watchdog/s3c2410_wdt.c:311:35: error: unused function
->   'freq_to_wdt' [-Werror,-Wunused-function]
-> static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
->                                   ^
-> drivers/watchdog/s3c2410_wdt.c:446:19: error: unused function
->   's3c2410wdt_is_running' [-Werror,-Wunused-function]
-> static inline int s3c2410wdt_is_running(struct s3c2410_wdt *wdt)
->                   ^
-> These functions are not used, so remove them.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Hi Abel,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+kernel test robot noticed the following build errors:
 
-> ---
->  drivers/watchdog/s3c2410_wdt.c | 10 ----------
->  1 file changed, 10 deletions(-)
-> 
-> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> index 200ba236a72e..6394dda7a5dc 100644
-> --- a/drivers/watchdog/s3c2410_wdt.c
-> +++ b/drivers/watchdog/s3c2410_wdt.c
-> @@ -308,11 +308,6 @@ static inline unsigned int s3c2410wdt_max_timeout(struct s3c2410_wdt *wdt)
->  				       / S3C2410_WTCON_MAXDIV);
->  }
->  
-> -static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
-> -{
-> -	return container_of(nb, struct s3c2410_wdt, freq_transition);
-> -}
-> -
->  static int s3c2410wdt_disable_wdt_reset(struct s3c2410_wdt *wdt, bool mask)
->  {
->  	const u32 mask_val = BIT(wdt->drv_data->mask_bit);
-> @@ -443,11 +438,6 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
->  	return 0;
->  }
->  
-> -static inline int s3c2410wdt_is_running(struct s3c2410_wdt *wdt)
-> -{
-> -	return readl(wdt->reg_base + S3C2410_WTCON) & S3C2410_WTCON_ENABLE;
-> -}
-> -
->  static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
->  				    unsigned int timeout)
->  {
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on jejb-scsi/for-next robh/for-next linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Abel-Vesa/dt-bindings-ufs-qcom-Add-ICE-phandle/20230409-054151
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230408214041.533749-3-abel.vesa%40linaro.org
+patch subject: [PATCH v7 2/3] scsi: ufs: ufs-qcom: Switch to the new ICE API
+config: arm-randconfig-r023-20230409 (https://download.01.org/0day-ci/archive/20230409/202304090708.EDYvW6wb-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/496cc31572753aac0d53c5e0666bcc6c3f323938
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Abel-Vesa/dt-bindings-ufs-qcom-Add-ICE-phandle/20230409-054151
+        git checkout 496cc31572753aac0d53c5e0666bcc6c3f323938
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/ufs/host/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304090708.EDYvW6wb-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/ufs/host/ufs-qcom.c:18:10: fatal error: 'soc/qcom/ice.h' file not found
+   #include <soc/qcom/ice.h>
+            ^~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +18 drivers/ufs/host/ufs-qcom.c
+
+    17	
+  > 18	#include <soc/qcom/ice.h>
+    19	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
