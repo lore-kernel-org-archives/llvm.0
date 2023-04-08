@@ -1,108 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EC21C38
-	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 16:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1680972630;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qy6SYd3f0i8ho8eow+vyxJgxXrM08wU7g/SGD1LI0yQ=;
-	b=i1Gx6z0jy16VyqEUyKRFEYmd9wPWBp0MM3rjsYHxAUbDE8suZf9FnMrA/Gtli4K6hK0w1a
-	BikDCdXGiFGWXclHQK71JzLbOS5OAQ615Rlz6MlZFezFB5GkwPfwaEKpGPzBCeTaLOJJeS
-	l4jOPIKBcZUR4ybc8/257vuVzVW/Uco=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-288-NYfMGG7DPbmAR3v7OHMerw-1; Sat, 08 Apr 2023 12:50:26 -0400
-X-MC-Unique: NYfMGG7DPbmAR3v7OHMerw-1
-Received: by mail-qv1-f71.google.com with SMTP id h6-20020a0cd806000000b005a33510e95aso728415qvj.16
-        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 09:50:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB8B1FB8
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 18:25:00 +0000 (UTC)
+Received: by mail-ot1-f44.google.com with SMTP id c2-20020a056830348200b006a3ab0ba8a2so5098273otu.1
+        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 11:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680978300;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Pwc/3AWMfEaAIvYsDnkVg0ci20u8p4CqXhM8i5egr5o=;
+        b=gzDts5q0CNK6aNvIaGy8bjFLBbnMG9p8cNk01Z5ybEt1Ac2fqxvhsL+ev7UKPbPgsQ
+         Ud6jJtmqURe2yNpIlyx5i7ytzeLnjRsRxAoogNyFZN5Rk7Mp/nO1uEB0tNS1wVlzX0qO
+         MSAPPQU2ywrrAxsUHgt0NzOG+8kN+U7NXJ1LhSPcEUk2z4ZiIIx4vyhmd9ZN0B/HOdKc
+         Dv+vfXs/joypJUkSpYTXTS4n4lm/YLiQY6OwIR1C6djuVRH9V6y9zoN1rQAQF8UqsF8i
+         j5gk6NCXXV4C0BI885dIhpKri6y36zMVWlaoR8H5D0QdYORnDnANC1oaRmGPxIxK96UQ
+         9o/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680972626;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qy6SYd3f0i8ho8eow+vyxJgxXrM08wU7g/SGD1LI0yQ=;
-        b=mNNlckuwmLfow0UU5iuMa7+DareQtJVK6BRMDQ29WCWAJTm8EM4UmblxdHKIwx5ViU
-         95c3864T12E0mtYGir5ys1Q6bT1PnTlTR76oC/Q8DNNhI9znzRlez6PSi95aOubXrArn
-         CRIOG0+0y2UDj/LEmlHaYiofvofNlMPR+u2h309tcX77J/le+w7+LoogsUgEDQqwx6fx
-         JecL+OmZ5YeNCDT5wLH9WoF5CQY205ZKCikmkp5QPwe+if4zCgA188JVdM3rnreBa7m2
-         1xaSA8Mmu4DMHoiFpVNNNr2nF10RTjt9efFtpoZmXMJ793y1XqRifSsNk/SyG1elA4ZP
-         FBIA==
-X-Gm-Message-State: AAQBX9dBIgzoUSiVJxt8Nt1idJsf91UXwnW1IR6iXBiqGIZO8mzMmjCN
-	p4fHGezt4K4HeEFlFkYbXrbrJ9R0hwZ3TPJKk8ftr9sobip0SLm665r1yzZ8M/DqMDHptvNgKoH
-	nl3VjTbGMhAllcg==
-X-Received: by 2002:a05:622a:15c3:b0:3e1:b06d:e9e1 with SMTP id d3-20020a05622a15c300b003e1b06de9e1mr3842265qty.57.1680972626216;
-        Sat, 08 Apr 2023 09:50:26 -0700 (PDT)
-X-Google-Smtp-Source: AKy350a46s9y+/itqppzPjf57cV1ZevRRKIKzqVvsO1UIrG/xBtSg7j5IKxAIQvMkkT/GV64uTG74Q==
-X-Received: by 2002:a05:622a:15c3:b0:3e1:b06d:e9e1 with SMTP id d3-20020a05622a15c300b003e1b06de9e1mr3842236qty.57.1680972625999;
-        Sat, 08 Apr 2023 09:50:25 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id s128-20020a372c86000000b0074688c36facsm2113865qkh.56.2023.04.08.09.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 09:50:25 -0700 (PDT)
-From: Tom Rix <trix@redhat.com>
-To: airlied@redhat.com,
-	kraxel@redhat.com,
-	airlied@gmail.com,
-	daniel@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com
-Cc: virtualization@lists.linux-foundation.org,
-	spice-devel@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/qxl: remove variable count
-Date: Sat,  8 Apr 2023 12:50:23 -0400
-Message-Id: <20230408165023.2706235-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20210112; t=1680978300;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pwc/3AWMfEaAIvYsDnkVg0ci20u8p4CqXhM8i5egr5o=;
+        b=56hJ6p0GhtXH4tXJUvB+TsNjYwtbnNqdLfNza+4lvgwjV11wewd2MhWUv57oMwBBnS
+         4xZhckgOCCbhwZCOE5TnqrZ8iuS/XH81dr6plsqfYYDodAdSlcpmEuPqXa3e+nkEYBky
+         +n1vkesSTcweXySdbdYiF3oybdsnCym9EUhOFyPHf8H5iJ9aMTbBxvzgdDfm3zXdGfUR
+         9u6ncTXv/68zJiVt40OOIhyabR1SWHIpPQasKRMT9j88lwV4P8FVpeDzdoQdsDoOXQBm
+         ristES0QfICBG3hE9y0omhYu921Pcw/rrjRH8RpJmBjw8xBi0ULyDel8yg4mPTBKdZuF
+         Xhwg==
+X-Gm-Message-State: AAQBX9eYyQSk3HZCpWaVWfPYOS8TLWr3CXFccUqzNjxXd9nIW3tk2ZH6
+	T56UGwOKKbOTEqgLogrDBnE=
+X-Google-Smtp-Source: AKy350YVWWK5LVrcIXkGkfiCOeOtBJu5JBLuctbC9AAS/sN/aoOr5liabuPstmjtoZ5nP3Uz6zCHZg==
+X-Received: by 2002:a9d:7443:0:b0:6a1:21fc:653b with SMTP id p3-20020a9d7443000000b006a121fc653bmr2280347otk.14.1680978299895;
+        Sat, 08 Apr 2023 11:24:59 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id b17-20020a9d7551000000b006a3bc285eeesm2670716otl.68.2023.04.08.11.24.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Apr 2023 11:24:59 -0700 (PDT)
+Message-ID: <c0f47367-6352-e55d-1a87-fe2960a84838@gmail.com>
+Date: Sat, 8 Apr 2023 15:24:53 -0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
+Content-Language: en-US
+To: Andrea Righi <andrea.righi@canonical.com>, Miguel Ojeda
+ <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+ Eric Curtin <ecurtin@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ Neal Gompa <neal@gompa.dev>, Arnaldo Carvalho de Melo <acme@redhat.com>,
+ rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230407070517.204676-1-andrea.righi@canonical.com>
+From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-clang with W=1 reports
-drivers/gpu/drm/qxl/qxl_cmd.c:424:6: error: variable
-  'count' set but not used [-Werror,-Wunused-but-set-variable]
-        int count = 0;
-            ^
-This variable is not used so remove it.
+On 4/7/23 04:05, Andrea Righi wrote:
+> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+> to enable RUST.
+> 
+> With this constraint we don't need is_rust_module.sh anymore, because
+> 'pahole --lang_exclude=rust' already has the capability to exclude Rust
+> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+> isn't used as well.
+> 
+> In any case is_rust_module.sh is obsolete and we can just drop it.
+> 
+> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> ---
+>  [...]
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/qxl/qxl_cmd.c | 2 --
- 1 file changed, 2 deletions(-)
+Go on
 
-diff --git a/drivers/gpu/drm/qxl/qxl_cmd.c b/drivers/gpu/drm/qxl/qxl_cmd.c
-index 281edab518cd..d6ea01f3797b 100644
---- a/drivers/gpu/drm/qxl/qxl_cmd.c
-+++ b/drivers/gpu/drm/qxl/qxl_cmd.c
-@@ -421,7 +421,6 @@ int qxl_surface_id_alloc(struct qxl_device *qdev,
- {
- 	uint32_t handle;
- 	int idr_ret;
--	int count = 0;
- again:
- 	idr_preload(GFP_ATOMIC);
- 	spin_lock(&qdev->surf_id_idr_lock);
-@@ -433,7 +432,6 @@ int qxl_surface_id_alloc(struct qxl_device *qdev,
- 	handle = idr_ret;
- 
- 	if (handle >= qdev->rom->n_surfaces) {
--		count++;
- 		spin_lock(&qdev->surf_id_idr_lock);
- 		idr_remove(&qdev->surf_id_idr, handle);
- 		spin_unlock(&qdev->surf_id_idr_lock);
--- 
-2.27.0
-
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
