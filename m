@@ -1,43 +1,51 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C83B1108;
-	Sat,  8 Apr 2023 08:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843661841;
+	Sat,  8 Apr 2023 08:35:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680942942; x=1712478942;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9vktp4z/eaqBeWyi58F6VjddRUwOIbTB9wfYx5xJzFg=;
-  b=DvCzhzGZxubeRGZ+rX/TIkOfnd8qVX0HW0B3I6A2zU5LoCIV4cClk7I9
-   X52uino+AxVVSWBNEt1+cCBpkmnv0/N/0qDfDUXhRxmxEuivQyFpnU9Qb
-   qlGOdZ1EZYN4H8/czomwg81NqUPOetSh/U4TiYnPUTqoMRwpX3NWBZ2N9
-   hvPDJo+YHAMVIPGKqRGLJ4DeeUtwxRR7aF1nAmuxZUB9eragcpe+Y1G1a
-   kDAzSJa1V1Rj7Wk2cWZjkSSeUZBawlTeFqoYibRZ3fa0nqREaPkI87WPV
-   Z6Crj7koDxel1ldVe9QEtD+gcmPvQnUzjZceSzlDQ7v+yyBxG02dwClmr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="327216268"
+  t=1680942944; x=1712478944;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lxkkBZdI9k/nHA+MzzcXBFUD0IJeMAc31c2hhqC60EQ=;
+  b=OoE2s60dmCPnLta+MCTZtXGK+2I2+G+XON/kKOu2kL7wxnqNfUIG8M6Y
+   16f4rH4WQLPy/m9zmd9nkqI52QiGra948IWZhNeIRUuk1sNWZIBrWV3v0
+   exC3QQIPXOmChzAVP5oZfNMgBgqBXSR6U4xuNf8EWq11mAtbjLOzpsw9u
+   7UoPusx8UTLTGeTGGOCJDAng9hW0OkB36COOhPFNmJHf/o8O7ckgORCPr
+   5/eKDckGHf98xajY/fffE8sd28g5L2dFSFPnsXqIei+A3St+z1gqp83hL
+   yGGAHO0B+87k3TnGj6HD7gIdzJ0hG4sXNGQlFB/KQ0S+3x0Rh401C1i0E
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="331785182"
 X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="327216268"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 01:35:41 -0700
+   d="scan'208";a="331785182"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 01:35:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="777063295"
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="752249577"
 X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="777063295"
+   d="scan'208";a="752249577"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Apr 2023 01:35:40 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2023 01:35:40 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pl42t-000TXt-28;
+	id 1pl42t-000TXp-20;
 	Sat, 08 Apr 2023 08:35:39 +0000
-Date: Sat, 8 Apr 2023 16:35:24 +0800
+Date: Sat, 8 Apr 2023 16:35:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dexuan Cui <decui@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dcui-tdx:decui/michaelv7dda/tdx/v4-dda 2/13]
- kernel/dma/swiotlb.c:218:6: warning: variable 'rc' is uninitialized when
- used here
-Message-ID: <202304081648.Ez8xz2eD-lkp@intel.com>
+To: Tze-nan Wu <Tze-nan.Wu@mediatek.com>, rostedt@goodmis.org,
+	mhiramat@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bobule.chang@mediatek.com, wsd_upstream@mediatek.com,
+	Tze-nan.Wu@mediatek.com, stable@vger.kernel.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] ring-buffer: Prevent inconsistent operation on
+ cpu_buffer->resize_disabled
+Message-ID: <202304081615.eiaqpbV8-lkp@intel.com>
+References: <20230408052226.25268-1-Tze-nan.Wu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,67 +54,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230408052226.25268-1-Tze-nan.Wu@mediatek.com>
 
-tree:   https://github.com/dcui/tdx decui/michaelv7dda/tdx/v4-dda
-head:   bb4b60cd5c9d32d52768dd6793aee1fd80d485e7
-commit: 5f96005082ab0b64700bc56838cb283bd1404b5c [2/13] swiotlb: check set_memory_decrypted()'s return value
-config: x86_64-randconfig-r001-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081648.Ez8xz2eD-lkp@intel.com/config)
+Hi Tze-nan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on rostedt-trace/for-next v6.3-rc5 next-20230406]
+[cannot apply to rostedt-trace/for-next-urgent]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tze-nan-Wu/ring-buffer-Prevent-inconsistent-operation-on-cpu_buffer-resize_disabled/20230408-132502
+patch link:    https://lore.kernel.org/r/20230408052226.25268-1-Tze-nan.Wu%40mediatek.com
+patch subject: [PATCH] ring-buffer: Prevent inconsistent operation on cpu_buffer->resize_disabled
+config: x86_64-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081615.eiaqpbV8-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/dcui/tdx/commit/5f96005082ab0b64700bc56838cb283bd1404b5c
-        git remote add dcui-tdx https://github.com/dcui/tdx
-        git fetch --no-tags dcui-tdx decui/michaelv7dda/tdx/v4-dda
-        git checkout 5f96005082ab0b64700bc56838cb283bd1404b5c
+        # https://github.com/intel-lab-lkp/linux/commit/d404bc0af0a4bde3aa20704642d69a78bdc154f8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tze-nan-Wu/ring-buffer-Prevent-inconsistent-operation-on-cpu_buffer-resize_disabled/20230408-132502
+        git checkout d404bc0af0a4bde3aa20704642d69a78bdc154f8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/dma/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081648.Ez8xz2eD-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081615.eiaqpbV8-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/dma/swiotlb.c:218:6: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
-           if (rc) {
-               ^~
-   kernel/dma/swiotlb.c:212:8: note: initialize the variable 'rc' to silence this warning
-           int rc;
-                 ^
-                  = 0
+>> kernel/trace/ring_buffer.c:5359:15: warning: variable 'reset_online_mask' is uninitialized when used here [-Wuninitialized]
+           cpumask_copy(reset_online_mask, cpu_online_mask);
+                        ^~~~~~~~~~~~~~~~~
+   kernel/trace/ring_buffer.c:5353:33: note: initialize the variable 'reset_online_mask' to silence this warning
+           cpumask_var_t reset_online_mask;
+                                          ^
+                                           = NULL
    1 warning generated.
 
 
-vim +/rc +218 kernel/dma/swiotlb.c
+vim +/reset_online_mask +5359 kernel/trace/ring_buffer.c
 
-   201	
-   202	/*
-   203	 * Early SWIOTLB allocation may be too early to allow an architecture to
-   204	 * perform the desired operations.  This function allows the architecture to
-   205	 * call SWIOTLB when the operations are possible.  It needs to be called
-   206	 * before the SWIOTLB memory is used.
-   207	 */
-   208	void __init swiotlb_update_mem_attributes(void)
-   209	{
-   210		struct io_tlb_mem *mem = &io_tlb_default_mem;
-   211		unsigned long bytes;
-   212		int rc;
-   213	
-   214		if (!mem->nslabs || mem->late_alloc)
-   215			return;
-   216		bytes = PAGE_ALIGN(mem->nslabs << IO_TLB_SHIFT);
-   217		set_memory_decrypted((unsigned long)mem->vaddr, bytes >> PAGE_SHIFT);
- > 218		if (rc) {
-   219			pr_err("Failed to decrypt swiotlb buffer (%d): disabling swiotlb!\n",
-   220			       rc);
-   221			mem->nslabs = 0;
-   222			return;
-   223		}
-   224	}
-   225	
+  5344	
+  5345	/**
+  5346	 * ring_buffer_reset_online_cpus - reset a ring buffer per CPU buffer
+  5347	 * @buffer: The ring buffer to reset a per cpu buffer of
+  5348	 * @cpu: The CPU buffer to be reset
+  5349	 */
+  5350	void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
+  5351	{
+  5352		struct ring_buffer_per_cpu *cpu_buffer;
+  5353		cpumask_var_t reset_online_mask;
+  5354		int cpu;
+  5355	
+  5356		/* prevent another thread from changing buffer sizes */
+  5357		mutex_lock(&buffer->mutex);
+  5358	
+> 5359		cpumask_copy(reset_online_mask, cpu_online_mask);
+  5360	
+  5361		for_each_cpu_and(cpu, buffer->cpumask, reset_online_mask) {
+  5362			cpu_buffer = buffer->buffers[cpu];
+  5363	
+  5364			atomic_inc(&cpu_buffer->resize_disabled);
+  5365			atomic_inc(&cpu_buffer->record_disabled);
+  5366		}
+  5367	
+  5368		/* Make sure all commits have finished */
+  5369		synchronize_rcu();
+  5370	
+  5371		for_each_cpu_and(cpu, buffer->cpumask, reset_online_mask) {
+  5372			cpu_buffer = buffer->buffers[cpu];
+  5373	
+  5374			reset_disabled_cpu_buffer(cpu_buffer);
+  5375	
+  5376			atomic_dec(&cpu_buffer->record_disabled);
+  5377			atomic_dec(&cpu_buffer->resize_disabled);
+  5378		}
+  5379	
+  5380		mutex_unlock(&buffer->mutex);
+  5381	}
+  5382	
 
 -- 
 0-DAY CI Kernel Test Service
