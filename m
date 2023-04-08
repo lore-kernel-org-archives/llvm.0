@@ -1,173 +1,113 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785511841;
-	Sat,  8 Apr 2023 09:06:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680944805; x=1712480805;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hpnpvx6xos6iUlaCPN6kP4RigNaZ4dPMBCtAmVawsAM=;
-  b=Gt5SHoKiQ9r5WHoykxi5GCJizfp0zsHwDJmyegzHIunFtXYTXkaqngMW
-   CYysAKK0m4tNf1JBCMmOLCgCVyLSKehqMT9tgTddLdBhNiDzTCA6JmLQT
-   z0X4xJfydsZsdW2ugpHtPYPO/YCF9vNyaDCU7bRtFK1GFfkTOjC75qGFU
-   RYkeAf7gMuQaJHRCo/IvJC+Xpo2tCyDRySpLtS/nzTRwwDO+QJO9CzgmL
-   +ylIPuwC9PgTdI3jovP6tz/2lLv74EyKDfjjVXLed64ihWjH7UURWQwAK
-   hLGWfqo2iXdNC7xvFF6UYI8ncfBT4gWuOgBRxptjCNEvLE0BRB5gKDjl8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="408263406"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="408263406"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 02:06:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="681244371"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="681244371"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Apr 2023 02:06:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pl4Wv-000TZt-25;
-	Sat, 08 Apr 2023 09:06:41 +0000
-Date: Sat, 8 Apr 2023 17:06:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to
- undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202304081740.35UVR4Ai-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31804C2F0
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 09:47:28 +0000 (UTC)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id CD9A0320046E;
+	Sat,  8 Apr 2023 05:47:26 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sat, 08 Apr 2023 05:47:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1680947246; x=1681033646; bh=P+LdaHQqkTUcKyex1fOjk2zirIW4YnB+O3f
+	jG4pV5sk=; b=XyVtyt8dvu918S+oX1JVDVhxv1q7NyseL5qAAAnRCBGcdM+0LVS
+	M2R8THvLW50qMOjaRXFHn4a1OLo/ySA02xfEsl5t80xfGP9x1V4c22nHLVW9r67A
+	O2HakKbNaE2GgZTqjMjz4DZqsRLAi9owp9oNamEAy6C8TTKcHVITcAyOf6EcOChk
+	NPKMUJ1CEsMFwc0pScdW526EJQRlTARer8ygF5+SbJeR6tmLPD1uyUNtWexgLmKi
+	UikueFC2BmS2/egjBnCIfveJUfL1TOD/gTAT27yF7dtrYn/JJY28RRXtKnIyybje
+	ufnIhsvntqsvGBXchrvYuGQfWziZZPDsBig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1680947246; x=1681033646; bh=P+LdaHQqkTUcKyex1fOjk2zirIW4YnB+O3f
+	jG4pV5sk=; b=NKespcM+5pmkDvyzfZ3oc5pUPjiJq8gxEJ7avL1w/HQWxzfIkVz
+	ubVMh0/gE6uH1vT8WMB2y5SbPC0PsjxLuixfc/6glmkkaMBh0RmWtKwiF8RFCpQl
+	2GDUUZ4nRoRKLwbFblTSzM06rHbnqtADqg41yBa/i+/iJd6O9HWt+j8E8XbBQrrI
+	UkFwq63wmdA3s7kGXOUJfPvsmSm/vzmc5pU52pgM6l0fVyvaRFkAGLplvpYFUEfJ
+	nKUvMjcPqPqKwuaQkAFKvRXZwF47HimMH9PbxzVWalJOu0MKYNncUhfeuXVl7+jg
+	GusUA+tA+v4XvVIGZbZjfM2zLwVhpdsFhIQ==
+X-ME-Sender: <xms:LTgxZIn-tQHE-1ZjJHIrEiZkztxz1kJlkrmlXvX8kYlslJhdMy02fQ>
+    <xme:LTgxZH2SbvlEds7Ue2tRUmemTDhWdS0cPU_5V0FKXR7iH_JIbgjs6BfFIfgbDSdXT
+    d12CTT5RM2jcxcUkYk>
+X-ME-Received: <xmr:LTgxZGoFTfSpZNqpKTpo7Mjs4D8N3lZie-80dQbTkQlDxt3FBqh0W9oU1cfYe2qxLdgo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejjedgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:LTgxZEn2Q2ZVrMOzwimCE-iWx0xGaM1I1C6odK3h4who1ZBOgI9_tg>
+    <xmx:LTgxZG03xS9ubmjM-Qu7PaRzaadDmeLN4ygNbZx8s2ZWHP0fApKCbw>
+    <xmx:LTgxZLsjJ6ay7J-2HXo3tduTk2H0m6Wa_DBASb1R-5AmBE0I6xw9sw>
+    <xmx:LjgxZLwl7O7gDuySUxHw61gVwRiaH_zb3FZhKjcv888YzFUDbW71Tw>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 8 Apr 2023 05:47:25 -0400 (EDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi Arnd,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   aa318c48808c0aa73216bd94c54c4553d3663add
-commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
-date:   1 year, 1 month ago
-config: mips-randconfig-r001-20230408 (https://download.01.org/0day-ci/archive/20230408/202304081740.35UVR4Ai-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/cirrus/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081740.35UVR4Ai-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
-   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                                        ^
->> drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^
-   <scratch space>:139:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: initializer element is not a compile-time constant
-   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:139:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
-   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                                        ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: initializer element is not a compile-time constant
-   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:150:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   5 errors generated.
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH 5/5] MIPS: Fallback CPU -march CFLAG to ISA level if
+ unsupported
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <CAKwvOdmNR=c4toqkzR_x7ub+L5j8V5Y1PZFOi8s37YRGj9nfMw@mail.gmail.com>
+Date: Sat, 8 Apr 2023 10:47:13 +0100
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ llvm@lists.linux.dev,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Nathan Chancellor <nathan@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <7A857648-974B-42DA-AF8B-ED982096E847@flygoat.com>
+References: <20230407102721.14814-1-jiaxun.yang@flygoat.com>
+ <20230407102721.14814-6-jiaxun.yang@flygoat.com>
+ <CAKwvOdmNR=c4toqkzR_x7ub+L5j8V5Y1PZFOi8s37YRGj9nfMw@mail.gmail.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+X-Mailer: Apple Mail (2.3731.500.231)
 
 
-vim +/LOCHNAGAR1_ +200 drivers/pinctrl/cirrus/pinctrl-lochnagar.c
 
-0548448b719ac7 Charles Keepax 2019-03-19  199  
-0548448b719ac7 Charles Keepax 2019-03-19 @200  LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-0548448b719ac7 Charles Keepax 2019-03-19  201  LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-0548448b719ac7 Charles Keepax 2019-03-19  202  LN1_PIN_GPIO(CDC_CIF1MODE, "codec-cif1mode", I2C_CTRL, CDC_CIF_MODE, 0);
-0548448b719ac7 Charles Keepax 2019-03-19  203  LN1_PIN_MUX(GF_GPIO2,      "gf-gpio2");
-0548448b719ac7 Charles Keepax 2019-03-19  204  LN1_PIN_MUX(GF_GPIO3,      "gf-gpio3");
-0548448b719ac7 Charles Keepax 2019-03-19  205  LN1_PIN_MUX(GF_GPIO7,      "gf-gpio7");
-0548448b719ac7 Charles Keepax 2019-03-19  206  LN1_PIN_MUX(LED1,          "led1");
-0548448b719ac7 Charles Keepax 2019-03-19  207  LN1_PIN_MUX(LED2,          "led2");
-0548448b719ac7 Charles Keepax 2019-03-19  208  LN1_PIN_AIF(CDC_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  209  LN1_PIN_AIF(CDC_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  210  LN1_PIN_AIF(CDC_AIF3);
-0548448b719ac7 Charles Keepax 2019-03-19  211  LN1_PIN_AIF(DSP_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  212  LN1_PIN_AIF(DSP_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  213  LN1_PIN_AIF(PSIA1);
-0548448b719ac7 Charles Keepax 2019-03-19  214  LN1_PIN_AIF(PSIA2);
-0548448b719ac7 Charles Keepax 2019-03-19  215  LN1_PIN_AIF(SPDIF_AIF);
-0548448b719ac7 Charles Keepax 2019-03-19  216  LN1_PIN_AIF(GF_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  217  LN1_PIN_AIF(GF_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  218  LN1_PIN_AIF(GF_AIF3);
-0548448b719ac7 Charles Keepax 2019-03-19  219  LN1_PIN_AIF(GF_AIF4);
-0548448b719ac7 Charles Keepax 2019-03-19  220  
+> 2023=E5=B9=B44=E6=9C=887=E6=97=A5 23:23=EF=BC=8CNick Desaulniers =
+<ndesaulniers@google.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Fri, Apr 7, 2023 at 3:27=E2=80=AFAM Jiaxun Yang =
+<jiaxun.yang@flygoat.com> wrote:
+>>=20
+>> LLVM does not implement some of -march option. However those march
+>> does not provide any special functionality in most cases, they just
+>> serves as compiler's tuning target.
+>=20
+> Then should we change these then to be in the form:
+>=20
+> -cflags-$(CONFIG_CPU_R3000)     +=3D -march=3Dr3000
+> +cflags-$(CONFIG_CPU_R3000)     +=3D -march=3Dmips1 $(call =
+cc-option,-mtune=3Dr3000)
 
-:::::: The code at line 200 was first introduced by commit
-:::::: 0548448b719ac78fa18fdbcd03856952ba6cc7dc pinctrl: lochnagar: Add support for the Cirrus Logic Lochnagar
+Just tested with GCC and it seems like there are still some difference =
+in generated code
+for -march=3Dr4600 and -march=3Dmips3 -mtune=3Dr4600.
+As I=E2=80=99m unable to test on a real system I=E2=80=99d prefer just =
+leave them as is.
 
-:::::: TO: Charles Keepax <ckeepax@opensource.cirrus.com>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+I=E2=80=99ll try to reword commit message.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks
+Jiaxun
+
+>=20
+> --=20
+> Thanks,
+> ~Nick Desaulniers
+
+
