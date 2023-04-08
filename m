@@ -1,46 +1,47 @@
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D20F1107;
-	Sat,  8 Apr 2023 10:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DAE1847;
+	Sat,  8 Apr 2023 10:38:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680950327; x=1712486327;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eKHqVAL32smantM3k8Lt5d+MUOKLe+OaL0Irr/VIGVA=;
-  b=ZYKUeOx++lCxMX0ixPV8tSm4qXLs09rkgFhJISaudFRvEDHZ4A1O+7b0
-   gn1gX6lHFfgq7YVE4dXRK/Rqn3vPR+go/451s3uPbslAXFnU+n1/qjB4Q
-   A3Fco+h95jMTzixICcRazCZAeyZbeHs7o+UUEGgJojNjmLZvXLTYnBhNr
-   dt+AuprgBbsEhzhFbtUJIpzV4wqxm0xhjgmwuI76P4wH010pYUBsxxrVk
-   JSLVmZrazOJB0HNghdhRqcTMLq33ZP4Er2Nf3Jto+bUXt+hF5RkAUWs2U
-   f1NTWy+Z9FanQF8YvQaVl64RFxCT3vfA0QNirq4HTsfc9N3hLNdz7JrTs
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="344911148"
+  t=1680950333; x=1712486333;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tj/ggpYw50HfAyBFPq7ICd0Kc7tgKVtlkma/BblHx2Y=;
+  b=fMteUlNDmv2Nw3G7d1z29TVFGCYd9nkcKlO/H1x12yPOjhxxrsWQcsqZ
+   ZJtwifZjeIna+48tGVBvmXVGnUe+44oBAjo/q+014Bn6ONhJTyQwGbE6d
+   n0TssVJzTwhEX4PCQ05EKCZK1dhUYzskFKGALKvuz9Mt792bY5tMj5P0i
+   kcb9bQ3MCW1RgfYl7wiOCeNgsiDvH94cCh1jLmKwjw3CExcHGYJ9VFs0w
+   54phoF2883NiGMiYpyRO0hoWnQUPVW0Pd+SU6pfFxPPWMbtxg0o3pKUFP
+   qhe/uaKQr+R1wFsxUI9xfzFYIuWXaw+z8gnb2JEiFPzEwPwgI7pCaqQfD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="344911163"
 X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="344911148"
+   d="scan'208";a="344911163"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 03:38:46 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 03:38:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="665149570"
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="665149579"
 X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="665149570"
+   d="scan'208";a="665149579"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Apr 2023 03:38:43 -0700
+  by orsmga006.jf.intel.com with ESMTP; 08 Apr 2023 03:38:48 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pl5y0-000Tdd-0X;
+	id 1pl5y0-000Tdf-0b;
 	Sat, 08 Apr 2023 10:38:44 +0000
-Date: Sat, 8 Apr 2023 18:38:34 +0800
+Date: Sat, 8 Apr 2023 18:38:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Robert Elliott <elliott@hpe.com>
+To: Deepanshu Kartikey <kartikey406@gmail.com>, gregkh@linuxfoundation.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Herbert Xu <herbert@gondor.apana.org.au>
-Subject: arch/arm/crypto/sha1_neon_glue.c:43:8: warning: cast from 'void
- (*)(void *, const char *, unsigned int)' to 'sha1_block_fn *' (aka 'void
- (*)(struct sha1_state *, const unsigned char *, int)') converts to
- incompatible function type
-Message-ID: <202304081828.zjGcFUyE-lkp@intel.com>
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Deepanshu Kartikey <kartikey406@gmail.com>
+Subject: Re: [PATCH] Staging: fbtft: fbtft-bus: fixed extra space and
+ parenthesis issue
+Message-ID: <202304081830.7kKqUkLL-lkp@intel.com>
+References: <20230408050323.70919-1-kartikey406@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,100 +50,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230408050323.70919-1-kartikey406@gmail.com>
 
-Hi Robert,
+Hi Deepanshu,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   aa318c48808c0aa73216bd94c54c4553d3663add
-commit: 4a329fecc9aaebb27a53fa7abfa53bbc2ee42f3f crypto: Kconfig - submenus for arm and arm64
-date:   8 months ago
-config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20230408/202304081828.zjGcFUyE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+[auto build test ERROR on staging/staging-testing]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Deepanshu-Kartikey/Staging-fbtft-fbtft-bus-fixed-extra-space-and-parenthesis-issue/20230408-130429
+patch link:    https://lore.kernel.org/r/20230408050323.70919-1-kartikey406%40gmail.com
+patch subject: [PATCH] Staging: fbtft: fbtft-bus: fixed extra space and parenthesis issue
+config: i386-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081830.7kKqUkLL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4a329fecc9aaebb27a53fa7abfa53bbc2ee42f3f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4a329fecc9aaebb27a53fa7abfa53bbc2ee42f3f
+        # https://github.com/intel-lab-lkp/linux/commit/a5c79ed6665465f3101e8251ca030a600cf1ea88
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Deepanshu-Kartikey/Staging-fbtft-fbtft-bus-fixed-extra-space-and-parenthesis-issue/20230408-130429
+        git checkout a5c79ed6665465f3101e8251ca030a600cf1ea88
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/boot/compressed/ arch/arm/crypto/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081828.zjGcFUyE-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081830.7kKqUkLL-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/arm/crypto/sha1_neon_glue.c:43:8: warning: cast from 'void (*)(void *, const char *, unsigned int)' to 'sha1_block_fn *' (aka 'void (*)(struct sha1_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-                               (sha1_block_fn *)sha1_transform_neon);
-                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm/crypto/sha1_neon_glue.c:58:9: warning: cast from 'void (*)(void *, const char *, unsigned int)' to 'sha1_block_fn *' (aka 'void (*)(struct sha1_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-                                       (sha1_block_fn *)sha1_transform_neon);
-                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm/crypto/sha1_neon_glue.c:59:30: warning: cast from 'void (*)(void *, const char *, unsigned int)' to 'sha1_block_fn *' (aka 'void (*)(struct sha1_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-           sha1_base_do_finalize(desc, (sha1_block_fn *)sha1_transform_neon);
-                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings generated.
---
->> arch/arm/crypto/sha256_neon_glue.c:38:4: warning: cast from 'void (*)(u32 *, const void *, unsigned int)' (aka 'void (*)(unsigned int *, const void *, unsigned int)') to 'sha256_block_fn *' (aka 'void (*)(struct sha256_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-                           (sha256_block_fn *)sha256_block_data_order_neon);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm/crypto/sha256_neon_glue.c:53:4: warning: cast from 'void (*)(u32 *, const void *, unsigned int)' (aka 'void (*)(unsigned int *, const void *, unsigned int)') to 'sha256_block_fn *' (aka 'void (*)(struct sha256_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-                           (sha256_block_fn *)sha256_block_data_order_neon);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm/crypto/sha256_neon_glue.c:55:4: warning: cast from 'void (*)(u32 *, const void *, unsigned int)' (aka 'void (*)(unsigned int *, const void *, unsigned int)') to 'sha256_block_fn *' (aka 'void (*)(struct sha256_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-                           (sha256_block_fn *)sha256_block_data_order_neon);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings generated.
---
->> arch/arm/crypto/sha512-neon-glue.c:37:3: warning: cast from 'void (*)(u64 *, const u8 *, int)' (aka 'void (*)(unsigned long long *, const unsigned char *, int)') to 'sha512_block_fn *' (aka 'void (*)(struct sha512_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-                   (sha512_block_fn *)sha512_block_data_order_neon);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm/crypto/sha512-neon-glue.c:52:4: warning: cast from 'void (*)(u64 *, const u8 *, int)' (aka 'void (*)(unsigned long long *, const unsigned char *, int)') to 'sha512_block_fn *' (aka 'void (*)(struct sha512_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-                           (sha512_block_fn *)sha512_block_data_order_neon);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm/crypto/sha512-neon-glue.c:54:3: warning: cast from 'void (*)(u64 *, const u8 *, int)' (aka 'void (*)(unsigned long long *, const unsigned char *, int)') to 'sha512_block_fn *' (aka 'void (*)(struct sha512_state *, const unsigned char *, int)') converts to incompatible function type [-Wcast-function-type-strict]
-                   (sha512_block_fn *)sha512_block_data_order_neon);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings generated.
+>> drivers/staging/fbtft/fbtft-bus.c:65:53: error: too few arguments provided to function-like macro invocation
+   define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
+                                                       ^
+   drivers/staging/fbtft/fbtft-bus.c:14:9: note: macro 'define_fbtft_write_reg' defined here
+   #define define_fbtft_write_reg(func, buffer_type, data_type, modifier)        \
+           ^
+>> drivers/staging/fbtft/fbtft-bus.c:65:1: error: unknown type name 'define_fbtft_write_reg'
+   define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
+   ^
+   drivers/staging/fbtft/fbtft-bus.c:67:57: error: too few arguments provided to function-like macro invocation
+   define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
+                                                           ^
+   drivers/staging/fbtft/fbtft-bus.c:14:9: note: macro 'define_fbtft_write_reg' defined here
+   #define define_fbtft_write_reg(func, buffer_type, data_type, modifier)        \
+           ^
+   drivers/staging/fbtft/fbtft-bus.c:67:1: error: unknown type name 'define_fbtft_write_reg'
+   define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
+   ^
+>> drivers/staging/fbtft/fbtft-bus.c:86:3: error: non-void function 'fbtft_write_reg8_bus9' should return a value [-Wreturn-type]
+                   return;
+                   ^
+   drivers/staging/fbtft/fbtft-bus.c:109:3: error: non-void function 'fbtft_write_reg8_bus9' should return a value [-Wreturn-type]
+                   return;
+                   ^
+   6 errors generated.
 
 
-vim +43 arch/arm/crypto/sha1_neon_glue.c
+vim +65 drivers/staging/fbtft/fbtft-bus.c
 
-604682551aa511e Jussi Kivilinna 2014-07-29  28  
-604682551aa511e Jussi Kivilinna 2014-07-29  29  asmlinkage void sha1_transform_neon(void *state_h, const char *data,
-604682551aa511e Jussi Kivilinna 2014-07-29  30  				    unsigned int rounds);
-604682551aa511e Jussi Kivilinna 2014-07-29  31  
-604682551aa511e Jussi Kivilinna 2014-07-29  32  static int sha1_neon_update(struct shash_desc *desc, const u8 *data,
-604682551aa511e Jussi Kivilinna 2014-07-29  33  			  unsigned int len)
-604682551aa511e Jussi Kivilinna 2014-07-29  34  {
-604682551aa511e Jussi Kivilinna 2014-07-29  35  	struct sha1_state *sctx = shash_desc_ctx(desc);
-604682551aa511e Jussi Kivilinna 2014-07-29  36  
-99680c5e9182945 Eric Biggers    2019-03-12  37  	if (!crypto_simd_usable() ||
-51e515faa887e40 Ard Biesheuvel  2015-04-09  38  	    (sctx->count % SHA1_BLOCK_SIZE) + len < SHA1_BLOCK_SIZE)
-51e515faa887e40 Ard Biesheuvel  2015-04-09  39  		return sha1_update_arm(desc, data, len);
-604682551aa511e Jussi Kivilinna 2014-07-29  40  
-604682551aa511e Jussi Kivilinna 2014-07-29  41  	kernel_neon_begin();
-51e515faa887e40 Ard Biesheuvel  2015-04-09  42  	sha1_base_do_update(desc, data, len,
-51e515faa887e40 Ard Biesheuvel  2015-04-09 @43  			    (sha1_block_fn *)sha1_transform_neon);
-604682551aa511e Jussi Kivilinna 2014-07-29  44  	kernel_neon_end();
-604682551aa511e Jussi Kivilinna 2014-07-29  45  
-604682551aa511e Jussi Kivilinna 2014-07-29  46  	return 0;
-604682551aa511e Jussi Kivilinna 2014-07-29  47  }
-604682551aa511e Jussi Kivilinna 2014-07-29  48  
-
-:::::: The code at line 43 was first introduced by commit
-:::::: 51e515faa887e40e7e30a3e13607ea6be418e4c4 crypto: arm/sha1_neon - move SHA-1 NEON implementation to base layer
-
-:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+    64	
+  > 65	define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
+    66	define_fbtft_write_reg(fbtft_write_reg16_bus8, __be16, u16, cpu_to_be16)
+  > 67	define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
+    68	
+    69	void fbtft_write_reg8_bus9(struct fbtft_par *par, int len, ...)
+    70	{
+    71		va_list args;
+    72		int i, ret;
+    73		int pad = 0;
+    74		u16 *buf = (u16 *)par->buf;
+    75	
+    76		if (unlikely(par->debug & DEBUG_WRITE_REGISTER)) {
+    77			va_start(args, len);
+    78			for (i = 0; i < len; i++)
+    79				*(((u8 *)buf) + i) = (u8)va_arg(args, unsigned int);
+    80			va_end(args);
+    81			fbtft_par_dbg_hex(DEBUG_WRITE_REGISTER, par,
+    82					  par->info->device, u8, buf, len, "%s: ",
+    83					  __func__);
+    84		}
+    85		if (len <= 0)
+  > 86			return;
+    87	
+    88		if (par->spi && (par->spi->bits_per_word == 8)) {
+    89			/* we're emulating 9-bit, pad start of buffer with no-ops
+    90			 * (assuming here that zero is a no-op)
+    91			 */
+    92			pad = (len % 4) ? 4 - (len % 4) : 0;
+    93			for (i = 0; i < pad; i++)
+    94				*buf++ = 0x000;
+    95		}
+    96	
+    97		va_start(args, len);
+    98		*buf++ = (u8)va_arg(args, unsigned int);
+    99		i = len - 1;
+   100		while (i--) {
+   101			*buf = (u8)va_arg(args, unsigned int);
+   102			*buf++ |= 0x100; /* dc=1 */
+   103		}
+   104		va_end(args);
+   105		ret = par->fbtftops.write(par, par->buf, (len + pad) * sizeof(u16));
+   106		if (ret < 0) {
+   107			dev_err(par->info->device,
+   108				"write() failed and returned %d\n", ret);
+   109			return;
+   110		}
+   111	}
+   112	EXPORT_SYMBOL(fbtft_write_reg8_bus9);
+   113	
 
 -- 
 0-DAY CI Kernel Test Service
