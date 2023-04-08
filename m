@@ -1,113 +1,236 @@
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31804C2F0
-	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 09:47:28 +0000 (UTC)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id CD9A0320046E;
-	Sat,  8 Apr 2023 05:47:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sat, 08 Apr 2023 05:47:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1680947246; x=1681033646; bh=P+LdaHQqkTUcKyex1fOjk2zirIW4YnB+O3f
-	jG4pV5sk=; b=XyVtyt8dvu918S+oX1JVDVhxv1q7NyseL5qAAAnRCBGcdM+0LVS
-	M2R8THvLW50qMOjaRXFHn4a1OLo/ySA02xfEsl5t80xfGP9x1V4c22nHLVW9r67A
-	O2HakKbNaE2GgZTqjMjz4DZqsRLAi9owp9oNamEAy6C8TTKcHVITcAyOf6EcOChk
-	NPKMUJ1CEsMFwc0pScdW526EJQRlTARer8ygF5+SbJeR6tmLPD1uyUNtWexgLmKi
-	UikueFC2BmS2/egjBnCIfveJUfL1TOD/gTAT27yF7dtrYn/JJY28RRXtKnIyybje
-	ufnIhsvntqsvGBXchrvYuGQfWziZZPDsBig==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1680947246; x=1681033646; bh=P+LdaHQqkTUcKyex1fOjk2zirIW4YnB+O3f
-	jG4pV5sk=; b=NKespcM+5pmkDvyzfZ3oc5pUPjiJq8gxEJ7avL1w/HQWxzfIkVz
-	ubVMh0/gE6uH1vT8WMB2y5SbPC0PsjxLuixfc/6glmkkaMBh0RmWtKwiF8RFCpQl
-	2GDUUZ4nRoRKLwbFblTSzM06rHbnqtADqg41yBa/i+/iJd6O9HWt+j8E8XbBQrrI
-	UkFwq63wmdA3s7kGXOUJfPvsmSm/vzmc5pU52pgM6l0fVyvaRFkAGLplvpYFUEfJ
-	nKUvMjcPqPqKwuaQkAFKvRXZwF47HimMH9PbxzVWalJOu0MKYNncUhfeuXVl7+jg
-	GusUA+tA+v4XvVIGZbZjfM2zLwVhpdsFhIQ==
-X-ME-Sender: <xms:LTgxZIn-tQHE-1ZjJHIrEiZkztxz1kJlkrmlXvX8kYlslJhdMy02fQ>
-    <xme:LTgxZH2SbvlEds7Ue2tRUmemTDhWdS0cPU_5V0FKXR7iH_JIbgjs6BfFIfgbDSdXT
-    d12CTT5RM2jcxcUkYk>
-X-ME-Received: <xmr:LTgxZGoFTfSpZNqpKTpo7Mjs4D8N3lZie-80dQbTkQlDxt3FBqh0W9oU1cfYe2qxLdgo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejjedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:LTgxZEn2Q2ZVrMOzwimCE-iWx0xGaM1I1C6odK3h4who1ZBOgI9_tg>
-    <xmx:LTgxZG03xS9ubmjM-Qu7PaRzaadDmeLN4ygNbZx8s2ZWHP0fApKCbw>
-    <xmx:LTgxZLsjJ6ay7J-2HXo3tduTk2H0m6Wa_DBASb1R-5AmBE0I6xw9sw>
-    <xmx:LjgxZLwl7O7gDuySUxHw61gVwRiaH_zb3FZhKjcv888YzFUDbW71Tw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 8 Apr 2023 05:47:25 -0400 (EDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52EF5C2F1;
+	Sat,  8 Apr 2023 09:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680947868; x=1712483868;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yVhRaml7AsllbdxM7IiG7fKmnog0vHKgWdc+YYx0oMQ=;
+  b=PWKHUBG08ZNP+7uBcR/7PfFioiISN1ZZ8M2bR8oDyLbUjb3NEq19Ij5i
+   mG3ix+zulARYACYCUPen0eIErQr4beB9/FF/zSqMq6mOy9nJQTomJvthp
+   2czrLagZEmdN58oVD2FkUrjs75s1HPVr7fnd9MyX+eyeNKK3ZvxJVQl4R
+   qHZCPXpHYYRS3dk+XUaDl3pWOJBpmpqYXHxQWMoCuMN9reVyqnviHpRgl
+   BtzbEMyxGT8XtKq68xt9mY834tAzX+2ifwRl7dakikB+Mnn0eGaNhRCpt
+   Q/WSX8QCOOdggArIRLG6lSqH6ivEIKFh1ZP4iZ8c1O14bP+SpvAhME3tk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="429414072"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="429414072"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 02:57:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="756952505"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="756952505"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2023 02:57:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pl5KJ-000Tbr-0L;
+	Sat, 08 Apr 2023 09:57:43 +0000
+Date: Sat, 8 Apr 2023 17:57:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chen Aotian <chenaotian2@163.com>, alex.aring@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	stefan@datenfreihafen.org, miquel.raynal@bootlin.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-wpan@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Chen Aotian <chenaotian2@163.com>
+Subject: Re: [PATH wpan v2] ieee802154: hwsim: Fix possible memory leaks
+Message-ID: <202304081742.rOfPXJln-lkp@intel.com>
+References: <20230408081934.54002-1-chenaotian2@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 5/5] MIPS: Fallback CPU -march CFLAG to ISA level if
- unsupported
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <CAKwvOdmNR=c4toqkzR_x7ub+L5j8V5Y1PZFOi8s37YRGj9nfMw@mail.gmail.com>
-Date: Sat, 8 Apr 2023 10:47:13 +0100
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- llvm@lists.linux.dev,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Nathan Chancellor <nathan@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7A857648-974B-42DA-AF8B-ED982096E847@flygoat.com>
-References: <20230407102721.14814-1-jiaxun.yang@flygoat.com>
- <20230407102721.14814-6-jiaxun.yang@flygoat.com>
- <CAKwvOdmNR=c4toqkzR_x7ub+L5j8V5Y1PZFOi8s37YRGj9nfMw@mail.gmail.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-X-Mailer: Apple Mail (2.3731.500.231)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230408081934.54002-1-chenaotian2@163.com>
+
+Hi Chen,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+[also build test ERROR on net/main linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Aotian/ieee802154-hwsim-Fix-possible-memory-leaks/20230408-162130
+patch link:    https://lore.kernel.org/r/20230408081934.54002-1-chenaotian2%40163.com
+patch subject: [PATH wpan v2] ieee802154: hwsim: Fix possible memory leaks
+config: hexagon-randconfig-r015-20230406 (https://download.01.org/0day-ci/archive/20230408/202304081742.rOfPXJln-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1a9fcf2d1438f9603039670041da5ed90471a4e5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chen-Aotian/ieee802154-hwsim-Fix-possible-memory-leaks/20230408-162130
+        git checkout 1a9fcf2d1438f9603039670041da5ed90471a4e5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ieee802154/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081742.rOfPXJln-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/net/ieee802154/mac802154_hwsim.c:17:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/net/ieee802154/mac802154_hwsim.c:17:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/ieee802154/mac802154_hwsim.c:17:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/net/ieee802154/mac802154_hwsim.c:727:21: error: incompatible pointer types passing 'struct mutex *' to parameter of type 'const struct lockdep_map *' [-Werror,-Wincompatible-pointer-types]
+                                                           lock_is_held(&hwsim_phys_lock));
+                                                                        ^~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:542:60: note: expanded from macro 'rcu_replace_pointer'
+           typeof(ptr) __tmp = rcu_dereference_protected((rcu_ptr), (c));  \
+                                                                     ^
+   include/linux/rcupdate.h:673:54: note: expanded from macro 'rcu_dereference_protected'
+           __rcu_dereference_protected((p), __UNIQUE_ID(rcu), (c), __rcu)
+                                                               ^
+   include/linux/rcupdate.h:469:21: note: expanded from macro '__rcu_dereference_protected'
+           RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
+                              ^
+   include/linux/rcupdate.h:389:39: note: expanded from macro 'RCU_LOCKDEP_WARN'
+                   if (debug_lockdep_rcu_enabled() && (c) &&               \
+                                                       ^
+   include/linux/lockdep.h:281:58: note: passing argument to parameter 'lock' here
+   static inline int lock_is_held(const struct lockdep_map *lock)
+                                                            ^
+   6 warnings and 1 error generated.
 
 
+vim +727 drivers/net/ieee802154/mac802154_hwsim.c
 
-> 2023=E5=B9=B44=E6=9C=887=E6=97=A5 23:23=EF=BC=8CNick Desaulniers =
-<ndesaulniers@google.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Fri, Apr 7, 2023 at 3:27=E2=80=AFAM Jiaxun Yang =
-<jiaxun.yang@flygoat.com> wrote:
->>=20
->> LLVM does not implement some of -march option. However those march
->> does not provide any special functionality in most cases, they just
->> serves as compiler's tuning target.
->=20
-> Then should we change these then to be in the form:
->=20
-> -cflags-$(CONFIG_CPU_R3000)     +=3D -march=3Dr3000
-> +cflags-$(CONFIG_CPU_R3000)     +=3D -march=3Dmips1 $(call =
-cc-option,-mtune=3Dr3000)
+   684	
+   685	static int hwsim_set_edge_lqi(struct sk_buff *msg, struct genl_info *info)
+   686	{
+   687		struct nlattr *edge_attrs[MAC802154_HWSIM_EDGE_ATTR_MAX + 1];
+   688		struct hwsim_edge_info *einfo, *einfo_old;
+   689		struct hwsim_phy *phy_v0;
+   690		struct hwsim_edge *e;
+   691		u32 v0, v1;
+   692		u8 lqi;
+   693	
+   694		if (!info->attrs[MAC802154_HWSIM_ATTR_RADIO_ID] ||
+   695		    !info->attrs[MAC802154_HWSIM_ATTR_RADIO_EDGE])
+   696			return -EINVAL;
+   697	
+   698		if (nla_parse_nested_deprecated(edge_attrs, MAC802154_HWSIM_EDGE_ATTR_MAX, info->attrs[MAC802154_HWSIM_ATTR_RADIO_EDGE], hwsim_edge_policy, NULL))
+   699			return -EINVAL;
+   700	
+   701		if (!edge_attrs[MAC802154_HWSIM_EDGE_ATTR_ENDPOINT_ID] ||
+   702		    !edge_attrs[MAC802154_HWSIM_EDGE_ATTR_LQI])
+   703			return -EINVAL;
+   704	
+   705		v0 = nla_get_u32(info->attrs[MAC802154_HWSIM_ATTR_RADIO_ID]);
+   706		v1 = nla_get_u32(edge_attrs[MAC802154_HWSIM_EDGE_ATTR_ENDPOINT_ID]);
+   707		lqi = nla_get_u8(edge_attrs[MAC802154_HWSIM_EDGE_ATTR_LQI]);
+   708	
+   709		mutex_lock(&hwsim_phys_lock);
+   710		phy_v0 = hwsim_get_radio_by_id(v0);
+   711		if (!phy_v0) {
+   712			mutex_unlock(&hwsim_phys_lock);
+   713			return -ENOENT;
+   714		}
+   715	
+   716		einfo = kzalloc(sizeof(*einfo), GFP_KERNEL);
+   717		if (!einfo) {
+   718			mutex_unlock(&hwsim_phys_lock);
+   719			return -ENOMEM;
+   720		}
+   721	
+   722		rcu_read_lock();
+   723		list_for_each_entry_rcu(e, &phy_v0->edges, list) {
+   724			if (e->endpoint->idx == v1) {
+   725				einfo->lqi = lqi;
+   726				einfo_old = rcu_replace_pointer(e->info, einfo,
+ > 727								lock_is_held(&hwsim_phys_lock));
+   728				rcu_read_unlock();
+   729				kfree_rcu(einfo_old, rcu);
+   730				mutex_unlock(&hwsim_phys_lock);
+   731				return 0;
+   732			}
+   733		}
+   734		rcu_read_unlock();
+   735	
+   736		kfree(einfo);
+   737		mutex_unlock(&hwsim_phys_lock);
+   738	
+   739		return -ENOENT;
+   740	}
+   741	
 
-Just tested with GCC and it seems like there are still some difference =
-in generated code
-for -march=3Dr4600 and -march=3Dmips3 -mtune=3Dr4600.
-As I=E2=80=99m unable to test on a real system I=E2=80=99d prefer just =
-leave them as is.
-
-I=E2=80=99ll try to reword commit message.
-
-Thanks
-Jiaxun
-
->=20
-> --=20
-> Thanks,
-> ~Nick Desaulniers
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
