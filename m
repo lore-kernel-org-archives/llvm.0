@@ -1,45 +1,43 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D97136F;
-	Sat,  8 Apr 2023 01:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8647415A0;
+	Sat,  8 Apr 2023 03:38:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680917725; x=1712453725;
+  t=1680925108; x=1712461108;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fkKv7QrgbrL1+nAO+XJmQtEgJNzzljQKbPjTlZu7Kls=;
-  b=Mk4TrPgqe+PXFh0ilwBbQNdy/01hyIF/wlqIpsxRRlPw/9CixQ/bRf5u
-   oDYX8RLH/3TWmo3fd9pyvvm36j7FHlt8CbpRFxFIHUuIaQTyTSGO6wRt9
-   PA6To8ZgrltjozwQIpjf7wqAlu7UEPXOiG0xh1nyOpqsvbDgTN1djX3tc
-   OFXDKQvPqybqJAjpPu3PehB35LmkfLhIuGlwo4U57L92UTr7xZbQS8y85
-   Kj74sWe/xGRwuqvwG095QtFhjKKGHmrpf4lsXw3h2ocimo8PmelJs4JZQ
-   dIogRg+Ue+dp6EvqNoGE8FvFaSlbO4gkpKH5TnwPUNwyDxYv/rIE9NOJM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="340584760"
+  bh=xnO0sDPl1HQzTQIUjCRe8kSlZAJ1tELSqKn2OfnckgA=;
+  b=HbT7dt4Pi/ps9/+FE9wDpjIcX6zh3r1he1ovy53kahuWD9PTAW82jU6p
+   bO/DTc82iEbw6NqhYh5Ov02DW4+du60e/hDhjAs+Wr/rhIb5oAHug1m3L
+   uJzL4405Uny7jNeyOpsXwzKmDd8oDXwWRbSKlmkhU6PvXfeJIx0GAQ5Ce
+   UFjlaZhft68fPHzu3edz8FwahwYO4x4hIfX6BNDfJixzt6yirqG82kd1c
+   Xuj9CwKmSqujwRleEYmPe4b63nXVTvnKhwC4IOP2yNmrhoMT6w9oebKb0
+   pWpTerD4eJXfgtoNDGEYTX9WPDrkv3wwzhh3S35KCAFwIN7C6YTLByEGi
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="405933301"
 X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="340584760"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 18:35:21 -0700
+   d="scan'208";a="405933301"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 20:38:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="752190165"
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="811589947"
 X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="752190165"
+   d="scan'208";a="811589947"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Apr 2023 18:35:19 -0700
+  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2023 20:38:26 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pkxU6-000T8L-2k;
-	Sat, 08 Apr 2023 01:35:18 +0000
-Date: Sat, 8 Apr 2023 09:35:14 +0800
+	id 1pkzPG-000TFx-06;
+	Sat, 08 Apr 2023 03:38:26 +0000
+Date: Sat, 8 Apr 2023 11:38:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yogesh Lal <quic_ylal@quicinc.com>
+To: Anup Patel <apatel@ventanamicro.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Bjorn Andersson <andersson@kernel.org>,
-	Sibi Sankar <quic_sibis@quicinc.com>
-Subject: drivers/remoteproc/qcom_q6v5_pas.c:108:6: warning: no previous
- prototype for function 'adsp_segment_dump'
-Message-ID: <202304080914.Ps91Sn8x-lkp@intel.com>
+	Andrew Jones <ajones@ventanamicro.com>
+Subject: [avpatel:riscv_kvm_aia_csr_v4 19/20] arch/riscv/kvm/aia.c:67:3:
+ error: expected ')'
+Message-ID: <202304081121.tuXRhkCT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,67 +47,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Yogesh,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   aa318c48808c0aa73216bd94c54c4553d3663add
-commit: a376c10d45a8e6ee5ea55791193f90625b35e156 remoteproc: qcom: pas: Adjust the phys addr wrt the mem region
-date:   7 weeks ago
-config: arm-randconfig-r046-20230407 (https://download.01.org/0day-ci/archive/20230408/202304080914.Ps91Sn8x-lkp@intel.com/config)
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_csr_v4
+head:   10a633664c6222e488f960ad5e20823853c085e0
+commit: 07b94e72a68ca6f3ea93dbc2e419de440467bd35 [19/20] RISC-V: KVM: Virtualize per-HART AIA CSRs
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20230408/202304081121.tuXRhkCT-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a376c10d45a8e6ee5ea55791193f90625b35e156
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a376c10d45a8e6ee5ea55791193f90625b35e156
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/avpatel/linux/commit/07b94e72a68ca6f3ea93dbc2e419de440467bd35
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_kvm_aia_csr_v4
+        git checkout 07b94e72a68ca6f3ea93dbc2e419de440467bd35
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304080914.Ps91Sn8x-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081121.tuXRhkCT-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/remoteproc/qcom_q6v5_pas.c:108:6: warning: no previous prototype for function 'adsp_segment_dump' [-Wmissing-prototypes]
-   void adsp_segment_dump(struct rproc *rproc, struct rproc_dump_segment *segment,
-        ^
-   drivers/remoteproc/qcom_q6v5_pas.c:108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void adsp_segment_dump(struct rproc *rproc, struct rproc_dump_segment *segment,
-   ^
-   static 
-   1 warning generated.
+>> arch/riscv/kvm/aia.c:67:3: error: expected ')'
+                   return true;
+                   ^
+   arch/riscv/kvm/aia.c:65:5: note: to match this '('
+           if (READ_ONCE(vcpu->arch.irqs_pending[1]) &
+              ^
+   1 error generated.
 
 
-vim +/adsp_segment_dump +108 drivers/remoteproc/qcom_q6v5_pas.c
+vim +67 arch/riscv/kvm/aia.c
 
-   107	
- > 108	void adsp_segment_dump(struct rproc *rproc, struct rproc_dump_segment *segment,
-   109			       void *dest, size_t offset, size_t size)
-   110	{
-   111		struct qcom_adsp *adsp = rproc->priv;
-   112		int total_offset;
-   113	
-   114		total_offset = segment->da + segment->offset + offset - adsp->mem_phys;
-   115		if (total_offset < 0 || total_offset + size > adsp->mem_size) {
-   116			dev_err(adsp->dev,
-   117				"invalid copy request for segment %pad with offset %zu and size %zu)\n",
-   118				&segment->da, offset, size);
-   119			memset(dest, 0xff, size);
-   120			return;
-   121		}
-   122	
-   123		memcpy_fromio(dest, adsp->mem_region + total_offset, size);
-   124	}
-   125	
+    56	
+    57	bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
+    58	{
+    59		unsigned long seip;
+    60	
+    61		if (!kvm_riscv_aia_available())
+    62			return false;
+    63	
+    64	#ifdef CONFIG_32BIT
+    65		if (READ_ONCE(vcpu->arch.irqs_pending[1]) &
+    66		    (vcpu->arch.aia_context.guest_csr.vsieh & upper_32_bits(mask))
+  > 67			return true;
+    68	#endif
+    69	
+    70		seip = vcpu->arch.guest_csr.vsie;
+    71		seip &= (unsigned long)mask;
+    72		seip &= BIT(IRQ_S_EXT);
+    73	
+    74		if (!kvm_riscv_aia_initialized(vcpu->kvm) || !seip)
+    75			return false;
+    76	
+    77		return false;
+    78	}
+    79	
 
 -- 
 0-DAY CI Kernel Test Service
