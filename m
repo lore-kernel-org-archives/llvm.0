@@ -1,42 +1,51 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABD615A4;
-	Sat,  8 Apr 2023 03:38:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6398C17C0;
+	Sat,  8 Apr 2023 04:09:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680925111; x=1712461111;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+oztJTWwYt3X0/EYAgkC+nX2yjwtrPqRKC5U7BhGYT4=;
-  b=hg2sj1lOOMZAZRhHzGgNedAWdu4XwkIQL3dnihVHTdCdlygt0XcqVnMk
-   3G+nNWIaddR9qKNp6mbItR8JDs5TQySSQ7Lf9J7Scn7ctQHI5Df95gAwF
-   mgGb7I3ytX3t+H0kjkyg+cY+zzYGMKEfptRL2v/tn7fUYFfa3JxeQVwtR
-   kwYkgbss2rPVBLNrIsZ1/+i16wX4/wJxluijwvurV19jEjg2OGY8KbXkG
-   5k4XGChMiKlY4jeQb/BGXrzze9xMYl3O7JDYpsG5Avzp0iXMcrGLBj0Vh
-   LXtX7bivFghf/y/BgayhWapsfr0Z8koFayzQtgB5WtFlVaaG3rvKE2LZZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="405933302"
+  t=1680926980; x=1712462980;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I85LnZNyBLif63Nt+7CkFxtYuaxsLLp2R4nv7/uIJo0=;
+  b=jRAGIUYcmmsMnShR9r74UKpGLm6gbLxIwQH7i91IJ7C6QG4Y+RKUDlKk
+   IWibkDXYBghfJmyGySAS0FAA4XvU232lEZ+Y94qMN57boUZ09FW9OVm7j
+   jxcpm8xKUFVNEn09G4cvbuaU+iMuHDaosBLRKvfAOZa1j3Ga1Hgk6J6uN
+   3YLt9iN8FKzbeC4+ChOu1JeeLmC/C1Krx1SInp/K1UpOpM25+DwIS1cnT
+   3XmO+epC/nAaNtt2hG3sgQOSKiBA1feZIpHAKtefHBqjWnhIDBqEIz1s5
+   eBzf/qv1cqzLO+Yh3MY5KK3e0+y2wqWXxSoa+RaEAPG/t5f6dyN9DRwId
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="341861523"
 X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="405933302"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 20:38:28 -0700
+   d="scan'208";a="341861523"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 21:09:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="811589948"
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="831368603"
 X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="811589948"
+   d="scan'208";a="831368603"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2023 20:38:26 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 07 Apr 2023 21:09:28 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pkzPG-000TFz-0B;
-	Sat, 08 Apr 2023 03:38:26 +0000
-Date: Sat, 8 Apr 2023 11:38:17 +0800
+	id 1pkztH-000TIP-1p;
+	Sat, 08 Apr 2023 04:09:27 +0000
+Date: Sat, 8 Apr 2023 12:09:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [pablo-gtp:main 5/5] drivers/net/gtp.c:1225:13: error: no member
- named 'local_ip6' in 'struct udp_port_cfg'
-Message-ID: <202304081142.M3PPnGma-lkp@intel.com>
+To: Lyude Paul <lyude@redhat.com>, dri-devel@lists.freedesktop.org,
+	nouveau@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Karol Herbst <kherbst@redhat.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	Ben Skeggs <bskeggs@redhat.com>, Dave Airlie <airlied@redhat.com>,
+	Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 2/2] drm/nouveau/kms: Add INHERIT ioctl to nvkm/nvif for
+ reading IOR state
+Message-ID: <202304081129.AMXCmyn2-lkp@intel.com>
+References: <20230407222133.1425969-2-lyude@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,58 +54,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230407222133.1425969-2-lyude@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pablo/gtp.git main
-head:   371016d821b96636a0a571bc8cabb7048369daa7
-commit: 371016d821b96636a0a571bc8cabb7048369daa7 [5/5] gtp: add IPv6 support
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230408/202304081142.M3PPnGma-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Lyude,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lyude-Paul/drm-nouveau-kms-Add-INHERIT-ioctl-to-nvkm-nvif-for-reading-IOR-state/20230408-062329
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230407222133.1425969-2-lyude%40redhat.com
+patch subject: [PATCH 2/2] drm/nouveau/kms: Add INHERIT ioctl to nvkm/nvif for reading IOR state
+config: arm64-buildonly-randconfig-r001-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081129.AMXCmyn2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/pablo/gtp.git/commit/?id=371016d821b96636a0a571bc8cabb7048369daa7
-        git remote add pablo-gtp https://git.kernel.org/pub/scm/linux/kernel/git/pablo/gtp.git
-        git fetch --no-tags pablo-gtp main
-        git checkout 371016d821b96636a0a571bc8cabb7048369daa7
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/a3d963915cf6f2d87b57146f7bc57a6a89d90cf6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lyude-Paul/drm-nouveau-kms-Add-INHERIT-ioctl-to-nvkm-nvif-for-reading-IOR-state/20230408-062329
+        git checkout a3d963915cf6f2d87b57146f7bc57a6a89d90cf6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081142.M3PPnGma-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081129.AMXCmyn2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/gtp.c:1225:13: error: no member named 'local_ip6' in 'struct udp_port_cfg'
-                   udp_conf->local_ip6 = nla_get_in6_addr(nla);
-                   ~~~~~~~~  ^
-   1 error generated.
+>> drivers/gpu/drm/nouveau/dispnv50/disp.c:2554:1: warning: no previous prototype for function 'nv50_display_read_hw_state' [-Wmissing-prototypes]
+   nv50_display_read_hw_state(struct nouveau_drm *drm)
+   ^
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2553:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void
+   ^
+   static 
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2618:1: warning: no previous prototype for function 'nv50_display_create' [-Wmissing-prototypes]
+   nv50_display_create(struct drm_device *dev)
+   ^
+   drivers/gpu/drm/nouveau/dispnv50/disp.c:2617:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 warnings generated.
 
 
-vim +1225 drivers/net/gtp.c
+vim +/nv50_display_read_hw_state +2554 drivers/gpu/drm/nouveau/dispnv50/disp.c
 
-  1214	
-  1215	static int gtp_sock_udp_config(struct udp_port_cfg *udp_conf,
-  1216				       const struct nlattr *nla, int family)
-  1217	{
-  1218		udp_conf->family = family;
-  1219	
-  1220		switch (udp_conf->family) {
-  1221		case AF_INET:
-  1222			udp_conf->local_ip.s_addr = nla_get_be32(nla);
-  1223			break;
-  1224		case AF_INET6:
-> 1225			udp_conf->local_ip6 = nla_get_in6_addr(nla);
-  1226			break;
-  1227		default:
-  1228			return -EOPNOTSUPP;
-  1229		}
-  1230	
-  1231		return 0;
-  1232	}
-  1233	
+  2551	
+  2552	/* Read back the currently programmed display state */
+  2553	void
+> 2554	nv50_display_read_hw_state(struct nouveau_drm *drm)
+  2555	{
+  2556		struct drm_device *dev = drm->dev;
+  2557		struct drm_encoder *encoder;
+  2558		struct drm_modeset_acquire_ctx ctx;
+  2559		struct nv50_disp *disp = nv50_disp(dev);
+  2560		int ret;
+  2561	
+  2562		DRM_MODESET_LOCK_ALL_BEGIN(dev, ctx, 0, ret);
+  2563	
+  2564		drm_for_each_encoder(encoder, dev) {
+  2565			if (encoder->encoder_type == DRM_MODE_ENCODER_DPMST)
+  2566				continue;
+  2567	
+  2568			nv50_display_read_hw_or_state(dev, disp, nouveau_encoder(encoder));
+  2569		}
+  2570	
+  2571		DRM_MODESET_LOCK_ALL_END(dev, ctx, ret);
+  2572	}
+  2573	
 
 -- 
 0-DAY CI Kernel Test Service
