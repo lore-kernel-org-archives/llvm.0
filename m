@@ -1,236 +1,153 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52EF5C2F1;
-	Sat,  8 Apr 2023 09:57:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680947868; x=1712483868;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yVhRaml7AsllbdxM7IiG7fKmnog0vHKgWdc+YYx0oMQ=;
-  b=PWKHUBG08ZNP+7uBcR/7PfFioiISN1ZZ8M2bR8oDyLbUjb3NEq19Ij5i
-   mG3ix+zulARYACYCUPen0eIErQr4beB9/FF/zSqMq6mOy9nJQTomJvthp
-   2czrLagZEmdN58oVD2FkUrjs75s1HPVr7fnd9MyX+eyeNKK3ZvxJVQl4R
-   qHZCPXpHYYRS3dk+XUaDl3pWOJBpmpqYXHxQWMoCuMN9reVyqnviHpRgl
-   BtzbEMyxGT8XtKq68xt9mY834tAzX+2ifwRl7dakikB+Mnn0eGaNhRCpt
-   Q/WSX8QCOOdggArIRLG6lSqH6ivEIKFh1ZP4iZ8c1O14bP+SpvAhME3tk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="429414072"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="429414072"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 02:57:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="756952505"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="756952505"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2023 02:57:43 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pl5KJ-000Tbr-0L;
-	Sat, 08 Apr 2023 09:57:43 +0000
-Date: Sat, 8 Apr 2023 17:57:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chen Aotian <chenaotian2@163.com>, alex.aring@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	stefan@datenfreihafen.org, miquel.raynal@bootlin.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, linux-wpan@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, Chen Aotian <chenaotian2@163.com>
-Subject: Re: [PATH wpan v2] ieee802154: hwsim: Fix possible memory leaks
-Message-ID: <202304081742.rOfPXJln-lkp@intel.com>
-References: <20230408081934.54002-1-chenaotian2@163.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B064C2F2
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 10:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680949501;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b+B9to8j2Lzj7TcvjD6Ev0dSy316NI/IHJxCACF6SvY=;
+	b=b47PjyrH/BX5SVDVu3JsKpFMhC9K+sWzglnMiQxNNQcEu/ADr5bUVXoADZ0FTibjG9jFhI
+	T9Qos1f0sLWKiY5iYPVE/SlH1MFN/VJ5gmf5pyem8kiJPJyhkqG+8Ib8OrX0GPzOdHqu5c
+	Fpg7QWXypqUs+yT/JYiRkyPgX35io/Y=
+Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com
+ [209.85.217.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-175-3FcwE5RwPRytbwIsiCUHbg-1; Sat, 08 Apr 2023 06:24:57 -0400
+X-MC-Unique: 3FcwE5RwPRytbwIsiCUHbg-1
+Received: by mail-vs1-f71.google.com with SMTP id z30-20020a67d29e000000b0042a1076b5e6so5686471vsi.7
+        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 03:24:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680949497;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b+B9to8j2Lzj7TcvjD6Ev0dSy316NI/IHJxCACF6SvY=;
+        b=XMzgLTj0Gg9TLt+2TGfywOALW2S4qb0o8uFkZ89jyouEuS9z6t9jL5c9c4LeIEzL7E
+         oZp/HwnrljD8UAexNwWbtylqps7PL78xa6IabURvs28G9jibFpHevGpSobZUICBviQTx
+         dKg17Q/7w2dbC9aAvySRpjuVlyjczBDKvpD6m6eeCP4AXuH9eI8d/aOS4hW1z3ucfAG1
+         V2olH0C/Ip9tQ1gtbiKU4MBkx8JD+pfhhrsVIoM7QI6/5yzNKFS6DxMmW48wiomYY3+h
+         HKQs0rWUn4NFRil/E6rKxix5ZUdeEvR1/tVhi6yM+j2QFzsCdZ/Kwgwgwmeu0Zxo3ezr
+         3sSQ==
+X-Gm-Message-State: AAQBX9ekh7+5e8KJawYkCoiGQiIhyUzdh1KUMMUyrKaSP4L2XNbI9LXH
+	VKlVJPvTTOt03svMNGoRf41690Xwj5zbFayRG121tqYVqYUa2KWmPFSRAPChR4SUOCu6m8YfHj7
+	LshfGd5JPBZibgl5PZCKtSocBYZNwwA==
+X-Received: by 2002:a1f:2a4b:0:b0:43c:2acb:9a60 with SMTP id q72-20020a1f2a4b000000b0043c2acb9a60mr2566270vkq.3.1680949497395;
+        Sat, 08 Apr 2023 03:24:57 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bcRbIrqbYLXQvhgU1yB25jrUYi60umTA4Aj4dtEtmHkg2stdHgIeAeLt4yqtCa6AkG6OTgIuIzrtdJ+KnT83g=
+X-Received: by 2002:a1f:2a4b:0:b0:43c:2acb:9a60 with SMTP id
+ q72-20020a1f2a4b000000b0043c2acb9a60mr2566263vkq.3.1680949497089; Sat, 08 Apr
+ 2023 03:24:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230408081934.54002-1-chenaotian2@163.com>
+References: <20230407070517.204676-1-andrea.righi@canonical.com>
+In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
+From: Eric Curtin <ecurtin@redhat.com>
+Date: Sat, 8 Apr 2023 11:24:41 +0100
+Message-ID: <CAOgh=FxE_Y3Chr3wCG5QkoPZW5-BjrVCM9moEZGy=xMkv2fKOA@mail.gmail.com>
+Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
+To: Andrea Righi <andrea.righi@canonical.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, 
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, Neal Gompa <neal@gompa.dev>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Chen,
+On Fri, 7 Apr 2023 at 08:05, Andrea Righi <andrea.righi@canonical.com> wrote:
+>
+> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+> to enable RUST.
+>
+> With this constraint we don't need is_rust_module.sh anymore, because
+> 'pahole --lang_exclude=rust' already has the capability to exclude Rust
+> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+> isn't used as well.
+>
+> In any case is_rust_module.sh is obsolete and we can just drop it.
+>
+> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 
-kernel test robot noticed the following build errors:
+Ran this in an Asahi Fedora build to be sure.
 
-[auto build test ERROR on net-next/main]
-[also build test ERROR on net/main linus/master v6.3-rc5 next-20230406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: Eric Curtin <ecurtin@redhat.com>
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Aotian/ieee802154-hwsim-Fix-possible-memory-leaks/20230408-162130
-patch link:    https://lore.kernel.org/r/20230408081934.54002-1-chenaotian2%40163.com
-patch subject: [PATH wpan v2] ieee802154: hwsim: Fix possible memory leaks
-config: hexagon-randconfig-r015-20230406 (https://download.01.org/0day-ci/archive/20230408/202304081742.rOfPXJln-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1a9fcf2d1438f9603039670041da5ed90471a4e5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chen-Aotian/ieee802154-hwsim-Fix-possible-memory-leaks/20230408-162130
-        git checkout 1a9fcf2d1438f9603039670041da5ed90471a4e5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ieee802154/
+Is mise le meas/Regards,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081742.rOfPXJln-lkp@intel.com/
+Eric Curtin
 
-All errors (new ones prefixed by >>):
+> ---
+>  rust/macros/module.rs     |  2 +-
+>  scripts/Makefile.modfinal |  2 --
+>  scripts/is_rust_module.sh | 16 ----------------
+>  3 files changed, 1 insertion(+), 19 deletions(-)
+>  delete mode 100755 scripts/is_rust_module.sh
+>
+> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> index a7e363c2b044..608406f33a70 100644
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@ -179,7 +179,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+>              /// Used by the printing macros, e.g. [`info!`].
+>              const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
+>
+> -            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
+> +            /// The \"Rust loadable module\" mark.
+>              //
+>              // This may be best done another way later on, e.g. as a new modinfo
+>              // key or a new section. For the moment, keep it simple.
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 4703f652c009..e6f8fa3c9b8d 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -41,8 +41,6 @@ quiet_cmd_btf_ko = BTF [M] $@
+>        cmd_btf_ko =                                                     \
+>         if [ ! -f vmlinux ]; then                                       \
+>                 printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+> -       elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module.sh $@; then           \
+> -               printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
+>         else                                                            \
+>                 LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
+>                 $(RESOLVE_BTFIDS) -b vmlinux $@;                        \
+> diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
+> deleted file mode 100755
+> index 28b3831a7593..000000000000
+> --- a/scripts/is_rust_module.sh
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -#
+> -# is_rust_module.sh module.ko
+> -#
+> -# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
+> -
+> -set -e
+> -
+> -# Using the `16_` prefix ensures other symbols with the same substring
+> -# are not picked up (even if it would be unlikely). The last part is
+> -# used just in case LLVM decides to use the `.` suffix.
+> -#
+> -# In the future, checking for the `.comment` section may be another
+> -# option, see https://github.com/rust-lang/rust/pull/97550.
+> -${NM} "$*" | grep -qE '^[0-9a-fA-F]+ r _R[^[:space:]]+16___IS_RUST_MODULE[^[:space:]]*$'
+> --
+> 2.39.2
+>
 
-   In file included from drivers/net/ieee802154/mac802154_hwsim.c:17:
-   In file included from include/linux/rtnetlink.h:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/net/ieee802154/mac802154_hwsim.c:17:
-   In file included from include/linux/rtnetlink.h:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/net/ieee802154/mac802154_hwsim.c:17:
-   In file included from include/linux/rtnetlink.h:7:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/net/ieee802154/mac802154_hwsim.c:727:21: error: incompatible pointer types passing 'struct mutex *' to parameter of type 'const struct lockdep_map *' [-Werror,-Wincompatible-pointer-types]
-                                                           lock_is_held(&hwsim_phys_lock));
-                                                                        ^~~~~~~~~~~~~~~~
-   include/linux/rcupdate.h:542:60: note: expanded from macro 'rcu_replace_pointer'
-           typeof(ptr) __tmp = rcu_dereference_protected((rcu_ptr), (c));  \
-                                                                     ^
-   include/linux/rcupdate.h:673:54: note: expanded from macro 'rcu_dereference_protected'
-           __rcu_dereference_protected((p), __UNIQUE_ID(rcu), (c), __rcu)
-                                                               ^
-   include/linux/rcupdate.h:469:21: note: expanded from macro '__rcu_dereference_protected'
-           RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_protected() usage"); \
-                              ^
-   include/linux/rcupdate.h:389:39: note: expanded from macro 'RCU_LOCKDEP_WARN'
-                   if (debug_lockdep_rcu_enabled() && (c) &&               \
-                                                       ^
-   include/linux/lockdep.h:281:58: note: passing argument to parameter 'lock' here
-   static inline int lock_is_held(const struct lockdep_map *lock)
-                                                            ^
-   6 warnings and 1 error generated.
-
-
-vim +727 drivers/net/ieee802154/mac802154_hwsim.c
-
-   684	
-   685	static int hwsim_set_edge_lqi(struct sk_buff *msg, struct genl_info *info)
-   686	{
-   687		struct nlattr *edge_attrs[MAC802154_HWSIM_EDGE_ATTR_MAX + 1];
-   688		struct hwsim_edge_info *einfo, *einfo_old;
-   689		struct hwsim_phy *phy_v0;
-   690		struct hwsim_edge *e;
-   691		u32 v0, v1;
-   692		u8 lqi;
-   693	
-   694		if (!info->attrs[MAC802154_HWSIM_ATTR_RADIO_ID] ||
-   695		    !info->attrs[MAC802154_HWSIM_ATTR_RADIO_EDGE])
-   696			return -EINVAL;
-   697	
-   698		if (nla_parse_nested_deprecated(edge_attrs, MAC802154_HWSIM_EDGE_ATTR_MAX, info->attrs[MAC802154_HWSIM_ATTR_RADIO_EDGE], hwsim_edge_policy, NULL))
-   699			return -EINVAL;
-   700	
-   701		if (!edge_attrs[MAC802154_HWSIM_EDGE_ATTR_ENDPOINT_ID] ||
-   702		    !edge_attrs[MAC802154_HWSIM_EDGE_ATTR_LQI])
-   703			return -EINVAL;
-   704	
-   705		v0 = nla_get_u32(info->attrs[MAC802154_HWSIM_ATTR_RADIO_ID]);
-   706		v1 = nla_get_u32(edge_attrs[MAC802154_HWSIM_EDGE_ATTR_ENDPOINT_ID]);
-   707		lqi = nla_get_u8(edge_attrs[MAC802154_HWSIM_EDGE_ATTR_LQI]);
-   708	
-   709		mutex_lock(&hwsim_phys_lock);
-   710		phy_v0 = hwsim_get_radio_by_id(v0);
-   711		if (!phy_v0) {
-   712			mutex_unlock(&hwsim_phys_lock);
-   713			return -ENOENT;
-   714		}
-   715	
-   716		einfo = kzalloc(sizeof(*einfo), GFP_KERNEL);
-   717		if (!einfo) {
-   718			mutex_unlock(&hwsim_phys_lock);
-   719			return -ENOMEM;
-   720		}
-   721	
-   722		rcu_read_lock();
-   723		list_for_each_entry_rcu(e, &phy_v0->edges, list) {
-   724			if (e->endpoint->idx == v1) {
-   725				einfo->lqi = lqi;
-   726				einfo_old = rcu_replace_pointer(e->info, einfo,
- > 727								lock_is_held(&hwsim_phys_lock));
-   728				rcu_read_unlock();
-   729				kfree_rcu(einfo_old, rcu);
-   730				mutex_unlock(&hwsim_phys_lock);
-   731				return 0;
-   732			}
-   733		}
-   734		rcu_read_unlock();
-   735	
-   736		kfree(einfo);
-   737		mutex_unlock(&hwsim_phys_lock);
-   738	
-   739		return -ENOENT;
-   740	}
-   741	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
