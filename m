@@ -1,43 +1,42 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4B5EDE;
-	Sat,  8 Apr 2023 00:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9845C1101;
+	Sat,  8 Apr 2023 01:15:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680914658; x=1712450658;
+  t=1680916520; x=1712452520;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m1t3rC86Qw2U2jYpF1IB+S/rmx37YNL5eBWegDMIipA=;
-  b=W8TEWJO0XG53iIboEu78JdD/qn5g42zsrbqNtIqd2tiIHI69meyw2SGx
-   sw9rOp936/XqFL4AHdVvzoeSp1/vG54xCHsibeKX3ANNx/qDyzmonsTAp
-   em+gk+EIO5PwH7D3SMs7rpWzYXTTKaUAxZgKj/ylnbi2UyO5ttXcn91yH
-   hLeo9DLncHiX8QoST/+y3DSC3qXGo8C0jVvNIbE1o2eiJ1jMcXRywUx67
-   HNIpVPJqj/IarNqZ5BEdG2VjXSkh/AjZPaP5OCs3MYbwGBRej1Eufhgl7
-   nL9885suY9FiorX1mC3XDXLF4Jy2oXuJ/2tvH5QNEyAeq+sxx3llBw0KG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="331750883"
+  bh=ij36e70UE/LAcrcPTUAmndG4LFO7gSvO7yQfkL2jGK8=;
+  b=kv5oySXvI0JGbYLfCS8AJ4pliDZfuey8fG6FvDa0KsvaZpIWsQRJvS/p
+   0IuSvMpwRJcOKzE18tjFVIzWLqI7IA4aIuxOkSt+MPd2umi2TCLid+E0e
+   Lq7x0lnIMbHiyKO8z74FrgzHTqqnol45cvzXOb533yc8u1bcobh6kePA4
+   a/QC7qspSqqQW1YWK/8lliLsaxXQgnbb6OsepsyE+g/55nIFLm64Qn/yW
+   7njqyKMVYZdWw+zXbMQM4HJMuI5Ogk4Y93gJOab/WJNykni07gyrMNaqM
+   5LxhQDd55GUjtMpiSEejpUlWsde40Hxch+Wx21n6zy9ijD/THjYmAQ8+J
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="322733630"
 X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="331750883"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 17:44:17 -0700
+   d="scan'208";a="322733630"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 18:15:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="637865901"
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="717994972"
 X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="637865901"
+   d="scan'208";a="717994972"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2023 17:44:16 -0700
+  by orsmga008.jf.intel.com with ESMTP; 07 Apr 2023 18:15:18 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pkwgh-000T53-16;
-	Sat, 08 Apr 2023 00:44:15 +0000
-Date: Sat, 8 Apr 2023 08:43:37 +0800
+	id 1pkxAj-000T6v-1t;
+	Sat, 08 Apr 2023 01:15:17 +0000
+Date: Sat, 8 Apr 2023 09:14:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/210-gpu 71/135] rust/helpers.c:317:9: error:
- implicit declaration of function 'of_node_is_root' is invalid in C99
-Message-ID: <202304080837.MsJV7k5G-lkp@intel.com>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [djiang:cxl-qtg 12/23] drivers/cxl/core/port.c:2045:6: warning:
+ variable 'devices' set but not used
+Message-ID: <202304080913.dZb5ztze-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,56 +46,101 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/AsahiLinux/linux bits/210-gpu
-head:   b77ed23d7d093f7ce5d31c84b70282467321abe8
-commit: 694fb974d50dded57d8ae42487c6486bfd374b35 [71/135] rust: kernel: platform: Add Device.set_dma_masks()
-config: x86_64-randconfig-a004-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080837.MsJV7k5G-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl-qtg
+head:   5c305908f705279678135d3adf13cf2165c0609c
+commit: 064b21698b2e5653b5547c639a895141a402edd4 [12/23] cxl: Add helper function that calculate QoS values for PCI path
+config: arm-randconfig-r046-20230407 (https://download.01.org/0day-ci/archive/20230408/202304080913.dZb5ztze-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/694fb974d50dded57d8ae42487c6486bfd374b35
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/210-gpu
-        git checkout 694fb974d50dded57d8ae42487c6486bfd374b35
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/commit/?id=064b21698b2e5653b5547c639a895141a402edd4
+        git remote add djiang https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git
+        git fetch --no-tags djiang cxl-qtg
+        git checkout 064b21698b2e5653b5547c639a895141a402edd4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/cxl/core/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304080837.MsJV7k5G-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080913.dZb5ztze-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> rust/helpers.c:317:9: error: implicit declaration of function 'of_node_is_root' is invalid in C99 [-Wimplicit-function-declaration]
->> rust/helpers.c:317:9: error: implicit declaration of function 'of_node_is_root' is invalid in C99 [-Wimplicit-function-declaration], err: true
-   thread 'main' panicked at 'Unable to generate bindings: ()', /opt/cross/rustc-1.66.0-bindgen-0.56.0/cargo/registry/src/github.com-1ecc6299db9ec823/bindgen-0.56.0/src/main.rs:54:36
-   note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-   make[2]: *** [rust/Makefile:311: rust/bindings/bindings_helpers_generated.rs] Error 1
-   make[2]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
-   make[2]: Target 'rust/' not remade because of errors.
-   make[1]: *** [Makefile:1304: prepare] Error 2
-   make: *** [Makefile:242: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> drivers/cxl/core/port.c:2045:6: warning: variable 'devices' set but not used [-Wunused-but-set-variable]
+           int devices = 0;
+               ^
+   1 warning generated.
 
 
-vim +/of_node_is_root +317 rust/helpers.c
+vim +/devices +2045 drivers/cxl/core/port.c
 
-5cbe9841e92bc7 Asahi Lina 2023-02-16  314  
-578c008c65bf4b Asahi Lina 2022-10-22  315  bool rust_helper_of_node_is_root(const struct device_node *np)
-578c008c65bf4b Asahi Lina 2022-10-22  316  {
-578c008c65bf4b Asahi Lina 2022-10-22 @317  	return of_node_is_root(np);
-578c008c65bf4b Asahi Lina 2022-10-22  318  }
-578c008c65bf4b Asahi Lina 2022-10-22  319  EXPORT_SYMBOL_GPL(rust_helper_of_node_is_root);
-578c008c65bf4b Asahi Lina 2022-10-22  320  
-
-:::::: The code at line 317 was first introduced by commit
-:::::: 578c008c65bf4bc078b4adbdb229c3f4cd352329 rust: of: Add OF node abstraction
-
-:::::: TO: Asahi Lina <lina@asahilina.net>
-:::::: CC: Hector Martin <marcan@marcan.st>
+  2028	
+  2029	/**
+  2030	 * cxl_port_get_downstream_qos - retrieve QoS data for PCIE downstream path
+  2031	 * @port: endpoint cxl_port
+  2032	 * @bandwidth: writeback value for min bandwidth
+  2033	 * @latency: writeback value for total latency
+  2034	 *
+  2035	 * Return: Errno on failure, 0 on success.
+  2036	 */
+  2037	int cxl_port_get_downstream_qos(struct cxl_port *port, u64 *bandwidth,
+  2038					u64 *latency)
+  2039	{
+  2040		u64 min_bw = ULONG_MAX;
+  2041		struct pci_dev *pdev;
+  2042		struct cxl_port *p;
+  2043		struct device *dev;
+  2044		u64 total_lat = 0;
+> 2045		int devices = 0;
+  2046		u64 lat;
+  2047	
+  2048		/* Grab the device that is the PCI device for CXL memdev */
+  2049		dev = port->uport->parent;
+  2050		/* Skip if it's not PCI, most likely a cxl_test device */
+  2051		if (!dev_is_pci(dev))
+  2052			return 0;
+  2053	
+  2054		pdev = to_pci_dev(dev);
+  2055		min_bw = pcie_bandwidth_available(pdev, NULL, NULL, NULL);
+  2056		if (min_bw == 0)
+  2057			return -ENXIO;
+  2058	
+  2059		/* convert to MB/s from Mb/s */
+  2060		min_bw >>= 3;
+  2061	
+  2062		p = port;
+  2063		do {
+  2064			struct cxl_dport *dport;
+  2065	
+  2066			lat = cxl_pci_get_latency(pdev);
+  2067			if (lat < 0)
+  2068				return lat;
+  2069	
+  2070			total_lat += lat;
+  2071			devices++;
+  2072	
+  2073			dport = p->parent_dport;
+  2074			if (!dport)
+  2075				break;
+  2076	
+  2077			p = dport->port;
+  2078			dev = p->uport;
+  2079			if (!dev_is_pci(dev))
+  2080				break;
+  2081			pdev = to_pci_dev(dev);
+  2082		} while (1);
+  2083	
+  2084		*bandwidth = min_bw;
+  2085		*latency = total_lat;
+  2086		return 0;
+  2087	}
+  2088	EXPORT_SYMBOL_NS_GPL(cxl_port_get_downstream_qos, CXL);
+  2089	
 
 -- 
 0-DAY CI Kernel Test Service
