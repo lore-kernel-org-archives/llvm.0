@@ -1,74 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB211C07;
-	Sat,  8 Apr 2023 13:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97985C4339C;
-	Sat,  8 Apr 2023 13:49:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1680961786;
-	bh=rpFTrTpcNVbSF0vqVoyh7L6giVIN41C6RAvl7FyFd6M=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uYTTzr+VaSdylukWPgMXvbabqMmFJFBelvAVKNtGkkIMZ1pFQpTdcJneODqdlGLIC
-	 NMm7/KkuKUJWf9AVIqyZCJ2fIaa0JgZ/qXBwsUoT3Gj+H6WkbGwYTbAkhnSr9MWkn5
-	 RNh7d3QhL0cDEaelZ72nYpNXOCt9XG318tFjcgIWryvfP1lII8xCWiSDjzsmXUxVjw
-	 79qFqh7GdiF3LkqIAnY5nPV7i1tT09Gwn3OUlvyKP0/b4vbRrYfx2D8dYcdi0rjtgV
-	 9eWLZa/L9fT/XjtG5jSzK+FIxrV0bOiWfAW1PoHI4q6Kvjy/KSaEJP5IyIkg1ebQ2h
-	 sfoKlbVKZJgHQ==
-Received: by mail-ot1-f53.google.com with SMTP id 6-20020a9d0106000000b006a177038dfeso14019221otu.7;
-        Sat, 08 Apr 2023 06:49:46 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eDcWK8riojCJ5OFhf0KsIn8xrtzOWkuWNZMns6gBowWt+ERTPj
-	btogSxOYsbw6Zu3UiIm376JqQ+JHYyMza81aY0Q=
-X-Google-Smtp-Source: AKy350Yym8k/APtYBId7w0JsijjhyT7A4owCM9aPZto2PhafU7XfDKW9u3WGQU/uDgTbGtERYGu0UOkevabdF/37QBs=
-X-Received: by 2002:a05:6830:130a:b0:69f:8da4:48d with SMTP id
- p10-20020a056830130a00b0069f8da4048dmr1361134otq.1.1680961785939; Sat, 08 Apr
- 2023 06:49:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B6A1C38
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 16:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1680971488;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=T/nkT9+EA25MOqVV+8TPjcxte5Jj5lQFv3hVG4QxSa4=;
+	b=gj89Ola+54MTQLSE8KnjTntlM9e22v1NMFX50K8X/4dypObKvHedmyyTokJ9co+Yut+0Sb
+	Lmp/PgCOTPDqjoaTmwl2ay+qDu4F+aMTG/Ke9w+TlcWby7HZgX2Pqai/vp2fqA1srxBI0o
+	8rVIk57rOnn2b1gMbJ0OQ2EiVwuJq1M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-73-n12BHsmEORyzuUKopSRp_w-1; Sat, 08 Apr 2023 12:31:27 -0400
+X-MC-Unique: n12BHsmEORyzuUKopSRp_w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 25227101A54F
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 16:31:27 +0000 (UTC)
+Received: from [172.64.0.121] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 10AFD2166B30;
+	Sat,  8 Apr 2023 16:31:27 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 79 of 358): Test report for master
+ (6.3.0-rc5, mainline.kernel.org-clang, aa318c48)
+Date: Sat, 08 Apr 2023 16:31:27 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230405-korg-llvm-tc-docs-v2-1-98d2e4a96c41@kernel.org>
-In-Reply-To: <20230405-korg-llvm-tc-docs-v2-1-98d2e4a96c41@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 8 Apr 2023 22:49:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR9NjtgJip-ZuSrvFX6+zkF7XA7XewS7w+_hogB2F1x6A@mail.gmail.com>
-Message-ID: <CAK7LNAR9NjtgJip-ZuSrvFX6+zkF7XA7XewS7w+_hogB2F1x6A@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation/llvm: Add a note about prebuilt
- kernel.org toolchains
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: corbet@lwn.net, arnd@arndb.de, keescook@chromium.org, 
-	ndesaulniers@google.com, trix@redhat.com, nicolas@fjasle.eu, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Bill Wendling <morbo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <69948.123040812312700239@us-mta-73.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 8, 2023 at 6:43=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> I recently started uploading prebuilt stable versions of LLVM to
-> kernel.org, which should make building the kernel with LLVM more
-> accessible to maintainers and developers. Link them in the LLVM
-> documentation to make this more visible.
->
-> Link: https://lore.kernel.org/20230319235619.GA18547@dev-arch.thelio-3990=
-X/
-> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> Reviewed-by: Bill Wendling <morbo@google.com>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Hi, we tested your kernel and here are the results:
+
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
+
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'gpio-fixes-for-v6.3-rc6' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/brgl/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84037
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: xfstests - nfsv4.2: generic/129: ./xfstests-run.sh: line 55:=
+ results/generic/129.dmesg: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1407
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: generic/132: FAIL: tee: results/generi=
+c/generic-132.log: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1491
+            Affected tests:
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-Applied to linux-kbuild/fixes.
-Thanks.
 
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-
-
---=20
-Best Regards
-Masahiro Yamada
