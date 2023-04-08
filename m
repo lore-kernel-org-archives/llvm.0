@@ -1,43 +1,56 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6464A29B0;
-	Sat,  8 Apr 2023 21:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680990196; x=1712526196;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2hRuw1rGU9RrBXVSKV+O7FyJjjrRQFTbJwVNqiJ7gy0=;
-  b=BqlXVl466lLBMA6xRMRbz3bXb99BZKN7iiBksRo5PdwWAnBOx+2EUgj3
-   6LUpNEw1+iCRQ9EyTFbuxJ3sXUqd8U4tjuunJxs2EYIYnYXU3uM4Ei8nm
-   ehQGCEsZvdeQfH0DABh3dgyKPKaCAsebzbNxwscj1Ho0FH93RAk9bJ1r2
-   kkBAzWaoZZk6LmwMnLcgm4/kGjo7/wf4QqUl4pfT3At6T4b07h2y+zDkJ
-   RumHe3zWix9FYOauSRUGtffOYVNhqtZzF88jLgOaXFiJyHCWJ8Hnoy8Mz
-   pCsXhxKkKDM6Y+OIf67+Cd37BfLmxNpLWO2XFA5xb1zSC+HEqc+lnSzBs
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10674"; a="345827425"
-X-IronPort-AV: E=Sophos;i="5.98,330,1673942400"; 
-   d="scan'208";a="345827425"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 14:43:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10674"; a="811728040"
-X-IronPort-AV: E=Sophos;i="5.98,330,1673942400"; 
-   d="scan'208";a="811728040"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2023 14:43:14 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1plGL3-000U8B-0R;
-	Sat, 08 Apr 2023 21:43:13 +0000
-Date: Sun, 9 Apr 2023 05:42:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dexuan Cui <decui@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dcui-tdx:decui/michaelv7dda/tdx/v4-dda 4/14]
- drivers/hv/vmbus_drv.c:2178:74: warning: format specifies type 'unsigned
- long long' but the argument has type 'resource_size_t' (aka 'unsigned int')
-Message-ID: <202304090541.rEuF2bHr-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387D429B0
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 21:45:39 +0000 (UTC)
+Received: by mail-pj1-f43.google.com with SMTP id pc4-20020a17090b3b8400b0024676052044so1613986pjb.1
+        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 14:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680990338; x=1683582338;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zqgSPZYBsDtVwiEZJVoDEmESaLU5H7DMz1BSoSn2S1Y=;
+        b=mSJ/X1rr3c3vVPHxFoGeOmsi6zaCi+/+edXfzwes87BlIz/bdb4KVwCpsAogLkEECe
+         H6FQLGTn8KB+93PdqO6eDEMypOPMpiVhXpRRuSCABL+waC1lujqqI8kO7eC+mqqDXbOf
+         VkrdcDUSM/E758jYGxcj+lFncSdPQmn9mShx0nPK6hZTgsEzv8SY5ngjuqGyh5iaHbMg
+         sDH/6uTCb8YCLZKmpujxpog07gJAhEeHLDUW99I6XiP6icQSyI0sY8u6cbjbdbPs9H3U
+         OUUDM2C3G0I+H8BXAav2HpVuaS/92Ay35V+8b825chzgZfM3iGRm5tBSUFdh4G6p2jNC
+         xgLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680990338; x=1683582338;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zqgSPZYBsDtVwiEZJVoDEmESaLU5H7DMz1BSoSn2S1Y=;
+        b=HP95y0y24dMHgaAtifdXHksD8ub7qK/NsUtyihU79dmoNEGYRYmexCLmupPnLtnERC
+         6ZU3jsBLorKUkimW/xmM5uS/ClY3K7CaIm6RNLLm0sz8mrO2OK+iPYBcpqFAyJEjMox5
+         /NlYASTmD4cBAM6uKfy09PX37fKHeXkmWGgwjM9Dn61mD84R76afsYYX5kU0YIqzQuHK
+         9J8neJcqe1aKlxaqt66bD893THH2hWU/Xv1KqjkLaHzr+fIS3+mHdzrQlU6/mMMHWsqU
+         NLNYM+gA1lr2Jmsd3BtzMuKE+/PWaG2dReG6YeHNxq8jJuTg+H5iOky8T/V5o1DrrKZc
+         L5rw==
+X-Gm-Message-State: AAQBX9eb4tixnDa3rkhYdT3j4RpWuz22YfOrD/QgZNP0D7Kx9NStWEX9
+	GdmPMZt7qUjc52C/c5Lq2E0=
+X-Google-Smtp-Source: AKy350YeQ+EjOvH0//H82sraUYKe/H1jY2NGbOgELoyt7GUy4+kORmVMIBbchbzc/x3LIarUd4YXuA==
+X-Received: by 2002:a17:90b:1e0f:b0:23f:ebf2:d3e9 with SMTP id pg15-20020a17090b1e0f00b0023febf2d3e9mr7851623pjb.6.1680990338393;
+        Sat, 08 Apr 2023 14:45:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g15-20020a17090a7d0f00b002309279baf8sm6586668pjl.43.2023.04.08.14.45.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 14:45:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 8 Apr 2023 14:45:36 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Tom Rix <trix@redhat.com>
+Cc: krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+	wim@linux-watchdog.org, nathan@kernel.org, ndesaulniers@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] watchdog: s3c2410: remove unused freq_to_wdt and
+ s3c2410wdt_is_running functions
+Message-ID: <72a085ff-172f-4378-8ee2-5bf1e47958bf@roeck-us.net>
+References: <20230321183439.1826823-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,243 +59,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230321183439.1826823-1-trix@redhat.com>
 
-tree:   https://github.com/dcui/tdx decui/michaelv7dda/tdx/v4-dda
-head:   ee475770ca8b9c70a2f41ec136e5d6124fd82ae9
-commit: f2590983760f15765fd05ee1cfc9ec63a5bea359 [4/14] [Workaround for DDA]: hardcode MMIO _CRS in vmbus_walk_resources() for now
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230409/202304090541.rEuF2bHr-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/dcui/tdx/commit/f2590983760f15765fd05ee1cfc9ec63a5bea359
-        git remote add dcui-tdx https://github.com/dcui/tdx
-        git fetch --no-tags dcui-tdx decui/michaelv7dda/tdx/v4-dda
-        git checkout f2590983760f15765fd05ee1cfc9ec63a5bea359
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hv/
+On Tue, Mar 21, 2023 at 02:34:39PM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/watchdog/s3c2410_wdt.c:311:35: error: unused function
+>   'freq_to_wdt' [-Werror,-Wunused-function]
+> static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
+>                                   ^
+> drivers/watchdog/s3c2410_wdt.c:446:19: error: unused function
+>   's3c2410wdt_is_running' [-Werror,-Wunused-function]
+> static inline int s3c2410wdt_is_running(struct s3c2410_wdt *wdt)
+>                   ^
+> These functions are not used, so remove them.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304090541.rEuF2bHr-lkp@intel.com/
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-All warnings (new ones prefixed by >>):
-
->> drivers/hv/vmbus_drv.c:2178:74: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-                                                             ~~~~           ^~~~~
-                                                             %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2178:81: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-                                                                   ~~~~            ^~~
-                                                                   %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2181:76: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-                                                               ~~~~           ^~~~~
-                                                               %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2181:83: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-                                                                     ~~~~            ^~~
-                                                                     %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2187:74: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-                                                             ~~~~           ^~~~~
-                                                             %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2187:81: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-                                                                   ~~~~            ^~~
-                                                                   %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2190:76: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-                                                               ~~~~           ^~~~~
-                                                               %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2190:83: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-                                                                     ~~~~            ^~~
-                                                                     %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
->> drivers/hv/vmbus_drv.c:2188:25: warning: implicit conversion from 'long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68182605824 to 3758096384 [-Wconstant-conversion]
-                   start = 0xfe0000000;
-                         ~ ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2189:23: warning: implicit conversion from 'long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68719476735 to 4294967295 [-Wconstant-conversion]
-                   end = 0xfffffffff;
-                       ~ ^~~~~~~~~~~
-   10 warnings generated.
-
-
-vim +2178 drivers/hv/vmbus_drv.c
-
-  2153	
-  2154	
-  2155	/*
-  2156	 * VMBUS is an acpi enumerated device. Get the information we
-  2157	 * need from DSDT.
-  2158	 */
-  2159	static acpi_status vmbus_walk_resources(struct acpi_resource *res, void *ctx)
-  2160	{
-  2161		resource_size_t start = 0;
-  2162		resource_size_t end = 0;
-  2163		struct resource *new_res;
-  2164		struct resource **old_res = &hyperv_mmio;
-  2165		struct resource **prev_res = NULL;
-  2166		struct resource r;
-  2167	
-  2168		switch (res->type) {
-  2169	
-  2170		/*
-  2171		 * "Address" descriptors are for bus windows. Ignore
-  2172		 * "memory" descriptors, which are for registers on
-  2173		 * devices.
-  2174		 */
-  2175		case ACPI_RESOURCE_TYPE_ADDRESS32:
-  2176			start = res->data.address32.address.minimum;
-  2177			end = res->data.address32.address.maximum;
-> 2178	                printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-  2179	                start = 0xf8000000;
-  2180	                end = 0xffffffff;
-  2181	                printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-  2182			break;
-  2183	
-  2184		case ACPI_RESOURCE_TYPE_ADDRESS64:
-  2185			start = res->data.address64.address.minimum;
-  2186			end = res->data.address64.address.maximum;
-  2187	                printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-> 2188	                start = 0xfe0000000;
-  2189	                end = 0xfffffffff;
-  2190	                printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-  2191			break;
-  2192	
-  2193		/*
-  2194		 * The IRQ information is needed only on ARM64, which Hyper-V
-  2195		 * sets up in the extended format. IRQ information is present
-  2196		 * on x86/x64 in the non-extended format but it is not used by
-  2197		 * Linux. So don't bother checking for the non-extended format.
-  2198		 */
-  2199		case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
-  2200			if (!acpi_dev_resource_interrupt(res, 0, &r)) {
-  2201				pr_err("Unable to parse Hyper-V ACPI interrupt\n");
-  2202				return AE_ERROR;
-  2203			}
-  2204			/* ARM64 INTID for VMbus */
-  2205			vmbus_interrupt = res->data.extended_irq.interrupts[0];
-  2206			/* Linux IRQ number */
-  2207			vmbus_irq = r.start;
-  2208	               printk("cdx: vmbus_walk_resources: irq=%d\n", vmbus_irq);
-  2209			return AE_OK;
-  2210	
-  2211		default:
-  2212			/* Unused resource type */
-  2213	               printk("cdx: vmbus_walk_resources: default type=%d\n", res->type);
-  2214			return AE_OK;
-  2215	
-  2216		}
-  2217		/*
-  2218		 * Ignore ranges that are below 1MB, as they're not
-  2219		 * necessary or useful here.
-  2220		 */
-  2221		if (end < 0x100000)
-  2222			return AE_OK;
-  2223	
-  2224		new_res = kzalloc(sizeof(*new_res), GFP_ATOMIC);
-  2225		if (!new_res)
-  2226			return AE_NO_MEMORY;
-  2227	
-  2228		/* If this range overlaps the virtual TPM, truncate it. */
-  2229		if (end > VTPM_BASE_ADDRESS && start < VTPM_BASE_ADDRESS)
-  2230			end = VTPM_BASE_ADDRESS;
-  2231	
-  2232		new_res->name = "hyperv mmio";
-  2233		new_res->flags = IORESOURCE_MEM;
-  2234		new_res->start = start;
-  2235		new_res->end = end;
-  2236	
-  2237		/*
-  2238		 * If two ranges are adjacent, merge them.
-  2239		 */
-  2240		do {
-  2241			if (!*old_res) {
-  2242				*old_res = new_res;
-  2243				break;
-  2244			}
-  2245	
-  2246			if (((*old_res)->end + 1) == new_res->start) {
-  2247				(*old_res)->end = new_res->end;
-  2248				kfree(new_res);
-  2249				break;
-  2250			}
-  2251	
-  2252			if ((*old_res)->start == new_res->end + 1) {
-  2253				(*old_res)->start = new_res->start;
-  2254				kfree(new_res);
-  2255				break;
-  2256			}
-  2257	
-  2258			if ((*old_res)->start > new_res->end) {
-  2259				new_res->sibling = *old_res;
-  2260				if (prev_res)
-  2261					(*prev_res)->sibling = new_res;
-  2262				*old_res = new_res;
-  2263				break;
-  2264			}
-  2265	
-  2266			prev_res = old_res;
-  2267			old_res = &(*old_res)->sibling;
-  2268	
-  2269		} while (1);
-  2270	
-  2271		return AE_OK;
-  2272	}
-  2273	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  drivers/watchdog/s3c2410_wdt.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+> 
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index 200ba236a72e..6394dda7a5dc 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -308,11 +308,6 @@ static inline unsigned int s3c2410wdt_max_timeout(struct s3c2410_wdt *wdt)
+>  				       / S3C2410_WTCON_MAXDIV);
+>  }
+>  
+> -static inline struct s3c2410_wdt *freq_to_wdt(struct notifier_block *nb)
+> -{
+> -	return container_of(nb, struct s3c2410_wdt, freq_transition);
+> -}
+> -
+>  static int s3c2410wdt_disable_wdt_reset(struct s3c2410_wdt *wdt, bool mask)
+>  {
+>  	const u32 mask_val = BIT(wdt->drv_data->mask_bit);
+> @@ -443,11 +438,6 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
+>  	return 0;
+>  }
+>  
+> -static inline int s3c2410wdt_is_running(struct s3c2410_wdt *wdt)
+> -{
+> -	return readl(wdt->reg_base + S3C2410_WTCON) & S3C2410_WTCON_ENABLE;
+> -}
+> -
+>  static int s3c2410wdt_set_heartbeat(struct watchdog_device *wdd,
+>  				    unsigned int timeout)
+>  {
