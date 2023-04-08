@@ -1,51 +1,48 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843661841;
-	Sat,  8 Apr 2023 08:35:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785511841;
+	Sat,  8 Apr 2023 09:06:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680942944; x=1712478944;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lxkkBZdI9k/nHA+MzzcXBFUD0IJeMAc31c2hhqC60EQ=;
-  b=OoE2s60dmCPnLta+MCTZtXGK+2I2+G+XON/kKOu2kL7wxnqNfUIG8M6Y
-   16f4rH4WQLPy/m9zmd9nkqI52QiGra948IWZhNeIRUuk1sNWZIBrWV3v0
-   exC3QQIPXOmChzAVP5oZfNMgBgqBXSR6U4xuNf8EWq11mAtbjLOzpsw9u
-   7UoPusx8UTLTGeTGGOCJDAng9hW0OkB36COOhPFNmJHf/o8O7ckgORCPr
-   5/eKDckGHf98xajY/fffE8sd28g5L2dFSFPnsXqIei+A3St+z1gqp83hL
-   yGGAHO0B+87k3TnGj6HD7gIdzJ0hG4sXNGQlFB/KQ0S+3x0Rh401C1i0E
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="331785182"
+  t=1680944805; x=1712480805;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Hpnpvx6xos6iUlaCPN6kP4RigNaZ4dPMBCtAmVawsAM=;
+  b=Gt5SHoKiQ9r5WHoykxi5GCJizfp0zsHwDJmyegzHIunFtXYTXkaqngMW
+   CYysAKK0m4tNf1JBCMmOLCgCVyLSKehqMT9tgTddLdBhNiDzTCA6JmLQT
+   z0X4xJfydsZsdW2ugpHtPYPO/YCF9vNyaDCU7bRtFK1GFfkTOjC75qGFU
+   RYkeAf7gMuQaJHRCo/IvJC+Xpo2tCyDRySpLtS/nzTRwwDO+QJO9CzgmL
+   +ylIPuwC9PgTdI3jovP6tz/2lLv74EyKDfjjVXLed64ihWjH7UURWQwAK
+   hLGWfqo2iXdNC7xvFF6UYI8ncfBT4gWuOgBRxptjCNEvLE0BRB5gKDjl8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="408263406"
 X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="331785182"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 01:35:44 -0700
+   d="scan'208";a="408263406"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 02:06:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="752249577"
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="681244371"
 X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="752249577"
+   d="scan'208";a="681244371"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2023 01:35:40 -0700
+  by orsmga007.jf.intel.com with ESMTP; 08 Apr 2023 02:06:42 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pl42t-000TXp-20;
-	Sat, 08 Apr 2023 08:35:39 +0000
-Date: Sat, 8 Apr 2023 16:35:25 +0800
+	id 1pl4Wv-000TZt-25;
+	Sat, 08 Apr 2023 09:06:41 +0000
+Date: Sat, 8 Apr 2023 17:06:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tze-nan Wu <Tze-nan.Wu@mediatek.com>, rostedt@goodmis.org,
-	mhiramat@kernel.org
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	bobule.chang@mediatek.com, wsd_upstream@mediatek.com,
-	Tze-nan.Wu@mediatek.com, stable@vger.kernel.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] ring-buffer: Prevent inconsistent operation on
- cpu_buffer->resize_disabled
-Message-ID: <202304081615.eiaqpbV8-lkp@intel.com>
-References: <20230408052226.25268-1-Tze-nan.Wu@mediatek.com>
+	linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>, Alex Shi <alexs@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to
+ undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202304081740.35UVR4Ai-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,93 +51,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230408052226.25268-1-Tze-nan.Wu@mediatek.com>
 
-Hi Tze-nan,
+Hi Arnd,
 
-kernel test robot noticed the following build warnings:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on rostedt-trace/for-next v6.3-rc5 next-20230406]
-[cannot apply to rostedt-trace/for-next-urgent]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tze-nan-Wu/ring-buffer-Prevent-inconsistent-operation-on-cpu_buffer-resize_disabled/20230408-132502
-patch link:    https://lore.kernel.org/r/20230408052226.25268-1-Tze-nan.Wu%40mediatek.com
-patch subject: [PATCH] ring-buffer: Prevent inconsistent operation on cpu_buffer->resize_disabled
-config: x86_64-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081615.eiaqpbV8-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aa318c48808c0aa73216bd94c54c4553d3663add
+commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+date:   1 year, 1 month ago
+config: mips-randconfig-r001-20230408 (https://download.01.org/0day-ci/archive/20230408/202304081740.35UVR4Ai-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d404bc0af0a4bde3aa20704642d69a78bdc154f8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tze-nan-Wu/ring-buffer-Prevent-inconsistent-operation-on-cpu_buffer-resize_disabled/20230408-132502
-        git checkout d404bc0af0a4bde3aa20704642d69a78bdc154f8
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/cirrus/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081615.eiaqpbV8-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081740.35UVR4Ai-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/trace/ring_buffer.c:5359:15: warning: variable 'reset_online_mask' is uninitialized when used here [-Wuninitialized]
-           cpumask_copy(reset_online_mask, cpu_online_mask);
-                        ^~~~~~~~~~~~~~~~~
-   kernel/trace/ring_buffer.c:5353:33: note: initialize the variable 'reset_online_mask' to silence this warning
-           cpumask_var_t reset_online_mask;
-                                          ^
-                                           = NULL
-   1 warning generated.
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
+   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                                        ^
+>> drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^
+   <scratch space>:139:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: initializer element is not a compile-time constant
+   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:139:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
+   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                                        ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: initializer element is not a compile-time constant
+   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:150:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
+   5 errors generated.
 
 
-vim +/reset_online_mask +5359 kernel/trace/ring_buffer.c
+vim +/LOCHNAGAR1_ +200 drivers/pinctrl/cirrus/pinctrl-lochnagar.c
 
-  5344	
-  5345	/**
-  5346	 * ring_buffer_reset_online_cpus - reset a ring buffer per CPU buffer
-  5347	 * @buffer: The ring buffer to reset a per cpu buffer of
-  5348	 * @cpu: The CPU buffer to be reset
-  5349	 */
-  5350	void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
-  5351	{
-  5352		struct ring_buffer_per_cpu *cpu_buffer;
-  5353		cpumask_var_t reset_online_mask;
-  5354		int cpu;
-  5355	
-  5356		/* prevent another thread from changing buffer sizes */
-  5357		mutex_lock(&buffer->mutex);
-  5358	
-> 5359		cpumask_copy(reset_online_mask, cpu_online_mask);
-  5360	
-  5361		for_each_cpu_and(cpu, buffer->cpumask, reset_online_mask) {
-  5362			cpu_buffer = buffer->buffers[cpu];
-  5363	
-  5364			atomic_inc(&cpu_buffer->resize_disabled);
-  5365			atomic_inc(&cpu_buffer->record_disabled);
-  5366		}
-  5367	
-  5368		/* Make sure all commits have finished */
-  5369		synchronize_rcu();
-  5370	
-  5371		for_each_cpu_and(cpu, buffer->cpumask, reset_online_mask) {
-  5372			cpu_buffer = buffer->buffers[cpu];
-  5373	
-  5374			reset_disabled_cpu_buffer(cpu_buffer);
-  5375	
-  5376			atomic_dec(&cpu_buffer->record_disabled);
-  5377			atomic_dec(&cpu_buffer->resize_disabled);
-  5378		}
-  5379	
-  5380		mutex_unlock(&buffer->mutex);
-  5381	}
-  5382	
+0548448b719ac7 Charles Keepax 2019-03-19  199  
+0548448b719ac7 Charles Keepax 2019-03-19 @200  LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
+0548448b719ac7 Charles Keepax 2019-03-19  201  LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+0548448b719ac7 Charles Keepax 2019-03-19  202  LN1_PIN_GPIO(CDC_CIF1MODE, "codec-cif1mode", I2C_CTRL, CDC_CIF_MODE, 0);
+0548448b719ac7 Charles Keepax 2019-03-19  203  LN1_PIN_MUX(GF_GPIO2,      "gf-gpio2");
+0548448b719ac7 Charles Keepax 2019-03-19  204  LN1_PIN_MUX(GF_GPIO3,      "gf-gpio3");
+0548448b719ac7 Charles Keepax 2019-03-19  205  LN1_PIN_MUX(GF_GPIO7,      "gf-gpio7");
+0548448b719ac7 Charles Keepax 2019-03-19  206  LN1_PIN_MUX(LED1,          "led1");
+0548448b719ac7 Charles Keepax 2019-03-19  207  LN1_PIN_MUX(LED2,          "led2");
+0548448b719ac7 Charles Keepax 2019-03-19  208  LN1_PIN_AIF(CDC_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  209  LN1_PIN_AIF(CDC_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  210  LN1_PIN_AIF(CDC_AIF3);
+0548448b719ac7 Charles Keepax 2019-03-19  211  LN1_PIN_AIF(DSP_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  212  LN1_PIN_AIF(DSP_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  213  LN1_PIN_AIF(PSIA1);
+0548448b719ac7 Charles Keepax 2019-03-19  214  LN1_PIN_AIF(PSIA2);
+0548448b719ac7 Charles Keepax 2019-03-19  215  LN1_PIN_AIF(SPDIF_AIF);
+0548448b719ac7 Charles Keepax 2019-03-19  216  LN1_PIN_AIF(GF_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  217  LN1_PIN_AIF(GF_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  218  LN1_PIN_AIF(GF_AIF3);
+0548448b719ac7 Charles Keepax 2019-03-19  219  LN1_PIN_AIF(GF_AIF4);
+0548448b719ac7 Charles Keepax 2019-03-19  220  
+
+:::::: The code at line 200 was first introduced by commit
+:::::: 0548448b719ac78fa18fdbcd03856952ba6cc7dc pinctrl: lochnagar: Add support for the Cirrus Logic Lochnagar
+
+:::::: TO: Charles Keepax <ckeepax@opensource.cirrus.com>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
 
 -- 
 0-DAY CI Kernel Test Service
