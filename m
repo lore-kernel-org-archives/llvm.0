@@ -1,166 +1,77 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DAE1847;
-	Sat,  8 Apr 2023 10:38:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680950333; x=1712486333;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tj/ggpYw50HfAyBFPq7ICd0Kc7tgKVtlkma/BblHx2Y=;
-  b=fMteUlNDmv2Nw3G7d1z29TVFGCYd9nkcKlO/H1x12yPOjhxxrsWQcsqZ
-   ZJtwifZjeIna+48tGVBvmXVGnUe+44oBAjo/q+014Bn6ONhJTyQwGbE6d
-   n0TssVJzTwhEX4PCQ05EKCZK1dhUYzskFKGALKvuz9Mt792bY5tMj5P0i
-   kcb9bQ3MCW1RgfYl7wiOCeNgsiDvH94cCh1jLmKwjw3CExcHGYJ9VFs0w
-   54phoF2883NiGMiYpyRO0hoWnQUPVW0Pd+SU6pfFxPPWMbtxg0o3pKUFP
-   qhe/uaKQr+R1wFsxUI9xfzFYIuWXaw+z8gnb2JEiFPzEwPwgI7pCaqQfD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="344911163"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="344911163"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 03:38:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="665149579"
-X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
-   d="scan'208";a="665149579"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 08 Apr 2023 03:38:48 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pl5y0-000Tdf-0b;
-	Sat, 08 Apr 2023 10:38:44 +0000
-Date: Sat, 8 Apr 2023 18:38:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Deepanshu Kartikey <kartikey406@gmail.com>, gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Deepanshu Kartikey <kartikey406@gmail.com>
-Subject: Re: [PATCH] Staging: fbtft: fbtft-bus: fixed extra space and
- parenthesis issue
-Message-ID: <202304081830.7kKqUkLL-lkp@intel.com>
-References: <20230408050323.70919-1-kartikey406@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381091C07
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 13:42:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC3FC433A4
+	for <llvm@lists.linux.dev>; Sat,  8 Apr 2023 13:42:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1680961323;
+	bh=+rvCJwQnhgHtRPTA4FpOWMqeq2UPBg8NLPxv4nEuxX0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=j8wXnh8jcxeZy5hlnL9j7yhf1PfZDoBKolcpy8BAI3zytnC6o3YeEcQ21+RGU398S
+	 lwlY1lX1+rGmxa3RW1a4ssgZVrMNHXDCC6WIPr8GtoapHSeRq8QJ4+1MkRoPe/q1co
+	 pBZRK9TS0XYB4rlCrpX5ng+gaXL15uri2QVjR6Fo1l66G9KP7d7+87JoNRfKRWutR0
+	 HW8KaNz2q7SbsqNYO02xV8LQKQ8X11uv0ovd00bz1EsLtjqCS292zKcsS54/wMPkBY
+	 +uoYQ0p8nmdgW2/VffK8mE2GMfG1FpQRopt7rW1Yx0C1UStZhRxsOGAwfAxnow3PDU
+	 QQ1B9czlK0ofA==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1841c57c221so3545075fac.3
+        for <llvm@lists.linux.dev>; Sat, 08 Apr 2023 06:42:03 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eK4/qBGpvhQnoEQOAjsqsYg6P13FuLoKBshWlo6Akv+Oepj7vg
+	ongGatebluZiesVgB55IU9/CRYz6SBXqh8BwTTY=
+X-Google-Smtp-Source: AKy350YM5FAGa/kRWBMoLt816ScO0UDcA4Pm4t4Ada1UZVKLZfKRP4ulOWZgDvkSe3Ul/chuG7STZWY4sSR50yAJtLg=
+X-Received: by 2002:a05:6870:1119:b0:17e:d9e2:a55c with SMTP id
+ 25-20020a056870111900b0017ed9e2a55cmr2268082oaf.11.1680961323046; Sat, 08 Apr
+ 2023 06:42:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230408050323.70919-1-kartikey406@gmail.com>
+References: <20230407070517.204676-1-andrea.righi@canonical.com>
+In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 8 Apr 2023 22:41:26 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATG0rmbV79Uo8a8mX5uFNn878UbP0BEJ3c=cYSsO_a3ww@mail.gmail.com>
+Message-ID: <CAK7LNATG0rmbV79Uo8a8mX5uFNn878UbP0BEJ3c=cYSsO_a3ww@mail.gmail.com>
+Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
+To: Andrea Righi <andrea.righi@canonical.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>, Eric Curtin <ecurtin@redhat.com>, 
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, Neal Gompa <neal@gompa.dev>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Deepanshu,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on staging/staging-testing]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Deepanshu-Kartikey/Staging-fbtft-fbtft-bus-fixed-extra-space-and-parenthesis-issue/20230408-130429
-patch link:    https://lore.kernel.org/r/20230408050323.70919-1-kartikey406%40gmail.com
-patch subject: [PATCH] Staging: fbtft: fbtft-bus: fixed extra space and parenthesis issue
-config: i386-randconfig-a002-20230403 (https://download.01.org/0day-ci/archive/20230408/202304081830.7kKqUkLL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a5c79ed6665465f3101e8251ca030a600cf1ea88
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Deepanshu-Kartikey/Staging-fbtft-fbtft-bus-fixed-extra-space-and-parenthesis-issue/20230408-130429
-        git checkout a5c79ed6665465f3101e8251ca030a600cf1ea88
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304081830.7kKqUkLL-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/staging/fbtft/fbtft-bus.c:65:53: error: too few arguments provided to function-like macro invocation
-   define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
-                                                       ^
-   drivers/staging/fbtft/fbtft-bus.c:14:9: note: macro 'define_fbtft_write_reg' defined here
-   #define define_fbtft_write_reg(func, buffer_type, data_type, modifier)        \
-           ^
->> drivers/staging/fbtft/fbtft-bus.c:65:1: error: unknown type name 'define_fbtft_write_reg'
-   define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
-   ^
-   drivers/staging/fbtft/fbtft-bus.c:67:57: error: too few arguments provided to function-like macro invocation
-   define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
-                                                           ^
-   drivers/staging/fbtft/fbtft-bus.c:14:9: note: macro 'define_fbtft_write_reg' defined here
-   #define define_fbtft_write_reg(func, buffer_type, data_type, modifier)        \
-           ^
-   drivers/staging/fbtft/fbtft-bus.c:67:1: error: unknown type name 'define_fbtft_write_reg'
-   define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
-   ^
->> drivers/staging/fbtft/fbtft-bus.c:86:3: error: non-void function 'fbtft_write_reg8_bus9' should return a value [-Wreturn-type]
-                   return;
-                   ^
-   drivers/staging/fbtft/fbtft-bus.c:109:3: error: non-void function 'fbtft_write_reg8_bus9' should return a value [-Wreturn-type]
-                   return;
-                   ^
-   6 errors generated.
+On Fri, Apr 7, 2023 at 4:05=E2=80=AFPM Andrea Righi <andrea.righi@canonical=
+.com> wrote:
+>
+> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+> to enable RUST.
+>
+> With this constraint we don't need is_rust_module.sh anymore, because
+> 'pahole --lang_exclude=3Drust' already has the capability to exclude Rust
+> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+> isn't used as well.
+>
+> In any case is_rust_module.sh is obsolete and we can just drop it.
+>
+> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390=
+/
+> Signed-off-by: Andrea Righi
 
 
-vim +65 drivers/staging/fbtft/fbtft-bus.c
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
-    64	
-  > 65	define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
-    66	define_fbtft_write_reg(fbtft_write_reg16_bus8, __be16, u16, cpu_to_be16)
-  > 67	define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
-    68	
-    69	void fbtft_write_reg8_bus9(struct fbtft_par *par, int len, ...)
-    70	{
-    71		va_list args;
-    72		int i, ret;
-    73		int pad = 0;
-    74		u16 *buf = (u16 *)par->buf;
-    75	
-    76		if (unlikely(par->debug & DEBUG_WRITE_REGISTER)) {
-    77			va_start(args, len);
-    78			for (i = 0; i < len; i++)
-    79				*(((u8 *)buf) + i) = (u8)va_arg(args, unsigned int);
-    80			va_end(args);
-    81			fbtft_par_dbg_hex(DEBUG_WRITE_REGISTER, par,
-    82					  par->info->device, u8, buf, len, "%s: ",
-    83					  __func__);
-    84		}
-    85		if (len <= 0)
-  > 86			return;
-    87	
-    88		if (par->spi && (par->spi->bits_per_word == 8)) {
-    89			/* we're emulating 9-bit, pad start of buffer with no-ops
-    90			 * (assuming here that zero is a no-op)
-    91			 */
-    92			pad = (len % 4) ? 4 - (len % 4) : 0;
-    93			for (i = 0; i < pad; i++)
-    94				*buf++ = 0x000;
-    95		}
-    96	
-    97		va_start(args, len);
-    98		*buf++ = (u8)va_arg(args, unsigned int);
-    99		i = len - 1;
-   100		while (i--) {
-   101			*buf = (u8)va_arg(args, unsigned int);
-   102			*buf++ |= 0x100; /* dc=1 */
-   103		}
-   104		va_end(args);
-   105		ret = par->fbtftops.write(par, par->buf, (len + pad) * sizeof(u16));
-   106		if (ret < 0) {
-   107			dev_err(par->info->device,
-   108				"write() failed and returned %d\n", ret);
-   109			return;
-   110		}
-   111	}
-   112	EXPORT_SYMBOL(fbtft_write_reg8_bus9);
-   113	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Best Regards
+Masahiro Yamada
