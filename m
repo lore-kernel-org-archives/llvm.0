@@ -1,157 +1,136 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB381FA5;
-	Sun,  9 Apr 2023 10:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681036110; x=1712572110;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KhUdK/JCLi5O0q5+rXzywZethSVgIl1MPo2BWSWnKpg=;
-  b=K50pXK9TesfobuFsjNHsYg+bieheVrZt8tr19p6R45375ZDPldNw6oK+
-   gCe7e3IQk1NYnZHf1ap/D7aYFuiwN+T9m0bpZbhkEL5QFjT69Jsn67jF/
-   4ZYGZIAGZ6Mp2BtNAU7O1Cx4ceEDRhKZ2XxOsJceSrfgUG3Q0jUVX4qRS
-   1NlAO5f/xzUCCyjeLnaselLbR3+BJuW97B1el9kcF0OjzKHykc3t1KC+1
-   Z8RJeOoG+t95Kgu14GAk+n+yGMugAxgjd6xrx8ABvA68Oe8sHfXmQf6qR
-   X+sWhOcQDYrlbL1aTErjWXDPmifWItP4rHkIGNnL9XVW4U5qHIOWrA+mi
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10674"; a="343215823"
-X-IronPort-AV: E=Sophos;i="5.98,331,1673942400"; 
-   d="scan'208";a="343215823"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2023 03:28:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10674"; a="718304032"
-X-IronPort-AV: E=Sophos;i="5.98,331,1673942400"; 
-   d="scan'208";a="718304032"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Apr 2023 03:28:28 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1plSHb-000UT7-2h;
-	Sun, 09 Apr 2023 10:28:27 +0000
-Date: Sun, 9 Apr 2023 18:27:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Riesch via B4 Relay <devnull+michael.riesch.wolfvision.net@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 1/4] media: v4l2-ctrls: add lens group status
- controls for zoom and focus
-Message-ID: <202304091844.U8qwkT3d-lkp@intel.com>
-References: <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1C2C2DA
+	for <llvm@lists.linux.dev>; Sun,  9 Apr 2023 10:43:19 +0000 (UTC)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 6AD8C32002E2;
+	Sun,  9 Apr 2023 06:43:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 09 Apr 2023 06:43:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:sender:subject:subject:to:to; s=fm3; t=1681036998; x=
+	1681123398; bh=PMqqr88crw3e/FBcE7+PtWmriJr6ml+310l16WR9uDE=; b=i
+	Z3KCVOjG+6AMBqh2mTaAlcS3cDX0XctKWAToVpDWNbYMagKFzMug/0NN2SawGif+
+	tTGc9NABwR9pDtFwMkn0WNdtasxXF+cp7Ws+oDzaoIli5CbxmgOg9XwPUX0Bc1x3
+	Q+ZbixBq+b9KZj/ifF2cxiCX+zGv65P6OtjyDfE9PV73o7/d7s6Ljzc+NVfBf9C/
+	lNgdyDP7/+8B5TBWLFiJRo6+dWzKu97i/iS/B/j2qjKQgehDDtckz4Nv0bC6DbOt
+	womIdtjpdCYSm19auh59aMfcy9k8RoQtbsBETIyE1xShVAE7Z+QHcYwKi31Lyegf
+	LRKw1qK7NzEooO5AQ+FRg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:sender
+	:subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm2; t=1681036998; x=1681123398; bh=P
+	Mqqr88crw3e/FBcE7+PtWmriJr6ml+310l16WR9uDE=; b=ddKVvuBsfpXM522As
+	SnTSKgfCALda0Wrz/vGjNOzUbrN+oG0L7Xr8bqmMwXwF0PcLNiZV/gLdQ/14b+5H
+	2aTWVLt51/DaI5dJHAcFZ2g9iSYKkh1dRUz7EloE+cZv47TuNqV0pjbo9GFPDWGv
+	z4nwW+woZh/CzbVljnGJmyF1fqFHscTk1d72noMLWRHg2MZ7s5SbAI6G14/vt8G+
+	0yVQd+o1I1HKSJQ8RcActweeJgEoiRWPOb1IjU8NHcZXOQOWUXCuilvX1vYWnAN4
+	hsHTH9DNR1bchOfLkeb6o+6Uxh32oZ4e5kYgmwY2vS+I6tcQuPZ2oh+26HzBg7W5
+	ojcjg==
+X-ME-Sender: <xms:xZYyZGoZgA3kLgLCEMmZRxsBPwb48YCizUuVVnzNt1TVIDGpiJ1USw>
+    <xme:xZYyZEoqDnj6fnSKv4OxthVRy-uQpf7dzzPafpM5m48UPLX_z6on0VQgqMZIlOYUm
+    pvICbXsbW2DNxHVpL4>
+X-ME-Received: <xmr:xZYyZLPVnvfN0wzdHdNVFAP3bXtL4XiQjMM7eCMgVD8D_k8AnMqh050bYqU6>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdektddgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffogggtgfesthekre
+    dtredtjeenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejueekkedvfeekudfhhe
+    eliedugefgffduveeviedvffeiueekiefhtdekueeuudenucffohhmrghinhepkhgvrhhn
+    vghlrdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgt
+    ohhm
+X-ME-Proxy: <xmx:xZYyZF47h6ILlrvxM2fh9WPJt2ktgeOxAvE0L3jCYYUhA4kHWew27w>
+    <xmx:xZYyZF5_1i1bF3rmfLitbAIx6CZmcmTThyArcJ4DNQ_HDtIM90JIrQ>
+    <xmx:xZYyZFhLUarNNGut_uxr6gn1EKfznFGzevPWrxfTLS1mfzAKtYtUjQ>
+    <xmx:xpYyZI3GMjKjonfVXzOPVLfql_oQfFgQnwlHQhkd6W7nTj4RwRH0YA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 9 Apr 2023 06:43:16 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+To: linux-mips@vger.kernel.org
+Cc: llvm@lists.linux.dev,
+	tsbogend@alpha.franken.de,
+	ndesaulniers@google.com,
+	nathan@kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/7] MIPS: LLVM build fixes
+Date: Sun,  9 Apr 2023 11:43:01 +0100
+Message-Id: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Michael,
+Hi all,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+This series fixes some build errors when building with LLVM.
+Some of them was discorved by inspecting the tree.
 
-[auto build test WARNING on fe15c26ee26efa11741a7b632e9f23b01aca4cc6]
+Tested with LLVM + LLVM_IAS={0, 1} and GCC against:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Riesch-via-B4-Relay/media-v4l2-ctrls-add-lens-group-status-controls-for-zoom-and-focus/20230406-223922
-base:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-patch link:    https://lore.kernel.org/r/20230406-feature-controls-lens-v1-1-543189a680de%40wolfvision.net
-patch subject: [PATCH RFC 1/4] media: v4l2-ctrls: add lens group status controls for zoom and focus
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230409/202304091844.U8qwkT3d-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c1630c0aaed9c37193a2b0f4ada0f4e5da4c641e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Michael-Riesch-via-B4-Relay/media-v4l2-ctrls-add-lens-group-status-controls-for-zoom-and-focus/20230406-223922
-        git checkout c1630c0aaed9c37193a2b0f4ada0f4e5da4c641e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/media/atomisp/ kernel/module/
+allnoconfig, allmodconfig, 32r2_defconfig, 32r2el_defconfig, 64r2_defconfig,
+64r2el_defconfig, micro32r2el_defconfig, 32r6el_defconfig, 64r6el_defconfig,
+loongson3_defconfig, lemote2f_defconfig, ip22_defconfig, cavium_octeon_defconfig,
+malta_defconfig
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304091844.U8qwkT3d-lkp@intel.com/
+With other patchsets [1] [2] [3] I sent before, on my CI [4], with tree [5].
 
-All warnings (new ones prefixed by >>):
+allmodconfig is still failing but it's not related to MIPS.
 
-   In file included from drivers/staging/media/atomisp/pci/atomisp_cmd.c:37:
-   In file included from drivers/staging/media/atomisp//pci/atomisp_cmd.h:24:
->> drivers/staging/media/atomisp//include/hmm/../../include/linux/atomisp.h:1072:9: warning: 'V4L2_CID_FOCUS_STATUS' macro redefined [-Wmacro-redefined]
-   #define V4L2_CID_FOCUS_STATUS              (V4L2_CID_CAMERA_LASTP1 + 14)
-           ^
-   include/uapi/linux/v4l2-controls.h:1006:9: note: previous definition is here
-   #define V4L2_CID_FOCUS_STATUS                   (V4L2_CID_CAMERA_CLASS_BASE + 37)
-           ^
-   1 warning generated.
---
-   In file included from drivers/staging/media/atomisp/pci/atomisp_compat_css20.c:28:
-   In file included from drivers/staging/media/atomisp//pci/atomisp_compat.h:22:
-   In file included from drivers/staging/media/atomisp//pci/atomisp_compat_css20.h:24:
-   In file included from drivers/staging/media/atomisp//pci/ia_css.h:30:
-   In file included from drivers/staging/media/atomisp//pci/ia_css_dvs.h:26:
-   In file included from drivers/staging/media/atomisp//pci/ia_css_stream_public.h:26:
-   In file included from drivers/staging/media/atomisp//pci/ia_css_metadata.h:25:
-   In file included from drivers/staging/media/atomisp//pci/ia_css_stream_format.h:24:
-   In file included from drivers/staging/media/atomisp//pci/hive_isp_css_common/host/../../../include/linux/atomisp_platform.h:26:
->> drivers/staging/media/atomisp//pci/hive_isp_css_common/host/../../../include/linux/atomisp.h:1072:9: warning: 'V4L2_CID_FOCUS_STATUS' macro redefined [-Wmacro-redefined]
-   #define V4L2_CID_FOCUS_STATUS              (V4L2_CID_CAMERA_LASTP1 + 14)
-           ^
-   include/uapi/linux/v4l2-controls.h:1006:9: note: previous definition is here
-   #define V4L2_CID_FOCUS_STATUS                   (V4L2_CID_CAMERA_CLASS_BASE + 37)
-           ^
-   1 warning generated.
---
-   In file included from drivers/staging/media/atomisp/pci/sh_css_version.c:17:
-   In file included from drivers/staging/media/atomisp//include/hmm/../../include/linux/atomisp_platform.h:25:
-   In file included from include/media/v4l2-subdev.h:12:
-   In file included from include/uapi/linux/v4l2-subdev.h:18:
-   In file included from include/uapi/linux/v4l2-mediabus.h:13:
-   In file included from include/linux/videodev2.h:61:
-   In file included from include/uapi/linux/videodev2.h:67:
->> include/uapi/linux/v4l2-controls.h:1006:9: warning: 'V4L2_CID_FOCUS_STATUS' macro redefined [-Wmacro-redefined]
-   #define V4L2_CID_FOCUS_STATUS                   (V4L2_CID_CAMERA_CLASS_BASE + 37)
-           ^
-   drivers/staging/media/atomisp//include/hmm/../../include/linux/atomisp.h:1072:9: note: previous definition is here
-   #define V4L2_CID_FOCUS_STATUS              (V4L2_CID_CAMERA_LASTP1 + 14)
-           ^
-   1 warning generated.
---
-   In file included from drivers/staging/media/atomisp/i2c/atomisp-mt9m114.c:33:
-   In file included from drivers/staging/media/atomisp/i2c/../include/linux/atomisp_gmin_platform.h:19:
-   In file included from drivers/staging/media/atomisp/i2c/../include/linux/atomisp_platform.h:26:
->> drivers/staging/media/atomisp/i2c/../include/linux/atomisp.h:1072:9: warning: 'V4L2_CID_FOCUS_STATUS' macro redefined [-Wmacro-redefined]
-   #define V4L2_CID_FOCUS_STATUS              (V4L2_CID_CAMERA_LASTP1 + 14)
-           ^
-   include/uapi/linux/v4l2-controls.h:1006:9: note: previous definition is here
-   #define V4L2_CID_FOCUS_STATUS                   (V4L2_CID_CAMERA_CLASS_BASE + 37)
-           ^
-   1 warning generated.
---
-   In file included from drivers/staging/media/atomisp/i2c/ov5693/atomisp-ov5693.c:35:
-   In file included from drivers/staging/media/atomisp/i2c/ov5693/../../include/linux/atomisp_gmin_platform.h:19:
-   In file included from drivers/staging/media/atomisp/i2c/ov5693/../../include/linux/atomisp_platform.h:26:
->> drivers/staging/media/atomisp/i2c/ov5693/../../include/linux/atomisp.h:1072:9: warning: 'V4L2_CID_FOCUS_STATUS' macro redefined [-Wmacro-redefined]
-   #define V4L2_CID_FOCUS_STATUS              (V4L2_CID_CAMERA_LASTP1 + 14)
-           ^
-   include/uapi/linux/v4l2-controls.h:1006:9: note: previous definition is here
-   #define V4L2_CID_FOCUS_STATUS                   (V4L2_CID_CAMERA_CLASS_BASE + 37)
-           ^
-   1 warning generated.
+[1]: https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814-2-jiaxun.yang@flygoat.com/
+[2]: https://patchwork.kernel.org/project/linux-mips/patch/20230408115936.6631-1-jiaxun.yang@flygoat.com/
+[3]: https://patchwork.kernel.org/project/linux-mips/patch/20230407102721.14814-2-jiaxun.yang@flygoat.com/
+[4]: https://github.com/FlyGoat/kernel-action-ci/actions/runs/4649898964/jobs/8228560848
+[5]: https://github.com/FlyGoat/kernel-action-ci/tree/71d3f53e9c44cebf62cfa4ed7ec3b0ce6452555f
 
+Thanks
+Jiaxun
 
-vim +/V4L2_CID_FOCUS_STATUS +1072 drivers/staging/media/atomisp//include/hmm/../../include/linux/atomisp.h
+Jiaxun Yang (8):
+  MIPS: Replace assembly isa level directives with macros
+  MIPS: Set ISA level for MSA control reg helpers
+  MIPS: loongson2ef: Add missing break in cs5536_isa
+  MIPS: asmmacro: Restore fp macro after undef
+  MIPS: mipsregs: Parse fp and sp register by name in parse_r
+  MIPS: c-r4k: Use cache_op function for rm7k_erratum31
+  MIPS: octeon_switch: Remove duplicated labels
+  MIPS: Implement microMIPS MT ASE helpers
 
-ad85094b293e40 Mauro Carvalho Chehab 2020-04-19  1070  
-ad85094b293e40 Mauro Carvalho Chehab 2020-04-19  1071  /* Query Focus Status */
-ad85094b293e40 Mauro Carvalho Chehab 2020-04-19 @1072  #define V4L2_CID_FOCUS_STATUS              (V4L2_CID_CAMERA_LASTP1 + 14)
-ad85094b293e40 Mauro Carvalho Chehab 2020-04-19  1073  
+ arch/mips/alchemy/common/sleeper.S            |   6 +-
+ arch/mips/include/asm/asmmacro.h              |  57 ++--
+ arch/mips/include/asm/futex.h                 |   8 +-
+ arch/mips/include/asm/hazards.h               |   2 +-
+ arch/mips/include/asm/io.h                    |   4 +-
+ arch/mips/include/asm/mipsmtregs.h            | 256 +++++++++++-------
+ arch/mips/include/asm/mipsregs.h              |  63 +++--
+ arch/mips/include/asm/msa.h                   |   2 +
+ arch/mips/include/asm/stackframe.h            |   2 +-
+ arch/mips/kernel/bmips_vec.S                  |   4 +-
+ arch/mips/kernel/csrc-r4k.c                   |   2 +-
+ arch/mips/kernel/genex.S                      |   8 +-
+ arch/mips/kernel/idle.c                       |   6 +-
+ arch/mips/kernel/octeon_switch.S              |   6 -
+ arch/mips/kernel/r4k_fpu.S                    |   4 +-
+ arch/mips/kernel/syscall.c                    |   2 +-
+ arch/mips/lantiq/clk.c                        |   2 +-
+ arch/mips/lib/csum_partial.S                  |   5 +-
+ .../loongson2ef/common/cs5536/cs5536_isa.c    |   2 +-
+ arch/mips/mm/c-r4k.c                          |  33 +--
+ arch/mips/mm/cex-oct.S                        |   2 +-
+ arch/mips/mm/sc-ip22.c                        |   6 +-
+ 22 files changed, 277 insertions(+), 205 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2 (Apple Git-143)
+
