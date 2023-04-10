@@ -1,43 +1,43 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE24423A8;
-	Mon, 10 Apr 2023 05:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEE723A8;
+	Mon, 10 Apr 2023 05:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681104074; x=1712640074;
+  t=1681104675; x=1712640675;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2ZzNCGssA1wu98mRXpa9+cWNwnehjRVT4+2e5+tdmHU=;
-  b=I7Yfrvzu/ZDZUsIjfRxNbvthsF/45OfmNYdUhyA1E4mEVwuJuCi/Kv7r
-   vVwj3WSdjkRQ+FMDBeLulIRiSjNgVX76P/n2In1cxCX5jGDxtUGIw0czY
-   RR1QiKR2hzyUiMweD+eGsQYQDqJaJFCWDh0jIe6pQKCXsD0zBWB32Qy5d
-   6TJkcKeqsPnbkGMgpr/N/S5ShLXxyfNK5/3HxLGaEaDuy4Dud2MAg+e5O
-   9zx4uJfxzo3aeJRLt2AkyaghleH/YjPKalYhEURmpr8lpSMy5Pstr6CsN
-   J/CrKMGJxyhObLmYBfF1e+NCoVQ0XlPvzi6c3ASaw3NygTl0iGT0JLBEM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="322922022"
+  bh=LqyUN8HDCR3cV/IyN2VJVJSaNnDfcBInbPbv/UhMifA=;
+  b=H9wUHqBAH+DgiC3VGgMnP2odCCGjW/YAXLFs+a9mrdEBqU/tQ9VNpuZ7
+   JGBIBO65qV4q1n99wp1QSoVkcdLrIGf5SqjszFjyPpBjkerftLpZEaWYu
+   94TLMiCbbBSgm2BkS4PDVLeZKcJwnS2oz2hfDf7Bd5V5GgD1tyEtntoxD
+   qSLzpO0LrAEnP8TMAlPtMjZR3unkgemwA2L/XvFn2gmzd1kJ8nk0rBl6W
+   MwE1utJB0Gf9tyBuebMqsvpI0gtC+jgaaD5ESIJcKkrCehr5Okfv/4T1R
+   JtDsepD3w6ehjkcJ3lWeH1Dr4bAWF4D24Cru/gJIXDUvumf5TAdwglmsM
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="345951720"
 X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="322922022"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2023 22:21:14 -0700
+   d="scan'208";a="345951720"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2023 22:31:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="862382912"
+X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="665509464"
 X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="862382912"
+   d="scan'208";a="665509464"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Apr 2023 22:21:12 -0700
+  by orsmga006.jf.intel.com with ESMTP; 09 Apr 2023 22:31:13 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pljxn-000V6b-2H;
-	Mon, 10 Apr 2023 05:21:11 +0000
-Date: Mon, 10 Apr 2023 13:20:45 +0800
+	id 1plk7U-000V7J-0T;
+	Mon, 10 Apr 2023 05:31:12 +0000
+Date: Mon, 10 Apr 2023 13:30:56 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [mhiramat:topic/fprobe-event-ext 5/5] drivers/greybus/hd.c:15:1:
  error: use of undeclared identifier '__probestub_gb_hd_create'; did you mean
  '__traceiter_gb_hd_create'?
-Message-ID: <202304101349.UUe8ZXGN-lkp@intel.com>
+Message-ID: <202304101321.KQhjAdXL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
 head:   dba0fb8da5621907bcbc624b94b6b3350e824317
 commit: dba0fb8da5621907bcbc624b94b6b3350e824317 [5/5] tracing: Add tracepoint support on fprobe_event
-config: x86_64-randconfig-a003-20230410 (https://download.01.org/0day-ci/archive/20230410/202304101349.UUe8ZXGN-lkp@intel.com/config)
+config: x86_64-randconfig-r002-20230410 (https://download.01.org/0day-ci/archive/20230410/202304101321.KQhjAdXL-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
@@ -62,11 +62,11 @@ reproduce (this is a W=1 build):
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/greybus/ drivers/nvme/host/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304101349.UUe8ZXGN-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304101321.KQhjAdXL-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
@@ -76,14 +76,14 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:64:1: note: expanded from here
+   <scratch space>:91:1: note: expanded from here
    __probestub_gb_hd_create
    ^
    drivers/greybus/hd.c:15:1: note: '__traceiter_gb_hd_create' declared here
    include/linux/tracepoint.h:344:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__traceiter_##name);                          \
                              ^
-   <scratch space>:49:1: note: expanded from here
+   <scratch space>:76:1: note: expanded from here
    __traceiter_gb_hd_create
    ^
 >> drivers/greybus/hd.c:16:1: error: use of undeclared identifier '__probestub_gb_hd_release'; did you mean '__probestub_gb_hd_create'?
@@ -92,7 +92,7 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:7:1: note: expanded from here
+   <scratch space>:23:1: note: expanded from here
    __probestub_gb_hd_release
    ^
    drivers/greybus/hd.c:15:1: note: '__probestub_gb_hd_create' declared here
@@ -101,7 +101,7 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:64:1: note: expanded from here
+   <scratch space>:91:1: note: expanded from here
    __probestub_gb_hd_create
    ^
 >> drivers/greybus/hd.c:17:1: error: use of undeclared identifier '__probestub_gb_hd_add'; did you mean '__probestub_gb_hd_create'?
@@ -110,7 +110,7 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:83:1: note: expanded from here
+   <scratch space>:99:1: note: expanded from here
    __probestub_gb_hd_add
    ^
    drivers/greybus/hd.c:15:1: note: '__probestub_gb_hd_create' declared here
@@ -119,7 +119,7 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:64:1: note: expanded from here
+   <scratch space>:91:1: note: expanded from here
    __probestub_gb_hd_create
    ^
 >> drivers/greybus/hd.c:18:1: error: use of undeclared identifier '__probestub_gb_hd_del'; did you mean '__probestub_gb_hd_add'?
@@ -128,7 +128,7 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:32:1: note: expanded from here
+   <scratch space>:48:1: note: expanded from here
    __probestub_gb_hd_del
    ^
    drivers/greybus/hd.c:17:1: note: '__probestub_gb_hd_add' declared here
@@ -137,7 +137,7 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:83:1: note: expanded from here
+   <scratch space>:99:1: note: expanded from here
    __probestub_gb_hd_add
    ^
 >> drivers/greybus/hd.c:19:1: error: use of undeclared identifier '__probestub_gb_hd_in'
@@ -146,7 +146,7 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:108:1: note: expanded from here
+   <scratch space>:124:1: note: expanded from here
    __probestub_gb_hd_in
    ^
 >> drivers/greybus/hd.c:20:1: error: use of undeclared identifier '__probestub_gb_message_submit'; did you mean '__traceiter_gb_message_submit'?
@@ -155,17 +155,35 @@ All errors (new ones prefixed by >>):
    include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__probestub_##name);                          \
                              ^
-   <scratch space>:47:1: note: expanded from here
+   <scratch space>:64:1: note: expanded from here
    __probestub_gb_message_submit
    ^
    drivers/greybus/hd.c:20:1: note: '__traceiter_gb_message_submit' declared here
    include/linux/tracepoint.h:344:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
            EXPORT_SYMBOL_GPL(__traceiter_##name);                          \
                              ^
-   <scratch space>:32:1: note: expanded from here
+   <scratch space>:49:1: note: expanded from here
    __traceiter_gb_message_submit
    ^
    6 errors generated.
+--
+>> drivers/nvme/host/trace.c:357:1: error: use of undeclared identifier '__probestub_nvme_sq'; did you mean '__traceiter_nvme_sq'?
+   EXPORT_TRACEPOINT_SYMBOL_GPL(nvme_sq);
+   ^
+   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
+           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
+                             ^
+   <scratch space>:130:1: note: expanded from here
+   __probestub_nvme_sq
+   ^
+   drivers/nvme/host/trace.c:357:1: note: '__traceiter_nvme_sq' declared here
+   include/linux/tracepoint.h:344:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
+           EXPORT_SYMBOL_GPL(__traceiter_##name);                          \
+                             ^
+   <scratch space>:115:1: note: expanded from here
+   __traceiter_nvme_sq
+   ^
+   1 error generated.
 
 
 vim +15 drivers/greybus/hd.c
