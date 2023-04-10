@@ -1,149 +1,136 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13DF28FC;
-	Mon, 10 Apr 2023 10:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681121903; x=1712657903;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+Px3xZYXBGh3gWKcigP5xScFiAaWtfJvlKq6TWnP5VY=;
-  b=i9dpVHB9rTB+rLyXLjae/cj5uT40r4WVcy2BJWKIyRmhDwGUoxnZWoGu
-   qN2Riof5rqLNFi4f6LN+L232WwFJUEzw0q5MSCn5OU1cqnR4sHnQQmd8s
-   TeqJdj6mWhRAhh5NeodHKcM0huEeIB71EFiyCl+3iGlBQAgqIsVWuuUU9
-   ohibbE9U8f045hare2wgJ0SNYNztG3OVeE1JCflp4PsCeXTVtJ9FJr58H
-   1XEzJZA7Xbr9dLqshKzoIDxDNCvvAndegXOIPro6GexcYJRVzSbdKe/He
-   kusb3Uj74uUANUilFO05FSMWkTnJVXJCmoL+MhJKky21y/cQRETZzz5VM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="327421873"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="327421873"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 03:18:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="777524079"
-X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
-   d="scan'208";a="777524079"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Apr 2023 03:18:20 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1plobM-000VJB-01;
-	Mon, 10 Apr 2023 10:18:20 +0000
-Date: Mon, 10 Apr 2023 18:17:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [stable:linux-5.10.y 1220/9999]
- drivers/gpu/drm/i915/gt/intel_gt.c:732:2: error: format string is not a
- string literal (potentially insecure)
-Message-ID: <202304101810.OgeMN6Rz-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2845B17CE
+	for <llvm@lists.linux.dev>; Mon, 10 Apr 2023 13:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681131643;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wzrkHK4OYp+4XNBRd84fwqSupVBHy2wwJ0ID1hZNXOw=;
+	b=UxeQmWqLwLPHlxScMakj6RYmxiDf3qJflFKmuDvvb3174mBXlrZOC8FZR2d42/5p6ONFoL
+	AVLHcOawyo8LelZJ1fxZPmd+DkMtLt0TXAVLAixvzYOLH/M5lADk+3A0WO53ty19TgxAZ6
+	PXnRQ88hkImTD+YBagK8TL3yxm0oUlY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-oLrHrMaSM3W1_CUljWpYOg-1; Mon, 10 Apr 2023 09:00:41 -0400
+X-MC-Unique: oLrHrMaSM3W1_CUljWpYOg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 38F961C0A588
+	for <llvm@lists.linux.dev>; Mon, 10 Apr 2023 13:00:39 +0000 (UTC)
+Received: from [172.64.3.12] (unknown [10.30.33.173])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 279BC14171BF;
+	Mon, 10 Apr 2023 13:00:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 35 of 358): Test report for master
+ (6.3.0-rc5, mainline.kernel.org-clang, faf8f418)
+Date: Mon, 10 Apr 2023 13:00:39 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <85199.123041009004101757@us-mta-25.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tvrtko,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-head:   387078f9030cf336cd9fef521540db75b61615e0
-commit: 6a6acf927895c38bdd9f3cd76b8dbfc25ac03e88 [1220/9999] drm/i915: Flush TLBs before releasing backing store
-config: x86_64-randconfig-a005-20230410 (https://download.01.org/0day-ci/archive/20230410/202304101810.OgeMN6Rz-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=6a6acf927895c38bdd9f3cd76b8dbfc25ac03e88
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.10.y
-        git checkout 6a6acf927895c38bdd9f3cd76b8dbfc25ac03e88
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+Tested-by: CKI Project <cki-project@redhat.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304101810.OgeMN6Rz-lkp@intel.com/
+Kernel information:
+    Commit message: Merge tag 'perf_urgent_for_v6.3_rc6' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tip/tip
 
-All errors (new ones prefixed by >>):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84080
 
->> drivers/gpu/drm/i915/gt/intel_gt.c:732:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("\n");
-           ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt.c:732:2: note: treat the string as an argument to avoid this
-   drivers/gpu/drm/i915/i915_gem.h:69:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^
-   include/linux/kernel.h:724:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^
-   include/linux/kernel.h:738:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^
-   1 error generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
+ waiting the udev queue being empty
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1470
+            Affected tests:
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-vim +732 drivers/gpu/drm/i915/gt/intel_gt.c
 
-   693	
-   694	void intel_gt_invalidate_tlbs(struct intel_gt *gt)
-   695	{
-   696		static const i915_reg_t gen8_regs[] = {
-   697			[RENDER_CLASS]			= GEN8_RTCR,
-   698			[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
-   699			[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
-   700			[COPY_ENGINE_CLASS]		= GEN8_BTCR,
-   701		};
-   702		static const i915_reg_t gen12_regs[] = {
-   703			[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
-   704			[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
-   705			[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
-   706			[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
-   707		};
-   708		struct drm_i915_private *i915 = gt->i915;
-   709		struct intel_uncore *uncore = gt->uncore;
-   710		struct intel_engine_cs *engine;
-   711		enum intel_engine_id id;
-   712		const i915_reg_t *regs;
-   713		unsigned int num = 0;
-   714	
-   715		if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
-   716			return;
-   717	
-   718		if (INTEL_GEN(i915) == 12) {
-   719			regs = gen12_regs;
-   720			num = ARRAY_SIZE(gen12_regs);
-   721		} else if (INTEL_GEN(i915) >= 8 && INTEL_GEN(i915) <= 11) {
-   722			regs = gen8_regs;
-   723			num = ARRAY_SIZE(gen8_regs);
-   724		} else if (INTEL_GEN(i915) < 8) {
-   725			return;
-   726		}
-   727	
-   728		if (drm_WARN_ONCE(&i915->drm, !num,
-   729				  "Platform does not implement TLB invalidation!"))
-   730			return;
-   731	
- > 732		GEM_TRACE("\n");
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
