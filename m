@@ -1,130 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6344D28FE
-	for <llvm@lists.linux.dev>; Sun,  9 Apr 2023 21:51:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681077089;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZVr0kCh65oGBSmGUPn3KBmDH38ras+/Ks67i276EHok=;
-	b=TLqMpLQfYe+j+p8ckCZVBQF670XTeFJCs98+fpVYKrpwK5FST1eEPhoSLKzXKbzQ/gXNPA
-	qBNxJP0qlfRUfGbBYhIVd8ztOMUPf7V4wafrrFHOenEZG3LYKAHoHaVi+3VI50qjammhBo
-	KQDWk3wHny7O+Gw+bryK42L/2SKHvms=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-UZ06GsiOOlesfLthNGSEwQ-1; Sun, 09 Apr 2023 17:51:28 -0400
-X-MC-Unique: UZ06GsiOOlesfLthNGSEwQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61FB41C0513C
-	for <llvm@lists.linux.dev>; Sun,  9 Apr 2023 21:51:28 +0000 (UTC)
-Received: from [172.64.0.121] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5085A1415127;
-	Sun,  9 Apr 2023 21:51:28 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 35 of 358): Test report for master
- (6.3.0-rc5, mainline.kernel.org-clang, cdc9718d)
-Date: Sun, 09 Apr 2023 21:51:28 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5335517FA
+	for <llvm@lists.linux.dev>; Mon, 10 Apr 2023 00:00:48 +0000 (UTC)
+Received: by mail-il1-f208.google.com with SMTP id i25-20020a056e021d1900b00316f1737173so3121910ila.16
+        for <llvm@lists.linux.dev>; Sun, 09 Apr 2023 17:00:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681084847; x=1683676847;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KUe7oj9hTq5hcskImUR6Y1MNxIs+QSkpYtdEdfE2RGE=;
+        b=TXd2SJziBRnX3ohFVu8T0Hngp0qEWI8IT5cus4PfPWqZMENrropg6CiBPpTUXde8UG
+         jGd1zTjwSp1wffvmWCYY+wb1yQbUZf+WLUxzLJlCx44qhMZ2qoXVPAcQJNayLkPYOZtl
+         /c9XqouRXxs5KhXb/i2U2oXZZuv7rsms1GDft7D6PYvQwdvIvw/FJ5Osa7hgG+O6yftl
+         +OoAuZH3Gtvr4nRlHMa1kX8+hM77QyAVitj63TNmISVPfvUDJeq3CYZlLm5ladtgMu4f
+         Wro76TrJplTxUJ0KSorCZPPgg1I/VhxW9VND3srQ2ILp0bNK8t0057l8RGTc0ayGxM8T
+         KRWA==
+X-Gm-Message-State: AAQBX9cIzZ9q9+h2OPvrELVONdDbV1gEa7wfVuznwh4+G0HPKfNEpf0g
+	Jbb08SeHXw2DU1aIGPQVMQ8Dc0042i/sHODlZ8Zy1XtUkNwi
+X-Google-Smtp-Source: AKy350Y/UG//8klK566koPPD5BsMP1Bvg8PQE7X+VafGvAkCN6LUNSl8FL7vkqf5L+9ttMzMuNMOVW72CaxQf3qr+T/vlE2/xNcc
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <45694.123040917512800255@us-mta-632.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a5e:8e4a:0:b0:71b:8c6:6123 with SMTP id
+ r10-20020a5e8e4a000000b0071b08c66123mr3904508ioo.3.1681084847398; Sun, 09 Apr
+ 2023 17:00:47 -0700 (PDT)
+Date: Sun, 09 Apr 2023 17:00:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002aa60c05f8f0114b@google.com>
+Subject: [syzbot] [ntfs3?] WARNING in errseq_set
+From: syzbot <syzbot+e08a9f98656d7a208859@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi, we tested your kernel and here are the results:
+Hello,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+syzbot found the following issue on:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+HEAD commit:    99ddf2254feb Merge tag 'trace-v6.3-rc5' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a3ec8dc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5666fa6aca264e42
+dashboard link: https://syzkaller.appspot.com/bug?extid=e08a9f98656d7a208859
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Kernel information:
-    Commit message: Merge tag '6.3-rc5-smb3-cifs-client-fixes' of git://git=
-.samba.org/sfrench/cifs-2.6
+Unfortunately, I don't have any reproducer for this issue yet.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84072
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/907a43450c5c/disk-99ddf225.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a142637e5396/vmlinux-99ddf225.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/447736ad6200/bzImage-99ddf225.xz
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e08a9f98656d7a208859@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+err = 556
+WARNING: CPU: 1 PID: 46 at lib/errseq.c:75 errseq_set+0xf2/0x120 lib/errseq.c:74
+Modules linked in:
+CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.3.0-rc5-syzkaller-00032-g99ddf2254feb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Workqueue: writeback wb_workfn (flush-7:0)
+RIP: 0010:errseq_set+0xf2/0x120 lib/errseq.c:74
+Code: fd 89 e8 5b 41 5c 41 5e 41 5f 5d c3 e8 f7 4d 5a fd 44 89 e5 eb eb e8 ed 4d 5a fd 48 c7 c7 c0 c0 37 8b 44 89 fe e8 4e 65 22 fd <0f> 0b 44 89 e5 eb d0 44 89 f1 80 e1 07 80 c1 03 38 c1 0f 8c 2a ff
+RSP: 0018:ffffc90000b770f0 EFLAGS: 00010246
+RAX: 4af338da7583c100 RBX: ffff888074f98bd8 RCX: ffff888017d23a80
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 000000000000022c R08: ffffffff81527c82 R09: ffffed101732515b
+R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
+R13: 1ffff1100e9f317b R14: ffff888074f98da0 R15: 000000000000022c
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd05cb85998 CR3: 000000006cd24000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __filemap_set_wb_err+0x22/0x1e0 mm/filemap.c:698
+ mapping_set_error include/linux/pagemap.h:224 [inline]
+ ntfs_resident_writepage+0x90/0x150 fs/ntfs3/inode.c:848
+ write_cache_pages+0x89e/0x12c0 mm/page-writeback.c:2473
+ do_writepages+0x3a6/0x670 mm/page-writeback.c:2551
+ __writeback_single_inode+0x155/0xfb0 fs/fs-writeback.c:1600
+ writeback_sb_inodes+0x8ef/0x11d0 fs/fs-writeback.c:1891
+ wb_writeback+0x458/0xc70 fs/fs-writeback.c:2065
+ wb_do_writeback fs/fs-writeback.c:2208 [inline]
+ wb_workfn+0x400/0xff0 fs/fs-writeback.c:2248
+ process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2390
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2537
+ kthread+0x270/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
