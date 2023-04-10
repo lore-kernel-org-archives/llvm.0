@@ -1,57 +1,44 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977F35250
-	for <llvm@lists.linux.dev>; Mon, 10 Apr 2023 20:02:48 +0000 (UTC)
-Received: by mail-pl1-f177.google.com with SMTP id h24so5757117plr.1
-        for <llvm@lists.linux.dev>; Mon, 10 Apr 2023 13:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1681156968; x=1683748968;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HpioAPXxW+v4Q4xUafxth5Qioe7sUCWQU1eCRcCSF4E=;
-        b=OpSVB2xGYnoW5ZPOAmBnJFAuzcl4KWcOCssIXXoleg7BMgFiMKR6onztmHu2iPTwqV
-         nlirkxgXvfjkEPyH+/Rw9CqIAFpt6o0d5KXy01HdZ4VSxoR8Cdr5bJ+/wtCvtRInRhlp
-         Du9/tQ0WN8TytZHVtzCSsUEzJdQ4lnRPIeo8cTdnVr9SKRvHR4szvHAHahSq7IipAsLL
-         l3fiTUSzkx8hBk08XSdL2o0DNbEAqNUDwG56S6yWXYvoXxal+x23wrDXYtE7d3NAUMLw
-         Co11Qx7Q8VwF5wDNnGhH4ztFDGFLUNRgyq4wkQ2HewgSRwUVhVPkscfkT420mVaj04Ub
-         ejqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681156968; x=1683748968;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HpioAPXxW+v4Q4xUafxth5Qioe7sUCWQU1eCRcCSF4E=;
-        b=ZyyYGUoRG9hP3BrIq755JP6sl8ZOQlYE8C8sL6quc7y6ToKwvYJ9cJ/GCK5st97Qml
-         5mPnFtfDH9c6xYDyWJKgI5D4/smmXXYgNnvzoZCtgqNYGenMQRB09JFecLFT5u2vxu11
-         z/3mulB2KXUzdE3g+HxP8FIu/Y+LAmxFLeJbIB3u8MFBPYSa9lAb5AVE6kfmUloInwdn
-         F9PMQc/x38nQx+xRn3EtKV7mG8MDkN3pNXu3JvY4UetnqQULdGKk0HxJghTkEIIlNveL
-         oey02EaAHSEATQl+KlYF93qBcjYXkubfwXp87x/y5n1mltu1X/+Cno2IUSKlTd+EVDZM
-         M53w==
-X-Gm-Message-State: AAQBX9fBGqLBcCt01YYNTF0TiNgxXzHlrkkGTUuGylDMoFusrnkDUKTc
-	pSlhqwrXC09L4H+av2UUc4alig==
-X-Google-Smtp-Source: AKy350b82capCtNuSEsvxElVHvbtJETNgyp2B+atrv+RlVkQiQyDeGAflx7JoQTMQzRsKIJ+MsvcRg==
-X-Received: by 2002:a17:902:c404:b0:1a2:7356:1ecd with SMTP id k4-20020a170902c40400b001a273561ecdmr17301528plk.5.1681156967766;
-        Mon, 10 Apr 2023 13:02:47 -0700 (PDT)
-Received: from google.com ([2620:15c:2d1:203:8e63:90de:efab:9bf6])
-        by smtp.gmail.com with ESMTPSA id r19-20020a170902be1300b001a072aedec7sm8201345pls.75.2023.04.10.13.02.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 13:02:47 -0700 (PDT)
-Date: Mon, 10 Apr 2023 13:02:35 -0700
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miroslav Benes <mbenes@suse.cz>, linux-btrfs@vger.kernel.org,
-	Mark Rutland <mark.rutland@arm.com>, linux-scsi@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-	Michael Kelley <mikelley@microsoft.com>, nathan@kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 01/11] init: Mark [arch_call_]rest_init() __noreturn
-Message-ID: <ZDRrW9+FrGxgw6Ok@google.com>
-References: <cover.1680912057.git.jpoimboe@kernel.org>
- <b24a972397061a67d46ff5a98657e352040f427a.1680912057.git.jpoimboe@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49A823D0;
+	Mon, 10 Apr 2023 23:46:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681170360; x=1712706360;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2gL9AIsy+pMSDwwh5kMQmzlYzHqgWRNk+FUARdbuWJM=;
+  b=lmJUvXMejXH8HsMUcc7Hvb5lDjY4/b7TOQEAaR6ZKdI8AZmIxa45/NfR
+   5nAM8bXv7q2ciI29Ju8zS06ykRvIuq4NTNCi8SDKQPOYys+wGLncKz2fU
+   efYFalxEvnBYUFhh9DNHm3xf+N/VrG4yl3AqmwOyEQRVJbiNULexC7VI+
+   /UpoqBuF2XooprvR/0Ha1YrRinLgl7S1Mzj9TWmyvmmxqdASUp6fuTU/E
+   ZIXRYZTWXRhOU58pZVyMkgHrQk4iTYEBpwI7PxAScWgJ253LmgiayT1zT
+   1Nl62W7s6+0kYd0DMEMr4cPwweGG4CEi5lnvcRJA2snzXLzCmgk1s13bA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="406310841"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="406310841"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 16:45:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="934512815"
+X-IronPort-AV: E=Sophos;i="5.98,335,1673942400"; 
+   d="scan'208";a="934512815"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Apr 2023 16:45:44 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pm1Ch-000VjV-0D;
+	Mon, 10 Apr 2023 23:45:43 +0000
+Date: Tue, 11 Apr 2023 07:45:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jic23-iio:testing 65/65]
+ drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:2641:7: error: call to
+ undeclared function 'acpi_has_method'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202304110756.69aPebZE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,114 +47,162 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b24a972397061a67d46ff5a98657e352040f427a.1680912057.git.jpoimboe@kernel.org>
 
-On Fri, Apr 07, 2023 at 05:09:54PM -0700, Josh Poimboeuf wrote:
-> Fixes the following warning:
-> 
->   init/main.o: warning: objtool: start_kernel+0x4ad: unreachable instruction
-> 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+head:   4c3b188facb2011e9edcdaaf71f2f553e9c230df
+commit: 4c3b188facb2011e9edcdaaf71f2f553e9c230df [65/65] iio: imu: lsm6dsx: Add ACPI mount matrix retrieval
+config: hexagon-randconfig-r045-20230410 (https://download.01.org/0day-ci/archive/20230411/202304110756.69aPebZE-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=4c3b188facb2011e9edcdaaf71f2f553e9c230df
+        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+        git fetch --no-tags jic23-iio testing
+        git checkout 4c3b188facb2011e9edcdaaf71f2f553e9c230df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/iio/imu/st_lsm6dsx/
 
-Ha! I was just looking into this, by coincidence.
-https://github.com/ClangBuiltLinux/linux/issues/1815#issuecomment-1489113303
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304110756.69aPebZE-lkp@intel.com/
 
-Generally, the compiler can infer when a function does not return, but
-it's not safe to do so when the definition is weak, since the strong
-definition may not be, so the caller must not make optimizations based
-on such an assumption.
+All errors (new ones prefixed by >>):
 
-https://reviews.llvm.org/D147177 (abandoned, but has more info)
+   In file included from drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:64:
+   In file included from include/linux/iio/triggered_buffer.h:6:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:64:
+   In file included from include/linux/iio/triggered_buffer.h:6:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:64:
+   In file included from include/linux/iio/triggered_buffer.h:6:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:2641:7: error: call to undeclared function 'acpi_has_method'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!acpi_has_method(adev->handle, "ROTM"))
+                ^
+   drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:2641:7: note: did you mean 'acpi_has_watchdog'?
+   include/linux/acpi.h:1442:20: note: 'acpi_has_watchdog' declared here
+   static inline bool acpi_has_watchdog(void) { return false; }
+                      ^
+>> drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:2641:27: error: incomplete definition of type 'struct acpi_device'
+           if (!acpi_has_method(adev->handle, "ROTM"))
+                                ~~~~^
+   include/linux/acpi.h:798:8: note: forward declaration of 'struct acpi_device'
+   struct acpi_device;
+          ^
+   drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:2644:36: error: incomplete definition of type 'struct acpi_device'
+           status = acpi_evaluate_object(adev->handle, "ROTM", NULL, &buffer);
+                                         ~~~~^
+   include/linux/acpi.h:798:8: note: forward declaration of 'struct acpi_device'
+   struct acpi_device;
+          ^
+   6 warnings and 3 errors generated.
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-(I agree with the first two patches, since those are ones I was just
-looking at.  Unfortunately, some security embargo just lifted on
-https://bugs.chromium.org/p/llvm/issues/detail?id=30 which a clang-16
-change is causing the stack canaries to be set+checked again in
-start_kernel. I'm about to meet with LLVM folks at Intel in 30 minutes
-to discuss walking back some of the changes since I strongly disagree
-with them.  But merging this series will cause boot failures with
-clang-16, and I would appreciate some time to sort this out before this
-series is merged. It's my top priority.)
+vim +/acpi_has_method +2641 drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
 
-> ---
->  arch/s390/kernel/setup.c     | 2 +-
->  include/linux/start_kernel.h | 4 ++--
->  init/main.c                  | 4 ++--
->  tools/objtool/check.c        | 2 ++
->  4 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-> index 8ec5cdf9dadc..4259b6c50516 100644
-> --- a/arch/s390/kernel/setup.c
-> +++ b/arch/s390/kernel/setup.c
-> @@ -396,7 +396,7 @@ int __init arch_early_irq_init(void)
->  	return 0;
->  }
->  
-> -void __init arch_call_rest_init(void)
-> +void __init __noreturn arch_call_rest_init(void)
->  {
->  	unsigned long stack;
->  
-> diff --git a/include/linux/start_kernel.h b/include/linux/start_kernel.h
-> index 8b369a41c03c..864921e54c92 100644
-> --- a/include/linux/start_kernel.h
-> +++ b/include/linux/start_kernel.h
-> @@ -9,7 +9,7 @@
->     up something else. */
->  
->  extern asmlinkage void __init start_kernel(void);
-> -extern void __init arch_call_rest_init(void);
-> -extern void __ref rest_init(void);
-> +extern void __init __noreturn arch_call_rest_init(void);
-> +extern void __ref __noreturn rest_init(void);
->  
->  #endif /* _LINUX_START_KERNEL_H */
-> diff --git a/init/main.c b/init/main.c
-> index 4425d1783d5c..161ed956d738 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -683,7 +683,7 @@ static void __init setup_command_line(char *command_line)
->  
->  static __initdata DECLARE_COMPLETION(kthreadd_done);
->  
-> -noinline void __ref rest_init(void)
-> +noinline void __ref __noreturn rest_init(void)
->  {
->  	struct task_struct *tsk;
->  	int pid;
-> @@ -889,7 +889,7 @@ static int __init early_randomize_kstack_offset(char *buf)
->  early_param("randomize_kstack_offset", early_randomize_kstack_offset);
->  #endif
->  
-> -void __init __weak arch_call_rest_init(void)
-> +void __init __weak __noreturn arch_call_rest_init(void)
->  {
->  	rest_init();
->  }
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index cae6ac6ff246..e7442e7ad676 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -202,6 +202,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
->  		"__reiserfs_panic",
->  		"__stack_chk_fail",
->  		"__ubsan_handle_builtin_unreachable",
-> +		"arch_call_rest_init",
->  		"arch_cpu_idle_dead",
->  		"cpu_bringup_and_idle",
->  		"cpu_startup_entry",
-> @@ -217,6 +218,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
->  		"machine_real_restart",
->  		"make_task_dead",
->  		"panic",
-> +		"rest_init",
->  		"rewind_stack_and_make_dead",
->  		"sev_es_terminate",
->  		"snp_abort",
-> -- 
-> 2.39.2
-> 
-> 
+  2627	
+  2628	static bool lsm6dsx_get_acpi_mount_matrix(struct device *dev,
+  2629						  struct iio_mount_matrix *orientation)
+  2630	{
+  2631		struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+  2632		struct acpi_device *adev = ACPI_COMPANION(dev);
+  2633		union acpi_object *obj, *elements;
+  2634		acpi_status status;
+  2635		int i, j, val[3];
+  2636		char *str;
+  2637	
+  2638		if (!has_acpi_companion(dev))
+  2639			return -EINVAL;
+  2640	
+> 2641		if (!acpi_has_method(adev->handle, "ROTM"))
+  2642			return -EINVAL;
+  2643	
+  2644		status = acpi_evaluate_object(adev->handle, "ROTM", NULL, &buffer);
+  2645		if (ACPI_FAILURE(status)) {
+  2646			dev_warn(dev, "Failed to get ACPI mount matrix: %d\n", status);
+  2647			return -EINVAL;
+  2648		}
+  2649	
+  2650		obj = buffer.pointer;
+  2651		if (obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 3)
+  2652			goto unknown_format;
+  2653	
+  2654		elements = obj->package.elements;
+  2655		for (i = 0; i < 3; i++) {
+  2656			if (elements[i].type != ACPI_TYPE_STRING)
+  2657				goto unknown_format;
+  2658	
+  2659			str = elements[i].string.pointer;
+  2660			if (sscanf(str, "%d %d %d", &val[0], &val[1], &val[2]) != 3)
+  2661				goto unknown_format;
+  2662	
+  2663			for (j = 0; j < 3; j++) {
+  2664				switch (val[j]) {
+  2665				case -1: str = "-1"; break;
+  2666				case 0:  str = "0";  break;
+  2667				case 1:  str = "1";  break;
+  2668				default: goto unknown_format;
+  2669				}
+  2670				orientation->rotation[i * 3 + j] = str;
+  2671			}
+  2672		}
+  2673	
+  2674		kfree(buffer.pointer);
+  2675		return 0;
+  2676	
+  2677	unknown_format:
+  2678		dev_warn(dev, "Unknown ACPI mount matrix format, ignoring\n");
+  2679		kfree(buffer.pointer);
+  2680		return -EINVAL;
+  2681	}
+  2682	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
