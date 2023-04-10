@@ -1,208 +1,90 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEE723A8;
-	Mon, 10 Apr 2023 05:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681104675; x=1712640675;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LqyUN8HDCR3cV/IyN2VJVJSaNnDfcBInbPbv/UhMifA=;
-  b=H9wUHqBAH+DgiC3VGgMnP2odCCGjW/YAXLFs+a9mrdEBqU/tQ9VNpuZ7
-   JGBIBO65qV4q1n99wp1QSoVkcdLrIGf5SqjszFjyPpBjkerftLpZEaWYu
-   94TLMiCbbBSgm2BkS4PDVLeZKcJwnS2oz2hfDf7Bd5V5GgD1tyEtntoxD
-   qSLzpO0LrAEnP8TMAlPtMjZR3unkgemwA2L/XvFn2gmzd1kJ8nk0rBl6W
-   MwE1utJB0Gf9tyBuebMqsvpI0gtC+jgaaD5ESIJcKkrCehr5Okfv/4T1R
-   JtDsepD3w6ehjkcJ3lWeH1Dr4bAWF4D24Cru/gJIXDUvumf5TAdwglmsM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="345951720"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="345951720"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2023 22:31:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10675"; a="665509464"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="665509464"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 Apr 2023 22:31:13 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1plk7U-000V7J-0T;
-	Mon, 10 Apr 2023 05:31:12 +0000
-Date: Mon, 10 Apr 2023 13:30:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mhiramat:topic/fprobe-event-ext 5/5] drivers/greybus/hd.c:15:1:
- error: use of undeclared identifier '__probestub_gb_hd_create'; did you mean
- '__traceiter_gb_hd_create'?
-Message-ID: <202304101321.KQhjAdXL-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D010179
+	for <llvm@lists.linux.dev>; Mon, 10 Apr 2023 08:34:06 +0000 (UTC)
+Received: by mail-vs1-f49.google.com with SMTP id v1so3885676vsg.5
+        for <llvm@lists.linux.dev>; Mon, 10 Apr 2023 01:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681115645;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2y6ZF+9oOUd5xpzsnYpA/WWQqIIRWLv0YQ7yeTEnMFI=;
+        b=LdEWgyWN5oc0YneShy1GFV80BlXsRdVOLVGntL5QZXzKMJw00sGV6ud9nsoaXXALAh
+         cTmQqVYMpMbj4O5enPJ+sdLzx04GlcbnFQ7A4Y8ZdjE/zMCVXR/wx3VNYPdOA3I1a9u6
+         gXJ+OS3XX7+U7bsGiyv18KMphV1RkqDfpLstm0he3r3C52LEX+D8AZ6vd+TZg2Q4XtY1
+         89+zZuDkuCCof2vKmYOkcWlaffVjkZhwZYf30NkAQYz8bStQKxi+HIhY/QgSww+k3w2q
+         4mrYA+nAeaNKkDeRQhzLbfhYioXJL3DOQXj1GVLFIe2fNUCwffmqk/lndEBUH2qxcdrX
+         Uakw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681115645;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2y6ZF+9oOUd5xpzsnYpA/WWQqIIRWLv0YQ7yeTEnMFI=;
+        b=v6bYvc+1QbblIjR3kcb/3cj6ihPKUR2nnTM6P/p/wC+/KDraUiPg7siI9elyBkNGg2
+         IMH+iOm0D/m350NMeNksV4POFdzsOrNa/VmdJWoHia4Uc4LDjBAj8/kkx24EMUsso0Cd
+         Xts9RCmCi+wxC9iGzLwUUdQtWVz0OxxSYz2w2Y7ph8U8IA8utBwvFPBfDplb5Uu9ii3W
+         q2jU0j/meKPZXkXEMcxOy7lYAPLDC89yoqCOEsQKqYcDgwM8AHFeqUN+HGdOqYOrLJF6
+         ZHbCws0dhp45SF1Ur4kcst5OGtIVR26DEs2JTC5iBXRix82MLXrodNCfBl+/oEmctEp9
+         IvnA==
+X-Gm-Message-State: AAQBX9cA+7ER5bqiLK2PltKyJlU3qQOv8RkYSv3hdQv1L24/V6uSPeBd
+	JC9O2qptJWIl2xqk8hcFvhXA6T9p0VPQ+vdu7YmcB7V3YQ5n8oJMZ4o=
+X-Google-Smtp-Source: AKy350bncSFZcosjHjqQnOjeQEFT8SwcKqwSa3FsXW6R4FbtxDmAmfupWPWLtksuGhZxRt1waKe0plT2W9g0MedZecc=
+X-Received: by 2002:a67:c38a:0:b0:425:e623:360a with SMTP id
+ s10-20020a67c38a000000b00425e623360amr5739468vsj.1.1681115644735; Mon, 10 Apr
+ 2023 01:34:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 10 Apr 2023 14:03:53 +0530
+Message-ID: <CA+G9fYs9jB7V2QFBKy3WbMkGKqWSrE7iUq_t2QqCDLetws-bjg@mail.gmail.com>
+Subject: next: MIPS: clang-16: tinyconfig: error: unknown target CPU 'r4600'
+To: llvm@lists.linux.dev, linux-mips@vger.kernel.org, 
+	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc: Nathan Chancellor <nathan@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
-head:   dba0fb8da5621907bcbc624b94b6b3350e824317
-commit: dba0fb8da5621907bcbc624b94b6b3350e824317 [5/5] tracing: Add tracepoint support on fprobe_event
-config: x86_64-randconfig-r002-20230410 (https://download.01.org/0day-ci/archive/20230410/202304101321.KQhjAdXL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=dba0fb8da5621907bcbc624b94b6b3350e824317
-        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
-        git fetch --no-tags mhiramat topic/fprobe-event-ext
-        git checkout dba0fb8da5621907bcbc624b94b6b3350e824317
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/greybus/ drivers/nvme/host/
+MIPS clang-16 tinyconfig build failed on Linux next-20230410.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304101321.KQhjAdXL-lkp@intel.com/
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-All errors (new ones prefixed by >>):
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'HOSTCC=sccache clang' 'CC=sccache
+clang' LLVM=1 LLVM_IAS=1
 
->> drivers/greybus/hd.c:15:1: error: use of undeclared identifier '__probestub_gb_hd_create'; did you mean '__traceiter_gb_hd_create'?
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_create);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:91:1: note: expanded from here
-   __probestub_gb_hd_create
-   ^
-   drivers/greybus/hd.c:15:1: note: '__traceiter_gb_hd_create' declared here
-   include/linux/tracepoint.h:344:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__traceiter_##name);                          \
-                             ^
-   <scratch space>:76:1: note: expanded from here
-   __traceiter_gb_hd_create
-   ^
->> drivers/greybus/hd.c:16:1: error: use of undeclared identifier '__probestub_gb_hd_release'; did you mean '__probestub_gb_hd_create'?
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_release);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:23:1: note: expanded from here
-   __probestub_gb_hd_release
-   ^
-   drivers/greybus/hd.c:15:1: note: '__probestub_gb_hd_create' declared here
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_create);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:91:1: note: expanded from here
-   __probestub_gb_hd_create
-   ^
->> drivers/greybus/hd.c:17:1: error: use of undeclared identifier '__probestub_gb_hd_add'; did you mean '__probestub_gb_hd_create'?
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_add);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:99:1: note: expanded from here
-   __probestub_gb_hd_add
-   ^
-   drivers/greybus/hd.c:15:1: note: '__probestub_gb_hd_create' declared here
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_create);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:91:1: note: expanded from here
-   __probestub_gb_hd_create
-   ^
->> drivers/greybus/hd.c:18:1: error: use of undeclared identifier '__probestub_gb_hd_del'; did you mean '__probestub_gb_hd_add'?
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_del);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:48:1: note: expanded from here
-   __probestub_gb_hd_del
-   ^
-   drivers/greybus/hd.c:17:1: note: '__probestub_gb_hd_add' declared here
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_add);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:99:1: note: expanded from here
-   __probestub_gb_hd_add
-   ^
->> drivers/greybus/hd.c:19:1: error: use of undeclared identifier '__probestub_gb_hd_in'
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_in);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:124:1: note: expanded from here
-   __probestub_gb_hd_in
-   ^
->> drivers/greybus/hd.c:20:1: error: use of undeclared identifier '__probestub_gb_message_submit'; did you mean '__traceiter_gb_message_submit'?
-   EXPORT_TRACEPOINT_SYMBOL_GPL(gb_message_submit);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:64:1: note: expanded from here
-   __probestub_gb_message_submit
-   ^
-   drivers/greybus/hd.c:20:1: note: '__traceiter_gb_message_submit' declared here
-   include/linux/tracepoint.h:344:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__traceiter_##name);                          \
-                             ^
-   <scratch space>:49:1: note: expanded from here
-   __traceiter_gb_message_submit
-   ^
-   6 errors generated.
+error: unknown target CPU 'r4600'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+error: unknown target CPU 'r4600'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+error: unknown target CPU 'r4600'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+error: unknown target CPU 'r4600'
+note: valid target CPU values are: mips1, mips2, mips3, mips4, mips5,
+mips32, mips32r2, mips32r3, mips32r5, mips32r6, mips64, mips64r2,
+mips64r3, mips64r5, mips64r6, octeon, octeon+, p5600
+make[2]: *** [/builds/linux/scripts/Makefile.build:114:
+scripts/mod/devicetable-offsets.s] Error 1
+make[2]: *** [/builds/linux/scripts/Makefile.build:252:
+scripts/mod/empty.o] Error 1
+
+
+Build history:
+  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119585/suite/build/test/clang-16-tinyconfig/history/
+  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230406/testrun/16119585/suite/build/tests/
+
+
 --
->> drivers/nvme/host/trace.c:357:1: error: use of undeclared identifier '__probestub_nvme_sq'; did you mean '__traceiter_nvme_sq'?
-   EXPORT_TRACEPOINT_SYMBOL_GPL(nvme_sq);
-   ^
-   include/linux/tracepoint.h:345:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__probestub_##name);                          \
-                             ^
-   <scratch space>:130:1: note: expanded from here
-   __probestub_nvme_sq
-   ^
-   drivers/nvme/host/trace.c:357:1: note: '__traceiter_nvme_sq' declared here
-   include/linux/tracepoint.h:344:20: note: expanded from macro 'EXPORT_TRACEPOINT_SYMBOL_GPL'
-           EXPORT_SYMBOL_GPL(__traceiter_##name);                          \
-                             ^
-   <scratch space>:115:1: note: expanded from here
-   __traceiter_nvme_sq
-   ^
-   1 error generated.
-
-
-vim +15 drivers/greybus/hd.c
-
-7bc6faaca7d829 drivers/staging/greybus/hd.c Johan Hovold 2015-11-03  14  
-56278c7384a3c0 drivers/staging/greybus/hd.c Viresh Kumar 2016-06-09 @15  EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_create);
-56278c7384a3c0 drivers/staging/greybus/hd.c Viresh Kumar 2016-06-09 @16  EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_release);
-56278c7384a3c0 drivers/staging/greybus/hd.c Viresh Kumar 2016-06-09 @17  EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_add);
-56278c7384a3c0 drivers/staging/greybus/hd.c Viresh Kumar 2016-06-09 @18  EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_del);
-495787a792ac49 drivers/staging/greybus/hd.c Alex Elder   2016-06-03 @19  EXPORT_TRACEPOINT_SYMBOL_GPL(gb_hd_in);
-56278c7384a3c0 drivers/staging/greybus/hd.c Viresh Kumar 2016-06-09 @20  EXPORT_TRACEPOINT_SYMBOL_GPL(gb_message_submit);
-495787a792ac49 drivers/staging/greybus/hd.c Alex Elder   2016-06-03  21  
-
-:::::: The code at line 15 was first introduced by commit
-:::::: 56278c7384a3c0242fe2f7ba91473c978ab500ae greybus: hd: Export host device tracepoint from hd.c
-
-:::::: TO: Viresh Kumar <viresh.kumar@linaro.org>
-:::::: CC: Greg Kroah-Hartman <gregkh@google.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Linaro LKFT
+https://lkft.linaro.org
