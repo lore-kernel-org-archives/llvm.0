@@ -1,160 +1,185 @@
-Received: from outbound.mail.protection.outlook.com (mail-mw2nam10on2059.outbound.protection.outlook.com [40.107.94.59])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867EE1C04
-	for <llvm@lists.linux.dev>; Mon, 10 Apr 2023 14:46:27 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X4WINfzecwP54fF4RLBtZhFzXJIVcf5JRpOgzj2cLys0tbayw1bJp57EaEEH8OmQC62nWVb14YwGRM6DcozI2TSxnFYsda2ZYNiQv/DAvfabHbLgOOPyDj5hkk7NAhHveHZjQA4s8dPd8Oege5ajq09e4PnvFHzYTtX8EwxA4kyMXzmWXcXqY+i0GEkZcJUeExppHnctZxPEum6lfwG20bKslFl/0f9ClKuN1iOmQ+rIVJY0MD0EFkmtWBVCTpiXZBZTWjAezVwnQND8qJAdb3p6n/DEafKbp8OXiak+67ToTmxoSZwNyYFRPvOudWDFcE8wi3KqoGIBdURxNLXWuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r1+j4iSJkvXRZYQCs/Lc6/hx5wP9D/Wau3seB+PheBU=;
- b=VuH6g3n4iRYzcJBx3SdpiFiSQfAf0YXHcc1eeJCYLwRjZSQ0aAZtFt8ZYfbharYNHC2eP3X6tfpm9sujk/qlJBLuddLnQF6ZuNOrx+MUNS9yDGym1XsygWLAcX/imtuDZBNOMB+7/dn3Wjjogcg7yg8YPtFmi+9XKu3adDDxOH/TnTYap75J+ToakDHVcJOGsBRpM0aTy0PinsK66aWUSLPn8lBTo3I8IJjmGD++f/vJG+xaZBBbV1HrDGmZF2xYYZCEs4ieaUS3M5Jswfdn75mCICgbgD4OTkJEjElb+fwlSYRPTXH6kq3KAt+qH+6h/DzyR+y5bwAqybfbJcG+jA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r1+j4iSJkvXRZYQCs/Lc6/hx5wP9D/Wau3seB+PheBU=;
- b=H48r8XIX7cob2jno+NKsclenRKUNnSugYfRhQvrL2rvt5GV86B3/7IFYo0r9FA5d6lMrYjPWuYkyAr6EEnD5BxanxKYdVCwT8EoXj3z85VwwOONUFKiebqiGASbyR0s2MbchsPVvrYPgBl6b9254Dm1fAYVffNJWbiNv+N27BcQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- DM4PR12MB5771.namprd12.prod.outlook.com (2603:10b6:8:62::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.33; Mon, 10 Apr 2023 14:46:25 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6277.038; Mon, 10 Apr 2023
- 14:46:24 +0000
-Message-ID: <c4fbb44b-ed31-96b2-2342-b654299f72dc@amd.com>
-Date: Mon, 10 Apr 2023 10:47:46 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] drm/amd/display: remove unused matching_stream_ptrs
- variable
-To: Tom Rix <trix@redhat.com>, harry.wentland@amd.com, sunpeng.li@amd.com,
- Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
- christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
- daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
- Jun.Lei@amd.com, wenjing.liu@amd.com, Jimmy.Kizito@amd.com,
- Cruise.Hung@amd.com
-Cc: llvm@lists.linux.dev, dri-devel@lists.freedesktop.org,
- amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230325134503.1335510-1-trix@redhat.com>
-Content-Language: en-US
-From: Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230325134503.1335510-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0478.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d6::9) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0D73C04;
+	Mon, 10 Apr 2023 15:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681139724; x=1712675724;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IcBIRnBkkgY++2wg9UVkZojiEjodJTNWVyp8d7um//w=;
+  b=hqJmrguLaEXnDJuGYHuMU/Gnf3YY9arKF9yuIqbmSM+P9dH90J09Ot5M
+   xT6FXKr3sxRFroyM16Qkinw+D3vt2k2+NgCUY49P2SJyQ75MnHtQ4aJJ1
+   yC0pNkhWvGHYq+oZjZDohtR2iz3gm63rYRaud/dU9wbByc9su/To2UbnK
+   z3cbNJGyvwvd+lea3AclKVDlCkxkvTn/0pQ82rbZgFBm8jVBaZpxSMqoS
+   IzInjsQl6CgwGa35OWIYfZ4pOJhibwAwh446d4qAhmltcSuOOIv+5bymg
+   +BdoWp1kMmAGPrHY5J+8idx9sB6ymedVAlQeQ7XY5LDbhIgi7LAD0i5Wz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="323008421"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="323008421"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2023 08:14:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10676"; a="862531578"
+X-IronPort-AV: E=Sophos;i="5.98,333,1673942400"; 
+   d="scan'208";a="862531578"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Apr 2023 08:14:28 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pltDv-000VRd-1W;
+	Mon, 10 Apr 2023 15:14:27 +0000
+Date: Mon, 10 Apr 2023 23:13:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jani Nikula <jani.nikula@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>
+Subject: [linux-next:master 9268/9787]
+ drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:62: warning: wrong kernel-doc
+ identifier on line:
+Message-ID: <202304102354.Q4VOXGTE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DM4PR12MB5771:EE_
-X-MS-Office365-Filtering-Correlation-Id: b40c687c-927c-4f80-8e7a-08db39d25b9d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	XcPTlPJapfmg80n7hWthQyxfC9YiPNyL2r5FRn7yI2yqf3ziTGwszR5DBolxWzVZ7pEoHRZV4UeMkJFwRyoFHBoBXXIQThAC56S/DivGb2TN8UrqsT75uDHDhKksSOkIK9460Pyub1kDY1vkEvnr2/hayXRuNuqZiZhrf5vYlIVIsoml82nuHb4EHY80jva7rEjNHV370FxifXZhmKM3zVz4UjnQAN0kd7XT6ooW0ka5BlRYRLbFRyhz0DBELXvENXcZIdjuC4vL3rJSmUx/HN/tX0w6GLdniPZmSG9B2xT1k7M/SIKzOjSnQYfV3oPOer6+8GZfiTKLQdIOhIvt6EVm6vQFnQLUoMFvOIh2K5aq3EDLbjDh8XsK1HUkTO+Y6EuvWst7lXKcdPE4egeEkzlBIEwVf8Qk7Mf8KNbWB7U2Eq0M74kXlf1JihlY7GFAYm2mob0j+MAmgpFbkp7NjZYSK8sAF9KW6HtqETL8LbX2EkUBjcac02qeytWB7RiFiefGXHwQdLH8VmWWNbiZ3a+T+R50nHmmjLZMkHckuXaN6ZbcPrY/AQ9beEwdsfyq5a6g70eSwd7C2EUwG+Uvm3BqVB8Qtdo9XEHn3XkZ/ewcKvd/orP5vEWRmPC7wN6SS9gwldbNvTj8rWVWqkNWOhER5ScAElfq1vL/oVoiUxY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(346002)(136003)(366004)(451199021)(36756003)(2906002)(6512007)(6486002)(316002)(6636002)(6506007)(53546011)(26005)(2616005)(478600001)(31686004)(66946007)(186003)(86362001)(8676002)(66476007)(66556008)(6666004)(83380400001)(31696002)(4326008)(921005)(41300700001)(44832011)(5660300002)(38100700002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NlVRd2YwV0U5WkxxZ1BIZHVvNUZxTVM2U3FLV1c5RDBkNWkwWG1XblJRTDRm?=
- =?utf-8?B?eHc5MllDNGJzcURpblRJbXFJZ3FzQUtaMVIwYmVhQWV2emtoalBGUGZUZnBo?=
- =?utf-8?B?RGZaVS9UN0ROZXl3RVArcEN1VjJlWFFNODljdWhkUUl1V3daS29ycERvd2RG?=
- =?utf-8?B?NDlyeHlkSThGZ3BZVVVpbTgySDRoS1dBaXlYck9RMlluZjdINU40MjZiSVZw?=
- =?utf-8?B?SEx2TWFuRVU3ekpMT09uSDBHMmk1bkJ6UlpmTDE3NDBxSUExWFlENld5ZzA0?=
- =?utf-8?B?MUh6QWw1QXN3TW5obEV4QW5FRGhwVUF1ZStLU3dydk9pMHdKLzZtM3YrWVoy?=
- =?utf-8?B?d3VRalJ2MG5rbFlCWU1XcUE5bEtrc2J5aWUyemtFbTRnSFJoZE9ocG03R1Fi?=
- =?utf-8?B?YllnNGNiMWYvNkZvSHpSNEE2RFM4R21GRi9LVzU3Qk8yL0xxUjRNN2ZZMExC?=
- =?utf-8?B?UWpGZmNKdkwzTklDV1RvOFRFUG03dW85Z2VPSHlrQUhVNEJPajEva3hDNnpQ?=
- =?utf-8?B?Q2N2bklLY2RBYTJObHl5N2dhZXhzTUdGdGU2UGxNMmpQRkpVYmZ6MW9hSHI5?=
- =?utf-8?B?Q2tadTh3ZzJvakkwNFdudFZFcTlEejM4eTB5YWI1YXhYYzNkUm5JTkpSc3R0?=
- =?utf-8?B?ZmVnYU1hT1ZtZ0ZwVmRmUmtKUUhVNVlnN3JXTG9MNXVEdHZpOFU2RG11OTVs?=
- =?utf-8?B?elB6bENnejRpRHJtQmNpdmQyQVRXelA3ZWJjaFlrc1BNVDBTSHcvK1hwTm9j?=
- =?utf-8?B?ZElmaE82aGRYWnRMQUkrNHNkcmcwaUc2TDRwdGxhaCtHRk1kT1RCZ2FFL0Zm?=
- =?utf-8?B?Uy9oWURNTjFHdW0zekp2YkFFTFdESVdkeis0b0V6Um5MMThkeVRab1o1SWUy?=
- =?utf-8?B?RFFaaE5NRzQyQUFTNGUzTTJINWtyNHB3V0dVT2hRMTZYTXRVSEE1M01DYkxj?=
- =?utf-8?B?R01Qb0YwSTg0S0xxajVSUERydXhYSmRxS0R3ditFa3c3SDR2Z1NOemRlWW9V?=
- =?utf-8?B?TjVMU2pNRVFqTjVBTTlOMStaRWZRUk5QZ2trU3RhUE1ZNGhzWFFkdWhpZDVr?=
- =?utf-8?B?d0NZZmhMdEFYejVpVEpLZitwL3pxbFVWY240aEtxSWs3QVBidXVmbHhxL0lR?=
- =?utf-8?B?V3VBVDJvT1Y2M25xU0xQUm9yWlR1YVNmYktiZldTQ3pxYVRZK2ErQldqVFVq?=
- =?utf-8?B?MkZlc28yR1FNS043ZTVGeERQT2FHbllSeTJVVnZuRmZiTzR0a1QxRFFHQzMz?=
- =?utf-8?B?MGRqWENtYllLdFlnZUY3N3RhbjZSbGZLbUZlYkZvUHFiLzVwelFYVkhmQWlM?=
- =?utf-8?B?bEZEenNWMHVYTTdOeW9VM2tzeUFMdWMxNG1TYy9BSlh5RStiUnRxM2dNbTV6?=
- =?utf-8?B?MlJYcC9mdENuL3Z6M1ZDS0QxcGh5bXAwYnEvY2x0TzRxbUJ3Q3NYWDVZN1pr?=
- =?utf-8?B?NEQwSVpuR3BTMDAzNlVWUWlPb1R3Z1lOKzBrYS80MTBNd0VOanJvcDBvWldt?=
- =?utf-8?B?YW1uN1IwMmNacmJGZFpNSTJlVHl3MnNXbEp0U0JuZTNxckN3NVRYZzk1Q2VI?=
- =?utf-8?B?R2xqc1NBMHhKMlByRVhiaWxIcE9DbzZHelpld3l3U1NnaWlqQ1R6aGUxOXp3?=
- =?utf-8?B?cTBPVUY4OFY0YmlCTnBWVCtlSXVKV3JpN1dwMnBJbjFvM3JnbkZPZTAvejRX?=
- =?utf-8?B?emlTMkpsbnFMUUdyUnRvd0NhVTNCaXVPbmVMbXBZdUlJZUVMNEVodVV3VVhn?=
- =?utf-8?B?ZWExbGdhRUh3WHBEKzlSVlVXd3NZNVM4bTBPNC9xLzcyamoxeWxPQUVzM0tm?=
- =?utf-8?B?Q2x6eU4vai9OVlBxT0kvRlk1YUljdkh6azRjd0pna2x0OS9hd1ZWQWR2RkxR?=
- =?utf-8?B?VmdDbVMyTUlvY1dJRW5HR0VxNk14UTNWRUYrZUwzNXduSWJtSzJRWk01aHlM?=
- =?utf-8?B?M0I0NVpiQTBMWGtBN3o0eUE5dmRxdWp3Ry8wYzZWdGF5VW5la1c4amV6enNx?=
- =?utf-8?B?Q205SEJ6VU4vdzdOaGM5MzliU3Aza3c4RmQ4cUZRUjNVejF0M0RLeEtVL2VB?=
- =?utf-8?B?QWN1dnUzK1NKRUNmV0JFSmFxdFNkVCtkTVRGYkZvbmNkaE9QZEFjKzJJRDJQ?=
- =?utf-8?Q?WSAdqpvoG4PsK5UPaxWY+SVE4?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b40c687c-927c-4f80-8e7a-08db39d25b9d
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2023 14:46:24.8760
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mpKUB3+KvIo5ohLBroyRwydNfWZ6RCIgHRxFFwKTRlcQmztky9WRn5cXZGosemYLlWfQalVsYIjaAgqgyo2VOQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5771
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 3/25/23 09:45, Tom Rix wrote:
-> clang with W=1 reports
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_enc_cfg.c:625:6: error:
->    variable 'matching_stream_ptrs' set but not used [-Werror,-Wunused-but-set-variable]
->          int matching_stream_ptrs = 0;
->              ^
-> This variable is not used so remove it.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e134c93f788fb93fd6a3ec3af9af850a2048c7e6
+commit: 899ff790d1a94dda9bd09a4a6bde01fb7ff0bec8 [9268/9787] drm/i915: run kernel-doc on headers as part of HDRTEST
+config: x86_64-randconfig-a005-20230410 (https://download.01.org/0day-ci/archive/20230410/202304102354.Q4VOXGTE-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=899ff790d1a94dda9bd09a4a6bde01fb7ff0bec8
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 899ff790d1a94dda9bd09a4a6bde01fb7ff0bec8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
 
-Applied, thanks!
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304102354.Q4VOXGTE-lkp@intel.com/
 
-> ---
->   drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-> index 41198c729d90..30c0644d4418 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-> @@ -622,7 +622,6 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc_state *state)
->   	int i, j;
->   	uint8_t valid_count = 0;
->   	uint8_t dig_stream_count = 0;
-> -	int matching_stream_ptrs = 0;
->   	int eng_ids_per_ep_id[MAX_PIPES] = {0};
->   	int ep_ids_per_eng_id[MAX_PIPES] = {0};
->   	int valid_bitmap = 0;
-> @@ -645,9 +644,7 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc_state *state)
->   		struct link_enc_assignment assignment = state->res_ctx.link_enc_cfg_ctx.link_enc_assignments[i];
->   
->   		if (assignment.valid) {
-> -			if (assignment.stream == state->streams[i])
-> -				matching_stream_ptrs++;
-> -			else
-> +			if (assignment.stream != state->streams[i])
->   				valid_stream_ptrs = false;
->   		}
->   	}
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:27: warning: Function parameter or member 'size' not described in '__guc_capture_bufstate'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:27: warning: Function parameter or member 'data' not described in '__guc_capture_bufstate'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:27: warning: Function parameter or member 'rd' not described in '__guc_capture_bufstate'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:27: warning: Function parameter or member 'wr' not described in '__guc_capture_bufstate'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'link' not described in '__guc_capture_parsed_output'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'is_partial' not described in '__guc_capture_parsed_output'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'eng_class' not described in '__guc_capture_parsed_output'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'eng_inst' not described in '__guc_capture_parsed_output'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'guc_id' not described in '__guc_capture_parsed_output'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'lrca' not described in '__guc_capture_parsed_output'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'reginfo' not described in '__guc_capture_parsed_output'
+>> drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:62: warning: wrong kernel-doc identifier on line:
+    * struct guc_debug_capture_list_header / struct guc_debug_capture_list
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:80: warning: wrong kernel-doc identifier on line:
+    * struct __guc_mmio_reg_descr / struct __guc_mmio_reg_descr_group
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:105: warning: wrong kernel-doc identifier on line:
+    * struct guc_state_capture_header_t / struct guc_state_capture_t /
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:163: warning: Function parameter or member 'is_valid' not described in '__guc_capture_ads_cache'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:163: warning: Function parameter or member 'ptr' not described in '__guc_capture_ads_cache'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:163: warning: Function parameter or member 'size' not described in '__guc_capture_ads_cache'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:163: warning: Function parameter or member 'status' not described in '__guc_capture_ads_cache'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:216: warning: Function parameter or member 'ads_null_cache' not described in 'intel_guc_state_capture'
+   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:216: warning: Function parameter or member 'max_mmio_per_node' not described in 'intel_guc_state_capture'
+--
+   drivers/gpu/drm/i915/i915_pmu.h:21: warning: cannot understand function prototype: 'enum i915_pmu_tracked_events '
+   drivers/gpu/drm/i915/i915_pmu.h:32: warning: cannot understand function prototype: 'enum '
+>> drivers/gpu/drm/i915/i915_pmu.h:41: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * How many different events we track in the global PMU mask.
+--
+>> drivers/gpu/drm/i915/i915_request.h:176: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Request queue structure.
+   drivers/gpu/drm/i915/i915_request.h:477: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Returns true if seq1 is later than seq2.
+--
+>> drivers/gpu/drm/i915/i915_vma.h:145: warning: expecting prototype for i915_vma_offset(). Prototype was for i915_vma_size() instead
+--
+>> drivers/gpu/drm/i915/intel_wakeref.h:118: warning: expecting prototype for intel_wakeref_get_if_in_use(). Prototype was for intel_wakeref_get_if_active() instead
+
+
+vim +62 drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
+
+24492514ccbd571 Alan Previn 2022-03-21  14  
+f5718a7265a6f56 Alan Previn 2022-03-21  15  /**
+f5718a7265a6f56 Alan Previn 2022-03-21  16   * struct __guc_capture_bufstate
+f5718a7265a6f56 Alan Previn 2022-03-21  17   *
+f5718a7265a6f56 Alan Previn 2022-03-21  18   * Book-keeping structure used to track read and write pointers
+f5718a7265a6f56 Alan Previn 2022-03-21  19   * as we extract error capture data from the GuC-log-buffer's
+f5718a7265a6f56 Alan Previn 2022-03-21  20   * error-capture region as a stream of dwords.
+f5718a7265a6f56 Alan Previn 2022-03-21  21   */
+f5718a7265a6f56 Alan Previn 2022-03-21  22  struct __guc_capture_bufstate {
+f5718a7265a6f56 Alan Previn 2022-03-21  23  	u32 size;
+f5718a7265a6f56 Alan Previn 2022-03-21  24  	void *data;
+f5718a7265a6f56 Alan Previn 2022-03-21  25  	u32 rd;
+f5718a7265a6f56 Alan Previn 2022-03-21  26  	u32 wr;
+f5718a7265a6f56 Alan Previn 2022-03-21 @27  };
+f5718a7265a6f56 Alan Previn 2022-03-21  28  
+f5718a7265a6f56 Alan Previn 2022-03-21  29  /**
+f5718a7265a6f56 Alan Previn 2022-03-21  30   * struct __guc_capture_parsed_output - extracted error capture node
+f5718a7265a6f56 Alan Previn 2022-03-21  31   *
+f5718a7265a6f56 Alan Previn 2022-03-21  32   * A single unit of extracted error-capture output data grouped together
+f5718a7265a6f56 Alan Previn 2022-03-21  33   * at an engine-instance level. We keep these nodes in a linked list.
+247f8071d589333 Alan Previn 2022-03-21  34   * See cachelist and outlist below.
+f5718a7265a6f56 Alan Previn 2022-03-21  35   */
+f5718a7265a6f56 Alan Previn 2022-03-21  36  struct __guc_capture_parsed_output {
+f5718a7265a6f56 Alan Previn 2022-03-21  37  	/*
+f5718a7265a6f56 Alan Previn 2022-03-21  38  	 * A single set of 3 capture lists: a global-list
+f5718a7265a6f56 Alan Previn 2022-03-21  39  	 * an engine-class-list and an engine-instance list.
+f5718a7265a6f56 Alan Previn 2022-03-21  40  	 * outlist in __guc_capture_parsed_output will keep
+f5718a7265a6f56 Alan Previn 2022-03-21  41  	 * a linked list of these nodes that will eventually
+f5718a7265a6f56 Alan Previn 2022-03-21  42  	 * be detached from outlist and attached into to
+f5718a7265a6f56 Alan Previn 2022-03-21  43  	 * i915_gpu_codedump in response to a context reset
+f5718a7265a6f56 Alan Previn 2022-03-21  44  	 */
+f5718a7265a6f56 Alan Previn 2022-03-21  45  	struct list_head link;
+f5718a7265a6f56 Alan Previn 2022-03-21  46  	bool is_partial;
+f5718a7265a6f56 Alan Previn 2022-03-21  47  	u32 eng_class;
+f5718a7265a6f56 Alan Previn 2022-03-21  48  	u32 eng_inst;
+f5718a7265a6f56 Alan Previn 2022-03-21  49  	u32 guc_id;
+f5718a7265a6f56 Alan Previn 2022-03-21  50  	u32 lrca;
+f5718a7265a6f56 Alan Previn 2022-03-21  51  	struct gcap_reg_list_info {
+f5718a7265a6f56 Alan Previn 2022-03-21  52  		u32 vfid;
+f5718a7265a6f56 Alan Previn 2022-03-21  53  		u32 num_regs;
+f5718a7265a6f56 Alan Previn 2022-03-21  54  		struct guc_mmio_reg *regs;
+f5718a7265a6f56 Alan Previn 2022-03-21  55  	} reginfo[GUC_CAPTURE_LIST_TYPE_MAX];
+f5718a7265a6f56 Alan Previn 2022-03-21  56  #define GCAP_PARSED_REGLIST_INDEX_GLOBAL   BIT(GUC_CAPTURE_LIST_TYPE_GLOBAL)
+f5718a7265a6f56 Alan Previn 2022-03-21  57  #define GCAP_PARSED_REGLIST_INDEX_ENGCLASS BIT(GUC_CAPTURE_LIST_TYPE_ENGINE_CLASS)
+f5718a7265a6f56 Alan Previn 2022-03-21  58  #define GCAP_PARSED_REGLIST_INDEX_ENGINST  BIT(GUC_CAPTURE_LIST_TYPE_ENGINE_INSTANCE)
+f5718a7265a6f56 Alan Previn 2022-03-21  59  };
+f5718a7265a6f56 Alan Previn 2022-03-21  60  
+24492514ccbd571 Alan Previn 2022-03-21  61  /**
+24492514ccbd571 Alan Previn 2022-03-21 @62   * struct guc_debug_capture_list_header / struct guc_debug_capture_list
+24492514ccbd571 Alan Previn 2022-03-21  63   *
+24492514ccbd571 Alan Previn 2022-03-21  64   * As part of ADS registration, these header structures (followed by
+24492514ccbd571 Alan Previn 2022-03-21  65   * an array of 'struct guc_mmio_reg' entries) are used to register with
+24492514ccbd571 Alan Previn 2022-03-21  66   * GuC microkernel the list of registers we want it to dump out prior
+24492514ccbd571 Alan Previn 2022-03-21  67   * to a engine reset.
+24492514ccbd571 Alan Previn 2022-03-21  68   */
+24492514ccbd571 Alan Previn 2022-03-21  69  struct guc_debug_capture_list_header {
+24492514ccbd571 Alan Previn 2022-03-21  70  	u32 info;
+24492514ccbd571 Alan Previn 2022-03-21  71  #define GUC_CAPTURELISTHDR_NUMDESCR GENMASK(15, 0)
+24492514ccbd571 Alan Previn 2022-03-21  72  } __packed;
+24492514ccbd571 Alan Previn 2022-03-21  73  
+
+:::::: The code at line 62 was first introduced by commit
+:::::: 24492514ccbd57121f168bb14939f32d8905d579 drm/i915/guc: Update GuC ADS size for error capture lists
+
+:::::: TO: Alan Previn <alan.previn.teres.alexis@intel.com>
+:::::: CC: Lucas De Marchi <lucas.demarchi@intel.com>
+
 -- 
-Hamza
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
