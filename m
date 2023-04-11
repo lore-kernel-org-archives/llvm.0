@@ -1,179 +1,133 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA1A2F21
-	for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 21:46:10 +0000 (UTC)
-Received: by mail-pj1-f49.google.com with SMTP id f2so844974pjs.3
-        for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 14:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1681249570; x=1683841570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zejEY/r4Tfq5XbhV7cIEeG2i14mVKUoGXnXZCvl+x7Q=;
-        b=CLg+ltyt8lASxe48oYWEGyvYpWrGarOtutiNF9Vk13x1OeLE0F+KPxrsUoBJvXUCDW
-         Qs+dJdu4uYEpFbW0vzfYvS9OET3zKkBHUBOaHcfIcOibi1lRxY+r6F2gqxRJM49eoD2Q
-         FYVEeH3ctTVcah2+UTWp7zh5lExOcPEm9cPq4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681249570; x=1683841570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zejEY/r4Tfq5XbhV7cIEeG2i14mVKUoGXnXZCvl+x7Q=;
-        b=gP2TyRRlHROdJChB3u9qr6yO9wdxC2wdcTAyJmFhW5NIXpjRp6sDnmvMyP2J9dhIuo
-         9Urw9rfNiC0YCLUx4P0NSpmBVP6ZFYE279VCVSoqplLms9UBoaj2tfaC5GTws7ffuoEl
-         rNuIK5CbaYwmzaFQPcTMPGt/1nZ9mIl6YSzH0RxqMxz0ErUCcs0hNpVt8FVTh0lNbpeB
-         KJKYdiJExGuQUq0ISfBV+x6jLp7Y1h4qMSpc68gSTrMO7pIbj1EquJTBBWvtknJ2pqpa
-         VcSpAm6BY/hponK3gASbYfi86/BRcQV1OGuNJJfcGGPdwJh7A3QIobiYN/XFg2Vj4hqz
-         e4GA==
-X-Gm-Message-State: AAQBX9cXtZwyvzITyMW35xvyQTgqBi9WJKC8CcjpeTgvOiyR9KFTMmP+
-	wtZlDoJXKc8hYUKSAr4MrqdqWzhM6yfB5fH/FXI=
-X-Google-Smtp-Source: AKy350a9RSMMgCtfHgpgEc/0y9eP8AyQLPNkiJ99cXVX9qTPPXdPE5/bNLtvym28V9vcha9Lh5FRow==
-X-Received: by 2002:a17:90b:33c3:b0:236:73d5:82cf with SMTP id lk3-20020a17090b33c300b0023673d582cfmr16395501pjb.9.1681249569735;
-        Tue, 11 Apr 2023 14:46:09 -0700 (PDT)
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com. [209.85.216.49])
-        by smtp.gmail.com with ESMTPSA id x1-20020a1709029a4100b001943d58268csm10137843plv.55.2023.04.11.14.46.08
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Apr 2023 14:46:08 -0700 (PDT)
-Received: by mail-pj1-f49.google.com with SMTP id q15-20020a17090a2dcf00b0023efab0e3bfso12459392pjm.3
-        for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 14:46:08 -0700 (PDT)
-X-Received: by 2002:a17:90b:384f:b0:23f:9d83:ad76 with SMTP id
- nl15-20020a17090b384f00b0023f9d83ad76mr15506588pjb.23.1681249567905; Tue, 11
- Apr 2023 14:46:07 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5BB2F21
+	for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 22:08:14 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id DD5831F74C;
+	Tue, 11 Apr 2023 22:08:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1681250892;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L/XjSc44gwG+nuE0NrNWNRHKpYqRY6i/VDLJHWflJa0=;
+	b=nopzy3baTfU9VDTbbEVM85Fa105wcPZ5uvMV5OmwvqnxLv3cnT80UFP7EyYuEjyT3Vzy5/
+	kQR3iNlCgf3Ex54h+kZK6WtxpEnelOc4KTGDIwI6k+mnGREbg6XAiRr2NvI7djuCOF9Wv5
+	xcdEK++37tZuWWWqi7/zxyFnfXnd4bA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1681250892;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L/XjSc44gwG+nuE0NrNWNRHKpYqRY6i/VDLJHWflJa0=;
+	b=uF5k3OzYwEkJqEKMm/E/E5LbQ8NCt9CBWVvDN9l1zf5FrFaBnANjYsmswK2/pjLOP4Tn94
+	eiHYut3yEcLDeTAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9472013638;
+	Tue, 11 Apr 2023 22:08:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id jV4kI0zaNWQ3OAAAMHmgww
+	(envelope-from <pvorel@suse.cz>); Tue, 11 Apr 2023 22:08:12 +0000
+Date: Wed, 12 Apr 2023 00:08:11 +0200
+From: Petr Vorel <pvorel@suse.cz>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, open list <linux-kernel@vger.kernel.org>,
+	LTP List <ltp@lists.linux.it>, llvm@lists.linux.dev,
+	chrubis <chrubis@suse.cz>, Nathan Chancellor <nathan@kernel.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Daniel =?iso-8859-2?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+	Benjamin Copeland <ben.copeland@linaro.org>,
+	Tudor Cretu <tudor.cretu@arm.com>
+Subject: Re: LTP: list of failures on 32bit and compat mode
+Message-ID: <20230411220811.GA1798729@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
+ <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
+ <20230406105646.GB1545779@pevik>
+ <CA+G9fYs461=iJqZqKe8_iRkfsMemSSA+ByOPRc9k-kBf4Hp8og@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org>
- <20230321-kexec_clang16-v5-2-5563bf7c4173@chromium.org> <20230330111523.4b98c8ce@gandalf.local.home>
- <20230330151826.GDZCWoQkQBj4BYbwWw@fat_crate.local> <20230330113127.3011e021@gandalf.local.home>
- <20230330160017.GEZCWyEXQVQZRBbYif@fat_crate.local> <CAKwvOdkULKxoifiVO4H4yomt1DHQxw0ntdO6QgMXk2BpM-urRg@mail.gmail.com>
-In-Reply-To: <CAKwvOdkULKxoifiVO4H4yomt1DHQxw0ntdO6QgMXk2BpM-urRg@mail.gmail.com>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Tue, 11 Apr 2023 23:45:56 +0200
-X-Gmail-Original-Message-ID: <CANiDSCvSDcQi2Qbwu8ddpPDAYehu2VoOB6x-v_PaMkWnwAGxYQ@mail.gmail.com>
-Message-ID: <CANiDSCvSDcQi2Qbwu8ddpPDAYehu2VoOB6x-v_PaMkWnwAGxYQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] x86/purgatory: Add linker script
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Eric Biederman <ebiederm@xmission.com>, 
-	Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>, 
-	Simon Horman <horms@kernel.org>, "x86@kernel.org" <x86@kernel.org>, linux-toolchains@vger.kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Borislav Petkov <bp@alien8.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYs461=iJqZqKe8_iRkfsMemSSA+ByOPRc9k-kBf4Hp8og@mail.gmail.com>
 
-Hi Nick
+> On Thu, 6 Apr 2023 at 16:26, Petr Vorel <pvorel@suse.cz> wrote:
 
-On Sat, 8 Apr 2023 at 01:22, Nick Desaulniers <ndesaulniers@google.com> wro=
-te:
->
-> Hi Ricardo,
-> Thanks for the patch!  Please make sure to cc our mailing list
-> <llvm@lists.linux.dev> for llvm specific issues.
-> scripts/get_maintainer.pl should recommend it, or you can find it from
-> clangbuiltlinux.github.io.  You can also ping me internally for
-> toolchain related issues.
->
-> Start of thread.
-> https://lore.kernel.org/lkml/20230321-kexec_clang16-v5-0-5563bf7c4173@chr=
-omium.org/
->
-> On Thu, Mar 30, 2023 at 9:00=E2=80=AFAM Borislav Petkov <bp@alien8.de> wr=
-ote:
-> >
-> > On Thu, Mar 30, 2023 at 11:31:27AM -0400, Steven Rostedt wrote:
-> > > On Thu, 30 Mar 2023 17:18:26 +0200
-> > > Borislav Petkov <bp@alien8.de> wrote:
-> > >
-> > > > On Thu, Mar 30, 2023 at 11:15:23AM -0400, Steven Rostedt wrote:
-> > > > > > Make sure that the .text section is not divided in multiple ove=
-rlapping
-> > > > > > sections. This is not supported by kexec_file.
->
-> Perhaps this is related to CrOS' use of AutoFDO creating .text.hot?
-> If so, it's probably more straightforward to straight up disable PGO
-> for kexec. See also:
->
-> commit bde971a83bbf ("KVM: arm64: nvhe: Fix build with profile optimizati=
-on")
+> > > On Thu, Apr 6, 2023, at 11:11, Naresh Kamboju wrote:
+> > > > Following LTP syscalls failed on the i386 and arm environments with
+> > > > Linux next / mainline kernels. The userspace is coming from Open
+> > > > Embedded kirkstone.
 
-It was indeed due to the AutoFDO, adding
+> > > Thanks for the report and summary! I went through the list and found
+> > > that most if not all of the bugs looks like incompatibilities
+> > > with musl, not with 32-bit. It's probably not well tested with
+> > > musl.
 
-KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=3D%,
-$(KBUILD_CFLAGS))
+> > > Can you try again with glibc and see if there are any remaining
+> > > issues then? LTP should probably be fixed to work with both, but
+> > > if nobody has done that so far, it's likely that this has come
+> > > up in the past but ran into problems upstreaming the fixes.
 
-to arch/x86/purgatory/Makefile
+> > > > Anyone seeing this problem on 32-bit i386 or arm ?
+> > > > You get to see "segfault" in the following logs that have been noticed
+> > > > on i386 only.
 
-It is definitely simpler than adding a linker script, but I am not
-sure if it is the correct way to fix this... Seems like splitting
-.text in multiple sections is an implementation detail of the compiler
-and the only way to force it is with a linker script... Or am I
-missing something?
+> > > > This is not a new problem. We have been noticing these failures for a
+> > > > really long time.
+> > > > Would it be worth investigating the reason for failures on 32bit architectures ?
 
-Shall I send a new version with the KBUILD_CFLAGS ?
+> > > > Test logs,
+> > > > -----
+> > > > [    0.000000] Linux version 6.3.0-rc5-next-20230406 (tuxmake@tuxmake)
+> > > > (i686-linux-gnu-gcc (Debian 11.3.0-11) 11.3.0, GNU ld (GNU Binutils
+> > > > for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1680759389
 
+
+> > > > Test environment: i386
+> > > > Suite: ltp-syscalls
+> > > > Toolchain: gcc-11
+
+
+> > > > fstatfs02
+> > > > fstatfs02    1  TPASS  :  expected failure - errno = 9 : Bad file descriptor
+> > > > fstatfs02    2  TBROK  :  tst_sig.c:232: unexpected signal SIGSEGV(11)
+> > > > received (pid = 17841).
+> > > > fstatfs02    3  TBROK  :  tst_sig.c:232: Remaining cases broken
+> > This is IMHO using the old LTP API.
+> > testcases/kernel/syscalls/fstatfs/fstatfs02.c was converted to new LTP API in
+> > 5a8f89d35 ("syscalls/statfs02, fstatfs02: Convert to new API"), which was
+> > released in 20220930. There is already newer release 20230127.
+> > Generally it's safer to test mainline kernel with LTP master,
+> > but this fix has already been in the latest LTP release 20230127.
+> > And this error has been later fixed with
+> > 492542072 ("syscalls/statfs02, fstatfs02: Accept segfault instead of EFAULT")
+I'm sorry, I was wrong stating that unexpected signal SIGSEGV(11)
+error was fixed by 492542072.
+
+> Thanks for insite about the failed test investigations.
+
+
+> > @Naresh which LTP do you use for testing? It must be some older LTP :(.
+
+> Our build system started running LTP version 20230127.
+I'm sorry, I obviously misinterpreted the test output as old LTP code.
+
+> I will keep you posted with the latest findings.
 Thanks!
 
->
-> > > >
-> > > > And?
-> > > >
-> > > > What is the failure scenario? Why are you fixing it? Why do we care=
-?
-> > > >
-> > > > This is way too laconic.
-> > > >
-> > >
-> > > Yeah, I think the change log in patch 1 needs to be in this patch too=
-,
-> > > which gives better context.
-> >
-> > Just read it.
-> >
-> > Why did it work with clang version < 16?
->
-> I'll bet if we bisect llvm, we can spot what might have changed, which
-> may give us a clue on how to get the old behavior back; maybe without
-> the need for a linker script.
->
-> Ricardo, how did you verify that your fix was correct? Surely we can
-> check using command line utilities without needing a full blown kexec
-> setup? If you can share more info, I can bisect llvm quickly.  If it
-> requires profile data, you'll need to share it, since CrOS engineers
-> still have not posted public documentation on AutoFDO as I have
-> repeatedly asked for.
+Kind regards,
+Petr
 
-The simplest test is to run:
-
-$readelf -S arch/x86/purgatory/purgatory.ro | grep "] \.text"
-[ 3] .text             PROGBITS         0000000000000000  000002a0
-
-If there is only one .text section then that kernel will be load
-properly via kexec_file().
-
-
-
->
-> >
-> > + toolchains ML.
-> >
-> > --
-> > Regards/Gruss,
-> >     Boris.
-> >
-> > https://people.kernel.org/tglx/notes-about-netiquette
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
---
-Ricardo Ribalda
+> - Naresh
