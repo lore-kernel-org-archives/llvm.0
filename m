@@ -1,151 +1,131 @@
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MW2PR02CU002.outbound.protection.outlook.com (mail-westus2azon11013000.outbound.protection.outlook.com [52.101.49.0])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6335E8F6C
-	for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 17:37:16 +0000 (UTC)
-Received: by mail-vs1-f53.google.com with SMTP id v1so8163587vsg.5
-        for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 10:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681234635;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lhDQvgwbEigeXXlhjN0Q22Hgc1o3hW4XorfhYiSjVOw=;
-        b=wM0eU9iLTKS2qIwAZM91w9fyzPeNpHKK5in6tKFab7b8hwc1DfX2rk1esKdYhShKWr
-         z6++KMS11Y3BY7X8+mYRdqbevzVHWtjam5+uWqDFEjhBXbE6pe1FXVQ0GVdPwIdoanuV
-         uNT6git+LHi4jWXGsIpCXmY3sazX0UNtZAVVP2x83QHV9m4Kt3xN7AfNgBKnLyKqB7jo
-         gwiiANyEFIKbSGVZCxUbvo/uQsuy42VBndU4t1lUMAJDf8qdl5SaLqaTGjRvroD5nu2l
-         TWDWbGVc4OO3GEa4nAIrUAUqzGX/e/5BtYYPkx/xe4iWG+OGQRSaa8PeZHsCxkSx4DxG
-         tRsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681234635;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lhDQvgwbEigeXXlhjN0Q22Hgc1o3hW4XorfhYiSjVOw=;
-        b=k3KE4+bWWX4piysmxQBRJvF7Ffd/6wfJJPqdKfStwWqcdc7x9uEOnv3Qik5M5F190b
-         UH6QN4bLm1X8tbgl/3/7gn5yBVnLnxJE51GlE1Vhx4bOHBV23xDbbruurJwWXEHP5+Y4
-         PuUYkHE6vLQb+YU2tr8JZ+5QHN3SdZMnDniqRGt9MDTa409VgXs4fRmkdhakE+gcPxZR
-         Kmc4O3qezW8VZ0o+E7TxOWwhLlPom324H1TLFAFJXqnYmoyLSOF2uFvnlb860hgWIwWV
-         eqyUyvYxtF+r5N6fh5/i2trrDPGbPBQKaQ1ojfwGyD7eHy8FvGQjwRNooIEKX3EWQ60i
-         Qz9Q==
-X-Gm-Message-State: AAQBX9eSBRriIIPS3KJThM3s0JUvlBFSlpK8INF0rI+WARw21TZXXsi1
-	UDKfirhXeNVLqKsby6zRbaMcueKuwCG3k8IIb/Up2O2Uc5/aBJJXRfU=
-X-Google-Smtp-Source: AKy350YpuoPk7W++ajGy+qfyAsaan1Z7UNoHbZNPGVodEYE9qqPd4lFm1tkfjtHuOoVmq8hz4BUp9kM3Y3qx/OT3ZLk=
-X-Received: by 2002:a67:d293:0:b0:416:2ad3:35ba with SMTP id
- z19-20020a67d293000000b004162ad335bamr8779166vsi.1.1681234634941; Tue, 11 Apr
- 2023 10:37:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E384C944C
+	for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 17:54:32 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UNr0yLV0CCoKTjQfCoJqME2SgA3yYtoXiVauvymMaiR+aueXPCpHTwN1sN+mORq30m/PLb5z3YAA71EbqO3D/VVGA+UqPP9dfeC5ZaIGmIdB4rIHiV6xT1XNnX0zhf3ccj8BM2NveLgCgFF35S6XzGCUPhzkXlbROGNfjNTSNyCl4jYvK7Hc7Hly3EBamODVaYuvufZxpi6lps3vaHg8ufYPwXqdsrDaksnry13QICY9m9ItE2T82zqhnPigfDMDLAOmiPZEbGWPIRJw8EZC2tjbpgVm/HQnDIRjeVCmzFtPSV/tN6g9svpqrSf9Ez5sTyPU9nI0lMATzApg+DdVrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Kc4KD0zweSE20s1/cw8qWDR4AhSBC15h9rjxz9ud2ow=;
+ b=ZMqfdMY3J/p9REJZP6zk7flwTGcmgNXz8Nbm9kBBEs8eI+/snRBE6S3E6vOrKcyXSVVkoKlO9GE1Ko2eQ/XnqBlAysloKQ1tuIclghU7437AtNb+HO76B0i7elr1F9CCEJfEjIcLpgkVXOPMEw7/zBI+mJyyoBwJzOeOKzknNpbOgyXDCqUL5b0Fo70uG79qMeNTLmW5qDb4cwHvCfJocMWTnY2sOVa2r9ZER6oGqjNlX9gOBoNvQWpIzJmi4I/d7LvptCvwcbN6CUt5T3DMlAgHQRlk9hsD4YLxbHE1Yxd82v9Jk3wQF7uOSRpEWZECygyH9UhrZpsIYcAQoAOGoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Kc4KD0zweSE20s1/cw8qWDR4AhSBC15h9rjxz9ud2ow=;
+ b=EvoLoI/EUghGnqu2vNNZlQKHvFmKqUEWUyBSPR5bSgSCfnQ641AHfjY/gWqVlAb6IvCn2gbYS1H3V0jlZCBTPWp4l4fvkkuHRMS0WFlh8gAIKQI2xntzCOqBlzSgGDh3uIrs5X9OiI28UrtDyFX0hZRwYVHKmDGa4dpTPw1PsyE=
+Received: from CH3PR05MB10206.namprd05.prod.outlook.com
+ (2603:10b6:610:155::10) by MN2PR05MB6048.namprd05.prod.outlook.com
+ (2603:10b6:208:d0::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Tue, 11 Apr
+ 2023 17:54:26 +0000
+Received: from CH3PR05MB10206.namprd05.prod.outlook.com
+ ([fe80::b4c3:9441:f0:efb8]) by CH3PR05MB10206.namprd05.prod.outlook.com
+ ([fe80::b4c3:9441:f0:efb8%6]) with mapi id 15.20.6298.028; Tue, 11 Apr 2023
+ 17:54:26 +0000
+From: Zack Rusin <zackr@vmware.com>
+To: "daniel@ffwll.ch" <daniel@ffwll.ch>, "nathan@kernel.org"
+	<nathan@kernel.org>, "ndesaulniers@google.com" <ndesaulniers@google.com>,
+	Linux-graphics-maintainer <Linux-graphics-maintainer@vmware.com>,
+	"trix@redhat.com" <trix@redhat.com>, "airlied@gmail.com" <airlied@gmail.com>
+CC: "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
+Thread-Topic: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
+Thread-Index: AQHZXCJfQ+s7JMgTuEarwKwV+53z968mhQmA
+Date: Tue, 11 Apr 2023 17:54:26 +0000
+Message-ID: <466f4517100964537142f698e82cffb87acd39fb.camel@vmware.com>
+References: <20230321182414.1826372-1-trix@redhat.com>
+In-Reply-To: <20230321182414.1826372-1-trix@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Evolution 3.48.0-1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR05MB10206:EE_|MN2PR05MB6048:EE_
+x-ms-office365-filtering-correlation-id: b21a6cca-89a6-47df-2466-08db3ab5caa8
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ puq21ZqvtA/7MGmyx2xXaRiFzwcS+IaPSlMH+dpdWPq40MX7kMaPwkjPfS0c/cgR+MINy+5yWsqz2LQMSm+QDSs4Ant48Cg+l1Tw9+od+GwNL6DJO2ArxPaMIuMo1iFpMtFplTuMhUihK7Z6lQUPxqRp0K982kboJOQvsDqD2e0DnzDIfFy4sJXtf7aVNW3l1bD8SAx79TN7185e0/XnmdRRxlxECfKa2jCq1vrc5b9Ow9tURNl9OuKm8SHKVnfwK7yVswUX5ahoSlmflA012CJD0zhwby+mbCCpirSAOiWXbMHgXeFrML55ku2sDgELE5hRO498BGzGSWFzTPL7shsoLZ9mGdOmSPhs29SPBVjWpA3JujtIGckFpiuHRcoiAHz2X3zSDgvYXyHu0D7zPN9pcjncJOv18oQo45eE2LKJv2sCzalEtNxZoq5GYRXVEq1SLaI8SRgcbtHsHoi9kiJWq32ivyg1CTSr8n/ytLH7rtdXWuqYwEKjyucCZSwPt+HQWDWXP2uHYRVG1kfueYhahq/Xlm6w8D+aLAELzDL+9RQiSAK27bJrF7QpftazLHvVJyAQgPe+GdB7LsbLh+syQaGZ1TLhJ7Uro6xDiwn9iKww3wNPo10LS5bXL0B2
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR05MB10206.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(451199021)(478600001)(71200400001)(6506007)(316002)(6512007)(110136005)(26005)(54906003)(186003)(5660300002)(6486002)(91956017)(4744005)(2906002)(66556008)(76116006)(66946007)(4326008)(64756008)(41300700001)(66446008)(8676002)(8936002)(66476007)(38100700002)(122000001)(36756003)(2616005)(38070700005)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?M3FZSE5naVpNVHk5aFR2Sk85ZHgrdldQSmk4NVJCaTZ0REpnM3JaOWxlLzNl?=
+ =?utf-8?B?Q3Q1MlpFZDJRMEFHK1VJcnFyUlY3bXZ5M0xSUVU2RkEvOXc4ZE1YWmd2aERV?=
+ =?utf-8?B?STYya3prelVrQ2RGR2pTeklWbHpseGdTNU1RcitPMWQ5eVg1RHFzQkM0MFZx?=
+ =?utf-8?B?NFR2N3g1MTJuYUMxT1U4SmxQdENpNlBqTUZXK3ExMlEzT29XbGUyOFErUkti?=
+ =?utf-8?B?UWJTV015enlyWlh3YnVOb0Q4c2s4RitVRXR6K21JZ1BiVWVhaW8ya1BWK3Mv?=
+ =?utf-8?B?ejJLRUdXR3VlcDIxMGw5OGY3TG9EQlgxbklvMXpRbHZSL2VKcXpaTGREamJG?=
+ =?utf-8?B?bUpESkpKZWFydGFPTkRNaUtRbU9mSVVWWVVncXN3a2RpOWhncXBQaUxFYVJB?=
+ =?utf-8?B?UFhaVEpnVWFvVVZTQ2tWWFZhUjJXb0g2OUgxejVNRG5DOUQrZWFiN3pmYjRV?=
+ =?utf-8?B?bmIraW9hU2d0UHV4VEpzWlJSdTRRc1AwSjNGTjh0cncxbFNKaHZZY1BpcmVo?=
+ =?utf-8?B?QkFKS1Nkc05hOERsU05WeXljeDlwYW1YS0FVMDlEVE05dkx5T21XK3hiNkdt?=
+ =?utf-8?B?L1cyVUpjK1JWQktsRndSMlJyUDZ4Z1lHUnZUNXlHZEVCeFhXNFVCVXdsVnZP?=
+ =?utf-8?B?bEF1TE5XenBoSzR4bTFLQ2YzQVlaeWw3U1VUY0JhcXdxcXE0RWZPUUxvckEr?=
+ =?utf-8?B?cnJqdXJBLzJDNW52bjFWS2tNZkFwdk9aMzRWY1RZQyswWmVDcU9QUTY1SjAy?=
+ =?utf-8?B?bXRGYzVCRHg1MkZoL2ZZR0VjVDJNVW5oYU5OeWJES1E3Q2FndlFpWTFjSVhT?=
+ =?utf-8?B?NEhJOGFsYnIrQ0ZPeUVhRHpOY29Mc2R0ZGtXWWlMK29TRm1GOTdKRkpJbnpl?=
+ =?utf-8?B?V3UyZXNqd05YY2dheHVJZE9YbEtIT0FwWEdlTjdhbzBkWUxiY0ZzYUY3MldR?=
+ =?utf-8?B?K01FZ010TnJMQmVhSndhRXFsczBncnQ3dU9SUTJmdHUzNUc1T2tRdUg2NHlY?=
+ =?utf-8?B?MDdVbzNDSnlLUWl2Mmoxd3NoOE1rU3NyUWtaQWdQSEVTL2ErT1M1NzY5ZGZ5?=
+ =?utf-8?B?c0dvNFdHd21rUnV3ZXdYdTc1bWlSZGUrS0pIeGpJOFo3U3dzYUtPaDg5WUdS?=
+ =?utf-8?B?ZXRnRVA4bEx0em91YURFUk1sck1DUUJUd0VBU0xmWThsMGh2VjhyZ1NUVm1M?=
+ =?utf-8?B?Y1BMaGF4UkR6Ri9CZHFaZHN0bzF0QzVIaWtqdzV5UE1EWTlFU2x4NGZobkVL?=
+ =?utf-8?B?VWpUSWlWdGpyOTBHOS82QWd2eFNiNHRoS0R1bEZUZm8wbER1alZDK3U1cGZG?=
+ =?utf-8?B?RVlnYVd4QWplWTB5UkNaVU1KV3dIbWR4U2I1T2t5T1FlTTNqOExFQjJiTlVO?=
+ =?utf-8?B?dS95aUx1MGdwZVFhRXh3MUNHcmZrNFcyM0RDMmU3UHQwWkEwZ3NOV05qVnlN?=
+ =?utf-8?B?VWxDVVhTTkxTZjNJejdmSmdUUzZ5V1ZSTHVFR01PSFQ1VWFXUnN6dE1oQkNE?=
+ =?utf-8?B?RkdGcHZBbWFRL1dsM0ViS0pyTXM2bGwyTysxb3lyS1UxclNvM3lYekVlL2NW?=
+ =?utf-8?B?Q09YMVRHMUE5VEEyOWN5aU1lYWI3bkh5ZWZWYlhpQ1BGempYR3Fyakp4STlZ?=
+ =?utf-8?B?SWVFUm5hREx2NUZiQjhMQWtndVllN3lGV2J4enJBYXhFcFZkbVd6SmFZQ3Bp?=
+ =?utf-8?B?OFp2dDZacjlpMXNEM2JKSWN3R2NKWU9rVVZsQno5c0JjSmRXVk8xOEJkcUFl?=
+ =?utf-8?B?amV4QkJJNk84cTZLcHNDMGticlkra1Z0QTVoZ3lHY0VWZld5eTgrUXVFMGVD?=
+ =?utf-8?B?MEM3elhCeHlPK3FmbnZwR1IxNFRaVDlJUS9UWUFTQXluai9WV3FDT3BTVmdR?=
+ =?utf-8?B?Q20yNDVJY09RQU5qWmdwWFl4ZktGTjdEc1dkKzgrMEIwNWd0VWJMS09GY3No?=
+ =?utf-8?B?TFIwdWVYc1pLREpGakFNekVtVFhqb1NPNGdlaUQ1RVRYem92ak4yWXNmMTNu?=
+ =?utf-8?B?TkdjZFcwcUtWQy91WXJHaWNXNEF4NjQ0M0plQ3VNY2JoWVBkMTErcjJ6cmJw?=
+ =?utf-8?B?dVRkdnlXblVhYVNwdW1udmdYbVpGVEptbTRFYUhRZzhDOStETm9YTE5CREpt?=
+ =?utf-8?Q?ziVy3XOXqA8XATEcxykYnWTF/?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A30070B6451B3E4C9233F0734BD70154@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
- <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com> <20230406105646.GB1545779@pevik>
- <CA+G9fYs461=iJqZqKe8_iRkfsMemSSA+ByOPRc9k-kBf4Hp8og@mail.gmail.com>
-In-Reply-To: <CA+G9fYs461=iJqZqKe8_iRkfsMemSSA+ByOPRc9k-kBf4Hp8og@mail.gmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 11 Apr 2023 23:07:02 +0530
-Message-ID: <CA+G9fYtvp+iu-hA0YnMuT9gVET+4VFuz7faGTUWfmY_=dPtzZg@mail.gmail.com>
-Subject: Re: LTP: list of failures on 32bit and compat mode
-To: Petr Vorel <pvorel@suse.cz>
-Cc: Arnd Bergmann <arnd@arndb.de>, open list <linux-kernel@vger.kernel.org>, 
-	LTP List <ltp@lists.linux.it>, llvm@lists.linux.dev, chrubis <chrubis@suse.cz>, 
-	Nathan Chancellor <nathan@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	=?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>, 
-	Benjamin Copeland <ben.copeland@linaro.org>, Tudor Cretu <tudor.cretu@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR05MB10206.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b21a6cca-89a6-47df-2466-08db3ab5caa8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2023 17:54:26.6202
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aJOECwb//QAFF13BxPX4fQeidI3xmLVOCAI7uB7clGS7WQRq9KFkASWgv3+x2jN7LrDPwgEocX4hX2VRCmAXZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR05MB6048
 
-On Tue, 11 Apr 2023 at 22:15, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> On Thu, 6 Apr 2023 at 16:26, Petr Vorel <pvorel@suse.cz> wrote:
-> >
-> > > On Thu, Apr 6, 2023, at 11:11, Naresh Kamboju wrote:
-> > > > Following LTP syscalls failed on the i386 and arm environments with
-> > > > Linux next / mainline kernels. The userspace is coming from Open
-> > > > Embedded kirkstone.
-
-<Trim>
-> > testcases/kernel/syscalls/fstatfs/fstatfs02.c was converted to new LTP API in
-> > 5a8f89d35 ("syscalls/statfs02, fstatfs02: Convert to new API"), which was
-> > released in 20220930. There is already newer release 20230127.
-> > Generally it's safer to test mainline kernel with LTP master,
-> > but this fix has already been in the latest LTP release 20230127.
-> > And this error has been later fixed with
-> > 492542072 ("syscalls/statfs02, fstatfs02: Accept segfault instead of EFAULT")
->
-> Thanks for insite about the failed test investigations.
->
-> >
-> > @Naresh which LTP do you use for testing? It must be some older LTP :(.
->
-> Our build system started running LTP version 20230127.
-> I will keep you posted with the latest findings.
-
-Few quick updates,
-Do you see these failures on compat mode ?
-
-Following regressions noticed with LTP version 20230127 on Linux next.
-
-Regressions found on juno-r2-compat:
-Regressions found on qemu_arm64-compat:
-
-  ltp-syscalls/fcntl34
-  ltp-syscalls/fcntl36
-  ltp-syscalls/fcntl34_64
-  ltp-syscalls/fcntl36_64
-
-tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
-fcntl34.c:87: TINFO: write to a file inside threads with OFD locks
-fcntl34.c:33: TINFO: spawning '18' threads
-tst_kernel.c:87: TINFO: uname.machine=aarch64 kernel is 64bit
-fcntl34.c:63: TBROK: fcntl(4, F_OFD_SETLKW, { 1, 0, 0, 1, 0 }): EINVAL (22)
-
-tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
-fcntl34.c:87: TINFO: write to a file inside threads with OFD locks
-fcntl34.c:33: TINFO: spawning '18' threads
-tst_kernel.c:87: TINFO: uname.machine=aarch64 kernel is 64bit
-fcntl34.c:63: TBROK: fcntl(4, F_OFD_SETLKW, { 1, 0, 0, 1, 0 }): EINVAL (22)
-
-tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
-fcntl36.c:288: TINFO: OFD read lock vs OFD write lock
-tst_kernel.c:87: TINFO: uname.machine=aarch64 kernel is 64bit
-fcntl36.c:166: TBROK: fcntl(3, F_OFD_SETLKW, { 0, 0, 0, 4096, 0 }): EINVAL (22)
-
-tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
-fcntl36.c:288: TINFO: OFD read lock vs OFD write lock
-tst_kernel.c:87: TINFO: uname.machine=aarch64 kernel is 64bit
-fcntl36.c:166: TBROK: fcntl(3, F_OFD_SETLKW, { 0, 0, 0, 4096, 0 }): EINVAL (22)
-
-Test details links,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230411/testrun/16168516/suite/ltp-syscalls/test/fcntl36/history/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230411/testrun/16168516/suite/ltp-syscalls/test/fcntl34/history/
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230411/testrun/16168516/suite/ltp-syscalls/test/fcntl36/log
-
-Steps to reproduce:
-
-# To install tuxrun on your system globally:
-# sudo pip3 install -U tuxrun==0.41.0
-#
-# See https://tuxrun.org/ for complete documentation.
-
-tuxrun   \
- --runtime podman   \
- --device qemu-arm64   \
- --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2OGsEcyUv1ZWPkcY6bowUEt67EK/Image.gz
-  \
- --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2OGsEcyUv1ZWPkcY6bowUEt67EK/modules.tar.xz
-  \
- --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2OFRZRfcnhLXEnzmi2qNYuD7o3k/images/am57xx-evm/lkft-tux-image-am57xx-evm-20230410193023.rootfs.ext4.gz
-  \
- --parameters SKIPFILE=skipfile-lkft.yaml   \
- --parameters SHARD_NUMBER=10   \
- --parameters SHARD_INDEX=2   \
- --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
- --tests ltp-syscalls   \
- --timeouts boot=30 ltp-syscalls=50
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+T24gVHVlLCAyMDIzLTAzLTIxIGF0IDE0OjI0IC0wNDAwLCBUb20gUml4IHdyb3RlOg0KPiBjbGFu
+ZyB3aXRoIFc9MSByZXBvcnRzDQo+IGRyaXZlcnMvZ3B1L2RybS92bXdnZngvdm13Z2Z4X292ZXJs
+YXkuYzo1NjozNTogZXJyb3I6DQo+IMKgIHVudXNlZCBmdW5jdGlvbiAndm13X292ZXJsYXknIFst
+V2Vycm9yLC1XdW51c2VkLWZ1bmN0aW9uXQ0KPiBzdGF0aWMgaW5saW5lIHN0cnVjdCB2bXdfb3Zl
+cmxheSAqdm13X292ZXJsYXkoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF4N
+Cj4gVGhpcyBmdW5jdGlvbiBpcyBub3QgdXNlZCwgc28gcmVtb3ZlIGl0Lg0KPiANCj4gU2lnbmVk
+LW9mZi1ieTogVG9tIFJpeCA8dHJpeEByZWRoYXQuY29tPg0KDQpUaGFuayB5b3UgZm9yIHRoZSBw
+YXRjaC4gSSB3ZW50IGFoZWFkIGFuZCBwdXNoZWQgaXQgdG8gdGhlIGRybS1taXNjLW5leHQgYnJh
+bmNoIGluDQpkcm0tbWlzYyB0cmVlLg0KDQp6DQo=
