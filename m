@@ -1,44 +1,47 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE763C02;
-	Wed, 12 Apr 2023 19:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A049474;
+	Wed, 12 Apr 2023 19:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681326565; x=1712862565;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ffpx6BIgKzZteyb//gSQO/b401PrP2Mpz/F5h/jfzBc=;
-  b=eMpEKPGYSE6hH9HwmW/XZ+KZKp6tyxWnkqc8px/KHRTGnqqWFL1sXSv+
-   4+zWSwldj8HYGEd98vpPFHtWeQ4GittkyAKAmfvfs0goWFMb0c69dfGKt
-   3uWniTzlJJ77LOENDKlyQYU1TxSh0U3QoZl+Jia/ny+/6q56xxWVPdP4s
-   2sxklvA8YURfsNSb0vHdnjgskgWE4I0728H3vTSV4p98JqtkwKTLxzjjJ
-   NoBCyqagRLs2XA2RVjU5+8pOQb8bbaHyzCpCYyI6fD6EWL3E/9sNMskGN
-   Ji53O1L1lZtVgHSu5D+mzkwDK6l8sZgVlFS0f3xq229U6/4Em7TScTfjx
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="323618594"
+  t=1681329027; x=1712865027;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ryrT6XXWVMCWWKoxwWscM+/CIkHlB0N4maaPhHLtx88=;
+  b=VJCCvV7pamOK3MF/ZYnHKayMkqlNJZeccMcy7H4AHXL2Si74ytuHuCaE
+   UEyBqxk752BPftl2BWI6L/pYM7wbLY3tRQUvzvWel71pk2LDf6NGHjxDO
+   uXJYs8UIVdO7PNGtEXyyGUdPaeaQ1OsBSke6QEp8VLsAGGseLGxnHnaiz
+   QQ4PKyv7bN7T/0D7MM7XByD9GrYBYrqctHGBpyV5uqy0Ttoe5+Y8uGQ73
+   TZUncVODiA4Zcac4CNTM87d+g037E2D+o56Ca5dbX45oKnSeYaGtejdv/
+   MXXJR32kdtnpdh05ZIvhywZxwLB22RlDYBE4sJEGmj8Xxg/psum5Rk+LH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="324366527"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="323618594"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 12:09:24 -0700
+   d="scan'208";a="324366527"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 12:50:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="758355965"
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="935258310"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="758355965"
+   d="scan'208";a="935258310"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Apr 2023 12:09:22 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2023 12:50:22 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pmfqL-000Y0N-1h;
-	Wed, 12 Apr 2023 19:09:21 +0000
-Date: Thu, 13 Apr 2023 03:08:31 +0800
+	id 1pmgU2-000Y1R-0X;
+	Wed, 12 Apr 2023 19:50:22 +0000
+Date: Thu, 13 Apr 2023 03:49:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Guillaume Ranquet <granquet@baylibre.com>
+To: Kemeng Shi <shikemeng@huaweicloud.com>, tytso@mit.edu,
+	adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vinod Koul <vkoul@kernel.org>, Kishon <kishon@ti.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: [phy:next 72/77] drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6:
- warning: variable 'ret' is uninitialized when used here
-Message-ID: <202304130304.gMtrUdbd-lkp@intel.com>
+	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+	shikemeng@huaweicloud.com
+Subject: Re: [PATCH v2 19/19] ext4: add first unit test for
+ ext4_mb_new_blocks_simple in mballoc
+Message-ID: <202304130309.erdFVvYL-lkp@intel.com>
+References: <20230412172833.2317696-20-shikemeng@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,146 +50,223 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230412172833.2317696-20-shikemeng@huaweicloud.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git next
-head:   45810d486bb44bd60213d5f09a713df81b987972
-commit: 45810d486bb44bd60213d5f09a713df81b987972 [72/77] phy: mediatek: add support for phy-mtk-hdmi-mt8195
-config: arm64-buildonly-randconfig-r005-20230409 (https://download.01.org/0day-ci/archive/20230413/202304130304.gMtrUdbd-lkp@intel.com/config)
+Hi Kemeng,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tytso-ext4/dev]
+[also build test ERROR on next-20230412]
+[cannot apply to linus/master v6.3-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230412172833.2317696-20-shikemeng%40huaweicloud.com
+patch subject: [PATCH v2 19/19] ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
+config: powerpc-randconfig-r006-20230409 (https://download.01.org/0day-ci/archive/20230413/202304130309.erdFVvYL-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git/commit/?id=45810d486bb44bd60213d5f09a713df81b987972
-        git remote add phy https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git
-        git fetch --no-tags phy next
-        git checkout 45810d486bb44bd60213d5f09a713df81b987972
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3ceb1daf83fdf578c28ede1a10e55f05ef7642d5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
+        git checkout 3ceb1daf83fdf578c28ede1a10e55f05ef7642d5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/phy/mediatek/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130304.gMtrUdbd-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130309.erdFVvYL-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-           if (ret)
-               ^~~
-   include/linux/compiler.h:56:47: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                                                 ^~~~
-   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                                      ^~~~
-   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the variable 'ret' to silence this warning
-           int i, ret;
+   fs/ext4/mballoc.c:3752:12: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           handle_t *handle = mc->handle;
                      ^
-                      = 0
-   1 warning generated.
+   In file included from fs/ext4/mballoc.c:6523:
+>> fs/ext4/mballoc-test.c:107:31: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
+           struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, group);
+                                        ^
+   fs/ext4/mballoc-test.c:23:33: note: expanded from macro 'MB_GRP_CTX'
+   #define MB_GRP_CTX(sb, group) (&MB_CTX(sb)->grp_ctx[group])
+                                   ^
+   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
+   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
+                       ^
+   fs/ext4/mballoc-test.c:115:23: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
+           struct mb_ctx *ctx = MB_CTX(sb);
+                                ^
+   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
+   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
+                       ^
+   fs/ext4/mballoc-test.c:144:23: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
+           struct mb_ctx *ctx = MB_CTX(sb);
+                                ^
+   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
+   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
+                       ^
+   fs/ext4/mballoc-test.c:156:31: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
+           struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
+                                        ^
+   fs/ext4/mballoc-test.c:23:33: note: expanded from macro 'MB_GRP_CTX'
+   #define MB_GRP_CTX(sb, group) (&MB_CTX(sb)->grp_ctx[group])
+                                   ^
+   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
+   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
+                       ^
+>> fs/ext4/mballoc-test.c:153:1: warning: no previous prototype for function 'ext4_read_block_bitmap_nowait_stub' [-Wmissing-prototypes]
+   ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
+   ^
+   fs/ext4/mballoc-test.c:152:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct buffer_head *
+   ^
+   static 
+>> fs/ext4/mballoc-test.c:162:5: warning: no previous prototype for function 'ext4_wait_block_bitmap_stub' [-Wmissing-prototypes]
+   int ext4_wait_block_bitmap_stub(struct super_block *sb,
+       ^
+   fs/ext4/mballoc-test.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ext4_wait_block_bitmap_stub(struct super_block *sb,
+   ^
+   static 
+   fs/ext4/mballoc-test.c:173:31: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
+           struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
+                                        ^
+   fs/ext4/mballoc-test.c:23:33: note: expanded from macro 'MB_GRP_CTX'
+   #define MB_GRP_CTX(sb, group) (&MB_CTX(sb)->grp_ctx[group])
+                                   ^
+   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
+   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
+                       ^
+>> fs/ext4/mballoc-test.c:169:25: warning: no previous prototype for function 'ext4_get_group_desc_stub' [-Wmissing-prototypes]
+   struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
+                           ^
+   fs/ext4/mballoc-test.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
+   ^
+   static 
+   fs/ext4/mballoc-test.c:185:31: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
+           struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(mc->sb, group);
+                                        ^
+   fs/ext4/mballoc-test.c:23:33: note: expanded from macro 'MB_GRP_CTX'
+   #define MB_GRP_CTX(sb, group) (&MB_CTX(sb)->grp_ctx[group])
+                                   ^
+   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
+   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
+                       ^
+>> fs/ext4/mballoc-test.c:181:5: warning: no previous prototype for function 'ext4_mb_mark_group_bb_stub' [-Wmissing-prototypes]
+   int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
+       ^
+   fs/ext4/mballoc-test.c:181:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
+   ^
+   static 
+   5 warnings and 6 errors generated.
 
 
-vim +/ret +298 drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+vim +107 fs/ext4/mballoc-test.c
 
-   208	
-   209	static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *hdmi_phy, struct clk_hw *hw,
-   210				     unsigned long rate, unsigned long parent_rate)
-   211	{
-   212		u8 digital_div, txprediv, txposdiv, fbkdiv_high, posdiv1, posdiv2;
-   213		u64 tmds_clk, pixel_clk, da_hdmitx21_ref_ck, ns_hdmipll_ck, pcw;
-   214		u8 txpredivs[4] = { 2, 4, 6, 12 };
-   215		u32 fbkdiv_low;
-   216		int i, ret;
-   217	
-   218		pixel_clk = rate;
-   219		tmds_clk = pixel_clk;
-   220	
-   221		if (tmds_clk < 25 * MEGA || tmds_clk > 594 * MEGA)
-   222			return -EINVAL;
-   223	
-   224		if (tmds_clk >= 340 * MEGA)
-   225			hdmi_phy->tmds_over_340M = true;
-   226		else
-   227			hdmi_phy->tmds_over_340M = false;
-   228	
-   229		/* in Hz */
-   230		da_hdmitx21_ref_ck = 26 * MEGA;
-   231	
-   232		/*  TXPOSDIV stage treatment:
-   233		 *	0M  <  TMDS clk  < 54M		  /8
-   234		 *	54M <= TMDS clk  < 148.35M    /4
-   235		 *	148.35M <=TMDS clk < 296.7M   /2
-   236		 *	296.7 <=TMDS clk <= 594M	  /1
-   237		 */
-   238		if (tmds_clk < 54 * MEGA)
-   239			txposdiv = 8;
-   240		else if (tmds_clk >= 54 * MEGA && tmds_clk < 148.35 * MEGA)
-   241			txposdiv = 4;
-   242		else if (tmds_clk >= 148.35 * MEGA && tmds_clk < 296.7 * MEGA)
-   243			txposdiv = 2;
-   244		else if (tmds_clk >= 296.7 * MEGA && tmds_clk <= 594 * MEGA)
-   245			txposdiv = 1;
-   246		else
-   247			return -EINVAL;
-   248	
-   249		/* calculate txprediv: can be 2, 4, 6, 12
-   250		 * ICO clk = 5*TMDS_CLK*TXPOSDIV*TXPREDIV
-   251		 * ICO clk constraint: 5G =< ICO clk <= 12G
-   252		 */
-   253		for (i = 0; i < ARRAY_SIZE(txpredivs); i++) {
-   254			ns_hdmipll_ck = 5 * tmds_clk * txposdiv * txpredivs[i];
-   255			if (ns_hdmipll_ck >= 5 * GIGA &&
-   256			    ns_hdmipll_ck <= 1 * GIGA)
-   257				break;
-   258		}
-   259		if (i == (ARRAY_SIZE(txpredivs) - 1) &&
-   260		    (ns_hdmipll_ck < 5 * GIGA || ns_hdmipll_ck > 12 * GIGA)) {
-   261			return -EINVAL;
-   262		}
-   263		if (i == ARRAY_SIZE(txpredivs))
-   264			return -EINVAL;
-   265	
-   266		txprediv = txpredivs[i];
-   267	
-   268		/* PCW calculation: FBKDIV
-   269		 * formula: pcw=(frequency_out*2^pcw_bit) / frequency_in / FBKDIV_HS3;
-   270		 * RG_HDMITXPLL_FBKDIV[32:0]:
-   271		 * [32,24] 9bit integer, [23,0]:24bit fraction
-   272		 */
-   273		pcw = div_u64(((u64)ns_hdmipll_ck) << PCW_DECIMAL_WIDTH,
-   274			      da_hdmitx21_ref_ck / PLL_FBKDIV_HS3);
-   275	
-   276		if (pcw > GENMASK_ULL(32, 0))
-   277			return -EINVAL;
-   278	
-   279		fbkdiv_high = FIELD_GET(GENMASK_ULL(63, 32), pcw);
-   280		fbkdiv_low = FIELD_GET(GENMASK(31, 0), pcw);
-   281	
-   282		/* posdiv1:
-   283		 * posdiv1 stage treatment according to color_depth:
-   284		 * 24bit -> posdiv1 /10, 30bit -> posdiv1 /12.5,
-   285		 * 36bit -> posdiv1 /15, 48bit -> posdiv1 /10
-   286		 */
-   287		posdiv1 = 10;
-   288		posdiv2 = 1;
-   289	
-   290		/* Digital clk divider, max /32 */
-   291		digital_div = div_u64((u64)ns_hdmipll_ck, posdiv1 / posdiv2 / pixel_clk);
-   292		if (!(digital_div <= 32 && digital_div >= 1))
-   293			return -EINVAL;
-   294	
-   295		mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
-   296				    PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
-   297				    txposdiv, digital_div);
- > 298		if (ret)
-   299			return -EINVAL;
-   300	
-   301		return 0;
-   302	}
-   303	
+   103	
+   104	static void mb_ctx_mark_used(struct super_block *sb, ext4_group_t group,
+   105				     unsigned int start, unsigned int len)
+   106	{
+ > 107		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, group);
+   108	
+   109		mb_set_bits(grp_ctx->bitmap_bh.b_data, start, len);
+   110	}
+   111	
+   112	/* called after init_sb_layout */
+   113	static int mb_ctx_init(struct super_block *sb)
+   114	{
+   115		struct mb_ctx *ctx = MB_CTX(sb);
+   116		ext4_group_t i, ngroups = ext4_get_groups_count(sb);
+   117	
+   118		ctx->grp_ctx = kcalloc(ngroups, sizeof(struct mb_grp_ctx),
+   119				       GFP_KERNEL);
+   120		if (ctx->grp_ctx == NULL)
+   121			return -ENOMEM;
+   122	
+   123		for (i = 0; i < ngroups; i++)
+   124			if (mb_grp_ctx_init(sb, &ctx->grp_ctx[i]))
+   125				goto out;
+   126	
+   127		/*
+   128		 * first data block(first cluster in first group) is used by
+   129		 * metadata, mark it used to avoid to alloc data block at first
+   130		 * block which will fail ext4_sb_block_valid check.
+   131		 */
+   132		mb_set_bits(ctx->grp_ctx[0].bitmap_bh.b_data, 0, 1);
+   133	
+   134		return 0;
+   135	out:
+   136		while (i-- > 0)
+   137			mb_grp_ctx_release(&ctx->grp_ctx[i]);
+   138		kfree(ctx->grp_ctx);
+   139		return -ENOMEM;
+   140	}
+   141	
+   142	static void mb_ctx_release(struct super_block *sb)
+   143	{
+   144		struct mb_ctx *ctx = MB_CTX(sb);
+   145		ext4_group_t i, ngroups = ext4_get_groups_count(sb);
+   146	
+   147		for (i = 0; i < ngroups; i++)
+   148			mb_grp_ctx_release(&ctx->grp_ctx[i]);
+   149		kfree(ctx->grp_ctx);
+   150	}
+   151	
+   152	struct buffer_head *
+ > 153	ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
+   154					   bool ignore_locked)
+   155	{
+   156		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
+   157	
+   158		get_bh(&grp_ctx->bitmap_bh);
+   159		return &grp_ctx->bitmap_bh;
+   160	}
+   161	
+ > 162	int ext4_wait_block_bitmap_stub(struct super_block *sb,
+   163					ext4_group_t block_group,
+   164					struct buffer_head *bh)
+   165	{
+   166		return 0;
+   167	}
+   168	
+ > 169	struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
+   170						     ext4_group_t block_group,
+   171						     struct buffer_head **bh)
+   172	{
+   173		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
+   174	
+   175		if (bh != NULL)
+   176			*bh = &grp_ctx->gd_bh;
+   177	
+   178		return &grp_ctx->desc;
+   179	}
+   180	
+ > 181	int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
+   182				       ext4_group_t group, ext4_grpblk_t blkoff,
+   183				       ext4_grpblk_t len, int flags)
+   184	{
+   185		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(mc->sb, group);
+   186		struct buffer_head *bitmap_bh = &grp_ctx->bitmap_bh;
+   187	
+   188		if (mc->state)
+   189			mb_set_bits(bitmap_bh->b_data, blkoff, len);
+   190		else
+   191			mb_clear_bits(bitmap_bh->b_data, blkoff, len);
+   192	
+   193		return 0;
+   194	}
+   195	
 
 -- 
 0-DAY CI Kernel Test Service
