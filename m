@@ -1,44 +1,47 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D0B6FD2;
-	Wed, 12 Apr 2023 17:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F00B6FD2;
+	Wed, 12 Apr 2023 17:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681319062; x=1712855062;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=t8guRHxFq9/yPpcqOvC1MeOY9gUelFzBE58yFnp9rZU=;
-  b=S44Q9TFGbOopyqH1DhwFqDi63Om5otI2nZH4viK6b2Dm640uRn0VTjDR
-   bJXqO5/rOC5SiH/PrC/UuoupGX3ix/4DtOwrEyiu68G+AGDA4opUReZNM
-   BL3iJb8cidP4rT1FoIoRW9Bh4aBHaKRd3Ckd9CIi+9iR8xlh+dyGX/luH
-   P71p0jrK69apbpz7pga/EDQGh1M1VQMzyFPmAbD93tvP0Py7/i+RLWGz1
-   d9lzoh74KLdOcPHxbQXb7thB/jvJh7xW83VyRCgMy5UUBUYm1bQhXz6DI
-   7qnvrlmmRqpA6q1mqz7w8LAiD2X1sGRsVlzFY1fGC62tg5diyhVWF+TVC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="341453560"
+  t=1681320334; x=1712856334;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fg6uGIM3FM+B+1guXhrCn+MxDSVjY3zwLFWXWk63VL8=;
+  b=WYeIXId79zIONIxrd/gCFzBill4yoQlhKMTdVIY3kCPZs4byApOl5W0I
+   eLj0bT9WrHCiDjQXC9ywgPJxAfovpZjoI3zTUsUqJWV5bryv+AD/m/l14
+   N6Bm7z4AA3GhbH0VQWrP/J3mgX1h0Myt4vwmx2XFpSerrFN9+Z7byO5qF
+   xxXOEMmRmRhHBU96gISfuVEuNK0tRLUMKdcBoI03D4/ERuSUSGl+mKuG9
+   hTCmvMoKwXGsM6QeU5gkPKooe/YVfexTqQmgYzEoR2q3z6EgSjuNwVP5c
+   a+NiNPCrB6//QAabJQmRIwMMtQdIkEyQ5dyFYGoHdvTrn5w5qV/d97mES
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="406794194"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="341453560"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 10:04:21 -0700
+   d="scan'208";a="406794194"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 10:25:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="935192944"
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719468741"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="935192944"
+   d="scan'208";a="719468741"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2023 10:04:19 -0700
+  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2023 10:25:20 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pmdtK-000XvL-1i;
-	Wed, 12 Apr 2023 17:04:18 +0000
-Date: Thu, 13 Apr 2023 01:04:13 +0800
+	id 1pmeDf-000XwN-0G;
+	Wed, 12 Apr 2023 17:25:19 +0000
+Date: Thu, 13 Apr 2023 01:24:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:master 950/1117] drivers/mtd/spi-nor/core.c:1724:34:
- warning: variable 'offset' is uninitialized when used here
-Message-ID: <202304130035.hN0Czp9b-lkp@intel.com>
+To: Baokun Li <libaokun1@huawei.com>, linux-ext4@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tytso@mit.edu,
+	adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+	linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+	yangerkun@huawei.com, yukuai3@huawei.com, libaokun1@huawei.com
+Subject: Re: [PATCH v3 6/8] ext4: make ext4_es_insert_delayed_block return
+ void
+Message-ID: <202304130044.d3iOG59z-lkp@intel.com>
+References: <20230412124126.2286716-7-libaokun1@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,304 +50,112 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230412124126.2286716-7-libaokun1@huawei.com>
 
-tree:   https://github.com/Xilinx/linux-xlnx master
-head:   3a2a9dcee70777a85b3952269c47e6eb65779b78
-commit: e0c2c63b704976190abcbfb1a9b728fac4f7b7b8 [950/1117] mtd: spi-nor: Add EAR support
-config: x86_64-randconfig-a001-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130035.hN0Czp9b-lkp@intel.com/config)
+Hi Baokun,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on linus/master v6.3-rc6 next-20230412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Baokun-Li/ext4-only-update-i_reserved_data_blocks-on-successful-block-allocation/20230412-204407
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230412124126.2286716-7-libaokun1%40huawei.com
+patch subject: [PATCH v3 6/8] ext4: make ext4_es_insert_delayed_block return void
+config: x86_64-randconfig-a002-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130044.d3iOG59z-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/e0c2c63b704976190abcbfb1a9b728fac4f7b7b8
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx master
-        git checkout e0c2c63b704976190abcbfb1a9b728fac4f7b7b8
+        # https://github.com/intel-lab-lkp/linux/commit/87f992eeab9cd894894e27c3c6ff322cbd473ebf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Baokun-Li/ext4-only-update-i_reserved_data_blocks-on-successful-block-allocation/20230412-204407
+        git checkout 87f992eeab9cd894894e27c3c6ff322cbd473ebf
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mtd/spi-nor/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ext4/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130035.hN0Czp9b-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130044.d3iOG59z-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/mtd/spi-nor/core.c:593:5: warning: no previous prototype for function 'spi_nor_write_ear' [-Wmissing-prototypes]
-   int spi_nor_write_ear(struct spi_nor *nor, u32 addr)
-       ^
-   drivers/mtd/spi-nor/core.c:593:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int spi_nor_write_ear(struct spi_nor *nor, u32 addr)
-   ^
-   static 
->> drivers/mtd/spi-nor/core.c:1724:34: warning: variable 'offset' is uninitialized when used here [-Wuninitialized]
-                                   ret = spi_nor_write_ear(nor, offset);
-                                                                ^~~~~~
-   drivers/mtd/spi-nor/core.c:1563:23: note: initialize the variable 'offset' to silence this warning
-           u32 addr, len, offset, cur_cs_num = 0;
-                                ^
-                                 = 0
-   2 warnings generated.
+>> fs/ext4/inode.c:1640:7: warning: variable 'reserved' set but not used [-Wunused-but-set-variable]
+           bool reserved = false;
+                ^
+   1 warning generated.
 
 
-vim +/offset +1724 drivers/mtd/spi-nor/core.c
+vim +/reserved +1640 fs/ext4/inode.c
 
-  1554	
-  1555	/*
-  1556	 * Erase an address range on the nor chip.  The address range may extend
-  1557	 * one or more erase sectors. Return an error if there is a problem erasing.
-  1558	 */
-  1559	static int spi_nor_erase(struct mtd_info *mtd, struct erase_info *instr)
-  1560	{
-  1561		struct spi_nor *nor = mtd_to_spi_nor(mtd);
-  1562		struct spi_nor_flash_parameter *params;
-  1563		u32 addr, len, offset, cur_cs_num = 0;
-  1564		uint32_t rem;
-  1565		int ret;
-  1566		u64 sz;
-  1567	
-  1568		dev_dbg(nor->dev, "at 0x%llx, len %lld\n", (long long)instr->addr,
-  1569				(long long)instr->len);
-  1570	
-  1571		params = spi_nor_get_params(nor, 0);
-  1572		sz = params->size;
-  1573	
-  1574		if (spi_nor_has_uniform_erase(nor)) {
-  1575			div_u64_rem(instr->len, mtd->erasesize, &rem);
-  1576			if (rem)
-  1577				return -EINVAL;
-  1578		}
-  1579	
-  1580		addr = instr->addr;
-  1581		len = instr->len;
-  1582	
-  1583		ret = spi_nor_lock_and_prep(nor);
-  1584		if (ret)
-  1585			return ret;
-  1586	
-  1587		if (!(nor->flags & SNOR_F_HAS_PARALLEL)) {
-  1588			/* whole-chip erase? */
-  1589			if (len == mtd->size && !(nor->flags & SNOR_F_NO_OP_CHIP_ERASE)) {
-  1590				unsigned long timeout;
-  1591	
-  1592				while ((cur_cs_num < SNOR_FLASH_CNT_MAX) && params) {
-  1593					nor->spimem->spi->cs_index_mask = 1 << cur_cs_num;
-  1594					ret = spi_nor_write_enable(nor);
-  1595					if (ret)
-  1596						goto erase_err;
-  1597	
-  1598					ret = spi_nor_erase_chip(nor);
-  1599					if (ret)
-  1600						goto erase_err;
-  1601	
-  1602					/*
-  1603					 * Scale the timeout linearly with the size of the flash, with
-  1604					 * a minimum calibrated to an old 2MB flash. We could try to
-  1605					 * pull these from CFI/SFDP, but these values should be good
-  1606					 * enough for now.
-  1607					 */
-  1608					timeout = max(CHIP_ERASE_2MB_READY_WAIT_JIFFIES,
-  1609						      CHIP_ERASE_2MB_READY_WAIT_JIFFIES *
-  1610						      (unsigned long)(params->size /
-  1611								      SZ_2M));
-  1612					ret = spi_nor_wait_till_ready_with_timeout(nor, timeout);
-  1613					if (ret)
-  1614						goto erase_err;
-  1615	
-  1616					cur_cs_num++;
-  1617					params = spi_nor_get_params(nor, cur_cs_num);
-  1618				}
-  1619	
-  1620			/* REVISIT in some cases we could speed up erasing large regions
-  1621			 * by using SPINOR_OP_SE instead of SPINOR_OP_BE_4K.  We may have set up
-  1622			 * to use "small sector erase", but that's not always optimal.
-  1623			 */
-  1624	
-  1625			/* "sector"-at-a-time erase */
-  1626			} else if (spi_nor_has_uniform_erase(nor)) {
-  1627				/* Determine the flash from which the operation need to start */
-  1628				while ((cur_cs_num < SNOR_FLASH_CNT_MAX) &&
-  1629				       (addr > sz - 1) && params) {
-  1630					cur_cs_num++;
-  1631					params = spi_nor_get_params(nor, cur_cs_num);
-  1632					sz += params->size;
-  1633				}
-  1634				while (len) {
-  1635					nor->spimem->spi->cs_index_mask = 1 << cur_cs_num;
-  1636					ret = spi_nor_write_enable(nor);
-  1637					if (ret)
-  1638						goto erase_err;
-  1639	
-  1640					offset = addr;
-  1641					if (nor->flags & SNOR_F_HAS_STACKED) {
-  1642						params = spi_nor_get_params(nor, cur_cs_num);
-  1643						offset -= (sz - params->size);
-  1644					}
-  1645	
-  1646					if (nor->addr_nbytes == 3) {
-  1647						/* Update Extended Address Register */
-  1648						ret = spi_nor_write_ear(nor, offset);
-  1649						if (ret)
-  1650							goto erase_err;
-  1651					}
-  1652					ret = spi_nor_wait_till_ready(nor);
-  1653					if (ret)
-  1654						goto erase_err;
-  1655	
-  1656					ret = spi_nor_write_enable(nor);
-  1657					if (ret)
-  1658						goto erase_err;
-  1659	
-  1660					ret = spi_nor_erase_sector(nor, offset);
-  1661					if (ret)
-  1662						goto erase_err;
-  1663	
-  1664					ret = spi_nor_wait_till_ready(nor);
-  1665					if (ret)
-  1666						goto erase_err;
-  1667	
-  1668					addr += mtd->erasesize;
-  1669					len -= mtd->erasesize;
-  1670	
-  1671					/*
-  1672					 * Flash cross over condition in stacked mode.
-  1673					 */
-  1674					if ((nor->flags & SNOR_F_HAS_STACKED) && (addr > sz - 1)) {
-  1675						cur_cs_num++;
-  1676						params = spi_nor_get_params(nor, cur_cs_num);
-  1677						sz += params->size;
-  1678					}
-  1679				}
-  1680	
-  1681			/* erase multiple sectors */
-  1682			} else {
-  1683				u64 erase_len = 0;
-  1684	
-  1685				/* Determine the flash from which the operation need to start */
-  1686				while ((cur_cs_num < SNOR_FLASH_CNT_MAX) &&
-  1687				       (addr > sz - 1) && params) {
-  1688					cur_cs_num++;
-  1689					params = spi_nor_get_params(nor, cur_cs_num);
-  1690					sz += params->size;
-  1691				}
-  1692				/* perform multi sector erase onec per Flash*/
-  1693				while (len) {
-  1694					erase_len = (len > (sz - addr)) ? (sz - addr) : len;
-  1695					offset = addr;
-  1696					nor->spimem->spi->cs_index_mask = 1 << cur_cs_num;
-  1697					if (nor->flags & SNOR_F_HAS_STACKED) {
-  1698						params = spi_nor_get_params(nor, cur_cs_num);
-  1699						offset -= (sz - params->size);
-  1700					}
-  1701					ret = spi_nor_erase_multi_sectors(nor, offset, erase_len);
-  1702					if (ret)
-  1703						goto erase_err;
-  1704					len -= erase_len;
-  1705					addr += erase_len;
-  1706					params = spi_nor_get_params(nor, cur_cs_num);
-  1707					sz += params->size;
-  1708				}
-  1709			}
-  1710		} else {
-  1711			nor->spimem->spi->cs_index_mask = SPI_NOR_ENABLE_MULTI_CS;
-  1712	
-  1713			/* whole-chip erase? */
-  1714			if (len == mtd->size && !(nor->flags &
-  1715						  SNOR_F_NO_OP_CHIP_ERASE)) {
-  1716				unsigned long timeout;
-  1717	
-  1718				ret = spi_nor_write_enable(nor);
-  1719				if (ret)
-  1720					goto erase_err;
-  1721	
-  1722				if (nor->addr_nbytes == 3) {
-  1723					/* Update Extended Address Register */
-> 1724					ret = spi_nor_write_ear(nor, offset);
-  1725					if (ret)
-  1726						goto erase_err;
-  1727				}
-  1728				ret = spi_nor_wait_till_ready(nor);
-  1729				if (ret)
-  1730					goto erase_err;
-  1731	
-  1732				ret = spi_nor_write_enable(nor);
-  1733				if (ret)
-  1734					goto erase_err;
-  1735	
-  1736				ret = spi_nor_erase_chip(nor);
-  1737				if (ret)
-  1738					goto erase_err;
-  1739	
-  1740				/*
-  1741				 * Scale the timeout linearly with the size of the flash, with
-  1742				 * a minimum calibrated to an old 2MB flash. We could try to
-  1743				 * pull these from CFI/SFDP, but these values should be good
-  1744				 * enough for now.
-  1745				 */
-  1746				timeout = max(CHIP_ERASE_2MB_READY_WAIT_JIFFIES,
-  1747					      CHIP_ERASE_2MB_READY_WAIT_JIFFIES *
-  1748					      (unsigned long)(mtd->size / SZ_2M));
-  1749				ret = spi_nor_wait_till_ready_with_timeout(nor, timeout);
-  1750				if (ret)
-  1751					goto erase_err;
-  1752	
-  1753			/* REVISIT in some cases we could speed up erasing large regions
-  1754			 * by using SPINOR_OP_SE instead of SPINOR_OP_BE_4K.  We may have set up
-  1755			 * to use "small sector erase", but that's not always optimal.
-  1756			 */
-  1757	
-  1758			/* "sector"-at-a-time erase */
-  1759			} else if (spi_nor_has_uniform_erase(nor)) {
-  1760				while (len) {
-  1761					ret = spi_nor_write_enable(nor);
-  1762					if (ret)
-  1763						goto erase_err;
-  1764	
-  1765					offset = addr / 2;
-  1766	
-  1767					if (nor->addr_nbytes == 3) {
-  1768						/* Update Extended Address Register */
-  1769						ret = spi_nor_write_ear(nor, offset);
-  1770						if (ret)
-  1771							goto erase_err;
-  1772					}
-  1773					ret = spi_nor_wait_till_ready(nor);
-  1774					if (ret)
-  1775						goto erase_err;
-  1776	
-  1777					ret = spi_nor_write_enable(nor);
-  1778					if (ret)
-  1779						goto erase_err;
-  1780	
-  1781					ret = spi_nor_erase_sector(nor, offset);
-  1782					if (ret)
-  1783						goto erase_err;
-  1784	
-  1785					ret = spi_nor_wait_till_ready(nor);
-  1786					if (ret)
-  1787						goto erase_err;
-  1788	
-  1789					addr += mtd->erasesize;
-  1790					len -= mtd->erasesize;
-  1791				}
-  1792	
-  1793			/* erase multiple sectors */
-  1794			} else {
-  1795				offset = addr / 2;
-  1796				ret = spi_nor_erase_multi_sectors(nor, offset, len);
-  1797				if (ret)
-  1798					goto erase_err;
-  1799			}
-  1800		}
-  1801		ret = spi_nor_write_disable(nor);
-  1802	
-  1803	erase_err:
-  1804		spi_nor_unlock_and_unprep(nor);
-  1805	
-  1806		return ret;
-  1807	}
-  1808	
+df22291ff0fde0 Aneesh Kumar K.V 2008-09-08  1623  
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1624  /*
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1625   * ext4_insert_delayed_block - adds a delayed block to the extents status
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1626   *                             tree, incrementing the reserved cluster/block
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1627   *                             count or making a pending reservation
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1628   *                             where needed
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1629   *
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1630   * @inode - file containing the newly added block
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1631   * @lblk - logical block to be added
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1632   *
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1633   * Returns 0 on success, negative error code on failure.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1634   */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1635  static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1636  {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1637  	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+87f992eeab9cd8 Baokun Li        2023-04-12  1638  	int ret = 0;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1639  	bool allocated = false;
+6fed83957f21ef Jeffle Xu        2021-08-23 @1640  	bool reserved = false;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1641  
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1642  	/*
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1643  	 * If the cluster containing lblk is shared with a delayed,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1644  	 * written, or unwritten extent in a bigalloc file system, it's
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1645  	 * already been accounted for and does not need to be reserved.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1646  	 * A pending reservation must be made for the cluster if it's
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1647  	 * shared with a written or unwritten extent and doesn't already
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1648  	 * have one.  Written and unwritten extents can be purged from the
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1649  	 * extents status tree if the system is under memory pressure, so
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1650  	 * it's necessary to examine the extent tree if a search of the
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1651  	 * extents status tree doesn't get a match.
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1652  	 */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1653  	if (sbi->s_cluster_ratio == 1) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1654  		ret = ext4_da_reserve_space(inode);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1655  		if (ret != 0)   /* ENOSPC */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1656  			goto errout;
+6fed83957f21ef Jeffle Xu        2021-08-23  1657  		reserved = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1658  	} else {   /* bigalloc */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1659  		if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1660  			if (!ext4_es_scan_clu(inode,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1661  					      &ext4_es_is_mapped, lblk)) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1662  				ret = ext4_clu_mapped(inode,
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1663  						      EXT4_B2C(sbi, lblk));
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1664  				if (ret < 0)
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1665  					goto errout;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1666  				if (ret == 0) {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1667  					ret = ext4_da_reserve_space(inode);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1668  					if (ret != 0)   /* ENOSPC */
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1669  						goto errout;
+6fed83957f21ef Jeffle Xu        2021-08-23  1670  					reserved = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1671  				} else {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1672  					allocated = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1673  				}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1674  			} else {
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1675  				allocated = true;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1676  			}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1677  		}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1678  	}
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1679  
+87f992eeab9cd8 Baokun Li        2023-04-12  1680  	ext4_es_insert_delayed_block(inode, lblk, allocated);
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1681  errout:
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1682  	return ret;
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1683  }
+0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1684  
 
 -- 
 0-DAY CI Kernel Test Service
