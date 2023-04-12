@@ -1,273 +1,67 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A049474;
-	Wed, 12 Apr 2023 19:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681329027; x=1712865027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ryrT6XXWVMCWWKoxwWscM+/CIkHlB0N4maaPhHLtx88=;
-  b=VJCCvV7pamOK3MF/ZYnHKayMkqlNJZeccMcy7H4AHXL2Si74ytuHuCaE
-   UEyBqxk752BPftl2BWI6L/pYM7wbLY3tRQUvzvWel71pk2LDf6NGHjxDO
-   uXJYs8UIVdO7PNGtEXyyGUdPaeaQ1OsBSke6QEp8VLsAGGseLGxnHnaiz
-   QQ4PKyv7bN7T/0D7MM7XByD9GrYBYrqctHGBpyV5uqy0Ttoe5+Y8uGQ73
-   TZUncVODiA4Zcac4CNTM87d+g037E2D+o56Ca5dbX45oKnSeYaGtejdv/
-   MXXJR32kdtnpdh05ZIvhywZxwLB22RlDYBE4sJEGmj8Xxg/psum5Rk+LH
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="324366527"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="324366527"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 12:50:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="935258310"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="935258310"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Apr 2023 12:50:22 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pmgU2-000Y1R-0X;
-	Wed, 12 Apr 2023 19:50:22 +0000
-Date: Thu, 13 Apr 2023 03:49:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kemeng Shi <shikemeng@huaweicloud.com>, tytso@mit.edu,
-	adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-	shikemeng@huaweicloud.com
-Subject: Re: [PATCH v2 19/19] ext4: add first unit test for
- ext4_mb_new_blocks_simple in mballoc
-Message-ID: <202304130309.erdFVvYL-lkp@intel.com>
-References: <20230412172833.2317696-20-shikemeng@huaweicloud.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29259474
+	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 20:22:57 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id i20so16860212ybg.10
+        for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 13:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681330977; x=1683922977;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PgwjS6Tr4i1305yeX30DIlabH7TqwnvRJKw/s8cbqkI=;
+        b=Xm+oLaLy2xX8U8M3214PtlhA3pWh+6m/xZ7SE7GRIwizo0thViCEKmE8fPlBFQ9G3p
+         Hztwgts8VEscCrAsloNWb4fLv9+D74xec1d79hZVChGcAk33NydBAoUVkiYPRpWmxJuI
+         L8XbeIvSa4EO+hMUKbHSi6E49wl6FZq7+dd6a+eB4GC2MIRGdSJEJMrHCQN4jD2FQdFr
+         q9UupqcdO5LzGVxuSOFY2SahZmlT9PaBzL8csr8/oQFAbkb+L+bw6FunMFSct6Ssw3BV
+         k/KrwVIswr4u5gtNbbBOIPx4b4dypSzrhc1Rdab8MUsS0s/HjiDiKIXQTNhKw8QFsEBy
+         QLwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681330977; x=1683922977;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PgwjS6Tr4i1305yeX30DIlabH7TqwnvRJKw/s8cbqkI=;
+        b=hIUsXHtx0OHiEE+psSDo+/V9AvUFmdEX/ISBCjY/hPRpcAOuvmoSE6/8/ueTJYaSHl
+         dbwrTIEHvUqhDhjy5Hl9LEgG6xWBG5lUY95HMj7JXNDW76FQ9UuNk1m61uFVyslcjv64
+         2nXHRma52SCymW+fReRsOAhhLoB2b3es4Jb2KxyCmsBr/vziRhDNr+6I+O77jC8SQ5dE
+         hQOYjKUU3aeq9D3BsIoTrKF8UbGRll2Hoy+7xShpgucMRmupJDALE060r/RtjPMuFPJw
+         a53pO1dsNwPuWl0WutKuCOR4o6irJ0nld4JxvTEPVXQgWj56JS6t4GjcQCFCFju9F6ap
+         vuiA==
+X-Gm-Message-State: AAQBX9c79XBK6+1GLDFO6RSn3Bqiu/c1//KL9A3WvpnfxwCDYE28V07J
+	pgU2SXymutc0U+x+Cmcld317oaD/2NGLYuYa/98=
+X-Google-Smtp-Source: AKy350YfoLyqtWzzli9vHTYdX013KqUtiC1U6d/03D/of28HrW6Se3PJdf29WJ92nMhtkEq1HTJZDmV6JX+LoQ8cWV4=
+X-Received: by 2002:a25:d9d0:0:b0:b8f:350e:ccee with SMTP id
+ q199-20020a25d9d0000000b00b8f350ecceemr2358222ybg.11.1681330976992; Wed, 12
+ Apr 2023 13:22:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412172833.2317696-20-shikemeng@huaweicloud.com>
+References: <20230412-no_stackp-v1-0-46a69b507a4b@google.com> <20230412-no_stackp-v1-1-46a69b507a4b@google.com>
+In-Reply-To: <20230412-no_stackp-v1-1-46a69b507a4b@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 12 Apr 2023 22:22:46 +0200
+Message-ID: <CANiq72moZqOWvSQ=updqMEVe1NggyAO-_iD6s0UMSL8HZF0mtQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] start_kernel: add no_stack_protector fn attr
+To: ndesaulniers@google.com
+Cc: "Borislav Petkov (AMD)" <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kemeng,
+On Wed, Apr 12, 2023 at 8:32=E2=80=AFPM <ndesaulniers@google.com> wrote:
+>
+>  include/linux/compiler_attributes.h | 12 ++++++++++++
 
-kernel test robot noticed the following build errors:
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on next-20230412]
-[cannot apply to linus/master v6.3-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230412172833.2317696-20-shikemeng%40huaweicloud.com
-patch subject: [PATCH v2 19/19] ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
-config: powerpc-randconfig-r006-20230409 (https://download.01.org/0day-ci/archive/20230413/202304130309.erdFVvYL-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3ceb1daf83fdf578c28ede1a10e55f05ef7642d5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
-        git checkout 3ceb1daf83fdf578c28ede1a10e55f05ef7642d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash fs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130309.erdFVvYL-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   fs/ext4/mballoc.c:3752:12: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-           handle_t *handle = mc->handle;
-                     ^
-   In file included from fs/ext4/mballoc.c:6523:
->> fs/ext4/mballoc-test.c:107:31: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
-           struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, group);
-                                        ^
-   fs/ext4/mballoc-test.c:23:33: note: expanded from macro 'MB_GRP_CTX'
-   #define MB_GRP_CTX(sb, group) (&MB_CTX(sb)->grp_ctx[group])
-                                   ^
-   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
-   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
-                       ^
-   fs/ext4/mballoc-test.c:115:23: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
-           struct mb_ctx *ctx = MB_CTX(sb);
-                                ^
-   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
-   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
-                       ^
-   fs/ext4/mballoc-test.c:144:23: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
-           struct mb_ctx *ctx = MB_CTX(sb);
-                                ^
-   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
-   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
-                       ^
-   fs/ext4/mballoc-test.c:156:31: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
-           struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
-                                        ^
-   fs/ext4/mballoc-test.c:23:33: note: expanded from macro 'MB_GRP_CTX'
-   #define MB_GRP_CTX(sb, group) (&MB_CTX(sb)->grp_ctx[group])
-                                   ^
-   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
-   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
-                       ^
->> fs/ext4/mballoc-test.c:153:1: warning: no previous prototype for function 'ext4_read_block_bitmap_nowait_stub' [-Wmissing-prototypes]
-   ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
-   ^
-   fs/ext4/mballoc-test.c:152:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct buffer_head *
-   ^
-   static 
->> fs/ext4/mballoc-test.c:162:5: warning: no previous prototype for function 'ext4_wait_block_bitmap_stub' [-Wmissing-prototypes]
-   int ext4_wait_block_bitmap_stub(struct super_block *sb,
-       ^
-   fs/ext4/mballoc-test.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ext4_wait_block_bitmap_stub(struct super_block *sb,
-   ^
-   static 
-   fs/ext4/mballoc-test.c:173:31: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
-           struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
-                                        ^
-   fs/ext4/mballoc-test.c:23:33: note: expanded from macro 'MB_GRP_CTX'
-   #define MB_GRP_CTX(sb, group) (&MB_CTX(sb)->grp_ctx[group])
-                                   ^
-   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
-   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
-                       ^
->> fs/ext4/mballoc-test.c:169:25: warning: no previous prototype for function 'ext4_get_group_desc_stub' [-Wmissing-prototypes]
-   struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
-                           ^
-   fs/ext4/mballoc-test.c:169:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
-   ^
-   static 
-   fs/ext4/mballoc-test.c:185:31: error: casting from randomized structure pointer type 'struct super_block *' to 'struct mb_ctx *'
-           struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(mc->sb, group);
-                                        ^
-   fs/ext4/mballoc-test.c:23:33: note: expanded from macro 'MB_GRP_CTX'
-   #define MB_GRP_CTX(sb, group) (&MB_CTX(sb)->grp_ctx[group])
-                                   ^
-   fs/ext4/mballoc-test.c:22:21: note: expanded from macro 'MB_CTX'
-   #define MB_CTX(sb) ((struct mb_ctx *)((struct super_block *)sb + 1))
-                       ^
->> fs/ext4/mballoc-test.c:181:5: warning: no previous prototype for function 'ext4_mb_mark_group_bb_stub' [-Wmissing-prototypes]
-   int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
-       ^
-   fs/ext4/mballoc-test.c:181:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
-   ^
-   static 
-   5 warnings and 6 errors generated.
-
-
-vim +107 fs/ext4/mballoc-test.c
-
-   103	
-   104	static void mb_ctx_mark_used(struct super_block *sb, ext4_group_t group,
-   105				     unsigned int start, unsigned int len)
-   106	{
- > 107		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, group);
-   108	
-   109		mb_set_bits(grp_ctx->bitmap_bh.b_data, start, len);
-   110	}
-   111	
-   112	/* called after init_sb_layout */
-   113	static int mb_ctx_init(struct super_block *sb)
-   114	{
-   115		struct mb_ctx *ctx = MB_CTX(sb);
-   116		ext4_group_t i, ngroups = ext4_get_groups_count(sb);
-   117	
-   118		ctx->grp_ctx = kcalloc(ngroups, sizeof(struct mb_grp_ctx),
-   119				       GFP_KERNEL);
-   120		if (ctx->grp_ctx == NULL)
-   121			return -ENOMEM;
-   122	
-   123		for (i = 0; i < ngroups; i++)
-   124			if (mb_grp_ctx_init(sb, &ctx->grp_ctx[i]))
-   125				goto out;
-   126	
-   127		/*
-   128		 * first data block(first cluster in first group) is used by
-   129		 * metadata, mark it used to avoid to alloc data block at first
-   130		 * block which will fail ext4_sb_block_valid check.
-   131		 */
-   132		mb_set_bits(ctx->grp_ctx[0].bitmap_bh.b_data, 0, 1);
-   133	
-   134		return 0;
-   135	out:
-   136		while (i-- > 0)
-   137			mb_grp_ctx_release(&ctx->grp_ctx[i]);
-   138		kfree(ctx->grp_ctx);
-   139		return -ENOMEM;
-   140	}
-   141	
-   142	static void mb_ctx_release(struct super_block *sb)
-   143	{
-   144		struct mb_ctx *ctx = MB_CTX(sb);
-   145		ext4_group_t i, ngroups = ext4_get_groups_count(sb);
-   146	
-   147		for (i = 0; i < ngroups; i++)
-   148			mb_grp_ctx_release(&ctx->grp_ctx[i]);
-   149		kfree(ctx->grp_ctx);
-   150	}
-   151	
-   152	struct buffer_head *
- > 153	ext4_read_block_bitmap_nowait_stub(struct super_block *sb, ext4_group_t block_group,
-   154					   bool ignore_locked)
-   155	{
-   156		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
-   157	
-   158		get_bh(&grp_ctx->bitmap_bh);
-   159		return &grp_ctx->bitmap_bh;
-   160	}
-   161	
- > 162	int ext4_wait_block_bitmap_stub(struct super_block *sb,
-   163					ext4_group_t block_group,
-   164					struct buffer_head *bh)
-   165	{
-   166		return 0;
-   167	}
-   168	
- > 169	struct ext4_group_desc *ext4_get_group_desc_stub(struct super_block *sb,
-   170						     ext4_group_t block_group,
-   171						     struct buffer_head **bh)
-   172	{
-   173		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(sb, block_group);
-   174	
-   175		if (bh != NULL)
-   176			*bh = &grp_ctx->gd_bh;
-   177	
-   178		return &grp_ctx->desc;
-   179	}
-   180	
- > 181	int ext4_mb_mark_group_bb_stub(struct ext4_mark_context *mc,
-   182				       ext4_group_t group, ext4_grpblk_t blkoff,
-   183				       ext4_grpblk_t len, int flags)
-   184	{
-   185		struct mb_grp_ctx *grp_ctx = MB_GRP_CTX(mc->sb, group);
-   186		struct buffer_head *bitmap_bh = &grp_ctx->bitmap_bh;
-   187	
-   188		if (mc->state)
-   189			mb_set_bits(bitmap_bh->b_data, blkoff, len);
-   190		else
-   191			mb_clear_bits(bitmap_bh->b_data, blkoff, len);
-   192	
-   193		return 0;
-   194	}
-   195	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Cheers,
+Miguel
