@@ -1,62 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BBAA92E;
-	Wed, 12 Apr 2023 21:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D2DC433EF;
-	Wed, 12 Apr 2023 21:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1681333562;
-	bh=tBuKzWjSMLs8UvYBdSDGzOLgtVGDJL5zVZa/hiwcI7Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rmhB919gqmisPXX6gHRY+oQZFyU/szgZjbTc0ox+RrAHTyBXZ1JHeV66GM0B+wVeR
-	 1lzvypLhE5gOdWeXFCWLKqc0jPTeaeQ686SAQcyxCRsikU2PGYnz6buDKNXfKZGgOr
-	 OYuwzUfjWWBIpqdwtFXrI3k8H7wmiOxuaUxuDIwM=
-Date: Wed, 12 Apr 2023 14:06:01 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, urezki@gmail.com, hch@infradead.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, elver@google.com,
- dvyukov@google.com, kasan-dev@googlegroups.com, Dipanjan Das
- <mail.dipanjan.das@gmail.com>
-Subject: Re: [PATCH 1/2] mm: kmsan: handle alloc failures in
- kmsan_vmap_pages_range_noflush()
-Message-Id: <20230412140601.9308b871e38acb842c119478@linux-foundation.org>
-In-Reply-To: <202304130223.epEIvA1E-lkp@intel.com>
-References: <20230412145300.3651840-1-glider@google.com>
-	<202304130223.epEIvA1E-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6554AA935
+	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 22:03:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B555C433EF;
+	Wed, 12 Apr 2023 22:03:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681337031;
+	bh=tefIW53ZJKwIqOdZsSJl2ug2/mxFBL2MwlQe6fIar5k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iq5PQ4osESwUKnDUSdpSV3y1JKWndWE3bB36t9LoMuVuTLD3i6CvQvgl6U72MlTuC
+	 dqhafdhs+5oM0ElgpFUcGFnErtcRt2BGoR0qQ0y4K4qlOW6XKOqc5lGePKbyZ8bwcf
+	 gzRtyTokxw05pe3hmj9TRZN+6bQn3I6jwaSZXMZDRS5yMjekEdcMm+5Oih6G7/nw9t
+	 +jm2is6aEJfWfcaAjYLg+CS1HFTjHSSNXD2JjBlDpRFAaNUekzga5YU+dWkKEy/IEk
+	 9jjrmCuzmLwQosxDXqRTEa2DS1tKlYpQ1WS9HqM70Ee2OIKEpNjYOQurT4iWuaAqBV
+	 gzCefz8cgu8Fw==
+Date: Wed, 12 Apr 2023 15:03:48 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: ndesaulniers@google.com
+Cc: "Borislav Petkov (AMD)" <bp@alien8.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Miguel Ojeda <ojeda@kernel.org>, Tom Rix <trix@redhat.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] start_kernel: add no_stack_protector fn attr
+Message-ID: <20230412220348.GA1120303@dev-arch.thelio-3990X>
+References: <20230412-no_stackp-v1-0-46a69b507a4b@google.com>
+ <20230412-no_stackp-v1-1-46a69b507a4b@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412-no_stackp-v1-1-46a69b507a4b@google.com>
 
-On Thu, 13 Apr 2023 02:27:19 +0800 kernel test robot <lkp@intel.com> wrote:
-
-> Hi Alexander,
+On Wed, Apr 12, 2023 at 11:32:12AM -0700, ndesaulniers@google.com wrote:
+> Back during the discussion of
+> commit a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
+> we discussed the need for a function attribute to control the omission
+> of stack protectors on a per-function basis; at the time Clang had
+> support for no_stack_protector but GCC did not. This was fixed in
+> gcc-11. Now that the function attribute is available, let's start using
+> it.
 > 
-> kernel test robot noticed the following build errors:
+> Callers of boot_init_stack_canary need to use this function attribute
+> unless they're compiled with -fno-stack-protector, otherwise the canary
+> stored in the stack slot of the caller will differ upon the call to
+> boot_init_stack_canary. This will lead to a call to __stack_chk_fail
+> then panic.
 > 
-> [auto build test ERROR on akpm-mm/mm-everything]
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94722
+> Link: https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+
+I applied this in front of Josh's series and defconfig no longer panics
+on boot :)
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  arch/powerpc/kernel/smp.c           |  1 +
+>  include/linux/compiler_attributes.h | 12 ++++++++++++
+>  init/main.c                         |  3 ++-
+>  3 files changed, 15 insertions(+), 1 deletion(-)
 > 
-> >> include/linux/kmsan.h:291:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-
-Thanks, I'll do this:
-
---- a/include/linux/kmsan.h~mm-kmsan-handle-alloc-failures-in-kmsan_ioremap_page_range-fix
-+++ a/include/linux/kmsan.h
-@@ -289,6 +289,7 @@ static inline int kmsan_vmap_pages_range
- 						 struct page **pages,
- 						 unsigned int page_shift)
- {
-+	return 0;
- }
- 
- static inline void kmsan_vunmap_range_noflush(unsigned long start,
-_
-
+> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+> index 6b90f10a6c81..7d4c12b1abb7 100644
+> --- a/arch/powerpc/kernel/smp.c
+> +++ b/arch/powerpc/kernel/smp.c
+> @@ -1603,6 +1603,7 @@ static void add_cpu_to_masks(int cpu)
+>  }
+>  
+>  /* Activate a secondary processor. */
+> +__no_stack_protector
+>  void start_secondary(void *unused)
+>  {
+>  	unsigned int cpu = raw_smp_processor_id();
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index e659cb6fded3..84864767a56a 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -255,6 +255,18 @@
+>   */
+>  #define __noreturn                      __attribute__((__noreturn__))
+>  
+> +/*
+> + * Optional: only supported since GCC >= 11.1, clang >= 7.0.
+> + *
+> + *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-no_005fstack_005fprotector-function-attribute
+> + *   clang: https://clang.llvm.org/docs/AttributeReference.html#no-stack-protector-safebuffers
+> + */
+> +#if __has_attribute(__no_stack_protector__)
+> +# define __no_stack_protector		__attribute__((__no_stack_protector__))
+> +#else
+> +# define __no_stack_protector
+> +#endif
+> +
+>  /*
+>   * Optional: not supported by gcc.
+>   *
+> diff --git a/init/main.c b/init/main.c
+> index bb87b789c543..213baf7b8cb1 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -941,7 +941,8 @@ static void __init print_unknown_bootoptions(void)
+>  	memblock_free(unknown_options, len);
+>  }
+>  
+> -asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+> +asmlinkage __visible __init __no_sanitize_address __no_stack_protector
+> +void start_kernel(void)
+>  {
+>  	char *command_line;
+>  	char *after_dashes;
+> 
+> -- 
+> 2.40.0.577.gac1e443424-goog
+> 
+> 
