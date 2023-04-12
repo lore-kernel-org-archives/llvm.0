@@ -1,47 +1,44 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F00B6FD2;
-	Wed, 12 Apr 2023 17:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD02A746F;
+	Wed, 12 Apr 2023 17:56:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681320334; x=1712856334;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fg6uGIM3FM+B+1guXhrCn+MxDSVjY3zwLFWXWk63VL8=;
-  b=WYeIXId79zIONIxrd/gCFzBill4yoQlhKMTdVIY3kCPZs4byApOl5W0I
-   eLj0bT9WrHCiDjQXC9ywgPJxAfovpZjoI3zTUsUqJWV5bryv+AD/m/l14
-   N6Bm7z4AA3GhbH0VQWrP/J3mgX1h0Myt4vwmx2XFpSerrFN9+Z7byO5qF
-   xxXOEMmRmRhHBU96gISfuVEuNK0tRLUMKdcBoI03D4/ERuSUSGl+mKuG9
-   hTCmvMoKwXGsM6QeU5gkPKooe/YVfexTqQmgYzEoR2q3z6EgSjuNwVP5c
-   a+NiNPCrB6//QAabJQmRIwMMtQdIkEyQ5dyFYGoHdvTrn5w5qV/d97mES
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="406794194"
+  t=1681322183; x=1712858183;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pAPZ3pDjDhNlH6yRAG+mFXvd29vCvZ6e5uUFg1nTgew=;
+  b=Mm4m22/fH+UgiTlOlDdGzVrcPqx+0WG7ifGT8UBqnVd3B3N5kYqWcip5
+   8i4FlfRl0OL5ydXnmdpuZg9MIB+YOYcoPg5WjCz6b39veNh5Dmuc7R9hd
+   d6rdotOVyvllxcrQSdELVjzdunjcYRGN3nS9i+GQw3F8yBx+tTv0+/Dkp
+   2QC8kbhwHYn8qOIG6OCLxyTEe5LiJErMToDGGuA5ZJfzRMIecnZXWGiJp
+   +JHnr8dIdW7OQXrJhGtgqiVNaGSUMqM9D/XQ1MN/tQ6PEis7xD+hTL0ri
+   WKm9gVBVljlDy9sEHe5twdVL2E/qnCmvjqZ74qRTfYrQnpgD4NHC09fAd
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332676724"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="406794194"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 10:25:24 -0700
+   d="scan'208";a="332676724"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 10:56:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="719468741"
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="813080856"
 X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="719468741"
+   d="scan'208";a="813080856"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 12 Apr 2023 10:25:20 -0700
+  by orsmga004.jf.intel.com with ESMTP; 12 Apr 2023 10:56:21 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pmeDf-000XwN-0G;
-	Wed, 12 Apr 2023 17:25:19 +0000
-Date: Thu, 13 Apr 2023 01:24:41 +0800
+	id 1pmehg-000Xxx-0j;
+	Wed, 12 Apr 2023 17:56:20 +0000
+Date: Thu, 13 Apr 2023 01:56:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Baokun Li <libaokun1@huawei.com>, linux-ext4@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tytso@mit.edu,
-	adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-	linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-	yangerkun@huawei.com, yukuai3@huawei.com, libaokun1@huawei.com
-Subject: Re: [PATCH v3 6/8] ext4: make ext4_es_insert_delayed_block return
- void
-Message-ID: <202304130044.d3iOG59z-lkp@intel.com>
-References: <20230412124126.2286716-7-libaokun1@huawei.com>
+To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Michal Simek <monstr@monstr.eu>
+Subject: [xilinx-xlnx:master 946/1117] drivers/spi/spi-zynqmp-gqspi.c:229:6:
+ warning: no previous prototype for function 'zynqmp_gqspi_update_stripe'
+Message-ID: <202304130122.DoBs1fgx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,112 +47,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230412124126.2286716-7-libaokun1@huawei.com>
 
-Hi Baokun,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tytso-ext4/dev]
-[also build test WARNING on linus/master v6.3-rc6 next-20230412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Baokun-Li/ext4-only-update-i_reserved_data_blocks-on-successful-block-allocation/20230412-204407
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-patch link:    https://lore.kernel.org/r/20230412124126.2286716-7-libaokun1%40huawei.com
-patch subject: [PATCH v3 6/8] ext4: make ext4_es_insert_delayed_block return void
-config: x86_64-randconfig-a002-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130044.d3iOG59z-lkp@intel.com/config)
+tree:   https://github.com/Xilinx/linux-xlnx master
+head:   3a2a9dcee70777a85b3952269c47e6eb65779b78
+commit: 754602bf2ee623dc6274c971e7e84058b70450aa [946/1117] spi: spi-zynqmp-gqspi: Add parallel memories support in GQSPI driver
+config: x86_64-randconfig-a006-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130122.DoBs1fgx-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/87f992eeab9cd894894e27c3c6ff322cbd473ebf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Baokun-Li/ext4-only-update-i_reserved_data_blocks-on-successful-block-allocation/20230412-204407
-        git checkout 87f992eeab9cd894894e27c3c6ff322cbd473ebf
+        # https://github.com/Xilinx/linux-xlnx/commit/754602bf2ee623dc6274c971e7e84058b70450aa
+        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
+        git fetch --no-tags xilinx-xlnx master
+        git checkout 754602bf2ee623dc6274c971e7e84058b70450aa
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ext4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130044.d3iOG59z-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130122.DoBs1fgx-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/ext4/inode.c:1640:7: warning: variable 'reserved' set but not used [-Wunused-but-set-variable]
-           bool reserved = false;
-                ^
-   1 warning generated.
+   In file included from drivers/spi/spi-zynqmp-gqspi.c:26:
+   In file included from include/linux/mtd/spi-nor.h:10:
+   include/linux/mtd/cfi.h:62:2: warning: No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work. [-W#warnings]
+   #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
+    ^
+>> drivers/spi/spi-zynqmp-gqspi.c:229:6: warning: no previous prototype for function 'zynqmp_gqspi_update_stripe' [-Wmissing-prototypes]
+   bool zynqmp_gqspi_update_stripe(const struct spi_mem_op *op)
+        ^
+   drivers/spi/spi-zynqmp-gqspi.c:229:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool zynqmp_gqspi_update_stripe(const struct spi_mem_op *op)
+   ^
+   static 
+   In file included from drivers/spi/spi-zynqmp-gqspi.c:13:
+   include/linux/firmware/xlnx-zynqmp.h:1249:12: warning: unused function 'zynqmp_pm_sec_read_reg' [-Wunused-function]
+   static int zynqmp_pm_sec_read_reg(u32 node_id, u32 offset, u32 *ret_value)
+              ^
+   include/linux/firmware/xlnx-zynqmp.h:1254:12: warning: unused function 'zynqmp_pm_sec_mask_write_reg' [-Wunused-function]
+   static int zynqmp_pm_sec_mask_write_reg(const u32 node_id, const u32 offset,
+              ^
+   include/linux/firmware/xlnx-zynqmp.h:1324:12: warning: unused function 'zynqmp_pm_fpga_get_version' [-Wunused-function]
+   static int zynqmp_pm_fpga_get_version(u32 *value)
+              ^
+   include/linux/firmware/xlnx-zynqmp.h:1329:12: warning: unused function 'zynqmp_pm_fpga_get_feature_list' [-Wunused-function]
+   static int zynqmp_pm_fpga_get_feature_list(u32 *value)
+              ^
+   include/linux/firmware/xlnx-zynqmp.h:1334:12: warning: unused function 'versal_pm_sha_hash' [-Wunused-function]
+   static int versal_pm_sha_hash(const u64 src, const u64 dst, const u32 size)
+              ^
+   7 warnings generated.
 
 
-vim +/reserved +1640 fs/ext4/inode.c
+vim +/zynqmp_gqspi_update_stripe +229 drivers/spi/spi-zynqmp-gqspi.c
 
-df22291ff0fde0 Aneesh Kumar K.V 2008-09-08  1623  
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1624  /*
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1625   * ext4_insert_delayed_block - adds a delayed block to the extents status
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1626   *                             tree, incrementing the reserved cluster/block
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1627   *                             count or making a pending reservation
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1628   *                             where needed
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1629   *
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1630   * @inode - file containing the newly added block
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1631   * @lblk - logical block to be added
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1632   *
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1633   * Returns 0 on success, negative error code on failure.
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1634   */
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1635  static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1636  {
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1637  	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
-87f992eeab9cd8 Baokun Li        2023-04-12  1638  	int ret = 0;
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1639  	bool allocated = false;
-6fed83957f21ef Jeffle Xu        2021-08-23 @1640  	bool reserved = false;
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1641  
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1642  	/*
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1643  	 * If the cluster containing lblk is shared with a delayed,
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1644  	 * written, or unwritten extent in a bigalloc file system, it's
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1645  	 * already been accounted for and does not need to be reserved.
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1646  	 * A pending reservation must be made for the cluster if it's
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1647  	 * shared with a written or unwritten extent and doesn't already
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1648  	 * have one.  Written and unwritten extents can be purged from the
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1649  	 * extents status tree if the system is under memory pressure, so
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1650  	 * it's necessary to examine the extent tree if a search of the
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1651  	 * extents status tree doesn't get a match.
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1652  	 */
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1653  	if (sbi->s_cluster_ratio == 1) {
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1654  		ret = ext4_da_reserve_space(inode);
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1655  		if (ret != 0)   /* ENOSPC */
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1656  			goto errout;
-6fed83957f21ef Jeffle Xu        2021-08-23  1657  		reserved = true;
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1658  	} else {   /* bigalloc */
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1659  		if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)) {
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1660  			if (!ext4_es_scan_clu(inode,
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1661  					      &ext4_es_is_mapped, lblk)) {
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1662  				ret = ext4_clu_mapped(inode,
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1663  						      EXT4_B2C(sbi, lblk));
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1664  				if (ret < 0)
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1665  					goto errout;
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1666  				if (ret == 0) {
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1667  					ret = ext4_da_reserve_space(inode);
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1668  					if (ret != 0)   /* ENOSPC */
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1669  						goto errout;
-6fed83957f21ef Jeffle Xu        2021-08-23  1670  					reserved = true;
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1671  				} else {
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1672  					allocated = true;
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1673  				}
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1674  			} else {
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1675  				allocated = true;
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1676  			}
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1677  		}
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1678  	}
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1679  
-87f992eeab9cd8 Baokun Li        2023-04-12  1680  	ext4_es_insert_delayed_block(inode, lblk, allocated);
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1681  errout:
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1682  	return ret;
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1683  }
-0b02f4c0d6d9e2 Eric Whitney     2018-10-01  1684  
+   221	
+   222	/**
+   223	 * zynqmp_gqspi_update_stripe - For GQSPI controller data stripe capabilities
+   224	 * @op:	Pointer to mem ops
+   225	 * Return:      Status of the data stripe
+   226	 *
+   227	 * Returns true if data stripe need to be enabled, else returns false
+   228	 */
+ > 229	bool zynqmp_gqspi_update_stripe(const struct spi_mem_op *op)
+   230	{
+   231		if (op->cmd.opcode ==  SPINOR_OP_BE_4K ||
+   232		    op->cmd.opcode ==  SPINOR_OP_BE_32K ||
+   233		    op->cmd.opcode ==  SPINOR_OP_CHIP_ERASE ||
+   234		    op->cmd.opcode ==  SPINOR_OP_SE ||
+   235		    op->cmd.opcode ==  SPINOR_OP_BE_32K_4B ||
+   236		    op->cmd.opcode ==  SPINOR_OP_SE_4B ||
+   237		    op->cmd.opcode == SPINOR_OP_BE_4K_4B ||
+   238		    op->cmd.opcode ==  SPINOR_OP_WRSR ||
+   239		    op->cmd.opcode ==  SPINOR_OP_BRWR ||
+   240		    (op->cmd.opcode ==  SPINOR_OP_WRSR2 && !op->addr.nbytes))
+   241			return false;
+   242	
+   243		return true;
+   244	}
+   245	
 
 -- 
 0-DAY CI Kernel Test Service
