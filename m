@@ -1,118 +1,100 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E317323E
-	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 10:09:28 +0000 (UTC)
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 12DE83F431
-	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 09:59:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1681293566;
-	bh=lPAnInjEPmYSXmdYizwbO/BNtnsYb9zk0SNDJiS3bTc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-	b=wLahUtcaFHFDXoNn8BuQeWUpnpcfXs/Y4F+DvJ42pu6r3kVgm8rzq4We2lpvIQOQm
-	 6PnC11Hdxj5cgkhfkf5DFnuzBdPHvtDypHkoVjA2dcKc/UVVNqeIbxrEHMpAK6qFia
-	 Jr8FFAuXhXiaADcTlGBZtBOiXxCNHXYHLkYCqgH1UuaIYqylXknb4KSjyE3MJ58i7M
-	 7V1cQhdSpJZJnRYLZC2sbFeFZhLCTj8VXrCFeKI0di9u5y+otMoEcTITc/Gs4seFeE
-	 fTb55hnRdqtnTRRhq+Gnz9YMDvs8xUu9Tr55MaKJKaAyDKMiDpwjm9BzbKN5Rldnd8
-	 0Z/RIM+W7EXeQ==
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1843d69b22dso5300564fac.5
-        for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 02:59:26 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BDF73D78
+	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 13:11:17 +0000 (UTC)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3f04275b2bdso59375e9.1
+        for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 06:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681305075; x=1683897075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sYNrGQC5b/NBqc1yQ3cYIsZNkqhxiUfUPkUBeBGXBMI=;
+        b=1CZnjtbR216USXkVhbERFHDy8P7c+AU2osjSac6rHPbdfZ1vFvFhpC8NSnsnBms5yM
+         ve/WfWhOsaTBOMut5gQKDeHynouskhigYhz64Uh/jmvu7HqO0dQe8SQoPknBPtZozit5
+         +m0QCFmYDoIWUSceZWqW2EdwpZ8RhSffbp1dST0cR8Q4g4o3pKr6l3PMhjVc561EUbq/
+         HH6huU0rL1RFwJFtwRCbNvrYq2y8pY5k5TLhOYU0gv4QMzCP7fr69CaKpq+U6jaONVkB
+         qLHdWz7mNBPIAxaNX6thZHHVqNyUN70hDnR9dxnWTtJAdEHNDRboANdIZIAejOdlbmr/
+         Hg8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681293565; x=1683885565;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lPAnInjEPmYSXmdYizwbO/BNtnsYb9zk0SNDJiS3bTc=;
-        b=OAYiL6FKbIsihQOTwsIsBtLEVhrTlTbQQTh9g9+61MUA74j+BIX7rNXCRd9trZ3Mmr
-         Gx1zbYLjYw4BhF1JtXtIx2leijaeknwCzL6GqbV8l0uaPD6PR2vGAg4HVeDZpC/hh6dl
-         /i+MD0lwc3kcaeaRFoeDlsD/DMDs6C1whyHQh2LRNIIINwDHOP8nof8KvsajPPJwW8a3
-         bnSPZ2pnip8biu1jTvc3EFqcrUAsRdyoRlC/TP7LNs1fHJc+W6M+V/vzMhhrxj4pI1DX
-         w8NiWBlG1B3/NQUFhEHudtBUT4jz+xOyUgke77f/WiiSEMN7ncslUlCw0Ha6kGTIiuU5
-         N5+g==
-X-Gm-Message-State: AAQBX9dyys/CkRB3eMtOGyA5f99xeEQiQwjiVjXX6Fa0nOcsu0texIVT
-	ZeQLNNVvajqoF4JGkv/IoEz10uTi1ztdATbituY+WM3vBByjo3e6Qa52lXr2bujOEXUL8b3TUyw
-	k51c7T38fBPGYOJMBDh9RjzLKfiU3exo=
-X-Received: by 2002:a05:6870:610d:b0:183:be43:c9b6 with SMTP id s13-20020a056870610d00b00183be43c9b6mr1118738oae.4.1681293564794;
-        Wed, 12 Apr 2023 02:59:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Yke3E7dyjDyozy6CKNMRJ1yHALwyJpgUMrQxdhYZcZxJvUNLn3rj3fZX932Jte9GiiI4COFQ==
-X-Received: by 2002:a05:6870:610d:b0:183:be43:c9b6 with SMTP id s13-20020a056870610d00b00183be43c9b6mr1118714oae.4.1681293564521;
-        Wed, 12 Apr 2023 02:59:24 -0700 (PDT)
-Received: from localhost.localdomain (uk.sesame.canonical.com. [185.125.190.60])
-        by smtp.gmail.com with ESMTPSA id zr21-20020a056871ae1500b001765b2f6c53sm6045880oab.9.2023.04.12.02.59.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Apr 2023 02:59:23 -0700 (PDT)
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Paolo Pisati <paolo.pisati@canonical.com>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: ignore pointer types check with clang
-Date: Wed, 12 Apr 2023 11:59:12 +0200
-Message-Id: <20230412095912.188453-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1681305075; x=1683897075;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sYNrGQC5b/NBqc1yQ3cYIsZNkqhxiUfUPkUBeBGXBMI=;
+        b=P1C0cxu75MP5SXlPhzpYsm7Op9xWm7dFquYhu5FgYxPa+wUvK8EUuSHioNwEO1EC6H
+         7nW7cYuYvKpMQCc23t+OiMYiXvaV8xFBqr3sbK74GzBRyjMsAurYS27vVtJ7SJMTb+02
+         uo67jHDyZxS8EuyIG5KJQ6cD77/dYZNhXbHI4i2MPgapR//tl4yyBB23ck9oAUaIRLQN
+         0p+MJ8goxmz3nIHhobQpkFU1iw2fDnpO1LXn2fgr+nuKo26GTHth1CKzLrzd2NBJQNZP
+         y/mkgqx03iIy7izxOAeIpc828Hbk2JNzbzZp4V7D3zlFu2R+i61kNI8bnLenoYCGw3P3
+         zsRQ==
+X-Gm-Message-State: AAQBX9fSh8A8MdRE9mLziaRbIq8pZAy9TjJQwMJRkTgC160ckk0JoxfA
+	WM223OjR9yzApLMyVg0AkVrc2K5+lVjPaIBWZqqN/w==
+X-Google-Smtp-Source: AKy350YtLCDH4ydbVdrabxsvBBFQW00tuyHb9t9bfLeg/Wd8PxHaRAFugQin3ixuS561igGxpjSQp0SgAkwMWeu5Lh8=
+X-Received: by 2002:a05:600c:5125:b0:3f0:a122:93d9 with SMTP id
+ o37-20020a05600c512500b003f0a12293d9mr24457wms.6.1681305075095; Wed, 12 Apr
+ 2023 06:11:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <0000000000005af92105e80510f2@google.com> <0000000000002c692505f3265254@google.com>
+In-Reply-To: <0000000000002c692505f3265254@google.com>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Wed, 12 Apr 2023 15:11:03 +0200
+Message-ID: <CANp29Y6-1HThnB6C+p1D77n3hH1RKyD5WR+xjQomdqrc_pjUcw@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_get_ea
+To: syzbot <syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com>
+Cc: almaz.alexandrovich@paragon-software.com, dan.carpenter@oracle.com, 
+	eadaivs@sina.com, eadavis@sina.com, eadvis@sina.com, kbuild-all@lists.01.org, 
+	linux-kernel@vger.kernel.org, lkp@intel.com, llvm@lists.linux.dev, 
+	nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	pjwatson999@gmail.com, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Building bpf selftests with clang can trigger errors like the following:
+#syz fix: fs/ntfs3: Check fields while reading
 
-  CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
-progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-pointer-types]
-        s = &nlk->sk;
-          ^ ~~~~~~~~
-1 error generated.
-
-This is due to the fact that bpftool emits duplicate data types with
-different names in vmlinux.h (i.e., `struct sock` in this case) and
-these types, despite having a different name, represent in fact the same
-object.
-
-Add -Wno-incompatible-pointer-types to CLANG_CLAGS to prevent these
-errors.
-
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- tools/testing/selftests/bpf/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b677dcd0b77a..0d9ef819a065 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -356,7 +356,8 @@ BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 		\
- 	     -I$(abspath $(OUTPUT)/../usr/include)
- 
- CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
--	       -Wno-compare-distinct-pointer-types
-+	       -Wno-compare-distinct-pointer-types \
-+	       -Wno-incompatible-pointer-types
- 
- $(OUTPUT)/test_l4lb_noinline.o: BPF_CFLAGS += -fno-inline
- $(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS += -fno-inline
--- 
-2.39.2
-
+On Thu, Jan 26, 2023 at 9:13=E2=80=AFAM syzbot
+<syzbot+c4d950787fd5553287b7@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
+> Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+> Date:   Mon Oct 10 10:15:33 2022 +0000
+>
+>     fs/ntfs3: Check fields while reading
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D15cc619948=
+0000
+> start commit:   fef7fd48922d Merge tag 'scsi-fixes' of git://git.kernel.o=
+r..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7341d0f941b33=
+56
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dc4d950787fd5553=
+287b7
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D133d4479880=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D13f05e7188000=
+0
+>
+> If the result looks correct, please mark the issue as fixed by replying w=
+ith:
+>
+> #syz fix: fs/ntfs3: Check fields while reading
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/0000000000002c692505f3265254%40google.com.
