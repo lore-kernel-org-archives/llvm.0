@@ -1,82 +1,82 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7315138A
-	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 02:05:14 +0000 (UTC)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33BL9fxF016846;
-	Wed, 12 Apr 2023 02:05:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=XyddacQrOEObd5inHWKPd8K2BW12A6LoR4IjfefzZHI=;
- b=B5Eg0d8NEZO9bQqV5/j7wCWwH5wXFgK1xE//pTyRWpGcxp6RGp+MwGc6s7REXOApk8Dy
- CNMr8j7PKC2t+PBiy8J2sMdumxxYZRJ7PfuXkAtcVdh5EtNHkhj3w/Fn+vj2x/fyDQqU
- kNwlj5UZyvEkIdfWVc0mUnrkAAZuDXJQCBWJItA7Yjql94PTzNZr2mv9DFrf60I2hNua
- Z1Lf7oE+hRV9r88xWz4bHVMKT2/PadD+HGxHyH8r6XC2AdrWJ1CmKewPjmthmsDoyg+B
- tpbgbdtxi1+0wAiUz9DYpTrck/aBGOzIebiLGguHDxjVKDVOgYb6XCaGHCre7CyUbzgg MQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pu0hc6xdy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 12 Apr 2023 02:05:04 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33BNxJS0008203;
-	Wed, 12 Apr 2023 02:05:02 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3puwc54tvg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 12 Apr 2023 02:05:02 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33C24xea031283;
-	Wed, 12 Apr 2023 02:05:02 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3puwc54tqc-8;
-	Wed, 12 Apr 2023 02:05:02 +0000
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-To: kartilak@cisco.com, sebaddel@cisco.com, jejb@linux.ibm.com,
-        nathan@kernel.org, ndesaulniers@google.com, Tom Rix <trix@redhat.com>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] scsi: snic: remove unused xfer_len variable
-Date: Tue, 11 Apr 2023 22:04:48 -0400
-Message-Id: <168126077055.185856.5469142120830492047.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230328001647.1778448-1-trix@redhat.com>
-References: <20230328001647.1778448-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596ED362;
+	Wed, 12 Apr 2023 03:36:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681270560; x=1712806560;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UgZok1KXQKT0lsE++nffC3lJ1l9TeQipDKYFszOO+vo=;
+  b=IbKDlrgsxx//8955oW5c+9cBemvFhRv+lqo6NB5IMDXaakwDQ3MvNwBu
+   Z4aAc2YKM7y9bgi4qovPH8V9VoGgpIFO2aUFItTnAly4+hJ7OWbJIeKTx
+   ddbzAz0PCDhP0mZDXgt95VdGS6CdEfpRGYUtSe/uLgDUEUGDI4hZQkU2m
+   0HB5MwOjbs72frKgZ/oCfHknP8dPsbWBby4uEiNBk7371y+dbx983Vnck
+   g7CmeDDaoE6kZSvozBlgBN1SJaqkNHl4w8leKD4fhD+r/4D6S13Gsm6JL
+   RFV/fzC5zbJWT2c74V5+WGPh5T00nexwL7MzYAY5+WpsmnAf5iRAJ+4h4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="341278250"
+X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
+   d="scan'208";a="341278250"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 20:35:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="832576604"
+X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
+   d="scan'208";a="832576604"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Apr 2023 20:35:53 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pmRGy-000XER-0b;
+	Wed, 12 Apr 2023 03:35:52 +0000
+Date: Wed, 12 Apr 2023 11:35:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [linux-next:pending-fixes 146/186] ld.lld: error: undefined symbol:
+ vfp_entry
+Message-ID: <202304121127.8klViEwi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-11_16,2023-04-11_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 adultscore=0
- suspectscore=0 phishscore=0 mlxlogscore=723 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304120016
-X-Proofpoint-GUID: r7T-t7Ft99JbyOsFmOMKZpFIYbPvMiv1
-X-Proofpoint-ORIG-GUID: r7T-t7Ft99JbyOsFmOMKZpFIYbPvMiv1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 27 Mar 2023 20:16:47 -0400, Tom Rix wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git pending-fixes
+head:   99455a05abbda682706286b04307f4fe04221b4a
+commit: 62fa0c124d5ff1d1b1fab988ed4ef0e82e3ece16 [146/186] ARM: 9294/1: vfp: Fix broken softirq handling with instrumentation enabled
+config: arm-sp7021_defconfig (https://download.01.org/0day-ci/archive/20230412/202304121127.8klViEwi-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=62fa0c124d5ff1d1b1fab988ed4ef0e82e3ece16
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next pending-fixes
+        git checkout 62fa0c124d5ff1d1b1fab988ed4ef0e82e3ece16
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-> clang with W=1 reports
-> drivers/scsi/snic/snic_scsi.c:490:6: error: variable
->   'xfer_len' set but not used [-Werror,-Wunused-but-set-variable]
->         u64 xfer_len = 0;
->             ^
-> This variable is not used so remove it.
-> 
-> [...]
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304121127.8klViEwi-lkp@intel.com/
 
-Applied to 6.4/scsi-queue, thanks!
+All errors (new ones prefixed by >>):
 
-[1/1] scsi: snic: remove unused xfer_len variable
-      https://git.kernel.org/mkp/scsi/c/4e0966a48291
+>> ld.lld: error: undefined symbol: vfp_entry
+   >>> referenced by arch/arm/vfp/entry.o:(do_vfp) in archive vmlinux.a
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
