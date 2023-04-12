@@ -1,135 +1,142 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD02A746F;
-	Wed, 12 Apr 2023 17:56:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681322183; x=1712858183;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pAPZ3pDjDhNlH6yRAG+mFXvd29vCvZ6e5uUFg1nTgew=;
-  b=Mm4m22/fH+UgiTlOlDdGzVrcPqx+0WG7ifGT8UBqnVd3B3N5kYqWcip5
-   8i4FlfRl0OL5ydXnmdpuZg9MIB+YOYcoPg5WjCz6b39veNh5Dmuc7R9hd
-   d6rdotOVyvllxcrQSdELVjzdunjcYRGN3nS9i+GQw3F8yBx+tTv0+/Dkp
-   2QC8kbhwHYn8qOIG6OCLxyTEe5LiJErMToDGGuA5ZJfzRMIecnZXWGiJp
-   +JHnr8dIdW7OQXrJhGtgqiVNaGSUMqM9D/XQ1MN/tQ6PEis7xD+hTL0ri
-   WKm9gVBVljlDy9sEHe5twdVL2E/qnCmvjqZ74qRTfYrQnpgD4NHC09fAd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332676724"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="332676724"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 10:56:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="813080856"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="813080856"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 12 Apr 2023 10:56:21 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pmehg-000Xxx-0j;
-	Wed, 12 Apr 2023 17:56:20 +0000
-Date: Thu, 13 Apr 2023 01:56:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:master 946/1117] drivers/spi/spi-zynqmp-gqspi.c:229:6:
- warning: no previous prototype for function 'zynqmp_gqspi_update_stripe'
-Message-ID: <202304130122.DoBs1fgx-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E85B746F
+	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 18:14:06 +0000 (UTC)
+Received: by mail-pg1-f173.google.com with SMTP id q191so13946756pgq.7
+        for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 11:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681323245; x=1683915245;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mQ31eEt6ZYO43YiugcfpSmhC+pVuzGTb6Zz9KcAavfM=;
+        b=vPofuZHIlhfX+z2SNgprxinQozpSZBivzLioAa02Vh4CbOQvKruyUSng5BJb3+2x6m
+         BWgKaeoklbSElYf8aVzcH7T7XATjsnAnebZHGs/LbFWCIR0Cn6Cer0rm8FPFWEY660wa
+         zuY0hdsRCAfsQ3DBNg3SgqDGqYOZn2LDXcS4sYotY+nLwd0en1CjaBkQZRzE4EsVQ52/
+         ku3rYsbfzwFQRMl/tbpEszdHABMWHU9/JG11CZcpTeDUeijH7s4u0GC/FuD+2X8zJZcr
+         j7PBAHmX0gHOCJXW85/xp9wxxzZTCJC7iFkrzB2JvrObM5tqpw06FagdVai3X2VRH/vZ
+         dXaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681323245; x=1683915245;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mQ31eEt6ZYO43YiugcfpSmhC+pVuzGTb6Zz9KcAavfM=;
+        b=XIXX5iYl9qjPPaqUcDc6DF0LU+3ulM2BGAJ0A+1aKCNgXKsjHWHkaFE9ntutTLkJAS
+         IXi7flyN3/D0EISAnuzWuM9/0+sI4/oIpNET4eAej2q927kNYl42nV+BhkTU5KNJXz9A
+         6Tp65V3y8Ekvus+yMoz5ZFcujWC16Brm9mfUiDhTDFUKeLlX4Ksr0J4YrFVdVBaR82bK
+         tjPL9+vdns4yGbEEjNVzHzKclJ/KHfYZsUCeHfoHdpvl3ba8TCHq8cPiiquVFrTqz5qO
+         IB9CVvB1y4QEqavJSL3kOXk9h2RuSZmEyLnnkQCM2WqgHx0BraO2pqezf42WPXX0c+jg
+         O0JQ==
+X-Gm-Message-State: AAQBX9eC9mjk8aUcvx6qEogFCnzHk/OtgMZBEnkZWUe0s8av4INsgQ+y
+	UmnCidx3yO8ma/4of+5uYrSjaUWLnAR54iEK4ZIcNg==
+X-Google-Smtp-Source: AKy350YqdV99jeX0kMzDXAbWTGOCcv8Rkwt8IAeySrgHWgkIMB5tfHY8Z+rwpBHb+G4KrRxgFc7ThZ7IXuy2tQXa+ro=
+X-Received: by 2002:a63:a47:0:b0:513:90eb:a37c with SMTP id
+ z7-20020a630a47000000b0051390eba37cmr840341pgk.11.1681323245458; Wed, 12 Apr
+ 2023 11:14:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230407215406.768464-1-ndesaulniers@google.com>
+ <20230407215824.GA1524475@dev-arch.thelio-3990X> <CAFP8O3+YzvwgeSS_GvU3oTtxunyUm8qMaAnV3Mt-ezTsxZ=Q0Q@mail.gmail.com>
+ <6436ca47.a70a0220.e83cf.adf4@mx.google.com>
+In-Reply-To: <6436ca47.a70a0220.e83cf.adf4@mx.google.com>
+From: Fangrui Song <maskray@google.com>
+Date: Wed, 12 Apr 2023 11:13:53 -0700
+Message-ID: <CAFP8O3K2c-7wCeDrxPaFpNe-yV9M1g0BPQw7qA6JdpUD74dC1w@mail.gmail.com>
+Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
+To: Kees Cook <keescook@chromium.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, linux-hardening@vger.kernel.org, 
+	Tom Rix <trix@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/Xilinx/linux-xlnx master
-head:   3a2a9dcee70777a85b3952269c47e6eb65779b78
-commit: 754602bf2ee623dc6274c971e7e84058b70450aa [946/1117] spi: spi-zynqmp-gqspi: Add parallel memories support in GQSPI driver
-config: x86_64-randconfig-a006-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130122.DoBs1fgx-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/Xilinx/linux-xlnx/commit/754602bf2ee623dc6274c971e7e84058b70450aa
-        git remote add xilinx-xlnx https://github.com/Xilinx/linux-xlnx
-        git fetch --no-tags xilinx-xlnx master
-        git checkout 754602bf2ee623dc6274c971e7e84058b70450aa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/spi/
+On Wed, Apr 12, 2023 at 8:12=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> On Tue, Apr 11, 2023 at 05:12:24PM -0700, Fangrui Song wrote:
+> > On Fri, Apr 7, 2023 at 2:58=E2=80=AFPM Nathan Chancellor <nathan@kernel=
+.org> wrote:
+> > >
+> > > On Fri, Apr 07, 2023 at 02:54:06PM -0700, Nick Desaulniers wrote:
+> > > > -fsanitize-undefined-trap-on-error has been supported since GCC 5.1=
+ and
+> > > > Clang 3.2.  The minimum supported version of these according to
+> > > > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. D=
+rop
+> > > > this cc-option check.
+> > > >
+> > > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> > >
+> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> > >
+> > > As an aside, we should really consider having some standard format of
+> > > comment around cc-option checks so that we can easily remove them whe=
+n
+> > > they become stale...
+> > >
+> > > > ---
+> > > > Masahiro, Kees: get_maintainer.pl leaves much to be desired for thi=
+s
+> > > > file. Can one of you please pick this up?
+> > > >
+> > > >  lib/Kconfig.ubsan | 1 -
+> > > >  1 file changed, 1 deletion(-)
+> > > >
+> > > > diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> > > > index fd15230a703b..0e7ad0782399 100644
+> > > > --- a/lib/Kconfig.ubsan
+> > > > +++ b/lib/Kconfig.ubsan
+> > > > @@ -15,7 +15,6 @@ if UBSAN
+> > > >  config UBSAN_TRAP
+> > > >       bool "On Sanitizer warnings, abort the running kernel code"
+> > > >       depends on !COMPILE_TEST
+> > > > -     depends on $(cc-option, -fsanitize-undefined-trap-on-error)
+> > > >       help
+> > > >         Building kernels with Sanitizer features enabled tends to g=
+row
+> > > >         the kernel size by around 5%, due to adding all the debuggi=
+ng
+> > > > --
+> > > > 2.40.0.577.gac1e443424-goog
+> > > >
+> > >
+> >
+> > -fsanitize-undefined-trap-on-error is a legacy option from 2013 when
+> > -fcatch-undefined-behavior instead of -fsanitize=3Dundefined enabled
+> > UBSan.
+> > On the Clang side, http://reviews.llvm.org/D10464 added
+> > -fsanitize-trap=3D in June 2015.
+> > It's best to use -fsanitize-trap=3Dundefined and avoid uses of
+> > -fsanitize-undefined-trap-on-error.
+>
+> But that's Clang-only. -fsanitize-undefined-trap-on-error works for both
+> GCC and Clang.
+>
+> --
+> Kees Cook
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130122.DoBs1fgx-lkp@intel.com/
+Just filed a -fsanitize-trap=3D feature request for GCC:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D109489 :)
 
-All warnings (new ones prefixed by >>):
+https://reviews.llvm.org/D10464 (2015) does mention the state of the
+legacy option:
 
-   In file included from drivers/spi/spi-zynqmp-gqspi.c:26:
-   In file included from include/linux/mtd/spi-nor.h:10:
-   include/linux/mtd/cfi.h:62:2: warning: No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work. [-W#warnings]
-   #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip support can work.
-    ^
->> drivers/spi/spi-zynqmp-gqspi.c:229:6: warning: no previous prototype for function 'zynqmp_gqspi_update_stripe' [-Wmissing-prototypes]
-   bool zynqmp_gqspi_update_stripe(const struct spi_mem_op *op)
-        ^
-   drivers/spi/spi-zynqmp-gqspi.c:229:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool zynqmp_gqspi_update_stripe(const struct spi_mem_op *op)
-   ^
-   static 
-   In file included from drivers/spi/spi-zynqmp-gqspi.c:13:
-   include/linux/firmware/xlnx-zynqmp.h:1249:12: warning: unused function 'zynqmp_pm_sec_read_reg' [-Wunused-function]
-   static int zynqmp_pm_sec_read_reg(u32 node_id, u32 offset, u32 *ret_value)
-              ^
-   include/linux/firmware/xlnx-zynqmp.h:1254:12: warning: unused function 'zynqmp_pm_sec_mask_write_reg' [-Wunused-function]
-   static int zynqmp_pm_sec_mask_write_reg(const u32 node_id, const u32 offset,
-              ^
-   include/linux/firmware/xlnx-zynqmp.h:1324:12: warning: unused function 'zynqmp_pm_fpga_get_version' [-Wunused-function]
-   static int zynqmp_pm_fpga_get_version(u32 *value)
-              ^
-   include/linux/firmware/xlnx-zynqmp.h:1329:12: warning: unused function 'zynqmp_pm_fpga_get_feature_list' [-Wunused-function]
-   static int zynqmp_pm_fpga_get_feature_list(u32 *value)
-              ^
-   include/linux/firmware/xlnx-zynqmp.h:1334:12: warning: unused function 'versal_pm_sha_hash' [-Wunused-function]
-   static int versal_pm_sha_hash(const u64 src, const u64 dst, const u32 size)
-              ^
-   7 warnings generated.
+  // https://clang.llvm.org/docs/UsersManual.html#cmdoption-fsanitize-undef=
+ined-trap-on-error
+  -fsanitize-undefined-trap-on-error
+  Deprecated alias for -fsanitize-trap=3Dundefined.
 
 
-vim +/zynqmp_gqspi_update_stripe +229 drivers/spi/spi-zynqmp-gqspi.c
 
-   221	
-   222	/**
-   223	 * zynqmp_gqspi_update_stripe - For GQSPI controller data stripe capabilities
-   224	 * @op:	Pointer to mem ops
-   225	 * Return:      Status of the data stripe
-   226	 *
-   227	 * Returns true if data stripe need to be enabled, else returns false
-   228	 */
- > 229	bool zynqmp_gqspi_update_stripe(const struct spi_mem_op *op)
-   230	{
-   231		if (op->cmd.opcode ==  SPINOR_OP_BE_4K ||
-   232		    op->cmd.opcode ==  SPINOR_OP_BE_32K ||
-   233		    op->cmd.opcode ==  SPINOR_OP_CHIP_ERASE ||
-   234		    op->cmd.opcode ==  SPINOR_OP_SE ||
-   235		    op->cmd.opcode ==  SPINOR_OP_BE_32K_4B ||
-   236		    op->cmd.opcode ==  SPINOR_OP_SE_4B ||
-   237		    op->cmd.opcode == SPINOR_OP_BE_4K_4B ||
-   238		    op->cmd.opcode ==  SPINOR_OP_WRSR ||
-   239		    op->cmd.opcode ==  SPINOR_OP_BRWR ||
-   240		    (op->cmd.opcode ==  SPINOR_OP_WRSR2 && !op->addr.nbytes))
-   241			return false;
-   242	
-   243		return true;
-   244	}
-   245	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
