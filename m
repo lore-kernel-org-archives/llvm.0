@@ -1,80 +1,68 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A9917EA;
-	Wed, 12 Apr 2023 07:30:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681284603; x=1712820603;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=XCOIIDhICYWk35v4yl/X0d85lQo6w0/v9+FS3ZsxJpE=;
-  b=E+Ssw4F8wD/A0hXN5zNJbEw97hAZhElJsjVL0SPXPrD1JeEid5D3rDs2
-   25BvqijzN2cmoATxefBsO0Q6UvFUS5iudh9T2PLkY2Ph7aGyXdJWiWOmP
-   wEI+GLYtVzNqObmmxyPowaQVngtAKpJDIt1or8SmHcAC/nt5aWPYnMicU
-   joSX59hn7qk3g1mwJIp+C4LOUJO6xgzhA/10zv9XIM7HDhdnypBsFcOEJ
-   cV431OwmYGLWjw01pzV5Y2LRdGxVQvTHYIiAUkVtI9bBHacb7NtH3R7xF
-   ckKJxsXCpqHtXLaO2x63BmxiMYkItnAdiaGUrarfW8/ARQV1LoM+lg86o
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="342580831"
-X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
-   d="scan'208";a="342580831"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 00:30:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="639117664"
-X-IronPort-AV: E=Sophos;i="5.98,338,1673942400"; 
-   d="scan'208";a="639117664"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 12 Apr 2023 00:30:01 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pmUvY-000XSN-1J;
-	Wed, 12 Apr 2023 07:30:00 +0000
-Date: Wed, 12 Apr 2023 15:29:02 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [jsarha:topic/chromeos-4.19-s0ix 9741/9999]
- net/bluetooth/l2cap_core.o: warning: objtool: l2cap_state_change()+0x7b:
- can't find switch jump table
-Message-ID: <202304121544.dNzbmt1w-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9859A2F24
+	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 08:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5161FC433A1;
+	Wed, 12 Apr 2023 08:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681288819;
+	bh=YxlN5kBgNva8PX985QQZfOhsFUE2dtvhBiO+B4X7ayw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=igS8Wn3j43wk82qGQXGLzqUvnL6WntHEUGZJzm2qU9JEdMjp+g6qI6J4ZRWexWAXQ
+	 JfgOiyOeaHoZDlpMTMzhOMg9RcSZeSdF6hpEVv9yiF35ZnYqys6nPCP3+yveZmNVpd
+	 3eLZYH3sPx6g2rYNzW+usR8VR3IcXFr2Q+0A8owNVLbjMmthChZ+0ZY2yECXASiSdA
+	 fnHJmpnG0QNYuUAqbhHGPh1D3FfMHWDcsNnaMbXhMg5w8WhIcyBAOcwwX0Bg224uQi
+	 kibLtre1oe/idxZ+hM2p5zfUGf6kR9WgeTK0LTxPBhBoZkm4PeorxKPdhS/0ZQvpbv
+	 9Hq/LUTPYq52w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2C7DCE29F4A;
+	Wed, 12 Apr 2023 08:40:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] ksz884x: Remove unused functions
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <168128881917.3903.10500748834451240307.git-patchwork-notify@kernel.org>
+Date: Wed, 12 Apr 2023 08:40:19 +0000
+References: <20230405-ksz884x-unused-code-v2-1-23eb8f7002c4@kernel.org>
+In-Reply-To: <20230405-ksz884x-unused-code-v2-1-23eb8f7002c4@kernel.org>
+To: Simon Horman <horms@kernel.org>
+Cc: kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, wsa+renesas@sang-engineering.com, nathan@kernel.org,
+ ndesaulniers@google.com, trix@redhat.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-TO: Archie Pusaka <apusaka@chromium.org>
-CC: "Shyh-In Hwang" <josephsih@chromium.org>
-CC: Sonny Sasaka <sonnysasaka@chromium.org>
+Hello:
 
-tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
-head:   430bdaa0a8c38697780f45a148964d71951df11f
-commit: 9b30b4dd29c7f6b53f53076d7339e112c308f05e [9741/9999] CHROMIUM: bluetooth: enable turn on/off debug logs at runtime
-config: x86_64-randconfig-a003-20230410 (https://download.01.org/0day-ci/archive/20230412/202304121544.dNzbmt1w-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/9b30b4dd29c7f6b53f53076d7339e112c308f05e
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
-        git checkout 9b30b4dd29c7f6b53f53076d7339e112c308f05e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/bluetooth/ net/bluetooth/
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304121544.dNzbmt1w-lkp@intel.com/
+On Sat, 08 Apr 2023 09:47:54 +0200 you wrote:
+> Remove unused functions.
+> 
+> These functions may have some value in documenting the
+> hardware. But that information may be accessed via SCM history.
+> 
+> Flagged by clang-16 with W=1.
+> No functional change intended.
+> Compile tested only.
+> 
+> [...]
 
-All warnings (new ones prefixed by >>):
+Here is the summary with links:
+  - [net-next,v2] ksz884x: Remove unused functions
+    https://git.kernel.org/netdev/net-next/c/ed72bd5a6790
 
->> net/bluetooth/l2cap_core.o: warning: objtool: l2cap_state_change()+0x7b: can't find switch jump table
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
