@@ -1,142 +1,178 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E85B746F
-	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 18:14:06 +0000 (UTC)
-Received: by mail-pg1-f173.google.com with SMTP id q191so13946756pgq.7
-        for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 11:14:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681323245; x=1683915245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mQ31eEt6ZYO43YiugcfpSmhC+pVuzGTb6Zz9KcAavfM=;
-        b=vPofuZHIlhfX+z2SNgprxinQozpSZBivzLioAa02Vh4CbOQvKruyUSng5BJb3+2x6m
-         BWgKaeoklbSElYf8aVzcH7T7XATjsnAnebZHGs/LbFWCIR0Cn6Cer0rm8FPFWEY660wa
-         zuY0hdsRCAfsQ3DBNg3SgqDGqYOZn2LDXcS4sYotY+nLwd0en1CjaBkQZRzE4EsVQ52/
-         ku3rYsbfzwFQRMl/tbpEszdHABMWHU9/JG11CZcpTeDUeijH7s4u0GC/FuD+2X8zJZcr
-         j7PBAHmX0gHOCJXW85/xp9wxxzZTCJC7iFkrzB2JvrObM5tqpw06FagdVai3X2VRH/vZ
-         dXaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681323245; x=1683915245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mQ31eEt6ZYO43YiugcfpSmhC+pVuzGTb6Zz9KcAavfM=;
-        b=XIXX5iYl9qjPPaqUcDc6DF0LU+3ulM2BGAJ0A+1aKCNgXKsjHWHkaFE9ntutTLkJAS
-         IXi7flyN3/D0EISAnuzWuM9/0+sI4/oIpNET4eAej2q927kNYl42nV+BhkTU5KNJXz9A
-         6Tp65V3y8Ekvus+yMoz5ZFcujWC16Brm9mfUiDhTDFUKeLlX4Ksr0J4YrFVdVBaR82bK
-         tjPL9+vdns4yGbEEjNVzHzKclJ/KHfYZsUCeHfoHdpvl3ba8TCHq8cPiiquVFrTqz5qO
-         IB9CVvB1y4QEqavJSL3kOXk9h2RuSZmEyLnnkQCM2WqgHx0BraO2pqezf42WPXX0c+jg
-         O0JQ==
-X-Gm-Message-State: AAQBX9eC9mjk8aUcvx6qEogFCnzHk/OtgMZBEnkZWUe0s8av4INsgQ+y
-	UmnCidx3yO8ma/4of+5uYrSjaUWLnAR54iEK4ZIcNg==
-X-Google-Smtp-Source: AKy350YqdV99jeX0kMzDXAbWTGOCcv8Rkwt8IAeySrgHWgkIMB5tfHY8Z+rwpBHb+G4KrRxgFc7ThZ7IXuy2tQXa+ro=
-X-Received: by 2002:a63:a47:0:b0:513:90eb:a37c with SMTP id
- z7-20020a630a47000000b0051390eba37cmr840341pgk.11.1681323245458; Wed, 12 Apr
- 2023 11:14:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C71746F;
+	Wed, 12 Apr 2023 18:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681323444; x=1712859444;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y02E6hvkxtc5Gw89z3ATruCZ4MvvZMvsFhWaaNNs1sg=;
+  b=KC7jdR20/LJ3U7cuFvDiGi4MQgO/KZGIQBhYdzNYoZ5ltT0B6DV7OpZg
+   rgxtgUjdMfzU0iiev74FLe1tdvCTkkRunHHKC0VgkLFmf9LjyM/XD77J9
+   5th7kO2QQBZZyorXseSD/mW71/WToZ70K51figiuYaWEjS9r0LkL2XKvB
+   ++2EtV2mJTi3l377qVcQF3GjP23tzxpaozqn0lYUsiypE/WeomuCgAKKy
+   /6dHx3kyZBzOsc7sOvxKQxd+c4kI4exK2iIyoESxnXpGdnZcAW7bUe6k0
+   D515MCAv8q4KPSLIOIU0Tbx+gKLKrIilNdomlu2YGjwYSeXdjXsG7pYwn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="323606919"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="323606919"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 11:17:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="691633211"
+X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
+   d="scan'208";a="691633211"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Apr 2023 11:17:21 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pmf20-000XyP-1d;
+	Wed, 12 Apr 2023 18:17:20 +0000
+Date: Thu, 13 Apr 2023 02:16:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kemeng Shi <shikemeng@huaweicloud.com>, tytso@mit.edu,
+	adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+	shikemeng@huaweicloud.com
+Subject: Re: [PATCH v2 18/19] ext4: add some kunit stub for mballoc kunit test
+Message-ID: <202304130244.S0jqbqkn-lkp@intel.com>
+References: <20230412172833.2317696-19-shikemeng@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230407215406.768464-1-ndesaulniers@google.com>
- <20230407215824.GA1524475@dev-arch.thelio-3990X> <CAFP8O3+YzvwgeSS_GvU3oTtxunyUm8qMaAnV3Mt-ezTsxZ=Q0Q@mail.gmail.com>
- <6436ca47.a70a0220.e83cf.adf4@mx.google.com>
-In-Reply-To: <6436ca47.a70a0220.e83cf.adf4@mx.google.com>
-From: Fangrui Song <maskray@google.com>
-Date: Wed, 12 Apr 2023 11:13:53 -0700
-Message-ID: <CAFP8O3K2c-7wCeDrxPaFpNe-yV9M1g0BPQw7qA6JdpUD74dC1w@mail.gmail.com>
-Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
-To: Kees Cook <keescook@chromium.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-hardening@vger.kernel.org, 
-	Tom Rix <trix@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412172833.2317696-19-shikemeng@huaweicloud.com>
 
-On Wed, Apr 12, 2023 at 8:12=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Tue, Apr 11, 2023 at 05:12:24PM -0700, Fangrui Song wrote:
-> > On Fri, Apr 7, 2023 at 2:58=E2=80=AFPM Nathan Chancellor <nathan@kernel=
-.org> wrote:
-> > >
-> > > On Fri, Apr 07, 2023 at 02:54:06PM -0700, Nick Desaulniers wrote:
-> > > > -fsanitize-undefined-trap-on-error has been supported since GCC 5.1=
- and
-> > > > Clang 3.2.  The minimum supported version of these according to
-> > > > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. D=
-rop
-> > > > this cc-option check.
-> > > >
-> > > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > >
-> > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > >
-> > > As an aside, we should really consider having some standard format of
-> > > comment around cc-option checks so that we can easily remove them whe=
-n
-> > > they become stale...
-> > >
-> > > > ---
-> > > > Masahiro, Kees: get_maintainer.pl leaves much to be desired for thi=
-s
-> > > > file. Can one of you please pick this up?
-> > > >
-> > > >  lib/Kconfig.ubsan | 1 -
-> > > >  1 file changed, 1 deletion(-)
-> > > >
-> > > > diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> > > > index fd15230a703b..0e7ad0782399 100644
-> > > > --- a/lib/Kconfig.ubsan
-> > > > +++ b/lib/Kconfig.ubsan
-> > > > @@ -15,7 +15,6 @@ if UBSAN
-> > > >  config UBSAN_TRAP
-> > > >       bool "On Sanitizer warnings, abort the running kernel code"
-> > > >       depends on !COMPILE_TEST
-> > > > -     depends on $(cc-option, -fsanitize-undefined-trap-on-error)
-> > > >       help
-> > > >         Building kernels with Sanitizer features enabled tends to g=
-row
-> > > >         the kernel size by around 5%, due to adding all the debuggi=
-ng
-> > > > --
-> > > > 2.40.0.577.gac1e443424-goog
-> > > >
-> > >
-> >
-> > -fsanitize-undefined-trap-on-error is a legacy option from 2013 when
-> > -fcatch-undefined-behavior instead of -fsanitize=3Dundefined enabled
-> > UBSan.
-> > On the Clang side, http://reviews.llvm.org/D10464 added
-> > -fsanitize-trap=3D in June 2015.
-> > It's best to use -fsanitize-trap=3Dundefined and avoid uses of
-> > -fsanitize-undefined-trap-on-error.
->
-> But that's Clang-only. -fsanitize-undefined-trap-on-error works for both
-> GCC and Clang.
->
-> --
-> Kees Cook
+Hi Kemeng,
 
-Just filed a -fsanitize-trap=3D feature request for GCC:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D109489 :)
+kernel test robot noticed the following build warnings:
 
-https://reviews.llvm.org/D10464 (2015) does mention the state of the
-legacy option:
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on next-20230412]
+[cannot apply to linus/master v6.3-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  // https://clang.llvm.org/docs/UsersManual.html#cmdoption-fsanitize-undef=
-ined-trap-on-error
-  -fsanitize-undefined-trap-on-error
-  Deprecated alias for -fsanitize-trap=3Dundefined.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230412172833.2317696-19-shikemeng%40huaweicloud.com
+patch subject: [PATCH v2 18/19] ext4: add some kunit stub for mballoc kunit test
+config: powerpc-randconfig-r006-20230409 (https://download.01.org/0day-ci/archive/20230413/202304130244.S0jqbqkn-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/357d528a1ead868fa038c4bfe426744ac7c34ea6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kemeng-Shi/ext4-fix-wrong-unit-use-in-ext4_mb_normalize_request/20230412-172757
+        git checkout 357d528a1ead868fa038c4bfe426744ac7c34ea6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash fs/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304130244.S0jqbqkn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ext4/balloc.c:275:15: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           unsigned int group_desc;
+                        ^
+   fs/ext4/balloc.c:435:26: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           struct ext4_group_desc *desc;
+                                   ^
+   fs/ext4/balloc.c:538:26: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           struct ext4_group_desc *desc;
+                                   ^
+   3 warnings generated.
+--
+>> fs/ext4/mballoc.c:3752:12: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           handle_t *handle = mc->handle;
+                     ^
+   1 warning generated.
 
 
+vim +275 fs/ext4/balloc.c
 
+717d50e4971b81 Andreas Dilger    2007-10-16  248  
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  249  /*
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  250   * The free blocks are managed by bitmaps.  A file system contains several
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  251   * blocks groups.  Each group contains 1 bitmap block for blocks, 1 bitmap
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  252   * block for inodes, N blocks for the inode table and data blocks.
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  253   *
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  254   * The file system contains group descriptors which are located after the
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  255   * super block.  Each descriptor contains the number of the bitmap block and
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  256   * the free blocks count in the block.  The descriptors are loaded in memory
+e627432c2948d5 Aneesh Kumar K.V  2007-02-20  257   * when a file system is mounted (see ext4_fill_super).
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  258   */
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  259  
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  260  /**
+617ba13b31fbf5 Mingming Cao      2006-10-11  261   * ext4_get_group_desc() -- load group descriptor from disk
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  262   * @sb:			super block
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  263   * @block_group:	given block group
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  264   * @bh:			pointer to the buffer head to store the block
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  265   *			group descriptor
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  266   */
+617ba13b31fbf5 Mingming Cao      2006-10-11  267  struct ext4_group_desc * ext4_get_group_desc(struct super_block *sb,
+fd2d42912f9f09 Avantika Mathur   2008-01-28  268  					     ext4_group_t block_group,
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  269  					     struct buffer_head **bh)
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  270  {
+357d528a1ead86 Kemeng Shi        2023-04-13  271  #ifdef CONFIG_EXT4_KUNIT_TESTS
+357d528a1ead86 Kemeng Shi        2023-04-13  272  	KUNIT_STATIC_STUB_REDIRECT(ext4_get_group_desc,
+357d528a1ead86 Kemeng Shi        2023-04-13  273  				   sb, block_group, bh);
+357d528a1ead86 Kemeng Shi        2023-04-13  274  #endif
+498e5f24158da7 Theodore Ts'o     2008-11-05 @275  	unsigned int group_desc;
+498e5f24158da7 Theodore Ts'o     2008-11-05  276  	unsigned int offset;
+8df9675f8b498d Theodore Ts'o     2009-05-01  277  	ext4_group_t ngroups = ext4_get_groups_count(sb);
+617ba13b31fbf5 Mingming Cao      2006-10-11  278  	struct ext4_group_desc *desc;
+617ba13b31fbf5 Mingming Cao      2006-10-11  279  	struct ext4_sb_info *sbi = EXT4_SB(sb);
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  280  	struct buffer_head *bh_p;
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  281  
+8df9675f8b498d Theodore Ts'o     2009-05-01  282  	if (block_group >= ngroups) {
+12062dddda4509 Eric Sandeen      2010-02-15  283  		ext4_error(sb, "block_group >= groups_count - block_group = %u,"
+12062dddda4509 Eric Sandeen      2010-02-15  284  			   " groups_count = %u", block_group, ngroups);
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  285  
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  286  		return NULL;
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  287  	}
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  288  
+617ba13b31fbf5 Mingming Cao      2006-10-11  289  	group_desc = block_group >> EXT4_DESC_PER_BLOCK_BITS(sb);
+617ba13b31fbf5 Mingming Cao      2006-10-11  290  	offset = block_group & (EXT4_DESC_PER_BLOCK(sb) - 1);
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  291  	bh_p = sbi_array_rcu_deref(sbi, s_group_desc, group_desc);
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  292  	/*
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  293  	 * sbi_array_rcu_deref returns with rcu unlocked, this is ok since
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  294  	 * the pointer being dereferenced won't be dereferenced again. By
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  295  	 * looking at the usage in add_new_gdb() the value isn't modified,
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  296  	 * just the pointer, and so it remains valid.
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  297  	 */
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  298  	if (!bh_p) {
+12062dddda4509 Eric Sandeen      2010-02-15  299  		ext4_error(sb, "Group descriptor not loaded - "
+498e5f24158da7 Theodore Ts'o     2008-11-05  300  			   "block_group = %u, group_desc = %u, desc = %u",
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  301  			   block_group, group_desc, offset);
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  302  		return NULL;
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  303  	}
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  304  
+0d1ee42f27d30e Alexandre Ratchov 2006-10-11  305  	desc = (struct ext4_group_desc *)(
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  306  		(__u8 *)bh_p->b_data +
+0d1ee42f27d30e Alexandre Ratchov 2006-10-11  307  		offset * EXT4_DESC_SIZE(sb));
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  308  	if (bh)
+1d0c3924a92e69 Theodore Ts'o     2020-02-15  309  		*bh = bh_p;
+0d1ee42f27d30e Alexandre Ratchov 2006-10-11  310  	return desc;
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  311  }
+ac27a0ec112a08 Dave Kleikamp     2006-10-11  312  
 
-
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
