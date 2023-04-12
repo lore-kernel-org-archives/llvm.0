@@ -1,133 +1,111 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5BB2F21
-	for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 22:08:14 +0000 (UTC)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DD5831F74C;
-	Tue, 11 Apr 2023 22:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1681250892;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L/XjSc44gwG+nuE0NrNWNRHKpYqRY6i/VDLJHWflJa0=;
-	b=nopzy3baTfU9VDTbbEVM85Fa105wcPZ5uvMV5OmwvqnxLv3cnT80UFP7EyYuEjyT3Vzy5/
-	kQR3iNlCgf3Ex54h+kZK6WtxpEnelOc4KTGDIwI6k+mnGREbg6XAiRr2NvI7djuCOF9Wv5
-	xcdEK++37tZuWWWqi7/zxyFnfXnd4bA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1681250892;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L/XjSc44gwG+nuE0NrNWNRHKpYqRY6i/VDLJHWflJa0=;
-	b=uF5k3OzYwEkJqEKMm/E/E5LbQ8NCt9CBWVvDN9l1zf5FrFaBnANjYsmswK2/pjLOP4Tn94
-	eiHYut3yEcLDeTAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9472013638;
-	Tue, 11 Apr 2023 22:08:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id jV4kI0zaNWQ3OAAAMHmgww
-	(envelope-from <pvorel@suse.cz>); Tue, 11 Apr 2023 22:08:12 +0000
-Date: Wed, 12 Apr 2023 00:08:11 +0200
-From: Petr Vorel <pvorel@suse.cz>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, open list <linux-kernel@vger.kernel.org>,
-	LTP List <ltp@lists.linux.it>, llvm@lists.linux.dev,
-	chrubis <chrubis@suse.cz>, Nathan Chancellor <nathan@kernel.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Daniel =?iso-8859-2?Q?D=EDaz?= <daniel.diaz@linaro.org>,
-	Benjamin Copeland <ben.copeland@linaro.org>,
-	Tudor Cretu <tudor.cretu@arm.com>
-Subject: Re: LTP: list of failures on 32bit and compat mode
-Message-ID: <20230411220811.GA1798729@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
- <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
- <20230406105646.GB1545779@pevik>
- <CA+G9fYs461=iJqZqKe8_iRkfsMemSSA+ByOPRc9k-kBf4Hp8og@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA5D160
+	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 00:12:36 +0000 (UTC)
+Received: by mail-pj1-f50.google.com with SMTP id g3so10942024pja.2
+        for <llvm@lists.linux.dev>; Tue, 11 Apr 2023 17:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681258356; x=1683850356;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EUfNHvgbMHbCxR7Z5ej0J4OW6YiW5Ee09V0uQZNWLuA=;
+        b=yRuWuTRhiWx3XwFpc57Ol2M1IPyVrYtxZC3LJYOl+z6YsIP1MVABRg2+I1SYgCvB5r
+         9ma9A/JibUHa8FeY439yp5Z1o59QK0Jr36B5oqQWOJiPUjdfX83Yl8tuXtbQFh6gLWR8
+         dwnI3QGeP/PgL/C7Bi7zDPqNmKSIwYahqjJxsklqdeVWzEfsf3VWL64TZmkx+pwkwv7a
+         gY7m98i6jaFqo3atHGNZpP8nwW4Vil4325RnsXUn1l8VDrF2qkisVY/7Id5ooJQIC4gk
+         6zn380pEKuZ0vlDDYZsLg2fIGhtIJ61YuSVuQnxwtUt/6ag6cQGbY825Ls8Jf7Edy4hD
+         ff9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681258356; x=1683850356;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EUfNHvgbMHbCxR7Z5ej0J4OW6YiW5Ee09V0uQZNWLuA=;
+        b=5deya+nldFMus4ym02T0DT3csI7HIweTMVXg3toAdKsAbezxTkY0WgSJw3dz36ZQUX
+         XzD5V2DE8tuWpmPMmlyQT69b47Bqg1VxKGoqathMK/saN4F2KhDh+Tij3OwMTBQxjtsq
+         xFjFHcNlWIxtDJISxGGwkbZN3eq8DmCPhE+MDCX9keaGyl0gM3i247V1acXeXRX08/gk
+         bZskwKIXC0aUWZxrkLaq0sufFSuqijhJT/iiSegVaxbYVjzxhPwXwtJed0ozwZldvK0P
+         oI4pBjL9Wqph6kXjDUaDRFQWqH/GBBM/lNBRUS+4VtyzUxoqXGKUQw/kAinrsAwMpmcE
+         JGPQ==
+X-Gm-Message-State: AAQBX9d4WXGRsUY3TBZNXATuNcW8JQRiFXo9XOBSAnJsJ6y3k+M3ZU1U
+	2xPo093/gN/vD5Io6fGSDNvv6lX/IDJiVYs097wWig==
+X-Google-Smtp-Source: AKy350a6v0Bzy8uTYnPo43Z1a0p7U8LI2dM7an6ki1cKagG6JpglxhSHLcrBIVpCj5q+AYqQphGmoJQ/Nqm5Pnc108M=
+X-Received: by 2002:a17:90b:3641:b0:244:987c:a873 with SMTP id
+ nh1-20020a17090b364100b00244987ca873mr4635662pjb.7.1681258355815; Tue, 11 Apr
+ 2023 17:12:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYs461=iJqZqKe8_iRkfsMemSSA+ByOPRc9k-kBf4Hp8og@mail.gmail.com>
+References: <20230407215406.768464-1-ndesaulniers@google.com> <20230407215824.GA1524475@dev-arch.thelio-3990X>
+In-Reply-To: <20230407215824.GA1524475@dev-arch.thelio-3990X>
+From: Fangrui Song <maskray@google.com>
+Date: Tue, 11 Apr 2023 17:12:24 -0700
+Message-ID: <CAFP8O3+YzvwgeSS_GvU3oTtxunyUm8qMaAnV3Mt-ezTsxZ=Q0Q@mail.gmail.com>
+Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, linux-hardening@vger.kernel.org, 
+	Tom Rix <trix@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On Thu, 6 Apr 2023 at 16:26, Petr Vorel <pvorel@suse.cz> wrote:
+On Fri, Apr 7, 2023 at 2:58=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> On Fri, Apr 07, 2023 at 02:54:06PM -0700, Nick Desaulniers wrote:
+> > -fsanitize-undefined-trap-on-error has been supported since GCC 5.1 and
+> > Clang 3.2.  The minimum supported version of these according to
+> > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. Drop
+> > this cc-option check.
+> >
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> As an aside, we should really consider having some standard format of
+> comment around cc-option checks so that we can easily remove them when
+> they become stale...
+>
+> > ---
+> > Masahiro, Kees: get_maintainer.pl leaves much to be desired for this
+> > file. Can one of you please pick this up?
+> >
+> >  lib/Kconfig.ubsan | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> > index fd15230a703b..0e7ad0782399 100644
+> > --- a/lib/Kconfig.ubsan
+> > +++ b/lib/Kconfig.ubsan
+> > @@ -15,7 +15,6 @@ if UBSAN
+> >  config UBSAN_TRAP
+> >       bool "On Sanitizer warnings, abort the running kernel code"
+> >       depends on !COMPILE_TEST
+> > -     depends on $(cc-option, -fsanitize-undefined-trap-on-error)
+> >       help
+> >         Building kernels with Sanitizer features enabled tends to grow
+> >         the kernel size by around 5%, due to adding all the debugging
+> > --
+> > 2.40.0.577.gac1e443424-goog
+> >
+>
 
-> > > On Thu, Apr 6, 2023, at 11:11, Naresh Kamboju wrote:
-> > > > Following LTP syscalls failed on the i386 and arm environments with
-> > > > Linux next / mainline kernels. The userspace is coming from Open
-> > > > Embedded kirkstone.
-
-> > > Thanks for the report and summary! I went through the list and found
-> > > that most if not all of the bugs looks like incompatibilities
-> > > with musl, not with 32-bit. It's probably not well tested with
-> > > musl.
-
-> > > Can you try again with glibc and see if there are any remaining
-> > > issues then? LTP should probably be fixed to work with both, but
-> > > if nobody has done that so far, it's likely that this has come
-> > > up in the past but ran into problems upstreaming the fixes.
-
-> > > > Anyone seeing this problem on 32-bit i386 or arm ?
-> > > > You get to see "segfault" in the following logs that have been noticed
-> > > > on i386 only.
-
-> > > > This is not a new problem. We have been noticing these failures for a
-> > > > really long time.
-> > > > Would it be worth investigating the reason for failures on 32bit architectures ?
-
-> > > > Test logs,
-> > > > -----
-> > > > [    0.000000] Linux version 6.3.0-rc5-next-20230406 (tuxmake@tuxmake)
-> > > > (i686-linux-gnu-gcc (Debian 11.3.0-11) 11.3.0, GNU ld (GNU Binutils
-> > > > for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1680759389
-
-
-> > > > Test environment: i386
-> > > > Suite: ltp-syscalls
-> > > > Toolchain: gcc-11
-
-
-> > > > fstatfs02
-> > > > fstatfs02    1  TPASS  :  expected failure - errno = 9 : Bad file descriptor
-> > > > fstatfs02    2  TBROK  :  tst_sig.c:232: unexpected signal SIGSEGV(11)
-> > > > received (pid = 17841).
-> > > > fstatfs02    3  TBROK  :  tst_sig.c:232: Remaining cases broken
-> > This is IMHO using the old LTP API.
-> > testcases/kernel/syscalls/fstatfs/fstatfs02.c was converted to new LTP API in
-> > 5a8f89d35 ("syscalls/statfs02, fstatfs02: Convert to new API"), which was
-> > released in 20220930. There is already newer release 20230127.
-> > Generally it's safer to test mainline kernel with LTP master,
-> > but this fix has already been in the latest LTP release 20230127.
-> > And this error has been later fixed with
-> > 492542072 ("syscalls/statfs02, fstatfs02: Accept segfault instead of EFAULT")
-I'm sorry, I was wrong stating that unexpected signal SIGSEGV(11)
-error was fixed by 492542072.
-
-> Thanks for insite about the failed test investigations.
+-fsanitize-undefined-trap-on-error is a legacy option from 2013 when
+-fcatch-undefined-behavior instead of -fsanitize=3Dundefined enabled
+UBSan.
+On the Clang side, http://reviews.llvm.org/D10464 added
+-fsanitize-trap=3D in June 2015.
+It's best to use -fsanitize-trap=3Dundefined and avoid uses of
+-fsanitize-undefined-trap-on-error.
 
 
-> > @Naresh which LTP do you use for testing? It must be some older LTP :(.
 
-> Our build system started running LTP version 20230127.
-I'm sorry, I obviously misinterpreted the test output as old LTP code.
-
-> I will keep you posted with the latest findings.
-Thanks!
-
-Kind regards,
-Petr
-
-> - Naresh
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
