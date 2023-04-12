@@ -1,120 +1,137 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503467482;
-	Wed, 12 Apr 2023 18:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681324054; x=1712860054;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VTdyIpjaATWa7mekoiTWRCLcyz15fwCjJ1LRg3DqtMo=;
-  b=HAJCMKZ4TxEsvz40dKMjIudBA7I7DQGjldNVBbiD0Tn6qeRTgoaktPQi
-   QeXg8ni6sCs73iqfmpnRmIW+dhmA2z4MJbFrj3lllwqZY9qHt/6NXO/Wc
-   Mnx7ipec1uSbCwiM+wU9ND7cmZpJ7zBelT9hYOPrpCj8a7bEvxhZl/yLW
-   JHYRDD/RE2TLGbojfNQRWxQqKJlTdYKf/qKSj3/CMBkXPDLu6idDe2Kxw
-   hqf2UAWzDRP4iOQKkJ96ShFR5syjv6SKQ9id8tm1HiJ9tR3N+exRiYWGK
-   OCbmNTQmRW03iAdQB9sjkJqbIf9S0a8eQZDqfBlw5BdVb7aTOmzndJpfq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="342738379"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="342738379"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 11:27:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="778403203"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="778403203"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2023 11:27:26 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pmfBg-000Xyz-2T;
-	Wed, 12 Apr 2023 18:27:20 +0000
-Date: Thu, 13 Apr 2023 02:27:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Potapenko <glider@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, urezki@gmail.com,
-	hch@infradead.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	akpm@linux-foundation.org, elver@google.com, dvyukov@google.com,
-	kasan-dev@googlegroups.com,
-	Dipanjan Das <mail.dipanjan.das@gmail.com>
-Subject: Re: [PATCH 1/2] mm: kmsan: handle alloc failures in
- kmsan_vmap_pages_range_noflush()
-Message-ID: <202304130223.epEIvA1E-lkp@intel.com>
-References: <20230412145300.3651840-1-glider@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BEA2F21
+	for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 18:32:15 +0000 (UTC)
+Received: by mail-yb1-f202.google.com with SMTP id c67-20020a254e46000000b00b88f1fd158fso28678065ybb.17
+        for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 11:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681324334; x=1683916334;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=unsQK783ZuljLmKYpP1tTMNm96vCB2UUQkNLBUKyn0Q=;
+        b=wImcPsrNxghIbuoD7vh15iP9oZ8zp6eQWP5HdYu2jMTXgzuUo/P7CdiwHMeAz9ammv
+         afIu2ZztCm1f6JDK5OCHf6FSqx2+/6CZ9PniTQUJ9sNUxEKP8EAkiF68QAuSo3E2Wz6Y
+         j6GmfMcThWMN1tqDem48dZIiz7Jq8XGuZqZuQNfqPSH7e5dDyMfRVGK2TDa+5eSJD5uA
+         zPszVMLKZio4TTxfGwN8oAiEcD9RaBdInc4bKfB0H4bo0QKuaGBimfnuCrME7dg5IjAq
+         eZtJpDh37onYwYA8W9l9X9PPKQMq2OqcqW1Lfh9CyTT316DhPCiYbW3IrvmEjlDX2V14
+         9nww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681324334; x=1683916334;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=unsQK783ZuljLmKYpP1tTMNm96vCB2UUQkNLBUKyn0Q=;
+        b=JQH9omVkYpGyrCimx+0Qzg7cTA8wD+RhsstSkEns6uw3QsPMIgr1alaTpn6mUIJjQg
+         /uhajwJjalWT6thWT9X0ZMaF8yt5ufopyXz0BXHt6QrQc0U1wturiz3Xkroaek5ly2zQ
+         g5cP1BitPnKxsBZwe9Y6lVq1fHGxPNw1blPdwC8wxGF8WJxFIX3jLT1ZpVrKUllG+UZC
+         gjrwlsrEbHsFFFUCmNiiKX/o//P+0sYjqkgwOu8hf6PBm3kySaWNkNwEjVWrOt4f6Wb4
+         4i82N/D+vFlCGuoZZcclKCngKdZ8iogVHoBKogfDDNib6ftGm/GRlzxm+fHjbCNeu1HQ
+         VNGw==
+X-Gm-Message-State: AAQBX9eWhnHuHx04fBT19uDrjlY0UCBs9kLNBHG6EEd5OLu/kVJbB5Cp
+	X2XjEOwJ3LvI20gAw0rcA9Y9QucfAJlaHDh/1u0=
+X-Google-Smtp-Source: AKy350asfywVXW9Fy4KzqBhDU/bQX7xifl9Wja8QAMqPvcJjv4csC++8cr3ABgrfg0Put9bxHZoYkpuE4lW61gB3BIE=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:4a4a:51a1:19b:61ab])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:d141:0:b0:b75:8ac3:d5da with SMTP
+ id i62-20020a25d141000000b00b758ac3d5damr7557621ybg.4.1681324334082; Wed, 12
+ Apr 2023 11:32:14 -0700 (PDT)
+Date: Wed, 12 Apr 2023 11:32:11 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412145300.3651840-1-glider@google.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIACv5NmQC/w3LQQqAIBBA0avErBPUIqzLxGhDSjKFU22ku+fyw
+ f8VhEoigaWrUOhNkk5uMH0HISLvpNLWDFbbQY/GKj5XuTEcl8LZmcmh9V4jtN6jkPIFOcR28JP z9/3pKfYIYAAAAA==
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681324332; l=3360;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=O3vM+UqKG7xDqT6eRLzJnQA+CEPVjKXEAVK41sMB3WA=; b=ivxUYQ2lSDuxxyJnaW7i9pXOfQLF2GhtrPCC3EKgGw8HT6o/LAHtCIrAyC0VVPFxeosi1ulwZRPt
+ C0JCTfDkAazXDRs8Yu1BkCh4vLZdWVyJ2GTXuSMNatbp4DYLqhQZ
+X-Mailer: b4 0.12.2
+Message-ID: <20230412-no_stackp-v1-0-46a69b507a4b@google.com>
+Subject: [PATCH 0/2] start_kernel: omit stack canary
+From: ndesaulniers@google.com
+To: "Borislav Petkov (AMD)" <bp@alien8.de>
+Cc: Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Alexander,
+A security research paper was recently published detailing Catch Handler
+Oriented Programming (CHOP) attacks.
+https://download.vusec.net/papers/chop_ndss23.pdf
+The TL;DR being that C++ structured exception handling runtimes are
+attractive gadgets for Jump Oriented Programming (JOP) attacks.
 
-kernel test robot noticed the following build errors:
+In response to this, a mitigation was developed under embargo in
+clang-16 to check the stack canary before calling noreturn functions.
+https://bugs.chromium.org/p/llvm/issues/detail?id=30
 
-[auto build test ERROR on akpm-mm/mm-everything]
+This started causing boot failures in Android kernel trees downstream of
+stable linux-4.14.y that had proto-LTO support, as reported by Nathan
+Chancellor.
+https://github.com/ClangBuiltLinux/linux/issues/1815
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Potapenko/mm-kmsan-handle-alloc-failures-in-kmsan_ioremap_page_range/20230412-225414
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230412145300.3651840-1-glider%40google.com
-patch subject: [PATCH 1/2] mm: kmsan: handle alloc failures in kmsan_vmap_pages_range_noflush()
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230413/202304130223.epEIvA1E-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f8f0837563234abfae564b24278879d42d52a6e8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexander-Potapenko/mm-kmsan-handle-alloc-failures-in-kmsan_ioremap_page_range/20230412-225414
-        git checkout f8f0837563234abfae564b24278879d42d52a6e8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
+Josh Poimboeuf recently sent a series to explicitly annotate more
+functions as noreturn. Nathan noticed the series, and tested it finding
+that it now caused boot failures with clang-16+ on mainline (raising the
+visibility and urgency of the issue).
+https://lore.kernel.org/cover.1680912057.git.jpoimboe@kernel.org/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304130223.epEIvA1E-lkp@intel.com/
+Once the embargo was lifted, I asked questions such as "what does C++
+structured exception handling have to do with C code" and "surely GCC
+didn't ship the same mitigation for C code (narrator: 'They did not:
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=a25982ada523689c8745d7fb4b1b93c8f5dab2e7')?"
 
-All errors (new ones prefixed by >>):
+I now have a patch out for LLVM to undo this mess (or at least limit it
+to C++ functions that may throw, similar to GCC's mitigation); it hasn't
+landed yet but we're close to consensus and I expect it to land
+imminently.
+https://reviews.llvm.org/D147975
 
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:22:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:9:
->> include/linux/kmsan.h:291:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
-   }
-   ^
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:114: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:1286: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Remember this thread?  (Pepperidge farms remembers...)
+https://lore.kernel.org/all/20200314164451.346497-1-slyfox@gentoo.org/
 
+That reminded me that years ago we discussed a function attribute for
+no_stack_protector.
+https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
 
-vim +291 include/linux/kmsan.h
+GCC didn't have one at the time, it now does. In addition to the LLVM
+fix, I'd like to introduce this in the kernel so that we might start
+using it in additional places:
+* https://lore.kernel.org/linux-pm/20200915172658.1432732-1-rkir@google.com/
+* https://lore.kernel.org/lkml/20200918201436.2932360-30-samitolvanen@google.com/
+And eventually remove the final macro expansion site of
+prevent_tail_call_optimization.
 
-68ef169a1dd20d Alexander Potapenko 2022-09-15  284  
-f8f0837563234a Alexander Potapenko 2023-04-12  285  static inline int kmsan_vmap_pages_range_noflush(unsigned long start,
-b073d7f8aee4eb Alexander Potapenko 2022-09-15  286  						 unsigned long end,
-b073d7f8aee4eb Alexander Potapenko 2022-09-15  287  						 pgprot_t prot,
-b073d7f8aee4eb Alexander Potapenko 2022-09-15  288  						 struct page **pages,
-b073d7f8aee4eb Alexander Potapenko 2022-09-15  289  						 unsigned int page_shift)
-b073d7f8aee4eb Alexander Potapenko 2022-09-15  290  {
-b073d7f8aee4eb Alexander Potapenko 2022-09-15 @291  }
-b073d7f8aee4eb Alexander Potapenko 2022-09-15  292  
+With the LLVM fix, this series isn't required, but I'd like to start
+paving the way to use these function attributes since I think they are a
+sweet spot in terms of granularity (as opposed to trying to move
+start_kernel to its own TU compiled with -fno-stack-protector).
 
+(This is my first time using b4 to send a series, as per
+https://people.kernel.org/monsieuricon/sending-a-kernel-patch-with-b4-part-1.
+Here goes nothing!)
+
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Nick Desaulniers (2):
+      start_kernel: add no_stack_protector fn attr
+      start_kernel: omit prevent_tail_call_optimization for newer toolchains
+
+ arch/powerpc/kernel/smp.c           |  1 +
+ include/linux/compiler_attributes.h | 12 ++++++++++++
+ init/main.c                         |  8 +++++++-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
+---
+base-commit: 0bcc4025550403ae28d2984bddacafbca0a2f112
+change-id: 20230412-no_stackp-a98168a2bb0a
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Nick Desaulniers <ndesaulniers@google.com>
+
