@@ -1,187 +1,161 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF207E;
-	Thu, 13 Apr 2023 15:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681400399; x=1712936399;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AoLGypafLX9NAuBfVTUVj9m67WG5JbctYwofsqzrUwY=;
-  b=Z3Ve3D88fE84issYqBRFUENU1yCypQLbbBRaQAnQxboiiQEdFvphB8Zi
-   R/1aQIrZrsQ304aOEIth5zypWe+1EVahAoZJdmcBcw6v8YrG2d13s33SK
-   nf6faiiwlMnwGyh0p83kN1IO+MSrmkeEqS+lcloKXlioRmr4ENiKRT1am
-   11fB+SJAWyc1ZdIVGxygQnx5+Tl8k60DFiHYSMPxzxjvDDNbUWMgFjtsC
-   mombuKVRJOtJbPbqWRE2u1bEayaPYQNb1lqNtEpk0I7wKrcb892vd0d5K
-   PmrP/EylbOrmVLwA8VvvNyXLz2tMuyhl5hYDzLrH2G8g4pHTQ/DyVpqIa
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="341711363"
-X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
-   d="scan'208";a="341711363"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 08:39:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="692005071"
-X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
-   d="scan'208";a="692005071"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2023 08:39:54 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pmz3B-000YmL-02;
-	Thu, 13 Apr 2023 15:39:53 +0000
-Date: Thu, 13 Apr 2023 23:39:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-	mcanal@igalia.com, stanislaw.gruszka@linux.intel.com,
-	ogabbay@kernel.org, quic_jhugo@quicinc.com, daniel@ffwll.ch,
-	jani.nikula@linux.intel.com, mwen@igalia.com, maxime@cerno.tech,
-	wambui.karugax@gmail.com, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/5] drm/debugfs: rework debugfs directory creation v3
-Message-ID: <202304132344.9oz5dfJI-lkp@intel.com>
-References: <20230412145206.2483-3-christian.koenig@amd.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66EE626;
+	Thu, 13 Apr 2023 16:47:28 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 548EBD75;
+	Thu, 13 Apr 2023 09:48:06 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 652733F6C4;
+	Thu, 13 Apr 2023 09:47:20 -0700 (PDT)
+Message-ID: <eb151466-1357-846a-a365-1517508fea1c@arm.com>
+Date: Thu, 13 Apr 2023 17:47:14 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412145206.2483-3-christian.koenig@amd.com>
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 03/17] iommu: Make __iommu_group_set_domain() handle
+ error unwind
+Content-Language: en-GB
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+ Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
+ Nicolin Chen <nicolinc@nvidia.com>
+References: <3-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
+ <26039535-5f78-74f1-7864-978ad6c2810d@arm.com> <ZC8Y7g99aAQURbtj@nvidia.com>
+From: Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZC8Y7g99aAQURbtj@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Christian,
+On 06/04/2023 8:09 pm, Jason Gunthorpe wrote:
+> On Thu, Apr 06, 2023 at 07:08:59PM +0100, Robin Murphy wrote:
+> 
+>>> +		if (ret) {
+>>> +			result = ret;
+>>> +			/*
+>>> +			 * Keep trying the other devices in the group. If a
+>>> +			 * driver fails attach to an otherwise good domain, and
+>>> +			 * does not support blocking domains, it should at least
+>>> +			 * drop its reference on the current domain so we don't
+>>> +			 * UAF.
+>>> +			 */
+>>> +			if (flags & IOMMU_SET_DOMAIN_MUST_SUCCEED)
+>>> +				continue;
+>>
+>> I know it's called out above, but my brain truly can't cope with a flag
+>> named "MUST_SUCCEED" which actually means "can fail, but you can't reason
+>> about the state after failure". As before, I think the actual flag itself
+>> can go away, but the behaviour itself will still be no nicer for being
+>> implicit :/
+> 
+> What I saw is that a bunch of drivers tend to implement attach_dev
+> with first some kind of detach, which often cannot fail, and then can
+> fail the new attach.
+> 
+> So, this is intended to go along with that design pattern. We call
+> every device's attach and hope that the outcome is either to release
+> the current iommu_domain or to attach to the new one.
 
-kernel test robot noticed the following build errors:
+It's that design pattern which is most of the problem, though. It's a 
+left-over from the old pre-default-domain era (quite literally, in most 
+cases, where drivers were just minimally bodged to simulate the previous 
+core call of ops->detach_dev). In the modern 
+always-attached-to-something paradigm, drivers should absolutely be able 
+to figure out if an attach will fail *before* they throw away any 
+existing device state.
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-intel/for-linux-next drm-intel/for-linux-next-fixes tegra/for-next linus/master v6.3-rc6 next-20230412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If we reach the point of adding core code that only serves to help 
+drivers emulate the new API using the old API because we'd rather 
+undermine the new API design than fix the drivers, then frankly that 
+seems like an argument for just reverting back to the old API.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-K-nig/drm-debugfs-rework-debugfs-directory-creation-v3/20230412-235231
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230412145206.2483-3-christian.koenig%40amd.com
-patch subject: [PATCH 2/5] drm/debugfs: rework debugfs directory creation v3
-config: hexagon-randconfig-r002-20230409 (https://download.01.org/0day-ci/archive/20230413/202304132344.9oz5dfJI-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/92a7a4f0fd59d427c5827c323692b76095f90efc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christian-K-nig/drm-debugfs-rework-debugfs-directory-creation-v3/20230412-235231
-        git checkout 92a7a4f0fd59d427c5827c323692b76095f90efc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/
+Partial failure at the group level - i.e. one device's attach call 
+failing after previous ones have succeeded and leaving the group as a 
+whole in an inconsistent state - is a separate issue dating all the way 
+back to day 1 of groups. I don't disagree with questioning the current 
+implicit assumption that that just shouldn't ever happen, but it touches 
+on different aspects of driver design than the above.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304132344.9oz5dfJI-lkp@intel.com/
+> If a driver doesn't follow this pattern then we'll UAF.
+> 
+> The primary purpose of the MUST_SUCCEED flag is to prevent the code
+> from trying to go back to the old domain. This really should only
+> depend on the caller's context and ability to handle errors, so I
+> don't see what would make it implicit?
 
-All errors (new ones prefixed by >>):
+It could be implicit *because* it's contextual; the domain types already 
+carry as much information as the flag would. Attaching to a non-core 
+(unmanaged or SVA) domain type is the one case where core code has clear 
+reason to unwind if an attach fails mid-group. The initial attach to a 
+core domain from nothing in probe_device could be allowed to fail, but 
+there there's clearly nothing to unwind, and leaving the device in limbo 
+seems OK. Attaching from non-core to core should represent a repeat of 
+something which previously succeeded for the given device+domain 
+combination, so whether we permit that to fail-to-limbo or mandate that 
+drivers must be able to repeat a previous success mostly depends on what 
+we think is a reasonable expectation of how to design a driver (I think 
+it comes down to whether anyone really needs any domain-specific 
+allocations that have to belong to devices rather than the domain 
+itself, and cannot otherwise be preserved over a detach/reattach cycle). 
+Finally, core to core transitions via sysfs can probably be their own 
+special case depending on what falls out of the others.
 
-   In file included from drivers/gpu/drm/drm_drv.c:38:
-   In file included from include/drm/drm_accel.h:11:
-   In file included from include/drm/drm_file.h:39:
-   In file included from include/drm/drm_prime.h:37:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/gpu/drm/drm_drv.c:38:
-   In file included from include/drm/drm_accel.h:11:
-   In file included from include/drm/drm_file.h:39:
-   In file included from include/drm/drm_prime.h:37:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/gpu/drm/drm_drv.c:38:
-   In file included from include/drm/drm_accel.h:11:
-   In file included from include/drm/drm_file.h:39:
-   In file included from include/drm/drm_prime.h:37:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/gpu/drm/drm_drv.c:1011:2: error: call to undeclared function 'drm_debugfs_dev_fini'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           drm_debugfs_dev_fini(dev);
-           ^
-   drivers/gpu/drm/drm_drv.c:1011:2: note: did you mean 'drm_debugfs_dev_init'?
-   include/drm/drm_drv.h:596:13: note: 'drm_debugfs_dev_init' declared here
-   static void drm_debugfs_dev_init(struct drm_device *dev, struct dentry *root)
-               ^
-   6 warnings and 1 error generated.
+> We definitely do not want to attach back the old domain if we are
+> about to unconditionally free it.
+> 
+>> TBH I still think the responsibility should be on the drivers to handle
+>> rollback of their internal per-device state if returning failure from an
+>> .attach_dev call.
+> 
+> It helps the driver stay consistent, but I don't think it helps the
+> core code too much.
+> 
+> With the two patches to add the rodata IDENTITY domain to drivers I
+> think we should go in that direction.
+> 
+> Lets have an "ops->emergency_domain" that is something the driver can
+> always attach. Ideally it will be the BLOCKING domain, but IDENTITY
+> could work too.
+> 
+> When this function gets into trouble it will put the entire group on
+> 'emergency_domain' and things will be safe, no UAF.
+> 
+> This seems pretty simple for drivers since the attach_dev can just
+> leave behind whatever state is convenient, so long as their
+> emergency_domain cannot fail.
+> 
+>> But what would be really really really good, now that .detach_dev has
+>> truly gone, is to pass *both* "to" and "from" domains to .attach_dev (and a
+>> "from" domain to .release_device), so that drivers don't have to squirrel
+>> away all these internal references to their own notions of "current" domains
+>> which are the root of this whole class of horrid UAF and consistency
+>> bugs.
+> 
+> Usually the IOMMU HW will be touching the IOPTEs via DMA enclosed by
+> the iommu_domain, so even if we could remove the iommu_domain pointers
+> from the drivers it still retains the HW programming to the
+> memory. Freeing the domain will still UAF.
+> 
+> Refcounts would be another way to address the UAF, then we can leak
+> the iommu_domain if things go bad. I think this is more complex on drivers.
 
+Ah, we're thinking of different notions of UAF - I just mean drivers 
+dereferencing stale pointers in software. If software leaves the 
+hardware pointing at the the wrong thing, then it's already not going to 
+work as expected from then on, regardless of whether that 
+descriptor/pagetable/whatever is subsequently freed or not, so as far as 
+I'm concerned there isn't much meaningful functional difference between 
+"broken" and "much more badly broken". Obviously it does matter more 
+from an overall kernel safety/stability viewpoint, but that's only a 
+concern for when we can't get the API-level functional correctness right 
+in the first place.
 
-vim +/drm_debugfs_dev_fini +1011 drivers/gpu/drm/drm_drv.c
-
-   974	
-   975	/**
-   976	 * drm_dev_unregister - Unregister DRM device
-   977	 * @dev: Device to unregister
-   978	 *
-   979	 * Unregister the DRM device from the system. This does the reverse of
-   980	 * drm_dev_register() but does not deallocate the device. The caller must call
-   981	 * drm_dev_put() to drop their final reference.
-   982	 *
-   983	 * A special form of unregistering for hotpluggable devices is drm_dev_unplug(),
-   984	 * which can be called while there are still open users of @dev.
-   985	 *
-   986	 * This should be called first in the device teardown code to make sure
-   987	 * userspace can't access the device instance any more.
-   988	 */
-   989	void drm_dev_unregister(struct drm_device *dev)
-   990	{
-   991		if (drm_core_check_feature(dev, DRIVER_LEGACY))
-   992			drm_lastclose(dev);
-   993	
-   994		dev->registered = false;
-   995	
-   996		drm_client_dev_unregister(dev);
-   997	
-   998		if (drm_core_check_feature(dev, DRIVER_MODESET))
-   999			drm_modeset_unregister_all(dev);
-  1000	
-  1001		if (dev->driver->unload)
-  1002			dev->driver->unload(dev);
-  1003	
-  1004		drm_legacy_pci_agp_destroy(dev);
-  1005		drm_legacy_rmmaps(dev);
-  1006	
-  1007		remove_compat_control_link(dev);
-  1008		drm_minor_unregister(dev, DRM_MINOR_ACCEL);
-  1009		drm_minor_unregister(dev, DRM_MINOR_PRIMARY);
-  1010		drm_minor_unregister(dev, DRM_MINOR_RENDER);
-> 1011		drm_debugfs_dev_fini(dev);
-  1012	}
-  1013	EXPORT_SYMBOL(drm_dev_unregister);
-  1014	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Robin.
