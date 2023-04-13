@@ -1,78 +1,187 @@
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9926ABF
-	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 13:20:07 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id u13so15405023ybu.5
-        for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 06:20:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681392006; x=1683984006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OEYIJxcj5kmzNVXSipi1HyC65eTywMQLwhS5DFReugM=;
-        b=tQ6wJTzCLuhE8bfXNSfUCszgAi37G4ZhBl+WQz1oQmfYFytFaCY0Oh67v858OE5AXc
-         V/JHLD2pK/I9YKCATu0KIGtLbNWE+Q4heAs/kqfaHUmI+5i3p7MmPvVs8uOMudb2y5hb
-         NFjcqWCUQ3ML208RfeF96TWVB3hDsfVakdBsNxx8dS8iY8IFSlM8p8+as1svnuhRaWdi
-         wdZeobyTFV5I8AlGyW/GyMaYIYeTLYK0ZXwQBQ/2lLkEAXiWME2lJnddrQATjTz/yPU9
-         P65DG16JWYVuRUJjLfxf8rgu2YfakSB1QAyGLkDPIE/PFPLFeyzSl5CbqARP25pGuIRE
-         T4gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681392006; x=1683984006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OEYIJxcj5kmzNVXSipi1HyC65eTywMQLwhS5DFReugM=;
-        b=EdHXcLGT+RJ3TMYqtWJQ3qiPtT1g0PCA5coaYGlykRhmcxudyNm0yZN3IlOqBDZN79
-         m/uaLA+JAnm40OJW2MzbhVJ5CnkWwknaQxo2cilqk+9YwWvCORsJp8UC7r+WpZXgH3uM
-         BCFOAJTAvp2m4mvc1QVoswmN+TklTV+8DtVkJHqhOgvHUlj6Eq0c9wGp+dtk4Oo0L7ld
-         2iL6FCvp3cGfTzZlyRK4wabrSFGHHafuja2J6ZHPEmbaDVN/bTj8uZDKc9xe9kYFTR/L
-         lUWA0ox3v13XmP/Eia0ya4JlD9WBU60HbdTEAKXSuwNfE+KhPUGGPqnYXnPh8NUKmHqU
-         dj4g==
-X-Gm-Message-State: AAQBX9fy4sa+RlxnXOyLI8Vn5kP5TEiOmreIrEGt93dzY5nWRrC+sOET
-	7zmmrtnnC8iDSJDqrFXHEJ9er4JDv4vQZh62CMgMyQ==
-X-Google-Smtp-Source: AKy350bze9rRwSEH8mQHkOzRLi/0g5jEhOn91d5G//UCGeCd2mlUYHNEOpMVXezcQc9ZFgn8VYY0YoReb5GDXy4TB7Y=
-X-Received: by 2002:a25:d003:0:b0:b8f:32c4:c6f8 with SMTP id
- h3-20020a25d003000000b00b8f32c4c6f8mr1775428ybg.42.1681392006415; Thu, 13 Apr
- 2023 06:20:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF207E;
+	Thu, 13 Apr 2023 15:39:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681400399; x=1712936399;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AoLGypafLX9NAuBfVTUVj9m67WG5JbctYwofsqzrUwY=;
+  b=Z3Ve3D88fE84issYqBRFUENU1yCypQLbbBRaQAnQxboiiQEdFvphB8Zi
+   R/1aQIrZrsQ304aOEIth5zypWe+1EVahAoZJdmcBcw6v8YrG2d13s33SK
+   nf6faiiwlMnwGyh0p83kN1IO+MSrmkeEqS+lcloKXlioRmr4ENiKRT1am
+   11fB+SJAWyc1ZdIVGxygQnx5+Tl8k60DFiHYSMPxzxjvDDNbUWMgFjtsC
+   mombuKVRJOtJbPbqWRE2u1bEayaPYQNb1lqNtEpk0I7wKrcb892vd0d5K
+   PmrP/EylbOrmVLwA8VvvNyXLz2tMuyhl5hYDzLrH2G8g4pHTQ/DyVpqIa
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="341711363"
+X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
+   d="scan'208";a="341711363"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 08:39:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="692005071"
+X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
+   d="scan'208";a="692005071"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2023 08:39:54 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pmz3B-000YmL-02;
+	Thu, 13 Apr 2023 15:39:53 +0000
+Date: Thu, 13 Apr 2023 23:39:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+	mcanal@igalia.com, stanislaw.gruszka@linux.intel.com,
+	ogabbay@kernel.org, quic_jhugo@quicinc.com, daniel@ffwll.ch,
+	jani.nikula@linux.intel.com, mwen@igalia.com, maxime@cerno.tech,
+	wambui.karugax@gmail.com, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/5] drm/debugfs: rework debugfs directory creation v3
+Message-ID: <202304132344.9oz5dfJI-lkp@intel.com>
+References: <20230412145206.2483-3-christian.koenig@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230412145300.3651840-1-glider@google.com> <202304130223.epEIvA1E-lkp@intel.com>
- <20230412140601.9308b871e38acb842c119478@linux-foundation.org>
-In-Reply-To: <20230412140601.9308b871e38acb842c119478@linux-foundation.org>
-From: Alexander Potapenko <glider@google.com>
-Date: Thu, 13 Apr 2023 15:19:29 +0200
-Message-ID: <CAG_fn=Wqf0E0Uo8wA5pdhgpreKZB7TPU-DiyERyG=T7bqqiJ9A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm: kmsan: handle alloc failures in kmsan_vmap_pages_range_noflush()
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	urezki@gmail.com, hch@infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, elver@google.com, dvyukov@google.com, 
-	kasan-dev@googlegroups.com, Dipanjan Das <mail.dipanjan.das@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412145206.2483-3-christian.koenig@amd.com>
 
-On Wed, Apr 12, 2023 at 11:06=E2=80=AFPM Andrew Morton
-<akpm@linux-foundation.org> wrote:
->
-> On Thu, 13 Apr 2023 02:27:19 +0800 kernel test robot <lkp@intel.com> wrot=
-e:
->
-> > Hi Alexander,
-> >
-> > kernel test robot noticed the following build errors:
-> >
-> > [auto build test ERROR on akpm-mm/mm-everything]
-> >
-> > >> include/linux/kmsan.h:291:1: error: non-void function does not retur=
-n a value [-Werror,-Wreturn-type]
->
-> Thanks, I'll do this:
-Thanks!
-I sent an updated version of the patch series, which includes your fix
-as well as a couple more improvements (__must_check annotations in
-particular)
+Hi Christian,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm-intel/for-linux-next drm-intel/for-linux-next-fixes tegra/for-next linus/master v6.3-rc6 next-20230412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-K-nig/drm-debugfs-rework-debugfs-directory-creation-v3/20230412-235231
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230412145206.2483-3-christian.koenig%40amd.com
+patch subject: [PATCH 2/5] drm/debugfs: rework debugfs directory creation v3
+config: hexagon-randconfig-r002-20230409 (https://download.01.org/0day-ci/archive/20230413/202304132344.9oz5dfJI-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/92a7a4f0fd59d427c5827c323692b76095f90efc
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christian-K-nig/drm-debugfs-rework-debugfs-directory-creation-v3/20230412-235231
+        git checkout 92a7a4f0fd59d427c5827c323692b76095f90efc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpu/drm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304132344.9oz5dfJI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/drm_drv.c:38:
+   In file included from include/drm/drm_accel.h:11:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/gpu/drm/drm_drv.c:38:
+   In file included from include/drm/drm_accel.h:11:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/gpu/drm/drm_drv.c:38:
+   In file included from include/drm/drm_accel.h:11:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/gpu/drm/drm_drv.c:1011:2: error: call to undeclared function 'drm_debugfs_dev_fini'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           drm_debugfs_dev_fini(dev);
+           ^
+   drivers/gpu/drm/drm_drv.c:1011:2: note: did you mean 'drm_debugfs_dev_init'?
+   include/drm/drm_drv.h:596:13: note: 'drm_debugfs_dev_init' declared here
+   static void drm_debugfs_dev_init(struct drm_device *dev, struct dentry *root)
+               ^
+   6 warnings and 1 error generated.
+
+
+vim +/drm_debugfs_dev_fini +1011 drivers/gpu/drm/drm_drv.c
+
+   974	
+   975	/**
+   976	 * drm_dev_unregister - Unregister DRM device
+   977	 * @dev: Device to unregister
+   978	 *
+   979	 * Unregister the DRM device from the system. This does the reverse of
+   980	 * drm_dev_register() but does not deallocate the device. The caller must call
+   981	 * drm_dev_put() to drop their final reference.
+   982	 *
+   983	 * A special form of unregistering for hotpluggable devices is drm_dev_unplug(),
+   984	 * which can be called while there are still open users of @dev.
+   985	 *
+   986	 * This should be called first in the device teardown code to make sure
+   987	 * userspace can't access the device instance any more.
+   988	 */
+   989	void drm_dev_unregister(struct drm_device *dev)
+   990	{
+   991		if (drm_core_check_feature(dev, DRIVER_LEGACY))
+   992			drm_lastclose(dev);
+   993	
+   994		dev->registered = false;
+   995	
+   996		drm_client_dev_unregister(dev);
+   997	
+   998		if (drm_core_check_feature(dev, DRIVER_MODESET))
+   999			drm_modeset_unregister_all(dev);
+  1000	
+  1001		if (dev->driver->unload)
+  1002			dev->driver->unload(dev);
+  1003	
+  1004		drm_legacy_pci_agp_destroy(dev);
+  1005		drm_legacy_rmmaps(dev);
+  1006	
+  1007		remove_compat_control_link(dev);
+  1008		drm_minor_unregister(dev, DRM_MINOR_ACCEL);
+  1009		drm_minor_unregister(dev, DRM_MINOR_PRIMARY);
+  1010		drm_minor_unregister(dev, DRM_MINOR_RENDER);
+> 1011		drm_debugfs_dev_fini(dev);
+  1012	}
+  1013	EXPORT_SYMBOL(drm_dev_unregister);
+  1014	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
