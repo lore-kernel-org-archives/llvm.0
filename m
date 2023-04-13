@@ -1,195 +1,134 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76A32F23;
-	Thu, 13 Apr 2023 12:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681389772; x=1712925772;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VoD4HZCtF2eoEZicpjj2XlYJmJxVn/JnvwmNPYON1x8=;
-  b=NzSzO4X1kjn1zmZMAWmbgAIKFk4k5LaQja87Hkae2zcQWBt+K+ImYPwd
-   xKp1xPWTwSFfvi3FswfpyBAtcydlQq20cJMKNslU8I0d2bV3mIXy5D1nL
-   rcJZW20d5SZzGQ9EaG/eT1Dl+KAJ2X503XsPuwZBRSARkVVBWKvQHj/+T
-   MFRf4gsmfvWy2z4u8a54qnjEnjUT1Y+omn3QETbf/9K4qoHkwXnpoPlSl
-   Wsslnb5ycKv+kmNDnPuIOyeURNJU9MqZnZ2pFWarUom2QRrhCXPhZCUh6
-   IjwQ3hANV0OPyTVVU0dLlPD3I9cXKEGLTyo/YcVvFmAKcSoNE+kYSWJ/j
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="344166426"
-X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
-   d="scan'208";a="344166426"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 05:42:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="722041266"
-X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
-   d="scan'208";a="722041266"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2023 05:42:49 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pmwHo-000Ygc-2P;
-	Thu, 13 Apr 2023 12:42:48 +0000
-Date: Thu, 13 Apr 2023 20:42:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/bcm47xx/prom.c:129:6: warning: no previous prototype for
- function 'early_tlb_init'
-Message-ID: <202304132001.mawtrQpw-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4BA2F23
+	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 12:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681390295;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=JedUSc7QxiOU2lKVD43BDoeYE832PlcMco63WO3XaB0=;
+	b=IUZGJNaS3/khjDL2xQs2V6a+gpgbpGODoEUn52IWcML+Ku35JRNJWl5GU0/fRE4etQ/FPj
+	0rJk8nDiZnxQnAgYCnnlOj0L8fk77zkk9WM5hNvI8zSu+9EwpTuQ7LJRItGgnDIi8K5lAl
+	wis3HH49gUyB44I7E+ry3M+fZklEpuQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-phSAWUwmPHaRx21zrA_jFw-1; Thu, 13 Apr 2023 08:51:34 -0400
+X-MC-Unique: phSAWUwmPHaRx21zrA_jFw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A3F7680C8C4
+	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 12:51:33 +0000 (UTC)
+Received: from [172.64.0.123] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 91F5D140EBF4;
+	Thu, 13 Apr 2023 12:51:33 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 30 of 358): Test report for master
+ (6.3.0-rc6, mainline.kernel.org-clang, 0bcc4025)
+Date: Thu, 13 Apr 2023 12:51:33 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <78066.123041308513400304@us-mta-635.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Paul,
+Hi, we tested your kernel and here are the results:
 
-First bad commit (maybe != root cause):
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   de4664485abbc0529b1eec44d0061bbfe58a28fb
-commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
-date:   2 years, 7 months ago
-config: mips-buildonly-randconfig-r005-20230413 (https://download.01.org/0day-ci/archive/20230413/202304132001.mawtrQpw-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/bcm47xx/ drivers/gpio/ drivers/mfd/ drivers/regulator/ drivers/soc/mediatek/ drivers/thermal/
+Tested-by: CKI Project <cki-project@redhat.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304132001.mawtrQpw-lkp@intel.com/
+Kernel information:
+    Commit message: netfs: Fix netfs_extract_iter_to_sg() for ITER_UBUF/IOV=
+EC
 
-All warnings (new ones prefixed by >>):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84477
 
->> arch/mips/bcm47xx/prom.c:129:6: warning: no previous prototype for function 'early_tlb_init' [-Wmissing-prototypes]
-   void early_tlb_init(void)
-        ^
-   arch/mips/bcm47xx/prom.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void early_tlb_init(void)
-   ^
-   static 
->> arch/mips/bcm47xx/prom.c:137:13: warning: no previous prototype for function 'bcm47xx_prom_highmem_init' [-Wmissing-prototypes]
-   void __init bcm47xx_prom_highmem_init(void)
-               ^
-   arch/mips/bcm47xx/prom.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init bcm47xx_prom_highmem_init(void)
-   ^
-   static 
-   2 warnings generated.
---
->> drivers/gpio/gpio-zx.c:275:34: warning: unused variable 'zx_gpio_match' [-Wunused-const-variable]
-   static const struct of_device_id zx_gpio_match[] = {
-                                    ^
-   1 warning generated.
---
->> drivers/mfd/max77686.c:148:34: warning: unused variable 'max77686_pmic_dt_match' [-Wunused-const-variable]
-   static const struct of_device_id max77686_pmic_dt_match[] = {
-                                    ^
-   1 warning generated.
---
->> drivers/regulator/mp886x.c:258:34: warning: unused variable 'mp886x_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mp886x_dt_ids[] = {
-                                    ^
-   1 warning generated.
---
->> drivers/thermal/thermal_mmio.c:103:34: warning: unused variable 'thermal_mmio_id_table' [-Wunused-const-variable]
-   static const struct of_device_id thermal_mmio_id_table[] = {
-                                    ^
-   1 warning generated.
---
->> drivers/soc/mediatek/mtk-pmic-wrap.c:1842:34: warning: unused variable 'of_slave_match_tbl' [-Wunused-const-variable]
-   static const struct of_device_id of_slave_match_tbl[] = {
-                                    ^
->> drivers/soc/mediatek/mtk-pmic-wrap.c:1988:34: warning: unused variable 'of_pwrap_match_tbl' [-Wunused-const-variable]
-   static const struct of_device_id of_pwrap_match_tbl[] = {
-                                    ^
-   2 warnings generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
+ash
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2137631
+            Affected tests:
+                 ppc64le - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-vim +/early_tlb_init +129 arch/mips/bcm47xx/prom.c
 
-6ee1d93455384ce Rafał Miłecki  2014-07-17  125  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  126  /* Stripped version of tlb_init, with the call to build_tlb_refill_handler
-6ee1d93455384ce Rafał Miłecki  2014-07-17  127   * dropped. Calling it at this stage causes a hang.
-6ee1d93455384ce Rafał Miłecki  2014-07-17  128   */
-b1f7e1129097cdb Paul Gortmaker 2015-04-27 @129  void early_tlb_init(void)
-6ee1d93455384ce Rafał Miłecki  2014-07-17  130  {
-6ee1d93455384ce Rafał Miłecki  2014-07-17  131  	write_c0_pagemask(PM_DEFAULT_MASK);
-6ee1d93455384ce Rafał Miłecki  2014-07-17  132  	write_c0_wired(0);
-6ee1d93455384ce Rafał Miłecki  2014-07-17  133  	temp_tlb_entry = current_cpu_data.tlbsize - 1;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  134  	local_flush_tlb_all();
-6ee1d93455384ce Rafał Miłecki  2014-07-17  135  }
-6ee1d93455384ce Rafał Miłecki  2014-07-17  136  
-6ee1d93455384ce Rafał Miłecki  2014-07-17 @137  void __init bcm47xx_prom_highmem_init(void)
-6ee1d93455384ce Rafał Miłecki  2014-07-17  138  {
-6ee1d93455384ce Rafał Miłecki  2014-07-17  139  	unsigned long off = (unsigned long)prom_init;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  140  	unsigned long extmem = 0;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  141  	bool highmem_region = false;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  142  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  143  	if (WARN_ON(bcm47xx_bus_type != BCM47XX_BUS_TYPE_BCMA))
-6ee1d93455384ce Rafał Miłecki  2014-07-17  144  		return;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  145  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  146  	if (bcm47xx_bus.bcma.bus.chipinfo.id == BCMA_CHIP_ID_BCM4706)
-6ee1d93455384ce Rafał Miłecki  2014-07-17  147  		highmem_region = true;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  148  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  149  	if (lowmem != 128 << 20 || !highmem_region)
-6ee1d93455384ce Rafał Miłecki  2014-07-17  150  		return;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  151  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  152  	early_tlb_init();
-6ee1d93455384ce Rafał Miłecki  2014-07-17  153  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  154  	/* Add one temporary TLB entry to map SDRAM Region 2.
-6ee1d93455384ce Rafał Miłecki  2014-07-17  155  	 *      Physical        Virtual
-6ee1d93455384ce Rafał Miłecki  2014-07-17  156  	 *      0x80000000      0xc0000000      (1st: 256MB)
-6ee1d93455384ce Rafał Miłecki  2014-07-17  157  	 *      0x90000000      0xd0000000      (2nd: 256MB)
-6ee1d93455384ce Rafał Miłecki  2014-07-17  158  	 */
-6ee1d93455384ce Rafał Miłecki  2014-07-17  159  	add_temporary_entry(ENTRYLO(0x80000000),
-6ee1d93455384ce Rafał Miłecki  2014-07-17  160  			    ENTRYLO(0x80000000 + (256 << 20)),
-6ee1d93455384ce Rafał Miłecki  2014-07-17  161  			    EXTVBASE, PM_256M);
-6ee1d93455384ce Rafał Miłecki  2014-07-17  162  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  163  	off = EXTVBASE + __pa(off);
-6ee1d93455384ce Rafał Miłecki  2014-07-17  164  	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
-6ee1d93455384ce Rafał Miłecki  2014-07-17  165  		if (!memcmp(prom_init, (void *)(off + extmem), 16))
-6ee1d93455384ce Rafał Miłecki  2014-07-17  166  			break;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  167  	}
-6ee1d93455384ce Rafał Miłecki  2014-07-17  168  	extmem -= lowmem;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  169  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  170  	early_tlb_init();
-6ee1d93455384ce Rafał Miłecki  2014-07-17  171  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  172  	if (!extmem)
-6ee1d93455384ce Rafał Miłecki  2014-07-17  173  		return;
-6ee1d93455384ce Rafał Miłecki  2014-07-17  174  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  175  	pr_warn("Found %lu MiB of extra memory, but highmem is unsupported yet!\n",
-6ee1d93455384ce Rafał Miłecki  2014-07-17  176  		extmem >> 20);
-6ee1d93455384ce Rafał Miłecki  2014-07-17  177  
-6ee1d93455384ce Rafał Miłecki  2014-07-17  178  	/* TODO: Register extra memory */
-6ee1d93455384ce Rafał Miłecki  2014-07-17  179  }
-6ee1d93455384ce Rafał Miłecki  2014-07-17  180  
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-:::::: The code at line 129 was first introduced by commit
-:::::: b1f7e1129097cdb5cf2d6ef5d365dc94d13e3c76 MIPS: BCM77xx: Remove legacy __cpuinit{,data} sections that crept in
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-:::::: TO: Paul Gortmaker <paul.gortmaker@windriver.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
