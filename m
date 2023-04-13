@@ -1,157 +1,155 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5971262F;
-	Thu, 13 Apr 2023 04:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681359341; x=1712895341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Hud/tEH/bO4ykSDB5vwIzW+i0/5nC8j5l6CjYVfUw8w=;
-  b=VGx1BflOdGoAqLNxc5jgyPNY1mkFT7S+FaTloPX+lkhFLpFEXvGouXtD
-   6rNF8b8CIe7oHl8HHQJbHs8O57SxWO/xnU4j863aa2Bgiflar8BcKLlLP
-   6pAamFfNMIQfJMXyegBraYV9IA71zQVVkLc9l+zSSMkLgeiv+tn5clt8q
-   ClHoRVO6eJn1ckN/0YMUTpeGEySFzp/haRpjtIw+adnU8cOphBk/qJH8w
-   KSftDcCPX3m4Rei0hu49wRCj4XkTt+SW5tdjYnUY2zNJ5sEgGK77kj4sO
-   nUUPaiiIeXY7dg/AnqH6L8cvxwauVeF6I6cbB6rGSYekNNhYcK46qmAFS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="406919609"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="406919609"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 21:15:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="682736293"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="682736293"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 Apr 2023 21:15:34 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pmoMv-000YKr-2w;
-	Thu, 13 Apr 2023 04:15:33 +0000
-Date: Thu, 13 Apr 2023 12:15:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-	David Airlie <airlied@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-fbdev@vger.kernel.org, lvc-project@linuxtesting.org,
-	dri-devel@lists.freedesktop.org,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Helge Deller <deller@gmx.de>, amd-gfx@lists.freedesktop.org,
-	Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	intel-gfx@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, linux-tegra@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] video/hdmi: minor fixes for *_infoframe_init functions
-Message-ID: <202304131234.hT3mzkju-lkp@intel.com>
-References: <20230412152910.9486-1-n.zhandarovich@fintech.ru>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56116648
+	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 04:24:42 +0000 (UTC)
+Received: by mail-il1-f206.google.com with SMTP id b9-20020a923409000000b00326156e3a8bso3378335ila.3
+        for <llvm@lists.linux.dev>; Wed, 12 Apr 2023 21:24:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681359881; x=1683951881;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lPLBYJZCaSbvGJr6SFGCV+03ZFiIAG6k72Q9uMQoEvI=;
+        b=lQT0keSy3Ezw65NmY5OxT3fs1KECeCqAFVRqDFB53eJHvGKrtl+1XaT5od/R6QFkvN
+         XEho4LWoPldKDP4kWDUp0dCdYwYtoF7wu1dzKCH2D49rtdE/4nssmszljLewqYUeX0oZ
+         eGbro0xL/1OL68JqdMQsmeBkpmrY3kQudng6l7DjQhwj0MaJ/BhqInlDaxYabybDhQcZ
+         6CNXjuUte4r3hBSCiEn1ERwG0SDEEQTKLmqSfiEp6QrMV3yIjIjSaE5GYcRNllku2gkC
+         uk2clYoYpnECo55o6zX65xLF4N+fiGX2pCztHGsWVZ2GJDeNAWuWVPcwlOZ2lKmGCV7/
+         CfPA==
+X-Gm-Message-State: AAQBX9d9lf1z3gJsAwUEh9SxmPCnWMTrS88BoDfpT7emiKhZwAqI84Jw
+	bQ1Hk4QUtfQndBQMRSfwb8/n9mOt/jlNQn5adm1gU/j9/3ca
+X-Google-Smtp-Source: AKy350an4a6gao3vrP+GzViBgy1z7wGEjpvaG+UrUfB4G/F3m36OvoxO1OC5JXju3jdtNaCO1LVB8BtRLGRL6zZVePhENaCxKMq+
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230412152910.9486-1-n.zhandarovich@fintech.ru>
+X-Received: by 2002:a02:7314:0:b0:3f6:657a:e922 with SMTP id
+ y20-20020a027314000000b003f6657ae922mr138404jab.5.1681359881464; Wed, 12 Apr
+ 2023 21:24:41 -0700 (PDT)
+Date: Wed, 12 Apr 2023 21:24:41 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000079737805f9301a86@google.com>
+Subject: [syzbot] [ntfs3?] INFO: trying to register non-static key in ntfs3_setattr
+From: syzbot <syzbot+2bc11770a01ccf77388f@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nikita,
+Hello,
 
-kernel test robot noticed the following build errors:
+syzbot found the following issue on:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on tegra/for-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes linus/master v6.3-rc6 next-20230412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    a79d5c76f705 Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1646f4adc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5666fa6aca264e42
+dashboard link: https://syzkaller.appspot.com/bug?extid=2bc11770a01ccf77388f
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikita-Zhandarovich/video-hdmi-minor-fixes-for-_infoframe_init-functions/20230412-232947
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230412152910.9486-1-n.zhandarovich%40fintech.ru
-patch subject: [PATCH] video/hdmi: minor fixes for *_infoframe_init functions
-config: x86_64-randconfig-a005-20230410 (https://download.01.org/0day-ci/archive/20230413/202304131234.hT3mzkju-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/36210f5b0ac3046f4c1c1d0c6e392eab40811699
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nikita-Zhandarovich/video-hdmi-minor-fixes-for-_infoframe_init-functions/20230412-232947
-        git checkout 36210f5b0ac3046f4c1c1d0c6e392eab40811699
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+Unfortunately, I don't have any reproducer for this issue yet.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304131234.hT3mzkju-lkp@intel.com/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/adf61ecd5810/disk-a79d5c76.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8192876ea15a/vmlinux-a79d5c76.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/80c6e54ddbe7/bzImage-a79d5c76.xz
 
-All errors (new ones prefixed by >>):
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2bc11770a01ccf77388f@syzkaller.appspotmail.com
 
->> drivers/gpu/drm/i915/display/intel_hdmi.c:769:37: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
-           if (drm_WARN_ON(encoder->base.dev, ret))
-                                              ^~~
-   include/drm/drm_print.h:630:19: note: expanded from macro 'drm_WARN_ON'
-           drm_WARN((drm), (x), "%s",                                      \
-                            ^
-   include/drm/drm_print.h:620:7: note: expanded from macro 'drm_WARN'
-           WARN(condition, "%s %s: " format,                               \
-                ^~~~~~~~~
-   include/asm-generic/bug.h:131:25: note: expanded from macro 'WARN'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_hdmi.c:756:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 error generated.
+ntfs3: loop3: ino=0, ntfs_iget5
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 1 PID: 18325 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00202-ga79d5c76f705 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ assign_lock_key+0x222/0x230 kernel/locking/lockdep.c:982
+ register_lock_class+0x28e/0x990 kernel/locking/lockdep.c:1295
+ __lock_acquire+0xd3/0x1f80 kernel/locking/lockdep.c:4935
+ lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
+ down_write+0x3a/0x50 kernel/locking/rwsem.c:1573
+ ntfs_truncate fs/ntfs3/file.c:397 [inline]
+ ntfs3_setattr+0x53a/0xb80 fs/ntfs3/file.c:696
+ notify_change+0xc8b/0xf40 fs/attr.c:482
+ do_truncate+0x220/0x300 fs/open.c:66
+ handle_truncate fs/namei.c:3219 [inline]
+ do_open fs/namei.c:3564 [inline]
+ path_openat+0x294e/0x3170 fs/namei.c:3715
+ do_file_open_root+0x376/0x7c0 fs/namei.c:3767
+ file_open_root+0x247/0x2a0 fs/open.c:1328
+ do_handle_open+0x582/0x960 fs/fhandle.c:232
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff798c8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ff799a61168 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
+RAX: ffffffffffffffda RBX: 00007ff798dabf80 RCX: 00007ff798c8c169
+RDX: 0000000000000300 RSI: 0000000020000040 RDI: 0000000000000004
+RBP: 00007ff798ce7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe1d3f0f7f R14: 00007ff799a61300 R15: 0000000000022000
+ </TASK>
+------------[ cut here ]------------
+DEBUG_RWSEMS_WARN_ON(sem->magic != sem): count = 0x1, magic = 0x0, owner = 0xffff88801c879d40, curr 0xffff88801c879d40, list not empty
+WARNING: CPU: 0 PID: 18325 at kernel/locking/rwsem.c:1364 __up_write kernel/locking/rwsem.c:1364 [inline]
+WARNING: CPU: 0 PID: 18325 at kernel/locking/rwsem.c:1364 up_write+0x40a/0x580 kernel/locking/rwsem.c:1626
+Modules linked in:
+CPU: 0 PID: 18325 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00202-ga79d5c76f705 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+RIP: 0010:__up_write kernel/locking/rwsem.c:1364 [inline]
+RIP: 0010:up_write+0x40a/0x580 kernel/locking/rwsem.c:1626
+Code: 48 c7 c7 e0 71 ea 8a 48 c7 c6 80 73 ea 8a 48 89 da 48 8b 4c 24 20 4c 8b 44 24 30 4c 8b 4c 24 28 50 e8 5a f9 e8 ff 48 83 c4 08 <0f> 0b e9 c0 fc ff ff 0f 0b e9 36 fd ff ff 48 89 5c 24 30 c6 05 0c
+RSP: 0018:ffffc900163874c0 EFLAGS: 00010296
+RAX: 2c2e1a283ac27d00 RBX: 0000000000000001 RCX: 0000000000040000
+RDX: ffffc90003d71000 RSI: 000000000003ffff RDI: 0000000000040000
+RBP: ffffc90016387590 R08: ffffffff81528012 R09: fffff52002c70e51
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff8880739717b8
+R13: ffff888073971760 R14: 1ffff92002c70ea0 R15: dffffc0000000000
+FS:  00007ff799a61700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555556344708 CR3: 000000002ac7c000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ntfs_truncate fs/ntfs3/file.c:400 [inline]
+ ntfs3_setattr+0x5e9/0xb80 fs/ntfs3/file.c:696
+ notify_change+0xc8b/0xf40 fs/attr.c:482
+ do_truncate+0x220/0x300 fs/open.c:66
+ handle_truncate fs/namei.c:3219 [inline]
+ do_open fs/namei.c:3564 [inline]
+ path_openat+0x294e/0x3170 fs/namei.c:3715
+ do_file_open_root+0x376/0x7c0 fs/namei.c:3767
+ file_open_root+0x247/0x2a0 fs/open.c:1328
+ do_handle_open+0x582/0x960 fs/fhandle.c:232
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff798c8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ff799a61168 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
+RAX: ffffffffffffffda RBX: 00007ff798dabf80 RCX: 00007ff798c8c169
+RDX: 0000000000000300 RSI: 0000000020000040 RDI: 0000000000000004
+RBP: 00007ff798ce7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe1d3f0f7f R14: 00007ff799a61300 R15: 0000000000022000
+ </TASK>
 
 
-vim +/ret +769 drivers/gpu/drm/i915/display/intel_hdmi.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-b055c8f3ef9f7b drivers/gpu/drm/i915/intel_hdmi.c         Jesse Barnes        2011-07-08  748  
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  749  static bool
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  750  intel_hdmi_compute_spd_infoframe(struct intel_encoder *encoder,
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  751  				 struct intel_crtc_state *crtc_state,
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  752  				 struct drm_connector_state *conn_state)
-c0864cb39c6869 drivers/gpu/drm/i915/intel_hdmi.c         Jesse Barnes        2011-08-03  753  {
-7d1675dcb5a16c drivers/gpu/drm/i915/display/intel_hdmi.c Taylor, Clinton A   2022-11-29  754  	struct drm_i915_private *i915 = to_i915(encoder->base.dev);
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  755  	struct hdmi_spd_infoframe *frame = &crtc_state->infoframes.spd.spd;
-5adaea799c1c2c drivers/gpu/drm/i915/intel_hdmi.c         Damien Lespiau      2013-08-06  756  	int ret;
-5adaea799c1c2c drivers/gpu/drm/i915/intel_hdmi.c         Damien Lespiau      2013-08-06  757  
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  758  	if (!crtc_state->has_infoframe)
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  759  		return true;
-c0864cb39c6869 drivers/gpu/drm/i915/intel_hdmi.c         Jesse Barnes        2011-08-03  760  
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  761  	crtc_state->infoframes.enable |=
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  762  		intel_hdmi_infoframe_enable(HDMI_INFOFRAME_TYPE_SPD);
-c0864cb39c6869 drivers/gpu/drm/i915/intel_hdmi.c         Jesse Barnes        2011-08-03  763  
-7d1675dcb5a16c drivers/gpu/drm/i915/display/intel_hdmi.c Taylor, Clinton A   2022-11-29  764  	if (IS_DGFX(i915))
-36210f5b0ac304 drivers/gpu/drm/i915/display/intel_hdmi.c Nikita Zhandarovich 2023-04-12  765  		hdmi_spd_infoframe_init(frame, "Intel", "Discrete gfx");
-7d1675dcb5a16c drivers/gpu/drm/i915/display/intel_hdmi.c Taylor, Clinton A   2022-11-29  766  	else
-36210f5b0ac304 drivers/gpu/drm/i915/display/intel_hdmi.c Nikita Zhandarovich 2023-04-12  767  		hdmi_spd_infoframe_init(frame, "Intel", "Integrated gfx");
-7d1675dcb5a16c drivers/gpu/drm/i915/display/intel_hdmi.c Taylor, Clinton A   2022-11-29  768  
-3a47ae201e0749 drivers/gpu/drm/i915/display/intel_hdmi.c Pankaj Bharadiya    2020-01-15 @769  	if (drm_WARN_ON(encoder->base.dev, ret))
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  770  		return false;
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  771  
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  772  	frame->sdi = HDMI_SPD_SDI_PC;
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  773  
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  774  	ret = hdmi_spd_infoframe_check(frame);
-3a47ae201e0749 drivers/gpu/drm/i915/display/intel_hdmi.c Pankaj Bharadiya    2020-01-15  775  	if (drm_WARN_ON(encoder->base.dev, ret))
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  776  		return false;
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  777  
-fbf08556ed4344 drivers/gpu/drm/i915/intel_hdmi.c         Ville Syrjälä       2019-02-25  778  	return true;
-c0864cb39c6869 drivers/gpu/drm/i915/intel_hdmi.c         Jesse Barnes        2011-08-03  779  }
-c0864cb39c6869 drivers/gpu/drm/i915/intel_hdmi.c         Jesse Barnes        2011-08-03  780  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
