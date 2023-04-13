@@ -1,134 +1,78 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4BA2F23
-	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 12:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681390295;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=JedUSc7QxiOU2lKVD43BDoeYE832PlcMco63WO3XaB0=;
-	b=IUZGJNaS3/khjDL2xQs2V6a+gpgbpGODoEUn52IWcML+Ku35JRNJWl5GU0/fRE4etQ/FPj
-	0rJk8nDiZnxQnAgYCnnlOj0L8fk77zkk9WM5hNvI8zSu+9EwpTuQ7LJRItGgnDIi8K5lAl
-	wis3HH49gUyB44I7E+ry3M+fZklEpuQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-phSAWUwmPHaRx21zrA_jFw-1; Thu, 13 Apr 2023 08:51:34 -0400
-X-MC-Unique: phSAWUwmPHaRx21zrA_jFw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A3F7680C8C4
-	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 12:51:33 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 91F5D140EBF4;
-	Thu, 13 Apr 2023 12:51:33 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 30 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, 0bcc4025)
-Date: Thu, 13 Apr 2023 12:51:33 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9926ABF
+	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 13:20:07 +0000 (UTC)
+Received: by mail-yb1-f171.google.com with SMTP id u13so15405023ybu.5
+        for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 06:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681392006; x=1683984006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OEYIJxcj5kmzNVXSipi1HyC65eTywMQLwhS5DFReugM=;
+        b=tQ6wJTzCLuhE8bfXNSfUCszgAi37G4ZhBl+WQz1oQmfYFytFaCY0Oh67v858OE5AXc
+         V/JHLD2pK/I9YKCATu0KIGtLbNWE+Q4heAs/kqfaHUmI+5i3p7MmPvVs8uOMudb2y5hb
+         NFjcqWCUQ3ML208RfeF96TWVB3hDsfVakdBsNxx8dS8iY8IFSlM8p8+as1svnuhRaWdi
+         wdZeobyTFV5I8AlGyW/GyMaYIYeTLYK0ZXwQBQ/2lLkEAXiWME2lJnddrQATjTz/yPU9
+         P65DG16JWYVuRUJjLfxf8rgu2YfakSB1QAyGLkDPIE/PFPLFeyzSl5CbqARP25pGuIRE
+         T4gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681392006; x=1683984006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OEYIJxcj5kmzNVXSipi1HyC65eTywMQLwhS5DFReugM=;
+        b=EdHXcLGT+RJ3TMYqtWJQ3qiPtT1g0PCA5coaYGlykRhmcxudyNm0yZN3IlOqBDZN79
+         m/uaLA+JAnm40OJW2MzbhVJ5CnkWwknaQxo2cilqk+9YwWvCORsJp8UC7r+WpZXgH3uM
+         BCFOAJTAvp2m4mvc1QVoswmN+TklTV+8DtVkJHqhOgvHUlj6Eq0c9wGp+dtk4Oo0L7ld
+         2iL6FCvp3cGfTzZlyRK4wabrSFGHHafuja2J6ZHPEmbaDVN/bTj8uZDKc9xe9kYFTR/L
+         lUWA0ox3v13XmP/Eia0ya4JlD9WBU60HbdTEAKXSuwNfE+KhPUGGPqnYXnPh8NUKmHqU
+         dj4g==
+X-Gm-Message-State: AAQBX9fy4sa+RlxnXOyLI8Vn5kP5TEiOmreIrEGt93dzY5nWRrC+sOET
+	7zmmrtnnC8iDSJDqrFXHEJ9er4JDv4vQZh62CMgMyQ==
+X-Google-Smtp-Source: AKy350bze9rRwSEH8mQHkOzRLi/0g5jEhOn91d5G//UCGeCd2mlUYHNEOpMVXezcQc9ZFgn8VYY0YoReb5GDXy4TB7Y=
+X-Received: by 2002:a25:d003:0:b0:b8f:32c4:c6f8 with SMTP id
+ h3-20020a25d003000000b00b8f32c4c6f8mr1775428ybg.42.1681392006415; Thu, 13 Apr
+ 2023 06:20:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <78066.123041308513400304@us-mta-635.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20230412145300.3651840-1-glider@google.com> <202304130223.epEIvA1E-lkp@intel.com>
+ <20230412140601.9308b871e38acb842c119478@linux-foundation.org>
+In-Reply-To: <20230412140601.9308b871e38acb842c119478@linux-foundation.org>
+From: Alexander Potapenko <glider@google.com>
+Date: Thu, 13 Apr 2023 15:19:29 +0200
+Message-ID: <CAG_fn=Wqf0E0Uo8wA5pdhgpreKZB7TPU-DiyERyG=T7bqqiJ9A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm: kmsan: handle alloc failures in kmsan_vmap_pages_range_noflush()
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	urezki@gmail.com, hch@infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, elver@google.com, dvyukov@google.com, 
+	kasan-dev@googlegroups.com, Dipanjan Das <mail.dipanjan.das@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: netfs: Fix netfs_extract_iter_to_sg() for ITER_UBUF/IOV=
-EC
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84477
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - sysrq-c: ERROR: No vmcore-dmesg.txt saved in /var/cr=
-ash
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2137631
-            Affected tests:
-                 ppc64le - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+On Wed, Apr 12, 2023 at 11:06=E2=80=AFPM Andrew Morton
+<akpm@linux-foundation.org> wrote:
+>
+> On Thu, 13 Apr 2023 02:27:19 +0800 kernel test robot <lkp@intel.com> wrot=
+e:
+>
+> > Hi Alexander,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on akpm-mm/mm-everything]
+> >
+> > >> include/linux/kmsan.h:291:1: error: non-void function does not retur=
+n a value [-Werror,-Wreturn-type]
+>
+> Thanks, I'll do this:
+Thanks!
+I sent an updated version of the patch series, which includes your fix
+as well as a couple more improvements (__must_check annotations in
+particular)
