@@ -1,42 +1,45 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C497E;
-	Thu, 13 Apr 2023 06:40:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681368041; x=1712904041;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JPER1IPvFzvIr3r02eSr/qgy8467UVnTjxa1UldoJp8=;
-  b=GkciGk/M0BZhTUWIiKYtE8jdt3/Y3LiFyNaAhr8ibcl5bC5if+lQIG0M
-   JKwFP71ZOLTAG4+wC49ymzLzVsXETmfgLss3Np01gyYC+wgOp/fhb3Ygt
-   XvKY/tQz2+/XXaPwUWnFbdxlF7oVzG0EF9ZQVekdjGoyAMu4m7QpxI8bU
-   5wN8ORCYPYNnBC2/BWMf0lXb73KBSheg+xTESPfOroIILJlyhXkxMScXe
-   GPps6qdx+Fui9M5dKpVyYVblfk0MNTiiPBSE9EQHhXrvEOpEIKRBnw3On
-   ncYmU5OvOMKiyTnO3mdT6kL/gihnLAPRIi66aly4aewczh/nBrVx7ghdp
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="328216283"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="328216283"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 23:40:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="778625448"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="778625448"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2023 23:40:38 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pmqdK-000YQt-0B;
-	Thu, 13 Apr 2023 06:40:38 +0000
-Date: Thu, 13 Apr 2023 14:39:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: undefined reference to `ftrace_likely_update'
-Message-ID: <202304131400.BLPkK6sC-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16867E
+	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 07:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Au1HGF148lMOJhXl55fVMciphrL5/N0EfS5Fnj76E4g=; b=mEliRrXDDk8Kw7VHKsS5hSUMl4
+	ldXJVGmCkr1vlznPtsLVyufPQRpdwWxbJM26bCbyLMFDA3DfDM9Vx3J6/4xa1hdXg4VdA3liP6QUJ
+	iE+k/ZYn0JdTpTNJMmmyk0C/xKYHNJyvhhZmIZ6lwsVaZ2gf8LNalXxtYHYs5VU0FUbu+RYWkXTC5
+	nrKgc2Yu69XwE5JDSshFTh25FCuHs9C9VIoZryu2Dp/TjpDrdk3AuJEUlxVt85SRX/rg6bWUqBVz7
+	quaURGsRd8ujKm5fVJoli/YWMw7eYbdehGoUQDiJEuBPFN5M0E+SWJVfOxQKUjRKWqkYV7CUdMUJs
+	abDFoBaA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1pmrjY-00EfR9-1y;
+	Thu, 13 Apr 2023 07:51:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(Client did not present a certificate)
+	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F0FCE30002F;
+	Thu, 13 Apr 2023 09:51:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+	id D5214235CC4A0; Thu, 13 Apr 2023 09:51:06 +0200 (CEST)
+Date: Thu, 13 Apr 2023 09:51:06 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: ndesaulniers@google.com
+Cc: "Borislav Petkov (AMD)" <bp@alien8.de>,
+	Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] start_kernel: omit stack canary
+Message-ID: <20230413075106.GE4253@hirez.programming.kicks-ass.net>
+References: <20230412-no_stackp-v1-0-46a69b507a4b@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,41 +48,17 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230412-no_stackp-v1-0-46a69b507a4b@google.com>
 
-Hi Kees,
+On Wed, Apr 12, 2023 at 11:32:11AM -0700, ndesaulniers@google.com wrote:
 
-FYI, the error/warning still remains.
+> Nick Desaulniers (2):
+>       start_kernel: add no_stack_protector fn attr
+>       start_kernel: omit prevent_tail_call_optimization for newer toolchains
+> 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   de4664485abbc0529b1eec44d0061bbfe58a28fb
-commit: 54d9469bc515dc5fcbc20eecbe19cea868b70d68 fortify: Add run-time WARN for cross-field memcpy()
-date:   7 months ago
-config: s390-buildonly-randconfig-r001-20230413 (https://download.01.org/0day-ci/archive/20230413/202304131400.BLPkK6sC-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54d9469bc515dc5fcbc20eecbe19cea868b70d68
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 54d9469bc515dc5fcbc20eecbe19cea868b70d68
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+Your second patch has a vile comment style :-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304131400.BLPkK6sC-lkp@intel.com/
+Other than that,
 
-All errors (new ones prefixed by >>):
-
-   s390x-linux-ld: arch/s390/purgatory/purgatory: in function `sha256_update':
->> (.text+0x23f2): undefined reference to `ftrace_likely_update'
->> s390x-linux-ld: (.text+0x2aa8): undefined reference to `ftrace_likely_update'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
