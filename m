@@ -1,161 +1,119 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66EE626;
-	Thu, 13 Apr 2023 16:47:28 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 548EBD75;
-	Thu, 13 Apr 2023 09:48:06 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 652733F6C4;
-	Thu, 13 Apr 2023 09:47:20 -0700 (PDT)
-Message-ID: <eb151466-1357-846a-a365-1517508fea1c@arm.com>
-Date: Thu, 13 Apr 2023 17:47:14 +0100
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3E2626;
+	Thu, 13 Apr 2023 16:52:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681404720; x=1712940720;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lAs50PK3nogPeEywekbB3ksviy4g1rG9j2SzINUspfc=;
+  b=aFWSVSV25zZRMEBnEJ1PwjyKtiMnRDcpssvftZYScQu2JFqz1E0+4g70
+   04H5+hJKJbNENRMSTBdJVfSmQtH5icGT5TtPsYW2obHQSOGPLCJULUswb
+   ZsqnGycft+Kbvwfx/VVtJSk3agDjVCWUFvuesGTa5fA9V5nNiC5RBYd5B
+   GAU8ntW329BSPQdIbtjv6WYplPvDC5ibFkyPvrj6aGReo9H/4d5n673K1
+   LoTikHiTrvddD9kQYvzLRqb+YgPC5QMHv+mVTnPTt25ZRzJa9B2dADfHb
+   qwRVBG+Dxlxvxpl3Apz/0wPfhOdxchKN0Dt/bsblXyFuHkZKam34aK8II
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="341736213"
+X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
+   d="scan'208";a="341736213"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 09:51:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="778846867"
+X-IronPort-AV: E=Sophos;i="5.99,194,1677571200"; 
+   d="scan'208";a="778846867"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Apr 2023 09:51:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pn0At-000YpP-12;
+	Thu, 13 Apr 2023 16:51:55 +0000
+Date: Fri, 14 Apr 2023 00:51:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:hotplug 30/43] arch/mips/kernel/smp.c:695:14: error: no
+ member named 'cleanup_dead_cpu' in 'struct plat_smp_ops'
+Message-ID: <202304140005.QSBRx6Ah-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 03/17] iommu: Make __iommu_group_set_domain() handle
- error unwind
-Content-Language: en-GB
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
- Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
- Nicolin Chen <nicolinc@nvidia.com>
-References: <3-v3-e89a9bb522f5+8c87-iommu_err_unwind_jgg@nvidia.com>
- <26039535-5f78-74f1-7864-978ad6c2810d@arm.com> <ZC8Y7g99aAQURbtj@nvidia.com>
-From: Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ZC8Y7g99aAQURbtj@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 06/04/2023 8:09 pm, Jason Gunthorpe wrote:
-> On Thu, Apr 06, 2023 at 07:08:59PM +0100, Robin Murphy wrote:
-> 
->>> +		if (ret) {
->>> +			result = ret;
->>> +			/*
->>> +			 * Keep trying the other devices in the group. If a
->>> +			 * driver fails attach to an otherwise good domain, and
->>> +			 * does not support blocking domains, it should at least
->>> +			 * drop its reference on the current domain so we don't
->>> +			 * UAF.
->>> +			 */
->>> +			if (flags & IOMMU_SET_DOMAIN_MUST_SUCCEED)
->>> +				continue;
->>
->> I know it's called out above, but my brain truly can't cope with a flag
->> named "MUST_SUCCEED" which actually means "can fail, but you can't reason
->> about the state after failure". As before, I think the actual flag itself
->> can go away, but the behaviour itself will still be no nicer for being
->> implicit :/
-> 
-> What I saw is that a bunch of drivers tend to implement attach_dev
-> with first some kind of detach, which often cannot fail, and then can
-> fail the new attach.
-> 
-> So, this is intended to go along with that design pattern. We call
-> every device's attach and hope that the outcome is either to release
-> the current iommu_domain or to attach to the new one.
+Hi Thomas,
 
-It's that design pattern which is most of the problem, though. It's a 
-left-over from the old pre-default-domain era (quite literally, in most 
-cases, where drivers were just minimally bodged to simulate the previous 
-core call of ops->detach_dev). In the modern 
-always-attached-to-something paradigm, drivers should absolutely be able 
-to figure out if an attach will fail *before* they throw away any 
-existing device state.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-If we reach the point of adding core code that only serves to help 
-drivers emulate the new API using the old API because we'd rather 
-undermine the new API design than fix the drivers, then frankly that 
-seems like an argument for just reverting back to the old API.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
+head:   d48bd313bebb2d7535ee31422539cc698e22dbfa
+commit: 78ca613e2ad3f023135ea52e8f1b232c2bcb1906 [30/43] MIPS: SMP_CPS: Switch to hotplug core state synchronization
+config: mips-randconfig-r012-20230410 (https://download.01.org/0day-ci/archive/20230414/202304140005.QSBRx6Ah-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/commit/?id=78ca613e2ad3f023135ea52e8f1b232c2bcb1906
+        git remote add tglx-devel https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git
+        git fetch --no-tags tglx-devel hotplug
+        git checkout 78ca613e2ad3f023135ea52e8f1b232c2bcb1906
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
 
-Partial failure at the group level - i.e. one device's attach call 
-failing after previous ones have succeeded and leaving the group as a 
-whole in an inconsistent state - is a separate issue dating all the way 
-back to day 1 of groups. I don't disagree with questioning the current 
-implicit assumption that that just shouldn't ever happen, but it touches 
-on different aspects of driver design than the above.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304140005.QSBRx6Ah-lkp@intel.com/
 
-> If a driver doesn't follow this pattern then we'll UAF.
-> 
-> The primary purpose of the MUST_SUCCEED flag is to prevent the code
-> from trying to go back to the old domain. This really should only
-> depend on the caller's context and ability to handle errors, so I
-> don't see what would make it implicit?
+All errors (new ones prefixed by >>):
 
-It could be implicit *because* it's contextual; the domain types already 
-carry as much information as the flag would. Attaching to a non-core 
-(unmanaged or SVA) domain type is the one case where core code has clear 
-reason to unwind if an attach fails mid-group. The initial attach to a 
-core domain from nothing in probe_device could be allowed to fail, but 
-there there's clearly nothing to unwind, and leaving the device in limbo 
-seems OK. Attaching from non-core to core should represent a repeat of 
-something which previously succeeded for the given device+domain 
-combination, so whether we permit that to fail-to-limbo or mandate that 
-drivers must be able to repeat a previous success mostly depends on what 
-we think is a reasonable expectation of how to design a driver (I think 
-it comes down to whether anyone really needs any domain-specific 
-allocations that have to belong to devices rather than the domain 
-itself, and cannot otherwise be preserved over a detach/reattach cycle). 
-Finally, core to core transitions via sysfs can probably be their own 
-special case depending on what falls out of the others.
+   arch/mips/kernel/smp.c:334:17: warning: no previous prototype for function 'start_secondary' [-Wmissing-prototypes]
+   asmlinkage void start_secondary(void)
+                   ^
+   arch/mips/kernel/smp.c:334:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage void start_secondary(void)
+              ^
+              static 
+   arch/mips/kernel/smp.c:454:5: warning: no previous prototype for function 'setup_profiling_timer' [-Wmissing-prototypes]
+   int setup_profiling_timer(unsigned int multiplier)
+       ^
+   arch/mips/kernel/smp.c:454:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int setup_profiling_timer(unsigned int multiplier)
+   ^
+   static 
+   arch/mips/kernel/smp.c:693:6: error: redefinition of 'arch_cpuhp_cleanup_dead_cpu'
+   void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
+        ^
+   include/linux/cpuhotplug.h:531:20: note: previous definition is here
+   static inline void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu) { }
+                      ^
+>> arch/mips/kernel/smp.c:695:14: error: no member named 'cleanup_dead_cpu' in 'struct plat_smp_ops'
+           if (mp_ops->cleanup_dead_cpu)
+               ~~~~~~  ^
+   arch/mips/kernel/smp.c:696:11: error: no member named 'cleanup_dead_cpu' in 'struct plat_smp_ops'
+                   mp_ops->cleanup_dead_cpu(cpu);
+                   ~~~~~~  ^
+   2 warnings and 3 errors generated.
 
-> We definitely do not want to attach back the old domain if we are
-> about to unconditionally free it.
-> 
->> TBH I still think the responsibility should be on the drivers to handle
->> rollback of their internal per-device state if returning failure from an
->> .attach_dev call.
-> 
-> It helps the driver stay consistent, but I don't think it helps the
-> core code too much.
-> 
-> With the two patches to add the rodata IDENTITY domain to drivers I
-> think we should go in that direction.
-> 
-> Lets have an "ops->emergency_domain" that is something the driver can
-> always attach. Ideally it will be the BLOCKING domain, but IDENTITY
-> could work too.
-> 
-> When this function gets into trouble it will put the entire group on
-> 'emergency_domain' and things will be safe, no UAF.
-> 
-> This seems pretty simple for drivers since the attach_dev can just
-> leave behind whatever state is convenient, so long as their
-> emergency_domain cannot fail.
-> 
->> But what would be really really really good, now that .detach_dev has
->> truly gone, is to pass *both* "to" and "from" domains to .attach_dev (and a
->> "from" domain to .release_device), so that drivers don't have to squirrel
->> away all these internal references to their own notions of "current" domains
->> which are the root of this whole class of horrid UAF and consistency
->> bugs.
-> 
-> Usually the IOMMU HW will be touching the IOPTEs via DMA enclosed by
-> the iommu_domain, so even if we could remove the iommu_domain pointers
-> from the drivers it still retains the HW programming to the
-> memory. Freeing the domain will still UAF.
-> 
-> Refcounts would be another way to address the UAF, then we can leak
-> the iommu_domain if things go bad. I think this is more complex on drivers.
 
-Ah, we're thinking of different notions of UAF - I just mean drivers 
-dereferencing stale pointers in software. If software leaves the 
-hardware pointing at the the wrong thing, then it's already not going to 
-work as expected from then on, regardless of whether that 
-descriptor/pagetable/whatever is subsequently freed or not, so as far as 
-I'm concerned there isn't much meaningful functional difference between 
-"broken" and "much more badly broken". Obviously it does matter more 
-from an overall kernel safety/stability viewpoint, but that's only a 
-concern for when we can't get the API-level functional correctness right 
-in the first place.
+vim +695 arch/mips/kernel/smp.c
 
-Thanks,
-Robin.
+   692	
+   693	void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
+   694	{
+ > 695		if (mp_ops->cleanup_dead_cpu)
+   696			mp_ops->cleanup_dead_cpu(cpu);
+   697	}
+   698	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
