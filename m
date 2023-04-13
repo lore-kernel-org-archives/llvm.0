@@ -1,211 +1,143 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DAD2F31
-	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 20:41:21 +0000 (UTC)
-Received: by mail-pj1-f44.google.com with SMTP id hg12so1887318pjb.2
-        for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 13:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1681418481; x=1684010481;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=JpD/idY75JCUonc1mCHRsxaPMz+Dua0TbOwZfoFGyKc=;
-        b=ZS3xVUuekua/xIb85OW00vHzmw9UZEkQs4okOtfSjM0IppwM3nv1gi8nhkTmT7eynb
-         41PO43VyeV622cv/Fb6X7ssWuv6JK40f5jWM0CFgP8z/CzBFXIgKRnD6wd53SkYubUr1
-         5oOW+GeJ13r5CiSkwBsXmEkuKZYrLRloCg8CiDG0gz7myu4kp3eAd7ujD2zO8uqx0k9W
-         frgjC4g1Bm4o9cwei21oOR0oYQKZdRUAe4wBNItm7BsZm+BQaV0ZwueLVUVw909Moum9
-         FZYmDMc/91baUGDa9DXpzlCIFaigCRNbEKQiFRCZGESCUvNg8m3PiX+GWS2/YZWo91Em
-         w23Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681418481; x=1684010481;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JpD/idY75JCUonc1mCHRsxaPMz+Dua0TbOwZfoFGyKc=;
-        b=RNTAU9lUnj8qruUc+XOargyJgcRH52PHyLgzvUYmHXJHcns0+E65VQEXdDiaJImv+u
-         O4oqtqWe9rqpMHHEpCipezcgzUeMGW1GcsX9eM3cjrjDNEUds6AcK4YvtO+UpxVQsbxl
-         9f/6ptoxWfK05HWRMgL5FO5GvSfVc7WKnmACeYNC78sSEEF2ZTlRx4jO6amGcM7wZRJC
-         OgV+7+tvnvKzzHgx/hlobIz7IBRv5t7CKqUMTvI4B7o9clsAIfjNOyym0+Nmt5Rf5ias
-         w6tw9GRPL8NUgNc2NXIpSiiZmY0rEU2s4fivPZDFhQFegdbrQzl8GCicztbnzyZztdvw
-         kHdg==
-X-Gm-Message-State: AAQBX9e+JKWoqssAMC56n5ReWyTx+/NtLVk62w7yNLSw9AT8LFwzCd5u
-	qOBUaljk6gaZZI6+BYqf/LIbO9fE1u/Q2v+VbvuKbh/h
-X-Google-Smtp-Source: AKy350abb09U9mGJX7y9TaTIZSAg6e8zIAkhOY7ecrDzTCpEnaaGJZfoR56gaIrKK6elLZlwnomVkQ==
-X-Received: by 2002:a17:902:ef4d:b0:1a1:e01e:7279 with SMTP id e13-20020a170902ef4d00b001a1e01e7279mr388858plx.4.1681418480811;
-        Thu, 13 Apr 2023 13:41:20 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 5-20020a170902e9c500b001a1adbe215asm1870586plk.142.2023.04.13.13.41.20
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 13:41:20 -0700 (PDT)
-Message-ID: <643868f0.170a0220.79845.4a9d@mx.google.com>
-Date: Thu, 13 Apr 2023 13:41:20 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD7C2F31
+	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 21:01:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681419699;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YW49nMfAlEAIhF8wWwdDba5GEYhdAO8vC8KcHei04IE=;
+	b=YPS8I+91GG5aPmVB6o+7S/YR3Jc8T08TURxpYhqapuEk/1rZ/Ldy28oRA7VoRYM5Whcokd
+	KNIMdqmTuJC0PhobfSph7290merFhb7zYrRUSwa2iuu0bSswTR/bLL0m8kAJoSzFWy/Us4
+	K+f5z13B/3k5OP/0WI5zbAI3qS+6qt8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-28-yiJ88VAlPzSp62FuGIm-1g-1; Thu, 13 Apr 2023 17:01:36 -0400
+X-MC-Unique: yiJ88VAlPzSp62FuGIm-1g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5FCF185A794
+	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 21:01:35 +0000 (UTC)
+Received: from [172.64.0.123] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D51C440B3EDA;
+	Thu, 13 Apr 2023 21:01:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 29 of 358): Test report for master
+ (6.3.0-rc6, mainline.kernel.org-clang, de466448)
+Date: Thu, 13 Apr 2023 21:01:35 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Message-Id: <13841.123041317013600885@us-mta-28.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20230413
-X-Kernelci-Report-Type: build
-Subject: next/master build: 13 builds: 3 failed, 10 passed, 3 errors,
- 3 warnings (next-20230413)
-To: llvm@lists.linux.dev
-From: "kernelci.org bot" <bot@kernelci.org>
 
-next/master build: 13 builds: 3 failed, 10 passed, 3 errors, 3 warnings (ne=
-xt-20230413)
+Hi, we tested your kernel and here are the results:
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20230413/
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Tree: next
-Branch: master
-Git Describe: next-20230413
-Git Commit: e3342532ecd39bbd9c2ab5b9001cec1589bc37e9
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 3 unique architectures
 
-Build Failures Detected:
+Kernel information:
+    Commit message: Merge tag 'for-linus-2023041201' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/hid/hid
 
-arm64:
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config: (clang-13) =
-FAIL
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
-book: (clang-13) FAIL
-    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
-omebook: (clang-13) FAIL
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84521
 
-Errors and Warnings Detected:
+One or more kernel tests failed:
+    =E2=9D=97 Regression(s) detected:
+          x86_64 - xfstests - cifsv3.11
+                   Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2'=
+ to 'sub/e.3': Input/output error
+                          https://gitlab.com/redhat/centos-stream/tests/ker=
+nel/kernel-tests/-/issues/1436
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7799740
 
-arm64:
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (clang-13): =
-1 error, 1 warning
-    cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chrome=
-book (clang-13): 1 error, 1 warning
-    cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chr=
-omebook (clang-13): 1 error, 1 warning
+    Note: Any of these might not be a regression and/or we might have mista=
+kenly thought this issue to be fixed.
+          If it is not a regression, please ask the test maintainer to reop=
+en the issue and untag the regression from this execution.
 
-arm:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-x86_64:
 
-Errors summary:
 
-    3    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable =
-'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Warnings summary:
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-    3    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initializ=
-e the variable 'ret' to silence this warning
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config (arm64, clang-13=
-) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
-
-Errors:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
- is uninitialized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
- variable 'ret' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-arm64.flavour.config+arm64-chromebook=
- (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatches
-
-Errors:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
- is uninitialized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
- variable 'ret' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-mediatek.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mismatc=
-hes
-
-Errors:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
- is uninitialized when used here [-Werror,-Wuninitialized]
-
-Warnings:
-    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
- variable 'ret' to silence this warning
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-qualcomm.flavour.config+arm64-chromeb=
-ook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section misma=
-tches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/arm64/chromiumos-rockchip64.flavour.config+arm64-chrom=
-ebook (arm64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-arm.flavour.config (arm, clang-13) =
-=E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/armel/chromiumos-rockchip.flavour.config (arm, clang-1=
-3) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-amd-stoneyridge.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-denverton.flavour.config+x86-chr=
-omebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromeos-intel-pineview.flavour.config+x86-chro=
-mebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config (x86_64, clang=
--13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-cros://chromeos-5.10/x86_64/chromiumos-x86_64.flavour.config+x86-chromebook=
- (x86_64, clang-13) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mismatc=
-hes
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+x86-chromebook (x86_64, clang-13) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
