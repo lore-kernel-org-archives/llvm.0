@@ -1,150 +1,195 @@
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693422C9C;
-	Thu, 13 Apr 2023 11:00:35 +0000 (UTC)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PxxPh5dddz6J7Lm;
-	Thu, 13 Apr 2023 18:58:00 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 13 Apr
- 2023 12:00:25 +0100
-Date: Thu, 13 Apr 2023 12:00:24 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: kernel test robot <lkp@intel.com>
-CC: Patrik =?ISO-8859-1?Q?Dahlstr=F6m?= <risca@dalakolonin.se>,
-	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>
-Subject: Re: [jic23-iio:testing 9/10] drivers/iio/adc/palmas_gpadc.c:753:7:
- warning: variable 'old' is used uninitialized whenever 'if' condition is
- true
-Message-ID: <20230413120024.00006ac1@Huawei.com>
-In-Reply-To: <202304130711.Eueav3k7-lkp@intel.com>
-References: <202304130711.Eueav3k7-lkp@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76A32F23;
+	Thu, 13 Apr 2023 12:42:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681389772; x=1712925772;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VoD4HZCtF2eoEZicpjj2XlYJmJxVn/JnvwmNPYON1x8=;
+  b=NzSzO4X1kjn1zmZMAWmbgAIKFk4k5LaQja87Hkae2zcQWBt+K+ImYPwd
+   xKp1xPWTwSFfvi3FswfpyBAtcydlQq20cJMKNslU8I0d2bV3mIXy5D1nL
+   rcJZW20d5SZzGQ9EaG/eT1Dl+KAJ2X503XsPuwZBRSARkVVBWKvQHj/+T
+   MFRf4gsmfvWy2z4u8a54qnjEnjUT1Y+omn3QETbf/9K4qoHkwXnpoPlSl
+   Wsslnb5ycKv+kmNDnPuIOyeURNJU9MqZnZ2pFWarUom2QRrhCXPhZCUh6
+   IjwQ3hANV0OPyTVVU0dLlPD3I9cXKEGLTyo/YcVvFmAKcSoNE+kYSWJ/j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="344166426"
+X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
+   d="scan'208";a="344166426"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 05:42:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="722041266"
+X-IronPort-AV: E=Sophos;i="5.99,193,1677571200"; 
+   d="scan'208";a="722041266"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2023 05:42:49 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pmwHo-000Ygc-2P;
+	Thu, 13 Apr 2023 12:42:48 +0000
+Date: Thu, 13 Apr 2023 20:42:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/bcm47xx/prom.c:129:6: warning: no previous prototype for
+ function 'early_tlb_init'
+Message-ID: <202304132001.mawtrQpw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Thu, 13 Apr 2023 07:56:53 +0800
-kernel test robot <lkp@intel.com> wrote:
+Hi Paul,
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-> head:   32f442dba193b5682bd1e9784b0ea42893c6e966
-> commit: 78441f504e3991b3f33b48de6fc8ed3cba7a40a7 [9/10] iio: adc: palmas: add support for iio threshold events
-> config: i386-randconfig-a002-20230410 (https://download.01.org/0day-ci/archive/20230413/202304130711.Eueav3k7-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=78441f504e3991b3f33b48de6fc8ed3cba7a40a7
->         git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
->         git fetch --no-tags jic23-iio testing
->         git checkout 78441f504e3991b3f33b48de6fc8ed3cba7a40a7
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iio/adc/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304130711.Eueav3k7-lkp@intel.com/
-Fixed up.
+First bad commit (maybe != root cause):
 
-Thanks,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   de4664485abbc0529b1eec44d0061bbfe58a28fb
+commit: c434b9f80b0923e6460031b0fd964f8b0bf3c6a6 MIPS: Kconfig: add MIPS_GENERIC_KERNEL symbol
+date:   2 years, 7 months ago
+config: mips-buildonly-randconfig-r005-20230413 (https://download.01.org/0day-ci/archive/20230413/202304132001.mawtrQpw-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c434b9f80b0923e6460031b0fd964f8b0bf3c6a6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/bcm47xx/ drivers/gpio/ drivers/mfd/ drivers/regulator/ drivers/soc/mediatek/ drivers/thermal/
 
-Jonathan
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304132001.mawtrQpw-lkp@intel.com/
 
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/iio/adc/palmas_gpadc.c:753:7: warning: variable 'old' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]  
->                    if (val < 0 || val > 0xFFF) {
->                        ^~~~~~~~~~~~~~~~~~~~~~
->    drivers/iio/adc/palmas_gpadc.c:772:13: note: uninitialized use occurs here
->            if (val != old && palmas_gpadc_get_event(adc, adc_chan, dir))
->                       ^~~
->    drivers/iio/adc/palmas_gpadc.c:753:3: note: remove the 'if' if its condition is always false
->                    if (val < 0 || val > 0xFFF) {
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >> drivers/iio/adc/palmas_gpadc.c:753:7: warning: variable 'old' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]  
->                    if (val < 0 || val > 0xFFF) {
->                        ^~~~~~~
->    drivers/iio/adc/palmas_gpadc.c:772:13: note: uninitialized use occurs here
->            if (val != old && palmas_gpadc_get_event(adc, adc_chan, dir))
->                       ^~~
->    drivers/iio/adc/palmas_gpadc.c:753:7: note: remove the '||' if its condition is always false
->                    if (val < 0 || val > 0xFFF) {
->                        ^~~~~~~~~~
->    drivers/iio/adc/palmas_gpadc.c:744:9: note: initialize the variable 'old' to silence this warning
->            int old;
->                   ^
->                    = 0
->    2 warnings generated.
-> 
-> 
-> vim +753 drivers/iio/adc/palmas_gpadc.c
-> 
->    734	
->    735	static int palmas_gpadc_write_event_value(struct iio_dev *indio_dev,
->    736						  const struct iio_chan_spec *chan,
->    737						  enum iio_event_type type,
->    738						  enum iio_event_direction dir,
->    739						  enum iio_event_info info,
->    740						  int val, int val2)
->    741	{
->    742		struct palmas_gpadc *adc = iio_priv(indio_dev);
->    743		int adc_chan = chan->channel;
->    744		int old;
->    745		int ret;
->    746	
->    747		if (adc_chan > PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
->    748			return -EINVAL;
->    749	
->    750		mutex_lock(&adc->lock);
->    751		switch (info) {
->    752		case IIO_EV_INFO_VALUE:
->  > 753			if (val < 0 || val > 0xFFF) {  
->    754				ret = -EINVAL;
-replaced with
+All warnings (new ones prefixed by >>):
 
-goto out_unlock;
+>> arch/mips/bcm47xx/prom.c:129:6: warning: no previous prototype for function 'early_tlb_init' [-Wmissing-prototypes]
+   void early_tlb_init(void)
+        ^
+   arch/mips/bcm47xx/prom.c:129:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void early_tlb_init(void)
+   ^
+   static 
+>> arch/mips/bcm47xx/prom.c:137:13: warning: no previous prototype for function 'bcm47xx_prom_highmem_init' [-Wmissing-prototypes]
+   void __init bcm47xx_prom_highmem_init(void)
+               ^
+   arch/mips/bcm47xx/prom.c:137:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init bcm47xx_prom_highmem_init(void)
+   ^
+   static 
+   2 warnings generated.
+--
+>> drivers/gpio/gpio-zx.c:275:34: warning: unused variable 'zx_gpio_match' [-Wunused-const-variable]
+   static const struct of_device_id zx_gpio_match[] = {
+                                    ^
+   1 warning generated.
+--
+>> drivers/mfd/max77686.c:148:34: warning: unused variable 'max77686_pmic_dt_match' [-Wunused-const-variable]
+   static const struct of_device_id max77686_pmic_dt_match[] = {
+                                    ^
+   1 warning generated.
+--
+>> drivers/regulator/mp886x.c:258:34: warning: unused variable 'mp886x_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id mp886x_dt_ids[] = {
+                                    ^
+   1 warning generated.
+--
+>> drivers/thermal/thermal_mmio.c:103:34: warning: unused variable 'thermal_mmio_id_table' [-Wunused-const-variable]
+   static const struct of_device_id thermal_mmio_id_table[] = {
+                                    ^
+   1 warning generated.
+--
+>> drivers/soc/mediatek/mtk-pmic-wrap.c:1842:34: warning: unused variable 'of_slave_match_tbl' [-Wunused-const-variable]
+   static const struct of_device_id of_slave_match_tbl[] = {
+                                    ^
+>> drivers/soc/mediatek/mtk-pmic-wrap.c:1988:34: warning: unused variable 'of_pwrap_match_tbl' [-Wunused-const-variable]
+   static const struct of_device_id of_pwrap_match_tbl[] = {
+                                    ^
+   2 warnings generated.
 
->    755				break;
->    756			}
->    757			if (dir == IIO_EV_DIR_RISING) {
->    758				old = adc->thresholds[adc_chan].high;
->    759				adc->thresholds[adc_chan].high = val;
->    760			}
->    761			else {
->    762				old = adc->thresholds[adc_chan].low;
->    763				adc->thresholds[adc_chan].low = val;
->    764			}
->    765			ret = 0;
->    766			break;
->    767		default:
->    768			ret = -EINVAL;
->    769			goto out_unlock;
->    770		}
->    771	
->    772		if (val != old && palmas_gpadc_get_event(adc, adc_chan, dir))
->    773			ret = palmas_gpadc_reconfigure_event_channels(adc);
->    774	
->    775	out_unlock:
->    776		mutex_unlock(&adc->lock);
->    777	
->    778		return ret;
->    779	}
->    780	
-> 
 
+vim +/early_tlb_init +129 arch/mips/bcm47xx/prom.c
+
+6ee1d93455384ce Rafał Miłecki  2014-07-17  125  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  126  /* Stripped version of tlb_init, with the call to build_tlb_refill_handler
+6ee1d93455384ce Rafał Miłecki  2014-07-17  127   * dropped. Calling it at this stage causes a hang.
+6ee1d93455384ce Rafał Miłecki  2014-07-17  128   */
+b1f7e1129097cdb Paul Gortmaker 2015-04-27 @129  void early_tlb_init(void)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  130  {
+6ee1d93455384ce Rafał Miłecki  2014-07-17  131  	write_c0_pagemask(PM_DEFAULT_MASK);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  132  	write_c0_wired(0);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  133  	temp_tlb_entry = current_cpu_data.tlbsize - 1;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  134  	local_flush_tlb_all();
+6ee1d93455384ce Rafał Miłecki  2014-07-17  135  }
+6ee1d93455384ce Rafał Miłecki  2014-07-17  136  
+6ee1d93455384ce Rafał Miłecki  2014-07-17 @137  void __init bcm47xx_prom_highmem_init(void)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  138  {
+6ee1d93455384ce Rafał Miłecki  2014-07-17  139  	unsigned long off = (unsigned long)prom_init;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  140  	unsigned long extmem = 0;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  141  	bool highmem_region = false;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  142  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  143  	if (WARN_ON(bcm47xx_bus_type != BCM47XX_BUS_TYPE_BCMA))
+6ee1d93455384ce Rafał Miłecki  2014-07-17  144  		return;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  145  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  146  	if (bcm47xx_bus.bcma.bus.chipinfo.id == BCMA_CHIP_ID_BCM4706)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  147  		highmem_region = true;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  148  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  149  	if (lowmem != 128 << 20 || !highmem_region)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  150  		return;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  151  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  152  	early_tlb_init();
+6ee1d93455384ce Rafał Miłecki  2014-07-17  153  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  154  	/* Add one temporary TLB entry to map SDRAM Region 2.
+6ee1d93455384ce Rafał Miłecki  2014-07-17  155  	 *      Physical        Virtual
+6ee1d93455384ce Rafał Miłecki  2014-07-17  156  	 *      0x80000000      0xc0000000      (1st: 256MB)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  157  	 *      0x90000000      0xd0000000      (2nd: 256MB)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  158  	 */
+6ee1d93455384ce Rafał Miłecki  2014-07-17  159  	add_temporary_entry(ENTRYLO(0x80000000),
+6ee1d93455384ce Rafał Miłecki  2014-07-17  160  			    ENTRYLO(0x80000000 + (256 << 20)),
+6ee1d93455384ce Rafał Miłecki  2014-07-17  161  			    EXTVBASE, PM_256M);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  162  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  163  	off = EXTVBASE + __pa(off);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  164  	for (extmem = 128 << 20; extmem < 512 << 20; extmem <<= 1) {
+6ee1d93455384ce Rafał Miłecki  2014-07-17  165  		if (!memcmp(prom_init, (void *)(off + extmem), 16))
+6ee1d93455384ce Rafał Miłecki  2014-07-17  166  			break;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  167  	}
+6ee1d93455384ce Rafał Miłecki  2014-07-17  168  	extmem -= lowmem;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  169  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  170  	early_tlb_init();
+6ee1d93455384ce Rafał Miłecki  2014-07-17  171  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  172  	if (!extmem)
+6ee1d93455384ce Rafał Miłecki  2014-07-17  173  		return;
+6ee1d93455384ce Rafał Miłecki  2014-07-17  174  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  175  	pr_warn("Found %lu MiB of extra memory, but highmem is unsupported yet!\n",
+6ee1d93455384ce Rafał Miłecki  2014-07-17  176  		extmem >> 20);
+6ee1d93455384ce Rafał Miłecki  2014-07-17  177  
+6ee1d93455384ce Rafał Miłecki  2014-07-17  178  	/* TODO: Register extra memory */
+6ee1d93455384ce Rafał Miłecki  2014-07-17  179  }
+6ee1d93455384ce Rafał Miłecki  2014-07-17  180  
+
+:::::: The code at line 129 was first introduced by commit
+:::::: b1f7e1129097cdb5cf2d6ef5d365dc94d13e3c76 MIPS: BCM77xx: Remove legacy __cpuinit{,data} sections that crept in
+
+:::::: TO: Paul Gortmaker <paul.gortmaker@windriver.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
