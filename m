@@ -1,176 +1,111 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4627C;
-	Fri, 14 Apr 2023 11:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681471111; x=1713007111;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gdHq+NrxA5QnPfv/7dYFhkLl1betOdrkY6HhFy5LWRc=;
-  b=H4R437JNSQWcnuK4d3Ai2ralsrtxbaocpwBpomMTZZGM7UrAWJMHn4c3
-   dbo91x0m80caHm+rOsyBCnHTMHSZafcaxUj6MoyNcsA8O6J1urYv1Mk1c
-   O22h8TPbQRcDyjuxH3jGHMcfYxUqWAOsOYFBgI9z5ah3AVh0oa1gbJgMM
-   iwnjgKOPD5q3W4O5hoj8WD8yncFZG/CM1R9pCfyTp85WFiZSWrRE3JWPa
-   kF+pMNcnSeR2ra3Nzk+dttX2jTfIWlVY8m2ZUOZWK7apaxm1eVLINTzHx
-   anIruCAlVvUncxoDFzx+rsqCz3g+9UpfnRt3b3X6Oj5x5Aln1P+OVJTps
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="430733835"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="430733835"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 04:18:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="935984359"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="935984359"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Apr 2023 04:18:27 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pnHRi-000ZTb-1d;
-	Fri, 14 Apr 2023 11:18:26 +0000
-Date: Fri, 14 Apr 2023 19:17:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lee Jones <lee.jones@linaro.org>, Lee Jones <lee@kernel.org>
-Subject: [lee-mfd:for-mfd-next 15/78] drivers/mfd/qcom-pm8008.c:143:21:
- error: incompatible function pointer types initializing 'int (*)(unsigned
- int **, unsigned int, const struct regmap_irq *, int)' with an expression of
- type 'int (unsigned int **, unsigned int, const struct regmap_irq *, i...
-Message-ID: <202304141907.9MEPUN9w-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981C27C
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 12:23:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681474980;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yPCGffG6qbUGI7F6FTErQ0LH3cHGPkEEbnsErQvfFxw=;
+	b=b/1x6luHPegLm6mZpHK+2Wu7u9um7zXBw4i5l0Nf8vNQ80OtffQ5G+t6Zp6VU1POQVBy0U
+	hqVEro3JB2lpnud/yUB+qJ9zELPxDEk2SrvW0v3W9KtAd24y25/KehfumMKH24AN+uS/KG
+	mc7xrjy9YUijjMtWCkbsvUiZl145+z8=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-211-3tHAK6zjPp61bDNcxGCGxg-1; Fri, 14 Apr 2023 08:22:57 -0400
+X-MC-Unique: 3tHAK6zjPp61bDNcxGCGxg-1
+Received: by mail-qk1-f200.google.com with SMTP id a62-20020ae9e841000000b0074abdff4ccdso4483512qkg.13
+        for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 05:22:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681474977; x=1684066977;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yPCGffG6qbUGI7F6FTErQ0LH3cHGPkEEbnsErQvfFxw=;
+        b=TL/iKP7BOW/4iODUpQMgILVNvz7TLtDDlVCA042njX1an2D/nfiufYC9KCOKV4viCF
+         YdAtVWeQhz6Xmwyxg5UA6QfFxopZ8C5r4ebvj6CyQA9ceTfWBBNPjoCIDPNWYWG3KZWn
+         6dZDGis0zODz5t0DhEVXbNgptUwx8Ems3NVBpbbcom4dnp+cQ+BEgX44X3lJq7m0JvSE
+         CUFl0qpOHCCIhqtYfpokE2kdfbjDwgrex0TwyoZKK2ypFa6ZNYDXN09O53rPOhFwyayB
+         Rl5inSkoIeAwpknhM+3m2BEXeuckxoJEV8GiDczi1LVEkxyy1rHpXX5sEH7UqB4ECqF8
+         8GNw==
+X-Gm-Message-State: AAQBX9f1smzolFbSX1Ss5qNxj8MLZSCnhwC6ue1H83G7s4W4KpH1zHsH
+	gAyHHjN9KBUR7gkJDISstuGcj+zbzhjtQJaNzvt+T8EW0aRpk4G8iLcfP6VFRVSqYaQSE62UhFL
+	3Zs8vH50zOg7f3w==
+X-Received: by 2002:ac8:5945:0:b0:3e4:e2fa:66b0 with SMTP id 5-20020ac85945000000b003e4e2fa66b0mr7771657qtz.29.1681474977147;
+        Fri, 14 Apr 2023 05:22:57 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZrFNjLa1K+ogArho3OQ0SXUeh36MSY9HRSMAimwdY9UWoY7qElQIx2CPz+MS7Z6iLrkNomrA==
+X-Received: by 2002:ac8:5945:0:b0:3e4:e2fa:66b0 with SMTP id 5-20020ac85945000000b003e4e2fa66b0mr7771633qtz.29.1681474976909;
+        Fri, 14 Apr 2023 05:22:56 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id r4-20020ac85e84000000b003e302c1f498sm1193420qtx.37.2023.04.14.05.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 05:22:56 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: chunkuang.hu@kernel.org,
+	p.zabel@pengutronix.de,
+	chunfeng.yun@mediatek.com,
+	vkoul@kernel.org,
+	kishon@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	granquet@baylibre.com
+Cc: dri-devel@lists.freedesktop.org,
+	linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-phy@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] phy: mediatek: fix returning garbage
+Date: Fri, 14 Apr 2023 08:22:53 -0400
+Message-Id: <20230414122253.3171524-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-head:   9d8d0d98885abba451d7ffc4885236d14ead3c9a
-commit: 540eee4708487d16d7f9d1ddadd679ce3e0b9d69 [15/78] mfd: qcom-pm8008: Convert irq chip to config regs
-config: hexagon-randconfig-r024-20230410 (https://download.01.org/0day-ci/archive/20230414/202304141907.9MEPUN9w-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/commit/?id=540eee4708487d16d7f9d1ddadd679ce3e0b9d69
-        git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
-        git fetch --no-tags lee-mfd for-mfd-next
-        git checkout 540eee4708487d16d7f9d1ddadd679ce3e0b9d69
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mfd/
+clang reports
+drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
+  'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+        if (ret)
+            ^~~
+ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304141907.9MEPUN9w-lkp@intel.com/
+Fixes: 45810d486bb4 ("phy: mediatek: add support for phy-mtk-hdmi-mt8195")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/mfd/qcom-pm8008.c:7:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/mfd/qcom-pm8008.c:7:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/mfd/qcom-pm8008.c:7:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/mfd/qcom-pm8008.c:143:21: error: incompatible function pointer types initializing 'int (*)(unsigned int **, unsigned int, const struct regmap_irq *, int)' with an expression of type 'int (unsigned int **, unsigned int, const struct regmap_irq *, int, void *)' [-Wincompatible-function-pointer-types]
-           .set_type_config        = pm8008_set_type_config,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
-
-
-vim +143 drivers/mfd/qcom-pm8008.c
-
-   125	
-   126	static struct regmap_irq_chip pm8008_irq_chip = {
-   127		.name			= "pm8008_irq",
-   128		.main_status		= I2C_INTR_STATUS_BASE,
-   129		.num_main_regs		= 1,
-   130		.irqs			= pm8008_irqs,
-   131		.num_irqs		= ARRAY_SIZE(pm8008_irqs),
-   132		.num_regs		= PM8008_NUM_PERIPHS,
-   133		.not_fixed_stride	= true,
-   134		.sub_reg_offsets	= pm8008_sub_reg_offsets,
-   135		.status_base		= PM8008_STATUS_BASE,
-   136		.mask_base		= PM8008_MASK_BASE,
-   137		.unmask_base		= PM8008_UNMASK_BASE,
-   138		.mask_unmask_non_inverted = true,
-   139		.ack_base		= PM8008_ACK_BASE,
-   140		.config_base		= pm8008_config_regs,
-   141		.num_config_bases	= ARRAY_SIZE(pm8008_config_regs),
-   142		.num_config_regs	= PM8008_NUM_PERIPHS,
- > 143		.set_type_config	= pm8008_set_type_config,
-   144	};
-   145	
-
+diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+index abfc077fb0a8..c63294e451d6 100644
+--- a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
++++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+@@ -292,9 +292,9 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *hdmi_phy, struct clk_hw *hw,
+ 	if (!(digital_div <= 32 && digital_div >= 1))
+ 		return -EINVAL;
+ 
+-	mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
+-			    PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
+-			    txposdiv, digital_div);
++	ret = mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
++				  PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
++				  txposdiv, digital_div);
+ 	if (ret)
+ 		return -EINVAL;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
