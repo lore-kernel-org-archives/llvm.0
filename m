@@ -1,62 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7A3620;
-	Fri, 14 Apr 2023 02:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92EF630;
+	Fri, 14 Apr 2023 03:33:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681438219; x=1712974219;
+  t=1681443195; x=1712979195;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=IeRnQ+CQcJwGbjz4GOR0Cyk0yJ9hc73wDuZH6+tv/hs=;
-  b=VVh5p2RbrIAjo6tMF+mJPdfARgoKhekd7hod6ZelYODYXzZVmz546dW5
-   p24eJOussYsgk/0qrTZvsYAO1LMo/m/48X3NayRYmyJsOzmXJ1IBjDd4f
-   UJPJydPvr1rQHE3lXOpc8byGJfNaAaILFDCWn/j70QlI0yYI26qlLWcZD
-   HbWyE8VJJgUbXksrDTbGxyPzQgW9nnSe8V7B9Jy0RTOzo1Fy96hgBXiY+
-   2aEas+MNdEcHPPIuBdoulp2UoqrHc4mVgS6Q5dmMa25udtlMLV/ZQGxGS
-   1Ym8FfJBCQAmD4MZOnsAyWs0umkxwVQASDrq/WzJK5nXFWPzONLFSEUXm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="372222359"
+  bh=8+H3Yn8mCHIQZVndb2RJ/hjT1NxIw/Q1dkpG63g8Tf8=;
+  b=TmQbypAXhk8vQ18V3GsGOY5+IVdyngRYPteq7XrGGDE+ZXE9ZK5Ccngb
+   nsC0Y8GkPuG6XtyLVwl+mRzhAKuIr+LIShLytYWVBLnt4yLXmEusVw37v
+   Jz3ER5s+XBYbQCIe+UC9bdRD2IXuGuj/ac1MgOVJXPXJiayjZNmpsQYLy
+   MDApj89wyv35nTaHz5UQpToK0Ae53y3bHFM+rhpcLX5QSRz9/nXoLNzDj
+   y6D/aSHeC1EV4AYdGW4qYXexxd2PPe559F8+3ltfp//7V2eQ2xBZCxAR5
+   ftOcWNWAr+6Ch1KiGwzroYcbKx4PUbqxE3MEDo1Ds7XbGd+9yUsHJu0xh
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="343134142"
 X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="372222359"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 19:10:18 -0700
+   d="scan'208";a="343134142"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 20:33:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="720102853"
+X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="722308925"
 X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="720102853"
+   d="scan'208";a="722308925"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 13 Apr 2023 19:10:11 -0700
+  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2023 20:33:13 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pn8t8-000Z8D-0o;
-	Fri, 14 Apr 2023 02:10:10 +0000
-Date: Fri, 14 Apr 2023 10:09:43 +0800
+	id 1pnABU-000ZBj-2E;
+	Fri, 14 Apr 2023 03:33:12 +0000
+Date: Fri, 14 Apr 2023 11:32:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Atish Patra <atishp@atishpatra.org>,
-	Anup Patel <anup@brainfault.org>, Will Deacon <will@kernel.org>,
-	Rob Herring <robh@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH 4/4] riscv: Enable perf counters user access only through
- perf
-Message-ID: <202304140904.9oAVhFHu-lkp@intel.com>
-References: <20230413161725.195417-5-alexghiti@rivosinc.com>
+To: Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC net-next v2 3/4] vsock: Add lockless sendmsg() support
+Message-ID: <202304141112.r8VWcDK5-lkp@intel.com>
+References: <20230413-b4-vsock-dgram-v2-3-079cc7cee62e@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,82 +46,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230413161725.195417-5-alexghiti@rivosinc.com>
+In-Reply-To: <20230413-b4-vsock-dgram-v2-3-079cc7cee62e@bytedance.com>
 
-Hi Alexandre,
+Hi Bobby,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on tip/perf/core]
-[also build test ERROR on acme/perf/core tip/master tip/auto-latest linus/master v6.3-rc6]
-[cannot apply to next-20230413]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on ed72bd5a6790a0c3747cb32b0427f921bd03bb71]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/perf-Fix-wrong-comment-about-default-event_idx/20230414-002232
-patch link:    https://lore.kernel.org/r/20230413161725.195417-5-alexghiti%40rivosinc.com
-patch subject: [PATCH 4/4] riscv: Enable perf counters user access only through perf
-config: riscv-randconfig-r036-20230412 (https://download.01.org/0day-ci/archive/20230414/202304140904.9oAVhFHu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/virtio-vsock-support-dgram/20230414-082831
+base:   ed72bd5a6790a0c3747cb32b0427f921bd03bb71
+patch link:    https://lore.kernel.org/r/20230413-b4-vsock-dgram-v2-3-079cc7cee62e%40bytedance.com
+patch subject: [PATCH RFC net-next v2 3/4] vsock: Add lockless sendmsg() support
+config: i386-randconfig-a003-20230410 (https://download.01.org/0day-ci/archive/20230414/202304141112.r8VWcDK5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/8ca9b21cbf2c0b91ee35356c01aef9da7d874e55
+        # https://github.com/intel-lab-lkp/linux/commit/de4d5e13dd5c747996abbc4e9ce38eeb3093ea01
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexandre-Ghiti/perf-Fix-wrong-comment-about-default-event_idx/20230414-002232
-        git checkout 8ca9b21cbf2c0b91ee35356c01aef9da7d874e55
+        git fetch --no-tags linux-review Bobby-Eshleman/virtio-vsock-support-dgram/20230414-082831
+        git checkout de4d5e13dd5c747996abbc4e9ce38eeb3093ea01
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/vmw_vsock/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304140904.9oAVhFHu-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304141112.r8VWcDK5-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/riscv/kernel/perf_event.c:8:28: error: call to undeclared function 'to_riscv_pmu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
-                                     ^
->> arch/riscv/kernel/perf_event.c:8:20: error: incompatible integer to pointer conversion initializing 'struct riscv_pmu *' with an expression of type 'int' [-Wint-conversion]
-           struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
-                             ^       ~~~~~~~~~~~~~~~~~~~~~~~~
->> arch/riscv/kernel/perf_event.c:24:27: error: incomplete definition of type 'struct riscv_pmu'
-           userpg->pmc_width = rvpmu->ctr_get_width(event->hw.idx) + 1;
-                               ~~~~~^
-   arch/riscv/kernel/perf_event.c:8:9: note: forward declaration of 'struct riscv_pmu'
-           struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
-                  ^
-   3 errors generated.
+>> net/vmw_vsock/af_vsock.c:247:5: warning: no previous prototype for function 'vsock_remote_addr_update' [-Wmissing-prototypes]
+   int vsock_remote_addr_update(struct vsock_sock *vsk, struct sockaddr_vm *src)
+       ^
+   net/vmw_vsock/af_vsock.c:247:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int vsock_remote_addr_update(struct vsock_sock *vsk, struct sockaddr_vm *src)
+   ^
+   static 
+   1 warning generated.
+--
+>> net/vmw_vsock/virtio_transport_common.c:1174:7: warning: variable 'skerr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+                   if (err)
+                       ^~~
+   net/vmw_vsock/virtio_transport_common.c:1194:15: note: uninitialized use occurs here
+           sk->sk_err = skerr;
+                        ^~~~~
+   net/vmw_vsock/virtio_transport_common.c:1174:3: note: remove the 'if' if its condition is always false
+                   if (err)
+                   ^~~~~~~~
+   net/vmw_vsock/virtio_transport_common.c:1166:11: note: initialize the variable 'skerr' to silence this warning
+           int skerr;
+                    ^
+                     = 0
+   1 warning generated.
 
 
-vim +/to_riscv_pmu +8 arch/riscv/kernel/perf_event.c
+vim +/vsock_remote_addr_update +247 net/vmw_vsock/af_vsock.c
 
-     4	
-     5	void arch_perf_update_userpage(struct perf_event *event,
-     6				       struct perf_event_mmap_page *userpg, u64 now)
-     7	{
-   > 8		struct riscv_pmu *rvpmu = to_riscv_pmu(event->pmu);
-     9		struct clock_read_data *rd;
-    10		unsigned int seq;
-    11		u64 ns;
-    12	
-    13		userpg->cap_user_time = 0;
-    14		userpg->cap_user_time_zero = 0;
-    15		userpg->cap_user_time_short = 0;
-    16		userpg->cap_user_rdpmc =
-    17			!!(event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT);
-    18	
-    19		/*
-    20		 * The counters are 64-bit but the priv spec doesn't mandate all the
-    21		 * bits to be implemented: that's why, counter width can vary based on
-    22		 * the cpu vendor.
-    23		 */
-  > 24		userpg->pmc_width = rvpmu->ctr_get_width(event->hw.idx) + 1;
+   245	
+   246	/* The socket lock must be held by the caller */
+ > 247	int vsock_remote_addr_update(struct vsock_sock *vsk, struct sockaddr_vm *src)
+   248	{
+   249		struct sockaddr_vm_rcu *old, *new;
+   250	
+   251		new = kmalloc(sizeof(*new), GFP_KERNEL);
+   252		if (!new)
+   253			return -ENOMEM;
+   254	
+   255		memcpy(&new->addr, src, sizeof(new->addr));
+   256		old = rcu_replace_pointer(vsk->remote_addr, new, lockdep_sock_is_held(sk_vsock(vsk)));
+   257		kfree_rcu(old, rcu);
+   258	
+   259		return 0;
+   260	}
+   261	
 
 -- 
 0-DAY CI Kernel Test Service
