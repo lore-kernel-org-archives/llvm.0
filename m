@@ -1,93 +1,150 @@
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AD77C
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 00:10:11 +0000 (UTC)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4PyGzZ1vVRz4xFL;
-	Fri, 14 Apr 2023 10:10:02 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1681431004;
-	bh=Q7KsgvqsLrWieFE7M07Ww7Bl5ImVflY8xEb93QACjIM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=cOakumuv2DjMHDtWx/3C7Bm8wh4VSwSsx3518og5iYSSg0pD9S3WJFg7I+mgCDrFu
-	 wZwi4kVFHfCq94qKXCqycy8qQXmrxMkDiblK2Ckw1BzF5ewdHJyhfx++hCNzaDcu0e
-	 7lAN8OwhnL7WBqzzbBPCf/RcQ+PrJHBGiNKdSEMy5dYNhyLT4Rh/nDxciblhzGJc7v
-	 d8JvTZTLQsad1SCrBuXuj2ZcHXLnynbCLIBIoP4+05mcYjf+FHPYGvkRV3YXF4X+Mh
-	 eE7nMbDGAOv3TlCO1VKQJML9x10idZmDNRTYe9joFzNXSKh6u3CXXR0T52LP1MN8w/
-	 ISD8y/0082nOg==
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: ndesaulniers@google.com, "Borislav Petkov (AMD)" <bp@alien8.de>
-Cc: Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>, x86@kernel.org, Nicholas Piggin
- <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Nick Desaulniers
- <ndesaulniers@google.com>
-Subject: Re: [PATCH 1/2] start_kernel: add no_stack_protector fn attr
-In-Reply-To: <20230412-no_stackp-v1-1-46a69b507a4b@google.com>
-References: <20230412-no_stackp-v1-0-46a69b507a4b@google.com>
- <20230412-no_stackp-v1-1-46a69b507a4b@google.com>
-Date: Fri, 14 Apr 2023 10:09:58 +1000
-Message-ID: <87r0sn9ve1.fsf@mpe.ellerman.id.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97423620
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 00:53:11 +0000 (UTC)
+Received: by mail-qt1-f177.google.com with SMTP id l11so18208344qtj.4
+        for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 17:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1681433590; x=1684025590;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u6ht6VeS0SYKV/SXdhYfuGvwNi3nriuxD0cNinrb83g=;
+        b=duedhMmGMNRKLOW7F4MD1jMvtneIgcC6F5J3y2xm5PnUBFiC6YzEBKoc3sukHb46wo
+         umdd53NagWIYzOWck9jCuvIO3VY2EqBwCe6ZZz1502+JhWZdEgRrIYzbc3J43HIjTcd7
+         ymGLvZyWVztbmkmCTD7agyZ9C7yAdhPMiaNzI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681433590; x=1684025590;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u6ht6VeS0SYKV/SXdhYfuGvwNi3nriuxD0cNinrb83g=;
+        b=ddHmSoLFSxx9A6DTLlvIBieQLqoH3kyweqFcSZqVp90brAELU759FGgOI15q3reIyz
+         ScdYXq3I7ZWEpZ3lCWL4qe7Lgv2zfntgVQJr8E8vbmxb47OwuwAoW6hNcIkj989e4QYS
+         V9NfXH8bWLb2BIoV/tGma69jxZBoQK8auFouVNpT3qquYBbXNM5LZHzzNTRsUl8Pcsmp
+         n+anNtpU3efCnPetM/CadbjV7VSpv9RHi7wUW6Jfy59MosMwLqlUfuosKhRZut18w8w2
+         x2u4qtEEo8UmtDEG91AYGTnoTSRDt1J047OiZWcSX1UymgbeySsH6maTUoYluImHhjX7
+         lRMQ==
+X-Gm-Message-State: AAQBX9cbtz4pPB6GS18YoZ15AcKWC96krDzkAkiIbsBMwypb1/pub/BW
+	iXnSZLOU/Tj/WBtN77TqMD/zcw==
+X-Google-Smtp-Source: AKy350ZHeQYY3Mlpr5qR+jlU5dWCzqny5lOsxPfsSHe+prE7uemkv7G6mzqEfhhWcWn2SeBKVItI2Q==
+X-Received: by 2002:a05:622a:1aa1:b0:3e3:8bcd:23cb with SMTP id s33-20020a05622a1aa100b003e38bcd23cbmr5836300qtc.29.1681433590254;
+        Thu, 13 Apr 2023 17:53:10 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id qb4-20020a05620a650400b0074ace1dbd83sm861835qkn.39.2023.04.13.17.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Apr 2023 17:53:09 -0700 (PDT)
+Date: Fri, 14 Apr 2023 00:53:09 +0000
+From: Joel Fernandes <joel@joelfernandes.org>
+To: rcu@vger.kernel.org, ndesaulniers@google.com, nathan@kernel.org,
+	trix@redhat.com, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	paulmck@kernel.org
+Subject: clangd cannot handle tree_nocb.h
+Message-ID: <20230414005309.GA2198310@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-ndesaulniers@google.com writes:
-> Back during the discussion of
-> commit a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
-> we discussed the need for a function attribute to control the omission
-> of stack protectors on a per-function basis; at the time Clang had
-> support for no_stack_protector but GCC did not. This was fixed in
-> gcc-11. Now that the function attribute is available, let's start using
-> it.
->
-> Callers of boot_init_stack_canary need to use this function attribute
-> unless they're compiled with -fno-stack-protector, otherwise the canary
-> stored in the stack slot of the caller will differ upon the call to
-> boot_init_stack_canary. This will lead to a call to __stack_chk_fail
-> then panic.
->
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94722
-> Link: https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  arch/powerpc/kernel/smp.c           |  1 +
->  include/linux/compiler_attributes.h | 12 ++++++++++++
->  init/main.c                         |  3 ++-
->  3 files changed, 15 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-> index 6b90f10a6c81..7d4c12b1abb7 100644
-> --- a/arch/powerpc/kernel/smp.c
-> +++ b/arch/powerpc/kernel/smp.c
-> @@ -1603,6 +1603,7 @@ static void add_cpu_to_masks(int cpu)
->  }
->  
->  /* Activate a secondary processor. */
-> +__no_stack_protector
->  void start_secondary(void *unused)
->  {
->  	unsigned int cpu = raw_smp_processor_id();
+Hello!
 
-start_secondary() doesn't return, so it won't actually crash, but it
-obviously makes sense for it to be marked with __no_stack_protector.
+I have been trying to get clangd working properly with tree_nocb.h. clangd
+trips quite badly when trying to build tree_nocb.h to generate ASTs.
 
-There's quite a few other places we could add __no_stack_protector
-annotations in powerpc code, and then make the changes to CFLAGS to
-disable stack protector conditional on GCC < 11.
+I get something like this in the clangd logs showing it 'infers' how to build
+tree_nocb.h because it could not find a command in compile_commands.json:
 
-So I guess this patch is fine, but there's more that could be done.
+ASTWorker building file [..]/tree_nocb.h version 9 with command inferred from
+[..]/kernel/rcu/tree.c
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+This leads to all hell breaking lose with complaints about missing rcu_data
+struct definition and so forth.
 
-cheers
+So far I came up with a workaround as follows, but is there a better way?
+
+1. Open compile_commands.json and add a new entry as follows, with a
+definition "-DNOCB_H_CLANGD_PARSE". Otherwise the entry is indentical to how
+tree.c is built.
+
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wp,-MMD,kernel/rcu/.treenocb.o.d",
+      "-nostdinc",
+      "-I./arch/x86/include",
+      "-I./arch/x86/include/generated",
+      "-I./include",
+      "-I./arch/x86/include/uapi",
+[...]
+      "-Wformat-zero-length",
+      "-Wnonnull",
+      "-Wformat-insufficient-args",
+      "-Wno-sign-compare",
+      "-Wno-pointer-to-enum-cast",
+      "-Wno-tautological-constant-out-of-range-compare",
+      "-Wno-unaligned-access",
+      "-DKBUILD_MODFILE=\"kernel/rcu/tree\"",
+      "-DKBUILD_BASENAME=\"tree\"",
+      "-DKBUILD_MODNAME=\"tree\"",
+      "-D__KBUILD_MODNAME=kmod_tree",
+      "-DNOCB_H_CLANGD_PARSE",
+      "-c",
+      "-I",
+      "/s/",
+      "-I",
+      "/s/",
+      "-o",
+      "kernel/rcu/tree_nocb.h.o",
+      "kernel/rcu/tree_nocb.h"
+    ],
+    "directory": "/usr/local/google/home/joelaf/repo/linux-master",
+    "file": "/usr/local/google/home/joelaf/repo/linux-master/kernel/rcu/tree_nocb.h",
+    "output": "/usr/local/google/home/joelaf/repo/linux-master/kernel/rcu/tree_nocb.h.o"
+  },
+
+2.
+Then in kernel/tree/tree_nocb.h, I do the following right in the beginning.
+(Thanks to paulmck@ for this idea).
+
+#ifdef NOCB_H_CLANGD_PARSE
+#include "tree.c"
+#endif
+
+3. To prevent the above inclusion of tree.c from recursively including
+tree_nocb.h, I do the following at the end of tree.c
+
++#ifndef NOCB_H_CLANGD_PARSE
+ #include "tree_nocb.h"
+-#include "tree_plugin.h"
++#endif
++#include "tree_plugin.h"
+
+With that it works, but if I ever generate compile_commands.json again, then
+I'll have to again modify compile_commands.json manually to make my editor
+work again with clangd.
+
+So I guess my questions are:
+
+1. Is there a 'standard' procedure to solve something like this?
+
+2. How do we fix this the right way?
+   One way would be for scripts/clang-tools/gen_compile_commands.py to parse
+   header files and generate suitable compile_commands.json based on
+   meta-data in the header file.
+
+3. How do we fix this for other header files in general? Do we have to make hacks like
+   above (sad face) or can we come up with a standard way to make it work for kernel
+   sources?
+
+Thank you!
+
+ - Joel
+
+
+
+
+
+
