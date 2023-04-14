@@ -1,110 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEC92CA9
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 19:09:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDBBC433EF;
-	Fri, 14 Apr 2023 19:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681499343;
-	bh=8+ul74ZOMPCS9hfly4Btg1dktvKcVkcKPgQLuyGVrSc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d7NqpW/juNRjpXma8oVlbDfAIehEEZ1EhICsU4T4QzgIg9YAqWTqr3zCyrkth0awX
-	 pah4hp2eVg06zve9pJ8HqJA8hJnXNdz9tlKqsZLDOLg4w7SMceK07jeTLGOfgg1Vdf
-	 nglfKUf5VZDs8Zn/achnWXYxrhKlhqk9Wh7WcsExotAz2OeASTQwVe2mivL1P6KFiA
-	 b+8OgM066vExi1h+E/9BjAY4Eo7gNMBsBolG1GBJ9ep3NG/PY2jW9cTF0ie1rVLfGi
-	 Tol3SAq1do87ctDPOo8GMIN3gjeer6X2Q7YIeACAPmDWzDE5yBOyZ8on77qLn/NVua
-	 UmuRaO4JIOPtA==
-Date: Fri, 14 Apr 2023 12:09:00 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Marco Elver <elver@google.com>, Nicolas Schier <nicolas@fjasle.eu>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Tom Rix <trix@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Peter Zijlstra <peterz@infradead.org>, linux-kbuild@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for
- clang-14
-Message-ID: <20230414190900.GA1277152@dev-arch.thelio-3990X>
-References: <20230414082943.1341757-1-arnd@kernel.org>
- <20230414162605.GA2161385@dev-arch.thelio-3990X>
- <24ebf857-b70d-4d94-8870-e41b91649dd1@app.fastmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB5263CA
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 19:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681500101;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8Zi8cTz4Qn9IoJmCXbFRmW72xMUvdYl85L1mIXyAuMc=;
+	b=bEWElrwxHHYcRDeQDet7JzaG1lIsKAF2jHwQ2Yz/Feu4reUK4pNfRV2nWR+LSmiEPFULTW
+	szLt9tDgVMTtR1NL/QUMq0VSQvdQ/aHnVePBj27o3nuqZX9kfrsbP85zFWR/MNAX1MLSwb
+	uRtLcdblP+yCuKoPCIwlOg+hDjqetYA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-222-871j95oyMye_txqxcRT_Sw-1; Fri, 14 Apr 2023 15:21:40 -0400
+X-MC-Unique: 871j95oyMye_txqxcRT_Sw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00D36280A335
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 19:21:39 +0000 (UTC)
+Received: from [172.64.0.123] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DF61140C6E70;
+	Fri, 14 Apr 2023 19:21:38 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 358): Test report for master
+ (6.3.0-rc6, mainline.kernel.org-clang, 44149752)
+Date: Fri, 14 Apr 2023 19:21:38 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24ebf857-b70d-4d94-8870-e41b91649dd1@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <28689.123041415214000267@us-mta-222.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 14, 2023 at 08:53:49PM +0200, Arnd Bergmann wrote:
-> On Fri, Apr 14, 2023, at 18:26, Nathan Chancellor wrote:
-> > On Fri, Apr 14, 2023 at 10:29:27AM +0200, Arnd Bergmann wrote:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >> 
-> >> Unknown -mllvm options don't cause an error to be returned by clang, so
-> >> the cc-option helper adds the unknown hwasan-kernel-mem-intrinsic-prefix=1
-> >> flag to CFLAGS with compilers that are new enough for hwasan but too
-> >
-> > Hmmm, how did a change like commit 0e1aa5b62160 ("kcsan: Restrict
-> > supported compilers") work if cc-option does not work with unknown
-> > '-mllvm' flags (or did it)? That definitely seems like a problem, as I
-> > see a few different places where '-mllvm' options are used with
-> > cc-option. I guess I will leave that up to the sanitizer folks to
-> > comment on that further, one small comment below.
-> 
-> That one adds both "-fsanitize=thread" and "-mllvm
-> -tsan-distinguish-volatile=1". If the first one is missing in the
-> compiler, neither will be set. If only the second one fails, I assume
-> you'd get the same result I see with hwasan-kernel-mem-intrinsic-prefix=1.
+Hi, we tested your kernel and here are the results:
 
-I did not look close enough but it turns out that this check is always
-true for the versions of clang that the kernel currently supports, so it
-could not fail even if '-mllvm' flag checking worked.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-$ git grep tsan-distinguish-volatile llvmorg-11.0.0
-llvmorg-11.0.0:llvm/lib/Transforms/Instrumentation/ThreadSanitizer.cpp:    "tsan-distinguish-volatile", cl::init(false),
-llvmorg-11.0.0:llvm/test/Instrumentation/ThreadSanitizer/volatile.ll:; RUN: opt < %s -tsan -tsan-distinguish-volatile -S | FileCheck %s
+Tested-by: CKI Project <cki-project@redhat.com>
 
-At the time of the Linux change though, we did not have a minimum
-supported version, so that check was necessary. I wonder if LLVM
-regressed with regards to '-mllvm' flag checking at some point...
+Kernel information:
+    Commit message: Merge tag 'cgroup-for-6.3-rc6-fixes' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/tj/cgroup
 
-> >>  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
-> >> +ifeq ($(call clang-min-version, 150000),y)
-> >>  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-> >> +endif
-> >> +ifeq ($(call gcc-min-version, 130000),y)
-> >> +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-> >> +endif
-> >
-> > I do not think you need to duplicate this block, I think
-> >
-> >   ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
-> >   CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
-> >   endif
-> >
-> > would work, as only one of those conditions can be true at a time.
-> 
-> Are you sure that clang-min-version evaluates to an empty string
-> rather than "n" or something else? I haven't found a documentation
-> that says anything about it other than it returning "y" if the condition
-> is true.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84670
 
-Yes, see the test-ge and test-gt macros in scripts/Kbuild.include, they
-will only ever print the empty string or 'y'.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-Cheers,
-Nathan
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
