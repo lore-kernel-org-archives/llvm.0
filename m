@@ -1,136 +1,215 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF13223DA
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 15:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681485699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DEiF6JkhytEeXxJWaXY+QWZYlklLkmBd6zczNuFNn2Y=;
-	b=JI2poi7aIwpxi0Ip4Ut3vF66UnQWyip2h6t6b1MwwrrVMjD2CPmuXBjsudPEjCbApdJfvG
-	U6fLUaM6invGXQzpa3b9S3p75cgkXCYrt+UHOhkK4FpggdCFyn8lOsrnavcr+MFEV19jWl
-	j3uLZa6uDw7LPpltAXXI4MfqVnZnzNg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-43-RZQ7jjCnMrmHKBKexC0Aag-1; Fri, 14 Apr 2023 11:21:38 -0400
-X-MC-Unique: RZQ7jjCnMrmHKBKexC0Aag-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 04F7A8996E2
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 15:21:38 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E068F2027043;
-	Fri, 14 Apr 2023 15:21:37 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 36 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, 531f27ad)
-Date: Fri, 14 Apr 2023 15:21:37 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4379D29A8
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 15:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99AEDC433D2;
+	Fri, 14 Apr 2023 15:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681487016;
+	bh=h08I4UOy8O/vtjA3/HDm61kRiDez4uSAqmuZ1CwmyKk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=o+ECzy4SqCMH8bwiyhjQ9euvqHVKbvcLeCukW2ymofuf6GA7/E3fJT3/VqTlAPYlM
+	 WKQqWVBSNOCUNyQn/F/idt/Ui8effGoQvzoajqDVxeO4vI+OCzz+lmQQ8nFGCkpVB5
+	 m3LeiQl6OxvxAr53faXSmRecTvhvxUuX/yNNahppTdFpI7u4olbJJuwQbPjf7wZI0y
+	 0tZdQiDyqPmn94uKRuK6v5lzpJ2sz+rvTNqlr4gZpPIn8FB7GBq3+SI6s+d9CIFLlQ
+	 krrsfzY7rQ5jl6J9ZB2UutIVwp/ceKcakzBQTFEkjy8cIgxHq9R1QK8RvLdU3Cx9Ia
+	 D4UoQ8fD9lmew==
+Date: Fri, 14 Apr 2023 08:43:33 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: No Name <xbjfk.github@gmail.com>,
+	Quentin Monnet <quentin@isovalent.com>
+Cc: linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+	llvm@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: LLVM not detected in bpfutil due to LLVM 16 requiring c++17
+Message-ID: <20230414154333.GA1931632@dev-arch.thelio-3990X>
+References: <CALS7K9V1j6ufrQ=6nGjyHQCWb7-YiqNdctBWk8og1gW_q4C4dA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <74442.123041411213800533@us-mta-43.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALS7K9V1j6ufrQ=6nGjyHQCWb7-YiqNdctBWk8og1gW_q4C4dA@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Reagan,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+On Fri, Apr 14, 2023 at 10:36:35PM +1200, No Name wrote:
+> This is my first time reporting a bug, so apologies if I get something wrong.
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Thanks for the report! "See something, say something", even if it is not
+quite right out of the gate, we can get down to the bottom of it.
 
-Kernel information:
-    Commit message: Merge tag 'pinctrl-v6.3-3' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/linusw/linux-pinctrl
+> In tools/build/feature/Makefile, line 342, the c++ std is set to
+> gnu++14, whereas LLVM 16 now requires c++17 to include the headers.
+> This results in the llvm feature being falsely disabled for bpfutil.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84665
+I cannot find any reference to bpfutil either in tree or when doing a
+web search, did you mean bpftool? I am going to assume yes, so I have
+gone ahead and added Quentin (the maintainer of bpftool in MAINTAINERS)
+and bpf@vger.kernel.org to the thread.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
- waiting the udev queue being empty
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1470
-            Affected tests:
-                   s390x - Storage - blktests - nvmeof-mp
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+> Perhaps the --cxxflags, --ldflags and --libs options of llvm-config
+> should instead?
 
+The tools system is pretty much Greek to me, so I am hoping someone else
+will have a better idea of what is going on and how to fix it.
 
+For the record, I think I see the issue you are talking about on Fedora,
+which has clang-16, whereas I do not see the same issue on Arch Linux,
+which still has clang-15.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  $ clang --version | head -1
+  clang version 15.0.7
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+  $ make -C tools/bpf/bpftool -j(nproc) -s
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+  Auto-detecting system features:
+  ...                         clang-bpf-co-re: [ on  ]
+  ...                                    llvm: [ on  ]
+  ...                                  libcap: [ on  ]
+  ...                                  libbfd: [ on  ]
 
+compared to
+
+  $ clang --version | head -1
+  clang version 16.0.0 (Fedora 16.0.0-1.fc39)
+
+  $ make -C tools/bpf/bpftool -j(nproc) -s
+
+  Auto-detecting system features:
+  ...                         clang-bpf-co-re: [ on  ]
+  ...                                    llvm: [ OFF ]
+  ...                                  libcap: [ on  ]
+  ...                                  libbfd: [ on  ]
+
+This is the output of tools/build/feature/test-llvm.make.output on my
+machine, which seems to confirm that the headers expect to be compiled
+with '-std=c++17', but that is just a superficial observation at this
+point.
+
+  In file included from /usr/include/llvm/Support/raw_ostream.h:16,
+                   from test-llvm.cpp:3:
+  /usr/include/llvm/ADT/SmallVector.h: In static member function ‘static void llvm::SmallVectorTemplateBase<T, <anonymous> >::uninitialized_move(It1, It1, It2)’:
+  /usr/include/llvm/ADT/SmallVector.h:352:10: error: ‘uninitialized_move’ is not a member of ‘std’; did you mean ‘uninitialized_copy’?
+    352 |     std::uninitialized_move(I, E, Dest);
+        |          ^~~~~~~~~~~~~~~~~~
+        |          uninitialized_copy
+  In file included from /usr/include/llvm/ADT/StringRef.h:12,
+                   from /usr/include/llvm/Support/raw_ostream.h:17:
+  /usr/include/llvm/ADT/DenseMapInfo.h: At global scope:
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: error: ‘variant’ is not a member of ‘std’
+    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
+        |                                                    ^~~~~~~
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: note: ‘std::variant’ is only available from C++17 onwards
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: error: ‘variant’ is not a member of ‘std’
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: note: ‘std::variant’ is only available from C++17 onwards
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:62: error: expected parameter pack before ‘...’
+    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
+        |                                                              ^~~
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:62: error: template argument 1 is invalid
+  /usr/include/llvm/ADT/DenseMapInfo.h:294:65: error: expected unqualified-id before ‘>’ token
+    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
+        |                                                                 ^~
+  In file included from /usr/include/llvm/ADT/STLFunctionalExtras.h:18,
+                   from /usr/include/llvm/ADT/StringRef.h:13:
+  /usr/include/llvm/ADT/STLForwardCompat.h:46:35: error: ‘optional’ in namespace ‘std’ does not name a template type
+     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
+        |                                   ^~~~~~~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:46:30: note: ‘std::optional’ is only available from C++17 onwards
+     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
+        |                              ^~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:46:43: error: expected ‘,’ or ‘...’ before ‘<’ token
+     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
+        |                                           ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:47:13: error: ‘optional’ in namespace ‘std’ does not name a template type
+     47 |     -> std::optional<decltype(F(*O))> {
+        |             ^~~~~~~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:47:8: note: ‘std::optional’ is only available from C++17 onwards
+     47 |     -> std::optional<decltype(F(*O))> {
+        |        ^~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:47:21: error: expected initializer before ‘<’ token
+     47 |     -> std::optional<decltype(F(*O))> {
+        |                     ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:29: error: ‘optional’ is not a member of ‘std’
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                             ^~~~~~~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:29: note: ‘std::optional’ is only available from C++17 onwards
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:39: error: expected primary-expression before ‘>’ token
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                       ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:43: error: label ‘O’ referenced outside of any function
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                           ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:46: error: expected primary-expression before ‘const’
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                              ^~~~~
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:63: error: expression list treated as compound expression in initializer [-fpermissive]
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                                               ^
+  /usr/include/llvm/ADT/STLForwardCompat.h:56:64: error: expected ‘;’ before ‘->’ token
+     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
+        |                                                                ^
+        |                                                                ;
+     57 |     -> std::optional<decltype(F(*std::move(O)))> {
+        |     ~~                                                          
+  /usr/include/llvm/ADT/StringRef.h:104:54: error: expected ‘)’ before ‘Str’
+    104 |     /*implicit*/ constexpr StringRef(std::string_view Str)
+        |                                     ~                ^~~~
+        |                                                      )
+  /usr/include/llvm/ADT/StringRef.h:248:14: error: expected type-specifier
+    248 |     operator std::string_view() const {
+        |              ^~~
+  /usr/include/llvm/ADT/StringRef.h: In member function ‘size_t llvm::StringRef::find(char, size_t) const’:
+  /usr/include/llvm/ADT/StringRef.h:296:19: error: ‘string_view’ is not a member of ‘std’
+    296 |       return std::string_view(*this).find(C, From);
+        |                   ^~~~~~~~~~~
+  /usr/include/llvm/ADT/StringRef.h:296:19: note: ‘std::string_view’ is only available from C++17 onwards
+  /usr/include/llvm/Support/raw_ostream.h: At global scope:
+  /usr/include/llvm/Support/raw_ostream.h:252:38: error: ‘string_view’ in namespace ‘std’ does not name a type
+    252 |   raw_ostream &operator<<(const std::string_view &Str) {
+        |                                      ^~~~~~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:252:33: note: ‘std::string_view’ is only available from C++17 onwards
+    252 |   raw_ostream &operator<<(const std::string_view &Str) {
+        |                                 ^~~
+  /usr/include/llvm/Support/raw_ostream.h: In member function ‘llvm::raw_ostream& llvm::raw_ostream::operator<<(const int&)’:
+  /usr/include/llvm/Support/raw_ostream.h:253:22: error: request for member ‘data’ in ‘Str’, which is of non-class type ‘const int’
+    253 |     return write(Str.data(), Str.length());
+        |                      ^~~~
+  /usr/include/llvm/Support/raw_ostream.h:253:34: error: request for member ‘length’ in ‘Str’, which is of non-class type ‘const int’
+    253 |     return write(Str.data(), Str.length());
+        |                                  ^~~~~~
+  /usr/include/llvm/Support/raw_ostream.h: At global scope:
+  /usr/include/llvm/Support/raw_ostream.h:459:16: error: ‘optional’ in namespace ‘std’ does not name a template type
+    459 |   mutable std::optional<bool> HasColors;
+        |                ^~~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:459:11: note: ‘std::optional’ is only available from C++17 onwards
+    459 |   mutable std::optional<bool> HasColors;
+        |           ^~~
+  /usr/include/llvm/Support/raw_ostream.h:757:47: error: ‘std::nullopt_t’ has not been declared
+    757 | raw_ostream &operator<<(raw_ostream &OS, std::nullopt_t);
+        |                                               ^~~~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:761:53: error: ‘optional’ in namespace ‘std’ does not name a template type
+    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
+        |                                                     ^~~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:761:48: note: ‘std::optional’ is only available from C++17 onwards
+    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
+        |                                                ^~~
+  /usr/include/llvm/Support/raw_ostream.h:761:61: error: expected ‘,’ or ‘...’ before ‘<’ token
+    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
+        |                                                             ^
+  /usr/include/llvm/Support/raw_ostream.h: In function ‘llvm::raw_ostream& llvm::operator<<(raw_ostream&, int)’:
+  /usr/include/llvm/Support/raw_ostream.h:762:7: error: ‘O’ was not declared in this scope; did you mean ‘OS’?
+    762 |   if (O)
+        |       ^
+        |       OS
+  /usr/include/llvm/Support/raw_ostream.h:765:16: error: ‘nullopt’ is not a member of ‘std’
+    765 |     OS << std::nullopt;
+        |                ^~~~~~~
+  /usr/include/llvm/Support/raw_ostream.h:765:16: note: ‘std::nullopt’ is only available from C++17 onwards
+
+Cheers,
+Nathan
