@@ -1,42 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2DA7F1
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 08:04:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1904C433D2;
-	Fri, 14 Apr 2023 08:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681459465;
-	bh=kIJ6lK/Lc6cAvvvb9aZuILfOuK0T9xQHpTLzt8A9dFI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=e6CSSlSynnb8/8SQwximjDYsEgO3iB37cizeXObEuBX6UeZi8PxJbes/BFDKFHl1r
-	 J845+gmamcoMiwEHZXspDymX/EUrJ1c0x2LpLkUaRUwb6c4sSDKK9Lu9lzza8abojD
-	 RuKF8Ji5sBj5MXlRir50HWDq3CKnkFPF18u8iPwydZ2QdJMV1Oc4gP38WMyZgvAFAw
-	 bSzc8eH4UpRLtxV1eCsP8mnq61xV61x6SEdQd8P0WPIzpHETQ62DyT0FuRhFfBlMA8
-	 VFn8ZB8lzhZGvQZooZ11s139afw6PGuEVJO6I/2qXWP+S+ACcTnOg0CGC4JK84r2mZ
-	 5BgtQeI+xEWQQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Vineet Gupta <vgupta@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	David Hildenbrand <david@redhat.com>,
-	Vlastimil Babka <vbabka@suse.cz>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	llvm@lists.linux.dev,
-	Tom Rix <trix@redhat.com>,
-	"Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Naoya Horiguchi <naoya.horiguchi@nec.com>,
-	linux-snps-arc@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH] mm: make arch_has_descending_max_zone_pfns() static
-Date: Fri, 14 Apr 2023 10:03:53 +0200
-Message-Id: <20230414080418.110236-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4CB7F1
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 08:07:29 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 2E1AC5C00C7;
+	Fri, 14 Apr 2023 04:07:28 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 14 Apr 2023 04:07:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to; s=fm1; t=1681459648; x=1681546048; bh=Z+5OVprnxv
+	mJy54lJVl6CxDYP6IT5+FJyDN/trCBkx4=; b=0CkedSLtTI+vXsFUjtF6irf4oN
+	GPTLOGD5UpLTvZC3N3zET3jFrylUfkUN/yKfBu7ZFFAMfXb6kNC9gyjvCQ1w+rrf
+	/pSa2O8H+CF0n+SI+3zK1kz/8kUo5CnAE1/7NnF+543lUbMDLnnL9n46jeqNjrNH
+	0YF4y4iit0j01uq8fX7xARzk+zu9drFMhm92zrYkBh4XtG+KbKHT2FsGOiJiiZ4E
+	3DXl6XBRM4Cu6ar3M648z/Xw0Lmt5w0btfct0AaaBmUVHk5Ep8kPzI/W176qqAVd
+	xG/c3fpk234X5bQiQ/B/bF8aqbbTv11lokUWHivjsfVG9TkzfsWeSrzSUJTg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1681459648; x=1681546048; bh=Z+5OVprnxvmJy
+	54lJVl6CxDYP6IT5+FJyDN/trCBkx4=; b=Ycg8+FoImML3EQVI9oeDk34kkM8Gz
+	d+Ogu4Bc8uquvdSCpNyEUTFepwtay0+eSAtUE1X7napbeLchaeIFGDGsIdiyiHPS
+	a5AGn952tyFAaWQK6npqduJNveI7t0fJslCQ1bmX6nHwKVD40sUvlizWBTDa8osb
+	1ApoFp1OFNcko0U7hvTmZ2GFRxmBe/Or3YH7Q4NRz1PpbWHlRynrsLQoajOKp8Dx
+	27LNMrNkOoHcZRL5ci54npTtSRqDBKllTEXRyYdO+pjGC+ClKRDhivuxrFZUSUnK
+	3Cm8OgBkmoelZYYDw+SFdPTOfSArxgY9g1Nsj7Z3jaAb/IpxBKqMsVQcg==
+X-ME-Sender: <xms:vwk5ZPSZU2nbxPZHij6MeOFZ-g4-nSjIU8KOhFzjEps1Odw-2qzogA>
+    <xme:vwk5ZAzhz8GXdN8TeNF76xY02wFA4jmNL1TSNvp-UFgOXVwKYSxgB0pD9kFf0Z33I
+    CcCWWUjiE8B9KDZWAo>
+X-ME-Received: <xmr:vwk5ZE3yIyCyCXDHA4U2kc0M6bb5UhCDE95_NIJwu7QXyqIeKp868A-gOjJf>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekledgudeftdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
+    dtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhg
+    sehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpefhtedutdduveeileejje
+    etffehueejudehgfffjeduhfeuleeludfffefgffevkeenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihgh
+    horghtrdgtohhm
+X-ME-Proxy: <xmx:vwk5ZPDE3mTPWOu6KbbEnySnoZED1d_PRH0MTZnW7SY5D_kQmN1PHQ>
+    <xmx:vwk5ZIg-TQF91fLswW9kRzJ1Sx-2gFJ9hVtE7kEeArSt1R9BQ76ujA>
+    <xmx:vwk5ZDpsWAqJD4Py0yzB_g8hxNGRdN43vSoNJa9YxZid3-LXfHZHbg>
+    <xmx:wAk5ZAdgmgxuAEXYiZLYUHDKerHg0AOuvI_8qQy3NmkBkUZ1f4En3Q>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Apr 2023 04:07:26 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+To: linux-mips@vger.kernel.org
+Cc: llvm@lists.linux.dev,
+	tsbogend@alpha.franken.de,
+	ndesaulniers@google.com,
+	nathan@kernel.org,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 0/7] MIPS: LLVM toolchain support for more CPUs
+Date: Fri, 14 Apr 2023 09:06:54 +0100
+Message-Id: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,74 +68,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+This patchset is to add toolchain feature detection for most MIPS CPUs
+by adding more toolchain feature detections and fixing -march CFLAGS.
 
-clang produces a build failure on x86 for some randconfig builds
-after a change that moves around code to mm/mm_init.c:
+Thanks
+Jiaxun
 
-Cannot find symbol for section 2: .text.
-mm/mm_init.o: failed
+Jiaxun Yang (7):
+  MIPS: Move various toolchain ASE check to Kconfig
+  MIPS: Add toolchain feature dependency for microMIPS smartMIPS
+  MIPS: Detect toolchain support of workarounds in Kconfig
+  MIPS: Detect toolchain support of o32 ABI with 64 bit CPU
+  MIPS: Remove cc-option checks for -march=octeon
+  MIPS: Fallback CPU -march CFLAG to ISA level if unsupported
+  MIPS: Limit MIPS_MT_SMP support by ISA reversion
 
-I have not been able to figure out why this happens, but the __weak
-annotation on arch_has_descending_max_zone_pfns() is the trigger here.
+ arch/mips/Kconfig                | 68 ++++++++++++++++++++++++++++---
+ arch/mips/Makefile               | 70 +++++++++++---------------------
+ arch/mips/cavium-octeon/Kconfig  |  1 +
+ arch/mips/crypto/crc32-mips.c    |  4 +-
+ arch/mips/include/asm/asmmacro.h |  8 ++--
+ arch/mips/include/asm/ginvt.h    |  2 +-
+ arch/mips/include/asm/mipsregs.h | 10 ++---
+ arch/mips/include/asm/msa.h      |  4 +-
+ 8 files changed, 101 insertions(+), 66 deletions(-)
 
-Removing the weak function in favor of an open-coded Kconfig option
-check avoids the problem and becomes clearer as well as better to
-optimize by the compiler.
-
-Fixes: 9420f89db2dd ("mm: move most of core MM initialization to mm/mm_init.c")
-Cc: llvm@lists.linux.dev
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arc/mm/init.c | 5 -----
- include/linux/mm.h | 1 -
- mm/mm_init.c       | 4 ++--
- 3 files changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
-index ce4e939a7f07..2b89b6c53801 100644
---- a/arch/arc/mm/init.c
-+++ b/arch/arc/mm/init.c
-@@ -74,11 +74,6 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
- 		base, TO_MB(size), !in_use ? "Not used":"");
- }
- 
--bool arch_has_descending_max_zone_pfns(void)
--{
--	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
--}
--
- /*
-  * First memory setup routine called from setup_arch()
-  * 1. setup swapper's mm @init_mm
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index ada57b11bb5a..a13cc121841d 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3061,7 +3061,6 @@ extern void setup_per_cpu_pageset(void);
- extern int min_free_kbytes;
- extern int watermark_boost_factor;
- extern int watermark_scale_factor;
--extern bool arch_has_descending_max_zone_pfns(void);
- 
- /* nommu.c */
- extern atomic_long_t mmap_pages_allocated;
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 35302b7bca83..f6165747fd3e 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -1754,9 +1754,9 @@ static void __init free_area_init_memoryless_node(int nid)
-  * Some architectures, e.g. ARC may have ZONE_HIGHMEM below ZONE_NORMAL. For
-  * such cases we allow max_zone_pfn sorted in the descending order
-  */
--bool __weak arch_has_descending_max_zone_pfns(void)
-+static bool arch_has_descending_max_zone_pfns(void)
- {
--	return false;
-+	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
- }
- 
- /**
 -- 
-2.39.2
+2.39.2 (Apple Git-143)
 
