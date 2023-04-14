@@ -1,129 +1,78 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92EF630;
-	Fri, 14 Apr 2023 03:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681443195; x=1712979195;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8+H3Yn8mCHIQZVndb2RJ/hjT1NxIw/Q1dkpG63g8Tf8=;
-  b=TmQbypAXhk8vQ18V3GsGOY5+IVdyngRYPteq7XrGGDE+ZXE9ZK5Ccngb
-   nsC0Y8GkPuG6XtyLVwl+mRzhAKuIr+LIShLytYWVBLnt4yLXmEusVw37v
-   Jz3ER5s+XBYbQCIe+UC9bdRD2IXuGuj/ac1MgOVJXPXJiayjZNmpsQYLy
-   MDApj89wyv35nTaHz5UQpToK0Ae53y3bHFM+rhpcLX5QSRz9/nXoLNzDj
-   y6D/aSHeC1EV4AYdGW4qYXexxd2PPe559F8+3ltfp//7V2eQ2xBZCxAR5
-   ftOcWNWAr+6Ch1KiGwzroYcbKx4PUbqxE3MEDo1Ds7XbGd+9yUsHJu0xh
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="343134142"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="343134142"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 20:33:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10679"; a="722308925"
-X-IronPort-AV: E=Sophos;i="5.99,195,1677571200"; 
-   d="scan'208";a="722308925"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2023 20:33:13 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pnABU-000ZBj-2E;
-	Fri, 14 Apr 2023 03:33:12 +0000
-Date: Fri, 14 Apr 2023 11:32:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC net-next v2 3/4] vsock: Add lockless sendmsg() support
-Message-ID: <202304141112.r8VWcDK5-lkp@intel.com>
-References: <20230413-b4-vsock-dgram-v2-3-079cc7cee62e@bytedance.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDA87C
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 04:56:14 +0000 (UTC)
+Received: by mail-ej1-f43.google.com with SMTP id j17so33039018ejs.5
+        for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 21:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681448172; x=1684040172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VOahN4QlawcFehI7bLkgrg/iclvzg8ErEBM3r/6qSpk=;
+        b=CrORqfpgEv8CcZlXgF/ZZDgOnffuc+L7LYhC7/5nNBokxAsYwWGd2SiMnIDh06t/yn
+         G0ISeD9fIQso5ekz4J1JfFRORTNa6aEcTAl2cgvewdhKtfiONANh7mAFaNXOFwi8mZCM
+         Mjz4Rz/lbBn3jW1jecVUvMmuvet8mZChBaqe8tfA8p9geD0b2y61pVpH5dXgoVggy3q7
+         ecqW2ZO20JUowb8SaK5Et45JXOFKvaHBy760qPV7syOJzTiYT4T6SWFy6XRiThAV0vmD
+         XyUy2cc1Z/uaKnivvTjK6cl5plFMrhqrGsoJXhZjOjIewP5xIjppd50z0w2IlgCIqiv0
+         8N6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681448172; x=1684040172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VOahN4QlawcFehI7bLkgrg/iclvzg8ErEBM3r/6qSpk=;
+        b=NuBnc9PpBX1AHpRshJrff7aZ0sN6SNXBM8DsOrkLpnJsZWvRSbMevzktv96WqOcpdF
+         f39oRlXB0xtdpk17a9MNG4v8kMpBNZ4mNL9jXBvI/duPYYM5/Ha0XEelAygvOhab0Oij
+         pBCCgDY0q4AEUvuza+e5vezmBrUpfRPavt8adHiuFU5QxvYjgAqqAPujKokhyH4CtKFF
+         EznCNuPauVXhr+uis/Qg9PCeG0uzztjhb0b+/uBrOGJ/f7fucp/+bt8xNZQ05UC3bDnx
+         6WqMZvXkXFj47Uxn4mZ2HX3+tdbv/rxI1pwMpLErGnZKAcN4zG7Dq3rNl4MmgKYt/LgQ
+         CT9w==
+X-Gm-Message-State: AAQBX9d5IjHn5GW49QGR9nwYiOuV5ruOXo4NnnI63GxQOG4QyrsS+qtE
+	MnmG3tFuK/f0IO8vfHlepwJ6rfRosssnfk7UbF4=
+X-Google-Smtp-Source: AKy350YveSCh9e1itePQiC1fiBDMPTPosSx9uzFJv5U8GqasjFL8eDOOPHlNN4hQfkj2UU2eQ6eYskxDGzTh/tVAEsU=
+X-Received: by 2002:a17:907:968c:b0:94a:87d6:d39a with SMTP id
+ hd12-20020a170907968c00b0094a87d6d39amr2519987ejc.3.1681448171913; Thu, 13
+ Apr 2023 21:56:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230413-b4-vsock-dgram-v2-3-079cc7cee62e@bytedance.com>
+References: <20230412095912.188453-1-andrea.righi@canonical.com>
+In-Reply-To: <20230412095912.188453-1-andrea.righi@canonical.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 13 Apr 2023 21:56:00 -0700
+Message-ID: <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
+To: Andrea Righi <andrea.righi@canonical.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Paolo Pisati <paolo.pisati@canonical.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Bobby,
+On Wed, Apr 12, 2023 at 2:59=E2=80=AFAM Andrea Righi <andrea.righi@canonica=
+l.com> wrote:
+>
+> Building bpf selftests with clang can trigger errors like the following:
+>
+>   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
+> progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assignin=
+g to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-poin=
+ter-types]
+>         s =3D &nlk->sk;
+>           ^ ~~~~~~~~
+> 1 error generated.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on ed72bd5a6790a0c3747cb32b0427f921bd03bb71]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/virtio-vsock-support-dgram/20230414-082831
-base:   ed72bd5a6790a0c3747cb32b0427f921bd03bb71
-patch link:    https://lore.kernel.org/r/20230413-b4-vsock-dgram-v2-3-079cc7cee62e%40bytedance.com
-patch subject: [PATCH RFC net-next v2 3/4] vsock: Add lockless sendmsg() support
-config: i386-randconfig-a003-20230410 (https://download.01.org/0day-ci/archive/20230414/202304141112.r8VWcDK5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/de4d5e13dd5c747996abbc4e9ce38eeb3093ea01
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bobby-Eshleman/virtio-vsock-support-dgram/20230414-082831
-        git checkout de4d5e13dd5c747996abbc4e9ce38eeb3093ea01
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/vmw_vsock/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304141112.r8VWcDK5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/vmw_vsock/af_vsock.c:247:5: warning: no previous prototype for function 'vsock_remote_addr_update' [-Wmissing-prototypes]
-   int vsock_remote_addr_update(struct vsock_sock *vsk, struct sockaddr_vm *src)
-       ^
-   net/vmw_vsock/af_vsock.c:247:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vsock_remote_addr_update(struct vsock_sock *vsk, struct sockaddr_vm *src)
-   ^
-   static 
-   1 warning generated.
---
->> net/vmw_vsock/virtio_transport_common.c:1174:7: warning: variable 'skerr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (err)
-                       ^~~
-   net/vmw_vsock/virtio_transport_common.c:1194:15: note: uninitialized use occurs here
-           sk->sk_err = skerr;
-                        ^~~~~
-   net/vmw_vsock/virtio_transport_common.c:1174:3: note: remove the 'if' if its condition is always false
-                   if (err)
-                   ^~~~~~~~
-   net/vmw_vsock/virtio_transport_common.c:1166:11: note: initialize the variable 'skerr' to silence this warning
-           int skerr;
-                    ^
-                     = 0
-   1 warning generated.
-
-
-vim +/vsock_remote_addr_update +247 net/vmw_vsock/af_vsock.c
-
-   245	
-   246	/* The socket lock must be held by the caller */
- > 247	int vsock_remote_addr_update(struct vsock_sock *vsk, struct sockaddr_vm *src)
-   248	{
-   249		struct sockaddr_vm_rcu *old, *new;
-   250	
-   251		new = kmalloc(sizeof(*new), GFP_KERNEL);
-   252		if (!new)
-   253			return -ENOMEM;
-   254	
-   255		memcpy(&new->addr, src, sizeof(new->addr));
-   256		old = rcu_replace_pointer(vsk->remote_addr, new, lockdep_sock_is_held(sk_vsock(vsk)));
-   257		kfree_rcu(old, rcu);
-   258	
-   259		return 0;
-   260	}
-   261	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I cannot reproduce this and BPF CI doesn't complain about it either.
+What kind of clang do you use?
+Some special version and build flags?
