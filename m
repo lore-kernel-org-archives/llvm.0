@@ -1,84 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B3D33C0
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 15:49:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C7CCC433EF;
-	Fri, 14 Apr 2023 15:49:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681487364;
-	bh=5DqrhCTzuzTjvwCGlt19FA3g4stRfeUyytfgLiO4ps8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D+M4c8lZ8CKUyLB4075G4N7ODWaHSg88hJWbhdpIVYS8u7hwMnq7mfLEE+BniHyD6
-	 asCaVPm64ZeLyeyNT+N0Y6+uXFBgz8E7bJygkylSKH+9QA5IJT9yttrVxK6jqwCZfv
-	 mcev16XlcOWWVwZqZa3svHdx6UeQN9splmLRfZ6PUJB4OMfgKLqihc7YlLo9sHiy4Q
-	 ENYiYmQlt6YadBkHXG74JdINOamfMUJaUkXICj/tm4hnGviEnjxRcTG8fREkzOHriy
-	 Ove74Hq/km8t/N+sARfWLfYXXZsnOPXx4Kgf6P5LpHKBJ0i71O0haS/6m03hvzia75
-	 FkmDD8tCgTO1g==
-Date: Fri, 14 Apr 2023 08:49:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Tom Rix <trix@redhat.com>
-Cc: chunkuang.hu@kernel.org, p.zabel@pengutronix.de,
-	chunfeng.yun@mediatek.com, vkoul@kernel.org, kishon@kernel.org,
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-	ndesaulniers@google.com, granquet@baylibre.com,
-	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] phy: mediatek: fix returning garbage
-Message-ID: <20230414154921.GB1931632@dev-arch.thelio-3990X>
-References: <20230414122253.3171524-1-trix@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5188A2C9A
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 16:11:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681488700;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TG6yxGboHr2nkOmlagHXLSHk2OnyRbcdRk1XLWYEfvE=;
+	b=Bp/zCWDRmPG2mauPVZiBMw7TyPyXqRyHpMsiFzBpUljam7tYMlhPi/jOxgmouPh/xRi+fO
+	pA3s3B63N5/+13jy38V5x7rWsGlfUlyN45+7FYNOm+OjusaHmrLESf+wbcnsXQ4aEIm7Ok
+	5+IQmdm53UEIq/Z1v4Gpca/CKE2n3sA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-TfkVLDbrP9elSr4RKJPFgg-1; Fri, 14 Apr 2023 12:11:38 -0400
+X-MC-Unique: TfkVLDbrP9elSr4RKJPFgg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A4DA185A7AD
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 16:11:38 +0000 (UTC)
+Received: from [172.64.0.123] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7C7B22027043;
+	Fri, 14 Apr 2023 16:11:38 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 358): Test report for master
+ (6.3.0-rc6, mainline.kernel.org-clang, 829cca4d)
+Date: Fri, 14 Apr 2023 16:11:38 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414122253.3171524-1-trix@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <19970.123041412113900171@us-mta-584.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 14, 2023 at 08:22:53AM -0400, Tom Rix wrote:
-> clang reports
-> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
->   'ret' is uninitialized when used here [-Werror,-Wuninitialized]
->         if (ret)
->             ^~~
-> ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
-> 
-> Fixes: 45810d486bb4 ("phy: mediatek: add support for phy-mtk-hdmi-mt8195")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Angelo brought up a good point on another patch to fix this issue that
-we should probably be returning ret instead of unconditionally returning
--EINVAL but it sounds like it does not really matter at the moment since
-mtk_hdmi_pll_set_hw() can only return -EINVAL or 0.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-https://lore.kernel.org/ada769e0-0141-634f-3753-eb3a50f0eee3@collabora.com/
+Kernel information:
+    Commit message: Merge tag 'net-6.3-rc7' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/netdev/net
 
-> ---
->  drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> index abfc077fb0a8..c63294e451d6 100644
-> --- a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> +++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> @@ -292,9 +292,9 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *hdmi_phy, struct clk_hw *hw,
->  	if (!(digital_div <= 32 && digital_div >= 1))
->  		return -EINVAL;
->  
-> -	mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
-> -			    PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
-> -			    txposdiv, digital_div);
-> +	ret = mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
-> +				  PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
-> +				  txposdiv, digital_div);
->  	if (ret)
->  		return -EINVAL;
->  
-> -- 
-> 2.27.0
-> 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84666
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - nfsv4.2: generic/129: ./xfstests-run.sh: line 55:=
+ results/generic/129.dmesg: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1407
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: xfstests - cifsv3.11: generic/132: FAIL: tee: results/generi=
+c/generic-132.log: No space left on device
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1491
+            Affected tests:
+                  x86_64 (debug) - xfstests - cifsv3.11
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: selinux-policy: serge-testsuite: fatal: unable to access 'ht=
+tps://src.fedoraproject.org/tests/selinux.git/': The requested URL returned=
+ error: 503
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/3565986
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
