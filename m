@@ -1,143 +1,93 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD7C2F31
-	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 21:01:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681419699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YW49nMfAlEAIhF8wWwdDba5GEYhdAO8vC8KcHei04IE=;
-	b=YPS8I+91GG5aPmVB6o+7S/YR3Jc8T08TURxpYhqapuEk/1rZ/Ldy28oRA7VoRYM5Whcokd
-	KNIMdqmTuJC0PhobfSph7290merFhb7zYrRUSwa2iuu0bSswTR/bLL0m8kAJoSzFWy/Us4
-	K+f5z13B/3k5OP/0WI5zbAI3qS+6qt8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-28-yiJ88VAlPzSp62FuGIm-1g-1; Thu, 13 Apr 2023 17:01:36 -0400
-X-MC-Unique: yiJ88VAlPzSp62FuGIm-1g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AD77C
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 00:10:11 +0000 (UTC)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5FCF185A794
-	for <llvm@lists.linux.dev>; Thu, 13 Apr 2023 21:01:35 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id D51C440B3EDA;
-	Thu, 13 Apr 2023 21:01:35 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 29 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, de466448)
-Date: Thu, 13 Apr 2023 21:01:35 -0000
-To: llvm@lists.linux.dev
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4PyGzZ1vVRz4xFL;
+	Fri, 14 Apr 2023 10:10:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1681431004;
+	bh=Q7KsgvqsLrWieFE7M07Ww7Bl5ImVflY8xEb93QACjIM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=cOakumuv2DjMHDtWx/3C7Bm8wh4VSwSsx3518og5iYSSg0pD9S3WJFg7I+mgCDrFu
+	 wZwi4kVFHfCq94qKXCqycy8qQXmrxMkDiblK2Ckw1BzF5ewdHJyhfx++hCNzaDcu0e
+	 7lAN8OwhnL7WBqzzbBPCf/RcQ+PrJHBGiNKdSEMy5dYNhyLT4Rh/nDxciblhzGJc7v
+	 d8JvTZTLQsad1SCrBuXuj2ZcHXLnynbCLIBIoP4+05mcYjf+FHPYGvkRV3YXF4X+Mh
+	 eE7nMbDGAOv3TlCO1VKQJML9x10idZmDNRTYe9joFzNXSKh6u3CXXR0T52LP1MN8w/
+	 ISD8y/0082nOg==
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: ndesaulniers@google.com, "Borislav Petkov (AMD)" <bp@alien8.de>
+Cc: Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, x86@kernel.org, Nicholas Piggin
+ <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Nick Desaulniers
+ <ndesaulniers@google.com>
+Subject: Re: [PATCH 1/2] start_kernel: add no_stack_protector fn attr
+In-Reply-To: <20230412-no_stackp-v1-1-46a69b507a4b@google.com>
+References: <20230412-no_stackp-v1-0-46a69b507a4b@google.com>
+ <20230412-no_stackp-v1-1-46a69b507a4b@google.com>
+Date: Fri, 14 Apr 2023 10:09:58 +1000
+Message-ID: <87r0sn9ve1.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <13841.123041317013600885@us-mta-28.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Hi, we tested your kernel and here are the results:
+ndesaulniers@google.com writes:
+> Back during the discussion of
+> commit a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
+> we discussed the need for a function attribute to control the omission
+> of stack protectors on a per-function basis; at the time Clang had
+> support for no_stack_protector but GCC did not. This was fixed in
+> gcc-11. Now that the function attribute is available, let's start using
+> it.
+>
+> Callers of boot_init_stack_canary need to use this function attribute
+> unless they're compiled with -fno-stack-protector, otherwise the canary
+> stored in the stack slot of the caller will differ upon the call to
+> boot_init_stack_canary. This will lead to a call to __stack_chk_fail
+> then panic.
+>
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94722
+> Link: https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  arch/powerpc/kernel/smp.c           |  1 +
+>  include/linux/compiler_attributes.h | 12 ++++++++++++
+>  init/main.c                         |  3 ++-
+>  3 files changed, 15 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+> index 6b90f10a6c81..7d4c12b1abb7 100644
+> --- a/arch/powerpc/kernel/smp.c
+> +++ b/arch/powerpc/kernel/smp.c
+> @@ -1603,6 +1603,7 @@ static void add_cpu_to_masks(int cpu)
+>  }
+>  
+>  /* Activate a secondary processor. */
+> +__no_stack_protector
+>  void start_secondary(void *unused)
+>  {
+>  	unsigned int cpu = raw_smp_processor_id();
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: OK
+start_secondary() doesn't return, so it won't actually crash, but it
+obviously makes sense for it to be marked with __no_stack_protector.
 
+There's quite a few other places we could add __no_stack_protector
+annotations in powerpc code, and then make the changes to CFLAGS to
+disable stack protector conditional on GCC < 11.
 
-Kernel information:
-    Commit message: Merge tag 'for-linus-2023041201' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/hid/hid
+So I guess this patch is fine, but there's more that could be done.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84521
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-One or more kernel tests failed:
-    =E2=9D=97 Regression(s) detected:
-          x86_64 - xfstests - cifsv3.11
-                   Issue: xfstests - cifsv3.11: cp: error copying 'sub/e.2'=
- to 'sub/e.3': Input/output error
-                          https://gitlab.com/redhat/centos-stream/tests/ker=
-nel/kernel-tests/-/issues/1436
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7799740
-
-    Note: Any of these might not be a regression and/or we might have mista=
-kenly thought this issue to be fixed.
-          If it is not a regression, please ask the test maintainer to reop=
-en the issue and untag the regression from this execution.
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+cheers
