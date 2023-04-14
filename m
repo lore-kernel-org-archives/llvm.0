@@ -1,129 +1,172 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB5263CA
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 19:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681500101;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8Zi8cTz4Qn9IoJmCXbFRmW72xMUvdYl85L1mIXyAuMc=;
-	b=bEWElrwxHHYcRDeQDet7JzaG1lIsKAF2jHwQ2Yz/Feu4reUK4pNfRV2nWR+LSmiEPFULTW
-	szLt9tDgVMTtR1NL/QUMq0VSQvdQ/aHnVePBj27o3nuqZX9kfrsbP85zFWR/MNAX1MLSwb
-	uRtLcdblP+yCuKoPCIwlOg+hDjqetYA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-222-871j95oyMye_txqxcRT_Sw-1; Fri, 14 Apr 2023 15:21:40 -0400
-X-MC-Unique: 871j95oyMye_txqxcRT_Sw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00D36280A335
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 19:21:39 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DF61140C6E70;
-	Fri, 14 Apr 2023 19:21:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, 44149752)
-Date: Fri, 14 Apr 2023 19:21:38 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289F263DC;
+	Fri, 14 Apr 2023 20:16:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681503372; x=1713039372;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QJnIbU+555sjDhir4kYwr+Pnn4S1ezPNx+nzAlJyneY=;
+  b=CxZBcsK1l7Jhg84SP1gMpqsH/uwN1ggrrHFCB6rc2ScxEXaWtVbQNPhB
+   aEsDyPru7hq5lBuu5wSGnmZwNsVdT1Wt/+Wyeyhxqo9gXCTaTrC3ykIuP
+   EuG6R+0L4wclMTjD8UEWS7dBqC2E70OGCF8x2AhjXtS1XW+NFc228WY20
+   h5t80xV0ksAtRHvDai8Td45TbxHdjghX1m2fwwQgSQQIvatZY9xMw9dDb
+   xMIC4l1z6vnHy+Zfm8LQ+p9jEjtd2VBLqKJluxkejx4NyNd3pOpJlqjj/
+   PYZoVFnXhQP3urym8jn39uEhWqBv06jNdDpRzg15nxabTL/8yCvEAEVZd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="407445567"
+X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
+   d="scan'208";a="407445567"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 13:15:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="814016916"
+X-IronPort-AV: E=Sophos;i="5.99,197,1677571200"; 
+   d="scan'208";a="814016916"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 14 Apr 2023 13:15:47 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pnPpi-000ZuF-24;
+	Fri, 14 Apr 2023 20:15:46 +0000
+Date: Sat, 15 Apr 2023 04:15:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Lin <CTLIN0@nuvoton.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-sound:for-next 440/441] sound/soc/codecs/nau8825.c:2826:31:
+ warning: overlapping comparisons always evaluate to false
+Message-ID: <202304150432.zdu6MCpg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <28689.123041415214000267@us-mta-222.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+head:   813cca73b7c2b3cbb6ff4b2b6d515035318d690a
+commit: fc0b096c92918c2ba4d76411ea763fdeb2ef6b0d [440/441] ASoC: nau8825: Add delay control for input path
+config: arm-randconfig-r046-20230412 (https://download.01.org/0day-ci/archive/20230415/202304150432.zdu6MCpg-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git/commit/?id=fc0b096c92918c2ba4d76411ea763fdeb2ef6b0d
+        git remote add broonie-sound https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git
+        git fetch --no-tags broonie-sound for-next
+        git checkout fc0b096c92918c2ba4d76411ea763fdeb2ef6b0d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash sound/soc/codecs/
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304150432.zdu6MCpg-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'cgroup-for-6.3-rc6-fixes' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/tj/cgroup
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84670
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> sound/soc/codecs/nau8825.c:2826:31: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
+           if (nau8825->adc_delay < 125 && nau8825->adc_delay > 500)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
+vim +2826 sound/soc/codecs/nau8825.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  2757	
+  2758	static int nau8825_read_device_properties(struct device *dev,
+  2759		struct nau8825 *nau8825) {
+  2760		int ret;
+  2761	
+  2762		nau8825->jkdet_enable = device_property_read_bool(dev,
+  2763			"nuvoton,jkdet-enable");
+  2764		nau8825->jkdet_pull_enable = device_property_read_bool(dev,
+  2765			"nuvoton,jkdet-pull-enable");
+  2766		nau8825->jkdet_pull_up = device_property_read_bool(dev,
+  2767			"nuvoton,jkdet-pull-up");
+  2768		ret = device_property_read_u32(dev, "nuvoton,jkdet-polarity",
+  2769			&nau8825->jkdet_polarity);
+  2770		if (ret)
+  2771			nau8825->jkdet_polarity = 1;
+  2772		ret = device_property_read_u32(dev, "nuvoton,micbias-voltage",
+  2773			&nau8825->micbias_voltage);
+  2774		if (ret)
+  2775			nau8825->micbias_voltage = 6;
+  2776		ret = device_property_read_u32(dev, "nuvoton,vref-impedance",
+  2777			&nau8825->vref_impedance);
+  2778		if (ret)
+  2779			nau8825->vref_impedance = 2;
+  2780		ret = device_property_read_u32(dev, "nuvoton,sar-threshold-num",
+  2781			&nau8825->sar_threshold_num);
+  2782		if (ret)
+  2783			nau8825->sar_threshold_num = 4;
+  2784		ret = device_property_read_u32_array(dev, "nuvoton,sar-threshold",
+  2785			nau8825->sar_threshold, nau8825->sar_threshold_num);
+  2786		if (ret) {
+  2787			nau8825->sar_threshold[0] = 0x08;
+  2788			nau8825->sar_threshold[1] = 0x12;
+  2789			nau8825->sar_threshold[2] = 0x26;
+  2790			nau8825->sar_threshold[3] = 0x73;
+  2791		}
+  2792		ret = device_property_read_u32(dev, "nuvoton,sar-hysteresis",
+  2793			&nau8825->sar_hysteresis);
+  2794		if (ret)
+  2795			nau8825->sar_hysteresis = 0;
+  2796		ret = device_property_read_u32(dev, "nuvoton,sar-voltage",
+  2797			&nau8825->sar_voltage);
+  2798		if (ret)
+  2799			nau8825->sar_voltage = 6;
+  2800		ret = device_property_read_u32(dev, "nuvoton,sar-compare-time",
+  2801			&nau8825->sar_compare_time);
+  2802		if (ret)
+  2803			nau8825->sar_compare_time = 1;
+  2804		ret = device_property_read_u32(dev, "nuvoton,sar-sampling-time",
+  2805			&nau8825->sar_sampling_time);
+  2806		if (ret)
+  2807			nau8825->sar_sampling_time = 1;
+  2808		ret = device_property_read_u32(dev, "nuvoton,short-key-debounce",
+  2809			&nau8825->key_debounce);
+  2810		if (ret)
+  2811			nau8825->key_debounce = 3;
+  2812		ret = device_property_read_u32(dev, "nuvoton,jack-insert-debounce",
+  2813			&nau8825->jack_insert_debounce);
+  2814		if (ret)
+  2815			nau8825->jack_insert_debounce = 7;
+  2816		ret = device_property_read_u32(dev, "nuvoton,jack-eject-debounce",
+  2817			&nau8825->jack_eject_debounce);
+  2818		if (ret)
+  2819			nau8825->jack_eject_debounce = 0;
+  2820		nau8825->xtalk_enable = device_property_read_bool(dev,
+  2821			"nuvoton,crosstalk-enable");
+  2822		nau8825->adcout_ds = device_property_read_bool(dev, "nuvoton,adcout-drive-strong");
+  2823		ret = device_property_read_u32(dev, "nuvoton,adc-delay-ms", &nau8825->adc_delay);
+  2824		if (ret)
+  2825			nau8825->adc_delay = 125;
+> 2826		if (nau8825->adc_delay < 125 && nau8825->adc_delay > 500)
+  2827			dev_warn(dev, "Please set the suitable delay time!\n");
+  2828	
+  2829		nau8825->mclk = devm_clk_get(dev, "mclk");
+  2830		if (PTR_ERR(nau8825->mclk) == -EPROBE_DEFER) {
+  2831			return -EPROBE_DEFER;
+  2832		} else if (PTR_ERR(nau8825->mclk) == -ENOENT) {
+  2833			/* The MCLK is managed externally or not used at all */
+  2834			nau8825->mclk = NULL;
+  2835			dev_info(dev, "No 'mclk' clock found, assume MCLK is managed externally");
+  2836		} else if (IS_ERR(nau8825->mclk)) {
+  2837			return -EINVAL;
+  2838		}
+  2839	
+  2840		return 0;
+  2841	}
+  2842	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
