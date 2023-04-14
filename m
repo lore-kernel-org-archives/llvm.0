@@ -1,70 +1,44 @@
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A32D7F1
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 08:07:38 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id C9D3D5C00C5;
-	Fri, 14 Apr 2023 04:07:37 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 14 Apr 2023 04:07:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm1; t=1681459657; x=
-	1681546057; bh=60PlD2MyZgNIk/JWFkkJ/HhQAbjvbcqYgeFeUzfxVX4=; b=H
-	He3OMK/2SxbRROumRYhSngFQvhDhE4kCRXRU8t6K90E9JEud15H9tcWYRg7TIjzK
-	iKrE+81nDS/z4MTLXZDh7OZ9EVj9YS74G8NzjK8IATp9PWKDAweEuZS6Wg3Ms5jr
-	YasvTSAE63Xt0p1VQRYyYsEyCTQiD+b+iLgDWi/chNVeKBR1ShZnWZGvIZAr2eL8
-	YY/2bxhnI77u6coDnfSmG4gyu+WZaBEQLtoo1m+an2MyiHmuYEjmIoz+KkamR4ZH
-	0AzvOtJIz1ApZkPlGMwvW6EvSbnZPfaFvoeZ0lqSBTkyP+soJPiG/78nVAS11fMx
-	jAFUFil7WItDPAHkDZzrg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1681459657; x=
-	1681546057; bh=60PlD2MyZgNIk/JWFkkJ/HhQAbjvbcqYgeFeUzfxVX4=; b=R
-	+DG39sOCMrIJALMPWneV2LJlc+CZkek9A1KDDHhvyY8Vb4hHVjqWCZA89Ld15obA
-	+iDc3wP0EP8RQwCw3L4ezdn6O9s7t9OygoqXh+9zoTge023FOFu80GiK8XPWlZt3
-	TDPPrltz16kFBBTLAEKQjPitVfoITM5E5pcCR2aQCDa5FRbYao8772/aSYoCHIDE
-	zp3kkRNmWFC5JE2C/WcuFNvVRVls9wIyTmtOF33T6g4Sa6/frE5lI7UQGtLceKya
-	e0bRxluXMcnpwIfCEyHlUOPkSPFBHIaH8eCEWATFqAt/mrIXqXTK7Kf+R6awW/IO
-	QZll/P+Quv0WoDBUa9toQ==
-X-ME-Sender: <xms:yQk5ZPGaN1rUQFna8x-mEYOWpqRABLHNnTDnigPc-y1cEXEuuz67TQ>
-    <xme:yQk5ZMWaA3vHTFAFm0TB8jsXd8yq8zVMPQSgdAW0nQMcr0VvOnI6zg7FQ_IVO1uwI
-    WEomDhNNQE7tqVr1Mw>
-X-ME-Received: <xmr:yQk5ZBI8khikt4OunBDSISlyxnezvojPUH8T_esH9BFlF-bwI-P7zr6-3vbt>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekledgudeftdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestd
-    ekredtredttdenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigr
-    nhhgsehflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeefledufeehgedvue
-    dvvdegkefgvddttedtleeiiefhgeetudegkefhvdfhjeeftdenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflh
-    ihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:yQk5ZNErtxlHLeys8ijlcAKbYz7HTa4eEEFYhmvmWf5VKAQYDnc_Kw>
-    <xmx:yQk5ZFUyS2MyJW4W78tQ2h7rMKtCtBHpqj2LDafPyyXol4abHT25QA>
-    <xmx:yQk5ZINof3PxJ80zj0KkwvOOct6nSYvmGoXxDD7axp3gNqONtY-c6w>
-    <xmx:yQk5ZDek-AYqrtYk0JOtlo8BlreI9jkTylZJaeeT_maJ9QxUp7l3rA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Apr 2023 04:07:36 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-To: linux-mips@vger.kernel.org
-Cc: llvm@lists.linux.dev,
-	tsbogend@alpha.franken.de,
-	ndesaulniers@google.com,
-	nathan@kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 7/7] MIPS: Limit MIPS_MT_SMP support by ISA reversion
-Date: Fri, 14 Apr 2023 09:07:01 +0100
-Message-Id: <20230414080701.15503-8-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
-References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928BB7F1
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 08:29:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48916C433EF;
+	Fri, 14 Apr 2023 08:29:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681460997;
+	bh=ZTCTGs1pRDDeWJeFuWw6MUiRlW5oe3Xoqp/dtRXoY0o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MAc0WdvtaHTQOVtkR71fygSK181HZrRel+3IJliSMjR6cKg5dK5tzRhJDo1C1DnAE
+	 hRdOVKQ2Ip5CbFSmSU84TD3LjP7ZdbPWd1iGEkvtwgrXmdrDrxZL24zdDQq+t+5R+e
+	 aBVFLXTpI+fCGZ3onY6KnK+j5ZusS2MaxSB+PvBvc3oEf6H0ezQa+ujnG4ohFqS2/X
+	 K3N4MPlM3l668EE6yYNPGiaLVybR+oBVjQjHPIMuXLoVCdfMrdS7JE3jrGlZiCg4Bn
+	 INujmut/VQNgRi7hYKV5qlcf99alLjF5ILdUr25hqG42/inaD3nS1f2NgXnfW4/B0X
+	 uMTHV4E9s7kmQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Marco Elver <elver@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Tom Rix <trix@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	linux-kbuild@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for clang-14
+Date: Fri, 14 Apr 2023 10:29:27 +0200
+Message-Id: <20230414082943.1341757-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,29 +47,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-MIPS MT ASE is only available on ISA between Release 1 and Release 5.
-Add ISA level dependency to Kconfig to fix build.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Unknown -mllvm options don't cause an error to be returned by clang, so
+the cc-option helper adds the unknown hwasan-kernel-mem-intrinsic-prefix=1
+flag to CFLAGS with compilers that are new enough for hwasan but too
+old for this option. This causes a rather unreadable build failure:
+
+fixdep: error opening file: scripts/mod/.empty.o.d: No such file or directory
+make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:252: scripts/mod/empty.o] Error 2
+fixdep: error opening file: scripts/mod/.devicetable-offsets.s.d: No such file or directory
+make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 2
+
+Add a version check to only allow this option with clang-15, gcc-13
+or later versions.
+
+Fixes: 51287dcb00cc ("kasan: emit different calls for instrumentable memintrinsics")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/mips/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+There is probably a better way to do this than to add version checks,
+but I could not figure it out.
+---
+ scripts/Makefile.kasan | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 2374f859e001..a61f860771e2 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2194,7 +2194,8 @@ config CPU_R4K_CACHE_TLB
- config MIPS_MT_SMP
- 	bool "MIPS MT SMP support (1 TC on each available VPE)"
- 	default y
--	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MIPSR6 && !CPU_MICROMIPS
-+	depends on TARGET_ISA_REV > 0 && TARGET_ISA_REV < 6
-+	depends on SYS_SUPPORTS_MULTITHREADING && !CPU_MICROMIPS
- 	select CPU_MIPSR2_IRQ_VI
- 	select CPU_MIPSR2_IRQ_EI
- 	select SYNC_R4K
+diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+index c186110ffa20..2cea0592e343 100644
+--- a/scripts/Makefile.kasan
++++ b/scripts/Makefile.kasan
+@@ -69,7 +69,12 @@ CFLAGS_KASAN := -fsanitize=kernel-hwaddress \
+ 		$(instrumentation_flags)
+ 
+ # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
++ifeq ($(call clang-min-version, 150000),y)
+ CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
++endif
++ifeq ($(call gcc-min-version, 130000),y)
++CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
++endif
+ 
+ endif # CONFIG_KASAN_SW_TAGS
+ 
 -- 
-2.39.2 (Apple Git-143)
+2.39.2
 
