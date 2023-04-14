@@ -1,215 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4379D29A8
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 15:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99AEDC433D2;
-	Fri, 14 Apr 2023 15:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681487016;
-	bh=h08I4UOy8O/vtjA3/HDm61kRiDez4uSAqmuZ1CwmyKk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o+ECzy4SqCMH8bwiyhjQ9euvqHVKbvcLeCukW2ymofuf6GA7/E3fJT3/VqTlAPYlM
-	 WKQqWVBSNOCUNyQn/F/idt/Ui8effGoQvzoajqDVxeO4vI+OCzz+lmQQ8nFGCkpVB5
-	 m3LeiQl6OxvxAr53faXSmRecTvhvxUuX/yNNahppTdFpI7u4olbJJuwQbPjf7wZI0y
-	 0tZdQiDyqPmn94uKRuK6v5lzpJ2sz+rvTNqlr4gZpPIn8FB7GBq3+SI6s+d9CIFLlQ
-	 krrsfzY7rQ5jl6J9ZB2UutIVwp/ceKcakzBQTFEkjy8cIgxHq9R1QK8RvLdU3Cx9Ia
-	 D4UoQ8fD9lmew==
-Date: Fri, 14 Apr 2023 08:43:33 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: No Name <xbjfk.github@gmail.com>,
-	Quentin Monnet <quentin@isovalent.com>
-Cc: linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-	llvm@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: LLVM not detected in bpfutil due to LLVM 16 requiring c++17
-Message-ID: <20230414154333.GA1931632@dev-arch.thelio-3990X>
-References: <CALS7K9V1j6ufrQ=6nGjyHQCWb7-YiqNdctBWk8og1gW_q4C4dA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE4E29A8
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 15:43:51 +0000 (UTC)
+Received: by mail-wm1-f53.google.com with SMTP id hg25-20020a05600c539900b003f05a99a841so17959508wmb.3
+        for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 08:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681487030; x=1684079030;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YIbNvnDJkbKIDG9W40wHYyYsAJM6e0/VxMfL2/QQhNY=;
+        b=QXpobAtYXuuja8eAnUitUYYdJFXqaConoab7s3RSbwHCOgxUoVFacXpnQJBcpA+JQb
+         5N5tvC74yxQMqIqvqsop1XuZ4P+M7IaoRPqSbiY/1c2NeOfnuh57dPnBNRYtuvpOuOYQ
+         d4ovTXDqN0R67vvA11ZrTveMDsLXR57NkWxMv0PtrbwpGTIEWGxabu7b6Kc4D1VC/yVL
+         ftBSnh4ajvZ0aKZhcFea4GRL9sEGf22K7vufTD/WbjkwkdvB2NQi/q4ApF1oXBGDeC/I
+         rZ1ZyK37G8LoSePqAYSqaAqTRIwbVHk0FT/40JaT1ZT4QJ2nRUPTFVGP/TsKf+MDR3mA
+         gvvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681487030; x=1684079030;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YIbNvnDJkbKIDG9W40wHYyYsAJM6e0/VxMfL2/QQhNY=;
+        b=io5YQvl3oTfiS3K8mZqKriP+tCEjw8ivkDzhJ0IOfsRUDu9V8hnFFL1VeLEYgUQUXC
+         cgCsPx1FpMDqi4bTmxI09+0KdGpm5TF1I8HP6KlvF5FuQbkypDPho/uh+q65zED4gYtC
+         tUip60ZE6nNOMD0K77jTPy1qquOxk6qKIAYt7goRb56R5jR/5iXk4avb/bNhWFLStkY+
+         AFYLt/n+kGDx3vG28zZfbDgen2UZisefcMbV0PAfyz30Lx4gsD2L0rq/Ke13wYc4QESH
+         TA03Ss9V+rxm2CTaWjuJ1E0k+gZR2UzWz9JsUB5aGBljcXSw886oTMkylpDgAZRhkp1m
+         6hOQ==
+X-Gm-Message-State: AAQBX9d1G6dvfa58cLKdm2ipKKrQx5OBMlIIu/ktnPawH3R0lTV7SYrG
+	G6JK+hAJm+Zu6n6FUBKz768=
+X-Google-Smtp-Source: AKy350a/b5Qg3ihzSVs/aHO9rCG1Yz359ZRWoVzo+MEmLSGdlhob8RT2eGiZbxTyHZHZZ5H4owZGGA==
+X-Received: by 2002:a1c:770d:0:b0:3ed:95a5:3257 with SMTP id t13-20020a1c770d000000b003ed95a53257mr5261946wmi.2.1681487029517;
+        Fri, 14 Apr 2023 08:43:49 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r4-20020a05600c458400b003f0a090d798sm6510629wmo.18.2023.04.14.08.43.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 08:43:48 -0700 (PDT)
+Message-ID: <3242b862-0e7c-b7e9-14cd-3fbcbb87ba04@gmail.com>
+Date: Fri, 14 Apr 2023 17:43:46 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALS7K9V1j6ufrQ=6nGjyHQCWb7-YiqNdctBWk8og1gW_q4C4dA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] phy: mediatek: fix returning garbage
+Content-Language: en-US
+To: Tom Rix <trix@redhat.com>, chunkuang.hu@kernel.org,
+ p.zabel@pengutronix.de, chunfeng.yun@mediatek.com, vkoul@kernel.org,
+ kishon@kernel.org, angelogioacchino.delregno@collabora.com,
+ nathan@kernel.org, ndesaulniers@google.com, granquet@baylibre.com
+Cc: dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230414122253.3171524-1-trix@redhat.com>
+From: Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230414122253.3171524-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Reagan,
 
-On Fri, Apr 14, 2023 at 10:36:35PM +1200, No Name wrote:
-> This is my first time reporting a bug, so apologies if I get something wrong.
 
-Thanks for the report! "See something, say something", even if it is not
-quite right out of the gate, we can get down to the bottom of it.
+On 14/04/2023 14:22, Tom Rix wrote:
+> clang reports
+> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
+>    'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+>          if (ret)
+>              ^~~
+> ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
+> 
+> Fixes: 45810d486bb4 ("phy: mediatek: add support for phy-mtk-hdmi-mt8195")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-> In tools/build/feature/Makefile, line 342, the c++ std is set to
-> gnu++14, whereas LLVM 16 now requires c++17 to include the headers.
-> This results in the llvm feature being falsely disabled for bpfutil.
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-I cannot find any reference to bpfutil either in tree or when doing a
-web search, did you mean bpftool? I am going to assume yes, so I have
-gone ahead and added Quentin (the maintainer of bpftool in MAINTAINERS)
-and bpf@vger.kernel.org to the thread.
-
-> Perhaps the --cxxflags, --ldflags and --libs options of llvm-config
-> should instead?
-
-The tools system is pretty much Greek to me, so I am hoping someone else
-will have a better idea of what is going on and how to fix it.
-
-For the record, I think I see the issue you are talking about on Fedora,
-which has clang-16, whereas I do not see the same issue on Arch Linux,
-which still has clang-15.
-
-  $ clang --version | head -1
-  clang version 15.0.7
-
-  $ make -C tools/bpf/bpftool -j(nproc) -s
-
-  Auto-detecting system features:
-  ...                         clang-bpf-co-re: [ on  ]
-  ...                                    llvm: [ on  ]
-  ...                                  libcap: [ on  ]
-  ...                                  libbfd: [ on  ]
-
-compared to
-
-  $ clang --version | head -1
-  clang version 16.0.0 (Fedora 16.0.0-1.fc39)
-
-  $ make -C tools/bpf/bpftool -j(nproc) -s
-
-  Auto-detecting system features:
-  ...                         clang-bpf-co-re: [ on  ]
-  ...                                    llvm: [ OFF ]
-  ...                                  libcap: [ on  ]
-  ...                                  libbfd: [ on  ]
-
-This is the output of tools/build/feature/test-llvm.make.output on my
-machine, which seems to confirm that the headers expect to be compiled
-with '-std=c++17', but that is just a superficial observation at this
-point.
-
-  In file included from /usr/include/llvm/Support/raw_ostream.h:16,
-                   from test-llvm.cpp:3:
-  /usr/include/llvm/ADT/SmallVector.h: In static member function ‘static void llvm::SmallVectorTemplateBase<T, <anonymous> >::uninitialized_move(It1, It1, It2)’:
-  /usr/include/llvm/ADT/SmallVector.h:352:10: error: ‘uninitialized_move’ is not a member of ‘std’; did you mean ‘uninitialized_copy’?
-    352 |     std::uninitialized_move(I, E, Dest);
-        |          ^~~~~~~~~~~~~~~~~~
-        |          uninitialized_copy
-  In file included from /usr/include/llvm/ADT/StringRef.h:12,
-                   from /usr/include/llvm/Support/raw_ostream.h:17:
-  /usr/include/llvm/ADT/DenseMapInfo.h: At global scope:
-  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: error: ‘variant’ is not a member of ‘std’
-    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
-        |                                                    ^~~~~~~
-  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: note: ‘std::variant’ is only available from C++17 onwards
-  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: error: ‘variant’ is not a member of ‘std’
-  /usr/include/llvm/ADT/DenseMapInfo.h:294:52: note: ‘std::variant’ is only available from C++17 onwards
-  /usr/include/llvm/ADT/DenseMapInfo.h:294:62: error: expected parameter pack before ‘...’
-    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
-        |                                                              ^~~
-  /usr/include/llvm/ADT/DenseMapInfo.h:294:62: error: template argument 1 is invalid
-  /usr/include/llvm/ADT/DenseMapInfo.h:294:65: error: expected unqualified-id before ‘>’ token
-    294 | template <typename... Ts> struct DenseMapInfo<std::variant<Ts...>> {
-        |                                                                 ^~
-  In file included from /usr/include/llvm/ADT/STLFunctionalExtras.h:18,
-                   from /usr/include/llvm/ADT/StringRef.h:13:
-  /usr/include/llvm/ADT/STLForwardCompat.h:46:35: error: ‘optional’ in namespace ‘std’ does not name a template type
-     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
-        |                                   ^~~~~~~~
-  /usr/include/llvm/ADT/STLForwardCompat.h:46:30: note: ‘std::optional’ is only available from C++17 onwards
-     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
-        |                              ^~~
-  /usr/include/llvm/ADT/STLForwardCompat.h:46:43: error: expected ‘,’ or ‘...’ before ‘<’ token
-     46 | auto transformOptional(const std::optional<T> &O, const Function &F)
-        |                                           ^
-  /usr/include/llvm/ADT/STLForwardCompat.h:47:13: error: ‘optional’ in namespace ‘std’ does not name a template type
-     47 |     -> std::optional<decltype(F(*O))> {
-        |             ^~~~~~~~
-  /usr/include/llvm/ADT/STLForwardCompat.h:47:8: note: ‘std::optional’ is only available from C++17 onwards
-     47 |     -> std::optional<decltype(F(*O))> {
-        |        ^~~
-  /usr/include/llvm/ADT/STLForwardCompat.h:47:21: error: expected initializer before ‘<’ token
-     47 |     -> std::optional<decltype(F(*O))> {
-        |                     ^
-  /usr/include/llvm/ADT/STLForwardCompat.h:56:29: error: ‘optional’ is not a member of ‘std’
-     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
-        |                             ^~~~~~~~
-  /usr/include/llvm/ADT/STLForwardCompat.h:56:29: note: ‘std::optional’ is only available from C++17 onwards
-  /usr/include/llvm/ADT/STLForwardCompat.h:56:39: error: expected primary-expression before ‘>’ token
-     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
-        |                                       ^
-  /usr/include/llvm/ADT/STLForwardCompat.h:56:43: error: label ‘O’ referenced outside of any function
-     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
-        |                                           ^
-  /usr/include/llvm/ADT/STLForwardCompat.h:56:46: error: expected primary-expression before ‘const’
-     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
-        |                                              ^~~~~
-  /usr/include/llvm/ADT/STLForwardCompat.h:56:63: error: expression list treated as compound expression in initializer [-fpermissive]
-     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
-        |                                                               ^
-  /usr/include/llvm/ADT/STLForwardCompat.h:56:64: error: expected ‘;’ before ‘->’ token
-     56 | auto transformOptional(std::optional<T> &&O, const Function &F)
-        |                                                                ^
-        |                                                                ;
-     57 |     -> std::optional<decltype(F(*std::move(O)))> {
-        |     ~~                                                          
-  /usr/include/llvm/ADT/StringRef.h:104:54: error: expected ‘)’ before ‘Str’
-    104 |     /*implicit*/ constexpr StringRef(std::string_view Str)
-        |                                     ~                ^~~~
-        |                                                      )
-  /usr/include/llvm/ADT/StringRef.h:248:14: error: expected type-specifier
-    248 |     operator std::string_view() const {
-        |              ^~~
-  /usr/include/llvm/ADT/StringRef.h: In member function ‘size_t llvm::StringRef::find(char, size_t) const’:
-  /usr/include/llvm/ADT/StringRef.h:296:19: error: ‘string_view’ is not a member of ‘std’
-    296 |       return std::string_view(*this).find(C, From);
-        |                   ^~~~~~~~~~~
-  /usr/include/llvm/ADT/StringRef.h:296:19: note: ‘std::string_view’ is only available from C++17 onwards
-  /usr/include/llvm/Support/raw_ostream.h: At global scope:
-  /usr/include/llvm/Support/raw_ostream.h:252:38: error: ‘string_view’ in namespace ‘std’ does not name a type
-    252 |   raw_ostream &operator<<(const std::string_view &Str) {
-        |                                      ^~~~~~~~~~~
-  /usr/include/llvm/Support/raw_ostream.h:252:33: note: ‘std::string_view’ is only available from C++17 onwards
-    252 |   raw_ostream &operator<<(const std::string_view &Str) {
-        |                                 ^~~
-  /usr/include/llvm/Support/raw_ostream.h: In member function ‘llvm::raw_ostream& llvm::raw_ostream::operator<<(const int&)’:
-  /usr/include/llvm/Support/raw_ostream.h:253:22: error: request for member ‘data’ in ‘Str’, which is of non-class type ‘const int’
-    253 |     return write(Str.data(), Str.length());
-        |                      ^~~~
-  /usr/include/llvm/Support/raw_ostream.h:253:34: error: request for member ‘length’ in ‘Str’, which is of non-class type ‘const int’
-    253 |     return write(Str.data(), Str.length());
-        |                                  ^~~~~~
-  /usr/include/llvm/Support/raw_ostream.h: At global scope:
-  /usr/include/llvm/Support/raw_ostream.h:459:16: error: ‘optional’ in namespace ‘std’ does not name a template type
-    459 |   mutable std::optional<bool> HasColors;
-        |                ^~~~~~~~
-  /usr/include/llvm/Support/raw_ostream.h:459:11: note: ‘std::optional’ is only available from C++17 onwards
-    459 |   mutable std::optional<bool> HasColors;
-        |           ^~~
-  /usr/include/llvm/Support/raw_ostream.h:757:47: error: ‘std::nullopt_t’ has not been declared
-    757 | raw_ostream &operator<<(raw_ostream &OS, std::nullopt_t);
-        |                                               ^~~~~~~~~
-  /usr/include/llvm/Support/raw_ostream.h:761:53: error: ‘optional’ in namespace ‘std’ does not name a template type
-    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
-        |                                                     ^~~~~~~~
-  /usr/include/llvm/Support/raw_ostream.h:761:48: note: ‘std::optional’ is only available from C++17 onwards
-    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
-        |                                                ^~~
-  /usr/include/llvm/Support/raw_ostream.h:761:61: error: expected ‘,’ or ‘...’ before ‘<’ token
-    761 | raw_ostream &operator<<(raw_ostream &OS, const std::optional<T> &O) {
-        |                                                             ^
-  /usr/include/llvm/Support/raw_ostream.h: In function ‘llvm::raw_ostream& llvm::operator<<(raw_ostream&, int)’:
-  /usr/include/llvm/Support/raw_ostream.h:762:7: error: ‘O’ was not declared in this scope; did you mean ‘OS’?
-    762 |   if (O)
-        |       ^
-        |       OS
-  /usr/include/llvm/Support/raw_ostream.h:765:16: error: ‘nullopt’ is not a member of ‘std’
-    765 |     OS << std::nullopt;
-        |                ^~~~~~~
-  /usr/include/llvm/Support/raw_ostream.h:765:16: note: ‘std::nullopt’ is only available from C++17 onwards
-
-Cheers,
-Nathan
+> ---
+>   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+> index abfc077fb0a8..c63294e451d6 100644
+> --- a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+> +++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+> @@ -292,9 +292,9 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *hdmi_phy, struct clk_hw *hw,
+>   	if (!(digital_div <= 32 && digital_div >= 1))
+>   		return -EINVAL;
+>   
+> -	mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
+> -			    PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
+> -			    txposdiv, digital_div);
+> +	ret = mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
+> +				  PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
+> +				  txposdiv, digital_div);
+>   	if (ret)
+>   		return -EINVAL;
+>   
