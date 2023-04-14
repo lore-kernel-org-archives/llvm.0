@@ -1,120 +1,107 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C642C9A
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 16:16:11 +0000 (UTC)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EFDGa9000385;
-	Fri, 14 Apr 2023 16:15:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=RpAjtv77c3dRhMWtwrys0GqqNyVgx8vpDE89fectelk=;
- b=HJHZQclP6Z3x2k4AE6TMpOc3p3WyV+QmZvnv1rR68o4I5xxlT2cZ/+CdHTW5SCrxwzu5
- o4f5Va/KhvAAsirsIKFqt41Av6XUl5gx4DEyIDL4Sbj62BEkfsPysdR3LbYYiS7tPN3g
- Ez20moBGhPVQiKVWtLqkdmP4HKhuQnQ7PANuszxmKnF4HzNJT2H8Kt24PPc4p3Cw5DWY
- t5qw4LsHgdOgxDRsxtkfOx6gqrSzDK4JQ0s7sctTfDNipxz7RNzDusr80xh4ZsNJJk1w
- ys2R9uVz4uKzkzLHYhPjhzZSCQ1g+IJne6H4kFc6FkOVXRFdFKuopyd3Tmi/rhEKEZGw Cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3py999tfkh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 14 Apr 2023 16:15:47 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33EFEWAB009783;
-	Fri, 14 Apr 2023 16:15:46 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3py999tfj7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 14 Apr 2023 16:15:46 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-	by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33E3dPhX018750;
-	Fri, 14 Apr 2023 16:15:43 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m1btbw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 14 Apr 2023 16:15:43 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33EGFfnU30998922
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 14 Apr 2023 16:15:41 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1D94820043;
-	Fri, 14 Apr 2023 16:15:41 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3949E20040;
-	Fri, 14 Apr 2023 16:15:40 +0000 (GMT)
-Received: from heavy (unknown [9.171.89.218])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 14 Apr 2023 16:15:40 +0000 (GMT)
-Date: Fri, 14 Apr 2023 18:15:38 +0200
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-To: Andrea Righi <andrea.righi@canonical.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-        Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
-        Paolo Pisati <paolo.pisati@canonical.com>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
-Message-ID: <q5rj72tmwlpzx6qgkromem5t7q6xmen52aavfr65olnuv52f3z@wzs4p3xz3635>
-References: <20230412095912.188453-1-andrea.righi@canonical.com>
- <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
- <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5083C2C9A
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 16:26:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B58C433D2;
+	Fri, 14 Apr 2023 16:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681489568;
+	bh=9dGs3TW9SOqFu3PmMFt8oVQybRajp0/o5j5Brj6gn0o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j3qAa/tCEuOQUzRwfLB0aGf7iU1bf2YL4bclomJmgllHNHUVZqFxLgxPN0hwSBsr2
+	 6cpRt5bVCm5ItQtZV92nvqQpmEqU2syQzwuxx+Cy+ss4E1JBzJncXuTRVgzChvksm7
+	 yRqyNUv8VxLZn99sZaTBQ+STa2c+xj2e/1Fvd/d/9l7phb3zYlGxcv5fOtz1cD9al7
+	 vESoRZA+A25yjhW9kPcijjWuR7QFfSBAyXa9U4Cl25dUG0mHUVVuQhjN0h8eKCuA9C
+	 nOxX1dIzLW7gm9XRPNGRBzB3/M4lhNUGD3nsNDYq5/8zavX9b/DeqWIbZkAbVrn2ox
+	 L9DBeg9yxx2Cw==
+Date: Fri, 14 Apr 2023 09:26:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Tom Rix <trix@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for
+ clang-14
+Message-ID: <20230414162605.GA2161385@dev-arch.thelio-3990X>
+References: <20230414082943.1341757-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UqRBtxknN6WEuZnVDVXRbt06hx3mQ1k9
-X-Proofpoint-GUID: CeKvyijkGrCWLD_t0crn5f_K5gZ88OdP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-14_08,2023-04-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 clxscore=1011 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304140141
+In-Reply-To: <20230414082943.1341757-1-arnd@kernel.org>
 
-On Fri, Apr 14, 2023 at 08:15:03AM +0200, Andrea Righi wrote:
-> On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
-> > On Wed, Apr 12, 2023 at 2:59 AM Andrea Righi <andrea.righi@canonical.com> wrote:
-> > >
-> > > Building bpf selftests with clang can trigger errors like the following:
-> > >
-> > >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
-> > > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-pointer-types]
-> > >         s = &nlk->sk;
-> > >           ^ ~~~~~~~~
-> > > 1 error generated.
-> > 
-> > I cannot reproduce this and BPF CI doesn't complain about it either.
-> > What kind of clang do you use?
-> > Some special version and build flags?
+On Fri, Apr 14, 2023 at 10:29:27AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special build
-> flag (unless Ubuntu enables some different default flags, but it
-> shouldn't be the case... I'll double check).
+> Unknown -mllvm options don't cause an error to be returned by clang, so
+> the cc-option helper adds the unknown hwasan-kernel-mem-intrinsic-prefix=1
+> flag to CFLAGS with compilers that are new enough for hwasan but too
+
+Hmmm, how did a change like commit 0e1aa5b62160 ("kcsan: Restrict
+supported compilers") work if cc-option does not work with unknown
+'-mllvm' flags (or did it)? That definitely seems like a problem, as I
+see a few different places where '-mllvm' options are used with
+cc-option. I guess I will leave that up to the sanitizer folks to
+comment on that further, one small comment below.
+
+> old for this option. This causes a rather unreadable build failure:
 > 
-> -Andrea
+> fixdep: error opening file: scripts/mod/.empty.o.d: No such file or directory
+> make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:252: scripts/mod/empty.o] Error 2
+> fixdep: error opening file: scripts/mod/.devicetable-offsets.s.d: No such file or directory
+> make[4]: *** [/home/arnd/arm-soc/scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 2
+> 
+> Add a version check to only allow this option with clang-15, gcc-13
+> or later versions.
+> 
+> Fixes: 51287dcb00cc ("kasan: emit different calls for instrumentable memintrinsics")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> There is probably a better way to do this than to add version checks,
+> but I could not figure it out.
+> ---
+>  scripts/Makefile.kasan | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+> index c186110ffa20..2cea0592e343 100644
+> --- a/scripts/Makefile.kasan
+> +++ b/scripts/Makefile.kasan
+> @@ -69,7 +69,12 @@ CFLAGS_KASAN := -fsanitize=kernel-hwaddress \
+>  		$(instrumentation_flags)
+>  
+>  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
+> +ifeq ($(call clang-min-version, 150000),y)
+>  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
+> +endif
+> +ifeq ($(call gcc-min-version, 130000),y)
+> +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
+> +endif
 
-Hi,
+I do not think you need to duplicate this block, I think
 
-FWIW, I see similar errors when I don't use recent pahole.
+  ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
+  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
+  endif
 
-Best regards,
-Ilya
+would work, as only one of those conditions can be true at a time.
+
+Cheers,
+Nathan
