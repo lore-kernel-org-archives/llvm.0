@@ -1,152 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5188A2C9A
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 16:11:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681488700;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TG6yxGboHr2nkOmlagHXLSHk2OnyRbcdRk1XLWYEfvE=;
-	b=Bp/zCWDRmPG2mauPVZiBMw7TyPyXqRyHpMsiFzBpUljam7tYMlhPi/jOxgmouPh/xRi+fO
-	pA3s3B63N5/+13jy38V5x7rWsGlfUlyN45+7FYNOm+OjusaHmrLESf+wbcnsXQ4aEIm7Ok
-	5+IQmdm53UEIq/Z1v4Gpca/CKE2n3sA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-TfkVLDbrP9elSr4RKJPFgg-1; Fri, 14 Apr 2023 12:11:38 -0400
-X-MC-Unique: TfkVLDbrP9elSr4RKJPFgg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A4DA185A7AD
-	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 16:11:38 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7C7B22027043;
-	Fri, 14 Apr 2023 16:11:38 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, 829cca4d)
-Date: Fri, 14 Apr 2023 16:11:38 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C642C9A
+	for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 16:16:11 +0000 (UTC)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33EFDGa9000385;
+	Fri, 14 Apr 2023 16:15:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=RpAjtv77c3dRhMWtwrys0GqqNyVgx8vpDE89fectelk=;
+ b=HJHZQclP6Z3x2k4AE6TMpOc3p3WyV+QmZvnv1rR68o4I5xxlT2cZ/+CdHTW5SCrxwzu5
+ o4f5Va/KhvAAsirsIKFqt41Av6XUl5gx4DEyIDL4Sbj62BEkfsPysdR3LbYYiS7tPN3g
+ Ez20moBGhPVQiKVWtLqkdmP4HKhuQnQ7PANuszxmKnF4HzNJT2H8Kt24PPc4p3Cw5DWY
+ t5qw4LsHgdOgxDRsxtkfOx6gqrSzDK4JQ0s7sctTfDNipxz7RNzDusr80xh4ZsNJJk1w
+ ys2R9uVz4uKzkzLHYhPjhzZSCQ1g+IJne6H4kFc6FkOVXRFdFKuopyd3Tmi/rhEKEZGw Cw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3py999tfkh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Apr 2023 16:15:47 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33EFEWAB009783;
+	Fri, 14 Apr 2023 16:15:46 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3py999tfj7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Apr 2023 16:15:46 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+	by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33E3dPhX018750;
+	Fri, 14 Apr 2023 16:15:43 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pu0m1btbw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Apr 2023 16:15:43 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33EGFfnU30998922
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 14 Apr 2023 16:15:41 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1D94820043;
+	Fri, 14 Apr 2023 16:15:41 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3949E20040;
+	Fri, 14 Apr 2023 16:15:40 +0000 (GMT)
+Received: from heavy (unknown [9.171.89.218])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 14 Apr 2023 16:15:40 +0000 (GMT)
+Date: Fri, 14 Apr 2023 18:15:38 +0200
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+To: Andrea Righi <andrea.righi@canonical.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+        Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
+Message-ID: <q5rj72tmwlpzx6qgkromem5t7q6xmen52aavfr65olnuv52f3z@wzs4p3xz3635>
+References: <20230412095912.188453-1-andrea.righi@canonical.com>
+ <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
+ <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <19970.123041412113900171@us-mta-584.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UqRBtxknN6WEuZnVDVXRbt06hx3mQ1k9
+X-Proofpoint-GUID: CeKvyijkGrCWLD_t0crn5f_K5gZ88OdP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_08,2023-04-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 clxscore=1011 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304140141
 
-Hi, we tested your kernel and here are the results:
+On Fri, Apr 14, 2023 at 08:15:03AM +0200, Andrea Righi wrote:
+> On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
+> > On Wed, Apr 12, 2023 at 2:59 AM Andrea Righi <andrea.righi@canonical.com> wrote:
+> > >
+> > > Building bpf selftests with clang can trigger errors like the following:
+> > >
+> > >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
+> > > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-pointer-types]
+> > >         s = &nlk->sk;
+> > >           ^ ~~~~~~~~
+> > > 1 error generated.
+> > 
+> > I cannot reproduce this and BPF CI doesn't complain about it either.
+> > What kind of clang do you use?
+> > Some special version and build flags?
+> 
+> I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special build
+> flag (unless Ubuntu enables some different default flags, but it
+> shouldn't be the case... I'll double check).
+> 
+> -Andrea
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Hi,
 
-Tested-by: CKI Project <cki-project@redhat.com>
+FWIW, I see similar errors when I don't use recent pahole.
 
-Kernel information:
-    Commit message: Merge tag 'net-6.3-rc7' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84666
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - nfsv4.2: generic/129: ./xfstests-run.sh: line 55:=
- results/generic/129.dmesg: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1407
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: xfstests - cifsv3.11: generic/132: FAIL: tee: results/generi=
-c/generic-132.log: No space left on device
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1491
-            Affected tests:
-                  x86_64 (debug) - xfstests - cifsv3.11
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: selinux-policy: serge-testsuite: fatal: unable to access 'ht=
-tps://src.fedoraproject.org/tests/selinux.git/': The requested URL returned=
- error: 503
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/3565986
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Best regards,
+Ilya
