@@ -1,137 +1,141 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357F4A21
-	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 08:31:43 +0000 (UTC)
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F24259A
+	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 13:41:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681566101;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZmVlmIpECAyRGfWheZ4P67eZQDYujpWfEyk+21u0GGY=;
+	b=Yd+aBP/gK3GjyHVKRgD39i7KnU9Gxky8TPJnwk2vScWELVhfTLA78UG4qdybz92Bs5UqkT
+	V3RnoamQX45YejR93iB4fXaYttfbufnG66+vYo7QeGVxoRFFHis19tutk3jsflGYEPO/T1
+	rPUUYBFj0jlldXoCmIJ6jJmdusCnwhI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-541-BgVamqsUP-CrYd8hD3L0Tw-1; Sat, 15 Apr 2023 09:41:40 -0400
+X-MC-Unique: BgVamqsUP-CrYd8hD3L0Tw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0FC803F22F
-	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 08:31:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1681547496;
-	bh=Wx0/JegDs5ydht80NXH/UwxmxbYUu5hxKxJx5a7E6kw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=HpqfEn5C9IhKxg6Ssf3iFKsRu9iznJhTdwVvODx6cLELtb/qYI/YQCpqmr9GPR4E3
-	 7fnVLLWjHzDgQiW13sC93GerI0iMIiPI5fMPGLXgvEgR2vtQt9RArCt8vi6f3V+Awp
-	 TT0P0RwvzQJt9dF2ffx7zueH1RN3m4j5NlPxy/6nE5ufJ3oZCyuSyGcDhEbloSV24C
-	 DAcWUH+vIWd6D2qMIo93xr1ExUYoW5QMOi14QgXbmtg4nC4+NjkhRVWy+ATunxNRAZ
-	 zs4/R+EJXytnbEjsnRzi8p4sDLlGOUemfpakIC0vm4jFYnrdnhZD7XEpa8C0Q7d6NB
-	 jmDJ9w8mMHJAA==
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2a8a9ba55deso969281fa.2
-        for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 01:31:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681547495; x=1684139495;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wx0/JegDs5ydht80NXH/UwxmxbYUu5hxKxJx5a7E6kw=;
-        b=USBcSVMQhm+IpI0XDQrTLn4ynOeA9/R1mO1Ce/snCgFzqAQOwtPMgAFklHddP0BvEA
-         1cfExpn7USG6mbeHRRBbGr6C0u0qq8o8WJ2P1/oD1cXjimJ44EteRGVxEXl0MAFVd3zA
-         LZPOr4+fzrsioOPYZalCsQxgR3G+IgzDCXAVgYBLRnHrvglK+vCQbkp5h7xZxmYqHZ1c
-         q9W4O1IkwKo11Tie2ijseiHy/3tY1spDBFKvaJU7IBr++jqHz9GlOyOBxS1CFD6C6kU5
-         ERw/Zam27/R3bsq8l5qOdPSkLF80NOu2Zx1bKDAopmrvBfBMpNcuvjtL8+fQctiSHrzg
-         m5iQ==
-X-Gm-Message-State: AAQBX9cjJ/Ze+hqD7ovvRBuajXXZYddRlx5rkD+Enj6Ekgm/M3Bv18Tt
-	d4Jrt3/XCe/6VJnwEjWIOBZKeYM04xB6aXgUL6B+xsgHbQ0VmNEw5yW3DiHbVs0MdRm1PCguarh
-	z70+HAeQCugyZsmVdXjzObokj5NPRppc=
-X-Received: by 2002:a17:907:2d1f:b0:94f:322d:909d with SMTP id gs31-20020a1709072d1f00b0094f322d909dmr9553ejc.63.1681547474682;
-        Sat, 15 Apr 2023 01:31:14 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bD5nX03JewNoORuQdFHtYzSIEKXUwgdDNHDz4qbxSX6RiDgl4Lw29zLgKKwShLulQpqTQmQQ==
-X-Received: by 2002:a17:907:2d1f:b0:94f:322d:909d with SMTP id gs31-20020a1709072d1f00b0094f322d909dmr9518ejc.63.1681547474284;
-        Sat, 15 Apr 2023 01:31:14 -0700 (PDT)
-Received: from localhost (host-87-18-123-182.retail.telecomitalia.it. [87.18.123.182])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1709064a4a00b0094a4e970508sm3491554ejv.57.2023.04.15.01.31.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 01:31:13 -0700 (PDT)
-Date: Sat, 15 Apr 2023 10:31:13 +0200
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Paolo Pisati <paolo.pisati@canonical.com>,
-	bpf <bpf@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
-Message-ID: <ZDpg0YmXpZFlvmpM@righiandr-XPS-13-7390>
-References: <20230412095912.188453-1-andrea.righi@canonical.com>
- <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
- <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390>
- <q5rj72tmwlpzx6qgkromem5t7q6xmen52aavfr65olnuv52f3z@wzs4p3xz3635>
- <ZDl/KFLy7wOBa2tj@righiandr-XPS-13-7390>
- <CAADnVQJFxoYqBisj4w_Mm35mf3gR6YTK0QvNjQfVSjfcQK33yw@mail.gmail.com>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1556185A791
+	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 13:41:39 +0000 (UTC)
+Received: from [172.64.0.123] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CACF42166B26;
+	Sat, 15 Apr 2023 13:41:39 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 91 of 358): Test report for master
+ (6.3.0-rc6, mainline.kernel.org-clang, 7a934f4b)
+Date: Sat, 15 Apr 2023 13:41:39 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJFxoYqBisj4w_Mm35mf3gR6YTK0QvNjQfVSjfcQK33yw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <41613.123041509414000144@us-mta-541.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 14, 2023 at 06:15:41PM -0700, Alexei Starovoitov wrote:
-> On Fri, Apr 14, 2023 at 9:28 AM Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > On Fri, Apr 14, 2023 at 06:15:38PM +0200, Ilya Leoshkevich wrote:
-> > > On Fri, Apr 14, 2023 at 08:15:03AM +0200, Andrea Righi wrote:
-> > > > On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
-> > > > > On Wed, Apr 12, 2023 at 2:59 AM Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > >
-> > > > > > Building bpf selftests with clang can trigger errors like the following:
-> > > > > >
-> > > > > >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
-> > > > > > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompatible-pointer-types]
-> > > > > >         s = &nlk->sk;
-> > > > > >           ^ ~~~~~~~~
-> > > > > > 1 error generated.
-> > > > >
-> > > > > I cannot reproduce this and BPF CI doesn't complain about it either.
-> > > > > What kind of clang do you use?
-> > > > > Some special version and build flags?
-> > > >
-> > > > I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special build
-> > > > flag (unless Ubuntu enables some different default flags, but it
-> > > > shouldn't be the case... I'll double check).
-> > > >
-> > > > -Andrea
-> > >
-> > > Hi,
-> > >
-> > > FWIW, I see similar errors when I don't use recent pahole.
-> >
-> > I'm using pahole v1.24.
-> 
-> I believe Ilya is correct.
-> 
-> struct sock___17 is likely coming from vmlinux.h
-> Which means that there were errors due vmlinux build which
-> caused multiple structs to be present in BTF
-> and therefore bpftool generated such broken vmlinux.h
-> 
-> The BTF section in such vmlinux is likely much larger than normal.
-> Let's get to the bottom of it instead of masking build error.
-> 
-> Please try pahole 1.25.
+Hi, we tested your kernel and here are the results:
 
-Yay! Success. Everything is working fine with pahole 1.25. Please ignore
-my patch, the fix is to simply upgrade pahole.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Thanks!
--Andrea
+Tested-by: CKI Project <cki-project@redhat.com>
+
+Kernel information:
+    Commit message: Merge tag 'riscv-for-linus-6.3-rc7' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/riscv/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84774
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
