@@ -1,107 +1,120 @@
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A7610EF;
-	Sat, 15 Apr 2023 08:09:35 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 7FCEA58242A;
-	Sat, 15 Apr 2023 04:09:34 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 15 Apr 2023 04:09:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1681546174; x=1681553374; bh=Uq
-	U7KjqFW7R4wCnfU8G481rDgRmXTM3UqCvssdZQ58U=; b=lEKAfqARaJqIZvjFV5
-	2/F9loU8SZyNSXlA/agV/Z6S4EfEbWcWak8tfGvCHWXyvl6ZxZNh5mRIsiHng1cV
-	W1QxVtHtUdPyZQwKpOk4+4YbeglB/gSTUtdjS40Oas4GQ5GEMz7wgALmHMeTqsTG
-	4sHrOnXWNXYCRsT+l3+ZYoAjwu7oXXZNa/Keypu9JkWsj4OhcCt8MRiA22yiPQsX
-	hQWzvHqjR0i8K/FgBN1Vpr0Z6/e7mGBsSR3R4kVdppItsrfkgRfNA/DQUdelHGD0
-	uqbm9av/ydUtgs9UJs+MNIEvnsREymTLYWvne0j8kRinDzBJ4IXunYfFJ/28u01f
-	i0cQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1681546174; x=1681553374; bh=UqU7KjqFW7R4w
-	CnfU8G481rDgRmXTM3UqCvssdZQ58U=; b=YAro2kfgih1F2RfwX77jc6dtupBwb
-	2LxwCvOOPiOuAJnlCbrrbIttE7PNZ2PQSFhRT9//zXS/TlNgrvs9ZrXtH3id0EAK
-	dnCnsl+OEmNsn7N5TSk0rjWzAo/d8OPWByOUdFeT0qvyBNYYsDM1+UQK6T0h8eCr
-	IotgRZFnhIWJCp4UaMbI0e4kDIow97grScZnXWcBNTRE8NC22zdu6PaJLEycML96
-	IhJwo8QBwidQNAwkVsNh+CJY453MKawN+2DirxCVwfo/PP+k8HzBfNijp40hDxpl
-	z0DC95vfz4apQZ8/me7wJn8QtoCocq4KPf67etx3h5z2IK4TeXjq1oYNA==
-X-ME-Sender: <xms:vFs6ZIHG1OtXgdhAkS9LCTdtUXnazIyDkkT7KKluRVqRGuoUGlQtJg>
-    <xme:vFs6ZBWH0rgXf0uGmA8R2SlTVC--3NS3xR7Rgn0u2DbinYDP9cXQhWbS76ktdMNpP
-    RKO1E8xX7vjygZv9eI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeluddgudeftdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:vFs6ZCK6vIv5glAfhYJYEziL8DyKaFC7cCwtyChw4FALN_ia1lQYMQ>
-    <xmx:vFs6ZKE40WZM7gH0nQyQUGP5kW5Bzapzu4VL9Eymk4kMZ7SVvKJdbA>
-    <xmx:vFs6ZOWGpc6vlsAmJ4q_Z04bDtN7vFTSsEdnjJ6e5QlngqEfatxzPQ>
-    <xmx:vls6ZFOJwqfWWSeE8UHvvcMxZf8FNxqkQr_BWprxpathSHlyyoMQow>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A50C4B60086; Sat, 15 Apr 2023 04:09:32 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2429010EF
+	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 08:19:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68DCEC433D2;
+	Sat, 15 Apr 2023 08:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681546757;
+	bh=ljAiPSwIhWGmapP/c1uNdTrp/qDU7fl0aVv/azO7YYc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Wl3gzEypngqcW08OZvjH6HF9OZf/zXny3K7LUCUsq++UnsVLaDKvBzCnhntZEYtQK
+	 AdB9V6nMsz4R1ufYFZULYMFVAZSDK8ynDrMXz1jq1KTK4udt9Q5xLqSIN9p4eTcs87
+	 b50ZibD2Eh59IxclwgnAp1/U+qO7oK4EjJ0rv/gbAKKYQ+uqaqERJSJn1kGtIIFnr5
+	 AHjH5ltIKRs+cDY9eMjqab2PHhVcroegZgBk10mO6WzgSLNbOP6m9LsjdE2kwul5XY
+	 kmklVMWmjC1IK0WvXsS3piYyalfFDaaEw79LF5x/x+nWKSBDnFHZuVKa4vLKWoXDlO
+	 a3MDw3OJUipSg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	llvm@lists.linux.dev,
+	Vineet Gupta <vgupta@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	David Hildenbrand <david@redhat.com>,
+	"Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Naoya Horiguchi <naoya.horiguchi@nec.com>,
+	linux-snps-arc@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH] [v2] mm: make arch_has_descending_max_zone_pfns() static
+Date: Sat, 15 Apr 2023 10:18:20 +0200
+Message-Id: <20230415081904.969049-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <3c5d33f8-3669-4486-8986-d75fed8d882b@app.fastmail.com>
-In-Reply-To: <202304151422.5e4d380b-oliver.sang@intel.com>
-References: <202304151422.5e4d380b-oliver.sang@intel.com>
-Date: Sat, 15 Apr 2023 10:09:12 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "kernel test robot" <oliver.sang@intel.com>,
- "Arnd Bergmann" <arnd@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>
-Cc: oe-lkp@lists.linux.dev, "kernel test robot" <lkp@intel.com>,
- linux-snps-arc@lists.infradead.org, linux-mm@kvack.org,
- "Vineet Gupta" <vgupta@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "David Hildenbrand" <david@redhat.com>, "Vlastimil Babka" <vbabka@suse.cz>,
- llvm@lists.linux.dev, "Tom Rix" <trix@redhat.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Matthew Wilcox" <willy@infradead.org>,
- "Suren Baghdasaryan" <surenb@google.com>,
- "Naoya Horiguchi" <naoya.horiguchi@nec.com>, linux-kernel@vger.kernel.org,
- "Oscar Salvador" <osalvador@suse.de>
-Subject: Re: [PATCH] mm: make arch_has_descending_max_zone_pfns() static
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sat, Apr 15, 2023, at 08:42, kernel test robot wrote:
-> Hello,
->
-> kernel test robot noticed "kernel_BUG_at_lib/list_debug.c" on:
->
-> commit: c31fe5eb2ec68f6d2331fabc924e0030cc6bb2b3 ("[PATCH] mm: make 
-> arch_has_descending_max_zone_pfns() static")
+From: Arnd Bergmann <arnd@arndb.de>
 
-Thanks for the report, that was a logic error on my end, the fix is:
+clang produces a build failure on x86 for some randconfig builds
+after a change that moves around code to mm/mm_init.c:
 
+Cannot find symbol for section 2: .text.
+mm/mm_init.o: failed
+
+I have not been able to figure out why this happens, but the __weak
+annotation on arch_has_descending_max_zone_pfns() is the trigger here.
+
+Removing the weak function in favor of an open-coded Kconfig option
+check avoids the problem and becomes clearer as well as better to
+optimize by the compiler.
+
+Fixes: 9420f89db2dd ("mm: move most of core MM initialization to mm/mm_init.c")
+Cc: llvm@lists.linux.dev
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v2: fix logic bug reported-by: kernel test robot <oliver.sang@intel.com>,
+see https://lore.kernel.org/oe-lkp/202304151422.5e4d380b-oliver.sang@intel.com
+---
+ arch/arc/mm/init.c | 5 -----
+ include/linux/mm.h | 1 -
+ mm/mm_init.c       | 4 ++--
+ 3 files changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
+index ce4e939a7f07..2b89b6c53801 100644
+--- a/arch/arc/mm/init.c
++++ b/arch/arc/mm/init.c
+@@ -74,11 +74,6 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+ 		base, TO_MB(size), !in_use ? "Not used":"");
+ }
+ 
+-bool arch_has_descending_max_zone_pfns(void)
+-{
+-	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
+-}
+-
+ /*
+  * First memory setup routine called from setup_arch()
+  * 1. setup swapper's mm @init_mm
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 63acf4a598fe..75d8adce0aee 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3061,7 +3061,6 @@ extern void setup_per_cpu_pageset(void);
+ extern int min_free_kbytes;
+ extern int watermark_boost_factor;
+ extern int watermark_scale_factor;
+-extern bool arch_has_descending_max_zone_pfns(void);
+ 
+ /* nommu.c */
+ extern atomic_long_t mmap_pages_allocated;
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index 35302b7bca83..7f7f9c677854 100644
 --- a/mm/mm_init.c
 +++ b/mm/mm_init.c
-@@ -1756,7 +1756,7 @@ static void __init free_area_init_memoryless_node(int nid)
+@@ -1754,9 +1754,9 @@ static void __init free_area_init_memoryless_node(int nid)
+  * Some architectures, e.g. ARC may have ZONE_HIGHMEM below ZONE_NORMAL. For
+  * such cases we allow max_zone_pfn sorted in the descending order
   */
- static bool arch_has_descending_max_zone_pfns(void)
+-bool __weak arch_has_descending_max_zone_pfns(void)
++static bool arch_has_descending_max_zone_pfns(void)
  {
--       return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
-+       return IS_ENABLED(CONFIG_ARC) && !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
+-	return false;
++	return IS_ENABLED(CONFIG_ARC) && !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
  }
  
  /**
+-- 
+2.39.2
 
-I'll send a replacement v2 that has this folded in.
-
-    Arnd
