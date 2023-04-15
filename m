@@ -1,141 +1,337 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F24259A
-	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 13:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681566101;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZmVlmIpECAyRGfWheZ4P67eZQDYujpWfEyk+21u0GGY=;
-	b=Yd+aBP/gK3GjyHVKRgD39i7KnU9Gxky8TPJnwk2vScWELVhfTLA78UG4qdybz92Bs5UqkT
-	V3RnoamQX45YejR93iB4fXaYttfbufnG66+vYo7QeGVxoRFFHis19tutk3jsflGYEPO/T1
-	rPUUYBFj0jlldXoCmIJ6jJmdusCnwhI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-BgVamqsUP-CrYd8hD3L0Tw-1; Sat, 15 Apr 2023 09:41:40 -0400
-X-MC-Unique: BgVamqsUP-CrYd8hD3L0Tw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1556185A791
-	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 13:41:39 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CACF42166B26;
-	Sat, 15 Apr 2023 13:41:39 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 91 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, 7a934f4b)
-Date: Sat, 15 Apr 2023 13:41:39 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE342F4B;
+	Sat, 15 Apr 2023 14:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681568639; x=1713104639;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OfnwQm6Bo6FWbilIKA1+eP5Y8qlhKGqRenzmVzOoc4E=;
+  b=EMoqxrgHnPTZWqw5rHR6XLAwwTi4+YQZdiVUqfyxdw6XXKp+hpgAYYNY
+   0DXtdjfEI01f+oBE5Z3Ka7D6Cxwx/sGJ7Lyj2721btpkohaBhtQLlHSXs
+   sn7clfus1DF6rHahnXwAVn65iKWQw7/tJ58R4+yk08gA635GJ/jq5xVyf
+   R0OLGCdUHjtmlXFSFwuiPrfjnKZTpxWJ9F0VhlGZvxnEGShZkuw/HkXP7
+   1gezJoY2ValxRbwm5Ji9qJQXOVa6a89CAK1n7w0Bwo6SrsqvudO/Uz3Oe
+   fZwxBobr+C77h7qGTX7JbBVWgBaR5VqS/feCiWt0i5uwbTFglKu8p72eb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="407538548"
+X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
+   d="scan'208";a="407538548"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 07:23:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="1019922219"
+X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
+   d="scan'208";a="1019922219"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Apr 2023 07:23:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pngoY-000b6h-2g;
+	Sat, 15 Apr 2023 14:23:42 +0000
+Date: Sat, 15 Apr 2023 22:22:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeffrey Hugo <quic_jhugo@quicinc.com>, mani@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jeffrey Hugo <quic_jhugo@quicinc.com>, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, mhi@lists.linux.dev
+Subject: Re: [PATCH 1/2] bus: mhi: host: Add quirk framework and initial quirk
+Message-ID: <202304152256.QzCwI9iu-lkp@intel.com>
+References: <1681502239-3781-2-git-send-email-quic_jhugo@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <41613.123041509414000144@us-mta-541.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1681502239-3781-2-git-send-email-quic_jhugo@quicinc.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Jeffrey,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm-tip/drm-tip linus/master v6.3-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'riscv-for-linus-6.3-rc7' of git://git.kernel=
-.org/pub/scm/linux/kernel/git/riscv/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeffrey-Hugo/bus-mhi-host-Add-quirk-framework-and-initial-quirk/20230415-035846
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/1681502239-3781-2-git-send-email-quic_jhugo%40quicinc.com
+patch subject: [PATCH 1/2] bus: mhi: host: Add quirk framework and initial quirk
+config: i386-randconfig-r036-20230410 (https://download.01.org/0day-ci/archive/20230415/202304152256.QzCwI9iu-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/678cad31c3c8f1b6d772150b98d25e40240e4e14
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jeffrey-Hugo/bus-mhi-host-Add-quirk-framework-and-initial-quirk/20230415-035846
+        git checkout 678cad31c3c8f1b6d772150b98d25e40240e4e14
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84774
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304152256.QzCwI9iu-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+All errors (new ones prefixed by >>):
+
+>> drivers/bus/mhi/host/init.c:977:2: error: expected expression
+           else {
+           ^
+>> drivers/bus/mhi/host/init.c:1043:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1072:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1082:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1088:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1170:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1189:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1208:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1236:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1312:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1382:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1398:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1404:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1412:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/bus/mhi/host/init.c:1436:11: error: use of undeclared identifier 'mhi_match'
+           .match = mhi_match,
+                    ^
+>> drivers/bus/mhi/host/init.c:1437:12: error: use of undeclared identifier 'mhi_uevent'; did you mean 'mhi_event'?
+           .uevent = mhi_uevent,
+                     ^~~~~~~~~~
+                     mhi_event
+   drivers/bus/mhi/host/init.c:895:20: note: 'mhi_event' declared here
+           struct mhi_event *mhi_event;
+                             ^
+   drivers/bus/mhi/host/init.c:1442:1: error: function definition is not allowed here
+   {
+   ^
+   drivers/bus/mhi/host/init.c:1448:1: error: function definition is not allowed here
+   {
+   ^
+>> drivers/bus/mhi/host/init.c:1453:19: error: use of undeclared identifier 'mhi_init'
+   postcore_initcall(mhi_init);
+                     ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
 
+vim +977 drivers/bus/mhi/host/init.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   891	
+   892	int mhi_register_controller(struct mhi_controller *mhi_cntrl,
+   893				    const struct mhi_controller_config *config)
+   894	{
+   895		struct mhi_event *mhi_event;
+   896		struct mhi_chan *mhi_chan;
+   897		struct mhi_cmd *mhi_cmd;
+   898		struct mhi_device *mhi_dev;
+   899		u32 soc_info;
+   900		int ret, i;
+   901	
+   902		if (!mhi_cntrl || !mhi_cntrl->cntrl_dev || !mhi_cntrl->regs ||
+   903		    !mhi_cntrl->runtime_get || !mhi_cntrl->runtime_put ||
+   904		    !mhi_cntrl->status_cb || !mhi_cntrl->read_reg ||
+   905		    !mhi_cntrl->write_reg || !mhi_cntrl->nr_irqs ||
+   906		    !mhi_cntrl->irq || !mhi_cntrl->reg_len)
+   907			return -EINVAL;
+   908	
+   909		ret = parse_config(mhi_cntrl, config);
+   910		if (ret)
+   911			return -EINVAL;
+   912	
+   913		mhi_cntrl->mhi_cmd = kcalloc(NR_OF_CMD_RINGS,
+   914					     sizeof(*mhi_cntrl->mhi_cmd), GFP_KERNEL);
+   915		if (!mhi_cntrl->mhi_cmd) {
+   916			ret = -ENOMEM;
+   917			goto err_free_event;
+   918		}
+   919	
+   920		INIT_LIST_HEAD(&mhi_cntrl->transition_list);
+   921		mutex_init(&mhi_cntrl->pm_mutex);
+   922		rwlock_init(&mhi_cntrl->pm_lock);
+   923		spin_lock_init(&mhi_cntrl->transition_lock);
+   924		spin_lock_init(&mhi_cntrl->wlock);
+   925		INIT_WORK(&mhi_cntrl->st_worker, mhi_pm_st_worker);
+   926		init_waitqueue_head(&mhi_cntrl->state_event);
+   927	
+   928		mhi_cntrl->hiprio_wq = alloc_ordered_workqueue("mhi_hiprio_wq", WQ_HIGHPRI);
+   929		if (!mhi_cntrl->hiprio_wq) {
+   930			dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate workqueue\n");
+   931			ret = -ENOMEM;
+   932			goto err_free_cmd;
+   933		}
+   934	
+   935		mhi_cmd = mhi_cntrl->mhi_cmd;
+   936		for (i = 0; i < NR_OF_CMD_RINGS; i++, mhi_cmd++)
+   937			spin_lock_init(&mhi_cmd->lock);
+   938	
+   939		mhi_event = mhi_cntrl->mhi_event;
+   940		for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+   941			/* Skip for offload events */
+   942			if (mhi_event->offload_ev)
+   943				continue;
+   944	
+   945			mhi_event->mhi_cntrl = mhi_cntrl;
+   946			spin_lock_init(&mhi_event->lock);
+   947			if (mhi_event->data_type == MHI_ER_CTRL)
+   948				tasklet_init(&mhi_event->task, mhi_ctrl_ev_task,
+   949					     (ulong)mhi_event);
+   950			else
+   951				tasklet_init(&mhi_event->task, mhi_ev_task,
+   952					     (ulong)mhi_event);
+   953		}
+   954	
+   955		mhi_chan = mhi_cntrl->mhi_chan;
+   956		for (i = 0; i < mhi_cntrl->max_chan; i++, mhi_chan++) {
+   957			mutex_init(&mhi_chan->mutex);
+   958			init_completion(&mhi_chan->completion);
+   959			rwlock_init(&mhi_chan->lock);
+   960	
+   961			/* used in setting bei field of TRE */
+   962			mhi_event = &mhi_cntrl->mhi_event[mhi_chan->er_index];
+   963			mhi_chan->intmod = mhi_event->intmod;
+   964		}
+   965	
+   966		if (mhi_cntrl->bounce_buf) {
+   967			mhi_cntrl->map_single = mhi_map_single_use_bb;
+   968			mhi_cntrl->unmap_single = mhi_unmap_single_use_bb;
+   969		} else {
+   970			mhi_cntrl->map_single = mhi_map_single_no_bb;
+   971			mhi_cntrl->unmap_single = mhi_unmap_single_no_bb;
+   972		}
+   973	
+   974		/* Read the MHI device info */
+   975		if (mhi_cntrl->quirks & MHI_QUIRK_SOC_HW_VERSION_UNRELIABLE) {
+   976			soc_info = 0;
+ > 977		else {
+   978			ret = mhi_read_reg(mhi_cntrl, mhi_cntrl->regs, SOC_HW_VERSION_OFFS, &soc_info);
+   979			if (ret)
+   980				goto err_destroy_wq;
+   981		}
+   982	
+   983		mhi_cntrl->family_number = FIELD_GET(SOC_HW_VERSION_FAM_NUM_BMSK, soc_info);
+   984		mhi_cntrl->device_number = FIELD_GET(SOC_HW_VERSION_DEV_NUM_BMSK, soc_info);
+   985		mhi_cntrl->major_version = FIELD_GET(SOC_HW_VERSION_MAJOR_VER_BMSK, soc_info);
+   986		mhi_cntrl->minor_version = FIELD_GET(SOC_HW_VERSION_MINOR_VER_BMSK, soc_info);
+   987	
+   988		mhi_cntrl->index = ida_alloc(&mhi_controller_ida, GFP_KERNEL);
+   989		if (mhi_cntrl->index < 0) {
+   990			ret = mhi_cntrl->index;
+   991			goto err_destroy_wq;
+   992		}
+   993	
+   994		ret = mhi_init_irq_setup(mhi_cntrl);
+   995		if (ret)
+   996			goto err_ida_free;
+   997	
+   998		/* Register controller with MHI bus */
+   999		mhi_dev = mhi_alloc_device(mhi_cntrl);
+  1000		if (IS_ERR(mhi_dev)) {
+  1001			dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate MHI device\n");
+  1002			ret = PTR_ERR(mhi_dev);
+  1003			goto error_setup_irq;
+  1004		}
+  1005	
+  1006		mhi_dev->dev_type = MHI_DEVICE_CONTROLLER;
+  1007		mhi_dev->mhi_cntrl = mhi_cntrl;
+  1008		dev_set_name(&mhi_dev->dev, "mhi%d", mhi_cntrl->index);
+  1009		mhi_dev->name = dev_name(&mhi_dev->dev);
+  1010	
+  1011		/* Init wakeup source */
+  1012		device_init_wakeup(&mhi_dev->dev, true);
+  1013	
+  1014		ret = device_add(&mhi_dev->dev);
+  1015		if (ret)
+  1016			goto err_release_dev;
+  1017	
+  1018		mhi_cntrl->mhi_dev = mhi_dev;
+  1019	
+  1020		mhi_create_debugfs(mhi_cntrl);
+  1021	
+  1022		return 0;
+  1023	
+  1024	err_release_dev:
+  1025		put_device(&mhi_dev->dev);
+  1026	error_setup_irq:
+  1027		mhi_deinit_free_irq(mhi_cntrl);
+  1028	err_ida_free:
+  1029		ida_free(&mhi_controller_ida, mhi_cntrl->index);
+  1030	err_destroy_wq:
+  1031		destroy_workqueue(mhi_cntrl->hiprio_wq);
+  1032	err_free_cmd:
+  1033		kfree(mhi_cntrl->mhi_cmd);
+  1034	err_free_event:
+  1035		kfree(mhi_cntrl->mhi_event);
+  1036		vfree(mhi_cntrl->mhi_chan);
+  1037	
+  1038		return ret;
+  1039	}
+  1040	EXPORT_SYMBOL_GPL(mhi_register_controller);
+  1041	
+  1042	void mhi_unregister_controller(struct mhi_controller *mhi_cntrl)
+> 1043	{
+  1044		struct mhi_device *mhi_dev = mhi_cntrl->mhi_dev;
+  1045		struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
+  1046		unsigned int i;
+  1047	
+  1048		mhi_deinit_free_irq(mhi_cntrl);
+  1049		mhi_destroy_debugfs(mhi_cntrl);
+  1050	
+  1051		destroy_workqueue(mhi_cntrl->hiprio_wq);
+  1052		kfree(mhi_cntrl->mhi_cmd);
+  1053		kfree(mhi_cntrl->mhi_event);
+  1054	
+  1055		/* Drop the references to MHI devices created for channels */
+  1056		for (i = 0; i < mhi_cntrl->max_chan; i++, mhi_chan++) {
+  1057			if (!mhi_chan->mhi_dev)
+  1058				continue;
+  1059	
+  1060			put_device(&mhi_chan->mhi_dev->dev);
+  1061		}
+  1062		vfree(mhi_cntrl->mhi_chan);
+  1063	
+  1064		device_del(&mhi_dev->dev);
+  1065		put_device(&mhi_dev->dev);
+  1066	
+  1067		ida_free(&mhi_controller_ida, mhi_cntrl->index);
+  1068	}
+  1069	EXPORT_SYMBOL_GPL(mhi_unregister_controller);
+  1070	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
