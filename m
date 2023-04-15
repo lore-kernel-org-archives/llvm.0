@@ -1,44 +1,46 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D3B1868;
-	Sat, 15 Apr 2023 19:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B83679E0;
+	Sat, 15 Apr 2023 22:19:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681588495; x=1713124495;
+  t=1681597198; x=1713133198;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ibQYgOzgU83XerxDcPwp14yJzRTqyflYwNRm4kZiRhk=;
-  b=BXNs0VwRHnNPPtw5YA58+WxqHfI1LrJ5356et/ly+G+i9BYdek1LBpnZ
-   aded+3GXTGnkzVfz8/LFkloUm70xjjSoFiYcWLXazUXfxyS4m3P83aniP
-   S8OgXf3yutsPTO4u+YiZrg3QlBNHkwPsif/It0Rz3pGW8h/bInzJ92mYi
-   Fif8F1nj3m1Kkj+sizF7EigHbXcJ3/rinI2i0mzq9ArMxSyMNEHJq+dwv
-   BgszFIqyw2Q2M7F+CjFChXgLTJHUsQ08cFHcFJaeX6re4l4ThgCXigKh7
-   aVqpEeyPrQeG/i4S43AZz4ZIPkxmoYqupnr4AkHn8pCrFO/tMdUD0OW4A
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="328832118"
-X-IronPort-AV: E=Sophos;i="5.99,200,1677571200"; 
-   d="scan'208";a="328832118"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 12:54:54 -0700
+  bh=b6R9dyE0mEBmFKyqQ5dz9ZibiCp3qCxUkFlujQv9J1g=;
+  b=BnVG9pkNFPEJTVMDmF8Qj+JlVbfH120TgxjfQGTU84goRMIn3hnpENDF
+   tdKtA4KHBfGZJoNnjX1LqGLBkyZy5PAUEwkEBEp3DLRhms28DNK9HOhe5
+   4uEzE+CjZKHgF5VCxYJJc69c+xrnAF3QaCVXFBXzckDy8deWnOFkVq71F
+   ECee+GYRnYvnnHhCIfw+IfbjCv6uS6+5ijhYRcKsG9zyorVpsfteQxrNS
+   +lRFdw4qL1ggVqAfrg8h95xpEteWzKSnDrKYEUyDcPtK9gLbMDFOSv+Zy
+   QP2Ornnt15eVet1aaoxz/S4na3shII2EbMQnUoJIhISa+7z4gNsGRGoDc
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="346527875"
+X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
+   d="scan'208";a="346527875"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2023 15:19:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="690202399"
-X-IronPort-AV: E=Sophos;i="5.99,200,1677571200"; 
-   d="scan'208";a="690202399"
+X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="864580270"
+X-IronPort-AV: E=Sophos;i="5.99,201,1677571200"; 
+   d="scan'208";a="864580270"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 Apr 2023 12:54:52 -0700
+  by orsmga005.jf.intel.com with ESMTP; 15 Apr 2023 15:19:55 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pnlz1-000bJ9-39;
-	Sat, 15 Apr 2023 19:54:51 +0000
-Date: Sun, 16 Apr 2023 03:54:30 +0800
+	id 1pnoFO-000bNn-25;
+	Sat, 15 Apr 2023 22:19:54 +0000
+Date: Sun, 16 Apr 2023 06:19:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
+To: Jani Nikula <jani.nikula@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: arch/arm/mach-sa1100/assabet.c:746:13: warning: no previous
- prototype for function 'assabet_init_irq'
-Message-ID: <202304160350.FfJdKRPG-lkp@intel.com>
+	Sasha Levin <sashal@kernel.org>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [linux-stable-rc:queue/5.10 68/68]
+ drivers/gpu/drm/i915/display/icl_dsi.c:283:6: error: implicit declaration of
+ function 'DISPLAY_VER'
+Message-ID: <202304160645.4WG086Kj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,83 +50,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Nathan,
-
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
-commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-date:   2 months ago
-config: arm-neponset_defconfig (https://download.01.org/0day-ci/archive/20230416/202304160350.FfJdKRPG-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.10
+head:   a0049fd9c865939ea0cf399d2440d1f5fc1c72c0
+commit: a0049fd9c865939ea0cf399d2440d1f5fc1c72c0 [68/68] drm/i915/dsi: fix DSS CTL register offsets for TGL+
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20230416/202304160645.4WG086Kj-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5eb6e280432ddc9b755193552f3a070da8d7455c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5eb6e280432ddc9b755193552f3a070da8d7455c
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=a0049fd9c865939ea0cf399d2440d1f5fc1c72c0
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.10
+        git checkout a0049fd9c865939ea0cf399d2440d1f5fc1c72c0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/common/ arch/arm/mach-sa1100/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304160350.FfJdKRPG-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304160645.4WG086Kj-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/arm/mach-sa1100/assabet.c:746:13: warning: no previous prototype for function 'assabet_init_irq' [-Wmissing-prototypes]
-   void __init assabet_init_irq(void)
+>> drivers/gpu/drm/i915/display/icl_dsi.c:283:6: error: implicit declaration of function 'DISPLAY_VER' [-Werror,-Wimplicit-function-declaration]
+           if (DISPLAY_VER(dev_priv) >= 12) {
                ^
-   arch/arm/mach-sa1100/assabet.c:746:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init assabet_init_irq(void)
-   ^
-   static 
-   1 warning generated.
---
->> arch/arm/common/sa1111.c:699:1: warning: no previous prototype for function 'sa1111_configure_smc' [-Wmissing-prototypes]
-   sa1111_configure_smc(struct sa1111 *sachip, int sdram, unsigned int drac,
-   ^
-   arch/arm/common/sa1111.c:698:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void
-   ^
-   static 
-   1 warning generated.
+   1 error generated.
 
 
-vim +/assabet_init_irq +746 arch/arm/mach-sa1100/assabet.c
+vim +/DISPLAY_VER +283 drivers/gpu/drm/i915/display/icl_dsi.c
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  745  
-b955153bfa68d7 Russell King   2016-08-31 @746  void __init assabet_init_irq(void)
-b955153bfa68d7 Russell King   2016-08-31  747  {
-b955153bfa68d7 Russell King   2016-08-31  748  	u32 def_val;
-b955153bfa68d7 Russell King   2016-08-31  749  
-b955153bfa68d7 Russell King   2016-08-31  750  	sa1100_init_irq();
-b955153bfa68d7 Russell King   2016-08-31  751  
-b955153bfa68d7 Russell King   2016-08-31  752  	if (machine_has_neponset())
-b955153bfa68d7 Russell King   2016-08-31  753  		def_val = ASSABET_BCR_DB1111;
-b955153bfa68d7 Russell King   2016-08-31  754  	else
-b955153bfa68d7 Russell King   2016-08-31  755  		def_val = ASSABET_BCR_DB1110;
-b955153bfa68d7 Russell King   2016-08-31  756  
-b955153bfa68d7 Russell King   2016-08-31  757  	/*
-b955153bfa68d7 Russell King   2016-08-31  758  	 * Angel sets this, but other bootloaders may not.
-b955153bfa68d7 Russell King   2016-08-31  759  	 *
-b955153bfa68d7 Russell King   2016-08-31  760  	 * This must precede any driver calls to BCR_set() or BCR_clear().
-b955153bfa68d7 Russell King   2016-08-31  761  	 */
-20a451f8db4a81 Linus Walleij  2021-07-20  762  	assabet_init_gpio((void *)&ASSABET_BCR, def_val);
-b955153bfa68d7 Russell King   2016-08-31  763  }
-b955153bfa68d7 Russell King   2016-08-31  764  
-
-:::::: The code at line 746 was first introduced by commit
-:::::: b955153bfa68d7a9fa2be40bb606cf9578b66511 ARM: sa1100/assabet: add BCR/BSR GPIO driver
-
-:::::: TO: Russell King <rmk+kernel@armlinux.org.uk>
-:::::: CC: Russell King <rmk+kernel@armlinux.org.uk>
+   273	
+   274	static void configure_dual_link_mode(struct intel_encoder *encoder,
+   275					     const struct intel_crtc_state *pipe_config)
+   276	{
+   277		struct drm_i915_private *dev_priv = to_i915(encoder->base.dev);
+   278		struct intel_dsi *intel_dsi = enc_to_intel_dsi(encoder);
+   279		i915_reg_t dss_ctl1_reg, dss_ctl2_reg;
+   280		u32 dss_ctl1;
+   281	
+   282		/* FIXME: Move all DSS handling to intel_vdsc.c */
+ > 283		if (DISPLAY_VER(dev_priv) >= 12) {
+   284			struct intel_crtc *crtc = to_intel_crtc(pipe_config->uapi.crtc);
+   285	
+   286			dss_ctl1_reg = ICL_PIPE_DSS_CTL1(crtc->pipe);
+   287			dss_ctl2_reg = ICL_PIPE_DSS_CTL2(crtc->pipe);
+   288		} else {
+   289			dss_ctl1_reg = DSS_CTL1;
+   290			dss_ctl2_reg = DSS_CTL2;
+   291		}
+   292	
+   293		dss_ctl1 = intel_de_read(dev_priv, dss_ctl1_reg);
+   294		dss_ctl1 |= SPLITTER_ENABLE;
+   295		dss_ctl1 &= ~OVERLAP_PIXELS_MASK;
+   296		dss_ctl1 |= OVERLAP_PIXELS(intel_dsi->pixel_overlap);
+   297	
+   298		if (intel_dsi->dual_link == DSI_DUAL_LINK_FRONT_BACK) {
+   299			const struct drm_display_mode *adjusted_mode =
+   300						&pipe_config->hw.adjusted_mode;
+   301			u32 dss_ctl2;
+   302			u16 hactive = adjusted_mode->crtc_hdisplay;
+   303			u16 dl_buffer_depth;
+   304	
+   305			dss_ctl1 &= ~DUAL_LINK_MODE_INTERLEAVE;
+   306			dl_buffer_depth = hactive / 2 + intel_dsi->pixel_overlap;
+   307	
+   308			if (dl_buffer_depth > MAX_DL_BUFFER_TARGET_DEPTH)
+   309				drm_err(&dev_priv->drm,
+   310					"DL buffer depth exceed max value\n");
+   311	
+   312			dss_ctl1 &= ~LEFT_DL_BUF_TARGET_DEPTH_MASK;
+   313			dss_ctl1 |= LEFT_DL_BUF_TARGET_DEPTH(dl_buffer_depth);
+   314			dss_ctl2 = intel_de_read(dev_priv, dss_ctl2_reg);
+   315			dss_ctl2 &= ~RIGHT_DL_BUF_TARGET_DEPTH_MASK;
+   316			dss_ctl2 |= RIGHT_DL_BUF_TARGET_DEPTH(dl_buffer_depth);
+   317			intel_de_write(dev_priv, dss_ctl2_reg, dss_ctl2);
+   318		} else {
+   319			/* Interleave */
+   320			dss_ctl1 |= DUAL_LINK_MODE_INTERLEAVE;
+   321		}
+   322	
+   323		intel_de_write(dev_priv, dss_ctl1_reg, dss_ctl1);
+   324	}
+   325	
 
 -- 
 0-DAY CI Kernel Test Service
