@@ -1,115 +1,97 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706E77EA
-	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 01:15:54 +0000 (UTC)
-Received: by mail-ej1-f47.google.com with SMTP id qb20so49522167ejc.6
-        for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 18:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681521352; x=1684113352;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fC4kxkJoU5H0KyEnir1WfQCWSx6t7d24Ud56sJ7PoSE=;
-        b=hbwLdFnJtyk2KnbO/WdU6+2+hQM8kH0eWv+EzVzdZwyxorRpn6LVyC9YIPOwwR5VMh
-         Pqf22M0lBsfTecsgzlYN5jg3PKrBNzbOPOY4ZvTFgzgza7yWjjPbsCFb9DYfYRja0ymr
-         /vTxNaLOLFDC5n5Dmywh+q/j376tNhP3PHbztAMJcM7ySjefTeO9TBkhHh+ZOQYoXaZk
-         685kc0KTChqFLvFU5HpiihQgzRXftkDY2aDQUpWw+ZryVo/liieskjXk8ejImAQgSe+N
-         EMpkeMrs5wild3eQycaqaeZ65TkFXS/smf45Fd1npo/dyjv3HB6KUu4djG9n8D2QQxbB
-         MjOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681521352; x=1684113352;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fC4kxkJoU5H0KyEnir1WfQCWSx6t7d24Ud56sJ7PoSE=;
-        b=HQO4yCItgM9Xyh8dVqKvM0FdkSNoZePj+mlI2jSjdxBWC/PxLI+MDIrxmq5LvNfIXz
-         GRgveCLKOpnYljoCjt2RxKyq6RUbd6vJM/WZQfg2nlb+CysdRyKb7vBkVqJ7a1i+V4sl
-         iCj2XpS2br8OMFBtRC7+Rn0GfV/3X1DOQ2tL5Exu0W0K8Xq2XDcCdCmz5NfAHv9bbBjT
-         HZD/1UeytjZ1x0i0WIT/yNerJPfJxLvsDVccswNRnkEC+4zabTHvR5acEgAPKREOhOOT
-         ml6/QT6ZuW+/ovLca96goQtAdQUcvhFShlyi7hWO6LhBO+DUx4PNB4T/55oAipDZ6/Pi
-         2KLA==
-X-Gm-Message-State: AAQBX9dBMybyq2icxwHmK+4mDOC4ni4uM87xhZy8GbDpL7Q1tGBNmTeC
-	RL3c3wDn81lr6XdXaNtle59l2v5KdwkNzQHUp8U=
-X-Google-Smtp-Source: AKy350aZc1kDQXDRrsAJdoYDo7bzIbPeRF8KE0ZiYxoWv56d2Y08t0DwLjaJjC11xY/qgxHf1ArGOp0K0JH+2GdqjsA=
-X-Received: by 2002:a17:906:4ace:b0:94e:d57a:49fe with SMTP id
- u14-20020a1709064ace00b0094ed57a49femr429549ejt.7.1681521352400; Fri, 14 Apr
- 2023 18:15:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46703803;
+	Sat, 15 Apr 2023 01:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681521920; x=1713057920;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LQlwW5Iy/uYfcT0ifL2FNfH7/nWnOJ4yxUFCz4Bbu2c=;
+  b=PlRRN6NxQLwvRvG8Z3uTDe1+Pa2c3rVCfyvec0TE76GaPabIIW77Qfpb
+   bLe9xNrMYr2damK7Ilgs4xAvruvDuHUZTMZ10dJhXWUhhUJg3JDBhizae
+   VxMi7nOErZu2ZmnkzTkuuFZP8SRgq0ecLke6rX5mjd0N3+dm5i+9xR9n1
+   +VNTFPqYb/B20C97PeQ+3MeBO2z7rOUzB2yhzPaiHZF1MhQ5NKU10iR9N
+   148AAcr5hl8lVoG+4fw3KKBKUtM1K890wDAvKsXWQm18wiQS8ixWeYMNE
+   YQE+EoZ/MIgsqPNhNSAodBfedsMXoR5voSq/ROimZK/pTzm0Jzyg2N4aI
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="372474016"
+X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
+   d="scan'208";a="372474016"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 18:25:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="754644724"
+X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
+   d="scan'208";a="754644724"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Apr 2023 18:25:02 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pnUez-000aEJ-2V;
+	Sat, 15 Apr 2023 01:25:01 +0000
+Date: Sat, 15 Apr 2023 09:24:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Liam Girdwood <liam.r.girdwood@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ben Zhang <benzh@chromium.org>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+	Takashi Iwai <tiwai@suse.de>, Mark Brown <broonie@kernel.org>,
+	"Ap, Kamal" <kamal.ap@intel.corp-partner.google.com>
+Subject: [jsarha:topic/chromeos-4.19-s0ix 6961/9999]
+ sound/soc/sof/control.c:483:19: warning: parameter 'size' set but not used
+Message-ID: <202304150944.miA8YMdx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230412095912.188453-1-andrea.righi@canonical.com>
- <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
- <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390> <q5rj72tmwlpzx6qgkromem5t7q6xmen52aavfr65olnuv52f3z@wzs4p3xz3635>
- <ZDl/KFLy7wOBa2tj@righiandr-XPS-13-7390>
-In-Reply-To: <ZDl/KFLy7wOBa2tj@righiandr-XPS-13-7390>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 14 Apr 2023 18:15:41 -0700
-Message-ID: <CAADnVQJFxoYqBisj4w_Mm35mf3gR6YTK0QvNjQfVSjfcQK33yw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
-To: Andrea Righi <andrea.righi@canonical.com>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
-	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
-	Paolo Pisati <paolo.pisati@canonical.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Apr 14, 2023 at 9:28=E2=80=AFAM Andrea Righi <andrea.righi@canonica=
-l.com> wrote:
->
-> On Fri, Apr 14, 2023 at 06:15:38PM +0200, Ilya Leoshkevich wrote:
-> > On Fri, Apr 14, 2023 at 08:15:03AM +0200, Andrea Righi wrote:
-> > > On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
-> > > > On Wed, Apr 12, 2023 at 2:59=E2=80=AFAM Andrea Righi <andrea.righi@=
-canonical.com> wrote:
-> > > > >
-> > > > > Building bpf selftests with clang can trigger errors like the fol=
-lowing:
-> > > > >
-> > > > >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
-> > > > > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types =
-assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompati=
-ble-pointer-types]
-> > > > >         s =3D &nlk->sk;
-> > > > >           ^ ~~~~~~~~
-> > > > > 1 error generated.
-> > > >
-> > > > I cannot reproduce this and BPF CI doesn't complain about it either=
-.
-> > > > What kind of clang do you use?
-> > > > Some special version and build flags?
-> > >
-> > > I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special buil=
-d
-> > > flag (unless Ubuntu enables some different default flags, but it
-> > > shouldn't be the case... I'll double check).
-> > >
-> > > -Andrea
-> >
-> > Hi,
-> >
-> > FWIW, I see similar errors when I don't use recent pahole.
->
-> I'm using pahole v1.24.
+tree:   https://github.com/jsarha/linux topic/chromeos-4.19-s0ix
+head:   430bdaa0a8c38697780f45a148964d71951df11f
+commit: e51116ebd36c8c10c8290001915e7f546dc2d398 [6961/9999] UPSTREAM: ASoC: SOF: Add Build support for SOF core and Intel drivers
+config: x86_64-randconfig-r036-20230410 (https://download.01.org/0day-ci/archive/20230415/202304150944.miA8YMdx-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jsarha/linux/commit/e51116ebd36c8c10c8290001915e7f546dc2d398
+        git remote add jsarha https://github.com/jsarha/linux
+        git fetch --no-tags jsarha topic/chromeos-4.19-s0ix
+        git checkout e51116ebd36c8c10c8290001915e7f546dc2d398
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwtracing/intel_th/ drivers/mfd/ sound/soc/sof/
 
-I believe Ilya is correct.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304150944.miA8YMdx-lkp@intel.com/
 
-struct sock___17 is likely coming from vmlinux.h
-Which means that there were errors due vmlinux build which
-caused multiple structs to be present in BTF
-and therefore bpftool generated such broken vmlinux.h
+All warnings (new ones prefixed by >>):
 
-The BTF section in such vmlinux is likely much larger than normal.
-Let's get to the bottom of it instead of masking build error.
+>> sound/soc/sof/control.c:483:19: warning: parameter 'size' set but not used [-Wunused-but-set-parameter]
+                             unsigned int size)
+                                          ^
+   1 warning generated.
 
-Please try pahole 1.25.
+
+vim +/size +483 sound/soc/sof/control.c
+
+e824e72bd02d0c Liam Girdwood 2019-04-12  480  
+e824e72bd02d0c Liam Girdwood 2019-04-12  481  int snd_sof_bytes_ext_get(struct snd_kcontrol *kcontrol,
+e824e72bd02d0c Liam Girdwood 2019-04-12  482  			  unsigned int __user *binary_data,
+e824e72bd02d0c Liam Girdwood 2019-04-12 @483  			  unsigned int size)
+
+:::::: The code at line 483 was first introduced by commit
+:::::: e824e72bd02d0c3c6296788a7c8530857a891602 UPSTREAM: ASoC: SOF: Add Sound Open Firmware KControl support
+
+:::::: TO: Liam Girdwood <liam.r.girdwood@linux.intel.com>
+:::::: CC: Ben Zhang <benzh@chromium.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
