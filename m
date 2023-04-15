@@ -1,123 +1,115 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E037FA;
-	Sat, 15 Apr 2023 00:44:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681519445; x=1713055445;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a1YTaGvNfV6OIZ4Py7zcMRzRR16ghrp/iTk/SPFNtEI=;
-  b=LHTLzcIWZtC0hZnixW6ZG0erd0cD1aMqqF1mZ1QVwZye+K8HJVZZemz4
-   gft+70uI9vJm832218HSlegogNk32268duprBUhg7/6nAoIThySNmFwwT
-   C1xz4tk3d+dbHlK1TPb736leBT9FMr3HaRioo9LB/y7sXp23qLdkueJos
-   4isFftEPIFFwWUMLxwAo1qGFn+qPNRDwfWajJcQ1wT0x5smMR4Jcz2rAl
-   /VTr5iBz4A8pPelQdRCG6fyGn2Cn3Pyu84GKR6jSyrLicfENa+kFKbRLk
-   FhbVLGTurcQWNVHAZ37D4mJxhAxRJ8HtIObxfmC3x6z0a3ddrL2yE1MS0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="347328851"
-X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
-   d="scan'208";a="347328851"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 17:44:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="864381611"
-X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
-   d="scan'208";a="864381611"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 14 Apr 2023 17:44:00 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pnU1H-000aBB-2Q;
-	Sat, 15 Apr 2023 00:43:59 +0000
-Date: Sat, 15 Apr 2023 08:43:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>, pablo@netfilter.org, fw@strlen.de
-Subject: Re: [PATCH net-next 5/5] net: skbuff: hide nf_trace and ipvs_property
-Message-ID: <202304150840.hkUoyFNG-lkp@intel.com>
-References: <20230414160105.172125-6-kuba@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706E77EA
+	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 01:15:54 +0000 (UTC)
+Received: by mail-ej1-f47.google.com with SMTP id qb20so49522167ejc.6
+        for <llvm@lists.linux.dev>; Fri, 14 Apr 2023 18:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681521352; x=1684113352;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fC4kxkJoU5H0KyEnir1WfQCWSx6t7d24Ud56sJ7PoSE=;
+        b=hbwLdFnJtyk2KnbO/WdU6+2+hQM8kH0eWv+EzVzdZwyxorRpn6LVyC9YIPOwwR5VMh
+         Pqf22M0lBsfTecsgzlYN5jg3PKrBNzbOPOY4ZvTFgzgza7yWjjPbsCFb9DYfYRja0ymr
+         /vTxNaLOLFDC5n5Dmywh+q/j376tNhP3PHbztAMJcM7ySjefTeO9TBkhHh+ZOQYoXaZk
+         685kc0KTChqFLvFU5HpiihQgzRXftkDY2aDQUpWw+ZryVo/liieskjXk8ejImAQgSe+N
+         EMpkeMrs5wild3eQycaqaeZ65TkFXS/smf45Fd1npo/dyjv3HB6KUu4djG9n8D2QQxbB
+         MjOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681521352; x=1684113352;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fC4kxkJoU5H0KyEnir1WfQCWSx6t7d24Ud56sJ7PoSE=;
+        b=HQO4yCItgM9Xyh8dVqKvM0FdkSNoZePj+mlI2jSjdxBWC/PxLI+MDIrxmq5LvNfIXz
+         GRgveCLKOpnYljoCjt2RxKyq6RUbd6vJM/WZQfg2nlb+CysdRyKb7vBkVqJ7a1i+V4sl
+         iCj2XpS2br8OMFBtRC7+Rn0GfV/3X1DOQ2tL5Exu0W0K8Xq2XDcCdCmz5NfAHv9bbBjT
+         HZD/1UeytjZ1x0i0WIT/yNerJPfJxLvsDVccswNRnkEC+4zabTHvR5acEgAPKREOhOOT
+         ml6/QT6ZuW+/ovLca96goQtAdQUcvhFShlyi7hWO6LhBO+DUx4PNB4T/55oAipDZ6/Pi
+         2KLA==
+X-Gm-Message-State: AAQBX9dBMybyq2icxwHmK+4mDOC4ni4uM87xhZy8GbDpL7Q1tGBNmTeC
+	RL3c3wDn81lr6XdXaNtle59l2v5KdwkNzQHUp8U=
+X-Google-Smtp-Source: AKy350aZc1kDQXDRrsAJdoYDo7bzIbPeRF8KE0ZiYxoWv56d2Y08t0DwLjaJjC11xY/qgxHf1ArGOp0K0JH+2GdqjsA=
+X-Received: by 2002:a17:906:4ace:b0:94e:d57a:49fe with SMTP id
+ u14-20020a1709064ace00b0094ed57a49femr429549ejt.7.1681521352400; Fri, 14 Apr
+ 2023 18:15:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414160105.172125-6-kuba@kernel.org>
+References: <20230412095912.188453-1-andrea.righi@canonical.com>
+ <CAADnVQJ00Npkp=+XYaTybzaPnrcfK0nKrePAktVNBt2-YqWdEg@mail.gmail.com>
+ <ZDjvZ7mx7+IsSCCO@righiandr-XPS-13-7390> <q5rj72tmwlpzx6qgkromem5t7q6xmen52aavfr65olnuv52f3z@wzs4p3xz3635>
+ <ZDl/KFLy7wOBa2tj@righiandr-XPS-13-7390>
+In-Reply-To: <ZDl/KFLy7wOBa2tj@righiandr-XPS-13-7390>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 14 Apr 2023 18:15:41 -0700
+Message-ID: <CAADnVQJFxoYqBisj4w_Mm35mf3gR6YTK0QvNjQfVSjfcQK33yw@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: ignore pointer types check with clang
+To: Andrea Righi <andrea.righi@canonical.com>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+	Paolo Pisati <paolo.pisati@canonical.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub,
+On Fri, Apr 14, 2023 at 9:28=E2=80=AFAM Andrea Righi <andrea.righi@canonica=
+l.com> wrote:
+>
+> On Fri, Apr 14, 2023 at 06:15:38PM +0200, Ilya Leoshkevich wrote:
+> > On Fri, Apr 14, 2023 at 08:15:03AM +0200, Andrea Righi wrote:
+> > > On Thu, Apr 13, 2023 at 09:56:00PM -0700, Alexei Starovoitov wrote:
+> > > > On Wed, Apr 12, 2023 at 2:59=E2=80=AFAM Andrea Righi <andrea.righi@=
+canonical.com> wrote:
+> > > > >
+> > > > > Building bpf selftests with clang can trigger errors like the fol=
+lowing:
+> > > > >
+> > > > >   CLNG-BPF [test_maps] bpf_iter_netlink.bpf.o
+> > > > > progs/bpf_iter_netlink.c:32:4: error: incompatible pointer types =
+assigning to 'struct sock *' from 'struct sock___17 *' [-Werror,-Wincompati=
+ble-pointer-types]
+> > > > >         s =3D &nlk->sk;
+> > > > >           ^ ~~~~~~~~
+> > > > > 1 error generated.
+> > > >
+> > > > I cannot reproduce this and BPF CI doesn't complain about it either=
+.
+> > > > What kind of clang do you use?
+> > > > Some special version and build flags?
+> > >
+> > > I'm using Ubuntu clang version 15.0.7 (Ubuntu 23.04), no special buil=
+d
+> > > flag (unless Ubuntu enables some different default flags, but it
+> > > shouldn't be the case... I'll double check).
+> > >
+> > > -Andrea
+> >
+> > Hi,
+> >
+> > FWIW, I see similar errors when I don't use recent pahole.
+>
+> I'm using pahole v1.24.
 
-kernel test robot noticed the following build errors:
+I believe Ilya is correct.
 
-[auto build test ERROR on net-next/main]
+struct sock___17 is likely coming from vmlinux.h
+Which means that there were errors due vmlinux build which
+caused multiple structs to be present in BTF
+and therefore bpftool generated such broken vmlinux.h
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jakub-Kicinski/net-skbuff-hide-wifi_acked-when-CONFIG_WIRELESS-not-set/20230415-000750
-patch link:    https://lore.kernel.org/r/20230414160105.172125-6-kuba%40kernel.org
-patch subject: [PATCH net-next 5/5] net: skbuff: hide nf_trace and ipvs_property
-config: i386-randconfig-a005-20230410 (https://download.01.org/0day-ci/archive/20230415/202304150840.hkUoyFNG-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e2a92e33e41fe773b7c4a32a75db87340855387a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jakub-Kicinski/net-skbuff-hide-wifi_acked-when-CONFIG_WIRELESS-not-set/20230415-000750
-        git checkout e2a92e33e41fe773b7c4a32a75db87340855387a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/netfilter/
+The BTF section in such vmlinux is likely much larger than normal.
+Let's get to the bottom of it instead of masking build error.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304150840.hkUoyFNG-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/netfilter/nf_tables_core.c:64:30: error: no member named 'nf_trace' in 'struct sk_buff'
-                   info->nf_trace = pkt->skb->nf_trace;
-                                    ~~~~~~~~  ^
-   net/netfilter/nf_tables_core.c:75:31: error: no member named 'nf_trace' in 'struct sk_buff'
-                           info->nf_trace = pkt->skb->nf_trace;
-                                            ~~~~~~~~  ^
-   net/netfilter/nf_tables_core.c:132:37: error: no member named 'nf_trace' in 'struct sk_buff'
-                           info->nf_trace = info->pkt->skb->nf_trace;
-                                            ~~~~~~~~~~~~~~  ^
-   3 errors generated.
---
->> net/netfilter/nf_tables_trace.c:284:29: error: no member named 'nf_trace' in 'struct sk_buff'
-           info->nf_trace = pkt->skb->nf_trace;
-                            ~~~~~~~~  ^
-   1 error generated.
---
->> net/netfilter/nft_meta.c:446:8: error: no member named 'nf_trace' in 'struct sk_buff'
-                   skb->nf_trace = !!value8;
-                   ~~~  ^
-   1 error generated.
-
-
-vim +64 net/netfilter/nf_tables_core.c
-
-01ef16c2dd2e9a Patrick McHardy   2015-03-03  56  
-399a14ec7993d6 Florian Westphal  2022-08-04  57  static inline void nft_trace_packet(const struct nft_pktinfo *pkt,
-399a14ec7993d6 Florian Westphal  2022-08-04  58  				    struct nft_traceinfo *info,
-01ef16c2dd2e9a Patrick McHardy   2015-03-03  59  				    const struct nft_chain *chain,
-2c865a8a28a10e Pablo Neira Ayuso 2022-01-09  60  				    const struct nft_rule_dp *rule,
-33d5a7b14bfd02 Florian Westphal  2015-11-28  61  				    enum nft_trace_types type)
-01ef16c2dd2e9a Patrick McHardy   2015-03-03  62  {
-e639f7ab079b52 Florian Westphal  2015-11-28  63  	if (static_branch_unlikely(&nft_trace_enabled)) {
-e34b9ed96ce3b0 Florian Westphal  2022-06-22 @64  		info->nf_trace = pkt->skb->nf_trace;
-33d5a7b14bfd02 Florian Westphal  2015-11-28  65  		info->rule = rule;
-e65eebec9c67df Florian Westphal  2018-05-11  66  		__nft_trace_packet(info, chain, type);
-33d5a7b14bfd02 Florian Westphal  2015-11-28  67  	}
-01ef16c2dd2e9a Patrick McHardy   2015-03-03  68  }
-01ef16c2dd2e9a Patrick McHardy   2015-03-03  69  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please try pahole 1.25.
