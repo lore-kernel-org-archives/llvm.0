@@ -1,90 +1,129 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D405D7E6;
-	Sat, 15 Apr 2023 02:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681526888; x=1713062888;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sM7vnxGO0JlIrDHTr4WGoz7ijUGd6xwPhvYPaZ+lue8=;
-  b=ZQMWpiFGfihilhXrpmWcB1sfJmSjiczXTEaqbBe8fgblDVVf01R6YUG5
-   qVTwZ1Ohnx5i21hVHqKGceF9CjpFSlBFgTUhGx4k5Dl6TgQ/4+z9IcKrF
-   BwMwt3tehQVGlRVO0JTTni/xjSSByQ7jiNicT2ZaOo0IOdAnPF1pfKiBs
-   ULEx6yMeKlZbzw8VWKYvVhTsUUqr6U5WcHs6mto2jXNcIlTO/+9AZX8m8
-   zumN3ZIHJ937mp+gb6b+1hyhp3ddKVRK8b/g76cRKYlqgjBMrjrprgws4
-   iolpuL2PMcWDeBnuB0qqhCaFoJCb1kvX4gs4zwcPiRnrLxouU/kytGsTB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="343364796"
-X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
-   d="scan'208";a="343364796"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 19:48:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="722661550"
-X-IronPort-AV: E=Sophos;i="5.99,198,1677571200"; 
-   d="scan'208";a="722661550"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 14 Apr 2023 19:48:06 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pnVxN-000aKd-1v;
-	Sat, 15 Apr 2023 02:48:05 +0000
-Date: Sat, 15 Apr 2023 10:47:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:objtool-debug 7/7] check.c:195:9: error: 'NORETURN' macro
- redefined
-Message-ID: <202304151033.a3vocLqU-lkp@intel.com>
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A436A21
+	for <llvm@lists.linux.dev>; Sat, 15 Apr 2023 04:14:35 +0000 (UTC)
+Received: from [192.168.254.32] (unknown [47.189.246.67])
+	by linux.microsoft.com (Postfix) with ESMTPSA id A8D7D2179262;
+	Fri, 14 Apr 2023 21:14:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A8D7D2179262
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1681532074;
+	bh=j521elXctw+G+7/S2A3bktLJfDJV6hvnvHUJKFioICU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Usb0R1vdJuBqPnBNM1i8xezubq6ZedR6e2qsxRfnQgdQ0jSONkitrmpvUgtwXiifh
+	 Rp5CNDg4nwhbwqvgtcPH0b9mY/ITu0rXVdfJtg9jtREfZelOqYHdylHGolzlRmcacM
+	 iqbFocZcmgQypkYy6qbCqTUoqHS1vYgA8xCXcjFY=
+Message-ID: <5ee7e7da-9dba-b9b6-dcca-9bcbcbb879c1@linux.microsoft.com>
+Date: Fri, 14 Apr 2023 23:14:32 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
+ pointer validation
+To: "Jose E. Marchesi" <jose.marchesi@oracle.com>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, jpoimboe@redhat.com,
+ peterz@infradead.org, chenzhongjin@huawei.com, broonie@kernel.org,
+ nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com, catalin.marinas@arm.com,
+ will@kernel.org, jamorris@linux.microsoft.com,
+ linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ linux-toolchains@vger.kernel.org
+References: <20230202074036.507249-1-madvenka@linux.microsoft.com>
+ <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
+ <ZDg2BUL4uauG/w4T@google.com> <87wn2fhcmh.fsf@oracle.com>
+Content-Language: en-US
+From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <87wn2fhcmh.fsf@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-debug
-head:   76a9aa0c13243fc9452dc79184f457791c872a8c
-commit: 76a9aa0c13243fc9452dc79184f457791c872a8c [7/7] objtool: Move list of noreturn functions to separate file
-config: x86_64-randconfig-r033-20230410 (https://download.01.org/0day-ci/archive/20230415/202304151033.a3vocLqU-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=76a9aa0c13243fc9452dc79184f457791c872a8c
-        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
-        git fetch --no-tags jpoimboe objtool-debug
-        git checkout 76a9aa0c13243fc9452dc79184f457791c872a8c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304151033.a3vocLqU-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+On 4/13/23 13:15, Jose E. Marchesi wrote:
+> 
+>> On Thu, Mar 23, 2023 at 05:17:14PM +0000, Mark Rutland wrote:
+>>> Hi Madhavan,
+>>>
+>>> At a high-level, I think this still falls afoul of our desire to not reverse
+>>> engineer control flow from the binary, and so I do not think this is the right
+>>> approach. I've expanded a bit on that below.
+>>>
+>>> I do think it would be nice to have *some* of the objtool changes, as I do
+>>> think we will want to use objtool for some things in future (e.g. some
+>>> build-time binary patching such as table sorting).
+>>>
+>>>> Problem
+>>>> =======
+>>>>
+>>>> Objtool is complex and highly architecture-dependent. There are a lot of
+>>>> different checks in objtool that all of the code in the kernel must pass
+>>>> before livepatch can be enabled. If a check fails, it must be corrected
+>>>> before we can proceed. Sometimes, the kernel code needs to be fixed.
+>>>> Sometimes, it is a compiler bug that needs to be fixed. The challenge is
+>>>> also to prove that all the work is complete for an architecture.
+>>>>
+>>>> As such, it presents a great challenge to enable livepatch for an
+>>>> architecture.
+>>>
+>>> There's a more fundamental issue here in that objtool has to reverse-engineer
+>>> control flow, and so even if the kernel code and compiled code generation is
+>>> *perfect*, it's possible that objtool won't recognise the structure of the
+>>> generated code, and won't be able to reverse-engineer the correct control flow.
+>>>
+>>> We've seen issues where objtool didn't understand jump tables, so support for
+>>> that got disabled on x86. A key objection from the arm64 side is that we don't
+>>> want to disable compile code generation strategies like this. Further, as
+>>> compiles evolve, their code generation strategies will change, and it's likely
+>>> there will be other cases that crop up. This is inherently fragile.
+>>>
+>>> The key objections from the arm64 side is that we don't want to
+>>> reverse-engineer details from the binary, as this is complex, fragile, and
+>>> unstable. This is why we've previously suggested that we should work with
+>>> compiler folk to get what we need.
+>>
+>>> This still requires reverse-engineering the forward-edge control flow in order
+>>> to compute those offets, so the same objections apply with this approach. I do
+>>> not think this is the right approach.
+>>>
+>>> I would *strongly* prefer that we work with compiler folk to get the
+>>> information that we need.
+>>
+>> IDK if it's relevant here, but I did see a commit go by to LLVM that
+>> seemed to include such info in a custom ELF section (for the purposes of
+>> improving fuzzing, IIUC). Maybe such an encoding scheme could be tested
+>> to see if it's reliable or usable?
+>> - https://github.com/llvm/llvm-project/commit/3e52c0926c22575d918e7ca8369522b986635cd3
+>> - https://clang.llvm.org/docs/SanitizerCoverage.html#tracing-control-flow
+>>
+>>>
+>>> [...]
+>>>
+>>>> 		FWIW, I have also compared the CFI I am generating with DWARF
+>>>> 		information that the compiler generates. The CFIs match a
+>>>> 		100% for Clang. In the case of gcc, the comparison fails
+>>>> 		in 1.7% of the cases. I have analyzed those cases and found
+>>>> 		the DWARF information generated by gcc is incorrect. The
+>>>> 		ORC generated by my Objtool is correct.
+>>>
+>>>
+>>> Have you reported this to the GCC folk, and can you give any examples?
+>>> I'm sure they would be interested in fixing this, regardless of whether we end
+>>> up using it.
+>>
+>> Yeah, at least a bug report is good. "See something, say something."
+> 
+> By all means, please.  If you guys report these issues on CFI
+> divergences in the GCC bugzilla, we will look into fixing them.
+> 
+> https://gcc.gnu.org/bugzilla
 
->> check.c:195:9: error: 'NORETURN' macro redefined [-Werror,-Wmacro-redefined]
-   #define NORETURN(func) "\"" __stringify(func) "\"",
-           ^
-   tools/objtool/libsubcmd/include/subcmd/parse-options.h:10:9: note: previous definition is here
-   #define NORETURN __attribute__((__noreturn__))
-           ^
-   1 error generated.
-   make[4]: *** [tools/build/Makefile.build:97: tools/objtool/check.o] Error 1
-   make[4]: *** Waiting for unfinished jobs....
-   make[3]: *** [Makefile:66: tools/objtool/objtool-in.o] Error 2
-   make[2]: *** [Makefile:73: objtool] Error 2
-   make[1]: *** [Makefile:1440: tools/objtool] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+I will try to get the data again and report the problems that I see.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks.
+
+Madhavan
