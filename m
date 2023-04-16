@@ -1,129 +1,150 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524A47B
-	for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 11:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681644639;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oU96nL/a0LhgxOcbg8uIU16BiV10KqaZALmC07yYeWg=;
-	b=QlqKs/HgtPNGHvt1q0EiZp/EXtw1cATPMYv86+NM2ciAl6e798ojVb9tHVM+FLlRr7yhHi
-	yxPu7He2abB2lobgoQOie7UJy0rwLhpprHGyY4Tmr8wI4JeAMUUhuuqnfHvNcXicKpkmYI
-	wXFT1sSm4/b+DBR7aTrvYUSSk+4mIIU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-104-CPgGOBtaPxCsMAyhkBVAXg-1; Sun, 16 Apr 2023 07:30:37 -0400
-X-MC-Unique: CPgGOBtaPxCsMAyhkBVAXg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79E5F811E7C
-	for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 11:30:37 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4E1E62166B26;
-	Sun, 16 Apr 2023 11:30:37 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, a7a55e27)
-Date: Sun, 16 Apr 2023 11:30:37 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071A41C11
+	for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 13:02:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A854CC433A0
+	for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 13:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681650169;
+	bh=D3wy4kwpYEcnvQj/DKBp/Hq76nY/CXZPNCXOrIibLCg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Un3l3D3xgYAMWSddL2GeWG8Y3LD4HC3NFNMrx1dRHGwOdznt7jdMJhKELlvIdxPyW
+	 KBdJ1QPSPeB+4rxMyty4HsmSO9oYSoE9rXgB95yaghcgI4ZGMttCQyHPJF2NwZ/ymH
+	 l4yhK7PE6SPHHoolR3MFWhWQtuXzm60ABVe6MPMsim9zPGgPmcBmA6h1XpTqipfmzm
+	 ODwTfGXrMy/dzPmmnux4tBBpAh9CBHzX5muBLBY67UHn9A+ff75HpHvMMq4ae8NTfP
+	 t3JZvIkUeLk0UdvWC7HrHbZ3i/XrOlJ/Qk0tEVCrg1Wd2gxyTfqA7l1QyXiTPs+3Cc
+	 7921zRW5bxGPQ==
+Received: by mail-ot1-f41.google.com with SMTP id 63-20020a9d0345000000b006a5e01360fdso409519otv.10
+        for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 06:02:49 -0700 (PDT)
+X-Gm-Message-State: AAQBX9f6RdTIx7xNvgA+IU21Y3Gq1ywj76+2E/kcAZtiISifZa6Fg+2F
+	s6M2rFzAp76hQRfoH57rfTYZ8J7J0nZFtf0D1E8=
+X-Google-Smtp-Source: AKy350asvMZybXnMTiMzrhCi04P+dV9lupbZkct2X70VIIPJHBHL6CfYbZrmmKagvzwZVMmz4lAwLL/CIw60sfCgFkE=
+X-Received: by 2002:a9d:77d1:0:b0:6a4:279d:aab5 with SMTP id
+ w17-20020a9d77d1000000b006a4279daab5mr2778407otl.1.1681650168906; Sun, 16 Apr
+ 2023 06:02:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <80991.123041607303700173@us-mta-104.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20230401170117.1580840-1-masahiroy@kernel.org> <20230403144758.GA3460665@dev-arch.thelio-3990X>
+In-Reply-To: <20230403144758.GA3460665@dev-arch.thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 16 Apr 2023 22:02:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQsgB-SC2t+9ZpDwJbME+BVt+Gur1ydTnHfBfMAfn_y0w@mail.gmail.com>
+Message-ID: <CAK7LNAQsgB-SC2t+9ZpDwJbME+BVt+Gur1ydTnHfBfMAfn_y0w@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: clang: do not use CROSS_COMPILE for target triple
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Fangrui Song <maskray@google.com>, Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Mon, Apr 3, 2023 at 11:48=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Sun, Apr 02, 2023 at 02:01:17AM +0900, Masahiro Yamada wrote:
+> > The target triple is overridden by the user-supplied CROSS_COMPILE,
+> > but I do not see a good reason to support it. Users can use a new
+> > architecture without adding CLANG_TARGET_FLAGS_*, but that would be
+> > a rare case.
+> >
+> > Use the hard-coded and deterministic target triple all the time.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> I know of one bug where the value of '--target' matters:
+>
+> https://github.com/ClangBuiltLinux/linux/issues/1244
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
 
-Tested-by: CKI Project <cki-project@redhat.com>
+I did not look into it closely, but if we say
+"
+Using either CROSS_COMPILE=3Dpowerpc64-linux-gnu- or
+CROSS_COMPILE=3Dpowerpc-linux-gnu- fixes it.
+Using KCFLAGS=3D-v reveals that powerpc64le-linux-gnu-as is not getting
+the endianness information.
+", why didn't we fix it like the following?
 
-Kernel information:
-    Commit message: Merge tag 'i2c-for-6.3-rc7' of git://git.kernel.org/pub=
-/scm/linux/kernel/git/wsa/linux
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84830
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+ diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+ index 70b354fa1cb4..8dda7dc69c93 100644
+ --- a/scripts/Makefile.clang
+ +++ b/scripts/Makefile.clang
+ @@ -6,7 +6,7 @@ CLANG_TARGET_FLAGS_arm64        :=3D aarch64-linux-gnu
+  CLANG_TARGET_FLAGS_hexagon     :=3D hexagon-linux-musl
+  CLANG_TARGET_FLAGS_m68k                :=3D m68k-linux-gnu
+  CLANG_TARGET_FLAGS_mips                :=3D mipsel-linux-gnu
+ -CLANG_TARGET_FLAGS_powerpc     :=3D powerpc64le-linux-gnu
+ +CLANG_TARGET_FLAGS_powerpc     :=3D powerpc64-linux-gnu
+  CLANG_TARGET_FLAGS_riscv       :=3D riscv64-linux-gnu
+  CLANG_TARGET_FLAGS_s390                :=3D s390x-linux-gnu
+  CLANG_TARGET_FLAGS_x86         :=3D x86_64-linux-gnu
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+We do not need to test all possible target triples.
+We can just use the one that is known to work.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Anyway, I will apply this patch. Thanks.
 
+
+>
+> This was fixed in LLVM 12.0.0. We are not testing this in our CI though,
+> so we would not get bit by this (we could bump the minimum supported
+> version of LLVM to 12.0.0 for this, we have talked recently about doing
+> it for other reasons).
+>
+> I guess I cannot really think of a good reason not to do this aside from
+> that; the target triple should only affect code generation, rather than
+> tool selection (i.e., this does not take away the ability to use a
+> custom set of binutils with clang).
+>
+> However, Nick is currently OOO and I would like his opinion voiced
+> before we commit to this. Consider this a tentative:
+>
+> Acked-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> >
+> >  scripts/Makefile.clang | 8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 70b354fa1cb4..9076cc939e87 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -13,15 +13,11 @@ CLANG_TARGET_FLAGS_x86            :=3D x86_64-linux=
+-gnu
+> >  CLANG_TARGET_FLAGS_um                :=3D $(CLANG_TARGET_FLAGS_$(SUBAR=
+CH))
+> >  CLANG_TARGET_FLAGS           :=3D $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> >
+> > -ifeq ($(CROSS_COMPILE),)
+> >  ifeq ($(CLANG_TARGET_FLAGS),)
+> > -$(error Specify CROSS_COMPILE or add '--target=3D' option to scripts/M=
+akefile.clang)
+> > +$(error add '--target=3D' option to scripts/Makefile.clang)
+> >  else
+> >  CLANG_FLAGS  +=3D --target=3D$(CLANG_TARGET_FLAGS)
+> > -endif # CLANG_TARGET_FLAGS
+> > -else
+> > -CLANG_FLAGS  +=3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
+> > -endif # CROSS_COMPILE
+> > +endif
+> >
+> >  ifeq ($(LLVM_IAS),0)
+> >  CLANG_FLAGS  +=3D -fno-integrated-as
+> > --
+> > 2.37.2
+> >
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
