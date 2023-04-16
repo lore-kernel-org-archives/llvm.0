@@ -1,123 +1,126 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26131FDB
-	for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 15:00:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681657243;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Ix4ZsSfnAMLUf05dUkR7F70cwBD7Ytgd20DobHhYENI=;
-	b=Wc2t+afgpQy/5qjqN7czybVs9QJf2FrqStwJh9lRV1KznIS/cjbQubj5YNduFVRbzQP91+
-	MLwxBkmkS62cJ55HVdCTUTZDRm7AOTGtSFVXPZ2ttPtRIXTby3gT3LiYuYxY5mNtyuQFoN
-	Kgr+7OhPUZ98blQ7qrAjZtM2FAKVuvY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-1QyiBqV0OTK3ZFhHsf7FFw-1; Sun, 16 Apr 2023 11:00:42 -0400
-X-MC-Unique: 1QyiBqV0OTK3ZFhHsf7FFw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 048993814598
-	for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 15:00:42 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id E313E141511D;
-	Sun, 16 Apr 2023 15:00:41 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 76 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, 3e7bb4f2)
-Date: Sun, 16 Apr 2023 15:00:41 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B62723C4;
+	Sun, 16 Apr 2023 15:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681659253; x=1713195253;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XjleyHKbuFASERo1ML/4CMKE4qwlrz1GsQGg0gRQq+c=;
+  b=gvxDeX86FCDG4jzgNxlBI6mfV3O8z4hqSlsUn38Y7/0jPdkecpcaxYXu
+   BKtINXeiRN05KmFMEot+YoY9Fgk0ZpRxd9iZkCwQbXHoBuZ/bvDFqSb7O
+   ppXN5V3S/rUL8OQ/UxLgDqsNNkzybDEW8If4bMDj0DLWR4lYK3/WnuQGo
+   flDzvx0HPA8tsLnQ8LNmlmFsLAohbrucUhU3rm9MduT3Ep6KWRePKwDuk
+   ukibgUIuwGdmUMTzYUSRkVqoGjgn0EVh0EB0UWlYvuyUeI9il+59GblFU
+   omd1cuU6Nmzv9NAWYCJpHu9JAlgs/WeDEc9dgtjYduO/hM8mjMbMs+oMY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="344739369"
+X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
+   d="scan'208";a="344739369"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 08:34:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="723016835"
+X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
+   d="scan'208";a="723016835"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Apr 2023 08:34:11 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1po4OI-000bjj-11;
+	Sun, 16 Apr 2023 15:34:10 +0000
+Date: Sun, 16 Apr 2023 23:33:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 8/40] sound/soc/soc-ops.c:817:5: warning:
+ stack frame size (1072) exceeds limit (1024) in 'snd_soc_set_enum_kctl'
+Message-ID: <202304162354.2DZAe7tk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <51563.123041611004200173@us-mta-427.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   04466302f3a6cb36c4784f371777f254644bfff3
+commit: f453a222c3ef6f741fb2ccf50274234207702c05 [8/40] ASoC: ops: Introduce 'soc_set_enum_kctl'
+config: mips-randconfig-r013-20230416 (https://download.01.org/0day-ci/archive/20230416/202304162354.2DZAe7tk-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/f453a222c3ef6f741fb2ccf50274234207702c05
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout f453a222c3ef6f741fb2ccf50274234207702c05
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/soc/
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304162354.2DZAe7tk-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag '6.3-rc6-smb311-client-negcontext-fix' of git=
-://git.samba.org/sfrench/cifs-2.6
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84836
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> sound/soc/soc-ops.c:817:5: warning: stack frame size (1072) exceeds limit (1024) in 'snd_soc_set_enum_kctl' [-Wframe-larger-than]
+   int snd_soc_set_enum_kctl(struct snd_soc_card *card,
+       ^
+   68/1072 (6.34%) spills, 1004/1072 (93.66%) variables
+   1 warning generated.
 
 
+vim +/snd_soc_set_enum_kctl +817 sound/soc/soc-ops.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   806	
+   807	/**
+   808	 * snd_soc_set_enum_kctl - Set enumerated controls matching a pattern
+   809	 *
+   810	 * @card: where to look for the controls
+   811	 * @name: name pattern
+   812	 * @value: string value to set the controls to
+   813	 *
+   814	 * Return number of matching and set controls on success, else error.
+   815	 * No controls need to match.
+   816	 */
+ > 817	int snd_soc_set_enum_kctl(struct snd_soc_card *card,
+   818		const char *name, const char *value)
+   819	{
+   820		struct snd_kcontrol *kctl;
+   821		int hits = 0;
+   822		int ret;
+   823	
+   824		/* Sanity check for name */
+   825		if (unlikely(!name))
+   826			return -EINVAL;
+   827	
+   828		list_for_each_entry(kctl, &card->snd_card->controls, list) {
+   829			if (!soc_control_matches(kctl, name))
+   830				continue;
+   831	
+   832			ret = soc_set_enum_kctl(kctl, value);
+   833			if (ret < 0)
+   834				return ret;
+   835			hits++;
+   836		}
+   837	
+   838		if (!hits)
+   839			return -EINVAL;
+   840	
+   841		return hits;
+   842	}
+   843	EXPORT_SYMBOL_GPL(snd_soc_set_enum_kctl);
+   844	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
