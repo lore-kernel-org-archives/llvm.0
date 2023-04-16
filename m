@@ -1,140 +1,129 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7447B;
-	Sun, 16 Apr 2023 11:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681644489; x=1713180489;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=V7cq3vwlaU5o2aHO5qYDngl0tcAa0hST12vNzEC//hw=;
-  b=VALkfF9EHzBlK6cbj3fNpbu3G9RB88A2SCrIXVjmpZqRqz4551LaSRBs
-   RRcIRIdqJxvOfGOic6MpXp+jX4rHz7brkcW6LJxHe+F9H2TNtYAoLwc91
-   2nwldB1OU2ZkaDR5c3o/pJgKVkieHlfSoUAvvYTkd0UgIJQyaFzjDiKwg
-   s+ELiub8CPnGVLACaFSGxELVSHWgWYWqx3lPtNHMPla4q2oAl+iQw5Ioc
-   RITk6F2gt01Fib7rLWlNHH4m5lzaqdxdnMXt54bMvBVJ0Rt/l8466M/aN
-   xzNdglFFM/7WioxASUdIiQTVcvpKVLUCJItCxL7uNCwgNzlSjoJRTPmbC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="407613377"
-X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
-   d="scan'208";a="407613377"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 04:28:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10681"; a="1020107690"
-X-IronPort-AV: E=Sophos;i="5.99,202,1677571200"; 
-   d="scan'208";a="1020107690"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Apr 2023 04:28:07 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1po0YA-000bel-1Y;
-	Sun, 16 Apr 2023 11:28:06 +0000
-Date: Sun, 16 Apr 2023 19:27:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hector Martin <marcan@marcan.st>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:t602x/bringup 127/147]
- drivers/pci/controller/pcie-apple.c:468:19: error: call to undeclared
- function 'FIELD_PREP'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202304161936.Mpkc9lVa-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524A47B
+	for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 11:30:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681644639;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oU96nL/a0LhgxOcbg8uIU16BiV10KqaZALmC07yYeWg=;
+	b=QlqKs/HgtPNGHvt1q0EiZp/EXtw1cATPMYv86+NM2ciAl6e798ojVb9tHVM+FLlRr7yhHi
+	yxPu7He2abB2lobgoQOie7UJy0rwLhpprHGyY4Tmr8wI4JeAMUUhuuqnfHvNcXicKpkmYI
+	wXFT1sSm4/b+DBR7aTrvYUSSk+4mIIU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-104-CPgGOBtaPxCsMAyhkBVAXg-1; Sun, 16 Apr 2023 07:30:37 -0400
+X-MC-Unique: CPgGOBtaPxCsMAyhkBVAXg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 79E5F811E7C
+	for <llvm@lists.linux.dev>; Sun, 16 Apr 2023 11:30:37 +0000 (UTC)
+Received: from [172.64.0.123] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 4E1E62166B26;
+	Sun, 16 Apr 2023 11:30:37 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 358): Test report for master
+ (6.3.0-rc6, mainline.kernel.org-clang, a7a55e27)
+Date: Sun, 16 Apr 2023 11:30:37 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <80991.123041607303700173@us-mta-104.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux t602x/bringup
-head:   38a78ea027af8fa8ea016a1b902d08f7797c7346
-commit: 33680a713291ebc4d379818d65af88b0b47ea6dc [127/147] PCIE: apple: Add T602x PCIe support
-config: powerpc-randconfig-r031-20230416 (https://download.01.org/0day-ci/archive/20230416/202304161936.Mpkc9lVa-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/33680a713291ebc4d379818d65af88b0b47ea6dc
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux t602x/bringup
-        git checkout 33680a713291ebc4d379818d65af88b0b47ea6dc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/pci/controller/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304161936.Mpkc9lVa-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All errors (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> drivers/pci/controller/pcie-apple.c:468:19: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           writel_relaxed(FIELD_PREP(PORT_MSIMAP_TARGET, i) |
-                                          ^
-   1 error generated.
+Kernel information:
+    Commit message: Merge tag 'i2c-for-6.3-rc7' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/wsa/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84830
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-vim +/FIELD_PREP +468 drivers/pci/controller/pcie-apple.c
 
-   430	
-   431	static int apple_pcie_port_setup_irq(struct apple_pcie_port *port)
-   432	{
-   433		struct fwnode_handle *fwnode = &port->np->fwnode;
-   434		struct apple_pcie *pcie = port->pcie;
-   435		unsigned int irq;
-   436	
-   437		/* FIXME: consider moving each interrupt under each port */
-   438		irq = irq_of_parse_and_map(to_of_node(dev_fwnode(port->pcie->dev)),
-   439					   port->idx);
-   440		if (!irq)
-   441			return -ENXIO;
-   442	
-   443		port->domain = irq_domain_create_linear(fwnode, 32,
-   444							&apple_port_irq_domain_ops,
-   445							port);
-   446		if (!port->domain)
-   447			return -ENOMEM;
-   448	
-   449		/* Disable all interrupts */
-   450		writel_relaxed(~0, port->base + PORT_INTMSK);
-   451		writel_relaxed(~0, port->base + PORT_INTSTAT);
-   452		writel_relaxed(~0, port->base + PORT_LINKCMDSTS);
-   453	
-   454		irq_set_chained_handler_and_data(irq, apple_port_irq_handler, port);
-   455	
-   456		/* Configure MSI base address */
-   457		BUG_ON(upper_32_bits(DOORBELL_ADDR));
-   458		writel_relaxed(lower_32_bits(DOORBELL_ADDR),
-   459			       port->base + pcie->hw->port_msiaddr);
-   460		if (pcie->hw->port_msiaddr_hi)
-   461			writel_relaxed(0, port->base + pcie->hw->port_msiaddr_hi);
-   462	
-   463		/* Enable MSIs, shared between all ports */
-   464		if (pcie->hw->port_msimap) {
-   465			int i;
-   466	
-   467			for (i = 0; i < pcie->nvecs; i++) {
- > 468				writel_relaxed(FIELD_PREP(PORT_MSIMAP_TARGET, i) |
-   469					       PORT_MSIMAP_ENABLE,
-   470					       port->base + pcie->hw->port_msimap + 4 * i);
-   471			}
-   472	
-   473			writel_relaxed(PORT_MSICFG_EN, port->base + PORT_MSICFG);
-   474		} else {
-   475			writel_relaxed(0, port->base + PORT_MSIBASE);
-   476			writel_relaxed((ilog2(pcie->nvecs) << PORT_MSICFG_L2MSINUM_SHIFT) |
-   477				PORT_MSICFG_EN, port->base + PORT_MSICFG);
-   478		}
-   479	
-   480		return 0;
-   481	}
-   482	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
