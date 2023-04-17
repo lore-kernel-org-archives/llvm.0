@@ -1,129 +1,138 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0906FCB
-	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 13:41:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681738902;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RuqrG6JQ3ImUs/PFRS/ojePnj4Nwdwc8UUuinmLVEG4=;
-	b=B8S/5QQHw5IPhvsZmV0pNHQFL24g2PgCAlEmGGa59FffngZUq/V9wYcs2K0WkBGo7yHUJV
-	32lhs4VLGoegyYTyOdBK+jaK6tmZlUFK02ll/+fTOo8fGsUOsKEz09smtuYW2Qvb/W80B9
-	KxqIG7LQ7PffNUyNJHXzXXYHw5c+i64=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-194-8vXB41pRPNq8dq1__OQK-w-1; Mon, 17 Apr 2023 09:41:40 -0400
-X-MC-Unique: 8vXB41pRPNq8dq1__OQK-w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2AC7E185A794
-	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 13:41:40 +0000 (UTC)
-Received: from [172.64.2.78] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 17A15C15BA0;
-	Mon, 17 Apr 2023 13:41:40 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 358): Test report for master
- (6.3.0-rc7, mainline.kernel.org-clang, 6a8f57ae)
-Date: Mon, 17 Apr 2023 13:41:39 -0000
-To: llvm@lists.linux.dev
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8592A6FCB;
+	Mon, 17 Apr 2023 13:50:05 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5C1E91691;
+	Mon, 17 Apr 2023 06:50:48 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.19.253])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 87AD33F5A1;
+	Mon, 17 Apr 2023 06:50:03 -0700 (PDT)
+Date: Mon, 17 Apr 2023 14:49:57 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Will Deacon <will@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>
+Subject: Re: [linux-next:master 10286/12016] arch/arm64/mm/fixmap.c:199:10:
+ warning: variable 'bm_pudp' set but not used
+Message-ID: <ZD1OhVZElN1uGRJy@FVFF77S0Q05N>
+References: <202304172004.r3IPh5Ja-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <12774.123041709414001015@us-mta-194.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202304172004.r3IPh5Ja-lkp@intel.com>
 
-Hi, we tested your kernel and here are the results:
+On Mon, Apr 17, 2023 at 08:55:17PM +0800, kernel test robot wrote:
+> Hi Mark,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+Hi,
 
-Tested-by: CKI Project <cki-project@redhat.com>
+> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Kernel information:
-    Commit message: Linux 6.3-rc7
+I took a look, and this warning existed in the prior commit. All that has
+changed is that it has moved from arch/arm64/mm/mmu.c to arch/arm64/mm/init.c.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84853
+This commit is not to blame, and there is no regression here.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+The warning itself is bogus; more details on that below. Please ignore this.
 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   d3f2cd24819158bb70701c3549e586f9df9cee67
+> commit: b97547761b02cc95e0e6be827dc9ca9da8142761 [10286/12016] arm64: mm: move fixmap code to its own file
+> config: arm64-buildonly-randconfig-r004-20230416 (https://download.01.org/0day-ci/archive/20230417/202304172004.r3IPh5Ja-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b97547761b02cc95e0e6be827dc9ca9da8142761
+>         git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>         git fetch --no-tags linux-next master
+>         git checkout b97547761b02cc95e0e6be827dc9ca9da8142761
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304172004.r3IPh5Ja-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> arch/arm64/mm/fixmap.c:199:10: warning: variable 'bm_pudp' set but not used [-Wunused-but-set-variable]
+>                    pud_t *bm_pudp;
+>                           ^
+>    1 warning generated.
+> 
+> 
+> vim +/bm_pudp +199 arch/arm64/mm/fixmap.c
+> 
+:>    182	
+>    183	/*
+>    184	 * Copy the fixmap region into a new pgdir.
+>    185	 */
+>    186	void __init fixmap_copy(pgd_t *pgdir)
+>    187	{
+>    188		if (!READ_ONCE(pgd_val(*pgd_offset_pgd(pgdir, FIXADDR_TOT_START)))) {
+>    189			/*
+>    190			 * The fixmap falls in a separate pgd to the kernel, and doesn't
+>    191			 * live in the carveout for the swapper_pg_dir. We can simply
+>    192			 * re-use the existing dir for the fixmap.
+>    193			 */
+>    194			set_pgd(pgd_offset_pgd(pgdir, FIXADDR_TOT_START),
+>    195				READ_ONCE(*pgd_offset_k(FIXADDR_TOT_START)));
+>    196		} else if (CONFIG_PGTABLE_LEVELS > 3) {
+>    197			pgd_t *bm_pgdp;
+>    198			p4d_t *bm_p4dp;
+>  > 199			pud_t *bm_pudp;
 
+The full piece of code in question is:
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+|        } else if (CONFIG_PGTABLE_LEVELS > 3) {
+|                pgd_t *bm_pgdp;
+|                p4d_t *bm_p4dp;
+|                pud_t *bm_pudp;
+                        ^ defined
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+|                /*
+|                 * The fixmap shares its top level pgd entry with the kernel
+|                 * mapping. This can really only occur when we are running
+|                 * with 16k/4 levels, so we can simply reuse the pud level
+|                 * entry instead.
+|                 */
+|                BUG_ON(!IS_ENABLED(CONFIG_ARM64_16K_PAGES));
+|                bm_pgdp = pgd_offset_pgd(pgdp, FIXADDR_TOT_START);
+|                bm_p4dp = p4d_offset(bm_pgdp, FIXADDR_TOT_START);
+|                bm_pudp = pud_set_fixmap_offset(bm_p4dp, FIXADDR_TOT_START);
+                 ^ set
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+|                pud_populate(&init_mm, bm_pudp, lm_alias(bm_pmd));
+                                        ^ used
 
+|                pud_clear_fixmap();
+|        } else {
+
+What's happening here is that the config has CONFIG_PGTABLE_LEVELS=2, where the
+above block is unreachable, but the warning is being generated for trivially
+unreachable code.
+
+With that config, we'll use include/asm-generic/pgtable-nopmd.h, where
+pud_populate() is defined as:
+
+| #define pud_populate(mm, pmd, pte)          do { } while (0)
+
+... and hence it's complaing that the (unreachable) definition and
+initialization of bm_pudp is not used.
+
+If I reconfigure the kernel with 4K pages and 48-bit VAs so that
+CONFIG_PGTABLE_LEVELS=4, the above warning isn't generated.
+
+Thanks,
+Mark.
