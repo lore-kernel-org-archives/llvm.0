@@ -1,123 +1,98 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B2DAD2D;
-	Mon, 17 Apr 2023 22:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681769293; x=1713305293;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+rWAufT+1XCj4iPA+P7vctkwd0W/JIPu4RUm6R0PmOE=;
-  b=dWwO/6Az+cGoez2x+kL8gRzraJM6v+9cvzXsWUq/sU5e6z79wL9L0G6u
-   e4zMX6ZAsFpvYbKjhJU4OF93hw9gu0PWqpGsijW7jLY1TFVF28yPIA1a3
-   Vx5QuvSR50H+XeO8fAswABxL7eEeEkVIp3F57GLw+XYhNxda2d+BwO5ic
-   s2bJRy7/X/+13bzfIAbbTgHU4an21kDbwHi995IJzHYiN2WYNcuH7+1Tz
-   3HunEUJRhI1nUoyekuCT+LVX4owa6hvz+oCOxllkE7r5dTNrC17w4LL9E
-   A27E+D947OQf7kdR1XSfYfvItAPDPv/JySkkLnf08h+3Uz9hNTnVFT13+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="410235682"
-X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="410235682"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 15:08:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="937016979"
-X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="937016979"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Apr 2023 15:08:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1poX12-000chP-2Y;
-	Mon, 17 Apr 2023 22:08:04 +0000
-Date: Tue, 18 Apr 2023 06:07:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [krzk-github:wip/sm8450-hdmi-audio-on-qcomlt 297/357]
- drivers/interconnect/qcom/icc-rpm.c:206:5: warning: no previous prototype
- for function 'qcom_icc_rpm_set'
-Message-ID: <202304180615.pXigsxUc-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CE310EB
+	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 23:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681773005;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9KwBP9Man5SYvHcbBmo3b28W9QLZLArX7nGl4kEM31Y=;
+	b=TdM0rMj0UCSvSAI+/UAOTvovt8HkYvaQPITqDLOb1w//MqmfdMYmXxcvBzrk7dvbJa1agT
+	XY417lUaovYyxdCDHsYy7etd+3zGDG/g97RCRIlXUBj4XNi10ZJC8Z04UEIOE/swNX+zt6
+	f4f7rhj00BPifVJt/pyExmRHM8ga4VY=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-119-3aFzfWGIM_qdpRyyz_yYZg-1; Mon, 17 Apr 2023 19:10:03 -0400
+X-MC-Unique: 3aFzfWGIM_qdpRyyz_yYZg-1
+Received: by mail-qk1-f200.google.com with SMTP id 194-20020a370acb000000b00746b7fae197so1963087qkk.12
+        for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 16:10:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681773003; x=1684365003;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9KwBP9Man5SYvHcbBmo3b28W9QLZLArX7nGl4kEM31Y=;
+        b=EgUOQOJbvlQ+/a2av5v3qpEKzz/+NCu7XOzxzHFYNoDr1iy78NCBFP+lAafbeLP7GV
+         W6BmwhPyFZNH1GVprIVbwimVI1DTAjUtN/1FnYbO9GRhbdWaL4IhegCYPvWvcSgPwpJ0
+         SnQo601FnShILCANB0fkmgZ9bIsnljp9+lswmS3jJ/ifUf4XYtl05tpVpr37z1bo/z1D
+         mhMwpVlB321+VcRe63ny1Dam+Fe2aSb2NoP8aNSOKMK482ZmDrhfkssZjVBrVezDzr/j
+         LwUoCR62YfKjDMjX9R2uo2LRkQgBvHlHjkOZsnN8qCV46j/BNv3XO7qz+u0B5or4JXms
+         tyhQ==
+X-Gm-Message-State: AAQBX9eQbfuu/PCy7Jt51xW06q7pTfVQxAHVMDU7bj0DmmO/XbQJqG93
+	3l69yw++QTL8Eks+/d2cMRh+1ccz/922wqkZfr4qPw9UNwE0EnCB2+2xJyfNhhGpHZEW0AFls2f
+	Os3sS79pvJK+tzg==
+X-Received: by 2002:a05:6214:202d:b0:5c8:403a:22f8 with SMTP id 13-20020a056214202d00b005c8403a22f8mr20199716qvf.5.1681773003527;
+        Mon, 17 Apr 2023 16:10:03 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bd/2/c5QbKCswcHJPCu2Ivyl4odfLfeqheGCnBG0dmlgXXCyJCkdUwofowvXv/jLIeXWkPpw==
+X-Received: by 2002:a05:6214:202d:b0:5c8:403a:22f8 with SMTP id 13-20020a056214202d00b005c8403a22f8mr20199697qvf.5.1681773003276;
+        Mon, 17 Apr 2023 16:10:03 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id b6-20020a0cbf46000000b005ef465ad69bsm3337943qvj.23.2023.04.17.16.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 16:10:02 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: mcgrof@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com
+Cc: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] module: remove use of uninitialized variable len
+Date: Mon, 17 Apr 2023 19:09:57 -0400
+Message-Id: <20230417230957.3221615-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-tree:   https://github.com/krzk/linux wip/sm8450-hdmi-audio-on-qcomlt
-head:   aaffc85ea59d991971812124737973d89355d8b1
-commit: 9a39bdbadcf01035fa85765c18a6fd048c177ba8 [297/357] [HACK] Push DDR to FMAX frequency at boot
-config: arm64-randconfig-r036-20230416 (https://download.01.org/0day-ci/archive/20230418/202304180615.pXigsxUc-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/krzk/linux/commit/9a39bdbadcf01035fa85765c18a6fd048c177ba8
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github wip/sm8450-hdmi-audio-on-qcomlt
-        git checkout 9a39bdbadcf01035fa85765c18a6fd048c177ba8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/interconnect/qcom/
+clang build reports
+kernel/module/stats.c:307:34: error: variable
+  'len' is uninitialized when used here [-Werror,-Wuninitialized]
+        len = scnprintf(buf + 0, size - len,
+                                        ^~~
+At the start of this sequence, neither the '+ 0', nor the '- len' are needed.
+So remove them and fix using 'len' uninitalized.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304180615.pXigsxUc-lkp@intel.com/
+Fixes: 0d4ab68ce983 ("module: add debug stats to help identify memory pressure")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ kernel/module/stats.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
-
->> drivers/interconnect/qcom/icc-rpm.c:206:5: warning: no previous prototype for function 'qcom_icc_rpm_set' [-Wmissing-prototypes]
-   int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
-       ^
-   drivers/interconnect/qcom/icc-rpm.c:206:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/qcom_icc_rpm_set +206 drivers/interconnect/qcom/icc-rpm.c
-
-   205	
- > 206	int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
-   207	{
-   208		int ret = 0;
-   209	
-   210		if (mas_rpm_id != -1) {
-   211			ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
-   212						    RPM_BUS_MASTER_REQ,
-   213						    mas_rpm_id,
-   214						    sum_bw);
-   215			if (ret) {
-   216				pr_err("qcom_icc_rpm_smd_send mas %d error %d\n",
-   217				       mas_rpm_id, ret);
-   218				return ret;
-   219			}
-   220		}
-   221	
-   222		if (slv_rpm_id != -1) {
-   223			ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
-   224						    RPM_BUS_SLAVE_REQ,
-   225						    slv_rpm_id,
-   226						    sum_bw);
-   227			if (ret) {
-   228				pr_err("qcom_icc_rpm_smd_send slv %d error %d\n",
-   229				       slv_rpm_id, ret);
-   230				return ret;
-   231			}
-   232		}
-   233	
-   234		return ret;
-   235	}
-   236	EXPORT_SYMBOL_GPL(qcom_icc_rpm_set);
-   237	
-
+diff --git a/kernel/module/stats.c b/kernel/module/stats.c
+index d9b9bccf4256..f0619170bd3d 100644
+--- a/kernel/module/stats.c
++++ b/kernel/module/stats.c
+@@ -304,7 +304,7 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
+ 		return -ENOMEM;
+ 
+ 	/* The beginning of our debug preamble */
+-	len = scnprintf(buf + 0, size - len, "%25s\t%u\n", "Mods ever loaded", live_mod_count);
++	len = scnprintf(buf, size, "%25s\t%u\n", "Mods ever loaded", live_mod_count);
+ 
+ 	len += scnprintf(buf + len, size - len, "%25s\t%u\n", "Mods failed on kread", fkreads);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
