@@ -1,44 +1,41 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCC1110B;
-	Mon, 17 Apr 2023 01:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4CA1847;
+	Mon, 17 Apr 2023 04:55:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681696169; x=1713232169;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9NMR7qCrmCB/D1PJFwh8rCee5L5CGooUeOkuXrtNGWc=;
-  b=a3eV+BGUV05/jhh7OoE+b5MCr0UgxfeIIVFHWieHq8NvhrUY4B9JsfDG
-   r33isg//QJWWqrh2ZK1A9OXN2vZe+tqJwe2OzKajOz3kD+7uyWkUlN1ak
-   qMNet8bKTI/UCKDXUi0dSjpe0AWF9S2gDergLNg6pbUr2hJEbQopPLurp
-   C1qCOFLWD7TZbRzvUqpPVe4tPRKphHAIfmW97azi4P6bXQjSx/Jsdk4jn
-   8wi3bo0yV/+DN2bKp9hQoRcAe3iZdVWbUbVKGd7fZunpXdyB8M2UlZqS4
-   h1BzB2ESrChOI3syGYEOy2+Ho0nJWt1u/FAOW0kpWmzuGw3Ir9XCkDq1D
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="333576702"
+  t=1681707342; x=1713243342;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=B4w7dvl8XzNTfFc/VooXJvMQLPUQh43Ya3EmOv8Sfy4=;
+  b=TPnUR9vTFCk9+nPVQOy5SOe9hlZRzLEQh+JAuRB4+kowxKigIbf0mn51
+   4tPn3IZH2gMdDB5oMv+XopeRzboQqIlKTcVrPvvMMCEikeaNZLM4LAEDC
+   Ld4i8G2CjrV7RYiaN7ypLSJJiEShtjcqyTC94IGiIoodIc+hL1UMbB6Io
+   WWH9T/E7vz7fDZREfy59rYVR1AthM1pE3sLhHzOWKpEZPuZbO02UAe8Dk
+   Vm1tpX1Qt7tU85hP1whIhSK3XW+ve5SvK1wzR8GMKblvEuJybF3VNJxlO
+   mQ9c+bPeyuwCFk7WsY9LViWx1BMf4peg7SXSPxEhsTat/UnqO6Ag+yENW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="343560221"
 X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="333576702"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 18:49:29 -0700
+   d="scan'208";a="343560221"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 21:55:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="723097143"
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="1020278350"
 X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="723097143"
+   d="scan'208";a="1020278350"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 16 Apr 2023 18:49:27 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 16 Apr 2023 21:55:34 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1poDzi-000c1j-2Y;
-	Mon, 17 Apr 2023 01:49:26 +0000
-Date: Mon, 17 Apr 2023 09:49:09 +0800
+	id 1poGtq-000c8B-0U;
+	Mon, 17 Apr 2023 04:55:34 +0000
+Date: Mon, 17 Apr 2023 12:55:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v7] sched: Fix performance regression introduced by
- mm_cid
-Message-ID: <202304170947.E0GyNhr1-lkp@intel.com>
-References: <20230416223217.191261-1-mathieu.desnoyers@efficios.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: mwait_idle+0x27: call to
+ ftrace_likely_update() leaves .noinstr.text section
+Message-ID: <202304171248.xVEyp6SG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,172 +44,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230416223217.191261-1-mathieu.desnoyers@efficios.com>
 
-Hi Mathieu,
+CC: linux-kernel@vger.kernel.org
+TO: Peter Zijlstra <peterz@infradead.org>
+CC: Ingo Molnar <mingo@kernel.org>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Hi Peter,
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc7]
-[cannot apply to tip/sched/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+FYI, the error/warning still remains.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mathieu-Desnoyers/sched-Fix-performance-regression-introduced-by-mm_cid/20230417-063345
-patch link:    https://lore.kernel.org/r/20230416223217.191261-1-mathieu.desnoyers%40efficios.com
-patch subject: [RFC PATCH v7] sched: Fix performance regression introduced by mm_cid
-config: s390-randconfig-r024-20230417 (https://download.01.org/0day-ci/archive/20230417/202304170947.E0GyNhr1-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
+commit: e4df1511e1f4bcaa0d590aa7bbffe8bbbd6dfb49 cpuidle, sched: Remove instrumentation from TIF_{POLLING_NRFLAG,NEED_RESCHED}
+date:   3 months ago
+config: x86_64-randconfig-a016-20230417 (https://download.01.org/0day-ci/archive/20230417/202304171248.xVEyp6SG-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3ab4bef6c0bd5b33395bbd475c423ba95b9763d6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mathieu-Desnoyers/sched-Fix-performance-regression-introduced-by-mm_cid/20230417-063345
-        git checkout 3ab4bef6c0bd5b33395bbd475c423ba95b9763d6
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e4df1511e1f4bcaa0d590aa7bbffe8bbbd6dfb49
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e4df1511e1f4bcaa0d590aa7bbffe8bbbd6dfb49
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304170947.E0GyNhr1-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304171248.xVEyp6SG-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from kernel/sched/core.c:33:
-   In file included from include/linux/sched/isolation.h:6:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/sched/core.c:33:
-   In file included from include/linux/sched/isolation.h:6:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/sched/core.c:33:
-   In file included from include/linux/sched/isolation.h:6:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/sched/core.c:11770:15: warning: variable 'next_scan' is uninitialized when used here [-Wuninitialized]
-                           old_scan = next_scan;
-                                      ^~~~~~~~~
-   kernel/sched/core.c:11764:31: note: initialize the variable 'next_scan' to silence this warning
-                   unsigned long res, next_scan;
-                                               ^
-                                                = 0
-   kernel/sched/core.c:6448:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-   static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-                      ^
-   14 warnings generated.
+   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x33: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x37: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: sync_regs+0x1f: call to memcpy() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x86: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0xd4: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x37: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x32: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x38: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x32: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x32: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x40: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __ct_user_enter+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x3c: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __ct_user_exit+0x47: call to __kasan_check_write() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: mwait_idle+0x27: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: acpi_processor_ffh_cstate_enter+0x10f: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: intel_idle+0xf1: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: intel_idle_s2idle+0x102: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: intel_idle_irq+0xf3: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: intel_idle_ibrs+0xf7: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: intel_idle_xstate+0xf7: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter+0x36: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x3f: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: io_idle+0x3: call to __inb() leaves .noinstr.text section
 
 
-vim +/next_scan +11770 kernel/sched/core.c
-
- 11743	
- 11744	static void task_mm_cid_work(struct callback_head *work)
- 11745	{
- 11746		struct task_struct *t = current;
- 11747		struct mm_struct *mm;
- 11748		int cpu;
- 11749		unsigned long now = jiffies, old_scan, next_scan;
- 11750		struct cpumask *cidmask;
- 11751		int weight;
- 11752	
- 11753		SCHED_WARN_ON(t != container_of(work, struct task_struct, cid_work));
- 11754	
- 11755		work->next = work;	/* Prevent double-add */
- 11756		if (t->flags & PF_EXITING)
- 11757			return;
- 11758		mm = t->mm;
- 11759		if (!mm)
- 11760			return;
- 11761		old_scan = READ_ONCE(mm->mm_cid_next_scan);
- 11762		next_scan = now + msecs_to_jiffies(MM_CID_SCAN_DELAY);
- 11763		if (!old_scan) {
- 11764			unsigned long res, next_scan;
- 11765	
- 11766			res = cmpxchg(&mm->mm_cid_next_scan, old_scan, next_scan);
- 11767			if (res != old_scan)
- 11768				old_scan = res;
- 11769			else
- 11770				old_scan = next_scan;
- 11771		}
- 11772		if (time_before(now, old_scan))
- 11773			return;
- 11774		if (!try_cmpxchg(&mm->mm_cid_next_scan, &old_scan, next_scan))
- 11775			return;
- 11776		cidmask = mm_cidmask(mm);
- 11777		/* Clear cids that were not recently used. */
- 11778		for_each_possible_cpu(cpu)
- 11779			sched_mm_cid_remote_clear_old(mm, cpu);
- 11780		weight = cpumask_weight(cidmask);
- 11781		/*
- 11782		 * Clear cids that are greater or equal to the cidmask weight to
- 11783		 * recompact it.
- 11784		 */
- 11785		for_each_possible_cpu(cpu)
- 11786			sched_mm_cid_remote_clear_weight(mm, cpu, weight);
- 11787	}
- 11788	
+objdump-func vmlinux.o mwait_idle:
+0000 0000000000000030 <mwait_idle>:
+0000   30:	41 56                	push   %r14
+0002   32:	53                   	push   %rbx
+0003   33:	4c 8b 34 25 00 00 00 00 	mov    0x0,%r14	37: R_X86_64_32S	pcpu_hot
+000b   3b:	41 80 4e 02 20       	orb    $0x20,0x2(%r14)
+0010   40:	49 8b 1e             	mov    (%r14),%rbx
+0013   43:	83 e3 08             	and    $0x8,%ebx
+0016   46:	48 c1 eb 03          	shr    $0x3,%rbx
+001a   4a:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	4d: R_X86_64_32S	_ftrace_annotated_branch+0xa680
+0021   51:	89 de                	mov    %ebx,%esi
+0023   53:	31 d2                	xor    %edx,%edx
+0025   55:	31 c9                	xor    %ecx,%ecx
+0027   57:	e8 00 00 00 00       	call   5c <mwait_idle+0x2c>	58: R_X86_64_PLT32	ftrace_likely_update-0x4
+002c   5c:	48 85 db             	test   %rbx,%rbx
+002f   5f:	75 48                	jne    a9 <mwait_idle+0x79>
+0031   61:	48 8b 05 00 00 00 00 	mov    0x0(%rip),%rax        # 68 <mwait_idle+0x38>	64: R_X86_64_PC32	boot_cpu_data+0x74
+0038   68:	a8 80                	test   $0x80,%al
+003a   6a:	74 0e                	je     7a <mwait_idle+0x4a>
+003c   6c:	0f ae f0             	mfence
+003f   6f:	4c 89 f7             	mov    %r14,%rdi
+0042   72:	e8 00 00 00 00       	call   77 <mwait_idle+0x47>	73: R_X86_64_PLT32	.text+0x9110c
+0047   77:	0f ae f0             	mfence
+004a   7a:	4c 89 f7             	mov    %r14,%rdi
+004d   7d:	e8 00 00 00 00       	call   82 <mwait_idle+0x52>	7e: R_X86_64_PLT32	.text+0x9111c
+0052   82:	49 8b 1e             	mov    (%r14),%rbx
+0055   85:	83 e3 08             	and    $0x8,%ebx
+0058   88:	48 c1 eb 03          	shr    $0x3,%rbx
+005c   8c:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	8f: R_X86_64_32S	_ftrace_annotated_branch+0xa6b0
+0063   93:	89 de                	mov    %ebx,%esi
+0065   95:	31 d2                	xor    %edx,%edx
+0067   97:	31 c9                	xor    %ecx,%ecx
+0069   99:	e8 00 00 00 00       	call   9e <mwait_idle+0x6e>	9a: R_X86_64_PLT32	ftrace_likely_update-0x4
+006e   9e:	48 85 db             	test   %rbx,%rbx
+0071   a1:	75 06                	jne    a9 <mwait_idle+0x79>
+0073   a3:	e8 00 00 00 00       	call   a8 <mwait_idle+0x78>	a4: R_X86_64_PLT32	.text+0x9112c
+0078   a8:	fa                   	cli
+0079   a9:	41 80 66 02 df       	andb   $0xdf,0x2(%r14)
+007e   ae:	5b                   	pop    %rbx
+007f   af:	41 5e                	pop    %r14
+0081   b1:	c3                   	ret
+0082   b2:	cc                   	int3
+0083   b3:	cc                   	int3
+0084   b4:	cc                   	int3
+0085   b5:	cc                   	int3
+0086   b6:	cc                   	int3
+0087   b7:	cc                   	int3
+0088   b8:	cc                   	int3
+0089   b9:	cc                   	int3
+008a   ba:	cc                   	int3
+008b   bb:	cc                   	int3
+008c   bc:	cc                   	int3
+008d   bd:	cc                   	int3
+008e   be:	cc                   	int3
+008f   bf:	cc                   	int3
 
 -- 
 0-DAY CI Kernel Test Service
