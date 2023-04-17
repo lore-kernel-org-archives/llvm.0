@@ -1,43 +1,44 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4796D1B;
-	Sun, 16 Apr 2023 23:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77357110B;
+	Mon, 17 Apr 2023 01:39:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681689445; x=1713225445;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AtW0Exung/JYM3fw0t+Uiz+5i9wx0Rg+c2AkNR9dntI=;
-  b=h2jFWhcWVLIGm4+u+5V6IBqM5QcBdaW4d+16oEL0Kp3CKd+llwxcfVix
-   IbxzYsqriz0WKK6yrLF57PD56xwydngBD7fuBZNRRERHyS40i1VCg3ZGQ
-   elcd7bQgjsL0Jn3YUw8qpwXuQaGNV3Bgie1qhDoW49Zh2n6myjhUs7+P9
-   0gi4LeMo43i7TGzdwFbDlDKGYMIcqV5oG1ZRISVVBvsJs7O0gQbouDYte
-   KR3vdhwUEcp0zDFiqSTfZVlXISfz2MQDQ2cF1a1AeoKVQRUvqNZ2JppyV
-   Kxl0+EtQcyRV28cMmjpIMKLRsdgwDCYEf2G3YDXDkOg70pMCZzLH6LmbD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="325116901"
+  t=1681695569; x=1713231569;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X/GBb5HglFIjzboirRn9P8KM64/rpDYdlfzYELVLZQ0=;
+  b=dygZdCiCSgZmli59xaTkvtEuLvuERHe8+6zhN7cxJF7+Yc7zF5vYO52I
+   N1xif/fovfFJykvBC0XKSWcA8NhtpXoZuCvJc79bvy1iyYBPEhJlsI1+e
+   12mgvojJpD8fUo89WG1KZ0uZuWtFsuUCEOTZ6OTO7MTlLAznZejpDz7wP
+   hAH1xWB1V36XmyQsWW60PIZl1fJikPJoDAEGRovJeH9d11NCZI9aS78q+
+   9RZ+tnEHMqFXHTGiF34ISyNwUeXLQBznpxrWXEQFWRRUWDDd9seDTMAW3
+   WBPhDStmZCD3nJK0BxEZqjO3fqWNG63V5mI2+sYbUgLDk+6eCXA+C+lhi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="342272176"
 X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="325116901"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 16:57:24 -0700
+   d="scan'208";a="342272176"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 18:39:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="814588713"
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="834221268"
 X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="814588713"
+   d="scan'208";a="834221268"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 16 Apr 2023 16:57:23 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 16 Apr 2023 18:39:27 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1poCFG-000bv9-18;
-	Sun, 16 Apr 2023 23:57:22 +0000
-Date: Mon, 17 Apr 2023 07:57:04 +0800
+	id 1poDq2-000c0p-0v;
+	Mon, 17 Apr 2023 01:39:26 +0000
+Date: Mon, 17 Apr 2023 09:38:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Borislav Petkov (AMD)" <bp@alien8.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: arch/mips/include/asm/timex.h:75:10: error: instruction requires a
- CPU feature not currently enabled
-Message-ID: <202304170748.Fg9VIgGd-lkp@intel.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v7] sched: Fix performance regression introduced by
+ mm_cid
+Message-ID: <202304170916.wfhHZcvE-lkp@intel.com>
+References: <20230416223217.191261-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,138 +47,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230416223217.191261-1-mathieu.desnoyers@efficios.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
-commit: aba5b397cad7d398b385aaf5029f99f41b690466 hamradio: baycom_epp: Do not use x86-specific rdtsc()
-date:   4 months ago
-config: mips-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230417/202304170748.Fg9VIgGd-lkp@intel.com/config)
+Hi Mathieu,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.3-rc7]
+[cannot apply to tip/sched/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mathieu-Desnoyers/sched-Fix-performance-regression-introduced-by-mm_cid/20230417-063345
+patch link:    https://lore.kernel.org/r/20230416223217.191261-1-mathieu.desnoyers%40efficios.com
+patch subject: [RFC PATCH v7] sched: Fix performance regression introduced by mm_cid
+config: riscv-randconfig-r042-20230417 (https://download.01.org/0day-ci/archive/20230417/202304170916.wfhHZcvE-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aba5b397cad7d398b385aaf5029f99f41b690466
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout aba5b397cad7d398b385aaf5029f99f41b690466
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3ab4bef6c0bd5b33395bbd475c423ba95b9763d6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mathieu-Desnoyers/sched-Fix-performance-regression-introduced-by-mm_cid/20230417-063345
+        git checkout 3ab4bef6c0bd5b33395bbd475c423ba95b9763d6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/hamradio/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/sched/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304170748.Fg9VIgGd-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304170916.wfhHZcvE-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/hamradio/baycom_epp.c:29:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
->> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
-                   return read_c0_count();
-                          ^
-   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
-   #define read_c0_count()         __read_32bit_c0_register($9, 0)
-                                   ^
-   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
-           ___read_32bit_c0_register(source, sel, __volatile__)
-           ^
-   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
-                           "mfc0\t%0, " #source "\n\t"                     \
-                           ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           mfc0    $4, $9
-           ^
-   In file included from drivers/net/hamradio/baycom_epp.c:29:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
->> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
-                   return read_c0_count();
-                          ^
-   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
-   #define read_c0_count()         __read_32bit_c0_register($9, 0)
-                                   ^
-   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
-           ___read_32bit_c0_register(source, sel, __volatile__)
-           ^
-   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
-                           "mfc0\t%0, " #source "\n\t"                     \
-                           ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           mfc0    $2, $9
-           ^
-   In file included from drivers/net/hamradio/baycom_epp.c:29:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
->> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
-                   return read_c0_count();
-                          ^
-   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
-   #define read_c0_count()         __read_32bit_c0_register($9, 0)
-                                   ^
-   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
-           ___read_32bit_c0_register(source, sel, __volatile__)
-           ^
-   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
-                           "mfc0\t%0, " #source "\n\t"                     \
-                           ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           mfc0    $2, $9
-           ^
-   In file included from drivers/net/hamradio/baycom_epp.c:29:
-   In file included from include/linux/module.h:13:
-   In file included from include/linux/stat.h:19:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:67:
->> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
-                   return read_c0_count();
-                          ^
-   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
-   #define read_c0_count()         __read_32bit_c0_register($9, 0)
-                                   ^
-   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
-           ___read_32bit_c0_register(source, sel, __volatile__)
-           ^
-   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
-                           "mfc0\t%0, " #source "\n\t"                     \
-                           ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           mfc0    $2, $9
-           ^
-   4 errors generated.
+   kernel/sched/core.c:6744:35: warning: no previous prototype for function 'schedule_user' [-Wmissing-prototypes]
+   asmlinkage __visible void __sched schedule_user(void)
+                                     ^
+   kernel/sched/core.c:6744:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage __visible void __sched schedule_user(void)
+                        ^
+                        static 
+>> kernel/sched/core.c:11770:15: warning: variable 'next_scan' is uninitialized when used here [-Wuninitialized]
+                           old_scan = next_scan;
+                                      ^~~~~~~~~
+   kernel/sched/core.c:11764:31: note: initialize the variable 'next_scan' to silence this warning
+                   unsigned long res, next_scan;
+                                               ^
+                                                = 0
+   kernel/sched/core.c:1689:1: warning: unused function 'uclamp_update_active' [-Wunused-function]
+   uclamp_update_active(struct task_struct *p)
+   ^
+   kernel/sched/core.c:6448:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
+   static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
+                      ^
+   4 warnings generated.
 
 
-vim +75 arch/mips/include/asm/timex.h
+vim +/next_scan +11770 kernel/sched/core.c
 
-9c9b415c50bc29 Ralf Baechle       2013-09-12  71  
-06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  72  static inline cycles_t get_cycles(void)
-06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  73  {
-06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  74  	if (can_use_mips_counter(read_c0_prid()))
-9c9b415c50bc29 Ralf Baechle       2013-09-12 @75  		return read_c0_count();
-06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  76  	else
-06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  77  		return 0;	/* no usable counter */
-9c9b415c50bc29 Ralf Baechle       2013-09-12  78  }
-1c99c6a7c3c599 Jason A. Donenfeld 2022-04-08  79  #define get_cycles get_cycles
-9c9b415c50bc29 Ralf Baechle       2013-09-12  80  
-
-:::::: The code at line 75 was first introduced by commit
-:::::: 9c9b415c50bc298ac61412dff856eae2f54889ee MIPS: Reimplement get_cycles().
-
-:::::: TO: Ralf Baechle <ralf@linux-mips.org>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+ 11743	
+ 11744	static void task_mm_cid_work(struct callback_head *work)
+ 11745	{
+ 11746		struct task_struct *t = current;
+ 11747		struct mm_struct *mm;
+ 11748		int cpu;
+ 11749		unsigned long now = jiffies, old_scan, next_scan;
+ 11750		struct cpumask *cidmask;
+ 11751		int weight;
+ 11752	
+ 11753		SCHED_WARN_ON(t != container_of(work, struct task_struct, cid_work));
+ 11754	
+ 11755		work->next = work;	/* Prevent double-add */
+ 11756		if (t->flags & PF_EXITING)
+ 11757			return;
+ 11758		mm = t->mm;
+ 11759		if (!mm)
+ 11760			return;
+ 11761		old_scan = READ_ONCE(mm->mm_cid_next_scan);
+ 11762		next_scan = now + msecs_to_jiffies(MM_CID_SCAN_DELAY);
+ 11763		if (!old_scan) {
+ 11764			unsigned long res, next_scan;
+ 11765	
+ 11766			res = cmpxchg(&mm->mm_cid_next_scan, old_scan, next_scan);
+ 11767			if (res != old_scan)
+ 11768				old_scan = res;
+ 11769			else
+ 11770				old_scan = next_scan;
+ 11771		}
+ 11772		if (time_before(now, old_scan))
+ 11773			return;
+ 11774		if (!try_cmpxchg(&mm->mm_cid_next_scan, &old_scan, next_scan))
+ 11775			return;
+ 11776		cidmask = mm_cidmask(mm);
+ 11777		/* Clear cids that were not recently used. */
+ 11778		for_each_possible_cpu(cpu)
+ 11779			sched_mm_cid_remote_clear_old(mm, cpu);
+ 11780		weight = cpumask_weight(cidmask);
+ 11781		/*
+ 11782		 * Clear cids that are greater or equal to the cidmask weight to
+ 11783		 * recompact it.
+ 11784		 */
+ 11785		for_each_possible_cpu(cpu)
+ 11786			sched_mm_cid_remote_clear_weight(mm, cpu, weight);
+ 11787	}
+ 11788	
 
 -- 
 0-DAY CI Kernel Test Service
