@@ -1,83 +1,141 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C65AD2D;
-	Mon, 17 Apr 2023 21:47:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681768027; x=1713304027;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EzOsyFFM6QOJEt8ppPE7FZu8aVW4n94hzGuyUfT2rtY=;
-  b=nrwkjdaQJwQWaLceBWMFPhZT9OxinKm0lx7ReQaupxrpoqK/2+tfaqnj
-   jWj5Z6TUeY1+YtQyuXkyL//VUntMFFG7GIg94i7nDqf7kFcD7P1tL9yP8
-   Cy6t5GyQnV9UlDcL0jFd8J9HoaHC9VHBIDoGhJdz/IvHPJeQzBoS2ZYxW
-   97NLPEVB56PsoSXKtKaODiuke6Bs2KuZAzMTl75eUHPuERJEPQg37JozM
-   IJ+3N+esDniDlN+xUSZP0WnAIEElAuCkVmIYSFrly+hkeRhvsppDwvmr4
-   YA+wRJu5RTC2kk/M3k6KSVdqyJUygEpg8vLIX0+87QvU9OeHg0peMgT91
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="407910362"
-X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="407910362"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 14:47:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="814963201"
-X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="814963201"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Apr 2023 14:47:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1poWgi-000cgl-0r;
-	Mon, 17 Apr 2023 21:47:04 +0000
-Date: Tue, 18 Apr 2023 05:46:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
-Subject: ld.lld: error: assignment to symbol __init_end does not converge
-Message-ID: <202304180555.xZBCEnvs-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48EF8AD2D
+	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 21:54:13 +0000 (UTC)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-54f87e44598so158674607b3.5
+        for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 14:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681768452; x=1684360452;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2duZpU/eZSHwLEuEsM1wPgBeCX6HIty9VCVJmbcQV60=;
+        b=EGPv0nIKb92KJl2AeUoGYOvzu2GzLLkcrRkOqzZbkVTtocbB74qlqJ1si4fSVdh/h+
+         1J5kC1OZoYxKKorE1TvmyuyYBmzeGVTS4Fqrd3BtAb7FqvjxPGnK2sgvyvSFSxYctW2h
+         ANHO92O27UNVNjVIDuooFZIj03mkP23njYnSNkTyXI4OYYSghFk+g5v4guojvm9AkkRG
+         0hBsdKIQHGu0jMOPX1Ho4to0yX+YJ70q01re5chTK8WY/tYSx8+LPWfP0k9KGqwSKLnM
+         /yige6n1AY44bbJsZoeyYWuytUiCjKDj9xuuznDt4TGhHV5eT7XUfdKdUigFxU7r4q7B
+         Txiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681768452; x=1684360452;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2duZpU/eZSHwLEuEsM1wPgBeCX6HIty9VCVJmbcQV60=;
+        b=bNTH8+WrmaDw1YtIuISWvI2SGOP4xqWJ6KM0mb1anF2u7WXzdV4ig7Nrp/q7/aFiXU
+         SYI8+6ruYUywq765/bH1v6H6Abcl7ouUA9aUPDH6JkG0tISpwAYfOE9U2y6KL4IiyvqE
+         irnGShPI86AZZE2NHr3L9vweOItIoiap734miHpdjzjgZX95JbfUdEKpAC7myROwJ5Kj
+         hUUv4GaLiUzxtkFZcX6etqKwaQbMI+eVstYz0SkN/DjmI0LxXb1jrI6wb9eKh5PuV5mO
+         owhgGtLv/UY/ywgQOU0G+GG6xj7yrT3Fx1DUOBVDPRM6NvXHyEcrTz+ML7Zsv2Bj8aGG
+         6zrw==
+X-Gm-Message-State: AAQBX9dxAGD8IX+na2pTYZkiR0KUu1yoFD/MiBrLZO/vdrwn4nypX5Zl
+	ld6eObxyc9HtGrxnfXrsOmUgfay+RwEPltCxUAU=
+X-Google-Smtp-Source: AKy350bIM/+HmY5iRKBfThLeZwd20fzSuyCq4zowHtLOJDiE6fNyk+ekeEHxUCL4XgtTzddlr5PgLT1dEC9CUhSq70o=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:e8f1:df30:2fb2:cf8a])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:d2d4:0:b0:b95:31a3:9d89 with SMTP
+ id j203-20020a25d2d4000000b00b9531a39d89mr196920ybg.2.1681768452185; Mon, 17
+ Apr 2023 14:54:12 -0700 (PDT)
+Date: Mon, 17 Apr 2023 14:54:06 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAP6/PWQC/w3LQQqAIBBA0avErBPUIqzLxGhDSjKFU22ku+fyw
+ f8VhEoigaWrUOhNkk5uMH0HISLvpNLWDFbbQY/GKj5XuTEcl8LZmcmh9V4jtN6jkPIFOcR28JP z9/3pKfYIYAAAAA==
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681768450; l=3460;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=L+SfgiE84uBc6ASyb4ccLntQBYnB84v4M07YkhSItYs=; b=4kZW7sG9q2UtgI9ubA8EgzqIsMnQxqatdhYmJO4idn8myvviWXNOOFewD85rUB0y0u81BbCMNooI
+ zCEPcp69Dm/hm+rT4UXEpfh4JM2fH/b2vuzJmV5MKfrL0u0Jpfvi
+X-Mailer: b4 0.12.2
+Message-ID: <20230412-no_stackp-v1-0-86d2034a4d06@google.com>
+Subject: [PATCH 0/2] start_kernel: omit stack canary
+From: ndesaulniers@google.com
+To: "Borislav Petkov (AMD)" <bp@alien8.de>
+Cc: Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Ard,
+A security research paper was recently published detailing Catch Handler
+Oriented Programming (CHOP) attacks.
+https://download.vusec.net/papers/chop_ndss23.pdf
+The TL;DR being that C++ structured exception handling runtimes are
+attractive gadgets for Jump Oriented Programming (JOP) attacks.
 
-FYI, the error/warning still remains.
+In response to this, a mitigation was developed under embargo in
+clang-16 to check the stack canary before calling noreturn functions.
+https://bugs.chromium.org/p/llvm/issues/detail?id=30
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
-commit: f70b3a23324a2d31efb83cc01302acb343e4ec1b arm64: head: create a temporary FDT mapping in the initial ID map
-date:   10 months ago
-config: arm64-randconfig-r014-20230417 (https://download.01.org/0day-ci/archive/20230418/202304180555.xZBCEnvs-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f70b3a23324a2d31efb83cc01302acb343e4ec1b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f70b3a23324a2d31efb83cc01302acb343e4ec1b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+This started causing boot failures in Android kernel trees downstream of
+stable linux-4.14.y that had proto-LTO support, as reported by Nathan
+Chancellor.
+https://github.com/ClangBuiltLinux/linux/issues/1815
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304180555.xZBCEnvs-lkp@intel.com/
+Josh Poimboeuf recently sent a series to explicitly annotate more
+functions as noreturn. Nathan noticed the series, and tested it finding
+that it now caused boot failures with clang-16+ on mainline (raising the
+visibility and urgency of the issue).
+https://lore.kernel.org/cover.1680912057.git.jpoimboe@kernel.org/
+V2 of this series is rebased on tip/objtool/core @
+88b478ee5c7b080b70c68d6e9b3da6c2b518ceb0 now that that series has been
+picked up.
 
-All errors (new ones prefixed by >>):
+Once the embargo was lifted, I asked questions such as "what does C++
+structured exception handling have to do with C code" and "surely GCC
+didn't ship the same mitigation for C code (narrator: 'They did not:
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=a25982ada523689c8745d7fb4b1b93c8f5dab2e7')?"
 
->> ld.lld: error: assignment to symbol __init_end does not converge
+I now have a patch out for LLVM to undo this mess (or at least limit it
+to C++ functions that may throw, similar to GCC's mitigation); it hasn't
+landed yet but we're close to consensus and I expect it to land
+imminently.
+https://reviews.llvm.org/D147975
 
+Remember this thread?  (Pepperidge farms remembers...)
+https://lore.kernel.org/all/20200314164451.346497-1-slyfox@gentoo.org/
+
+That reminded me that years ago we discussed a function attribute for
+no_stack_protector.
+https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
+
+GCC didn't have one at the time, it now does. In addition to the LLVM
+fix, I'd like to introduce this in the kernel so that we might start
+using it in additional places:
+* https://lore.kernel.org/linux-pm/20200915172658.1432732-1-rkir@google.com/
+* https://lore.kernel.org/lkml/20200918201436.2932360-30-samitolvanen@google.com/
+And eventually remove the final macro expansion site of
+prevent_tail_call_optimization.
+
+With the LLVM fix, this series isn't required, but I'd like to start
+paving the way to use these function attributes since I think they are a
+sweet spot in terms of granularity (as opposed to trying to move
+start_kernel to its own TU compiled with -fno-stack-protector).
+
+Changes V1 -> V2:
+* Rebase to avoid conflicts with Josh's changes.
+* Fix comment style as per Peter.
+* Pick up tags.
+
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Nick Desaulniers (2):
+      start_kernel: add no_stack_protector fn attr
+      start_kernel: omit prevent_tail_call_optimization for newer toolchains
+
+ arch/powerpc/kernel/smp.c           |  1 +
+ include/linux/compiler_attributes.h | 12 ++++++++++++
+ init/main.c                         |  9 ++++++++-
+ 3 files changed, 21 insertions(+), 1 deletion(-)
+---
+base-commit: 88b478ee5c7b080b70c68d6e9b3da6c2b518ceb0
+change-id: 20230412-no_stackp-a98168a2bb0a
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Nick Desaulniers <ndesaulniers@google.com>
+
