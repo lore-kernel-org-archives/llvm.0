@@ -1,37 +1,37 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3641854;
-	Mon, 17 Apr 2023 06:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABDFC2DE;
+	Mon, 17 Apr 2023 06:49:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681713524; x=1713249524;
+  t=1681714184; x=1713250184;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=APSV8unHo6232fDV6VKenS3ZBFA96bR9koTl2+6CQjk=;
-  b=NUGYxRJKyfxby7dQaJ2TAH10e1KBy6u2NmRnNEhLQXm+5kGHGy5LL+am
-   Y4/I5Xki9D/xYYJ/Vv4kHGgl3CPmrmn5kAviZ/YICis3SwHrS18SQmig/
-   PRQDbfNQTD4sLejJ2A3n2MjChIYraXxjS0QqKz42aIwX6/7+p7G82o1JA
-   KijFLwNKwudb6O+ngV0dhG+1yqqqvLK9Lrc0QfakUumZaqhpBcfF9oUmj
-   JZGCbHlv0br+eDQlg8T92Cc7LAGCnXzLF3EAvZcOojZPk2PXJTTVGaFxv
-   18DeZXAQbIDD0XzZpcJvGabbG6b+ZG5/jEGlDei+5vyUFgk3qmXwVxsGV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="325162549"
+  bh=pw05ArBEOGC8O4oDZZnDPNta+hX5gpR0Bhz+4+xnn58=;
+  b=GAZKVK+SipGOl2qcp/sg81E2BQKoNQ8mar0DoRdsPqcglIYF0qRw6Ris
+   ErH2ZdD5rjTqJSVr8ASe23dDJRxparG33G6v2jZIEKDSLXwPx8xVKQ6vL
+   sazQ56LGQDWV20/tOVATRYTzqrGhRssKHTh6mwHsxiDgsb85/hu/29F7e
+   Jt2HS8o1O+yJIGhtJsNsf7YezRBtQQIFL4nb/flA0HY+zbqqLpE1x043h
+   xMvTxrMnA+xR6/3CvjeB9AU3KQMJJqD+DjXO/5bu0aN5KOI9AyU9TW3u5
+   dIBLoaC+LNgozZfD83krpP5/zyHg2zh+t/lKuMn9EUAqzytViJSq2S4jN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="407711542"
 X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="325162549"
+   d="scan'208";a="407711542"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 23:38:43 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 23:49:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="684051518"
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="684053053"
 X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="684051518"
+   d="scan'208";a="684053053"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 16 Apr 2023 23:38:37 -0700
+  by orsmga007.jf.intel.com with ESMTP; 16 Apr 2023 23:49:38 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1poIVZ-000cD3-0V;
-	Mon, 17 Apr 2023 06:38:37 +0000
-Date: Mon, 17 Apr 2023 14:38:15 +0800
+	id 1poIgD-000cDj-1w;
+	Mon, 17 Apr 2023 06:49:37 +0000
+Date: Mon, 17 Apr 2023 14:48:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -52,7 +52,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Gerd Hoffmann <kraxel@redhat.com>,
 	Christoph Hellwig <hch@infradead.org>
 Subject: Re: [PATCH net-next] xsk: introduce xsk_dma_ops
-Message-ID: <202304171427.Uaryn9jl-lkp@intel.com>
+Message-ID: <202304171441.eZRwCNsh-lkp@intel.com>
 References: <20230417032750.7086-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -73,27 +73,29 @@ kernel test robot noticed the following build errors:
 url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/xsk-introduce-xsk_dma_ops/20230417-112903
 patch link:    https://lore.kernel.org/r/20230417032750.7086-1-xuanzhuo%40linux.alibaba.com
 patch subject: [PATCH net-next] xsk: introduce xsk_dma_ops
-config: i386-randconfig-a011-20230417 (https://download.01.org/0day-ci/archive/20230417/202304171427.Uaryn9jl-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: mips-randconfig-r021-20230416 (https://download.01.org/0day-ci/archive/20230417/202304171441.eZRwCNsh-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/28e766603a33761d7bd1fdd3e107595408319f7d
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Xuan-Zhuo/xsk-introduce-xsk_dma_ops/20230417-112903
         git checkout 28e766603a33761d7bd1fdd3e107595408319f7d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash net/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304171427.Uaryn9jl-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304171441.eZRwCNsh-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/xdp/xsk_buff_pool.c:430:26: error: incompatible function pointer types assigning to 'dma_addr_t (*)(struct device *, struct page *, unsigned long, size_t, enum dma_data_direction, unsigned long)' (aka 'unsigned int (*)(struct device *, struct page *, unsigned long, unsigned int, enum dma_data_direction, unsigned long)') from 'dma_addr_t (struct device *, struct page *, size_t, size_t, enum dma_data_direction, unsigned long)' (aka 'unsigned int (struct device *, struct page *, unsigned int, unsigned int, enum dma_data_direction, unsigned long)') [-Werror,-Wincompatible-function-pointer-types]
+>> net/xdp/xsk_buff_pool.c:430:26: error: incompatible function pointer types assigning to 'dma_addr_t (*)(struct device *, struct page *, unsigned long, size_t, enum dma_data_direction, unsigned long)' (aka 'unsigned int (*)(struct device *, struct page *, unsigned long, unsigned int, enum dma_data_direction, unsigned long)') from 'dma_addr_t (struct device *, struct page *, size_t, size_t, enum dma_data_direction, unsigned long)' (aka 'unsigned int (struct device *, struct page *, unsigned int, unsigned int, enum dma_data_direction, unsigned long)') [-Wincompatible-function-pointer-types]
                    pool->dma_ops.map_page = dma_map_page_attrs;
                                           ^ ~~~~~~~~~~~~~~~~~~
    1 error generated.
