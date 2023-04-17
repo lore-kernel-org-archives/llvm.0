@@ -1,95 +1,129 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7921848;
-	Mon, 17 Apr 2023 05:06:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681708002; x=1713244002;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UDDopr66OsEgnSYquxK5eIR0C0VPS0YpkRdk3HoVf/Q=;
-  b=I1ddWaUDKiLTtAMI746PcRLxTV7mBqL1pY24tcAbZ6ozxEZcg/RPpGNE
-   9CcHYASV8qs8nwgxLNsq5hNE72DRU3MGztp/vn1EJJVGnY5sIGM54C7LZ
-   TK+sA9inMmHr4ftOoKjQjXXgyYFas8U9GuEyK4v+Az7vHzQUmObu4+C+L
-   E8BjZhjeS4HQeZjZBCcz/2NF5mS25gUO+jnXeUYYil7arNjkRB5eBatfM
-   ILU7r6Yur20AWLfjIF/bqv8Ep1VlTxOdFgiXpsyb7bU6yqZi1tdvW5Aw6
-   kiXIBfm5q/U9eU2oI52MHWjGJayrz9XRJUsWvg5kzZ0EQCEqcAvfKosLI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="410019526"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="410019526"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 22:06:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="690515686"
-X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
-   d="scan'208";a="690515686"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 16 Apr 2023 22:06:40 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1poH4U-000c8X-1F;
-	Mon, 17 Apr 2023 05:06:34 +0000
-Date: Mon, 17 Apr 2023 13:05:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Subject: drivers/clk/clk-asm9260.c:258:17: warning: variable 'hw' set but not
- used
-Message-ID: <202304171233.h0vn6dH5-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DD61848
+	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 05:51:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681710696;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VTekV68zVWRjfJRYwdSxoaXAz8rTx4H6/gkEEGuBOOU=;
+	b=EV+VDDlrIFOYYLtjfEbJa0L1Wben4fV4qh/bwuYPZd1sB5PfXMhAoBo07OZHg19hz1/x1H
+	blmbGfAIL8XcwfoFzfHKIJDYVdRWZmWedsOsQ5Qus1IfdF5doWFjGrNyXv/87R//LMZx+r
+	QEXV60vyrrtqtRm3Lh5bq9FaA2XlRzQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-139--hFBtSh8M8Smhhnkbhuizw-1; Mon, 17 Apr 2023 01:51:34 -0400
+X-MC-Unique: -hFBtSh8M8Smhhnkbhuizw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B4128828C0
+	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 05:51:34 +0000 (UTC)
+Received: from [172.64.0.123] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 87BE614171B8;
+	Mon, 17 Apr 2023 05:51:34 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 44 of 358): Test report for master
+ (6.3.0-rc6, mainline.kernel.org-clang, 6c538e1a)
+Date: Mon, 17 Apr 2023 05:51:34 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <38535.123041701513400661@us-mta-139.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dmitry,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
-commit: f5290d8e4f0caa81a491448a27dd70e726095d07 clk: asm9260: use parent index to link the reference clock
-date:   7 months ago
-config: arm-randconfig-r025-20230416 (https://download.01.org/0day-ci/archive/20230417/202304171233.h0vn6dH5-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f5290d8e4f0caa81a491448a27dd70e726095d07
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f5290d8e4f0caa81a491448a27dd70e726095d07
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/
+Tested-by: CKI Project <cki-project@redhat.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304171233.h0vn6dH5-lkp@intel.com/
+Kernel information:
+    Commit message: Merge tag 'sched_urgent_for_v6.3_rc7' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/tip/tip
 
-All warnings (new ones prefixed by >>):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/84850
 
->> drivers/clk/clk-asm9260.c:258:17: warning: variable 'hw' set but not used [-Wunused-but-set-variable]
-           struct clk_hw *hw, *pll_hw;
-                          ^
-   1 warning generated.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-vim +/hw +258 drivers/clk/clk-asm9260.c
 
-   255	
-   256	static void __init asm9260_acc_init(struct device_node *np)
-   257	{
- > 258		struct clk_hw *hw, *pll_hw;
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
