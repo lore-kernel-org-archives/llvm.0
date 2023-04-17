@@ -1,56 +1,56 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD20AD2D
-	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 22:00:12 +0000 (UTC)
-Received: by mail-yb1-f201.google.com with SMTP id d132-20020a254f8a000000b00b868826cdfeso2512931ybb.0
-        for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 15:00:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A77AAD3B
+	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 22:00:15 +0000 (UTC)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-54faf2e22afso135383177b3.7
+        for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 15:00:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681768812; x=1684360812;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZQrcPnaz6i7jaUL3dB9umNv7i0Yx1YEim5fldBHPBhY=;
-        b=Ka3g0y8hwEbpgHuxcxJn9hTMwnb9D6QDRLuqh5D5ry8ZFrSUBp5Hi3M0RdOM7qC4G2
-         8ZzTqA5lk5KEoSZqo1jGdvm72/o5cJWl2LXIgUdFrp5EkdbhF4CLqPPMFRbIMqmOl86L
-         ycApduk0A3QoX39V+bmC2s0VR4a4lZigwZLfDTa6b680j7qhqlCam6PAJZSZUbwUgJgi
-         B5l/h0mqvPOixUI2DSxYspMSz8uolBC+GF1snmju3gRAyR6+Oqo3fqeZO6trg7PG3QIa
-         kSnc0fqLLN1c+Czwwr0E4zXca8cwUnfBrisSS3jQ9akhfJt4HrHvrcitCebHqLHx4OlM
-         mTYQ==
+        d=google.com; s=20221208; t=1681768814; x=1684360814;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ROFbMOV6yOo0pF0esK8s0D/4X+P3zglkAv5TCX1cqs=;
+        b=a//CU5GAM8cMAJg0CXk4u7gyVLyPhgoZa7x1mGzF/rQPaDLgId/wanEXVqOxXOn+kM
+         nYLD5qN/wOUNiFXB0cOc5R3SjZ2OTsHezj0xJbZPmD04sovR1oR5JJGJ/aDfV/cxg3Vd
+         LgqjpqZPYfBA1ZhN1IOrM/axxWBCDvl7JA0F8QM1Y1Uc2mEqoG5u1bxgNIRw334OOzg3
+         u80lcm6pZMmZoeqG/pLfdVpQafV6hDgyAOCWGYImDTzb2WmqZExgTAbnR58VnCZyCFuV
+         TOvJZzJ4Y16C0wl8Sww6Vf9mTUlZvH9no4BT2ZF4AVgExEoUSCU0mCL3ElUO8LkHYyDU
+         qENQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681768812; x=1684360812;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQrcPnaz6i7jaUL3dB9umNv7i0Yx1YEim5fldBHPBhY=;
-        b=YVULd99XmJEy3YROXSzMHmvy3yGtB3xBCNOvI2dHJkfuoCwV83Fu/xB75Wo4AcGQY9
-         aq+RZlhaBw3R4k71Z8w2qlvH661A44V3xzqnnI/VbDHVYa0F6uAwQa1uElbln7qw1k3G
-         /b99rU0oENHzn9XalPDoHtC034PyQoy+Niqd7u5Wcyfny78/J2vUFLKRsxoLxpFkpiFU
-         Qg1djZ+rW3nf+qAkVTybUuHNubzuZlnQSsOpgPXOEpO/CDR8WiFPaZR3vVXtzpyKpKWI
-         lw5gWqSMlwUyEkacoSQTUVEwfAll29XJTZ21BcA4ArLJc4U7+iaOed8xSVzNhZkhRv44
-         Urag==
-X-Gm-Message-State: AAQBX9cGwWhgyYG6fc6hF7+mVxRWQQkiJqbWj0N11mVOImM14jp1rmhz
-	E8ykP7BHMW7fP5YhEtMGuCCKHihusypSFo1vwIQ=
-X-Google-Smtp-Source: AKy350bXUufvEYS+NAQ3xLM7rU27TmtXGN6FPkU6ZedGZVjdPtlR1WAaSjVEZOTcOMtRZ5ULuB6mqQwyFUR5n/IbDJ0=
+        d=1e100.net; s=20221208; t=1681768814; x=1684360814;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ROFbMOV6yOo0pF0esK8s0D/4X+P3zglkAv5TCX1cqs=;
+        b=FuRlq6a/hG4adOMbjnSyquImuWJOHK7Uym8HGB3apEQrE3fcRt54HyWzjfEgrfagFV
+         nfIp5+nDXD+ucgJl2OMsEP5PLVIsimuYUTch3Sks45zK+ltq3MnlbSmmPlvcJF7XwFCP
+         BqY+l3M1PeAm2bea455GUPnChFyOwcbx78+38Z2mEtURsAra/N7JC6+gyzPEKwQF/U9s
+         0q+ztbmDobQz+leVjDtFNTXn35erZABnbvxgsYWFvl3ZChNmmSG+X9TYdG+AGG429gHd
+         P3g/EoRI8B9hC5OqWOyil8NxRuYkA3DlVhj5JfF3NseMvVDC/pIZRSjSErUnqjLWfrlz
+         iuOQ==
+X-Gm-Message-State: AAQBX9ehKxbr2iQk00Y1Y5D5qEJbSyok79OtoMIrcTpJDpXC8LHNQb7t
+	6U1iCuXvwLN4Vyqynot/rMmVa9QSachzmeSVfEs=
+X-Google-Smtp-Source: AKy350aj8hcRq7cSR+KhDqJVKAfpqj5aUFTlQ600+8xvMXvQ8sXvA/YNrOWGMc/8TS/lRXrMEe/ZtGrMgU+SJgwEYDs=
 X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:e8f1:df30:2fb2:cf8a])
- (user=ndesaulniers job=sendgmr) by 2002:a05:690c:706:b0:545:5f92:f7ee with
- SMTP id bs6-20020a05690c070600b005455f92f7eemr10958911ywb.2.1681768811997;
- Mon, 17 Apr 2023 15:00:11 -0700 (PDT)
-Date: Mon, 17 Apr 2023 15:00:04 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a25:d24e:0:b0:b8b:eea7:525b with SMTP
+ id j75-20020a25d24e000000b00b8beea7525bmr10333781ybg.7.1681768814180; Mon, 17
+ Apr 2023 15:00:14 -0700 (PDT)
+Date: Mon, 17 Apr 2023 15:00:05 -0700
+In-Reply-To: <20230412-no_stackp-v2-0-116f9fe4bbe7@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAGTBPWQC/22MwQoCIRRFf2V46ww1s5lZ9R8R8bSHSpOGTkIM/
- nvSutXlXO49GxTKgQrMwwaZaighxQ5yN4D1GB2xcO8MkssDV0KymG5lRft4MZxGoUeUxnCEvjd YiJmM0fr+iO9l6aUPZU358/NX0ePyT1UF40xp1JM58hMqc3YpuYX2Nj3h2lr7ApnvUaWoAAAA
+References: <20230412-no_stackp-v2-0-116f9fe4bbe7@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1681768810; l=3659;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1681768810; l=3068;
  i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
- bh=uFHb2Ss6mf2TUD8KGl+f7c4yBc2F7Ouqeqyr+hQa2b8=; b=HUGT0zAYJrbcXxiYxtlHHTKQhZ9/JNtQICgwAtY0NthSfX4/eUxRXZtwpqj+Tk1G8a45U81lqTar
- vHycTN/yDftrKtJuCytb4bH3RtxkPLpdbRn6gMVCogqLN3fi6fvG
+ bh=Y+mVeYQgxmjVxZ8TAgHiUAti6DIYAGqhexs7SrW7nh8=; b=k+bDSjx2YwwBdTyaFSoJ/8gMZw5tWZUIXNTaKWaFoZOH6WdmTdy6AGNiUQAbqdFMIvIdWAOy0t2k
+ GvvIDyIJAK3E9qe3zp8TVxxLQwxMwt4iYQrdD0fLqDyjKVw0SXFx
 X-Mailer: b4 0.12.2
-Message-ID: <20230412-no_stackp-v2-0-116f9fe4bbe7@google.com>
-Subject: [PATCH v2 0/2] start_kernel: omit stack canary
+Message-ID: <20230412-no_stackp-v2-1-116f9fe4bbe7@google.com>
+Subject: [PATCH v2 1/2] start_kernel: add no_stack_protector fn attr
 From: ndesaulniers@google.com
 To: "Borislav Petkov (AMD)" <bp@alien8.de>
 Cc: Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org, 
@@ -61,85 +61,83 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-A security research paper was recently published detailing Catch Handler
-Oriented Programming (CHOP) attacks.
-https://download.vusec.net/papers/chop_ndss23.pdf
-The TL;DR being that C++ structured exception handling runtimes are
-attractive gadgets for Jump Oriented Programming (JOP) attacks.
+Back during the discussion of
+commit a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
+we discussed the need for a function attribute to control the omission
+of stack protectors on a per-function basis; at the time Clang had
+support for no_stack_protector but GCC did not. This was fixed in
+gcc-11. Now that the function attribute is available, let's start using
+it.
 
-In response to this, a mitigation was developed under embargo in
-clang-16 to check the stack canary before calling noreturn functions.
-https://bugs.chromium.org/p/llvm/issues/detail?id=30
+Callers of boot_init_stack_canary need to use this function attribute
+unless they're compiled with -fno-stack-protector, otherwise the canary
+stored in the stack slot of the caller will differ upon the call to
+boot_init_stack_canary. This will lead to a call to __stack_chk_fail
+then panic.
 
-This started causing boot failures in Android kernel trees downstream of
-stable linux-4.14.y that had proto-LTO support, as reported by Nathan
-Chancellor.
-https://github.com/ClangBuiltLinux/linux/issues/1815
-
-Josh Poimboeuf recently sent a series to explicitly annotate more
-functions as noreturn. Nathan noticed the series, and tested it finding
-that it now caused boot failures with clang-16+ on mainline (raising the
-visibility and urgency of the issue).
-https://lore.kernel.org/cover.1680912057.git.jpoimboe@kernel.org/
-V2 of this series is rebased on tip/objtool/core @
-88b478ee5c7b080b70c68d6e9b3da6c2b518ceb0 now that that series has been
-picked up.
-
-Once the embargo was lifted, I asked questions such as "what does C++
-structured exception handling have to do with C code" and "surely GCC
-didn't ship the same mitigation for C code (narrator: 'They did not:
-https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=a25982ada523689c8745d7fb4b1b93c8f5dab2e7')?"
-
-I now have a patch out for LLVM to undo this mess (or at least limit it
-to C++ functions that may throw, similar to GCC's mitigation); it hasn't
-landed yet but we're close to consensus and I expect it to land
-imminently.
-https://reviews.llvm.org/D147975
-
-Remember this thread?  (Pepperidge farms remembers...)
-https://lore.kernel.org/all/20200314164451.346497-1-slyfox@gentoo.org/
-
-That reminded me that years ago we discussed a function attribute for
-no_stack_protector.
-https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
-
-GCC didn't have one at the time, it now does. In addition to the LLVM
-fix, I'd like to introduce this in the kernel so that we might start
-using it in additional places:
-* https://lore.kernel.org/linux-pm/20200915172658.1432732-1-rkir@google.com/
-* https://lore.kernel.org/lkml/20200918201436.2932360-30-samitolvanen@google.com/
-And eventually remove the final macro expansion site of
-prevent_tail_call_optimization.
-
-With the LLVM fix, this series isn't required, but I'd like to start
-paving the way to use these function attributes since I think they are a
-sweet spot in terms of granularity (as opposed to trying to move
-start_kernel to its own TU compiled with -fno-stack-protector).
-
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94722
+Link: https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
-Changes in v2:
-- Rebase to avoid conflicts with Josh's changes.
-- Fix comment style as per Peter.
-- Pick up tags.
-- Link to v1: https://lore.kernel.org/r/20230412-no_stackp-v1-0-46a69b507a4b@google.com
-(sorry for the spam with v2, mrincon is helping me get kinks worked out
-with b4 and our corporate mailer)
-
----
-Nick Desaulniers (2):
-      start_kernel: add no_stack_protector fn attr
-      start_kernel: omit prevent_tail_call_optimization for newer toolchains
-
  arch/powerpc/kernel/smp.c           |  1 +
  include/linux/compiler_attributes.h | 12 ++++++++++++
- init/main.c                         |  9 ++++++++-
- 3 files changed, 21 insertions(+), 1 deletion(-)
----
-base-commit: 88b478ee5c7b080b70c68d6e9b3da6c2b518ceb0
-change-id: 20230412-no_stackp-a98168a2bb0a
+ init/main.c                         |  3 ++-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
-Best regards,
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index f62e5e651bcd..48acae0da034 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1603,6 +1603,7 @@ static void add_cpu_to_masks(int cpu)
+ }
+ 
+ /* Activate a secondary processor. */
++__no_stack_protector
+ void start_secondary(void *unused)
+ {
+ 	unsigned int cpu = raw_smp_processor_id();
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index e659cb6fded3..84864767a56a 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -255,6 +255,18 @@
+  */
+ #define __noreturn                      __attribute__((__noreturn__))
+ 
++/*
++ * Optional: only supported since GCC >= 11.1, clang >= 7.0.
++ *
++ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-no_005fstack_005fprotector-function-attribute
++ *   clang: https://clang.llvm.org/docs/AttributeReference.html#no-stack-protector-safebuffers
++ */
++#if __has_attribute(__no_stack_protector__)
++# define __no_stack_protector		__attribute__((__no_stack_protector__))
++#else
++# define __no_stack_protector
++#endif
++
+ /*
+  * Optional: not supported by gcc.
+  *
+diff --git a/init/main.c b/init/main.c
+index 5d6365510173..1265c8d11052 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -941,7 +941,8 @@ static void __init print_unknown_bootoptions(void)
+ 	memblock_free(unknown_options, len);
+ }
+ 
+-asmlinkage __visible void __init __no_sanitize_address __noreturn start_kernel(void)
++asmlinkage __visible __init __no_sanitize_address __noreturn __no_stack_protector
++void start_kernel(void)
+ {
+ 	char *command_line;
+ 	char *after_dashes;
+
 -- 
-Nick Desaulniers <ndesaulniers@google.com>
+2.40.0.634.g4ca3ef3211-goog
 
