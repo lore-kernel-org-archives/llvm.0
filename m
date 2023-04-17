@@ -1,129 +1,167 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DD61848
-	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 05:51:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1681710696;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VTekV68zVWRjfJRYwdSxoaXAz8rTx4H6/gkEEGuBOOU=;
-	b=EV+VDDlrIFOYYLtjfEbJa0L1Wben4fV4qh/bwuYPZd1sB5PfXMhAoBo07OZHg19hz1/x1H
-	blmbGfAIL8XcwfoFzfHKIJDYVdRWZmWedsOsQ5Qus1IfdF5doWFjGrNyXv/87R//LMZx+r
-	QEXV60vyrrtqtRm3Lh5bq9FaA2XlRzQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-139--hFBtSh8M8Smhhnkbhuizw-1; Mon, 17 Apr 2023 01:51:34 -0400
-X-MC-Unique: -hFBtSh8M8Smhhnkbhuizw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B4128828C0
-	for <llvm@lists.linux.dev>; Mon, 17 Apr 2023 05:51:34 +0000 (UTC)
-Received: from [172.64.0.123] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 87BE614171B8;
-	Mon, 17 Apr 2023 05:51:34 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 44 of 358): Test report for master
- (6.3.0-rc6, mainline.kernel.org-clang, 6c538e1a)
-Date: Mon, 17 Apr 2023 05:51:34 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3641854;
+	Mon, 17 Apr 2023 06:38:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681713524; x=1713249524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=APSV8unHo6232fDV6VKenS3ZBFA96bR9koTl2+6CQjk=;
+  b=NUGYxRJKyfxby7dQaJ2TAH10e1KBy6u2NmRnNEhLQXm+5kGHGy5LL+am
+   Y4/I5Xki9D/xYYJ/Vv4kHGgl3CPmrmn5kAviZ/YICis3SwHrS18SQmig/
+   PRQDbfNQTD4sLejJ2A3n2MjChIYraXxjS0QqKz42aIwX6/7+p7G82o1JA
+   KijFLwNKwudb6O+ngV0dhG+1yqqqvLK9Lrc0QfakUumZaqhpBcfF9oUmj
+   JZGCbHlv0br+eDQlg8T92Cc7LAGCnXzLF3EAvZcOojZPk2PXJTTVGaFxv
+   18DeZXAQbIDD0XzZpcJvGabbG6b+ZG5/jEGlDei+5vyUFgk3qmXwVxsGV
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="325162549"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="325162549"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2023 23:38:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10682"; a="684051518"
+X-IronPort-AV: E=Sophos;i="5.99,203,1677571200"; 
+   d="scan'208";a="684051518"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Apr 2023 23:38:37 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1poIVZ-000cD3-0V;
+	Mon, 17 Apr 2023 06:38:37 +0000
+Date: Mon, 17 Apr 2023 14:38:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+	virtualization@lists.linux-foundation.org,
+	Jason Wang <jasowang@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH net-next] xsk: introduce xsk_dma_ops
+Message-ID: <202304171427.Uaryn9jl-lkp@intel.com>
+References: <20230417032750.7086-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <38535.123041701513400661@us-mta-139.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417032750.7086-1-xuanzhuo@linux.alibaba.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Xuan,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on net-next/main]
 
-Kernel information:
-    Commit message: Merge tag 'sched_urgent_for_v6.3_rc7' of git://git.kern=
-el.org/pub/scm/linux/kernel/git/tip/tip
+url:    https://github.com/intel-lab-lkp/linux/commits/Xuan-Zhuo/xsk-introduce-xsk_dma_ops/20230417-112903
+patch link:    https://lore.kernel.org/r/20230417032750.7086-1-xuanzhuo%40linux.alibaba.com
+patch subject: [PATCH net-next] xsk: introduce xsk_dma_ops
+config: i386-randconfig-a011-20230417 (https://download.01.org/0day-ci/archive/20230417/202304171427.Uaryn9jl-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/28e766603a33761d7bd1fdd3e107595408319f7d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xuan-Zhuo/xsk-introduce-xsk_dma_ops/20230417-112903
+        git checkout 28e766603a33761d7bd1fdd3e107595408319f7d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/84850
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304171427.Uaryn9jl-lkp@intel.com/
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+All errors (new ones prefixed by >>):
+
+>> net/xdp/xsk_buff_pool.c:430:26: error: incompatible function pointer types assigning to 'dma_addr_t (*)(struct device *, struct page *, unsigned long, size_t, enum dma_data_direction, unsigned long)' (aka 'unsigned int (*)(struct device *, struct page *, unsigned long, unsigned int, enum dma_data_direction, unsigned long)') from 'dma_addr_t (struct device *, struct page *, size_t, size_t, enum dma_data_direction, unsigned long)' (aka 'unsigned int (struct device *, struct page *, unsigned int, unsigned int, enum dma_data_direction, unsigned long)') [-Werror,-Wincompatible-function-pointer-types]
+                   pool->dma_ops.map_page = dma_map_page_attrs;
+                                          ^ ~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +430 net/xdp/xsk_buff_pool.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   409	
+   410	int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
+   411		       struct xsk_dma_ops *dma_ops,
+   412		       unsigned long attrs, struct page **pages, u32 nr_pages)
+   413	{
+   414		struct xsk_dma_map *dma_map;
+   415		dma_addr_t dma;
+   416		int err;
+   417		u32 i;
+   418	
+   419		dma_map = xp_find_dma_map(pool);
+   420		if (dma_map) {
+   421			err = xp_init_dma_info(pool, dma_map);
+   422			if (err)
+   423				return err;
+   424	
+   425			refcount_inc(&dma_map->users);
+   426			return 0;
+   427		}
+   428	
+   429		if (!dma_ops) {
+ > 430			pool->dma_ops.map_page = dma_map_page_attrs;
+   431			pool->dma_ops.mapping_error = dma_mapping_error;
+   432			pool->dma_ops.need_sync = dma_need_sync;
+   433			pool->dma_ops.sync_single_range_for_device = dma_sync_single_range_for_device;
+   434			pool->dma_ops.sync_single_range_for_cpu = dma_sync_single_range_for_cpu;
+   435			dma_ops = &pool->dma_ops;
+   436		} else {
+   437			pool->dma_ops = *dma_ops;
+   438		}
+   439	
+   440		dma_map = xp_create_dma_map(dev, pool->netdev, nr_pages, pool->umem);
+   441		if (!dma_map)
+   442			return -ENOMEM;
+   443	
+   444		for (i = 0; i < dma_map->dma_pages_cnt; i++) {
+   445			dma = dma_ops->map_page(dev, pages[i], 0, PAGE_SIZE,
+   446						DMA_BIDIRECTIONAL, attrs);
+   447			if (dma_ops->mapping_error(dev, dma)) {
+   448				__xp_dma_unmap(dma_map, dma_ops, attrs);
+   449				return -ENOMEM;
+   450			}
+   451			if (dma_ops->need_sync(dev, dma))
+   452				dma_map->dma_need_sync = true;
+   453			dma_map->dma_pages[i] = dma;
+   454		}
+   455	
+   456		if (pool->unaligned)
+   457			xp_check_dma_contiguity(dma_map);
+   458	
+   459		err = xp_init_dma_info(pool, dma_map);
+   460		if (err) {
+   461			__xp_dma_unmap(dma_map, dma_ops, attrs);
+   462			return err;
+   463		}
+   464	
+   465		return 0;
+   466	}
+   467	EXPORT_SYMBOL(xp_dma_map);
+   468	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
