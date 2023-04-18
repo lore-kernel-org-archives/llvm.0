@@ -1,44 +1,30 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA20B1FA0;
-	Tue, 18 Apr 2023 09:45:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681811137; x=1713347137;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wlDhzbPza+xuR+HQxyeC3YbJjUbskKZQKYxmK2tXHO4=;
-  b=VhDM9jnKuGVwtKvTvzmfdGxnt4KATHFytFveU5sSurJKh/A0bXakP1YW
-   dk0V9dBTNCTJFUIfu1QKD2J7QSjQkdRgs9yh+L9cc3X+kT7witmGdO9UJ
-   p6Z7w7bxjSBT28ulBu02EXezEqQsRtYVJTw8a4kF9U751QYU5sYn356Gz
-   2bwvNnb0hh/zjzbvDOXQpfVF6BG1TKkCmjvX0j/6MiuYz4iTgjZ86Va0p
-   Ll3qilPySXTt8dXfq5QbfbmgzfqbfBm10DeKSFn1dnfFGas4ygabMqK75
-   ER4q3BANxUxOSp1F3RrAVuvYjETd1mUkpXGXzEe1sqGQ+E1N5adLf1W0F
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="431410555"
-X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="431410555"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 02:45:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="693564006"
-X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="693564006"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2023 02:45:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pohtz-000dDp-2R;
-	Tue, 18 Apr 2023 09:45:31 +0000
-Date: Tue, 18 Apr 2023 17:44:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [sudeep-holla:android13-5.10/ffa 9246/9999] <unknown>:0: error:
- symbol 'secondary_kexec_args' is already defined
-Message-ID: <202304181713.Ji2wpzAl-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7667C1FA0
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 09:46:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1FCCC433D2;
+	Tue, 18 Apr 2023 09:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1681811219;
+	bh=/xfbOpyupvbqNz2qsHH+H4MqAraE3d2u1isOY9SKHmA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P3RILYSZY608JoNmaCMLCq3EX1vBjdMh2BdTdvWV1/8jsNF/pSexOpgeBD6hAC4Lc
+	 ZEs0coHWgDhkJTGyypg9riN/4uuSixFWhGw4rnW0edLOS/XO7N+RdHTWvPYWmxhGYR
+	 kzEsL9VxsDYroMshYRrH2KmTjhcNEDOOTdTUtQBA=
+Date: Tue, 18 Apr 2023 11:46:56 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: sashal@kernel.org, conor@kernel.org, stable@vger.kernel.org,
+	llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH 5.10 0/4] Backport of e89c2e815e76 to linux-5.10.y
+Message-ID: <2023041847-catalyze-unfailing-ffe6@gregkh>
+References: <20230328-riscv-zifencei-zicsr-5-10-v1-0-bccb3e16dc46@kernel.org>
+ <20230411162001.GA3308382@dev-arch.thelio-3990X>
+ <2023041223-nastily-huntress-cfa2@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,44 +33,15 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2023041223-nastily-huntress-cfa2@gregkh>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git android13-5.10/ffa
-head:   9e12ac4f9c69befe08119567c073adc938aafc4d
-commit: ffff118fe157b534c3244f8b300e655231dbd95c [9246/9999] BACKPORT: scripts/Makefile.clang: default to LLVM_IAS=1
-config: mips-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230418/202304181713.Ji2wpzAl-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project c5ade37f1f6f97d628a5b9f2fdbb31b9caa1c8df)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/commit/?id=ffff118fe157b534c3244f8b300e655231dbd95c
-        git remote add sudeep-holla https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git
-        git fetch --no-tags sudeep-holla android13-5.10/ffa
-        git checkout ffff118fe157b534c3244f8b300e655231dbd95c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+On Wed, Apr 12, 2023 at 08:17:06AM +0200, Greg KH wrote:
+> On Tue, Apr 11, 2023 at 09:20:01AM -0700, Nathan Chancellor wrote:
+> > Gentle ping, did this get lost?
+> 
+> Nope, just burried under a raft of other proposed backports.  It's still
+> in my review queue, will get to it eventually...
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304181713.Ji2wpzAl-lkp@intel.com/
+All now queued up, sorry for the delay.
 
-All errors (new ones prefixed by >>):
-
-   arch/mips/include/asm/asmmacro.h:48:2: warning: macro defined with named parameters which are not used in macro body, possible positional parameter found in body which will have no effect
-    .macro local_irq_enable reg=$8
-    ^
-   arch/mips/include/asm/asmmacro.h:53:2: warning: macro defined with named parameters which are not used in macro body, possible positional parameter found in body which will have no effect
-    .macro local_irq_disable reg=$8
-    ^
-   <unknown>:0: error: symbol 'kexec_args' is already defined
->> <unknown>:0: error: symbol 'secondary_kexec_args' is already defined
-   <unknown>:0: error: symbol 'kexec_start_address' is already defined
-   <unknown>:0: error: symbol 'kexec_indirection_page' is already defined
-   <unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+greg k-h
