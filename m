@@ -1,128 +1,85 @@
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+Received: from weierstrass.telenet-ops.be (weierstrass.telenet-ops.be [195.130.137.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993A4256D
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 12:29:17 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 9C6495C00E8;
-	Tue, 18 Apr 2023 08:29:16 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 18 Apr 2023 08:29:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1681820956; x=1681907356; bh=VM
-	wb91EjeaIIwMVJOlqozliVSEbH/Bchyh3fjPDYvkE=; b=fD2wHJI/bKnYdEKMvA
-	OFP1OMUFa/DcdiSvEeS3jyc3fs7pYGjj2nPSJWceSFkyzBgWuYkUp1kM6gzuHeiC
-	9ZIAxIZpZ6jMwkeMdWIPoht4kliqUH3+/QXsLdHCx8HsVa8PSNlCvAfOI2ndVMSm
-	ODRKuMzne3ljJTZv7uka0cz7mwApFi/2JEvh5oF8dt3ZZ3EN4BFhT4kr8KbWzdlJ
-	DuKPdGqHO+bmtVA0j93mpU0DDpPWhXPf0n4p6Kij+LAiVJhs7AzpKoDASbltxXfs
-	6BLCMsyBPhzjx4zag9KGu1Hqv5fb4U0qdwU7rez+twDyaalpKTDspjQHB+9enARb
-	8k4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1681820956; x=1681907356; bh=VMwb91EjeaIIw
-	MVJOlqozliVSEbH/Bchyh3fjPDYvkE=; b=fr585nbRin/G68HRrhwCE2ojOa/tv
-	1zDamuBIAlzPSNcntpQrIdXZdKBfOTs7ToTHbB4pKSkqO3nUs6PBb1ImutS/yxBM
-	2B4B5Uv7EnD+4OcebfIDM8WkEW91M8+0wiglGU5TGk07FiI9dPKIJjs2unCmyzgY
-	lO4fyf/jbo7HoOXPTQ1BAztviLrtGglfSP+qqLAVRcveQPzjYxvrARefG0V+CP+M
-	zlJD2N9wi+SZYY8AddLhOH0tEcSScD2tHUQoRnLHNHtkuo3i/eRBdmNAfLA/SqVj
-	2cKnspDuPfPeAkz84iYpN/LzyZSfyfQcqNaJYxClK1/ZwGBAl82+OZUvw==
-X-ME-Sender: <xms:G40-ZOECZtfLzU_dRwIEh_PFY0w4UQVr2KtuOtXeVZMJ48l5Uil3PA>
-    <xme:G40-ZPV7Z2oMUqoPDeSe0vuHqjtC0mhP7wZz96tkK9zTbmTJHq0bX-JV4RbimIrOz
-    eloZFjxTvpoONFCcd0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelkedghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:G40-ZII9qvrLW9EVD0ArNGrVCJfcHsQkE1vI1ulk9_FEwuyg7aPyTg>
-    <xmx:G40-ZIFoemLCyuhosrpjJst5IN9jbd8FSAV4OJ54ri-kWgradjVBLg>
-    <xmx:G40-ZEUpMllTfuXekGh_6pVCsNSv2cXoIj9asP96ZSLjiPVdvu_tWA>
-    <xmx:HI0-ZAn8YOLM7OFf3Tw8Ff7KmWXEQWEZ5sdyUmu5c62ZBUETdz2YoA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id B7D7BB60089; Tue, 18 Apr 2023 08:29:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17FA12572
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 12:42:12 +0000 (UTC)
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+	by weierstrass.telenet-ops.be (Postfix) with ESMTPS id 4Q13Mc6q1Vz4x3Tj
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 14:37:00 +0200 (CEST)
+Received: from ramsan.of.borg ([84.195.187.55])
+	by andre.telenet-ops.be with bizsmtp
+	id mCci290131C8whw01CciYR; Tue, 18 Apr 2023 14:36:53 +0200
+Received: from geert (helo=localhost)
+	by ramsan.of.borg with local-esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1pokZe-00H56B-Ey;
+	Tue, 18 Apr 2023 14:36:42 +0200
+Date: Tue, 18 Apr 2023 14:36:42 +0200 (CEST)
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+To: Arnd Bergmann <arnd@kernel.org>
+cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+    llvm@lists.linux.dev, Vineet Gupta <vgupta@kernel.org>, 
+    Mike Rapoport <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, 
+    David Hildenbrand <david@redhat.com>, 
+    "Liam R. Howlett" <Liam.Howlett@Oracle.com>, 
+    "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+    Suren Baghdasaryan <surenb@google.com>, 
+    Naoya Horiguchi <naoya.horiguchi@nec.com>, 
+    linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org, 
+    linux-mm@kvack.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+    linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] [v2] mm: make arch_has_descending_max_zone_pfns()
+ static
+In-Reply-To: <20230415081904.969049-1-arnd@kernel.org>
+Message-ID: <cab7df5e-a7d7-ce15-20fa-31afe6f7180@linux-m68k.org>
+References: <20230415081904.969049-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <c28486a2-dc12-4613-abda-bdeace783d40@app.fastmail.com>
-In-Reply-To: 
- <CANpmjNMwYosrvqh4ogDO8rgn+SeDHM2b-shD21wTypm_6MMe=g@mail.gmail.com>
-References: <20230414082943.1341757-1-arnd@kernel.org>
- <20230414162605.GA2161385@dev-arch.thelio-3990X>
- <CANpmjNMwYosrvqh4ogDO8rgn+SeDHM2b-shD21wTypm_6MMe=g@mail.gmail.com>
-Date: Tue, 18 Apr 2023 14:28:55 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Marco Elver" <elver@google.com>, "Nathan Chancellor" <nathan@kernel.org>
-Cc: "Arnd Bergmann" <arnd@kernel.org>,
- "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Nicolas Schier" <nicolas@fjasle.eu>,
- "Alexander Potapenko" <glider@google.com>,
- "Andrey Konovalov" <andreyknvl@gmail.com>,
- "Dmitry Vyukov" <dvyukov@google.com>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>, "Tom Rix" <trix@redhat.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Peter Zijlstra" <peterz@infradead.org>, linux-kbuild@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] kasan: remove hwasan-kernel-mem-intrinsic-prefix=1 for clang-14
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-On Tue, Apr 18, 2023, at 14:06, Marco Elver wrote:
-> On Fri, 14 Apr 2023 at 18:26, Nathan Chancellor <nathan@kernel.org> wrote:
->> On Fri, Apr 14, 2023 at 10:29:27AM +0200, Arnd Bergmann wrote:
-> It errors as expected. But with:
+ 	Hi Arnd,
+
+On Sat, 15 Apr 2023, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
->> clang -Werror -mllvm -hwasan-does-not-exist -c -x c /dev/null -o /dev/null
+> clang produces a build failure on x86 for some randconfig builds
+> after a change that moves around code to mm/mm_init.c:
 >
-> It ends up printing _help_ text, because anything "-h..." (if it
-> doesn't recognize it as a long-form argument), will make it produce
-> the help text.
-
-Ah, that explains a lot. I think I actually tried a few other options, but
-probably only edited part of the option name, and not the beginning, so
-I always saw the help text.
-
->> >  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
->> > +ifeq ($(call clang-min-version, 150000),y)
->> >  CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->> > +endif
->> > +ifeq ($(call gcc-min-version, 130000),y)
->> > +CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->> > +endif
->>
->> I do not think you need to duplicate this block, I think
->>
->>   ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
->>   CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
->>   endif
+> Cannot find symbol for section 2: .text.
+> mm/mm_init.o: failed
 >
-> We just need the clang version check. If the compiler is gcc, it'll do
-> the "right thing" (i.e. not print help text). So at a minimum, we need
-> if "clang version >= 15 or gcc". Checking if gcc is 13 or later
-> doesn't hurt though, so I don't mind either way.
+> I have not been able to figure out why this happens, but the __weak
+> annotation on arch_has_descending_max_zone_pfns() is the trigger here.
+>
+> Removing the weak function in favor of an open-coded Kconfig option
+> check avoids the problem and becomes clearer as well as better to
+> optimize by the compiler.
+>
+> Fixes: 9420f89db2dd ("mm: move most of core MM initialization to mm/mm_init.c")
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> v2: fix logic bug reported-by: kernel test robot <oliver.sang@intel.com>,
+> see https://lore.kernel.org/oe-lkp/202304151422.5e4d380b-oliver.sang@intel.com
 
-I've sent a v2 now, with an updated help text and the simplified
-version check.
+Thanks, reverting commit 413d478d3b366d09 ("mm: make
+arch_has_descending_max_zone_pfns() static") in next-20230417 and
+applying your v2 makes Salvator-XS regain its DMA memory zone.
 
-It might be possible to change the cc-option check in a way that
-parses the output, this variant should do that, if we care:
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-echo "char *str = \"check that assembler works\";" | clang -Werror -mllvm -hwasan-does-not-exist  -S -x c - -o - | grep -q "check that assembler works"
+Gr{oetje,eeting}s,
 
-      Arnd
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
