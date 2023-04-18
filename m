@@ -1,114 +1,139 @@
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FCCAFC3
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 17:15:11 +0000 (UTC)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailout.west.internal (Postfix) with ESMTP id 8E2C63200942;
-	Tue, 18 Apr 2023 13:15:10 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 18 Apr 2023 13:15:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1681838110; x=1681924510; bh=S3GhOuCYcd2nhZg7uJTlbvD5zzXKBRBChgs
-	30ByJ2yY=; b=Ea6ugq7MZ7XwAB6UnZ74ROq13UZ1berua3YQoaiarAYuynX0Iby
-	ey24AqGu0k9l1RQiRU3FrvoYnvt4AEoY+yaNCGcCa+/42bODFluZbXB7eiTubdbm
-	kQQshY/U+VPr64A3/FuCs+gMbyLkGcw7Jm/zDNW8+1M2HDYJIlqYIxjkaIRoW8gE
-	SB8Rm2XJLbMLHm+/wLqugajPGP97CyVlMIBsEg/CRTK+QXSIoRXUgN8m9VIuksAB
-	tXCCcTx6LMjry90GB743baMgdmV+LLXOLwJx3EuBJUPfKqgbOJF9le5oGTaUypHW
-	SMiIUYZgyyEdLCusLdsutEUjoHSY8MLg5cQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1681838110; x=1681924510; bh=S3GhOuCYcd2nhZg7uJTlbvD5zzXKBRBChgs
-	30ByJ2yY=; b=PCCWGkQzlnHoLbF2+1mGNbWPO7GSuKa20GeRd8J6dZiBiOxsSXy
-	7SlFxUZgd67Xn1UCLMpezRzCFsOdKtKAeqQ/7INv9jufrpNBRlZinEzMJJilTwru
-	AMv1GuqkRQPRs7Jz30+D40GBfd7a+rRc4PhDtqWYBBq4grFBpqE6pY0OAm71ZdgB
-	ALH5raDout52LuBb1b9l2YIgiMG3N18DaggHMeY4uljiBl74JyhDuKyKXpqHmq5f
-	ewNIMwcse0r72Ve4xCsIA2yXDybsX9XlNZOZcwPYDSuDChZOBfM/AEBAC+qPgnpg
-	ahnUapRDWRFJPPd/SFWZ7GHBg9+My/YN0lw==
-X-ME-Sender: <xms:HdA-ZHQ0ckH_ArpfUE8NFU9j7oT0xBu670_tGOIPK0F6yiAhFchFCg>
-    <xme:HdA-ZIypprOq8L7FPa6SCMA5nUtsdHOWRa_xHF4Lk7S3vG54fTO_XIINNFtgiKs2q
-    MNBNgCxrAxkYYT6Agc>
-X-ME-Received: <xmr:HdA-ZM1Quub0JCgsHQjxG_NCpAZH6J4cVFzLObEaWa3C-s_Qv9uvEgEcHZTsVRek6yHH>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdelkedguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:HdA-ZHABzCldI8WYftXXvw7oNbS79Q2p8KC_xhDzOOVNyiVIjTMhNQ>
-    <xmx:HdA-ZAgBq8S6RrT0eX1PSeIpT4NA4GKBldrq2P_Xu23KScCpZEI16A>
-    <xmx:HdA-ZLo8A8Qp-f4I5u7JBwYDxyY1W3tAxgpNk5XDYH9IMVZoPUM6EQ>
-    <xmx:HtA-ZJu_rHlCzQcSQDdOQzEeDTBH5i5_D40clvnM0x2kB5z_flLFBg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Apr 2023 13:15:08 -0400 (EDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A78AFC3;
+	Tue, 18 Apr 2023 17:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681838941; x=1713374941;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8sTyy/MBLR7M7+ZMaGdrA3Vqd4cpkWN0mXm9dxewjUs=;
+  b=eC5Id2t2B/kEgdKcCP7kLpbGTETs0E6TFPbG35DzmOJhEew8gW/MhJIF
+   7XpoY637Wwrz1ICUPjDWX03vc8ZOe1SJeFH6QgEzAMI+b3bbL0l/BTb2j
+   inYtnEheHZmEkedTgBNqOuYd8neyeOBkzjS4Dpox+mnC39+8ZhMN/AgMt
+   ER2xAkjzuWUiKoelTJ9Jf2ZxGV7X//MvuFt7dF9hDxwEoUSbJrVmo2ScE
+   eR2YFG5wSkWfooUrnQxVJwV2oH9GzH0tytZsAmMh6hsz6Y3Zi/YcHL7zf
+   vAS9SQn/puRYaFi8MbhjU4eRI3c1qLGb2a6mKNh5JKQtyjCwdYPOOikzH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="347088896"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="347088896"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:29:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="755767769"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="755767769"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Apr 2023 10:28:58 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pop8T-000doH-3D;
+	Tue, 18 Apr 2023 17:28:57 +0000
+Date: Wed, 19 Apr 2023 01:28:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Waiman Long <longman@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sasha Levin <sashal@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [linux-stable-rc:queue/5.15 86/88] kernel/cgroup/cpuset.c:2979:23:
+ error: use of undeclared identifier 'cgroup_mutex'; did you mean
+ 'cgroup_put'?
+Message-ID: <202304190126.6FziYqlt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH v2 3/7] MIPS: Detect toolchain support of workarounds in
- Kconfig
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230418130945.GB12456@alpha.franken.de>
-Date: Tue, 18 Apr 2023 18:14:57 +0100
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- llvm@lists.linux.dev,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <nathan@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1146BEC7-89AE-418E-8F5E-F328D578A0E0@flygoat.com>
-References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
- <20230414080701.15503-4-jiaxun.yang@flygoat.com>
- <20230418130945.GB12456@alpha.franken.de>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Mailer: Apple Mail (2.3731.500.231)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.15
+head:   ec40996c2eeacb96d6a8f06f270cc0d5aa89d2a5
+commit: d7b4889d3500cbc6111502bd24c9292c3942bdad [86/88] cgroup/cpuset: Add cpuset_can_fork() and cpuset_cancel_fork() methods
+config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20230419/202304190126.6FziYqlt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=d7b4889d3500cbc6111502bd24c9292c3942bdad
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/5.15
+        git checkout d7b4889d3500cbc6111502bd24c9292c3942bdad
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304190126.6FziYqlt-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/cgroup/cpuset.c:2979:23: error: use of undeclared identifier 'cgroup_mutex'; did you mean 'cgroup_put'?
+           lockdep_assert_held(&cgroup_mutex);
+                                ^~~~~~~~~~~~
+                                cgroup_put
+   include/linux/lockdep.h:415:46: note: expanded from macro 'lockdep_assert_held'
+   #define lockdep_assert_held(l)                  do { (void)(l); } while (0)
+                                                               ^
+   include/linux/cgroup.h:431:20: note: 'cgroup_put' declared here
+   static inline void cgroup_put(struct cgroup *cgrp)
+                      ^
+   1 error generated.
 
 
+vim +2979 kernel/cgroup/cpuset.c
 
-> 2023=E5=B9=B44=E6=9C=8818=E6=97=A5 14:09=EF=BC=8CThomas Bogendoerfer =
-<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Fri, Apr 14, 2023 at 09:06:57AM +0100, Jiaxun Yang wrote:
->> LLVM toolchain does not support most of workarounds, detect
->> those supports in Kconfig so we can hide unsupported workarounds
->> to user.
->=20
-> again hiding something, which then needs to be digged out is IMHO not
-> a good way.
+  2961	
+  2962	/*
+  2963	 * In case the child is cloned into a cpuset different from its parent,
+  2964	 * additional checks are done to see if the move is allowed.
+  2965	 */
+  2966	static int cpuset_can_fork(struct task_struct *task, struct css_set *cset)
+  2967	{
+  2968		struct cpuset *cs = css_cs(cset->subsys[cpuset_cgrp_id]);
+  2969		bool same_cs;
+  2970		int ret;
+  2971	
+  2972		rcu_read_lock();
+  2973		same_cs = (cs == task_cs(current));
+  2974		rcu_read_unlock();
+  2975	
+  2976		if (same_cs)
+  2977			return 0;
+  2978	
+> 2979		lockdep_assert_held(&cgroup_mutex);
+  2980		percpu_down_write(&cpuset_rwsem);
+  2981	
+  2982		/* Check to see if task is allowed in the cpuset */
+  2983		ret = cpuset_can_attach_check(cs);
+  2984		if (ret)
+  2985			goto out_unlock;
+  2986	
+  2987		ret = task_can_attach(task, cs->effective_cpus);
+  2988		if (ret)
+  2989			goto out_unlock;
+  2990	
+  2991		ret = security_task_setscheduler(task);
+  2992		if (ret)
+  2993			goto out_unlock;
+  2994	
+  2995		/*
+  2996		 * Mark attach is in progress.  This makes validate_change() fail
+  2997		 * changes which zero cpus/mems_allowed.
+  2998		 */
+  2999		cs->attach_in_progress++;
+  3000	out_unlock:
+  3001		percpu_up_write(&cpuset_rwsem);
+  3002		return ret;
+  3003	}
+  3004	
 
-Agreed, my universal target is to make every defconfig build against =
-clang so we
-can leverage clang=E2=80=99s warning to find any potential problems, and =
-possibly use clang
-built kernel on machines that don't need those workaround. Seems like =
-better option
-Is to let user to drop those configs manually.
-
-Will drop this two patch.
-
-Thanks
-Jiaxun
-
-
->=20
-> Thomas.
->=20
-> --=20
-> Crap can work. Given enough thrust pigs will fly, but it's not =
-necessarily a
-> good idea.                                                [ RFC1925, =
-2.3 ]
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
