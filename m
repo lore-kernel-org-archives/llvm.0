@@ -1,173 +1,130 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C72BAFC3;
-	Tue, 18 Apr 2023 17:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681840202; x=1713376202;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4g4RNFt/nvzBukVZ+1r6EaicuiIbuuWLbEhbGbUz/9M=;
-  b=fJKZsUsVe8xiFG1/V6l8I2hpTvtkz3vyhlinnPJm43tDY9s8033BypAS
-   4LQIFfSE48r5hlHKECcPDUbPZSHaLzQjv4PQsItsqOO6FZNuBu993pjR7
-   8Sf/W0Ley4MkTtOoXYXJCAsOr6r5LUsntkztbCibZLQHe26GoMMz8AJHu
-   wCJu+VcS5mgURETNaxUSrNgCqWBGbjvhGzo/K+vQYLTdx8TraJC1pcN7B
-   Cu507egHel6ywLD4/+p2TI4UsjCIhCgAVbpvuqHthQRnc9BsJ9Ee2DD8c
-   +CCVMqy4yIxmHY4gpP78gLbrFspsnnmrydkv+RAYFl+tpkqHt1kD3+cvE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="431527664"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="431527664"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 10:50:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780568550"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="780568550"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 10:50:00 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1popSp-000dpj-1m;
-	Tue, 18 Apr 2023 17:49:59 +0000
-Date: Wed, 19 Apr 2023 01:49:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lin Chun Yeh <r09921093@g.ntu.edu.tw>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lin Chun Yeh <r09921093@g.ntu.edu.tw>
-Subject: Re: [PATCH] include/linux/rbtree.h: move the declaration of c in
- rb_find_add()
-Message-ID: <202304190118.H5o8xyuA-lkp@intel.com>
-References: <20230418145712.20620-1-r09921093@g.ntu.edu.tw>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F41923A7
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 18:36:29 +0000 (UTC)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-247526f0eceso1204213a91.2
+        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 11:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681842988; x=1684434988;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ApsPN1GAt+bKSjbs42LxkANlc6ClVgqELeBRCapEZOY=;
+        b=fcvQ6uiiAwbiDHp9ofdozAuOiqo8sbjEaS1wJfZPJdR7ku/k91ggC43xkhzyyW+7nI
+         yL05D8fKTVowBu7cH7oGSbwvorwMmpZfZp+be71T12rL9TRGAsRKhgX9BtbLc+iyZwgq
+         Qb48G1rKzQZjLEUD5f92333ozX9LrkHTarpi26AV6WxfUdF8E317PyK+GRvYlhJDse5Z
+         MEZRohJ9XuAxL4kVb0Aft7cnNRU1ffRIyB+Hpuwglq4gprdj5r075/QYekStmw9Zcc7e
+         uJaoVEg0RaJ6z9kkri0qCgyEJPxz6DZVa/1Zx09Yl/HmHiUZVgIL62G/nueZQ1DngeXx
+         2F5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681842988; x=1684434988;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ApsPN1GAt+bKSjbs42LxkANlc6ClVgqELeBRCapEZOY=;
+        b=h0uZw/jaEPFqh45hR5Dqrt4h8fLI6x8XZfDv/Ui8FnNTPV7dKXUW8N3cs1vcAr1ufF
+         7FJiPS1pKsgJNYU4sNwL8lciMZ5y4M+vlki+t1i5S/fO9qzOug1GD+Gwj/GA8BFhkidG
+         t0cICX/ZBjlwlRuRToMTh2RCkjJxHSFj/Ur9PWWyQ7R1iFyxzKt5T24GVEegtHl4ABx+
+         9AJfsoGu2IgIBGPyjDu6YhAQM3C9PpHaqBlW8BXikKGqOosYxpFz4/FlpsEcNHpYQ5Em
+         S1vv8Vn9yrOCEKcZBJdG0hKGBF5Mc/fDexCBBq76BopP7Er+lTX8oqKRRv8yNNVk1ylJ
+         gJzQ==
+X-Gm-Message-State: AAQBX9dIq9Aoyi1uuaS/vuv2Vuf+8dHrqcgXy2tE/bsqlcrNuwXByPT2
+	nnI1HVnhN1S2ChPGwd9JQR9dalt/mbLfNS74MOCNzg==
+X-Google-Smtp-Source: AKy350ZShnO2tG7T/57z/jUzMW01PDWOatg+RwsX6uSLq6+zwhs8lAyWd6JaHE6qNghBF+/vCyIJp0/ga1bkMCOPgjE=
+X-Received: by 2002:a17:90a:d70b:b0:246:ba3f:4f3e with SMTP id
+ y11-20020a17090ad70b00b00246ba3f4f3emr605102pju.6.1681842988421; Tue, 18 Apr
+ 2023 11:36:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418145712.20620-1-r09921093@g.ntu.edu.tw>
+References: <20230418-dwmac-meson8b-clk-cb-cast-v1-1-e892b670cbbb@kernel.org>
+In-Reply-To: <20230418-dwmac-meson8b-clk-cb-cast-v1-1-e892b670cbbb@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 18 Apr 2023 11:36:17 -0700
+Message-ID: <CAKwvOd=DeCNoQYuTJVfbd0tSddJpGVaKBTEfC-+XUN4OJ4hRRw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: stmmac: dwmac-meson8b: Avoid cast to
+ incompatible function type
+To: Simon Horman <horms@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Jose Abreu <joabreu@synopsys.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-amlogic@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, 
+	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>, 
+	Nathan Huckleberry <nhuck@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lin,
+On Tue, Apr 18, 2023 at 4:07=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> Rather than casting clk_disable_unprepare to an incompatible function
+> type provide a trivial wrapper with the correct signature for the
+> use-case.
+>
+> Reported by clang-16 with W=3D1:
+>
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c:276:6: error: cast f=
+rom 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible=
+ function type [-Werror,-Wcast-function-type-strict]
+>                                         (void(*)(void *))clk_disable_unpr=
+epare,
+>                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~
+> No functional change intended.
+> Compile tested only.
+>
+> Signed-off-by: Simon Horman <horms@kernel.org>
 
-kernel test robot noticed the following build errors:
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.3-rc7 next-20230417]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lin-Chun-Yeh/include-linux-rbtree-h-move-the-declaration-of-c-in-rb_find_add/20230418-230031
-patch link:    https://lore.kernel.org/r/20230418145712.20620-1-r09921093%40g.ntu.edu.tw
-patch subject: [PATCH] include/linux/rbtree.h: move the declaration of c in rb_find_add()
-config: arm-randconfig-r046-20230416 (https://download.01.org/0day-ci/archive/20230419/202304190118.H5o8xyuA-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/9348e5c71c46a8d88c805acf5dd56c1785bc04e8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lin-Chun-Yeh/include-linux-rbtree-h-move-the-declaration-of-c-in-rb_find_add/20230418-230031
-        git checkout 9348e5c71c46a8d88c805acf5dd56c1785bc04e8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/tilcdc/ drivers/memstick/host/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304190118.H5o8xyuA-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:20:
-   In file included from include/linux/hrtimer.h:16:
->> include/linux/rbtree.h:231:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-                   int c = cmp(node, parent);
-                       ^
-   1 warning generated.
---
-   In file included from drivers/memstick/host/r592.c:8:
-   In file included from include/linux/module.h:14:
-   In file included from include/linux/buildid.h:5:
-   In file included from include/linux/mm_types.h:11:
->> include/linux/rbtree.h:231:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-                   int c = cmp(node, parent);
-                       ^
-   drivers/memstick/host/r592.c:47:13: warning: no previous prototype for function 'memstick_debug_get_tpc_name' [-Wmissing-prototypes]
-   const char *memstick_debug_get_tpc_name(int tpc)
-               ^
-   drivers/memstick/host/r592.c:47:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   const char *memstick_debug_get_tpc_name(int tpc)
-         ^
-   static 
-   2 warnings generated.
---
-   In file included from drivers/gpu/drm/tilcdc/tilcdc_plane.c:7:
-   In file included from include/drm/drm_atomic.h:31:
-   In file included from include/drm/drm_crtc.h:30:
-   In file included from include/drm/drm_modeset_lock.h:28:
-   In file included from include/linux/stackdepot.h:25:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:11:
->> include/linux/rbtree.h:231:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
-                   int c = cmp(node, parent);
-                       ^
-   1 error generated.
---
-   In file included from arch/arm/kernel/asm-offsets.c:11:
-   In file included from include/linux/sched.h:20:
-   In file included from include/linux/hrtimer.h:16:
->> include/linux/rbtree.h:231:7: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
-                   int c = cmp(node, parent);
-                       ^
-   1 warning generated.
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c b/driver=
+s/net/ethernet/stmicro/stmmac/dwmac-meson8b.c
+> index e8b507f88fbc..f6754e3643f3 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c
+> @@ -263,6 +263,11 @@ static int meson_axg_set_phy_mode(struct meson8b_dwm=
+ac *dwmac)
+>         return 0;
+>  }
+>
+> +static void meson8b_clk_disable_unprepare(void *data)
+> +{
+> +       clk_disable_unprepare(data);
+> +}
+> +
+>  static int meson8b_devm_clk_prepare_enable(struct meson8b_dwmac *dwmac,
+>                                            struct clk *clk)
+>  {
+> @@ -273,8 +278,7 @@ static int meson8b_devm_clk_prepare_enable(struct mes=
+on8b_dwmac *dwmac,
+>                 return ret;
+>
+>         return devm_add_action_or_reset(dwmac->dev,
+> -                                       (void(*)(void *))clk_disable_unpr=
+epare,
+> -                                       clk);
+> +                                       meson8b_clk_disable_unprepare, cl=
+k);
+>  }
+>
+>  static int meson8b_init_rgmii_delays(struct meson8b_dwmac *dwmac)
+>
 
 
-vim +231 include/linux/rbtree.h
-
-   212	
-   213	/**
-   214	 * rb_find_add() - find equivalent @node in @tree, or add @node
-   215	 * @node: node to look-for / insert
-   216	 * @tree: tree to search / modify
-   217	 * @cmp: operator defining the node order
-   218	 *
-   219	 * Returns the rb_node matching @node, or NULL when no match is found and @node
-   220	 * is inserted.
-   221	 */
-   222	static __always_inline struct rb_node *
-   223	rb_find_add(struct rb_node *node, struct rb_root *tree,
-   224		    int (*cmp)(struct rb_node *, const struct rb_node *))
-   225	{
-   226		struct rb_node **link = &tree->rb_node;
-   227		struct rb_node *parent = NULL;
-   228	
-   229		while (*link) {
-   230			parent = *link;
- > 231			int c = cmp(node, parent);
-   232	
-   233			if (c < 0)
-   234				link = &parent->rb_left;
-   235			else if (c > 0)
-   236				link = &parent->rb_right;
-   237			else
-   238				return parent;
-   239		}
-   240	
-   241		rb_link_node(node, parent, link);
-   242		rb_insert_color(node, tree);
-   243		return NULL;
-   244	}
-   245	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--=20
+Thanks,
+~Nick Desaulniers
