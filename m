@@ -1,127 +1,107 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F41923A7
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 18:36:29 +0000 (UTC)
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-247526f0eceso1204213a91.2
-        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 11:36:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E39BAFE6
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 18:40:10 +0000 (UTC)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2478485fd76so927947a91.2
+        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 11:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681842988; x=1684434988;
+        d=google.com; s=20221208; t=1681843210; x=1684435210;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ApsPN1GAt+bKSjbs42LxkANlc6ClVgqELeBRCapEZOY=;
-        b=fcvQ6uiiAwbiDHp9ofdozAuOiqo8sbjEaS1wJfZPJdR7ku/k91ggC43xkhzyyW+7nI
-         yL05D8fKTVowBu7cH7oGSbwvorwMmpZfZp+be71T12rL9TRGAsRKhgX9BtbLc+iyZwgq
-         Qb48G1rKzQZjLEUD5f92333ozX9LrkHTarpi26AV6WxfUdF8E317PyK+GRvYlhJDse5Z
-         MEZRohJ9XuAxL4kVb0Aft7cnNRU1ffRIyB+Hpuwglq4gprdj5r075/QYekStmw9Zcc7e
-         uJaoVEg0RaJ6z9kkri0qCgyEJPxz6DZVa/1Zx09Yl/HmHiUZVgIL62G/nueZQ1DngeXx
-         2F5A==
+        bh=1LHv9N9/HFVqKxzoKPoqcmb9LbcWkIAFqisfybYb+MY=;
+        b=q/DWOACuVLUo32r9r6o5lmoYVt3TeJIwgwWAuun3IfYo8MAoz4A5IYJRtJ27dJVgcd
+         zOFM1mW26IBes8vCDwso578PDZWdnr3OkKQF1xFU87nFrY33FHdMpxACIbiH2Mrw79lR
+         A915rnN0qgcrL4hzO2nxCzrgVZYQSBROH+MzxkfAP4q0mVfHF/RQRejfqjswUMBibvqP
+         K0DnWhOMmpGHITjqPoE1P80hdXN7rnQa/NzsiqNCby1zFeC/Ywyyp3apt79KbkFqWt8c
+         /BCgjQRPiDqJYf46YMfitthcTDGgBxg0JGxWavUY4lbSzZURU1TpH8EyWQIoxmpN5mP7
+         CfKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681842988; x=1684434988;
+        d=1e100.net; s=20221208; t=1681843210; x=1684435210;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ApsPN1GAt+bKSjbs42LxkANlc6ClVgqELeBRCapEZOY=;
-        b=h0uZw/jaEPFqh45hR5Dqrt4h8fLI6x8XZfDv/Ui8FnNTPV7dKXUW8N3cs1vcAr1ufF
-         7FJiPS1pKsgJNYU4sNwL8lciMZ5y4M+vlki+t1i5S/fO9qzOug1GD+Gwj/GA8BFhkidG
-         t0cICX/ZBjlwlRuRToMTh2RCkjJxHSFj/Ur9PWWyQ7R1iFyxzKt5T24GVEegtHl4ABx+
-         9AJfsoGu2IgIBGPyjDu6YhAQM3C9PpHaqBlW8BXikKGqOosYxpFz4/FlpsEcNHpYQ5Em
-         S1vv8Vn9yrOCEKcZBJdG0hKGBF5Mc/fDexCBBq76BopP7Er+lTX8oqKRRv8yNNVk1ylJ
-         gJzQ==
-X-Gm-Message-State: AAQBX9dIq9Aoyi1uuaS/vuv2Vuf+8dHrqcgXy2tE/bsqlcrNuwXByPT2
-	nnI1HVnhN1S2ChPGwd9JQR9dalt/mbLfNS74MOCNzg==
-X-Google-Smtp-Source: AKy350ZShnO2tG7T/57z/jUzMW01PDWOatg+RwsX6uSLq6+zwhs8lAyWd6JaHE6qNghBF+/vCyIJp0/ga1bkMCOPgjE=
-X-Received: by 2002:a17:90a:d70b:b0:246:ba3f:4f3e with SMTP id
- y11-20020a17090ad70b00b00246ba3f4f3emr605102pju.6.1681842988421; Tue, 18 Apr
- 2023 11:36:28 -0700 (PDT)
+        bh=1LHv9N9/HFVqKxzoKPoqcmb9LbcWkIAFqisfybYb+MY=;
+        b=JW36jjgfxV30aS9XYbzfDuMKYF7W2p2SCoqbYm6ttft5U3qOoJwgcOS9vq6lLC/8aa
+         bokXbZ6NzQkGnzvByn9Zkz6b7s3oxG44td+VVNBVQfvE/Q5OuPH/lgrg7969oDrdh3GD
+         5K5Gssl9yU3mapYVD2CxyxE3onS0vp0HqrmtTcPzv1EA4etaD+H+e1VHQHjn0IxC/xMv
+         5wbwBvTX39yE6fD8iB4MIS5zQoeK4oGso2/KcQjxB5ZXuyrEMrPciK7kUD30ISoQ85dy
+         nRJJxcX3969b/GCy2nqXvuUnJf91jnjRXW4AgzpHnjjqfGb2dAecUVYOss7p9xvAxbzg
+         Pm1Q==
+X-Gm-Message-State: AAQBX9diHbJfoQCxswDsMeXx6xcBU8tIXRs5hhi3lbtBcT5ZxAEqAIic
+	kyN+0iKHTKzO4zklce53rt4CB2+g/b37/2EELSxJFA==
+X-Google-Smtp-Source: AKy350ZsK0yvZUWE1zRa05ieglnNKlLegyMH1ze252gPEOO5e1sXfeTVgJKdDAD52WLV5jZmdlmhwNoN2Zeo0NR/WbA=
+X-Received: by 2002:a17:90a:4594:b0:22c:59c3:8694 with SMTP id
+ v20-20020a17090a459400b0022c59c38694mr444300pjg.44.1681843209703; Tue, 18 Apr
+ 2023 11:40:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230418-dwmac-meson8b-clk-cb-cast-v1-1-e892b670cbbb@kernel.org>
-In-Reply-To: <20230418-dwmac-meson8b-clk-cb-cast-v1-1-e892b670cbbb@kernel.org>
+References: <20230418-vchiq_platform_init-static-v1-1-3c38ba81bc66@kernel.org>
+In-Reply-To: <20230418-vchiq_platform_init-static-v1-1-3c38ba81bc66@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 18 Apr 2023 11:36:17 -0700
-Message-ID: <CAKwvOd=DeCNoQYuTJVfbd0tSddJpGVaKBTEfC-+XUN4OJ4hRRw@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: stmmac: dwmac-meson8b: Avoid cast to
- incompatible function type
+Date: Tue, 18 Apr 2023 11:39:58 -0700
+Message-ID: <CAKwvOdmuwuSn+4csSCwsNXM01ohsp+ZzcWQ1WfM_kgj_NRugZA@mail.gmail.com>
+Subject: Re: [PATCH] staging: vchiq_arm: Make vchiq_platform_init() static
 To: Simon Horman <horms@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Jose Abreu <joabreu@synopsys.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-stm32@st-md-mailman.stormreply.com, 
-	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>, 
-	Nathan Huckleberry <nhuck@google.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-staging@lists.linux.dev, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 18, 2023 at 4:07=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
+On Tue, Apr 18, 2023 at 4:23=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
 te:
 >
-> Rather than casting clk_disable_unprepare to an incompatible function
-> type provide a trivial wrapper with the correct signature for the
-> use-case.
+> vchiq_platform_init() is only used in this file so it can be static.
 >
-> Reported by clang-16 with W=3D1:
+> clang-16 with W=3D1 reports:
 >
->  drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c:276:6: error: cast f=
-rom 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible=
- function type [-Werror,-Wcast-function-type-strict]
->                                         (void(*)(void *))clk_disable_unpr=
-epare,
->                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~
-> No functional change intended.
-> Compile tested only.
+>  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:5: err=
+or: no previous prototype for function 'vchiq_platform_init' [-Werror,-Wmis=
+sing-prototypes]
+>  int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state=
+ *state)
+>      ^
+>  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:1: not=
+e: declare 'static' if the function is not intended to be used outside of t=
+his translation unit
 >
 > Signed-off-by: Simon Horman <horms@kernel.org>
 
-Thanks for the patch!
+I would have kept the return type on the original line and just added
+the explicit linkage on top, but it's fine and checkpatch doesn't
+complain. Thanks for the patch!
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
->  drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c b/driver=
-s/net/ethernet/stmicro/stmmac/dwmac-meson8b.c
-> index e8b507f88fbc..f6754e3643f3 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-meson8b.c
-> @@ -263,6 +263,11 @@ static int meson_axg_set_phy_mode(struct meson8b_dwm=
-ac *dwmac)
->         return 0;
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.=
+c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> index 40dd62cf7399..59312b9f2058 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> @@ -462,7 +462,8 @@ free_pagelist(struct vchiq_instance *instance, struct=
+ vchiq_pagelist_info *pagel
+>         cleanup_pagelistinfo(instance, pagelistinfo);
 >  }
 >
-> +static void meson8b_clk_disable_unprepare(void *data)
-> +{
-> +       clk_disable_unprepare(data);
-> +}
-> +
->  static int meson8b_devm_clk_prepare_enable(struct meson8b_dwmac *dwmac,
->                                            struct clk *clk)
+> -int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state=
+ *state)
+> +static int
+> +vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *st=
+ate)
 >  {
-> @@ -273,8 +278,7 @@ static int meson8b_devm_clk_prepare_enable(struct mes=
-on8b_dwmac *dwmac,
->                 return ret;
->
->         return devm_add_action_or_reset(dwmac->dev,
-> -                                       (void(*)(void *))clk_disable_unpr=
-epare,
-> -                                       clk);
-> +                                       meson8b_clk_disable_unprepare, cl=
-k);
->  }
->
->  static int meson8b_init_rgmii_delays(struct meson8b_dwmac *dwmac)
+>         struct device *dev =3D &pdev->dev;
+>         struct vchiq_drvdata *drvdata =3D platform_get_drvdata(pdev);
 >
 
 
