@@ -1,45 +1,49 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFE2AFED;
-	Tue, 18 Apr 2023 19:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248C5AFE6;
+	Tue, 18 Apr 2023 19:13:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681845187; x=1713381187;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pCIjkH5ojZL5lr0UZi0Zh9m5e6nLH2vEJTAReE0D9R8=;
-  b=lcX6rhCSiAKtIRinpilzMaUsQRwkAAv06JCBFSiX7APuGcNzyAhmkjnr
-   NlRGmvIGZN/2Fa9Vr/iyhKChVRRhQ6eu0Whw8cTszfwFdNlSCCUvIUOj8
-   AKw0Fj1wIsWw0pBse0ImtK/9IzHrBFi4KRNlPybse7VV1MmCx6A4EVYkf
-   Mqf/oKxM9nsTSdA+MNlGZ4EzlAb980FjsD36Ouynkonr8u7Vcxugmg3If
-   OPKrxzpATaTSQAnoCrAvWUa7UwSzHPOAZNj3vXgTJs5uYgLOc9F1i/TX2
-   RYz5NGxxtMcKYFwZbFdWGTOVh9iu8HA7y4LFGX5oiRBVy/xojpRpaDx/s
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325599438"
+  t=1681845189; x=1713381189;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MOhprBHpr43tz8sYRr2cXoGAuUvU7HU/0ZiTdde8Ipg=;
+  b=dN99pVeFU1w9FvlwzuZ+XSOIx+ZG6NkNqc9Uy/RY60/tNknqV6YKH+qo
+   /6x24HClpBlQijX28jB25SL/M0NGYLLj/JAl4OSrHo7uXRus7i2uSeP3d
+   daEFxbUxm1HP3W97J/maoIg19IFBY3kAQoJuqf4FbrF4ktNNm+w6L6BhV
+   DpNemqUB64pf03gxb/Hvq07Hp4I/2THbGJYT6Nh+fytTmxHEN5hhpwGYw
+   n2py3QMgrqNbAu3ypRhffeFn1cLg0OgIlulSYte9E+gDkmGsce5ZG31ki
+   7pwFKFrWB72XjiDb9sf+e8IPD1eMsBN3dQmjgiRh8k7iYzkrn1Ad3+uNe
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325599445"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="325599438"
+   d="scan'208";a="325599445"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 12:13:06 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 12:13:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="641481109"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="641481108"
 X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="641481109"
+   d="scan'208";a="641481108"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
   by orsmga003.jf.intel.com with ESMTP; 18 Apr 2023 12:13:04 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1poqlD-000dwH-1i;
+	id 1poqlD-000dwF-1b;
 	Tue, 18 Apr 2023 19:13:03 +0000
-Date: Wed, 19 Apr 2023 03:12:37 +0800
+Date: Wed, 19 Apr 2023 03:12:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>
+To: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Tejun Heo <tj@kernel.org>
-Subject: [linux-stable-rc:linux-5.15.y 9993/9999]
- kernel/cgroup/cpuset.c:2979:2: error: member reference base type 'void
- (struct cgroup *)' is not a structure or union
-Message-ID: <202304190332.bk6CiRw8-lkp@intel.com>
+	David Yang <mmyangfl@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] clk: Add simple clock controller
+Message-ID: <202304190206.OjctYqwT-lkp@intel.com>
+References: <20230416194624.1258860-3-mmyangfl@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,115 +52,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230416194624.1258860-3-mmyangfl@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   0b6a5617247cb685e4efb226d56074068ad8d0ce
-commit: aa3aacdd6c3597589da61279f6a2a1666f1a1690 [9993/9999] cgroup/cpuset: Add cpuset_can_fork() and cpuset_cancel_fork() methods
-config: powerpc-randconfig-r032-20230418 (https://download.01.org/0day-ci/archive/20230419/202304190332.bk6CiRw8-lkp@intel.com/config)
+Hi David,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 7a934f4bd7d6f9da84c8812da3ba42ee10f5778e]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/dt-bindings-clock-Add-simple-clock-controller/20230417-034857
+base:   7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
+patch link:    https://lore.kernel.org/r/20230416194624.1258860-3-mmyangfl%40gmail.com
+patch subject: [PATCH v3 2/4] clk: Add simple clock controller
+config: s390-randconfig-r036-20230416 (https://download.01.org/0day-ci/archive/20230419/202304190206.OjctYqwT-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=aa3aacdd6c3597589da61279f6a2a1666f1a1690
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout aa3aacdd6c3597589da61279f6a2a1666f1a1690
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/242d6bab7339a967b40f9731b989913e8b2ea63c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Yang/dt-bindings-clock-Add-simple-clock-controller/20230417-034857
+        git checkout 242d6bab7339a967b40f9731b989913e8b2ea63c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304190332.bk6CiRw8-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304190206.OjctYqwT-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   kernel/cgroup/cpuset.c:2979:23: error: use of undeclared identifier 'cgroup_mutex'; did you mean 'cgroup_put'?
-           lockdep_assert_held(&cgroup_mutex);
-                                ^~~~~~~~~~~~
-                                cgroup_put
-   include/linux/lockdep.h:320:33: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-                                          ^
-   include/linux/lockdep.h:290:47: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                          ^
-   include/linux/lockdep.h:314:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                                         ^
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^
-   include/linux/cgroup.h:431:20: note: 'cgroup_put' declared here
-   static inline void cgroup_put(struct cgroup *cgrp)
-                      ^
->> kernel/cgroup/cpuset.c:2979:2: error: member reference base type 'void (struct cgroup *)' is not a structure or union
-           lockdep_assert_held(&cgroup_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:320:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:290:52: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                               ^ ~~~~~~~
-   include/linux/lockdep.h:314:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   2 errors generated.
-
-
-vim +2979 kernel/cgroup/cpuset.c
-
-  2961	
-  2962	/*
-  2963	 * In case the child is cloned into a cpuset different from its parent,
-  2964	 * additional checks are done to see if the move is allowed.
-  2965	 */
-  2966	static int cpuset_can_fork(struct task_struct *task, struct css_set *cset)
-  2967	{
-  2968		struct cpuset *cs = css_cs(cset->subsys[cpuset_cgrp_id]);
-  2969		bool same_cs;
-  2970		int ret;
-  2971	
-  2972		rcu_read_lock();
-  2973		same_cs = (cs == task_cs(current));
-  2974		rcu_read_unlock();
-  2975	
-  2976		if (same_cs)
-  2977			return 0;
-  2978	
-> 2979		lockdep_assert_held(&cgroup_mutex);
-  2980		percpu_down_write(&cpuset_rwsem);
-  2981	
-  2982		/* Check to see if task is allowed in the cpuset */
-  2983		ret = cpuset_can_attach_check(cs);
-  2984		if (ret)
-  2985			goto out_unlock;
-  2986	
-  2987		ret = task_can_attach(task, cs->effective_cpus);
-  2988		if (ret)
-  2989			goto out_unlock;
-  2990	
-  2991		ret = security_task_setscheduler(task);
-  2992		if (ret)
-  2993			goto out_unlock;
-  2994	
-  2995		/*
-  2996		 * Mark attach is in progress.  This makes validate_change() fail
-  2997		 * changes which zero cpus/mems_allowed.
-  2998		 */
-  2999		cs->attach_in_progress++;
-  3000	out_unlock:
-  3001		percpu_up_write(&cpuset_rwsem);
-  3002		return ret;
-  3003	}
-  3004	
+   s390x-linux-ld: DWARF error: could not find abbrev number 115
+   kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
+   coherent.c:(.text+0xc8): undefined reference to `memunmap'
+   s390x-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
+   coherent.c:(.text+0x14a): undefined reference to `memremap'
+   s390x-linux-ld: coherent.c:(.text+0x254): undefined reference to `memunmap'
+   s390x-linux-ld: kernel/dma/coherent.o: in function `dma_release_coherent_memory':
+   coherent.c:(.text+0x2c0): undefined reference to `memunmap'
+   s390x-linux-ld: DWARF error: could not find abbrev number 53
+   drivers/clk/clk-of.o: in function `of_clk_get_reg':
+>> clk-of.c:(.text+0x6a): undefined reference to `of_iomap'
+   s390x-linux-ld: drivers/clk/clk-of.o: in function `of_crg_ctrl_setup':
+   clk-of.c:(.text+0x322): undefined reference to `of_iomap'
+   s390x-linux-ld: DWARF error: could not find abbrev number 8446
+   drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
+   clk-fixed-mmio.c:(.text+0x48): undefined reference to `of_iomap'
+   s390x-linux-ld: clk-fixed-mmio.c:(.text+0x68): undefined reference to `iounmap'
+   s390x-linux-ld: DWARF error: could not find abbrev number 15506
+   drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+   xillybus_of.c:(.text+0x64): undefined reference to `devm_platform_ioremap_resource'
+   s390x-linux-ld: DWARF error: could not find abbrev number 93
+   drivers/misc/open-dice.o: in function `open_dice_write':
+   open-dice.c:(.text+0xe6): undefined reference to `devm_memremap'
+   s390x-linux-ld: open-dice.c:(.text+0x176): undefined reference to `devm_memunmap'
+   s390x-linux-ld: DWARF error: could not find abbrev number 67
+   drivers/pcmcia/cistpl.o: in function `release_cis_mem':
+   cistpl.c:(.text+0xe8): undefined reference to `iounmap'
+   s390x-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
+   cistpl.c:(.text+0x4a6): undefined reference to `ioremap'
+   s390x-linux-ld: cistpl.c:(.text+0x520): undefined reference to `iounmap'
+   s390x-linux-ld: cistpl.c:(.text+0x572): undefined reference to `iounmap'
+   s390x-linux-ld: cistpl.c:(.text+0x59c): undefined reference to `ioremap'
 
 -- 
 0-DAY CI Kernel Test Service
