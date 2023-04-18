@@ -1,78 +1,211 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDBE1C02
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 16:21:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF6EC4339B;
-	Tue, 18 Apr 2023 16:21:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681834884;
-	bh=KYDGQ9LC4dPkxsMX1LMYuetVwQ+YdQq+9bWbGBBitMU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=FAjdS1X12XnDLtdc2vxXiUiZEUSoRx5JQwgiqbIyXf5jNtZK+REYZ4mBKDmCmoQv7
-	 0KQmMicHUPbbSHyIqfCjadsugLbUtHK5hG6ze75e48XCs0hBYzs2vlQGEz/NeEI71e
-	 mZT5BYh4uh7RuG4gYtpS5A0risLPIElTJiDQsOi86KTj2r78ALN7wymPglJaVKblWW
-	 Axe0NQA1J4qRT6ZluipdMEvB9XEtGJrz16VypAWyMbgieK6a3kn+G0kgMMsh8ZWgl/
-	 yVAFnvVZfNg7/idwIYz55Oh9jLxw9/CRXRO+7yKAv+IAmnSPzBtEFjL4DTLRlbJAEx
-	 De1HdNSCQZeOA==
-From: Mark Brown <broonie@kernel.org>
-To: lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com, nathan@kernel.org, 
- ndesaulniers@google.com, CTLIN0@nuvoton.com, luca.ceresoli@bootlin.com, 
- peda@axentia.se, javierm@redhat.com, u.kleine-koenig@pengutronix.de, 
- ckeepax@opensource.cirrus.com, Tom Rix <trix@redhat.com>
-Cc: alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev
-In-Reply-To: <20230418120955.3230705-1-trix@redhat.com>
-References: <20230418120955.3230705-1-trix@redhat.com>
-Subject: Re: [PATCH] ASoC: nau8825: fix bounds check for adc_delay
-Message-Id: <168183488148.87933.1461165483240440828.b4-ty@kernel.org>
-Date: Tue, 18 Apr 2023 17:21:21 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5CE1C02
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 16:28:16 +0000 (UTC)
+Received: by mail-pj1-f41.google.com with SMTP id kx14so7721829pjb.1
+        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 09:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681835295; x=1684427295;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gg7+zV4NSB6viBP2KzrSgH4qbGRSZleBqwHL94BVLGo=;
+        b=0/6DsPiDHSSaXXKmGoAmwZreYEXCQE1lTa8DjLHyg3HFWkxsEkifdKCCokZcwclg8/
+         Qidpfqh5qXZnVpJeRTCShVUqNq0WbDacEK1gZ3mI6K5OIqbRZpcWp0EhcvaTznNs9Hzx
+         6f1eQdVJSxPNf0jIDMxjwbcswuuWGVs8C3aLHg23LpDFnEqUQXvNLGphtVNxy6qj0A29
+         asKzBqb21uJZ/Fr55rOKReK1HLaHtIwG22gAL06h+Th4H3yVx7aZmPB+i1H3dl1m/Mfo
+         /Z2J7ai/0e1zMpEV27sYhsWChJlinm+tTCD3m58np4ua8GiyG0k10HWcl8N5zqKBG4E7
+         r4VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681835295; x=1684427295;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gg7+zV4NSB6viBP2KzrSgH4qbGRSZleBqwHL94BVLGo=;
+        b=fWm2gR/ihvxyqjB2DcmAlBXVmdXYhD7iRNSzAnQPQIETbBtx+jcMT7ivA0ts+8Y6bY
+         tC5pnoEiJANav+RgAwx0gncUBva1WUffPuXN+KLdt1l0caPASczKng5wIelJnv8HpX4e
+         yXU+FALwdxRRb7aMz2Vu7iO7CeytgIXql2pN6TZBTv55xtqhFJZ5wykX6MNJNvgIWFGw
+         kin0exUT66BGAitc/V0W2jbVS7sgMsqVmEx9wdXUJNoG/uKCBn1gG1yyfVY+Mh99wPzl
+         qI3SVwrlt2QDoptgYoSWxHmDQTepTsTOMPpupvTEc/kWe8H99KxcnFimVqP2ZjFTrFgV
+         0DaQ==
+X-Gm-Message-State: AAQBX9ewLTSeUKVAQCL+oGixvo/qjdJkxe5ird4sGnZCkAfF1pFPZpfP
+	RObPxQc7QbWJ+d7n2XpmidI6YUSziQ/sbNe6ECBrOA==
+X-Google-Smtp-Source: AKy350ads55xeGW5KbL/vPnE9RhcNLgCaUD41EkAnLuTjGQCbY8SQXdr2NjRO8xG0Po5dFCxf9tlLzRZN84isAOfw70=
+X-Received: by 2002:a05:6a20:914c:b0:ee:2f91:206b with SMTP id
+ x12-20020a056a20914c00b000ee2f91206bmr450137pzc.1.1681835295278; Tue, 18 Apr
+ 2023 09:28:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
+References: <20230414005309.GA2198310@google.com> <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
+In-Reply-To: <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 18 Apr 2023 09:28:03 -0700
+Message-ID: <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com>
+Subject: Re: clangd cannot handle tree_nocb.h
+To: Joel Fernandes <joel@joelfernandes.org>, Florent Revest <revest@google.com>
+Cc: rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, paulmck@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 18 Apr 2023 08:09:55 -0400, Tom Rix wrote:
-> clang build reports
-> sound/soc/codecs/nau8825.c:2826:31: error: overlapping comparisons
->   always evaluate to false [-Werror,-Wtautological-overlap-compare]
->         if (nau8825->adc_delay < 125 && nau8825->adc_delay > 500)
->             ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This is a bug, a logical-or should have been used.
-> 
-> [...]
++ Florent
 
-Applied to
+Joel, Florent is doing some cool stuff with clangd and kernels (check
+out the demo at go/linux-kernel-vscode).  I'm pushing Florent to
+publish some of the cool stuff he's been working on externally because
+it is awesome. ;)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Florent, have you seen any such issues such as what Joel reported below?
 
-Thanks!
+On Fri, Apr 14, 2023 at 3:47=E2=80=AFPM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Thu, Apr 13, 2023 at 5:53=E2=80=AFPM Joel Fernandes <joel@joelfernande=
+s.org> wrote:
+> >
+> > Hello!
+> >
+> > I have been trying to get clangd working properly with tree_nocb.h. cla=
+ngd
+> > trips quite badly when trying to build tree_nocb.h to generate ASTs.
+>
+> Hi Joel,
+> Thanks for the report.  What are you using clangd for? I'll bet
+> something interesting.
+>
+> I've never used it myself, so I don't know where to even begin with
+> how to reproduce the issue.
+>
+> It might be worth filing a bug upstream at
+> https://github.com/llvm/llvm-project/issues
+> or internally under the component
+> Language Platforms > C++ > Clang > Tools > Clangd
+> with detailed steps to reproduce (and what the observed error actually
+> is). Feel free to cc me, though I don't know the first thing about
+> clangd.
+>
+> >
+> > I get something like this in the clangd logs showing it 'infers' how to=
+ build
+> > tree_nocb.h because it could not find a command in compile_commands.jso=
+n:
+> >
+> > ASTWorker building file [..]/tree_nocb.h version 9 with command inferre=
+d from
+> > [..]/kernel/rcu/tree.c
+> >
+> > This leads to all hell breaking lose with complaints about missing rcu_=
+data
+> > struct definition and so forth.
+> >
+> > So far I came up with a workaround as follows, but is there a better wa=
+y?
+> >
+> > 1. Open compile_commands.json and add a new entry as follows, with a
+> > definition "-DNOCB_H_CLANGD_PARSE". Otherwise the entry is indentical t=
+o how
+> > tree.c is built.
+> >
+> >   {
+> >     "arguments": [
+> >       "/usr/bin/clang",
+> >       "-Wp,-MMD,kernel/rcu/.treenocb.o.d",
+> >       "-nostdinc",
+> >       "-I./arch/x86/include",
+> >       "-I./arch/x86/include/generated",
+> >       "-I./include",
+> >       "-I./arch/x86/include/uapi",
+> > [...]
+> >       "-Wformat-zero-length",
+> >       "-Wnonnull",
+> >       "-Wformat-insufficient-args",
+> >       "-Wno-sign-compare",
+> >       "-Wno-pointer-to-enum-cast",
+> >       "-Wno-tautological-constant-out-of-range-compare",
+> >       "-Wno-unaligned-access",
+> >       "-DKBUILD_MODFILE=3D\"kernel/rcu/tree\"",
+> >       "-DKBUILD_BASENAME=3D\"tree\"",
+> >       "-DKBUILD_MODNAME=3D\"tree\"",
+> >       "-D__KBUILD_MODNAME=3Dkmod_tree",
+> >       "-DNOCB_H_CLANGD_PARSE",
+> >       "-c",
+> >       "-I",
+> >       "/s/",
+> >       "-I",
+> >       "/s/",
+> >       "-o",
+> >       "kernel/rcu/tree_nocb.h.o",
+> >       "kernel/rcu/tree_nocb.h"
+> >     ],
+> >     "directory": "/usr/local/google/home/joelaf/repo/linux-master",
+> >     "file": "/usr/local/google/home/joelaf/repo/linux-master/kernel/rcu=
+/tree_nocb.h",
+> >     "output": "/usr/local/google/home/joelaf/repo/linux-master/kernel/r=
+cu/tree_nocb.h.o"
+> >   },
+> >
+> > 2.
+> > Then in kernel/tree/tree_nocb.h, I do the following right in the beginn=
+ing.
+> > (Thanks to paulmck@ for this idea).
+> >
+> > #ifdef NOCB_H_CLANGD_PARSE
+> > #include "tree.c"
+> > #endif
+> >
+> > 3. To prevent the above inclusion of tree.c from recursively including
+> > tree_nocb.h, I do the following at the end of tree.c
+> >
+> > +#ifndef NOCB_H_CLANGD_PARSE
+> >  #include "tree_nocb.h"
+> > -#include "tree_plugin.h"
+> > +#endif
+> > +#include "tree_plugin.h"
+> >
+> > With that it works, but if I ever generate compile_commands.json again,=
+ then
+> > I'll have to again modify compile_commands.json manually to make my edi=
+tor
+> > work again with clangd.
+> >
+> > So I guess my questions are:
+> >
+> > 1. Is there a 'standard' procedure to solve something like this?
+> >
+> > 2. How do we fix this the right way?
+> >    One way would be for scripts/clang-tools/gen_compile_commands.py to =
+parse
+> >    header files and generate suitable compile_commands.json based on
+> >    meta-data in the header file.
+> >
+> > 3. How do we fix this for other header files in general? Do we have to =
+make hacks like
+> >    above (sad face) or can we come up with a standard way to make it wo=
+rk for kernel
+> >    sources?
+> >
+> > Thank you!
+> >
+> >  - Joel
+> >
+> >
+> >
+> >
+> >
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-[1/1] ASoC: nau8825: fix bounds check for adc_delay
-      commit: 5f3d94eb7ae877430d9fe6a9aae7dcef6c3e5fea
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
+--=20
 Thanks,
-Mark
-
+~Nick Desaulniers
