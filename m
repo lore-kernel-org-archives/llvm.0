@@ -1,44 +1,56 @@
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A3115B8;
-	Tue, 18 Apr 2023 04:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1565115C7;
+	Tue, 18 Apr 2023 05:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681791451; x=1713327451;
+  t=1681795175; x=1713331175;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5lZgqi3haM74WGprs2woDGHUNCvW9iRyntwDy2oUvL0=;
-  b=V0gM5q1ksHItyoGJa5x113VDyB7lzdAn8q6kEHo5ocdn4MuX7Du6tZPU
-   JCq3hXm1CUSxaHhddFWM86eSq3dqrwWaF8DO6t8cnv16CfsEfILGv6fXy
-   trIDscMbCtwQn9jNKjRArtpL37ddVTihsEoCBrbzuMXuuC/IceAC9m+g7
-   cShntiQQUBxPAf0QGAcdFS79R3OwqiukFx+8lLdU2Ri+r84exqNXkUeUx
-   GqvLrHskxqZdorilBo8A66NK2tEBrlHFM/vUvDi10MQ/M0gSxRo0s809C
-   boqNdSiTHnawiB4itTMuc6pyA3YgBh/BuM+FO/MT6lndLb5AFJRsZ6Knw
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="325409654"
+  bh=ApemhVgsU+TFdPtwqGDQRyH9z/W8/lC9uWid1us00p8=;
+  b=OzoZGTlfYGrTj2w6o0vRNx8c7Ztqu9FJq9jakni54vZLUBIo0lRDcd7J
+   A7hFfVB0gRIlprXfvwZoPem2kxtL9RXX4qxRWtBeeH06c72qcY08FYba4
+   wjjkp5+5mYqTquzgoNrLwwrFNVb/CHpH0DEDX4i8oU0Mrvmk4xB7q2hX0
+   D7kt02ZgdLiqe3jlkly1mLIajWOpCRggVc1mT+HPW3hW/hstkRaqoyEUE
+   BXofVY1poXsCJrUa/L4Fa1gr6MT4HieRcRUFYpPgL0WFLuNx3ds7vrFyA
+   LgHXYOUd3EaHorNoXFHWMrOCEzm1dzWKoTuBi5Vz5PVI9sTsLo0AoOBvz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="325417313"
 X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="325409654"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 21:17:21 -0700
+   d="scan'208";a="325417313"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 22:19:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="668353354"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="815071972"
 X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="668353354"
+   d="scan'208";a="815071972"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 17 Apr 2023 21:17:20 -0700
+  by orsmga004.jf.intel.com with ESMTP; 17 Apr 2023 22:19:22 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pocmN-000cyF-1H;
-	Tue, 18 Apr 2023 04:17:19 +0000
-Date: Tue, 18 Apr 2023 12:16:34 +0800
+	id 1podkP-000d1P-1u;
+	Tue, 18 Apr 2023 05:19:21 +0000
+Date: Tue, 18 Apr 2023 13:18:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Rosenberg <drosen@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH v3 30/37] fuse: Provide registration functions for
- fuse-bpf
-Message-ID: <202304181216.vm8kB0N7-lkp@intel.com>
-References: <20230418014037.2412394-31-drosen@google.com>
+To: Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@somainline.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: Re: [PATCH V1 2/3] drivers: misc: dcc: Add driver support for Data
+ Capture and Compare unit(DCC)
+Message-ID: <202304181327.0grVYsHS-lkp@intel.com>
+References: <b1a9cbbcfefe133cc9047a71a2acdaa74239df29.1681480351.git.quic_schowdhu@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,115 +59,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230418014037.2412394-31-drosen@google.com>
+In-Reply-To: <b1a9cbbcfefe133cc9047a71a2acdaa74239df29.1681480351.git.quic_schowdhu@quicinc.com>
 
-Hi Daniel,
+Hi Souradeep,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 49859de997c3115b85544bce6b6ceab60a7fabc4]
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.3-rc7 next-20230417]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Rosenberg/bpf-verifier-Accept-dynptr-mem-as-mem-in-herlpers/20230418-094717
-base:   49859de997c3115b85544bce6b6ceab60a7fabc4
-patch link:    https://lore.kernel.org/r/20230418014037.2412394-31-drosen%40google.com
-patch subject: [RFC PATCH v3 30/37] fuse: Provide registration functions for fuse-bpf
-config: x86_64-randconfig-a012-20230417 (https://download.01.org/0day-ci/archive/20230418/202304181216.vm8kB0N7-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Souradeep-Chowdhury/dt-bindings-misc-qcom-dcc-Add-the-dtschema/20230414-220304
+patch link:    https://lore.kernel.org/r/b1a9cbbcfefe133cc9047a71a2acdaa74239df29.1681480351.git.quic_schowdhu%40quicinc.com
+patch subject: [PATCH V1 2/3] drivers: misc: dcc: Add driver support for Data Capture and Compare unit(DCC)
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20230418/202304181327.0grVYsHS-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ff2c02ca675655ec88e525c51defda64d7774b0d
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/f3f73f6008e1ebca6fba848e260b1f938d91be95
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Rosenberg/bpf-verifier-Accept-dynptr-mem-as-mem-in-herlpers/20230418-094717
-        git checkout ff2c02ca675655ec88e525c51defda64d7774b0d
+        git fetch --no-tags linux-review Souradeep-Chowdhury/dt-bindings-misc-qcom-dcc-Add-the-dtschema/20230414-220304
+        git checkout f3f73f6008e1ebca6fba848e260b1f938d91be95
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/misc/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304181216.vm8kB0N7-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304181327.0grVYsHS-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from fs/fuse/dev.c:9:
->> fs/fuse/fuse_i.h:1400:5: warning: no previous prototype for function 'init_fuse_bpf' [-Wmissing-prototypes]
-   int init_fuse_bpf(void)
-       ^
-   fs/fuse/fuse_i.h:1400:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int init_fuse_bpf(void)
-   ^
-   static 
->> fs/fuse/fuse_i.h:1404:6: warning: no previous prototype for function 'uninit_fuse_bpf' [-Wmissing-prototypes]
-   void uninit_fuse_bpf(void)
-        ^
-   fs/fuse/fuse_i.h:1404:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void uninit_fuse_bpf(void)
-   ^
-   static 
->> fs/fuse/fuse_i.h:1407:18: warning: no previous prototype for function 'find_fuse_ops' [-Wmissing-prototypes]
-   struct fuse_ops *find_fuse_ops(const char *key)
-                    ^
-   fs/fuse/fuse_i.h:1407:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct fuse_ops *find_fuse_ops(const char *key)
-   ^
-   static 
->> fs/fuse/fuse_i.h:1411:18: warning: no previous prototype for function 'get_fuse_ops' [-Wmissing-prototypes]
-   struct fuse_ops *get_fuse_ops(struct fuse_ops *ops)
-                    ^
-   fs/fuse/fuse_i.h:1411:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct fuse_ops *get_fuse_ops(struct fuse_ops *ops)
-   ^
-   static 
->> fs/fuse/fuse_i.h:1415:6: warning: no previous prototype for function 'put_fuse_ops' [-Wmissing-prototypes]
-   void put_fuse_ops(struct fuse_ops *ops)
-        ^
-   fs/fuse/fuse_i.h:1415:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void put_fuse_ops(struct fuse_ops *ops)
-   ^
-   static 
-   5 warnings generated.
+>> drivers/misc/dcc.c:217:14: warning: variable 'ret' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
+           for (i = 0; i < drvdata->nr_link_list; i++) {
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/dcc.c:238:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/misc/dcc.c:217:14: note: remove the condition if it is always true
+           for (i = 0; i < drvdata->nr_link_list; i++) {
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/dcc.c:190:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
 
-vim +/init_fuse_bpf +1400 fs/fuse/fuse_i.h
+vim +217 drivers/misc/dcc.c
 
-  1385	
-  1386	struct fuse_file *fuse_file_open(struct fuse_mount *fm, u64 nodeid,
-  1387					 unsigned int open_flags, bool isdir,
-  1388					 struct file *file);
-  1389	void fuse_file_release(struct inode *inode, struct fuse_file *ff,
-  1390			       unsigned int open_flags, fl_owner_t id, bool isdir);
-  1391	
-  1392	/* backing.c */
-  1393	#ifdef CONFIG_FUSE_BPF
-  1394	struct fuse_ops *find_fuse_ops(const char *key);
-  1395	struct fuse_ops *get_fuse_ops(struct fuse_ops *ops);
-  1396	void put_fuse_ops(struct fuse_ops *ops);
-  1397	int init_fuse_bpf(void);
-  1398	void uninit_fuse_bpf(void);
-  1399	#else
-> 1400	int init_fuse_bpf(void)
-  1401	{
-  1402		return -EOPNOTSUPP;
-  1403	}
-> 1404	void uninit_fuse_bpf(void)
-  1405	{
-  1406	}
-> 1407	struct fuse_ops *find_fuse_ops(const char *key)
-  1408	{
-  1409		return NULL;
-  1410	}
-> 1411	struct fuse_ops *get_fuse_ops(struct fuse_ops *ops)
-  1412	{
-  1413		return NULL;
-  1414	}
-> 1415	void put_fuse_ops(struct fuse_ops *ops)
-  1416	{
-  1417	}
-  1418	#endif
-  1419	
+   186	
+   187	static int dcc_sw_trigger(struct dcc_drvdata *drvdata)
+   188	{
+   189		void __iomem *addr;
+   190		int ret;
+   191		int i;
+   192		u32 status;
+   193		u32 ll_cfg;
+   194		u32 tmp_ll_cfg;
+   195		u32 val;
+   196	
+   197		mutex_lock(&drvdata->mutex);
+   198	
+   199		for (i = 0; i < drvdata->nr_link_list; i++) {
+   200			if (!test_bit(i, drvdata->enable_bitmap))
+   201				continue;
+   202			ll_cfg = dcc_list_readl(drvdata, i, DCC_LL_CFG);
+   203			tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
+   204			dcc_list_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
+   205			dcc_list_writel(drvdata, 1, i, DCC_LL_SW_TRIGGER);
+   206			dcc_list_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
+   207		}
+   208	
+   209		addr = drvdata->base + DCC_STATUS(drvdata->mem_map_ver);
+   210		if (readl_poll_timeout(addr, val, !FIELD_GET(DCC_STATUS_MASK, val),
+   211				       1, STATUS_READY_TIMEOUT)) {
+   212			dev_err(drvdata->dev, "DCC is busy after receiving sw trigger\n");
+   213			ret = -EBUSY;
+   214			goto out_unlock;
+   215		}
+   216	
+ > 217		for (i = 0; i < drvdata->nr_link_list; i++) {
+   218			if (!test_bit(i, drvdata->enable_bitmap))
+   219				continue;
+   220	
+   221			status = dcc_list_readl(drvdata, i, DCC_LL_BUS_ACCESS_STATUS);
+   222			if (!status)
+   223				continue;
+   224	
+   225			dev_err(drvdata->dev, "Read access error for list %d err: 0x%x\n",
+   226				i, status);
+   227			ll_cfg = dcc_list_readl(drvdata, i, DCC_LL_CFG);
+   228			tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
+   229			dcc_list_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
+   230			dcc_list_writel(drvdata, DCC_STATUS_MASK, i, DCC_LL_BUS_ACCESS_STATUS);
+   231			dcc_list_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
+   232			ret = -ENODATA;
+   233			break;
+   234		}
+   235	
+   236	out_unlock:
+   237		mutex_unlock(&drvdata->mutex);
+   238		return ret;
+   239	}
+   240	
 
 -- 
 0-DAY CI Kernel Test Service
