@@ -1,111 +1,105 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6C5AFED;
-	Tue, 18 Apr 2023 19:13:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681845189; x=1713381189;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hi5rDPKAiKO3dkrZvNzmcu1W3or/62oMJmUKhJ71JxI=;
-  b=dySk9KABxqIujHmrff8iOawN7JZIdSX2UAOSERMJ/necIF1Vn+7FhQNd
-   mRyrFHbIzm5VARqJbbM+gb6Exk16mYbxL6gw6bc2BuV6rfWjRjXfVQM7n
-   ZbVX21epG3a37mI2vth1C4ePN+k1h7fzPZdXFqvtDwMY0Wtf7ber4Bw+t
-   4MM16Mv3kn2P1J76b4WqVzEG8neXhZLzPgJbVb4JMkNSWVwFDC+u9di9f
-   XtQ/oLagri1WvkonTamA4SLbFCgIjS0wakF+M9+FOY6e5go1EhSrUMjPg
-   NdF2v8112qMmUWpBVuwfnn2otWCWOETipoZfPmXNXhVbUnFsl8bGY/c3L
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325599454"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="325599454"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 12:13:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="641481107"
-X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
-   d="scan'208";a="641481107"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2023 12:13:04 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1poqlD-000dwL-1q;
-	Tue, 18 Apr 2023 19:13:03 +0000
-Date: Wed, 19 Apr 2023 03:12:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stefan Berger <stefanb@linux.ibm.com>, kexec@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	nayna@linux.ibm.com, nasastry@in.ibm.com, mpe@ellerman.id.au,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Nageswara R Sastry <rnsastry@linux.ibm.com>,
-	Coiby Xu <coxu@redhat.com>
-Subject: Re: [PATCH v9 4/4] tpm/kexec: Duplicate TPM measurement log in
- of-tree for kexec
-Message-ID: <202304190215.d0zwo1ni-lkp@intel.com>
-References: <20230418134409.177485-5-stefanb@linux.ibm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6BDAFED
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 19:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681845655;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=aai1WHo4fg1sxKcLX3kD4BGAw1PP+pR+m3nWfdfcZTU=;
+	b=SEJPcsAflSfXP88Lt9fb57YukdDbEswjw1lGuKpACS5WyAxg0NBNTljoFiGj/vv/dAGvG9
+	bC4WzVzxisL3tnNpi4w99QF8zVWcU3cXmA8L4JJOdkuZfZS5BExFrt+ii52s2XcBnfGW5O
+	xTgRB9uwuE+7NeVoeakDW11IHC3YHAI=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-eeLlsbT9PXGQ-eBZ5DyxIg-1; Tue, 18 Apr 2023 15:20:54 -0400
+X-MC-Unique: eeLlsbT9PXGQ-eBZ5DyxIg-1
+Received: by mail-qt1-f199.google.com with SMTP id bp42-20020a05622a1baa00b003e6748b05edso27785362qtb.2
+        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 12:20:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681845654; x=1684437654;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aai1WHo4fg1sxKcLX3kD4BGAw1PP+pR+m3nWfdfcZTU=;
+        b=ftU2T++Br3wF/TL8H7iOv0DGkJhV/giUG9jzQ4PRtMgtOCjQY/NWkkSFh/oDdub/kX
+         PJDV7u6PXbgo7LgVWSDkhjWaIQiWZ3nN/kzUUzxIGQZ1QSG+CFHK+BLNrWn6h7x+KYii
+         ZGfgQQUaMHPR9Ci7jz0eZbWjMM32AGkHTiylV/+bC6Ok/kzVCI2V0ar3EHR0ZAWBK9mn
+         eK2JzNty+MJF1pFL5Yr+tLhYEs9G8tfsGlRRRariBAM0XcA36Wpn1wI5YnMpopctR+++
+         2Y6vZbrwgb+OfbvZ/FggaNBtmewh864AygFGSH9pXY2UXY8aFZH1ZKqhotdt8IhVlA8r
+         +cmg==
+X-Gm-Message-State: AAQBX9dRM+nhoCHbbVKnIemqJrc0dJZZ/6b1xGfdZfvc1jKje+cdj3PP
+	A0TqaxbhD+4BYEwiTbHxYgRbk+mh27elw59S3e5RBwukLMeLS/bOKEhWRoxj5DZhgkpvHB+aHTN
+	KG4U6vT/0x0Dvew==
+X-Received: by 2002:a05:6214:410:b0:56c:13cc:d21f with SMTP id z16-20020a056214041000b0056c13ccd21fmr25855297qvx.50.1681845654140;
+        Tue, 18 Apr 2023 12:20:54 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZFUZ7JQR9xbohdXv2IbnkoRfbUviweblbnyFfC0N6wmvnsGUN3xBE3c2IZkXBZ0ZSdmAywfQ==
+X-Received: by 2002:a05:6214:410:b0:56c:13cc:d21f with SMTP id z16-20020a056214041000b0056c13ccd21fmr25855272qvx.50.1681845653894;
+        Tue, 18 Apr 2023 12:20:53 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 7-20020a370c07000000b0074df3f7e14esm1709609qkm.67.2023.04.18.12.20.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 12:20:53 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: quic_jhugo@quicinc.com,
+	ogabbay@kernel.org,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	jacek.lawrynowicz@linux.intel.com,
+	quic_carlv@quicinc.com,
+	stanislaw.gruszka@linux.intel.com,
+	quic_pkanojiy@quicinc.com
+Cc: linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] accel/qaic: initialize ret variable to 0
+Date: Tue, 18 Apr 2023 15:20:46 -0400
+Message-Id: <20230418192046.3235870-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418134409.177485-5-stefanb@linux.ibm.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Stefan,
+clang static analysis reports
+drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
+  value returned to caller [core.uninitialized.UndefReturn]
+        return ret;
+        ^~~~~~~~~~
 
-kernel test robot noticed the following build warnings:
+The ret variable is only set some of the time but is always returned.
+So initialize ret to 0.
 
-[auto build test WARNING on 6a8f57ae2eb07ab39a6f0ccad60c760743051026]
+Fixes: ff13be830333 ("accel/qaic: Add datapath")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/accel/qaic/qaic_data.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Berger/drivers-of-kexec-ima-Support-32-bit-platforms/20230418-214600
-base:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
-patch link:    https://lore.kernel.org/r/20230418134409.177485-5-stefanb%40linux.ibm.com
-patch subject: [PATCH v9 4/4] tpm/kexec: Duplicate TPM measurement log in of-tree for kexec
-config: x86_64-randconfig-a013-20230417 (https://download.01.org/0day-ci/archive/20230419/202304190215.d0zwo1ni-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/16a833d47b9aca53a1b099dea4066b76b7f14ee1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Stefan-Berger/drivers-of-kexec-ima-Support-32-bit-platforms/20230418-214600
-        git checkout 16a833d47b9aca53a1b099dea4066b76b7f14ee1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mailbox/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304190215.d0zwo1ni-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/mailbox/mailbox.c:18:
-   In file included from include/linux/mailbox_client.h:10:
->> include/linux/of.h:1664:48: warning: declaration of 'struct kimage' will not be visible outside of this function [-Wvisibility]
-   static inline void tpm_add_kexec_buffer(struct kimage *image) { }
-                                                  ^
-   1 warning generated.
-
-
-vim +1664 include/linux/of.h
-
-  1660	
-  1661	#if defined(CONFIG_KEXEC_FILE) && defined(CONFIG_OF_FLATTREE)
-  1662	void tpm_add_kexec_buffer(struct kimage *image);
-  1663	#else
-> 1664	static inline void tpm_add_kexec_buffer(struct kimage *image) { }
-  1665	#endif
-  1666	
-
+diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
+index c0a574cd1b35..b46a16fb3080 100644
+--- a/drivers/accel/qaic/qaic_data.c
++++ b/drivers/accel/qaic/qaic_data.c
+@@ -591,7 +591,7 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
+ 	struct qaic_bo *bo = to_qaic_bo(obj);
+ 	unsigned long offset = 0;
+ 	struct scatterlist *sg;
+-	int ret;
++	int ret = 0;
+ 
+ 	if (obj->import_attach)
+ 		return -EINVAL;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
