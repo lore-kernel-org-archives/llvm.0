@@ -1,187 +1,140 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51149C94A
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 21:45:51 +0000 (UTC)
-Received: by mail-ej1-f52.google.com with SMTP id kt6so38645071ejb.0
-        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 14:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1681854349; x=1684446349;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+7fzjxjpSJQbGFahxPhwqauiqYw82JYBD81Vlaf8aNg=;
-        b=n8JnoZPj6nSoiMjCWqD+A8FQGaFm947tubfOwN8d6KbUhPu8/lp5EjJBguCkCuMVKK
-         6ApNVzzAcgaLkuwqGRDQdM3KbXBZymURm+HdMHGVhVVhJl910gYm+lnnHchTCIHPsPt3
-         z1q4QR0zF/wcKHG2FL4TEsFtMCCpYZTAKIcks=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681854349; x=1684446349;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+7fzjxjpSJQbGFahxPhwqauiqYw82JYBD81Vlaf8aNg=;
-        b=Mp5ZjsuSRjTdA+84gq2s0+1CHxSQXXhLEgrWyKR3ttKJn+q0gN7lPGOz+EoWrvlLGF
-         sRR/liEBfr0O6R4J12+JsRtdytiY2FH7nVC+CCk+YRde/Pr5S3HMeYD3DG3qMKoi1MVE
-         eyW7Tt5rJHHJ2B2zZ6Jlapp1TOhT9BOdcE3FbyYV3HNAWiFX3mu1eBlg7wV/Ooy2MFD/
-         s5yEQimi9jf4zZloNqDAwAhrXNuiJMOrpwpbmmcKWRGbgOqC21oNUJKAnWUK7ZHxltMP
-         EXvnnB+1krOL3dMw+9/QV/akWYlR3h/A4JKsQeSbQOy4dy/2I0jhqGb5g8AgVreq2FmA
-         slUA==
-X-Gm-Message-State: AAQBX9fYhCCCxseQ1kW/yY6eFl/YWd+Zk6GC6d0J87w2uYrFaCx4hb0u
-	dkZDdBZi0iGgz5d2FvCKiAPyqg==
-X-Google-Smtp-Source: AKy350ZNFPKryyLDsksUkZk8sVrSowPL//l4P852yJIGScZucnixJVGJkKBnDd29l9yMxe0VpNomlg==
-X-Received: by 2002:a17:906:564e:b0:94e:ec0f:455 with SMTP id v14-20020a170906564e00b0094eec0f0455mr11836365ejr.54.1681854349299;
-        Tue, 18 Apr 2023 14:45:49 -0700 (PDT)
-Received: from smtpclient.apple ([206.0.75.9])
-        by smtp.gmail.com with ESMTPSA id se12-20020a170906ce4c00b0094ecd76eda9sm7499896ejb.182.2023.04.18.14.45.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 14:45:48 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: Joel Fernandes <joel@joelfernandes.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB095C94A
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 21:51:55 +0000 (UTC)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33ILOi1M031252;
+	Tue, 18 Apr 2023 21:51:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3HsRrfr6uEi597nAEVxngP/P+gdrt96xB0IUuG8Lktk=;
+ b=hstE+GG4ITf7i1MOoBBRMo+fKsYmx/TVMd1EZtkF/lUJzduUkyXldmMEN/Id2gtjaO+H
+ 9T0/VqNIk5cEJKPLeEbZpWWq9kj/mwBZLhlupPanPet5CAznkQE/48XyxY1gFjW1tTUF
+ 1s/HJuYeSrI1+1gRhcoeqGqfZcxKUp614lqeqGYTWXnSSwnwteWBjCoVSiOGDcLGEGg9
+ JujpoY7CPhNm6X/pOZS+qVtW8ely1t6lzK5lH7cTH3acL36ByH9yXJWVtHiIDDwoIgYM
+ 9GX3MBT8xea2erTL0WowMgxNpomU6A+e8xKFtjQ8e19BdQQAxhmc5KHRb9HjUFz2xM4U aA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q1v2ahbw9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Apr 2023 21:51:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33ILpQPm006302
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Apr 2023 21:51:26 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
+ 2023 14:51:24 -0700
+Message-ID: <3f27c84f-f8b0-bddf-cdd5-952c9576c6c3@quicinc.com>
+Date: Tue, 18 Apr 2023 15:51:23 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (1.0)
-Subject: Re: clangd cannot handle tree_nocb.h
-Date: Tue, 18 Apr 2023 23:45:37 +0200
-Message-Id: <F76FA81E-C173-418E-B44D-359850A0723A@joelfernandes.org>
-References: <20230418210321.GA3648938@google.com>
-Cc: rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com,
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org, paulmck@kernel.org
-In-Reply-To: <20230418210321.GA3648938@google.com>
-To: Nick Desaulniers <ndesaulniers@google.com>, revest@google.com
-X-Mailer: iPhone Mail (20B101)
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] accel/qaic: initialize ret variable to 0
+Content-Language: en-US
+To: Nick Desaulniers <ndesaulniers@google.com>
+CC: Tom Rix <trix@redhat.com>, <ogabbay@kernel.org>, <nathan@kernel.org>,
+        <jacek.lawrynowicz@linux.intel.com>, <quic_carlv@quicinc.com>,
+        <stanislaw.gruszka@linux.intel.com>, <quic_pkanojiy@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20230418192046.3235870-1-trix@redhat.com>
+ <fe7da2c1-904e-ee4f-9a6c-443049c214b7@quicinc.com>
+ <CAKwvOdmFGVPddi98yt22i+U+3aow+dwhxKgdJ45h3n1i-n3bzw@mail.gmail.com>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <CAKwvOdmFGVPddi98yt22i+U+3aow+dwhxKgdJ45h3n1i-n3bzw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tAIzabtbEnlqnjwMTzlJetoLznbSrvbL
+X-Proofpoint-ORIG-GUID: tAIzabtbEnlqnjwMTzlJetoLznbSrvbL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_15,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 spamscore=0 phishscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304180182
 
-Adding Florent as well since Nick added him to the other thread.
+On 4/18/2023 2:48 PM, Nick Desaulniers wrote:
+> On Tue, Apr 18, 2023 at 1:46 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
+>>
+>> On 4/18/2023 1:20 PM, Tom Rix wrote:
+>>> clang static analysis reports
+>>> drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
+>>>     value returned to caller [core.uninitialized.UndefReturn]
+>>>           return ret;
+>>>           ^~~~~~~~~~
+>>>
+>>> The ret variable is only set some of the time but is always returned.
+>>> So initialize ret to 0.
+>>
+>> This does not appear to be entirely accurate to me.
+>>
+>> Do you know what analysis Clang is doing?  Is it limited to the function
+>> itself?
+>>
+>> remap_pfn_range, which initializes ret, will always run at-least once.
+> 
+> What happens if the loop body is never executed, say if `bo->sgt->sgl` is NULL?
 
-Thanks.
+qaic_gem_object_mmap() doesn't get called unless a valid GEM object is 
+provided by userspace.  For userspace to get a valid GEM object, it has 
+to go through qaic_create_bo_ioctl().  qaic_create_bo_ioctl() will not 
+return a valid GEM object unless sgt is allocated and initialized.
 
-> On Apr 18, 2023, at 11:03 PM, Joel Fernandes <joel@joelfernandes.org> wrot=
-e:
->=20
-> =EF=BB=BFHi Nick,
->=20
->> On Tue, Apr 18, 2023 at 01:46:40PM -0700, Nick Desaulniers wrote:
->>> On Tue, Apr 18, 2023 at 1:36=E2=80=AFPM Joel Fernandes <joel@joelfernand=
-es.org> wrote:
->>>=20
->>> On Fri, Apr 14, 2023 at 03:47:51PM -0700, Nick Desaulniers wrote:
->>>> On Thu, Apr 13, 2023 at 5:53=E2=80=AFPM Joel Fernandes <joel@joelfernan=
-des.org> wrote:
->>>>>=20
->>>>> Hello!
->>>>>=20
->>>>> I have been trying to get clangd working properly with tree_nocb.h. cl=
-angd
->>>>> trips quite badly when trying to build tree_nocb.h to generate ASTs.
->>>>=20
->>>> Hi Joel,
->>>> Thanks for the report.  What are you using clangd for? I'll bet
->>>> something interesting.
->>>=20
->>> Thanks for the response and sorry for the late reply. I am at the OSPM
->>> conference. I use vim and vscode with clangd. In vim, YCM uses it to
->>> highlight compiler errors live while editing, I am pretty happy with it s=
-o
->>> far and has been a huge time saver. Enough that now I want to use it for=
+The loop body will execute at-least once.  The if body will execute 
+at-least once.  remap_pfn_range() will run at-least once.  Therefore, 
+ret is always initialized.
 
->>> everything...
->>=20
->> Cool! I use vim, can you share more info about your set up for this?
->> I'll have to try it.
->=20
-> This is how I installed YCM:
->=20
-> # Install YouCompleteMe for vim
-> # cd ~/.vim/bundle
-> # git clone https://github.com/Valloric/YouCompleteMe.git
-> # cd YouCompleteMe/
-> # git submodule update --init --recursive
-> # python3 install.py --clang-completer
->=20
-> Then install and run bear in the kernel sources to generate
-> compile_compands.json:
-> bear -- make -j99 CC=3Dclang
->=20
-> However, there's also the script:
-> scripts/clang-tools/gen_compile_commands.py
->=20
-> This generates the .json from an existing build. Thank God because we can
-> probably make this generate better .json files which may make clangd bette=
-r.
->=20
-> You don't need YCM to reproduce the issue though if you just use vscode wi=
-th
-> the clangd plugin.
->=20
->>> I first came across clangd when developing Chrome userspace code which i=
-s C++
->>> :). In Chrome, ninja builds can be made to output compile_commands.json.=
+This is how the code is intended to operate, and how it appears to be 
+implemented from what I see.  Unless I'm missing something.
 
->>> However, now I noticed the support in the kernel and was like, wow I nee=
-d to
->>> try it. Further, YCM seems to work much better with it than without :)
->>>=20
->>>> I've never used it myself, so I don't know where to even begin with
->>>> how to reproduce the issue.
->>>=20
->>> Ah ok. :). When I ran get_maintainer on the script, your name popped up a=
-nd
->>> someone also suggested that you're the goto person for clang on the kern=
-el
->>> (which I kind of already knew ;)
->>=20
->> You've cc'ed the right set of folks.  We might not have the expertise
->> related to clangd specifically, but we can point you in the right
->> direction.
->=20
-> Sure, thanks! And thanks for CC'ing the right folks.
->=20
->>>> It might be worth filing a bug upstream at
->>>> https://github.com/llvm/llvm-project/issues
->>>> or internally under the component
->>>> Language Platforms > C++ > Clang > Tools > Clangd
->>>> with detailed steps to reproduce (and what the observed error actually
->>>> is). Feel free to cc me, though I don't know the first thing about
->>>> clangd.
->>>=20
->>> Ok I will consider doing this if needed. One thing I do observe is lack o=
-f
->>> good support for header files and it is a known clangd issue [1].
->>>=20
->>> However, the fixes I was proposing can purely be done in the kernel itse=
-lf
->>> since all it'd require is generating compile_compands.json with the -D<m=
-acro>
->>> and editing files to keep clangd happy. I guess one question is, how wel=
-come
->>> would such changes to header files be since they're for tooling and isn'=
-t
->>> code that will be compiled outside of clangd.
->>=20
->> Specifically your patch sites some log print that doesn't look
->> indicative of a failure:
->> https://github.com/llvm/llvm-project/blob/53430bfd5c9d0074dd6de06dccea366=
-e1d40bce4/clang-tools-extra/clangd/TUScheduler.cpp#L903-L906
->> so something else is going on here. Just trying to make sure we root caus=
-e this.
->>=20
->=20
-> Right, so clangd's log does not show failure, the failure is when it displ=
-ays
-> in the code editor that your code has compiler errors when in fact it does=
+I can see how Clang might not be able to infer these things, but I don't 
+believe the code is broken.  I feel that the commit text is unclear and 
+suggests that the code is infact, broken.
 
-> not.
->=20
-> So if you open up tree_nocb.h in vscode, for example, you'll see squiggles=
+Userspace should not call mmap() in a critical path thus I don't see a 
+true performance concern here.  So while my understanding of the coding 
+style is that redundant initialization of variables are to be avoided, I 
+think we can say that this is not redundant because it silences a 
+warning (because Clang is limited).
 
-> saying 'undefined reference to rcu_data', etc. That makes clangd stop work=
-ing
-> at the error. Sorry to not make the failure mode clear earlier.
->=20
-> thanks,
->=20
-> - Joel
->=20
+>> Feels more accurate to say that Clang cannot detect that ret will be
+>> initialized, and we want to quiet the warning from the false positive.
+>>
+>>> Fixes: ff13be830333 ("accel/qaic: Add datapath")
+>>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>> ---
+>>>    drivers/accel/qaic/qaic_data.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
+>>> index c0a574cd1b35..b46a16fb3080 100644
+>>> --- a/drivers/accel/qaic/qaic_data.c
+>>> +++ b/drivers/accel/qaic/qaic_data.c
+>>> @@ -591,7 +591,7 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
+>>>        struct qaic_bo *bo = to_qaic_bo(obj);
+>>>        unsigned long offset = 0;
+>>>        struct scatterlist *sg;
+>>> -     int ret;
+>>> +     int ret = 0;
+>>>
+>>>        if (obj->import_attach)
+>>>                return -EINVAL;
+>>
+> 
+> 
+
