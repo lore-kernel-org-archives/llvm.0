@@ -1,144 +1,108 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C34BBA50
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 20:46:55 +0000 (UTC)
-Received: by mail-pl1-f182.google.com with SMTP id z2so300776ple.0
-        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 13:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681850815; x=1684442815;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MwZIiVHUhQZs52apnr131loVbxJzKqT7q8JveSlmJaI=;
-        b=5tCJ3PNikCivXIc33R3cairDzMx0H0YL+Bfpqf3eGrF7DDSbI2A/dL2MtyDC0Pvt2v
-         PvoPFLnxKKl3ZBK9bgeki1aAT/vXeboRnMIWpqzBG1fuzvnmU3IhM02AE3ATj4KOaCMH
-         DDuLvu/qq6MyA3Pi6pwCbSeUK4TO42yxHdr+um2eLK6/nOI3+6XuWzE9lE0BZTSKppa9
-         9u22oXvOvFkEi1bd+3dfJxrUhTRfs0kGB8g69I4I6+RyRLwz9kSOtokqXLcgk+1SiYF5
-         Tx0jrA4vgtr8UNjMMHhqD5nTm6yjHF/eCmZEir12z1n/twW+qI9mqZ+EVVCpWdxYeah3
-         6xsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681850815; x=1684442815;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MwZIiVHUhQZs52apnr131loVbxJzKqT7q8JveSlmJaI=;
-        b=ZLMxy3Vk9t7y+YGGDuz8vWtE9+K3v6IwZCn3PogPpg8TzSmEJNq0ibUs8A+1uMFPQk
-         5JrNw3r1/oAD65pqGgsbdN5r8w3i+XAYkvO6bGJ5WCgr9wEQQkK3ml0TbaJJbYNawGkm
-         UB+zbKLh8PAYzCKj5zkNag6jOE/fl4eb2T2MxZsYq+ghmlJ6hgjb1jvZlKFBhDewGB0/
-         6+245v4ya/hatpmZG/YdVa/ObV4+pgcbnvmyD/aM0hYY7vPgjqlCA9xAhzgp+UOfhg6i
-         CnkoJhpB/8IVXj8Wk0ytt7zBfCcqxokfb0wM2CjeheGYx8858fDjRxyqn8Oh3+NVTW8+
-         yJQQ==
-X-Gm-Message-State: AAQBX9fTd4vtqDpQEqqBQwPIxCbTaz4wwjSnNryigLOSsoX7uyHEW6Wi
-	Sdd6NzpTeaIdvvHe169ZEVEAo+dowhycwGkgeN//JQ==
-X-Google-Smtp-Source: AKy350aRAESMi4ZeF0sSdTbpctykvqapaRJIrCqwEiq/p38uC1kh3VmnMLr7DgyjuS7SCK7g8yF2FgdUI3/pCrXJSmQ=
-X-Received: by 2002:a05:6a21:9986:b0:f0:302a:ccd1 with SMTP id
- ve6-20020a056a21998600b000f0302accd1mr1087927pzb.8.1681850814640; Tue, 18 Apr
- 2023 13:46:54 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26FF3BA50
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 20:47:01 +0000 (UTC)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33IKWkL1028338;
+	Tue, 18 Apr 2023 20:46:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bbr5o2YauD0eZRxyBUJRPAqMIVy90p0HuWJfE651qAQ=;
+ b=G/O3Xv+KEndIiY/aX4x8KfGyotOGP9MVp/JavUN8cicPFT2a3Diy7J+TftffGMGFsRK7
+ 7IpUquy1LNNhD6t6cIeyHAN5cppgs4EapYz6C/Myla2D4/qeRfUDhFbSfuOgs9SUX4zt
+ BGfshfnU10mb0RfULLUxhDdsYc+e5EWUQp0I7y/CsUbirEhpB4tswmM6Zsore8zN52sC
+ Zimwcc1JgZmj1pjjbQVnHd1q2wBruhCrN5p2pjiF+Ph25/mvC4DBXq/lsy6sW//SO1hO
+ 42n4q32f9Nub6xg5mdkBPM0o4GcwRtb2cbB6LuJ61ahhWY7Uu/KAxsbtbHkVLTIerN7C UQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q171gm6q8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Apr 2023 20:46:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33IKkZiU004556
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Apr 2023 20:46:35 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 18 Apr
+ 2023 13:46:34 -0700
+Message-ID: <fe7da2c1-904e-ee4f-9a6c-443049c214b7@quicinc.com>
+Date: Tue, 18 Apr 2023 14:46:33 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230414005309.GA2198310@google.com> <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
- <20230418203611.GA3640630@google.com>
-In-Reply-To: <20230418203611.GA3640630@google.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 18 Apr 2023 13:46:40 -0700
-Message-ID: <CAKwvOdnxCJo-FoPfcNw=SBum6yRXOY7_meT8T6gsjV3c3FFm5A@mail.gmail.com>
-Subject: Re: clangd cannot handle tree_nocb.h
-To: Joel Fernandes <joel@joelfernandes.org>
-Cc: rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, paulmck@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] accel/qaic: initialize ret variable to 0
+Content-Language: en-US
+To: Tom Rix <trix@redhat.com>, <ogabbay@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <jacek.lawrynowicz@linux.intel.com>,
+        <quic_carlv@quicinc.com>, <stanislaw.gruszka@linux.intel.com>,
+        <quic_pkanojiy@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20230418192046.3235870-1-trix@redhat.com>
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230418192046.3235870-1-trix@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: sfX04aJJ9qbOGEBW6zkYrRF9Un9_uJcn
+X-Proofpoint-ORIG-GUID: sfX04aJJ9qbOGEBW6zkYrRF9Un9_uJcn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-18_15,2023-04-18_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 suspectscore=0 impostorscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 phishscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304180172
 
-On Tue, Apr 18, 2023 at 1:36=E2=80=AFPM Joel Fernandes <joel@joelfernandes.=
-org> wrote:
->
-> On Fri, Apr 14, 2023 at 03:47:51PM -0700, Nick Desaulniers wrote:
-> > On Thu, Apr 13, 2023 at 5:53=E2=80=AFPM Joel Fernandes <joel@joelfernan=
-des.org> wrote:
-> > >
-> > > Hello!
-> > >
-> > > I have been trying to get clangd working properly with tree_nocb.h. c=
-langd
-> > > trips quite badly when trying to build tree_nocb.h to generate ASTs.
-> >
-> > Hi Joel,
-> > Thanks for the report.  What are you using clangd for? I'll bet
-> > something interesting.
->
-> Thanks for the response and sorry for the late reply. I am at the OSPM
-> conference. I use vim and vscode with clangd. In vim, YCM uses it to
-> highlight compiler errors live while editing, I am pretty happy with it s=
-o
-> far and has been a huge time saver. Enough that now I want to use it for
-> everything...
+On 4/18/2023 1:20 PM, Tom Rix wrote:
+> clang static analysis reports
+> drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
+>    value returned to caller [core.uninitialized.UndefReturn]
+>          return ret;
+>          ^~~~~~~~~~
+> 
+> The ret variable is only set some of the time but is always returned.
+> So initialize ret to 0.
 
-Cool! I use vim, can you share more info about your set up for this?
-I'll have to try it.
+This does not appear to be entirely accurate to me.
 
->
-> I first came across clangd when developing Chrome userspace code which is=
- C++
-> :). In Chrome, ninja builds can be made to output compile_commands.json.
-> However, now I noticed the support in the kernel and was like, wow I need=
- to
-> try it. Further, YCM seems to work much better with it than without :)
->
-> > I've never used it myself, so I don't know where to even begin with
-> > how to reproduce the issue.
->
-> Ah ok. :). When I ran get_maintainer on the script, your name popped up a=
-nd
-> someone also suggested that you're the goto person for clang on the kerne=
-l
-> (which I kind of already knew ;)
+Do you know what analysis Clang is doing?  Is it limited to the function 
+itself?
 
-You've cc'ed the right set of folks.  We might not have the expertise
-related to clangd specifically, but we can point you in the right
-direction.
+remap_pfn_range, which initializes ret, will always run at-least once.
 
->
-> > It might be worth filing a bug upstream at
-> > https://github.com/llvm/llvm-project/issues
-> > or internally under the component
-> > Language Platforms > C++ > Clang > Tools > Clangd
-> > with detailed steps to reproduce (and what the observed error actually
-> > is). Feel free to cc me, though I don't know the first thing about
-> > clangd.
->
-> Ok I will consider doing this if needed. One thing I do observe is lack o=
-f
-> good support for header files and it is a known clangd issue [1].
->
-> However, the fixes I was proposing can purely be done in the kernel itsel=
-f
-> since all it'd require is generating compile_compands.json with the -D<ma=
-cro>
-> and editing files to keep clangd happy. I guess one question is, how welc=
-ome
-> would such changes to header files be since they're for tooling and isn't
-> code that will be compiled outside of clangd.
+Feels more accurate to say that Clang cannot detect that ret will be 
+initialized, and we want to quiet the warning from the false positive.
 
-Specifically your patch sites some log print that doesn't look
-indicative of a failure:
-https://github.com/llvm/llvm-project/blob/53430bfd5c9d0074dd6de06dccea366e1=
-d40bce4/clang-tools-extra/clangd/TUScheduler.cpp#L903-L906
-so something else is going on here. Just trying to make sure we root cause =
-this.
+> Fixes: ff13be830333 ("accel/qaic: Add datapath")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>   drivers/accel/qaic/qaic_data.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
+> index c0a574cd1b35..b46a16fb3080 100644
+> --- a/drivers/accel/qaic/qaic_data.c
+> +++ b/drivers/accel/qaic/qaic_data.c
+> @@ -591,7 +591,7 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
+>   	struct qaic_bo *bo = to_qaic_bo(obj);
+>   	unsigned long offset = 0;
+>   	struct scatterlist *sg;
+> -	int ret;
+> +	int ret = 0;
+>   
+>   	if (obj->import_attach)
+>   		return -EINVAL;
 
->
-> (Linked issue may not directly related to what I'm saying)
-> [1] https://discourse.llvm.org/t/header-file-heuristics-issue/1749
->
-> Thanks.
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
