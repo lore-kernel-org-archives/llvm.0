@@ -1,106 +1,127 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80857AFED
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 20:09:51 +0000 (UTC)
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-247122e9845so1574122a91.0
-        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 13:09:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681848591; x=1684440591;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rJjRijV5blbjzZLZll3N1JO9eikZc6Mlip365pggL9w=;
-        b=RxI8ccMnJU34C26Ht6af/Th3w247gQIO0uQnzRfH2qt11y5bG/KVu1JIv98zlpx4D1
-         6+T+7fm9LFj2LYaDIo2LT8T1Xo9ePq7ThXSPvAlSvNHct8dmTKu+ixGW2MxKCmKPEic5
-         0NMP5HW32YUXzNX6ZAvMzUZ+r7/o+fZqhWAmOZNWEtuGQr2uKAwqdsnDPOcnCQXkusAL
-         lEJpFgOxxgNb/wSBQGjXS2rZ5x92nLQ4+hV53yJlZyN8pSO9LtwYDE3KxhzcV0myrIXX
-         ZNsRtuRyCHtRAnfOYgVIMLVSDSYy3KfNTnfDpnhlSRuUbePgyG4vh2nQsd84Uc0WGgIG
-         AqbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681848591; x=1684440591;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rJjRijV5blbjzZLZll3N1JO9eikZc6Mlip365pggL9w=;
-        b=WLT/Ze1EX8sl5j9WUbjUZas0xZHp9y3HpRSh3SyzLXCLuFOM0iufSehTt3/6vIgIDN
-         U9ZS6nIXXrVhvO7Jx2bKhX5r5J4gS6VUknbTW22P27uRmpBkMYIc1Sdtr5ZdAB/lMKjW
-         mvQ8f5m8JXQKWHTN0y50+04dq7vp/kifmzr3C1C3k/NuGMhrTUrkQn4apVQr3pkt3wgI
-         GT5wSFH6L2UdUxVB64fFCNp/RYxGCkuKk8b1WPV2+c5rH/yO+22Yd+SrDUgjHaBZZVsu
-         eFRUfKT7CGPEcn1bFzMYKtK9xqp9Wphj5Yy+gl7VYJZ/JDHT/MJXC8wNGYBlQtWf7I6S
-         0iYg==
-X-Gm-Message-State: AAQBX9f/XegfOGjU9pWXEvXg9t4s37vTSUoIq0K7hdtFp7AimRcgvcDg
-	xn5Urdh5xqlc9Gq1DF0OncEcErWieqakAMN5D3UgzxWPkYWe3Jm11eUd0g==
-X-Google-Smtp-Source: AKy350baeGq9wa+UpgsWuLoH1elNcvdt1oOkfqqmaCQpAHbi6Eath+2E2j22ABbywJdPOlHgLe3u3xkeQP5kmoW7nv0=
-X-Received: by 2002:a17:90a:fe8c:b0:246:f73c:3aba with SMTP id
- co12-20020a17090afe8c00b00246f73c3abamr618143pjb.39.1681848590753; Tue, 18
- Apr 2023 13:09:50 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83688AFED
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 20:19:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A15BC433D2;
+	Tue, 18 Apr 2023 20:19:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681849154;
+	bh=818LBOx4Bv0tTU4R6fF/F8RgUh8+pLOLseVWoDF04Mc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VxSWuETwBuSPN7KR5ksPL4CeNNoZaPHeQX9xFxsbjuYNY5Ibx/tYwBgIBdeXos4eL
+	 vPl28hymPjO/NUqY86TbVyQWGIB/CmkfSreKYBqT8iNF8khdSUiLIdE8IzNfimQcsq
+	 0bN1VLPGn4Ep/JH8ndPdU71z/NImVpjwWdQxQrS2dcpLHVBLhQC4etDmwIIhNzJbQ8
+	 84h3wrJ1IjbkrHmI0PAt62hXXRb9+VpGeAMGdVwz0tEiGK+g1l4rVbpCjKKNsh3cgD
+	 uyxfXEY+DqY0UpASqoouTKWRLY3yN2FsBocpC8eSkpukcgNyZQqcOc6cJresUq6vMu
+	 bMp6aAz/r716A==
+Date: Tue, 18 Apr 2023 23:18:58 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
+	Vineet Gupta <vgupta@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, David Hildenbrand <david@redhat.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Naoya Horiguchi <naoya.horiguchi@nec.com>,
+	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH] [v2] mm: make arch_has_descending_max_zone_pfns() static
+Message-ID: <ZD77Mh58MVMVdLrT@kernel.org>
+References: <20230415081904.969049-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230408165023.2706235-1-trix@redhat.com>
-In-Reply-To: <20230408165023.2706235-1-trix@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 18 Apr 2023 13:09:39 -0700
-Message-ID: <CAKwvOdmFtc0shP45t7S9aoh1+UGXyaX_aodvJd97d-nH5J0HQg@mail.gmail.com>
-Subject: Re: [PATCH] drm/qxl: remove variable count
-To: Tom Rix <trix@redhat.com>
-Cc: airlied@redhat.com, kraxel@redhat.com, airlied@gmail.com, daniel@ffwll.ch, 
-	nathan@kernel.org, virtualization@lists.linux-foundation.org, 
-	spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230415081904.969049-1-arnd@kernel.org>
 
-On Sat, Apr 8, 2023 at 9:50=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/gpu/drm/qxl/qxl_cmd.c:424:6: error: variable
->   'count' set but not used [-Werror,-Wunused-but-set-variable]
->         int count =3D 0;
->             ^
-> This variable is not used so remove it.
+On Sat, Apr 15, 2023 at 10:18:20AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> clang produces a build failure on x86 for some randconfig builds
+> after a change that moves around code to mm/mm_init.c:
+> 
+> Cannot find symbol for section 2: .text.
+> mm/mm_init.o: failed
+> 
+> I have not been able to figure out why this happens, but the __weak
+> annotation on arch_has_descending_max_zone_pfns() is the trigger here.
+> 
+> Removing the weak function in favor of an open-coded Kconfig option
+> check avoids the problem and becomes clearer as well as better to
+> optimize by the compiler.
+> 
+> Fixes: 9420f89db2dd ("mm: move most of core MM initialization to mm/mm_init.c")
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks for the patch!
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-Fixes: 64122c1f6ad ("drm: add new QXL driver. (v1.4)")
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  drivers/gpu/drm/qxl/qxl_cmd.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/qxl/qxl_cmd.c b/drivers/gpu/drm/qxl/qxl_cmd.=
-c
-> index 281edab518cd..d6ea01f3797b 100644
-> --- a/drivers/gpu/drm/qxl/qxl_cmd.c
-> +++ b/drivers/gpu/drm/qxl/qxl_cmd.c
-> @@ -421,7 +421,6 @@ int qxl_surface_id_alloc(struct qxl_device *qdev,
+> v2: fix logic bug reported-by: kernel test robot <oliver.sang@intel.com>,
+> see https://lore.kernel.org/oe-lkp/202304151422.5e4d380b-oliver.sang@intel.com
+> ---
+>  arch/arc/mm/init.c | 5 -----
+>  include/linux/mm.h | 1 -
+>  mm/mm_init.c       | 4 ++--
+>  3 files changed, 2 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
+> index ce4e939a7f07..2b89b6c53801 100644
+> --- a/arch/arc/mm/init.c
+> +++ b/arch/arc/mm/init.c
+> @@ -74,11 +74,6 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
+>  		base, TO_MB(size), !in_use ? "Not used":"");
+>  }
+>  
+> -bool arch_has_descending_max_zone_pfns(void)
+> -{
+> -	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
+> -}
+> -
+>  /*
+>   * First memory setup routine called from setup_arch()
+>   * 1. setup swapper's mm @init_mm
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 63acf4a598fe..75d8adce0aee 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3061,7 +3061,6 @@ extern void setup_per_cpu_pageset(void);
+>  extern int min_free_kbytes;
+>  extern int watermark_boost_factor;
+>  extern int watermark_scale_factor;
+> -extern bool arch_has_descending_max_zone_pfns(void);
+>  
+>  /* nommu.c */
+>  extern atomic_long_t mmap_pages_allocated;
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 35302b7bca83..7f7f9c677854 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -1754,9 +1754,9 @@ static void __init free_area_init_memoryless_node(int nid)
+>   * Some architectures, e.g. ARC may have ZONE_HIGHMEM below ZONE_NORMAL. For
+>   * such cases we allow max_zone_pfn sorted in the descending order
+>   */
+> -bool __weak arch_has_descending_max_zone_pfns(void)
+> +static bool arch_has_descending_max_zone_pfns(void)
 >  {
->         uint32_t handle;
->         int idr_ret;
-> -       int count =3D 0;
->  again:
->         idr_preload(GFP_ATOMIC);
->         spin_lock(&qdev->surf_id_idr_lock);
-> @@ -433,7 +432,6 @@ int qxl_surface_id_alloc(struct qxl_device *qdev,
->         handle =3D idr_ret;
->
->         if (handle >=3D qdev->rom->n_surfaces) {
-> -               count++;
->                 spin_lock(&qdev->surf_id_idr_lock);
->                 idr_remove(&qdev->surf_id_idr, handle);
->                 spin_unlock(&qdev->surf_id_idr_lock);
-> --
-> 2.27.0
->
+> -	return false;
+> +	return IS_ENABLED(CONFIG_ARC) && !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
+>  }
+>  
+>  /**
+> -- 
+> 2.39.2
+> 
 
-
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+Sincerely yours,
+Mike.
