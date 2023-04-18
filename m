@@ -1,24 +1,24 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDA51FA0
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 10:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E412C4339B;
-	Tue, 18 Apr 2023 10:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB801FA0
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 10:17:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 704C2C433D2;
+	Tue, 18 Apr 2023 10:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1681813034;
-	bh=XKZwz4P8O0e62G3O5xxH7JMbuzIq5EsWgKxd/pr6fVM=;
+	s=korg; t=1681813042;
+	bh=pGa+LalPV5VHMcdAo9SpVhHDXkC590z2V32Ddn7AWV4=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=a1UsiC23X1N8diBmG8YLHWyVKlN9ZrwR3DBnCAq+lyzQnoxrlka/IjpQF0Eh3Sf03
-	 QNfg92cs+9xdvXflNcf43Ud9OgwCVIRM9aL0zdeRUy6KF/ry69frkM5vXgqGVgE1V+
-	 /LYrEcCza6GaPcqu+IfYsTObH1jsSbJwQzZUeEkY=
-Subject: Patch "kbuild: Switch to 'f' variants of integrated assembler flag" has been added to the 5.10-stable tree
-To: conor@kernel.org,gregkh@linuxfoundation.org,llvm@lists.linux.dev,masahiroy@kernel.org,nathan@kernel.org,ndesaulniers@google.com,sashal@kernel.org
+	b=sSuRWCkt2psH87cNbUe3ZVuH5CAAi+526O7UHYdYdEqZ2MTLjww86KJHkZMzgIJCg
+	 tFMc8mgIc0dRB5xJr/dIMmEtlj04W2Q+0EUtcVfFJHD9mgAkrgGzKrXYO/C+cE7lK5
+	 LGGfkmbIhqwxyGqC4IlwkC2akcf0NyjU88Gi3nQ4=
+Subject: Patch "riscv: Handle zicsr/zifencei issues between clang and binutils" has been added to the 5.10-stable tree
+To: ZAxT7T9Xy1Fo3d5W@aurel32.net,conor.dooley@microchip.com,conor@kernel.org,gregkh@linuxfoundation.org,llvm@lists.linux.dev,nathan@kernel.org,palmer@rivosinc.com,sashal@kernel.org
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
-Date: Tue, 18 Apr 2023 12:16:57 +0200
-In-Reply-To: <20230328-riscv-zifencei-zicsr-5-10-v1-2-bccb3e16dc46@kernel.org>
-Message-ID: <2023041857-purge-stumble-c060@gregkh>
+Date: Tue, 18 Apr 2023 12:16:58 +0200
+In-Reply-To: <20230328-riscv-zifencei-zicsr-5-10-v1-4-bccb3e16dc46@kernel.org>
+Message-ID: <2023041858-aside-blank-dcce@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,88 +33,145 @@ X-Patchwork-Hint: ignore
 
 This is a note to let you know that I've just added the patch titled
 
-    kbuild: Switch to 'f' variants of integrated assembler flag
+    riscv: Handle zicsr/zifencei issues between clang and binutils
 
 to the 5.10-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
-     kbuild-switch-to-f-variants-of-integrated-assembler-flag.patch
+     riscv-handle-zicsr-zifencei-issues-between-clang-and-binutils.patch
 and it can be found in the queue-5.10 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
 
 
-From stable-owner@vger.kernel.org Wed Mar 29 02:08:38 2023
+From stable-owner@vger.kernel.org Wed Mar 29 02:08:41 2023
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 28 Mar 2023 17:08:30 -0700
-Subject: kbuild: Switch to 'f' variants of integrated assembler flag
+Date: Tue, 28 Mar 2023 17:08:32 -0700
+Subject: riscv: Handle zicsr/zifencei issues between clang and binutils
 To: gregkh@linuxfoundation.org, sashal@kernel.org
-Cc: conor@kernel.org, stable@vger.kernel.org, llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
-Message-ID: <20230328-riscv-zifencei-zicsr-5-10-v1-2-bccb3e16dc46@kernel.org>
+Cc: conor@kernel.org, stable@vger.kernel.org, llvm@lists.linux.dev, Conor Dooley <conor.dooley@microchip.com>, Nathan Chancellor <nathan@kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>
+Message-ID: <20230328-riscv-zifencei-zicsr-5-10-v1-4-bccb3e16dc46@kernel.org>
 
 From: Nathan Chancellor <nathan@kernel.org>
 
-commit 2185a7e4b0ade86c2c57fc63d4a7535c40254bd0 upstream.
+commit e89c2e815e76471cb507bd95728bf26da7976430 upstream.
 
-It has been brought up a few times in various code reviews that clang
-3.5 introduced -f{,no-}integrated-as as the preferred way to enable and
-disable the integrated assembler, mentioning that -{no-,}integrated-as
-are now considered legacy flags.
+There are two related issues that appear in certain combinations with
+clang and GNU binutils.
 
-Switch the kernel over to using those variants in case there is ever a
-time where clang decides to remove the non-'f' variants of the flag.
+The first occurs when a version of clang that supports zicsr or zifencei
+via '-march=' [1] (i.e, >= 17.x) is used in combination with a version
+of GNU binutils that do not recognize zicsr and zifencei in the
+'-march=' value (i.e., < 2.36):
 
-Also, fix a typo in a comment ("intergrated" -> "integrated").
+  riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicsr2p0_zifencei2p0: Invalid or unknown z ISA extension: 'zifencei'
+  riscv64-linux-gnu-ld: failed to merge target specific data of file fs/efivarfs/file.o
+  riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicsr2p0_zifencei2p0: Invalid or unknown z ISA extension: 'zifencei'
+  riscv64-linux-gnu-ld: failed to merge target specific data of file fs/efivarfs/super.o
 
-Link: https://releases.llvm.org/3.5.0/tools/clang/docs/ReleaseNotes.html#new-compiler-flags
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+The second occurs when a version of clang that does not support zicsr or
+zifencei via '-march=' (i.e., <= 16.x) is used in combination with a
+version of GNU as that defaults to a newer ISA base spec, which requires
+specifying zicsr and zifencei in the '-march=' value explicitly (i.e, >=
+2.38):
+
+  ../arch/riscv/kernel/kexec_relocate.S: Assembler messages:
+  ../arch/riscv/kernel/kexec_relocate.S:147: Error: unrecognized opcode `fence.i', extension `zifencei' required
+  clang-12: error: assembler command failed with exit code 1 (use -v to see invocation)
+
+This is the same issue addressed by commit 6df2a016c0c8 ("riscv: fix
+build with binutils 2.38") (see [2] for additional information) but
+older versions of clang miss out on it because the cc-option check
+fails:
+
+  clang-12: error: invalid arch name 'rv64imac_zicsr_zifencei', unsupported standard user-level extension 'zicsr'
+  clang-12: error: invalid arch name 'rv64imac_zicsr_zifencei', unsupported standard user-level extension 'zicsr'
+
+To resolve the first issue, only attempt to add zicsr and zifencei to
+the march string when using the GNU assembler 2.38 or newer, which is
+when the default ISA spec was updated, requiring these extensions to be
+specified explicitly. LLVM implements an older version of the base
+specification for all currently released versions, so these instructions
+are available as part of the 'i' extension. If LLVM's implementation is
+updated in the future, a CONFIG_AS_IS_LLVM condition can be added to
+CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI.
+
+To resolve the second issue, use version 2.2 of the base ISA spec when
+using an older version of clang that does not support zicsr or zifencei
+via '-march=', as that is the spec version most compatible with the one
+clang/LLVM implements and avoids the need to specify zicsr and zifencei
+explicitly due to still being a part of 'i'.
+
+[1]: https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
+[2]: https://lore.kernel.org/ZAxT7T9Xy1Fo3d5W@aurel32.net/
+
+Cc: stable@vger.kernel.org
+Link: https://github.com/ClangBuiltLinux/linux/issues/1808
+Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-[nathan: Backport to 5.10]
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://lore.kernel.org/r/20230313-riscv-zicsr-zifencei-fiasco-v1-1-dd1b7840a551@kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Makefile              |    4 ++--
- scripts/as-version.sh |    8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/riscv/Kconfig  |   22 ++++++++++++++++++++++
+ arch/riscv/Makefile |   10 ++++++----
+ 2 files changed, 28 insertions(+), 4 deletions(-)
 
---- a/Makefile
-+++ b/Makefile
-@@ -581,9 +581,9 @@ ifneq ($(GCC_TOOLCHAIN),)
- CLANG_FLAGS	+= --gcc-toolchain=$(GCC_TOOLCHAIN)
- endif
- ifeq ($(LLVM_IAS),1)
--CLANG_FLAGS	+= -integrated-as
-+CLANG_FLAGS	+= -fintegrated-as
- else
--CLANG_FLAGS	+= -no-integrated-as
-+CLANG_FLAGS	+= -fno-integrated-as
- endif
- CLANG_FLAGS	+= -Werror=unknown-warning-option
- KBUILD_CFLAGS	+= $(CLANG_FLAGS)
---- a/scripts/as-version.sh
-+++ b/scripts/as-version.sh
-@@ -21,14 +21,14 @@ get_canonical_version()
- 	echo $((10000 * $1 + 100 * ${2:-0} + ${3:-0}))
- }
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -331,6 +331,28 @@ config RISCV_BASE_PMU
  
--# Clang fails to handle -Wa,--version unless -no-integrated-as is given.
--# We check -(f)integrated-as, expecting it is explicitly passed in for the
-+# Clang fails to handle -Wa,--version unless -fno-integrated-as is given.
-+# We check -fintegrated-as, expecting it is explicitly passed in for the
- # integrated assembler case.
- check_integrated_as()
- {
- 	while [ $# -gt 0 ]; do
--		if [ "$1" = -integrated-as -o "$1" = -fintegrated-as ]; then
--			# For the intergrated assembler, we do not check the
-+		if [ "$1" = -fintegrated-as ]; then
-+			# For the integrated assembler, we do not check the
- 			# version here. It is the same as the clang version, and
- 			# it has been already checked by scripts/cc-version.sh.
- 			echo LLVM 0
+ endmenu
+ 
++config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
++	def_bool y
++	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
++	depends on AS_IS_GNU && AS_VERSION >= 23800
++	help
++	  Newer binutils versions default to ISA spec version 20191213 which
++	  moves some instructions from the I extension to the Zicsr and Zifencei
++	  extensions.
++
++config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
++	def_bool y
++	depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
++	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
++	depends on CC_IS_CLANG && CLANG_VERSION < 170000
++	help
++	  Certain versions of clang do not support zicsr and zifencei via -march
++	  but newer versions of binutils require it for the reasons noted in the
++	  help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. This
++	  option causes an older ISA spec compatible with these older versions
++	  of clang to be passed to GAS, which has the same result as passing zicsr
++	  and zifencei to -march.
++
+ config FPU
+ 	bool "FPU support"
+ 	default y
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -53,10 +53,12 @@ riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64
+ riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
+ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
+ 
+-# Newer binutils versions default to ISA spec version 20191213 which moves some
+-# instructions from the I extension to the Zicsr and Zifencei extensions.
+-toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
+-riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
++ifdef CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC
++KBUILD_CFLAGS += -Wa,-misa-spec=2.2
++KBUILD_AFLAGS += -Wa,-misa-spec=2.2
++else
++riscv-march-$(CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI) := $(riscv-march-y)_zicsr_zifencei
++endif
+ 
+ KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+ KBUILD_AFLAGS += -march=$(riscv-march-y)
 
 
 Patches currently in stable-queue which might be from stable-owner@vger.kernel.org are
