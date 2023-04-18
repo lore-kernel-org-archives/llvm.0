@@ -1,181 +1,110 @@
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2BFBA50
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 20:27:43 +0000 (UTC)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-760ccc48b3bso202987239f.1
-        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 13:27:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF8F2573
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 20:36:13 +0000 (UTC)
+Received: by mail-qt1-f178.google.com with SMTP id fg9so9793382qtb.1
+        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 13:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1681850173; x=1684442173;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zb5oGrl4JjIvT1aq7E8aKQwDzSKWDYgsCqiEnJYeKrU=;
+        b=VDVEcSalZCQ/nQUEWR3rxtHo1TM3Evb7f69OLiWAnFX63oGNxKeyoPPLHjSUoZM4iE
+         pt81IDLvIdP//qmZ/pau7vj+Ev+KbstX/vIU/igzKH8019XOB0jalG9lfO1LwUayTtXo
+         rdjrEeO/jxtZLpFkRel4f8SgqGTdT8kg+njFM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681849662; x=1684441662;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gxn0DnPfADuaP40AJhy/UnpcsyfQMhcLyuDsCayXAKg=;
-        b=kfgjwxXDZWyKDHZA1lGBGuXsIJxNV2sJGoKjD2Ra1OHUSqDVc4kBlRjFTeobX00VFt
-         couQ9joFKXIXGth3o30/qwopOUrIsgrNJ93k956ybU9/a8AQbAOxaBOZOm7h9CHXJPQ8
-         B23zL7oaTmNgzXaqYFv3GRWrfZkIfwdfclK7kASXP8KuhDwwccFj5WFd5ZMsDsi9fXPo
-         Ruup7PhJcAavMEK+nHFUKLGVAoSvR1OXr3/YIxRj6jaJB/mTe8FDXJ/uZyN3H2EOxQTj
-         ZUgNZIFwsdpT8GgCeczMMda9D+mlEdlU/i1vZwLKoM3vX6VpBTk/jHRJ4rMhX1ZoKjwk
-         F+3Q==
-X-Gm-Message-State: AAQBX9eUvVKcSXo1QW0gSfy0oxFA4K13viXlFeKxNvuymamCtVUhIj8e
-	VJ4XnAbAdT6iLnV4zJCTr7C3VNEsBOf2YLw5Zk9zIM9Raebt
-X-Google-Smtp-Source: AKy350aiI9jjpH7dR8M/oD5GiD956rOdBfdXRVDecdKwxd7Hr8DLFVejFlXqA/AW0Y1xM1w1QawQEaasmWiQuuVIXNhxdM0S/XBX
+        d=1e100.net; s=20221208; t=1681850173; x=1684442173;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zb5oGrl4JjIvT1aq7E8aKQwDzSKWDYgsCqiEnJYeKrU=;
+        b=D01sG5V344iyGqL7oT0oOUgGnlB/iJBS0IiKKnUsdK+l7+I5v4kQVZuh27exSEth9+
+         nnqMEe4+02IwKCrBPuc5hSD+30qyyTPfO4sAfJiATMH60gxhwb3yDbOE7PaMvA+M8act
+         AQ+fPzzDtuuRZ5EFPC374TVfkCH3XHIJj2fQh3guq4ojH+Hxqzn63+82tW5BOQRddk2F
+         RB1K9mnrRo6uxZRzEX5h9CxEwcSOkP/a0ZHH6PZQwtPH3eWALVqv6QtfPaEVyk4zVa6V
+         loXSzOPtURfK0verd4MQ0qOuRiNr5HU8o7wFKDVracjGqHq+nsp5u65enPZcn1GXnzhV
+         NjaQ==
+X-Gm-Message-State: AAQBX9d+2c/HRSuKedAgJrqOZDRILzQ5g5T4FvqHTf0M2BwW//lSDXEI
+	oHM/ItAF9mTpuAi7ISqJofj3xA==
+X-Google-Smtp-Source: AKy350YEIjV6EPfbO2RYZySHSVrGUNFVSRiCc0nQEO4SDy03ISls+oUqrpO7lv/I3pZG9ExW+iJ8mA==
+X-Received: by 2002:ac8:5756:0:b0:3ef:3f4b:31b8 with SMTP id 22-20020ac85756000000b003ef3f4b31b8mr2176931qtx.7.1681850172894;
+        Tue, 18 Apr 2023 13:36:12 -0700 (PDT)
+Received: from localhost (55.87.194.35.bc.googleusercontent.com. [35.194.87.55])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05620a0c8c00b0074df7f62c83sm1429455qki.49.2023.04.18.13.36.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 13:36:12 -0700 (PDT)
+Date: Tue, 18 Apr 2023 20:36:11 +0000
+From: Joel Fernandes <joel@joelfernandes.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	paulmck@kernel.org
+Subject: Re: clangd cannot handle tree_nocb.h
+Message-ID: <20230418203611.GA3640630@google.com>
+References: <20230414005309.GA2198310@google.com>
+ <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6519:0:b0:760:e308:1070 with SMTP id
- z25-20020a6b6519000000b00760e3081070mr2470616iob.0.1681849662669; Tue, 18 Apr
- 2023 13:27:42 -0700 (PDT)
-Date: Tue, 18 Apr 2023 13:27:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b5973405f9a22358@google.com>
-Subject: [syzbot] [ntfs3?] KASAN: stack-out-of-bounds Read in ntfs_set_inode
-From: syzbot <syzbot+cbdd49fbb39696c71041@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
 
-Hello,
+On Fri, Apr 14, 2023 at 03:47:51PM -0700, Nick Desaulniers wrote:
+> On Thu, Apr 13, 2023 at 5:53 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> >
+> > Hello!
+> >
+> > I have been trying to get clangd working properly with tree_nocb.h. clangd
+> > trips quite badly when trying to build tree_nocb.h to generate ASTs.
+> 
+> Hi Joel,
+> Thanks for the report.  What are you using clangd for? I'll bet
+> something interesting.
 
-syzbot found the following issue on:
+Thanks for the response and sorry for the late reply. I am at the OSPM
+conference. I use vim and vscode with clangd. In vim, YCM uses it to
+highlight compiler errors live while editing, I am pretty happy with it so
+far and has been a huge time saver. Enough that now I want to use it for
+everything...
 
-HEAD commit:    de4664485abb Merge tag 'for-linus-2023041201' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a065e3c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=90aa79dcf599c3f1
-dashboard link: https://syzkaller.appspot.com/bug?extid=cbdd49fbb39696c71041
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+I first came across clangd when developing Chrome userspace code which is C++
+:). In Chrome, ninja builds can be made to output compile_commands.json.
+However, now I noticed the support in the kernel and was like, wow I need to
+try it. Further, YCM seems to work much better with it than without :)
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> I've never used it myself, so I don't know where to even begin with
+> how to reproduce the issue.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cbdd49fbb39696c71041@syzkaller.appspotmail.com
+Ah ok. :). When I ran get_maintainer on the script, your name popped up and
+someone also suggested that you're the goto person for clang on the kernel
+(which I kind of already knew ;)
 
-==================================================================
-BUG: KASAN: stack-out-of-bounds in ino_get fs/ntfs3/ntfs.h:193 [inline]
-BUG: KASAN: stack-out-of-bounds in ntfs_set_inode+0x65/0x70 fs/ntfs3/inode.c:502
-Read of size 4 at addr ffffc9000ceafccf by task syz-executor.2/7192
+> It might be worth filing a bug upstream at
+> https://github.com/llvm/llvm-project/issues
+> or internally under the component
+> Language Platforms > C++ > Clang > Tools > Clangd
+> with detailed steps to reproduce (and what the observed error actually
+> is). Feel free to cc me, though I don't know the first thing about
+> clangd.
 
-CPU: 3 PID: 7192 Comm: syz-executor.2 Not tainted 6.3.0-rc6-syzkaller-00046-gde4664485abb #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
- print_report mm/kasan/report.c:430 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:536
- ino_get fs/ntfs3/ntfs.h:193 [inline]
- ntfs_set_inode+0x65/0x70 fs/ntfs3/inode.c:502
- inode_insert5+0x125/0x660 fs/inode.c:1188
- iget5_locked fs/inode.c:1246 [inline]
- iget5_locked+0x225/0x2c0 fs/inode.c:1235
- ntfs_iget5+0xd2/0x3310 fs/ntfs3/inode.c:511
- ntfs_fill_super+0x3138/0x3ab0 fs/ntfs3/super.c:1244
- get_tree_bdev+0x444/0x760 fs/super.c:1303
- vfs_get_tree+0x8d/0x350 fs/super.c:1510
- do_new_mount fs/namespace.c:3042 [inline]
- path_mount+0x1342/0x1e40 fs/namespace.c:3372
- do_mount fs/namespace.c:3385 [inline]
- __do_sys_mount fs/namespace.c:3594 [inline]
- __se_sys_mount fs/namespace.c:3571 [inline]
- __x64_sys_mount+0x283/0x300 fs/namespace.c:3571
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0de348d69a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0de425af88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 000000000001f6bf RCX: 00007f0de348d69a
-RDX: 000000002001f6c0 RSI: 000000002001f700 RDI: 00007f0de425afe0
-RBP: 00007f0de425b020 R08: 00007f0de425b020 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 000000002001f6c0
-R13: 000000002001f700 R14: 00007f0de425afe0 R15: 000000002001f740
- </TASK>
+Ok I will consider doing this if needed. One thing I do observe is lack of
+good support for header files and it is a known clangd issue [1].
 
-The buggy address belongs to stack of task syz-executor.2/7192
- and is located at offset 127 in frame:
- ntfs_fill_super+0x0/0x3ab0 fs/ntfs3/super.c:473
+However, the fixes I was proposing can purely be done in the kernel itself
+since all it'd require is generating compile_compands.json with the -D<macro>
+and editing files to keep clangd happy. I guess one question is, how welcome
+would such changes to header files be since they're for tooling and isn't
+code that will be compiled outside of clangd.
 
-This frame has 5 objects:
- [48, 52) 'vcn'
- [64, 68) 'lcn'
- [80, 84) 'len'
- [96, 104) 'tt'
- [128, 136) 'ref'
+(Linked issue may not directly related to what I'm saying)
+[1] https://discourse.llvm.org/t/header-file-heuristics-issue/1749
 
-The buggy address belongs to the virtual mapping at
- [ffffc9000cea8000, ffffc9000ceb1000) created by:
- kernel_clone+0xeb/0x890 kernel/fork.c:2682
+Thanks.
 
-The buggy address belongs to the physical page:
-page:ffffea0001be4580 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x6f916
-memcg:ffff888022837602
-flags: 0x4fff00000000000(node=1|zone=1|lastcpupid=0x7ff)
-raw: 04fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff ffff888022837602
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 6955, tgid 6955 (syz-executor.3), ts 238333166289, free_ts 232134443559
- prep_new_page mm/page_alloc.c:2553 [inline]
- get_page_from_freelist+0x1190/0x2e20 mm/page_alloc.c:4326
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:5592
- alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
- vm_area_alloc_pages mm/vmalloc.c:2953 [inline]
- __vmalloc_area_node mm/vmalloc.c:3029 [inline]
- __vmalloc_node_range+0xb1c/0x14a0 mm/vmalloc.c:3201
- alloc_thread_stack_node kernel/fork.c:311 [inline]
- dup_task_struct kernel/fork.c:982 [inline]
- copy_process+0x1320/0x7590 kernel/fork.c:2098
- kernel_clone+0xeb/0x890 kernel/fork.c:2682
- __do_sys_clone+0xba/0x100 kernel/fork.c:2823
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1454 [inline]
- free_pcp_prepare+0x5d5/0xa50 mm/page_alloc.c:1504
- free_unref_page_prepare mm/page_alloc.c:3388 [inline]
- free_unref_page+0x1d/0x490 mm/page_alloc.c:3483
- __folio_put_small mm/swap.c:106 [inline]
- __folio_put+0xc5/0x140 mm/swap.c:129
- folio_put include/linux/mm.h:1309 [inline]
- put_page include/linux/mm.h:1378 [inline]
- generic_pipe_buf_release+0x23d/0x2b0 fs/pipe.c:210
- pipe_buf_release include/linux/pipe_fs_i.h:203 [inline]
- iter_file_splice_write+0x8a3/0xc80 fs/splice.c:793
- do_splice_from fs/splice.c:856 [inline]
- direct_splice_actor+0x114/0x180 fs/splice.c:1022
- splice_direct_to_actor+0x335/0x8a0 fs/splice.c:977
- do_splice_direct+0x1ab/0x280 fs/splice.c:1065
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffffc9000ceafb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000ceafc00: 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 f1 f1
->ffffc9000ceafc80: 04 f2 04 f2 04 f2 00 f2 f2 f2 00 f3 f3 f3 00 00
-                                              ^
- ffffc9000ceafd00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000ceafd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
