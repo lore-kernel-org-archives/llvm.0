@@ -1,127 +1,181 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83688AFED
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 20:19:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A15BC433D2;
-	Tue, 18 Apr 2023 20:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681849154;
-	bh=818LBOx4Bv0tTU4R6fF/F8RgUh8+pLOLseVWoDF04Mc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VxSWuETwBuSPN7KR5ksPL4CeNNoZaPHeQX9xFxsbjuYNY5Ibx/tYwBgIBdeXos4eL
-	 vPl28hymPjO/NUqY86TbVyQWGIB/CmkfSreKYBqT8iNF8khdSUiLIdE8IzNfimQcsq
-	 0bN1VLPGn4Ep/JH8ndPdU71z/NImVpjwWdQxQrS2dcpLHVBLhQC4etDmwIIhNzJbQ8
-	 84h3wrJ1IjbkrHmI0PAt62hXXRb9+VpGeAMGdVwz0tEiGK+g1l4rVbpCjKKNsh3cgD
-	 uyxfXEY+DqY0UpASqoouTKWRLY3yN2FsBocpC8eSkpukcgNyZQqcOc6cJresUq6vMu
-	 bMp6aAz/r716A==
-Date: Tue, 18 Apr 2023 23:18:58 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
-	Vineet Gupta <vgupta@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, David Hildenbrand <david@redhat.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Naoya Horiguchi <naoya.horiguchi@nec.com>,
-	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH] [v2] mm: make arch_has_descending_max_zone_pfns() static
-Message-ID: <ZD77Mh58MVMVdLrT@kernel.org>
-References: <20230415081904.969049-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2BFBA50
+	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 20:27:43 +0000 (UTC)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-760ccc48b3bso202987239f.1
+        for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 13:27:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681849662; x=1684441662;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gxn0DnPfADuaP40AJhy/UnpcsyfQMhcLyuDsCayXAKg=;
+        b=kfgjwxXDZWyKDHZA1lGBGuXsIJxNV2sJGoKjD2Ra1OHUSqDVc4kBlRjFTeobX00VFt
+         couQ9joFKXIXGth3o30/qwopOUrIsgrNJ93k956ybU9/a8AQbAOxaBOZOm7h9CHXJPQ8
+         B23zL7oaTmNgzXaqYFv3GRWrfZkIfwdfclK7kASXP8KuhDwwccFj5WFd5ZMsDsi9fXPo
+         Ruup7PhJcAavMEK+nHFUKLGVAoSvR1OXr3/YIxRj6jaJB/mTe8FDXJ/uZyN3H2EOxQTj
+         ZUgNZIFwsdpT8GgCeczMMda9D+mlEdlU/i1vZwLKoM3vX6VpBTk/jHRJ4rMhX1ZoKjwk
+         F+3Q==
+X-Gm-Message-State: AAQBX9eUvVKcSXo1QW0gSfy0oxFA4K13viXlFeKxNvuymamCtVUhIj8e
+	VJ4XnAbAdT6iLnV4zJCTr7C3VNEsBOf2YLw5Zk9zIM9Raebt
+X-Google-Smtp-Source: AKy350aiI9jjpH7dR8M/oD5GiD956rOdBfdXRVDecdKwxd7Hr8DLFVejFlXqA/AW0Y1xM1w1QawQEaasmWiQuuVIXNhxdM0S/XBX
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230415081904.969049-1-arnd@kernel.org>
+X-Received: by 2002:a6b:6519:0:b0:760:e308:1070 with SMTP id
+ z25-20020a6b6519000000b00760e3081070mr2470616iob.0.1681849662669; Tue, 18 Apr
+ 2023 13:27:42 -0700 (PDT)
+Date: Tue, 18 Apr 2023 13:27:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b5973405f9a22358@google.com>
+Subject: [syzbot] [ntfs3?] KASAN: stack-out-of-bounds Read in ntfs_set_inode
+From: syzbot <syzbot+cbdd49fbb39696c71041@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Apr 15, 2023 at 10:18:20AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> clang produces a build failure on x86 for some randconfig builds
-> after a change that moves around code to mm/mm_init.c:
-> 
-> Cannot find symbol for section 2: .text.
-> mm/mm_init.o: failed
-> 
-> I have not been able to figure out why this happens, but the __weak
-> annotation on arch_has_descending_max_zone_pfns() is the trigger here.
-> 
-> Removing the weak function in favor of an open-coded Kconfig option
-> check avoids the problem and becomes clearer as well as better to
-> optimize by the compiler.
-> 
-> Fixes: 9420f89db2dd ("mm: move most of core MM initialization to mm/mm_init.c")
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hello,
 
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+syzbot found the following issue on:
 
-> ---
-> v2: fix logic bug reported-by: kernel test robot <oliver.sang@intel.com>,
-> see https://lore.kernel.org/oe-lkp/202304151422.5e4d380b-oliver.sang@intel.com
-> ---
->  arch/arc/mm/init.c | 5 -----
->  include/linux/mm.h | 1 -
->  mm/mm_init.c       | 4 ++--
->  3 files changed, 2 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
-> index ce4e939a7f07..2b89b6c53801 100644
-> --- a/arch/arc/mm/init.c
-> +++ b/arch/arc/mm/init.c
-> @@ -74,11 +74,6 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
->  		base, TO_MB(size), !in_use ? "Not used":"");
->  }
->  
-> -bool arch_has_descending_max_zone_pfns(void)
-> -{
-> -	return !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
-> -}
-> -
->  /*
->   * First memory setup routine called from setup_arch()
->   * 1. setup swapper's mm @init_mm
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 63acf4a598fe..75d8adce0aee 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3061,7 +3061,6 @@ extern void setup_per_cpu_pageset(void);
->  extern int min_free_kbytes;
->  extern int watermark_boost_factor;
->  extern int watermark_scale_factor;
-> -extern bool arch_has_descending_max_zone_pfns(void);
->  
->  /* nommu.c */
->  extern atomic_long_t mmap_pages_allocated;
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index 35302b7bca83..7f7f9c677854 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -1754,9 +1754,9 @@ static void __init free_area_init_memoryless_node(int nid)
->   * Some architectures, e.g. ARC may have ZONE_HIGHMEM below ZONE_NORMAL. For
->   * such cases we allow max_zone_pfn sorted in the descending order
->   */
-> -bool __weak arch_has_descending_max_zone_pfns(void)
-> +static bool arch_has_descending_max_zone_pfns(void)
->  {
-> -	return false;
-> +	return IS_ENABLED(CONFIG_ARC) && !IS_ENABLED(CONFIG_ARC_HAS_PAE40);
->  }
->  
->  /**
-> -- 
-> 2.39.2
-> 
+HEAD commit:    de4664485abb Merge tag 'for-linus-2023041201' of git://git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a065e3c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=90aa79dcf599c3f1
+dashboard link: https://syzkaller.appspot.com/bug?extid=cbdd49fbb39696c71041
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
--- 
-Sincerely yours,
-Mike.
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cbdd49fbb39696c71041@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: stack-out-of-bounds in ino_get fs/ntfs3/ntfs.h:193 [inline]
+BUG: KASAN: stack-out-of-bounds in ntfs_set_inode+0x65/0x70 fs/ntfs3/inode.c:502
+Read of size 4 at addr ffffc9000ceafccf by task syz-executor.2/7192
+
+CPU: 3 PID: 7192 Comm: syz-executor.2 Not tainted 6.3.0-rc6-syzkaller-00046-gde4664485abb #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
+ print_report mm/kasan/report.c:430 [inline]
+ kasan_report+0x11c/0x130 mm/kasan/report.c:536
+ ino_get fs/ntfs3/ntfs.h:193 [inline]
+ ntfs_set_inode+0x65/0x70 fs/ntfs3/inode.c:502
+ inode_insert5+0x125/0x660 fs/inode.c:1188
+ iget5_locked fs/inode.c:1246 [inline]
+ iget5_locked+0x225/0x2c0 fs/inode.c:1235
+ ntfs_iget5+0xd2/0x3310 fs/ntfs3/inode.c:511
+ ntfs_fill_super+0x3138/0x3ab0 fs/ntfs3/super.c:1244
+ get_tree_bdev+0x444/0x760 fs/super.c:1303
+ vfs_get_tree+0x8d/0x350 fs/super.c:1510
+ do_new_mount fs/namespace.c:3042 [inline]
+ path_mount+0x1342/0x1e40 fs/namespace.c:3372
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount fs/namespace.c:3571 [inline]
+ __x64_sys_mount+0x283/0x300 fs/namespace.c:3571
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0de348d69a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0de425af88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 000000000001f6bf RCX: 00007f0de348d69a
+RDX: 000000002001f6c0 RSI: 000000002001f700 RDI: 00007f0de425afe0
+RBP: 00007f0de425b020 R08: 00007f0de425b020 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 000000002001f6c0
+R13: 000000002001f700 R14: 00007f0de425afe0 R15: 000000002001f740
+ </TASK>
+
+The buggy address belongs to stack of task syz-executor.2/7192
+ and is located at offset 127 in frame:
+ ntfs_fill_super+0x0/0x3ab0 fs/ntfs3/super.c:473
+
+This frame has 5 objects:
+ [48, 52) 'vcn'
+ [64, 68) 'lcn'
+ [80, 84) 'len'
+ [96, 104) 'tt'
+ [128, 136) 'ref'
+
+The buggy address belongs to the virtual mapping at
+ [ffffc9000cea8000, ffffc9000ceb1000) created by:
+ kernel_clone+0xeb/0x890 kernel/fork.c:2682
+
+The buggy address belongs to the physical page:
+page:ffffea0001be4580 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x6f916
+memcg:ffff888022837602
+flags: 0x4fff00000000000(node=1|zone=1|lastcpupid=0x7ff)
+raw: 04fff00000000000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff ffff888022837602
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x102dc2(GFP_HIGHUSER|__GFP_NOWARN|__GFP_ZERO), pid 6955, tgid 6955 (syz-executor.3), ts 238333166289, free_ts 232134443559
+ prep_new_page mm/page_alloc.c:2553 [inline]
+ get_page_from_freelist+0x1190/0x2e20 mm/page_alloc.c:4326
+ __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:5592
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
+ vm_area_alloc_pages mm/vmalloc.c:2953 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3029 [inline]
+ __vmalloc_node_range+0xb1c/0x14a0 mm/vmalloc.c:3201
+ alloc_thread_stack_node kernel/fork.c:311 [inline]
+ dup_task_struct kernel/fork.c:982 [inline]
+ copy_process+0x1320/0x7590 kernel/fork.c:2098
+ kernel_clone+0xeb/0x890 kernel/fork.c:2682
+ __do_sys_clone+0xba/0x100 kernel/fork.c:2823
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1454 [inline]
+ free_pcp_prepare+0x5d5/0xa50 mm/page_alloc.c:1504
+ free_unref_page_prepare mm/page_alloc.c:3388 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3483
+ __folio_put_small mm/swap.c:106 [inline]
+ __folio_put+0xc5/0x140 mm/swap.c:129
+ folio_put include/linux/mm.h:1309 [inline]
+ put_page include/linux/mm.h:1378 [inline]
+ generic_pipe_buf_release+0x23d/0x2b0 fs/pipe.c:210
+ pipe_buf_release include/linux/pipe_fs_i.h:203 [inline]
+ iter_file_splice_write+0x8a3/0xc80 fs/splice.c:793
+ do_splice_from fs/splice.c:856 [inline]
+ direct_splice_actor+0x114/0x180 fs/splice.c:1022
+ splice_direct_to_actor+0x335/0x8a0 fs/splice.c:977
+ do_splice_direct+0x1ab/0x280 fs/splice.c:1065
+ do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffffc9000ceafb80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc9000ceafc00: 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1 f1 f1
+>ffffc9000ceafc80: 04 f2 04 f2 04 f2 00 f2 f2 f2 00 f3 f3 f3 00 00
+                                              ^
+ ffffc9000ceafd00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc9000ceafd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
