@@ -1,43 +1,44 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604981C02;
-	Tue, 18 Apr 2023 08:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA20B1FA0;
+	Tue, 18 Apr 2023 09:45:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681805010; x=1713341010;
+  t=1681811137; x=1713347137;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3gvt0Cr3iK9FcuX33wgyb3BC3sOttQXdFu65w04jc1U=;
-  b=a+/i+p4gZy0/RdovrU/vm0b9MP3Tthb0OO4V0g8mPkm7bsUnvYvd3zDr
-   nib/KaKCmZQrTnzhE2Xs6A1Vgxm3n7ZWbU2Jy5Yqhlbx1naM10PQcZde6
-   +zhdbs6Lk6zLafXerKHowmqZVqAXEpSyuYXeMkLEkkK6/CM9vVPcpb+Pp
-   pB6khMR/ZmcK3kk70qqt+Zhw5/Hix6XR+DeoQnQ6VVPYtTAqjQWm7Xpyq
-   gpRS/dmpZpD4GiO1gAL1WSuJEbxCAa37gPzthSOWptcGKLI/xj9YWdK/H
-   kVtaTNJ4gZgIwyCHiE9J0qwznMqvQm+XbwW6G+cHri4iQCHa3IYirQ3/Y
+  bh=wlDhzbPza+xuR+HQxyeC3YbJjUbskKZQKYxmK2tXHO4=;
+  b=VhDM9jnKuGVwtKvTvzmfdGxnt4KATHFytFveU5sSurJKh/A0bXakP1YW
+   dk0V9dBTNCTJFUIfu1QKD2J7QSjQkdRgs9yh+L9cc3X+kT7witmGdO9UJ
+   p6Z7w7bxjSBT28ulBu02EXezEqQsRtYVJTw8a4kF9U751QYU5sYn356Gz
+   2bwvNnb0hh/zjzbvDOXQpfVF6BG1TKkCmjvX0j/6MiuYz4iTgjZ86Va0p
+   Ll3qilPySXTt8dXfq5QbfbmgzfqbfBm10DeKSFn1dnfFGas4ygabMqK75
+   ER4q3BANxUxOSp1F3RrAVuvYjETd1mUkpXGXzEe1sqGQ+E1N5adLf1W0F
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="343858973"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="431410555"
 X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="343858973"
+   d="scan'208";a="431410555"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 01:03:29 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 02:45:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="693539353"
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="693564006"
 X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
-   d="scan'208";a="693539353"
+   d="scan'208";a="693564006"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2023 01:03:27 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2023 02:45:32 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pogJC-000d8h-1V;
-	Tue, 18 Apr 2023 08:03:26 +0000
-Date: Tue, 18 Apr 2023 16:03:01 +0800
+	id 1pohtz-000dDp-2R;
+	Tue, 18 Apr 2023 09:45:31 +0000
+Date: Tue, 18 Apr 2023 17:44:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jaegeuk Kim <jaegeuk@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-f2fs-devel@lists.sourceforge.net
-Subject: [jaegeuk-f2fs:dev-test 49/49] ld.lld: error: undefined symbol:
- __hexagon_udivdi3
-Message-ID: <202304181512.3CpLfgBe-lkp@intel.com>
+	Nathan Chancellor <nathan@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [sudeep-holla:android13-5.10/ffa 9246/9999] <unknown>:0: error:
+ symbol 'secondary_kexec_args' is already defined
+Message-ID: <202304181713.Ji2wpzAl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,42 +48,42 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-head:   07717639336b495e1115e95824031643363d0276
-commit: 07717639336b495e1115e95824031643363d0276 [49/49] f2fs: remove power-of-two limitation fo zoned device
-config: hexagon-randconfig-r012-20230416 (https://download.01.org/0day-ci/archive/20230418/202304181512.3CpLfgBe-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git android13-5.10/ffa
+head:   9e12ac4f9c69befe08119567c073adc938aafc4d
+commit: ffff118fe157b534c3244f8b300e655231dbd95c [9246/9999] BACKPORT: scripts/Makefile.clang: default to LLVM_IAS=1
+config: mips-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230418/202304181713.Ji2wpzAl-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project c5ade37f1f6f97d628a5b9f2fdbb31b9caa1c8df)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?id=07717639336b495e1115e95824031643363d0276
-        git remote add jaegeuk-f2fs https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git
-        git fetch --no-tags jaegeuk-f2fs dev-test
-        git checkout 07717639336b495e1115e95824031643363d0276
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/commit/?id=ffff118fe157b534c3244f8b300e655231dbd95c
+        git remote add sudeep-holla https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git
+        git fetch --no-tags sudeep-holla android13-5.10/ffa
+        git checkout ffff118fe157b534c3244f8b300e655231dbd95c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304181512.3CpLfgBe-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304181713.Ji2wpzAl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: __hexagon_udivdi3
-   >>> referenced by super.c
-   >>>               fs/f2fs/super.o:(f2fs_scan_devices) in archive vmlinux.a
-   >>> referenced by super.c
-   >>>               fs/f2fs/super.o:(f2fs_scan_devices) in archive vmlinux.a
-   >>> did you mean: __hexagon_udivsi3
-   >>> defined in: vmlinux.a(arch/hexagon/lib/udivsi3.o)
---
->> ld.lld: error: undefined symbol: __hexagon_divdi3
-   >>> referenced by gc.c
-   >>>               fs/f2fs/gc.o:(update_fs_metadata) in archive vmlinux.a
-   >>> referenced by gc.c
-   >>>               fs/f2fs/gc.o:(update_fs_metadata) in archive vmlinux.a
+   arch/mips/include/asm/asmmacro.h:48:2: warning: macro defined with named parameters which are not used in macro body, possible positional parameter found in body which will have no effect
+    .macro local_irq_enable reg=$8
+    ^
+   arch/mips/include/asm/asmmacro.h:53:2: warning: macro defined with named parameters which are not used in macro body, possible positional parameter found in body which will have no effect
+    .macro local_irq_disable reg=$8
+    ^
+   <unknown>:0: error: symbol 'kexec_args' is already defined
+>> <unknown>:0: error: symbol 'secondary_kexec_args' is already defined
+   <unknown>:0: error: symbol 'kexec_start_address' is already defined
+   <unknown>:0: error: symbol 'kexec_indirection_page' is already defined
+   <unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
 
 -- 
 0-DAY CI Kernel Test Service
