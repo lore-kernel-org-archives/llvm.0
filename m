@@ -1,186 +1,174 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB801FA0
-	for <llvm@lists.linux.dev>; Tue, 18 Apr 2023 10:17:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 704C2C433D2;
-	Tue, 18 Apr 2023 10:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1681813042;
-	bh=pGa+LalPV5VHMcdAo9SpVhHDXkC590z2V32Ddn7AWV4=;
-	h=Subject:To:Cc:From:Date:In-Reply-To:From;
-	b=sSuRWCkt2psH87cNbUe3ZVuH5CAAi+526O7UHYdYdEqZ2MTLjww86KJHkZMzgIJCg
-	 tFMc8mgIc0dRB5xJr/dIMmEtlj04W2Q+0EUtcVfFJHD9mgAkrgGzKrXYO/C+cE7lK5
-	 LGGfkmbIhqwxyGqC4IlwkC2akcf0NyjU88Gi3nQ4=
-Subject: Patch "riscv: Handle zicsr/zifencei issues between clang and binutils" has been added to the 5.10-stable tree
-To: ZAxT7T9Xy1Fo3d5W@aurel32.net,conor.dooley@microchip.com,conor@kernel.org,gregkh@linuxfoundation.org,llvm@lists.linux.dev,nathan@kernel.org,palmer@rivosinc.com,sashal@kernel.org
-Cc: <stable-commits@vger.kernel.org>
-From: <gregkh@linuxfoundation.org>
-Date: Tue, 18 Apr 2023 12:16:58 +0200
-In-Reply-To: <20230328-riscv-zifencei-zicsr-5-10-v1-4-bccb3e16dc46@kernel.org>
-Message-ID: <2023041858-aside-blank-dcce@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2253D23C0;
+	Tue, 18 Apr 2023 10:57:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681815457; x=1713351457;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=U92aBm8LbsiT/Rpd11/cnLifOTwlsiEDeVIHHmgZAio=;
+  b=WIoXCB77gjuCIl05Epnmoi49njKdavoXvmtcc5kBkL+ltT1LtK2Dabnx
+   jB9JM48HHMqyaaBj9rDc4FyHXn+wnEYLcWw+SXboR1DZ65ZOZmxUVfdaU
+   H57MiXYz+k56BQ2mXnFuf7vE1bFWpmwXDH5SjmV26RVG+2vALUGQU3nO7
+   ihK/ZkDPidWCP46KdyAoNqxftjLjZIku1i+sbhgSRytPo+niWD9BY4DGO
+   PrPDl5LZu9FqcHtbCG0qXHQWnMd2oc82m4bwjcni4/yIrxh39SY3vZcB2
+   H6BWS79ug/cOVe+Z0cIvhq4XNhMKQB0HUUS778lRoNauP2Qyq27EeFbCi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="346985881"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="346985881"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 03:57:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="723586594"
+X-IronPort-AV: E=Sophos;i="5.99,207,1677571200"; 
+   d="scan'208";a="723586594"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 18 Apr 2023 03:57:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1poj1i-000dI7-1P;
+	Tue, 18 Apr 2023 10:57:34 +0000
+Date: Tue, 18 Apr 2023 18:56:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [avpatel:riscv_sbi_nested_v1 48/74] include/linux/fwnode.h:167:37:
+ warning: declaration of 'struct resource' will not be visible outside of
+ this function
+Message-ID: <202304181843.LNPhTsJM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
-X-stable: commit
-X-Patchwork-Hint: ignore 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://github.com/avpatel/linux.git riscv_sbi_nested_v1
+head:   664b96e7a3a7d1b9d6c7ede050633ada0eda4875
+commit: c0fae281cc6758ccb2c2aa3361acc62fbe038a7a [48/74] device property: Add ioresource_get to fwnode operation
+config: x86_64-randconfig-a013-20230417 (https://download.01.org/0day-ci/archive/20230418/202304181843.LNPhTsJM-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/avpatel/linux/commit/c0fae281cc6758ccb2c2aa3361acc62fbe038a7a
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_sbi_nested_v1
+        git checkout c0fae281cc6758ccb2c2aa3361acc62fbe038a7a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/input/ mm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304181843.LNPhTsJM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from mm/early_ioremap.c:13:
+   In file included from include/linux/io.h:13:
+   In file included from arch/x86/include/asm/io.h:332:
+   In file included from include/asm-generic/io.h:609:
+   In file included from include/linux/logic_pio.h:11:
+>> include/linux/fwnode.h:167:37: warning: declaration of 'struct resource' will not be visible outside of this function [-Wvisibility]
+                                 unsigned int index, struct resource *res);
+                                                            ^
+   1 warning generated.
+--
+   In file included from drivers/input/touchscreen.c:9:
+   In file included from include/linux/property.h:14:
+>> include/linux/fwnode.h:167:37: warning: declaration of 'struct resource' will not be visible outside of this function [-Wvisibility]
+                                 unsigned int index, struct resource *res);
+                                                            ^
+   In file included from drivers/input/touchscreen.c:9:
+>> include/linux/property.h:144:33: warning: declaration of 'struct resource' will not be visible outside of this function [-Wvisibility]
+                             unsigned int index, struct resource *res);
+                                                        ^
+   2 warnings generated.
 
 
-This is a note to let you know that I've just added the patch titled
+vim +167 include/linux/fwnode.h
 
-    riscv: Handle zicsr/zifencei issues between clang and binutils
+    97	
+    98	/**
+    99	 * struct fwnode_operations - Operations for fwnode interface
+   100	 * @get: Get a reference to an fwnode.
+   101	 * @put: Put a reference to an fwnode.
+   102	 * @device_is_available: Return true if the device is available.
+   103	 * @device_get_match_data: Return the device driver match data.
+   104	 * @property_present: Return true if a property is present.
+   105	 * @property_read_int_array: Read an array of integer properties. Return zero on
+   106	 *			     success, a negative error code otherwise.
+   107	 * @property_read_string_array: Read an array of string properties. Return zero
+   108	 *				on success, a negative error code otherwise.
+   109	 * @get_name: Return the name of an fwnode.
+   110	 * @get_name_prefix: Get a prefix for a node (for printing purposes).
+   111	 * @get_parent: Return the parent of an fwnode.
+   112	 * @get_next_child_node: Return the next child node in an iteration.
+   113	 * @get_named_child_node: Return a child node with a given name.
+   114	 * @get_reference_args: Return a reference pointed to by a property, with args
+   115	 * @graph_get_next_endpoint: Return an endpoint node in an iteration.
+   116	 * @graph_get_remote_endpoint: Return the remote endpoint node of a local
+   117	 *			       endpoint node.
+   118	 * @graph_get_port_parent: Return the parent node of a port node.
+   119	 * @graph_parse_endpoint: Parse endpoint for port and endpoint id.
+   120	 * @add_links:	Create fwnode links to all the suppliers of the fwnode. Return
+   121	 *		zero on success, a negative error code otherwise.
+   122	 */
+   123	struct fwnode_operations {
+   124		struct fwnode_handle *(*get)(struct fwnode_handle *fwnode);
+   125		void (*put)(struct fwnode_handle *fwnode);
+   126		bool (*device_is_available)(const struct fwnode_handle *fwnode);
+   127		const void *(*device_get_match_data)(const struct fwnode_handle *fwnode,
+   128						     const struct device *dev);
+   129		bool (*device_dma_supported)(const struct fwnode_handle *fwnode);
+   130		enum dev_dma_attr
+   131		(*device_get_dma_attr)(const struct fwnode_handle *fwnode);
+   132		bool (*property_present)(const struct fwnode_handle *fwnode,
+   133					 const char *propname);
+   134		int (*property_read_int_array)(const struct fwnode_handle *fwnode,
+   135					       const char *propname,
+   136					       unsigned int elem_size, void *val,
+   137					       size_t nval);
+   138		int
+   139		(*property_read_string_array)(const struct fwnode_handle *fwnode_handle,
+   140					      const char *propname, const char **val,
+   141					      size_t nval);
+   142		const char *(*get_name)(const struct fwnode_handle *fwnode);
+   143		const char *(*get_name_prefix)(const struct fwnode_handle *fwnode);
+   144		struct fwnode_handle *(*get_parent)(const struct fwnode_handle *fwnode);
+   145		struct fwnode_handle *
+   146		(*get_next_child_node)(const struct fwnode_handle *fwnode,
+   147				       struct fwnode_handle *child);
+   148		struct fwnode_handle *
+   149		(*get_named_child_node)(const struct fwnode_handle *fwnode,
+   150					const char *name);
+   151		int (*get_reference_args)(const struct fwnode_handle *fwnode,
+   152					  const char *prop, const char *nargs_prop,
+   153					  unsigned int nargs, unsigned int index,
+   154					  struct fwnode_reference_args *args);
+   155		struct fwnode_handle *
+   156		(*graph_get_next_endpoint)(const struct fwnode_handle *fwnode,
+   157					   struct fwnode_handle *prev);
+   158		struct fwnode_handle *
+   159		(*graph_get_remote_endpoint)(const struct fwnode_handle *fwnode);
+   160		struct fwnode_handle *
+   161		(*graph_get_port_parent)(struct fwnode_handle *fwnode);
+   162		int (*graph_parse_endpoint)(const struct fwnode_handle *fwnode,
+   163					    struct fwnode_endpoint *endpoint);
+   164		void __iomem *(*iomap)(struct fwnode_handle *fwnode, int index);
+   165		int (*irq_get)(const struct fwnode_handle *fwnode, unsigned int index);
+   166		int (*ioresource_get)(const struct fwnode_handle *fwnode,
+ > 167				      unsigned int index, struct resource *res);
+   168		int (*add_links)(struct fwnode_handle *fwnode);
+   169	};
+   170	
 
-to the 5.10-stable tree which can be found at:
-    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-
-The filename of the patch is:
-     riscv-handle-zicsr-zifencei-issues-between-clang-and-binutils.patch
-and it can be found in the queue-5.10 subdirectory.
-
-If you, or anyone else, feels it should not be added to the stable tree,
-please let <stable@vger.kernel.org> know about it.
-
-
-From stable-owner@vger.kernel.org Wed Mar 29 02:08:41 2023
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 28 Mar 2023 17:08:32 -0700
-Subject: riscv: Handle zicsr/zifencei issues between clang and binutils
-To: gregkh@linuxfoundation.org, sashal@kernel.org
-Cc: conor@kernel.org, stable@vger.kernel.org, llvm@lists.linux.dev, Conor Dooley <conor.dooley@microchip.com>, Nathan Chancellor <nathan@kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>
-Message-ID: <20230328-riscv-zifencei-zicsr-5-10-v1-4-bccb3e16dc46@kernel.org>
-
-From: Nathan Chancellor <nathan@kernel.org>
-
-commit e89c2e815e76471cb507bd95728bf26da7976430 upstream.
-
-There are two related issues that appear in certain combinations with
-clang and GNU binutils.
-
-The first occurs when a version of clang that supports zicsr or zifencei
-via '-march=' [1] (i.e, >= 17.x) is used in combination with a version
-of GNU binutils that do not recognize zicsr and zifencei in the
-'-march=' value (i.e., < 2.36):
-
-  riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicsr2p0_zifencei2p0: Invalid or unknown z ISA extension: 'zifencei'
-  riscv64-linux-gnu-ld: failed to merge target specific data of file fs/efivarfs/file.o
-  riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicsr2p0_zifencei2p0: Invalid or unknown z ISA extension: 'zifencei'
-  riscv64-linux-gnu-ld: failed to merge target specific data of file fs/efivarfs/super.o
-
-The second occurs when a version of clang that does not support zicsr or
-zifencei via '-march=' (i.e., <= 16.x) is used in combination with a
-version of GNU as that defaults to a newer ISA base spec, which requires
-specifying zicsr and zifencei in the '-march=' value explicitly (i.e, >=
-2.38):
-
-  ../arch/riscv/kernel/kexec_relocate.S: Assembler messages:
-  ../arch/riscv/kernel/kexec_relocate.S:147: Error: unrecognized opcode `fence.i', extension `zifencei' required
-  clang-12: error: assembler command failed with exit code 1 (use -v to see invocation)
-
-This is the same issue addressed by commit 6df2a016c0c8 ("riscv: fix
-build with binutils 2.38") (see [2] for additional information) but
-older versions of clang miss out on it because the cc-option check
-fails:
-
-  clang-12: error: invalid arch name 'rv64imac_zicsr_zifencei', unsupported standard user-level extension 'zicsr'
-  clang-12: error: invalid arch name 'rv64imac_zicsr_zifencei', unsupported standard user-level extension 'zicsr'
-
-To resolve the first issue, only attempt to add zicsr and zifencei to
-the march string when using the GNU assembler 2.38 or newer, which is
-when the default ISA spec was updated, requiring these extensions to be
-specified explicitly. LLVM implements an older version of the base
-specification for all currently released versions, so these instructions
-are available as part of the 'i' extension. If LLVM's implementation is
-updated in the future, a CONFIG_AS_IS_LLVM condition can be added to
-CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI.
-
-To resolve the second issue, use version 2.2 of the base ISA spec when
-using an older version of clang that does not support zicsr or zifencei
-via '-march=', as that is the spec version most compatible with the one
-clang/LLVM implements and avoids the need to specify zicsr and zifencei
-explicitly due to still being a part of 'i'.
-
-[1]: https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
-[2]: https://lore.kernel.org/ZAxT7T9Xy1Fo3d5W@aurel32.net/
-
-Cc: stable@vger.kernel.org
-Link: https://github.com/ClangBuiltLinux/linux/issues/1808
-Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Link: https://lore.kernel.org/r/20230313-riscv-zicsr-zifencei-fiasco-v1-1-dd1b7840a551@kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/riscv/Kconfig  |   22 ++++++++++++++++++++++
- arch/riscv/Makefile |   10 ++++++----
- 2 files changed, 28 insertions(+), 4 deletions(-)
-
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -331,6 +331,28 @@ config RISCV_BASE_PMU
- 
- endmenu
- 
-+config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
-+	def_bool y
-+	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
-+	depends on AS_IS_GNU && AS_VERSION >= 23800
-+	help
-+	  Newer binutils versions default to ISA spec version 20191213 which
-+	  moves some instructions from the I extension to the Zicsr and Zifencei
-+	  extensions.
-+
-+config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
-+	def_bool y
-+	depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
-+	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
-+	depends on CC_IS_CLANG && CLANG_VERSION < 170000
-+	help
-+	  Certain versions of clang do not support zicsr and zifencei via -march
-+	  but newer versions of binutils require it for the reasons noted in the
-+	  help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. This
-+	  option causes an older ISA spec compatible with these older versions
-+	  of clang to be passed to GAS, which has the same result as passing zicsr
-+	  and zifencei to -march.
-+
- config FPU
- 	bool "FPU support"
- 	default y
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -53,10 +53,12 @@ riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64
- riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
- riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
- 
--# Newer binutils versions default to ISA spec version 20191213 which moves some
--# instructions from the I extension to the Zicsr and Zifencei extensions.
--toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
--riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
-+ifdef CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC
-+KBUILD_CFLAGS += -Wa,-misa-spec=2.2
-+KBUILD_AFLAGS += -Wa,-misa-spec=2.2
-+else
-+riscv-march-$(CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI) := $(riscv-march-y)_zicsr_zifencei
-+endif
- 
- KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
- KBUILD_AFLAGS += -march=$(riscv-march-y)
-
-
-Patches currently in stable-queue which might be from stable-owner@vger.kernel.org are
-
-queue-5.10/kbuild-check-the-minimum-assembler-version-in-kconfig.patch
-queue-5.10/cgroup-cpuset-make-cpuset_fork-handle-clone_into_cgroup-properly.patch
-queue-5.10/kbuild-check-config_as_is_llvm-instead-of-llvm_ias.patch
-queue-5.10/riscv-handle-zicsr-zifencei-issues-between-clang-and-binutils.patch
-queue-5.10/kbuild-switch-to-f-variants-of-integrated-assembler-flag.patch
-queue-5.10/cgroup-cpuset-add-cpuset_can_fork-and-cpuset_cancel_fork-methods.patch
-queue-5.10/cgroup-cpuset-change-references-of-cpuset_mutex-to-cpuset_rwsem.patch
-queue-5.10/cgroup-cpuset-skip-spread-flags-update-on-v2.patch
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
