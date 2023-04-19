@@ -1,126 +1,133 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86CCAD2FA
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 21:56:30 +0000 (UTC)
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-51f597c975fso274083a12.0
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 14:56:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4647AD301
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 22:03:44 +0000 (UTC)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1a50cb65c92so4386835ad.0
+        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 15:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681941390; x=1684533390;
+        d=google.com; s=20221208; t=1681941823; x=1684533823;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OLFmQtDzjn4fYBCM5a8di1qRrzs1inEcdVm3lZ+12QM=;
-        b=Q0LakSBjf0+GBzOMLbAb3DpXco7mN4HHs+Qs/Nvg+jLZjcJ1Ie+a7eCijmH4a8EEbS
-         33LOFnttp72BosihncMJLawycgMQDlKvNydTZiCFj83K0yz6dglI2Uk8Soum3R0B6cDL
-         7kT2rgDuuy2BSkC721XmaGpdyGoniKYYFQdeipvyAeUW+DwbeNi0QdvuxXFIXA6hz82o
-         Mt7lompywH7ief7lBe9GAKR27XOorkb+5Hy+igyRHThnYXros/YOxszVOWr9mPsuL9+d
-         F2Hbq9EBe7DKdB01RQkTOyfNw68JW+Iaoe0HAhw9Mon/+ggI56OS0ryOXqmr4x8rNAHr
-         QsPw==
+        bh=zh5e890yF5vPU5jFDEQlJGrwn7FtrHqnTGkDM3PEhGk=;
+        b=nYVR6pd5ohHan4cvMM25Oc7l0XYFR7FKSc+MZWSm47m/oOsn4bUdrLtiApb2BMvn9W
+         WMcUClzdzEaRKUhQqYcVkdaaXR7KftttiGhQ7uahIeMcUbgwCNxXOFoRc0bqdUzsQNhH
+         TNIgJE1vhzIYwtrMizt4qj93JwRprxsgCnHVpqaBaO8fnbOpHZOl6pX9icRFTPPabgWH
+         AspQ5jLPqr23bvNYBUnbbxE6dz4gJfQw9RdJkVEwTGJ1vMBdxoV9soEmxUrCqrFDZaYs
+         5JTEhKZT+WcDaVg3XI73+vIz4c16Lv6VGec0UOth4LxNfXZuXXhJIDLO0/ERPMvIbgGy
+         4C2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681941390; x=1684533390;
+        d=1e100.net; s=20221208; t=1681941823; x=1684533823;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OLFmQtDzjn4fYBCM5a8di1qRrzs1inEcdVm3lZ+12QM=;
-        b=g7G4gvoAZXrKroD3YuBfh8V/TLC0B80evsO+rsQjYaNYtElIbT9eBL+CZv/RFizPYB
-         Ym4fnG1bfdxygSvh9uteHt/BDulm6TX3qaEg4NRqwS4HWMacpS0sGVXJlJD4Ln5d7Xqy
-         7KLyb3LQgQdI37o908Jr+ewT1lJCZ/zNIEZ0HZoHMLbLaIEotUWy88nmMjI5uLHME4ji
-         ahowVn9NQHcQ9fvBlNSRop876H8dq/pLPPG3GRHmByP8I5r0jl+Jcswlqj6g0x/Q2Lra
-         dJsn0kFgfUvsXXN2w6Rchd6EDz0PcjMm2YMCtxRd2LoW8bomBjM9EMk2kt8pTtLUnsFY
-         mCIg==
-X-Gm-Message-State: AAQBX9cgiqfgGcQwV0P/nSU5sCnic04hoO4y1z0CNK0cg9KjyQY5FrCg
-	tJKBpNwQWG6uHow/0SYs3doajwdxHp5HDc4KYjjwcQ==
-X-Google-Smtp-Source: AKy350ZzIjgiQTad0i+K7AT2aLRAa2MzlG+eA4IP23ChGDk1CoGmo4OGkFCXhCcBg96+koUcNJCu5vVd0OB81LDKpxI=
-X-Received: by 2002:a17:90a:4142:b0:247:19c5:aa3d with SMTP id
- m2-20020a17090a414200b0024719c5aa3dmr3916943pjg.36.1681941389816; Wed, 19 Apr
- 2023 14:56:29 -0700 (PDT)
+        bh=zh5e890yF5vPU5jFDEQlJGrwn7FtrHqnTGkDM3PEhGk=;
+        b=BESvbJt+95rVDzBRg06sKFk1hb0cc8TOUeHrqCshttgjfhkHA69WhcOqUlNocKOnQs
+         RymyqtLHNT8MKQAA/U4m6gkOyt1diX7nQ7PDwIG5QXKa8HS1QTAT+jyca5aouf0bgCNp
+         gyn48g2KhSNjTBg2/At6DKx2Wq6RYNh0Hbe0w4WhGhSuJi4jXvw2UM5MrM1YevbB94jW
+         XHSKe//KwaoJaJYPOgTxlysX8R54SWun5uAKtV1wBkjrw07hyjg8cH2wtRsHUxz3zj86
+         pw9E3lVImF+e9phMWnkzD4gePAmS7ER3pYL2khCOxR5HQBX7uPbEk149Kw7pwWC9crG3
+         zyWg==
+X-Gm-Message-State: AAQBX9flct0s3G4G8Mt70K8f1gngd905s785eE/koloJ5Is+T7xfZ0m7
+	ohuNR0EH89qIy5zLz2uUjQURebXYcswGwMN9fIsn8A==
+X-Google-Smtp-Source: AKy350Y2Z2JjZ2qaX/ON4uPm2q//KaaWuchhgDJWWtGCJjwBgwDhMMx5Eo7igcV2qq6xRhf+gjVMj3nsuoCURnpIxZM=
+X-Received: by 2002:a17:902:f78c:b0:1a2:94bb:e104 with SMTP id
+ q12-20020a170902f78c00b001a294bbe104mr6667157pln.39.1681941823522; Wed, 19
+ Apr 2023 15:03:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202304081828.zjGcFUyE-lkp@intel.com> <ZD+0DJq1NHmMSSja@gondor.apana.org.au>
- <ZD+1BQd8Phqk3lzv@gondor.apana.org.au> <ZD+1phnERT6EkIUe@gondor.apana.org.au>
-In-Reply-To: <ZD+1phnERT6EkIUe@gondor.apana.org.au>
+References: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
+In-Reply-To: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 19 Apr 2023 14:56:17 -0700
-Message-ID: <CAKwvOdmxK8jKK3aW7xViDyjA=NtmcvXsv=OPNRFC0FTrnVCS4A@mail.gmail.com>
-Subject: Re: [PATCH] crypto: arm/sha512-neon - Fix clang function cast warnings
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: kernel test robot <lkp@intel.com>, Robert Elliott <elliott@hpe.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Date: Wed, 19 Apr 2023 15:03:31 -0700
+Message-ID: <CAKwvOdmuQBnZR_pB5bUdsF+OoB_4pxBT9TNFF83fZhzwZ1gbxw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Mark check_bugs{,_early}() as __init
+To: Nathan Chancellor <nathan@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: jpoimboe@kernel.org, peterz@infradead.org, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 19, 2023 at 2:35=E2=80=AFAM Herbert Xu <herbert@gondor.apana.or=
-g.au> wrote:
+On Wed, Apr 19, 2023 at 11:43=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
+rg> wrote:
 >
-> Instead of casting the function which upsets clang for some reason,
-> change the assembly function siganture instead.
+> After commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
+> forcibly"), a compiler may choose not to inline a function marked with
+> just 'inline'. If check_bugs() is not inlined into start_kernel(), which
+> occurs when building with clang after commit 9ea7e6b62c2b ("init: Mark
+> [arch_call_]rest_init() __noreturn"), modpost complains with:
+>
+>   WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs =
+(section: .text) -> check_bugs32 (section: .init.text)
+>
+> check_bugs() is only called from start_kernel(), which itself is marked
+> __init, so mark check_bugs() as __init as well to clear up the warning
+> and make everything work properly.
+>
+> While there is currently no warning about check_bugs_early(), it could
+> have the same problem, as it is called from arch_setup() and calls
+> check_bugs64_early(), both marked __init. Mark it as __init for the same
+> reason as above.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> NOTE: This is based on v6.3-rc7, as the issue shows up due to a patch in
+> the tip tree, but this appears to be an ancient issue that could have
+> showed up at any point (hence why no explicit Fixes tag), so I chose a
+> base that should allow either the MIPS or tip folks to apply this patch.
 
-Same comments as sha1 and sha256.  Looks like more casts to remove:
-
-arch/arm/crypto/sha512-glue.c
-34:             (sha512_block_fn *)sha512_block_data_order);
-40:             (sha512_block_fn *)sha512_block_data_order);
-48:             (sha512_block_fn *)sha512_block_data_order);
-
-
+Probably for the MIPS tree.
 
 >
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304081828.zjGcFUyE-lkp@int=
-el.com/
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+> Additionally, I was tempted to remove the explicit 'inline' since the
+> compiler is free to do whatever it wants anyways but this is a static
+> function in a header so we would need to add '__maybe_unused', which is
+> already added with 'inline' in a normal build so I just left it alone.
+> ---
+>  arch/mips/include/asm/bugs.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/arch/arm/crypto/sha512-neon-glue.c b/arch/arm/crypto/sha512-=
-neon-glue.c
-> index c879ad32db51..c6e58fe475ac 100644
-> --- a/arch/arm/crypto/sha512-neon-glue.c
-> +++ b/arch/arm/crypto/sha512-neon-glue.c
-> @@ -20,8 +20,8 @@
->  MODULE_ALIAS_CRYPTO("sha384-neon");
->  MODULE_ALIAS_CRYPTO("sha512-neon");
+> diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
+> index d72dc6e1cf3c..9b9bf9bc7d24 100644
+> --- a/arch/mips/include/asm/bugs.h
+> +++ b/arch/mips/include/asm/bugs.h
+> @@ -24,13 +24,13 @@ extern void check_bugs64_early(void);
+>  extern void check_bugs32(void);
+>  extern void check_bugs64(void);
 >
-> -asmlinkage void sha512_block_data_order_neon(u64 *state, u8 const *src,
-> -                                            int blocks);
-> +asmlinkage void sha512_block_data_order_neon(struct sha512_state *state,
-> +                                            const u8 *src, int blocks);
+> -static inline void check_bugs_early(void)
+> +static inline void __init check_bugs_early(void)
+>  {
+>         if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
+>                 check_bugs64_early();
+>  }
+
+If the only call site is in arch/mips/kernel/setup.c, then perhaps we
+can move the definition of check_bugs_early there and mark it static
+__init and drop inline?
+
+Unless we foresee other callers potentially in the future?  Patch
+otherwise LGTM.  Thanks for the patch!
+
 >
->  static int sha512_neon_update(struct shash_desc *desc, const u8 *data,
->                               unsigned int len)
-> @@ -33,8 +33,7 @@ static int sha512_neon_update(struct shash_desc *desc, =
-const u8 *data,
->                 return sha512_arm_update(desc, data, len);
+> -static inline void check_bugs(void)
+> +static inline void __init check_bugs(void)
+>  {
+>         unsigned int cpu =3D smp_processor_id();
 >
->         kernel_neon_begin();
-> -       sha512_base_do_update(desc, data, len,
-> -               (sha512_block_fn *)sha512_block_data_order_neon);
-> +       sha512_base_do_update(desc, data, len, sha512_block_data_order_ne=
-on);
->         kernel_neon_end();
 >
->         return 0;
-> @@ -49,9 +48,8 @@ static int sha512_neon_finup(struct shash_desc *desc, c=
-onst u8 *data,
->         kernel_neon_begin();
->         if (len)
->                 sha512_base_do_update(desc, data, len,
-> -                       (sha512_block_fn *)sha512_block_data_order_neon);
-> -       sha512_base_do_finalize(desc,
-> -               (sha512_block_fn *)sha512_block_data_order_neon);
-> +                                     sha512_block_data_order_neon);
-> +       sha512_base_do_finalize(desc, sha512_block_data_order_neon);
->         kernel_neon_end();
+> ---
+> base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
+> change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
 >
->         return sha512_base_finish(desc, out);
+> Best regards,
 > --
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+> Nathan Chancellor <nathan@kernel.org>
 >
 
 
