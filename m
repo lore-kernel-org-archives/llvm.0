@@ -1,169 +1,237 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9099C977
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 20:02:14 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1a652700c36so232885ad.0
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 13:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681934534; x=1684526534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=56W2W/X8fkj8VZX3/1DTAaK9+j9FvXQXuYPz0XAniuc=;
-        b=Tm+PqrTiBoRJA04/Kl60G2CqwjByx5la8XcHF9okQZRzsClYBxiJTHt0YG5c7Ih8mT
-         LqiugknROCpyehmf+fFE2yLXzkxa7RRDDerSCmGNO6gj8wHE1MUCc2qXLU1NwoxWHQTN
-         PB/mAP8j6XUow6402YryLB5jYviHopAJ4iYiURfF9qoPqv16Riw+InNihTXtwAWmPte2
-         WzvgnJ1CLUIbSsA3WkAuSE2s+YmMzyBgHqf77zkPrj56JYAOdVHMo01j2j2szEV7YTIA
-         39nPjEODCVxQsypbfnaq1e0jji5goKJ9EUboMoqyesJEob+LeW9h6gbLFLLBA+vTiinI
-         dJgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681934534; x=1684526534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=56W2W/X8fkj8VZX3/1DTAaK9+j9FvXQXuYPz0XAniuc=;
-        b=hWWAc7Y6Oy2lWLYlSZVveO03S2K7KeT0j3g+NZ6ETNJ/pmQH1gQKfblnUCmu7g5gVu
-         J+GlrUgIGEgRSp0DE1OEH0tqv/C8gM5TosJl0nXuUb6u6JBHxOy89JjiaPJuxPjKtYs4
-         /E4Xi+cG2XWIdzitAiiZAjvClPSoiZ0CTCsGNhipSTsQBEv8RNF3Qxm8JvQT7ULSmTca
-         G/9LEwghpRrd2jmXddIo1dCBBDXhEEP/WJISwRQMBRWIrwJ2hErlZaG0tFobX41TwkjI
-         k9hNqYgLJKbj7Nr96hRRg07Gbhltp8G3q5IZmVpp8+YgdjExgyqwpquCekZ6I5xlo4IM
-         S6jQ==
-X-Gm-Message-State: AAQBX9epaK2ku9lfwijvd7oVCIKo6sOBV5jXXlBwLdLWVZXVQf7PcksN
-	Q+Il5AFoivvchpdh9QmU2cCEIif1M9zTQ2mNXwpQRg==
-X-Google-Smtp-Source: AKy350bP2Be/0rsmuq+XyQQsawPtRMQK0eA/jETVaSN8vBy4wBas0Titboop37b7IKAN7OP4R+HvW5JzRwQ8J+LMRZI=
-X-Received: by 2002:a17:903:228c:b0:198:af4f:de12 with SMTP id
- b12-20020a170903228c00b00198af4fde12mr49157plh.18.1681934534077; Wed, 19 Apr
- 2023 13:02:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62770D2E4;
+	Wed, 19 Apr 2023 20:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681935546; x=1713471546;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=18neG8Kc2hZtmIGSc9lSWv2acQ5LSxkbXSwIStCN6Zo=;
+  b=BT6g9qfmC+QqXPT7+blqMsTdUou8wqdWFL4uvH3xWPISPz5PiFlz8jvu
+   dPTxcUf+28dv6srpgKT2IRIYiuBQJzrS8RsXbv+k3xkxUDSU5rGRZcZrm
+   Me38RSygRTvAYyhDw+lDrkF/d34kW9+Bhqu7bR8k3zaKhfL/sO9FigR4Z
+   2ZPFTL72HJnjHT2ikvhsFAdQDx8Fsj4g0W6/hUWhFwhSgOVBH0r3L/lR4
+   djVq07MKmGm/5eKTcrLp/EYEX1eFiixN1j2R0Ve12HbuFetJg3KTFgCW9
+   wlHgaPCsC6bwdwl0upgB7pTnQvyoUV9vLJe1AHY9q1pEiMwpqQ+yawhpk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="347407270"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="347407270"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 13:19:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756229393"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="756229393"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2023 13:19:03 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ppEGd-000fAY-04;
+	Wed, 19 Apr 2023 20:19:03 +0000
+Date: Thu, 20 Apr 2023 04:18:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Deucher <alexander.deucher@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Aurabindo Pillai <aurabindo.pillai@amd.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [stable:linux-5.15.y 8569/9999]
+ drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:4433:14:
+ warning: performing pointer subtraction with a null pointer has undefined
+ behavior
+Message-ID: <202304200450.zGgXSfsp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230414005309.GA2198310@google.com> <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
- <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com> <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com>
-In-Reply-To: <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Wed, 19 Apr 2023 13:02:02 -0700
-Message-ID: <CAFP8O3KQRbmgyvuyuxNOa6TZ7MawN7YoGHvpFQ=oibEo3aUfDQ@mail.gmail.com>
-Subject: Re: clangd cannot handle tree_nocb.h
-To: Florent Revest <revest@google.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org, 
-	nathan@kernel.org, trix@redhat.com, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, paulmck@kernel.org, 
-	"revest@chromium.org" <revest@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Apr 19, 2023 at 6:00=E2=80=AFAM Florent Revest <revest@google.com> =
-wrote:
->
-> On Tue, Apr 18, 2023 at 6:28=E2=80=AFPM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > + Florent
->
-> Hi there!
->
-> > Joel, Florent is doing some cool stuff with clangd and kernels (check
-> > out the demo at go/linux-kernel-vscode).  I'm pushing Florent to
->
-> Apologies for folks outside Google, this is an internal link to a
-> kernel dev setup I originally created for myself, then for my team and
-> apparently more and more people are starting to use it internally. :)
-> If there's enough appetite for it externally too, I'll try to
-> open-source it someday. Anyway, in the context of this conversation,
-> it's just something that uses clangd. :)
->
-> > publish some of the cool stuff he's been working on externally because
-> > it is awesome. ;)
-> >
-> > Florent, have you seen any such issues such as what Joel reported below=
-?
->
-> Yes, I've seen this problem a bunch of times. Afaiu, Clangd operates
-> under the assumption that every source file is a valid compilation
-> unit. My understanding is that it's generally a good practice to keep
-> things that way and I wouldn't be surprised if the userspace Chrome
-> code-base Joel saw enforces this (iirc, it's a rule for
-> Google-internal C++ too, all headers must be interpretable
-> independently).
->
-> However, from the perspective of the C spec, anything can be included
-> anywhere and a C file can only make sense if it's included
-> after/before certain other things are defined/included. Spontaneously,
-> I would call these ".inc" rather than ".h" or ".c" because I would
-> expect a source file to be always valid and this suffix makes it
-> clearer they depend on their context, but as a matter of fact source
-> files that don't compile when interpreted individually are quite
-> common in the kernel tree. Other examples that have been reported to
-> me include a lot of kernel/sched/*, since many of these files
-> (including .c files) are included from kernel/sched/build_policy.c in
-> a specific order to form one big compilation unit.
->
-> Unfortunately, I don't know of any solution. :( This feels like a
-> limit of C or compile_commands.json to me. "compile commands" can not
-> be enough to interpret any file, clangd would need a way to express
-> "interpret this file as if it were included in that spot of that
-> compilation unit" and maybe even need a bunch of heuristics to choose
-> one such include spot.
->
-> I don't know if clangd has any plan to address this and so far I've
-> just lived with these error squiggles.
->
+Hi Alex,
 
-Some information about Clang based language servers
+FYI, the error/warning still remains.
 
-It's good practice to ensure that a header file is self-contained. If
-not, for example, if a.c includes a.h, which is not self-contained,
-a.h is generally compiled on its own (as if using clang [options] a.h)
-to confine diagnostics/completion results to a.h and not to other
-headers included by a.c.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   4fdad925aa1a320c2f32bf956ed29100c7fdc464
+commit: f1cb549bcd0b0a5fe8a845632b95359992eb0fae [8569/9999] drm/amd/display: Properly handle additional cases where DCN is not supported
+config: arm64-randconfig-r036-20230416 (https://download.01.org/0day-ci/archive/20230420/202304200450.zGgXSfsp-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=f1cb549bcd0b0a5fe8a845632b95359992eb0fae
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout f1cb549bcd0b0a5fe8a845632b95359992eb0fae
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
 
-However, this design choice may cause language servers to emit
-diagnostics that you don't see when building the project.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304200450.zGgXSfsp-lkp@intel.com/
 
-For my tool ccls, the index file for an included file (e.g. a.h) is
-computed when compiling the main source file (a.c). Therefore, if the
-project builds successfully, the index is always accurate.
+All warnings (new ones prefixed by >>):
 
-Language servers usually have the limitation that only one
-configuration of a main source file is recorded, e.g., you only get
-index data for either clang -DA=3D1 a.c or clang -DA=3D2 a.c, not both.
-This limitation exists due to technical challenges and practicality.
-If a main source file has 10 configurations, when you edit the file,
-do you compile it 10 times to get all indexes?
-
----
-
-My setup is like this. I have been doing it since about 2019, though I
-rarely read Linux kernel code :(
-
-Ensure you have the following Clang and LLVM tools. If you build them
-by yourself, create a llvm-project build directory, say, /tmp/Rel
-```
-ninja -C /tmp/Rel clang lld
-llvm-{ar,nm,objcopy,objdump,ranlib,readelf,strings,strip}
-```
-
-In a Linux kernel source directory,
-(https://github.com/MaskRay/ccls/wiki/Example-Projects)
-```
-PATH=3D/tmp/Rel/bin:$PATH make O=3D/tmp/out/x86_64 ARCH=3Dx86_64 LLVM=3D1 d=
-efconfig
-PATH=3D/tmp/Rel/bin:$PATH make O=3D/tmp/out/x86_64 ARCH=3Dx86_64 LLVM=3D1 -=
-k
-bzImage modules  # generate .<target>.cmd files
-
-scripts/clang-tools/gen_compile_commands.py -d /tmp/out/x86_64
-```
-
-emacs -nw fs/binfmt_elf.c   # check out lsp-mode and eglot
-
-For neovim, use https://github.com/neoclide/coc.nvim or the built-in
-client. I prefer coc.nvim.
+>> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:4433:14: warning: performing pointer subtraction with a null pointer has undefined behavior [-Wnull-pointer-subtraction]
+           int index = GetIndexIntoMasterTable(DATA, Object_Header);
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/atombios.h:7151:132: note: expanded from macro 'GetIndexIntoMasterTable'
+   #define   GetIndexIntoMasterTable(MasterOrData, FieldName) (((char*)(&((ATOM_MASTER_LIST_OF_##MasterOrData##_TABLES*)0)->FieldName)-(char*)0)/sizeof(USHORT))
+                                                                                                                                      ^~~~~~~~~
+   1 warning generated.
 
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+vim +4433 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c
+
+  4427	
+  4428	static int dm_early_init(void *handle)
+  4429	{
+  4430		struct amdgpu_device *adev = (struct amdgpu_device *)handle;
+  4431		struct amdgpu_mode_info *mode_info = &adev->mode_info;
+  4432		struct atom_context *ctx = mode_info->atom_context;
+> 4433		int index = GetIndexIntoMasterTable(DATA, Object_Header);
+  4434		u16 data_offset;
+  4435	
+  4436		/* if there is no object header, skip DM */
+  4437		if (!amdgpu_atom_parse_data_header(ctx, index, NULL, NULL, NULL, &data_offset)) {
+  4438			adev->harvest_ip_mask |= AMD_HARVEST_IP_DMU_MASK;
+  4439			dev_info(adev->dev, "No object header, skipping DM\n");
+  4440			return -ENOENT;
+  4441		}
+  4442	
+  4443		switch (adev->asic_type) {
+  4444	#if defined(CONFIG_DRM_AMD_DC_SI)
+  4445		case CHIP_TAHITI:
+  4446		case CHIP_PITCAIRN:
+  4447		case CHIP_VERDE:
+  4448			adev->mode_info.num_crtc = 6;
+  4449			adev->mode_info.num_hpd = 6;
+  4450			adev->mode_info.num_dig = 6;
+  4451			break;
+  4452		case CHIP_OLAND:
+  4453			adev->mode_info.num_crtc = 2;
+  4454			adev->mode_info.num_hpd = 2;
+  4455			adev->mode_info.num_dig = 2;
+  4456			break;
+  4457	#endif
+  4458		case CHIP_BONAIRE:
+  4459		case CHIP_HAWAII:
+  4460			adev->mode_info.num_crtc = 6;
+  4461			adev->mode_info.num_hpd = 6;
+  4462			adev->mode_info.num_dig = 6;
+  4463			break;
+  4464		case CHIP_KAVERI:
+  4465			adev->mode_info.num_crtc = 4;
+  4466			adev->mode_info.num_hpd = 6;
+  4467			adev->mode_info.num_dig = 7;
+  4468			break;
+  4469		case CHIP_KABINI:
+  4470		case CHIP_MULLINS:
+  4471			adev->mode_info.num_crtc = 2;
+  4472			adev->mode_info.num_hpd = 6;
+  4473			adev->mode_info.num_dig = 6;
+  4474			break;
+  4475		case CHIP_FIJI:
+  4476		case CHIP_TONGA:
+  4477			adev->mode_info.num_crtc = 6;
+  4478			adev->mode_info.num_hpd = 6;
+  4479			adev->mode_info.num_dig = 7;
+  4480			break;
+  4481		case CHIP_CARRIZO:
+  4482			adev->mode_info.num_crtc = 3;
+  4483			adev->mode_info.num_hpd = 6;
+  4484			adev->mode_info.num_dig = 9;
+  4485			break;
+  4486		case CHIP_STONEY:
+  4487			adev->mode_info.num_crtc = 2;
+  4488			adev->mode_info.num_hpd = 6;
+  4489			adev->mode_info.num_dig = 9;
+  4490			break;
+  4491		case CHIP_POLARIS11:
+  4492		case CHIP_POLARIS12:
+  4493			adev->mode_info.num_crtc = 5;
+  4494			adev->mode_info.num_hpd = 5;
+  4495			adev->mode_info.num_dig = 5;
+  4496			break;
+  4497		case CHIP_POLARIS10:
+  4498		case CHIP_VEGAM:
+  4499			adev->mode_info.num_crtc = 6;
+  4500			adev->mode_info.num_hpd = 6;
+  4501			adev->mode_info.num_dig = 6;
+  4502			break;
+  4503		case CHIP_VEGA10:
+  4504		case CHIP_VEGA12:
+  4505		case CHIP_VEGA20:
+  4506			adev->mode_info.num_crtc = 6;
+  4507			adev->mode_info.num_hpd = 6;
+  4508			adev->mode_info.num_dig = 6;
+  4509			break;
+  4510	#if defined(CONFIG_DRM_AMD_DC_DCN)
+  4511		case CHIP_RAVEN:
+  4512		case CHIP_RENOIR:
+  4513		case CHIP_VANGOGH:
+  4514			adev->mode_info.num_crtc = 4;
+  4515			adev->mode_info.num_hpd = 4;
+  4516			adev->mode_info.num_dig = 4;
+  4517			break;
+  4518		case CHIP_NAVI10:
+  4519		case CHIP_NAVI12:
+  4520		case CHIP_SIENNA_CICHLID:
+  4521		case CHIP_NAVY_FLOUNDER:
+  4522			adev->mode_info.num_crtc = 6;
+  4523			adev->mode_info.num_hpd = 6;
+  4524			adev->mode_info.num_dig = 6;
+  4525			break;
+  4526		case CHIP_YELLOW_CARP:
+  4527			adev->mode_info.num_crtc = 4;
+  4528			adev->mode_info.num_hpd = 4;
+  4529			adev->mode_info.num_dig = 4;
+  4530			break;
+  4531		case CHIP_NAVI14:
+  4532		case CHIP_DIMGREY_CAVEFISH:
+  4533			adev->mode_info.num_crtc = 5;
+  4534			adev->mode_info.num_hpd = 5;
+  4535			adev->mode_info.num_dig = 5;
+  4536			break;
+  4537		case CHIP_BEIGE_GOBY:
+  4538			adev->mode_info.num_crtc = 2;
+  4539			adev->mode_info.num_hpd = 2;
+  4540			adev->mode_info.num_dig = 2;
+  4541			break;
+  4542	#endif
+  4543		default:
+  4544			DRM_ERROR("Unsupported ASIC type: 0x%X\n", adev->asic_type);
+  4545			return -EINVAL;
+  4546		}
+  4547	
+  4548		amdgpu_dm_set_irq_funcs(adev);
+  4549	
+  4550		if (adev->mode_info.funcs == NULL)
+  4551			adev->mode_info.funcs = &dm_display_funcs;
+  4552	
+  4553		/*
+  4554		 * Note: Do NOT change adev->audio_endpt_rreg and
+  4555		 * adev->audio_endpt_wreg because they are initialised in
+  4556		 * amdgpu_device_init()
+  4557		 */
+  4558	#if defined(CONFIG_DEBUG_KERNEL_DC)
+  4559		device_create_file(
+  4560			adev_to_drm(adev)->dev,
+  4561			&dev_attr_s3_debug);
+  4562	#endif
+  4563	
+  4564		return 0;
+  4565	}
+  4566	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
