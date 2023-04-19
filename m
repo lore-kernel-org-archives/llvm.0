@@ -1,35 +1,21 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9641B2580;
-	Wed, 19 Apr 2023 08:51:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E2DC433D2;
-	Wed, 19 Apr 2023 08:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681894272;
-	bh=VXrpOSBlujFi+hh3tYsCGOxDWdKBsM/QYjcPSg9RskE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ka7ocJbBGzZMh64ujq3JPqaSiDyCzuUb7UQ9jIjPNctNl3tAHXyS8iPrzTBzXW1Xa
-	 ZTGaaPFwNEwOu7/T10uoT2AkUtvvCGw/iA/ZR9TTHzez4wCnGxcJp/2Vm81M7vrrbU
-	 fxsGgIobRAncv2vykywEOcofgyQ764C3vAxebwBJ+Z2hT29ZkA+MHKw3/kCqY1xyhR
-	 dcme4FK8dkQqDIuDM3FCPmY7r98xH0fSn6MUZ6YNIlgjpshkyvdISA2RLN3nFCt+XV
-	 s7hbeuWt0UGXek2grLzYh3MWx7qjwJoBYJdVk+o/bTT+eu6AON8ZKym8aAEVECXkkX
-	 dClvpK4JcuaTA==
-Date: Wed, 19 Apr 2023 10:51:06 +0200
-From: Simon Horman <horms@kernel.org>
-To: Stefan Wahren <stefan.wahren@i2se.com>
-Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-staging@lists.linux.dev,
-	llvm@lists.linux.dev, Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH] staging: vchiq_arm: Make vchiq_platform_init() static
-Message-ID: <ZD+rethobzN+rONr@kernel.org>
-References: <20230418-vchiq_platform_init-static-v1-1-3c38ba81bc66@kernel.org>
- <e1fed875-059d-bf98-f9da-09c51f362be8@i2se.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A52928F2;
+	Wed, 19 Apr 2023 09:27:53 +0000 (UTC)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+	id 1pp46F-00091g-Ap; Wed, 19 Apr 2023 17:27:41 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 19 Apr 2023 17:27:40 +0800
+Date: Wed, 19 Apr 2023 17:27:40 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: kernel test robot <lkp@intel.com>
+Cc: Robert Elliott <elliott@hpe.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: [PATCH] crypto: arm/sha1-neon - Fix clang function cast warnings
+Message-ID: <ZD+0DJq1NHmMSSja@gondor.apana.org.au>
+References: <202304081828.zjGcFUyE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -38,38 +24,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e1fed875-059d-bf98-f9da-09c51f362be8@i2se.com>
+In-Reply-To: <202304081828.zjGcFUyE-lkp@intel.com>
 
-On Wed, Apr 19, 2023 at 08:37:58AM +0200, Stefan Wahren wrote:
-> Hi Simon,
-> 
-> Am 18.04.23 um 13:23 schrieb Simon Horman:
-> > vchiq_platform_init() is only used in this file so it can be static.
-> > 
-> > clang-16 with W=1 reports:
-> > 
-> >   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:5: error: no previous prototype for function 'vchiq_platform_init' [-Werror,-Wmissing-prototypes]
-> >   int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
-> >       ^
-> >   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-> > 
-> > Signed-off-by: Simon Horman <horms@kernel.org>
-> 
-> this is not the first attempt to fix this [1]. But maybe this has been fixed
-> in the meantime.
-> 
-> [1] - https://lore.kernel.org/linux-staging/20221022043548.1671644-1-scottjcrouch@gmail.com/#t
+Instead of casting the function which upsets clang for some reason,
+change the assembly function siganture instead.
 
-Thanks,
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304081828.zjGcFUyE-lkp@intel.com/
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-I see in that thread that Greg notes that "this breaks the build in a very
-horrible and strange way" [2].
-
-I'm a bit surprised as I didn't observe such a thing.
-But I also don't dispute it - clearly my testing was inadequate.
-
-I'll try and dig a bit deeper into this one.
-Perhaps starting with the report from the kernel test robot [3]
-
-[2] https://lore.kernel.org/linux-staging/Y1Okpjbi2kKU2GFz@kroah.com/
-[3] https://lore.kernel.org/linux-staging/202210230127.p1Dp295m-lkp@intel.com/
+diff --git a/arch/arm/crypto/sha1_neon_glue.c b/arch/arm/crypto/sha1_neon_glue.c
+index cfe36ae0f3f5..9c70b87e69f7 100644
+--- a/arch/arm/crypto/sha1_neon_glue.c
++++ b/arch/arm/crypto/sha1_neon_glue.c
+@@ -26,8 +26,8 @@
+ 
+ #include "sha1.h"
+ 
+-asmlinkage void sha1_transform_neon(void *state_h, const char *data,
+-				    unsigned int rounds);
++asmlinkage void sha1_transform_neon(struct sha1_state *state_h,
++				    const u8 *data, int rounds);
+ 
+ static int sha1_neon_update(struct shash_desc *desc, const u8 *data,
+ 			  unsigned int len)
+@@ -39,8 +39,7 @@ static int sha1_neon_update(struct shash_desc *desc, const u8 *data,
+ 		return sha1_update_arm(desc, data, len);
+ 
+ 	kernel_neon_begin();
+-	sha1_base_do_update(desc, data, len,
+-			    (sha1_block_fn *)sha1_transform_neon);
++	sha1_base_do_update(desc, data, len, sha1_transform_neon);
+ 	kernel_neon_end();
+ 
+ 	return 0;
+@@ -54,9 +53,8 @@ static int sha1_neon_finup(struct shash_desc *desc, const u8 *data,
+ 
+ 	kernel_neon_begin();
+ 	if (len)
+-		sha1_base_do_update(desc, data, len,
+-				    (sha1_block_fn *)sha1_transform_neon);
+-	sha1_base_do_finalize(desc, (sha1_block_fn *)sha1_transform_neon);
++		sha1_base_do_update(desc, data, len, sha1_transform_neon);
++	sha1_base_do_finalize(desc, sha1_transform_neon);
+ 	kernel_neon_end();
+ 
+ 	return sha1_base_finish(desc, out);
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
