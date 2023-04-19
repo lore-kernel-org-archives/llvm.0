@@ -1,136 +1,104 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153B0D2FD
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 21:46:10 +0000 (UTC)
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-63b52ad6311so429594b3a.2
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 14:46:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F5DD2FA
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 21:48:30 +0000 (UTC)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-246fd87a124so224166a91.0
+        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 14:48:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681940770; x=1684532770;
+        d=google.com; s=20221208; t=1681940910; x=1684532910;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5eNA55poY27sJGkFBB9ELAvckRSp+Hs3DdUKmyP8I/c=;
-        b=Wu+EO2gLZK7bRlRXhOue6NYns1NGF7FgYObfpP2p7tSWYpnQJon+eZ1th/qgEPsbeT
-         n6YG0IH0XPWgIbKKR/M3vjqnEh+7YqJN4K0V0IqQN1geeWosh3pj/m3nQmPs69zCTXOO
-         F3hp3XJG3srHyjCAcvzWdXQrY8iGq+h3sroGuLR4nVCU/CgUPdhjHcZiGoQBwmYQOq6q
-         6nHpbRCJtMdALeo1UBhlq4sGLfDBin4I4t5N2QYN2KQWrLWqqQOZulXn7jLCyO4SF5D1
-         ADWe84kC/4VIG85xthR+4jmVpFZfD4HWvnk92BW52dBG9a56AAf+S53ye2pt6Wt1zQqu
-         4zxQ==
+        bh=3umHbQ49oYLkecPTCD3JSlHIMiNfIqcecI+C874KcLU=;
+        b=57b1kFmCr0701sHULhDh6hJvbcA/JCF8T9BfMwXm6gNKjpoFgqkiRNbbSCJ4usngpL
+         DKoGEALP4T49ns+mn9Gjv4wAwMsxJXX2CEhhTwvjiI9gSUad8Xf6JwRPGb/31lPG8QXt
+         k9LnwFASj/5ONaJ3FyRZZ7Jw6CRyA8Kfb/FtlTr3dCsIMd6gxEXqr9vnxM756KUQjIyW
+         1vIED6gatAIMxxqosz2P5t1Ftk7rQ1zIiTjX2GU3joytTkiefDxjc4cApJWVgXQ4kQQV
+         E9Kyj2dEfkawcnBtSLuq4vJ3lTHiSMyVhXtmT47lT2Sk4GoMX+MRU7WkNiSgCJGCzFgh
+         Z/iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681940770; x=1684532770;
+        d=1e100.net; s=20221208; t=1681940910; x=1684532910;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5eNA55poY27sJGkFBB9ELAvckRSp+Hs3DdUKmyP8I/c=;
-        b=T6XqkhoGTeW+8+E92v9nmGXWQCVw3GQkeuOV35al0TA+8aNpFE696pwJDt4jY39ByP
-         lLA5LOZTtVP39frae4hYdRPvh0ocU+eiz0m7wwuoPB9KpUT1V+01h6+VUDGTfPg5Iu/W
-         3it1pFrYdC0tNae33Ow8R1tVRor3LLGf8f4W+EMepyHWSE0jlhbW2/s+j3w385G7GBu5
-         RL6oh7+dIp0waRu30yGssR1+bn7z+QYQGyDy0xwxb4BH3/+W7Vhj721pqHUKmTUW8X/V
-         6w/qpgilJCMZr3aioICc2JC+RgO2si37QSa8iDUYKhVGM9ZjtaiuXlrBEqi+OR71ES7L
-         MjTg==
-X-Gm-Message-State: AAQBX9dVFh6gWy+UK3Kif4oXEmM+PjzyD4bZM72HeUk/AO1dJ9oVuQHE
-	LLUfN7XTPxCLb8nV+GkZE2Y4Tg0JlDTqlsJUzXxv/w==
-X-Google-Smtp-Source: AKy350bL48Q9SK3cJudoJ6xx9ltTOmsUb9nCB/69hFqPx6lo5kbFN2yYSkaFZsBy9oE0K351LWgmiL9hiI5w4oDtC+Q=
-X-Received: by 2002:a17:90b:4c4f:b0:247:78e7:8739 with SMTP id
- np15-20020a17090b4c4f00b0024778e78739mr4187323pjb.0.1681940770255; Wed, 19
- Apr 2023 14:46:10 -0700 (PDT)
+        bh=3umHbQ49oYLkecPTCD3JSlHIMiNfIqcecI+C874KcLU=;
+        b=XZ5sdWANE107YgZo81WOLZLcbhaWFLTB3/71hq2W6I8V5dwsg9aQZtkim7ABHE7jrt
+         dCdSVhpKWqLLA2gfq54Q4wHkYvIFTo2cvqoSfCANrDWXkc/C7gUYKwfKiB74reggM2r3
+         pulvfxAnggxzRPaE3+oYy4oO1Eht4E/AjEXg9+lfPTboKu9lbq/k64oC+wADS9iUsFBU
+         ZGLdROziD4NopQPPG3PVbdEEwby+hZX5fZRj7o2ftRdKEBUxUdWfhAmwRjuIksP88AZ0
+         rRohjBwhYIo5VMzAeqXKb7JlPyHVkPdvJdtNhjp31TfWt8k2meScuBgABrHlX168R2sh
+         wX/Q==
+X-Gm-Message-State: AAQBX9cVgW4l137bYJdShu5r8DvvNfbpgT958zR8hhxh9rTiF3hnR7/m
+	NWmSUg9dwfBaNHghIyiHF/JP/bCoj8Qyo4hqfPHuHw==
+X-Google-Smtp-Source: AKy350aYZAOdqbv0OVmtpCPAntPobWMY0GOLA+cGXP3stu82EOGCdTmpnZBPzc3tJVfo/0nrqABBLXLtnhTK11hhUxg=
+X-Received: by 2002:a17:90b:33c7:b0:23e:f855:79ed with SMTP id
+ lk7-20020a17090b33c700b0023ef85579edmr4217873pjb.28.1681940909903; Wed, 19
+ Apr 2023 14:48:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202304081828.zjGcFUyE-lkp@intel.com> <ZD+0DJq1NHmMSSja@gondor.apana.org.au>
-In-Reply-To: <ZD+0DJq1NHmMSSja@gondor.apana.org.au>
+References: <20230418-vchiq_platform_init-static-v1-1-3c38ba81bc66@kernel.org>
+ <e1fed875-059d-bf98-f9da-09c51f362be8@i2se.com> <ZD+rethobzN+rONr@kernel.org>
+ <CAKwvOdkKACfOvZ4BcG9NcO1Kh97vqSx0y7ZBc+BOJnHUpq8qWw@mail.gmail.com>
+ <20ac24d6-4d94-4003-9203-d852714e1a46@app.fastmail.com> <CAKwvOd=kShNVxFvjODEghrHGXK7Gekwcwb3cEFUgEBhZcOHC_Q@mail.gmail.com>
+ <8d070a27-fa53-4965-95b0-e0bf8bb90609@app.fastmail.com>
+In-Reply-To: <8d070a27-fa53-4965-95b0-e0bf8bb90609@app.fastmail.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 19 Apr 2023 14:45:58 -0700
-Message-ID: <CAKwvOdm2VyCzfmG6707osmtyniV-oL-ism08kER49D7p_7x+Rg@mail.gmail.com>
-Subject: Re: [PATCH] crypto: arm/sha1-neon - Fix clang function cast warnings
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: kernel test robot <lkp@intel.com>, Robert Elliott <elliott@hpe.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Nathan Huckleberry <nhuck@google.com>
+Date: Wed, 19 Apr 2023 14:48:17 -0700
+Message-ID: <CAKwvOdkCPy7XQS4dZ0=Ka8TNEStwqLhaW7idPJ+fA9d+A0Sjxg@mail.gmail.com>
+Subject: Re: [PATCH] staging: vchiq_arm: Make vchiq_platform_init() static
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Simon Horman <horms@kernel.org>, Stefan Wahren <stefan.wahren@i2se.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-staging@lists.linux.dev, 
+	llvm@lists.linux.dev, Florian Fainelli <f.fainelli@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 19, 2023 at 2:27=E2=80=AFAM Herbert Xu <herbert@gondor.apana.or=
-g.au> wrote:
+On Wed, Apr 19, 2023 at 2:42=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
-> Instead of casting the function which upsets clang for some reason,
-> change the assembly function siganture instead.
+> On Wed, Apr 19, 2023, at 23:38, Nick Desaulniers wrote:
+> > On Wed, Apr 19, 2023 at 2:35=E2=80=AFPM Arnd Bergmann <arnd@kernel.org>=
+ wrote:
+> >>
+> >> On Wed, Apr 19, 2023, at 23:21, Nick Desaulniers wrote:
+> >> > On Wed, Apr 19, 2023 at 1:51=E2=80=AFAM Simon Horman <horms@kernel.o=
+rg> wrote:
+> >>
+> >> > Marking something as `depends on OF_DYNAMIC`. (Not sure whether Arnd
+> >> > meant that for BCM2835_VCHIQ or BCM_VIDEOCORE).
+> >> > Perhaps try that?
+> >> >
+> >> >>
+> >> >> I'm a bit surprised as I didn't observe such a thing.
+> >> >> But I also don't dispute it - clearly my testing was inadequate.
+> >> >>
+> >> >> I'll try and dig a bit deeper into this one.
+> >> >> Perhaps starting with the report from the kernel test robot [3]
+> >>
+> >> I have this in my randconfig build tree, but it looks like I never
+> >> sent it out.
+> >
+> > What else have you got hidden up in there? ;)
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Actually, I have fixes for all missing-prototype warnings
+> in my tree, just remembered that this one is part of my
+> longer series. I have about 150 patches that are already split
+> up and just need to be sent out, plus more that are currently
+> sitting in a combined changeset.
 
-s/siganture/signature/
+All? Wanna bet we can introduce new instances of that warning faster
+than you can fix all of them? Actually, no I would not take that bet.
 
-Thanks for the patch!  Perhaps worth noting in the commit message that
-this fixes an instance of -Wcast-function-type-strict triggered for
-W=3D1 builds, which helps us catch potential kCFI violations at compile
-time rather than runtime.
-
-After this patch, there's only 4 more users of the sha1_block_fn
-typedef, consider if that typedef is a candidate for removal now?
-
-Also, you should update the comment in
-arch/arm/crypto/sha1-armv7-neon.S above the assembler implementation
-on L288-289 to reflect this revised fn signature, in this patch.
-
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304081828.zjGcFUyE-lkp@int=
-el.com/
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
->
-> diff --git a/arch/arm/crypto/sha1_neon_glue.c b/arch/arm/crypto/sha1_neon=
-_glue.c
-> index cfe36ae0f3f5..9c70b87e69f7 100644
-> --- a/arch/arm/crypto/sha1_neon_glue.c
-> +++ b/arch/arm/crypto/sha1_neon_glue.c
-> @@ -26,8 +26,8 @@
->
->  #include "sha1.h"
->
-> -asmlinkage void sha1_transform_neon(void *state_h, const char *data,
-> -                                   unsigned int rounds);
-> +asmlinkage void sha1_transform_neon(struct sha1_state *state_h,
-> +                                   const u8 *data, int rounds);
->
->  static int sha1_neon_update(struct shash_desc *desc, const u8 *data,
->                           unsigned int len)
-> @@ -39,8 +39,7 @@ static int sha1_neon_update(struct shash_desc *desc, co=
-nst u8 *data,
->                 return sha1_update_arm(desc, data, len);
->
->         kernel_neon_begin();
-> -       sha1_base_do_update(desc, data, len,
-> -                           (sha1_block_fn *)sha1_transform_neon);
-> +       sha1_base_do_update(desc, data, len, sha1_transform_neon);
->         kernel_neon_end();
->
->         return 0;
-> @@ -54,9 +53,8 @@ static int sha1_neon_finup(struct shash_desc *desc, con=
-st u8 *data,
->
->         kernel_neon_begin();
->         if (len)
-> -               sha1_base_do_update(desc, data, len,
-> -                                   (sha1_block_fn *)sha1_transform_neon)=
-;
-> -       sha1_base_do_finalize(desc, (sha1_block_fn *)sha1_transform_neon)=
-;
-> +               sha1_base_do_update(desc, data, len, sha1_transform_neon)=
-;
-> +       sha1_base_do_finalize(desc, sha1_transform_neon);
->         kernel_neon_end();
->
->         return sha1_base_finish(desc, out);
-> --
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
->
-
-
+I'm just having fun, thanks for all of that cleanup work!
 --=20
 Thanks,
 ~Nick Desaulniers
