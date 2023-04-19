@@ -1,46 +1,25 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510E9C941;
-	Wed, 19 Apr 2023 17:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681925702; x=1713461702;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V+63/HRIM6OQU4SjsCOxWii4OO8Ny2FbAhnQKO/QFes=;
-  b=JF2E+M4kB1v2teMrtqsliD1xwqGqoLl+KCIzc6DGC18NZ9KLE39E28vL
-   N9muVkNsn4CFlZo8luDHQfLgLA1eKYuSXWA8F9PMlYaL7O9NRTP3sGKLU
-   bWga3Zqx0ZFWx91ol5Us2uYGczVR842kp2KjsT7Y7b71hvdwSGNuf9z+q
-   1L/k3r82gOQj6eQZMNxjNDRjJIQccaNPXAXaMrobdPlD82AYWzIPIQVXk
-   FuKR8QUu3dpF0TT+r/XFefCQiH2Wj8Xiox+eSXbln6rqeSAhmRdpokkT+
-   Yy63ou0T22131ylZ5ZXzMU2gSJ2HyHAglOBBdydyaig37m6VPyBc8bGm3
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="347364372"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="347364372"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 10:35:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756179872"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="756179872"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2023 10:34:59 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ppBhq-000f3o-1d;
-	Wed, 19 Apr 2023 17:34:58 +0000
-Date: Thu, 20 Apr 2023 01:34:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bart Van Assche <bvanassche@acm.org>,
-	Damien Le Moal <dlemoal@kernel.org>, linux-block@vger.kernel.org
-Subject: Re: [PATCH 7/7] blk-mq: don't use the requeue list to queue flush
- commands
-Message-ID: <202304200122.GEFsqxFh-lkp@intel.com>
-References: <20230416200930.29542-8-hch@lst.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB616C941
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 18:06:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8262FC433EF;
+	Wed, 19 Apr 2023 18:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681927597;
+	bh=bMLoxOhWXVqY8Sas+obj9neqtDS1gz9HD3YT4tNYF4g=;
+	h=Date:From:To:Subject:From;
+	b=hdPyq+L2uovQ6bVoqiEOmg9Ogb9KC7nYh+j0FHub2G7yjvCHYEE7XDSAX4WdFnN1M
+	 15HLIwOiXFbj+rM4Ju5P0LOTpk2sHgEs4UHjv4J2Mfb8f/Pw8YbyWBFcd6OkC/aTov
+	 EIke5VVrHR3T9YhwCXR9Z1Dd7j4P+z7B/DfY18XEosANAJ6wAkKo/Q+W5PZfKvx1Mz
+	 JM73RELtgbEOeeyGbxjCsvGBHQX542cKTz+JCARijSRRcSWDz7uZdqXjiRxca4pKec
+	 i0UFsX3z9S+xIsqH+8dF3yewZp5TEPqOpNYwwYiAwHXQYGtmhOvQ86tEpmLG9lUDvg
+	 ttsBucwsP/U+g==
+Date: Wed, 19 Apr 2023 11:06:35 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Prebuilt LLVM 16.0.2 uploaded
+Message-ID: <20230419180635.GA1965688@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,67 +28,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230416200930.29542-8-hch@lst.de>
 
-Hi Christoph,
+Hi all,
 
-kernel test robot noticed the following build warnings:
+I have built and uploaded LLVM 16.0.2 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on next-20230418]
-[cannot apply to linus/master v6.3-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This release includes a fix relevant to the Linux kernel, which you can
+read about here:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/blk-mq-reflow-blk_insert_flush/20230417-051014
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20230416200930.29542-8-hch%40lst.de
-patch subject: [PATCH 7/7] blk-mq: don't use the requeue list to queue flush commands
-config: x86_64-randconfig-a013-20230417 (https://download.01.org/0day-ci/archive/20230420/202304200122.GEFsqxFh-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c1197e1a4ff5b38b73d3ec923987ca857f5e2695
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christoph-Hellwig/blk-mq-reflow-blk_insert_flush/20230417-051014
-        git checkout c1197e1a4ff5b38b73d3ec923987ca857f5e2695
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+https://github.com/llvm/llvm-project/commit/bf80902fdd43eed5b7a4c401bccc0a06ceac582c
+https://github.com/ClangBuiltLinux/linux/issues/1815
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304200122.GEFsqxFh-lkp@intel.com/
+It is recommended that you use 16.0.2 in lieu of older 16.x series for
+this reason, although there is a kernel series in progress to resolve
+this for older 16.x releases:
 
-All warnings (new ones prefixed by >>):
+https://lore.kernel.org/20230412-no_stackp-v2-0-116f9fe4bbe7@google.com/
 
->> block/blk-mq.c:1461:6: warning: no previous prototype for function 'blk_flush_queue_insert' [-Wmissing-prototypes]
-   void blk_flush_queue_insert(struct request *rq)
-        ^
-   block/blk-mq.c:1461:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void blk_flush_queue_insert(struct request *rq)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/blk_flush_queue_insert +1461 block/blk-mq.c
-
-  1460	
-> 1461	void blk_flush_queue_insert(struct request *rq)
-  1462	{
-  1463		struct request_queue *q = rq->q;
-  1464		unsigned long flags;
-  1465	
-  1466		spin_lock_irqsave(&q->requeue_lock, flags);
-  1467		list_add_tail(&rq->queuelist, &q->flush_list);
-  1468		spin_unlock_irqrestore(&q->requeue_lock, flags);
-  1469	}
-  1470	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Cheers,
+Nathan
