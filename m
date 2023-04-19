@@ -1,123 +1,89 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [85.220.165.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73C0C977;
-	Wed, 19 Apr 2023 19:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681933085; x=1713469085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t1OsSZQnF1LZH4+Xjffqd401TNQIEsaRxkp8+pmezZ8=;
-  b=jt6G4hhcqWl20ycmhlcEWjbY6v1MZ99wzDoJbWpx6ljOpE4+bDT9ACmo
-   1oVZ1iPuJ+jraVYQLsl+HgXoPRPYhyqo2uFs5te/r7E00JmUZQlJNwgen
-   hTWDx+Y5pmfNk7Yg4QzmS+klP6lSRHO3gGzQ7FgUj7L52fDcqtD1Yy7m7
-   K4LFdU6b6BqWys5lPToTWjcmFLW4DIGfN7zEwAYRkpTBw8/uoQT8gSV36
-   gvoUz858w3eHn4EHjTBW+gn26M+6JjE9CrfdXbs4tuqXvzXcafM0BE5y0
-   lXyRJy/cPje0uB6jILB1EGD0u+lTPyOE2vcvTJUU5XmG9T1kTsg7VWZR4
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="373430549"
-X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
-   d="scan'208";a="373430549"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 12:38:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="835436561"
-X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
-   d="scan'208";a="835436561"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Apr 2023 12:38:02 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ppDcv-000f8Q-2a;
-	Wed, 19 Apr 2023 19:38:01 +0000
-Date: Thu, 20 Apr 2023 03:37:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
-	linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
-	zyjzyj2000@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, rpearsonhpe@gmail.com,
-	yangx.jy@fujitsu.com, lizhijian@fujitsu.com,
-	Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
-Subject: Re: [PATCH for-next v4 2/8] RDMA/rxe: Always schedule works before
- accessing user MRs
-Message-ID: <202304200354.oGlN33Lg-lkp@intel.com>
-References: <7441c59fcea601c03c70ec03b5d17a69032e51f8.1681882651.git.matsuda-daisuke@fujitsu.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE600C977
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 19:58:46 +0000 (UTC)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1ppDwR-0005x6-CV; Wed, 19 Apr 2023 21:58:11 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1ppDwM-00CPGS-AB; Wed, 19 Apr 2023 21:58:06 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1ppDwL-00Eat3-Ez; Wed, 19 Apr 2023 21:58:05 +0200
+Date: Wed, 19 Apr 2023 21:58:05 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	David Lin <CTLIN0@nuvoton.com>, Arnd Bergmann <arnd@arndb.de>,
+	Tom Rix <trix@redhat.com>, Peter Rosin <peda@axentia.se>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] ASoC: nau8825: fix delay time range check
+Message-ID: <20230419195805.fpil775pw2wsrav4@pengutronix.de>
+References: <20230419114546.820921-1-arnd@kernel.org>
+ <c6bc42c6-4a98-4bb6-9639-acf4c2010b68@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="k7olzqvscnyzsee5"
 Content-Disposition: inline
-In-Reply-To: <7441c59fcea601c03c70ec03b5d17a69032e51f8.1681882651.git.matsuda-daisuke@fujitsu.com>
-
-Hi Daisuke,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on f605f26ea196a3b49bea249330cbd18dba61a33e]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daisuke-Matsuda/RDMA-rxe-Tentative-workqueue-implementation/20230419-135731
-base:   f605f26ea196a3b49bea249330cbd18dba61a33e
-patch link:    https://lore.kernel.org/r/7441c59fcea601c03c70ec03b5d17a69032e51f8.1681882651.git.matsuda-daisuke%40fujitsu.com
-patch subject: [PATCH for-next v4 2/8] RDMA/rxe: Always schedule works before accessing user MRs
-config: x86_64-randconfig-a011-20230417 (https://download.01.org/0day-ci/archive/20230420/202304200354.oGlN33Lg-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/493fb0777100e2e1b6358176e84b4b29372105ae
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daisuke-Matsuda/RDMA-rxe-Tentative-workqueue-implementation/20230419-135731
-        git checkout 493fb0777100e2e1b6358176e84b4b29372105ae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/infiniband/sw/rxe/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304200354.oGlN33Lg-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/infiniband/sw/rxe/rxe_comp.c:139:36: warning: converting the enum constant to a boolean [-Wint-in-bool-context]
-           if (pkt->mask | (RXE_PAYLOAD_MASK || RXE_ATMACK_MASK))
-                                             ^
-   1 warning generated.
+In-Reply-To: <c6bc42c6-4a98-4bb6-9639-acf4c2010b68@sirena.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
 
-vim +139 drivers/infiniband/sw/rxe/rxe_comp.c
+--k7olzqvscnyzsee5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   128	
-   129	void rxe_comp_queue_pkt(struct rxe_pkt_info *pkt, struct sk_buff *skb)
-   130	{
-   131		struct rxe_qp *qp = pkt->qp;
-   132		int must_sched;
-   133	
-   134		skb_queue_tail(&qp->resp_pkts, skb);
-   135	
-   136		/* Schedule the task if processing Read responses or Atomic acks.
-   137		 * In these cases, completer may sleep to access ODP-enabled MRs.
-   138		 */
- > 139		if (pkt->mask | (RXE_PAYLOAD_MASK || RXE_ATMACK_MASK))
-   140			must_sched = 1;
-   141		else
-   142			must_sched = skb_queue_len(&qp->resp_pkts) > 1;
-   143	
-   144		if (must_sched != 0)
-   145			rxe_counter_inc(SKB_TO_PKT(skb)->rxe, RXE_CNT_COMPLETER_SCHED);
-   146	
-   147		if (must_sched)
-   148			rxe_sched_task(&qp->comp.task);
-   149		else
-   150			rxe_run_task(&qp->comp.task);
-   151	}
-   152	
+On Wed, Apr 19, 2023 at 12:48:52PM +0100, Mark Brown wrote:
+> On Wed, Apr 19, 2023 at 01:45:39PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >=20
+> > clang points out that the recently added range check is nonsensical:
+>=20
+> Someone already sent a patch for tihs.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+FTR: https://lore.kernel.org/r/20230418120955.3230705-1-trix@redhat.com
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--k7olzqvscnyzsee5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRAR8wACgkQj4D7WH0S
+/k4TkQf/T0DEUGoTk9H/hfDu9v/xHFjLghN1ZIsuA02IHW/nDmfHyCGX1I51xV/d
+5zX4GHGk4AyO+qJ27KYo9K0Fj/TJKQEuR8cws86p8uqLztxDuRSLFhusRKpCjcpU
+33uann83bN3tSs3cvFUuRLt/bJ/Juc4SHKKWicYvraDRHnLCKgKTZwEQDBhBFa1f
+TfVZ7m1RnqSLvv4dpJ+I1IwMCVh7Q01wBM1EHSDDoit/OeyVlrkdQb13Ojz1sYs2
+yzhWzY+pEEY/X+1pHmsOZUO+IWHDnlQRf2AsqDhFbA3DEf1QTqb0SWZBZeIeffeE
+T7gPx9FOH5kgFoPxHly+IWO1SLLXLg==
+=SxS9
+-----END PGP SIGNATURE-----
+
+--k7olzqvscnyzsee5--
