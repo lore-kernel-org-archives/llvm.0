@@ -1,124 +1,171 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1BB2320C
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 23:34:38 +0000 (UTC)
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-24986c7cf2dso274073a91.2
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 16:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1681947278; x=1684539278;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=42V/4d2g4SmvVdtXXthexb+5Ubl/6v371AotGfmaixU=;
-        b=lgrWN3ZYYUvxafsTOzwbZWiNtrbe8XhcGEd/r4vVw8GtLnvll+Mvinro9WIVnR7cdr
-         +Lt9LcEQFlrJuCxKy5W0tkjkWAFuV2ex9CCpzHsX848xUdkxfhWlrizQarsdW2RFRqP6
-         Nf/+gtcblODAJ/oIEwPw4g6tRzhkn6C6Q46r0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681947278; x=1684539278;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=42V/4d2g4SmvVdtXXthexb+5Ubl/6v371AotGfmaixU=;
-        b=f6n+iHXJ/ftkU2j0aRFQaDW+C0EcGkzUghSysnDzjx1krRfNCembagooJ2jeVAbO+I
-         clU5+/YLGXpUrm5wnbMPOiCrnELKB73Frd6i8m//9cD600QYLlyDGv04EJwhEWF5ClJe
-         o0XisG/E8G9RLcSwTtx+CmF6aQwcXCooBnIkmA0/u/ALpZ7tQPCidrQdl2SttQipEs3f
-         5dz08tSUmU0bcnoWidm4YFw5m2y9HrPRnmhKQvxpQ9+XZHFuzftQavWZ9Mce4urfig/h
-         lMi2jvnDR0JDatdFj4z/D78zqPU9+txJTZwI03ik78XWSRQ4dxsN1xP6s+HpCpLOI1jF
-         QzMw==
-X-Gm-Message-State: AAQBX9fa0ItuQ6BnF0Ie7G324oZ338szDxnCfv3jnFP9KfRXCf8Pciji
-	PxpJAA0BgXTod0kUSL5XwqS0GTN8RUZV6LFCZPfl
-X-Google-Smtp-Source: AKy350aBH0VEPcP2Qh/Eoox3kPORS1HQObKPOJMrnSxK+FdPS8mYZv3TNtyW5xMB6xiXuJwilswkqt/c7AoWpmH4+5o=
-X-Received: by 2002:a17:90b:180f:b0:247:eae:1787 with SMTP id
- lw15-20020a17090b180f00b002470eae1787mr4273120pjb.36.1681947278172; Wed, 19
- Apr 2023 16:34:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3846FD310
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 23:36:56 +0000 (UTC)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.west.internal (Postfix) with ESMTP id 024F33200033;
+	Wed, 19 Apr 2023 19:36:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 19 Apr 2023 19:36:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1681947414; x=1682033814; bh=GLMPVgV6xsUU9TvUrlna2wd4KxrdWZ6q0Ww
+	QPVUyA7M=; b=THEIpDb/jQ1NQDqJEXLLhRzSvhOPFUXcRm7pzuqPkW8/6eBPbaK
+	I/csbqSYQG35ZbBUWm1HAXN5vr3oYZK4Lg5flZF3Qwyy/5NYXXvb9v0xvk2BcgSS
+	gjNlqVM1V0oupd0wMfYqskwRm8FgL22wfvcU+XbkDG/MiR0XX7vh0XNQh/9VP2eF
+	yffJDZ/r9UEHXsL3p7Z5WG9UgT5fGu1WTFwkxvoAN28mQtsYk/QFdAlTtetHOTWP
+	hlN1K+tyn1gFDARkj1gkwltLW5ylDwqiJhmK2OXwbUjBfXiipl4/Iw5NHwguugbt
+	LIRm1bTrzsx/a9jSMAM0WdWVlwaMoupPvmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1681947414; x=1682033814; bh=GLMPVgV6xsUU9TvUrlna2wd4KxrdWZ6q0Ww
+	QPVUyA7M=; b=UkPktIGgx81fAuWst2tq13To5U0MTekQrvmP1Zs0U62FNCrKsAL
+	y8MN1QLFL/VqqZOqAHbyAWcAgmDQt2Ba6TGowy+XyeM3MXsJHw6QUvXRAKf6QMuA
+	pNbkjnONav3MgFOI9ZHBQ5uyeem3NKVCPzGqoYw6F9zNr9gp1ITroa6x5zYPx0So
+	NLNHjFMqhkTlpzrGSIKs6TH6xG5k5zHqfVekmphxkzHQ9UAVZhW4s+NplcMkmHpE
+	LMsPmW1mHWT3CiACH9KRsO9OiBDoYIK3Jlal7vM90HM+ij9+YkWu0sYSVe++ckju
+	Y0tFUUi6WsrGaeZgsjnXhlCbCC6lqVnINeQ==
+X-ME-Sender: <xms:FntAZFPsQe2P1sdYHyyKdU8DTnPBlO_s9Y2sZF3no4RRv8g7Npjghg>
+    <xme:FntAZH9N3l2iaaq4cjz1igodMWA0xDhjH6kj_6pMTmLY5u2C4EMAlNmVGd5ikArwX
+    GAVo-jFUtBgFmHCdKA>
+X-ME-Received: <xmr:FntAZERxuzvU6Mh3wfyb2QryzbXcaSM6PejWKFovC7SAMGdepUX7YahY3JwELRtF52Fe>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtuddgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepudelfeeugefgiedtgfekueekteejvdevleeiveeivdeukeeu
+    leejhfelueeghfdunecuffhomhgrihhnpehgihhthhhusgdrtghomhdpfihikhhiphgvug
+    hirgdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
+    ohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:FntAZBu-JX43oZAiaDp6wxYoVJvN2TptWQ4lrB7QaExAkzM6vqI0NQ>
+    <xmx:FntAZNf3BYYO4ZFVEGMZ4zksUu1dLMZOuuPuFO5yiNx6tHF4XOsE-w>
+    <xmx:FntAZN1MUNov8dvvsFVnzUZJHwhj8YE0ss4owac4PUncFXLvY85Glw>
+    <xmx:FntAZB6RsEjaFm1-5Ct5JqHi6Oal0gu8aPqyPz__gGYFeQ-MFNKUug>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Apr 2023 19:36:53 -0400 (EDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
- <16007014-c5f2-4b07-baec-e19952236aa5@spud> <ZAbGSA6F0kfv9YYw@sunil-laptop>
- <E7FB4927-1FE6-435A-914E-9615C2AD9D34@kernel.org> <a9823561-2e32-49e8-b6c9-73e4b8f8cf8d@spud>
- <ZAfeaO52pnYhiyLN@sunil-laptop> <CAFiDJ58bRo6R1qOFaSSNgAdbQJZ3xDY6Wth-t8M8XKRFbig2hA@mail.gmail.com>
- <ZCvJpnNZYzrIcfPe@sunil-laptop> <CAHBxVyHA8ZouSUnqHaZTa=uMQxx61RqZuSBHx15Hg8+AVYLXZg@mail.gmail.com>
- <CAFiDJ5-7qY2vQvbcTU7QPLmqrbCmXWkCxmswO4OqeYtsNOiOFw@mail.gmail.com>
-In-Reply-To: <CAFiDJ5-7qY2vQvbcTU7QPLmqrbCmXWkCxmswO4OqeYtsNOiOFw@mail.gmail.com>
-From: Atish Patra <atishp@atishpatra.org>
-Date: Thu, 20 Apr 2023 05:04:26 +0530
-Message-ID: <CAOnJCUJT+kdFRn=3nZA6P6JatyN0anbKd0ufbQ_Zs9DSAoaC6A@mail.gmail.com>
-Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
-To: Ley Foon Tan <lftan@kernel.org>
-Cc: Atish Kumar Patra <atishp@rivosinc.com>, Anup Patel <apatel@ventanamicro.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-doc@vger.kernel.org, 
-	Marc Zyngier <maz@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, llvm@lists.linux.dev, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Conor Dooley <conor@kernel.org>, 
-	linux-acpi@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, linux-riscv <linux-riscv@lists.infradead.org>, 
-	Andrew Jones <ajones@ventanamicro.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH v2 6/7] MIPS: Fallback CPU -march CFLAG to ISA level if
+ unsupported
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230419221500.GA17797@alpha.franken.de>
+Date: Thu, 20 Apr 2023 00:36:41 +0100
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ llvm@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>
 Content-Transfer-Encoding: quoted-printable
-
-On Wed, Apr 19, 2023 at 1:38=E2=80=AFPM Ley Foon Tan <lftan@kernel.org> wro=
-te:
->
-> On Thu, Apr 6, 2023 at 10:45=E2=80=AFAM Atish Kumar Patra <atishp@rivosin=
-c.com> wrote:
-> >
->
-> > > >
-> > > > Hi Sunil
-> > > >
-> > > > One question regarding PMU in ACPI flow.
-> > > >
-> > > > We use DT to decode the supported HPM counters/events for the
-> > > > different platforms now.
-> > > > How do we enable PMU (drivers/perf/riscv_pmu_sbi.c) when using ACPI=
- method?
-> > > > Note, this might be in separate patch series.
-> > > >
-> > > Hi Lay Foon,
-> > >
-> > > This driver uses SBI calls and hence should work in case of ACPI also=
-.
-> > >
-> > > There is one minor change required in this driver for overflow
-> > > interrupt. I have a patch for that in future series.
-> >
-> > Just to add further clarification: OpenSBI will continue to use the
-> > device tree so that
-> > the firmware will have access to all the PMU details.
-> >
-> Sorry for the late reply, missed out on this email in my kernel.org mailb=
-ox.
->
-> Do you mean OpenSBI still using the device tree, but EDK II and Linux
-> using the ACPI table? Normally Linux shouldn't mix between ACPI and
-
-Yes. For Linux, it will only be ACPI. Otherwise, we have to define all
-those bindings in ACPI as well.
-In the future, we will have supervisor counter delegation ISA
-extension(in progress) that allows the kernel to directly program
-the hpmevents & modify counters without needing SBI PMU extension.
-
-
-> device tree.
->
-
-
-> Regards
-> Ley Foon
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Message-Id: <B02E6819-A25F-4588-8CDA-D7C5A2E5B0B6@flygoat.com>
+References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
+ <20230414080701.15503-7-jiaxun.yang@flygoat.com>
+ <CAKwvOdkttvdZQyxrP60hAziaRQ4HWRBBSuA-vN25_USg-zEJqg@mail.gmail.com>
+ <550FCA0F-2C48-4133-85B0-D9494CC1C23C@flygoat.com>
+ <CAKwvOd=sNyOq9J=CS09XXQ6YY3y3ytLnwHxKoHNdddcxYk=nJQ@mail.gmail.com>
+ <20230419221500.GA17797@alpha.franken.de>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+X-Mailer: Apple Mail (2.3731.500.231)
 
 
 
---=20
-Regards,
-Atish
+> 2023=E5=B9=B44=E6=9C=8819=E6=97=A5 23:15=EF=BC=8CThomas Bogendoerfer =
+<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Wed, Apr 19, 2023 at 02:35:02PM -0700, Nick Desaulniers wrote:
+>> On Wed, Apr 19, 2023 at 9:50=E2=80=AFAM Jiaxun Yang =
+<jiaxun.yang@flygoat.com> wrote:
+>>>=20
+>>>=20
+>>>=20
+>>>> 2023=E5=B9=B44=E6=9C=8818=E6=97=A5 21:07=EF=BC=8CNick Desaulniers =
+<ndesaulniers@google.com> =E5=86=99=E9=81=93=EF=BC=9A
+>>>>=20
+>>>> On Fri, Apr 14, 2023 at 1:07=E2=80=AFAM Jiaxun Yang =
+<jiaxun.yang@flygoat.com> wrote:
+>>>>>=20
+>>>>> LLVM does not implement some of -march options. However those =
+options
+>>>>> are not mandatory for kernel to build for those CPUs.
+>>>>>=20
+>>>>> Fallback -march CFLAG to ISA level if unsupported by toolchain so
+>>>>> we can get those kernel to build with LLVM.
+>>>>>=20
+>>>>> Link: https://github.com/ClangBuiltLinux/linux/issues/1544
+>>>>> Reported-by: Nathan Chancellor <nathan@kernel.org>
+>>>>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>>>>=20
+>>>> Thanks for the patch! Maybe it's more obvious to folks who work on
+>>>> mips, but how did you determine that say `p5600` is `mips32r5` or
+>>>> `r10000` is `mips4`?
+>>>=20
+>>> Wikipedia [1] should fit the purpose.
+>>>=20
+>>> [1]: =
+https://en.wikipedia.org/wiki/List_of_MIPS_architecture_processors
+>>=20
+>> Mostly! Though I was not able to verify:
+>> - p5600
+>=20
+> mips32r5
+
+On wikipedia=E2=80=99s =E2=80=9CImagination Technologies=E2=80=9D =
+section.
+
+>=20
+>> - r5500
+>=20
+> mips4
+>=20
+>> - rm5200
+>=20
+> mips4
+
+I think those are all R5000 derivatives?
+
+>=20
+>> - sb1
+>=20
+> mips64r1
+
+On wikipedia=E2=80=99s "Other designers=E2=80=9D section.
+
+>=20
+> all information taken from datasheets.
+>=20
+>> - loongson*
+
+Loongson-1A/1B/1C: Claims to be MIPS32R2 but lacks FP64 and DIEI, so =
+I=E2=80=99d say they are R1.
+Loongson2e/Loongson2f: MIPS-III
+Loongson64: MIPS64R2
+
+Thanks.
+- Jiaxu
+
+>=20
+> probably depends on the exact type, but as I don't have datasheets
+> I can't say what it is exactly, probaly mips32r2/mips64r2.
+>=20
+> Thomas.
+>=20
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not =
+necessarily a
+> good idea.                                                [ RFC1925, =
+2.3 ]
+
+
