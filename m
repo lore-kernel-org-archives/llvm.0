@@ -1,157 +1,108 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CE93C17;
-	Wed, 19 Apr 2023 12:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681906673; x=1713442673;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qIqm3ZQhi032s9XdXfyAExwjp4nhEc7/iet4F8R7P1k=;
-  b=ZBQ2fwB0wBMGY5hew8ezDrZGgNffaGpltE4vN82xYNf0Ahs7e+/NtmEy
-   DEUFUEe5tl+wew3TumNOyxyxzIcipaZuz49a559C6SYECz23WV5DjyvC0
-   zZPxAfE9A41ndM859mCx9VpEwn5FAVwXLZNn91yuhJQzpEtYhU1BgRrNJ
-   QhYQoxpSnVMObTWBpbQ6rZw/3JxSSTO4YloVP/QqqEy2IAUdOfi66j6HY
-   lolRdOmKaNJa6FiWdIucTDA3MTA6nJVP/as9Xr6NkPLhrxXoNklqz4MW2
-   lsAqm7s2shuW9mSvx7cQ3F0o36FhF3TNWLh1aE+UQD6y5xBk5GVRrPMSJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="410661374"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="410661374"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 05:17:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="760725073"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="760725073"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Apr 2023 05:17:51 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pp6kv-000es1-2t;
-	Wed, 19 Apr 2023 12:17:49 +0000
-Date: Wed, 19 Apr 2023 20:17:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [avpatel:riscv_sbi_nested_v1 57/73]
- arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202304192019.8FT10LGt-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405D03C34
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 13:00:43 +0000 (UTC)
+Received: by mail-ej1-f45.google.com with SMTP id u3so29443736ejj.12
+        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 06:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681909241; x=1684501241;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xwi6q3cu45MnE4kyT4HYhg8YlJb8XVnKZHENVBx9cJw=;
+        b=q9bUXYfNIZcsLe55ILrvb+lgpf2Vt3HQWODdgf0HwXP7ruIx5aJKLDRpZMAoNyq2xl
+         U2eVXI9moVOcl6M5H7JRZet9WaKzH0hO+Tj42DpFmXmgFhmtz8YBCBdDfJCe54JokDgG
+         wyRSar3MYwUSuh6tViOBxFXCKKVqWNv3dyppoCxVS3jIOPiIV+9yKFUV9ck60YZ3uJcq
+         3Wu106SGWBD+iAAIAXjJSyPPr8U+xJPEnfvVq78SP8j1CzZg8aRiVfDMtK7rHbhlvJBY
+         lxdowrUZ8QV5WqOIvj+2RG4BlGpm4KrXoIe6Yu06Kc71nPndkK7dteYEDLPeQhAPhS3S
+         KmJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681909241; x=1684501241;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xwi6q3cu45MnE4kyT4HYhg8YlJb8XVnKZHENVBx9cJw=;
+        b=kK3ZDoTpr5gbrP7uuYiCoZPxmoYRQs3o5Rjp8LdfzttEIf70+2grOpiILr7DthgeJP
+         Xu3TbrTEqUkCCVmTffypZ6JUdJDmIQIVXwghJRofvdlJA/DZ99UMmi5tIX3wj/aSsMZj
+         VQAppnGs+ipO7kE9+zUw9NZsVm2IYImg+Hlw2ySUvL2+kEVDUZwKt60+uPulcfQhBPU/
+         qRoBLDlSuGkPD6slylczqLGpaZ6q8/EUFkF1zdZ5IKd7+FcZ4zhfnbKejcI1UQ5OgdmR
+         Z4vsZAYEnl2o8hM2xpgY4ZQgDp+f0Q90I9LsW8fxfSMxVio7rnTgNhKirikeioGW5jRl
+         6z0w==
+X-Gm-Message-State: AAQBX9d13PnO7r37sDtTDQNXC9WKzu1VjHcPiwaB15jZR+UhJXReJCi8
+	NT7yt+lcb1jDCwaQ1TBtjBXzo7Q17ook1dRk4rfdSw==
+X-Google-Smtp-Source: AKy350YU7NS8auXb9psE2UrHtL99IMokCu0HrsOfTYc1jzaflfxqtjw+b8TWe/R+fYzLaCBTEQnr/BHby6rHDFe5Pfg=
+X-Received: by 2002:a17:907:8a21:b0:94f:3521:396 with SMTP id
+ sc33-20020a1709078a2100b0094f35210396mr13023290ejc.23.1681909241003; Wed, 19
+ Apr 2023 06:00:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230414005309.GA2198310@google.com> <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
+ <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com>
+In-Reply-To: <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com>
+From: Florent Revest <revest@google.com>
+Date: Wed, 19 Apr 2023 15:00:30 +0200
+Message-ID: <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com>
+Subject: Re: clangd cannot handle tree_nocb.h
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org, nathan@kernel.org, 
+	trix@redhat.com, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	paulmck@kernel.org, "revest@chromium.org" <revest@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_nested_v1
-head:   7dfa7ac228c2df5df7379fb0be2228030dee87f4
-commit: 58bb36c788e48c749ef668c6162372a7d36a1014 [57/73] RISC-V: KVM: Add in-kernel emulation of AIA APLIC
-config: riscv-randconfig-r034-20230416 (https://download.01.org/0day-ci/archive/20230419/202304192019.8FT10LGt-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/avpatel/linux/commit/58bb36c788e48c749ef668c6162372a7d36a1014
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_nested_v1
-        git checkout 58bb36c788e48c749ef668c6162372a7d36a1014
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kvm/
+On Tue, Apr 18, 2023 at 6:28=E2=80=AFPM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> + Florent
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304192019.8FT10LGt-lkp@intel.com/
+Hi there!
 
-All warnings (new ones prefixed by >>):
+> Joel, Florent is doing some cool stuff with clangd and kernels (check
+> out the demo at go/linux-kernel-vscode).  I'm pushing Florent to
 
->> arch/riscv/kvm/aia_aplic.c:264:6: warning: variable 'inject' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:303:6: note: uninitialized use occurs here
-           if (inject)
-               ^~~~~~
-   arch/riscv/kvm/aia_aplic.c:264:2: note: remove the 'if' if its condition is always false
-           if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/kvm/aia_aplic.c:252:13: note: initialize the variable 'inject' to silence this warning
-           bool inject, ie;
-                      ^
-                       = 0
-   1 warning generated.
+Apologies for folks outside Google, this is an internal link to a
+kernel dev setup I originally created for myself, then for my team and
+apparently more and more people are starting to use it internally. :)
+If there's enough appetite for it externally too, I'll try to
+open-source it someday. Anyway, in the context of this conversation,
+it's just something that uses clangd. :)
 
+> publish some of the cool stuff he's been working on externally because
+> it is awesome. ;)
+>
+> Florent, have you seen any such issues such as what Joel reported below?
 
-vim +264 arch/riscv/kvm/aia_aplic.c
+Yes, I've seen this problem a bunch of times. Afaiu, Clangd operates
+under the assumption that every source file is a valid compilation
+unit. My understanding is that it's generally a good practice to keep
+things that way and I wouldn't be surprised if the userspace Chrome
+code-base Joel saw enforces this (iirc, it's a rule for
+Google-internal C++ too, all headers must be interpretable
+independently).
 
-   248	
-   249	int kvm_riscv_aia_aplic_inject(struct kvm *kvm, u32 source, bool level)
-   250	{
-   251		u32 target;
-   252		bool inject, ie;
-   253		unsigned long flags;
-   254		struct aplic_irq *irqd;
-   255		struct aplic *aplic = kvm->arch.aia.aplic_state;
-   256	
-   257		if (!aplic || !source || (aplic->nr_irqs <= source))
-   258			return -ENODEV;
-   259		irqd = &aplic->irqs[source];
-   260		ie = (aplic->domaincfg & APLIC_DOMAINCFG_IE) ? true : false;
-   261	
-   262		raw_spin_lock_irqsave(&irqd->lock, flags);
-   263	
- > 264		if (irqd->sourcecfg & APLIC_SOURCECFG_D)
-   265			goto skip_unlock;
-   266	
-   267		switch (irqd->sourcecfg & APLIC_SOURCECFG_SM_MASK) {
-   268		case APLIC_SOURCECFG_SM_EDGE_RISE:
-   269			if (level && !(irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   270			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   271				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   272			break;
-   273		case APLIC_SOURCECFG_SM_EDGE_FALL:
-   274			if (!level && (irqd->state & APLIC_IRQ_STATE_INPUT) &&
-   275			    !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   276				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   277			break;
-   278		case APLIC_SOURCECFG_SM_LEVEL_HIGH:
-   279			if (level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   280				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   281			break;
-   282		case APLIC_SOURCECFG_SM_LEVEL_LOW:
-   283			if (!level && !(irqd->state & APLIC_IRQ_STATE_PENDING))
-   284				irqd->state |= APLIC_IRQ_STATE_PENDING;
-   285			break;
-   286		}
-   287	
-   288		if (level)
-   289			irqd->state |= APLIC_IRQ_STATE_INPUT;
-   290		else
-   291			irqd->state &= ~APLIC_IRQ_STATE_INPUT;
-   292	
-   293		inject = false;
-   294		target = irqd->target;
-   295		if (ie && (irqd->state & APLIC_IRQ_STATE_ENPEND)) {
-   296			irqd->state &= ~APLIC_IRQ_STATE_PENDING;
-   297			inject = true;
-   298		}
-   299	
-   300	skip_unlock:
-   301		raw_spin_unlock_irqrestore(&irqd->lock, flags);
-   302	
-   303		if (inject)
-   304			aplic_inject_msi(kvm, source, target);
-   305	
-   306		return 0;
-   307	}
-   308	
+However, from the perspective of the C spec, anything can be included
+anywhere and a C file can only make sense if it's included
+after/before certain other things are defined/included. Spontaneously,
+I would call these ".inc" rather than ".h" or ".c" because I would
+expect a source file to be always valid and this suffix makes it
+clearer they depend on their context, but as a matter of fact source
+files that don't compile when interpreted individually are quite
+common in the kernel tree. Other examples that have been reported to
+me include a lot of kernel/sched/*, since many of these files
+(including .c files) are included from kernel/sched/build_policy.c in
+a specific order to form one big compilation unit.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Unfortunately, I don't know of any solution. :( This feels like a
+limit of C or compile_commands.json to me. "compile commands" can not
+be enough to interpret any file, clangd would need a way to express
+"interpret this file as if it were included in that spot of that
+compilation unit" and maybe even need a bunch of heuristics to choose
+one such include spot.
+
+I don't know if clangd has any plan to address this and so far I've
+just lived with these error squiggles.
