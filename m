@@ -1,49 +1,46 @@
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D40523A2;
-	Wed, 19 Apr 2023 15:02:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7362564;
+	Wed, 19 Apr 2023 16:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681916555; x=1713452555;
+  t=1681921978; x=1713457978;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=XBiJTfIgTend9c6JUHceG7etl4rakE4n2xhOljQ08Ns=;
-  b=UxATrn8NZ6OcsI2OLCg4gA+DUFGzphMV0FPYp4nBdYs7XRDPwFKuaGuA
-   BpWp4c67rtTw4oEJsbpBecUsZH8+9L9/dN2kvAfLbHnG3ck1bp7DHVfZ/
-   RPU72Jg6qCneVH+ws6cqQICyIX0J7/7CgpZHvZLt5k2hfz3I22fuNdB/5
-   FiEFbUkpA1j4E0KI6zrVxystxVMyNiJA3O7uCOtKbi1kLGAwqZD2fU/KS
-   UOzQ3DXwW3iHdN84CRNysvzJ/Luj6jBeB0+m8qI82oGCyAKDO6ZuNcmoJ
-   SD7ueAVeS3C0GiWQbl9ll6r7SYPJNGlPTeJHH3bjoD8J3+me7LGMLkeRi
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334281334"
+  bh=mAnrcuaI7efpoWd59QZ5GygKxMkYAN5Xjr9QIGC1lsg=;
+  b=lXPx51WzY3Psc05GnjHwp0Uoj5g83p63m9qanEJzSBZcY4WmRdGGZGV8
+   d9EdWHbf18PmoQROhczkG02ca7MsaOjtl58/SzfMT/MeHmOVvypZIJTZc
+   mWm7gathZ8DfptuLOv3Qcesys97sGz54IhUblO1XOlUKje8jen8u0mmOp
+   MYbCuv1eYPxJ3IpYqyvWjw8mXkzLQ5oE5rW4fPQub4ZvH8u9NfbfXvP3D
+   FjrpZFwO5EZsdpUiWYduzBJTbCxD/cvxRIjcxhU9YJwhr8jSkuDOIWBLm
+   Dlnj0Jx7J+N0ril0M74Q7gvMxebEQLaCObqT/iwBGqCasgzIiM/PeKcAV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334310890"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="334281334"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 08:02:02 -0700
+   d="scan'208";a="334310890"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 09:32:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="724079780"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="760801231"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="724079780"
+   d="scan'208";a="760801231"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 19 Apr 2023 08:01:58 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 19 Apr 2023 09:32:55 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pp9Jg-000ewD-0s;
-	Wed, 19 Apr 2023 15:01:52 +0000
-Date: Wed, 19 Apr 2023 23:01:26 +0800
+	id 1ppAjn-000f0U-0l;
+	Wed, 19 Apr 2023 16:32:55 +0000
+Date: Thu, 20 Apr 2023 00:32:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
-	brgl@bgdev.pl, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
-	linux@roeck-us.net, linux@armlinux.org.uk,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v1 2/9] hwmon: (gxp_fan_ctrl) Give GPIO access to fan data
-Message-ID: <202304192243.9hwJ1Cad-lkp@intel.com>
-References: <20230418152824.110823-3-nick.hawkins@hpe.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 1/4] block: constify partition prober array
+Message-ID: <202304200014.y79VnmJo-lkp@intel.com>
+References: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,126 +49,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230418152824.110823-3-nick.hawkins@hpe.com>
+In-Reply-To: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
 
-Hi,
+Hi Thomas,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on robh/for-next linus/master v6.3-rc7]
-[cannot apply to brgl/gpio/for-next next-20230418]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on af67688dca57999fd848f051eeea1d375ba546b2]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/nick-hawkins-hpe-com/gpio-gxp-Add-HPE-GXP-GPIO/20230418-233513
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230418152824.110823-3-nick.hawkins%40hpe.com
-patch subject: [PATCH v1 2/9] hwmon: (gxp_fan_ctrl) Give GPIO access to fan data
-config: hexagon-randconfig-r045-20230419 (https://download.01.org/0day-ci/archive/20230419/202304192243.9hwJ1Cad-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
+base:   af67688dca57999fd848f051eeea1d375ba546b2
+patch link:    https://lore.kernel.org/r/20230419-const-partition-v1-1-2d66f2d83873%40weissschuh.net
+patch subject: [PATCH 1/4] block: constify partition prober array
+config: arm64-randconfig-r001-20230416 (https://download.01.org/0day-ci/archive/20230420/202304200014.y79VnmJo-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/be3722d7f32fea1ea375090d05cbfdd3dd4e04d3
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/9bc1f4308c10322c327c9e86ede6bb9e862440aa
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review nick-hawkins-hpe-com/gpio-gxp-Add-HPE-GXP-GPIO/20230418-233513
-        git checkout be3722d7f32fea1ea375090d05cbfdd3dd4e04d3
+        git fetch --no-tags linux-review Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
+        git checkout 9bc1f4308c10322c327c9e86ede6bb9e862440aa
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/ drivers/hwmon/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash block/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304192243.9hwJ1Cad-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304200014.y79VnmJo-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/hwmon/gxp-fan-ctrl.c:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/hwmon/gxp-fan-ctrl.c:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/hwmon/gxp-fan-ctrl.c:7:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/hwmon/gxp-fan-ctrl.c:32:4: warning: no previous prototype for function 'get_fans_installed' [-Wmissing-prototypes]
-   u8 get_fans_installed(void)
-      ^
-   drivers/hwmon/gxp-fan-ctrl.c:32:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u8 get_fans_installed(void)
-   ^
-   static 
->> drivers/hwmon/gxp-fan-ctrl.c:52:4: warning: no previous prototype for function 'get_fans_failed' [-Wmissing-prototypes]
-   u8 get_fans_failed(void)
-      ^
-   drivers/hwmon/gxp-fan-ctrl.c:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   u8 get_fans_failed(void)
-   ^
-   static 
-   8 warnings generated.
+   block/partitions/core.c:15:8: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
+   static const int (*check_part[])(struct parsed_partitions *) = {
+          ^~~~~~
+>> block/partitions/core.c:47:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           efi_partition,          /* this must come before msdos */
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:50:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           sgi_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:56:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           msdos_partition,
+           ^~~~~~~~~~~~~~~
+   block/partitions/core.c:59:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           osf_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:62:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           sun_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:65:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           amiga_partition,
+           ^~~~~~~~~~~~~~~
+   block/partitions/core.c:71:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           mac_partition,
+           ^~~~~~~~~~~~~
+   1 warning and 7 errors generated.
 
 
-vim +/get_fans_installed +32 drivers/hwmon/gxp-fan-ctrl.c
+vim +47 block/partitions/core.c
 
-    31	
-  > 32	u8 get_fans_installed(void)
-    33	{
-    34		static u8 val;
-    35	
-    36		val = readb(drvdata->plreg + OFS_FAN_INST);
-    37	
-    38		return val;
-    39	}
-    40	EXPORT_SYMBOL(get_fans_installed);
-    41	
-    42	static long fan_failed(struct device *dev, int fan)
-    43	{
-    44		struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-    45		u8 val;
-    46	
-    47		val = readb(drvdata->plreg + OFS_FAN_FAIL);
-    48	
-    49		return !!(val & BIT(fan));
-    50	}
-    51	
-  > 52	u8 get_fans_failed(void)
-    53	{
-    54		static u8 val;
-    55	
-    56		val = readb(drvdata->plreg + OFS_FAN_FAIL);
-    57	
-    58		return val;
-    59	}
-    60	EXPORT_SYMBOL(get_fans_failed);
-    61	
+387048bf67eeff Christoph Hellwig 2020-03-24  42  
+387048bf67eeff Christoph Hellwig 2020-03-24  43  #ifdef CONFIG_CMDLINE_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  44  	cmdline_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  45  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  46  #ifdef CONFIG_EFI_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24 @47  	efi_partition,		/* this must come before msdos */
+387048bf67eeff Christoph Hellwig 2020-03-24  48  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  49  #ifdef CONFIG_SGI_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  50  	sgi_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  51  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  52  #ifdef CONFIG_LDM_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  53  	ldm_partition,		/* this must come before msdos */
+387048bf67eeff Christoph Hellwig 2020-03-24  54  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  55  #ifdef CONFIG_MSDOS_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  56  	msdos_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  57  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  58  #ifdef CONFIG_OSF_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  59  	osf_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  60  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  61  #ifdef CONFIG_SUN_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  62  	sun_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  63  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  64  #ifdef CONFIG_AMIGA_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  65  	amiga_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  66  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  67  #ifdef CONFIG_ATARI_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  68  	atari_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  69  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  70  #ifdef CONFIG_MAC_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  71  	mac_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  72  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  73  #ifdef CONFIG_ULTRIX_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  74  	ultrix_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  75  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  76  #ifdef CONFIG_IBM_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  77  	ibm_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  78  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  79  #ifdef CONFIG_KARMA_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  80  	karma_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  81  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  82  #ifdef CONFIG_SYSV68_PARTITION
+387048bf67eeff Christoph Hellwig 2020-03-24  83  	sysv68_partition,
+387048bf67eeff Christoph Hellwig 2020-03-24  84  #endif
+387048bf67eeff Christoph Hellwig 2020-03-24  85  	NULL
+387048bf67eeff Christoph Hellwig 2020-03-24  86  };
+387048bf67eeff Christoph Hellwig 2020-03-24  87  
 
 -- 
 0-DAY CI Kernel Test Service
