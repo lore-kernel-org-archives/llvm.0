@@ -1,147 +1,172 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD583D67;
-	Wed, 19 Apr 2023 13:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681911055; x=1713447055;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N/GSlYqreKAXPu9B0lGYZfv80oraXkzW4fyW3/FG+wQ=;
-  b=brt7qoQAhklTou6CPSiTL97Ycejns7sjBu8bNAF/42G31XXU8+KVZBZX
-   7J6aXiaDoS1mgmnDcc906PZY+5ZeSlxDdBQpk4yhz9buvpOE9CLwNvNTj
-   D+70aaDlFEkIioo1JAMZYj04jLbmhIJTgP3Nk0Wxfz6ar0s656Udbdbo+
-   Jun7k/I5lrzZOMrzO9eP+O9kOYQM2uiA+rfXr90y9+2QX7QuNWgQOo+l7
-   cK9dxhI4m3VPGgtGTWzfiPk12AsGIt/iUTI1tabnkx9sV+WUbVT42hJg9
-   vMYzVUK6HtvTdkvbwba7OWIySnSQVe625eTCjw32RpYnVQ/LjHbXzXdC1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="325062181"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="325062181"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:30:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="684981964"
-X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="684981964"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 06:30:51 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pp7tb-000euR-0p;
-	Wed, 19 Apr 2023 13:30:51 +0000
-Date: Wed, 19 Apr 2023 21:29:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH 1/4] block: constify partition prober array
-Message-ID: <202304192132.a6MR0cFR-lkp@intel.com>
-References: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6724023A2
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 14:35:28 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailnew.west.internal (Postfix) with ESMTP id 91D492B06805;
+	Wed, 19 Apr 2023 10:35:25 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 19 Apr 2023 10:35:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1681914925; x=1681922125; bh=Ut
+	qJg87sclxB8kmKKjm1dWi2X4vfjejVvTPZmHeTPGw=; b=G/roXKLhk54CD8O/zz
+	DKOt+KTNmyPZq5TIMil3xkVjiJd4gTK4vjA1iahL90dev069v5N6GP6D4X6S6QHQ
+	WvYaQZRGXnUiawwq3737yfdLPM2FOqs0nwDb7kNkl5nEB+zj4GrWnuK/Kpldb/Q/
+	KnMEA8pt7JkCJ+uTC/cvsYNEDCBt4czLcz09XIeWKn6tV59dg5QJLPtoBdbmT/EY
+	n6ATaxC8nX7Gmf3KCQDLWQWIxVie3bO/EC39/Hz6xlFqWSSNQRyKJ2f6pdFxgHR4
+	MhmcUGyiZMhTk52DLlrVJJosS9E95J7dPuHvPLnK8g4ANCtUf10ccU/yv1WcWyVC
+	yKWw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1681914925; x=1681922125; bh=UtqJg87sclxB8
+	kmKKjm1dWi2X4vfjejVvTPZmHeTPGw=; b=Ayoqp8BoVyIaTqYKSvWcxI+q7xXHr
+	U+07R4ERCxUYUq9YFS4IqW+Gp+PHOE9ohJpaIuy3LN0j+q7mtre99MEphni+CUi9
+	GtHvEkeMTNUO4uqC9evL9j2oAnCozJ6LR8DD3f/kodBPsj2ygXPb1r+HDejWXVn7
+	4LAysEHDz3DVFtZL89xxbtsWqphFWxgpWNewdaa1+F1eebn0gCrxeDdXX8yCuouy
+	u75OYXRGMFXHyqklWYD2DE7ZEOLnRrGJ0S0bdwI/TDq59f97r0HzBBFAjIzg6ZxM
+	MvrlEEl3DLz6yob+G9qptjb/YVCkVWlk99w394m3NYhW9ZlG5SBEnnSMw==
+X-ME-Sender: <xms:K_w_ZAAcnt0IFxlEu-sWYxxCFj4E5HCrdO6gr4X0MJfFAiGmxaV84w>
+    <xme:K_w_ZCgIcIHgK9Z_PsDoB7b-8pvkx6wG9Mbj9U1d8bQhT3GT-hf-oSqbx10GP8B9f
+    Jhbjv9YwQGYOZs3ACg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedttddgjeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:K_w_ZDnBR_BAFwoanwfv8B7_PSBstC3_JVczRuVfTB6V2PuNb39qew>
+    <xmx:K_w_ZGznlZkjeBrmRL2dmDP6FxH9drM_zy3lWKa4ZN2-MD9ep5xGag>
+    <xmx:K_w_ZFRVkk5niRZjuNrSLjU3rJcwPSBhzMaC4kF6tovakEg27aFodQ>
+    <xmx:Lfw_ZOCz7NLW2Y2zhw3Ebr9-jzkAqBwZ7jwfeV0CSme0H9PGF0Ss2-wPCx8>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 04D1AB60086; Wed, 19 Apr 2023 10:35:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
+Mime-Version: 1.0
+Message-Id: <d0cf8fa6-d1d2-4a61-ac54-1a268030febc@app.fastmail.com>
+In-Reply-To: <487a20e7-2894-218a-47e9-b222aef4ec6e@huawei.com>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-24-sunilvl@ventanamicro.com>
+ <dcd04005-2dba-4ccc-a235-a809220f9dbd@app.fastmail.com>
+ <487a20e7-2894-218a-47e9-b222aef4ec6e@huawei.com>
+Date: Wed, 19 Apr 2023 16:34:34 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Weili Qian" <qianweili@huawei.com>,
+ "Sunil V L" <sunilvl@ventanamicro.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev
+Cc: "Jonathan Corbet" <corbet@lwn.net>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Len Brown" <lenb@kernel.org>, "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Zhou Wang" <wangzhou1@hisilicon.com>,
+ "Herbert Xu" <herbert@gondor.apana.org.au>, "Marc Zyngier" <maz@kernel.org>,
+ "Maximilian Luz" <luzmaximilian@gmail.com>,
+ "Hans de Goede" <hdegoede@redhat.com>, "Mark Gross" <markgross@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH V4 23/23] crypto: hisilicon/qm: Workaround to enable build with
+ RISC-V clang
+Content-Type: text/plain
 
-Hi Thomas,
+On Tue, Apr 11, 2023, at 13:42, Weili Qian wrote:
+> On 2023/4/5 16:16, Arnd Bergmann wrote:
+>> On Tue, Apr 4, 2023, at 20:20, Sunil V L wrote:
+>>> With CONFIG_ACPI enabled for RISC-V, this driver gets enabled in
+>>> allmodconfig build. The gcc tool chain builds this driver removing the
+>>> inline arm64 assembly code. However, clang for RISC-V tries to build
+>>> the arm64 assembly and below error is seen.
+>>>
+>>> drivers/crypto/hisilicon/qm.c:627:10: error: invalid output constraint 
+>>> '+Q' in asm
+>>>                        "+Q" (*((char __iomem *)fun_base))
+>>>                        ^
+>>> It appears that RISC-V clang is not smart enough to detect
+>>> IS_ENABLED(CONFIG_ARM64) and remove the dead code.
+>>>
+>>> As a workaround, move this check to preprocessing stage which works
+>>> with the RISC-V clang tool chain.
+>>>
+>>> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+>> 
+>> Your patch looks correct for this particular problem, but I
+>> see that there are a couple of other issues in the same function:
+>> 
+>>> -	}
+>>> +#if IS_ENABLED(CONFIG_ARM64)
+>>> +	unsigned long tmp0 = 0, tmp1 = 0;
+>>>
+>>>  	asm volatile("ldp %0, %1, %3\n"
+>>>  		     "stp %0, %1, %2\n"
+>>> @@ -627,6 +623,11 @@ static void qm_mb_write(struct hisi_qm *qm, const 
+>>> void *src)
+>>>  		       "+Q" (*((char __iomem *)fun_base))
+>>>  		     : "Q" (*((char *)src))
+>>>  		     : "memory");
+>> 
+>> For the arm64 version:
+>> 
+>> - the "dmb oshst" barrier needs to come before the stp, not after
+>>   it,  otherwise there is no guarantee that data written to memory
+>>   is visible by the device when the mailbox gets triggered
+>> - The input/output arguments need to be pointers to 128-bit types,
+>>   either a struct or a __uint128_t
+>> - this lacks a byteswap on big-endian kernels
+> Sorry for the late reply.
+>
+> - the execution order relies on the data dependency between ldp and stp:
+>   load "src" to "tmp0" and "tmp1", then
+>   store "tmp0" and "tmp1" to "fun_base";
 
-kernel test robot noticed the following build warnings:
+Not entirely sure how that data dependency would help serialize
+the store into the DMA buffer against the device access. The problem
+here is not the qm_mailbox structure but the data pointed to by the
+'u64 base' (e.g. struct qm_eqc *eqc) which may still be in a store
+buffer waiting to make it to physical memory at the time the mailbox
+store triggers the DMA from the device.
 
-[auto build test WARNING on af67688dca57999fd848f051eeea1d375ba546b2]
+>   The "dmb oshst" is used to ensure that the stp instruction has been executed
+>   before CPU checking mailbox status. Whether the execution order
+>   cannot be guaranteed via data dependency?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
-base:   af67688dca57999fd848f051eeea1d375ba546b2
-patch link:    https://lore.kernel.org/r/20230419-const-partition-v1-1-2d66f2d83873%40weissschuh.net
-patch subject: [PATCH 1/4] block: constify partition prober array
-config: arm64-randconfig-r001-20230416 (https://download.01.org/0day-ci/archive/20230419/202304192132.a6MR0cFR-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/9bc1f4308c10322c327c9e86ede6bb9e862440aa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
-        git checkout 9bc1f4308c10322c327c9e86ede6bb9e862440aa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash block/partitions/
+There is no need to have barriers between MMIO operations, they
+are implicitly serialized already. In this case specifically,
+the read is even on the same address as the write. Note that the
+"dmb oshst" does not actually guarantee that the store has made it
+to the device, as (at least on PCIe semantics) it can be posted,
+but the read from the same address does guarantee that the write
+is completed first, and this may be required to ensure that it does
+not complete after the mutex_unlock().
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304192132.a6MR0cFR-lkp@intel.com/
+> - The input argument "src" is struct "struct qm_mailbox".
+> - Before call this funcion, the data has been byteswapped.
+>
+> 	mailbox->w0 = cpu_to_le16((cmd) |
+> 		((op) ? 0x1 << QM_MB_OP_SHIFT : 0) |
+> 		(0x1 << QM_MB_BUSY_SHIFT));
+> 	mailbox->queue_num = cpu_to_le16(queue);
+> 	mailbox->base_l = cpu_to_le32(lower_32_bits(base));
+> 	mailbox->base_h = cpu_to_le32(upper_32_bits(base));
+> 	mailbox->rsvd = 0;
 
-All warnings (new ones prefixed by >>):
+Right, this bit does look correct.
 
->> block/partitions/core.c:15:8: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
-   static const int (*check_part[])(struct parsed_partitions *) = {
-          ^~~~~~
-   block/partitions/core.c:47:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
-           efi_partition,          /* this must come before msdos */
-           ^~~~~~~~~~~~~
-   block/partitions/core.c:50:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
-           sgi_partition,
-           ^~~~~~~~~~~~~
-   block/partitions/core.c:56:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
-           msdos_partition,
-           ^~~~~~~~~~~~~~~
-   block/partitions/core.c:59:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
-           osf_partition,
-           ^~~~~~~~~~~~~
-   block/partitions/core.c:62:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
-           sun_partition,
-           ^~~~~~~~~~~~~
-   block/partitions/core.c:65:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
-           amiga_partition,
-           ^~~~~~~~~~~~~~~
-   block/partitions/core.c:71:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
-           mac_partition,
-           ^~~~~~~~~~~~~
-   1 warning and 7 errors generated.
-
-
-vim +/const +15 block/partitions/core.c
-
-    14	
-  > 15	static const int (*check_part[])(struct parsed_partitions *) = {
-    16		/*
-    17		 * Probe partition formats with tables at disk address 0
-    18		 * that also have an ADFS boot block at 0xdc0.
-    19		 */
-    20	#ifdef CONFIG_ACORN_PARTITION_ICS
-    21		adfspart_check_ICS,
-    22	#endif
-    23	#ifdef CONFIG_ACORN_PARTITION_POWERTEC
-    24		adfspart_check_POWERTEC,
-    25	#endif
-    26	#ifdef CONFIG_ACORN_PARTITION_EESOX
-    27		adfspart_check_EESOX,
-    28	#endif
-    29	
-    30		/*
-    31		 * Now move on to formats that only have partition info at
-    32		 * disk address 0xdc0.  Since these may also have stale
-    33		 * PC/BIOS partition tables, they need to come before
-    34		 * the msdos entry.
-    35		 */
-    36	#ifdef CONFIG_ACORN_PARTITION_CUMANA
-    37		adfspart_check_CUMANA,
-    38	#endif
-    39	#ifdef CONFIG_ACORN_PARTITION_ADFS
-    40		adfspart_check_ADFS,
-    41	#endif
-    42	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+      Arnd
