@@ -1,117 +1,215 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A83320C
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 23:01:57 +0000 (UTC)
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-517bfdf55c3so204644a12.2
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 16:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681945317; x=1684537317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y5FZbEuLPEba8rPcluAsC6ixzhvfsFfoHO9sfW3zN38=;
-        b=uB33jRMOsh8Ag9+IcRCZ0dL69lg9NphJA+0ZiNUtp2TXceT9w54VIrahIW+5XA+sgv
-         cLtSa1GE68NCl2nBzHAE1T2bO0DNRyg/CFDwkwR1Klb5h3YYVgu4XWGmZaLvoJyQFW+P
-         Evqesc0TTUu8L0cD0MO1jbrG3h729UiKPor5klzZD8fKhMSuWoheOgLa7CKtTi7n3oYP
-         c4H+84dToBUEdtLKLkvCCDSy1UT+BtfBg9AeM7hAmoFoYxjVNz9CFb4fylh83YZ39RQz
-         Zs1lWDZ9PNLRh1p/ne5Q+BH7flgtKX+HYe+ieSIX2eSdYZmIGH5ne9gqpt5xdSzIwnPS
-         FPOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681945317; x=1684537317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y5FZbEuLPEba8rPcluAsC6ixzhvfsFfoHO9sfW3zN38=;
-        b=h09x8WQ3M4hcys03oZzK41gfOHFf5mZHHE+MNGJLozRdVFR77gGUBEqZWdLmHRLLN6
-         eOOs4CGBXqHmB9OTvoGDG2BVmHkceDcgJMVwmkuJBhknwUng5PyV5DwDBOuK5Lw7IKQL
-         ZepkyChiMAxPEhnCyZUpqWgSxR+FDOeevy86mOABB0AFrsi4Jv0Y84/B5mZ5FS19M92z
-         IoCqENU+DUCMwpAUmz5XuFGAeZ48rRWEyOXVD7OPQLkxjgwlqh3mDqbbDbNZRZxBFgr2
-         KSdrlxQ4tf1xWQHwDOvrctjBDSxUCGAZ0uGeoOmgy/H+oY1sHWw2cem5fwEp/6dQu625
-         7peQ==
-X-Gm-Message-State: AAQBX9eEUlclrnFEnT9H0Mnd42l63xRi0fZQIonBvpmK/qcVwVfYz4LQ
-	diLG+ltKowAymfQ5j9V2ziFTWYG6n13V5yybYNoccA==
-X-Google-Smtp-Source: AKy350Z07sfMiUFpEccZ3g5+kPuYI4IuMUqzBNmCLDqLSpQ+Oz8wKiBFnopdr2eveirWFgBMhzi0xVHY4pu5kn0GVTU=
-X-Received: by 2002:a17:90b:3b46:b0:237:97a3:1479 with SMTP id
- ot6-20020a17090b3b4600b0023797a31479mr4401121pjb.28.1681945317258; Wed, 19
- Apr 2023 16:01:57 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5115B320C;
+	Wed, 19 Apr 2023 23:18:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AEB6C433EF;
+	Wed, 19 Apr 2023 23:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681946316;
+	bh=fTRDZUWGdxakb/W1/QJfuBZg43PhaaoPUbUXoOlD6ms=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nTqImztIzVmweHLjBmYI4c5aiztfj+JA0uVxB0pcWAoJCVN6//DlRkKrwDb+3GRMX
+	 w7m+fgHuiv10OE0fb+uoi5Yu4TIqmqnAnaJR1dKApk1kzr9NYxw1/huU7TkV2nZNqS
+	 +kwcdMrjZrU37IJujEtTfx2jPnNf9V2KzQwMoUMT1vwtwNloOLGqXyaPLz/dzJ7A01
+	 34Fov7fS+cp8wUIK2Wl67yQnqvEzhBdSHkHgbO6i59/QdWBA9i9wMwe7CqSeftDZ59
+	 rVujCKtTYYaO6A3NY9fo8skMVHbNtU4y7mSepgA8AMq4DBZAUD4b+hg6DnOoVnqtzV
+	 kXMjubolRtFZw==
+Date: Wed, 19 Apr 2023 16:18:34 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: kernel test robot <lkp@intel.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
+ a CPU feature not currently enabled
+Message-ID: <20230419231834.GA1269248@dev-arch.thelio-3990X>
+References: <202304170748.Fg9VIgGd-lkp@intel.com>
+ <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
- <20230414080701.15503-3-jiaxun.yang@flygoat.com> <20230418130823.GA12456@alpha.franken.de>
-In-Reply-To: <20230418130823.GA12456@alpha.franken.de>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 19 Apr 2023 16:01:45 -0700
-Message-ID: <CAKwvOd=ye9jA0-3QRpD76waZCSX=ayFeE2ZNAPPM-fLdyCq1FQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] MIPS: Add toolchain feature dependency for
- microMIPS smartMIPS
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, Borislav Petkov <bp@alien8.de>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
 
-On Tue, Apr 18, 2023 at 6:13=E2=80=AFAM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Fri, Apr 14, 2023 at 09:06:56AM +0100, Jiaxun Yang wrote:
-> > microMIPS smartMIPS kernel can only be compiled if they are supported
-> > by toolchain.
-> >
-> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
++ Jiaxun, who has been looking into MIPS + LLVM issues recently and has
+been a big help :)
 
-Question: won't the lack of this (patch and rest of the series) hurt
-our ability to test randconfig builds of ARCH=3Dmips with clang? See
-also the 0day report from Boris:
-https://lore.kernel.org/llvm/202304170748.Fg9VIgGd-lkp@intel.com/
+On Thu, Apr 20, 2023 at 12:37:07AM +0200, Borislav Petkov wrote:
+> + Thomas.
+> 
+> On Mon, Apr 17, 2023 at 07:57:04AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
+> > commit: aba5b397cad7d398b385aaf5029f99f41b690466 hamradio: baycom_epp: Do not use x86-specific rdtsc()
+> > date:   4 months ago
+> > config: mips-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230417/202304170748.Fg9VIgGd-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+> 
+> Where do I get clang 17?
 
-i.e. randconfig will continue to select options that can't be built yet.
+I think they intend for you to get it via their make.cross script but
+this issue reproduces with clang 16.0.2 from
+https://mirrors.edge.kernel.org/pub/tools/llvm/ for me locally.
 
-> > ---
-> >  arch/mips/Kconfig | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> > index 41ac4dc5aae4..0b270562c3eb 100644
-> > --- a/arch/mips/Kconfig
-> > +++ b/arch/mips/Kconfig
-> > @@ -2360,7 +2360,7 @@ config CPU_NEEDS_NO_SMARTMIPS_OR_MICROMIPS
-> >         Select this if you want neither microMIPS nor SmartMIPS support
-> >
-> >  config CPU_HAS_SMARTMIPS
-> > -     depends on SYS_SUPPORTS_SMARTMIPS
-> > +     depends on SYS_SUPPORTS_SMARTMIPS && CC_HAS_SMARTMIPS
-> >       bool "SmartMIPS"
-> >       help
-> >         SmartMIPS is a extension of the MIPS32 architecture aimed at
-> > @@ -2373,6 +2373,7 @@ config CPU_HAS_SMARTMIPS
-> >
-> >  config CPU_MICROMIPS
-> >       depends on 32BIT && SYS_SUPPORTS_MICROMIPS && !CPU_MIPSR6
-> > +     depends on CC_HAS_MICROMIPS
-> >       bool "microMIPS"
-> >       help
-> >         When this option is enabled the kernel will be built using the
->
-> hmm, with this change the options will silently be dropped. I prefer
-> the error message, that the compiler doesn't support what is configured.
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+> In any case, this
+> 
+> "error: instruction requires a CPU feature not currently enabled"
+> 
+> sounds like clang is trying to generate invalid code for the wrong
+> target. .config issue?
 
+I am far from a MIPS expert but this usually means that there is some
+assembler directive that we are missing to allow access to certain
+instructions in newer ISA versions than the one specified via '-march'.
+I have no idea if that is the case here or not but I do see the correct
+target flags when building with V=1, so it is not something obvious like
+that. I can double back to this later this week or next week if nobody
+else is able to.
 
+Regardless, this seems like a pre-existing issue that was just exposed
+by your patch, not the root cause of it.
 
---=20
-Thanks,
-~Nick Desaulniers
+Cheers,
+Nathan
+
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install mips cross compiling tool for clang build
+> >         # apt-get install binutils-mipsel-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aba5b397cad7d398b385aaf5029f99f41b690466
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout aba5b397cad7d398b385aaf5029f99f41b690466
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/hamradio/
+> > 
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Link: https://lore.kernel.org/oe-kbuild-all/202304170748.Fg9VIgGd-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>):
+> > 
+> >    In file included from drivers/net/hamradio/baycom_epp.c:29:
+> >    In file included from include/linux/module.h:13:
+> >    In file included from include/linux/stat.h:19:
+> >    In file included from include/linux/time.h:60:
+> >    In file included from include/linux/time32.h:13:
+> >    In file included from include/linux/timex.h:67:
+> > >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+> >                    return read_c0_count();
+> >                           ^
+> >    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+> >    #define read_c0_count()         __read_32bit_c0_register($9, 0)
+> >                                    ^
+> >    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+> >            ___read_32bit_c0_register(source, sel, __volatile__)
+> >            ^
+> >    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+> >                            "mfc0\t%0, " #source "\n\t"                     \
+> >                            ^
+> >    <inline asm>:1:2: note: instantiated into assembly here
+> >            mfc0    $4, $9
+> >            ^
+> >    In file included from drivers/net/hamradio/baycom_epp.c:29:
+> >    In file included from include/linux/module.h:13:
+> >    In file included from include/linux/stat.h:19:
+> >    In file included from include/linux/time.h:60:
+> >    In file included from include/linux/time32.h:13:
+> >    In file included from include/linux/timex.h:67:
+> > >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+> >                    return read_c0_count();
+> >                           ^
+> >    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+> >    #define read_c0_count()         __read_32bit_c0_register($9, 0)
+> >                                    ^
+> >    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+> >            ___read_32bit_c0_register(source, sel, __volatile__)
+> >            ^
+> >    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+> >                            "mfc0\t%0, " #source "\n\t"                     \
+> >                            ^
+> >    <inline asm>:1:2: note: instantiated into assembly here
+> >            mfc0    $2, $9
+> >            ^
+> >    In file included from drivers/net/hamradio/baycom_epp.c:29:
+> >    In file included from include/linux/module.h:13:
+> >    In file included from include/linux/stat.h:19:
+> >    In file included from include/linux/time.h:60:
+> >    In file included from include/linux/time32.h:13:
+> >    In file included from include/linux/timex.h:67:
+> > >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+> >                    return read_c0_count();
+> >                           ^
+> >    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+> >    #define read_c0_count()         __read_32bit_c0_register($9, 0)
+> >                                    ^
+> >    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+> >            ___read_32bit_c0_register(source, sel, __volatile__)
+> >            ^
+> >    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+> >                            "mfc0\t%0, " #source "\n\t"                     \
+> >                            ^
+> >    <inline asm>:1:2: note: instantiated into assembly here
+> >            mfc0    $2, $9
+> >            ^
+> >    In file included from drivers/net/hamradio/baycom_epp.c:29:
+> >    In file included from include/linux/module.h:13:
+> >    In file included from include/linux/stat.h:19:
+> >    In file included from include/linux/time.h:60:
+> >    In file included from include/linux/time32.h:13:
+> >    In file included from include/linux/timex.h:67:
+> > >> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+> >                    return read_c0_count();
+> >                           ^
+> >    arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+> >    #define read_c0_count()         __read_32bit_c0_register($9, 0)
+> >                                    ^
+> >    arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+> >            ___read_32bit_c0_register(source, sel, __volatile__)
+> >            ^
+> >    arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+> >                            "mfc0\t%0, " #source "\n\t"                     \
+> >                            ^
+> >    <inline asm>:1:2: note: instantiated into assembly here
+> >            mfc0    $2, $9
+> >            ^
+> >    4 errors generated.
+> > 
+> > 
+> > vim +75 arch/mips/include/asm/timex.h
+> > 
+> > 9c9b415c50bc29 Ralf Baechle       2013-09-12  71  
+> > 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  72  static inline cycles_t get_cycles(void)
+> > 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  73  {
+> > 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  74  	if (can_use_mips_counter(read_c0_prid()))
+> > 9c9b415c50bc29 Ralf Baechle       2013-09-12 @75  		return read_c0_count();
+> > 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  76  	else
+> > 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  77  		return 0;	/* no usable counter */
+> > 9c9b415c50bc29 Ralf Baechle       2013-09-12  78  }
+> > 1c99c6a7c3c599 Jason A. Donenfeld 2022-04-08  79  #define get_cycles get_cycles
+> > 9c9b415c50bc29 Ralf Baechle       2013-09-12  80  
+> > 
+> > :::::: The code at line 75 was first introduced by commit
+> > :::::: 9c9b415c50bc298ac61412dff856eae2f54889ee MIPS: Reimplement get_cycles().
+> > 
+> > :::::: TO: Ralf Baechle <ralf@linux-mips.org>
+> > :::::: CC: Ralf Baechle <ralf@linux-mips.org>
+> > 
+> > -- 
+> > 0-DAY CI Kernel Test Service
+> > https://github.com/intel/lkp-tests
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
