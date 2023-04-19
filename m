@@ -1,136 +1,90 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4647AD301
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 22:03:44 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1a50cb65c92so4386835ad.0
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 15:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681941823; x=1684533823;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zh5e890yF5vPU5jFDEQlJGrwn7FtrHqnTGkDM3PEhGk=;
-        b=nYVR6pd5ohHan4cvMM25Oc7l0XYFR7FKSc+MZWSm47m/oOsn4bUdrLtiApb2BMvn9W
-         WMcUClzdzEaRKUhQqYcVkdaaXR7KftttiGhQ7uahIeMcUbgwCNxXOFoRc0bqdUzsQNhH
-         TNIgJE1vhzIYwtrMizt4qj93JwRprxsgCnHVpqaBaO8fnbOpHZOl6pX9icRFTPPabgWH
-         AspQ5jLPqr23bvNYBUnbbxE6dz4gJfQw9RdJkVEwTGJ1vMBdxoV9soEmxUrCqrFDZaYs
-         5JTEhKZT+WcDaVg3XI73+vIz4c16Lv6VGec0UOth4LxNfXZuXXhJIDLO0/ERPMvIbgGy
-         4C2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681941823; x=1684533823;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zh5e890yF5vPU5jFDEQlJGrwn7FtrHqnTGkDM3PEhGk=;
-        b=BESvbJt+95rVDzBRg06sKFk1hb0cc8TOUeHrqCshttgjfhkHA69WhcOqUlNocKOnQs
-         RymyqtLHNT8MKQAA/U4m6gkOyt1diX7nQ7PDwIG5QXKa8HS1QTAT+jyca5aouf0bgCNp
-         gyn48g2KhSNjTBg2/At6DKx2Wq6RYNh0Hbe0w4WhGhSuJi4jXvw2UM5MrM1YevbB94jW
-         XHSKe//KwaoJaJYPOgTxlysX8R54SWun5uAKtV1wBkjrw07hyjg8cH2wtRsHUxz3zj86
-         pw9E3lVImF+e9phMWnkzD4gePAmS7ER3pYL2khCOxR5HQBX7uPbEk149Kw7pwWC9crG3
-         zyWg==
-X-Gm-Message-State: AAQBX9flct0s3G4G8Mt70K8f1gngd905s785eE/koloJ5Is+T7xfZ0m7
-	ohuNR0EH89qIy5zLz2uUjQURebXYcswGwMN9fIsn8A==
-X-Google-Smtp-Source: AKy350Y2Z2JjZ2qaX/ON4uPm2q//KaaWuchhgDJWWtGCJjwBgwDhMMx5Eo7igcV2qq6xRhf+gjVMj3nsuoCURnpIxZM=
-X-Received: by 2002:a17:902:f78c:b0:1a2:94bb:e104 with SMTP id
- q12-20020a170902f78c00b001a294bbe104mr6667157pln.39.1681941823522; Wed, 19
- Apr 2023 15:03:43 -0700 (PDT)
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B2FD300
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 22:15:20 +0000 (UTC)
+Received: from uucp (helo=alpha)
+	by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+	id 1ppG52-0007kL-00; Thu, 20 Apr 2023 00:15:12 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id D827AC0117; Thu, 20 Apr 2023 00:15:00 +0200 (CEST)
+Date: Thu, 20 Apr 2023 00:15:00 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH v2 6/7] MIPS: Fallback CPU -march CFLAG to ISA level if
+ unsupported
+Message-ID: <20230419221500.GA17797@alpha.franken.de>
+References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
+ <20230414080701.15503-7-jiaxun.yang@flygoat.com>
+ <CAKwvOdkttvdZQyxrP60hAziaRQ4HWRBBSuA-vN25_USg-zEJqg@mail.gmail.com>
+ <550FCA0F-2C48-4133-85B0-D9494CC1C23C@flygoat.com>
+ <CAKwvOd=sNyOq9J=CS09XXQ6YY3y3ytLnwHxKoHNdddcxYk=nJQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
-In-Reply-To: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 19 Apr 2023 15:03:31 -0700
-Message-ID: <CAKwvOdmuQBnZR_pB5bUdsF+OoB_4pxBT9TNFF83fZhzwZ1gbxw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Mark check_bugs{,_early}() as __init
-To: Nathan Chancellor <nathan@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: jpoimboe@kernel.org, peterz@infradead.org, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=sNyOq9J=CS09XXQ6YY3y3ytLnwHxKoHNdddcxYk=nJQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Apr 19, 2023 at 11:43=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> After commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
-> forcibly"), a compiler may choose not to inline a function marked with
-> just 'inline'. If check_bugs() is not inlined into start_kernel(), which
-> occurs when building with clang after commit 9ea7e6b62c2b ("init: Mark
-> [arch_call_]rest_init() __noreturn"), modpost complains with:
->
->   WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs =
-(section: .text) -> check_bugs32 (section: .init.text)
->
-> check_bugs() is only called from start_kernel(), which itself is marked
-> __init, so mark check_bugs() as __init as well to clear up the warning
-> and make everything work properly.
->
-> While there is currently no warning about check_bugs_early(), it could
-> have the same problem, as it is called from arch_setup() and calls
-> check_bugs64_early(), both marked __init. Mark it as __init for the same
-> reason as above.
->
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> NOTE: This is based on v6.3-rc7, as the issue shows up due to a patch in
-> the tip tree, but this appears to be an ancient issue that could have
-> showed up at any point (hence why no explicit Fixes tag), so I chose a
-> base that should allow either the MIPS or tip folks to apply this patch.
+On Wed, Apr 19, 2023 at 02:35:02PM -0700, Nick Desaulniers wrote:
+> On Wed, Apr 19, 2023 at 9:50 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> >
+> >
+> >
+> > > 2023年4月18日 21:07，Nick Desaulniers <ndesaulniers@google.com> 写道：
+> > >
+> > > On Fri, Apr 14, 2023 at 1:07 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> > >>
+> > >> LLVM does not implement some of -march options. However those options
+> > >> are not mandatory for kernel to build for those CPUs.
+> > >>
+> > >> Fallback -march CFLAG to ISA level if unsupported by toolchain so
+> > >> we can get those kernel to build with LLVM.
+> > >>
+> > >> Link: https://github.com/ClangBuiltLinux/linux/issues/1544
+> > >> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > >
+> > > Thanks for the patch! Maybe it's more obvious to folks who work on
+> > > mips, but how did you determine that say `p5600` is `mips32r5` or
+> > > `r10000` is `mips4`?
+> >
+> > Wikipedia [1] should fit the purpose.
+> >
+> > [1]: https://en.wikipedia.org/wiki/List_of_MIPS_architecture_processors
+> 
+> Mostly! Though I was not able to verify:
+> - p5600
 
-Probably for the MIPS tree.
+mips32r5
 
->
-> Additionally, I was tempted to remove the explicit 'inline' since the
-> compiler is free to do whatever it wants anyways but this is a static
-> function in a header so we would need to add '__maybe_unused', which is
-> already added with 'inline' in a normal build so I just left it alone.
-> ---
->  arch/mips/include/asm/bugs.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-> index d72dc6e1cf3c..9b9bf9bc7d24 100644
-> --- a/arch/mips/include/asm/bugs.h
-> +++ b/arch/mips/include/asm/bugs.h
-> @@ -24,13 +24,13 @@ extern void check_bugs64_early(void);
->  extern void check_bugs32(void);
->  extern void check_bugs64(void);
->
-> -static inline void check_bugs_early(void)
-> +static inline void __init check_bugs_early(void)
->  {
->         if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
->                 check_bugs64_early();
->  }
+> - r5500
 
-If the only call site is in arch/mips/kernel/setup.c, then perhaps we
-can move the definition of check_bugs_early there and mark it static
-__init and drop inline?
+mips4
 
-Unless we foresee other callers potentially in the future?  Patch
-otherwise LGTM.  Thanks for the patch!
+> - rm5200
 
->
-> -static inline void check_bugs(void)
-> +static inline void __init check_bugs(void)
->  {
->         unsigned int cpu =3D smp_processor_id();
->
->
-> ---
-> base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
-> change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+mips4
 
+> - sb1
 
---=20
-Thanks,
-~Nick Desaulniers
+mips64r1
+
+all information taken from datasheets.
+
+> - loongson*
+
+probably depends on the exact type, but as I don't have datasheets
+I can't say what it is exactly, probaly mips32r2/mips64r2.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
