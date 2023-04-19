@@ -1,43 +1,42 @@
-Received: from mga05.intel.com (unknown [192.55.52.43])
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146912F52;
-	Wed, 19 Apr 2023 10:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828C519E;
+	Wed, 19 Apr 2023 10:34:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681899243; x=1713435243;
+  t=1681900491; x=1713436491;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CjFqxz7UXdM+AFHpm2eusThnG0zyFEE7qWTGXadf1Zg=;
-  b=Z4Kz3QFAbYaEXT/he8LEwIFzvNqAabeaT1/Xx5aAqV4YN59Kyi+WpgFK
-   KLXL/9I+n9ikAjq1nt1byUtUC3wNDFZhEsli0vRnYWaxK8ulv6QX21iDS
-   YPQy+2MhZXaRJ+en9n1Nhx1jIIGY+1Vwxyk2TdEOsiVY4ohC6XP3G/0Mr
-   tKzelKi2VQAyMfEaBkTyCw5LtHKtocx2PSk3fti4VRLTC6t6Hc4pKAF1/
-   ww41WDn10kRi342BJa4a1dVC/rfewYcQDUbAWpEhMJVHu53P2D7cIzukF
-   v9pHKEfGNP5Orxg0Ldr/9tuD23XnUkWzOsCOG7+/LkzxgWslFkRSKZXQm
+  bh=JzzJoT3wUpopbqqaghHHi9Wn1EdvBRnCXmZDU3J13uI=;
+  b=AGyl5MA1ULP0Tzwd4EdMjPtypC5UeQ+ufi86BbIhuReTOryK/IbFP6pa
+   hXNaGcZPDFDt6UJHanTJ53WeLYsGEpRfiZxlaKfIk6kI33QkmJkAJrDMn
+   +3I0MZSXmaSMyiuWDj7y8e+tLh2IiUJdlmrIAZ9mK0FrtOvA/XF+ZQ3s1
+   IwxjEGZSTuj8T3ub1ZTeCY2mFECSanRFi/Bms+tgmQW0fqX1H2BLm7rRV
+   AbAa6HjBEsh2ZqMBd7yxA7e+TGhqH7SiEahwLVcig/LpkfbfdnI5h6Zge
+   58P93Ah+hgg+mri6l8dI3H6zf/fipDGK/yxOlruyAfUX5xc0RtUZarch2
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="431685533"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="348165362"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="431685533"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 03:13:49 -0700
+   d="scan'208";a="348165362"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 03:34:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="684933075"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="760700825"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="684933075"
+   d="scan'208";a="760700825"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 03:13:47 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 19 Apr 2023 03:34:48 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pp4os-000enb-1T;
-	Wed, 19 Apr 2023 10:13:46 +0000
-Date: Wed, 19 Apr 2023 18:13:09 +0800
+	id 1pp59D-000eof-0K;
+	Wed, 19 Apr 2023 10:34:47 +0000
+Date: Wed, 19 Apr 2023 18:34:11 +0800
 From: kernel test robot <lkp@intel.com>
 To: Bart Van Assche <bvanassche@acm.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bvanassche:retain-zoned-write-order 15/15]
- block/mq-deadline.c:189:19: error: no member named 'max_active_zones' in
- 'struct gendisk'
-Message-ID: <202304191840.OXmGgJ6k-lkp@intel.com>
+Subject: [bvanassche:ufs-for-next 1/5] drivers/scsi/sd.c:3724:22: warning:
+ variable 'q' is uninitialized when used here
+Message-ID: <202304191843.Pby2PeEq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,84 +46,76 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/bvanassche/linux retain-zoned-write-order
-head:   2bdceaa60eb460189b66d717bce55dc354512fe8
-commit: 2bdceaa60eb460189b66d717bce55dc354512fe8 [15/15] block: mq-deadline: Respect the active zone limit
-config: x86_64-randconfig-a013-20230417 (https://download.01.org/0day-ci/archive/20230419/202304191840.OXmGgJ6k-lkp@intel.com/config)
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   2adb0245e0fe00d8d51c32cea617a7cb8992289d
+commit: 553ecaab1b05eca6508a07386fa30916cbcca8cc [1/5] scsi: sd: Let sd_shutdown() fail future I/O
+config: x86_64-randconfig-a013-20230417 (https://download.01.org/0day-ci/archive/20230419/202304191843.Pby2PeEq-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/2bdceaa60eb460189b66d717bce55dc354512fe8
+        # https://github.com/bvanassche/linux/commit/553ecaab1b05eca6508a07386fa30916cbcca8cc
         git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche retain-zoned-write-order
-        git checkout 2bdceaa60eb460189b66d717bce55dc354512fe8
+        git fetch --no-tags bvanassche ufs-for-next
+        git checkout 553ecaab1b05eca6508a07386fa30916cbcca8cc
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/scsi/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304191840.OXmGgJ6k-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304191843.Pby2PeEq-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> block/mq-deadline.c:189:19: error: no member named 'max_active_zones' in 'struct gendisk'
-           if (rq->q->disk->max_active_zones == 0)
-               ~~~~~~~~~~~  ^
-   block/mq-deadline.c:206:44: error: no member named 'max_active_zones' in 'struct gendisk'
-           return dd_active_zones(dd) < rq->q->disk->max_active_zones;
-                                        ~~~~~~~~~~~  ^
-   block/mq-deadline.c:216:32: error: no member named 'max_active_zones' in 'struct gendisk'
-           if (WARN_ON_ONCE(rq->q->disk->max_active_zones == 0))
-                            ~~~~~~~~~~~  ^
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON_ONCE'
-           int __ret_warn_on = !!(condition);                      \
-                                  ^~~~~~~~~
-   block/mq-deadline.c:762:25: error: no member named 'max_active_zones' in 'struct gendisk'
-           if (rq && rq->q->disk->max_active_zones)
-                     ~~~~~~~~~~~  ^
-   block/mq-deadline.c:1080:19: error: no member named 'max_active_zones' in 'struct gendisk'
-           if (rq->q->disk->max_active_zones) {
-               ~~~~~~~~~~~  ^
-   5 errors generated.
+>> drivers/scsi/sd.c:3724:22: warning: variable 'q' is uninitialized when used here [-Wuninitialized]
+           blk_mq_freeze_queue(q);
+                               ^
+   drivers/scsi/sd.c:3702:25: note: initialize the variable 'q' to silence this warning
+           struct request_queue *q;
+                                  ^
+                                   = NULL
+   1 warning generated.
 
 
-vim +189 block/mq-deadline.c
+vim +/q +3724 drivers/scsi/sd.c
 
-   177	
-   178	/*
-   179	 * Returns true if and only if dispatching request @rq won't cause the active
-   180	 * zones limit to be exceeded.
-   181	 */
-   182	static bool dd_check_zone(struct deadline_data *dd, struct request *rq)
-   183	{
-   184		unsigned int zno = blk_rq_zone_no(rq);
-   185		struct dd_zone *zone;
-   186	
-   187		lockdep_assert_held(&dd->lock);
-   188	
- > 189		if (rq->q->disk->max_active_zones == 0)
-   190			return true;
-   191	
-   192		switch (req_op(rq)) {
-   193		case REQ_OP_WRITE:
-   194		case REQ_OP_WRITE_ZEROES:
-   195		case REQ_OP_ZONE_APPEND:
-   196			break;
-   197		default:
-   198			return true;
-   199		}
-   200	
-   201		hash_for_each_possible(dd->active_zones, zone, entry, zno)
-   202			if (zone->zno == zno)
-   203				return true; /* zone already open */
-   204	
-   205		/* zone is empty or closed */
-   206		return dd_active_zones(dd) < rq->q->disk->max_active_zones;
-   207	}
-   208	
+  3693	
+  3694	/*
+  3695	 * Send a SYNCHRONIZE CACHE instruction down to the device through
+  3696	 * the normal SCSI command structure.  Wait for the command to
+  3697	 * complete.
+  3698	 */
+  3699	static void sd_shutdown(struct device *dev)
+  3700	{
+  3701		struct scsi_disk *sdkp = dev_get_drvdata(dev);
+  3702		struct request_queue *q;
+  3703	
+  3704		if (!sdkp)
+  3705			return;         /* this can happen */
+  3706	
+  3707		if (pm_runtime_suspended(dev))
+  3708			goto fail_future_io;
+  3709	
+  3710		if (sdkp->WCE && sdkp->media_present) {
+  3711			sd_printk(KERN_NOTICE, sdkp, "Synchronizing SCSI cache\n");
+  3712			sd_sync_cache(sdkp, NULL);
+  3713		}
+  3714	
+  3715		if (system_state != SYSTEM_RESTART && sdkp->device->manage_start_stop) {
+  3716			sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
+  3717			sd_start_stop_device(sdkp, 0);
+  3718		}
+  3719	
+  3720	fail_future_io:
+  3721		smp_store_release(&sdkp->device->shut_down, true);
+  3722		if (!scsi_host_busy(sdkp->device->host))
+  3723			return;
+> 3724		blk_mq_freeze_queue(q);
+  3725		blk_mq_unfreeze_queue(q);
+  3726	}
+  3727	
 
 -- 
 0-DAY CI Kernel Test Service
