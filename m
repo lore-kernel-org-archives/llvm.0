@@ -1,87 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0504820E6;
-	Wed, 19 Apr 2023 05:42:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8905DC433D2;
-	Wed, 19 Apr 2023 05:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA961FD9
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 05:45:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0E0C433EF;
+	Wed, 19 Apr 2023 05:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681882956;
-	bh=q1EDCX90eyaKlEozriKlZ5Kk5qpJSj1P9jvcWUQYroo=;
+	s=k20201202; t=1681883120;
+	bh=rHIVwcWlnAi6I7EkL3r3k1a15viUoZ98G0Ds8/Yst4M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iQcXSmFd0/IJrBSATb9RSeOS6t/9XaLZ1mPMehX5pEUAgMVuvL/QGZudjHxX7YA5R
-	 ENZqy+Ah5c7mMYNTbgkQLsdnThTYueNcFDFZk9+NUCcN15Wlk8B8Emr6QFoN0at6rl
-	 ic8PKVpnHIWROV61I5GUbOwSNDJ2nbv8LSufsgFt+fAKsTS26+ffCTwNNJQNeVbO5p
-	 uJEgbGaa++uds3P8RUJvsVS2Y5ovbAOQsYam8DXkzgXj9MwUnxKDV99RykD+xW7GMu
-	 GmEY7856uxb9Lri2cT9qAdQuZdb9lcm+ZooAmoJ/OCM0tAmPXmK0QU4YTIFp0CAvsb
-	 rg3XV7jlTZKCg==
-Date: Wed, 19 Apr 2023 07:42:32 +0200
+	b=H/BGdcSYEk2ZQ32pQ/0W1uRry9lv83+rgnE4uGpjyOtQqRFDNUni+12kavXJZm2No
+	 NRSeFPNyOaiol6RH221aAeH0iJ7QLpGF282uUoj1w6ZESa0iGmg61OKWt37WA6h2/P
+	 3uAY8LG6/vzl6VbVkSGZTHmZkTIsOffKc3D4w/e9jysM530tYnCBj/EMyo4p1rc2Kx
+	 eCpBKX7SsQ+yDJE3ON1iwcBGWo30qaD7n1lfrZPW85hzpGUH7meWLVGjQH2KdlOdF3
+	 /UiVSEa2frokvmHdbWV+y0PTiQ89/vjtpefaqFOl+dxdb7BIrFF4QqPynZlk3oHO0u
+	 iP8KnCri24PZA==
+Date: Wed, 19 Apr 2023 07:45:16 +0200
 From: Simon Horman <horms@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-staging@lists.linux.dev,
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH] staging: vchiq_arm: Make vchiq_platform_init() static
-Message-ID: <ZD9/SLO3CnXa4UXu@kernel.org>
-References: <20230418-vchiq_platform_init-static-v1-1-3c38ba81bc66@kernel.org>
- <20230418184419.GB2635379@dev-arch.thelio-3990X>
+Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
+Message-ID: <ZD9/7Oed8Rujjj/0@kernel.org>
+References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+ <CAKwvOdnj7rNeh0YeX2NPcbkoJBnRwXb9Dt0SF9mHaMKYVLjCjw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230418184419.GB2635379@dev-arch.thelio-3990X>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdnj7rNeh0YeX2NPcbkoJBnRwXb9Dt0SF9mHaMKYVLjCjw@mail.gmail.com>
 
-On Tue, Apr 18, 2023 at 11:44:19AM -0700, Nathan Chancellor wrote:
-> On Tue, Apr 18, 2023 at 01:23:11PM +0200, Simon Horman wrote:
-> > vchiq_platform_init() is only used in this file so it can be static.
-> > 
-> > clang-16 with W=1 reports:
-> > 
-> >  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:5: error: no previous prototype for function 'vchiq_platform_init' [-Werror,-Wmissing-prototypes]
-> >  int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
-> >      ^
-> >  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-> > 
-> > Signed-off-by: Simon Horman <horms@kernel.org>
+On Tue, Apr 18, 2023 at 11:44:28AM -0700, Nick Desaulniers wrote:
+> On Tue, Apr 18, 2023 at 4:41 AM Simon Horman <horms@kernel.org> wrote:
+> >
+> > Rather than casting clk_unregister_mux to an incompatible function
+> > type provide a trivial wrapper with the correct signature for the
+> > use-case.
+> >
+> > Reported by clang-16 with W=1:
+> >
+> >  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+> >          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
+> >
+> > No functional change intended.
+> > Compile tested only.
 > 
-> Introduced by commit 89cc4218f640 ("staging: vchiq_arm: drop unnecessary
-> declarations"), not sure it is worth a fixes tag since it is a W=1
-> warning.
-
-Thanks. For some reason it didn't occur to me to check which
-patch introduced the issue. Perhaps because, as you say, it's a W=1
-issue, and I don't think that warrants a fixes tag.
-
-I could include some information in the commit message, like
-"Introduced by ..." if desired.
-
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Thanks for the patch!
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 > 
-> > ---
-> >  drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> > index 40dd62cf7399..59312b9f2058 100644
-> > --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> > +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> > @@ -462,7 +462,8 @@ free_pagelist(struct vchiq_instance *instance, struct vchiq_pagelist_info *pagel
-> >  	cleanup_pagelistinfo(instance, pagelistinfo);
-> >  }
-> >  
-> > -int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
-> > +static int
-> > +vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
-> >  {
-> >  	struct device *dev = &pdev->dev;
-> >  	struct vchiq_drvdata *drvdata = platform_get_drvdata(pdev);
-> > 
-> 
+> Here's some more suspects to look at, if you have cycles:
+> drivers/base/devres.c:734:int __devm_add_action(struct device *dev,
+> void (*action)(void *), void *data, const char *name)
+> drivers/i2c/busses/i2c-mchp-pci1xxxx.c:1159: ret =
+> devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
+> drivers/soc/ti/pruss.c:96: ret = devm_add_action_or_reset(dev,
+> (void(*)(void *))clk_unregister_mux,
+> drivers/mmc/host/meson-mx-sdhc-mmc.c:791: ret =
+> devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_host,
+> drivers/pci/controller/pcie-microchip-host.c:866:
+> devm_add_action_or_reset(dev, (void (*) (void
+> *))clk_disable_unprepare,
+
+Thanks, I will take a look as a background task.
+Let me know if there is any urgency on your side.
+
+...
