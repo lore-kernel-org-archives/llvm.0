@@ -1,108 +1,147 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405D03C34
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 13:00:43 +0000 (UTC)
-Received: by mail-ej1-f45.google.com with SMTP id u3so29443736ejj.12
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 06:00:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681909241; x=1684501241;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xwi6q3cu45MnE4kyT4HYhg8YlJb8XVnKZHENVBx9cJw=;
-        b=q9bUXYfNIZcsLe55ILrvb+lgpf2Vt3HQWODdgf0HwXP7ruIx5aJKLDRpZMAoNyq2xl
-         U2eVXI9moVOcl6M5H7JRZet9WaKzH0hO+Tj42DpFmXmgFhmtz8YBCBdDfJCe54JokDgG
-         wyRSar3MYwUSuh6tViOBxFXCKKVqWNv3dyppoCxVS3jIOPiIV+9yKFUV9ck60YZ3uJcq
-         3Wu106SGWBD+iAAIAXjJSyPPr8U+xJPEnfvVq78SP8j1CzZg8aRiVfDMtK7rHbhlvJBY
-         lxdowrUZ8QV5WqOIvj+2RG4BlGpm4KrXoIe6Yu06Kc71nPndkK7dteYEDLPeQhAPhS3S
-         KmJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681909241; x=1684501241;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xwi6q3cu45MnE4kyT4HYhg8YlJb8XVnKZHENVBx9cJw=;
-        b=kK3ZDoTpr5gbrP7uuYiCoZPxmoYRQs3o5Rjp8LdfzttEIf70+2grOpiILr7DthgeJP
-         Xu3TbrTEqUkCCVmTffypZ6JUdJDmIQIVXwghJRofvdlJA/DZ99UMmi5tIX3wj/aSsMZj
-         VQAppnGs+ipO7kE9+zUw9NZsVm2IYImg+Hlw2ySUvL2+kEVDUZwKt60+uPulcfQhBPU/
-         qRoBLDlSuGkPD6slylczqLGpaZ6q8/EUFkF1zdZ5IKd7+FcZ4zhfnbKejcI1UQ5OgdmR
-         Z4vsZAYEnl2o8hM2xpgY4ZQgDp+f0Q90I9LsW8fxfSMxVio7rnTgNhKirikeioGW5jRl
-         6z0w==
-X-Gm-Message-State: AAQBX9d13PnO7r37sDtTDQNXC9WKzu1VjHcPiwaB15jZR+UhJXReJCi8
-	NT7yt+lcb1jDCwaQ1TBtjBXzo7Q17ook1dRk4rfdSw==
-X-Google-Smtp-Source: AKy350YU7NS8auXb9psE2UrHtL99IMokCu0HrsOfTYc1jzaflfxqtjw+b8TWe/R+fYzLaCBTEQnr/BHby6rHDFe5Pfg=
-X-Received: by 2002:a17:907:8a21:b0:94f:3521:396 with SMTP id
- sc33-20020a1709078a2100b0094f35210396mr13023290ejc.23.1681909241003; Wed, 19
- Apr 2023 06:00:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD583D67;
+	Wed, 19 Apr 2023 13:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681911055; x=1713447055;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N/GSlYqreKAXPu9B0lGYZfv80oraXkzW4fyW3/FG+wQ=;
+  b=brt7qoQAhklTou6CPSiTL97Ycejns7sjBu8bNAF/42G31XXU8+KVZBZX
+   7J6aXiaDoS1mgmnDcc906PZY+5ZeSlxDdBQpk4yhz9buvpOE9CLwNvNTj
+   D+70aaDlFEkIioo1JAMZYj04jLbmhIJTgP3Nk0Wxfz6ar0s656Udbdbo+
+   Jun7k/I5lrzZOMrzO9eP+O9kOYQM2uiA+rfXr90y9+2QX7QuNWgQOo+l7
+   cK9dxhI4m3VPGgtGTWzfiPk12AsGIt/iUTI1tabnkx9sV+WUbVT42hJg9
+   vMYzVUK6HtvTdkvbwba7OWIySnSQVe625eTCjw32RpYnVQ/LjHbXzXdC1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="325062181"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="325062181"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 06:30:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="684981964"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="684981964"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 19 Apr 2023 06:30:51 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pp7tb-000euR-0p;
+	Wed, 19 Apr 2023 13:30:51 +0000
+Date: Wed, 19 Apr 2023 21:29:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Jens Axboe <axboe@kernel.dk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 1/4] block: constify partition prober array
+Message-ID: <202304192132.a6MR0cFR-lkp@intel.com>
+References: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230414005309.GA2198310@google.com> <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
- <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com>
-In-Reply-To: <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com>
-From: Florent Revest <revest@google.com>
-Date: Wed, 19 Apr 2023 15:00:30 +0200
-Message-ID: <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com>
-Subject: Re: clangd cannot handle tree_nocb.h
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org, nathan@kernel.org, 
-	trix@redhat.com, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	paulmck@kernel.org, "revest@chromium.org" <revest@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419-const-partition-v1-1-2d66f2d83873@weissschuh.net>
 
-On Tue, Apr 18, 2023 at 6:28=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> + Florent
+Hi Thomas,
 
-Hi there!
+kernel test robot noticed the following build warnings:
 
-> Joel, Florent is doing some cool stuff with clangd and kernels (check
-> out the demo at go/linux-kernel-vscode).  I'm pushing Florent to
+[auto build test WARNING on af67688dca57999fd848f051eeea1d375ba546b2]
 
-Apologies for folks outside Google, this is an internal link to a
-kernel dev setup I originally created for myself, then for my team and
-apparently more and more people are starting to use it internally. :)
-If there's enough appetite for it externally too, I'll try to
-open-source it someday. Anyway, in the context of this conversation,
-it's just something that uses clangd. :)
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
+base:   af67688dca57999fd848f051eeea1d375ba546b2
+patch link:    https://lore.kernel.org/r/20230419-const-partition-v1-1-2d66f2d83873%40weissschuh.net
+patch subject: [PATCH 1/4] block: constify partition prober array
+config: arm64-randconfig-r001-20230416 (https://download.01.org/0day-ci/archive/20230419/202304192132.a6MR0cFR-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/9bc1f4308c10322c327c9e86ede6bb9e862440aa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Wei-schuh/block-constify-partition-prober-array/20230419-155356
+        git checkout 9bc1f4308c10322c327c9e86ede6bb9e862440aa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash block/partitions/
 
-> publish some of the cool stuff he's been working on externally because
-> it is awesome. ;)
->
-> Florent, have you seen any such issues such as what Joel reported below?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304192132.a6MR0cFR-lkp@intel.com/
 
-Yes, I've seen this problem a bunch of times. Afaiu, Clangd operates
-under the assumption that every source file is a valid compilation
-unit. My understanding is that it's generally a good practice to keep
-things that way and I wouldn't be surprised if the userspace Chrome
-code-base Joel saw enforces this (iirc, it's a rule for
-Google-internal C++ too, all headers must be interpretable
-independently).
+All warnings (new ones prefixed by >>):
 
-However, from the perspective of the C spec, anything can be included
-anywhere and a C file can only make sense if it's included
-after/before certain other things are defined/included. Spontaneously,
-I would call these ".inc" rather than ".h" or ".c" because I would
-expect a source file to be always valid and this suffix makes it
-clearer they depend on their context, but as a matter of fact source
-files that don't compile when interpreted individually are quite
-common in the kernel tree. Other examples that have been reported to
-me include a lot of kernel/sched/*, since many of these files
-(including .c files) are included from kernel/sched/build_policy.c in
-a specific order to form one big compilation unit.
+>> block/partitions/core.c:15:8: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
+   static const int (*check_part[])(struct parsed_partitions *) = {
+          ^~~~~~
+   block/partitions/core.c:47:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           efi_partition,          /* this must come before msdos */
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:50:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           sgi_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:56:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           msdos_partition,
+           ^~~~~~~~~~~~~~~
+   block/partitions/core.c:59:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           osf_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:62:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           sun_partition,
+           ^~~~~~~~~~~~~
+   block/partitions/core.c:65:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           amiga_partition,
+           ^~~~~~~~~~~~~~~
+   block/partitions/core.c:71:2: error: incompatible function pointer types initializing 'const int (*)(struct parsed_partitions *)' with an expression of type 'int (struct parsed_partitions *)' [-Wincompatible-function-pointer-types]
+           mac_partition,
+           ^~~~~~~~~~~~~
+   1 warning and 7 errors generated.
 
-Unfortunately, I don't know of any solution. :( This feels like a
-limit of C or compile_commands.json to me. "compile commands" can not
-be enough to interpret any file, clangd would need a way to express
-"interpret this file as if it were included in that spot of that
-compilation unit" and maybe even need a bunch of heuristics to choose
-one such include spot.
 
-I don't know if clangd has any plan to address this and so far I've
-just lived with these error squiggles.
+vim +/const +15 block/partitions/core.c
+
+    14	
+  > 15	static const int (*check_part[])(struct parsed_partitions *) = {
+    16		/*
+    17		 * Probe partition formats with tables at disk address 0
+    18		 * that also have an ADFS boot block at 0xdc0.
+    19		 */
+    20	#ifdef CONFIG_ACORN_PARTITION_ICS
+    21		adfspart_check_ICS,
+    22	#endif
+    23	#ifdef CONFIG_ACORN_PARTITION_POWERTEC
+    24		adfspart_check_POWERTEC,
+    25	#endif
+    26	#ifdef CONFIG_ACORN_PARTITION_EESOX
+    27		adfspart_check_EESOX,
+    28	#endif
+    29	
+    30		/*
+    31		 * Now move on to formats that only have partition info at
+    32		 * disk address 0xdc0.  Since these may also have stale
+    33		 * PC/BIOS partition tables, they need to come before
+    34		 * the msdos entry.
+    35		 */
+    36	#ifdef CONFIG_ACORN_PARTITION_CUMANA
+    37		adfspart_check_CUMANA,
+    38	#endif
+    39	#ifdef CONFIG_ACORN_PARTITION_ADFS
+    40		adfspart_check_ADFS,
+    41	#endif
+    42	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
