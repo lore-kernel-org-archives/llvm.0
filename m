@@ -1,74 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA961FD9
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 05:45:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0E0C433EF;
-	Wed, 19 Apr 2023 05:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681883120;
-	bh=rHIVwcWlnAi6I7EkL3r3k1a15viUoZ98G0Ds8/Yst4M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H/BGdcSYEk2ZQ32pQ/0W1uRry9lv83+rgnE4uGpjyOtQqRFDNUni+12kavXJZm2No
-	 NRSeFPNyOaiol6RH221aAeH0iJ7QLpGF282uUoj1w6ZESa0iGmg61OKWt37WA6h2/P
-	 3uAY8LG6/vzl6VbVkSGZTHmZkTIsOffKc3D4w/e9jysM530tYnCBj/EMyo4p1rc2Kx
-	 eCpBKX7SsQ+yDJE3ON1iwcBGWo30qaD7n1lfrZPW85hzpGUH7meWLVGjQH2KdlOdF3
-	 /UiVSEa2frokvmHdbWV+y0PTiQ89/vjtpefaqFOl+dxdb7BIrFF4QqPynZlk3oHO0u
-	 iP8KnCri24PZA==
-Date: Wed, 19 Apr 2023 07:45:16 +0200
-From: Simon Horman <horms@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
-Message-ID: <ZD9/7Oed8Rujjj/0@kernel.org>
-References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
- <CAKwvOdnj7rNeh0YeX2NPcbkoJBnRwXb9Dt0SF9mHaMKYVLjCjw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CAA23A2;
+	Wed, 19 Apr 2023 06:08:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681884517; x=1713420517;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XFd6S826A5maJk4OGrAotGluTj43cfII7cPWpLVWpvc=;
+  b=j6TfU3DMkg2RPA3q5pEkp1t78+Z/4tHzTsNWW659YEayTJ+w+P4+YUCC
+   ClcWsl84LXcQ8fLPtFhRw/uUSRdvWQtswvku2hdUnWainhx5Yay6BMWaV
+   Ufwnb0FqKFsf2hOqd2XdhSR2e/yf4aMC8fiEXhGON8T7Ao1HqcjwraMGM
+   NSXkjz1jyRWgTRp/QL7vN+IrLEtdRIvnX9bwg/fUOFGNBcbvSNVXRFOuj
+   wWyl0MZcBD2611dHSu9e+ZjZJhsfswdK2K2rOOtMgN4MRQSvP4qw/SHXl
+   xqSgoGceKNXWrFKYs8WTbuaDbUh3hFuCfpeCspy/V/iNfhTAhbc6t7LL/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="408269845"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="408269845"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 23:08:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="693912304"
+X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
+   d="scan'208";a="693912304"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Apr 2023 23:08:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pp0za-000ebG-0q;
+	Wed, 19 Apr 2023 06:08:34 +0000
+Date: Wed, 19 Apr 2023 14:07:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [geert-renesas-drivers:master 32/47]
+ drivers/dma/dw-edma/dw-edma-core.c:231:13: error: redefinition of
+ 'dw_edma_device_caps'
+Message-ID: <202304191404.hmYyn4RN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdnj7rNeh0YeX2NPcbkoJBnRwXb9Dt0SF9mHaMKYVLjCjw@mail.gmail.com>
 
-On Tue, Apr 18, 2023 at 11:44:28AM -0700, Nick Desaulniers wrote:
-> On Tue, Apr 18, 2023 at 4:41 AM Simon Horman <horms@kernel.org> wrote:
-> >
-> > Rather than casting clk_unregister_mux to an incompatible function
-> > type provide a trivial wrapper with the correct signature for the
-> > use-case.
-> >
-> > Reported by clang-16 with W=1:
-> >
-> >  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-> >          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
-> >
-> > No functional change intended.
-> > Compile tested only.
-> 
-> Thanks for the patch!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> Here's some more suspects to look at, if you have cycles:
-> drivers/base/devres.c:734:int __devm_add_action(struct device *dev,
-> void (*action)(void *), void *data, const char *name)
-> drivers/i2c/busses/i2c-mchp-pci1xxxx.c:1159: ret =
-> devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
-> drivers/soc/ti/pruss.c:96: ret = devm_add_action_or_reset(dev,
-> (void(*)(void *))clk_unregister_mux,
-> drivers/mmc/host/meson-mx-sdhc-mmc.c:791: ret =
-> devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_host,
-> drivers/pci/controller/pcie-microchip-host.c:866:
-> devm_add_action_or_reset(dev, (void (*) (void
-> *))clk_disable_unprepare,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git master
+head:   7e16ec08611059a1000cfa489ab5ae396d623e70
+commit: 9ba38c702dd57eb4403edf14467a620ed3d8cc23 [32/47] Merge remote-tracking branch 'pci/next' into renesas-drivers
+config: i386-randconfig-a015-20230417 (https://download.01.org/0day-ci/archive/20230419/202304191404.hmYyn4RN-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/commit/?id=9ba38c702dd57eb4403edf14467a620ed3d8cc23
+        git remote add geert-renesas-drivers https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git
+        git fetch --no-tags geert-renesas-drivers master
+        git checkout 9ba38c702dd57eb4403edf14467a620ed3d8cc23
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Thanks, I will take a look as a background task.
-Let me know if there is any urgency on your side.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304191404.hmYyn4RN-lkp@intel.com/
 
-...
+All errors (new ones prefixed by >>):
+
+>> drivers/dma/dw-edma/dw-edma-core.c:231:13: error: redefinition of 'dw_edma_device_caps'
+   static void dw_edma_device_caps(struct dma_chan *dchan,
+               ^
+   drivers/dma/dw-edma/dw-edma-core.c:213:13: note: previous definition is here
+   static void dw_edma_device_caps(struct dma_chan *dchan,
+               ^
+   1 error generated.
+
+
+vim +/dw_edma_device_caps +231 drivers/dma/dw-edma/dw-edma-core.c
+
+3883d64449ffe8 Serge Semin 2023-01-13  230  
+6f94141d8662ff Serge Semin 2023-01-13 @231  static void dw_edma_device_caps(struct dma_chan *dchan,
+6f94141d8662ff Serge Semin 2023-01-13  232  				struct dma_slave_caps *caps)
+6f94141d8662ff Serge Semin 2023-01-13  233  {
+6f94141d8662ff Serge Semin 2023-01-13  234  	struct dw_edma_chan *chan = dchan2dw_edma_chan(dchan);
+6f94141d8662ff Serge Semin 2023-01-13  235  
+6f94141d8662ff Serge Semin 2023-01-13  236  	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+6f94141d8662ff Serge Semin 2023-01-13  237  		if (chan->dir == EDMA_DIR_READ)
+6f94141d8662ff Serge Semin 2023-01-13  238  			caps->directions = BIT(DMA_DEV_TO_MEM);
+6f94141d8662ff Serge Semin 2023-01-13  239  		else
+6f94141d8662ff Serge Semin 2023-01-13  240  			caps->directions = BIT(DMA_MEM_TO_DEV);
+6f94141d8662ff Serge Semin 2023-01-13  241  	} else {
+6f94141d8662ff Serge Semin 2023-01-13  242  		if (chan->dir == EDMA_DIR_WRITE)
+6f94141d8662ff Serge Semin 2023-01-13  243  			caps->directions = BIT(DMA_DEV_TO_MEM);
+6f94141d8662ff Serge Semin 2023-01-13  244  		else
+6f94141d8662ff Serge Semin 2023-01-13  245  			caps->directions = BIT(DMA_MEM_TO_DEV);
+6f94141d8662ff Serge Semin 2023-01-13  246  	}
+6f94141d8662ff Serge Semin 2023-01-13  247  }
+6f94141d8662ff Serge Semin 2023-01-13  248  
+
+:::::: The code at line 231 was first introduced by commit
+:::::: 6f94141d8662ff9b164ea0c74a8325bbffc54183 dmaengine: dw-edma: Join read/write channels into a single device
+
+:::::: TO: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
