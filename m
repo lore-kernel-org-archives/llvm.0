@@ -1,122 +1,132 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8247ED2F7
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 21:22:09 +0000 (UTC)
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-246fdb97191so163020a91.0
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 14:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681939329; x=1684531329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7EqpSXGIJ8FuaADhu+9BrBh5VMvqHzQFJ3sg3xUH4Z0=;
-        b=giq9XJA79P8d4EkhbR3qSf3zUNekPnfuhW7bGGD0oELkHyCyb3UAytYbGGad/VxwmR
-         opPABWqWI6rDI+sSAkCJek+U4BTI4IiAtK7Z3R6id4vQBrXulZkyBKmF3il3Vr2M/PbW
-         HXGJTpXWrI3I+H9MUC6nVnNWcAfslsk7lF5Qf9KiFxuosS2dS1N2npg6sBLTvax2s9QD
-         zZl9ZAeGQOkidhGPRR5Re9y2MVvAO1wmm9rbhKIfC63DhRv5U8NhyICdJoXP+nXMAe1W
-         aAN32ghC2Zc2t5kPfKzJx9/NKJTFQcG1irDHReTZPlgR60dxa15W9io5fX3/4U97txJc
-         Eqdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681939329; x=1684531329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7EqpSXGIJ8FuaADhu+9BrBh5VMvqHzQFJ3sg3xUH4Z0=;
-        b=flm6otychLzL/SI4ZLK4ZDYjJpnbz/ecPW6zNC6c1ooGotg6IB8oYUffyqCDriyPpi
-         WDLPXMrbA+ZH9j3Zj7YXzypT31NZJJw+mS9klLXky8f0Lh6Y4fVf7RGF5pnFFhZmzLDu
-         20UpzmvZVb9+3BBFlv+MXdK3IxRRrDkFvY2ZDIkgDXZKbvb4sdUl/RR1ri914ph4S5hz
-         I6DAPu16xV9KWNOigE2C/hbp9dcA435Pgl7roVOhYDEK3RX3ZZvEO1J//XpWsi9WvPOO
-         Dac3aXGDDIYKUEg0U0kKBYW7pPlkDgqU7iWgf1UnxS9peVAwD1U1ayKSk8TB4Q2+j6E8
-         VNqg==
-X-Gm-Message-State: AAQBX9dzP3aDUeQLCtAS+WWeaLWbXd+FanFyWAMNrI9fO2e9va20K/A2
-	5L0Gpd1rteP8AakRmzHsQbrIjK2aet37cyY6/WdDBg==
-X-Google-Smtp-Source: AKy350bvcnDE0ggynDN9D9NjhXEGm9YBRtijZRormk7eU9NmP/ya2EqqRS768guSRAg3DZFd4MdsCmUKxxheEAdjEWw=
-X-Received: by 2002:a17:90b:1e02:b0:247:ab52:d5d8 with SMTP id
- pg2-20020a17090b1e0200b00247ab52d5d8mr3843388pjb.26.1681939328731; Wed, 19
- Apr 2023 14:22:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AB133EC;
+	Wed, 19 Apr 2023 21:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681939868; x=1713475868;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uzaEvtKF/wb+BpZHv45rlTavjENU0eMCTHpvxq+55cw=;
+  b=cBzO+UZukpQmV8H79i1QE1aJb16knkvmRD8Jhu4KyfYmNinUuPaIVQGk
+   EotCIs2v3vM3tZfZ3XsUohFVRR8apEh2PhGUUl7X348RP8xDfwYAGijQU
+   YHFGQAztSq0a9ciXeYv3EQHhzaebrCyWQY+00gv0jDFfKoKR11/aAsxcm
+   6XO0MhFMosJ1Uq+nSdIemHDYioewdpjfbmuwIs2cu826bfOJnz+kxiAgW
+   3tvZRaWOYfpiFt6S20VDphy6GX+G2VUKW8WZHNdT8ZwIVJik6vOMXr9kj
+   HQ+KY1m6VLXFKt0YAPU/k5U+Cav/X9MeWamAxCkBoKkCy731oUUyvjapa
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334382344"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="334382344"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 14:31:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756241128"
+X-IronPort-AV: E=Sophos;i="5.99,210,1677571200"; 
+   d="scan'208";a="756241128"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2023 14:31:05 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ppFOK-000fCq-0s;
+	Wed, 19 Apr 2023 21:31:04 +0000
+Date: Thu, 20 Apr 2023 05:30:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: luhongfei <luhongfei@vivo.com>, Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	"open list:IO_URING" <io-uring@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	opensource.kernel@vivo.com, luhongfei <luhongfei@vivo.com>
+Subject: Re: [PATCH] io_uring: Optimization of buffered random write
+Message-ID: <202304200502.T4Waeqad-lkp@intel.com>
+References: <20230419092233.56338-1-luhongfei@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230418-vchiq_platform_init-static-v1-1-3c38ba81bc66@kernel.org>
- <e1fed875-059d-bf98-f9da-09c51f362be8@i2se.com> <ZD+rethobzN+rONr@kernel.org>
-In-Reply-To: <ZD+rethobzN+rONr@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 19 Apr 2023 14:21:56 -0700
-Message-ID: <CAKwvOdkKACfOvZ4BcG9NcO1Kh97vqSx0y7ZBc+BOJnHUpq8qWw@mail.gmail.com>
-Subject: Re: [PATCH] staging: vchiq_arm: Make vchiq_platform_init() static
-To: Simon Horman <horms@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-Cc: Stefan Wahren <stefan.wahren@i2se.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-staging@lists.linux.dev, 
-	llvm@lists.linux.dev, Florian Fainelli <f.fainelli@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230419092233.56338-1-luhongfei@vivo.com>
 
-+ Arnd
+Hi luhongfei,
 
-On Wed, Apr 19, 2023 at 1:51=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
-te:
->
-> On Wed, Apr 19, 2023 at 08:37:58AM +0200, Stefan Wahren wrote:
-> > Hi Simon,
-> >
-> > Am 18.04.23 um 13:23 schrieb Simon Horman:
-> > > vchiq_platform_init() is only used in this file so it can be static.
-> > >
-> > > clang-16 with W=3D1 reports:
-> > >
-> > >   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:5=
-: error: no previous prototype for function 'vchiq_platform_init' [-Werror,=
--Wmissing-prototypes]
-> > >   int vchiq_platform_init(struct platform_device *pdev, struct vchiq_=
-state *state)
-> > >       ^
-> > >   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:1=
-: note: declare 'static' if the function is not intended to be used outside=
- of this translation unit
-> > >
-> > > Signed-off-by: Simon Horman <horms@kernel.org>
-> >
-> > this is not the first attempt to fix this [1]. But maybe this has been =
-fixed
-> > in the meantime.
-> >
-> > [1] - https://lore.kernel.org/linux-staging/20221022043548.1671644-1-sc=
-ottjcrouch@gmail.com/#t
->
-> Thanks,
->
-> I see in that thread that Greg notes that "this breaks the build in a ver=
-y
-> horrible and strange way" [2].
+kernel test robot noticed the following build errors:
 
-So Arnd had a Kconfig suggestion later in that thread:
-https://lore.kernel.org/linux-staging/d64dc0b4-ba82-49f4-9a43-c50b735ad91d@=
-app.fastmail.com/
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.3-rc7 next-20230418]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Marking something as `depends on OF_DYNAMIC`. (Not sure whether Arnd
-meant that for BCM2835_VCHIQ or BCM_VIDEOCORE).
-Perhaps try that?
+url:    https://github.com/intel-lab-lkp/linux/commits/luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
+patch link:    https://lore.kernel.org/r/20230419092233.56338-1-luhongfei%40vivo.com
+patch subject: [PATCH] io_uring: Optimization of buffered random write
+config: i386-randconfig-a012-20230417 (https://download.01.org/0day-ci/archive/20230420/202304200502.T4Waeqad-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/620dbcc5ab192992f08035fd9d271ffffb8ff043
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review luhongfei/io_uring-Optimization-of-buffered-random-write/20230419-172539
+        git checkout 620dbcc5ab192992f08035fd9d271ffffb8ff043
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
->
-> I'm a bit surprised as I didn't observe such a thing.
-> But I also don't dispute it - clearly my testing was inadequate.
->
-> I'll try and dig a bit deeper into this one.
-> Perhaps starting with the report from the kernel test robot [3]
->
-> [2] https://lore.kernel.org/linux-staging/Y1Okpjbi2kKU2GFz@kroah.com/
-> [3] https://lore.kernel.org/linux-staging/202210230127.p1Dp295m-lkp@intel=
-.com/
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304200502.T4Waeqad-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> io_uring/io_uring.c:2091:25: error: no member named 'rw' in 'struct io_kiocb'
+           if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
+                             ~~~  ^
+   1 error generated.
 
 
+vim +2091 io_uring/io_uring.c
 
---=20
-Thanks,
-~Nick Desaulniers
+  2073	
+  2074	static inline void io_queue_sqe(struct io_kiocb *req)
+  2075		__must_hold(&req->ctx->uring_lock)
+  2076	{
+  2077		int ret;
+  2078		bool is_write;
+  2079	
+  2080		switch (req->opcode) {
+  2081		case IORING_OP_WRITEV:
+  2082		case IORING_OP_WRITE_FIXED:
+  2083		case IORING_OP_WRITE:
+  2084			is_write = true;
+  2085			break;
+  2086		default:
+  2087			is_write = false;
+  2088			break;
+  2089		}
+  2090	
+> 2091		if (!is_write || (req->rw.kiocb.ki_flags & IOCB_DIRECT))
+  2092			ret = io_issue_sqe(req, IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
+  2093		else
+  2094			ret = io_issue_sqe(req, 0);
+  2095	
+  2096		/*
+  2097		 * We async punt it if the file wasn't marked NOWAIT, or if the file
+  2098		 * doesn't support non-blocking read/write attempts
+  2099		 */
+  2100		if (likely(!ret))
+  2101			io_arm_ltimeout(req);
+  2102		else
+  2103			io_queue_async(req, ret);
+  2104	}
+  2105	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
