@@ -1,140 +1,320 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D618BD310;
-	Wed, 19 Apr 2023 23:37:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DAB3C433EF;
-	Wed, 19 Apr 2023 23:37:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1681947432;
-	bh=RiJ8sZ4WJ7UP8H/LsivAO4Ph8LGZecE5A2kFeALbdlQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g/HNMFE3cV1lmfiJJLo0zG9dTyRVVtMRJJzo13C1YO8PtnV8bzZHXkkzOwTxzPaIA
-	 1rxSt03W4s1Xul0xSnleXAazIoJuD84e0q2lUvZ+u28hBiAa3zM18HIoK72QyJHqpW
-	 suGYAzGdwXNe7JFLclUiB7sXCmaBMk66cdqtcDd6+2E/cwPegZiVtTijvYHPcq8qhe
-	 LIJLcLFbs3zu1XPufO7yDh7EgGqhFIX4wbp9PtZRh5tXdPugMCxGX/NCuZH32M4oXQ
-	 4v9Qf7rmvI9aiHZIC8YyfKXduvP0WT9oh4bLWg98sGydFVCbDMmW8dglPcl/w3/S+o
-	 jvpYBM6bTPghw==
-Date: Wed, 19 Apr 2023 16:37:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, jpoimboe@kernel.org,
-	peterz@infradead.org, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] MIPS: Mark check_bugs{,_early}() as __init
-Message-ID: <20230419233710.GA1314058@dev-arch.thelio-3990X>
-References: <20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org>
- <CAKwvOdmuQBnZR_pB5bUdsF+OoB_4pxBT9TNFF83fZhzwZ1gbxw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07448D310;
+	Wed, 19 Apr 2023 23:42:04 +0000 (UTC)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.west.internal (Postfix) with ESMTP id C0C5B32007F1;
+	Wed, 19 Apr 2023 19:42:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 19 Apr 2023 19:42:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1681947723; x=1682034123; bh=yx1o5xrLkkfX/ayxDBgXkHp81fEFHgvVba2
+	0Qzf//Xo=; b=KVjiAEoj+LbexsV2pt4zrqZre18ofcY8OP+okl5sooAoc/p3pnI
+	ngbFo6Lu5fQxbwtblKxhOc30cnh8lSC2HE3in7K++gnXGodzY8grlc3m8QtwrWY3
+	qFYU36XVGAPDwikfNLnbH7OAkbjGqJJgMXISMyxKV1a6aUU+wcCluLNNmvZfdz/4
+	FA7KCnIC3Am+Qv27y9wJUSyxhnB3Yv668/wSUEWWKb1gRWYczN/Wsy0roifQewOz
+	T8YCVPFq/v0hd7ftWRQROwua4C1/VA+tAINXXwzcbIYfXKUseGA2BCHfN1u21s6y
+	QdKRGn++wF932+OQ3ZvRjuGBQY7L3tS+OyQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1681947723; x=1682034123; bh=yx1o5xrLkkfX/ayxDBgXkHp81fEFHgvVba2
+	0Qzf//Xo=; b=FiHhMsbtNj0b0Z+/ZE0SHvPBsO+lhIeU40AfGimQ+BIaUGrZwPY
+	dHrapBlki8HXH9Rakl2SqSEYYVJM3fFNmDu8RFyy2E6FgveKoEX5WixxVex/aalG
+	UwCuUsy2HsAM+EWIQNVxeW48b8TABJw7osvhTvULxwhNntq0DNRGssWddCj3uQ88
+	3NBg6XHno2VMXqXmtsl48RW81yqJPUUZ417OimqthwRDMWdnezgcPo90HP3wjWZT
+	EDKXOVfJRaruat67D4xDm0jveP3zlisYFWQ5wo8BYZI77WfibIWcoEj4JI3/Z5pR
+	tG09gds6WjwIl44abFMbjJwRnE+IaDoIShw==
+X-ME-Sender: <xms:S3xAZDHx6gNScoxOvRdsBNafQS7PT6gGCrSrbNkzdPouK4gA0A4NCw>
+    <xme:S3xAZAXU3N5Og9-CuUvjL2kz2ia0ks7UKF_ZjR13ue4tzRRD-gPt038AJG9p-oPPK
+    C8R4WZx5HELeFsrP9M>
+X-ME-Received: <xmr:S3xAZFIcfwyQzxH1P6KfhFEh4ZWCiBc4AaKpgYHl_rQ-V_IBoVk_NlIeD7R9ZWI7gDVq>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtuddgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepvedtfeekhefgvdfgveekkeegiedvfffhgfffledvleetgeek
+    vdfhfeegveekhedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgpd
+    hgihhthhhusgdrtghomhdpghhithhhuhgsuhhsvghrtghonhhtvghnthdrtghomhenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunh
+    drhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:S3xAZBEnDAKlnvFsvdOmetgZ6HEATMt9_Oc9TJd5BdobA5lWNSIYew>
+    <xmx:S3xAZJWsNcjqqTUdnb6ikMlvLogkaja5AyaOqw9fd58ndHKhDFhVQw>
+    <xmx:S3xAZMP1KkiY_42I_0lZAQDOsNoQpy-YOX5_t5CFfQO1yBL_faYpjw>
+    <xmx:S3xAZHe7YIGOiEBosuCwlQL5dS04m0YHgh8RlyGSdyRPdeTWeJ3evg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Apr 2023 19:42:01 -0400 (EDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdmuQBnZR_pB5bUdsF+OoB_4pxBT9TNFF83fZhzwZ1gbxw@mail.gmail.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
+ a CPU feature not currently enabled
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230419231834.GA1269248@dev-arch.thelio-3990X>
+Date: Thu, 20 Apr 2023 00:41:50 +0100
+Cc: Borislav Petkov <bp@alien8.de>,
+ kernel test robot <lkp@intel.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C6A730FC-C7B5-4A32-92CD-98FDA632782C@flygoat.com>
+References: <202304170748.Fg9VIgGd-lkp@intel.com>
+ <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
+ <20230419231834.GA1269248@dev-arch.thelio-3990X>
+To: Nathan Chancellor <nathan@kernel.org>
+X-Mailer: Apple Mail (2.3731.500.231)
 
-On Wed, Apr 19, 2023 at 03:03:31PM -0700, Nick Desaulniers wrote:
-> On Wed, Apr 19, 2023 at 11:43 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > After commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
-> > forcibly"), a compiler may choose not to inline a function marked with
-> > just 'inline'. If check_bugs() is not inlined into start_kernel(), which
-> > occurs when building with clang after commit 9ea7e6b62c2b ("init: Mark
-> > [arch_call_]rest_init() __noreturn"), modpost complains with:
-> >
-> >   WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs (section: .text) -> check_bugs32 (section: .init.text)
-> >
-> > check_bugs() is only called from start_kernel(), which itself is marked
-> > __init, so mark check_bugs() as __init as well to clear up the warning
-> > and make everything work properly.
-> >
-> > While there is currently no warning about check_bugs_early(), it could
-> > have the same problem, as it is called from arch_setup() and calls
-> > check_bugs64_early(), both marked __init. Mark it as __init for the same
-> > reason as above.
-> >
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> > NOTE: This is based on v6.3-rc7, as the issue shows up due to a patch in
-> > the tip tree, but this appears to be an ancient issue that could have
-> > showed up at any point (hence why no explicit Fixes tag), so I chose a
-> > base that should allow either the MIPS or tip folks to apply this patch.
-> 
-> Probably for the MIPS tree.
-> 
-> >
-> > Additionally, I was tempted to remove the explicit 'inline' since the
-> > compiler is free to do whatever it wants anyways but this is a static
-> > function in a header so we would need to add '__maybe_unused', which is
-> > already added with 'inline' in a normal build so I just left it alone.
-> > ---
-> >  arch/mips/include/asm/bugs.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-> > index d72dc6e1cf3c..9b9bf9bc7d24 100644
-> > --- a/arch/mips/include/asm/bugs.h
-> > +++ b/arch/mips/include/asm/bugs.h
-> > @@ -24,13 +24,13 @@ extern void check_bugs64_early(void);
-> >  extern void check_bugs32(void);
-> >  extern void check_bugs64(void);
-> >
-> > -static inline void check_bugs_early(void)
-> > +static inline void __init check_bugs_early(void)
-> >  {
-> >         if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
-> >                 check_bugs64_early();
-> >  }
-> 
-> If the only call site is in arch/mips/kernel/setup.c, then perhaps we
-> can move the definition of check_bugs_early there and mark it static
-> __init and drop inline?
 
-Sure, we could even go a step further and just copy the body into the
-one call site ourselves, I see little reason for this to be a dedicated
-function. That is probably best done in a separate patch altogether in
-lieu of just adding __init.
 
-> Unless we foresee other callers potentially in the future?  Patch
-> otherwise LGTM.  Thanks for the patch!
+> 2023=E5=B9=B44=E6=9C=8820=E6=97=A5 00:18=EF=BC=8CNathan Chancellor =
+<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> + Jiaxun, who has been looking into MIPS + LLVM issues recently and =
+has
+> been a big help :)
 
-Seems unlikely, I did a super scientific survey of several different
-revisions (:P) and check_bugs_early() is called once in each one:
+I think this patch[1] may fix the problem.
 
-v3.0:arch/mips/kernel/setup.c:    check_bugs_early();
-v3.5:arch/mips/kernel/setup.c:    check_bugs_early();
-v3.10:arch/mips/kernel/setup.c:    check_bugs_early();
-v4.0:arch/mips/kernel/setup.c:    check_bugs_early();
-v4.5:arch/mips/kernel/setup.c:    check_bugs_early();
-v5.0:arch/mips/kernel/setup.c:    check_bugs_early();
-v4.10:arch/mips/kernel/setup.c:    check_bugs_early();
-v5.5:arch/mips/kernel/setup.c:    check_bugs_early();
-v5.10:arch/mips/kernel/setup.c:    check_bugs_early();
-v6.0:arch/mips/kernel/setup.c:    check_bugs_early();
+Thanks
+- Jiaxun
 
-I'll do whatever Thomas would prefer.
+[1]: =
+https://patchwork.kernel.org/project/linux-mips/patch/20230411111225.55725=
+-2-jiaxun.yang@flygoat.com/
 
-> >
-> > -static inline void check_bugs(void)
-> > +static inline void __init check_bugs(void)
-> >  {
-> >         unsigned int cpu = smp_processor_id();
-> >
-> >
-> > ---
-> > base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
-> > change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
-> >
-> > Best regards,
-> > --
-> > Nathan Chancellor <nathan@kernel.org>
-> >
-> 
-> 
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+>=20
+> On Thu, Apr 20, 2023 at 12:37:07AM +0200, Borislav Petkov wrote:
+>> + Thomas.
+>>=20
+>> On Mon, Apr 17, 2023 at 07:57:04AM +0800, kernel test robot wrote:
+>>> tree:   =
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git =
+master
+>>> head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
+>>> commit: aba5b397cad7d398b385aaf5029f99f41b690466 hamradio: =
+baycom_epp: Do not use x86-specific rdtsc()
+>>> date:   4 months ago
+>>> config: mips-buildonly-randconfig-r001-20230417 =
+(https://download.01.org/0day-ci/archive/20230417/202304170748.Fg9VIgGd-lk=
+p@intel.com/config)
+>>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project =
+9638da200e00bd069e6dd63604e14cbafede9324)
+>>=20
+>> Where do I get clang 17?
+>=20
+> I think they intend for you to get it via their make.cross script but
+> this issue reproduces with clang 16.0.2 from
+> https://mirrors.edge.kernel.org/pub/tools/llvm/ for me locally.
+>=20
+>> In any case, this
+>>=20
+>> "error: instruction requires a CPU feature not currently enabled"
+>>=20
+>> sounds like clang is trying to generate invalid code for the wrong
+>> target. .config issue?
+>=20
+> I am far from a MIPS expert but this usually means that there is some
+> assembler directive that we are missing to allow access to certain
+> instructions in newer ISA versions than the one specified via =
+'-march'.
+> I have no idea if that is the case here or not but I do see the =
+correct
+> target flags when building with V=3D1, so it is not something obvious =
+like
+> that. I can double back to this later this week or next week if nobody
+> else is able to.
+>=20
+> Regardless, this seems like a pre-existing issue that was just exposed
+> by your patch, not the root cause of it.
+>=20
+> Cheers,
+> Nathan
+>=20
+>>> reproduce (this is a W=3D1 build):
+>>>        wget =
+https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross =
+-O ~/bin/make.cross
+>>>        chmod +x ~/bin/make.cross
+>>>        # install mips cross compiling tool for clang build
+>>>        # apt-get install binutils-mipsel-linux-gnu
+>>>        # =
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/=
+?id=3Daba5b397cad7d398b385aaf5029f99f41b690466
+>>>        git remote add linus =
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>        git fetch --no-tags linus master
+>>>        git checkout aba5b397cad7d398b385aaf5029f99f41b690466
+>>>        # save the config file
+>>>        mkdir build_dir && cp config build_dir/.config
+>>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
+make.cross W=3D1 O=3Dbuild_dir ARCH=3Dmips olddefconfig
+>>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
+make.cross W=3D1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash =
+drivers/net/hamradio/
+>>>=20
+>>> If you fix the issue, kindly add following tag where applicable
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>> | Link: =
+https://lore.kernel.org/oe-kbuild-all/202304170748.Fg9VIgGd-lkp@intel.com/=
+
+>>>=20
+>>> All errors (new ones prefixed by >>):
+>>>=20
+>>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
+>>>   In file included from include/linux/module.h:13:
+>>>   In file included from include/linux/stat.h:19:
+>>>   In file included from include/linux/time.h:60:
+>>>   In file included from include/linux/time32.h:13:
+>>>   In file included from include/linux/timex.h:67:
+>>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a =
+CPU feature not currently enabled
+>>>                   return read_c0_count();
+>>>                          ^
+>>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from =
+macro 'read_c0_count'
+>>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
+>>>                                   ^
+>>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro =
+'__read_32bit_c0_register'
+>>>           ___read_32bit_c0_register(source, sel, __volatile__)
+>>>           ^
+>>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro =
+'___read_32bit_c0_register'
+>>>                           "mfc0\t%0, " #source "\n\t"                =
+     \
+>>>                           ^
+>>>   <inline asm>:1:2: note: instantiated into assembly here
+>>>           mfc0    $4, $9
+>>>           ^
+>>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
+>>>   In file included from include/linux/module.h:13:
+>>>   In file included from include/linux/stat.h:19:
+>>>   In file included from include/linux/time.h:60:
+>>>   In file included from include/linux/time32.h:13:
+>>>   In file included from include/linux/timex.h:67:
+>>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a =
+CPU feature not currently enabled
+>>>                   return read_c0_count();
+>>>                          ^
+>>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from =
+macro 'read_c0_count'
+>>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
+>>>                                   ^
+>>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro =
+'__read_32bit_c0_register'
+>>>           ___read_32bit_c0_register(source, sel, __volatile__)
+>>>           ^
+>>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro =
+'___read_32bit_c0_register'
+>>>                           "mfc0\t%0, " #source "\n\t"                =
+     \
+>>>                           ^
+>>>   <inline asm>:1:2: note: instantiated into assembly here
+>>>           mfc0    $2, $9
+>>>           ^
+>>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
+>>>   In file included from include/linux/module.h:13:
+>>>   In file included from include/linux/stat.h:19:
+>>>   In file included from include/linux/time.h:60:
+>>>   In file included from include/linux/time32.h:13:
+>>>   In file included from include/linux/timex.h:67:
+>>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a =
+CPU feature not currently enabled
+>>>                   return read_c0_count();
+>>>                          ^
+>>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from =
+macro 'read_c0_count'
+>>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
+>>>                                   ^
+>>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro =
+'__read_32bit_c0_register'
+>>>           ___read_32bit_c0_register(source, sel, __volatile__)
+>>>           ^
+>>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro =
+'___read_32bit_c0_register'
+>>>                           "mfc0\t%0, " #source "\n\t"                =
+     \
+>>>                           ^
+>>>   <inline asm>:1:2: note: instantiated into assembly here
+>>>           mfc0    $2, $9
+>>>           ^
+>>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
+>>>   In file included from include/linux/module.h:13:
+>>>   In file included from include/linux/stat.h:19:
+>>>   In file included from include/linux/time.h:60:
+>>>   In file included from include/linux/time32.h:13:
+>>>   In file included from include/linux/timex.h:67:
+>>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a =
+CPU feature not currently enabled
+>>>                   return read_c0_count();
+>>>                          ^
+>>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from =
+macro 'read_c0_count'
+>>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
+>>>                                   ^
+>>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro =
+'__read_32bit_c0_register'
+>>>           ___read_32bit_c0_register(source, sel, __volatile__)
+>>>           ^
+>>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro =
+'___read_32bit_c0_register'
+>>>                           "mfc0\t%0, " #source "\n\t"                =
+     \
+>>>                           ^
+>>>   <inline asm>:1:2: note: instantiated into assembly here
+>>>           mfc0    $2, $9
+>>>           ^
+>>>   4 errors generated.
+>>>=20
+>>>=20
+>>> vim +75 arch/mips/include/asm/timex.h
+>>>=20
+>>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  71 =20
+>>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  72  static inline =
+cycles_t get_cycles(void)
+>>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  73  {
+>>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  74   if =
+(can_use_mips_counter(read_c0_prid()))
+>>> 9c9b415c50bc29 Ralf Baechle       2013-09-12 @75   return =
+read_c0_count();
+>>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  76   else
+>>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  77   return 0; /* no =
+usable counter */
+>>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  78  }
+>>> 1c99c6a7c3c599 Jason A. Donenfeld 2022-04-08  79  #define get_cycles =
+get_cycles
+>>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  80 =20
+>>>=20
+>>> :::::: The code at line 75 was first introduced by commit
+>>> :::::: 9c9b415c50bc298ac61412dff856eae2f54889ee MIPS: Reimplement =
+get_cycles().
+>>>=20
+>>> :::::: TO: Ralf Baechle <ralf@linux-mips.org>
+>>> :::::: CC: Ralf Baechle <ralf@linux-mips.org>
+>>>=20
+>>> --=20
+>>> 0-DAY CI Kernel Test Service
+>>> https://github.com/intel/lkp-tests
+>>=20
+>> --=20
+>> Regards/Gruss,
+>>    Boris.
+>>=20
+>> https://people.kernel.org/tglx/notes-about-netiquette
+
