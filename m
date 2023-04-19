@@ -1,74 +1,75 @@
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F62B2564
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 08:13:38 +0000 (UTC)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-32b532ee15bso88002895ab.1
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 01:13:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681892017; x=1684484017;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7RRpr/2enZpSN+Pqs5p0qwijporxRiSMR0agGaaar/U=;
-        b=JimFShg4q1Xc87o6bdlaBPVwnDDbVZhVn7sGbtUyYPwoSGaByJDXUAehLs5yPvZnq2
-         xj2a2LJsXLFQVU3X02+mTQfNpC+a3TyERluK+4f9VP3ZCAT7hrKcVUFz/KrRTzjm/N8k
-         xzynBcvy/BCG5L++7AB9pfa9tbr7hl8wJFvzaF9PxhfaX7c0UvKEqDm/+XE4mQtc9YAO
-         lZPirFlsQ3p4C1UdOQ3cc3JAxwtAENqcKModGip+dz1kO0k9zX6+zs2e1AsLEuB2WlUP
-         iF3urNo9rxoXE1Uw3sCvvSFHk7v/izXDDALXYWQl5WdXJs64QFS0bqHKaMlmMKpDFK8u
-         urDQ==
-X-Gm-Message-State: AAQBX9eSDl2nxLB0TkruSiaX8wLGJStfeb2RuKp6fG1lOv7Ljk9ZLa3Y
-	dpvHZFcWNZJf6E1t7TSTBOmNeJvfJQxGffmv1oWZcllxBrlg
-X-Google-Smtp-Source: AKy350ZxM+Xb9GNBN83504bkL3uq/X7S37Mg6zCrCUERbs9vz+Iu5OHFeTeyO3L39/R+jUYeAVh6qHLpNsIhMXAdoXULMXlBIadJ
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9641B2580;
+	Wed, 19 Apr 2023 08:51:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E2DC433D2;
+	Wed, 19 Apr 2023 08:51:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1681894272;
+	bh=VXrpOSBlujFi+hh3tYsCGOxDWdKBsM/QYjcPSg9RskE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ka7ocJbBGzZMh64ujq3JPqaSiDyCzuUb7UQ9jIjPNctNl3tAHXyS8iPrzTBzXW1Xa
+	 ZTGaaPFwNEwOu7/T10uoT2AkUtvvCGw/iA/ZR9TTHzez4wCnGxcJp/2Vm81M7vrrbU
+	 fxsGgIobRAncv2vykywEOcofgyQ764C3vAxebwBJ+Z2hT29ZkA+MHKw3/kCqY1xyhR
+	 dcme4FK8dkQqDIuDM3FCPmY7r98xH0fSn6MUZ6YNIlgjpshkyvdISA2RLN3nFCt+XV
+	 s7hbeuWt0UGXek2grLzYh3MWx7qjwJoBYJdVk+o/bTT+eu6AON8ZKym8aAEVECXkkX
+	 dClvpK4JcuaTA==
+Date: Wed, 19 Apr 2023 10:51:06 +0200
+From: Simon Horman <horms@kernel.org>
+To: Stefan Wahren <stefan.wahren@i2se.com>
+Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-staging@lists.linux.dev,
+	llvm@lists.linux.dev, Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH] staging: vchiq_arm: Make vchiq_platform_init() static
+Message-ID: <ZD+rethobzN+rONr@kernel.org>
+References: <20230418-vchiq_platform_init-static-v1-1-3c38ba81bc66@kernel.org>
+ <e1fed875-059d-bf98-f9da-09c51f362be8@i2se.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:cd4c:0:b0:760:ea29:2594 with SMTP id
- d73-20020a6bcd4c000000b00760ea292594mr1190040iog.0.1681892017330; Wed, 19 Apr
- 2023 01:13:37 -0700 (PDT)
-Date: Wed, 19 Apr 2023 01:13:37 -0700
-In-Reply-To: <000000000000ea3c3105ef377a12@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003e62ab05f9ac0071@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_listxattr
-From: syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, dvyukov@google.com, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com, zengheng4@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e1fed875-059d-bf98-f9da-09c51f362be8@i2se.com>
 
-This bug is marked as fixed by commit:
-ntfs: fix panic about slab-out-of-bounds caused by ntfs_listxattr()
+On Wed, Apr 19, 2023 at 08:37:58AM +0200, Stefan Wahren wrote:
+> Hi Simon,
+> 
+> Am 18.04.23 um 13:23 schrieb Simon Horman:
+> > vchiq_platform_init() is only used in this file so it can be static.
+> > 
+> > clang-16 with W=1 reports:
+> > 
+> >   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:5: error: no previous prototype for function 'vchiq_platform_init' [-Werror,-Wmissing-prototypes]
+> >   int vchiq_platform_init(struct platform_device *pdev, struct vchiq_state *state)
+> >       ^
+> >   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+> > 
+> > Signed-off-by: Simon Horman <horms@kernel.org>
+> 
+> this is not the first attempt to fix this [1]. But maybe this has been fixed
+> in the meantime.
+> 
+> [1] - https://lore.kernel.org/linux-staging/20221022043548.1671644-1-scottjcrouch@gmail.com/#t
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Thanks,
 
-#syz fix: exact-commit-title
+I see in that thread that Greg notes that "this breaks the build in a very
+horrible and strange way" [2].
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+I'm a bit surprised as I didn't observe such a thing.
+But I also don't dispute it - clearly my testing was inadequate.
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
+I'll try and dig a bit deeper into this one.
+Perhaps starting with the report from the kernel test robot [3]
 
----
-[1] I expect the commit to be present in:
-
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
+[2] https://lore.kernel.org/linux-staging/Y1Okpjbi2kKU2GFz@kroah.com/
+[3] https://lore.kernel.org/linux-staging/202210230127.p1Dp295m-lkp@intel.com/
