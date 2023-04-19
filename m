@@ -1,149 +1,109 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9AC33EC
-	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 21:02:33 +0000 (UTC)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1a9290a6f96so55845ad.1
-        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 14:02:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745F333EC
+	for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 21:14:18 +0000 (UTC)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-517bb11ca34so194543a12.0
+        for <llvm@lists.linux.dev>; Wed, 19 Apr 2023 14:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681938153; x=1684530153;
+        d=google.com; s=20221208; t=1681938858; x=1684530858;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DyuMuSEmljtk0uCa6yhRHNZgUIVDVBS+k9XudbHJtvA=;
-        b=NLbpzlPuW8YRaR7ZBfd0UwmtozZCtfufOPiJKcb35nvfU47ArbMZnKzXT9sTLnPcAd
-         8hGNdip4XvNJ1W30z1IamXiX8dojcLP5mHGNP15iARHvhyrxIYKCL1e1d3hw8uiZw4he
-         RgSaMrvD5/t21c+F8wgj9LosNvR62bx60wUJ/YepUxY2pRSPXO0BdRnRruGKemettefF
-         tl4JDGzAjbd5Se/Qhmsl08Ny1XxweGrnlGIsPe/vdEOKT3F/kaZGgXdr1OqZIdS4uzE0
-         +EWnazDNHkXXCjuLflA2bfaGsJurFYAwDvlhzBX4cQTthY/3OM9yRDWrhX/tIF1W5kGM
-         s5Kw==
+        bh=Nzf68FaVUmtk731uqhqZ3z1K+cuL6ITnPGFPOaYG/Xo=;
+        b=1PWp293U9uQOzABXuwX03Nv6JhKms2u6bdpYCyD1vAGb4hDRq/D6tn2cx6GjwB5Pe/
+         uI+SJuVTuc5W1fdoQARkAfBd71lmR7piYn5g9LAf2pvyyEhVbGDr427Bg0iWzN9My80B
+         jPQl7CtUN6skO6UZ43Z9l1fFwAnJSYbR+BN56Uhj/PjHRzXG78LlFxRagzUcijHhgLC5
+         Q2GDImKw9oZJeykT6L3srCK227EbSJo6e5NGmmo1NwlNDhZi2XLZ+1vcfCu/jHhRyMPd
+         vrAtXrfqxXUsg3L4KvY0sU8TAROVNQeDcUT+5oLs67wBl3HB7uDziav3uAMf/TAFETCY
+         9rnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681938153; x=1684530153;
+        d=1e100.net; s=20221208; t=1681938858; x=1684530858;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DyuMuSEmljtk0uCa6yhRHNZgUIVDVBS+k9XudbHJtvA=;
-        b=KOKIMyGsLKHgXBeXE2EiI0+5b4GfUNAAyN4pN32vhe6iGQh5XOBRl4NQZuU1tBkdjt
-         srFmez5qB0v5KVG6twwNpAwEIAUqZA24kE1I4kMKwfiKFZAETMx0zFzSLZl1UCMi3R2u
-         C13YW4/6lj5K28iBbOiftHiCSG52gUA4u89GH+7AP1QMKTEg8ZXQMBorSlIspqidfE8e
-         jSDG2OyUwQ8TBzR/Uw7oDH1j5bie2th7kBx3A9TKHlyaXP6jW+nbF1XBRb5qvzIPf1o4
-         hPx5CtNZxJT6EACiCj2enW5fqE21NYB9sraNokefO8NOf2sn0ah/74Qd/JH/OlFp0EWD
-         yXuQ==
-X-Gm-Message-State: AAQBX9fyEm0sUsd0JmKAk0dBSFTFge84pd5y0BOHm/B6QtFairuovGBM
-	HmH9KvnInO8Cv7FqpPi1Wud+z5UwGGxoMnZT38FR4Q==
-X-Google-Smtp-Source: AKy350ZXTlD268fHGIdwqk/FY6ac3wDAgmgs4JQ5UlJgaWyoePq9l7arX6DBkVc0TCMFe1Cz2LdzUs6aEd9TtMqSCXc=
-X-Received: by 2002:a17:902:f70e:b0:198:af50:e4de with SMTP id
- h14-20020a170902f70e00b00198af50e4demr76325plo.4.1681938152739; Wed, 19 Apr
- 2023 14:02:32 -0700 (PDT)
+        bh=Nzf68FaVUmtk731uqhqZ3z1K+cuL6ITnPGFPOaYG/Xo=;
+        b=bwNbhxFQPWhYrbi8TEqIvDvBscapSt+6tJ5m/VAm7++cqNu7Z8Zfwlr12NCgrftiSG
+         yoPOa3bAnJSsk+KKdvub2ip8WwzFsk/GXX79kuf9PCTksjoMIdj09zDwP8m96YQ+vv/d
+         QrOqTRuTqYRSbPD1dU5NybIPr2JR3Ric8vfGHy+4Iv7cA2hX1L3R8Utni2Zi4RRjiY6H
+         1Nq2LPbsa08GoYDpm5QKgC8n7Y7VJzn/SopSw0K4+AmqzLltTXjHwJ/5y+BYRRk1o2m9
+         5krDcjqhY+uPRZFIifRZWgYiz+BzY+/A9qnA6LWJZhPDsdFYQel2VpLAZFUXyPBo4Q9d
+         O5IQ==
+X-Gm-Message-State: AAQBX9eUMMkn08KFYDtXY/UPW9SuU2L9AtQ0F5E332ng8Wvmfl36oVk3
+	qijrez2LDp/UvrLDa7lEPKMojaER+ftqzgV2hgpcog==
+X-Google-Smtp-Source: AKy350ZHftN1Ugfbu/HRrNVQr6gP8etuO08rOMKi3s01Syg9itb4X0l03Y4y30BVLk+mVrwK5dPLpE+IE1iEK3oDmLA=
+X-Received: by 2002:a17:90b:3141:b0:23b:2f4a:57bb with SMTP id
+ ip1-20020a17090b314100b0023b2f4a57bbmr4260368pjb.10.1681938857703; Wed, 19
+ Apr 2023 14:14:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230407215406.768464-1-ndesaulniers@google.com>
- <20230407215824.GA1524475@dev-arch.thelio-3990X> <CAFP8O3+YzvwgeSS_GvU3oTtxunyUm8qMaAnV3Mt-ezTsxZ=Q0Q@mail.gmail.com>
- <6436ca47.a70a0220.e83cf.adf4@mx.google.com> <CAFP8O3K2c-7wCeDrxPaFpNe-yV9M1g0BPQw7qA6JdpUD74dC1w@mail.gmail.com>
-In-Reply-To: <CAFP8O3K2c-7wCeDrxPaFpNe-yV9M1g0BPQw7qA6JdpUD74dC1w@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Wed, 19 Apr 2023 14:02:21 -0700
-Message-ID: <CAFP8O3K1pO7AAMDeDyiSj3jCL2aOm_X88sUf5yZ4onc3whr9Jw@mail.gmail.com>
-Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Kees Cook <keescook@chromium.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-hardening@vger.kernel.org, 
-	Tom Rix <trix@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+ <CAKwvOdnj7rNeh0YeX2NPcbkoJBnRwXb9Dt0SF9mHaMKYVLjCjw@mail.gmail.com> <ZD9/7Oed8Rujjj/0@kernel.org>
+In-Reply-To: <ZD9/7Oed8Rujjj/0@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 19 Apr 2023 14:14:05 -0700
+Message-ID: <CAKwvOdn9heTWFTSA8oX56Grsh8z6wDEK5K6Mia2B=cO2gz-K8w@mail.gmail.com>
+Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
+To: Simon Horman <horms@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 12, 2023 at 11:13=E2=80=AFAM Fangrui Song <maskray@google.com> =
-wrote:
+On Tue, Apr 18, 2023 at 10:45=E2=80=AFPM Simon Horman <horms@kernel.org> wr=
+ote:
 >
-> On Wed, Apr 12, 2023 at 8:12=E2=80=AFAM Kees Cook <keescook@chromium.org>=
+> On Tue, Apr 18, 2023 at 11:44:28AM -0700, Nick Desaulniers wrote:
+> > On Tue, Apr 18, 2023 at 4:41=E2=80=AFAM Simon Horman <horms@kernel.org>=
  wrote:
-> >
-> > On Tue, Apr 11, 2023 at 05:12:24PM -0700, Fangrui Song wrote:
-> > > On Fri, Apr 7, 2023 at 2:58=E2=80=AFPM Nathan Chancellor <nathan@kern=
-el.org> wrote:
-> > > >
-> > > > On Fri, Apr 07, 2023 at 02:54:06PM -0700, Nick Desaulniers wrote:
-> > > > > -fsanitize-undefined-trap-on-error has been supported since GCC 5=
-.1 and
-> > > > > Clang 3.2.  The minimum supported version of these according to
-> > > > > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively.=
- Drop
-> > > > > this cc-option check.
-> > > > >
-> > > > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> > > >
-> > > > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > > >
-> > > > As an aside, we should really consider having some standard format =
-of
-> > > > comment around cc-option checks so that we can easily remove them w=
-hen
-> > > > they become stale...
-> > > >
-> > > > > ---
-> > > > > Masahiro, Kees: get_maintainer.pl leaves much to be desired for t=
-his
-> > > > > file. Can one of you please pick this up?
-> > > > >
-> > > > >  lib/Kconfig.ubsan | 1 -
-> > > > >  1 file changed, 1 deletion(-)
-> > > > >
-> > > > > diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> > > > > index fd15230a703b..0e7ad0782399 100644
-> > > > > --- a/lib/Kconfig.ubsan
-> > > > > +++ b/lib/Kconfig.ubsan
-> > > > > @@ -15,7 +15,6 @@ if UBSAN
-> > > > >  config UBSAN_TRAP
-> > > > >       bool "On Sanitizer warnings, abort the running kernel code"
-> > > > >       depends on !COMPILE_TEST
-> > > > > -     depends on $(cc-option, -fsanitize-undefined-trap-on-error)
-> > > > >       help
-> > > > >         Building kernels with Sanitizer features enabled tends to=
- grow
-> > > > >         the kernel size by around 5%, due to adding all the debug=
-ging
-> > > > > --
-> > > > > 2.40.0.577.gac1e443424-goog
-> > > > >
-> > > >
 > > >
-> > > -fsanitize-undefined-trap-on-error is a legacy option from 2013 when
-> > > -fcatch-undefined-behavior instead of -fsanitize=3Dundefined enabled
-> > > UBSan.
-> > > On the Clang side, http://reviews.llvm.org/D10464 added
-> > > -fsanitize-trap=3D in June 2015.
-> > > It's best to use -fsanitize-trap=3Dundefined and avoid uses of
-> > > -fsanitize-undefined-trap-on-error.
+> > > Rather than casting clk_unregister_mux to an incompatible function
+> > > type provide a trivial wrapper with the correct signature for the
+> > > use-case.
+> > >
+> > > Reported by clang-16 with W=3D1:
+> > >
+> > >  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk=
+ *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,=
+-Wcast-function-type-strict]
+> > >          ret =3D devm_add_action_or_reset(dev, (void(*)(void *))clk_u=
+nregister_mux,
+> > >
+> > > No functional change intended.
+> > > Compile tested only.
 > >
-> > But that's Clang-only. -fsanitize-undefined-trap-on-error works for bot=
-h
-> > GCC and Clang.
+> > Thanks for the patch!
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 > >
-> > --
-> > Kees Cook
+> > Here's some more suspects to look at, if you have cycles:
+> > drivers/base/devres.c:734:int __devm_add_action(struct device *dev,
+> > void (*action)(void *), void *data, const char *name)
+> > drivers/i2c/busses/i2c-mchp-pci1xxxx.c:1159: ret =3D
+> > devm_add_action(dev, (void (*)(void *))pci1xxxx_i2c_shutdown, i2c);
+> > drivers/soc/ti/pruss.c:96: ret =3D devm_add_action_or_reset(dev,
+> > (void(*)(void *))clk_unregister_mux,
+> > drivers/mmc/host/meson-mx-sdhc-mmc.c:791: ret =3D
+> > devm_add_action_or_reset(dev, (void(*)(void *))mmc_free_host,
+> > drivers/pci/controller/pcie-microchip-host.c:866:
+> > devm_add_action_or_reset(dev, (void (*) (void
+> > *))clk_disable_unprepare,
 >
-> Just filed a -fsanitize-trap=3D feature request for GCC:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D109489 :)
->
-> https://reviews.llvm.org/D10464 (2015) does mention the state of the
-> legacy option:
->
->   // https://clang.llvm.org/docs/UsersManual.html#cmdoption-fsanitize-und=
-efined-trap-on-error
->   -fsanitize-undefined-trap-on-error
->   Deprecated alias for -fsanitize-trap=3Dundefined.
+> Thanks, I will take a look as a background task.
+> Let me know if there is any urgency on your side.
 
-Circling back. it seems that GCC 13 will have
--fsanitize-trap=3Dundefined (a commit from 2022-06).
-The current https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
-says "The -fsanitize-undefined-trap-on-error option is deprecated
-equivalent of -fsanitize-trap=3Dall."
+No urgency on W=3D1 warnings.  They are good cleanups to do.  I meant to
+invite you to our meeting today (but forgot):
+https://clangbuiltlinux.github.io/ has links to more info under
+"Bi-weekly video meeting".
 
-We need to discourage further uses of the deprecated
--fsanitize-undefined-trap-on-error.
+We could use your help if there's anything in our issue tracker that
+looks tractable: https://github.com/ClangBuiltLinux/linux/issues
+
+Thanks for the patches.
+
+--=20
+Thanks,
+~Nick Desaulniers
