@@ -1,42 +1,49 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7DA15A8;
-	Wed, 19 Apr 2023 00:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F29A17D4;
+	Wed, 19 Apr 2023 02:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681864822; x=1713400822;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xv7xq9+ZhiLjo2ODmCjD20z8I2Htku92+m8r9xet5Cc=;
-  b=MBw3KiIZ+ma1uOagWoyJZlQww40gqSuSOFRzq4cwANgsXQvxPNa8YzcT
-   yktDEqRmM6nSm15+sV2Tm86zlZxEglDoykQRAtoY41G3XmCeCUqVq4FUe
-   sKliktSXGHPgwuFRvhM0C/MrfLrnspt/M9j7dpmSKYNkS4nrNj20+ZAqm
-   +WGjPQcjUDI3SRufPr23uB44fwvclv1mQLKub6vQKKQEYL5k94zRbYc0E
-   Z/0AVnsS7+qdn9cPSk2h4CNvZEK1FdLEWBvJA4G9LkrSAr2/HvIwBsljV
-   EQRZVlc9AWADJKX/U/M9p8tU5eQ707g1cMAGdwxC9rLOzEcnctLsJPy/W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325653982"
+  t=1681872208; x=1713408208;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ljxSHJURgT27vKhSROYonyITA0KaHaRnept4ArbLVcM=;
+  b=FfFM7BTyOk5ViNZi7lkw3rj71qINcdUgm955MH2i/FDnkuIgj+qRw1PL
+   z5B8sLf6wAborTTMyLkcNS1VM9Sj0bVBVdBPNqD1yb1VRwoGpwKJaO1J3
+   Vvk++Sfp+wGBhFGGS2V6IZJuKhO7Vl9DXXAkjLUCTm0DE5ck8We1r7Zsp
+   tpJPg/3qP0DD7kZR+9MGtxy6mbxMUNGtiAvJT5rlo2OihLJwhnOJaG9OG
+   W53szD2sNuPDw/OOqReTjNkHaEknVHQl7yPI+9xWzjAp40uXKE6J9ls2t
+   iL03vfgqQDAhD+hvGuFogkeoR0skE9CEYB2vItxBI0rqV8a/jjmAvIy4f
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="345336305"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="325653982"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 17:40:21 -0700
+   d="scan'208";a="345336305"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 19:43:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="641556561"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="835109330"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="641556561"
+   d="scan'208";a="835109330"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2023 17:40:19 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2023 19:43:24 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1povrv-000eHv-0f;
-	Wed, 19 Apr 2023 00:40:19 +0000
-Date: Wed, 19 Apr 2023 08:39:31 +0800
+	id 1poxn1-000eOc-2z;
+	Wed, 19 Apr 2023 02:43:23 +0000
+Date: Wed, 19 Apr 2023 10:42:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:uprobe_multi 1/17] include/linux/trace_events.h:799:5:
- warning: no previous prototype for function 'bpf_uprobe_multi_link_attach'
-Message-ID: <202304190821.LhAbwJXK-lkp@intel.com>
+To: Pierre Asselin <pa@panix.com>, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Pierre Asselin <pa@panix.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH] firmware/sysfb: Fix VESA format selection
+Message-ID: <202304191058.FrwRGYyD-lkp@intel.com>
+References: <20230418183325.2327-1-pa@panix.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,365 +52,215 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230418183325.2327-1-pa@panix.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git uprobe_multi
-head:   663cc4c067c5af744475e3a7573e3cd5b4647ef3
-commit: fe88ac2cbf6177d5ed19dd8a6f4cf7e066d6aa95 [1/17] bpf: Add multi uprobe link
-config: arm-buildonly-randconfig-r002-20230418 (https://download.01.org/0day-ci/archive/20230419/202304190821.LhAbwJXK-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+Hi Pierre,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on drm-misc/drm-misc-next linus/master v6.3-rc7 next-20230418]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Pierre-Asselin/firmware-sysfb-Fix-VESA-format-selection/20230419-023522
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+patch link:    https://lore.kernel.org/r/20230418183325.2327-1-pa%40panix.com
+patch subject: [PATCH] firmware/sysfb: Fix VESA format selection
+config: x86_64-randconfig-a014-20230417 (https://download.01.org/0day-ci/archive/20230419/202304191058.FrwRGYyD-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=fe88ac2cbf6177d5ed19dd8a6f4cf7e066d6aa95
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf uprobe_multi
-        git checkout fe88ac2cbf6177d5ed19dd8a6f4cf7e066d6aa95
+        # https://github.com/intel-lab-lkp/linux/commit/294e6879474c9528bcd0f652056d29ca3d1d473f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pierre-Asselin/firmware-sysfb-Fix-VESA-format-selection/20230419-023522
+        git checkout 294e6879474c9528bcd0f652056d29ca3d1d473f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/firmware/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304190821.LhAbwJXK-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304191058.FrwRGYyD-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from init/main.c:21:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   init/main.c:779:20: warning: no previous prototype for function 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-   void __init __weak arch_post_acpi_subsys_init(void) { }
-                      ^
-   init/main.c:779:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_post_acpi_subsys_init(void) { }
-   ^
-   static 
-   init/main.c:791:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init __weak mem_encrypt_init(void) { }
-                      ^
-   init/main.c:791:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak mem_encrypt_init(void) { }
-   ^
-   static 
-   init/main.c:793:20: warning: no previous prototype for function 'poking_init' [-Wmissing-prototypes]
-   void __init __weak poking_init(void) { }
-                      ^
-   init/main.c:793:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak poking_init(void) { }
-   ^
-   static 
-   4 warnings generated.
---
-   In file included from init/do_mounts.c:28:
-   In file included from init/do_mounts.h:5:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   1 warning generated.
---
-   In file included from kernel/fork.c:55:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   kernel/fork.c:162:13: warning: no previous prototype for function 'arch_release_task_struct' [-Wmissing-prototypes]
-   void __weak arch_release_task_struct(struct task_struct *tsk)
-               ^
-   kernel/fork.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __weak arch_release_task_struct(struct task_struct *tsk)
-   ^
-   static 
-   kernel/fork.c:857:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
-   void __init __weak arch_task_cache_init(void) { }
-                      ^
-   kernel/fork.c:857:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init __weak arch_task_cache_init(void) { }
-   ^
-   static 
-   kernel/fork.c:952:12: warning: no previous prototype for function 'arch_dup_task_struct' [-Wmissing-prototypes]
-   int __weak arch_dup_task_struct(struct task_struct *dst,
-              ^
-   kernel/fork.c:952:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak arch_dup_task_struct(struct task_struct *dst,
-   ^
-   static 
-   4 warnings generated.
---
-   In file included from kernel/cpu.c:40:
-   In file included from include/trace/events/power.h:12:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   kernel/cpu.c:110:20: warning: unused function 'cpuhp_lock_acquire' [-Wunused-function]
-   static inline void cpuhp_lock_acquire(bool bringup) { }
-                      ^
-   kernel/cpu.c:111:20: warning: unused function 'cpuhp_lock_release' [-Wunused-function]
-   static inline void cpuhp_lock_release(bool bringup) { }
-                      ^
-   3 warnings generated.
---
-   In file included from fs/d_path.c:2:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   fs/d_path.c:317:7: warning: no previous prototype for function 'simple_dname' [-Wmissing-prototypes]
-   char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
-         ^
-   fs/d_path.c:317:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
-   ^
-   static 
-   2 warnings generated.
---
-   In file included from arch/arm/kernel/signal.c:14:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   arch/arm/kernel/signal.c:142:15: warning: variable 'aux' set but not used [-Wunused-but-set-variable]
-           char __user *aux;
-                        ^
-   arch/arm/kernel/signal.c:186:16: warning: no previous prototype for function 'sys_sigreturn' [-Wmissing-prototypes]
-   asmlinkage int sys_sigreturn(struct pt_regs *regs)
-                  ^
-   arch/arm/kernel/signal.c:186:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage int sys_sigreturn(struct pt_regs *regs)
-              ^
-              static 
-   arch/arm/kernel/signal.c:216:16: warning: no previous prototype for function 'sys_rt_sigreturn' [-Wmissing-prototypes]
-   asmlinkage int sys_rt_sigreturn(struct pt_regs *regs)
-                  ^
-   arch/arm/kernel/signal.c:216:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage int sys_rt_sigreturn(struct pt_regs *regs)
-              ^
-              static 
-   arch/arm/kernel/signal.c:601:1: warning: no previous prototype for function 'do_work_pending' [-Wmissing-prototypes]
-   do_work_pending(struct pt_regs *regs, unsigned int thread_flags, int syscall)
-   ^
-   arch/arm/kernel/signal.c:600:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage int
-              ^
-              static 
-   5 warnings generated.
---
-   In file included from arch/arm/kernel/sys_arm.c:20:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   arch/arm/kernel/sys_arm.c:32:17: warning: no previous prototype for function 'sys_arm_fadvise64_64' [-Wmissing-prototypes]
-   asmlinkage long sys_arm_fadvise64_64(int fd, int advice,
-                   ^
-   arch/arm/kernel/sys_arm.c:32:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage long sys_arm_fadvise64_64(int fd, int advice,
-              ^
-              static 
-   2 warnings generated.
---
-   In file included from kernel/sched/core.c:13:
-   In file included from include/linux/syscalls_api.h:1:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   kernel/sched/core.c:3631:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-   static inline bool rq_has_pinned_tasks(struct rq *rq)
-                      ^
-   kernel/sched/core.c:5743:20: warning: unused function 'sched_tick_start' [-Wunused-function]
-   static inline void sched_tick_start(int cpu) { }
-                      ^
-   kernel/sched/core.c:5744:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-   static inline void sched_tick_stop(int cpu) { }
-                      ^
-   kernel/sched/core.c:6437:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
-   static inline void sched_core_cpu_starting(unsigned int cpu) {}
-                      ^
-   kernel/sched/core.c:6438:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-   static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-                      ^
-   kernel/sched/core.c:6439:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-   static inline void sched_core_cpu_dying(unsigned int cpu) {}
-                      ^
-   7 warnings generated.
---
-   In file included from kernel/sched/fair.c:55:
-   In file included from kernel/sched/sched.h:61:
-   In file included from include/linux/syscalls_api.h:1:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   kernel/sched/fair.c:688:5: warning: no previous prototype for function 'sched_update_scaling' [-Wmissing-prototypes]
-   int sched_update_scaling(void)
-       ^
-   kernel/sched/fair.c:688:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sched_update_scaling(void)
-   ^
-   static 
-   kernel/sched/fair.c:3200:20: warning: unused function 'account_numa_enqueue' [-Wunused-function]
-   static inline void account_numa_enqueue(struct rq *rq, struct task_struct *p)
-                      ^
-   kernel/sched/fair.c:3204:20: warning: unused function 'account_numa_dequeue' [-Wunused-function]
-   static inline void account_numa_dequeue(struct rq *rq, struct task_struct *p)
-                      ^
-   kernel/sched/fair.c:3208:20: warning: unused function 'update_scan_period' [-Wunused-function]
-   static inline void update_scan_period(struct task_struct *p, int new_cpu)
-                      ^
-   kernel/sched/fair.c:4598:20: warning: unused function 'cfs_rq_is_decayed' [-Wunused-function]
-   static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
-                      ^
-   kernel/sched/fair.c:6083:20: warning: unused function 'cfs_bandwidth_used' [-Wunused-function]
-   static inline bool cfs_bandwidth_used(void)
-                      ^
-   kernel/sched/fair.c:6104:19: warning: unused function 'throttled_lb_pair' [-Wunused-function]
-   static inline int throttled_lb_pair(struct task_group *tg,
-                     ^
-   kernel/sched/fair.c:6121:20: warning: unused function 'update_runtime_enabled' [-Wunused-function]
-   static inline void update_runtime_enabled(struct rq *rq) {}
-                      ^
-   kernel/sched/fair.c:6122:20: warning: unused function 'unthrottle_offline_cfs_rqs' [-Wunused-function]
-   static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
-                      ^
-   10 warnings generated.
---
-   In file included from kernel/time/hrtimer.c:30:
-   In file included from include/linux/syscalls.h:88:
-   In file included from include/trace/syscall.h:7:
->> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-       ^
-   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   ^
-   static 
-   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
-                                     ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [CLOCK_TAI]             = HRTIMER_BASE_TAI,
-                                     ^~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:118:27: note: previous initialization is here
-           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
-                                     ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/time/hrtimer.c:1648:7: warning: variable 'expires_in_hardirq' set but not used [-Wunused-but-set-variable]
-           bool expires_in_hardirq;
-                ^
-   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base' [-Wunused-function]
-   static inline bool is_migration_base(struct hrtimer_clock_base *base)
-                      ^
-   kernel/time/hrtimer.c:1873:20: warning: unused function '__hrtimer_peek_ahead_timers' [-Wunused-function]
-   static inline void __hrtimer_peek_ahead_timers(void)
-                      ^
-   8 warnings generated.
+>> drivers/firmware/sysfb_simplefb.c:60:20: warning: comparison of distinct pointer types ('typeof ((typeof (__builtin_choose_expr(((!!(sizeof ((typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) *)1 == (typeof (si->blue_size + si->blue_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->blue_size + si->blue_pos) * 0L)) : (int *)8))))), (((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) > (si->blue_size + si->blue_pos) ? ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) : (si->blue_size + si->blue_pos)), ({
+       typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) __UNIQUE_ID___x285 = ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+           typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+           typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+           ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+       })));
+       typeof (si->blue_size + si->blue_pos) __UNIQUE_ID___y286 = (si->blue_size + si->blue_pos);
+       ((__UNIQUE_ID___x285) > (__UNIQUE_ID___y286) ? (__UNIQUE_ID___x285) : (__UNIQUE_ID___y286));
+   }))))__builtin_choose_expr(((!!(sizeof ((typeof (__builtin_choose_expr(((!!(sizeof ((typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) *)1 == (typeof (si->blue_size + si->blue_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->blue_size + si->blue_pos) * 0L)) : (int *)8))))), (((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) > (si->blue_size + si->blue_pos) ? ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) : (si->blue_size + si->blue_pos)), ({
+       typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) __UNIQUE_ID___x285 = ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+           typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+           typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+           ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+       })));
+       typeof (si->blue_size + si->blue_pos) __UNIQUE_ID___y286 = (si->blue_size + si->blue_pos);
+       ((__UNIQUE_ID___x285) > (__UNIQUE_ID___y286) ? (__UNIQUE_ID___x285) : (__UNIQUE_ID___y286));
+   }))) *)1 == (typeof (si->rsvd_size + si->rsvd_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(__builtin_choose_expr(((!!(sizeof ((typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) *)1 == (typeof (si->blue_size + si->blue_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->blue_size + si->blue_pos) * 0L)) : (int *)8))))), (((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) > (si->blue_size + si->blue_pos) ? ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) : (si->blue_size + si->blue_pos)), ({
+       typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) __UNIQUE_ID___x285 = ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+           typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+           typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+           ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+       })));
+       typeof (si->blue_size + si->blue_pos) __UNIQUE_ID___y286 = (si->blue_size + si->blue_pos);
+       ((__UNIQUE_ID___x285) > (__UNIQUE_ID___y286) ? (__UNIQUE_ID___x285) : (__UNIQUE_ID___y286));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->rsvd_size + si->rsvd_pos) * 0L)) : (int *)8))))), ((__builtin_choose_expr(((!!(sizeof ((typeof ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) *)1 == (typeof (si->blue_size + si->blue_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->blue_size + si->blue_pos) * 0L)) : (int *)8))))), (((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) > (si->blue_size + si->blue_pos) ? ((typeof (si->red_size + si->red_pos))__builtin_choose_expr(((!!(sizeof ((typeof (si->red_size + si->red_pos) *)1 == (typeof (si->green_size + si->green_pos) *)1))) && ((sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->red_size + si->red_pos) * 0L)) : (int *)8))) && (sizeof(int) == sizeof (*(8 ? ((void *)((long)(si->green_size + si->green_pos) * 0L)) : (int *)8))))), ((si->red_size + si->red_pos) > (si->green_size + si->green_pos) ? (si->red_size + si->red_pos) : (si->green_size + si->green_pos)), ({
+       typeof (si->red_size + si->red_pos) __UNIQUE_ID___x283 = (si->red_size + si->red_pos);
+       typeof (si->green_size + si->green_pos) __UNIQUE_ID___y284 = (si->green_size + si->green_pos);
+       ((__UNIQUE_ID___x283) > (__UNIQUE_ID___y284) ? (__UNIQUE_ID___x283) : (__UNIQUE_ID___y284));
+   }))) : (si->blue_size + si->blue_pos)), ({
 
 
-vim +/bpf_uprobe_multi_link_attach +799 include/linux/trace_events.h
+vim +60 drivers/firmware/sysfb_simplefb.c
 
-   766	
-   767	static inline int
-   768	perf_event_query_prog_array(struct perf_event *event, void __user *info)
-   769	{
-   770		return -EOPNOTSUPP;
-   771	}
-   772	static inline int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *p)
-   773	{
-   774		return -EOPNOTSUPP;
-   775	}
-   776	static inline int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf_prog *p)
-   777	{
-   778		return -EOPNOTSUPP;
-   779	}
-   780	static inline struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
-   781	{
-   782		return NULL;
-   783	}
-   784	static inline void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp)
-   785	{
-   786	}
-   787	static inline int bpf_get_perf_event_info(const struct perf_event *event,
-   788						  u32 *prog_id, u32 *fd_type,
-   789						  const char **buf, u64 *probe_offset,
-   790						  u64 *probe_addr)
-   791	{
-   792		return -EOPNOTSUPP;
-   793	}
-   794	static inline int
-   795	bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   796	{
-   797		return -EOPNOTSUPP;
-   798	}
- > 799	int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-   800	{
-   801		return -EOPNOTSUPP;
-   802	}
-   803	#endif
-   804	
+    25	
+    26	/* try parsing screen_info into a simple-framebuffer mode struct */
+    27	__init bool sysfb_parse_mode(const struct screen_info *si,
+    28				     struct simplefb_platform_data *mode)
+    29	{
+    30		__u8 type;
+    31		u32 bits_per_pixel;
+    32		unsigned int i;
+    33	
+    34		type = si->orig_video_isVGA;
+    35		if (type != VIDEO_TYPE_VLFB && type != VIDEO_TYPE_EFI)
+    36			return false;
+    37	
+    38		/*
+    39		 * The meaning of depth and bpp for direct-color formats is
+    40		 * inconsistent:
+    41		 *
+    42		 *  - DRM format info specifies depth as the number of color
+    43		 *    bits; including alpha, but not including filler bits.
+    44		 *  - Linux' EFI platform code computes lfb_depth from the
+    45		 *    individual color channels, including the reserved bits.
+    46		 *  - VBE 1.1 defines lfb_depth for XRGB1555 as 16, but later
+    47		 *    versions use 15.
+    48		 *  - On the kernel command line, 'bpp' of 32 is usually
+    49		 *    XRGB8888 including the filler bits, but 15 is XRGB1555
+    50		 *    not including the filler bit.
+    51		 *
+    52		 * It's not easily possible to fix this in struct screen_info,
+    53		 * as this could break UAPI. The best solution is to compute
+    54		 * bits_per_pixel from the color bits, reserved bits and
+    55		 * reported lfb_depth, whichever is highest.  In the loop below,
+    56		 * ignore simplefb formats with alpha bits, as EFI and VESA
+    57		 * don't specify alpha channels.
+    58		 */
+    59		if (si->lfb_depth > 8) {
+  > 60			bits_per_pixel = max3(max3(si->red_size + si->red_pos,
+    61						  si->green_size + si->green_pos,
+    62						  si->blue_size + si->blue_pos),
+    63					     si->rsvd_size + si->rsvd_pos,
+    64					     si->lfb_depth);
+    65		} else {
+    66			bits_per_pixel = si->lfb_depth;
+    67		}
+    68	
+    69		for (i = 0; i < ARRAY_SIZE(formats); ++i) {
+    70			const struct simplefb_format *f = &formats[i];
+    71	
+    72			if (f->transp.length)
+    73				continue; /* transparent formats are unsupported by VESA/EFI */
+    74	
+    75			if (bits_per_pixel == f->bits_per_pixel &&
+    76			    si->red_size == f->red.length &&
+    77			    si->red_pos == f->red.offset &&
+    78			    si->green_size == f->green.length &&
+    79			    si->green_pos == f->green.offset &&
+    80			    si->blue_size == f->blue.length &&
+    81			    si->blue_pos == f->blue.offset) {
+    82				mode->format = f->name;
+    83				mode->width = si->lfb_width;
+    84				mode->height = si->lfb_height;
+    85				mode->stride = si->lfb_linelength;
+    86				return true;
+    87			}
+    88		}
+    89	
+    90		return false;
+    91	}
+    92	
 
 -- 
 0-DAY CI Kernel Test Service
