@@ -1,45 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FEF179;
-	Wed, 19 Apr 2023 00:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7DA15A8;
+	Wed, 19 Apr 2023 00:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681863599; x=1713399599;
+  t=1681864822; x=1713400822;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oVlUKJAhAzFmBsriH2rfMnbr7Dx4Kz8bc5EMVu7lhdU=;
-  b=Z1UtIo0LGA3+NG2U/Ixi0m0Hgqnb89neTfb8gKx5XKkpyEM3HJeG4u8e
-   4cGU7wt6WuJiOR0R4T/0XYqfv8J6zmPNLNXA1cK8+Ttv6G1bLQk/bGHzo
-   jeDIeujXv4aaFuAfMpeVSyTueLaxlDPlJFwGdCYVmneqo1vb6qQkLTOe4
-   tzdgyqJnafuxOsAUeaVlbJF+De/NcRu0dBzx6YDvOXYTk/dc0jK5wHCg9
-   wIeKTyXOZiNB2qoCoqk7Xpldx15Bl86JRu/eMYH7MQWKyMwOwneVXBFLm
-   sO/s0lAeoW82zctpu6H4T4bLztdqmS/0p/xTAAYxCpsH1g3do7eWGRqOV
+  bh=Xv7xq9+ZhiLjo2ODmCjD20z8I2Htku92+m8r9xet5Cc=;
+  b=MBw3KiIZ+ma1uOagWoyJZlQww40gqSuSOFRzq4cwANgsXQvxPNa8YzcT
+   yktDEqRmM6nSm15+sV2Tm86zlZxEglDoykQRAtoY41G3XmCeCUqVq4FUe
+   sKliktSXGHPgwuFRvhM0C/MrfLrnspt/M9j7dpmSKYNkS4nrNj20+ZAqm
+   +WGjPQcjUDI3SRufPr23uB44fwvclv1mQLKub6vQKKQEYL5k94zRbYc0E
+   Z/0AVnsS7+qdn9cPSk2h4CNvZEK1FdLEWBvJA4G9LkrSAr2/HvIwBsljV
+   EQRZVlc9AWADJKX/U/M9p8tU5eQ707g1cMAGdwxC9rLOzEcnctLsJPy/W
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="373193461"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="325653982"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="373193461"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 17:19:21 -0700
+   d="scan'208";a="325653982"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 17:40:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="780667641"
+X-IronPort-AV: E=McAfee;i="6600,9927,10684"; a="641556561"
 X-IronPort-AV: E=Sophos;i="5.99,208,1677571200"; 
-   d="scan'208";a="780667641"
+   d="scan'208";a="641556561"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2023 17:19:19 -0700
+  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2023 17:40:19 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1povXa-000eGT-1X;
-	Wed, 19 Apr 2023 00:19:18 +0000
-Date: Wed, 19 Apr 2023 08:18:43 +0800
+	id 1povrv-000eHv-0f;
+	Wed, 19 Apr 2023 00:40:19 +0000
+Date: Wed, 19 Apr 2023 08:39:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Tejun Heo <tj@kernel.org>
-Subject: [linux-stable-rc:linux-5.15.y 9993/9999]
- kernel/cgroup/cpuset.c:2979:23: error: use of undeclared identifier
- 'cgroup_mutex'; did you mean 'cgroup_put'?
-Message-ID: <202304190816.wyhGAfIY-lkp@intel.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:uprobe_multi 1/17] include/linux/trace_events.h:799:5:
+ warning: no previous prototype for function 'bpf_uprobe_multi_link_attach'
+Message-ID: <202304190821.LhAbwJXK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,177 +46,364 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   0b6a5617247cb685e4efb226d56074068ad8d0ce
-commit: 91ee1d88edbef3f1620d5fbaa1649680e586a5a8 [9993/9999] cgroup/cpuset: Add cpuset_can_fork() and cpuset_cancel_fork() methods
-config: s390-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230419/202304190816.wyhGAfIY-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git uprobe_multi
+head:   663cc4c067c5af744475e3a7573e3cd5b4647ef3
+commit: fe88ac2cbf6177d5ed19dd8a6f4cf7e066d6aa95 [1/17] bpf: Add multi uprobe link
+config: arm-buildonly-randconfig-r002-20230418 (https://download.01.org/0day-ci/archive/20230419/202304190821.LhAbwJXK-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=91ee1d88edbef3f1620d5fbaa1649680e586a5a8
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 91ee1d88edbef3f1620d5fbaa1649680e586a5a8
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=fe88ac2cbf6177d5ed19dd8a6f4cf7e066d6aa95
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf uprobe_multi
+        git checkout fe88ac2cbf6177d5ed19dd8a6f4cf7e066d6aa95
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/cgroup/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304190816.wyhGAfIY-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304190821.LhAbwJXK-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/cgroup/cpuset.c:60:
-   In file included from include/linux/backing-dev.h:15:
-   In file included from include/linux/blkdev.h:23:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/cgroup/cpuset.c:60:
-   In file included from include/linux/backing-dev.h:15:
-   In file included from include/linux/blkdev.h:23:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/cgroup/cpuset.c:60:
-   In file included from include/linux/backing-dev.h:15:
-   In file included from include/linux/blkdev.h:23:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/cgroup/cpuset.c:2979:23: error: use of undeclared identifier 'cgroup_mutex'; did you mean 'cgroup_put'?
-           lockdep_assert_held(&cgroup_mutex);
-                                ^~~~~~~~~~~~
-                                cgroup_put
-   include/linux/lockdep.h:320:33: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-                                          ^
-   include/linux/lockdep.h:290:47: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                          ^
-   include/linux/lockdep.h:314:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                                         ^
-   include/asm-generic/bug.h:166:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^
-   include/linux/cgroup.h:431:20: note: 'cgroup_put' declared here
-   static inline void cgroup_put(struct cgroup *cgrp)
+   In file included from init/main.c:21:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   init/main.c:779:20: warning: no previous prototype for function 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
+   void __init __weak arch_post_acpi_subsys_init(void) { }
                       ^
->> kernel/cgroup/cpuset.c:2979:2: error: member reference base type 'void (struct cgroup *)' is not a structure or union
-           lockdep_assert_held(&cgroup_mutex);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:320:17: note: expanded from macro 'lockdep_assert_held'
-           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-           ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:290:52: note: expanded from macro 'lockdep_is_held'
-   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-                                                               ^ ~~~~~~~
-   include/linux/lockdep.h:314:32: note: expanded from macro 'lockdep_assert'
-           do { WARN_ON(debug_locks && !(cond)); } while (0)
-                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:166:25: note: expanded from macro 'WARN_ON'
-           int __ret_warn_on = !!(condition);                              \
-                                  ^~~~~~~~~
-   12 warnings and 2 errors generated.
+   init/main.c:779:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak arch_post_acpi_subsys_init(void) { }
+   ^
+   static 
+   init/main.c:791:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
+   void __init __weak mem_encrypt_init(void) { }
+                      ^
+   init/main.c:791:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak mem_encrypt_init(void) { }
+   ^
+   static 
+   init/main.c:793:20: warning: no previous prototype for function 'poking_init' [-Wmissing-prototypes]
+   void __init __weak poking_init(void) { }
+                      ^
+   init/main.c:793:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak poking_init(void) { }
+   ^
+   static 
+   4 warnings generated.
+--
+   In file included from init/do_mounts.c:28:
+   In file included from init/do_mounts.h:5:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   1 warning generated.
+--
+   In file included from kernel/fork.c:55:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   kernel/fork.c:162:13: warning: no previous prototype for function 'arch_release_task_struct' [-Wmissing-prototypes]
+   void __weak arch_release_task_struct(struct task_struct *tsk)
+               ^
+   kernel/fork.c:162:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __weak arch_release_task_struct(struct task_struct *tsk)
+   ^
+   static 
+   kernel/fork.c:857:20: warning: no previous prototype for function 'arch_task_cache_init' [-Wmissing-prototypes]
+   void __init __weak arch_task_cache_init(void) { }
+                      ^
+   kernel/fork.c:857:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak arch_task_cache_init(void) { }
+   ^
+   static 
+   kernel/fork.c:952:12: warning: no previous prototype for function 'arch_dup_task_struct' [-Wmissing-prototypes]
+   int __weak arch_dup_task_struct(struct task_struct *dst,
+              ^
+   kernel/fork.c:952:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __weak arch_dup_task_struct(struct task_struct *dst,
+   ^
+   static 
+   4 warnings generated.
+--
+   In file included from kernel/cpu.c:40:
+   In file included from include/trace/events/power.h:12:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   kernel/cpu.c:110:20: warning: unused function 'cpuhp_lock_acquire' [-Wunused-function]
+   static inline void cpuhp_lock_acquire(bool bringup) { }
+                      ^
+   kernel/cpu.c:111:20: warning: unused function 'cpuhp_lock_release' [-Wunused-function]
+   static inline void cpuhp_lock_release(bool bringup) { }
+                      ^
+   3 warnings generated.
+--
+   In file included from fs/d_path.c:2:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   fs/d_path.c:317:7: warning: no previous prototype for function 'simple_dname' [-Wmissing-prototypes]
+   char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
+         ^
+   fs/d_path.c:317:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
+   ^
+   static 
+   2 warnings generated.
+--
+   In file included from arch/arm/kernel/signal.c:14:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   arch/arm/kernel/signal.c:142:15: warning: variable 'aux' set but not used [-Wunused-but-set-variable]
+           char __user *aux;
+                        ^
+   arch/arm/kernel/signal.c:186:16: warning: no previous prototype for function 'sys_sigreturn' [-Wmissing-prototypes]
+   asmlinkage int sys_sigreturn(struct pt_regs *regs)
+                  ^
+   arch/arm/kernel/signal.c:186:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int sys_sigreturn(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/signal.c:216:16: warning: no previous prototype for function 'sys_rt_sigreturn' [-Wmissing-prototypes]
+   asmlinkage int sys_rt_sigreturn(struct pt_regs *regs)
+                  ^
+   arch/arm/kernel/signal.c:216:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int sys_rt_sigreturn(struct pt_regs *regs)
+              ^
+              static 
+   arch/arm/kernel/signal.c:601:1: warning: no previous prototype for function 'do_work_pending' [-Wmissing-prototypes]
+   do_work_pending(struct pt_regs *regs, unsigned int thread_flags, int syscall)
+   ^
+   arch/arm/kernel/signal.c:600:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage int
+              ^
+              static 
+   5 warnings generated.
+--
+   In file included from arch/arm/kernel/sys_arm.c:20:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   arch/arm/kernel/sys_arm.c:32:17: warning: no previous prototype for function 'sys_arm_fadvise64_64' [-Wmissing-prototypes]
+   asmlinkage long sys_arm_fadvise64_64(int fd, int advice,
+                   ^
+   arch/arm/kernel/sys_arm.c:32:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage long sys_arm_fadvise64_64(int fd, int advice,
+              ^
+              static 
+   2 warnings generated.
+--
+   In file included from kernel/sched/core.c:13:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   kernel/sched/core.c:3631:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
+   static inline bool rq_has_pinned_tasks(struct rq *rq)
+                      ^
+   kernel/sched/core.c:5743:20: warning: unused function 'sched_tick_start' [-Wunused-function]
+   static inline void sched_tick_start(int cpu) { }
+                      ^
+   kernel/sched/core.c:5744:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
+   static inline void sched_tick_stop(int cpu) { }
+                      ^
+   kernel/sched/core.c:6437:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
+   static inline void sched_core_cpu_starting(unsigned int cpu) {}
+                      ^
+   kernel/sched/core.c:6438:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
+   static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
+                      ^
+   kernel/sched/core.c:6439:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
+   static inline void sched_core_cpu_dying(unsigned int cpu) {}
+                      ^
+   7 warnings generated.
+--
+   In file included from kernel/sched/fair.c:55:
+   In file included from kernel/sched/sched.h:61:
+   In file included from include/linux/syscalls_api.h:1:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   kernel/sched/fair.c:688:5: warning: no previous prototype for function 'sched_update_scaling' [-Wmissing-prototypes]
+   int sched_update_scaling(void)
+       ^
+   kernel/sched/fair.c:688:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int sched_update_scaling(void)
+   ^
+   static 
+   kernel/sched/fair.c:3200:20: warning: unused function 'account_numa_enqueue' [-Wunused-function]
+   static inline void account_numa_enqueue(struct rq *rq, struct task_struct *p)
+                      ^
+   kernel/sched/fair.c:3204:20: warning: unused function 'account_numa_dequeue' [-Wunused-function]
+   static inline void account_numa_dequeue(struct rq *rq, struct task_struct *p)
+                      ^
+   kernel/sched/fair.c:3208:20: warning: unused function 'update_scan_period' [-Wunused-function]
+   static inline void update_scan_period(struct task_struct *p, int new_cpu)
+                      ^
+   kernel/sched/fair.c:4598:20: warning: unused function 'cfs_rq_is_decayed' [-Wunused-function]
+   static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+                      ^
+   kernel/sched/fair.c:6083:20: warning: unused function 'cfs_bandwidth_used' [-Wunused-function]
+   static inline bool cfs_bandwidth_used(void)
+                      ^
+   kernel/sched/fair.c:6104:19: warning: unused function 'throttled_lb_pair' [-Wunused-function]
+   static inline int throttled_lb_pair(struct task_group *tg,
+                     ^
+   kernel/sched/fair.c:6121:20: warning: unused function 'update_runtime_enabled' [-Wunused-function]
+   static inline void update_runtime_enabled(struct rq *rq) {}
+                      ^
+   kernel/sched/fair.c:6122:20: warning: unused function 'unthrottle_offline_cfs_rqs' [-Wunused-function]
+   static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
+                      ^
+   10 warnings generated.
+--
+   In file included from kernel/time/hrtimer.c:30:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+>> include/linux/trace_events.h:799:5: warning: no previous prototype for function 'bpf_uprobe_multi_link_attach' [-Wmissing-prototypes]
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+       ^
+   include/linux/trace_events.h:799:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   ^
+   static 
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [CLOCK_MONOTONIC]       = HRTIMER_BASE_MONOTONIC,
+                                     ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [CLOCK_BOOTTIME]        = HRTIMER_BASE_BOOTTIME,
+                                     ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+           [CLOCK_TAI]             = HRTIMER_BASE_TAI,
+                                     ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+           [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:1648:7: warning: variable 'expires_in_hardirq' set but not used [-Wunused-but-set-variable]
+           bool expires_in_hardirq;
+                ^
+   kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base' [-Wunused-function]
+   static inline bool is_migration_base(struct hrtimer_clock_base *base)
+                      ^
+   kernel/time/hrtimer.c:1873:20: warning: unused function '__hrtimer_peek_ahead_timers' [-Wunused-function]
+   static inline void __hrtimer_peek_ahead_timers(void)
+                      ^
+   8 warnings generated.
 
 
-vim +2979 kernel/cgroup/cpuset.c
+vim +/bpf_uprobe_multi_link_attach +799 include/linux/trace_events.h
 
-  2961	
-  2962	/*
-  2963	 * In case the child is cloned into a cpuset different from its parent,
-  2964	 * additional checks are done to see if the move is allowed.
-  2965	 */
-  2966	static int cpuset_can_fork(struct task_struct *task, struct css_set *cset)
-  2967	{
-  2968		struct cpuset *cs = css_cs(cset->subsys[cpuset_cgrp_id]);
-  2969		bool same_cs;
-  2970		int ret;
-  2971	
-  2972		rcu_read_lock();
-  2973		same_cs = (cs == task_cs(current));
-  2974		rcu_read_unlock();
-  2975	
-  2976		if (same_cs)
-  2977			return 0;
-  2978	
-> 2979		lockdep_assert_held(&cgroup_mutex);
-  2980		percpu_down_write(&cpuset_rwsem);
-  2981	
-  2982		/* Check to see if task is allowed in the cpuset */
-  2983		ret = cpuset_can_attach_check(cs);
-  2984		if (ret)
-  2985			goto out_unlock;
-  2986	
-  2987		ret = task_can_attach(task, cs->effective_cpus);
-  2988		if (ret)
-  2989			goto out_unlock;
-  2990	
-  2991		ret = security_task_setscheduler(task);
-  2992		if (ret)
-  2993			goto out_unlock;
-  2994	
-  2995		/*
-  2996		 * Mark attach is in progress.  This makes validate_change() fail
-  2997		 * changes which zero cpus/mems_allowed.
-  2998		 */
-  2999		cs->attach_in_progress++;
-  3000	out_unlock:
-  3001		percpu_up_write(&cpuset_rwsem);
-  3002		return ret;
-  3003	}
-  3004	
+   766	
+   767	static inline int
+   768	perf_event_query_prog_array(struct perf_event *event, void __user *info)
+   769	{
+   770		return -EOPNOTSUPP;
+   771	}
+   772	static inline int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *p)
+   773	{
+   774		return -EOPNOTSUPP;
+   775	}
+   776	static inline int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf_prog *p)
+   777	{
+   778		return -EOPNOTSUPP;
+   779	}
+   780	static inline struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
+   781	{
+   782		return NULL;
+   783	}
+   784	static inline void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp)
+   785	{
+   786	}
+   787	static inline int bpf_get_perf_event_info(const struct perf_event *event,
+   788						  u32 *prog_id, u32 *fd_type,
+   789						  const char **buf, u64 *probe_offset,
+   790						  u64 *probe_addr)
+   791	{
+   792		return -EOPNOTSUPP;
+   793	}
+   794	static inline int
+   795	bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   796	{
+   797		return -EOPNOTSUPP;
+   798	}
+ > 799	int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+   800	{
+   801		return -EOPNOTSUPP;
+   802	}
+   803	#endif
+   804	
 
 -- 
 0-DAY CI Kernel Test Service
