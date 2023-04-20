@@ -1,151 +1,247 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E5B320A;
-	Thu, 20 Apr 2023 08:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8791E17C9;
+	Thu, 20 Apr 2023 08:44:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681978044; x=1713514044;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=/ckzCdn/T8hTSSuTtUuVXreQcLFA60BL/MtHY2rAEus=;
-  b=gCBq0nmu60r1aqK78tQQsgox2CQw3VIyBluQ4kgfG8thGuY6SbPrGOrp
-   1Mgbb78bDudFsxmaVUDGtKkk0OMuC6EEqf8MziwLULyVhkluWFgZx3T3g
-   YaPZ7/u1Y6pQiT3ohQBQQKvSwxrf0txE3Z+3cBCKkuo36oskl3jTjtY77
-   BcnaU2REtELYcqoAAQTSMBJy3+31iSCw7hxm8nSuGtLzxSFIWbvDhF2Th
-   jgCsdLANXLreqQlY2U0U6rnpat+3mLTKlwOXCeEt6mOWDIT55nT4VYFT9
-   PKez+dtzGh8ta+46MCVeDLia4PN2vITs9ttsPnaiT1+mEjkd6yfo9nOju
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="348428544"
+  t=1681980275; x=1713516275;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YjGQstfvvhcdHzIV9JHIeUC2gb3iKkrxZIq09mdWRmk=;
+  b=VQuzxcavnKsRbSpErnqY5HSZyyaApQx/grYApFoes9qFhne9l00aA2lh
+   dfqw5HGKC1RtxCtNOHgaITKRG4wFdr/yGYUAzHHm2zHDe2MXPszenzsOb
+   MPKaktOqqDzQGUEw3nEme8Nv3g0rBT6OHnCYd4Ym5iC4tp1WWSdbXG5eB
+   Mvfs2Da9r+Shxyd0LdwYRAQ1Ep3eprMaYWy3mLp3chR1oTFuDq6DsS0v1
+   0QahVWxvQ426IeP18N4ocoKZQCBK0RZXhxH7ZG757OCpY3jfzO1qQaXyt
+   KPRj0E+xGz8bRmhpFwsHb70dJC+N8kda90KLRSoFBy/bSlW9ibboDZE/b
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="325282856"
 X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="348428544"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:07:23 -0700
+   d="scan'208";a="325282856"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 01:44:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="756407789"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="937977405"
 X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="756407789"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Apr 2023 01:07:22 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 20 Apr 2023 01:07:22 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 20 Apr 2023 01:07:22 -0700
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.46) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 20 Apr 2023 01:07:21 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d/FhuupFJ+MzQzoB0VCPanwCC0nHyARut9If4qbKta8GVdgEWy6IJw94hIY6rJXJsvptprU8dPyB6wO1vMNaDISorF3CHBkv+slyzNLYzbNie5nIDx3KqoiLXDwPUejW0jgNxd27fhlH40+EnNKLkou4xTJV0EBpwOgLlpXiFwwJ6jFdgdH7g1YkXIqPNHSj0Xp3oCMAQkJXEkgDQbHCp4HfIOwfVApxSucJFe85UrflFziwzWrngLczQn8R2Eq8Hgm7ib7dYD9AnQnmu4xyb2gc4FS4WhWaPHQOrSGk/9SNajjmbTMuo32xn/U6s2qsldpqWz4wicTmAgxxikR5ig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/ckzCdn/T8hTSSuTtUuVXreQcLFA60BL/MtHY2rAEus=;
- b=Xxp+HRqMkTUFZV6yU78UPV/PtZaFOySq846/cPFVgY+py3EzvGcR/Xxh9F53z2LuQVOWS7kJOHCfbgG6nonJN3NzTjKFw+UfxkdhSjUCG7t8usFaMhLQFYtL/dlz7Hpm+YGiYWohcQvzf8zVVKWTCc2nmsRyjGWH81CtlbA5R1HK4CvKs2PKHXKTiBM6hrpZOJ5lHz3zsmOaBCTBFOe58/qcBDdfp0PHH4KPb+7kS3bM9qWMlYnqFaR9bC+DA3siuduc5Vk81XG+EtT+M/m788KjRfj+2AwMkfyAGCVcjctZVoER7OjqHP4k/PgwqM9F+m6iyTrkl1/zj98EkT1PKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
- by SJ1PR11MB6300.namprd11.prod.outlook.com (2603:10b6:a03:455::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Thu, 20 Apr
- 2023 08:07:18 +0000
-Received: from BL1PR11MB5271.namprd11.prod.outlook.com
- ([fe80::5e54:1212:2071:613f]) by BL1PR11MB5271.namprd11.prod.outlook.com
- ([fe80::5e54:1212:2071:613f%8]) with mapi id 15.20.6319.022; Thu, 20 Apr 2023
- 08:07:18 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda
-	<ojeda@kernel.org>, Robin Murphy <robin.murphy@arm.com>, "Rix, Tom"
-	<trix@redhat.com>, Will Deacon <will@kernel.org>
-CC: Lu Baolu <baolu.lu@linux.intel.com>, Nicolin Chen <nicolinc@nvidia.com>
-Subject: RE: [PATCH v4 17/17] iommu: Tidy the control flow in
- iommu_group_store_type()
-Thread-Topic: [PATCH v4 17/17] iommu: Tidy the control flow in
- iommu_group_store_type()
-Thread-Index: AQHZbUYFPy0HUU4rhEeIheeCXzTSvK8z45Dw
-Date: Thu, 20 Apr 2023 08:07:18 +0000
-Message-ID: <BL1PR11MB527193DB1A5F0951524131028C639@BL1PR11MB5271.namprd11.prod.outlook.com>
-References: <0-v4-79d0c229580a+650-iommu_err_unwind_jgg@nvidia.com>
- <17-v4-79d0c229580a+650-iommu_err_unwind_jgg@nvidia.com>
-In-Reply-To: <17-v4-79d0c229580a+650-iommu_err_unwind_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5271:EE_|SJ1PR11MB6300:EE_
-x-ms-office365-filtering-correlation-id: 334582fd-3be8-4a8b-9dab-08db41764282
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /RvAJQNn3sXLITkYeMontFbolw9pnXzgKdr5JhQD7boUdOQDjEN1I1AeuOxozUGFFciXbuM9ClOh42/1z8nOo/timEQhKOrgeKrBs83ElXj/a8qXogWsuhspnOj5uhsegwbpoC+RBny583R085IUiU7p4Poat6/3c62Dg+PLPNKoFmuigkca6iSxg/IZLKgA5OlmD3h8LZcI+Fx4fX7btm3D3LogutB2xkm7QX4hVrHjke1w6zlF7v7ybd9JB4dJi78zAUFTMgIi0pMrrt4ni+FtEZt6IXDWMFdn2qtIH8WqtJDt0G2rwvVjY18dewCoUjxMQ0BLK1HkcOXJSBxbGm8Ww93mrjvJW4j3wEatbpDGBlaEQVUDn008D7g0lDy6eLuek+EDaMiK4Yk38dhlO85nrsLRUwgF37SJRcgM5AgkITv1JD2KQl+FcbFYQ21jcVc1DTxiSEk8YPIlLiiFSRdZ7zTiEM5vX8WFjL4iDSj55IIGR28cv2F8njGleIW2ksbCh2t9ECWkAUKTdzgRafbPhEblxhASf9MydzojwEoKINnfsVz1oRehqhXCvy/mX1IdvsZW8YXMLR9wHqCu58yY3L25ODBVIchkG/jLyb1zHN6WZHb7M4nfsV9+QL46
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(376002)(346002)(396003)(366004)(451199021)(122000001)(4326008)(316002)(54906003)(110136005)(64756008)(76116006)(66946007)(66556008)(66476007)(66446008)(186003)(6506007)(26005)(9686003)(38100700002)(83380400001)(5660300002)(41300700001)(8676002)(55016003)(8936002)(478600001)(7696005)(71200400001)(38070700005)(33656002)(558084003)(86362001)(2906002)(7416002)(52536014)(82960400001)(921005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BDXgmmiGN0yEhnfaxWSi4HUBvGqfchFGYoH8tNRI/jTQiJYQd5L9qf7OwRWS?=
- =?us-ascii?Q?eIjZVrzSa602ziDP79sHtbMO6JvFh2dUFcRga15FPi46S3kCiLAPF0ZlhbMY?=
- =?us-ascii?Q?gNMlluq34FoU7609VYBBNAo8SPmkICOywOJoso8cg3urgCnPu2qmJWq8X5I6?=
- =?us-ascii?Q?18vjofTpp9eRfOdOJL6ZVuB0bhAz9/XMwaioWxD6otZIQgpxByN5rZU33ke2?=
- =?us-ascii?Q?EYxVt1yM8Eo8JSbPqCI9DlxUlWNL54ypNH8HhMfLYvSOccXDHEpvyOBGTg9i?=
- =?us-ascii?Q?JwAdgGxApoB5IXP/raIyW7v1iZJV3lvBE2XVYeudmHKwMjQPGsmKD+td4SOa?=
- =?us-ascii?Q?uePS9gzMZr3d52Ix7t12FhAfW5y61u1WjySH65kQ6BDfjg8l5atHd/kkG1ei?=
- =?us-ascii?Q?xVdO7OwowgJVTHDDujroBNqY0iMoAr72fuMZ3FHkyCjHKFwFFB4OBwr5y3Mb?=
- =?us-ascii?Q?y6kcj73MiGQtzZAHKMYYaNPKjJTcgmI+evVMV7PthKYHNJs3T0kwz5k+d2Re?=
- =?us-ascii?Q?WwUOaJ7Xg9elFZQCZliyOhJZM/pQCbuyWV7/+pIn/1dYV9AxKKaajC6DGuLM?=
- =?us-ascii?Q?N+pdBTMpfhyvHvG7bL39VlBODEq0Qic3nLum2N6ZhzDN0yYXn1u8g8/zaGvo?=
- =?us-ascii?Q?DowxiAA9JrE1hsoP1cBWEGmkgMV2+zX2D4JF0nVArP6NrJ5mke8E6us/06Yd?=
- =?us-ascii?Q?84zGIAOtqO/NszYSlYu0vXp3jhgNW/FM8ymT8t78n3H37KrLprN5whMZf2TB?=
- =?us-ascii?Q?DW1s/TbbiItAVDooB+kBLV4mB0kxo2FIZ3228vz6sGY/W+ghFcImQXa6zgQm?=
- =?us-ascii?Q?BGwWWIiXnIWvHwHgvQVoFIcLo5zGZoz6bXoQPCjrmcj8i+8NJfku07uzX6a5?=
- =?us-ascii?Q?caX6SvkAor2dmwK2AUbV7YKu2YaDiDJGPMO+nx4BbF/Yt5CeeMubbfclVkhX?=
- =?us-ascii?Q?FzDAy+POYjvXDHjneABFMzeVEdMIqISv2VKlBNPFJVziSwceTQtju+zKjRbA?=
- =?us-ascii?Q?rVgi8oAJnZLqZxCEFG0ELXibwYPGT18u5h3KYZLapvBBv8xm2H9S3ke+QmVb?=
- =?us-ascii?Q?sGVGl5FiDdf78XIR+ItMeg1+N+6PTbuAWEhqh5uR2H1crp48igB0d/6a8wZz?=
- =?us-ascii?Q?yl8lc19ouw6LAz8rv3p4HjKt+Q6pZ1Ve1Cum5bs6yMa2VzHoaCl9mq2uSpk5?=
- =?us-ascii?Q?DZnXecLRQpMYdfV81I6kcEeLNhMER/6AzNEUUVa/qCotjMcjHfsorTgqmApQ?=
- =?us-ascii?Q?Fk3vAqQ9o4NpdFidqgY1xeQvBX/HEBDcX6TVbqPkki8lua4Ko3yftplNa1rV?=
- =?us-ascii?Q?Op7hMQNP7B0LTV8YyuUvEpqaT2fQVMHwWWuffgjPcs3YBTZ8M1hmn/AhNlON?=
- =?us-ascii?Q?G86VoZ+npaRgjX1sXWG4u9uWsP95nR8rg2HSBGM5smZDyuAicgaqCvepF3fr?=
- =?us-ascii?Q?U5pLVdEFTfVmHObc6qbyz1N0HkrR/c3qV9Xn//rtTZKE/MJXIozYrgGyTxR7?=
- =?us-ascii?Q?L+FRN8S7A2nCNMtxft4fpM+xdlmk9p6hQ6LhDTxcbJGzyQoHbTdEiA/jxWS6?=
- =?us-ascii?Q?fWkWeIKxxZ2erzp6xR74+NIvQVqjtD/of9YAcNlZ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+   d="scan'208";a="937977405"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Apr 2023 01:44:33 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ppPu4-000fdY-1p;
+	Thu, 20 Apr 2023 08:44:32 +0000
+Date: Thu, 20 Apr 2023 16:43:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: peili.dev@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] Reduce vdpa initialization / startup overhead for
+ ioctl()
+Message-ID: <202304201654.2ewx6SeJ-lkp@intel.com>
+References: <20230420052026.1883230-1-peili.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 334582fd-3be8-4a8b-9dab-08db41764282
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2023 08:07:18.0543
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Vs/gbjdOS/C8eaPZZYzGV1Ph6nGDyf3FfukRSXYSwLgDRcmdAgW5UAsd8N4HasbXnrg3BE+s6Jcx3QpdpNsk1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6300
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420052026.1883230-1-peili.dev@gmail.com>
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Wednesday, April 12, 2023 9:52 PM
->=20
-> Use a normal "goto unwind" instead of trying to be clever with checking
-> !ret and manually managing the unlock.
->=20
-> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Hi,
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on mst-vhost/linux-next]
+[also build test ERROR on linus/master v6.3-rc7 next-20230419]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/peili-dev-gmail-com/Reduce-vdpa-initialization-startup-overhead-for-ioctl/20230420-132556
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20230420052026.1883230-1-peili.dev%40gmail.com
+patch subject: [RFC PATCH] Reduce vdpa initialization / startup overhead for ioctl()
+config: i386-randconfig-a012-20230417 (https://download.01.org/0day-ci/archive/20230420/202304201654.2ewx6SeJ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ab8e2356cbe7e460fb8d5e16d57db96737f000b7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review peili-dev-gmail-com/Reduce-vdpa-initialization-startup-overhead-for-ioctl/20230420-132556
+        git checkout ab8e2356cbe7e460fb8d5e16d57db96737f000b7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/vhost/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304201654.2ewx6SeJ-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/vhost/vdpa.c:558:6: error: indirection requires pointer operand ('unsigned int' invalid)
+           r = get_user(num, ((struct vhost_vring_state __user *)argp)->num);
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:130:43: note: expanded from macro 'get_user'
+   #define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:101:21: note: expanded from macro 'do_get_user_call'
+           register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);            \
+                    ~~~~~~~~~~^~~~~~~
+   arch/x86/include/asm/uaccess.h:72:13: note: expanded from macro '__inttype'
+           __typefits(x,char,                      \
+           ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:78:31: note: expanded from macro '__typefits'
+           __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
+                                        ^
+>> drivers/vhost/vdpa.c:558:6: error: indirection requires pointer operand ('unsigned int' invalid)
+           r = get_user(num, ((struct vhost_vring_state __user *)argp)->num);
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:130:43: note: expanded from macro 'get_user'
+   #define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:101:21: note: expanded from macro 'do_get_user_call'
+           register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);            \
+                    ~~~~~~~~~~^~~~~~~
+   arch/x86/include/asm/uaccess.h:73:15: note: expanded from macro '__inttype'
+             __typefits(x,short,                   \
+             ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:78:31: note: expanded from macro '__typefits'
+           __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
+                                        ^
+   arch/x86/include/asm/uaccess.h:78:65: note: expanded from macro '__typefits'
+           __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
+                                                                          ^~~
+>> drivers/vhost/vdpa.c:558:6: error: indirection requires pointer operand ('unsigned int' invalid)
+           r = get_user(num, ((struct vhost_vring_state __user *)argp)->num);
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:130:43: note: expanded from macro 'get_user'
+   #define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:101:21: note: expanded from macro 'do_get_user_call'
+           register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);            \
+                    ~~~~~~~~~~^~~~~~~
+   arch/x86/include/asm/uaccess.h:74:17: note: expanded from macro '__inttype'
+               __typefits(x,int,                   \
+               ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:78:31: note: expanded from macro '__typefits'
+           __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
+                                        ^
+   arch/x86/include/asm/uaccess.h:78:65: note: expanded from macro '__typefits'
+           __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
+                                                                          ^
+   arch/x86/include/asm/uaccess.h:78:65: note: expanded from macro '__typefits'
+           __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
+                                                                          ^~~
+>> drivers/vhost/vdpa.c:558:6: error: indirection requires pointer operand ('unsigned int' invalid)
+           r = get_user(num, ((struct vhost_vring_state __user *)argp)->num);
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:130:43: note: expanded from macro 'get_user'
+   #define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:101:21: note: expanded from macro 'do_get_user_call'
+           register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);            \
+                    ~~~~~~~~~~^~~~~~~
+   arch/x86/include/asm/uaccess.h:75:19: note: expanded from macro '__inttype'
+                 __typefits(x,long,0ULL)))))
+                 ~~~~~~~~~~~^~~~~~~~~~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   arch/x86/include/asm/uaccess.h:78:65: note: expanded from macro '__typefits'
+           __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
+                                                                          ^
+   arch/x86/include/asm/uaccess.h:78:65: note: expanded from macro '__typefits'
+   arch/x86/include/asm/uaccess.h:78:65: note: expanded from macro '__typefits'
+           __builtin_choose_expr(sizeof(x)<=sizeof(type),(unsigned type)0,not)
+                                                                          ^~~
+>> drivers/vhost/vdpa.c:558:6: error: indirection requires pointer operand ('unsigned int' invalid)
+           r = get_user(num, ((struct vhost_vring_state __user *)argp)->num);
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:130:43: note: expanded from macro 'get_user'
+   #define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/include/asm/uaccess.h:108:28: note: expanded from macro 'do_get_user_call'
+           (x) = (__force __typeof__(*(ptr))) __val_gu;                    \
+                                     ^~~~~~
+>> drivers/vhost/vdpa.c:565:34: warning: variable length array used [-Wvla]
+           struct vhost_vring_state states[num + 1];
+                                           ^~~~~~~
+>> drivers/vhost/vdpa.c:565:27: warning: mixing declarations and code is incompatible with standards before C99 [-Wdeclaration-after-statement]
+           struct vhost_vring_state states[num + 1];
+                                    ^
+   2 warnings and 5 errors generated.
+
+
+vim +558 drivers/vhost/vdpa.c
+
+   546	
+   547	static long vhost_vdpa_vring_ioctl_batch(struct vhost_vdpa *v, unsigned int cmd,
+   548					   void __user *argp)
+   549	{
+   550		struct vdpa_device *vdpa = v->vdpa;
+   551		const struct vdpa_config_ops *ops = vdpa->config;
+   552		struct vhost_virtqueue *vq;
+   553		struct vhost_vring_state s;
+   554	
+   555		u32 idx, num, i;
+   556		long r;
+   557	
+ > 558		r = get_user(num, ((struct vhost_vring_state __user *)argp)->num);
+   559		if (r < 0) {
+   560			return r;
+   561		}
+   562	
+   563		num = array_index_nospec(num, v->nvqs);
+   564	
+ > 565		struct vhost_vring_state states[num + 1];
+   566	
+   567		if (copy_from_user(&states, argp, sizeof(states)))
+   568			return -EFAULT;
+   569	
+   570		switch (cmd) {
+   571		case VHOST_VDPA_SET_VRING_ENABLE_BATCH:
+   572			for (i = 1; i <= num; i++) {
+   573				i = array_index_nospec(i, num + 1);
+   574				idx = states[i].index;
+   575				if (idx >= v->nvqs)
+   576					return -ENOBUFS;
+   577	
+   578				idx = array_index_nospec(idx, v->nvqs);
+   579	
+   580				ops->set_vq_ready(vdpa, idx, 1);
+   581			}
+   582			return 0;
+   583		case VHOST_VDPA_GET_VRING_GROUP_BATCH:
+   584			if (!ops->get_vq_group)
+   585				return -EOPNOTSUPP;
+   586			
+   587			for (i = 1; i <= num; i++) {
+   588				i = array_index_nospec(i, num + 1);
+   589				idx = states[i].index;
+   590				if (idx >= v->nvqs)
+   591					return -ENOBUFS;
+   592				idx = array_index_nospec(idx, v->nvqs);
+   593				states[i].num = ops->get_vq_group(vdpa, idx);
+   594				if (states[i].num >= vdpa->ngroups)
+   595					return -EIO;
+   596			}
+   597	
+   598			if (copy_to_user(argp, &states, sizeof(states)))
+   599				return -EFAULT;
+   600	
+   601			return 0;
+   602		default:
+   603			r = ENOIOCTLCMD;
+   604		}
+   605	
+   606		return r;
+   607	}
+   608	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
