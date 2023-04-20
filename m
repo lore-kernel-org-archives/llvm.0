@@ -1,70 +1,109 @@
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99C15661
-	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 11:51:01 +0000 (UTC)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-3-VYKQSiZZMzCrXX5nBd03kw-1; Thu, 20 Apr 2023 12:50:58 +0100
-X-MC-Unique: VYKQSiZZMzCrXX5nBd03kw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 20 Apr
- 2023 12:50:57 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 20 Apr 2023 12:50:57 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Fangrui Song' <maskray@google.com>, Florent Revest <revest@google.com>
-CC: Nick Desaulniers <ndesaulniers@google.com>, Joel Fernandes
-	<joel@joelfernandes.org>, "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-	"nathan@kernel.org" <nathan@kernel.org>, "trix@redhat.com" <trix@redhat.com>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "paulmck@kernel.org" <paulmck@kernel.org>,
-	"revest@chromium.org" <revest@chromium.org>
-Subject: RE: clangd cannot handle tree_nocb.h
-Thread-Topic: clangd cannot handle tree_nocb.h
-Thread-Index: AQHZcvnZ+BIUvq3YZUeAuVWwOlp7wa80FdDw
-Date: Thu, 20 Apr 2023 11:50:57 +0000
-Message-ID: <e6c8e08dfc8a4895aca44571d26fa445@AcuMS.aculab.com>
-References: <20230414005309.GA2198310@google.com>
- <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
- <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com>
- <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com>
- <CAFP8O3KQRbmgyvuyuxNOa6TZ7MawN7YoGHvpFQ=oibEo3aUfDQ@mail.gmail.com>
-In-Reply-To: <CAFP8O3KQRbmgyvuyuxNOa6TZ7MawN7YoGHvpFQ=oibEo3aUfDQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9682E5661
+	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 12:21:33 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 8C5AA5C017F;
+	Thu, 20 Apr 2023 08:21:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 20 Apr 2023 08:21:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1681993292; x=1682079692; bh=aj
+	j8ckcYRmO7dOoo1JmsRpld7eVArWfG+uH2nIR89dI=; b=T0gxSfg/fhE0/rGhnZ
+	RjHfgwADDlW0YfrFf3O0WfTJZXdSigDoof8ibpiw46qTGigWNagguWzRPPYyTCAk
+	5bGcrIVS/QZ93MECLInizrp9agyWHbQvPQglyQ4MkTsVaXYTPYbSjxcdK45//SwJ
+	oxEZYv9o871fYGWl5Oe/VXwVGwSUEdCLn2hxEYhhTIoC801Fbo5uRPW5R1QtJz6B
+	gY0ErVZEa0ERalJ3XFJb1lIRmrr04ULxU8NifO/HCfz2NoKH13i3mh3xKXHEadq3
+	VCDnAqzVNlK/rrcyYjfOSQ6L/ee0TmdI7ucL5ivGAyk6ocKoamzCWf3Aanvr6ZUz
+	TZ/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1681993292; x=1682079692; bh=ajj8ckcYRmO7d
+	Ooo1JmsRpld7eVArWfG+uH2nIR89dI=; b=JKKcjIXb3s3D8DdViWBfx1XsCr/mb
+	LRJKz2aUzTifLpx2f/NXUQK2Z/0XGtHiMngLqFgg+Gh0ZHB9WxkF8o+mADK2VMU2
+	XkMUfZY79qb2b7JlC35e38vJbOUqgrjmaWMB+ozX7k+Ce00YP6CC3IvuPD5xYFWR
+	fpwGk2UCBNy7mLcAXG2WzgtWDVC/LHIAWO3Z+PShh0iV43KEYAoVhzfzzJ/eIS2f
+	KY8m7szPTf2RhOIwFwXW5NqLNEaoJfb74yD2XltqGe4fDWsC0mokpaqSUDT3PD79
+	Wy4yeUPqWAPnyf9GHSFsIbIwAq0ovl69MHUhTf7yYFAAP3HOrmVhe3bbw==
+X-ME-Sender: <xms:TC5BZEuLiJgeilkq3pZZJhRmEDewiCR9znuI7wZ26siFN0Fz5Tt4mw>
+    <xme:TC5BZBfNYloNDEK3Il2SjnnRFCwEe1SHbbTnfAauGNMN6SjTkVq7bg09ZEDVETFCw
+    -gf32G9dKCmknDHCBY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:TC5BZPxU6DpN3wG4iSxDYPquMWcY9uHDRWxPhrPn3HqQXqi_B2cbEA>
+    <xmx:TC5BZHMDevZwSsCCEmowJ9naB-XCxHbBu_gidtXYjaQ3wq9llbgOiQ>
+    <xmx:TC5BZE-OVLVKVEmfcx9mEueVck_bAhxvEMMCV8XhZVyziHtgrQ7qJQ>
+    <xmx:TC5BZF1Sx18Q_snCEuxjLSjpKmRc68pRkCYyiYmfHBAsfmGHcG8J_A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 23594B60086; Thu, 20 Apr 2023 08:21:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Mime-Version: 1.0
+Message-Id: <a5ed97f2-b3f8-454b-a63a-16e7153003a6@app.fastmail.com>
+In-Reply-To: 
+ <CA+G9fYuMEEzTUyF-pCVuZYd+BU53_8MRyXoOmbYEo1O1v=9teg@mail.gmail.com>
+References: 
+ <CA+G9fYuMEEzTUyF-pCVuZYd+BU53_8MRyXoOmbYEo1O1v=9teg@mail.gmail.com>
+Date: Thu, 20 Apr 2023 14:21:10 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+ Netdev <netdev@vger.kernel.org>, linux-next <linux-next@vger.kernel.org>,
+ "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+ lkft-triage@lists.linaro.org, llvm@lists.linux.dev
+Cc: "Russell King" <linux@armlinux.org.uk>,
+ "David S . Miller" <davem@davemloft.net>, "Ard Biesheuvel" <ardb@kernel.org>,
+ "Anders Roxell" <anders.roxell@linaro.org>,
+ "Eric Dumazet" <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Jakub Kicinski" <kuba@kernel.org>
+Subject: Re: next: arm: drivers/net/phy/phy_device.o: in function `phy_probe':
+ drivers/net/phy/phy_device.c:3053: undefined reference to
+Content-Type: text/plain
 
-RnJvbTogRmFuZ3J1aSBTb25nDQo+IFNlbnQ6IDE5IEFwcmlsIDIwMjMgMjE6MDINCi4uLi4NCj4g
-U29tZSBpbmZvcm1hdGlvbiBhYm91dCBDbGFuZyBiYXNlZCBsYW5ndWFnZSBzZXJ2ZXJzDQo+IA0K
-PiBJdCdzIGdvb2QgcHJhY3RpY2UgdG8gZW5zdXJlIHRoYXQgYSBoZWFkZXIgZmlsZSBpcyBzZWxm
-LWNvbnRhaW5lZC4gSWYNCj4gbm90LCBmb3IgZXhhbXBsZSwgaWYgYS5jIGluY2x1ZGVzIGEuaCwg
-d2hpY2ggaXMgbm90IHNlbGYtY29udGFpbmVkLA0KPiBhLmggaXMgZ2VuZXJhbGx5IGNvbXBpbGVk
-IG9uIGl0cyBvd24gKGFzIGlmIHVzaW5nIGNsYW5nIFtvcHRpb25zXSBhLmgpDQo+IHRvIGNvbmZp
-bmUgZGlhZ25vc3RpY3MvY29tcGxldGlvbiByZXN1bHRzIHRvIGEuaCBhbmQgbm90IHRvIG90aGVy
-DQo+IGhlYWRlcnMgaW5jbHVkZWQgYnkgYS5jLg0KPiANCj4gSG93ZXZlciwgdGhpcyBkZXNpZ24g
-Y2hvaWNlIG1heSBjYXVzZSBsYW5ndWFnZSBzZXJ2ZXJzIHRvIGVtaXQNCj4gZGlhZ25vc3RpY3Mg
-dGhhdCB5b3UgZG9uJ3Qgc2VlIHdoZW4gYnVpbGRpbmcgdGhlIHByb2plY3QuDQoNClRoYXQgcmVh
-bGx5IGRvZXNuJ3Qgd29yayBmb3IgLmggZmlsZXMgdGhhdCBjb250YWluIHByb2dyYW0NCmdlbmVy
-YXRlZCBkYXRhIHVzZWQgdG8gaW5pdGlhbGlzZSBhcnJheXMuDQoNClRoZXkgbWF5IG5vdCBldmVu
-IGNvbnRhaW4gbnVtYmVycywganVzdCByZWZlcmVuY2VzIHRvDQojZGVmaW5lcyB0aGF0IHRoYXQg
-aW5jbHVkaW5nIGZpbGUgaXMgZXhwZWN0ZWQgdG8gZGVmaW5lLg0KDQpTbyB0aGVyZSB3aWxsIGFs
-d2F5cyBiZSAuaCBmaWxlcyB0aGF0IGFyZSBub3QgY29tcGlsYWJsZS4NCg0KCURhdmlkDQoNCi0N
-ClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBN
-aWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxl
-cykNCg==
+On Thu, Apr 20, 2023, at 12:51, Naresh Kamboju wrote:
+> [ Please ignore this email if it is already reported ]
+>
+> Following build failures noticed on Linux next-20230419.
+>
+> Regressions found on arm:
+>  - build/clang-16-omap2plus_defconfig
+>  - build/clang-16-davinci_all_defconfig
+>  - build/gcc-8-davinci_all_defconfig
+>  - build/clang-nightly-omap2plus_defconfig
+>  - build/gcc-12-omap2plus_defconfig
+>  - build/gcc-12-davinci_all_defconfig
+>  - build/clang-nightly-davinci_all_defconfig
+>  - build/gcc-8-omap2plus_defconfig
+>
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> Build log:
+> ------------
+>
+>  arm-linux-gnueabihf-ld: drivers/net/phy/phy_device.o: in function `phy_probe':
+> drivers/net/phy/phy_device.c:3053: undefined reference to
+> `devm_led_classdev_register_ext'
 
+I sent this patch now:
+
+https://lore.kernel.org/all/20230420084624.3005701-1-arnd@kernel.org/
+
+      Arnd
