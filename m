@@ -1,45 +1,42 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956953D6A;
-	Thu, 20 Apr 2023 12:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A3C5688;
+	Thu, 20 Apr 2023 12:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681994504; x=1713530504;
+  t=1681995103; x=1713531103;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dPK9C4cA46M8v+fFqyqYv0YSi+hmzXBNJ3JzGRiRy40=;
-  b=Ce4pLGmrUQpG90fpG4joqbGTsoiYAw/F3nHzrB8pkob5PfoowpYKS/0Z
-   EWjJ/Mjsn/PMbfuEIfuGlwHfjE/g/6oO0hGIis55C6yPJr9uWOOqBgV+6
-   xLI48w2uBy83vGJKpzUZtorBk73kK6fAUDrjJDoZpu61GKYxIlWnM0AIn
-   uC2fat24ADPCRB5vMXvKVo0VIUecS3JKaGV2Sm9c0cirMpF3KSOtbq92f
-   Yaae+UayxjKcLijNuEL3rehayeZtpj95cx41svubSqapyXMIYIFVdEny3
-   Qnxa6Jw5PtiR1W8DNcoKViV86B25/yJLaNY8lsmo58C53+JNGVW/bO/Hw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="343196437"
+  bh=DNcxqjV0tgSOBl2vw77/oJ/xpDsWn0w/fRbLCUKeRzI=;
+  b=j+WAQpiPMS+TOXlfIEa+KJuo2kCZsLn/M8vszN8/1cJhT2XX1CQR5hz2
+   DpZkV7B2L8bsbrwG/qljai47+c7KTgQlXvkFHarludtNb7rl1UuOQBujP
+   QyJOegHaLbD3F7qMAcO4PXmpbkO+Eid64kJT3Am7AGJVWMq+C0zyobv+T
+   8THhdNdM3U4mFKiqlFHfjGLONQ/rG6gEnnGUvK9qRhnUmVKH73l8sXHSF
+   sJn60C97aOF6b34vJYo82kiT8ETiwWCeGmIE0j8IefDytH9pGj26XrmBW
+   rJjfPPZQgTYwpmvyOGdAuv0unSKVmq7yOiq6/xVQo/OxMz1nKbd3vR643
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334557357"
 X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="343196437"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 05:41:43 -0700
+   d="scan'208";a="334557357"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 05:51:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="685333486"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="816002860"
 X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
-   d="scan'208";a="685333486"
+   d="scan'208";a="816002860"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2023 05:41:41 -0700
+  by orsmga004.jf.intel.com with ESMTP; 20 Apr 2023 05:51:41 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ppTbY-000fpm-31;
-	Thu, 20 Apr 2023 12:41:40 +0000
-Date: Thu, 20 Apr 2023 20:41:14 +0800
+	id 1ppTlF-000fqE-0f;
+	Thu, 20 Apr 2023 12:51:41 +0000
+Date: Thu, 20 Apr 2023 20:51:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>
+To: Zack Rusin <zackr@vmware.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Frederic Weisbecker <frederic@kernel.org>
-Subject: [tip:timers/core 13/13] kernel/time/posix-cpu-timers.c:1310:23:
- error: member reference type 'struct k_itimer *' is a pointer; did you mean
- to use '->'?
-Message-ID: <202304202022.rfhhidYd-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Dave Airlie <airlied@redhat.com>
+Subject: Inconsistent kallsyms data
+Message-ID: <202304202029.z4wDrmhv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,115 +46,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
-head:   2aaae4bf41b101f7e58e8b06778b1cd9a1dddf94
-commit: 2aaae4bf41b101f7e58e8b06778b1cd9a1dddf94 [13/13] posix-cpu-timers: Implement the missing timer_wait_running callback
-config: s390-randconfig-r002-20230418 (https://download.01.org/0day-ci/archive/20230420/202304202022.rfhhidYd-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cb0856346a60fe3eb837ba5e73588a41f81ac05f
+commit: a2a04b515562bbb040e8ae3decae8c1e9ef05327 Merge tag 'drm-misc-fixes-2023-02-16' of git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+date:   9 weeks ago
+config: arm-buildonly-randconfig-r006-20230418 (https://download.01.org/0day-ci/archive/20230420/202304202029.z4wDrmhv-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=2aaae4bf41b101f7e58e8b06778b1cd9a1dddf94
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip timers/core
-        git checkout 2aaae4bf41b101f7e58e8b06778b1cd9a1dddf94
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a2a04b515562bbb040e8ae3decae8c1e9ef05327
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a2a04b515562bbb040e8ae3decae8c1e9ef05327
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/time/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304202022.rfhhidYd-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304202029.z4wDrmhv-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/time/posix-cpu-timers.c:14:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/time/posix-cpu-timers.c:14:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/time/posix-cpu-timers.c:14:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/time/posix-cpu-timers.c:1310:23: error: member reference type 'struct k_itimer *' is a pointer; did you mean to use '->'?
-           spin_unlock_irq(&timr.it_lock);
-                            ~~~~^
-                                ->
-   kernel/time/posix-cpu-timers.c:1312:21: error: member reference type 'struct k_itimer *' is a pointer; did you mean to use '->'?
-           spin_lock_irq(&timr.it_lock);
-                          ~~~~^
-                              ->
-   12 warnings and 2 errors generated.
-
-
-vim +1310 kernel/time/posix-cpu-timers.c
-
-  1307	
-  1308	static void posix_cpu_timer_wait_running_nsleep(struct k_itimer *timr)
-  1309	{
-> 1310		spin_unlock_irq(&timr.it_lock);
-  1311		cpu_relax();
-  1312		spin_lock_irq(&timr.it_lock);
-  1313	}
-  1314	
+>> Inconsistent kallsyms data
+   Try make KALLSYMS_EXTRA_PASS=1 as a workaround
 
 -- 
 0-DAY CI Kernel Test Service
