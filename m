@@ -1,218 +1,134 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31808F44;
-	Thu, 20 Apr 2023 17:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682013220; x=1713549220;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gPUGsnCZZVrxTMLQ75P+O1/5TxBkW+4KY/+mePstM3s=;
-  b=brZcvN5LoXku3jM2QgWGsvEFokAhLxSWD/aSMKCmkr2n/AKp1+EQzY3E
-   ELv4qvPn0cqs/ycu8ANl38c4kGcf/yJQPJuf9t7VrFqi/bw0hhZhmV160
-   Pul/LRG4LDU4Jn834rL8TiG7w4ThKfcVpgSz+0RLiVVysjw9RwvCTj5kt
-   C9T6ODPqqGZaOyDYxVdhejEw8zUUPxe115q4UgBIpZqmrRgdnMz9fSow0
-   hJLleFZUq9Sk3xsu/6Pf0geTs8HVwduXn+u2uLDtHzqFiiIjxvxEB9S3L
-   Baj9L0cVOjKrqEJN+YpDedejNVvfu+1DlvcLi2Fx1qmrxHHD8dFpq7nv8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="348594481"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="348594481"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 10:38:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="692011281"
-X-IronPort-AV: E=Sophos;i="5.99,213,1677571200"; 
-   d="scan'208";a="692011281"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 20 Apr 2023 10:38:54 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ppYF6-000fz6-0p;
-	Thu, 20 Apr 2023 17:38:48 +0000
-Date: Fri, 21 Apr 2023 01:38:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jolsa-perf:uprobe_multi 1/21] kernel/trace/bpf_trace.c:3066:12:
- warning: variable 'old_inode' is uninitialized when used here
-Message-ID: <202304210113.O7szsjHN-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4D98F44
+	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 18:07:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682014032;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DAlGbmvVdWeoiiH06KOhyy0LizTfr2FfHgvUIIzCTWQ=;
+	b=ND1Ppuxo7nIwogh0wKdgK5HGvGTljzyCkfLI/tab2qs2M8lo08/Po3NdSk6yLHLg9UICXU
+	ACfVMfZY6C3gpmp5EkQOORPUDqmO96q7Tg1Y7bGHceUNSgT4pHb0V8TN5AoNmtJ724gZEy
+	glksBPyC8oHbw5XRzvhDX+xnazuBhtg=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-76-fayA19tHMgestIT_g56FsA-1; Thu, 20 Apr 2023 14:07:10 -0400
+X-MC-Unique: fayA19tHMgestIT_g56FsA-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-74e1cdf9cbeso418890985a.0
+        for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 11:07:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682014029; x=1684606029;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DAlGbmvVdWeoiiH06KOhyy0LizTfr2FfHgvUIIzCTWQ=;
+        b=QY33FRLRt2KNb+5rfh9gT4Bx40mq2gTqXw1MeSmzB4nXCLedtVIgKdhGipI07tTMQB
+         0vJtmUaTJRvPmprzEDBmf9jdT7CBsIrW3+NMe9GXq+mup+DZyLcugqkywVJhsN2n38Qf
+         QBI60qfuDCEsZ54WMu0Vb+zHwpddFKGjdxpj6wnuxXOtLqRyG0RGrScwrtWCkSuBa5a+
+         8ENf9P5P3Cd8/AXVvc049b4eQm/Z0WiA55OBKcHPReBkxyyOqFn+dBRjOXxd7x3Y3wVo
+         rMr59MNmu7mPLSe9ZzuTPUSJpQDFqjxeihQ1uAjW1BZqlws6fccBLML623qyZfmzJiYd
+         OJRw==
+X-Gm-Message-State: AAQBX9fSLNjXHXuAhEifoTnvNuGk0UVcHpZxMwOkrlGDFrFvNSPjF6iq
+	VyA7ECebsy0Cs0aa6tnScJY05KUpjQUzgSHBAyh/wLBQbPJTKtxM92Z9PVHQFREEeoHCVWxBLut
+	ZZLD7PKvvd4arsA==
+X-Received: by 2002:ac8:5915:0:b0:3e4:e035:b5ae with SMTP id 21-20020ac85915000000b003e4e035b5aemr5802137qty.25.1682014029752;
+        Thu, 20 Apr 2023 11:07:09 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bZtoGbXr5zTKxwxJWHDlD+kzZVK9Rkj0Gg5y9VvHKOIKTnh6wcqzjG9aPwh50t9BtIPzm+YQ==
+X-Received: by 2002:ac8:5915:0:b0:3e4:e035:b5ae with SMTP id 21-20020ac85915000000b003e4e035b5aemr5802089qty.25.1682014029490;
+        Thu, 20 Apr 2023 11:07:09 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id o17-20020a05620a111100b0074e00d6834esm602339qkk.81.2023.04.20.11.07.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Apr 2023 11:07:09 -0700 (PDT)
+From: Tom Rix <trix@redhat.com>
+To: harry.wentland@amd.com,
+	sunpeng.li@amd.com,
+	Rodrigo.Siqueira@amd.com,
+	alexander.deucher@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@gmail.com,
+	daniel@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	hamza.mahfooz@amd.com,
+	drv@mailo.com,
+	roman.li@amd.com,
+	mairacanal@riseup.net,
+	jiapeng.chong@linux.alibaba.com,
+	caionovais@usp.br,
+	gabe.teeger@amd.com
+Cc: amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: remove unused variables dispclk_delay_subtotal and dout
+Date: Thu, 20 Apr 2023 14:07:05 -0400
+Message-Id: <20230420180705.3893475-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git uprobe_multi
-head:   f06f72609beded6df569274ef7a92843471904ed
-commit: bce755e1c480a41c8528425d659c6b23ba839d67 [1/21] bpf: Add multi uprobe link
-config: s390-randconfig-r036-20230416 (https://download.01.org/0day-ci/archive/20230421/202304210113.O7szsjHN-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=bce755e1c480a41c8528425d659c6b23ba839d67
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf uprobe_multi
-        git checkout bce755e1c480a41c8528425d659c6b23ba839d67
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+clang with W=1 reports
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_rq_dlg_calc_314.c:1003:15:
+  error: variable 'dispclk_delay_subtotal' set but not used [-Werror,-Wunused-but-set-variable]
+        unsigned int dispclk_delay_subtotal;
+                     ^
+This variable is not used, so remove it.
+Which made dout unused, so also remove.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304210113.O7szsjHN-lkp@intel.com/
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ .../display/dc/dml/dcn314/display_rq_dlg_calc_314.c    | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/trace/bpf_trace.c:9:
-   In file included from include/linux/bpf_verifier.h:9:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/trace/bpf_trace.c:9:
-   In file included from include/linux/bpf_verifier.h:9:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/trace/bpf_trace.c:9:
-   In file included from include/linux/bpf_verifier.h:9:
-   In file included from include/linux/filter.h:12:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/trace/bpf_trace.c:3066:12: warning: variable 'old_inode' is uninitialized when used here [-Wuninitialized]
-                           inode = old_inode;
-                                   ^~~~~~~~~
-   kernel/trace/bpf_trace.c:3016:33: note: initialize the variable 'old_inode' to silence this warning
-           struct inode *inode, *old_inode;
-                                          ^
-                                           = NULL
-   13 warnings generated.
-
-
-vim +/old_inode +3066 kernel/trace/bpf_trace.c
-
-  3007	
-  3008	int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-  3009	{
-  3010		void __user **upaths, __user *upath, __user *old_upath = NULL;
-  3011		unsigned long __user *uoffsets, offset;
-  3012		unsigned long __user *uref_ctr_offsets, ref_ctr_offset = 0;
-  3013		struct bpf_uprobe_multi_link *link = NULL;
-  3014		struct bpf_link_primer link_primer;
-  3015		struct bpf_uprobe *uprobes = NULL;
-  3016		struct inode *inode, *old_inode;
-  3017		u32 flags, cnt, i;
-  3018		int err;
-  3019	
-  3020		/* no support for 32bit archs yet */
-  3021		if (sizeof(u64) != sizeof(void *))
-  3022			return -EOPNOTSUPP;
-  3023	
-  3024		if (prog->expected_attach_type != BPF_TRACE_UPROBE_MULTI)
-  3025			return -EINVAL;
-  3026	
-  3027		flags = attr->link_create.uprobe_multi.flags;
-  3028		if (flags & ~BPF_F_UPROBE_MULTI_RETURN)
-  3029			return -EINVAL;
-  3030	
-  3031		upaths = u64_to_user_ptr(attr->link_create.uprobe_multi.paths);
-  3032		uoffsets = u64_to_user_ptr(attr->link_create.uprobe_multi.offsets);
-  3033		if (!!upaths != !!uoffsets)
-  3034			return -EINVAL;
-  3035	
-  3036		uref_ctr_offsets = u64_to_user_ptr(attr->link_create.uprobe_multi.ref_ctr_offsets);
-  3037	
-  3038		cnt = attr->link_create.uprobe_multi.cnt;
-  3039		if (!cnt)
-  3040			return -EINVAL;
-  3041	
-  3042		uprobes = kvcalloc(cnt, sizeof(*uprobes), GFP_KERNEL);
-  3043		if (!uprobes)
-  3044			return -ENOMEM;
-  3045	
-  3046		link = kzalloc(sizeof(*link), GFP_KERNEL);
-  3047		if (!link) {
-  3048			err = -ENOMEM;
-  3049			goto error;
-  3050		}
-  3051	
-  3052		for (i = 0; i < cnt; i++) {
-  3053			if (uref_ctr_offsets && __get_user(ref_ctr_offset, uref_ctr_offsets + i)) {
-  3054				err = -EFAULT;
-  3055				goto error;
-  3056			}
-  3057			if (__get_user(offset, uoffsets + i)) {
-  3058				err = -EFAULT;
-  3059				goto error;
-  3060			}
-  3061			if (__get_user(upath, upaths + i)) {
-  3062				err = -EFAULT;
-  3063				goto error;
-  3064			}
-  3065			if (i && old_upath == upath) {
-> 3066				inode = old_inode;
-
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
+index ea4eb66066c4..239cb8160c77 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
+@@ -951,7 +951,6 @@ static void dml_rq_dlg_get_dlg_params(
+ {
+ 	const display_pipe_source_params_st *src = &e2e_pipe_param[pipe_idx].pipe.src;
+ 	const display_pipe_dest_params_st *dst = &e2e_pipe_param[pipe_idx].pipe.dest;
+-	const display_output_params_st *dout = &e2e_pipe_param[pipe_idx].dout;
+ 	const display_clocks_and_cfg_st *clks = &e2e_pipe_param[pipe_idx].clks_cfg;
+ 	const scaler_ratio_depth_st *scl = &e2e_pipe_param[pipe_idx].pipe.scale_ratio_depth;
+ 	const scaler_taps_st *taps = &e2e_pipe_param[pipe_idx].pipe.scale_taps;
+@@ -1000,8 +999,6 @@ static void dml_rq_dlg_get_dlg_params(
+ 	unsigned int vupdate_width;
+ 	unsigned int vready_offset;
+ 
+-	unsigned int dispclk_delay_subtotal;
+-
+ 	unsigned int vstartup_start;
+ 	unsigned int dst_x_after_scaler;
+ 	unsigned int dst_y_after_scaler;
+@@ -1127,13 +1124,6 @@ static void dml_rq_dlg_get_dlg_params(
+ 	vupdate_offset = dst->vupdate_offset;
+ 	vupdate_width = dst->vupdate_width;
+ 	vready_offset = dst->vready_offset;
+-	dispclk_delay_subtotal = mode_lib->ip.dispclk_delay_subtotal;
+-
+-	if (dout->dsc_enable) {
+-		double dsc_delay = get_dsc_delay(mode_lib, e2e_pipe_param, num_pipes, pipe_idx); // FROM VBA
+-
+-		dispclk_delay_subtotal += dsc_delay;
+-	}
+ 
+ 	vstartup_start = dst->vstartup_start;
+ 	if (interlaced) {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.27.0
+
