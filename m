@@ -1,45 +1,47 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B06D17C9;
-	Thu, 20 Apr 2023 02:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D6517ED;
+	Thu, 20 Apr 2023 03:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681957527; x=1713493527;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kcXiTGX0jEfHLVUs2sLhbceUjoj4al2FF2c6LlrgD+g=;
-  b=P0Jnq5nP9yayxRyP0wD5IF1fHtMtLh3MSBg1lES2pJW9snlPIWSJEoZc
-   xTnK8WdDitMZSqt1bhOYRJkW49llnsqOpx2AYGILDUg9uPpd31X7dkr5d
-   yROQOMXTMLBatSjzfn5HinrgEx68XeGGT8Cl0m9rrbmWEaw4/syWgC8DX
-   y7oj+cfSlW82ZIdPrO69i5KM90OaxGwGFqWecNq3Fsk3JfaJIYt3Ej3ZB
-   M8HrxOdfO2R54vgRPz9N39evERYazvMKTcK+IQGlqleyW4HLDZeMIXagv
-   0VkZ5YkiOIUthoMXDXjptYlhQzw0SUm5GIo7yTcZ0U0BFdcnJUqiJ+zPP
+  t=1681959996; x=1713495996;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Vrqpja8Z1hSqrZRC7tQPIr/La29qW5DFqZCbyUZi4Kk=;
+  b=FKdU39ZPAvFgnpoUiUb+BYy+xleQTTfHDs9yypbkY8rPdg0BUZeEnb0G
+   fk0qacxEsjJJvLJ7WSTLHBl1z92FKE+7RTfNaX/yuo7oxgdTtVXnv4hvk
+   L/QVadHLnD/cBRWFfh4K3OLZA7OFxpULz58WGzVInO2uR7Dt2dc76wy+Q
+   m7JABAsndpufKVM0TuqVfPqnEIn4KAXJDsG/R/c21TdYc72Q2JV8wC5Ud
+   utHgPfqthbqN795IMHLpv6txmJTkPJaCOaVT2Z1gDwhedaaaT/OfX5t/0
+   nhNQI9DGNd1tOjkkk8ds/D69yMBY6Wt5oLEuErbO/KT2HgKxm2prwbqjm
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="325943546"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="431896671"
 X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="325943546"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 19:25:13 -0700
+   d="scan'208";a="431896671"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 20:06:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="781074887"
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="760978836"
 X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="781074887"
+   d="scan'208";a="760978836"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Apr 2023 19:25:12 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 19 Apr 2023 20:06:13 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ppJyx-000fNm-2T;
-	Thu, 20 Apr 2023 02:25:11 +0000
-Date: Thu, 20 Apr 2023 10:24:53 +0800
+	id 1ppKcf-000fPU-0A;
+	Thu, 20 Apr 2023 03:06:13 +0000
+Date: Thu, 20 Apr 2023 11:05:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Eric Yang <Eric.Yang2@amd.com>
+To: Md Sadre Alam <quic_mdalam@quicinc.com>, mani@kernel.org,
+	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+	linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Alex Deucher <alexander.deucher@amd.com>
-Subject: [linux-next:master 12531/13075]
- drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:184:19: warning:
- variable 'dmub' set but not used
-Message-ID: <202304201027.2upm4i0C-lkp@intel.com>
+	quic_srichara@quicinc.com, quic_mdalam@quicinc.com
+Subject: Re: [PATCH V2] mtd: rawnand: qcom: Implement exec_op()
+Message-ID: <202304201013.6bradWxp-lkp@intel.com>
+References: <20230419093617.27134-1-quic_mdalam@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,54 +50,153 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230419093617.27134-1-quic_mdalam@quicinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3cdbc01c40e34c57697f8934f2727a88551696be
-commit: 499e4b1c722e0e2ca40c56342b766e95f6c31f4a [12531/13075] drm/amd/display: add mechanism to skip DCN init
-config: arm64-randconfig-r036-20230416 (https://download.01.org/0day-ci/archive/20230420/202304201027.2upm4i0C-lkp@intel.com/config)
+Hi Md,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on mtd/nand/next]
+[also build test WARNING on linus/master v6.3-rc7 next-20230419]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Md-Sadre-Alam/mtd-rawnand-qcom-Implement-exec_op/20230419-173849
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+patch link:    https://lore.kernel.org/r/20230419093617.27134-1-quic_mdalam%40quicinc.com
+patch subject: [PATCH V2] mtd: rawnand: qcom: Implement exec_op()
+config: s390-randconfig-r034-20230418 (https://download.01.org/0day-ci/archive/20230420/202304201013.6bradWxp-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=499e4b1c722e0e2ca40c56342b766e95f6c31f4a
-        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-        git fetch --no-tags linux-next master
-        git checkout 499e4b1c722e0e2ca40c56342b766e95f6c31f4a
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/a2d1599a63e93bde90166287021663cfc13c91b2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Md-Sadre-Alam/mtd-rawnand-qcom-Implement-exec_op/20230419-173849
+        git checkout a2d1599a63e93bde90166287021663cfc13c91b2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/ drivers/gpu/drm/amd/display/dc/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/mtd/nand/raw/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304201027.2upm4i0C-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304201013.6bradWxp-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c:184:19: warning: variable 'dmub' set but not used [-Wunused-but-set-variable]
-           struct dmub_srv *dmub;
-                            ^
-   1 warning generated.
+   In file included from drivers/mtd/nand/raw/qcom_nandc.c:9:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/mtd/nand/raw/qcom_nandc.c:9:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/mtd/nand/raw/qcom_nandc.c:9:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/mtd/nand/raw/qcom_nandc.c:2617:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+           default:
+           ^
+   drivers/mtd/nand/raw/qcom_nandc.c:2617:2: note: insert 'break;' to avoid fall-through
+           default:
+           ^
+           break; 
+   13 warnings generated.
 
 
-vim +/dmub +184 drivers/gpu/drm/amd/amdgpu/../display/dc/dc_dmub_srv.c
+vim +2617 drivers/mtd/nand/raw/qcom_nandc.c
 
-   181	
-   182	bool dc_dmub_srv_optimized_init_done(struct dc_dmub_srv *dc_dmub_srv)
-   183	{
- > 184		struct dmub_srv *dmub;
-   185		union dmub_fw_boot_status status;
-   186	
-   187		if (!dc_dmub_srv || !dc_dmub_srv->dmub)
-   188			return false;
-   189	
-   190		dmub = dc_dmub_srv->dmub;
-   191	
-   192		return status.bits.optimized_init_done;
-   193	}
-   194	
+  2587	
+  2588	static int qcom_op_cmd_mapping(struct qcom_nand_controller *nandc, u8 cmd,
+  2589				       struct qcom_op *q_op)
+  2590	{
+  2591		int ret = 0;
+  2592	
+  2593		switch (cmd) {
+  2594		case NAND_CMD_RESET:
+  2595			ret = OP_RESET_DEVICE;
+  2596			break;
+  2597		case NAND_CMD_READID:
+  2598			ret = OP_FETCH_ID;
+  2599			break;
+  2600		case NAND_CMD_PARAM:
+  2601			if (nandc->props->qpic_v2)
+  2602				ret = OP_PAGE_READ_ONFI_READ;
+  2603			else
+  2604				ret = OP_PAGE_READ;
+  2605			break;
+  2606		case NAND_CMD_ERASE1:
+  2607		case NAND_CMD_ERASE2:
+  2608			ret = OP_BLOCK_ERASE;
+  2609			break;
+  2610		case NAND_CMD_STATUS:
+  2611			ret = OP_CHECK_STATUS;
+  2612			break;
+  2613		case NAND_CMD_PAGEPROG:
+  2614			ret = OP_PROGRAM_PAGE;
+  2615			q_op->flag = NAND_CMD_PAGEPROG;
+  2616			nandc->exec_opwrite = true;
+> 2617		default:
+  2618			break;
+  2619		}
+  2620	
+  2621		return ret;
+  2622	}
+  2623	
 
 -- 
 0-DAY CI Kernel Test Service
