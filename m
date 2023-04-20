@@ -1,98 +1,174 @@
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB9E5661
-	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 11:01:24 +0000 (UTC)
-Received: by mail-ua1-f47.google.com with SMTP id r10so1871084uat.6
-        for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 04:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681988483; x=1684580483;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9/krmrwSEL+NhwRErVEyJ99NsFitd2cJDfkllHsD/uM=;
-        b=snFz9FcgJNGFQnSpVoFHu1+dHtbiF64/WO8BtxY/LR2Hrw/c+dITS3cGbHrCA8w0mp
-         aaY9QiLMN9eLID591qSC5AXl3zJ533ZDXnhmNJ8xHiKh2GDuuqG8pCGoi3Nc0nYtyxjT
-         jmNANCKY87CY6wuZA1sJgeUGQt3vLRObLyKxjo9ZJ0e1SibwRqsWOjpcEySFvPd92MBk
-         2WKsPGMGruUM86PM+CxOFyBt+OOJ6tEOGvTNDZsYZhdHMPLPAD2ueuSvYqOYLq7XIUHn
-         s4t5uE0LsVAAgz4bjwRzq4ReBpEGWUQYAGrtBOakq+i1VJxxQpTSt0CfJR+itdvu9sZ4
-         yG7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681988483; x=1684580483;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9/krmrwSEL+NhwRErVEyJ99NsFitd2cJDfkllHsD/uM=;
-        b=WUqAkltaCo0PE7CxVebTB/GruBlfl1lRG1WvbnZSYUQZ0O8nALIzwdLDcjTnc9zXNU
-         8KvG7+9+CpQLQhRrhpW+A5d1popOhYpYhzsQM9YX76FfUKGfnhXbUu3s4Gh1m8W3S8or
-         7WqhbfyA9utm1uFZZRE+qnERS6TTeOh6EX+AJnZPbH74sD/MonqJAFXmYwpKmXkiaGI2
-         NDbVQaD+bXcIbz0FbmY5yYkdzHpuYuBcXcLGFWOSYgZU1BEx+fg4Sptx4/6Y/VL1rERc
-         2zcAlqbWf2TMLmd3b5tEAu3MIybMJbQIyEeRCGjMw+ihRRpVO1z2U+VbfSm4cT4/fnz/
-         UaaQ==
-X-Gm-Message-State: AAQBX9dHATSOJK3qcypVj6R+hdsNDFLw+h0kRf9kTVW9v5FdzXmidgNW
-	+xBu8gJvruJwn2Ma5EVB1636mpfjGIjELJUpi5hxvA==
-X-Google-Smtp-Source: AKy350aynQMU4rqBVkT/HvHFUt9abSuGDscTBinD7vNfgD4VGkzFrpIlTakGszMHxO00jZ3rmdvHBbAoYTW5MPyHV8w=
-X-Received: by 2002:a1f:5fc5:0:b0:43f:f4a3:7385 with SMTP id
- t188-20020a1f5fc5000000b0043ff4a37385mr498327vkb.7.1681988483260; Thu, 20 Apr
- 2023 04:01:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1F45661;
+	Thu, 20 Apr 2023 11:50:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681991455; x=1713527455;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sNOFjEyQCbOWuEv6Cq+5maJTcQvQE6wHy8hTlQf7qyM=;
+  b=OAhTSMeZQQEh77tTqFWt13PJRpepxcFNTV0tNV3bmxMwqLdenb4RO5o7
+   pkreGAO3o1Wu/40UwjLATzVkF1xqGnJM0/UjgyFlzcpfwg5hyJiYsoCT9
+   Fi1HvnrRRjMMK5W25KaojdrzzhY+vwQllvlMoBGE4XkTb+ilXsU5BTyzp
+   ICgL02DqWYvqOCOOV31MSQfaaHyXIj+ygqkjmKqlGmvvgI8K0aHPnSWqO
+   sD+4I20XLYbEEo9A1DPD8euLcNHTnuxy2B+4LPBS8TR3iEUzXEwCEdTuE
+   FN7puC2xYPnTG2wbDRjh1ak0Wf1dffJY0akfLvuxr+W08LiY9FaQLaslD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="334542605"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="334542605"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 04:50:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="685326524"
+X-IronPort-AV: E=Sophos;i="5.99,212,1677571200"; 
+   d="scan'208";a="685326524"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2023 04:50:45 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ppSoB-000fno-2H;
+	Thu, 20 Apr 2023 11:50:39 +0000
+Date: Thu, 20 Apr 2023 19:49:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: yunchuan <yunchuan@nfschina.com>, kabel@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, yunchuan <yunchuan@nfschina.com>
+Subject: Re: [PATCH] firmware:Remove unnecessary (void*) conversions
+Message-ID: <202304201916.8OvkVl9W-lkp@intel.com>
+References: <20230420073751.1031944-1-yunchuan@nfschina.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 20 Apr 2023 16:31:12 +0530
-Message-ID: <CA+G9fYt+4e57Gdy6cix=LeNK6XqWoui8du=mZWu=cf8vPYocKw@mail.gmail.com>
-Subject: next: mips: ERROR: modpost: Section mismatches detected.
-To: linux-mips@vger.kernel.org, llvm@lists.linux.dev, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	=?UTF-8?Q?Phil_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420073751.1031944-1-yunchuan@nfschina.com>
 
-Following build failures noticed on Linux next-20230419 for mips.
+Hi yunchuan,
 
-Regressions found on mips:
- - build/clang-nightly-allnoconfig
- - build/clang-16-allnoconfig
- - build/clang-16-tinyconfig
- - build/clang-nightly-tinyconfig
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.3-rc7 next-20230419]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/yunchuan/firmware-Remove-unnecessary-void-conversions/20230420-154004
+patch link:    https://lore.kernel.org/r/20230420073751.1031944-1-yunchuan%40nfschina.com
+patch subject: [PATCH] firmware:Remove unnecessary (void*) conversions
+config: hexagon-randconfig-r034-20230420 (https://download.01.org/0day-ci/archive/20230420/202304201916.8OvkVl9W-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1dee3a7afbb402fc49f0af9eeb312f221e99fab6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review yunchuan/firmware-Remove-unnecessary-void-conversions/20230420-154004
+        git checkout 1dee3a7afbb402fc49f0af9eeb312f221e99fab6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firmware/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304201916.8OvkVl9W-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/firmware/turris-mox-rwtm.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/firmware/turris-mox-rwtm.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/firmware/turris-mox-rwtm.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/firmware/turris-mox-rwtm.c:286:19: error: incompatible integer to pointer conversion initializing 'struct mox_rwtm *' with an expression of type 'unsigned long' [-Wint-conversion]
+           struct mox_rwtm *rwtm = rng->priv;
+                            ^      ~~~~~~~~~
+   6 warnings and 1 error generated.
 
 
-arch/mips/kernel/genex.S:520:2: warning: macro defined with named
-parameters which are not used in macro body, possible positional
-parameter found in body which will have no effect
- .macro __BUILD_verbose nexception
- ^
-WARNING: modpost: vmlinux.o: section mismatch in reference: check_bugs
-(section: .text) -> check_bugs32 (section: .init.text)
-ERROR: modpost: Section mismatches detected.
-Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
-make[2]: *** [scripts/Makefile.modpost:136: vmlinux.symvers] Error 1
-make[2]: *** Deleting file 'vmlinux.symvers'
-make[2]: Target '__modpost' not remade because of errors.
-make[1]: *** [Makefile:1978: modpost] Error 2
+vim +286 drivers/firmware/turris-mox-rwtm.c
 
+   283	
+   284	static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+   285	{
+ > 286		struct mox_rwtm *rwtm = rng->priv;
+   287		struct armada_37xx_rwtm_tx_msg msg;
+   288		int ret;
+   289	
+   290		if (max > 4096)
+   291			max = 4096;
+   292	
+   293		msg.command = MBOX_CMD_GET_RANDOM;
+   294		msg.args[0] = 1;
+   295		msg.args[1] = rwtm->buf_phys;
+   296		msg.args[2] = (max + 3) & ~3;
+   297	
+   298		if (!wait) {
+   299			if (!mutex_trylock(&rwtm->busy))
+   300				return -EBUSY;
+   301		} else {
+   302			mutex_lock(&rwtm->busy);
+   303		}
+   304	
+   305		ret = mbox_send_message(rwtm->mbox, &msg);
+   306		if (ret < 0)
+   307			goto unlock_mutex;
+   308	
+   309		ret = wait_for_completion_interruptible(&rwtm->cmd_done);
+   310		if (ret < 0)
+   311			goto unlock_mutex;
+   312	
+   313		ret = mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
+   314		if (ret < 0)
+   315			goto unlock_mutex;
+   316	
+   317		memcpy(data, rwtm->buf, max);
+   318		ret = max;
+   319	
+   320	unlock_mutex:
+   321		mutex_unlock(&rwtm->busy);
+   322		return ret;
+   323	}
+   324	
 
-Build details:
----------
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16367253/suite/build/test/clang-16-tinyconfig/details/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230419/testrun/16367253/suite/build/test/clang-16-tinyconfig/log
-
-
-Steps to reproduce:
-----------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-
-tuxmake --runtime podman --target-arch mips --toolchain clang-16
---kconfig tinyconfig LLVM=1 LLVM_IAS=1
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
