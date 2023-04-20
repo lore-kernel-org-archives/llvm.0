@@ -1,166 +1,132 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABB523A3;
-	Thu, 20 Apr 2023 06:29:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681972172; x=1713508172;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IyOzyJAd/6ABxtofxBPj1J0sAalEL4tioDUX48t0eqQ=;
-  b=OVMACydnUpKkMgigcsHtkNy4Pdc+CW2LCde0dNc8HqsTY/7kURxghnMJ
-   InAYXpYfNjnMO6TiMVvryCvBw1BSXFEaEvtsaN8mk/+5TgZZ+xYBhbPcj
-   SKfdwGxU0s/cQO8rAE9w/Jz8fL+ce6qP3gacv/6sfI1k68VpVssxY6esw
-   lWJjOPX9vvqKIRLxU7SX0QC3Z3l76EnKSkJssXltN0JjSpDNdw0F0V+3J
-   fIQEIuKRyjM5fUxDM/q533u6syXF+rG4F5dUqJ4+whoXZFm3PTl+Uaq+j
-   garI7ctQgcTeJd8GQ+p65aGhL5QPP8vM6hwsKpVKfLHWphbUDTVqq4MzB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="408558518"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="408558518"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2023 23:29:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10685"; a="937931937"
-X-IronPort-AV: E=Sophos;i="5.99,211,1677571200"; 
-   d="scan'208";a="937931937"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Apr 2023 23:29:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ppNnN-000fYG-0e;
-	Thu, 20 Apr 2023 06:29:29 +0000
-Date: Thu, 20 Apr 2023 14:29:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anup Sharma <anupnewsmail@gmail.com>, zbr@ioremap.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: w1: slaves: Drop unnecessary explicit casting
-Message-ID: <202304201411.fS7y0KJP-lkp@intel.com>
-References: <ZECFjQMLwnoYPMeL@yoga>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097C5193;
+	Thu, 20 Apr 2023 06:31:40 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id 5C6F2320069B;
+	Thu, 20 Apr 2023 02:31:39 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 20 Apr 2023 02:31:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1681972298; x=1682058698; bh=eP
+	zZEj8M7v5T2YSkLJR2yP2qHh01VIHjtDtJNsIPb5Y=; b=i5FL1M32ued+WtcQCq
+	EYl5+KZSaJhuolI+2V6ij3AED0sMCj8lHtz12tziM70JA2SqcdLVv+K7tF7NMbZk
+	GfHm42gFBY8aQIkYBbznsaeM6nlJUxZ1T97+c7vkPk8a3MXMeCwHzgEa57cHp9tA
+	vk3M7NSPWDrqFqWMLV9Hz01ef4bu0FXoFpXDyYWgEZMiKoWBFhFvOp9X2J4hf9aV
+	6Vs0v1Vp2ybMfHjbMVb6c22OvfyQPMJKOLqjNa5wdhNQolfUv3fqi2r97/7VxH5m
+	yjEivOe/OJHD3b5t7FFP+sssOeCTBm7Smwl7jM2oKMGdxObsTfTf5k6muQr6R6nM
+	DUsw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1681972298; x=1682058698; bh=ePzZEj8M7v5T2
+	YSkLJR2yP2qHh01VIHjtDtJNsIPb5Y=; b=KCLwG3l5O3gAA27jXbZzdvHU4EveJ
+	lCQyBp2Svnu9kCNDTJ9LeXY6BxXfHgH5tk7Tw8Lvrq29rzc/FiXQI7/IhSGuwdA/
+	bWuSMBkH1kvm6jxRHB5TY7EXOilIo4xxaO6kL4Ss7yssohKnauKGCllmOv7zhs02
+	6AwFQkAtqK5nhostq50dU7oWyRG1bsE+QQ4dn8A8Qj7ml0x8DzRgEeCfOvKVV5T5
+	Qb8vLUgH8hWikCjtnYFkdAIvRNEaItSub76vjdnBAgWfsxwx8zE9e5fb37bZJL7a
+	mCmrMk5ueZY0qEel6MM2B0FLt9EOM+GNC3M+p8BbT3qF6apu/kZjptY8Q==
+X-ME-Sender: <xms:StxAZCDuJfyQ3_xhcoBV3HQTw8mM8aKD2ry9sFcww3D2FRsPqeaVHw>
+    <xme:StxAZMg_jf0455MvU-PMyGkKSATAUCusSrU3Aonn4Wn-VEXLr7_4KpI6XHLXSZ5qk
+    GrERFhxO5-wNrQN3vk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtuddguddutdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:StxAZFkwMhANCl37MtN12A_l1FOjIEIawFZ_CA62cvDfmUojxAB_PA>
+    <xmx:StxAZAz4vQGLb68CTLHVztEQzKNGWBEDNfxVmxrRPLyOgKD_mtEREA>
+    <xmx:StxAZHQpEbpFda-6rXtB0SDQ35n8kiVz0Qoj9U9gtNtAzVxYILZXBA>
+    <xmx:StxAZARMZlR-W6hHQDRLJI9ih0wlLNMam6ezYxWXtnhVzELIWXKepA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 6432FB60086; Thu, 20 Apr 2023 02:31:38 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZECFjQMLwnoYPMeL@yoga>
+Mime-Version: 1.0
+Message-Id: <f16fb810-f70d-40ac-8e9d-2ada008c446d@app.fastmail.com>
+In-Reply-To: <202303241935.xRMa6mc6-lkp@intel.com>
+References: <202303241935.xRMa6mc6-lkp@intel.com>
+Date: Thu, 20 Apr 2023 08:31:17 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "kernel test robot" <lkp@intel.com>, "Andrew Lunn" <andrew@lunn.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ "Christian Marangi" <ansuelsmth@gmail.com>, Netdev <netdev@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, "Florian Fainelli" <f.fainelli@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>
+Subject: Re: [lunn:v6.3-rc2-net-next-phy-leds 5/15] ld.lld: error: undefined symbol:
+ devm_mdiobus_alloc_size
+Content-Type: text/plain
 
-Hi Anup,
+On Fri, Mar 24, 2023, at 12:36, kernel test robot wrote:
+>>> ld.lld: error: undefined symbol: devm_mdiobus_alloc_size
+>    >>> referenced by phy.h:458 (include/linux/phy.h:458)
+>    >>>               
+> drivers/net/ethernet/microchip/lan743x_main.o:(lan743x_pcidev_probe) in 
+> archive vmlinux.a
+>    >>> referenced by phy.h:458 (include/linux/phy.h:458)
+>    >>>               drivers/net/ethernet/ni/nixge.o:(nixge_probe) in 
+> archive vmlinux.a
+>
+> Kconfig warnings: (for reference only)
+>    WARNING: unmet direct dependencies detected for PHYLIB
 
-kernel test robot noticed the following build warnings:
+It looks like this has hit linux-next now, I'm seeing the same problem in
+my own randconfig builds after Andrew's 01e5b728e9e4 ("net: phy: Add a
+binding for PHY LEDs").
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3-rc7 next-20230419]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>    Depends on [m]: NETDEVICES [=y] && (LEDS_CLASS [=m] || LEDS_CLASS 
+> [=m]=n)
+>    Selected by [y]:
+>    - PHYLINK [=y] && NETDEVICES [=y]
+>    - TIGON3 [=y] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_BROADCOM [=y] && PCI [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
+>    - LAN743X [=y] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_MICROCHIP [=y] && PCI [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
+>    - NI_XGE_MANAGEMENT_ENET [=y] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_NI [=y] && HAS_IOMEM [=y] && HAS_DMA [=y]
+>    - XILINX_EMACLITE [=y] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_XILINX [=y] && HAS_IOMEM [=y]
+>    Selected by [m]:
+>    - ALTERA_TSE [=m] && NETDEVICES [=y] && ETHERNET [=y] && HAS_DMA [=y]
+>    - DNET [=m] && NETDEVICES [=y] && ETHERNET [=y] && HAS_IOMEM [=y]
+>    - B44 [=m] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_BROADCOM [=y] && SSB_POSSIBLE [=y] && HAS_DMA [=y]
+>    - KS8851_MLL [=m] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_MICREL [=y] && HAS_IOMEM [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
+>    - SMSC911X [=m] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_SMSC [=y] && HAS_IOMEM [=y]
+>    - SMSC9420 [=m] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_SMSC [=y] && PCI [=y]
+>    - XILINX_LL_TEMAC [=m] && NETDEVICES [=y] && ETHERNET [=y] && 
+> NET_VENDOR_XILINX [=y] && HAS_IOMEM [=y]
+>    - USB_NET_AX88179_178A [=m] && NETDEVICES [=y] && USB_NET_DRIVERS 
+> [=m] && USB_USBNET [=m]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anup-Sharma/drivers-w1-slaves-Drop-unnecessary-explicit-casting/20230420-082340
-patch link:    https://lore.kernel.org/r/ZECFjQMLwnoYPMeL%40yoga
-patch subject: [PATCH] drivers: w1: slaves: Drop unnecessary explicit casting
-config: x86_64-randconfig-a015-20230417 (https://download.01.org/0day-ci/archive/20230420/202304201411.fS7y0KJP-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/211461ea088a31e3a084fd539e243c9d32db3cb6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Anup-Sharma/drivers-w1-slaves-Drop-unnecessary-explicit-casting/20230420-082340
-        git checkout 211461ea088a31e3a084fd539e243c9d32db3cb6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/w1/slaves/
+The problem here is that both PHYLIB and LEDS_CLASS are user-visible
+tristate symbols that are referenced from other Kconfig symbols with
+both 'depends on' and 'select'. Having the two interact introduces a
+number of ways that lead to circular dependencies.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304201411.fS7y0KJP-lkp@intel.com/
+It might be ok to use 'select LEDS_CLASS' from PHYLIB, but I have not
+tried that yet and I expect this will result in other build failures.
 
-All warnings (new ones prefixed by >>):
+A better solution would be to change all drivers that currently use
+'select PHYLIB' to 'depends on PHYLIB' and have PHYLIB itself
+'default ETHERNET' to avoid most of the regressions, but doing this
+for 6.4 is a bit risky and can cause other problems.
 
->> drivers/w1/slaves/w1_ds28e04.c:238:5: warning: format specifies type 'void *' but the argument has type 'loff_t' (aka 'long long') [-Wformat]
-                                   off, count);
-                                   ^~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/w1/slaves/w1_ds28e04.c:247:6: warning: format specifies type 'void *' but the argument has type 'loff_t' (aka 'long long') [-Wformat]
-                                           off);
-                                           ^~~
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +238 drivers/w1/slaves/w1_ds28e04.c
-
-   221	
-   222	static ssize_t eeprom_write(struct file *filp, struct kobject *kobj,
-   223				    struct bin_attribute *bin_attr, char *buf,
-   224				    loff_t off, size_t count)
-   225	
-   226	{
-   227		struct w1_slave *sl = kobj_to_w1_slave(kobj);
-   228		int addr, len, idx;
-   229	
-   230		count = w1_f1C_fix_count(off, count, W1_EEPROM_SIZE);
-   231		if (count == 0)
-   232			return 0;
-   233	
-   234		if (w1_enable_crccheck) {
-   235			/* can only write full blocks in cached mode */
-   236			if ((off & W1_PAGE_MASK) || (count & W1_PAGE_MASK)) {
-   237				dev_err(&sl->dev, "invalid offset/count off=%pe cnt=%zd\n",
- > 238					off, count);
-   239				return -EINVAL;
-   240			}
-   241	
-   242			/* make sure the block CRCs are valid */
-   243			for (idx = 0; idx < count; idx += W1_PAGE_SIZE) {
-   244				if (crc16(CRC16_INIT, &buf[idx], W1_PAGE_SIZE)
-   245					!= CRC16_VALID) {
-   246					dev_err(&sl->dev, "bad CRC at offset %pe\n",
-   247						off);
-   248					return -EINVAL;
-   249				}
-   250			}
-   251		}
-   252	
-   253		mutex_lock(&sl->master->mutex);
-   254	
-   255		/* Can only write data to one page at a time */
-   256		idx = 0;
-   257		while (idx < count) {
-   258			addr = off + idx;
-   259			len = W1_PAGE_SIZE - (addr & W1_PAGE_MASK);
-   260			if (len > (count - idx))
-   261				len = count - idx;
-   262	
-   263			if (w1_f1C_write(sl, addr, len, &buf[idx]) < 0) {
-   264				count = -EIO;
-   265				goto out_up;
-   266			}
-   267			idx += len;
-   268		}
-   269	
-   270	out_up:
-   271		mutex_unlock(&sl->master->mutex);
-   272	
-   273		return count;
-   274	}
-   275	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+     Arnd
