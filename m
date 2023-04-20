@@ -1,97 +1,103 @@
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DE58C15;
-	Thu, 20 Apr 2023 15:40:29 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 4629F5C00D3;
-	Thu, 20 Apr 2023 11:40:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 20 Apr 2023 11:40:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1682005227; x=1682091627; bh=Al
-	qUOfOa2kHr8oGUuOGFh2LpW6TOvsZBDKrnI2S7ANc=; b=KkG7wLMbnLTcOvv++O
-	4+CR2me9Eu8v2wfJUPP+1bru53dYLbRbtlcFS16z8V1D4y8z3jRREt3VRUk4HGzp
-	MJE7IVsJJGGhTpyskgVRab2Ux0dkRZCMxVxIbZCJ+TogQhZKp8kXFkZIRRbq/58I
-	I/vSXIs+ENkzjNQK8K2+Dj/Ji1TNVwqpcydGkiITWeBbWfOQqD2pHYuocZRF+0lG
-	CeJZeyuV31DxYTAokjeXfGE7bu/dusnorIgZuSsctEXTETvhTYQVTp3xhqNbF80g
-	xATk/d9J37pOuSCD37RS21tUt/txAjJia2MGAs219wP6MeznEBqhcnvQtO7QPtQt
-	rTiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1682005227; x=1682091627; bh=AlqUOfOa2kHr8
-	oGUuOGFh2LpW6TOvsZBDKrnI2S7ANc=; b=NXXxKdYpel3XATPdMjcy2LOplqU5/
-	sZHpAx0lc1joZfRni6Q7XUmYH6Vagz6LCYUwI7k7cHiAzJOQn5pfa8yN8X2N62TE
-	N7s7nOpDlB51fPCK5xZMZh5vwO8wcLCndwl9kBG9lClK4vkN2IiT1iHaMWdPDzH7
-	+77UL4QDYn10CvGp6bAzjRUT8xrePhKEQrjDWWrdTPoJ1Rpzy0trhvc8aSuTnl3Y
-	/ViHxA6ai6Z2rxxdkhRYLLvKsZ33UinIcC8k0c0AotgT0py4gI0mJsOO7veNtOxy
-	5OMqiCbeR/+WRuoKPATikUFaBHONs1uT1aU0z+RD0D3UgIyX4lUqo3tHQ==
-X-ME-Sender: <xms:6lxBZOguJGkVspDGQGA9QHVFRkxt4TN0azq9Q7QFrya4E3NAXtftVA>
-    <xme:6lxBZPCEYvzYrqqXSXypO8PV4zyV8V5SxJvNCzRKzyBf9XuuZKokrpR7CgM6Q4LBb
-    hmwLb1CeFjBS1EnMRg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:6lxBZGGSAp5YfCqfIBVUEnNEl2nDn-QwR4mtl4XdQaDhWgNDxMN4lQ>
-    <xmx:6lxBZHTl6uq07VtdGUt1AGK1xNAsd0yk7k2KkokzKZ2p_PgRJGaIHg>
-    <xmx:6lxBZLyuXWvldqMV3-LxhfztxS46KyJKO9iTcj7Uf4DKslfaQM7Iiw>
-    <xmx:61xBZCwrNwknFVp09McHL9-TW3RMMCtmTj_XZ0PmAJhVrEPCY4AKJg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id CC6F5B60089; Thu, 20 Apr 2023 11:40:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4729D8C15
+	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 15:40:41 +0000 (UTC)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id F146C732;
+	Thu, 20 Apr 2023 15:40:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net F146C732
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1682005240; bh=UF61JW6oRtLJIYx10KbxIyUy5rSXTyyXgGlY7V2DrHg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=Qcb4dlTc5ho5ToPMXUQ80Nry1hsqMBl2qEbaTo4ZKLPU3xmAuicagZzKzCd+LxXaj
+	 jxZ0adq+YtQ6huKRsNejlznrRbNlCMNy8ZqBQruRdYn/G79kOgt9bjdwaEZM8thry5
+	 c4GRXrjPaShA+V7Mr3otYovIIStDnFB+mqFGLFdiBT3aYlSDzu0UFL8cr0PbWzDc/Z
+	 iLddw/ryvzvL5VchGaN3+8ymqcXzJNXmDA7CHhyV0/roHnxHGUCHQmCUlGBPmHpeGZ
+	 nO9/C2KW+UZQy8v7stRhB0Q+zePmY7CnNITn4qLN53b0CpDXrsWNHcFU49jq55WNNS
+	 yCfVXzeQCQSHA==
+From: Jonathan Corbet <corbet@lwn.net>
+To: Zipeng Zhang <zhangzipeng0@foxmail.com>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+ boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+ nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+ masahiroy@kernel.org, codeagain@codeagain.dev, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev, Zipeng Zhang <zhangzipeng0@foxmail.com>
+Subject: Re: [PATCH] Documentation/process/changes: Escape --options to fix
+ Sphinx output
+In-Reply-To: <87sfcuu0fm.fsf@meer.lwn.net>
+References: <tencent_CB1A298D31FD221496FF657CD7EF406E6605@qq.com>
+ <87sfcuu0fm.fsf@meer.lwn.net>
+Date: Thu, 20 Apr 2023 09:40:39 -0600
+Message-ID: <87o7nitvd4.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <73674ffd-3231-4ca8-af65-3ec621de5072@app.fastmail.com>
-In-Reply-To: <2e7f5511-08e2-4ee0-ab3f-481ba6724824@lunn.ch>
-References: <202303241935.xRMa6mc6-lkp@intel.com>
- <f16fb810-f70d-40ac-8e9d-2ada008c446d@app.fastmail.com>
- <758fff85-aefc-4e0a-97b1-fe7179fafac6@lunn.ch>
- <91c716f0-bf7f-4fdf-8cb7-83f1bdc0cbd4@app.fastmail.com>
- <2e7f5511-08e2-4ee0-ab3f-481ba6724824@lunn.ch>
-Date: Thu, 20 Apr 2023 17:39:56 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andrew Lunn" <andrew@lunn.ch>
-Cc: "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, "Christian Marangi" <ansuelsmth@gmail.com>,
- Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
- "Florian Fainelli" <f.fainelli@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>
-Subject: Re: [lunn:v6.3-rc2-net-next-phy-leds 5/15] ld.lld: error: undefined symbol:
- devm_mdiobus_alloc_size
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 20, 2023, at 17:26, Andrew Lunn wrote:
->> I think the best way is to drop your MDIO_DEVRES patch and instead
->> apply mine (or some variation of that) from
->> 
->> https://lore.kernel.org/lkml/20230420084624.3005701-1-arnd@kernel.org/
->> 
->> Once any missing or recursive dependencies are handled, the devres
->> problem should be fixed as well. I have completed around 150
->> randconfig builds with that patch and have not seen any further
->> problems.
->
-> Is this on top of my patch? Or does it require mine is reverted?  I
-> can send a revert if it is needed.
+Jonathan Corbet <corbet@lwn.net> writes:
 
-The two are independent. I think your patch does nothing once
-mine is applied, since the indirect 'select MDIO_DEVRES' will
-work again. Reverting it might help avoid some confusion though.
+> The right solution, if it is possible, is to convince Sphinx to stop
+> messing with "--" altogether.  Substituting em-dashes is of limited
+> cosmetic value and, I think, is something we could do without.
 
-     Arnd
+Ah ... I get it now.  We *did* disable this once by disabling the
+"html_use_smartypants" option in conf.py.  The Sphinx folks changed the
+name of that option in the 1.6.6 release, though, silently turning that
+behavior back on.  It only took us five years to notice...  I think I'll
+just drop the attached patch into docs-next.
+
+Thanks for bringing this up!
+
+jon
+
+------------8<-----------------
+From 995addeb4ab2a2c4beaf8b90a4dc8c1d64735d29 Mon Sep 17 00:00:00 2001
+From: Jonathan Corbet <corbet@lwn.net>
+Date: Thu, 20 Apr 2023 09:34:35 -0600
+Subject: [PATCH] docs: turn off "smart quotes" in the HTML build
+
+We have long disabled the "html_use_smartypants" option to prevent Sphinx
+from mangling "--" sequences (among others).  Unfortunately, Sphinx changed
+that option to "smartquotes" in the 1.6.6 release, and seemingly didn't see
+fit to warn about the use of the obsolete option, resulting in the
+aforementioned mangling returning.  Disable this behavior again and hope
+that the option name stays stable for a while.
+
+Reported-by: Zipeng Zhang <zhangzipeng0@foxmail.com>
+Link: https://lore.kernel.org/lkml/tencent_CB1A298D31FD221496FF657CD7EF406E=
+6605@qq.com
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+---
+ Documentation/conf.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/conf.py b/Documentation/conf.py
+index db16814f182f..3d1f74f76e64 100644
+--- a/Documentation/conf.py
++++ b/Documentation/conf.py
+@@ -343,9 +343,10 @@ sys.stderr.write("Using %s theme\n" % html_theme)
+ # so a file named "default.css" will overwrite the builtin "default.css".
+ html_static_path =3D ['sphinx-static']
+=20
+-# If true, SmartyPants will be used to convert quotes and dashes to
+-# typographically correct entities.
+-html_use_smartypants =3D False
++# If true, Docutils "smart quotes will be used to convert quotes and dashes
++# to typographically correct entities.  This will convert "--" to "=E2=80=
+=94",
++# which is not always what we want, so disable it.
++smartquotes =3D False
+=20
+ # Custom sidebar templates, maps document names to template names.
+ # Note that the RTD theme ignores this
+--=20
+2.40.0
+
