@@ -1,67 +1,146 @@
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506B03C2F
-	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 08:48:44 +0000 (UTC)
-Received: from uucp (helo=alpha)
-	by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-	id 1ppPy5-0003nT-00; Thu, 20 Apr 2023 10:48:41 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id D2308C0119; Thu, 20 Apr 2023 10:06:21 +0200 (CEST)
-Date: Thu, 20 Apr 2023 10:06:21 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH v2 6/7] MIPS: Fallback CPU -march CFLAG to ISA level if
- unsupported
-Message-ID: <20230420080621.GA6908@alpha.franken.de>
-References: <20230414080701.15503-1-jiaxun.yang@flygoat.com>
- <20230414080701.15503-7-jiaxun.yang@flygoat.com>
- <CAKwvOdkttvdZQyxrP60hAziaRQ4HWRBBSuA-vN25_USg-zEJqg@mail.gmail.com>
- <550FCA0F-2C48-4133-85B0-D9494CC1C23C@flygoat.com>
- <CAKwvOd=sNyOq9J=CS09XXQ6YY3y3ytLnwHxKoHNdddcxYk=nJQ@mail.gmail.com>
- <20230419221500.GA17797@alpha.franken.de>
- <B02E6819-A25F-4588-8CDA-D7C5A2E5B0B6@flygoat.com>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C70525C
+	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 09:41:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1681983706;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=baXsXZ7LSGREBLIPR7Q4CFyAXJO++vrpc1vWiz/P6B8=;
+	b=Ft+OH07LGc6UTPOl5hv/TX4ubsWLTa89jJER10UapcZaSoTXb551RGOb3MDmr1oeCFtW30
+	/mM90cK3qmLcdSgQA0N0iqxb6D4a04HQNej2h7Jw5kKI83M1ZRs3K2+UBZlEvA4QDPBBIo
+	GheB99GPATxR9z3fkZW/Zw7NsG3WHTE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-r8d0ZzZLPr-dPOmqIpzMyw-1; Thu, 20 Apr 2023 05:41:45 -0400
+X-MC-Unique: r8d0ZzZLPr-dPOmqIpzMyw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2402D8996E3
+	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 09:41:45 +0000 (UTC)
+Received: from [172.64.2.78] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E8B904020BF1;
+	Thu, 20 Apr 2023 09:41:28 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 18 of 353): Test report for master
+ (6.3.0-rc7, mainline.kernel.org-clang, 23990b1a)
+Date: Thu, 20 Apr 2023 09:41:28 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <B02E6819-A25F-4588-8CDA-D7C5A2E5B0B6@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <26140.123042005414500103@us-mta-648.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 20, 2023 at 12:36:41AM +0100, Jiaxun Yang wrote:
-> >>> Wikipedia [1] should fit the purpose.
-> >>> 
-> >>> [1]: https://en.wikipedia.org/wiki/List_of_MIPS_architecture_processors
-> >> 
-> >> Mostly! Though I was not able to verify:
-> >> - p5600
-> > 
-> > mips32r5
-> 
-> On wikipedia’s “Imagination Technologies” section.
-> 
-> > 
-> >> - r5500
-> > 
-> > mips4
-> > 
-> >> - rm5200
-> > 
-> > mips4
-> 
-> I think those are all R5000 derivatives?
+Hi, we tested your kernel and here are the results:
 
-yes, which makes them mips4. Vr5500 is special as it supports out-of-order
-execution.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Thomas.
+Tested-by: CKI Project <cki-project@redhat.com>
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Kernel information:
+    Commit message: Merge tag 'spi-fix-v6.3-rc7' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/broonie/spi
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/85359
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
