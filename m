@@ -1,296 +1,145 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38EE8492;
-	Thu, 20 Apr 2023 13:34:19 +0000 (UTC)
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2a8ba5f1d6bso5013041fa.2;
-        Thu, 20 Apr 2023 06:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681997658; x=1684589658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JBx+eefuD3mlwASOnAXXaphvTZnbQD+D9i1G2I4aLj8=;
-        b=qmB7IgRNrOg7Yiy3/TCCuLJTdZB4SeCbSJttL+VR1cUJ04+ObsDD9YNoCesG+AnTHJ
-         aTeVhRRCY5DH9nEbVtHUHA46SG7WHzuheX2uLfll+cHdp7LAjEqFRzwamv7j4ZRlpYWo
-         LEWj3a6svuA2UrbTejkMtUNjhba6LI+KwaWc5ejbGx99wt79qmebAVLxUZp0cn6zBI/d
-         r+iWKXXsu5bcz9v81h5zaXe2/YBUu1c/lwRSqIOnlFrtvbsetPjfOWpUPQm8WBbBU2Rd
-         dJoZoLwtjUfqSjMspUZ7yJoKBkIURWO4PLxVccPS+Xc8LISsIDwtU5IcglUK/Ea+MJas
-         QJNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681997658; x=1684589658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JBx+eefuD3mlwASOnAXXaphvTZnbQD+D9i1G2I4aLj8=;
-        b=AH3mhpbcFDQ0c/+g9rbgNls1uIK+fxOQ58GFNuJOd8DgeUJJ0xS8PUkMEHqGIaLUok
-         Omii2fCwDJfQ8xvx/9Eg49kAo3LNTm5FaSaY0WticVc6PQoSGI9T/A9+MOFF4uX6khd6
-         r5mr5r1sQe3KN08AMLuuboIlrz03uala2d5x2AVsiSIfDkDhAtSeodcVIOcsjcupsjXm
-         STjQJIldi0arW8u3KUL4E2JUBornkcl5N0Er2O7HVI0/iryMEDJ/6H196A3KQWmOQsh9
-         7znE6sZzutmXEwRF/XV1ZMZ9x9qXPUIRlg6SOQxquHRtZcUZECwU42hm6RUwjiMkQPZO
-         Fr+g==
-X-Gm-Message-State: AAQBX9c+4oNquvxNOqYfaKXOfFvugOBRUw7/kfYbM9lfcjy00UZ0PcFF
-	uDLcHwNEL0emR11ogdM5WbLy7TSVNs6PtdDf84I=
-X-Google-Smtp-Source: AKy350btAzYnXLlPTv04Y7unRU8YAvfOdqZn0Lxv4Zt4Os2OAzHN86GYf4hNuxyadHt2aEVCWzfucLKCiIJ2BZ7vVzA=
-X-Received: by 2002:a19:ee0e:0:b0:4ea:e799:59f7 with SMTP id
- g14-20020a19ee0e000000b004eae79959f7mr393073lfb.2.1681997657435; Thu, 20 Apr
- 2023 06:34:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526E78492;
+	Thu, 20 Apr 2023 13:38:01 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 54FFB5C02B1;
+	Thu, 20 Apr 2023 09:38:00 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 20 Apr 2023 09:38:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1681997880; x=1682084280; bh=l1
+	57PF1o8GfYodDCq/uRVldL3RnSiAxX/QtRHLYnAzg=; b=i9vitxfqzHhlC5SUtd
+	1vMtckX3QQi+aeJIOBnS9Tf4UFRS9SSXdT5rJ3Q2OX0s0tl7uUeBCGnv3DoRQ+CW
+	YPK1t6JwyVdfBeDb8Q7P415qB7htkoPyQjPp097jOHhbD1hM764giFGSEUJAC0U2
+	ypVBLPnWA1Cv0ZZr7DInmY9CLaT/q3xLlUYxWOWDfZa3xDmfZf8wwllfgLO6kLG/
+	9e9WuT3cnw9dNag09DL171jMBy9/bOhyk36Pd9bsQkuk8L6v5raYP8uoQOmFBawg
+	SDO7IkU62bw3mhofU+M9yR4LNQ8jbOJuhbL1u/1++yKchRJV2T7IFp27IO2RMs7t
+	sutg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1681997880; x=1682084280; bh=l157PF1o8GfYo
+	dDCq/uRVldL3RnSiAxX/QtRHLYnAzg=; b=Kh7jMS4QOAKyepo6FS5j6xqoER69k
+	68tL8bFit/2b3jK+hPWHkzfEdNx/JonEZyTQ0QUvg/pP95oD2Rh60VBQeS1DBB3c
+	goY+43+gQYFPrZn8RA8+ZAjEHO+9rwPk1XjX921fFJHVlQ6+FyXXkk/j4BX82mee
+	qxy4oPLMPaN+F0Yp26VPOKRRoanySKVuQf5kmuqj4w3nz/Agj6AKDcEtLl465i5n
+	ZKW81LaJyac2oAk93Bv6tZ1p2EEjYxAeZVye0WzGRp2bMBHpofARi+0yDrrQkkfZ
+	vBjBWE2xa9CEd8GrZM2M/0DQNBxoPfvTKt4jw2C+yN3uSYAxtCINazqyA==
+X-ME-Sender: <xms:OEBBZKJTzqEOAufVxIZO_d1bF0RJhI-rv7io8tRgVN7YdbU--_VdKw>
+    <xme:OEBBZCJESyHE0OBu6jSmqqDjL6fuI9yKMQ89QA6bTzum3D7oppjJydVjwGv9IlFvg
+    pjWkkPeP2Ukk6qPNmo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtvddgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:OEBBZKvm-g6VhBfuo5zld3-9JsJ1zAzK6ODGacvQzQMsvDHgTTIPeg>
+    <xmx:OEBBZPZEmQCIjssV2CjJpqs-nlMtfmaJdKTGsgIC0mMMYtDxyI7KZQ>
+    <xmx:OEBBZBYlQxiVjBGqehCks1pMPWWeVwLNxTG17CyYxddurounxrjEjw>
+    <xmx:OEBBZN4adpwhvzXAOysdLQ7Ru4kxybBuOYJnYLk337Ix_ZOmNdDGuA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id F389BB60086; Thu, 20 Apr 2023 09:37:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20230419151321.6167-14-jorge.lopez2@hp.com> <202304200914.VfJcRutc-lkp@intel.com>
-In-Reply-To: <202304200914.VfJcRutc-lkp@intel.com>
-From: Jorge Lopez <jorgealtxwork@gmail.com>
-Date: Thu, 20 Apr 2023 08:33:54 -0500
-Message-ID: <CAOOmCE_+UL31C50Md-eV5H76jy2Ta1q1xB7b=QqdNU95Q4y6fw@mail.gmail.com>
-Subject: Re: [PATCH v10 13/14] HP BIOSCFG driver - Makefile
-To: kernel test robot <lkp@intel.com>
-Cc: hdegoede@redhat.com, platform-driver-x86@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, thomas@t-8ch.de, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Message-Id: <91c716f0-bf7f-4fdf-8cb7-83f1bdc0cbd4@app.fastmail.com>
+In-Reply-To: <758fff85-aefc-4e0a-97b1-fe7179fafac6@lunn.ch>
+References: <202303241935.xRMa6mc6-lkp@intel.com>
+ <f16fb810-f70d-40ac-8e9d-2ada008c446d@app.fastmail.com>
+ <758fff85-aefc-4e0a-97b1-fe7179fafac6@lunn.ch>
+Date: Thu, 20 Apr 2023 15:37:38 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andrew Lunn" <andrew@lunn.ch>
+Cc: "kernel test robot" <lkp@intel.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, "Christian Marangi" <ansuelsmth@gmail.com>,
+ Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ "Florian Fainelli" <f.fainelli@gmail.com>,
+ "David S . Miller" <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>
+Subject: Re: [lunn:v6.3-rc2-net-next-phy-leds 5/15] ld.lld: error: undefined symbol:
+ devm_mdiobus_alloc_size
+Content-Type: text/plain
 
-Thank you.  I will address those issues.
+On Thu, Apr 20, 2023, at 15:07, Andrew Lunn wrote:
+> On Thu, Apr 20, 2023 at 08:31:17AM +0200, Arnd Bergmann wrote:
+>> 
+>> It looks like this has hit linux-next now, I'm seeing the same problem in
+>> my own randconfig builds after Andrew's 01e5b728e9e4 ("net: phy: Add a
+>> binding for PHY LEDs").
+>
+> Hi Arnd
+>
+> I tried to fix this with:
+>
+> commit 37f9b2a6c086bb28487a0682b8098f907861c4a1
+> Author: Andrew Lunn <andrew@lunn.ch>
+> Date:   Thu Mar 30 20:13:29 2023 -0500
+>
+>     net: ethernet: Add missing depends on MDIO_DEVRES
+>    
+>     A number of MDIO drivers make use of devm_mdiobus_alloc_size(). This
+>     is only available when CONFIG_MDIO_DEVRES is enabled. Add missing
+>     depends or selects, depending on if there are circular dependencies or
+>     not. This avoids linker errors, especially for randconfig builds.
+>
+> All the failures i've seen have CONFIG_MDIO_DEVRES set to disabled. So
+> i added either depends on, or select to the drivers which use it. I
+> missed the LAN743x.
 
-Regards,
+I've sent a different patch now. From what I can tell, your patch does
+not address the actual problem, it just works around one of the symptoms:
 
-Jorge
+When you have a driver that selects PHYLIB, but PHYLIB itself
+depends on something that is not enabled, Kconfig just gives up
+and stops handling any other 'select' statements from that chain.
 
-On Wed, Apr 19, 2023 at 8:45=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
+selecting MDIO_DEVRES from each of the drivers works around this
+one thing, but it does not solve the actual dependency, for that you
+would have to add 'depends on LED_CLASS' on each of the network
+drivers as well, which is clearly not the intention.
+
+>> The problem here is that both PHYLIB and LEDS_CLASS are user-visible
+>> tristate symbols that are referenced from other Kconfig symbols with
+>> both 'depends on' and 'select'. Having the two interact introduces a
+>> number of ways that lead to circular dependencies.
 >
-> Hi Jorge,
+> I was getting circular dependencies with first versions of the above
+> patch. I initially tried depends on everywhere, and then had to drop
+> back to select for a few cases.
 >
-> kernel test robot noticed the following build warnings:
+>> It might be ok to use 'select LEDS_CLASS' from PHYLIB, but I have not
+>> tried that yet and I expect this will result in other build failures.
+>> 
+>> A better solution would be to change all drivers that currently use
+>> 'select PHYLIB' to 'depends on PHYLIB' and have PHYLIB itself
+>> 'default ETHERNET' to avoid most of the regressions, but doing this
+>> for 6.4 is a bit risky and can cause other problems.
 >
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on v6.3-rc7 next-20230419]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jorge-Lopez/HP-BIO=
-SCFG-driver-Documentation/20230419-231828
-> patch link:    https://lore.kernel.org/r/20230419151321.6167-14-jorge.lop=
-ez2%40hp.com
-> patch subject: [PATCH v10 13/14] HP BIOSCFG driver  - Makefile
-> config: i386-randconfig-a015-20230417 (https://download.01.org/0day-ci/ar=
-chive/20230420/202304200914.VfJcRutc-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c=
-006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/cfbebfbd4ed15793f=
-ab894715bfd74387adcf4f1
->         git remote add linux-review https://github.com/intel-lab-lkp/linu=
-x
->         git fetch --no-tags linux-review Jorge-Lopez/HP-BIOSCFG-driver-Do=
-cumentation/20230419-231828
->         git checkout cfbebfbd4ed15793fab894715bfd74387adcf4f1
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Di386 olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=
-=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash drivers/platform/x86/hp/hp=
--bioscfg/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304200914.VfJcRutc-lkp@i=
-ntel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:141:2: warni=
-ng: variable 'id' is used uninitialized whenever 'if' condition is true [-W=
-sometimes-uninitialized]
->            if (!buf_cp) {
->            ^~~~~~~~~~~~
->    include/linux/compiler.h:56:28: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_=
-var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __=
-trace_if_value(cond))
->                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:169:18: note=
-: uninitialized use occurs here
->            clear_passwords(id);
->                            ^~
->    drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:141:2: note:=
- remove the 'if' if its condition is always false
->            if (!buf_cp) {
->            ^~~~~~~~~~~~~~
->    include/linux/compiler.h:56:23: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                          ^
->    drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c:138:8: note:=
- initialize the variable 'id' to silence this warning
->            int id, ret =3D -EIO;
->                  ^
->                   =3D 0
->    1 warning generated.
-> --
-> >> drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:76:2: warning:=
- variable 'ret' is used uninitialized whenever 'if' condition is true [-Wso=
-metimes-uninitialized]
->            if (!start)
->            ^~~~~~~~~~~
->    include/linux/compiler.h:56:28: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_=
-var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __=
-trace_if_value(cond))
->                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:87:9: note: un=
-initialized use occurs here
->            return ret;
->                   ^~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:76:2: note: re=
-move the 'if' if its condition is always false
->            if (!start)
->            ^~~~~~~~~~~
->    include/linux/compiler.h:56:23: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                          ^
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:72:2: warning:=
- variable 'ret' is used uninitialized whenever 'if' condition is true [-Wso=
-metimes-uninitialized]
->            if (!start)
->            ^~~~~~~~~~~
->    include/linux/compiler.h:56:28: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_=
-var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __=
-trace_if_value(cond))
->                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:87:9: note: un=
-initialized use occurs here
->            return ret;
->                   ^~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:72:2: note: re=
-move the 'if' if its condition is always false
->            if (!start)
->            ^~~~~~~~~~~
->    include/linux/compiler.h:56:23: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                          ^
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:43:2: warning:=
- variable 'ret' is used uninitialized whenever 'if' condition is true [-Wso=
-metimes-uninitialized]
->            if (instance < 0)
->            ^~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:56:28: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_=
-var'
->    #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __=
-trace_if_value(cond))
->                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:87:9: note: un=
-initialized use occurs here
->            return ret;
->                   ^~~
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:43:2: note: re=
-move the 'if' if its condition is always false
->            if (instance < 0)
->            ^~~~~~~~~~~~~~~~~
->    include/linux/compiler.h:56:23: note: expanded from macro 'if'
->    #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) )=
- )
->                          ^
->    drivers/platform/x86/hp/hp-bioscfg/biosattr-interface.c:30:9: note: in=
-itialize the variable 'ret' to silence this warning
->            int ret;
->                   ^
->                    =3D 0
->    3 warnings generated.
->
->
-> vim +141 drivers/platform/x86/hp/hp-bioscfg/passwdobj-attributes.c
->
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  132
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  133  static ssize_t new_password_s=
-tore(struct kobject *kobj,
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  134                               =
- struct kobj_attribute *attr,
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  135                               =
- const char *buf, size_t count)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  136  {
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  137      char *p, *buf_cp =3D NULL=
-;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  138      int id, ret =3D -EIO;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  139
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  140      buf_cp =3D kstrdup(buf, G=
-FP_KERNEL);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19 @141      if (!buf_cp) {
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  142              ret =3D -ENOMEM;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  143              goto exit_passwor=
-d;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  144      }
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  145
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  146      p =3D memchr(buf_cp, '\n'=
-, count);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  147
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  148      if (p !=3D NULL)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  149              *p =3D '\0';
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  150
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  151      id =3D get_password_insta=
-nce_id(kobj);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  152
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  153      if (id >=3D 0)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  154              ret =3D validate_=
-password_input(id, buf_cp);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  155
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  156      if (!ret)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  157              strscpy(bioscfg_d=
-rv.password_data[id].new_password,
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  158                      buf_cp,
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  159                      sizeof(bi=
-oscfg_drv.password_data[id].new_password));
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  160
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  161      if (!ret)
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  162              ret =3D hp_set_at=
-tribute(kobj->name, buf_cp);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  163
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  164  exit_password:
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  165      /*
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  166       * Regardless of the resu=
-lts both new and current passwords
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  167       * will be set to zero an=
-d avoid security issues
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  168       */
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  169      clear_passwords(id);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  170
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  171      kfree(buf_cp);
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  172      return ret ? ret : count;
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  173  }
-> 1780f5eca27fb8 Jorge Lopez 2023-04-19  174
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+> For 6.4, will adding more depend on/select MDIO_DEVRES help? That
+> should be low risk.
+
+I think the best way is to drop your MDIO_DEVRES patch and instead
+apply mine (or some variation of that) from
+
+https://lore.kernel.org/lkml/20230420084624.3005701-1-arnd@kernel.org/
+
+Once any missing or recursive dependencies are handled, the devres
+problem should be fixed as well. I have completed around 150
+randconfig builds with that patch and have not seen any further
+problems.
+
+     Arnd
