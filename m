@@ -1,69 +1,140 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DF78BE9
-	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 13:57:23 +0000 (UTC)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E492F28F5
+	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 14:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682001048;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5u3lUWHDAbYsnN1AMIj/dDkn+xVP3xfZeO0Fyyc82Wk=;
+	b=i2CwBDzHzWU0I9/kvACRVM5moGETw20X++5E+DrLo8ApsEeW5VGpYKPYB+SwtFoVo4qmhD
+	GXndYy8z6lFTruJw/hfiUoeElueC2MBRJtoAF0wUXf8FOKK2yCcbWI04yNGMsK1nHQlam4
+	k4hR9zMbXsTrflkWBh6O2KI7G18a2rA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-250-SfarnyiSPzG8fUUYy4RcZw-1; Thu, 20 Apr 2023 10:30:47 -0400
+X-MC-Unique: SfarnyiSPzG8fUUYy4RcZw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 9C5582AE;
-	Thu, 20 Apr 2023 13:51:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9C5582AE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1681998670; bh=/HYRZYBMpyNaQ4v0vpG/OhEOPSI9xHRsqndtnAocw4E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=bhC8AhpYrKjnmG0JnaW5RjTdER8iwG3G9nb9BVcOk0OWAqZvcmFSN+uKIUl12S50F
-	 9laIZQSjgAjxGM/PVJLj+W/FrOvzr3BH5VVoX87cvtjl4C/vHvyPZrP0HbZvCw90Jp
-	 WAcl4prNQZpTyHiOsaNNz+mkN6YzzVK6vUYj7wvmFk/NKnKrCnLTe6Slza7Ps8LEZo
-	 xl2lJ8YHebgy4ADc2T7yNAimxczjySSTobX4BbeTMCtB0F8Jxy3g1HN+ZXgbSQHzgo
-	 GQuh9SmuyoAesda/zFn2MvfWTvaNk8M1m1C1I5Vfj2Rhthd6wxZIf9AUWsz/XMHVMh
-	 By7WDlZJoyZxg==
-From: Jonathan Corbet <corbet@lwn.net>
-To: Zipeng Zhang <zhangzipeng0@foxmail.com>
-Cc: ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
- boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
- nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
- masahiroy@kernel.org, codeagain@codeagain.dev, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev, Zipeng Zhang <zhangzipeng0@foxmail.com>
-Subject: Re: [PATCH] Documentation/process/changes: Escape --options to fix
- Sphinx output
-In-Reply-To: <tencent_CB1A298D31FD221496FF657CD7EF406E6605@qq.com>
-References: <tencent_CB1A298D31FD221496FF657CD7EF406E6605@qq.com>
-Date: Thu, 20 Apr 2023 07:51:09 -0600
-Message-ID: <87sfcuu0fm.fsf@meer.lwn.net>
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2622D3C0F229
+	for <llvm@lists.linux.dev>; Thu, 20 Apr 2023 14:30:47 +0000 (UTC)
+Received: from [172.64.2.78] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 78D3C492B05;
+	Thu, 20 Apr 2023 14:30:31 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 353): Test report for master
+ (6.3.0-rc7, mainline.kernel.org-clang, cb085634)
+Date: Thu, 20 Apr 2023 14:30:31 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <21677.123042010304700741@us-mta-250.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Zipeng Zhang <zhangzipeng0@foxmail.com> writes:
+Hi, we tested your kernel and here are the results:
 
-> Add an escape character to resolve the problem of
-> "--version" being displayed as "=E2=80=93version".
->
-> Without such escaping, -- is rendered as =E2=80=93 (en dash).
->
-> Signed-off-by: Zipeng Zhang <zhangzipeng0@foxmail.com>
-> ---
->  Documentation/process/changes.rst | 38 +++++++++++++++----------------
->  1 file changed, 19 insertions(+), 19 deletions(-)
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Thanks for working on improving the documentation!
+Tested-by: CKI Project <cki-project@redhat.com>
 
-I understand where you are coming from, but this may be one of those
-cases where the readability of the plain-text documentation has to win
-out.  Those backslashes are ugly and seem unlikely to be maintained
-going forward.
+Kernel information:
+    Commit message: Merge tag 'mm-hotfixes-stable-2023-04-19-16-36' of git:=
+//git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
 
-The right solution, if it is possible, is to convince Sphinx to stop
-messing with "--" altogether.  Substituting em-dashes is of limited
-cosmetic value and, I think, is something we could do without.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/85371
 
-Thanks,
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
+id hardware sector size 4096
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1375
+            Affected tests:
+                  x86_64 - Storage - blktests - blk
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
-jon
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
