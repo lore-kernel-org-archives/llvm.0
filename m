@@ -1,132 +1,136 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F399A28EA
-	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 12:43:10 +0000 (UTC)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id E17675C0125;
-	Fri, 21 Apr 2023 08:43:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 21 Apr 2023 08:43:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-	1682080989; x=1682167389; bh=MjYiLPZSoK/R59nkyiuKtpzVDszctJX3rDT
-	Em9/z6q0=; b=H7VA3SyFU73sznHlr3tvL1odW9urEx9hRyXtvhVbNXTge4VQp1r
-	/bUbS7Xk/af/FkMwgXLxhVdqqiW+2hPbvIQmYAahrDZxKVrlS5MCNyCas4VBFK0p
-	qbAin1XTw0nsK8csbsa3l3ssbfw8DxwjxuKo+qeSXvlv319fNUW1uN+p+4m6+a7y
-	4jJ8zXWd8pz0ANaCl38UK16adoIoRAoaRIGHNI1CuDF9AjPAkoAvREvocyjzqB9H
-	VUT+TSq5+30gyo7JVW+04WlXwRdTY+s6SiMppJEzxKmqOv1WSLR8opSPvnSS3tML
-	QN2PLkqGDsG5JKoe2JrV+44vluXde9MmYQw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1682080989; x=1682167389; bh=MjYiLPZSoK/R59nkyiuKtpzVDszctJX3rDT
-	Em9/z6q0=; b=NhmWbl5ow5a1/wbn1cmQUkpEtkiAIBOK6ATDFGAeyC32Q01j6Se
-	3HhLxRNxfHsIodF7C9wirNt5O/mAWq07avqpSKqjub9BrkFCut2MnwUCoJULDOpV
-	QMoS4A8QFguvLTFGpuphUtov2j/MGE3ylULjptMAPGN4VEwkc67QfWkLBK4h4Ciy
-	uftQi0zuZfBRWKv1wpqwF3MzN8/PkCtuJJsBX9bpNyRevLBAYw/MejpPc2sZBF44
-	cEHqSTQH2ACn/CoGBOVtG1dUxBF1rWomKnVN7Y7Py+8N3ggqn1QtsMFz+a+flImL
-	OT5+encmIF+b3AM+5Zb5NYfM8hDOODrX0Zg==
-X-ME-Sender: <xms:3YRCZN8isGSvjsls2dOD5BI6H1luYk6DEGi9q9flWgSPVtHotzXT-Q>
-    <xme:3YRCZBtP3e3x0nsDUYxjMx0BqcwuZ828Sdgk3i3ap1Y6PU0hWoEJfmDP3nT5YEwmi
-    VOF8wjRRtjtBN9WaCk>
-X-ME-Received: <xmr:3YRCZLBIkWqvN88G9v5CkQCNYjbRtG0ihrR8SW66lMOEFyCCKzJQji3OO4ow0yKanXhv>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedgheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:3YRCZBd_Tc5zID5XD5ywnpOcL-B8XmLSHFIroeZvsc1Vpzlnc3AN0A>
-    <xmx:3YRCZCOLpc7qaMbJ0WJL5ioB92kGdYz5H_B7hpHukwcvVlrXxO6vag>
-    <xmx:3YRCZDlMqNaQgBIu_G6rEheWzxPBdXv5T34MsMhRUzao2NWVCq51EQ>
-    <xmx:3YRCZPqf7oOEvf2iH52dXiY0bHZz3RTy75styWle3UzqE54zW_DzWQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 21 Apr 2023 08:43:08 -0400 (EDT)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E0133C7
+	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 13:01:56 +0000 (UTC)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4ec8148f73eso1630498e87.1
+        for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 06:01:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682082115; x=1684674115;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2+pWrcmsJUX8U6gG47Cy8fz3Wshzrb7IqPV8c+anomU=;
+        b=yKE17/lzivMJk61HwSk2EqY4iWCRK1T8NXenmV6C6bSY0NM3mB/nf+31qChrFoFszg
+         07cNFN1c8X5MSC1CaN7fL+RlFflAPQoGGw1ptclfPydQBGzueBKQvVYIvZ/Rk8rZVr5G
+         xsWY66ijl6krJ1w/cbbUsV+cw+BdKiZ2kzi3nZc6P25Fm/lEufU96f73kv0wva756fO3
+         ECMRLCiZU6dWP9UlCkSsu5hhJC8nsLy47n3EJFp0kJs1nribgKts+erNkoQeYjYrBQEu
+         myfi/dGW47jn+Ck1nE2cCSZva2KUPlz3mI4E7NPIgpILRZfBCcBHcwNe0nTzn+xJfdjp
+         /jxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682082115; x=1684674115;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2+pWrcmsJUX8U6gG47Cy8fz3Wshzrb7IqPV8c+anomU=;
+        b=isW0HuHupniMH1//HCHO3/YipG9lPsLwP4YZ4EzztK+uKI8iDV3xj6wwEfWJcvrHQk
+         jCcWjV8N+Xz2smhQFkOkgV4FPNWKlS5GJDzmI52IZ5VBcNYmu54DYj8ie2Gg96DZ1gOI
+         aINqQxkHNVbgoX8wh3LyX51GzmJii+EE0lMnH5QUaPANXYgL/7C0JcxmOiMCcbcqaW9b
+         JsfC6u6+BzM7B5QipHdbyoWw5d/tAi7j27dYlUMCHhUU7AZ/RnXkGKxfrVSBoZijYZ7/
+         FAyEU+kJS5tRY4OjKkcg2e8pWAAmOuVruZjR8WJgD5wWcXEe9xusln/EqQtruHZOUXOs
+         JLUg==
+X-Gm-Message-State: AAQBX9fkTQT/EfeehBiDANCgIpVupOfgOxS6bisbuDBvxzXvbq4AJz9Z
+	Xdb+MoS/xzlECowVUhULxyMCaA==
+X-Google-Smtp-Source: AKy350a8bqdgRrM6tQZzeOHfajjyD8LhZPR6WtO2lESmG4CApYidT2Meawa9DvC56LrLN7sIUiRuPg==
+X-Received: by 2002:ac2:5ddc:0:b0:4e0:b407:fdf4 with SMTP id x28-20020ac25ddc000000b004e0b407fdf4mr1180562lfq.37.1682082114673;
+        Fri, 21 Apr 2023 06:01:54 -0700 (PDT)
+Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
+        by smtp.gmail.com with ESMTPSA id y14-20020ac2446e000000b004edb2620375sm552906lfl.283.2023.04.21.06.01.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 06:01:54 -0700 (PDT)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+To: nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com,
+	akpm@linux-foundation.org
+Cc: arnd@arndb.de,
+	joneslee@google.com,
+	peterz@infradead.org,
+	keescook@chromium.org,
+	jpoimboe@kernel.org,
+	zhaoyang.huang@unisoc.com,
+	liam.howlett@oracle.com,
+	rdunlap@infradead.org,
+	geert+renesas@glider.be,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	broonie@kernel.org,
+	dvyukov@google.com,
+	nogikh@google.com,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH] Kconfig.debug: disable CONFIG_FRAME_WARN for KASAN_STACK && CC_IS_CLANG by default
+Date: Fri, 21 Apr 2023 13:01:11 +0000
+Message-ID: <20230421130111.4041641-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 5/8] MIPS: mipsregs: Parse fp and sp register by name in
- parse_r
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230421122125.GA10237@alpha.franken.de>
-Date: Fri, 21 Apr 2023 13:42:57 +0100
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- llvm@lists.linux.dev,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nathan Chancellor <nathan@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <913B06A9-8D95-4735-8BAD-B74F0EF92F7A@flygoat.com>
-References: <20230409104309.13887-1-jiaxun.yang@flygoat.com>
- <20230409104309.13887-6-jiaxun.yang@flygoat.com>
- <20230421104832.GA9238@alpha.franken.de>
- <F861FB0C-C6B3-4B16-8ECD-FD01E62DD429@flygoat.com>
- <20230421122125.GA10237@alpha.franken.de>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Mailer: Apple Mail (2.3731.500.231)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+Building with clang-15 a x86_64_defconfig kernel were CONFIG_KASAN
+and CONFIG_KASAN_STACK are enabled resulted in the following errors:
 
+drivers/block/loop.c:1531:12: error: stack frame size (2616) exceeds limit (2048) in 'lo_ioctl'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:964:6: error: stack frame size (3032) exceeds limit (2048) in 'intel_engine_init_ctx_wa'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:1818:6: error: stack frame size (5496) exceeds limit (2048) in 'intel_gt_init_workarounds'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:3153:6: error: stack frame size (5848) exceeds limit (2048) in 'intel_engine_init_workarounds'
+drivers/usb/core/devio.c:2801:13: error: stack frame size (2104) exceeds limit (2048) in 'usbdev_ioctl'
 
-> 2023=E5=B9=B44=E6=9C=8821=E6=97=A5 13:21=EF=BC=8CThomas Bogendoerfer =
-<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Fri, Apr 21, 2023 at 12:38:07PM +0100, Jiaxun Yang wrote:
->>=20
->>=20
->>> 2023=E5=B9=B44=E6=9C=8821=E6=97=A5 11:48=EF=BC=8CThomas Bogendoerfer =
-<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
->>>=20
->>> On Sun, Apr 09, 2023 at 11:43:06AM +0100, Jiaxun Yang wrote:
->>>> parse_r helper is used to parse register number from oprand,
->>>> it only handles oprand which use number to refer register before.
->>>>=20
->>>> However compiler may use $gp and $sp to reference register 29 and
->>>> 30. Handle this situation by adding relevant match name.
->>>=20
->>> are you sure the compiler is doing that ? Which compiler is this ?
->>> To me this feels more like missing #defines from asm/regdef.h for
->>> some inline assembly stuff...
->>=20
->> Yes, clang is doing that, see[1].
->>=20
->> There is no inline assembly mentioning $fp for cfcmsa but clang is =
-still generating $fp for
->> cfcmsa.
->>=20
->> I was able to reproduce this by dumping assembly generated by clang, =
-but I=E2=80=99m
->> unable to reproduce it for now, it seems like clang will only =
-allocate $fp in rare cases.
->=20
-> so is this clang miss-behaviour ? If yes fix should be done there.
+With Clang, stack instrumentation has a problem that causes excessive
+stack usage, see https://bugs.llvm.org/show_bug.cgi?id=38809.
+KASAN_STACK with clang is deemed unsafe and disabled when
+compile-testing. However when !COMPILE_TEST the errors are hit because
+CONFIG_FRAME_WARN is not disabled.
 
-I think it is not forbidden. Clang is doing nothing wrong and as long as =
-assembler is ok with that
-parse_r should able to handle it.
+Looking into the errors, they are indeed caused by compiling with clang
+and KASAN_STACK enabled. I determined KASAN_STACK's bloat by lowering
+the CONFIG_FRAME_WARN limit. Thus when KASAN and KASAN_STACK are
+disabled the same stack frames have the following sizes:
 
-Thanks
-Jiaxun
+drivers/block/loop.c:1531:12: error: stack frame size (528) exceeds limit (50) in 'lo_ioctl'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:964:6: error: stack frame size (72) exceeds limit (50) in 'intel_engine_init_ctx_wa'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:1818:6: error: stack frame size (104) exceeds limit (50) in 'intel_gt_init_workarounds'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:3153:6: error: stack frame size (88) exceeds limit (50) in 'intel_engine_init_workarounds'
+drivers/usb/core/devio.c:2801:13: error: stack frame size (416) exceeds limit (50) in 'usbdev_ioctl'
 
->=20
-> Thomas.
->=20
-> --=20
-> Crap can work. Given enough thrust pigs will fly, but it's not =
-necessarily a
-> good idea.                                                [ RFC1925, =
-2.3 ]
+When KASAN is enabled and KASAN_STACK is disabled the same stack frames
+have the following sizes:
 
+drivers/block/loop.c:1531:12: error: stack frame size (600) exceeds limit (50) in 'lo_ioctl'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:964:6: error: stack frame size (120) exceeds limit (50) in 'intel_engine_init_ctx_wa'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:1818:6: error: stack frame size (136) exceeds limit (50) in 'intel_gt_init_workarounds'
+drivers/gpu/drm/i915/gt/intel_workarounds.c:3153:6: error: stack frame size (128) exceeds limit (50) in 'intel_engine_init_workarounds'
+drivers/usb/core/devio.c:2801:13: error: stack frame size (480) exceeds limit (50) in 'usbdev_ioctl'
+
+The conclusion is that when KASAN is enabled the stack usage increases a
+bit, but nothing unmanageable ~30-70 bytes, whereas when enabling
+KASAN_STACK the stack usage is excessive, from ~1.7K to ~5.8K for these
+cases.
+
+Disable CONFIG_FRAME_WARN for KASAN_STACK && CC_IS_CLANG by default.
+Adventurers can still override the default value by input prompt or
+explicit values in defconfigs in case they feel that some real warnings
+are missed.
+
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+ lib/Kconfig.debug | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 39d1d93164bd..c5e8b76737af 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -430,6 +430,7 @@ config FRAME_WARN
+ 	int "Warn for stack frames larger than"
+ 	range 0 8192
+ 	default 0 if KMSAN
++	default 0 if KASAN_STACK && CC_IS_CLANG
+ 	default 2048 if GCC_PLUGIN_LATENT_ENTROPY
+ 	default 2048 if PARISC
+ 	default 1536 if (!64BIT && XTENSA)
+-- 
+2.40.0.634.g4ca3ef3211-goog
 
