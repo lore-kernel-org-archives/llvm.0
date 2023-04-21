@@ -1,97 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50D15683;
-	Fri, 21 Apr 2023 16:11:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D1ABC4339E;
-	Fri, 21 Apr 2023 16:11:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1682093500;
-	bh=K01BJyd9NrPkimTz2b/EJwIzah+Nwo0RWYciK9dPAaI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Fmkj5pVeH3qoz8EpdebM3UziJLXLTNAuMdT/8pLs5OmOvX54CRvTGVKyOTJlBLN3/
-	 /TXZAmGA+Efu3nLn6mAkVYAoECGPDVRbKgtAn4MaGc/7c6nNhqpdqrjtjVIOfe80di
-	 z/gT5nGK5sjLviMw1FiGXPlxItrEYoTNISGCc93OOUAR0FaWvvBzYDn5Urttmhe/8b
-	 MxkfcHXj2h3lNQS3I+WY/+mIwNfWTFygBHbsIiO4xnobBhv0zZKgogQw75RIbDe1Tb
-	 JpNgeHWlda+1bCanVRGtkL+DaLB+WMYyO5FJBIxHvUj2ZGDSWX06jXwGiKQ5t4MX4L
-	 be5kXdkBRt8sQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 21 Apr 2023 09:11:27 -0700
-Subject: [PATCH v2 2/2] MIPS: Sink body of check_bugs_early() into its only
- call site
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5EF5689;
+	Fri, 21 Apr 2023 17:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682098822; x=1713634822;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=04piXTxPmSclPs1kWuU7ErIbwh+BQvAnxCgVFJkKe54=;
+  b=mBDRiIY5dJivCNzzEbVhqSAFP9nvxWtjoxevFDnbBYK9Il8jTUqKv03T
+   8YZaNfXRmD4J2elS3ZkOmpoP7EsMU+8ZUUCORHoUYOXIWUGKFUqEdNOkp
+   e+kSSvHT2Tw+ebUibOhTUtpHj4Sii1zc6kZXhJf+Wt0puA/DCIWt51yNx
+   4Ge8qZtGreUw72hyQYPx+HNROwcPzlkyKnNqZkRVmWt+I3RKIz9ydEFn7
+   r0x0LfJzLBXxsPLu9eToc/CVMXo8k/Hjeks660INvPbugrcEejC099CPn
+   loIbHfyhtlEBUX+tD7+31agSwakzAaeFntronOR4Quq/ELI2/hpsDhSz4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="408982186"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="408982186"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 10:40:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="816502374"
+X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
+   d="scan'208";a="816502374"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 21 Apr 2023 10:40:19 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ppuk6-000ghy-28;
+	Fri, 21 Apr 2023 17:40:18 +0000
+Date: Sat, 22 Apr 2023 01:39:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [linux-next:master 9460/12794]
+ drivers/bluetooth/btnxpuart.c:1277:34: warning: unused variable
+ 'nxpuart_of_match_table'
+Message-ID: <202304220119.94Pw6YsD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-mips-check_bugs-init-attribute-v2-2-60a7ee65d4bf@kernel.org>
-References: <20230419-mips-check_bugs-init-attribute-v2-0-60a7ee65d4bf@kernel.org>
-In-Reply-To: <20230419-mips-check_bugs-init-attribute-v2-0-60a7ee65d4bf@kernel.org>
-To: tsbogend@alpha.franken.de
-Cc: ndesaulniers@google.com, linux-mips@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1706; i=nathan@kernel.org;
- h=from:subject:message-id; bh=K01BJyd9NrPkimTz2b/EJwIzah+Nwo0RWYciK9dPAaI=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDClOW3e96+H7r5GxYvqiLZbK7r6vRR+qdiWxSqUwKb1uT
- z61r0Kio5SFQYyDQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAExETYaRoXHKtRLJiyunc364
- /lqFeb8Kv9Ta7MBz1mmnvrjuZEyYH8zIsOr/uhwOHfE1Bv9Tzac4fZu+1mat9qKKR62znJq6/0w
- P5gAA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If check_bugs_early() is not inlined, which a compiler is free to do
-after commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
-forcibly"), modpost would warn that check_bugs_early(), a non-init
-function, refers to check_bugs64_early(), which is marked __init. This
-would not result in any run time issues, as check_bugs_early() is only
-called from setup_arch(), which is marked __init.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   44bf136283e567b2b62653be7630e7511da41da2
+commit: 2e9632009158054bcb6c1766c6748476db0561a0 [9460/12794] Bluetooth: NXP: Add protocol support for NXP Bluetooth chipsets
+config: hexagon-buildonly-randconfig-r003-20230421 (https://download.01.org/0day-ci/archive/20230422/202304220119.94Pw6YsD-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=2e9632009158054bcb6c1766c6748476db0561a0
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 2e9632009158054bcb6c1766c6748476db0561a0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/
 
-To avoid this potential warning, just sink the body of
-check_bugs_early() into its single call site in setup_arch().
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304220119.94Pw6YsD-lkp@intel.com/
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/mips/include/asm/bugs.h | 6 ------
- arch/mips/kernel/setup.c     | 3 ++-
- 2 files changed, 2 insertions(+), 7 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-index 047e14227c45..653f78f3a685 100644
---- a/arch/mips/include/asm/bugs.h
-+++ b/arch/mips/include/asm/bugs.h
-@@ -24,12 +24,6 @@ extern void check_bugs64_early(void);
- extern void check_bugs32(void);
- extern void check_bugs64(void);
- 
--static inline void check_bugs_early(void)
--{
--	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
--		check_bugs64_early();
--}
--
- static inline void __init check_bugs(void)
- {
- 	unsigned int cpu = smp_processor_id();
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index f1c88f8a1dc5..febdc5564638 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -786,7 +786,8 @@ void __init setup_arch(char **cmdline_p)
- 	setup_early_printk();
- #endif
- 	cpu_report();
--	check_bugs_early();
-+	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
-+		check_bugs64_early();
- 
- #if defined(CONFIG_VT)
- #if defined(CONFIG_VGA_CONSOLE)
+   In file included from drivers/bluetooth/btnxpuart.c:10:
+   In file included from include/linux/serdev.h:10:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/bluetooth/btnxpuart.c:10:
+   In file included from include/linux/serdev.h:10:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/bluetooth/btnxpuart.c:10:
+   In file included from include/linux/serdev.h:10:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/bluetooth/btnxpuart.c:1277:34: warning: unused variable 'nxpuart_of_match_table' [-Wunused-const-variable]
+   static const struct of_device_id nxpuart_of_match_table[] = {
+                                    ^
+   7 warnings generated.
+
+
+vim +/nxpuart_of_match_table +1277 drivers/bluetooth/btnxpuart.c
+
+  1276	
+> 1277	static const struct of_device_id nxpuart_of_match_table[] = {
+  1278		{ .compatible = "nxp,88w8987-bt", .data = &w8987_data },
+  1279		{ .compatible = "nxp,88w8997-bt", .data = &w8997_data },
+  1280		{ }
+  1281	};
+  1282	MODULE_DEVICE_TABLE(of, nxpuart_of_match_table);
+  1283	
 
 -- 
-2.40.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
