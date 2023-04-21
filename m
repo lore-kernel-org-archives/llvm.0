@@ -1,42 +1,42 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE4B23A6;
-	Fri, 21 Apr 2023 08:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5857423A6;
+	Fri, 21 Apr 2023 08:39:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682066351; x=1713602351;
+  t=1682066357; x=1713602357;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=QqYGPdlr9JgjwoOGSnxOaCglwFWzdMx6tnG007OYLP4=;
-  b=gtPl0NJS/p8ae9puTcNQIaz4saoP5XMzTNAcvPEcFfCYSe473C6qATo/
-   2aGY/L88RY6krtTsyD/1h3k13sur0JHtg2qZP+b6pLHkCkJVkoLfyPNyd
-   UVPbiQ1NkYYUo9dLUzHkmgEFYPcY/x0PAq7Pne0eQ5rh8pUbCmguZv7T0
-   n90KhUvebbG8R6SQHX3DWJy9plfUS4MWXz0WH7usAOYdVO5mHogValqIu
-   SK4gf4jmyIFvJ03T/Zshu+e6MOG4Mu2nw1x7S41ajYcai+wD9N4vRKohs
-   NdJubbJIpZPod1pkPO7WkhKKBeRauAxRmPJV9lPZcHj1tmbVzbR9pWHPY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="330144822"
+  bh=9/knMt+c3keBzuLKPxKBx2CH2yF5uGa3zZp5CZhQcos=;
+  b=WzuKd0YxUmM1dvJSiteodb51inQ5TXy+C0mvEFwygQpHCAZSBgoKUuCP
+   A1Zz5TLIbnXMbFQmMs8i57ymNAT86QCtfyrWsnxq4avwES0dUEH4DmhGd
+   d7mH9H9p8XEeOhp7qKI6LC80IZgPKaAkGeL42DJDicl4gjm0Ps1bdcMza
+   Mso4cixDWWuOHSYJ+Qc0G9WJidphEKPb1DKryrBw7ZgjGaHeUP1DyR8pQ
+   Z3t6vsaITGycnpDsTvtvdAmGbcoZv3//+GdEJQvblw66Ywf+dQeRg3x59
+   gNlML8SrdF70G0ZCtK2pcW6Imr3kISfXxs01REPhMaOJcl/ym0ojrT/aP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="325547479"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="330144822"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 01:39:10 -0700
+   d="scan'208";a="325547479"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 01:39:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="781546400"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="1021851058"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="781546400"
+   d="scan'208";a="1021851058"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Apr 2023 01:39:09 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 21 Apr 2023 01:39:09 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ppmIO-000gSk-1t;
+	id 1ppmIO-000gSi-1n;
 	Fri, 21 Apr 2023 08:39:08 +0000
 Date: Fri, 21 Apr 2023 16:38:26 +0800
 From: kernel test robot <lkp@intel.com>
 To: Yury Norov <yury.norov@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: Re: [PATCH v2 8/8] sched: drop for_each_numa_hop_mask()
-Message-ID: <202304211617.4nr99gar-lkp@intel.com>
+Message-ID: <202304211610.1Xprvad2-lkp@intel.com>
 References: <20230420051946.7463-9-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,33 +62,35 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 url:    https://github.com/intel-lab-lkp/linux/commits/Yury-Norov/lib-find-add-find_next_and_andnot_bit/20230420-132247
 patch link:    https://lore.kernel.org/r/20230420051946.7463-9-yury.norov%40gmail.com
 patch subject: [PATCH v2 8/8] sched: drop for_each_numa_hop_mask()
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230421/202304211617.4nr99gar-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+config: powerpc-randconfig-r016-20230417 (https://download.01.org/0day-ci/archive/20230421/202304211610.1Xprvad2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/2425882bb68586aad08582c2efbb860a78e1b8e3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Yury-Norov/lib-find-add-find_next_and_andnot_bit/20230420-132247
         git checkout 2425882bb68586aad08582c2efbb860a78e1b8e3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/intel/ice/ kernel/rcu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/intel/ice/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304211617.4nr99gar-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304211610.1Xprvad2-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
    drivers/net/ethernet/intel/ice/ice_base.c:664:23: error: no member named 'numa_node' in 'struct device'
            int numa_node = dev->numa_node;
                            ~~~  ^
->> drivers/net/ethernet/intel/ice/ice_base.c:681:2: error: implicit declaration of function 'for_each_numa_hop_mask' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+>> drivers/net/ethernet/intel/ice/ice_base.c:681:2: error: call to undeclared function 'for_each_numa_hop_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
            for_each_numa_hop_mask(aff_mask, numa_node) {
            ^
->> drivers/net/ethernet/intel/ice/ice_base.c:681:45: error: expected ';' after expression
+   drivers/net/ethernet/intel/ice/ice_base.c:681:45: error: expected ';' after expression
            for_each_numa_hop_mask(aff_mask, numa_node) {
                                                       ^
                                                       ;
@@ -109,7 +111,7 @@ eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  660  int ice_vsi_alloc_q_vecto
 eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  661  {
 5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  662  	cpumask_t *aff_mask, *last_aff_mask = cpu_none_mask;
 3306f79f428e85 Anirudh Venkataramanan 2020-02-06  663  	struct device *dev = ice_pf_to_dev(vsi->back);
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16 @664  	int numa_node = dev->numa_node;
+5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  664  	int numa_node = dev->numa_node;
 5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  665  	u16 v_idx, cpu = 0;
 88865fc4bbd61e Karol Kolacinski       2020-05-07  666  	int err;
 eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  667  
