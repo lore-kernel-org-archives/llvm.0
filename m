@@ -1,99 +1,125 @@
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5066C38B
-	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 14:31:02 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 376595C0180;
-	Fri, 21 Apr 2023 10:31:01 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 21 Apr 2023 10:31:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1682087461; x=1682173861; bh=ob
-	qkcphqvBdAWuMSyr9Pl64QwA+BGq6GX8P7IjRDFMo=; b=adXBOo68IWWVLNpbR7
-	XTdrYX6QuvQtcqZzG0y/PGRna4nQkqxhvCmx2PFZw6E8HQhvBu8YuttxyxSeSwmt
-	ex3Z8HKdsMA+j33afFwRg1nUycgXXA9EqjHi2WZbF+2zKud1Si1vIJ9RICQ4tbfC
-	fnBuHmL8nvKEOJE3I8Jp4Ak3hAV2oQHDymVGThGr8FhAEuuZ8OYkvMuJ7O2JFKR5
-	61MOoRcj70iYHQtZjoLADZpOyenXjL1B752TDuQTVAkKJuutL/kYXRtgTyzLiuYO
-	r/3orOzFknrsWAJ64W4Qqj2gVy7C/Q3rjyVGNiirlJNrOD8BzaN/IJmtY2JybRly
-	tteQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1682087461; x=1682173861; bh=obqkcphqvBdAW
-	uMSyr9Pl64QwA+BGq6GX8P7IjRDFMo=; b=gNB50BU/CdGiEojWS7vu5BksyMRZd
-	OlxJEOs2ueNsgZUeagQpaCifJONqnXMRnNeXZ6WBeKFmDIdMq4gSwOyWpABT7YFM
-	82ikp6ZGLZZlXE0mogvyi6m5dIoTqSwRwPdWOleGwlFzLpKxBtKT8QYAaOaOn2ay
-	zLkZep1hHmwlYSP0323Av4Tl5sxfLJN7WPGEIKvc/xlT2rPrJvN0YvtvpmMU2nJM
-	6uMowFldG2kBh0dbwY1H/Q/Je/FvqMi+bMxS56HN7G/l8maGNXq2hWeVXZ36FBVn
-	oV3/p9Pr70otk+PnhfcjOCRo192dRUX38z06ZOZscgQsIfHFBEoLKmPGg==
-X-ME-Sender: <xms:JJ5CZARgh8iDvyZxEt33ewlI5oCsZMoH1BT15JG5s-R_B0ZcQKZIyQ>
-    <xme:JJ5CZNyVjUU3S4Rmo0pHRHMfbKgVKKbBALHhW5A_pLfsyUef_Rzstpv2d5q17JEjB
-    1hnkgo5Vhw_DLsB3og>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:JJ5CZN3OHLhQj2rkrn4EP6tJjs0wp6xLXJTy5ZKzgovC5Yy6pczVHg>
-    <xmx:JJ5CZEAOvuQ3uOpW7y_grZgGsaOwVnkpcYs_5G3UHEqzbH4WQpsbrQ>
-    <xmx:JJ5CZJhV_QRKtaAHzt_VFwvqoA9_S9_7LENlM10l1GvBjOR03TwhiQ>
-    <xmx:JZ5CZBwmuDwRbr11M2a-jMCI7Ph3Azy4pn1hNL_CybjUPcBPgACwJQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 65915B60086; Fri, 21 Apr 2023 10:31:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC09020EE
+	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 14:33:51 +0000 (UTC)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-7606d45626dso164221739f.1
+        for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 07:33:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682087631; x=1684679631;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Xd2qd+WH/MF9eO5FF4xvXMEmGQHBwIElfg0S6pRbbI=;
+        b=KZVAqfJJz2+snOd5D5YGf7n9oOhx5TG3Dt/F8r4C//RGFr7XIKMySr3HWjyadI2jYD
+         16xq/3LqFMqVtSXZ1nRpwc8jtXhtTzpMw/bColi5qOd30hsHmm78hnhxjPFwKfUbiXIc
+         nU1TZ+ZXtcIkv0dAJ6kYWx41gVH4EkcLMtTGMN1LsteJk9pnTOwzENFI4JPwIJXQ4etl
+         cdwZdNCCqmOxr2TYEFJ9YNVI1qOsy5ZiXiTt49GO1dMZZVN4gLmC9qQh637n5sG7LHbn
+         Tr4jSQyIhexlM+xdTj0pl3n69fUiLryVlPcXDdKOmHebKXtHrnmDD+qYYfyjRjyTOIzE
+         AnVg==
+X-Gm-Message-State: AAQBX9exxOU1kjvtVbMBfUmCYDRXNi6n5AE6NlktBT+Lma38mi+aRwd3
+	cyKprVjUjaqYuQuOL3xKSPfHJ5qld+1SUeKEcCtqfBJ6Zjh4
+X-Google-Smtp-Source: AKy350brjF+Ql9WJtxgiejEpnpViFjaxOuOrE62IqEN/HsbedJPQiTthgLnXxcF82gPlJ1j0Udt/bpFBsLm7zd3MA/AphV+p3arI
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <5d13e927-3713-4b9e-b007-6be5671d46f2@app.fastmail.com>
-In-Reply-To: <20230421130111.4041641-1-tudor.ambarus@linaro.org>
-References: <20230421130111.4041641-1-tudor.ambarus@linaro.org>
-Date: Fri, 21 Apr 2023 16:30:40 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Tudor Ambarus" <tudor.ambarus@linaro.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- "Andrew Morton" <akpm@linux-foundation.org>
-Cc: joneslee@google.com, "Peter Zijlstra" <peterz@infradead.org>,
- "Kees Cook" <keescook@chromium.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>,
- zhaoyang.huang@unisoc.com, "Liam R. Howlett" <liam.howlett@oracle.com>,
- "Randy Dunlap" <rdunlap@infradead.org>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, "Mark Brown" <broonie@kernel.org>,
- "Dmitry Vyukov" <dvyukov@google.com>, nogikh@google.com
-Subject: Re: [PATCH] Kconfig.debug: disable CONFIG_FRAME_WARN for KASAN_STACK &&
- CC_IS_CLANG by default
-Content-Type: text/plain
+MIME-Version: 1.0
+X-Received: by 2002:a02:8502:0:b0:40f:80e3:6585 with SMTP id
+ g2-20020a028502000000b0040f80e36585mr2518484jai.1.1682087630965; Fri, 21 Apr
+ 2023 07:33:50 -0700 (PDT)
+Date: Fri, 21 Apr 2023 07:33:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b9915d05f9d98bdd@google.com>
+Subject: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
+From: syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>
+To: adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
+	tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Apr 21, 2023, at 15:01, Tudor Ambarus wrote:
+Hello,
 
-> The conclusion is that when KASAN is enabled the stack usage increases a
-> bit, but nothing unmanageable ~30-70 bytes, whereas when enabling
-> KASAN_STACK the stack usage is excessive, from ~1.7K to ~5.8K for these
-> cases.
->
-> Disable CONFIG_FRAME_WARN for KASAN_STACK && CC_IS_CLANG by default.
-> Adventurers can still override the default value by input prompt or
-> explicit values in defconfigs in case they feel that some real warnings
-> are missed.
->
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+syzbot found the following issue on:
 
-I think we are still better off with the warning enabled. When someone
-really wants to run a kernel with KASAN_STACK enabled, they should have
-a chance to see what they are getting into and not report any runtime
-bugs that come from stack overflow. 
+HEAD commit:    76f598ba7d8e Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=133bfbedc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9c5d44636e91081b
+dashboard link: https://syzkaller.appspot.com/bug?extid=c2de99a72baaa06d31f3
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-      Arnd
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a3654f5f77b9/disk-76f598ba.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/abfb4aaa5772/vmlinux-76f598ba.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/789fb5546551/bzImage-76f598ba.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KCSAN: data-race in strscpy / strscpy
+
+write to 0xffff88812ed8b730 of 8 bytes by task 16157 on cpu 1:
+ strscpy+0xa9/0x170 lib/string.c:165
+ strscpy_pad+0x27/0x80 lib/string_helpers.c:835
+ __set_task_comm+0x46/0x140 fs/exec.c:1232
+ set_task_comm include/linux/sched.h:1984 [inline]
+ __kthread_create_on_node+0x2b2/0x320 kernel/kthread.c:474
+ kthread_create_on_node+0x8a/0xb0 kernel/kthread.c:512
+ ext4_run_lazyinit_thread fs/ext4/super.c:3848 [inline]
+ ext4_register_li_request+0x407/0x650 fs/ext4/super.c:3983
+ __ext4_fill_super fs/ext4/super.c:5480 [inline]
+ ext4_fill_super+0x3f4a/0x43f0 fs/ext4/super.c:5637
+ get_tree_bdev+0x2b1/0x3a0 fs/super.c:1303
+ ext4_get_tree+0x1c/0x20 fs/ext4/super.c:5668
+ vfs_get_tree+0x51/0x190 fs/super.c:1510
+ do_new_mount+0x200/0x650 fs/namespace.c:3042
+ path_mount+0x498/0xb40 fs/namespace.c:3372
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount+0x27f/0x2d0 fs/namespace.c:3571
+ __x64_sys_mount+0x67/0x80 fs/namespace.c:3571
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+read to 0xffff88812ed8b733 of 1 bytes by task 16161 on cpu 0:
+ strscpy+0xde/0x170 lib/string.c:174
+ ____bpf_get_current_comm kernel/bpf/helpers.c:260 [inline]
+ bpf_get_current_comm+0x45/0x70 kernel/bpf/helpers.c:252
+ ___bpf_prog_run+0x281/0x3050 kernel/bpf/core.c:1822
+ __bpf_prog_run32+0x74/0xa0 kernel/bpf/core.c:2043
+ bpf_dispatcher_nop_func include/linux/bpf.h:1124 [inline]
+ __bpf_prog_run include/linux/filter.h:601 [inline]
+ bpf_prog_run include/linux/filter.h:608 [inline]
+ __bpf_trace_run kernel/trace/bpf_trace.c:2263 [inline]
+ bpf_trace_run4+0x9f/0x140 kernel/trace/bpf_trace.c:2304
+ __traceiter_sched_switch+0x3a/0x50 include/trace/events/sched.h:222
+ trace_sched_switch include/trace/events/sched.h:222 [inline]
+ __schedule+0x7e7/0x8e0 kernel/sched/core.c:6622
+ schedule+0x51/0x80 kernel/sched/core.c:6701
+ schedule_preempt_disabled+0x10/0x20 kernel/sched/core.c:6760
+ kthread+0x11c/0x1e0 kernel/kthread.c:369
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+value changed: 0x72 -> 0x34
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 PID: 16161 Comm: ext4lazyinit Not tainted 6.3.0-rc5-syzkaller-00022-g76f598ba7d8e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
