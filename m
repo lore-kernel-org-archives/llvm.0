@@ -1,139 +1,134 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6555F23A6;
-	Fri, 21 Apr 2023 09:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682067619; x=1713603619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dkqTBJMKo7F+hELtS2+2TMCCSxzpvF2p1cgx4R+h42I=;
-  b=fWLiuDXLslHx7JHYScmCa3LAAtbBd+pCC2KEW5f0cjHbKY7CUcu1j1dC
-   h0E3vQb3EmHePTwLiZwTfIdZ5Bg95A9aB3K/1XCMFYSJfHrQTeG9A0AAM
-   h2qXyKClPddNxoXaJkfXHy77DQdPmpsswXVE9AcvOT46pJL7OrxuRlie6
-   qLiljnSC+M2ZfryBvNz1wtj99ewVobQF/nAC957l9mVXWnwDuyOB5B2Tv
-   9HRn+8JBZJWnioZaNkYspETlHxx54CYF11czT7vEmDe8H/pi0gLzgg/lZ
-   8Y5hFE1Mz4oIV7zvHTSrTCEqxcIMCRYg1y5CVKFCv+S8X0erI7yianSV3
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="411217101"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="411217101"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:00:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="642443294"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="642443294"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2023 02:00:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ppmci-000gTE-2l;
-	Fri, 21 Apr 2023 09:00:08 +0000
-Date: Fri, 21 Apr 2023 16:59:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Petr Mladek <pmladek@suse.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [PATCH v4 1/2] printk: Do not delay messages which aren't
- solicited by any console
-Message-ID: <202304211628.wQn1SxkT-lkp@intel.com>
-References: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCD22561
+	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 10:01:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682071287;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=B66OvEcQhyNN8BhRn20j8z58Hup870ryQ48nJmSmcl8=;
+	b=KM9wC7oi+MUywSOTml4Xh88bbCVGIGzh0kHH+MLv7kolvvvAa0AjDdF24omL5v8ooYRCo8
+	1uL8e11cPf1Gz3cttnu/RWT6zSKBoGJN+nhZCo3iFEo/mJMmZ95VgIyxAEXVhKxzPwGAo7
+	XyfZPMT5J+aBhcakMB1Y8haYzFiKjqw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-437-6uay9ToPMw2fbqjcp0e8Jw-1; Fri, 21 Apr 2023 06:01:26 -0400
+X-MC-Unique: 6uay9ToPMw2fbqjcp0e8Jw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E69D03C106AE
+	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 10:01:25 +0000 (UTC)
+Received: from [172.64.2.78] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D2BDB2026DFD;
+	Fri, 21 Apr 2023 10:01:25 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 35 of 353): Test report for master
+ (6.3.0-rc7, mainline.kernel.org-clang, 0f2a4af2)
+Date: Fri, 21 Apr 2023 10:01:25 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <73269.123042106012600256@us-mta-437.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Chris,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on cb0856346a60fe3eb837ba5e73588a41f81ac05f]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230420-204202
-base:   cb0856346a60fe3eb837ba5e73588a41f81ac05f
-patch link:    https://lore.kernel.org/r/43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris%40chrisdown.name
-patch subject: [PATCH v4 1/2] printk: Do not delay messages which aren't solicited by any console
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230421/202304211628.wQn1SxkT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/db9fb81bc5f175ef48cb317c24da85d0f6d4391d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230420-204202
-        git checkout db9fb81bc5f175ef48cb317c24da85d0f6d4391d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
+Kernel information:
+    Commit message: wifi: ath9k: Don't mark channelmap stack variable read-=
+only in ath9k_mci_update_wlan_channels()
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304211628.wQn1SxkT-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/85540
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
->> kernel/printk/printk.c:1297:2: error: unterminated function-like macro invocation
-           if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
-           ^
-   include/linux/compiler.h:56:9: note: macro 'if' defined here
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-           ^
->> kernel/printk/printk.c:4272:24: error: expected '}'
-   #endif /* CONFIG_SMP */
-                          ^
-   kernel/printk/printk.c:1293:1: note: to match this '{'
-   {
-   ^
-   2 errors generated.
 
 
-vim +1297 kernel/printk/printk.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1291  
-db9fb81bc5f175 kernel/printk/printk.c Chris Down      2023-04-20  1292  static void boot_delay_msec(void)
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1293  {
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1294  	unsigned long long k;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1295  	unsigned long timeout;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1296  
-ff48cd26fc4889 kernel/printk/printk.c Thomas Gleixner 2017-05-16 @1297  	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1298  		return;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1299  
-3a3b6ed2235f2f kernel/printk.c        Dave Young      2009-09-22  1300  	k = (unsigned long long)loops_per_msec * boot_delay;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1301  
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1302  	timeout = jiffies + msecs_to_jiffies(boot_delay);
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1303  	while (k) {
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1304  		k--;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1305  		cpu_relax();
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1306  		/*
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1307  		 * use (volatile) jiffies to prevent
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1308  		 * compiler reduction; loop termination via jiffies
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1309  		 * is secondary and may or may not happen.
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1310  		 */
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1311  		if (time_after(jiffies, timeout))
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1312  			break;
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1313  		touch_nmi_watchdog();
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1314  	}
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1315  }
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1316  #else
-db9fb81bc5f175 kernel/printk/printk.c Chris Down      2023-04-20  1317  static inline void boot_delay_msec(void)
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1318  {
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1319  }
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1320  #endif
-bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1321  
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
