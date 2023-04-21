@@ -1,143 +1,159 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA32191;
-	Fri, 21 Apr 2023 04:34:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682051654; x=1713587654;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HcG2OaQaMXxW7kOzW0omM87pnvqjWJ8bghxZYMQSVrk=;
-  b=cG6iC6qc3oenVmhVOAVIOys/HMTLb36ayjHGLRHWfqCFNEgEIQJG8++Q
-   EmMCbpW3/2cG3sGv2zMzmQrsn3qlgPy03K7Rf8e4pnTdEPByr9JjTv0Br
-   QgNqYjElSKI4JaYVteHAxXhNZ4ZzC7A1Jlrph8WiMLQ/A68RUs3uhIhwn
-   2fRd5NDFminbgEFnWQpK4k+2XvjiRyFvR+9lHSxy7GoGzRTQSJXqarzZq
-   6Xv+rNGIMYz1vjA/12hHGkFEOuQSaBa/XyPBsrmdgINzVFx9f8x2uWYz9
-   S+TobHRyjq+VkbZeCZlG6B0kVGejPUqX1E3XbYIceUqeArMM5CCv4/G20
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="325514897"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="325514897"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2023 21:34:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="669598926"
-X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="669598926"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 20 Apr 2023 21:34:03 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ppiTC-000gJw-2d;
-	Fri, 21 Apr 2023 04:34:02 +0000
-Date: Fri, 21 Apr 2023 12:33:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
-	linux@roeck-us.net, manio@skyboo.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v2 2/2] hwmon: (adt7475) Convert to use device_property
- APIs
-Message-ID: <202304211232.U03a7306-lkp@intel.com>
-References: <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 12127649;
+	Fri, 21 Apr 2023 05:25:31 +0000 (UTC)
+Received: from [172.30.38.111] (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 8F4DD180175226;
+	Fri, 21 Apr 2023 13:23:15 +0800 (CST)
+Message-ID: <973e113f-e4f3-af44-a580-62e15535f542@nfschina.com>
+Date: Fri, 21 Apr 2023 13:23:11 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418233656.869055-3-chris.packham@alliedtelesis.co.nz>
-
-Hi Chris,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.3-rc7]
-[cannot apply to next-20230420]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/hwmon-adt7475-Use-device_property-APIs-when-configuring-polarity/20230419-074117
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230418233656.869055-3-chris.packham%40alliedtelesis.co.nz
-patch subject: [PATCH v2 2/2] hwmon: (adt7475) Convert to use device_property APIs
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230421/202304211232.U03a7306-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/59836340c66130951595e2adebf284eca3063ccd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chris-Packham/hwmon-adt7475-Use-device_property-APIs-when-configuring-polarity/20230419-074117
-        git checkout 59836340c66130951595e2adebf284eca3063ccd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hwmon/ drivers/net/ethernet/intel/ice/ kernel/rcu/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304211232.U03a7306-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/adt7475.c:1471:36: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           ret = device_property_read_string(&client->dev, propname, &function);
-                                             ^~~~~~~~~~~~
-   include/linux/property.h:54:48: note: passing argument to parameter 'dev' here
-   int device_property_read_string(struct device *dev, const char *propname,
-                                                  ^
-   drivers/hwmon/adt7475.c:1497:36: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           ret = device_property_read_string(&client->dev, propname, &function);
-                                             ^~~~~~~~~~~~
-   include/linux/property.h:54:48: note: passing argument to parameter 'dev' here
-   int device_property_read_string(struct device *dev, const char *propname,
-                                                  ^
-   drivers/hwmon/adt7475.c:1559:37: error: passing 'const struct device *' to parameter of type 'struct device *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           int ret = device_property_read_u32(&client->dev, property,
-                                              ^~~~~~~~~~~~
-   include/linux/property.h:164:59: note: passing argument to parameter 'dev' here
-   static inline int device_property_read_u32(struct device *dev,
-                                                             ^
-   3 errors generated.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] firmware:Remove unnecessary (void*) conversions
+Content-Language: en-US
+To: kabel@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+X-MD-Sfrom: yunchuan@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: yunchuan <yunchuan@nfschina.com>
+In-Reply-To: <202304201916.8OvkVl9W-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +1471 drivers/hwmon/adt7475.c
+在 2023/4/20 19:49, kernel test robot 写道:
+> Hi yunchuan,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.3-rc7 next-20230419]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/yunchuan/firmware-Remove-unnecessary-void-conversions/20230420-154004
+> patch link:    https://lore.kernel.org/r/20230420073751.1031944-1-yunchuan%40nfschina.com
+> patch subject: [PATCH] firmware:Remove unnecessary (void*) conversions
+> config: hexagon-randconfig-r034-20230420 (https://download.01.org/0day-ci/archive/20230420/202304201916.8OvkVl9W-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/1dee3a7afbb402fc49f0af9eeb312f221e99fab6
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review yunchuan/firmware-Remove-unnecessary-void-conversions/20230420-154004
+>          git checkout 1dee3a7afbb402fc49f0af9eeb312f221e99fab6
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/firmware/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304201916.8OvkVl9W-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>     In file included from drivers/firmware/turris-mox-rwtm.c:11:
+>     In file included from include/linux/dma-mapping.h:10:
+>     In file included from include/linux/scatterlist.h:9:
+>     In file included from arch/hexagon/include/asm/io.h:334:
+>     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>             val = __raw_readb(PCI_IOBASE + addr);
+>                               ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>             val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>                                                             ~~~~~~~~~~ ^
+>     include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+>     #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>                                                       ^
+>     In file included from drivers/firmware/turris-mox-rwtm.c:11:
+>     In file included from include/linux/dma-mapping.h:10:
+>     In file included from include/linux/scatterlist.h:9:
+>     In file included from arch/hexagon/include/asm/io.h:334:
+>     include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>             val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>                                                             ~~~~~~~~~~ ^
+>     include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+>     #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>                                                       ^
+>     In file included from drivers/firmware/turris-mox-rwtm.c:11:
+>     In file included from include/linux/dma-mapping.h:10:
+>     In file included from include/linux/scatterlist.h:9:
+>     In file included from arch/hexagon/include/asm/io.h:334:
+>     include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>             __raw_writeb(value, PCI_IOBASE + addr);
+>                                 ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>             __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>                                                           ~~~~~~~~~~ ^
+>     include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>             __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>                                                           ~~~~~~~~~~ ^
+>>> drivers/firmware/turris-mox-rwtm.c:286:19: error: incompatible integer to pointer conversion initializing 'struct mox_rwtm *' with an expression of type 'unsigned long' [-Wint-conversion]
+>             struct mox_rwtm *rwtm = rng->priv;
+>                              ^      ~~~~~~~~~
+>     6 warnings and 1 error generated.
 
-  1464	
-  1465	static int load_config3(const struct i2c_client *client, const char *propname)
-  1466	{
-  1467		const char *function;
-  1468		u8 config3;
-  1469		int ret;
-  1470	
-> 1471		ret = device_property_read_string(&client->dev, propname, &function);
-  1472		if (!ret) {
-  1473			ret = adt7475_read(REG_CONFIG3);
-  1474			if (ret < 0)
-  1475				return ret;
-  1476	
-  1477			config3 = ret & ~CONFIG3_SMBALERT;
-  1478			if (!strcmp("pwm2", function))
-  1479				;
-  1480			else if (!strcmp("smbalert#", function))
-  1481				config3 |= CONFIG3_SMBALERT;
-  1482			else
-  1483				return -EINVAL;
-  1484	
-  1485			return i2c_smbus_write_byte_data(client, REG_CONFIG3, config3);
-  1486		}
-  1487	
-  1488		return 0;
-  1489	}
-  1490	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Yes, that's an oversight, 'priv' should be unsigned long variable.I 
+didn't pay attention to the structure definition in 
+'include/linux/hw_random.h'.
+
+Thanks for your quick feedbacks and sorry for being late.
+
+
+>
+>
+> vim +286 drivers/firmware/turris-mox-rwtm.c
+>
+>     283	
+>     284	static int mox_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>     285	{
+>   > 286		struct mox_rwtm *rwtm = rng->priv;
+>     287		struct armada_37xx_rwtm_tx_msg msg;
+>     288		int ret;
+>     289	
+>     290		if (max > 4096)
+>     291			max = 4096;
+>     292	
+>     293		msg.command = MBOX_CMD_GET_RANDOM;
+>     294		msg.args[0] = 1;
+>     295		msg.args[1] = rwtm->buf_phys;
+>     296		msg.args[2] = (max + 3) & ~3;
+>     297	
+>     298		if (!wait) {
+>     299			if (!mutex_trylock(&rwtm->busy))
+>     300				return -EBUSY;
+>     301		} else {
+>     302			mutex_lock(&rwtm->busy);
+>     303		}
+>     304	
+>     305		ret = mbox_send_message(rwtm->mbox, &msg);
+>     306		if (ret < 0)
+>     307			goto unlock_mutex;
+>     308	
+>     309		ret = wait_for_completion_interruptible(&rwtm->cmd_done);
+>     310		if (ret < 0)
+>     311			goto unlock_mutex;
+>     312	
+>     313		ret = mox_get_status(MBOX_CMD_GET_RANDOM, rwtm->reply.retval);
+>     314		if (ret < 0)
+>     315			goto unlock_mutex;
+>     316	
+>     317		memcpy(data, rwtm->buf, max);
+>     318		ret = max;
+>     319	
+>     320	unlock_mutex:
+>     321		mutex_unlock(&rwtm->busy);
+>     322		return ret;
+>     323	}
+>     324	
+>
