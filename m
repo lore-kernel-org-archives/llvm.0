@@ -1,43 +1,50 @@
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5857423A6;
-	Fri, 21 Apr 2023 08:39:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6555F23A6;
+	Fri, 21 Apr 2023 09:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682066357; x=1713602357;
+  t=1682067619; x=1713603619;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9/knMt+c3keBzuLKPxKBx2CH2yF5uGa3zZp5CZhQcos=;
-  b=WzuKd0YxUmM1dvJSiteodb51inQ5TXy+C0mvEFwygQpHCAZSBgoKUuCP
-   A1Zz5TLIbnXMbFQmMs8i57ymNAT86QCtfyrWsnxq4avwES0dUEH4DmhGd
-   d7mH9H9p8XEeOhp7qKI6LC80IZgPKaAkGeL42DJDicl4gjm0Ps1bdcMza
-   Mso4cixDWWuOHSYJ+Qc0G9WJidphEKPb1DKryrBw7ZgjGaHeUP1DyR8pQ
-   Z3t6vsaITGycnpDsTvtvdAmGbcoZv3//+GdEJQvblw66Ywf+dQeRg3x59
-   gNlML8SrdF70G0ZCtK2pcW6Imr3kISfXxs01REPhMaOJcl/ym0ojrT/aP
+  bh=dkqTBJMKo7F+hELtS2+2TMCCSxzpvF2p1cgx4R+h42I=;
+  b=fWLiuDXLslHx7JHYScmCa3LAAtbBd+pCC2KEW5f0cjHbKY7CUcu1j1dC
+   h0E3vQb3EmHePTwLiZwTfIdZ5Bg95A9aB3K/1XCMFYSJfHrQTeG9A0AAM
+   h2qXyKClPddNxoXaJkfXHy77DQdPmpsswXVE9AcvOT46pJL7OrxuRlie6
+   qLiljnSC+M2ZfryBvNz1wtj99ewVobQF/nAC957l9mVXWnwDuyOB5B2Tv
+   9HRn+8JBZJWnioZaNkYspETlHxx54CYF11czT7vEmDe8H/pi0gLzgg/lZ
+   8Y5hFE1Mz4oIV7zvHTSrTCEqxcIMCRYg1y5CVKFCv+S8X0erI7yianSV3
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="325547479"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="411217101"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="325547479"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 01:39:16 -0700
+   d="scan'208";a="411217101"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 02:00:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="1021851058"
+X-IronPort-AV: E=McAfee;i="6600,9927,10686"; a="642443294"
 X-IronPort-AV: E=Sophos;i="5.99,214,1677571200"; 
-   d="scan'208";a="1021851058"
+   d="scan'208";a="642443294"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Apr 2023 01:39:09 -0700
+  by orsmga003.jf.intel.com with ESMTP; 21 Apr 2023 02:00:09 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ppmIO-000gSi-1n;
-	Fri, 21 Apr 2023 08:39:08 +0000
-Date: Fri, 21 Apr 2023 16:38:26 +0800
+	id 1ppmci-000gTE-2l;
+	Fri, 21 Apr 2023 09:00:08 +0000
+Date: Fri, 21 Apr 2023 16:59:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 8/8] sched: drop for_each_numa_hop_mask()
-Message-ID: <202304211610.1Xprvad2-lkp@intel.com>
-References: <20230420051946.7463-9-yury.norov@gmail.com>
+To: Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Petr Mladek <pmladek@suse.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: [PATCH v4 1/2] printk: Do not delay messages which aren't
+ solicited by any console
+Message-ID: <202304211628.wQn1SxkT-lkp@intel.com>
+References: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,115 +53,86 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230420051946.7463-9-yury.norov@gmail.com>
+In-Reply-To: <43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris@chrisdown.name>
 
-Hi Yury,
+Hi Chris,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net/main]
-[also build test ERROR on linus/master v6.3-rc7]
-[cannot apply to tip/sched/core horms-ipvs/master net-next/main next-20230420]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on cb0856346a60fe3eb837ba5e73588a41f81ac05f]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yury-Norov/lib-find-add-find_next_and_andnot_bit/20230420-132247
-patch link:    https://lore.kernel.org/r/20230420051946.7463-9-yury.norov%40gmail.com
-patch subject: [PATCH v2 8/8] sched: drop for_each_numa_hop_mask()
-config: powerpc-randconfig-r016-20230417 (https://download.01.org/0day-ci/archive/20230421/202304211610.1Xprvad2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230420-204202
+base:   cb0856346a60fe3eb837ba5e73588a41f81ac05f
+patch link:    https://lore.kernel.org/r/43d7f8d6e4b45a1a76fceef2d117bbc3954bc0bf.1681994221.git.chris%40chrisdown.name
+patch subject: [PATCH v4 1/2] printk: Do not delay messages which aren't solicited by any console
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230421/202304211628.wQn1SxkT-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/2425882bb68586aad08582c2efbb860a78e1b8e3
+        # https://github.com/intel-lab-lkp/linux/commit/db9fb81bc5f175ef48cb317c24da85d0f6d4391d
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yury-Norov/lib-find-add-find_next_and_andnot_bit/20230420-132247
-        git checkout 2425882bb68586aad08582c2efbb860a78e1b8e3
+        git fetch --no-tags linux-review Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230420-204202
+        git checkout db9fb81bc5f175ef48cb317c24da85d0f6d4391d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/intel/ice/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304211610.1Xprvad2-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304211628.wQn1SxkT-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/net/ethernet/intel/ice/ice_base.c:664:23: error: no member named 'numa_node' in 'struct device'
-           int numa_node = dev->numa_node;
-                           ~~~  ^
->> drivers/net/ethernet/intel/ice/ice_base.c:681:2: error: call to undeclared function 'for_each_numa_hop_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           for_each_numa_hop_mask(aff_mask, numa_node) {
+>> kernel/printk/printk.c:1297:2: error: unterminated function-like macro invocation
+           if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
            ^
-   drivers/net/ethernet/intel/ice/ice_base.c:681:45: error: expected ';' after expression
-           for_each_numa_hop_mask(aff_mask, numa_node) {
-                                                      ^
-                                                      ;
-   3 errors generated.
+   include/linux/compiler.h:56:9: note: macro 'if' defined here
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+           ^
+>> kernel/printk/printk.c:4272:24: error: expected '}'
+   #endif /* CONFIG_SMP */
+                          ^
+   kernel/printk/printk.c:1293:1: note: to match this '{'
+   {
+   ^
+   2 errors generated.
 
 
-vim +/for_each_numa_hop_mask +681 drivers/net/ethernet/intel/ice/ice_base.c
+vim +1297 kernel/printk/printk.c
 
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  652  
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  653  /**
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  654   * ice_vsi_alloc_q_vectors - Allocate memory for interrupt vectors
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  655   * @vsi: the VSI being configured
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  656   *
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  657   * We allocate one q_vector per queue interrupt. If allocation fails we
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  658   * return -ENOMEM.
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  659   */
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  660  int ice_vsi_alloc_q_vectors(struct ice_vsi *vsi)
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  661  {
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  662  	cpumask_t *aff_mask, *last_aff_mask = cpu_none_mask;
-3306f79f428e85 Anirudh Venkataramanan 2020-02-06  663  	struct device *dev = ice_pf_to_dev(vsi->back);
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  664  	int numa_node = dev->numa_node;
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  665  	u16 v_idx, cpu = 0;
-88865fc4bbd61e Karol Kolacinski       2020-05-07  666  	int err;
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  667  
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  668  	if (vsi->q_vectors[0]) {
-4015d11e4b9720 Brett Creeley          2019-11-08  669  		dev_dbg(dev, "VSI %d has existing q_vectors\n", vsi->vsi_num);
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  670  		return -EEXIST;
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  671  	}
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  672  
-3306f79f428e85 Anirudh Venkataramanan 2020-02-06  673  	for (v_idx = 0; v_idx < vsi->num_q_vectors; v_idx++) {
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  674  		err = ice_vsi_alloc_q_vector(vsi, v_idx);
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  675  		if (err)
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  676  			goto err_out;
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  677  	}
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  678  
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  679  	v_idx = 0;
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  680  
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16 @681  	for_each_numa_hop_mask(aff_mask, numa_node) {
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  682  		for_each_cpu_andnot(cpu, aff_mask, last_aff_mask) {
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  683  			if (v_idx >= vsi->num_q_vectors)
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  684  				goto out;
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  685  
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  686  			if (cpu_online(cpu)) {
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  687  				cpumask_set_cpu(cpu, &vsi->q_vectors[v_idx]->affinity_mask);
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  688  				v_idx++;
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  689  			}
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  690  		}
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  691  
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  692  		last_aff_mask = aff_mask;
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  693  	}
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  694  
-5dfb0e8f9fff34 Pawel Chmielewski      2023-02-16  695  out:
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  696  	return 0;
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  697  
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  698  err_out:
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  699  	while (v_idx--)
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  700  		ice_free_q_vector(vsi, v_idx);
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  701  
-4015d11e4b9720 Brett Creeley          2019-11-08  702  	dev_err(dev, "Failed to allocate %d q_vector for VSI %d, ret=%d\n",
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  703  		vsi->num_q_vectors, vsi->vsi_num, err);
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  704  	vsi->num_q_vectors = 0;
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  705  	return err;
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  706  }
-eff380aaffedb2 Anirudh Venkataramanan 2019-10-24  707  
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1291  
+db9fb81bc5f175 kernel/printk/printk.c Chris Down      2023-04-20  1292  static void boot_delay_msec(void)
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1293  {
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1294  	unsigned long long k;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1295  	unsigned long timeout;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1296  
+ff48cd26fc4889 kernel/printk/printk.c Thomas Gleixner 2017-05-16 @1297  	if ((boot_delay == 0 || system_state >= SYSTEM_RUNNING)
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1298  		return;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1299  
+3a3b6ed2235f2f kernel/printk.c        Dave Young      2009-09-22  1300  	k = (unsigned long long)loops_per_msec * boot_delay;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1301  
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1302  	timeout = jiffies + msecs_to_jiffies(boot_delay);
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1303  	while (k) {
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1304  		k--;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1305  		cpu_relax();
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1306  		/*
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1307  		 * use (volatile) jiffies to prevent
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1308  		 * compiler reduction; loop termination via jiffies
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1309  		 * is secondary and may or may not happen.
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1310  		 */
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1311  		if (time_after(jiffies, timeout))
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1312  			break;
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1313  		touch_nmi_watchdog();
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1314  	}
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1315  }
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1316  #else
+db9fb81bc5f175 kernel/printk/printk.c Chris Down      2023-04-20  1317  static inline void boot_delay_msec(void)
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1318  {
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1319  }
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1320  #endif
+bfe8df3d314bdd kernel/printk.c        Randy Dunlap    2007-10-16  1321  
 
 -- 
 0-DAY CI Kernel Test Service
