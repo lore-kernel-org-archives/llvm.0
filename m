@@ -1,129 +1,83 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C625670
-	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 15:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682091090;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZBBAh1DNKc+0s+zIBt9suHPit57ciWd/yut6kGhKPiQ=;
-	b=dfNk8v16v2F4plBIF3dy7lary52p/AlUle2fhaV+/dCXNO4s2I4JiHMQRkc68UBhB7EcHY
-	dAKo3gj53+0SRkUYLW75Wfb3N//Wxgy7aMqSjQOcvPNjlwm3I9e/bBtHZZ/1tGBMrEOEK/
-	g/yKskMs0vrpsnIsU+1XJlL3sGulOT0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-600-NJYoXAfSNZ2GWYOo84gGog-1; Fri, 21 Apr 2023 11:31:29 -0400
-X-MC-Unique: NJYoXAfSNZ2GWYOo84gGog-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A2783813F2E
-	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 15:31:29 +0000 (UTC)
-Received: from [172.64.2.78] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 33E0E140EBF4;
-	Fri, 21 Apr 2023 15:31:29 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 353): Test report for master
- (6.3.0-rc7, mainline.kernel.org-clang, 6a66fdd2)
-Date: Fri, 21 Apr 2023 15:31:29 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE795670;
+	Fri, 21 Apr 2023 16:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF72C433D2;
+	Fri, 21 Apr 2023 16:11:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1682093499;
+	bh=c90AqEKiidJLf8KZtwvOkDfwb/ynOHdlsUMkIyFs9yE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=KsMdUFQ7RAYytqEu5yiC7RiTDLpxfwzrQhCOZbFOk4nRCZgGe54rlQI93CFEr9ZmI
+	 9SUMhVRhXspg1GFDGqlbtU2j5hJaRBpp+cIy4/0aott+2sXoDNTS3vytPU6JcjGa5a
+	 jEkItwL2RmOyezIvUo/jUMKTLT+I0Gbd2cLOGmX+lA6y+u1oq8hF/EdL4tCQuI9S9r
+	 sCrgMmY7yoylUqIQ3PlIIMimMhewco19YLtAYrVSJY86NgRynjoMnpZjSjxMISOa7/
+	 gi/pzIWpiUhqHLVvsJAcpxDs9F5KceLEZdA3wE5M3NG/yPdNX7X9VrqzEuAxZJBZdG
+	 Q07HrinNJjiKQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2 0/2] MIPS: Fix check_bugs() modpost warning
+Date: Fri, 21 Apr 2023 09:11:25 -0700
+Message-Id: <20230419-mips-check_bugs-init-attribute-v2-0-60a7ee65d4bf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <61152.123042111312901026@us-mta-600.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK21QmQC/42OUQ6CMBBEr0L67RpaLBG/vIchpoWVbpBCtoVoC
+ He3cAI/30zyZlYRkAmDuGWrYFwo0OgTqFMmGmd8h0BtYqFyVeQXWcFAU4DGYdM/7dwFIE8RTIx
+ Mdo4IuSplXtjWKq1FklgTECwb37hdM5gQkfdiYnzR51h+1IkdhTjy9ziyyD39e3ORIKGSWCK2W
+ ttrde+RPb7PI3ei3rbtB4pVg7rmAAAA
+To: tsbogend@alpha.franken.de
+Cc: ndesaulniers@google.com, linux-mips@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Naresh Kamboju <naresh.kamboju@linaro.org>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1312; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=c90AqEKiidJLf8KZtwvOkDfwb/ynOHdlsUMkIyFs9yE=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDClOW3edXXEo5c2qg3dOC1izOSm/jlvcIfR9za6ZAfOmO
+ BWLzarh6ChlYRDjYJAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATyephZGjQXXeKRVSdz+99
+ hE75rsZuAcVtsk/FXhkrSv82WDhp612Gf9b9FcceP5sbbrpjVnkn15FNWn2vW79ct2SdaWGx+oi
+ 0PAcA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+Hi all,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+This series fixes a modpost warning visible in -next from check_bugs()
+and helps avoid a potential, albeit unlikely, warning from
+check_bugs_early().
 
-Tested-by: CKI Project <cki-project@redhat.com>
+---
+Changes in v2:
+- Now two separate patches: one to avoid current check_bugs() warning
+  and one to avoid potential check_bugs_early() warning.
+- Sink body of check_bugs_early() into setup_arch() directly, rather
+  than marking it as __init (Nick).
+- Add Naresh's reported-by to patch 1, which came after v1 was sent.
+- Reword commit messages to note that there is not a problem at run time
+  because check_bugs() and check_bugs_early(), while not marked __init,
+  are only called from __init functions; modpost does not know this
+  though, hence the warning.
+- Link to v1: https://lore.kernel.org/r/20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org
 
-Kernel information:
-    Commit message: Merge tag 'rust-fixes-6.3' of https://github.com/Rust-f=
-or-Linux/linux
+---
+Nathan Chancellor (2):
+      MIPS: Mark check_bugs() as __init
+      MIPS: Sink body of check_bugs_early() into its only call site
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/85532
+ arch/mips/include/asm/bugs.h | 8 +-------
+ arch/mips/kernel/setup.c     | 3 ++-
+ 2 files changed, 3 insertions(+), 8 deletions(-)
+---
+base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
+change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
