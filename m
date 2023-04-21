@@ -1,124 +1,129 @@
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500495670
-	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 15:28:51 +0000 (UTC)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.nyi.internal (Postfix) with ESMTP id 2F4545C018B;
-	Fri, 21 Apr 2023 11:28:50 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 21 Apr 2023 11:28:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm2; t=1682090930; x=1682177330; bh=UP
-	cMqJZ0P9N+7xzCJQfPEeFFIsp8Kyk+UricifK8t2M=; b=PwhfxD33msHwYZJhDN
-	Rz3H93n7oYbGH29nQ5i3Y9zMhXdnVAKKdyKoe821jOdNHpG9t8KUJeBWIoj7L7q0
-	KD9zR6QeVKbnWsdeLiMT74fDjp6dT+aQMTWBgWmLp1ldTvq7ZB5S9QYhUif8hjOH
-	hnVeoHwGH8ZVQiPw5/xEylPtFKn9a5fqpdz6ibR1JIw/T1kSm/7j1/jEqsmoYPWK
-	PnEgDBkjSIsYH5BuurkMKLjvZDicXGZ5CyF0Cy8u1PQdFXdnDRgeezZ3XEvDOGh+
-	nhM23ND9kaXc1YsyBdZ1hRGeG7XvlfxGvvBscIbPbN9HbGNLd2RJE1miJVZP1L+W
-	xYZw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1682090930; x=1682177330; bh=UPcMqJZ0P9N+7
-	xzCJQfPEeFFIsp8Kyk+UricifK8t2M=; b=Mbr3ig5z+4n15DHhycir6p6rXWfj+
-	KX3nMEPlRPSskGmsfxecBJraYmNC0kPsGVUiYj2Yqg7LgRX79+MSTh5rkp9jI6yw
-	wQx9qXKy7f7f9gsTOcaVPuOiGO3TO5YS1u+2Aai2gU1eyj44cS4PjTCOkiqzjMiT
-	D6ghS8FO5mFcFFNCPDskOLBHhUg51+2hhd4gxdCOk/4p7DRmmIOzmuCwp/ksUkdt
-	cwNv35ExmmzK7zOJQVTqjhWnCi8DBvncMxwIx2LdnHwtUMCMgTFzaFtFTgb/sEFT
-	QODbcwNlTSUdZKn3BR1X0fwKBVAHnu6gZVxeNwIlGPfiGzyWDbmfAK0cQ==
-X-ME-Sender: <xms:satCZC-PAl_5IPWHgULW-vJYi7vunjFCpEQ34ZbXln_3xYf9-6Lhrw>
-    <xme:satCZCtNBcqu15tStIO2k-4qvYRpP8sc47FpRJNdg9VvJjo2TJxoa6AzswXvLUAm-
-    CfJ7lQ8AhFDctX0npo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:satCZIDVmixRZmwRC70Aq7NTc94FvFBva2dGrQS6fdRPL76oLowrMg>
-    <xmx:satCZKdToTB_YWvKWHoh7sVjYMXGZ9p7SHXC69Ik2Z2j59D1fyuzeA>
-    <xmx:satCZHNsENL4-RPodlmEqnLZRB0JrTJadW9QIK3SmjKySqeVr0AI0g>
-    <xmx:sqtCZAvCCGzDpKRIpEeencUGlI2HAcO3GXxxCF6s5oYiKqRTuebNlQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 39A5BB60086; Fri, 21 Apr 2023 11:28:49 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C625670
+	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 15:31:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682091090;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZBBAh1DNKc+0s+zIBt9suHPit57ciWd/yut6kGhKPiQ=;
+	b=dfNk8v16v2F4plBIF3dy7lary52p/AlUle2fhaV+/dCXNO4s2I4JiHMQRkc68UBhB7EcHY
+	dAKo3gj53+0SRkUYLW75Wfb3N//Wxgy7aMqSjQOcvPNjlwm3I9e/bBtHZZ/1tGBMrEOEK/
+	g/yKskMs0vrpsnIsU+1XJlL3sGulOT0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-600-NJYoXAfSNZ2GWYOo84gGog-1; Fri, 21 Apr 2023 11:31:29 -0400
+X-MC-Unique: NJYoXAfSNZ2GWYOo84gGog-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A2783813F2E
+	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 15:31:29 +0000 (UTC)
+Received: from [172.64.2.78] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 33E0E140EBF4;
+	Fri, 21 Apr 2023 15:31:29 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 29 of 353): Test report for master
+ (6.3.0-rc7, mainline.kernel.org-clang, 6a66fdd2)
+Date: Fri, 21 Apr 2023 15:31:29 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Message-Id: <b6341f73-3ad2-4fcf-8612-e026751019b5@app.fastmail.com>
-In-Reply-To: <e46dd2bb-16d1-0c99-56f0-f8c2c4bbc79b@linaro.org>
-References: <20230421130111.4041641-1-tudor.ambarus@linaro.org>
- <5d13e927-3713-4b9e-b007-6be5671d46f2@app.fastmail.com>
- <e46dd2bb-16d1-0c99-56f0-f8c2c4bbc79b@linaro.org>
-Date: Fri, 21 Apr 2023 17:28:28 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Tudor Ambarus" <tudor.ambarus@linaro.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
- "Andrew Morton" <akpm@linux-foundation.org>
-Cc: joneslee@google.com, "Peter Zijlstra" <peterz@infradead.org>,
- "Kees Cook" <keescook@chromium.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>,
- zhaoyang.huang@unisoc.com, "Liam R. Howlett" <liam.howlett@oracle.com>,
- "Randy Dunlap" <rdunlap@infradead.org>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, "Mark Brown" <broonie@kernel.org>,
- "Dmitry Vyukov" <dvyukov@google.com>, nogikh@google.com
-Subject: Re: [PATCH] Kconfig.debug: disable CONFIG_FRAME_WARN for KASAN_STACK &&
- CC_IS_CLANG by default
-Content-Type: text/plain
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <61152.123042111312901026@us-mta-600.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 21, 2023, at 17:10, Tudor Ambarus wrote:
-> On 4/21/23 15:30, Arnd Bergmann wrote:
->> On Fri, Apr 21, 2023, at 15:01, Tudor Ambarus wrote:
->> 
->>> The conclusion is that when KASAN is enabled the stack usage increases a
->>> bit, but nothing unmanageable ~30-70 bytes, whereas when enabling
->>> KASAN_STACK the stack usage is excessive, from ~1.7K to ~5.8K for these
->>> cases.
->>>
->>> Disable CONFIG_FRAME_WARN for KASAN_STACK && CC_IS_CLANG by default.
->>> Adventurers can still override the default value by input prompt or
->>> explicit values in defconfigs in case they feel that some real warnings
->>> are missed.
->>>
->>> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
->> 
->> I think we are still better off with the warning enabled. When someone
->> really wants to run a kernel with KASAN_STACK enabled, they should have
->> a chance to see what they are getting into and not report any runtime
->> bugs that come from stack overflow. 
->> 
->
-> Are such stack overflows warnings reliable when we know that stack
-> instrumentation causes excessive stack usage? Until clang is fixed one
-> shall hunt frame-larger-than warnings with KASAN_STACK disabled.
+Hi, we tested your kernel and here are the results:
 
-The main problem with stack frame usage is that the compiler cannot know
-during compile time what the other functions are going to use, so it's
-always a bit of guesswork, and we just try to make the limit as small
-as possible without causing too much work addressing the warnings.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Only if the frame usage grows beyond the actual available stack size,
-it's guaranteed to crash (I've seen 80KB for a single function, clearly
-larger than 16kb of total stack size), but the larger it gets, the
-more problems you'll run into.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-We already discussed years ago how clang can improve a lot of the
-cases here by reworking the amount of padding between variables
-similar to how gcc does it. This won't work for all files, but for
-a lot of them, and once clang gets fixed, we can address the
-remaining ones by working around them in the kernel.
+Kernel information:
+    Commit message: Merge tag 'rust-fixes-6.3' of https://github.com/Rust-f=
+or-Linux/linux
 
-     Arnd
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/85532
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
