@@ -1,133 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11BE6FBB
-	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 20:01:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682107289;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=vxdyDEkhdRwbDbQz4m5YHFoUvqR6q2KTBQV2rmWejrQ=;
-	b=bCFxGYA2uFdAgs3fNRiRDvBMcSbynAnZ4RGkIIml+H9b4HH9P85tVcAOmQ2W87DofTBTQh
-	+Q+49U82bt0uhSamMcIREyhilucwUn8965XEkiuksDsCjcJ/bP4tL2dtO3t8zSpSrJWd+1
-	dES89sj4sCi53PcwdMtaaFLSeWvNEhA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-499-QnqooDHDNP6Iykd76tAIPw-1; Fri, 21 Apr 2023 16:01:28 -0400
-X-MC-Unique: QnqooDHDNP6Iykd76tAIPw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB39C1C04180
-	for <llvm@lists.linux.dev>; Fri, 21 Apr 2023 20:01:27 +0000 (UTC)
-Received: from [172.64.2.78] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A627118EC7;
-	Fri, 21 Apr 2023 20:01:27 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 29 of 353): Test report for master
- (6.3.0-rc7, mainline.kernel.org-clang, 2af3e53a)
-Date: Fri, 21 Apr 2023 20:01:27 -0000
-To: llvm@lists.linux.dev, xzhou@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8C46FBB;
+	Fri, 21 Apr 2023 20:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682107466; x=1713643466;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tyIuJWVgOap+WQetz8gIdZ7l9WAs+BgOlfzmXyOh82M=;
+  b=CKQXPYHban7XYorSHhab0fuwqdwzMJAC8SKpJMMtmY5vVxFVzCLVzRBB
+   Yk1EpO7LbM/px3Cu0LRbnAI6zvrp/q/sGBtfZE946haL0A1UF1HFpGk+h
+   f4fc6G9tK6f9oFCLqEE3qMp+9zhqrHrbXpBAiI+LKs3A4Rx2K/kYUBLv7
+   1lxmQ21UfWqaIq7fJMLLdobsUK1wz2Qyb3LF+LY4rEl7BDBEGFOCmC+uQ
+   9YEu5KXKxzgfe+Og42ClT3g3B9EH0jeKmoAwiM/ki3PUgZtY2tFIfHIZ5
+   RVbw0RpWPPTItVwN9mLR38kPX+O+1H3SPbOvJ18N2CxUGYzxRLA/t7C59
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="411341483"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="411341483"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2023 13:04:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10687"; a="695052628"
+X-IronPort-AV: E=Sophos;i="5.99,216,1677571200"; 
+   d="scan'208";a="695052628"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Apr 2023 13:04:22 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ppwzV-000gmG-1Y;
+	Fri, 21 Apr 2023 20:04:21 +0000
+Date: Sat, 22 Apr 2023 04:04:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Davidlohr Bueso <dave@stgolabs.net>, dan.j.williams@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan.Cameron@huawei.com, dave.jiang@intel.com,
+	alison.schofield@intel.com, ira.weiny@intel.com,
+	vishal.l.verma@intel.com, fan.ni@samsung.com,
+	a.manzanares@samsung.com, dave@stgolabs.net,
+	linux-cxl@vger.kernel.org
+Subject: Re: [PATCH 4/7] cxl/mem: Wire up Sanitation support
+Message-ID: <202304220358.PInFhQmP-lkp@intel.com>
+References: <20230421092321.12741-5-dave@stgolabs.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <01411.123042116012800282@us-mta-499.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421092321.12741-5-dave@stgolabs.net>
 
-Hi, we tested your kernel and here are the results:
+Hi Davidlohr,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.3-rc7 next-20230420]
+[cannot apply to cxl/next cxl/pending]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2023-04-21' of git://anongit.freed=
-esktop.org/drm/drm
+url:    https://github.com/intel-lab-lkp/linux/commits/Davidlohr-Bueso/cxl-pci-Allocate-irq-vectors-earlier-in-pci-probe/20230421-175725
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230421092321.12741-5-dave%40stgolabs.net
+patch subject: [PATCH 4/7] cxl/mem: Wire up Sanitation support
+config: powerpc-buildonly-randconfig-r006-20230421 (https://download.01.org/0day-ci/archive/20230422/202304220358.PInFhQmP-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/b5227afb40297993eba355a804720c834da3fe2a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Davidlohr-Bueso/cxl-pci-Allocate-irq-vectors-earlier-in-pci-probe/20230421-175725
+        git checkout b5227afb40297993eba355a804720c834da3fe2a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/cxl/core/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/85554
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304220358.PInFhQmP-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         ppc64le - Loopdev Sanity
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7916576
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> drivers/cxl/core/memdev.c:97:12: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           u64 reg = readq(cxlds->regs.mbox + CXLDEV_MBOX_BG_CMD_STATUS_OFFSET);
+                     ^
+   1 error generated.
 
 
+vim +/readq +97 drivers/cxl/core/memdev.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+    88	
+    89	static struct device_attribute dev_attr_pmem_size =
+    90		__ATTR(size, 0444, pmem_size_show, NULL);
+    91	
+    92	static ssize_t security_sanitize_show(struct device *dev,
+    93					      struct device_attribute *attr, char *buf)
+    94	{
+    95		struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+    96		struct cxl_dev_state *cxlds = cxlmd->cxlds;
+  > 97		u64 reg = readq(cxlds->regs.mbox + CXLDEV_MBOX_BG_CMD_STATUS_OFFSET);
+    98		u32 pct = FIELD_GET(CXLDEV_MBOX_BG_CMD_COMMAND_PCT_MASK, reg);
+    99		u16 cmd = FIELD_GET(CXLDEV_MBOX_BG_CMD_COMMAND_OPCODE_MASK, reg);
+   100	
+   101		if (cmd == CXL_MBOX_OP_SANITIZE && pct != 100)
+   102			return sysfs_emit(buf, "sanitize\n");
+   103		else
+   104			return sysfs_emit(buf, "disabled\n");
+   105	}
+   106	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
