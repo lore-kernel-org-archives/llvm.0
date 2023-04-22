@@ -1,20 +1,46 @@
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D4DA926;
-	Sat, 22 Apr 2023 21:31:06 +0000 (UTC)
-Received: from uucp (helo=alpha)
-	by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-	id 1pqKoq-0004RI-00; Sat, 22 Apr 2023 23:30:56 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 03F14C0135; Sat, 22 Apr 2023 23:30:42 +0200 (CEST)
-Date: Sat, 22 Apr 2023 23:30:42 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: ndesaulniers@google.com, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH v2 0/2] MIPS: Fix check_bugs() modpost warning
-Message-ID: <20230422213042.GA7318@alpha.franken.de>
-References: <20230419-mips-check_bugs-init-attribute-v2-0-60a7ee65d4bf@kernel.org>
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D9864F;
+	Sat, 22 Apr 2023 23:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682206198; x=1713742198;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4vG43szileUXsUY5B0mal23TOh8yJevfoJRi/ZolwC8=;
+  b=epHrmVplXZqW91eLj3eksz+YySzoKxVK5DAayTi9NO8jipnQb8bdAnT8
+   o1PYcyV8TIbsrHjpEDej52Q+3FHPgycevXBOkKvTLEj2KyjapdYLNzArN
+   ajGnkt30AS4oWACQOECHg3QbQqn/+WfJaR5qLbhglj8HxJwtIJ9cMHWug
+   /PXhLoimvi9R5Biqe9xJLumCY0k1GgAxe23jMGy9PF0UwPZ2D1fCu8XC7
+   cupt3yS1n6ve4l9fzTG3/KAXxlBTmnYP2SlMxybZVZt8t3mI14hmek/WT
+   yPK6fKPaJQiyNPgJhhXtIGzLi4e0c2z/O2H93H+aVQZrEzAcnHq+GSlY3
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="325809909"
+X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
+   d="scan'208";a="325809909"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 16:29:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="938865781"
+X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
+   d="scan'208";a="938865781"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2023 16:29:55 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pqMfz-000hZ6-0Z;
+	Sat, 22 Apr 2023 23:29:55 +0000
+Date: Sun, 23 Apr 2023 07:29:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eli Cohen <elic@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Saeed Mahameed <saeedm@nvidia.com>
+Subject: [linux-next:master 13449/13717]
+ drivers/vdpa/mlx5/net/mlx5_vnet.c:2896:3: error: implicit declaration of
+ function 'mlx5_msix_free' is invalid in C99
+Message-ID: <202304230755.9jjF6ZJr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -23,49 +49,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230419-mips-check_bugs-init-attribute-v2-0-60a7ee65d4bf@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, Apr 21, 2023 at 09:11:25AM -0700, Nathan Chancellor wrote:
-> Hi all,
-> 
-> This series fixes a modpost warning visible in -next from check_bugs()
-> and helps avoid a potential, albeit unlikely, warning from
-> check_bugs_early().
-> 
-> ---
-> Changes in v2:
-> - Now two separate patches: one to avoid current check_bugs() warning
->   and one to avoid potential check_bugs_early() warning.
-> - Sink body of check_bugs_early() into setup_arch() directly, rather
->   than marking it as __init (Nick).
-> - Add Naresh's reported-by to patch 1, which came after v1 was sent.
-> - Reword commit messages to note that there is not a problem at run time
->   because check_bugs() and check_bugs_early(), while not marked __init,
->   are only called from __init functions; modpost does not know this
->   though, hence the warning.
-> - Link to v1: https://lore.kernel.org/r/20230419-mips-check_bugs-init-attribute-v1-1-91e6eed55b89@kernel.org
-> 
-> ---
-> Nathan Chancellor (2):
->       MIPS: Mark check_bugs() as __init
->       MIPS: Sink body of check_bugs_early() into its only call site
-> 
->  arch/mips/include/asm/bugs.h | 8 +-------
->  arch/mips/kernel/setup.c     | 3 ++-
->  2 files changed, 3 insertions(+), 8 deletions(-)
-> ---
-> base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
-> change-id: 20230419-mips-check_bugs-init-attribute-026103bdb255
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   d3e1ee0e67e7603d36f4fa2fec6b881c01aabe89
+commit: b9ca712f33f59e977592cb639c2e00a02f45a146 [13449/13717] vdpa/mlx5: Support interrupt bypassing
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230423/202304230755.9jjF6ZJr-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b9ca712f33f59e977592cb639c2e00a02f45a146
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout b9ca712f33f59e977592cb639c2e00a02f45a146
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/xen/ drivers/power/supply/ drivers/vdpa/mlx5/
 
-series applied to mips-next.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304230755.9jjF6ZJr-lkp@intel.com/
 
-Thomas.
+Note: the linux-next/master HEAD d3e1ee0e67e7603d36f4fa2fec6b881c01aabe89 builds fine.
+      It may have been fixed somewhere.
+
+All errors (new ones prefixed by >>):
+
+>> drivers/vdpa/mlx5/net/mlx5_vnet.c:2896:3: error: implicit declaration of function 'mlx5_msix_free' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   mlx5_msix_free(ndev->mvdev.mdev, ent->map);
+                   ^
+   drivers/vdpa/mlx5/net/mlx5_vnet.c:2896:3: note: did you mean 'mlx5_db_free'?
+   include/linux/mlx5/driver.h:1083:6: note: 'mlx5_db_free' declared here
+   void mlx5_db_free(struct mlx5_core_dev *dev, struct mlx5_db *db);
+        ^
+>> drivers/vdpa/mlx5/net/mlx5_vnet.c:3259:14: error: implicit declaration of function 'mlx5_msix_alloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   ent->map = mlx5_msix_alloc(ndev->mvdev.mdev, int_handler, NULL, ent->name);
+                              ^
+   drivers/vdpa/mlx5/net/mlx5_vnet.c:3259:14: note: did you mean 'mlx5_db_alloc'?
+   include/linux/mlx5/driver.h:1078:19: note: 'mlx5_db_alloc' declared here
+   static inline int mlx5_db_alloc(struct mlx5_core_dev *dev, struct mlx5_db *db)
+                     ^
+>> drivers/vdpa/mlx5/net/mlx5_vnet.c:3259:12: error: assigning to 'struct msi_map' from incompatible type 'int'
+                   ent->map = mlx5_msix_alloc(ndev->mvdev.mdev, int_handler, NULL, ent->name);
+                            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +/mlx5_msix_free +2896 drivers/vdpa/mlx5/net/mlx5_vnet.c
+
+  2885	
+  2886	static void free_irqs(struct mlx5_vdpa_net *ndev)
+  2887	{
+  2888		struct mlx5_vdpa_irq_pool_entry *ent;
+  2889		int i;
+  2890	
+  2891		if (!msix_mode_supported(&ndev->mvdev))
+  2892			return;
+  2893	
+  2894		for (i = ndev->irqp.num_ent - 1; i >= 0; i--) {
+  2895			ent = ndev->irqp.entries + i;
+> 2896			mlx5_msix_free(ndev->mvdev.mdev, ent->map);
+  2897		}
+  2898		kfree(ndev->irqp.entries);
+  2899	}
+  2900	
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
