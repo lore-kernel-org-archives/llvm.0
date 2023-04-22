@@ -1,114 +1,246 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED186AB5;
-	Sat, 22 Apr 2023 19:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32918C15;
+	Sat, 22 Apr 2023 20:15:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682190834; x=1713726834;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NMbAIgoL1EbZiIobpYsvn1zflbdPN5yfsrJDkxCjPlc=;
-  b=et5ljHVhsGc/HTJquCgwI5xHZrBXISXkdbS5OOqciA4fWVoZEfYvVJYT
-   CW7Ru0XnV81XqDMvmLeAy8RLgyR3JwGGKu84s60ZIDBumCl5voIHUy7R9
-   fZqQolJhgMX0nGUXwk15ebgjbTNXN9QFw81vFV7OCFjhiB93gjdvwd3F7
-   i16eoAS+m1EV83eUADOjq7q7msIiPP7ecmIGKFI4m4hsdXbaOq6L0p2PC
-   PIoCPkqJ0PMUTT2QUHAL2mnrrxG5qsk5lYDzX6R/bBzGkrILTFs3Zt2nM
-   sb0Z4JzrBYuHZAibEW59zOX2t5n0YdFxjCxjiNNzjNdTTCmkzddyl+TiY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="346209987"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="346209987"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 12:13:53 -0700
+  t=1682194554; x=1713730554;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j06HRU+ozFm1+YkCZaC5MwXhonCiCTdwH3QbMc5Az7I=;
+  b=DtnOIfq8+QuGQX+QfQ1n3uiDn+rfyiZru1qAFHJqVQgPQgED778utn7v
+   j7SjzbNmTDwh8j48m088+8wtc8sME7BbqC6sRs4+N7T9foWadR/liGEjf
+   /xW+y5/td31RdFUsUylfLq1VYha3jnl7sRUAPYTB9tzrp6HMQOZEUuvcq
+   6Z4knKoFjAZV7wTkuFL8Byi1wITVJBoWQg9RCaF72GA/8/OFjroGb1Kzq
+   JWfqyl7wEVSu06dgsRDGTR7vXiGR5SDrQGPEMStaKjazYrFSPAyqkiEmi
+   Ch7VgevxsE+0x8s2L5WJmvS7AjHhv0b+kLpy4g5p71jM4PcOnlvX0qmoH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="325795572"
+X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
+   d="scan'208";a="325795572"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 13:15:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="761926731"
-X-IronPort-AV: E=Sophos;i="5.99,218,1677571200"; 
-   d="scan'208";a="761926731"
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="695273791"
+X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
+   d="scan'208";a="695273791"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Apr 2023 12:13:51 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 22 Apr 2023 13:15:52 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pqIgA-000hSC-37;
-	Sat, 22 Apr 2023 19:13:50 +0000
-Date: Sun, 23 Apr 2023 03:13:20 +0800
+	id 1pqJeB-000hTo-2S;
+	Sat, 22 Apr 2023 20:15:51 +0000
+Date: Sun, 23 Apr 2023 04:15:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
+To: Chen Lin <chen45464546@163.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
- unused variable 'mtk_mdp_comp_dt_ids'
-Message-ID: <202304230332.itoWhpOB-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result
+ of comparison of constant 262144 with expression of type 'u16' (aka
+ 'unsigned short') is always true
+Message-ID: <202304230428.rnTqk5H5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-Hi Mauro,
+Hi Chen,
 
 FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   2caeeb9d4a1bccd923b7918427f9e9ef7151ddd8
-commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
-date:   1 year, 1 month ago
-config: hexagon-randconfig-r016-20230423 (https://download.01.org/0day-ci/archive/20230423/202304230332.itoWhpOB-lkp@intel.com/config)
+commit: 2f2c0d2919a14002760f89f4e02960c735a316d2 net: ethernet: mtk_eth_soc: fix misuse of mem alloc interface netdev[napi]_alloc_frag
+date:   11 months ago
+config: hexagon-randconfig-r026-20230423 (https://download.01.org/0day-ci/archive/20230423/202304230428.rnTqk5H5-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2f2c0d2919a14002760f89f4e02960c735a316d2
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
+        git checkout 2f2c0d2919a14002760f89f4e02960c735a316d2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/ drivers/media/platform/mediatek/mdp/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/ethernet/mediatek/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304230332.itoWhpOB-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304230428.rnTqk5H5-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
-   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-                                    ^
-   1 warning generated.
+>> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1481:23: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+                   if (ring->frag_size <= PAGE_SIZE)
+                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1931:23: warning: result of comparison of constant 262144 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+                   if (ring->frag_size <= PAGE_SIZE)
+                       ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+vim +1481 drivers/net/ethernet/mediatek/mtk_eth_soc.c
 
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
-55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
-c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
-
-:::::: The code at line 31 was first introduced by commit
-:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
-
-:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+  1434	
+  1435	static int mtk_poll_rx(struct napi_struct *napi, int budget,
+  1436			       struct mtk_eth *eth)
+  1437	{
+  1438		struct dim_sample dim_sample = {};
+  1439		struct mtk_rx_ring *ring;
+  1440		int idx;
+  1441		struct sk_buff *skb;
+  1442		u8 *data, *new_data;
+  1443		struct mtk_rx_dma_v2 *rxd, trxd;
+  1444		int done = 0, bytes = 0;
+  1445	
+  1446		while (done < budget) {
+  1447			struct net_device *netdev;
+  1448			unsigned int pktlen;
+  1449			dma_addr_t dma_addr;
+  1450			u32 hash, reason;
+  1451			int mac = 0;
+  1452	
+  1453			ring = mtk_get_rx_ring(eth);
+  1454			if (unlikely(!ring))
+  1455				goto rx_done;
+  1456	
+  1457			idx = NEXT_DESP_IDX(ring->calc_idx, ring->dma_size);
+  1458			rxd = ring->dma + idx * eth->soc->txrx.rxd_size;
+  1459			data = ring->data[idx];
+  1460	
+  1461			if (!mtk_rx_get_desc(eth, &trxd, rxd))
+  1462				break;
+  1463	
+  1464			/* find out which mac the packet come from. values start at 1 */
+  1465			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
+  1466				mac = RX_DMA_GET_SPORT_V2(trxd.rxd5) - 1;
+  1467			else if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
+  1468				 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
+  1469				mac = RX_DMA_GET_SPORT(trxd.rxd4) - 1;
+  1470	
+  1471			if (unlikely(mac < 0 || mac >= MTK_MAC_COUNT ||
+  1472				     !eth->netdev[mac]))
+  1473				goto release_desc;
+  1474	
+  1475			netdev = eth->netdev[mac];
+  1476	
+  1477			if (unlikely(test_bit(MTK_RESETTING, &eth->state)))
+  1478				goto release_desc;
+  1479	
+  1480			/* alloc new buffer */
+> 1481			if (ring->frag_size <= PAGE_SIZE)
+  1482				new_data = napi_alloc_frag(ring->frag_size);
+  1483			else
+  1484				new_data = mtk_max_lro_buf_alloc(GFP_ATOMIC);
+  1485			if (unlikely(!new_data)) {
+  1486				netdev->stats.rx_dropped++;
+  1487				goto release_desc;
+  1488			}
+  1489			dma_addr = dma_map_single(eth->dma_dev,
+  1490						  new_data + NET_SKB_PAD +
+  1491						  eth->ip_align,
+  1492						  ring->buf_size,
+  1493						  DMA_FROM_DEVICE);
+  1494			if (unlikely(dma_mapping_error(eth->dma_dev, dma_addr))) {
+  1495				skb_free_frag(new_data);
+  1496				netdev->stats.rx_dropped++;
+  1497				goto release_desc;
+  1498			}
+  1499	
+  1500			dma_unmap_single(eth->dma_dev, trxd.rxd1,
+  1501					 ring->buf_size, DMA_FROM_DEVICE);
+  1502	
+  1503			/* receive data */
+  1504			skb = build_skb(data, ring->frag_size);
+  1505			if (unlikely(!skb)) {
+  1506				skb_free_frag(data);
+  1507				netdev->stats.rx_dropped++;
+  1508				goto skip_rx;
+  1509			}
+  1510			skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
+  1511	
+  1512			pktlen = RX_DMA_GET_PLEN0(trxd.rxd2);
+  1513			skb->dev = netdev;
+  1514			skb_put(skb, pktlen);
+  1515			if (trxd.rxd4 & eth->soc->txrx.rx_dma_l4_valid)
+  1516				skb->ip_summed = CHECKSUM_UNNECESSARY;
+  1517			else
+  1518				skb_checksum_none_assert(skb);
+  1519			skb->protocol = eth_type_trans(skb, netdev);
+  1520			bytes += pktlen;
+  1521	
+  1522			hash = trxd.rxd4 & MTK_RXD4_FOE_ENTRY;
+  1523			if (hash != MTK_RXD4_FOE_ENTRY) {
+  1524				hash = jhash_1word(hash, 0);
+  1525				skb_set_hash(skb, hash, PKT_HASH_TYPE_L4);
+  1526			}
+  1527	
+  1528			reason = FIELD_GET(MTK_RXD4_PPE_CPU_REASON, trxd.rxd4);
+  1529			if (reason == MTK_PPE_CPU_REASON_HIT_UNBIND_RATE_REACHED)
+  1530				mtk_ppe_check_skb(eth->ppe, skb,
+  1531						  trxd.rxd4 & MTK_RXD4_FOE_ENTRY);
+  1532	
+  1533			if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
+  1534				if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
+  1535					if (trxd.rxd3 & RX_DMA_VTAG_V2)
+  1536						__vlan_hwaccel_put_tag(skb,
+  1537							htons(RX_DMA_VPID(trxd.rxd4)),
+  1538							RX_DMA_VID(trxd.rxd4));
+  1539				} else if (trxd.rxd2 & RX_DMA_VTAG) {
+  1540					__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
+  1541							       RX_DMA_VID(trxd.rxd3));
+  1542				}
+  1543	
+  1544				/* If the device is attached to a dsa switch, the special
+  1545				 * tag inserted in VLAN field by hw switch can * be offloaded
+  1546				 * by RX HW VLAN offload. Clear vlan info.
+  1547				 */
+  1548				if (netdev_uses_dsa(netdev))
+  1549					__vlan_hwaccel_clear_tag(skb);
+  1550			}
+  1551	
+  1552			skb_record_rx_queue(skb, 0);
+  1553			napi_gro_receive(napi, skb);
+  1554	
+  1555	skip_rx:
+  1556			ring->data[idx] = new_data;
+  1557			rxd->rxd1 = (unsigned int)dma_addr;
+  1558	
+  1559	release_desc:
+  1560			if (MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628))
+  1561				rxd->rxd2 = RX_DMA_LSO;
+  1562			else
+  1563				rxd->rxd2 = RX_DMA_PREP_PLEN0(ring->buf_size);
+  1564	
+  1565			ring->calc_idx = idx;
+  1566	
+  1567			done++;
+  1568		}
+  1569	
+  1570	rx_done:
+  1571		if (done) {
+  1572			/* make sure that all changes to the dma ring are flushed before
+  1573			 * we continue
+  1574			 */
+  1575			wmb();
+  1576			mtk_update_rx_cpu_idx(eth);
+  1577		}
+  1578	
+  1579		eth->rx_packets += done;
+  1580		eth->rx_bytes += bytes;
+  1581		dim_update_sample(eth->rx_events, eth->rx_packets, eth->rx_bytes,
+  1582				  &dim_sample);
+  1583		net_dim(&eth->rx_dim, dim_sample);
+  1584	
+  1585		return done;
+  1586	}
+  1587	
 
 -- 
 0-DAY CI Kernel Test Service
