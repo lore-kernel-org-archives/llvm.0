@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4647F
-	for <llvm@lists.linux.dev>; Sat, 22 Apr 2023 10:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EEC7F
+	for <llvm@lists.linux.dev>; Sat, 22 Apr 2023 10:31:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682159489;
+	s=mimecast20190719; t=1682159512;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=uqCvPzCchLXnr0sGmeGus7glOuxnvM8NkWt95jn7g7k=;
-	b=HskrpO9R3r1J2nDW+rxMMpjYV6kIEFs3hPMFBMPX71BwS8/09d9I+ruFy5oMz9igU9Sdwd
-	aypeqdHHxtRrGvsDAA92xCkDGZLjRaX2lTwqMsB6avt//cDLnrjwvqDbWA/6tOjjhqAsM+
-	Gd73q5UWjpSJurnmwlEZjbtqPeRTADw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=3lxEhwATktch47SYrqBqJ2hzxMX+u5g/rGUrqJXYF9Q=;
+	b=GVbiuOPYVuoq9yOZtevb65irS2YRPvs2uQTB7O/rD0AjdwaFhkJDUDwp4cV0Gmyxo9zwOo
+	PUMNTHU8ZzerudR0UK/H9RvO04qo8+pO7Qiyh4uBPlUzQ+eY4EU+GPGlR/YY/gtPYC4DfJ
+	yoZvdFf3iX7NSdYtXVrw7ytGK9K9I28=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-57-lxaopVHlPDObAV01vaQU6Q-1; Sat, 22 Apr 2023 06:31:28 -0400
-X-MC-Unique: lxaopVHlPDObAV01vaQU6Q-1
+ us-mta-564-Scxna32kP4G0UTTdA1ejVQ-1; Sat, 22 Apr 2023 06:31:51 -0400
+X-MC-Unique: Scxna32kP4G0UTTdA1ejVQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B297C101A531
-	for <llvm@lists.linux.dev>; Sat, 22 Apr 2023 10:31:27 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 77A411C05ABA
+	for <llvm@lists.linux.dev>; Sat, 22 Apr 2023 10:31:51 +0000 (UTC)
 Received: from [172.64.2.78] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8E87A407D44E;
-	Sat, 22 Apr 2023 10:31:27 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 61FB7407D44E;
+	Sat, 22 Apr 2023 10:31:51 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 64 of 353): Test report for master
- (6.3.0-rc7, mainline.kernel.org-clang, 8e41e0a5)
-Date: Sat, 22 Apr 2023 10:31:27 -0000
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 29 of 353): Test report for master
+ (6.3.0-rc7, mainline.kernel.org-clang, 334e5a82)
+Date: Sat, 22 Apr 2023 10:31:51 -0000
 To: llvm@lists.linux.dev, xzhou@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -37,7 +37,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-Message-Id: <91147.123042206312800239@us-mta-57.us.mimecast.lan>
+Message-Id: <12398.123042206315100348@us-mta-564.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -52,28 +52,23 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Revert "ACPICA: Events: Support fixed PCIe wake event"
+    Commit message: Merge tag 'block-6.3-2023-04-21' of git://git.kernel.dk=
+/linux
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/85657
+    https://datawarehouse.cki-project.org/kcidb/checkouts/85641
 
 One or more kernel tests failed:
     Unrecognized or new issues:
          aarch64 - Loopdev Sanity
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7927294
-         ppc64le - Loopdev Sanity
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7927358
-           s390x - Loopdev Sanity
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7927423
+7924686
           x86_64 - Loopdev Sanity
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7927149
+7924526
           x86_64 (debug) - Loopdev Sanity
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7927227
+7924758
 
     We also see the following known issues which are not related to your ch=
 anges:
@@ -95,13 +90,8 @@ d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
 u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
+                  x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
- waiting the udev queue being empty
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1470
-            Affected tests:
-                  x86_64 - Storage - blktests - nvmeof-mp
         Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
 rch/powerpc/lib/crtsavres.o: No such file or directory
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
