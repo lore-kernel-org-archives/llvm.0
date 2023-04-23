@@ -1,41 +1,47 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1BF620;
-	Sun, 23 Apr 2023 04:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9D3650;
+	Sun, 23 Apr 2023 06:09:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682222763; x=1713758763;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=0YGPjK/j6dPhyPWh9b8KO4htrbBFqE74Mm+NxLkImz8=;
-  b=n8GbPJV4lBae9g8M8EReCtt85M9EVRm9XefI1Xuef65i7Nld0/hGL5tn
-   wmVq3n94zLCMNyHPDX4P9jT5PtU08idzaiLL5IKaiUCug0Ih/osPXajBG
-   +3l3WYKHtrlHIxglCPHZz7z5e8IvqLTItdTu/LPlfPYsdrAolZ3qd8qS4
-   UbgzeXSefESMOc0UHPCKBfUb6iqG837s9hNgdlrrPvZPo55zfd1H2AYs7
-   mttD9kOUVBH2Ce3G87+rMZcKaltmM3gTTSmfMKWhRYAJlS5YlepvmXJEP
-   EymCLA7yX5609RGit4a6cI+Dfx3Cu8LX3+7KMEr9WlkyBiOzFA/8AeicJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="411512457"
+  t=1682230146; x=1713766146;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+CY6XJvFpwGwaepwYVoZKOxETutIgMl/pKzba4yBJHs=;
+  b=AioaTo1qqRu29boSbOFhl8mA1ek+h0ZQ9j/Yc8/U4TR30vKUtfpKwhNJ
+   3sT31oHZrEsjQPfHairrB4prShlBVBLd9uAfkKSAm2PV0PpZxpuTOhjoX
+   kox0JwbticjPc3QQ/4pqPlsro5yF7HGE+kF2lzxPr3sOwu7DvzqZazn2B
+   C9FwUwGvwzdCtwXFN4wMc6TRYjX6aiUjxxdFgV2pZjTj1wmenczxDU6cF
+   PPFT/zxVnIkYu1lStHssgGFYY2izEPnS2KSqg6SYrsgktvz7y1NMKhZ8F
+   XjPNLC4Ibw+DIL2YOy04EZ51qkTrSqM5DfDw5Nh9VnO2RKBpCPhlmZquW
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="432526483"
 X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="411512457"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 21:06:02 -0700
+   d="scan'208";a="432526483"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2023 23:09:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="757299477"
+X-IronPort-AV: E=McAfee;i="6600,9927,10688"; a="642952137"
 X-IronPort-AV: E=Sophos;i="5.99,219,1677571200"; 
-   d="scan'208";a="757299477"
+   d="scan'208";a="642952137"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Apr 2023 21:06:01 -0700
+  by orsmga003.jf.intel.com with ESMTP; 22 Apr 2023 23:09:03 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pqQzA-000hgu-1F;
-	Sun, 23 Apr 2023 04:06:00 +0000
-Date: Sun, 23 Apr 2023 12:05:54 +0800
+	id 1pqSuE-000hk4-2D;
+	Sun, 23 Apr 2023 06:09:02 +0000
+Date: Sun, 23 Apr 2023 14:09:01 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [jarkko-tpmdd:tis-irq 70/75] vmlinux.o: warning: objtool:
- tpm_tis+0x50: data relocation to !ENDBR: tpm_tis_request_locality+0x0
-Message-ID: <202304231135.zmOsiK5U-lkp@intel.com>
+To: Qin Jian <qinjian@cqplus1.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Stephen Boyd <sboyd@kernel.org>
+Subject: [linux-next:master 4537/13717] drivers/clk/clk-sp7021.c:316:8:
+ warning: result of comparison of constant 18446744073709551615 with
+ expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned
+ char: (unsigned char)0, signed char: (unsigned char)0, unsigned short:
+ (unsigne...
+Message-ID: <202304231357.7gTDI8lT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,237 +51,166 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-CC: Jarkko Sakkinen <jarkko@kernel.org>
+Hi Qin,
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tis-irq
-head:   6cea73a6f10e7c9d07f77bb894d6aa4a29ed7bd8
-commit: c211567f78eb2c1f823cbf843460c4231c7c9632 [70/75] tpm, tpm: Implement usage counter for locality
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230423/202304231135.zmOsiK5U-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   d3e1ee0e67e7603d36f4fa2fec6b881c01aabe89
+commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2 [4537/13717] clk: Add Sunplus SP7021 clock driver
+config: powerpc-buildonly-randconfig-r003-20230423 (https://download.01.org/0day-ci/archive/20230423/202304231357.7gTDI8lT-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=c211567f78eb2c1f823cbf843460c4231c7c9632
-        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-        git fetch --no-tags jarkko-tpmdd tis-irq
-        git checkout c211567f78eb2c1f823cbf843460c4231c7c9632
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/clk/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304231135.zmOsiK5U-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304231357.7gTDI8lT-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: null_fops+0x28: data relocation to !ENDBR: write_iter_null+0x0
-   vmlinux.o: warning: objtool: null_fops+0xc0: data relocation to !ENDBR: splice_write_null+0x0
-   vmlinux.o: warning: objtool: null_fops+0x100: data relocation to !ENDBR: uring_cmd_null+0x0
-   vmlinux.o: warning: objtool: port_fops+0x8: data relocation to !ENDBR: memory_lseek+0x0
-   vmlinux.o: warning: objtool: port_fops+0x10: data relocation to !ENDBR: read_port+0x0
-   vmlinux.o: warning: objtool: port_fops+0x18: data relocation to !ENDBR: write_port+0x0
-   vmlinux.o: warning: objtool: port_fops+0x70: data relocation to !ENDBR: open_port+0x0
-   vmlinux.o: warning: objtool: zero_fops+0x8: data relocation to !ENDBR: null_lseek+0x0
-   vmlinux.o: warning: objtool: zero_fops+0x10: data relocation to !ENDBR: read_zero+0x0
-   vmlinux.o: warning: objtool: zero_fops+0x18: data relocation to !ENDBR: write_null+0x0
-   vmlinux.o: warning: objtool: zero_fops+0x20: data relocation to !ENDBR: read_iter_zero+0x0
-   vmlinux.o: warning: objtool: zero_fops+0x28: data relocation to !ENDBR: write_iter_null+0x0
-   vmlinux.o: warning: objtool: zero_fops+0x60: data relocation to !ENDBR: mmap_zero+0x0
-   vmlinux.o: warning: objtool: zero_fops+0xa8: data relocation to !ENDBR: get_unmapped_area_zero+0x0
-   vmlinux.o: warning: objtool: full_fops+0x8: data relocation to !ENDBR: null_lseek+0x0
-   vmlinux.o: warning: objtool: full_fops+0x18: data relocation to !ENDBR: write_full+0x0
-   vmlinux.o: warning: objtool: full_fops+0x20: data relocation to !ENDBR: read_iter_zero+0x0
-   vmlinux.o: warning: objtool: random_fops+0x8: data relocation to !ENDBR: noop_llseek+0x0
-   vmlinux.o: warning: objtool: random_fops+0x20: data relocation to !ENDBR: random_read_iter+0x0
-   vmlinux.o: warning: objtool: random_fops+0x28: data relocation to !ENDBR: random_write_iter+0x0
-   vmlinux.o: warning: objtool: random_fops+0x48: data relocation to !ENDBR: random_poll+0x0
-   vmlinux.o: warning: objtool: random_fops+0x50: data relocation to !ENDBR: random_ioctl+0x0
-   vmlinux.o: warning: objtool: random_fops+0x90: data relocation to !ENDBR: random_fasync+0x0
-   vmlinux.o: warning: objtool: random_fops+0xc0: data relocation to !ENDBR: iter_file_splice_write+0x0
-   vmlinux.o: warning: objtool: random_fops+0xc8: data relocation to !ENDBR: generic_file_splice_read+0x0
-   vmlinux.o: warning: objtool: urandom_fops+0x8: data relocation to !ENDBR: noop_llseek+0x0
-   vmlinux.o: warning: objtool: urandom_fops+0x20: data relocation to !ENDBR: urandom_read_iter+0x0
-   vmlinux.o: warning: objtool: urandom_fops+0x28: data relocation to !ENDBR: random_write_iter+0x0
-   vmlinux.o: warning: objtool: urandom_fops+0x50: data relocation to !ENDBR: random_ioctl+0x0
-   vmlinux.o: warning: objtool: urandom_fops+0x90: data relocation to !ENDBR: random_fasync+0x0
-   vmlinux.o: warning: objtool: urandom_fops+0xc0: data relocation to !ENDBR: iter_file_splice_write+0x0
-   vmlinux.o: warning: objtool: urandom_fops+0xc8: data relocation to !ENDBR: generic_file_splice_read+0x0
-   vmlinux.o: warning: objtool: misc_seq_ops+0x0: data relocation to !ENDBR: misc_seq_start+0x0
-   vmlinux.o: warning: objtool: misc_seq_ops+0x8: data relocation to !ENDBR: misc_seq_stop+0x0
-   vmlinux.o: warning: objtool: misc_seq_ops+0x10: data relocation to !ENDBR: misc_seq_next+0x0
-   vmlinux.o: warning: objtool: misc_seq_ops+0x18: data relocation to !ENDBR: misc_seq_show+0x0
-   vmlinux.o: warning: objtool: misc_fops+0x8: data relocation to !ENDBR: noop_llseek+0x0
-   vmlinux.o: warning: objtool: misc_fops+0x70: data relocation to !ENDBR: misc_open+0x0
-   vmlinux.o: warning: objtool: hv_ops+0x0: data relocation to !ENDBR: get_chars+0x0
-   vmlinux.o: warning: objtool: hv_ops+0x8: data relocation to !ENDBR: put_chars+0x0
-   vmlinux.o: warning: objtool: hv_ops+0x18: data relocation to !ENDBR: notifier_add_vio+0x0
-   vmlinux.o: warning: objtool: hv_ops+0x20: data relocation to !ENDBR: notifier_del_vio+0x0
-   vmlinux.o: warning: objtool: hv_ops+0x28: data relocation to !ENDBR: notifier_del_vio+0x0
-   vmlinux.o: warning: objtool: port_fops+0x10: data relocation to !ENDBR: port_fops_read+0x0
-   vmlinux.o: warning: objtool: port_fops+0x18: data relocation to !ENDBR: port_fops_write+0x0
-   vmlinux.o: warning: objtool: port_fops+0x48: data relocation to !ENDBR: port_fops_poll+0x0
-   vmlinux.o: warning: objtool: port_fops+0x70: data relocation to !ENDBR: port_fops_open+0x0
-   vmlinux.o: warning: objtool: port_fops+0x80: data relocation to !ENDBR: port_fops_release+0x0
-   vmlinux.o: warning: objtool: port_fops+0x90: data relocation to !ENDBR: port_fops_fasync+0x0
-   vmlinux.o: warning: objtool: port_fops+0xc0: data relocation to !ENDBR: port_fops_splice_write+0x0
-   vmlinux.o: warning: objtool: port_debugfs_fops+0x8: data relocation to !ENDBR: seq_lseek+0x0
-   vmlinux.o: warning: objtool: port_debugfs_fops+0x10: data relocation to !ENDBR: seq_read+0x0
-   vmlinux.o: warning: objtool: port_debugfs_fops+0x70: data relocation to !ENDBR: port_debugfs_open+0x0
-   vmlinux.o: warning: objtool: port_debugfs_fops+0x80: data relocation to !ENDBR: single_release+0x0
-   vmlinux.o: warning: objtool: rng_chrdev_ops+0x8: data relocation to !ENDBR: noop_llseek+0x0
-   vmlinux.o: warning: objtool: rng_chrdev_ops+0x10: data relocation to !ENDBR: rng_dev_read+0x0
-   vmlinux.o: warning: objtool: rng_chrdev_ops+0x70: data relocation to !ENDBR: rng_dev_open+0x0
-   vmlinux.o: warning: objtool: tlclk_fops+0x8: data relocation to !ENDBR: noop_llseek+0x0
-   vmlinux.o: warning: objtool: tlclk_fops+0x10: data relocation to !ENDBR: tlclk_read+0x0
-   vmlinux.o: warning: objtool: tlclk_fops+0x70: data relocation to !ENDBR: tlclk_open+0x0
-   vmlinux.o: warning: objtool: tlclk_fops+0x80: data relocation to !ENDBR: tlclk_release+0x0
-   vmlinux.o: warning: objtool: mwave_fops+0x8: data relocation to !ENDBR: default_llseek+0x0
-   vmlinux.o: warning: objtool: mwave_fops+0x10: data relocation to !ENDBR: mwave_read+0x0
-   vmlinux.o: warning: objtool: mwave_fops+0x18: data relocation to !ENDBR: mwave_write+0x0
-   vmlinux.o: warning: objtool: mwave_fops+0x50: data relocation to !ENDBR: mwave_ioctl+0x0
-   vmlinux.o: warning: objtool: mwave_fops+0x70: data relocation to !ENDBR: mwave_open+0x0
-   vmlinux.o: warning: objtool: mwave_fops+0x80: data relocation to !ENDBR: mwave_close+0x0
-   vmlinux.o: warning: objtool: scr24x_fops+0x10: data relocation to !ENDBR: scr24x_read+0x0
-   vmlinux.o: warning: objtool: scr24x_fops+0x18: data relocation to !ENDBR: scr24x_write+0x0
-   vmlinux.o: warning: objtool: scr24x_fops+0x70: data relocation to !ENDBR: scr24x_open+0x0
-   vmlinux.o: warning: objtool: scr24x_fops+0x80: data relocation to !ENDBR: scr24x_release+0x0
-   vmlinux.o: warning: objtool: tpm_fops+0x10: data relocation to !ENDBR: tpm_common_read+0x0
-   vmlinux.o: warning: objtool: tpm_fops+0x18: data relocation to !ENDBR: tpm_common_write+0x0
-   vmlinux.o: warning: objtool: tpm_fops+0x48: data relocation to !ENDBR: tpm_common_poll+0x0
-   vmlinux.o: warning: objtool: tpm_fops+0x70: data relocation to !ENDBR: tpm_open+0x0
-   vmlinux.o: warning: objtool: tpm_fops+0x80: data relocation to !ENDBR: tpm_release+0x0
-   vmlinux.o: warning: objtool: tpmrm_fops+0x10: data relocation to !ENDBR: tpm_common_read+0x0
-   vmlinux.o: warning: objtool: tpmrm_fops+0x18: data relocation to !ENDBR: tpm_common_write+0x0
-   vmlinux.o: warning: objtool: tpmrm_fops+0x48: data relocation to !ENDBR: tpm_common_poll+0x0
-   vmlinux.o: warning: objtool: tpmrm_fops+0x70: data relocation to !ENDBR: tpmrm_open+0x0
-   vmlinux.o: warning: objtool: tpmrm_fops+0x80: data relocation to !ENDBR: tpmrm_release+0x0
-   vmlinux.o: warning: objtool: tpm1_ascii_b_measurements_seqops+0x0: data relocation to !ENDBR: tpm1_bios_measurements_start+0x0
-   vmlinux.o: warning: objtool: tpm1_ascii_b_measurements_seqops+0x8: data relocation to !ENDBR: tpm1_bios_measurements_stop+0x0
-   vmlinux.o: warning: objtool: tpm1_ascii_b_measurements_seqops+0x10: data relocation to !ENDBR: tpm1_bios_measurements_next+0x0
-   vmlinux.o: warning: objtool: tpm1_ascii_b_measurements_seqops+0x18: data relocation to !ENDBR: tpm1_ascii_bios_measurements_show+0x0
-   vmlinux.o: warning: objtool: tpm1_binary_b_measurements_seqops+0x0: data relocation to !ENDBR: tpm1_bios_measurements_start+0x0
-   vmlinux.o: warning: objtool: tpm1_binary_b_measurements_seqops+0x8: data relocation to !ENDBR: tpm1_bios_measurements_stop+0x0
-   vmlinux.o: warning: objtool: tpm1_binary_b_measurements_seqops+0x10: data relocation to !ENDBR: tpm1_bios_measurements_next+0x0
-   vmlinux.o: warning: objtool: tpm1_binary_b_measurements_seqops+0x18: data relocation to !ENDBR: tpm1_binary_bios_measurements_show+0x0
-   vmlinux.o: warning: objtool: tpm2_binary_b_measurements_seqops+0x0: data relocation to !ENDBR: tpm2_bios_measurements_start+0x0
-   vmlinux.o: warning: objtool: tpm2_binary_b_measurements_seqops+0x8: data relocation to !ENDBR: tpm2_bios_measurements_stop+0x0
-   vmlinux.o: warning: objtool: tpm2_binary_b_measurements_seqops+0x10: data relocation to !ENDBR: tpm2_bios_measurements_next+0x0
-   vmlinux.o: warning: objtool: tpm2_binary_b_measurements_seqops+0x18: data relocation to !ENDBR: tpm2_binary_bios_measurements_show+0x0
-   vmlinux.o: warning: objtool: tpm_tis+0x8: data relocation to !ENDBR: tpm_tis_req_canceled+0x0
-   vmlinux.o: warning: objtool: tpm_tis+0x10: data relocation to !ENDBR: tpm_tis_recv+0x0
-   vmlinux.o: warning: objtool: tpm_tis+0x18: data relocation to !ENDBR: tpm_tis_send+0x0
-   vmlinux.o: warning: objtool: tpm_tis+0x20: data relocation to !ENDBR: tpm_tis_ready+0x0
-   vmlinux.o: warning: objtool: tpm_tis+0x28: data relocation to !ENDBR: tpm_tis_status+0x0
-   vmlinux.o: warning: objtool: tpm_tis+0x30: data relocation to !ENDBR: tpm_tis_update_timeouts+0x0
-   vmlinux.o: warning: objtool: tpm_tis+0x38: data relocation to !ENDBR: tpm_tis_update_durations+0x0
->> vmlinux.o: warning: objtool: tpm_tis+0x50: data relocation to !ENDBR: tpm_tis_request_locality+0x0
->> vmlinux.o: warning: objtool: tpm_tis+0x58: data relocation to !ENDBR: tpm_tis_relinquish_locality+0x0
-   vmlinux.o: warning: objtool: tpm_tis+0x60: data relocation to !ENDBR: tpm_tis_clkrun_enable+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x10: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x18: data relocation to !ENDBR: tpm_tis_resume+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x20: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x28: data relocation to !ENDBR: tpm_tis_resume+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x30: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x38: data relocation to !ENDBR: tpm_tis_resume+0x0
-   vmlinux.o: warning: objtool: tpm_tcg+0x0: data relocation to !ENDBR: tpm_tcg_read_bytes+0x0
-   vmlinux.o: warning: objtool: tpm_tcg+0x8: data relocation to !ENDBR: tpm_tcg_write_bytes+0x0
-   vmlinux.o: warning: objtool: tpm_tis_dmi_table+0x0: data relocation to !ENDBR: tpm_tis_disable_irq+0x0
-   vmlinux.o: warning: objtool: tpm_tis_spi_id+0x20: data relocation to !ENDBR: tpm_tis_spi_probe+0x0
-   vmlinux.o: warning: objtool: tpm_tis_spi_id+0x48: data relocation to !ENDBR: tpm_tis_spi_probe+0x0
-   vmlinux.o: warning: objtool: tpm_tis_spi_id+0x70: data relocation to !ENDBR: tpm_tis_spi_probe+0x0
-   vmlinux.o: warning: objtool: tpm_tis_spi_id+0x98: data relocation to !ENDBR: tpm_tis_spi_probe+0x0
-   vmlinux.o: warning: objtool: tpm_tis_spi_id+0xc0: data relocation to !ENDBR: cr50_spi_probe+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x10: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x18: data relocation to !ENDBR: tpm_tis_spi_resume+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x20: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x28: data relocation to !ENDBR: tpm_tis_spi_resume+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x30: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_pm+0x38: data relocation to !ENDBR: tpm_tis_spi_resume+0x0
-   vmlinux.o: warning: objtool: tpm_spi_phy_ops+0x0: data relocation to !ENDBR: tpm_tis_spi_read_bytes+0x0
-   vmlinux.o: warning: objtool: tpm_spi_phy_ops+0x8: data relocation to !ENDBR: tpm_tis_spi_write_bytes+0x0
-   vmlinux.o: warning: objtool: tpm_spi_cr50_phy_ops+0x0: data relocation to !ENDBR: tpm_tis_spi_cr50_read_bytes+0x0
-   vmlinux.o: warning: objtool: tpm_spi_cr50_phy_ops+0x8: data relocation to !ENDBR: tpm_tis_spi_cr50_write_bytes+0x0
-   vmlinux.o: warning: objtool: cr50_i2c_pm+0x10: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: cr50_i2c_pm+0x18: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: cr50_i2c_pm+0x20: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: cr50_i2c_pm+0x28: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: cr50_i2c_pm+0x30: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: cr50_i2c_pm+0x38: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: cr50_i2c+0x8: data relocation to !ENDBR: tpm_cr50_i2c_req_canceled+0x0
-   vmlinux.o: warning: objtool: cr50_i2c+0x10: data relocation to !ENDBR: tpm_cr50_i2c_tis_recv+0x0
-   vmlinux.o: warning: objtool: cr50_i2c+0x18: data relocation to !ENDBR: tpm_cr50_i2c_tis_send+0x0
-   vmlinux.o: warning: objtool: cr50_i2c+0x20: data relocation to !ENDBR: tpm_cr50_i2c_tis_set_ready+0x0
-   vmlinux.o: warning: objtool: cr50_i2c+0x28: data relocation to !ENDBR: tpm_cr50_i2c_tis_status+0x0
-   vmlinux.o: warning: objtool: i2c_atmel_pm_ops+0x10: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: i2c_atmel_pm_ops+0x18: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: i2c_atmel_pm_ops+0x20: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: i2c_atmel_pm_ops+0x28: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: i2c_atmel_pm_ops+0x30: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: i2c_atmel_pm_ops+0x38: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: i2c_atmel+0x8: data relocation to !ENDBR: i2c_atmel_req_canceled+0x0
-   vmlinux.o: warning: objtool: i2c_atmel+0x10: data relocation to !ENDBR: i2c_atmel_recv+0x0
-   vmlinux.o: warning: objtool: i2c_atmel+0x18: data relocation to !ENDBR: i2c_atmel_send+0x0
-   vmlinux.o: warning: objtool: i2c_atmel+0x20: data relocation to !ENDBR: i2c_atmel_cancel+0x0
-   vmlinux.o: warning: objtool: i2c_atmel+0x28: data relocation to !ENDBR: i2c_atmel_read_status+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c_ops+0x10: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c_ops+0x18: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c_ops+0x20: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c_ops+0x28: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c_ops+0x30: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c_ops+0x38: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c+0x8: data relocation to !ENDBR: tpm_tis_i2c_req_canceled+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c+0x10: data relocation to !ENDBR: tpm_tis_i2c_recv+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c+0x18: data relocation to !ENDBR: tpm_tis_i2c_send+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c+0x20: data relocation to !ENDBR: tpm_tis_i2c_ready+0x0
-   vmlinux.o: warning: objtool: tpm_tis_i2c+0x28: data relocation to !ENDBR: tpm_tis_i2c_status+0x0
-   vmlinux.o: warning: objtool: i2c_nuvoton_pm_ops+0x10: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: i2c_nuvoton_pm_ops+0x18: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: i2c_nuvoton_pm_ops+0x20: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: i2c_nuvoton_pm_ops+0x28: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: i2c_nuvoton_pm_ops+0x30: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: i2c_nuvoton_pm_ops+0x38: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: tpm_i2c+0x8: data relocation to !ENDBR: i2c_nuvoton_req_canceled+0x0
-   vmlinux.o: warning: objtool: tpm_i2c+0x10: data relocation to !ENDBR: i2c_nuvoton_recv+0x0
-   vmlinux.o: warning: objtool: tpm_i2c+0x18: data relocation to !ENDBR: i2c_nuvoton_send+0x0
-   vmlinux.o: warning: objtool: tpm_i2c+0x20: data relocation to !ENDBR: i2c_nuvoton_ready+0x0
-   vmlinux.o: warning: objtool: tpm_i2c+0x28: data relocation to !ENDBR: i2c_nuvoton_read_status+0x0
-   vmlinux.o: warning: objtool: tpm_nsc_pm+0x10: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_nsc_pm+0x18: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: tpm_nsc_pm+0x20: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_nsc_pm+0x28: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: tpm_nsc_pm+0x30: data relocation to !ENDBR: tpm_pm_suspend+0x0
-   vmlinux.o: warning: objtool: tpm_nsc_pm+0x38: data relocation to !ENDBR: tpm_pm_resume+0x0
-   vmlinux.o: warning: objtool: tpm_nsc+0x8: data relocation to !ENDBR: tpm_nsc_req_canceled+0x0
-   vmlinux.o: warning: objtool: tpm_nsc+0x10: data relocation to !ENDBR: tpm_nsc_recv+0x0
-   vmlinux.o: warning: objtool: tpm_nsc+0x18: data relocation to !ENDBR: tpm_nsc_send+0x0
-   vmlinux.o: warning: objtool: tpm_nsc+0x20: data relocation to !ENDBR: tpm_nsc_cancel+0x0
-   vmlinux.o: warning: objtool: tpm_nsc+0x28: data relocation to !ENDBR: tpm_nsc_status+0x0
-   vmlinux.o: warning: objtool: st33zp24_tpm+0x8: data relocation to !ENDBR: st33zp24_req_canceled+0x0
-   vmlinux.o: warning: objtool: st33zp24_tpm+0x10: data relocation to !ENDBR: st33zp24_recv+0x0
-   vmlinux.o: warning: objtool: st33zp24_tpm+0x18: data relocation to !ENDBR: st33zp24_send+0x0
-   vmlinux.o: warning: objtool: st33zp24_tpm+0x20: data relocation to !ENDBR: st33zp24_cancel+0x0
-   vmlinux.o: warning: objtool: st33zp24_tpm+0x28: data relocation to !ENDBR: st33zp24_status+0x0
-   vmlinux.o: warning: objtool: st33zp24_spi_ops+0x10: data relocation to !ENDBR: st33zp24_pm_suspend+0x0
-   vmlinux.o: warning: objtool: st33zp24_spi_ops+0x18: data relocation to !ENDBR: st33zp24_pm_resume+0x0
-   vmlinux.o: warning: objtool: st33zp24_spi_ops+0x20: data relocation to !ENDBR: st33zp24_pm_suspend+0x0
-   vmlinux.o: warning: objtool: st33zp24_spi_ops+0x28: data relocation to !ENDBR: st33zp24_pm_resume+0x0
-   vmlinux.o: warning: objtool: st33zp24_spi_ops+0x30: data relocation to !ENDBR: st33zp24_pm_suspend+0x0
-   vmlinux.o: warning: objtool: st33zp24_spi_ops+0x38: data relocation to !ENDBR: st33zp24_pm_resume+0x0
-   vmlinux.o: warning: objtool: spi_phy_ops+0x0: data relocation to !ENDBR: st33zp24_spi_send+0x0
-   vmlinux.o: warning: objtool: spi_phy_ops+0x8: data relocation to !ENDBR: st33zp24_spi_recv+0x0
-   vmlinux.o: warning: objtool: xillybus_fops+0x8: data relocation to !ENDBR: xillybus_llseek+0x0
-   vmlinux.o: warning: objtool: xillybus_fops+0x10: data relocation to !ENDBR: xillybus_read+0x0
-   vmlinux.o: warning: objtool: xillybus_fops+0x18: data relocation to !ENDBR: xillybus_write+0x0
-   vmlinux.o: warning: objtool: xillybus_fops+0x48: data relocation to !ENDBR: xillybus_poll+0x0
-   vmlinux.o: warning: objtool: xillybus_fops+0x70: data relocation to !ENDBR: xillybus_open+0x0
-   vmlinux.o: warning: objtool: xillybus_fops+0x78: data relocation to !ENDBR: xillybus_flush+0x0
-   vmlinux.o: warning: objtool: xillybus_fops+0x80: data relocation to !ENDBR: xillybus_release+0x0
+>> drivers/clk/clk-sp7021.c:316:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:317:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:318:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:319:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+   drivers/clk/clk-sp7021.c:321:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (_m)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
+           (_m << 16) | FIELD_PREP(_m, value);     \
+                        ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
+                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
+                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
 
 
-objdump-func vmlinux.o tpm_tis:
+vim +316 drivers/clk/clk-sp7021.c
+
+   309	
+   310	static int plltv_set_rate(struct sp_pll *clk)
+   311	{
+   312		unsigned long flags;
+   313		u32 r0, r1, r2;
+   314	
+   315		r0  = BIT(clk->bp_bit + 16);
+ > 316		r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
+   317		r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
+   318		r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
+   319		r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
+   320	
+   321		r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
+   322	
+   323		r2  = HWM_FIELD_PREP(MASK_DIVN, clk->p[DIVN] - 1);
+   324		r2 |= HWM_FIELD_PREP(MASK_DIVM, clk->p[DIVM] - 1);
+   325	
+   326		spin_lock_irqsave(&clk->lock, flags);
+   327		writel(r0, clk->reg);
+   328		writel(r1, clk->reg + 4);
+   329		writel(r2, clk->reg + 8);
+   330		spin_unlock_irqrestore(&clk->lock, flags);
+   331	
+   332		return 0;
+   333	}
+   334	
 
 -- 
 0-DAY CI Kernel Test Service
