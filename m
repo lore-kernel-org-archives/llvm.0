@@ -1,41 +1,43 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D5B7C;
-	Mon, 24 Apr 2023 04:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2812F7C;
+	Mon, 24 Apr 2023 06:34:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682310042; x=1713846042;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=yW6kFfttMJiqIfN8yN7kDT3N4o8hTOhcLtfdwzk16yQ=;
-  b=FlT9I/o1EHCF+cR+EDmFgCKXozo97vEYOZSbaI+h4faBaGRPd033ES9t
-   w7u2kNIY43r19dynVSRDW9se8Y2QD6bDjCRTIzPblPSOsjRPD2yr3PoLK
-   P7/qm/8xuA+UJFKj1WtVQuLfT9D0A/dn6EUU/RfuQnBZSnhgusOnWk2hk
-   UxQ+hfIVIXourZk55MHTcAvxNZa/dU7No1GBdqQQ6mYKAyDmKIwPdVM/n
-   gKYJLnnVBWIzXEucx9h4HtE1yCH+/yBn0gvqRDm/E4Hs8HQpfunLYg+YD
-   9fsYSakb/Q1xmXQ/atSC/RV8JFq3KiSFiEfmIbtyCQ9Wh3bCIwlZSsR1f
+  t=1682318084; x=1713854084;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h55tzEJ3sDayktUOnTgBrrilHEXbItXJcrAxVSrSJTQ=;
+  b=nE0qJa2WE0g2FoCYmFeklDHnRPZ1K2bUk/ScAGtJMdyleCIjv+SLZZgR
+   vHxUPWAZb3Pwbp1UTofdUumySYDuw/hcg5A8m1H+7mVSJpX/FcFFLzGOE
+   6DOPwt7RSo+97BKoFJdrWICON9WbJOvqMUZLgY7Qr+xo8zzTaBuQ/QVMb
+   9JoYdSsoZroHli60Jh8HBdTF3SN0VXsKQXYOY2pxmx68Hsk/5A7MgRtO5
+   r7hg//mbhNjBl+0miF01nLr15siIJo1PMFaS+81q9rsCG/WGURg8kytbA
+   rKf0mQrTRIQfJSXJtogkTPVK1eNJJc7bzzNzKl6Tb/uUGe1wR9sX4Rlgb
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="374300564"
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="330578923"
 X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="374300564"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 21:20:41 -0700
+   d="scan'208";a="330578923"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2023 23:34:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="725545662"
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="757576647"
 X-IronPort-AV: E=Sophos;i="5.99,221,1677571200"; 
-   d="scan'208";a="725545662"
+   d="scan'208";a="757576647"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Apr 2023 21:20:40 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 23 Apr 2023 23:34:41 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pqngt-000iGi-2F;
-	Mon, 24 Apr 2023 04:20:39 +0000
-Date: Mon, 24 Apr 2023 12:19:52 +0800
+	id 1pqpma-000iIy-2s;
+	Mon, 24 Apr 2023 06:34:40 +0000
+Date: Mon, 24 Apr 2023 14:34:01 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: ct_irq_enter+0x35: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <202304241253.Ktu9jZA6-lkp@intel.com>
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+Subject: drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable
+ 'ipmmu_of_ids'
+Message-ID: <202304241433.VrIdTpGU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,107 +47,100 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: linux-kernel@vger.kernel.org
-TO: Frederic Weisbecker <frederic@kernel.org>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
-CC: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-
-Hi Frederic,
+Hi Robin,
 
 FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   457391b0380335d5e9a5babdec90ac53928b23b4
-commit: 3864caafe7c66f01b188ffccb6a4215f3bf56292 rcu/context-tracking: Remove rcu_irq_enter/exit()
-date:   10 months ago
-config: x86_64-randconfig-a001-20230424 (https://download.01.org/0day-ci/archive/20230424/202304241253.Ktu9jZA6-lkp@intel.com/config)
+commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 iommu/ipmmu-vmsa: Clean up bus_set_iommu()
+date:   8 months ago
+config: x86_64-buildonly-randconfig-r002-20230424 (https://download.01.org/0day-ci/archive/20230424/202304241433.VrIdTpGU-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3864caafe7c66f01b188ffccb6a4215f3bf56292
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b87d6d7fa405e23478f1e1dff6d66b5a533a5433
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 3864caafe7c66f01b188ffccb6a4215f3bf56292
+        git checkout b87d6d7fa405e23478f1e1dff6d66b5a533a5433
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iommu/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304241253.Ktu9jZA6-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304241433.VrIdTpGU-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: kvm_spurious_fault+0x18: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: vmx_update_host_rsp+0x2b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: vmx_vcpu_enter_exit+0x177: call to do_trace_write_msr() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x39: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x32: call to memset() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x4e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0x2f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x4e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check+0xd2: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check+0x4e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0x28: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_idle_enter+0x46: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_enter+0x42: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_user_enter+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter+0x2e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_idle_exit+0x57: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_eqs_exit+0x4b: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_nmi_enter+0x2f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x58: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x58: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x58: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x43: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x5c: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_irq_enter+0x35: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: ct_irq_exit+0x35: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __ct_user_enter+0x2f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: context_tracking_recursion_enter+0x3b: call to ftrace_likely_update() leaves .noinstr.text section
+>> drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable 'ipmmu_of_ids' [-Wunused-const-variable]
+   static const struct of_device_id ipmmu_of_ids[] = {
+                                    ^
+   1 warning generated.
 
 
-objdump-func vmlinux.o ct_irq_enter:
-0000 00000000000065c0 <ct_irq_enter>:
-0000     65c0:	53                   	push   %rbx
-0001     65c1:	83 3d 00 00 00 00 00 	cmpl   $0x0,0x0(%rip)        # 65c8 <ct_irq_enter+0x8>	65c3: R_X86_64_PC32	debug_locks-0x5
-0008     65c8:	74 0b                	je     65d5 <ct_irq_enter+0x15>
-000a     65ca:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 65d1 <ct_irq_enter+0x11>	65cd: R_X86_64_PC32	lockdep_recursion-0x4
-0011     65d1:	85 c0                	test   %eax,%eax
-0013     65d3:	74 04                	je     65d9 <ct_irq_enter+0x19>
-0015     65d5:	31 c0                	xor    %eax,%eax
-0017     65d7:	eb 0c                	jmp    65e5 <ct_irq_enter+0x25>
-0019     65d9:	65 8b 05 00 00 00 00 	mov    %gs:0x0(%rip),%eax        # 65e0 <ct_irq_enter+0x20>	65dc: R_X86_64_PC32	hardirqs_enabled-0x4
-0020     65e0:	85 c0                	test   %eax,%eax
-0022     65e2:	0f 95 c0             	setne  %al
-0025     65e5:	0f b6 d8             	movzbl %al,%ebx
-0028     65e8:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	65eb: R_X86_64_32S	_ftrace_annotated_branch+0x65430
-002f     65ef:	89 de                	mov    %ebx,%esi
-0031     65f1:	31 d2                	xor    %edx,%edx
-0033     65f3:	31 c9                	xor    %ecx,%ecx
-0035     65f5:	e8 00 00 00 00       	call   65fa <ct_irq_enter+0x3a>	65f6: R_X86_64_PLT32	ftrace_likely_update-0x4
-003a     65fa:	84 db                	test   %bl,%bl
-003c     65fc:	74 04                	je     6602 <ct_irq_enter+0x42>
-003e     65fe:	90                   	nop
-003f     65ff:	0f 0b                	ud2
-0041     6601:	90                   	nop
-0042     6602:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	6605: R_X86_64_32S	_ftrace_annotated_branch+0x65460
-0049     6609:	89 de                	mov    %ebx,%esi
-004b     660b:	31 d2                	xor    %edx,%edx
-004d     660d:	31 c9                	xor    %ecx,%ecx
-004f     660f:	e8 00 00 00 00       	call   6614 <ct_irq_enter+0x54>	6610: R_X86_64_PLT32	ftrace_likely_update-0x4
-0054     6614:	5b                   	pop    %rbx
-0055     6615:	e9 00 00 00 00       	jmp    661a <ct_irq_enter+0x5a>	6616: R_X86_64_PLT32	ct_nmi_enter-0x4
-005a     661a:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
-0064     6624:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
-006e     662e:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
-0078     6638:	0f 1f 84 00 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
+
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
+33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
+33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
+33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
+33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
+60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
+60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
+60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
+757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
+757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
+757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
+b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
+b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
+b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
+58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
+58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
+0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
+0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
+0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
+0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
+98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
+98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
+98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
+3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
+b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
+b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
+b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
+3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
+9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
+33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
+33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
+33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
+33f3ac9b511612 Magnus Damm             2017-10-16  995  };
+33f3ac9b511612 Magnus Damm             2017-10-16  996  
+
+:::::: The code at line 946 was first introduced by commit
+:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
+
+:::::: TO: Magnus Damm <damm+renesas@opensource.se>
+:::::: CC: Alex Williamson <alex.williamson@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
