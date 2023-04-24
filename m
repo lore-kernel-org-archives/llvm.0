@@ -1,131 +1,138 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749337C;
-	Mon, 24 Apr 2023 07:46:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682322404; x=1713858404;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u3pZTubpJKZfX8b+6VbLGCsLKvGeuXh1yc7C0hDKUM0=;
-  b=kXKNZ86RDcOT1V4qkOIFYM0OP5VSye7bYmLZITk/VI2NzrfwUMf+cVbb
-   XIJM1ujw5cbPW/LFd/TofzYfMf6AvDy/rPajYl1sn79Q7ethfbN8Cm2i9
-   hNIU/nK1UZUC4Hi6gQdJV+BWeLkUG4qot5IRomF5IvZzSpdTIpqEC+++S
-   bjI6rCrJDu+3zSIIiwk5EwqAlWnr+AY0XT8O5G/Iy3mbNBbjXASUCytwB
-   QVpIcT7h+udfuinq2bR9tBwal561J5JEfB6aqTPkq47yzeHnZdB28dbi7
-   MtM09WIL9aSHUyZhhnl00rcnrvlPHKjGO9kWLjIYub2Guv7PGRL7dtTld
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="335272799"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="335272799"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 00:46:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="757594512"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="757594512"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Apr 2023 00:46:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pqquH-000iJw-1g;
-	Mon, 24 Apr 2023 07:46:41 +0000
-Date: Mon, 24 Apr 2023 15:46:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steev Klimaszewski <steev@kali.org>
-Subject: [steev:lenovo-x13s-linux-v6.3.0 144/157]
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:649:28: warning: variable 'i' is
- uninitialized when used here
-Message-ID: <202304241515.ornmzM1i-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D9C7C
+	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 07:59:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E5AEC433EF;
+	Mon, 24 Apr 2023 07:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1682323156;
+	bh=LVTaOO3e2WuhCkVNpP1jxSnkqaU8Al77qhAf5+dDf4E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TlUpVrOkP6yBue5XzLOYl2+j3hTGF9pt8WU/guTsbd7YVD7LW+z13puIb+Q//1IDz
+	 M8nLZ322fuvBxgmPkJA9jB7vhk19KTXBJ/9LKzrCNKQgnKItpKB3GliVCTlwDqJxHE
+	 iuDsWWPyTkJi4fmShKgYfE9WXtLowhwWNIlL7UpBXUH0QCy12VhAhPY6xMQKyKHnat
+	 gmbA6jP+gLai4y7zPrkfXxQ/W9XhdmantUWVQ2UySuptRAL/8HfnnkrLAO/WaV5iTb
+	 l6eEodJZkIS56RORPZ8guulhAxrD9VSlrOOl1xfud8t7xYGn0VeE/Fb2UAtB5joZHf
+	 2uPNxytB5LVAw==
+Date: Mon, 24 Apr 2023 09:59:07 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Mike Christie <michael.christie@oracle.com>
+Cc: Matthew Wilcox <willy@infradead.org>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>,
+	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org,
+	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
+	trix@redhat.com, tytso@mit.edu, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev,
+	bpf <bpf@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
+Message-ID: <20230424-frucht-beneiden-83a8083a973b@brauner>
+References: <000000000000b9915d05f9d98bdd@google.com>
+ <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
+ <ZEKko6U2MxfkXgs5@casper.infradead.org>
+ <13d484d3-d573-cd82-fff0-a35e27b8451e@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <13d484d3-d573-cd82-fff0-a35e27b8451e@oracle.com>
 
-tree:   https://github.com/steev/linux lenovo-x13s-linux-v6.3.0
-head:   dcb4f9644df6b6eab8d660a91c2a307d79b54020
-commit: 558e3820e2f31f7438304aef66c6748783f991a0 [144/157] drm/msm/dpu: add HDMI output support
-config: arm64-randconfig-r013-20230423 (https://download.01.org/0day-ci/archive/20230424/202304241515.ornmzM1i-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/steev/linux/commit/558e3820e2f31f7438304aef66c6748783f991a0
-        git remote add steev https://github.com/steev/linux
-        git fetch --no-tags steev lenovo-x13s-linux-v6.3.0
-        git checkout 558e3820e2f31f7438304aef66c6748783f991a0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/
+On Fri, Apr 21, 2023 at 12:40:45PM -0500, Mike Christie wrote:
+> cc'ing Christian, because I might have fixed this with a patch in
+> his tree.
+> 
+> On 4/21/23 9:58 AM, Matthew Wilcox wrote:
+> > I'm not sure how it is that bpf is able to see the task before comm is
+> > initialised; that seems to be the real race here, that comm is not set
+> > before the kthread is a schedulable entity?  Adding the scheduler people.
+> > 
+> >>> ==================================================================
+> >>> BUG: KCSAN: data-race in strscpy / strscpy
+> >>>
+> >>> write to 0xffff88812ed8b730 of 8 bytes by task 16157 on cpu 1:
+> >>>  strscpy+0xa9/0x170 lib/string.c:165
+> >>>  strscpy_pad+0x27/0x80 lib/string_helpers.c:835
+> >>>  __set_task_comm+0x46/0x140 fs/exec.c:1232
+> >>>  set_task_comm include/linux/sched.h:1984 [inline]
+> >>>  __kthread_create_on_node+0x2b2/0x320 kernel/kthread.c:474
+> >>>  kthread_create_on_node+0x8a/0xb0 kernel/kthread.c:512
+> >>>  ext4_run_lazyinit_thread fs/ext4/super.c:3848 [inline]
+> >>>  ext4_register_li_request+0x407/0x650 fs/ext4/super.c:3983
+> >>>  __ext4_fill_super fs/ext4/super.c:5480 [inline]
+> >>>  ext4_fill_super+0x3f4a/0x43f0 fs/ext4/super.c:5637
+> >>>  get_tree_bdev+0x2b1/0x3a0 fs/super.c:1303
+> >>>  ext4_get_tree+0x1c/0x20 fs/ext4/super.c:5668
+> >>>  vfs_get_tree+0x51/0x190 fs/super.c:1510
+> >>>  do_new_mount+0x200/0x650 fs/namespace.c:3042
+> >>>  path_mount+0x498/0xb40 fs/namespace.c:3372
+> >>>  do_mount fs/namespace.c:3385 [inline]
+> >>>  __do_sys_mount fs/namespace.c:3594 [inline]
+> >>>  __se_sys_mount+0x27f/0x2d0 fs/namespace.c:3571
+> >>>  __x64_sys_mount+0x67/0x80 fs/namespace.c:3571
+> >>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >>>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> >>>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >>>
+> >>> read to 0xffff88812ed8b733 of 1 bytes by task 16161 on cpu 0:
+> >>>  strscpy+0xde/0x170 lib/string.c:174
+> >>>  ____bpf_get_current_comm kernel/bpf/helpers.c:260 [inline]
+> >>>  bpf_get_current_comm+0x45/0x70 kernel/bpf/helpers.c:252
+> >>>  ___bpf_prog_run+0x281/0x3050 kernel/bpf/core.c:1822
+> >>>  __bpf_prog_run32+0x74/0xa0 kernel/bpf/core.c:2043
+> >>>  bpf_dispatcher_nop_func include/linux/bpf.h:1124 [inline]
+> >>>  __bpf_prog_run include/linux/filter.h:601 [inline]
+> >>>  bpf_prog_run include/linux/filter.h:608 [inline]
+> >>>  __bpf_trace_run kernel/trace/bpf_trace.c:2263 [inline]
+> >>>  bpf_trace_run4+0x9f/0x140 kernel/trace/bpf_trace.c:2304
+> >>>  __traceiter_sched_switch+0x3a/0x50 include/trace/events/sched.h:222
+> >>>  trace_sched_switch include/trace/events/sched.h:222 [inline]
+> >>>  __schedule+0x7e7/0x8e0 kernel/sched/core.c:6622
+> >>>  schedule+0x51/0x80 kernel/sched/core.c:6701
+> >>>  schedule_preempt_disabled+0x10/0x20 kernel/sched/core.c:6760
+> >>>  kthread+0x11c/0x1e0 kernel/kthread.c:369
+> >>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+> >>>
+> 
+> 
+> I didn't see the beginning of this thread and I think the part of the
+> sysbot report that lists the patches/trees being used got cut off so
+> I'm not 100% sure what's in the kernel.
+> 
+> In Linus's current tree we do set_task_comm in __kthread_create_on_node
+> after waiting on the kthread_create_info completion which is completed by
+> threadd(). At this time, kthread() has already done the complete() on the
+> kthread_create_info completion and started to run the threadfn function and
+> that could be running. So we can hit the race that way.
+> 
+> 
+> In linux next, from 
+> https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=kernel.user_worker
+> we have:
+> 
+> commit cf587db2ee0261c74d04f61f39783db88a0b65e4
+> Author: Mike Christie <michael.christie@oracle.com>
+> Date:   Fri Mar 10 16:03:23 2023 -0600
+> 
+>     kernel: Allow a kernel thread's name to be set in copy_process
+> 
+> and so now copy_process() sets the name before the taskfn is started, so we
+> shouldn't hit any races like above.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304241515.ornmzM1i-lkp@intel.com/
+Yeah, that looks like it should fix it.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:649:28: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-           info.h_tile_instance[0] = i;
-                                     ^
-   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c:629:7: note: initialize the variable 'i' to silence this warning
-           int i;
-                ^
-                 = 0
-   1 warning generated.
+Afaict, this has no reproducer so there's no point in letting syzbot
+test on this. I've sent the pull request for the kernel user worker
+series on Friday. So I guess we'll see whether it's reproducible on
+v6.4-rc1.
 
 
-vim +/i +649 drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-
-   621	
-   622	static int _dpu_kms_initialize_hdmi(struct drm_device *dev,
-   623					    struct msm_drm_private *priv,
-   624					    struct dpu_kms *dpu_kms)
-   625	{
-   626		struct drm_encoder *encoder = NULL;
-   627		struct msm_display_info info;
-   628		int rc;
-   629		int i;
-   630	
-   631		if (!priv->hdmi)
-   632			return 0;
-   633	
-   634		encoder = dpu_encoder_init(dev, DRM_MODE_ENCODER_TMDS);
-   635		if (IS_ERR(encoder)) {
-   636			DPU_ERROR("encoder init failed for HDMI display\n");
-   637			return PTR_ERR(encoder);
-   638		}
-   639	
-   640		memset(&info, 0, sizeof(info));
-   641		rc = msm_hdmi_modeset_init(priv->hdmi, dev, encoder);
-   642		if (rc) {
-   643			DPU_ERROR("modeset_init failed for DP, rc = %d\n", rc);
-   644			drm_encoder_cleanup(encoder);
-   645			return rc;
-   646		}
-   647	
-   648		info.num_of_h_tiles = 1;
- > 649		info.h_tile_instance[0] = i;
-   650		info.intf_type = INTF_HDMI;
-   651		rc = dpu_encoder_setup(dev, encoder, &info);
-   652		if (rc) {
-   653			DPU_ERROR("failed to setup DPU encoder %d: rc:%d\n",
-   654				  encoder->base.id, rc);
-   655			return rc;
-   656		}
-   657	
-   658		return 0;
-   659	}
-   660	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
