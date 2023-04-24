@@ -1,164 +1,123 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACFD7C
-	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 08:25:15 +0000 (UTC)
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4efd5e4d302so4118e87.0
-        for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 01:25:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682324713; x=1684916713;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j18LTPw/0ZiwBV/EQmierqo28H2NNyEAjpLUZMbxn80=;
-        b=CesUfe+p8d0dkEmrufChgURYmQzPVsRKB6Z1zq/0m7jQFerLN1vm3sKO5u2K/rl8sJ
-         753Xb1kwNpqsBLPPmYoA5D+gusVtmDUbYgFOfDLoue7QdZQWNHon9ozJTA5RjVwFMkRL
-         AnIoCuhdETOi2d3M+DoGmCRI0qslU+tTb1mfNS7drK8UaW9VeLrCnkq4Fqi2j5alos/A
-         IZikzBkRNKNvM0btTwz4vgI7z6JQ0rR5oqbZStxatygVFvg2zG7l8lGwK2GYsyt17272
-         RWCij0rqF2sPbmgGniN/jpu8ahpeTEhNwAAwPrUPETEnOkOGoHjSz5eh3iai5awtX9jQ
-         I5Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682324713; x=1684916713;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j18LTPw/0ZiwBV/EQmierqo28H2NNyEAjpLUZMbxn80=;
-        b=EG0r4XUcU9dXegvecW/UpUHlTyepCHfaYd/VqqUGuYQ4WIaJbweM5nSBAM2+/QDnqx
-         eAX8D5mPnmy2a9WAz3E8q4cMuvskB15PACXiOo0JtCNt6TuBA1nYeXEedBeW9Y/18zN8
-         uMrGIrqOptFQVDr42HRMra6+JCw9PuU37sWqljAr+f+V/yO5ljZ+XP95MsyBd6A3VTZh
-         6Guyd+mm1/fUX09wtEzuF6vjzZFG1ZTv939lTa5lekt/yMkTBcHjCjpLwUQfwVHeouIj
-         Svg3ys8yAwjQsXFQc/J1tuNIIJJxsTAB8lu4cOnbXIHkAV2NEG1xDb6vFfP/iieNAUIn
-         iCdg==
-X-Gm-Message-State: AAQBX9dNhBUEPbjf2YQlkOEQukuN+oKXuIwt51CLKkkrIQCQBzoQn9tU
-	EsSOgHEpR8hhj4leld+ocod+4jxM/KTl9Rn3MwlTeg==
-X-Google-Smtp-Source: AKy350a4MUjUHwoBfxED2Pw4cqUKPKubA2JMVCH1vFSwww8z8PN8W5VV4psZGKlLDpTHBQR/gqh8epDpYPGCETmVnoc=
-X-Received: by 2002:a05:6512:239b:b0:4ea:e5e2:c893 with SMTP id
- c27-20020a056512239b00b004eae5e2c893mr151496lfv.1.1682324713337; Mon, 24 Apr
- 2023 01:25:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6085A7C;
+	Mon, 24 Apr 2023 12:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682338850; x=1713874850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4KfjW5andPwqW6uLOs9vLZL8WFNeU3iKh7SfGRSAdnM=;
+  b=fUj8tAEPQ7cO26f/gD55mVT0nMeNivF9OrukEJ4w5XIhHDJtPK2h733k
+   zRap9H/wqt1Uu6J7IID/1DKTm5cBupFYf43OHk5F0McPTnC85m+dcrmkF
+   sHR84EXxRB6/icsEjuG6wLIPYWlUmFzlW0Zxmo31yPagh06R9eYqFaDC5
+   UZmCN5Qg51BYxncLent9s8aQTvc6DZPxZ929YIjMT9HaiPqRU3kkhUnD3
+   zmUaGJ7CL1QACoj4dCGrC63ExfwnF2eybErwHjzx4NsEXxT+VX/hVwBpl
+   qSLcblaSdgh9uN4RTQbb/bW0aLK0RUX+Rzwf26SGhQbi1C0XMvSSEceu1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="411713524"
+X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
+   d="scan'208";a="411713524"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 05:20:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="686821618"
+X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
+   d="scan'208";a="686821618"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 24 Apr 2023 05:20:46 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pqvBV-000iNc-0d;
+	Mon, 24 Apr 2023 12:20:45 +0000
+Date: Mon, 24 Apr 2023 20:20:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, Shyam-sundar.S-k@amd.com,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
+Message-ID: <202304242025.fz8SDA8d-lkp@intel.com>
+References: <20230420160923.14127-1-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <000000000000b9915d05f9d98bdd@google.com> <CACT4Y+a3J0Z2PThebH6UaUWchKLWec8qApuv1ezYGKjf67Xctg@mail.gmail.com>
- <ZEKko6U2MxfkXgs5@casper.infradead.org> <13d484d3-d573-cd82-fff0-a35e27b8451e@oracle.com>
- <20230424-frucht-beneiden-83a8083a973b@brauner>
-In-Reply-To: <20230424-frucht-beneiden-83a8083a973b@brauner>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Mon, 24 Apr 2023 10:25:00 +0200
-Message-ID: <CACT4Y+b+4pFtZQxXZLVF8e0OKcEEYgLo+5ExAg_iKZFVERcXrw@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] [mm?] KCSAN: data-race in strscpy / strscpy (3)
-To: Christian Brauner <brauner@kernel.org>
-Cc: Mike Christie <michael.christie@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
-	syzbot <syzbot+c2de99a72baaa06d31f3@syzkaller.appspotmail.com>, 
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, syzkaller-bugs@googlegroups.com, trix@redhat.com, 
-	tytso@mit.edu, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, martin.lau@linux.dev, bpf <bpf@vger.kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420160923.14127-1-mario.limonciello@amd.com>
 
-On Mon, 24 Apr 2023 at 09:59, Christian Brauner <brauner@kernel.org> wrote:
->
-> On Fri, Apr 21, 2023 at 12:40:45PM -0500, Mike Christie wrote:
-> > cc'ing Christian, because I might have fixed this with a patch in
-> > his tree.
-> >
-> > On 4/21/23 9:58 AM, Matthew Wilcox wrote:
-> > > I'm not sure how it is that bpf is able to see the task before comm is
-> > > initialised; that seems to be the real race here, that comm is not set
-> > > before the kthread is a schedulable entity?  Adding the scheduler people.
-> > >
-> > >>> ==================================================================
-> > >>> BUG: KCSAN: data-race in strscpy / strscpy
-> > >>>
-> > >>> write to 0xffff88812ed8b730 of 8 bytes by task 16157 on cpu 1:
-> > >>>  strscpy+0xa9/0x170 lib/string.c:165
-> > >>>  strscpy_pad+0x27/0x80 lib/string_helpers.c:835
-> > >>>  __set_task_comm+0x46/0x140 fs/exec.c:1232
-> > >>>  set_task_comm include/linux/sched.h:1984 [inline]
-> > >>>  __kthread_create_on_node+0x2b2/0x320 kernel/kthread.c:474
-> > >>>  kthread_create_on_node+0x8a/0xb0 kernel/kthread.c:512
-> > >>>  ext4_run_lazyinit_thread fs/ext4/super.c:3848 [inline]
-> > >>>  ext4_register_li_request+0x407/0x650 fs/ext4/super.c:3983
-> > >>>  __ext4_fill_super fs/ext4/super.c:5480 [inline]
-> > >>>  ext4_fill_super+0x3f4a/0x43f0 fs/ext4/super.c:5637
-> > >>>  get_tree_bdev+0x2b1/0x3a0 fs/super.c:1303
-> > >>>  ext4_get_tree+0x1c/0x20 fs/ext4/super.c:5668
-> > >>>  vfs_get_tree+0x51/0x190 fs/super.c:1510
-> > >>>  do_new_mount+0x200/0x650 fs/namespace.c:3042
-> > >>>  path_mount+0x498/0xb40 fs/namespace.c:3372
-> > >>>  do_mount fs/namespace.c:3385 [inline]
-> > >>>  __do_sys_mount fs/namespace.c:3594 [inline]
-> > >>>  __se_sys_mount+0x27f/0x2d0 fs/namespace.c:3571
-> > >>>  __x64_sys_mount+0x67/0x80 fs/namespace.c:3571
-> > >>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >>>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> > >>>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > >>>
-> > >>> read to 0xffff88812ed8b733 of 1 bytes by task 16161 on cpu 0:
-> > >>>  strscpy+0xde/0x170 lib/string.c:174
-> > >>>  ____bpf_get_current_comm kernel/bpf/helpers.c:260 [inline]
-> > >>>  bpf_get_current_comm+0x45/0x70 kernel/bpf/helpers.c:252
-> > >>>  ___bpf_prog_run+0x281/0x3050 kernel/bpf/core.c:1822
-> > >>>  __bpf_prog_run32+0x74/0xa0 kernel/bpf/core.c:2043
-> > >>>  bpf_dispatcher_nop_func include/linux/bpf.h:1124 [inline]
-> > >>>  __bpf_prog_run include/linux/filter.h:601 [inline]
-> > >>>  bpf_prog_run include/linux/filter.h:608 [inline]
-> > >>>  __bpf_trace_run kernel/trace/bpf_trace.c:2263 [inline]
-> > >>>  bpf_trace_run4+0x9f/0x140 kernel/trace/bpf_trace.c:2304
-> > >>>  __traceiter_sched_switch+0x3a/0x50 include/trace/events/sched.h:222
-> > >>>  trace_sched_switch include/trace/events/sched.h:222 [inline]
-> > >>>  __schedule+0x7e7/0x8e0 kernel/sched/core.c:6622
-> > >>>  schedule+0x51/0x80 kernel/sched/core.c:6701
-> > >>>  schedule_preempt_disabled+0x10/0x20 kernel/sched/core.c:6760
-> > >>>  kthread+0x11c/0x1e0 kernel/kthread.c:369
-> > >>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-> > >>>
-> >
-> >
-> > I didn't see the beginning of this thread and I think the part of the
-> > sysbot report that lists the patches/trees being used got cut off so
-> > I'm not 100% sure what's in the kernel.
-> >
-> > In Linus's current tree we do set_task_comm in __kthread_create_on_node
-> > after waiting on the kthread_create_info completion which is completed by
-> > threadd(). At this time, kthread() has already done the complete() on the
-> > kthread_create_info completion and started to run the threadfn function and
-> > that could be running. So we can hit the race that way.
-> >
-> >
-> > In linux next, from
-> > https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=kernel.user_worker
-> > we have:
-> >
-> > commit cf587db2ee0261c74d04f61f39783db88a0b65e4
-> > Author: Mike Christie <michael.christie@oracle.com>
-> > Date:   Fri Mar 10 16:03:23 2023 -0600
-> >
-> >     kernel: Allow a kernel thread's name to be set in copy_process
-> >
-> > and so now copy_process() sets the name before the taskfn is started, so we
-> > shouldn't hit any races like above.
->
-> Yeah, that looks like it should fix it.
->
-> Afaict, this has no reproducer so there's no point in letting syzbot
-> test on this. I've sent the pull request for the kernel user worker
-> series on Friday. So I guess we'll see whether it's reproducible on
-> v6.4-rc1.
+Hi Mario,
 
-To see if it still happens to tell syzbot about the fix, then it will
-remind if it still happens with the fix or not. Otherwise everybody
-will forget about this tomorrow ;)
+kernel test robot noticed the following build warnings:
 
-#syz fix: kernel: Allow a kernel thread's name to be set in copy_process
+[auto build test WARNING on 7124d7671af0facf115d70f9d1fadde0d768d325]
 
-Btw, a similar race will still be possible b/c it's possible to change
-the name at any point by writing to /proc/self/task/[tid]/comm. But I
-am not sure how provably dangerous it will be and there is a different
-attitude towards fixing races proactively for different kernel
-subsystems, so we will probably not report it.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
+base:   7124d7671af0facf115d70f9d1fadde0d768d325
+patch link:    https://lore.kernel.org/r/20230420160923.14127-1-mario.limonciello%40amd.com
+patch subject: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
+config: i386-randconfig-a002-20230424 (https://download.01.org/0day-ci/archive/20230424/202304242025.fz8SDA8d-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
+        git checkout e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304242025.fz8SDA8d-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/acpi/x86/s2idle.c:552:6: warning: no previous prototype for function 'lps0_s2idle_wake' [-Wmissing-prototypes]
+   bool lps0_s2idle_wake(void)
+        ^
+   drivers/acpi/x86/s2idle.c:552:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool lps0_s2idle_wake(void)
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/lps0_s2idle_wake +552 drivers/acpi/x86/s2idle.c
+
+   551	
+ > 552	bool lps0_s2idle_wake(void)
+   553	{
+   554		if (!lps0_device_handle || sleep_no_lps0)
+   555			goto out;
+   556	
+   557		/* avoid running on the first go through the s2idle loop */
+   558		if (lps0_dsm_func_mask_microsoft > 0) {
+   559			int target;
+   560	
+   561			if (lps0_dsm_state == ACPI_LPS0_ENTRY ||
+   562			    lps0_dsm_state == ACPI_LPS0_MS_EXIT)
+   563				target = ACPI_LPS0_MS_ENTRY;
+   564			else
+   565				target = ACPI_LPS0_MS_EXIT;
+   566			acpi_sleep_run_lps0_dsm(target,
+   567						lps0_dsm_func_mask_microsoft,
+   568						lps0_dsm_guid_microsoft);
+   569		}
+   570	out:
+   571		return acpi_s2idle_wake();
+   572	}
+   573	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
