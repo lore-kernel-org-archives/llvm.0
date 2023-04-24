@@ -1,194 +1,249 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F07733FC;
-	Mon, 24 Apr 2023 19:32:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682364722; x=1713900722;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wJLT86EQNQt6MvTiSylxFgaY/lNJRMt8ynHpzJhfp80=;
-  b=Z+eRWLY2VF9/lkboJLcUQZUQ9CJq41Nfwt8AjSPm+w8JG8XsrHAxe11+
-   TEJ4Rhx3wooiyBEAl0mxp3dWynxI6OgBz/OzrqI05TQAE4G50kZlKLmTO
-   llMPAuYoSgpfdbD8QbHR846atVo42titVybeyQumSpJY3x24ni3En80/9
-   RGqq5qwOtXCsDy9pAqTRCVHAwHg2U9nnjORc8TAH1Rkr79FOMFkJq01lJ
-   uKeJ/R9tAP9mCTWbR9OIwsQIm3wTcBiZ7VKAI7bdzbEYbfB+EVyCW5LC/
-   chK0ZWC6ef9Gj8X223vKGV48GsY8nBad8aQ279sr3ssM2Bzh/OpguGXGl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="348462145"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="348462145"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 12:32:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="686999816"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="686999816"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 24 Apr 2023 12:31:59 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pr1uo-000icI-23;
-	Mon, 24 Apr 2023 19:31:58 +0000
-Date: Tue, 25 Apr 2023 03:31:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: liuwf <liuwf@mailbox.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: Library: [RFC PATCH] btree_blue - a btree with linear travesal
- function and more
-Message-ID: <202304250319.8IOPqkLH-lkp@intel.com>
-References: <6d35bd15e3ec81bcde81b776a369d47ee1f373d2.camel@mailbox.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCF363AD;
+	Mon, 24 Apr 2023 20:01:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67998C433EF;
+	Mon, 24 Apr 2023 20:01:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1682366517;
+	bh=6OAnvmZc+28c5ShNZbv4gzUw8fjiV+jwmwVUxdiV03E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=C+hoSYVlRXq6RAcX+589h9KgTN+JTf2p5NzATk8PwebCSEiIyvwJ/PziUbZw3KATO
+	 7Y8LsQyD8nyCC59mP1zQfOcMNhXM0O8CrK4DRSb4GBSb0r3zn+oRGi84zEnUc26fIP
+	 s6FXPCVWaARui/Jaygey+F7gxPYtEr4SbeyastFVj4apK3K7KFfMsZGR1EWkOouePi
+	 owAgY6V2SiqNAI8LERS8JGm49823vpBaPB2BsfsGFf8sJ7wjujxj0Pagka4nzbvSHP
+	 jARgCyfQs06oMPGVvnOaqqbXeOKe8tU3icMRQziU5G4/cqrdnbVOjMJoqTIIYO1sqy
+	 3ZAmDMoNuQZSQ==
+Date: Mon, 24 Apr 2023 13:01:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Borislav Petkov <bp@alien8.de>, kernel test robot <lkp@intel.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
+ a CPU feature not currently enabled
+Message-ID: <20230424200155.GA2605117@dev-arch.thelio-3990X>
+References: <202304170748.Fg9VIgGd-lkp@intel.com>
+ <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
+ <20230419231834.GA1269248@dev-arch.thelio-3990X>
+ <C6A730FC-C7B5-4A32-92CD-98FDA632782C@flygoat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6d35bd15e3ec81bcde81b776a369d47ee1f373d2.camel@mailbox.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <C6A730FC-C7B5-4A32-92CD-98FDA632782C@flygoat.com>
 
-Hi liuwf,
+On Thu, Apr 20, 2023 at 12:41:50AM +0100, Jiaxun Yang wrote:
+> 
+> 
+> > 2023年4月20日 00:18，Nathan Chancellor <nathan@kernel.org> 写道：
+> > 
+> > + Jiaxun, who has been looking into MIPS + LLVM issues recently and has
+> > been a big help :)
+> 
+> I think this patch[1] may fix the problem.
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+I have the following patch stack:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.3 next-20230424]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+$ git log --oneline origin/master^..
+c6cd9f17692e MIPS: Replace assembly isa level directives with macros
+60508ba7d92f MIPS: Limit MIPS_MT_SMP support by ISA reversion
+c9e250105de4 MIPS: Fallback CPU -march CFLAG to ISA level if unsupported
+49c0420e59bb MIPS: Remove cc-option checks for -march=octeon
+b7ea7e959023 MIPS: Detect toolchain support of o32 ABI with 64 bit CPU
+51f2d93245ba MIPS: Detect toolchain support of workarounds in Kconfig
+7382a07eb105 MIPS: Add toolchain feature dependency for microMIPS smartMIPS
+de0621fbedd3 MIPS: Move various toolchain ASE check to Kconfig
+3b85b9b39960 Add linux-next specific files for 20230424
 
-url:    https://github.com/intel-lab-lkp/linux/commits/liuwf/Library-RFC-PATCH-btree_blue-a-btree-with-linear-travesal-function-and-more/20230424-214853
-base:   linus/master
-patch link:    https://lore.kernel.org/r/6d35bd15e3ec81bcde81b776a369d47ee1f373d2.camel%40mailbox.org
-patch subject: Library: [RFC PATCH] btree_blue - a btree with linear travesal function and more
-config: i386-randconfig-a002-20230424 (https://download.01.org/0day-ci/archive/20230425/202304250319.8IOPqkLH-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/749f2fb7789008fd7bb23287c37f4f5aaed09f25
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review liuwf/Library-RFC-PATCH-btree_blue-a-btree-with-linear-travesal-function-and-more/20230424-214853
-        git checkout 749f2fb7789008fd7bb23287c37f4f5aaed09f25
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash lib/
+but with the robot's configuration, I still see that error. I notice
+that the 'if (sel == 0)' branch of ___read_32bit_c0_register() has no
+'.set push' directive, could that matter here?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304250319.8IOPqkLH-lkp@intel.com/
+Cheers,
+Nathan
 
-All warnings (new ones prefixed by >>):
-
->> lib/btree_blue.c:109:5: warning: no previous prototype for function 'getpos' [-Wmissing-prototypes]
-   int getpos(struct btree_blue_head *head, struct btree_blue_node_cb *cb, unsigned long *key)
-       ^
-   lib/btree_blue.c:109:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int getpos(struct btree_blue_head *head, struct btree_blue_node_cb *cb, unsigned long *key)
-   ^
-   static 
->> lib/btree_blue.c:144:5: warning: no previous prototype for function 'geteqv' [-Wmissing-prototypes]
-   int geteqv(struct btree_blue_head *head, struct btree_blue_node_cb *cb, unsigned long *key)
-       ^
-   lib/btree_blue.c:144:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int geteqv(struct btree_blue_head *head, struct btree_blue_node_cb *cb, unsigned long *key)
-   ^
-   static 
->> lib/btree_blue.c:392:7: warning: no previous prototype for function 'btree_blue_prev_or_next' [-Wmissing-prototypes]
-   void *btree_blue_prev_or_next(struct btree_blue_head *head, 
-         ^
-   lib/btree_blue.c:392:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void *btree_blue_prev_or_next(struct btree_blue_head *head, 
-   ^
-   static 
-   lib/btree_blue.c:255:12: warning: unused function 'getpos_bin' [-Wunused-function]
-   static int getpos_bin(struct btree_blue_head *head, struct btree_blue_node_cb *cb, 
-              ^
-   lib/btree_blue.c:277:12: warning: unused function 'geteqv_bin' [-Wunused-function]
-   static int geteqv_bin(struct btree_blue_head *head, 
-              ^
-   5 warnings generated.
-
-
-vim +/getpos +109 lib/btree_blue.c
-
-   108	
- > 109	int getpos(struct btree_blue_head *head, struct btree_blue_node_cb *cb, unsigned long *key)
-   110	{
-   111		int i, o, x, nr, p, c;
-   112	
-   113		nr = cb->slots_info.slots_nr;
-   114		x = nr / 8;
-   115	
-   116		for (i = 1; i <= x; i++) {
-   117			p = i * 8 - 1;
-   118			c = keycmp(head, cb, p, key);
-   119			if (c < 0) {
-   120				o = (i - 1) * 8;
-   121				for (i = 0; i < 7; i++) {
-   122					p = o + i;
-   123					c = keycmp(head, cb, p, key);
-   124					if (c <= 0) {
-   125						return p;
-   126					}
-   127				}
-   128				return o + 7;
-   129			} else if (c == 0)
-   130				return p;
-   131		}
-   132		
-   133		o = x * 8;
-   134		for (i = 0; i < nr % 8; i++) {
-   135			p =  o + i;
-   136			c = keycmp(head, cb, p, key);
-   137			if (c <= 0)
-   138				return p;
-   139		}
-   140	
-   141		return nr;
-   142	}
-   143	
- > 144	int geteqv(struct btree_blue_head *head, struct btree_blue_node_cb *cb, unsigned long *key)
-   145	{
-   146		int i, o, x, nr, p, c;
-   147	
-   148		nr = cb->slots_info.slots_nr;
-   149		x = nr / 8;
-   150	
-   151		for (i = 1; i <= x; i++) {
-   152			p = i * 8 - 1;
-   153			c = keycmp(head, cb, p, key);
-   154			if (c < 0) {
-   155				o = (i - 1) * 8;
-   156				for (i = 0; i < 7; i++) {
-   157					p =  o + i;
-   158					c = keycmp(head, cb, p, key);
-   159					if (c != 0)
-   160						continue;
-   161					else
-   162						return p;
-   163				}
-   164				return nr;
-   165			} else if (c == 0)
-   166				return p;
-   167		}
-   168		
-   169		o = x * 8;
-   170		for (i = 0; i < nr % 8; i++) {
-   171			p =  o + i;
-   172			c = keycmp(head, cb, p, key);
-   173			if (c == 0)
-   174				return p;
-   175		}
-   176	
-   177		return nr;
-   178	}
-   179	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> [1]: https://patchwork.kernel.org/project/linux-mips/patch/20230411111225.55725-2-jiaxun.yang@flygoat.com/
+> 
+> > 
+> > On Thu, Apr 20, 2023 at 12:37:07AM +0200, Borislav Petkov wrote:
+> >> + Thomas.
+> >> 
+> >> On Mon, Apr 17, 2023 at 07:57:04AM +0800, kernel test robot wrote:
+> >>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> >>> head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
+> >>> commit: aba5b397cad7d398b385aaf5029f99f41b690466 hamradio: baycom_epp: Do not use x86-specific rdtsc()
+> >>> date:   4 months ago
+> >>> config: mips-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230417/202304170748.Fg9VIgGd-lkp@intel.com/config)
+> >>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
+> >> 
+> >> Where do I get clang 17?
+> > 
+> > I think they intend for you to get it via their make.cross script but
+> > this issue reproduces with clang 16.0.2 from
+> > https://mirrors.edge.kernel.org/pub/tools/llvm/ for me locally.
+> > 
+> >> In any case, this
+> >> 
+> >> "error: instruction requires a CPU feature not currently enabled"
+> >> 
+> >> sounds like clang is trying to generate invalid code for the wrong
+> >> target. .config issue?
+> > 
+> > I am far from a MIPS expert but this usually means that there is some
+> > assembler directive that we are missing to allow access to certain
+> > instructions in newer ISA versions than the one specified via '-march'.
+> > I have no idea if that is the case here or not but I do see the correct
+> > target flags when building with V=1, so it is not something obvious like
+> > that. I can double back to this later this week or next week if nobody
+> > else is able to.
+> > 
+> > Regardless, this seems like a pre-existing issue that was just exposed
+> > by your patch, not the root cause of it.
+> > 
+> > Cheers,
+> > Nathan
+> > 
+> >>> reproduce (this is a W=1 build):
+> >>>        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >>>        chmod +x ~/bin/make.cross
+> >>>        # install mips cross compiling tool for clang build
+> >>>        # apt-get install binutils-mipsel-linux-gnu
+> >>>        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aba5b397cad7d398b385aaf5029f99f41b690466
+> >>>        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >>>        git fetch --no-tags linus master
+> >>>        git checkout aba5b397cad7d398b385aaf5029f99f41b690466
+> >>>        # save the config file
+> >>>        mkdir build_dir && cp config build_dir/.config
+> >>>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+> >>>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/hamradio/
+> >>> 
+> >>> If you fix the issue, kindly add following tag where applicable
+> >>> | Reported-by: kernel test robot <lkp@intel.com>
+> >>> | Link: https://lore.kernel.org/oe-kbuild-all/202304170748.Fg9VIgGd-lkp@intel.com/
+> >>> 
+> >>> All errors (new ones prefixed by >>):
+> >>> 
+> >>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
+> >>>   In file included from include/linux/module.h:13:
+> >>>   In file included from include/linux/stat.h:19:
+> >>>   In file included from include/linux/time.h:60:
+> >>>   In file included from include/linux/time32.h:13:
+> >>>   In file included from include/linux/timex.h:67:
+> >>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+> >>>                   return read_c0_count();
+> >>>                          ^
+> >>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+> >>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
+> >>>                                   ^
+> >>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+> >>>           ___read_32bit_c0_register(source, sel, __volatile__)
+> >>>           ^
+> >>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+> >>>                           "mfc0\t%0, " #source "\n\t"                     \
+> >>>                           ^
+> >>>   <inline asm>:1:2: note: instantiated into assembly here
+> >>>           mfc0    $4, $9
+> >>>           ^
+> >>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
+> >>>   In file included from include/linux/module.h:13:
+> >>>   In file included from include/linux/stat.h:19:
+> >>>   In file included from include/linux/time.h:60:
+> >>>   In file included from include/linux/time32.h:13:
+> >>>   In file included from include/linux/timex.h:67:
+> >>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+> >>>                   return read_c0_count();
+> >>>                          ^
+> >>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+> >>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
+> >>>                                   ^
+> >>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+> >>>           ___read_32bit_c0_register(source, sel, __volatile__)
+> >>>           ^
+> >>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+> >>>                           "mfc0\t%0, " #source "\n\t"                     \
+> >>>                           ^
+> >>>   <inline asm>:1:2: note: instantiated into assembly here
+> >>>           mfc0    $2, $9
+> >>>           ^
+> >>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
+> >>>   In file included from include/linux/module.h:13:
+> >>>   In file included from include/linux/stat.h:19:
+> >>>   In file included from include/linux/time.h:60:
+> >>>   In file included from include/linux/time32.h:13:
+> >>>   In file included from include/linux/timex.h:67:
+> >>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+> >>>                   return read_c0_count();
+> >>>                          ^
+> >>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+> >>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
+> >>>                                   ^
+> >>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+> >>>           ___read_32bit_c0_register(source, sel, __volatile__)
+> >>>           ^
+> >>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+> >>>                           "mfc0\t%0, " #source "\n\t"                     \
+> >>>                           ^
+> >>>   <inline asm>:1:2: note: instantiated into assembly here
+> >>>           mfc0    $2, $9
+> >>>           ^
+> >>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
+> >>>   In file included from include/linux/module.h:13:
+> >>>   In file included from include/linux/stat.h:19:
+> >>>   In file included from include/linux/time.h:60:
+> >>>   In file included from include/linux/time32.h:13:
+> >>>   In file included from include/linux/timex.h:67:
+> >>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
+> >>>                   return read_c0_count();
+> >>>                          ^
+> >>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
+> >>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
+> >>>                                   ^
+> >>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
+> >>>           ___read_32bit_c0_register(source, sel, __volatile__)
+> >>>           ^
+> >>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
+> >>>                           "mfc0\t%0, " #source "\n\t"                     \
+> >>>                           ^
+> >>>   <inline asm>:1:2: note: instantiated into assembly here
+> >>>           mfc0    $2, $9
+> >>>           ^
+> >>>   4 errors generated.
+> >>> 
+> >>> 
+> >>> vim +75 arch/mips/include/asm/timex.h
+> >>> 
+> >>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  71  
+> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  72  static inline cycles_t get_cycles(void)
+> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  73  {
+> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  74   if (can_use_mips_counter(read_c0_prid()))
+> >>> 9c9b415c50bc29 Ralf Baechle       2013-09-12 @75   return read_c0_count();
+> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  76   else
+> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  77   return 0; /* no usable counter */
+> >>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  78  }
+> >>> 1c99c6a7c3c599 Jason A. Donenfeld 2022-04-08  79  #define get_cycles get_cycles
+> >>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  80  
+> >>> 
+> >>> :::::: The code at line 75 was first introduced by commit
+> >>> :::::: 9c9b415c50bc298ac61412dff856eae2f54889ee MIPS: Reimplement get_cycles().
+> >>> 
+> >>> :::::: TO: Ralf Baechle <ralf@linux-mips.org>
+> >>> :::::: CC: Ralf Baechle <ralf@linux-mips.org>
+> >>> 
+> >>> -- 
+> >>> 0-DAY CI Kernel Test Service
+> >>> https://github.com/intel/lkp-tests
+> >> 
+> >> -- 
+> >> Regards/Gruss,
+> >>    Boris.
+> >> 
+> >> https://people.kernel.org/tglx/notes-about-netiquette
+> 
