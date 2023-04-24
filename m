@@ -1,137 +1,130 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96422F2E;
-	Mon, 24 Apr 2023 18:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682362281; x=1713898281;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=huei9fm8wqaE4e2eRVEs7QavJaIOdk/zO+CVVXYTZpc=;
-  b=FAnVx0zDaxtNo3DPPN+8hFr8DZtwkuJB7U8XbIO73pYZWE8jO1xFTBAa
-   4kPiUlgbUsT1J46ob8hXQ92ho1/8ZLm/FJYbWeZKZCFrLgTEjkfmLMFGM
-   86jh1Oc2wQN7c69Qp6CI2Uukjz+DGXBlvVg4txgf8EaBZmu9bZDO25ala
-   eIzCZmSX2xaHKdogqELXntewUQfcyU35F0Gy8zR3DLFOQ6pVTFWTFqY5o
-   SBi9qHNKVUrqcyfGhnFf/6FfZF/rmNyGxqRGe5wWkd/Myc4QfBT/iSDZ6
-   ZqTv6d6dhcZz1gGUfCqsUJnf+Rsto86pnU6kLSEQyFuU9dc6Lk7jDxa8K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="349339347"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="349339347"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 11:51:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="782506404"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="782506404"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Apr 2023 11:50:58 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pr1H7-000iau-2q;
-	Mon, 24 Apr 2023 18:50:57 +0000
-Date: Tue, 25 Apr 2023 02:50:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-	Donghun Yoon <donghun.yoon@lge.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xhci-pci: Only run d3cold avoidance quirk for s2idle
-Message-ID: <202304250239.9WShH3NB-lkp@intel.com>
-References: <20230424134926.1416-1-mario.limonciello@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E75E2F2E
+	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 19:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682362888;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=w7qBaINozrcWxT5ovd4aT2GtfAxz2EM/dLkVBxD+eIM=;
+	b=fy3QvBJkOzEc81TIXV8SHELWtUyjP/BUe+TUbGDGdfMP378BCuAj4beM1h49yQUNB4j6sS
+	rWJcaLEhTWBNIwpqBwQkDHsEiuoeOIP+pLFIgNTtG+wVmP8/9diOCAam8d5UDUdmfIvKKy
+	Eozc9bXsJ0/i/c7JZ9hr6801FNwNmSs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-572-jzZWqCt7PHeQxJQN5OFQIA-1; Mon, 24 Apr 2023 15:01:26 -0400
+X-MC-Unique: jzZWqCt7PHeQxJQN5OFQIA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 666B3800B35
+	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 19:01:26 +0000 (UTC)
+Received: from [172.64.2.76] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 53EAB14171B8;
+	Mon, 24 Apr 2023 19:01:26 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 33 of 353): Test report for master
+ (6.3.0-rc7, mainline.kernel.org-clang, 622322f5)
+Date: Mon, 24 Apr 2023 19:01:26 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424134926.1416-1-mario.limonciello@amd.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <25152.123042415012601876@us-mta-572.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3 next-20230421]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/xhci-pci-Only-run-d3cold-avoidance-quirk-for-s2idle/20230424-215356
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230424134926.1416-1-mario.limonciello%40amd.com
-patch subject: [PATCH] xhci-pci: Only run d3cold avoidance quirk for s2idle
-config: i386-randconfig-a003-20230424 (https://download.01.org/0day-ci/archive/20230425/202304250239.9WShH3NB-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8e287659296330d0cb31e4730daacc92d0467e63
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/xhci-pci-Only-run-d3cold-avoidance-quirk-for-s2idle/20230424-215356
-        git checkout 8e287659296330d0cb31e4730daacc92d0467e63
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/host/
+Kernel information:
+    Commit message: Merge tag 'mips-fixes_6.3_2' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/mips/linux
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304250239.9WShH3NB-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/85701
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
->> drivers/usb/host/xhci-pci.c:806:7: error: use of undeclared identifier 'pm_suspend_target_state'
-               (pm_suspend_target_state == PM_SUSPEND_TO_IDLE &&
-                ^
-   1 error generated.
 
 
-vim +/pm_suspend_target_state +806 drivers/usb/host/xhci-pci.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   794	
-   795	static int xhci_pci_suspend(struct usb_hcd *hcd, bool do_wakeup)
-   796	{
-   797		struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-   798		struct pci_dev		*pdev = to_pci_dev(hcd->self.controller);
-   799		int			ret;
-   800	
-   801		/*
-   802		 * Systems with the TI redriver that loses port status change events
-   803		 * need to have the registers polled during D3, so avoid D3cold.
-   804		 */
-   805		if (xhci->quirks & XHCI_COMP_MODE_QUIRK ||
- > 806		    (pm_suspend_target_state == PM_SUSPEND_TO_IDLE &&
-   807		     xhci->quirks & (XHCI_BROKEN_D3COLD_S2I)))
-   808			pci_d3cold_disable(pdev);
-   809	
-   810		if (xhci->quirks & XHCI_PME_STUCK_QUIRK)
-   811			xhci_pme_quirk(hcd);
-   812	
-   813		if (xhci->quirks & XHCI_SSIC_PORT_UNUSED)
-   814			xhci_ssic_port_unused_quirk(hcd, true);
-   815	
-   816		if (xhci->quirks & XHCI_DISABLE_SPARSE)
-   817			xhci_sparse_control_quirk(hcd);
-   818	
-   819		ret = xhci_suspend(xhci, do_wakeup);
-   820	
-   821		/* synchronize irq when using MSI-X */
-   822		xhci_msix_sync_irqs(xhci);
-   823	
-   824		if (ret && (xhci->quirks & XHCI_SSIC_PORT_UNUSED))
-   825			xhci_ssic_port_unused_quirk(hcd, false);
-   826	
-   827		return ret;
-   828	}
-   829	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
