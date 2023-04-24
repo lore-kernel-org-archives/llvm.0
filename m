@@ -1,47 +1,56 @@
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6085A7C;
-	Mon, 24 Apr 2023 12:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4482CA2;
+	Mon, 24 Apr 2023 15:54:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682338850; x=1713874850;
+  t=1682351699; x=1713887699;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4KfjW5andPwqW6uLOs9vLZL8WFNeU3iKh7SfGRSAdnM=;
-  b=fUj8tAEPQ7cO26f/gD55mVT0nMeNivF9OrukEJ4w5XIhHDJtPK2h733k
-   zRap9H/wqt1Uu6J7IID/1DKTm5cBupFYf43OHk5F0McPTnC85m+dcrmkF
-   sHR84EXxRB6/icsEjuG6wLIPYWlUmFzlW0Zxmo31yPagh06R9eYqFaDC5
-   UZmCN5Qg51BYxncLent9s8aQTvc6DZPxZ929YIjMT9HaiPqRU3kkhUnD3
-   zmUaGJ7CL1QACoj4dCGrC63ExfwnF2eybErwHjzx4NsEXxT+VX/hVwBpl
-   qSLcblaSdgh9uN4RTQbb/bW0aLK0RUX+Rzwf26SGhQbi1C0XMvSSEceu1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="411713524"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="411713524"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 05:20:48 -0700
+  bh=twLeidi/BX59r6A18B0nMQG8GWRGkRGcWglppQmN5Lc=;
+  b=Ijrke6fODRsoQSwDv+0uXqfLP+6SNdOk9boAHrm6cDBvyXSFCw17yo7x
+   GBfcl1UsnvRDeJlA69NOLfibPxVpaHheRUsrHNJAYFDQOiO7XgjmbAJ/T
+   lYVOGqvDeHYNNjFxJXDSN+ZdXUg1NMdzJujDISFgenWHfsYc96ZD4J626
+   lD3yKCxQjm16ccm7sr1dgIOKljOBKd7Lg6axKuy63PGcQ/JVkBH++DcbF
+   579UwGWq9d5DZF6awVXyYNliCffbD0GdKHTkm629qrkvjGiyeAHJdHFfo
+   FmhU3Yox+LqpTI4OrB5RwkAiZ1IrLST1CuhOyv+PXFtfOJDN7ZXtt77Oz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345244377"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="345244377"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 08:54:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10689"; a="686821618"
-X-IronPort-AV: E=Sophos;i="5.99,222,1677571200"; 
-   d="scan'208";a="686821618"
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="804667850"
+X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
+   d="scan'208";a="804667850"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 24 Apr 2023 05:20:46 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 24 Apr 2023 08:54:53 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pqvBV-000iNc-0d;
-	Mon, 24 Apr 2023 12:20:45 +0000
-Date: Mon, 24 Apr 2023 20:20:28 +0800
+	id 1pqyWi-000iUi-2i;
+	Mon, 24 Apr 2023 15:54:52 +0000
+Date: Mon, 24 Apr 2023 23:54:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org,
-	linux-kernel@vger.kernel.org
+To: Sarthak Kukreti <sarthakkukreti@chromium.org>, dm-devel@redhat.com,
+	linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, Shyam-sundar.S-k@amd.com,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
-Message-ID: <202304242025.fz8SDA8d-lkp@intel.com>
-References: <20230420160923.14127-1-mario.limonciello@amd.com>
+	Jens Axboe <axboe@kernel.dk>, "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Brian Foster <bfoster@redhat.com>, Theodore Ts'o <tytso@mit.edu>,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Bart Van Assche <bvanassche@google.com>,
+	Daniil Lunev <dlunev@google.com>,
+	"Darrick J. Wong" <djwong@kernel.org>
+Subject: Re: [PATCH v5 1/5] block: Don't invalidate pagecache for invalid
+ falloc modes
+Message-ID: <202304242302.5zYRfUub-lkp@intel.com>
+References: <20230420004850.297045-2-sarthakkukreti@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,73 +59,178 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230420160923.14127-1-mario.limonciello@amd.com>
+In-Reply-To: <20230420004850.297045-2-sarthakkukreti@chromium.org>
 
-Hi Mario,
+Hi Sarthak,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 7124d7671af0facf115d70f9d1fadde0d768d325]
+[auto build test WARNING on device-mapper-dm/for-next]
+[also build test WARNING on linus/master v6.3 next-20230421]
+[cannot apply to axboe-block/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
-base:   7124d7671af0facf115d70f9d1fadde0d768d325
-patch link:    https://lore.kernel.org/r/20230420160923.14127-1-mario.limonciello%40amd.com
-patch subject: [PATCH] ACPI: x86: Separate out the Microsoft _DSM function calls
-config: i386-randconfig-a002-20230424 (https://download.01.org/0day-ci/archive/20230424/202304242025.fz8SDA8d-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sarthak-Kukreti/block-Introduce-provisioning-primitives/20230420-095025
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
+patch link:    https://lore.kernel.org/r/20230420004850.297045-2-sarthakkukreti%40chromium.org
+patch subject: [PATCH v5 1/5] block: Don't invalidate pagecache for invalid falloc modes
+config: hexagon-randconfig-r006-20230424 (https://download.01.org/0day-ci/archive/20230424/202304242302.5zYRfUub-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
+        # https://github.com/intel-lab-lkp/linux/commit/8bd0744b438be1722c5f8c1fe077e9dcef0e81b7
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mario-Limonciello/ACPI-x86-Separate-out-the-Microsoft-_DSM-function-calls/20230421-001547
-        git checkout e4ea0d2f15f2d0486bc3b4f59cbf9cea6c63fda1
+        git fetch --no-tags linux-review Sarthak-Kukreti/block-Introduce-provisioning-primitives/20230420-095025
+        git checkout 8bd0744b438be1722c5f8c1fe077e9dcef0e81b7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/acpi/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304242025.fz8SDA8d-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304242302.5zYRfUub-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/acpi/x86/s2idle.c:552:6: warning: no previous prototype for function 'lps0_s2idle_wake' [-Wmissing-prototypes]
-   bool lps0_s2idle_wake(void)
-        ^
-   drivers/acpi/x86/s2idle.c:552:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool lps0_s2idle_wake(void)
-   ^
-   static 
-   1 warning generated.
+   In file included from block/fops.c:9:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from block/fops.c:9:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from block/fops.c:9:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> block/fops.c:678:2: warning: unused label 'fail' [-Wunused-label]
+    fail:
+    ^~~~~
+   7 warnings generated.
 
 
-vim +/lps0_s2idle_wake +552 drivers/acpi/x86/s2idle.c
+vim +/fail +678 block/fops.c
 
-   551	
- > 552	bool lps0_s2idle_wake(void)
-   553	{
-   554		if (!lps0_device_handle || sleep_no_lps0)
-   555			goto out;
-   556	
-   557		/* avoid running on the first go through the s2idle loop */
-   558		if (lps0_dsm_func_mask_microsoft > 0) {
-   559			int target;
-   560	
-   561			if (lps0_dsm_state == ACPI_LPS0_ENTRY ||
-   562			    lps0_dsm_state == ACPI_LPS0_MS_EXIT)
-   563				target = ACPI_LPS0_MS_ENTRY;
-   564			else
-   565				target = ACPI_LPS0_MS_EXIT;
-   566			acpi_sleep_run_lps0_dsm(target,
-   567						lps0_dsm_func_mask_microsoft,
-   568						lps0_dsm_guid_microsoft);
-   569		}
-   570	out:
-   571		return acpi_s2idle_wake();
-   572	}
-   573	
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  613  
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  614  #define	BLKDEV_FALLOC_FL_SUPPORTED					\
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  615  		(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |		\
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  616  		 FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE)
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  617  
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  618  static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  619  			     loff_t len)
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  620  {
+f278eb3d8178f9 Ming Lei          2021-09-23  621  	struct inode *inode = bdev_file_inode(file);
+f278eb3d8178f9 Ming Lei          2021-09-23  622  	struct block_device *bdev = I_BDEV(inode);
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  623  	loff_t end = start + len - 1;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  624  	loff_t isize;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  625  	int error;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  626  
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  627  	/* Fail if we don't recognize the flags. */
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  628  	if (mode & ~BLKDEV_FALLOC_FL_SUPPORTED)
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  629  		return -EOPNOTSUPP;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  630  
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  631  	/* Don't go off the end of the device. */
+2a93ad8fcb377b Christoph Hellwig 2021-10-18  632  	isize = bdev_nr_bytes(bdev);
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  633  	if (start >= isize)
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  634  		return -EINVAL;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  635  	if (end >= isize) {
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  636  		if (mode & FALLOC_FL_KEEP_SIZE) {
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  637  			len = isize - start;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  638  			end = start + len - 1;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  639  		} else
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  640  			return -EINVAL;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  641  	}
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  642  
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  643  	/*
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  644  	 * Don't allow IO that isn't aligned to logical block size.
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  645  	 */
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  646  	if ((start | len) & (bdev_logical_block_size(bdev) - 1))
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  647  		return -EINVAL;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  648  
+f278eb3d8178f9 Ming Lei          2021-09-23  649  	filemap_invalidate_lock(inode->i_mapping);
+f278eb3d8178f9 Ming Lei          2021-09-23  650  
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  651  	/*
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  652  	 * Invalidate the page cache, including dirty pages, for valid
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  653  	 * de-allocate mode calls to fallocate().
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  654  	 */
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  655  	switch (mode) {
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  656  	case FALLOC_FL_ZERO_RANGE:
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  657  	case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  658  		error = truncate_bdev_range(bdev, file->f_mode, start, end) ||
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  659  			blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+6549a874fb65e7 Pavel Begunkov    2021-10-20  660  					     len >> SECTOR_SHIFT, GFP_KERNEL,
+6549a874fb65e7 Pavel Begunkov    2021-10-20  661  					     BLKDEV_ZERO_NOUNMAP);
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  662  		break;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  663  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE:
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  664  		error = truncate_bdev_range(bdev, file->f_mode, start, end) ||
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  665  			blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+6549a874fb65e7 Pavel Begunkov    2021-10-20  666  					     len >> SECTOR_SHIFT, GFP_KERNEL,
+6549a874fb65e7 Pavel Begunkov    2021-10-20  667  					     BLKDEV_ZERO_NOFALLBACK);
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  668  		break;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  669  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE | FALLOC_FL_NO_HIDE_STALE:
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  670  		error = truncate_bdev_range(bdev, file->f_mode, start, end) ||
+8bd0744b438be1 Sarthak Kukreti   2023-04-19  671  			blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
+44abff2c0b970a Christoph Hellwig 2022-04-15  672  					     len >> SECTOR_SHIFT, GFP_KERNEL);
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  673  		break;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  674  	default:
+f278eb3d8178f9 Ming Lei          2021-09-23  675  		error = -EOPNOTSUPP;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  676  	}
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  677  
+f278eb3d8178f9 Ming Lei          2021-09-23 @678   fail:
+f278eb3d8178f9 Ming Lei          2021-09-23  679  	filemap_invalidate_unlock(inode->i_mapping);
+f278eb3d8178f9 Ming Lei          2021-09-23  680  	return error;
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  681  }
+cd82cca7ebfe9c Christoph Hellwig 2021-09-07  682  
 
 -- 
 0-DAY CI Kernel Test Service
