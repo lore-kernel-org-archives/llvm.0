@@ -1,249 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCF363AD;
-	Mon, 24 Apr 2023 20:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67998C433EF;
-	Mon, 24 Apr 2023 20:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1682366517;
-	bh=6OAnvmZc+28c5ShNZbv4gzUw8fjiV+jwmwVUxdiV03E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C+hoSYVlRXq6RAcX+589h9KgTN+JTf2p5NzATk8PwebCSEiIyvwJ/PziUbZw3KATO
-	 7Y8LsQyD8nyCC59mP1zQfOcMNhXM0O8CrK4DRSb4GBSb0r3zn+oRGi84zEnUc26fIP
-	 s6FXPCVWaARui/Jaygey+F7gxPYtEr4SbeyastFVj4apK3K7KFfMsZGR1EWkOouePi
-	 owAgY6V2SiqNAI8LERS8JGm49823vpBaPB2BsfsGFf8sJ7wjujxj0Pagka4nzbvSHP
-	 jARgCyfQs06oMPGVvnOaqqbXeOKe8tU3icMRQziU5G4/cqrdnbVOjMJoqTIIYO1sqy
-	 3ZAmDMoNuQZSQ==
-Date: Mon, 24 Apr 2023 13:01:55 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Borislav Petkov <bp@alien8.de>, kernel test robot <lkp@intel.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
- a CPU feature not currently enabled
-Message-ID: <20230424200155.GA2605117@dev-arch.thelio-3990X>
-References: <202304170748.Fg9VIgGd-lkp@intel.com>
- <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
- <20230419231834.GA1269248@dev-arch.thelio-3990X>
- <C6A730FC-C7B5-4A32-92CD-98FDA632782C@flygoat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354C72F58
+	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 20:42:20 +0000 (UTC)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-63b73203e0aso30837484b3a.1
+        for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 13:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682368939; x=1684960939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F5ZMC5VZS+YuBCnDNL+LpSQZtLatJs+u2JnjBvK8Odc=;
+        b=DGbRYrvKbvAoKpxgR0HQbFQbYXIsz+xp2DGSkA2iOQ8mk1waOeWr+SQSqHjNuasxPf
+         8n+vMTsSnPigKcKIoYZz5PxLBhE5efTfaOCZ8JQV/rP6KgWH3nnIBQVYIr26Po+rSVfL
+         XKUeFmdh9NNpkHFwRbRXZrVl72cOFnBWI8Dgk+co7z1DsCZf3I+iGPR2qA6JciXH6DEX
+         Qh0waztvz2vfOG82eC66kLBXYiKWml2zHWu/0w++9GWg6HxYxWvVKbS71C6Drwt+GaGj
+         UnoKPfxkLl/YsG6phBs1KAw1BycVRWcxeqF4Q9S3pHsn0wCjS3bASvhbon6oYA/iVdX2
+         4r2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682368939; x=1684960939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F5ZMC5VZS+YuBCnDNL+LpSQZtLatJs+u2JnjBvK8Odc=;
+        b=fv4RfOfamGCJ4Qa2I2LCIfkN6RHpODNFz9Ts2AhmxGl1gLe9XOxrg4I48Qc7gpE3v/
+         B/pubthRY1DUYa/l9sK92nLkBi9vy4D27YNYl8GJGVsyf08n6WMjSS6DPn5fTAQSKVs+
+         5k5EhTyLCuGAJGXdNFwEeKuualOPEV4lQ2k98/9CjJb6s/ah3dygzKiedL+kAYjwvnbZ
+         BZY7ubtwN+13vJQh/u0IYDxi3U3eP+UMH5+IwlibLbTKzb9YpzIgNj1nYNeWTBH5CZvV
+         tiiNfE/bAuZXzuBmOcBYELMfmwaaskB6CUuV8xNgL0x8EVTud+2HmwfFbOpNj7RNjdQL
+         mT0Q==
+X-Gm-Message-State: AAQBX9d8wdqiqtoCOyeXe7F12abt3Xt3oby1RyEZj99RAMnoFOo1j4dT
+	aH1bnNY7KQnIVP96pAPpR6dfTRnbvHbb8RjMIWQQnA==
+X-Google-Smtp-Source: AKy350bsHQq1EzNGt73/j+nTzeIplaa5l3Hebw0touKLhbf8se1E6Dle8Z8ftc4k7i07Zf4ORu/GiUefhBFP9DGqO5w=
+X-Received: by 2002:a17:90a:6b43:b0:246:9517:30b6 with SMTP id
+ x3-20020a17090a6b4300b00246951730b6mr22012160pjl.4.1682368939446; Mon, 24 Apr
+ 2023 13:42:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <C6A730FC-C7B5-4A32-92CD-98FDA632782C@flygoat.com>
+References: <20230413-fixes-for-mt8195-hdmi-phy-v2-0-bbad62e64321@baylibre.com>
+ <20230413-fixes-for-mt8195-hdmi-phy-v2-1-bbad62e64321@baylibre.com> <20230421221330.GA3657732@dev-arch.thelio-3990X>
+In-Reply-To: <20230421221330.GA3657732@dev-arch.thelio-3990X>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 24 Apr 2023 13:42:08 -0700
+Message-ID: <CAKwvOd=5szkx5yA0bxcyktx85opAwLrB3_4n13SMV7p3m9x7LQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] phy: mediatek: hdmi: mt8195: fix uninitialized
+ variable usage in pll_calc
+To: Matthias Brugger <matthias.bgg@gmail.com>, Chunfeng Yun <chunfeng.yun@mediatek.com>, 
+	Vinod Koul <vkoul@kernel.org>
+Cc: Guillaume Ranquet <granquet@baylibre.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, dri-devel@lists.freedesktop.org, 
+	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 20, 2023 at 12:41:50AM +0100, Jiaxun Yang wrote:
-> 
-> 
-> > 2023年4月20日 00:18，Nathan Chancellor <nathan@kernel.org> 写道：
-> > 
-> > + Jiaxun, who has been looking into MIPS + LLVM issues recently and has
-> > been a big help :)
-> 
-> I think this patch[1] may fix the problem.
+On Fri, Apr 21, 2023 at 3:13=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Fri, Apr 14, 2023 at 06:07:46PM +0200, Guillaume Ranquet wrote:
+> > The ret variable in mtk_hdmi_pll_calc() was used unitialized as reporte=
+d
+> > by the kernel test robot.
+> >
+> > Fix the issue by removing the variable altogether and testing out the
+> > return value of mtk_hdmi_pll_set_hw()
+> >
+> > Fixes: 45810d486bb44 ("phy: mediatek: add support for phy-mtk-hdmi-mt81=
+95")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Can somebody pick this up? It fixes a rather obvious warning, which is
+> breaking clang builds (as evidenced by three versions of the same fix).
 
-I have the following patch stack:
+$ ./scripts/get_maintainer.pl -f
+drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | grep maintainer
+Chunfeng Yun <chunfeng.yun@mediatek.com> (maintainer:ARM/Mediatek USB3
+PHY DRIVER)
+Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC supp=
+ort)
 
-$ git log --oneline origin/master^..
-c6cd9f17692e MIPS: Replace assembly isa level directives with macros
-60508ba7d92f MIPS: Limit MIPS_MT_SMP support by ISA reversion
-c9e250105de4 MIPS: Fallback CPU -march CFLAG to ISA level if unsupported
-49c0420e59bb MIPS: Remove cc-option checks for -march=octeon
-b7ea7e959023 MIPS: Detect toolchain support of o32 ABI with 64 bit CPU
-51f2d93245ba MIPS: Detect toolchain support of workarounds in Kconfig
-7382a07eb105 MIPS: Add toolchain feature dependency for microMIPS smartMIPS
-de0621fbedd3 MIPS: Move various toolchain ASE check to Kconfig
-3b85b9b39960 Add linux-next specific files for 20230424
+Chunfeng, Matthias, can one of you pick this up, please?
 
-but with the robot's configuration, I still see that error. I notice
-that the 'if (sel == 0)' branch of ___read_32bit_c0_register() has no
-'.set push' directive, could that matter here?
+Or Vinod who merged 45810d486bb44 FWICT?
 
-Cheers,
-Nathan
+>
+> > ---
+> >  drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/m=
+ediatek/phy-mtk-hdmi-mt8195.c
+> > index abfc077fb0a8..054b73cb31ee 100644
+> > --- a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+> > +++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
+> > @@ -213,7 +213,7 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *h=
+dmi_phy, struct clk_hw *hw,
+> >       u64 tmds_clk, pixel_clk, da_hdmitx21_ref_ck, ns_hdmipll_ck, pcw;
+> >       u8 txpredivs[4] =3D { 2, 4, 6, 12 };
+> >       u32 fbkdiv_low;
+> > -     int i, ret;
+> > +     int i;
+> >
+> >       pixel_clk =3D rate;
+> >       tmds_clk =3D pixel_clk;
+> > @@ -292,13 +292,9 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *=
+hdmi_phy, struct clk_hw *hw,
+> >       if (!(digital_div <=3D 32 && digital_div >=3D 1))
+> >               return -EINVAL;
+> >
+> > -     mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_low,
+> > +     return mtk_hdmi_pll_set_hw(hw, PLL_PREDIV, fbkdiv_high, fbkdiv_lo=
+w,
+> >                           PLL_FBKDIV_HS3, posdiv1, posdiv2, txprediv,
+> >                           txposdiv, digital_div);
+> > -     if (ret)
+> > -             return -EINVAL;
+> > -
+> > -     return 0;
+> >  }
+> >
+> >  static int mtk_hdmi_pll_drv_setting(struct clk_hw *hw)
+> >
+> > --
+> > 2.40.0
+> >
+>
 
-> [1]: https://patchwork.kernel.org/project/linux-mips/patch/20230411111225.55725-2-jiaxun.yang@flygoat.com/
-> 
-> > 
-> > On Thu, Apr 20, 2023 at 12:37:07AM +0200, Borislav Petkov wrote:
-> >> + Thomas.
-> >> 
-> >> On Mon, Apr 17, 2023 at 07:57:04AM +0800, kernel test robot wrote:
-> >>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> >>> head:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
-> >>> commit: aba5b397cad7d398b385aaf5029f99f41b690466 hamradio: baycom_epp: Do not use x86-specific rdtsc()
-> >>> date:   4 months ago
-> >>> config: mips-buildonly-randconfig-r001-20230417 (https://download.01.org/0day-ci/archive/20230417/202304170748.Fg9VIgGd-lkp@intel.com/config)
-> >>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 9638da200e00bd069e6dd63604e14cbafede9324)
-> >> 
-> >> Where do I get clang 17?
-> > 
-> > I think they intend for you to get it via their make.cross script but
-> > this issue reproduces with clang 16.0.2 from
-> > https://mirrors.edge.kernel.org/pub/tools/llvm/ for me locally.
-> > 
-> >> In any case, this
-> >> 
-> >> "error: instruction requires a CPU feature not currently enabled"
-> >> 
-> >> sounds like clang is trying to generate invalid code for the wrong
-> >> target. .config issue?
-> > 
-> > I am far from a MIPS expert but this usually means that there is some
-> > assembler directive that we are missing to allow access to certain
-> > instructions in newer ISA versions than the one specified via '-march'.
-> > I have no idea if that is the case here or not but I do see the correct
-> > target flags when building with V=1, so it is not something obvious like
-> > that. I can double back to this later this week or next week if nobody
-> > else is able to.
-> > 
-> > Regardless, this seems like a pre-existing issue that was just exposed
-> > by your patch, not the root cause of it.
-> > 
-> > Cheers,
-> > Nathan
-> > 
-> >>> reproduce (this is a W=1 build):
-> >>>        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >>>        chmod +x ~/bin/make.cross
-> >>>        # install mips cross compiling tool for clang build
-> >>>        # apt-get install binutils-mipsel-linux-gnu
-> >>>        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=aba5b397cad7d398b385aaf5029f99f41b690466
-> >>>        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >>>        git fetch --no-tags linus master
-> >>>        git checkout aba5b397cad7d398b385aaf5029f99f41b690466
-> >>>        # save the config file
-> >>>        mkdir build_dir && cp config build_dir/.config
-> >>>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-> >>>        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/hamradio/
-> >>> 
-> >>> If you fix the issue, kindly add following tag where applicable
-> >>> | Reported-by: kernel test robot <lkp@intel.com>
-> >>> | Link: https://lore.kernel.org/oe-kbuild-all/202304170748.Fg9VIgGd-lkp@intel.com/
-> >>> 
-> >>> All errors (new ones prefixed by >>):
-> >>> 
-> >>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
-> >>>   In file included from include/linux/module.h:13:
-> >>>   In file included from include/linux/stat.h:19:
-> >>>   In file included from include/linux/time.h:60:
-> >>>   In file included from include/linux/time32.h:13:
-> >>>   In file included from include/linux/timex.h:67:
-> >>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
-> >>>                   return read_c0_count();
-> >>>                          ^
-> >>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
-> >>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
-> >>>                                   ^
-> >>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
-> >>>           ___read_32bit_c0_register(source, sel, __volatile__)
-> >>>           ^
-> >>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
-> >>>                           "mfc0\t%0, " #source "\n\t"                     \
-> >>>                           ^
-> >>>   <inline asm>:1:2: note: instantiated into assembly here
-> >>>           mfc0    $4, $9
-> >>>           ^
-> >>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
-> >>>   In file included from include/linux/module.h:13:
-> >>>   In file included from include/linux/stat.h:19:
-> >>>   In file included from include/linux/time.h:60:
-> >>>   In file included from include/linux/time32.h:13:
-> >>>   In file included from include/linux/timex.h:67:
-> >>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
-> >>>                   return read_c0_count();
-> >>>                          ^
-> >>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
-> >>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
-> >>>                                   ^
-> >>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
-> >>>           ___read_32bit_c0_register(source, sel, __volatile__)
-> >>>           ^
-> >>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
-> >>>                           "mfc0\t%0, " #source "\n\t"                     \
-> >>>                           ^
-> >>>   <inline asm>:1:2: note: instantiated into assembly here
-> >>>           mfc0    $2, $9
-> >>>           ^
-> >>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
-> >>>   In file included from include/linux/module.h:13:
-> >>>   In file included from include/linux/stat.h:19:
-> >>>   In file included from include/linux/time.h:60:
-> >>>   In file included from include/linux/time32.h:13:
-> >>>   In file included from include/linux/timex.h:67:
-> >>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
-> >>>                   return read_c0_count();
-> >>>                          ^
-> >>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
-> >>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
-> >>>                                   ^
-> >>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
-> >>>           ___read_32bit_c0_register(source, sel, __volatile__)
-> >>>           ^
-> >>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
-> >>>                           "mfc0\t%0, " #source "\n\t"                     \
-> >>>                           ^
-> >>>   <inline asm>:1:2: note: instantiated into assembly here
-> >>>           mfc0    $2, $9
-> >>>           ^
-> >>>   In file included from drivers/net/hamradio/baycom_epp.c:29:
-> >>>   In file included from include/linux/module.h:13:
-> >>>   In file included from include/linux/stat.h:19:
-> >>>   In file included from include/linux/time.h:60:
-> >>>   In file included from include/linux/time32.h:13:
-> >>>   In file included from include/linux/timex.h:67:
-> >>>>> arch/mips/include/asm/timex.h:75:10: error: instruction requires a CPU feature not currently enabled
-> >>>                   return read_c0_count();
-> >>>                          ^
-> >>>   arch/mips/include/asm/mipsregs.h:1712:26: note: expanded from macro 'read_c0_count'
-> >>>   #define read_c0_count()         __read_32bit_c0_register($9, 0)
-> >>>                                   ^
-> >>>   arch/mips/include/asm/mipsregs.h:1453:2: note: expanded from macro '__read_32bit_c0_register'
-> >>>           ___read_32bit_c0_register(source, sel, __volatile__)
-> >>>           ^
-> >>>   arch/mips/include/asm/mipsregs.h:1419:4: note: expanded from macro '___read_32bit_c0_register'
-> >>>                           "mfc0\t%0, " #source "\n\t"                     \
-> >>>                           ^
-> >>>   <inline asm>:1:2: note: instantiated into assembly here
-> >>>           mfc0    $2, $9
-> >>>           ^
-> >>>   4 errors generated.
-> >>> 
-> >>> 
-> >>> vim +75 arch/mips/include/asm/timex.h
-> >>> 
-> >>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  71  
-> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  72  static inline cycles_t get_cycles(void)
-> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  73  {
-> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  74   if (can_use_mips_counter(read_c0_prid()))
-> >>> 9c9b415c50bc29 Ralf Baechle       2013-09-12 @75   return read_c0_count();
-> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  76   else
-> >>> 06947aaaf9bf7d Maciej W. Rozycki  2014-04-06  77   return 0; /* no usable counter */
-> >>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  78  }
-> >>> 1c99c6a7c3c599 Jason A. Donenfeld 2022-04-08  79  #define get_cycles get_cycles
-> >>> 9c9b415c50bc29 Ralf Baechle       2013-09-12  80  
-> >>> 
-> >>> :::::: The code at line 75 was first introduced by commit
-> >>> :::::: 9c9b415c50bc298ac61412dff856eae2f54889ee MIPS: Reimplement get_cycles().
-> >>> 
-> >>> :::::: TO: Ralf Baechle <ralf@linux-mips.org>
-> >>> :::::: CC: Ralf Baechle <ralf@linux-mips.org>
-> >>> 
-> >>> -- 
-> >>> 0-DAY CI Kernel Test Service
-> >>> https://github.com/intel/lkp-tests
-> >> 
-> >> -- 
-> >> Regards/Gruss,
-> >>    Boris.
-> >> 
-> >> https://people.kernel.org/tglx/notes-about-netiquette
-> 
+
+--=20
+Thanks,
+~Nick Desaulniers
