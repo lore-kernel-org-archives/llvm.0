@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E75E2F2E
-	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 19:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3A02F2E
+	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 19:11:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682362888;
+	s=mimecast20190719; t=1682363487;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=w7qBaINozrcWxT5ovd4aT2GtfAxz2EM/dLkVBxD+eIM=;
-	b=fy3QvBJkOzEc81TIXV8SHELWtUyjP/BUe+TUbGDGdfMP378BCuAj4beM1h49yQUNB4j6sS
-	rWJcaLEhTWBNIwpqBwQkDHsEiuoeOIP+pLFIgNTtG+wVmP8/9diOCAam8d5UDUdmfIvKKy
-	Eozc9bXsJ0/i/c7JZ9hr6801FNwNmSs=
+	bh=nzN3UT9TwVl+JlU0k+6chnIJjePVqfCqCq2PZbiH/GM=;
+	b=XjDV8XU+3DWGTVAKdIgFdM1qxHx29TazBh2fqtY8cRlU69nSsbj8l8HARBFIsBzstedMcm
+	4iARrGi1Pz6suT+mZRX9N99Wm5RRj9M2zkGe4mdlczZhnTPr/ekLVbdiFcz/JW5/dw5KEq
+	Lbx7Et6W7zrlv1UBSturYUoHhb2dnLM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-572-jzZWqCt7PHeQxJQN5OFQIA-1; Mon, 24 Apr 2023 15:01:26 -0400
-X-MC-Unique: jzZWqCt7PHeQxJQN5OFQIA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-439-BoXTNZG1P_m407ObNvf9pw-1; Mon, 24 Apr 2023 15:11:26 -0400
+X-MC-Unique: BoXTNZG1P_m407ObNvf9pw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 666B3800B35
-	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 19:01:26 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9DD3101A531
+	for <llvm@lists.linux.dev>; Mon, 24 Apr 2023 19:11:25 +0000 (UTC)
 Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 53EAB14171B8;
-	Mon, 24 Apr 2023 19:01:26 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B5E32492B03;
+	Mon, 24 Apr 2023 19:11:25 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 33 of 353): Test report for master
- (6.3.0-rc7, mainline.kernel.org-clang, 622322f5)
-Date: Mon, 24 Apr 2023 19:01:26 -0000
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 39 of 353): Test report for master
+ (6.3.0-rc7, mainline.kernel.org-clang, 8296ac92)
+Date: Mon, 24 Apr 2023 19:11:25 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <25152.123042415012601876@us-mta-572.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+Message-Id: <63301.123042415112600409@us-mta-439.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,15 +53,20 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'mips-fixes_6.3_2' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/mips/linux
+    Commit message: Merge tag 'kbuild-fixes-v6.3-4' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/85701
+    https://datawarehouse.cki-project.org/kcidb/checkouts/85723
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
 anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
         Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
 oo big
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
