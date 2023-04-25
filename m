@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321614408
-	for <llvm@lists.linux.dev>; Tue, 25 Apr 2023 15:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920BB6ADC
+	for <llvm@lists.linux.dev>; Tue, 25 Apr 2023 15:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682434894;
+	s=mimecast20190719; t=1682436693;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=83v1mCfrIpx4em/Xi/h8ZrL4Pip1hN0NsRikgKgl3Yk=;
-	b=UgpXfC+YA10exTUwwtip0i97THMcSPvnKtKmpVoNC5f0HSDckWU35CexTA13ORnrRb464u
-	1Rymo2lJvLK7tJW2JE9ll7wXHKO+75/XEr6uAF43A8yfSSpxp72me2u5Pi6H12Xv1jrnEt
-	71rYcyyCKv2mceq+59JcbzTV3t0W9qU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=dFMAv8SOFJkpJ0Rk0IbG+pv0E839vPAYilKFv4XIFMo=;
+	b=JZYPtxqFb/IR1tcpwGpXkR9SJcfjRJ+JICnZxO2PU2tkdJDx7+jjHYFUj6EnjMJdnoDWBe
+	rD8sd4BZLo+/Y3Q5rcK6Pue4ZrIXOKhcQ8ADhDI76dp87Fqw+QG2GjlaVtyPyYJewUrt/n
+	xxHO7FzktWKGqqJvIMVPIA+G2GWMpTk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-CWILjzUjP06GJt_Qlc-F3A-1; Tue, 25 Apr 2023 11:01:32 -0400
-X-MC-Unique: CWILjzUjP06GJt_Qlc-F3A-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-225-11mK0EazOXmv7cZR9qM6SA-1; Tue, 25 Apr 2023 11:31:32 -0400
+X-MC-Unique: 11mK0EazOXmv7cZR9qM6SA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB785382C971
-	for <llvm@lists.linux.dev>; Tue, 25 Apr 2023 15:01:31 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 812A1A0F381
+	for <llvm@lists.linux.dev>; Tue, 25 Apr 2023 15:31:31 +0000 (UTC)
 Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id A7263492C18;
-	Tue, 25 Apr 2023 15:01:31 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7180440C6E67;
+	Tue, 25 Apr 2023 15:31:31 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 28 of 353): Test report for master
- (6.3.0, mainline.kernel.org-clang, 61d325dc)
-Date: Tue, 25 Apr 2023 15:01:31 -0000
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 23 of 353): Test report for master
+ (6.3.0, mainline.kernel.org-clang, 173ea743)
+Date: Tue, 25 Apr 2023 15:31:31 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <36531.123042511013200336@us-mta-556.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Message-Id: <29619.123042511313200873@us-mta-225.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,11 +53,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'erofs-for-6.4-rc1' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/xiang/erofs
+    Commit message: Merge tag 'pull-nios2' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/viro/vfs
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/85858
+    https://datawarehouse.cki-project.org/kcidb/checkouts/85873
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -110,11 +110,6 @@ o such file or directory
 l-tests/-/issues/1611
             Affected tests:
                  aarch64 - Firmware test suite
-        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
-p4 is inconsistent (r)
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
-            Affected tests:
-                 aarch64 - xfstests - btrfs
 
 
 
