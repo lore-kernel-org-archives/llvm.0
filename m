@@ -1,145 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3077B
-	for <llvm@lists.linux.dev>; Tue, 25 Apr 2023 08:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682411540;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/iEt5bBT9lMkhqFVteCCBnk+5n40X0STHlaBsPHmS3Q=;
-	b=VMGTT6pnqxHpthn+67nSZoq/6UBZ32tNG8ObJRVJA1bOCBxeIDF8syhRw1K0WmW/oDvDcx
-	qsOfvQtcwOc6SoxtLH8SWFqZ2qlr4/Wu6jPrs/ZeIsMHvLEnUdyam/sae7I+8zrmltyFqC
-	il3O4FT6PbBelIa7TkkLcSQxaTfvZtA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-77-0YRuMoY_MPesfwfXNF2xcg-1; Tue, 25 Apr 2023 04:32:19 -0400
-X-MC-Unique: 0YRuMoY_MPesfwfXNF2xcg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD1DA858297
-	for <llvm@lists.linux.dev>; Tue, 25 Apr 2023 08:32:18 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CDF532166B3A;
-	Tue, 25 Apr 2023 08:32:18 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 23 of 353): Test report for master
- (6.3.0, mainline.kernel.org-clang, 1a0beef9)
-Date: Tue, 25 Apr 2023 08:32:18 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EAF7B;
+	Tue, 25 Apr 2023 09:01:53 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.nyi.internal (Postfix) with ESMTP id 037C55C00CD;
+	Tue, 25 Apr 2023 05:01:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 25 Apr 2023 05:01:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1682413312; x=1682499712; bh=R0z5Zs+wnEsIT1a8y/eZUxxArXE6qSZmRoh
+	kAXezjZQ=; b=TzdRGTV2hO5JedwLX2OH2c1ohRTSGKu0BV1mcu4k29f/wMYONi1
+	5kUeO8gw7bqkaAn7CHeoDEtaO7V0IujFVTqgWsb00ooBp87ZjGGlDqJ3qrnNxubS
+	kWkJS3sf4U3dr/894BbN6ajEwk9Wfhro5QnfvHZHKn6Eqh2kVXGGyNFz0iG1Adty
+	0cFij0usNnxVdc7ZbjGTbw4MV6UM6cWckn6LVOt4zhwOWzQrjknlZQtHYxgZfapb
+	D0Ugd3uTRsJ30jSfca5/hREueVrgV6hSJc/QYM1v55o5P4sVFdHQ/YaM8r1nTCo0
+	mbnY1Eydy7mpuZlrJDW/aYEO4VlNCZyCb8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1682413312; x=1682499712; bh=R0z5Zs+wnEsIT1a8y/eZUxxArXE6qSZmRoh
+	kAXezjZQ=; b=dETx4Eje6jqkXHZfDAN1w4Z2QYI6v+22QFbitdpKZpmsP34Jnh6
+	3XCvtuBxJj9lD5/Dz58wZBgT3IaAw8VhKe4FfAHsfy+H4vTlCwOeNNq83Q325psH
+	Gizu/NVv4OwEGuP5w43EwdjiE16mSlmJcnTQEMEHwRdnsGG127x/rkilMSUYXN7J
+	IYCzArom7aJfoGQLR8byHUhNpdPzZ4/qH/bflKJUZLIgWEHRuKb1P0tu3RDRFkW5
+	QhngQjBPmbwdrOi7G7lCInLltSCKgGPzIBnS0Pi8/6QY1/yBNEtFiLr03FNCacT3
+	kToS46wUsTLKxXsVcpFbTvSHUyJGb4yN6qw==
+X-ME-Sender: <xms:_5ZHZJs_B7hg1lzne89QzMmORS9hGvNk8o8M4iA1Gy7iL7X2yVwgAQ>
+    <xme:_5ZHZCdzFTOKhsfaifdVoqmUVJ2xykOm3TsZggZg1JCRFohW8-2SdwK2xQVw0KUT8
+    NTXEDgRN5obyWGtm_Q>
+X-ME-Received: <xmr:_5ZHZMxp6_a7Xz5O87kbYLMKnNqCtf6aJ15Phl84LBwtQGgsCDZO60xnTlG7Oo_VM_-i>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:_5ZHZAPAPFgLWOmgcyL-rILyIUiedFqHBFOFuA-xqK6Aet5uxAkr4g>
+    <xmx:_5ZHZJ83aP9yDKsd9R6qKwGJODAnnfu8ZAN3mrUq9qmq9BkwofxEGA>
+    <xmx:_5ZHZAUl0wp_xKPEHQzLWjsdxjfVHcgHRPoJcc38D5nHJ9qqABAnqA>
+    <xmx:AJdHZMmh4uGwnwHmO4_3yRVNUwlGSQApy14d_RwCjDzFKL4vdUpItQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Apr 2023 05:01:50 -0400 (EDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-Message-Id: <67228.123042504321900227@us-mta-77.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: arch/mips/include/asm/timex.h:75:10: error: instruction requires
+ a CPU feature not currently enabled
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230424200155.GA2605117@dev-arch.thelio-3990X>
+Date: Tue, 25 Apr 2023 10:01:39 +0100
+Cc: Borislav Petkov <bp@alien8.de>,
+ kernel test robot <lkp@intel.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-
-Hi, we tested your kernel and here are the results:
-
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
-
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 'tpmdd-v6.4-rc1' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/jarkko/linux-tpmdd
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/85825
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: Storage - blktests - blk: nvme/012: ISOFS: unsupported/inval=
-id hardware sector size 4096
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1375
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+Message-Id: <FF433BBA-3723-4B4D-BBAC-664419EA52D0@flygoat.com>
+References: <202304170748.Fg9VIgGd-lkp@intel.com>
+ <20230419223707.GAZEBtE1vZGy5B4EUR@fat_crate.local>
+ <20230419231834.GA1269248@dev-arch.thelio-3990X>
+ <C6A730FC-C7B5-4A32-92CD-98FDA632782C@flygoat.com>
+ <20230424200155.GA2605117@dev-arch.thelio-3990X>
+To: Nathan Chancellor <nathan@kernel.org>
+X-Mailer: Apple Mail (2.3731.500.231)
 
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+> 2023=E5=B9=B44=E6=9C=8824=E6=97=A5 21:01=EF=BC=8CNathan Chancellor =
+<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Thu, Apr 20, 2023 at 12:41:50AM +0100, Jiaxun Yang wrote:
+>>=20
+>>=20
+>>> 2023=E5=B9=B44=E6=9C=8820=E6=97=A5 00:18=EF=BC=8CNathan Chancellor =
+<nathan@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>>>=20
+>>> + Jiaxun, who has been looking into MIPS + LLVM issues recently and =
+has
+>>> been a big help :)
+>>=20
+>> I think this patch[1] may fix the problem.
+>=20
+> I have the following patch stack:
+>=20
+> $ git log --oneline origin/master^..
+> c6cd9f17692e MIPS: Replace assembly isa level directives with macros
+> 60508ba7d92f MIPS: Limit MIPS_MT_SMP support by ISA reversion
+> c9e250105de4 MIPS: Fallback CPU -march CFLAG to ISA level if =
+unsupported
+> 49c0420e59bb MIPS: Remove cc-option checks for -march=3Docteon
+> b7ea7e959023 MIPS: Detect toolchain support of o32 ABI with 64 bit CPU
+> 51f2d93245ba MIPS: Detect toolchain support of workarounds in Kconfig
+> 7382a07eb105 MIPS: Add toolchain feature dependency for microMIPS =
+smartMIPS
+> de0621fbedd3 MIPS: Move various toolchain ASE check to Kconfig
+> 3b85b9b39960 Add linux-next specific files for 20230424
+>=20
+> but with the robot's configuration, I still see that error. I notice
+> that the 'if (sel =3D=3D 0)' branch of ___read_32bit_c0_register() has =
+no
+> '.set push' directive, could that matter here?
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Sorry I was identifying the wrong problem.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+The real problem is LLVM IAS (or the whole LLVM stack)=E2=80=99s =
+microMIPS is broken,
+It unable to handle =E2=80=9Cmfc0=E2=80=9D and many other instructions.
 
+Perhaps we should come up a method to block this config to happen.
+
+Thanks
+Jiaxun
+
+>=20
+> Cheers,
+> Nathan
