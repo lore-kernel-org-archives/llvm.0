@@ -1,47 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CDB33E5;
-	Tue, 25 Apr 2023 21:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686601FBF;
+	Tue, 25 Apr 2023 22:47:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682456591; x=1713992591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jw66GbpVDrNQLpIB5E1F9gDZmk+UiU7wloECDprBEi0=;
-  b=MSVqW8v/GxrOAZrOeIHEx6WDWrfB4XBbSojjiVd4K2133n/Ty2TlEFQZ
-   zZkF7LZ72kdSykjTyNExKdnSZC0CWz3lKxfwOUmF7OO8sL18n+iIZc2Zn
-   MaXNHLoOjCl+QzF/bI4PnMVsgb7Tfv3muTEBbfeqh5T4AZ2Druvl6FIJ0
-   dBsAF3dpjtbNqG6Twzh6pt4sXkMUfotLgyXfv4Tj30/07LZZZyp9+3JV7
-   CuHJC/xLQ3h4LsOQzwurY/ja7TmAqkapa2d0tb/y3EL1hs7uQeqKBM9c2
-   CFZFYWKfgcKvMJnD6DFEEb3hfYWfe4LFFxau7SZh4cAmF4dIjbocL5ANX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="346926800"
+  t=1682462825; x=1713998825;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VSpLcxcikTKfnCnMDjhtR63XahqoW5WLeNZf3ys8a5M=;
+  b=An+7amUVBbdZwX3QVdyIpO8+TLKJ4d5l5TIY+i48EezRatzJl/3SKF4w
+   nbFR0BvL/COzeGIzXhAdrfrfJx1hkxBwah8BDYm0gsaD0RgMopq3prbbH
+   tJ/YoDC/5mEB42d6B6FxKPv/LJneuUlfn/ob6fv6R/uTOiXgDjo/qvofr
+   LYD6h3ByCfYGZNCqIZd+OzhJPCSLsKup9r97E79la2bX4WwkXLm4hDjtf
+   MLrT8Rg5XGutT90ur6xCKQoJgR1JqR2AJSz1BNQ/gDY7kAJolCAKp2h+w
+   b2PlgQRHR4xU2TarvknA8waGpz92Klz6phBu5Vnr5m8l7J8TYCwNJGZRN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="412219010"
 X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="346926800"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 14:03:05 -0700
+   d="scan'208";a="412219010"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 15:47:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="724151023"
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="783034793"
 X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="724151023"
+   d="scan'208";a="783034793"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2023 14:03:00 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Apr 2023 15:47:03 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1prPoR-000jm0-2X;
-	Tue, 25 Apr 2023 21:02:59 +0000
-Date: Wed, 26 Apr 2023 05:02:12 +0800
+	id 1prRR8-000jpW-2W;
+	Tue, 25 Apr 2023 22:47:02 +0000
+Date: Wed, 26 Apr 2023 06:46:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: hildawu@realtek.com, marcel@holtmann.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-	mmandlik@google.com, apusaka@chromium.org, yinghsu@chromium.org,
-	alex_lu@realsil.com.cn, max.chou@realtek.com, kidman@realtek.com
-Subject: Re: [PATCH v3] Bluetooth: btrtl: Add Realtek devcoredump support
-Message-ID: <202304260422.XHBgACOW-lkp@intel.com>
-References: <20230420105343.2014-1-hildawu@realtek.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-component-2023-04-25-v2 15/28] ERROR: modpost:
+ "snd_soc_dlc_use_cpu_as_platform"
+ [sound/soc/generic/snd-soc-simple-card-utils.ko] undefined!
+Message-ID: <202304260645.B4o8UoN9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,60 +46,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230420105343.2014-1-hildawu@realtek.com>
 
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on next-20230425]
-[cannot apply to bluetooth/master linus/master v6.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/hildawu-realtek-com/Bluetooth-btrtl-Add-Realtek-devcoredump-support/20230420-185852
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20230420105343.2014-1-hildawu%40realtek.com
-patch subject: [PATCH v3] Bluetooth: btrtl: Add Realtek devcoredump support
-config: arm-randconfig-r013-20230424 (https://download.01.org/0day-ci/archive/20230426/202304260422.XHBgACOW-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+tree:   https://github.com/morimoto/linux sound-component-2023-04-25-v2
+head:   edc0bca1729bdd9ce5fc87a8076a5ef08e771aee
+commit: d98b3fa5d38f436ae0cf9d515a2f9402bd3e0abe [15/28] ASoC: soc-core.c: add snd_soc_dlc_use_cpu_as_platform()
+config: x86_64-randconfig-a003-20230424 (https://download.01.org/0day-ci/archive/20230426/202304260645.B4o8UoN9-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/dd7adb785f34ba9037f5c73dac879071302c636a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review hildawu-realtek-com/Bluetooth-btrtl-Add-Realtek-devcoredump-support/20230420-185852
-        git checkout dd7adb785f34ba9037f5c73dac879071302c636a
+        # https://github.com/morimoto/linux/commit/d98b3fa5d38f436ae0cf9d515a2f9402bd3e0abe
+        git remote add morimoto https://github.com/morimoto/linux
+        git fetch --no-tags morimoto sound-component-2023-04-25-v2
+        git checkout d98b3fa5d38f436ae0cf9d515a2f9402bd3e0abe
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304260422.XHBgACOW-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304260645.B4o8UoN9-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from drivers/bluetooth/btusb.c:27:
->> drivers/bluetooth/btrtl.h:188:2: error: void function 'btrtl_set_driver_name' should not return a value [-Wreturn-type]
-           return -EOPNOTSUPP;
-           ^      ~~~~~~~~~~~
-   1 error generated.
-
-
-vim +/btrtl_set_driver_name +188 drivers/bluetooth/btrtl.h
-
-   185	
-   186	static inline void btrtl_set_driver_name(struct hci_dev *hdev, const char *driver_name)
-   187	{
- > 188		return -EOPNOTSUPP;
-   189	}
-   190	
+>> ERROR: modpost: "snd_soc_dlc_use_cpu_as_platform" [sound/soc/generic/snd-soc-simple-card-utils.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
