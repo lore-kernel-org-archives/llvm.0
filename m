@@ -1,43 +1,43 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAB97B;
-	Tue, 25 Apr 2023 01:24:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE2B7B;
+	Tue, 25 Apr 2023 01:34:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682385851; x=1713921851;
+  t=1682386452; x=1713922452;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GCarHqMncruY6x6qBRrbIsDZRyVGEKQD+NixnUeSoTs=;
-  b=DNUPtIuhq90KkJihHZEIpcyi0KiSQb88Iler/Iwo7zXHuRlN93Tqz2aY
-   WFJQ9iEjfQLT295c+A0J7PzuJAfkONdKQ46OEofPT+sg9IZcr8y6jTFj9
-   WJ4evNAZGx/mosJcvxdWgPo5VPyBpZd/c/aQI0DzuIi6Qtk0KGg2OxBfa
-   QYo4pKtNAiGJrXCSkeHHlrqlNXjiXz274iWMLjDMYALm3XEnNqs16d8TW
-   gyzKu6FtwfkgmlDk6QKlq6mhBYhA/CQfBgGM5hYK7TsX52/gkFoZSz2uo
-   XcCydKKwmdHkA6gPUQw+JcVxLbDRFEX0dR0njcyUDNsvnBvC177H6SrYJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="346630131"
+  bh=9UVVTXvYG4utdmbPcp12KIsUk/nXZkzp5uQwxz98nPY=;
+  b=a/yBAGOA9kPFrHjK5kDslCG+S4gW/mCdnbpS3QfFeR09VYJQ2cU6N6Cn
+   YPusaLsZMsAwiXssh7LO2/dJfc9JECidqj6i4qk4/8/jn5QKEdQX9mYWM
+   KwgpgzJl+kpIoaNcAuvNCfJLt0uFLztq1okjQn1MmfFOjiHfd2guP+860
+   nMoAJKa/xQhs4b3cfqfntq2NTgyeed+vEzTTwTihL2tGBk0pe/gc9pgKC
+   VGIOIY2SAxHR13wF6XOcg46BZk29wcHZXRXABuoScrNsPFg2tm6nFLrkh
+   R10Gor2xpKH0dGWk5Ce0igS6WpV/dclmSz6ARG2dkNQmqLTnCgQagP0WG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="326925625"
 X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="346630131"
+   d="scan'208";a="326925625"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 18:24:10 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 18:34:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="867694989"
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="867697823"
 X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="867694989"
+   d="scan'208";a="867697823"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Apr 2023 18:24:09 -0700
+  by orsmga005.jf.intel.com with ESMTP; 24 Apr 2023 18:34:09 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1pr7Pc-000ioC-1b;
-	Tue, 25 Apr 2023 01:24:08 +0000
-Date: Tue, 25 Apr 2023 09:23:35 +0800
+	id 1pr7ZJ-000ipC-0V;
+	Tue, 25 Apr 2023 01:34:09 +0000
+Date: Tue, 25 Apr 2023 09:33:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:rcu/rcutop-debugobj 3/4] kernel/rcu/debug.h:130:26: error:
- use of undeclared identifier 'rcu_head_debug_data'; did you mean
- 'rcuhead_debug_descr'?
-Message-ID: <202304250917.i4zlsyhJ-lkp@intel.com>
+To: Isaku Yamahata <isaku.yamahata@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 55/338]
+ arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type
+Message-ID: <202304250930.X9ICXdpc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,101 +47,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git rcu/rcutop-debugobj
-head:   bb4ed72d010d114a825cba50a2f910b8a6bdadf7
-commit: 2df956d971601d26c6568dd888fa0398f20e29d1 [3/4] rcu/debug: Add debugfs nodes to read data
-config: riscv-randconfig-r021-20230425 (https://download.01.org/0day-ci/archive/20230425/202304250917.i4zlsyhJ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   abaa3072a8763b7a6276df61d205bf33eb2f31a5
+commit: 627dfa66ca7a1fa5af2927650f2e9d8a28b67a24 [55/338] KVM: TDX: Add C wrapper functions for SEAMCALLs to the TDX module
+config: i386-randconfig-r031-20230424 (https://download.01.org/0day-ci/archive/20230425/202304250930.X9ICXdpc-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git/commit/?id=2df956d971601d26c6568dd888fa0398f20e29d1
-        git remote add jfern https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git
-        git fetch --no-tags jfern rcu/rcutop-debugobj
-        git checkout 2df956d971601d26c6568dd888fa0398f20e29d1
+        # https://github.com/intel/tdx/commit/627dfa66ca7a1fa5af2927650f2e9d8a28b67a24
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout 627dfa66ca7a1fa5af2927650f2e9d8a28b67a24
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hwmon/pmbus/ drivers/rtc/ kernel/rcu/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304250917.i4zlsyhJ-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304250930.X9ICXdpc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from kernel/rcu/tree.c:70:
-   kernel/rcu/debug.h:52:5: warning: no previous prototype for function 'rcu_debug_cb_done' [-Wmissing-prototypes]
-   int rcu_debug_cb_done(struct rcu_data *rdp, void* ip_ptr, struct rcu_head_debug_data *data)
-       ^
-   kernel/rcu/debug.h:52:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int rcu_debug_cb_done(struct rcu_data *rdp, void* ip_ptr, struct rcu_head_debug_data *data)
-   ^
-   static 
->> kernel/rcu/debug.h:130:26: error: use of undeclared identifier 'rcu_head_debug_data'; did you mean 'rcuhead_debug_descr'?
-           if (WARN_ON_ONCE(sizeof(rcu_head_debug_data) > CONFIG_DEBUG_OBJECTS_RCU_HEAD_SIZE))
-                                   ^~~~~~~~~~~~~~~~~~~
-                                   rcuhead_debug_descr
-   include/asm-generic/bug.h:110:25: note: expanded from macro 'WARN_ON_ONCE'
-           int __ret_warn_on = !!(condition);                      \
-                                  ^
-   kernel/rcu/rcu.h:187:37: note: 'rcuhead_debug_descr' declared here
-   extern const struct debug_obj_descr rcuhead_debug_descr;
-                                       ^
-   In file included from kernel/rcu/tree.c:70:
->> kernel/rcu/debug.h:130:49: error: use of undeclared identifier 'CONFIG_DEBUG_OBJECTS_RCU_HEAD_SIZE'
-           if (WARN_ON_ONCE(sizeof(rcu_head_debug_data) > CONFIG_DEBUG_OBJECTS_RCU_HEAD_SIZE))
-                                                          ^
-   kernel/rcu/debug.h:126:13: warning: no previous prototype for function 'rcu_debug_init' [-Wmissing-prototypes]
-   void __init rcu_debug_init(void)
-               ^
-   kernel/rcu/debug.h:126:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init rcu_debug_init(void)
-   ^
-   static 
-   kernel/rcu/tree.c:2051:5: warning: no previous prototype for function 'rcu_debug_cb_done_lock' [-Wmissing-prototypes]
-   int rcu_debug_cb_done_lock(struct rcu_data *rdp, void *ip, struct rcu_head_debug_data *data)
-       ^
-   kernel/rcu/tree.c:2051:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int rcu_debug_cb_done_lock(struct rcu_data *rdp, void *ip, struct rcu_head_debug_data *data)
-   ^
-   static 
-   3 warnings and 2 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DEBUG_OBJECTS
-   Depends on [n]: DEBUG_KERNEL [=n]
-   Selected by [y]:
-   - RCU_DEBUGFS [=y] && DEBUG_FS [=y]
+   In file included from arch/x86/kernel/asm-offsets.c:22:
+>> arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type [-Wshift-count-overflow]
+                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+                                                                        ^~~~~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:24:28: note: expanded from macro 'TDX_SEAMCALL_UD'
+   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
+                                            ^~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:20:25: note: expanded from macro 'TDX_SW_ERROR'
+   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
+                                            ^~~~~~~~~
+   arch/x86/include/asm/tdx.h:19:21: note: expanded from macro 'TDX_ERROR'
+   #define TDX_ERROR                       _BITUL(63)
+                                           ^~~~~~~~~~
+   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
+   #define _BITUL(x)       (_UL(1) << (x))
+                                   ^  ~~~
+   1 warning generated.
+--
+   In file included from arch/x86/kernel/asm-offsets.c:22:
+>> arch/x86/include/asm/tdx.h:114:49: warning: shift count >= width of type [-Wshift-count-overflow]
+                                struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+                                                                        ^~~~~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:24:28: note: expanded from macro 'TDX_SEAMCALL_UD'
+   #define TDX_SEAMCALL_UD                 (TDX_SW_ERROR | X86_TRAP_UD)
+                                            ^~~~~~~~~~~~
+   arch/x86/include/asm/tdx.h:20:25: note: expanded from macro 'TDX_SW_ERROR'
+   #define TDX_SW_ERROR                    (TDX_ERROR | GENMASK_ULL(47, 40))
+                                            ^~~~~~~~~
+   arch/x86/include/asm/tdx.h:19:21: note: expanded from macro 'TDX_ERROR'
+   #define TDX_ERROR                       _BITUL(63)
+                                           ^~~~~~~~~~
+   include/uapi/linux/const.h:28:27: note: expanded from macro '_BITUL'
+   #define _BITUL(x)       (_UL(1) << (x))
+                                   ^  ~~~
+   1 warning generated.
 
 
-vim +130 kernel/rcu/debug.h
+vim +114 arch/x86/include/asm/tdx.h
 
-   125	
-   126	void __init rcu_debug_init(void)
-   127	{
-   128		struct dentry *rcu_dir, *rcu_file;
-   129	
- > 130		if (WARN_ON_ONCE(sizeof(rcu_head_debug_data) > CONFIG_DEBUG_OBJECTS_RCU_HEAD_SIZE))
-   131			return;
-   132	
-   133		rcu_dir = debugfs_create_dir("rcu", NULL);
-   134		if (!rcu_dir || IS_ERR(rcu_dir))
-   135			return;
-   136	
-   137		rcu_file = debugfs_create_file("callbacks", 0444, rcu_dir, NULL,
-   138				&rcu_debug_fops);
-   139		if (!rcu_file)
-   140			debugfs_remove(rcu_dir);
-   141	}
-   142	#else
-   143	int rcu_debug_cb_done(struct rcu_data *rdp, void* ip_ptr, struct rcu_head_debug_data *data)
-   144	{
-   145		return -1;
-   146	}
-   147	
+   102	
+   103	#ifdef CONFIG_INTEL_TDX_HOST
+   104	bool platform_tdx_enabled(void);
+   105	int tdx_cpu_enable(void);
+   106	int tdx_enable(void);
+   107	u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
+   108		       struct tdx_module_output *out);
+   109	#else	/* !CONFIG_INTEL_TDX_HOST */
+   110	static inline bool platform_tdx_enabled(void) { return false; }
+   111	static inline int tdx_cpu_enable(void) { return -EINVAL; }
+   112	static inline int tdx_enable(void)  { return -EINVAL; }
+   113	static inline u64 __seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
+ > 114				     struct tdx_module_output *out) { return TDX_SEAMCALL_UD; };
+   115	#endif	/* CONFIG_INTEL_TDX_HOST */
+   116	
 
 -- 
 0-DAY CI Kernel Test Service
