@@ -1,123 +1,164 @@
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04263C0A
-	for <llvm@lists.linux.dev>; Tue, 25 Apr 2023 16:49:02 +0000 (UTC)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-76353eb51acso958538539f.0
-        for <llvm@lists.linux.dev>; Tue, 25 Apr 2023 09:49:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682441342; x=1685033342;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mvlu2S6IOj0P66TUGmZILlb9E1nqtEeM3M9ymLjgqa0=;
-        b=NOX0+NSuYZZ4wY7W2WoY3gBm79kvTbvodP/TtJx0rD328x3kRdxhyt8maCd4dSy2lZ
-         HrnF94julDCA8TJCfAipoS3pOAmXDAp+p9MCuRTO6ALhapKXxuVIVtxFzo2IfKTZeuZi
-         FW4Z8j+RUzPv0KlXVqPVtjFPRzswi/+UABUu/oTP2/0raB01R5uTvZ+yiqdoIZ7WHr3L
-         /HX/OI5uucNCWMfe/yarmwNZHO1HJoy09mIa/s5HBqe0fBSewJNiTA0rv2+iR28je+r+
-         UAjfeHwZaOqUxUl80kMgtuFAh3/ebzVWjDnPOWZ+tg2cFGgHj3ux732VNF3c2EvQeh3I
-         5OcQ==
-X-Gm-Message-State: AAQBX9fEgA/id3SMiFvdELS96oy3FoEK8qD0IT0bXA+2wAs7Pfq4+7Jd
-	UKE/ykC+lKhNEGK0Z30/4xECwNYkYEcLPILu2E//+ZW71UtX
-X-Google-Smtp-Source: AKy350b+GZPyDeJcZB0TQ5O5WE7vay9NPoF6gobFS/+212QAsO0QFx6Pr3opvz59pXBSW+RUWoYoLJf2arXpwRJmoAtf75RDaf/I
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9F23C0A;
+	Tue, 25 Apr 2023 16:58:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682441894; x=1713977894;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YqqMtoC9cWi/0V4GCglSo1y9g8dhnon56YoIruvJfJw=;
+  b=nu+30ERRgjGkl4MIqMzZcflqSe519FF3uF2odjbe3gLyhfcH6mcC3Ltr
+   qLtFYp4+ZyPaZx/JF0IaCaSkylBfWpSv3O4QQ36gn58WGdPfeAmFy/Iqi
+   CQvqoM9YEnn791O48PoNsMpWq46ABNWKrjsfWGfEwpryOhAkBGSc4htOk
+   7WKOg93Rbzl0TATlAadlK8/XuMnO61ieEsoamsVS7RwWZXZIw9IjucM9Y
+   cUk2kaNVo/Vr5Smr41HnJiHDhbzXD8nukov5POg4K+GRgBFehpb0YY4hy
+   wSSkoKCvd0jBiwCS99my9HokSl7OqPTV3HECI7hC63ldzAh9KK4cOTbd6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="335736979"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="335736979"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 09:58:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="696262494"
+X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
+   d="scan'208";a="696262494"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2023 09:57:52 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1prLzD-000jbM-1u;
+	Tue, 25 Apr 2023 16:57:51 +0000
+Date: Wed, 26 Apr 2023 00:56:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ziqin Liu <ziqin_l@hust.edu.cn>, dzm91@hust.edu.cn,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	hust-os-kernel-patches@googlegroups.com,
+	Ziqin Liu <ziqin_l@hust.edu.cn>, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] clk: mediatek: clk-mt8173: fix memory leak in
+ clk_mt8173_apmixed_probe
+Message-ID: <202304260006.3Am8FGjt-lkp@intel.com>
+References: <20230425132601.106181-1-ziqin_l@hust.edu.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3285:b0:761:22af:1e3f with SMTP id
- d5-20020a056602328500b0076122af1e3fmr7113021ioz.3.1682441341846; Tue, 25 Apr
- 2023 09:49:01 -0700 (PDT)
-Date: Tue, 25 Apr 2023 09:49:01 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000894c7e05fa2be628@google.com>
-Subject: [syzbot] [ntfs3?] WARNING in evict
-From: syzbot <syzbot+6310a7df6baca255f9cc@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
-	ndesaulniers@google.com, ntfs3@lists.linux.dev, 
-	syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425132601.106181-1-ziqin_l@hust.edu.cn>
 
-Hello,
+Hi Ziqin,
 
-syzbot found the following issue on:
+kernel test robot noticed the following build errors:
 
-HEAD commit:    2af3e53a4dc0 Merge tag 'drm-fixes-2023-04-21' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12f3bf57c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4afb87f3ec27b7fd
-dashboard link: https://syzkaller.appspot.com/bug?extid=6310a7df6baca255f9cc
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on linus/master v6.3 next-20230425]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Unfortunately, I don't have any reproducer for this issue yet.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ziqin-Liu/clk-mediatek-clk-mt8173-fix-memory-leak-in-clk_mt8173_apmixed_probe/20230425-212917
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230425132601.106181-1-ziqin_l%40hust.edu.cn
+patch subject: [PATCH] clk: mediatek: clk-mt8173: fix memory leak in clk_mt8173_apmixed_probe
+config: arm64-randconfig-r011-20230423 (https://download.01.org/0day-ci/archive/20230426/202304260006.3Am8FGjt-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/cb4be4dcd48924984a6d0e3df7809cfc26286032
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ziqin-Liu/clk-mediatek-clk-mt8173-fix-memory-leak-in-clk_mt8173_apmixed_probe/20230425-212917
+        git checkout cb4be4dcd48924984a6d0e3df7809cfc26286032
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/mediatek/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/845f21360f64/disk-2af3e53a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3b9925dc3504/vmlinux-2af3e53a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/021758261c12/bzImage-2af3e53a.xz
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304260006.3Am8FGjt-lkp@intel.com/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6310a7df6baca255f9cc@syzkaller.appspotmail.com
+All errors (new ones prefixed by >>):
 
-loop5: detected capacity change from 0 to 4096
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(1)
-WARNING: CPU: 0 PID: 4955 at kernel/locking/lockdep.c:232 hlock_class kernel/locking/lockdep.c:232 [inline]
-WARNING: CPU: 0 PID: 4955 at kernel/locking/lockdep.c:232 mark_lock+0x14c/0x340 kernel/locking/lockdep.c:4613
-Modules linked in:
-CPU: 0 PID: 4955 Comm: syz-executor.5 Not tainted 6.3.0-rc7-syzkaller-00152-g2af3e53a4dc0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-RIP: 0010:hlock_class kernel/locking/lockdep.c:232 [inline]
-RIP: 0010:mark_lock+0x14c/0x340 kernel/locking/lockdep.c:4613
-Code: 03 42 0f b6 04 28 84 c0 0f 85 d2 01 00 00 83 3d 01 fd e8 0c 00 75 9d 48 c7 c7 40 7c ea 8a 48 c7 c6 e0 7e ea 8a e8 14 fb e7 ff <0f> 0b eb 86 e8 7b 47 ff ff 85 c0 0f 84 33 01 00 00 45 89 f6 4c 89
-RSP: 0000:ffffc90005487778 EFLAGS: 00010046
-RAX: 15fb29a09693de00 RBX: 0000000000001b00 RCX: 0000000000040000
-RDX: ffffc9000e3ef000 RSI: 0000000000007ab5 RDI: 0000000000007ab6
-RBP: 0000000000000002 R08: ffffffff81528022 R09: ffffed101730515b
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888046b9c4b0
-R13: dffffc0000000000 R14: 0000000000000004 R15: ffff888046b9c4df
-FS:  00007f42a5e55700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f7ddc767000 CR3: 0000000053d39000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- mark_usage kernel/locking/lockdep.c:4544 [inline]
- __lock_acquire+0xc0d/0x1f80 kernel/locking/lockdep.c:5010
- lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- inode_sb_list_del fs/inode.c:503 [inline]
- evict+0x161/0x620 fs/inode.c:654
- ntfs_fill_super+0x3ffc/0x47f0 fs/ntfs3/super.c:1239
- get_tree_bdev+0x402/0x620 fs/super.c:1303
- vfs_get_tree+0x8c/0x270 fs/super.c:1510
- do_new_mount+0x28f/0xae0 fs/namespace.c:3042
- do_mount fs/namespace.c:3385 [inline]
- __do_sys_mount fs/namespace.c:3594 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3571
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f42a508d69a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f42a5e54f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 000000000001f6cc RCX: 00007f42a508d69a
-RDX: 000000002001f700 RSI: 000000002001f740 RDI: 00007f42a5e54fe0
-RBP: 00007f42a5e55020 R08: 00007f42a5e55020 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 000000002001f700
-R13: 000000002001f740 R14: 00007f42a5e54fe0 R15: 000000002001f780
- </TASK>
+>> drivers/clk/mediatek/clk-mt8173-apmixedsys.c:149:23: error: passing 'struct device' to parameter of incompatible type 'struct device *'; take the address with &
+           base = devm_of_iomap(pdev->dev, node, 0, NULL);
+                                ^~~~~~~~~
+                                &
+   include/linux/device.h:241:44: note: passing argument to parameter 'dev' here
+   void __iomem *devm_of_iomap(struct device *dev,
+                                              ^
+   1 error generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +149 drivers/clk/mediatek/clk-mt8173-apmixedsys.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+   139	
+   140	static int clk_mt8173_apmixed_probe(struct platform_device *pdev)
+   141	{
+   142		const u8 *fhctl_node = "mediatek,mt8173-fhctl";
+   143		struct device_node *node = pdev->dev.of_node;
+   144		struct clk_hw_onecell_data *clk_data;
+   145		void __iomem *base;
+   146		struct clk_hw *hw;
+   147		int r;
+   148	
+ > 149		base = devm_of_iomap(pdev->dev, node, 0, NULL);
+   150		if (!base)
+   151			return PTR_ERR(base);
+   152	
+   153		clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
+   154		if (IS_ERR_OR_NULL(clk_data))
+   155			return -ENOMEM;
+   156	
+   157		fhctl_parse_dt(fhctl_node, pllfhs, ARRAY_SIZE(pllfhs));
+   158		r = mtk_clk_register_pllfhs(node, plls, ARRAY_SIZE(plls),
+   159					    pllfhs, ARRAY_SIZE(pllfhs), clk_data);
+   160		if (r)
+   161			goto free_clk_data;
+   162	
+   163		hw = mtk_clk_register_ref2usb_tx("ref2usb_tx", "clk26m", base + REGOFF_REF2USB);
+   164		if (IS_ERR(hw)) {
+   165			r = PTR_ERR(hw);
+   166			dev_err(&pdev->dev, "Failed to register ref2usb_tx: %d\n", r);
+   167			goto unregister_plls;
+   168		}
+   169		clk_data->hws[CLK_APMIXED_REF2USB_TX] = hw;
+   170	
+   171		hw = devm_clk_hw_register_divider(&pdev->dev, "hdmi_ref", "tvdpll_594m", 0,
+   172						  base + REGOFF_HDMI_REF, 16, 3,
+   173						  CLK_DIVIDER_POWER_OF_TWO, NULL);
+   174		clk_data->hws[CLK_APMIXED_HDMI_REF] = hw;
+   175	
+   176		r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+   177		if (r)
+   178			goto unregister_ref2usb;
+   179	
+   180		return 0;
+   181	
+   182	unregister_ref2usb:
+   183		mtk_clk_unregister_ref2usb_tx(clk_data->hws[CLK_APMIXED_REF2USB_TX]);
+   184	unregister_plls:
+   185		mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
+   186					  ARRAY_SIZE(pllfhs), clk_data);
+   187	free_clk_data:
+   188		mtk_free_clk_data(clk_data);
+   189		return r;
+   190	}
+   191	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
