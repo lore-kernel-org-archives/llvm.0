@@ -1,54 +1,44 @@
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1917B;
-	Tue, 25 Apr 2023 06:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6B57B;
+	Tue, 25 Apr 2023 07:23:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682405546; x=1713941546;
+  t=1682407405; x=1713943405;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hZeZYjSCd7dp30NG35QgMPJdjsADF6mllQwKMfh6V7o=;
-  b=MAgq/0PYSD6ziArBii7WcDv1mbT99/0HGcENBv44Px0IUvkPlFo7Elme
-   8mV0ycmZ62DyWge2Ui5OU0h1T9I3v6ScphNfGF3D9dF/VfwoiK7cb+jmb
-   unxhtwGN9n5Pu/pzwjoy/xnhSE1qc2IyQuDDQmawJQ87JC89cBsqy8xc0
-   44+Bwe/sNJgqEO+UTmcxKN8XqFVyW84U/RVedLoBvZvOwCwNUqtNmHPoy
-   o7Su06sLK0pRok1pI5yKLeeu5U1aWEX+/RuZuRydLT0YeikID28mDSeiM
-   dIIhkXBv4UV62Yh+QZMf89rqhsocnWUqI2fFzQB2KV1n73YBwfmQ4yFYC
+  bh=ZLLyogxFQloFVQPD76GnGG5Mb+uYLYFcxhvnkSmyb0k=;
+  b=YY2TH5evXVQwf8JDOr6c6uoJLJ5CBPI5EHxyMzE5W4L/KEnbgjxfmoKV
+   nuI6b+8YbGdSTZUIVHh+yylcngwZffejAxNLVA42vzSOKhBzl03xcXJt6
+   vq1033trl2uv+rTt9glFly8o+ob09YihakDf3rd0afD//mKQHVkURWWsr
+   wjshjS40uRMUPCJ0a27fQOc4k3zpnuWEoCpUCiRKJUIAUP6gtmdLnFrqB
+   rjbsvvwYXvvhP5a6HOLP4tfWMCtUclbveCAgR/bx2z0n1Ic6Nk9b9IXTv
+   WbcRCz9Eg+OaAyAi3Xrx1LutV8+We5kThdJaDOhpOSgBOpAKUxV3DUZ+M
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345433065"
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="345439910"
 X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="345433065"
+   d="scan'208";a="345439910"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 23:52:25 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 00:23:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="696061774"
+X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="696072106"
 X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="696061774"
+   d="scan'208";a="696072106"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Apr 2023 23:52:21 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2023 00:23:23 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1prCXF-000j7E-0O;
-	Tue, 25 Apr 2023 06:52:21 +0000
-Date: Tue, 25 Apr 2023 14:52:02 +0800
+	id 1prD1H-000j9O-0U;
+	Tue, 25 Apr 2023 07:23:23 +0000
+Date: Tue, 25 Apr 2023 15:22:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
-	KVMARM <kvmarm@lists.linux.dev>,
-	ARMLinux <linux-arm-kernel@lists.infradead.org>,
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	James Morse <james.morse@arm.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Fuad Tabba <tabba@google.com>, Reiji Watanabe <reijiw@google.com>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v7 2/6] KVM: arm64: Save ID registers' sanitized value
- per guest
-Message-ID: <202304251438.2kYTSPa2-lkp@intel.com>
-References: <20230424234704.2571444-3-jingzhangos@google.com>
+To: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v3] average: change non-init state and add check for
+ added values
+Message-ID: <202304251527.UYFJBOVz-lkp@intel.com>
+References: <20230424210430.390592-1-benjamin.beichler@uni-rostock.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,77 +47,209 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424234704.2571444-3-jingzhangos@google.com>
+In-Reply-To: <20230424210430.390592-1-benjamin.beichler@uni-rostock.de>
 
-Hi Jing,
+Hi Benjamin,
 
+[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 6a8f57ae2eb07ab39a6f0ccad60c760743051026]
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v6.3 next-20230424]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jing-Zhang/KVM-arm64-Move-CPU-ID-feature-registers-emulation-into-a-separate-file/20230425-074908
-base:   6a8f57ae2eb07ab39a6f0ccad60c760743051026
-patch link:    https://lore.kernel.org/r/20230424234704.2571444-3-jingzhangos%40google.com
-patch subject: [PATCH v7 2/6] KVM: arm64: Save ID registers' sanitized value per guest
-config: arm64-randconfig-r012-20230425 (https://download.01.org/0day-ci/archive/20230425/202304251438.2kYTSPa2-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Beichler/average-change-non-init-state-and-add-check-for-added-values/20230425-050642
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20230424210430.390592-1-benjamin.beichler%40uni-rostock.de
+patch subject: [RFC PATCH v3] average: change non-init state and add check for added values
+config: arm-randconfig-r025-20230424 (https://download.01.org/0day-ci/archive/20230425/202304251527.UYFJBOVz-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/cca571c516149d39bbaf1b5e916df617940458a6
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/5dcb0037ea1da8b44284784d7c5d62aab16abad4
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jing-Zhang/KVM-arm64-Move-CPU-ID-feature-registers-emulation-into-a-separate-file/20230425-074908
-        git checkout cca571c516149d39bbaf1b5e916df617940458a6
+        git fetch --no-tags linux-review Benjamin-Beichler/average-change-non-init-state-and-add-check-for-added-values/20230425-050642
+        git checkout 5dcb0037ea1da8b44284784d7c5d62aab16abad4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/ net/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304251438.2kYTSPa2-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304251527.UYFJBOVz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/arm64/kernel/asm-offsets.c:16:
-   In file included from include/linux/kvm_host.h:45:
->> arch/arm64/include/asm/kvm_host.h:1109:20: error: no member named 'config_lock' in 'struct kvm_arch'
-           mutex_lock(&arch->config_lock);
-                       ~~~~  ^
-   arch/arm64/include/asm/kvm_host.h:1111:22: error: no member named 'config_lock' in 'struct kvm_arch'
-           mutex_unlock(&arch->config_lock);
-                         ~~~~  ^
-   arch/arm64/include/asm/kvm_host.h:1118:20: error: no member named 'config_lock' in 'struct kvm_arch'
-           mutex_lock(&arch->config_lock);
-                       ~~~~  ^
-   arch/arm64/include/asm/kvm_host.h:1120:22: error: no member named 'config_lock' in 'struct kvm_arch'
-           mutex_unlock(&arch->config_lock);
-                         ~~~~  ^
-   4 errors generated.
-   make[2]: *** [scripts/Makefile.build:114: arch/arm64/kernel/asm-offsets.s] Error 1
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:1286: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> drivers/gpu/drm/drm_self_refresh_helper.c:56:1: error: expected ')'
+   DECLARE_EWMA(psr_time, 4, 4)
+   ^
+   include/linux/average.h:50:10: note: expanded from macro 'DECLARE_EWMA'
+                                                             unsigned long val)    \
+                                                             ^
+   drivers/gpu/drm/drm_self_refresh_helper.c:56:1: note: to match this '('
+   include/linux/average.h:49:44: note: expanded from macro 'DECLARE_EWMA'
+                   static inline void ewma_##name##_init_val(struct ewma_##name *e \
+                                                            ^
+>> drivers/gpu/drm/drm_self_refresh_helper.c:56:1: error: use of undeclared identifier 'val'
+   DECLARE_EWMA(psr_time, 4, 4)
+   ^
+   include/linux/average.h:53:17: note: expanded from macro 'DECLARE_EWMA'
+                   e->internal = val;                                              \
+                                 ^
+   2 errors generated.
+--
+   In file included from net/mac80211/main.c:28:
+   In file included from net/mac80211/ieee80211_i.h:34:
+>> net/mac80211/sta_info.h:126:1: error: expected ')'
+   DECLARE_EWMA(avg_signal, 10, 8)
+   ^
+   include/linux/average.h:50:10: note: expanded from macro 'DECLARE_EWMA'
+                                                             unsigned long val)    \
+                                                             ^
+   net/mac80211/sta_info.h:126:1: note: to match this '('
+   include/linux/average.h:49:44: note: expanded from macro 'DECLARE_EWMA'
+                   static inline void ewma_##name##_init_val(struct ewma_##name *e \
+                                                            ^
+   In file included from net/mac80211/main.c:28:
+   In file included from net/mac80211/ieee80211_i.h:34:
+>> net/mac80211/sta_info.h:126:1: error: use of undeclared identifier 'val'
+   DECLARE_EWMA(avg_signal, 10, 8)
+   ^
+   include/linux/average.h:53:17: note: expanded from macro 'DECLARE_EWMA'
+                   e->internal = val;                                              \
+                                 ^
+   In file included from net/mac80211/main.c:28:
+   In file included from net/mac80211/ieee80211_i.h:34:
+   net/mac80211/sta_info.h:367:1: error: expected ')'
+   DECLARE_EWMA(mesh_fail_avg, 20, 8)
+   ^
+   include/linux/average.h:50:10: note: expanded from macro 'DECLARE_EWMA'
+                                                             unsigned long val)    \
+                                                             ^
+   net/mac80211/sta_info.h:367:1: note: to match this '('
+   include/linux/average.h:49:44: note: expanded from macro 'DECLARE_EWMA'
+                   static inline void ewma_##name##_init_val(struct ewma_##name *e \
+                                                            ^
+   In file included from net/mac80211/main.c:28:
+   In file included from net/mac80211/ieee80211_i.h:34:
+   net/mac80211/sta_info.h:367:1: error: use of undeclared identifier 'val'
+   DECLARE_EWMA(mesh_fail_avg, 20, 8)
+   ^
+   include/linux/average.h:53:17: note: expanded from macro 'DECLARE_EWMA'
+                   e->internal = val;                                              \
+                                 ^
+   In file included from net/mac80211/main.c:28:
+   In file included from net/mac80211/ieee80211_i.h:34:
+   net/mac80211/sta_info.h:368:1: error: expected ')'
+   DECLARE_EWMA(mesh_tx_rate_avg, 8, 16)
+   ^
+   include/linux/average.h:50:10: note: expanded from macro 'DECLARE_EWMA'
+                                                             unsigned long val)    \
+                                                             ^
+   net/mac80211/sta_info.h:368:1: note: to match this '('
+   include/linux/average.h:49:44: note: expanded from macro 'DECLARE_EWMA'
+                   static inline void ewma_##name##_init_val(struct ewma_##name *e \
+                                                            ^
+   In file included from net/mac80211/main.c:28:
+   In file included from net/mac80211/ieee80211_i.h:34:
+   net/mac80211/sta_info.h:368:1: error: use of undeclared identifier 'val'
+   DECLARE_EWMA(mesh_tx_rate_avg, 8, 16)
+   ^
+   include/linux/average.h:53:17: note: expanded from macro 'DECLARE_EWMA'
+                   e->internal = val;                                              \
+                                 ^
+   In file included from net/mac80211/main.c:28:
+   In file included from net/mac80211/ieee80211_i.h:34:
+   net/mac80211/sta_info.h:427:1: error: expected ')'
+   DECLARE_EWMA(signal, 10, 8)
+   ^
+   include/linux/average.h:50:10: note: expanded from macro 'DECLARE_EWMA'
+                                                             unsigned long val)    \
+                                                             ^
+   net/mac80211/sta_info.h:427:1: note: to match this '('
+   include/linux/average.h:49:44: note: expanded from macro 'DECLARE_EWMA'
+                   static inline void ewma_##name##_init_val(struct ewma_##name *e \
+                                                            ^
+   In file included from net/mac80211/main.c:28:
+   In file included from net/mac80211/ieee80211_i.h:34:
+   net/mac80211/sta_info.h:427:1: error: use of undeclared identifier 'val'
+   DECLARE_EWMA(signal, 10, 8)
+   ^
+   include/linux/average.h:53:17: note: expanded from macro 'DECLARE_EWMA'
+                   e->internal = val;                                              \
+                                 ^
+   In file included from net/mac80211/main.c:28:
+>> net/mac80211/ieee80211_i.h:468:1: error: expected ')'
+   DECLARE_EWMA(beacon_signal, 4, 4)
+   ^
+   include/linux/average.h:50:10: note: expanded from macro 'DECLARE_EWMA'
+                                                             unsigned long val)    \
+                                                             ^
+   net/mac80211/ieee80211_i.h:468:1: note: to match this '('
+   include/linux/average.h:49:44: note: expanded from macro 'DECLARE_EWMA'
+                   static inline void ewma_##name##_init_val(struct ewma_##name *e \
+                                                            ^
+   In file included from net/mac80211/main.c:28:
+>> net/mac80211/ieee80211_i.h:468:1: error: use of undeclared identifier 'val'
+   DECLARE_EWMA(beacon_signal, 4, 4)
+   ^
+   include/linux/average.h:53:17: note: expanded from macro 'DECLARE_EWMA'
+                   e->internal = val;                                              \
+                                 ^
+   10 errors generated.
+--
+   In file included from net/batman-adv/bat_algo.c:7:
+   In file included from net/batman-adv/main.h:218:
+>> net/batman-adv/types.h:578:1: error: expected ')'
+   DECLARE_EWMA(throughput, 10, 8)
+   ^
+   include/linux/average.h:50:10: note: expanded from macro 'DECLARE_EWMA'
+                                                             unsigned long val)    \
+                                                             ^
+   net/batman-adv/types.h:578:1: note: to match this '('
+   include/linux/average.h:49:44: note: expanded from macro 'DECLARE_EWMA'
+                   static inline void ewma_##name##_init_val(struct ewma_##name *e \
+                                                            ^
+   In file included from net/batman-adv/bat_algo.c:7:
+   In file included from net/batman-adv/main.h:218:
+>> net/batman-adv/types.h:578:1: error: use of undeclared identifier 'val'
+   DECLARE_EWMA(throughput, 10, 8)
+   ^
+   include/linux/average.h:53:17: note: expanded from macro 'DECLARE_EWMA'
+                   e->internal = val;                                              \
+                                 ^
+   2 errors generated.
+--
+>> drivers/net/virtio_net.c:54:1: error: expected ')'
+   DECLARE_EWMA(pkt_len, 0, 64)
+   ^
+   include/linux/average.h:50:10: note: expanded from macro 'DECLARE_EWMA'
+                                                             unsigned long val)    \
+                                                             ^
+   drivers/net/virtio_net.c:54:1: note: to match this '('
+   include/linux/average.h:49:44: note: expanded from macro 'DECLARE_EWMA'
+                   static inline void ewma_##name##_init_val(struct ewma_##name *e \
+                                                            ^
+>> drivers/net/virtio_net.c:54:1: error: use of undeclared identifier 'val'
+   DECLARE_EWMA(pkt_len, 0, 64)
+   ^
+   include/linux/average.h:53:17: note: expanded from macro 'DECLARE_EWMA'
+                   e->internal = val;                                              \
+                                 ^
+   2 errors generated.
 
 
-vim +1109 arch/arm64/include/asm/kvm_host.h
+vim +56 drivers/gpu/drm/drm_self_refresh_helper.c
 
-  1104	
-  1105	static inline u64 idreg_read(struct kvm_arch *arch, u32 id)
-  1106	{
-  1107		u64 val;
-  1108	
-> 1109		mutex_lock(&arch->config_lock);
-  1110		val = _idreg_read(arch, id);
-  1111		mutex_unlock(&arch->config_lock);
-  1112	
-  1113		return val;
-  1114	}
-  1115	
+d4da4e33341c5e Sean Paul 2019-09-18  55  
+d4da4e33341c5e Sean Paul 2019-09-18 @56  DECLARE_EWMA(psr_time, 4, 4)
+d4da4e33341c5e Sean Paul 2019-09-18  57  
 
 -- 
 0-DAY CI Kernel Test Service
