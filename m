@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A96D185D
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 08:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE717EDE
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 08:32:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682496637;
+	s=mimecast20190719; t=1682497928;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=Yp7Esql2atoxfF5YQuiUN6bysW6Jowectowbp0nb26k=;
-	b=dffMIm1Pa6qMLGHTonbvuSpT6Vvyrk42/6BtehLswLLA3u89MyA6R1WleabFTORVH7ZWEO
-	O2oIhfjXOMGvso1JhebYEI2Jc8pXqsXISRc2tsJMcQlcuybiJiiJdlh+8m7Uo+olGM/hQV
-	D2bsTR1dVxVi++Qrvr428qt8adm8pP0=
+	bh=eNLXppWDfd8wDbiQEVUoEBWKrSmvuwBVZWsLPhu4q7s=;
+	b=bfiGnVXjWV4uU+HsOJmmfW4vJ/p/p2NyAjgcO6FAKYetg1hpN38zNm3Bb/42fhAxGnV1KK
+	ItQ2ftkyOiYMk93w/UpnhyVvTGN5AQ+7/GbQBNyWsHFxnmEJ+DPoEsJT8me1OOBexMuvcA
+	8MsF2dZAXxbBtcQDUXfwaDxDlPo18mw=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-474-atmCMFq8Mh6E7co7yUKuNw-1; Wed, 26 Apr 2023 04:10:35 -0400
-X-MC-Unique: atmCMFq8Mh6E7co7yUKuNw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-381-rTwOxyHINm-RfWBenfArCw-1; Wed, 26 Apr 2023 04:32:06 -0400
+X-MC-Unique: rTwOxyHINm-RfWBenfArCw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B0FC185A78F
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 08:10:35 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35CEDA0F38A
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 08:32:06 +0000 (UTC)
 Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 3409C14171FF;
-	Wed, 26 Apr 2023 08:10:35 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 0FD96492C18;
+	Wed, 26 Apr 2023 08:32:06 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 35 of 353): Test report for master
- (6.3.0, mainline.kernel.org-clang, 736b378b)
-Date: Wed, 26 Apr 2023 08:10:35 -0000
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 13 of 353): Test report for master
+ (6.3.0, mainline.kernel.org-clang, d53c3eaa)
+Date: Wed, 26 Apr 2023 08:32:06 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <89596.123042604103500178@us-mta-474.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Message-Id: <89124.123042604320602046@us-mta-381.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,11 +53,11 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'slab-for-6.4' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/vbabka/slab
+    Commit message: Merge tag 'soc-dt-6.4' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/soc/soc
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86018
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86013
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
@@ -81,17 +81,6 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
             Affected tests:
                   x86_64 (debug) - xfstests - nfsv4.2
-        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
- waiting the udev queue being empty
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1470
-            Affected tests:
-                  x86_64 - Storage - blktests - nvmeof-mp
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                   s390x - Storage - blktests - blk
         Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
             URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
             Affected tests:
@@ -121,6 +110,11 @@ o such file or directory
 l-tests/-/issues/1611
             Affected tests:
                  aarch64 - Firmware test suite
+        Issue: xfstests - _check_xfs_filesystem: filesystem on /dev/nvme0n1=
+p4 is inconsistent (r)
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1989409
+            Affected tests:
+                 aarch64 - xfstests - btrfs
 
 
 
