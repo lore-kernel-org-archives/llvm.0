@@ -1,132 +1,144 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982CAC2E0;
-	Wed, 26 Apr 2023 07:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682492923; x=1714028923;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=now8KsnWoa2Jc2GJn0vcsUknyuSvaNig3XN8wu45wj0=;
-  b=lmdS55m6B397SzbQsxyj2UHBMEwWJjiXiSGmCPe59q7fnVnArKNyDKEH
-   NzaAcIdSYXi3cxEzsZ6QVwyfr793mDyGOlxbtjBwKK+yYSANGXmxJm8nt
-   RyzJ6JK+6UJ4FvuAZmEVqKtmoLoTKkxhuLy8xGYM5pXcUfXwsdGmvvDOZ
-   O8CiSdpuZJ4Yr9c0uN0hdE8anfHWPFvpfO+iyMsF6tF3ToMMj8S+ECesp
-   zmmKGeEwRo2TlaDvHCvZaF9FFrri/pfmXkZzh86QKX03DnvGDihg/Zsl7
-   alas9aiT6k0Tq0AeQEBvQZtx3iFHI+q5R6XwsJB34xmxquB9tIdK5wAqO
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="374975774"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="374975774"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 00:08:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="940086953"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="940086953"
-Received: from lkp-server01.sh.intel.com (HELO 98ee5a99fc83) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Apr 2023 00:08:42 -0700
-Received: from kbuild by 98ee5a99fc83 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1prZGX-0000FO-0b;
-	Wed, 26 Apr 2023 07:08:37 +0000
-Date: Wed, 26 Apr 2023 15:08:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mnyman-xhci:fix_ring_expansion 2/2]
- drivers/usb/host/xhci-ring.c:300:11: warning: variable 'free' is
- uninitialized when used here
-Message-ID: <202304261531.wNaJdrf8-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A96D185D
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 08:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682496637;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Yp7Esql2atoxfF5YQuiUN6bysW6Jowectowbp0nb26k=;
+	b=dffMIm1Pa6qMLGHTonbvuSpT6Vvyrk42/6BtehLswLLA3u89MyA6R1WleabFTORVH7ZWEO
+	O2oIhfjXOMGvso1JhebYEI2Jc8pXqsXISRc2tsJMcQlcuybiJiiJdlh+8m7Uo+olGM/hQV
+	D2bsTR1dVxVi++Qrvr428qt8adm8pP0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-474-atmCMFq8Mh6E7co7yUKuNw-1; Wed, 26 Apr 2023 04:10:35 -0400
+X-MC-Unique: atmCMFq8Mh6E7co7yUKuNw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B0FC185A78F
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 08:10:35 +0000 (UTC)
+Received: from [172.64.2.76] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3409C14171FF;
+	Wed, 26 Apr 2023 08:10:35 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 35 of 353): Test report for master
+ (6.3.0, mainline.kernel.org-clang, 736b378b)
+Date: Wed, 26 Apr 2023 08:10:35 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <89596.123042604103500178@us-mta-474.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_ring_expansion
-head:   5d43e1a13408572e6bf8f7d91c9b26825f0287a9
-commit: 5d43e1a13408572e6bf8f7d91c9b26825f0287a9 [2/2] xhci: Stop unnecessary and incorrect tracking of free trbs in a ring
-config: x86_64-randconfig-a003-20230424 (https://download.01.org/0day-ci/archive/20230426/202304261531.wNaJdrf8-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?id=5d43e1a13408572e6bf8f7d91c9b26825f0287a9
-        git remote add mnyman-xhci https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git
-        git fetch --no-tags mnyman-xhci fix_ring_expansion
-        git checkout 5d43e1a13408572e6bf8f7d91c9b26825f0287a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304261531.wNaJdrf8-lkp@intel.com/
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-All warnings (new ones prefixed by >>):
+Tested-by: CKI Project <cki-project@redhat.com>
 
->> drivers/usb/host/xhci-ring.c:300:11: warning: variable 'free' is uninitialized when used here [-Wuninitialized]
-                           return free + (ring->dequeue - enq);
-                                  ^~~~
-   drivers/usb/host/xhci-ring.c:285:19: note: initialize the variable 'free' to silence this warning
-           unsigned int free;
-                            ^
-                             = 0
->> drivers/usb/host/xhci-ring.c:305:11: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-           } while (i++ <= ring->num_segs);
-                    ^
-   drivers/usb/host/xhci-ring.c:286:7: note: initialize the variable 'i' to silence this warning
-           int i;
-                ^
-                 = 0
-   2 warnings generated.
+Kernel information:
+    Commit message: Merge tag 'slab-for-6.4' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/vbabka/slab
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86018
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage - blktests - nvmeof-mp: nvmeof-mp/012: Timed out for=
+ waiting the udev queue being empty
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1470
+            Affected tests:
+                  x86_64 - Storage - blktests - nvmeof-mp
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                   s390x - Storage - blktests - blk
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
 
-vim +/free +300 drivers/usb/host/xhci-ring.c
 
-   273	
-   274	/*
-   275	 * Return number of free normal TRBs from enqueue to dequeue pointer on ring.
-   276	 * Not counting an assumed link TRB at end of each TRBS_PER_SEGMENT sized segment.
-   277	 * Only for transfer and command rings where driver is the producer, not for
-   278	 * event rings.
-   279	 */
-   280	static unsigned int xhci_num_trbs_free(struct xhci_hcd *xhci, struct xhci_ring *ring)
-   281	{
-   282		struct xhci_segment *enq_seg = ring->enq_seg;
-   283		union xhci_trb *enq = ring->enqueue;
-   284		union xhci_trb *last_on_seg;
-   285		unsigned int free;
-   286		int i;
-   287	
-   288		/* Ring might be empty even if enq != deq if enq is left on a link trb */
-   289		if (trb_is_link(enq)) {
-   290			enq_seg = enq_seg->next;
-   291			enq = enq_seg->trbs;
-   292		}
-   293	
-   294		/* Empty ring, common case, don't walk the segments */
-   295		if (enq == ring->dequeue)
-   296			return ring->num_segs * (TRBS_PER_SEGMENT - 1);
-   297	
-   298		do {
-   299			if (ring->deq_seg == enq_seg && ring->dequeue >= enq)
- > 300				return free + (ring->dequeue - enq);
-   301			last_on_seg = &enq_seg->trbs[TRBS_PER_SEGMENT - 1];
-   302			free += last_on_seg - enq;
-   303			enq_seg = enq_seg->next;
-   304			enq = enq_seg->trbs;
- > 305		} while (i++ <= ring->num_segs);
-   306	
-   307		return free;
-   308	}
-   309	
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
