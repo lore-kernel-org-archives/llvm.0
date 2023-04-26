@@ -1,84 +1,177 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA6A110B
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 01:11:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682471468;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=fENkqravDavluPnvEpmkLRr/7AsKUaPp2GJSWTPQ/ZI=;
-	b=DuCFdug1CFIRFrikMTYHeMTm1Pz/vuAhY6QOb/98QxSNGWJvWvTqRj3oYQmBkEmuj5G5SN
-	EpqhS3aXzH+GRNI7IaTUKVLccyTbTbeRki9OPVIRgiGJrP5B5diPzr/3BWVI5Yy5VGjyiI
-	wnIee52wR3tdcVv5Afk4sQ++U2UuoDY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-96-a43YYrizOqmtbnZOOL3Qeg-1; Tue, 25 Apr 2023 21:11:06 -0400
-X-MC-Unique: a43YYrizOqmtbnZOOL3Qeg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E23E51C0A584
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 01:11:05 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id CD6D94E3C5;
-	Wed, 26 Apr 2023 01:11:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4o+t77iP?= SKIPPED: Test report for master (6.3.0,
- mainline.kernel.org-clang, 4ea95696)
-Date: Wed, 26 Apr 2023 01:11:05 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9439F110B;
+	Wed, 26 Apr 2023 01:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682472131; x=1714008131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3AcK52L7rx9goG6cAWOkQxklzraiSoyB+m6ahkCeIqc=;
+  b=E/m6B/1uN2DGMt6lHHb0UXoupnXO6wJ9cDZfcI86r6TzAjM1sIRvAHeM
+   2NZ3TLRorh2fNEHrkks99sw350IOE8vUs5zzmmTmEKgRljqxX/myws35C
+   eRL3du4WOWnweIM/Pv8v7osfE3BUIzFdtExZYxdhaNAmfJ0006MxchuvU
+   ytD7ZTaQF2O3SEAfgGOlwkMolk8OeF4bITM0ko0b/dIcgEnzuW5wO04Cy
+   morD++9NCbfNLeUMUohccGApCMis82yPlw5QDh0tKRqlohDur4rcEFQ1Y
+   IA2kBhL3m3fug3uLxRZT4OBTx+KooO6uKp+aoCNnyUpsHKHKdVC7aLvkP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="335857578"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="335857578"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 18:22:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="817928243"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="817928243"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 Apr 2023 18:22:08 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1prTrE-000jwa-0c;
+	Wed, 26 Apr 2023 01:22:08 +0000
+Date: Wed, 26 Apr 2023 09:21:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>
+Subject: Re: [PATCH 27/34] maple_tree: Introduce mas_next_slot() interface
+Message-ID: <202304260907.iHgOR74J-lkp@intel.com>
+References: <20230425140955.3834476-28-Liam.Howlett@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-Message-Id: <34422.123042521110600287@us-mta-96.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425140955.3834476-28-Liam.Howlett@oracle.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Liam,
 
-    Overall result: SKIPPED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master v6.3 next-20230425]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Liam-R-Howlett/maple_tree-Fix-static-analyser-cppcheck-issue/20230425-233958
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230425140955.3834476-28-Liam.Howlett%40oracle.com
+patch subject: [PATCH 27/34] maple_tree: Introduce mas_next_slot() interface
+config: x86_64-randconfig-a003-20230424 (https://download.01.org/0day-ci/archive/20230426/202304260907.iHgOR74J-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0e736b8a8054e7f0b216320d2458a00b54fcd2b0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liam-R-Howlett/maple_tree-Fix-static-analyser-cppcheck-issue/20230425-233958
+        git checkout 0e736b8a8054e7f0b216320d2458a00b54fcd2b0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304260907.iHgOR74J-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> lib/maple_tree.c:4710:7: warning: no previous prototype for function 'mas_next_slot' [-Wmissing-prototypes]
+   void *mas_next_slot(struct ma_state *mas, unsigned long max)
+         ^
+   lib/maple_tree.c:4710:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *mas_next_slot(struct ma_state *mas, unsigned long max)
+   ^
+   static 
+   lib/maple_tree.c:4780:10: error: implicit declaration of function 'mas_next_slot_limit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           entry = mas_next_slot_limit(mas, limit);
+                   ^
+   lib/maple_tree.c:4780:10: note: did you mean 'mas_next_slot'?
+   lib/maple_tree.c:4710:7: note: 'mas_next_slot' declared here
+   void *mas_next_slot(struct ma_state *mas, unsigned long max)
+         ^
+   lib/maple_tree.c:4780:8: warning: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+           entry = mas_next_slot_limit(mas, limit);
+                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/maple_tree.c:4787:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion]
+           return mas_next_slot_limit(mas, limit);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings and 1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'media/v6.4-1' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/mchehab/linux-media
+vim +/mas_next_slot +4710 lib/maple_tree.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86049
+  4701	
+  4702	/*
+  4703	 * mas_next_slot() - Get the entry in the next slot
+  4704	 *
+  4705	 * @mas: The maple state
+  4706	 * @max: The maximum starting range
+  4707	 *
+  4708	 * Return: The entry in the next slot which is possibly NULL
+  4709	 */
+> 4710	void *mas_next_slot(struct ma_state *mas, unsigned long max)
+  4711	{
+  4712		void __rcu **slots;
+  4713		unsigned long *pivots;
+  4714		unsigned long pivot;
+  4715		enum maple_type type;
+  4716		struct maple_node *node;
+  4717		unsigned char data_end;
+  4718		unsigned long save_point = mas->last;
+  4719		void *entry;
+  4720	
+  4721	retry:
+  4722		node = mas_mn(mas);
+  4723		type = mte_node_type(mas->node);
+  4724		pivots = ma_pivots(node, type);
+  4725		data_end = ma_data_end(node, type, pivots, mas->max);
+  4726		pivot = mas_logical_pivot(mas, pivots, mas->offset, type);
+  4727		if (unlikely(mas_rewalk_if_dead(mas, node, save_point)))
+  4728			goto retry;
+  4729	
+  4730		if (pivot >= max)
+  4731			return NULL;
+  4732	
+  4733		if (likely(data_end > mas->offset)) {
+  4734			mas->offset++;
+  4735			mas->index = mas->last + 1;
+  4736		} else  {
+  4737			if (mas_next_node(mas, node, max)) {
+  4738				mas_rewalk(mas, save_point);
+  4739				goto retry;
+  4740			}
+  4741	
+  4742			if (mas_is_none(mas))
+  4743				return NULL;
+  4744	
+  4745			mas->offset = 0;
+  4746			mas->index = mas->min;
+  4747			node = mas_mn(mas);
+  4748			type = mte_node_type(mas->node);
+  4749			pivots = ma_pivots(node, type);
+  4750		}
+  4751	
+  4752		slots = ma_slots(node, type);
+  4753		mas->last = mas_logical_pivot(mas, pivots, mas->offset, type);
+  4754		entry = mas_slot(mas, slots, mas->offset);
+  4755		if (unlikely(mas_rewalk_if_dead(mas, node, save_point)))
+  4756			goto retry;
+  4757	
+  4758		return entry;
+  4759	}
+  4760	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/33988=
-6
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
