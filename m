@@ -1,34 +1,34 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0373910E3
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 06:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B1F10E3
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 06:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682490694;
+	s=mimecast20190719; t=1682491296;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=wrVaR5h3paEkJYx/eGVi7AzZs5w9i3o0aVfQJe7X24c=;
-	b=B31UD33sh3isNHf4/49QueHW94mZDc96dv/XdtsK2IDxph19lbIgXzyJrVZBrp02/30sUk
-	Q6hrUEFwdcm7bZ6JJN63G7es/CEEvMhtN3e64qgv3G9tqXMfdfgd6doPRuUmzdPr7MWkeC
-	OSNw8Wol2jQ0NRnG/sYZB4Xeqx/VbGs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=wXlesoUr020cdBZD/iqf6ZM/pNQM/xSJ4YuJQNB1khA=;
+	b=MZ8XaTa/gNNfKs7BUwxs6e/bnks8EcNWBbzzJPgZ3jAcEjmbI33FYVTMHiq2RI+8Q3XtPH
+	1G8poLUmffF35AAOW7neIgtOkSp3fLXNIRI6h7/smizKwc0+LHZW4BIA3LU5s95tIw/aze
+	iWydV5FEjKPeGpqKlsNt1TzEGRXSSpQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-6q_1N5LiP-a8dkwkaY1FLA-1; Wed, 26 Apr 2023 02:31:32 -0400
-X-MC-Unique: 6q_1N5LiP-a8dkwkaY1FLA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-152-SATvQiljPYmzVVZOUHq7eQ-1; Wed, 26 Apr 2023 02:41:34 -0400
+X-MC-Unique: SATvQiljPYmzVVZOUHq7eQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
 	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1CC61C07549
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 06:31:31 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2BBA4884340
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 06:41:34 +0000 (UTC)
 Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 1E00714171BA;
-	Wed, 26 Apr 2023 06:31:31 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1B0341121314;
+	Wed, 26 Apr 2023 06:41:34 +0000 (UTC)
 From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 25 of 353): Test report for master
- (6.3.0, mainline.kernel.org-clang, de10553f)
-Date: Wed, 26 Apr 2023 06:31:31 -0000
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 16 of 353): Test report for master
+ (6.3.0, mainline.kernel.org-clang, bc1bb2a4)
+Date: Wed, 26 Apr 2023 06:41:34 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -36,8 +36,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-Message-Id: <59401.123042602313200121@us-mta-653.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <49843.123042602413400429@us-mta-152.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -53,15 +53,20 @@ Hi, we tested your kernel and here are the results:
 Tested-by: CKI Project <cki-project@redhat.com>
 
 Kernel information:
-    Commit message: Merge tag 'x86-apic-2023-04-24' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/tip/tip
+    Commit message: Merge tag 'x86_sev_for_v6.4_rc1' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/tip/tip
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86004
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86001
 
 One or more kernel tests failed:
     We also see the following known issues which are not related to your ch=
 anges:
+        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
+            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
+PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
+            Affected tests:
+                  x86_64 (debug) - Boot test
         Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
 oo big
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
@@ -82,6 +87,12 @@ u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
             Affected tests:
                   x86_64 - xfstests - nfsv4.2
                   x86_64 (debug) - xfstests - nfsv4.2
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+                   s390x - Storage - blktests - blk
         Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
             URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
             Affected tests:
@@ -92,33 +103,13 @@ rch/powerpc/lib/crtsavres.o: No such file or directory
 l-tests/-/issues/1267
             Affected tests:
                  ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+        Issue: [aarch64][coresight_etm4x][kernel 5.19.0] coresight-etm4x: p=
+robe of ARMHC500:20 failed with error -17
+            URL: https://lore.kernel.org/all/CA+QYu4ogiTa1V20aqxFqBrMH0z927=
+YNNN2O=3DCKma+=3DM_8E81iQ@mail.gmail.com/
             Affected tests:
-                 aarch64 - Storage - blktests - blk
-        Issue: stress: stress-ng - memory: SELinux prevents pipefs
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1541
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: stress-ng invoked oom-killer: gf=
-p_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=3D0, o=
-om_score_adj=3D1000
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1214
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: system hit OOM
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1425
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
-        Issue: stress: stress-ng - memory: abort due to system crash or reb=
-oot
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
-            Affected tests:
-                 aarch64 - stress: stress-ng - memory
+                 aarch64 - Boot test
+                 aarch64 - Reboot test
         Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
 r
             URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
