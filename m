@@ -1,101 +1,84 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775BF6FBC;
-	Wed, 26 Apr 2023 20:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682540876; x=1714076876;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z5z5YQ9qvxyGzH+5wwrKzXquh2OCClX098Hpepb+yLY=;
-  b=JD+kfHVa4MmUfDY0F1NLlIA7YBqVF3M7ihtvJ0QHYGtvqpkJ9AkhSDr0
-   wkB1GqsIg2DIs4saVBXqzyZYi4/zdIk5vk1bgw3vN5l3FlQBItx1icRHp
-   5VwPmbqgec63+C8sXLkJKNH8Oy9340WDOqMcAkul16de/ukI5LvXorTh+
-   Q/NvWEArWsQeAhKOLDD1OFJWc13wRuL+lwyi8+xAZUa9lH1pNZ+EwyV8g
-   DuWh9XOmyBu3cBbCUOE4HtVRzOImA14OlOQ4lX+n0NkXNo8SVu/3cX/1J
-   JsXp4Y1PgRJJ13qCMi2KZ5wkuXDCzCGYQI6Sbhfvx+9dKmsW5aje723Qn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="433519618"
-X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="433519618"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 13:27:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="696761379"
-X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="696761379"
-Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Apr 2023 13:27:53 -0700
-Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1prlk0-0000Va-0S;
-	Wed, 26 Apr 2023 20:27:52 +0000
-Date: Thu, 27 Apr 2023 04:27:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-dai-ops-2023-04-25-v2 57/58]
- sound/soc/codecs/hdmi-codec.c:902:3: error: field designator 'pcm_construct'
- does not refer to any field in type 'const struct snd_soc_dai_ops'
-Message-ID: <202304270441.OLw0UD1d-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AC06FC7
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 22:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682547009;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iq1dTNemdUS3rpim3UftnN/RwKzzyBBoOGZI8ZwOt6Q=;
+	b=hjrXgkf+wi5EdD0JwYD60+YIHobF5Ch8DC/xBZ7/NTiVqYneODs7uNlytIpyvSiesKWobD
+	8sDuV6jy3IQOGeq2euAwpb+pUSQ17kAqd7mW2vYKhc6v/oW3cQqkPlRFQT8rHcJTG+4Etk
+	DKADOb59C0kKACBfEM2weIBVBC5QCCc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-645-VsSCUUUkMcC7gybm1nj-Ww-1; Wed, 26 Apr 2023 18:10:08 -0400
+X-MC-Unique: VsSCUUUkMcC7gybm1nj-Ww-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F28451991C41
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 22:10:07 +0000 (UTC)
+Received: from [172.64.15.55] (unknown [10.30.34.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id E337B1121314;
+	Wed, 26 Apr 2023 22:10:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
+ mainline.kernel.org-clang, 48dc8100)
+Date: Wed, 26 Apr 2023 22:10:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <06107.123042618100800586@us-mta-645.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/morimoto/linux sound-dai-ops-2023-04-25-v2
-head:   95707df62ebc8850d4cc2a5fd9b2674d218e1c93
-commit: b96243bc0ed82b30a0b31600ea3e4674fdc6439f [57/58] ASoC: codecs/hdmi-codec: merge DAI call back functions into ops
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230427/202304270441.OLw0UD1d-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/morimoto/linux/commit/b96243bc0ed82b30a0b31600ea3e4674fdc6439f
-        git remote add morimoto https://github.com/morimoto/linux
-        git fetch --no-tags morimoto sound-dai-ops-2023-04-25-v2
-        git checkout b96243bc0ed82b30a0b31600ea3e4674fdc6439f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/codecs/
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304270441.OLw0UD1d-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> sound/soc/codecs/hdmi-codec.c:902:3: error: field designator 'pcm_construct' does not refer to any field in type 'const struct snd_soc_dai_ops'
-           .pcm_construct                  = hdmi_codec_pcm_new,
-            ^
-   sound/soc/codecs/hdmi-codec.c:913:3: error: field designator 'pcm_construct' does not refer to any field in type 'const struct snd_soc_dai_ops'
-           .pcm_construct  = hdmi_codec_pcm_new,
-            ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-vim +902 sound/soc/codecs/hdmi-codec.c
+Kernel information:
+    Commit message: Merge tag 'for-6.4/dm-changes' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/device-mapper/linux-dm
 
-   893	
-   894	static const struct snd_soc_dai_ops hdmi_codec_i2s_dai_ops = {
-   895		.probe				= hdmi_dai_probe,
-   896		.startup			= hdmi_codec_startup,
-   897		.shutdown			= hdmi_codec_shutdown,
-   898		.hw_params			= hdmi_codec_hw_params,
-   899		.prepare			= hdmi_codec_prepare,
-   900		.set_fmt			= hdmi_codec_i2s_set_fmt,
-   901		.mute_stream			= hdmi_codec_mute,
- > 902		.pcm_construct			= hdmi_codec_pcm_new,
-   903		.auto_selectable_formats	= &hdmi_codec_formats,
-   904		.num_auto_selectable_formats	= 1,
-   905	};
-   906	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86177
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34030=
+6
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
