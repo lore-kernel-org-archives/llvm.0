@@ -1,134 +1,126 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1A21C29
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 08:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682498498;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RF/O6mHHFf8HGbummMtwaag4JFkDGg7V2gElU49y3YQ=;
-	b=ddxVcdWuEUBoaL3LWJ5Qka1r7ng+VfYmTgLyUpOaGn1Giphoo/fyyvKB/J9JyNREErwDUK
-	W3JEBq8O3sax6GC+aSZtN/HXth7Lm9uHMBUhfhMXoNLMtxaXs8EmNwGNb7k9Z07Ml7egku
-	LwtV/1KvEiGc9TvkJdnOovYOYb0V308=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-266-bP4hwjB2OXO9OE8QLyjUdQ-1; Wed, 26 Apr 2023 04:41:36 -0400
-X-MC-Unique: bP4hwjB2OXO9OE8QLyjUdQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 944B13C10ED2
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 08:41:36 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9F66BC15BAD;
-	Wed, 26 Apr 2023 08:41:30 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 27 of 353): Test report for master
- (6.3.0, mainline.kernel.org-clang, df45da57)
-Date: Wed, 26 Apr 2023 08:41:30 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346521FA7;
+	Wed, 26 Apr 2023 12:56:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682513796; x=1714049796;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FXPqLxBIbf8Zkjcyuo4O8RhUpdAl3Teb3LG2zXL0io4=;
+  b=EZBSNkJaBIrS0v7lfcKjHjndZMTw30G9dIeT1lj2pJdX+q3QWE9Ke65m
+   LByoH93Ylsoa2i7U2u/nff+t+f5JD5jXxSCHmH7G9eN9BY9NZ45NtWoRD
+   D2a4kc4pfNyxHSvLlVNTvaBWSFn4QJJbfafMeP7T8lxjWjjyKat3B9W43
+   ZmlFtggTYtEZOYrGqHSV7QEP5OKQZ0XZKSf1DFYJw5ZC3WwyZAXH4KJZS
+   nmY2C46ZOtb5rPiE3KmbAea5+HfTP3AQjfKtLOZw1GxYGR2VbwufhHeli
+   qZTVpToU6S83NWgtxRcA2RCo1SUei29wtQVvyfpLHw7M83qxDi/Rw5dKW
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="344548988"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="344548988"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 05:56:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="758602632"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="758602632"
+Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Apr 2023 05:56:33 -0700
+Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1prehE-0000A6-2x;
+	Wed, 26 Apr 2023 12:56:32 +0000
+Date: Wed, 26 Apr 2023 20:55:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jarkko-tpmdd:tpm1-s3-bug 32/32]
+ drivers/char/tpm/tpm_tis_core.c:1238:2: error: use of undeclared identifier
+ 'rc'
+Message-ID: <202304262019.01pU4v2D-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <62350.123042604413601093@us-mta-266.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tpm1-s3-bug
+head:   f6075147019ca730925d4059a6256ab06fbd5d4c
+commit: f6075147019ca730925d4059a6256ab06fbd5d4c [32/32] tpm, tpm_tis: Use tpm_chip_{start,stop}() in tpm_tis_resume()
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230426/202304262019.01pU4v2D-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=f6075147019ca730925d4059a6256ab06fbd5d4c
+        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+        git fetch --no-tags jarkko-tpmdd tpm1-s3-bug
+        git checkout f6075147019ca730925d4059a6256ab06fbd5d4c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/char/tpm/
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304262019.01pU4v2D-lkp@intel.com/
 
-Tested-by: CKI Project <cki-project@redhat.com>
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'arm64-upstream' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/arm64/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86014
-
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
-            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
-            Affected tests:
-                   s390x - kdump - sysrq-c
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+   In file included from drivers/char/tpm/tpm_tis_core.c:27:
+   In file included from drivers/char/tpm/tpm.h:28:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+           int mapping_size;
+               ^
+>> drivers/char/tpm/tpm_tis_core.c:1238:2: error: use of undeclared identifier 'rc'
+           rc = tpm_chip_start(chip);
+           ^
+   drivers/char/tpm/tpm_tis_core.c:1239:6: error: use of undeclared identifier 'rc'
+           if (rc)
+               ^
+   drivers/char/tpm/tpm_tis_core.c:1239:6: error: use of undeclared identifier 'rc'
+   drivers/char/tpm/tpm_tis_core.c:1239:6: error: use of undeclared identifier 'rc'
+   1 warning and 4 errors generated.
 
 
+vim +/rc +1238 drivers/char/tpm/tpm_tis_core.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1232	
+  1233	int tpm_tis_resume(struct device *dev)
+  1234	{
+  1235		struct tpm_chip *chip = dev_get_drvdata(dev);
+  1236		int ret;
+  1237	
+> 1238		rc = tpm_chip_start(chip);
+  1239		if (rc)
+  1240			return ret;
+  1241	
+  1242		if (chip->flags & TPM_CHIP_FLAG_IRQ)
+  1243			tpm_tis_reenable_interrupts(chip);
+  1244	
+  1245		ret = tpm_pm_resume(dev);
+  1246		if (ret)
+  1247			goto out;
+  1248	
+  1249		/*
+  1250		 * TPM 1.2 requires self-test on resume. This function actually returns
+  1251		 * an error code but for unknown reason it isn't handled.
+  1252		 */
+  1253		if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
+  1254			tpm1_do_selftest(chip);
+  1255	
+  1256	out:
+  1257		tpm_chip_stop(chip);
+  1258	
+  1259		return ret;
+  1260	}
+  1261	EXPORT_SYMBOL_GPL(tpm_tis_resume);
+  1262	#endif
+  1263	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
