@@ -1,134 +1,161 @@
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BEF1859;
-	Wed, 26 Apr 2023 05:16:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682486197; x=1714022197;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Eq8o8+B6diLLvj3cb6sS+tT9wrkN93md5/woie8nDsA=;
-  b=KyKzOkVfLmr7MELMJCBFfKDOMKTcLArjtP5CyfoOU9B2GSJaR24T9QU8
-   JqzCJqkrJftDLxrMDiMEtPAD5kiZdPZ2bKU/vqNYVGF5C1DLYKrYDJoIL
-   4Qua8hvOBYh3VNq6VEh3LVfO+y84LpcpjEkSA8RYFWTUsEwRiZHgUdaXr
-   QBUThKza20jQxDPxkXSYenui6eH2vpU7AgAlKwNQy7HGb/1uyF1ALBduR
-   VMURhW8sF3S72P8+brkwSWZQexK/0u0afIw3Hy623aj4LOqk37m2cRZxF
-   gnDrsS+l1pVYdf5qnQKJ9JrTpCnJ1fwrE71R9lw4/Q+/YoaQ/SdoH8WBm
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="433277056"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="433277056"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 22:16:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="758455016"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="758455016"
-Received: from lkp-server01.sh.intel.com (HELO 98ee5a99fc83) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Apr 2023 22:16:33 -0700
-Received: from kbuild by 98ee5a99fc83 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1prXW4-00008g-0v;
-	Wed, 26 Apr 2023 05:16:32 +0000
-Date: Wed, 26 Apr 2023 13:16:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
-	Hannes Reinecke <hare@suse.de>,
-	John Garry <john.g.garry@oracle.com>,
-	Mike Christie <michael.christie@oracle.com>,
-	"James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH 3/4] scsi: Only kick the requeue list if necessary
-Message-ID: <202304261310.YvjIbyb4-lkp@intel.com>
-References: <20230425233446.1231000-4-bvanassche@acm.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0373910E3
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 06:31:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682490694;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wrVaR5h3paEkJYx/eGVi7AzZs5w9i3o0aVfQJe7X24c=;
+	b=B31UD33sh3isNHf4/49QueHW94mZDc96dv/XdtsK2IDxph19lbIgXzyJrVZBrp02/30sUk
+	Q6hrUEFwdcm7bZ6JJN63G7es/CEEvMhtN3e64qgv3G9tqXMfdfgd6doPRuUmzdPr7MWkeC
+	OSNw8Wol2jQ0NRnG/sYZB4Xeqx/VbGs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-6q_1N5LiP-a8dkwkaY1FLA-1; Wed, 26 Apr 2023 02:31:32 -0400
+X-MC-Unique: 6q_1N5LiP-a8dkwkaY1FLA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1CC61C07549
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 06:31:31 +0000 (UTC)
+Received: from [172.64.2.76] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 1E00714171BA;
+	Wed, 26 Apr 2023 06:31:31 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (SKIPPED 25 of 353): Test report for master
+ (6.3.0, mainline.kernel.org-clang, de10553f)
+Date: Wed, 26 Apr 2023 06:31:31 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425233446.1231000-4-bvanassche@acm.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Message-Id: <59401.123042602313200121@us-mta-653.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Bart,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-[auto build test ERROR on mkp-scsi/for-next]
-[also build test ERROR on jejb-scsi/for-next linus/master v6.3 next-20230425]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tested-by: CKI Project <cki-project@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bart-Van-Assche/scsi-core-Use-min-instead-of-open-coding-it/20230426-073743
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230425233446.1231000-4-bvanassche%40acm.org
-patch subject: [PATCH 3/4] scsi: Only kick the requeue list if necessary
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230426/202304261310.YvjIbyb4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1f35bc98f5c39b963f1cbb31159a1e1395dda276
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bart-Van-Assche/scsi-core-Use-min-instead-of-open-coding-it/20230426-073743
-        git checkout 1f35bc98f5c39b963f1cbb31159a1e1395dda276
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/scsi/
+Kernel information:
+    Commit message: Merge tag 'x86-apic-2023-04-24' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/tip/tip
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304261310.YvjIbyb4-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86004
 
-All errors (new ones prefixed by >>):
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: kdump - sysrq-c: kdump: Reserved 0MB memory for crash kernel
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/7188004
+            Affected tests:
+                   s390x - kdump - sysrq-c
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+        Issue: stress: stress-ng - memory: SELinux prevents pipefs
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1541
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: stress-ng invoked oom-killer: gf=
+p_mask=3D0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), order=3D0, o=
+om_score_adj=3D1000
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1214
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: system hit OOM
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1425
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: stress: stress-ng - memory: abort due to system crash or reb=
+oot
+            URL: https://datawarehouse.cki-project.org/kcidb/tests/6821894
+            Affected tests:
+                 aarch64 - stress: stress-ng - memory
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
 
->> drivers/scsi/scsi_lib.c:509:28: error: use of undeclared identifier 'cmd'
-           if (scsi_host_in_recovery(cmd->device->host))
-                                     ^
-   1 error generated.
 
 
-vim +/cmd +509 drivers/scsi/scsi_lib.c
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   506	
-   507	static void scsi_run_queue_async(struct scsi_device *sdev)
-   508	{
- > 509		if (scsi_host_in_recovery(cmd->device->host))
-   510			return;
-   511	
-   512		if (scsi_target(sdev)->single_lun ||
-   513		    !list_empty(&sdev->host->starved_list)) {
-   514			kblockd_schedule_work(&sdev->requeue_work);
-   515		} else {
-   516			/*
-   517			 * smp_mb() present in sbitmap_queue_clear() or implied in
-   518			 * .end_io is for ordering writing .device_busy in
-   519			 * scsi_device_unbusy() and reading sdev->restarts.
-   520			 */
-   521			int old = atomic_read(&sdev->restarts);
-   522	
-   523			/*
-   524			 * ->restarts has to be kept as non-zero if new budget
-   525			 *  contention occurs.
-   526			 *
-   527			 *  No need to run queue when either another re-run
-   528			 *  queue wins in updating ->restarts or a new budget
-   529			 *  contention occurs.
-   530			 */
-   531			if (old && atomic_cmpxchg(&sdev->restarts, old, 0) == old)
-   532				blk_mq_run_hw_queues(sdev->request_queue, true);
-   533		}
-   534	}
-   535	
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
