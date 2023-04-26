@@ -1,84 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2789A136F
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 03:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682478666;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=k/RAVMxIUNYWsjckgk0yEXnmqbBM4QCn37Ff8bbSOug=;
-	b=BXPxV1uua/Mc9Zf+hiQqCzqsUsrG5x8jdv1hXnMvrtBoKQiwnTdPeTYGNXN5UgAf/I+iD8
-	3x3p6457/7I+Lp2+JKdlKmZuwT3Ane6ZdW5QJMUlg+AFmhEf+d6ov8CJ1M0oyhi8ZeHh/A
-	JGoyVbGA0fZR/If4EEPY4leT/r0/8UQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-351-_2DyNk0FPbWrKRn2GpoSRA-1; Tue, 25 Apr 2023 23:11:04 -0400
-X-MC-Unique: _2DyNk0FPbWrKRn2GpoSRA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A04823C02183
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 03:11:04 +0000 (UTC)
-Received: from [172.64.2.76] (unknown [10.30.34.88])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7AE3240C2064;
-	Wed, 26 Apr 2023 03:11:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4o+t77iP?= SKIPPED: Test report for master (6.3.0,
- mainline.kernel.org-clang, 0cfd8703)
-Date: Wed, 26 Apr 2023 03:11:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B110515A0;
+	Wed, 26 Apr 2023 03:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682478808; x=1714014808;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JlqLDSz6fbGccbQhS+HodxTEhgwpZOEQpFLn6ZoASKc=;
+  b=XmEkCj4gPSH3V65nw9m9oKqI7FLB5Fc441cyEvHmYzyXUjY27mc3R7h9
+   n/MOJi3e/Wi816uS5FEVY85S0oFwBsORAlYxsuq0y2IBwentYf8tWWhtD
+   BNosv5Ky2dgEuTRySj77/XX22EhxY/z2S0LVJs+CzJjgu5uRhOrjoOE0+
+   bVFWyNC4tKcixsLKedDaI+6DBaAHfIyEBsAqKfSlCv3iBapDwvyPCRzb7
+   u69dZYP+3oflU1l/NSkGBE9RTMxOcERExT3IlgPGqwok7nFOCg3ZuK1F/
+   JUocBKAirUHmEfLeZ3l3BIdUDZj9JFQTtMl/cDoNWG04mVCV9zD3Zw+vl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="335880616"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="335880616"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 20:13:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="868109817"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="868109817"
+Received: from lkp-server01.sh.intel.com (HELO 98ee5a99fc83) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 Apr 2023 20:13:26 -0700
+Received: from kbuild by 98ee5a99fc83 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1prVaw-00002A-0L;
+	Wed, 26 Apr 2023 03:13:26 +0000
+Date: Wed, 26 Apr 2023 11:13:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-component-2023-04-25-v2 27/28]
+ sound/soc/soc-core.c:2555: warning: expecting prototype for
+ snd_soc_register_dais(). Prototype was for devm_snd_soc_register_dais()
+ instead
+Message-ID: <202304261145.LesTA6p5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-Message-Id: <85834.123042523110400607@us-mta-351.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/morimoto/linux sound-component-2023-04-25-v2
+head:   edc0bca1729bdd9ce5fc87a8076a5ef08e771aee
+commit: 7ca5c2e62571b8fa6e838671a4cac618b28112da [27/28] ASoC: soc-core.c: use devm_snd_soc_register_dai()
+config: x86_64-randconfig-a003-20230424 (https://download.01.org/0day-ci/archive/20230426/202304261145.LesTA6p5-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/morimoto/linux/commit/7ca5c2e62571b8fa6e838671a4cac618b28112da
+        git remote add morimoto https://github.com/morimoto/linux
+        git fetch --no-tags morimoto sound-component-2023-04-25-v2
+        git checkout 7ca5c2e62571b8fa6e838671a4cac618b28112da
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-    Overall result: SKIPPED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304261145.LesTA6p5-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/soc-core.c:2555: warning: expecting prototype for snd_soc_register_dais(). Prototype was for devm_snd_soc_register_dais() instead
 
 
-Kernel information:
-    Commit message: Merge tag 'pm-6.4-rc1' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/rafael/linux-pm
+vim +2555 sound/soc/soc-core.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86053
+e11381f38f3478 Kuninori Morimoto 2019-11-05  2544  
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2545  /**
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2546   * snd_soc_register_dais - Register a DAI with the ASoC core
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2547   *
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2548   * @component: The component the DAIs are registered for
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2549   * @dai_drv: DAI driver to use for the DAIs
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2550   * @count: Number of DAIs
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2551   */
+7ca5c2e62571b8 Kuninori Morimoto 2023-03-15  2552  static int devm_snd_soc_register_dais(struct snd_soc_component *component,
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2553  				      struct snd_soc_dai_driver *dai_drv,
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2554  				      size_t count)
+daf7737335bf55 Kuninori Morimoto 2019-11-05 @2555  {
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2556  	struct snd_soc_dai *dai;
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2557  	unsigned int i;
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2558  
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2559  	for (i = 0; i < count; i++) {
+7ca5c2e62571b8 Kuninori Morimoto 2023-03-15  2560  		dai = devm_snd_soc_register_dai(component->dev,
+7ca5c2e62571b8 Kuninori Morimoto 2023-03-15  2561  						component, dai_drv + i, count == 1 &&
+129f055a2144ab Charles Keepax    2022-06-23  2562  						component->driver->legacy_dai_naming);
+7ca5c2e62571b8 Kuninori Morimoto 2023-03-15  2563  		if (!dai)
+7ca5c2e62571b8 Kuninori Morimoto 2023-03-15  2564  			return -ENOMEM;
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2565  	}
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2566  
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2567  	return 0;
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2568  }
+daf7737335bf55 Kuninori Morimoto 2019-11-05  2569  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/33990=
-6
+:::::: The code at line 2555 was first introduced by commit
+:::::: daf7737335bf555abf14031530fe8e47b46b373a ASoC: soc-core: move snd_soc_register_dai()
 
+:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
