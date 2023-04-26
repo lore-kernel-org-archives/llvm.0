@@ -1,84 +1,144 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281D063D2
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 19:01:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682535666;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oFdLJHsrqN60nE0C03236pi06MOAH4N9QqcEh7mRCHQ=;
-	b=Kw+oSnVtnybl6jUypRVHQN2iUmLrC9JYMVTR9G5IMKDxTPJ8xEmpmLJhRShxCOBXGXOmXO
-	0xsLOeJiQkjVOEwUG+bO5NJCdSqIAAoOWSZhLy6IEpSI7PHGjZGdCReyajEcPTNcOlc9sY
-	Jyrm+ADm4OpS1eAv7oLzLODnlARqQ4U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-O_xs575lMo-LaHsAYRl0qA-1; Wed, 26 Apr 2023 15:01:05 -0400
-X-MC-Unique: O_xs575lMo-LaHsAYRl0qA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29F29800B35
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 19:01:05 +0000 (UTC)
-Received: from [172.64.15.55] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 198562027045;
-	Wed, 26 Apr 2023 19:01:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
- mainline.kernel.org-clang, 5c7ecada)
-Date: Wed, 26 Apr 2023 19:01:05 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53826ADC;
+	Wed, 26 Apr 2023 19:06:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682535983; x=1714071983;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=x8KLFWw2JkSBQzqKINgr2vPWIaic9sd5l78AGWxwD+M=;
+  b=PgUSbFM31KPBRnKKZ4Bph/9FTiCEdmDIpdpd2rUuvoIxtHiRr1JwM9JM
+   pWOOG4fj6mRweGdiXO3ZLLU6mU3o41/XyBAn31gLizmqkO9ePQaoC0YwL
+   jvCjXL73GAvaDsbD8L9HCzvdkSD2zNyOexR5cUVOiQ0wTFjUUT4z5nvRN
+   hP6W7XuZNnqozqtnK8OmZ44XgfJCxGbT7DYwZSEGX7LA/haPNB/EAbUht
+   1j6YkkF5yWlDXmVvEvcb4F8vW0+t77RUqzRwXC9ItYTrGTUgCx5Ch3HHf
+   KVYT5qt7sl6b6TWFsphjeXR8WbXqjbYnQOEPXpXTU7U7FEED2h5dH1S/E
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="433498981"
+X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
+   d="scan'208";a="433498981"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 12:06:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="726682190"
+X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
+   d="scan'208";a="726682190"
+Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2023 12:05:51 -0700
+Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1prkSc-0000T8-1U;
+	Wed, 26 Apr 2023 19:05:50 +0000
+Date: Thu, 27 Apr 2023 03:05:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c:415:10: warning:
+ cast to smaller integer type 'enum mtk_ovl_adaptor_comp_type' from 'const
+ void *'
+Message-ID: <202304270202.860mmUdY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-Message-Id: <26253.123042615010501414@us-mta-644.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Nancy.Lin,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0cfd8703e7da687924371e9bc77a025bdeba9637
+commit: 453c3364632a1f305db7d425dc9f8d6711cd3491 drm/mediatek: Add ovl_adaptor support for MT8195
+date:   5 weeks ago
+config: arm64-buildonly-randconfig-r005-20230426 (https://download.01.org/0day-ci/archive/20230427/202304270202.860mmUdY-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=453c3364632a1f305db7d425dc9f8d6711cd3491
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 453c3364632a1f305db7d425dc9f8d6711cd3491
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/mediatek/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304270202.860mmUdY-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c:415:10: warning: cast to smaller integer type 'enum mtk_ovl_adaptor_comp_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+                   type = (enum mtk_ovl_adaptor_comp_type)of_id->data;
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'f2fs-for-6.4-rc1' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/jaegeuk/f2fs
+vim +415 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86145
+   391	
+   392	static int ovl_adaptor_comp_init(struct device *dev, struct component_match **match)
+   393	{
+   394		struct mtk_disp_ovl_adaptor *priv = dev_get_drvdata(dev);
+   395		struct device_node *node, *parent;
+   396		struct platform_device *comp_pdev;
+   397	
+   398		parent = dev->parent->parent->of_node->parent;
+   399	
+   400		for_each_child_of_node(parent, node) {
+   401			const struct of_device_id *of_id;
+   402			enum mtk_ovl_adaptor_comp_type type;
+   403			int id;
+   404	
+   405			of_id = of_match_node(mtk_ovl_adaptor_comp_dt_ids, node);
+   406			if (!of_id)
+   407				continue;
+   408	
+   409			if (!of_device_is_available(node)) {
+   410				dev_dbg(dev, "Skipping disabled component %pOF\n",
+   411					node);
+   412				continue;
+   413			}
+   414	
+ > 415			type = (enum mtk_ovl_adaptor_comp_type)of_id->data;
+   416			id = ovl_adaptor_comp_get_id(dev, node, type);
+   417			if (id < 0) {
+   418				dev_warn(dev, "Skipping unknown component %pOF\n",
+   419					 node);
+   420				continue;
+   421			}
+   422	
+   423			comp_pdev = of_find_device_by_node(node);
+   424			if (!comp_pdev)
+   425				return -EPROBE_DEFER;
+   426	
+   427			priv->ovl_adaptor_comp[id] = &comp_pdev->dev;
+   428	
+   429			drm_of_component_match_add(dev, match, compare_of, node);
+   430			dev_dbg(dev, "Adding component match for %pOF\n", node);
+   431		}
+   432	
+   433		if (!*match) {
+   434			dev_err(dev, "No match device for ovl_adaptor\n");
+   435			return -ENODEV;
+   436		}
+   437	
+   438		return 0;
+   439	}
+   440	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34019=
-7
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
