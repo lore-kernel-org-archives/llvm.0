@@ -1,43 +1,51 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346521FA7;
-	Wed, 26 Apr 2023 12:56:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A861FC6;
+	Wed, 26 Apr 2023 13:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682513796; x=1714049796;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FXPqLxBIbf8Zkjcyuo4O8RhUpdAl3Teb3LG2zXL0io4=;
-  b=EZBSNkJaBIrS0v7lfcKjHjndZMTw30G9dIeT1lj2pJdX+q3QWE9Ke65m
-   LByoH93Ylsoa2i7U2u/nff+t+f5JD5jXxSCHmH7G9eN9BY9NZ45NtWoRD
-   D2a4kc4pfNyxHSvLlVNTvaBWSFn4QJJbfafMeP7T8lxjWjjyKat3B9W43
-   ZmlFtggTYtEZOYrGqHSV7QEP5OKQZ0XZKSf1DFYJw5ZC3WwyZAXH4KJZS
-   nmY2C46ZOtb5rPiE3KmbAea5+HfTP3AQjfKtLOZw1GxYGR2VbwufhHeli
-   qZTVpToU6S83NWgtxRcA2RCo1SUei29wtQVvyfpLHw7M83qxDi/Rw5dKW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="344548988"
+  t=1682514398; x=1714050398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oVxuTR4A/wrlt9G6C/zKK3j09fIf1TBLj219Iy+IWg4=;
+  b=cZ1CJFmmJ8Tt1hKvS6cEQc1IySVLcvIP8wh6e41qv/0X4X/pgeThcTz3
+   cAl+qwWKE4AuVCW8PPHQVhgfRKMZqSZeACKslaB4RN8Z5x64l7dso3zoQ
+   r7rv6ov9YiWvOP0SDb3QF34n1Zs8xnF9Tq5pcZBo1Pf8EMGhMb6EoEIyZ
+   h6mufUH3JtMTZu/lpkxZFxaXLA1M0VIrILq4ZIk081Em7rzgVdxbSoJna
+   23x+i1Z3yNpjc9r2CNmQrsdnEbkAfddTQ3kVD3hV8nCu/ycfYIdH6vQmR
+   cMXTumocwcVs/+eIl800bI7Zo0Gg6d/da+fv1kDmcUalWcW+h+T2uKfz3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="349033775"
 X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="344548988"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 05:56:34 -0700
+   d="scan'208";a="349033775"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 06:06:37 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="758602632"
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="783323577"
 X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="758602632"
+   d="scan'208";a="783323577"
 Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Apr 2023 05:56:33 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Apr 2023 06:06:33 -0700
 Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1prehE-0000A6-2x;
-	Wed, 26 Apr 2023 12:56:32 +0000
-Date: Wed, 26 Apr 2023 20:55:51 +0800
+	id 1preqv-0000AU-0U;
+	Wed, 26 Apr 2023 13:06:33 +0000
+Date: Wed, 26 Apr 2023 21:06:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jarkko-tpmdd:tpm1-s3-bug 32/32]
- drivers/char/tpm/tpm_tis_core.c:1238:2: error: use of undeclared identifier
- 'rc'
-Message-ID: <202304262019.01pU4v2D-lkp@intel.com>
+To: Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, oxffffaa@gmail.com,
+	kernel@sberdevices.ru, linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
+Message-ID: <202304262003.Lzpyh2BA-lkp@intel.com>
+References: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,80 +54,136 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tpm1-s3-bug
-head:   f6075147019ca730925d4059a6256ab06fbd5d4c
-commit: f6075147019ca730925d4059a6256ab06fbd5d4c [32/32] tpm, tpm_tis: Use tpm_chip_{start,stop}() in tpm_tis_resume()
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230426/202304262019.01pU4v2D-lkp@intel.com/config)
+Hi Arseniy,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on mtd/nand/next]
+[also build test ERROR on linus/master v6.3 next-20230425]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230426-153143
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+patch link:    https://lore.kernel.org/r/20230426072455.3887717-1-AVKrasnov%40sberdevices.ru
+patch subject: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
+config: i386-randconfig-a001-20230424 (https://download.01.org/0day-ci/archive/20230426/202304262003.Lzpyh2BA-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=f6075147019ca730925d4059a6256ab06fbd5d4c
-        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-        git fetch --no-tags jarkko-tpmdd tpm1-s3-bug
-        git checkout f6075147019ca730925d4059a6256ab06fbd5d4c
+        # https://github.com/intel-lab-lkp/linux/commit/3529f3465e99379489b59c035a8a0506c3756ef4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230426-153143
+        git checkout 3529f3465e99379489b59c035a8a0506c3756ef4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/char/tpm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mtd/nand/raw/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304262019.01pU4v2D-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304262003.Lzpyh2BA-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/char/tpm/tpm_tis_core.c:27:
-   In file included from drivers/char/tpm/tpm.h:28:
-   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-           int mapping_size;
-               ^
->> drivers/char/tpm/tpm_tis_core.c:1238:2: error: use of undeclared identifier 'rc'
-           rc = tpm_chip_start(chip);
+>> drivers/mtd/nand/raw/nand_macronix.c:384:12: error: implicit declaration of function 'kmalloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
+                     ^
+   drivers/mtd/nand/raw/nand_macronix.c:384:12: note: did you mean 'mm_alloc'?
+   include/linux/sched/mm.h:16:26: note: 'mm_alloc' declared here
+   extern struct mm_struct *mm_alloc(void);
+                            ^
+>> drivers/mtd/nand/raw/nand_macronix.c:384:10: warning: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+           dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
+                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mtd/nand/raw/nand_macronix.c:437:2: error: implicit declaration of function 'kfree' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           kfree(dma_buf);
            ^
-   drivers/char/tpm/tpm_tis_core.c:1239:6: error: use of undeclared identifier 'rc'
-           if (rc)
-               ^
-   drivers/char/tpm/tpm_tis_core.c:1239:6: error: use of undeclared identifier 'rc'
-   drivers/char/tpm/tpm_tis_core.c:1239:6: error: use of undeclared identifier 'rc'
-   1 warning and 4 errors generated.
+   1 warning and 2 errors generated.
 
 
-vim +/rc +1238 drivers/char/tpm/tpm_tis_core.c
+vim +/kmalloc +384 drivers/mtd/nand/raw/nand_macronix.c
 
-  1232	
-  1233	int tpm_tis_resume(struct device *dev)
-  1234	{
-  1235		struct tpm_chip *chip = dev_get_drvdata(dev);
-  1236		int ret;
-  1237	
-> 1238		rc = tpm_chip_start(chip);
-  1239		if (rc)
-  1240			return ret;
-  1241	
-  1242		if (chip->flags & TPM_CHIP_FLAG_IRQ)
-  1243			tpm_tis_reenable_interrupts(chip);
-  1244	
-  1245		ret = tpm_pm_resume(dev);
-  1246		if (ret)
-  1247			goto out;
-  1248	
-  1249		/*
-  1250		 * TPM 1.2 requires self-test on resume. This function actually returns
-  1251		 * an error code but for unknown reason it isn't handled.
-  1252		 */
-  1253		if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-  1254			tpm1_do_selftest(chip);
-  1255	
-  1256	out:
-  1257		tpm_chip_stop(chip);
-  1258	
-  1259		return ret;
-  1260	}
-  1261	EXPORT_SYMBOL_GPL(tpm_tis_resume);
-  1262	#endif
-  1263	
+   366	
+   367	static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
+   368						loff_t offs_in_flash,
+   369						size_t len, size_t *retlen,
+   370						u_char *buf, bool write)
+   371	{
+   372		struct nand_chip *nand;
+   373		size_t bytes_handled;
+   374		unsigned long page;
+   375		off_t offs_in_page;
+   376		void *dma_buf;
+   377		int ret;
+   378	
+   379		/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
+   380		 * so allocate properly aligned memory for it. This is
+   381		 * needed because cross page accesses may lead to unaligned
+   382		 * buffer address for DMA.
+   383		 */
+ > 384		dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
+   385		if (!dma_buf)
+   386			return -ENOMEM;
+   387	
+   388		nand = mtd_to_nand(mtd);
+   389		nand_select_target(nand, 0);
+   390	
+   391		ret = macronix_30lfxg18ac_otp_enable(nand);
+   392		if (ret)
+   393			goto out_otp;
+   394	
+   395		page = offs_in_flash;
+   396		/* 'page' will be result of division. */
+   397		offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
+   398		bytes_handled = 0;
+   399	
+   400		while (bytes_handled < len &&
+   401		       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
+   402			size_t bytes_to_handle;
+   403	
+   404			bytes_to_handle = min_t(size_t, len - bytes_handled,
+   405						MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
+   406						offs_in_page);
+   407	
+   408			if (write) {
+   409				memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
+   410				ret = nand_prog_page_op(nand, page, offs_in_page,
+   411							dma_buf, bytes_to_handle);
+   412			} else {
+   413				ret = nand_read_page_op(nand, page, offs_in_page,
+   414							dma_buf, bytes_to_handle);
+   415				if (!ret)
+   416					memcpy(&buf[bytes_handled], dma_buf,
+   417					       bytes_to_handle);
+   418			}
+   419			if (ret)
+   420				goto out_otp;
+   421	
+   422			bytes_handled += bytes_to_handle;
+   423			offs_in_page = 0;
+   424			page++;
+   425		}
+   426	
+   427		*retlen = bytes_handled;
+   428	
+   429	out_otp:
+   430		if (ret)
+   431			dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
+   432	
+   433		ret = macronix_30lfxg18ac_otp_disable(nand);
+   434		WARN(ret, "failed to leave OTP mode after %s\n",
+   435		     write ? "write" : "read");
+   436		nand_deselect_target(nand);
+ > 437		kfree(dma_buf);
+   438	
+   439		return ret;
+   440	}
+   441	
 
 -- 
 0-DAY CI Kernel Test Service
