@@ -1,105 +1,84 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4059363D2
-	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 18:45:05 +0000 (UTC)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1a920d484bdso59764545ad.1
-        for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 11:45:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682534704; x=1685126704;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lXwqrHaYzKo2yrBADgB5WqZEnPYQ+1SHT4/YEIm6rfk=;
-        b=yxmeIMM7AqMrYpjTPhdJvmtkQFPvan9NpmCeQGiyWsJ8rAwTZOYkEjw1ULTCzu/UY/
-         p+JxxPb6kjDGYGiZE6rGIf6FxsOeVd1XHZhjjQ2Jt4srKtvhvz1BgV7n0RYa9HqX5Tcx
-         pGupfUA0qbgmg2dhyuu0IoXpUgUMTMKispsGRNr4cTt3RXtSfFdnWYxRuJLLfAaqJWoC
-         gcJZez6b6z+kNe50a27vXIEmYxCHZZVP7PtZAOjCK4mZPRQPvsgg+f+Nw5U9T8Kk4QnF
-         iZ//DRkyY1yc2h8A7CQpRKuOXCl1fQrYYoUeWxtQK3nHGckqos7RLKXsKDV8iBrIiaXZ
-         XfOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682534704; x=1685126704;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lXwqrHaYzKo2yrBADgB5WqZEnPYQ+1SHT4/YEIm6rfk=;
-        b=elFSS3ZnWZ9IcsR18mIdKsOjIx5589lSjEQn2Cl9Sdy4qF7F6Lnwzm1VrWrdfCjdP2
-         ZckGIPwQcVZeDQpuzRMs47gfuQdQ/dOZdKqtAM1VnehN2usTbL+bSf5FwZJ/PQkpV6Lk
-         zPXfH6avIsNEVVvSoP5rFGueSJn4suOVZq6DYUtL6shuNoGNRTQoTw3LDr6TmwIwGU62
-         GmvqpyGle2oqtgeSMqfKv+46X/iyXdE4Qx2wc2Di61RhMgrkuPe54nITYbOZ5A1vSNiF
-         gRQIyAPaSQr/rB16gg9e0/WjUF+Mi1GFKvhfhzqO16Qxm5aCUl1tecxRkYlkr8qUOq5h
-         fbTA==
-X-Gm-Message-State: AC+VfDzWtkyEIAJGIxZ6o99jXa1hql83TAEdAvSFSyr9N2ELcmMMadht
-	JWNtGkMAKzi4iXoZcoS/NDpA8Q==
-X-Google-Smtp-Source: ACHHUZ6XGF1YFTCK+4TjiFTAQPFcameE2epgjBDRDaOfU6uZsFJI6CGSCG2MRBu5cCtfg/boc69nAQ==
-X-Received: by 2002:a17:902:f682:b0:1a9:9929:face with SMTP id l2-20020a170902f68200b001a99929facemr5189336plg.34.1682534704484;
-        Wed, 26 Apr 2023 11:45:04 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902ee5500b001a0763fa8d6sm10257455plo.98.2023.04.26.11.45.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 11:45:03 -0700 (PDT)
-Date: Wed, 26 Apr 2023 11:45:03 -0700 (PDT)
-X-Google-Original-Date: Wed, 26 Apr 2023 11:44:26 PDT (-0700)
-Subject:     Re: [PATCH V4 10/23] RISC-V: smpboot: Create wrapper smp_setup()
-In-Reply-To: <20230404182037.863533-11-sunilvl@ventanamicro.com>
-CC: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-  linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
-  platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev, corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-  aou@eecs.berkeley.edu, lenb@kernel.org, daniel.lezcano@linaro.org, tglx@linutronix.de,
-  qianweili@huawei.com, wangzhou1@hisilicon.com, herbert@gondor.apana.org.au,
-  Marc Zyngier <maz@kernel.org>, luzmaximilian@gmail.com, hdegoede@redhat.com, markgross@kernel.org,
-  nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, rafael@kernel.org,
-  davem@davemloft.net, sunilvl@ventanamicro.com, rafael.j.wysocki@intel.com,
-  Conor Dooley <conor.dooley@microchip.com>, ajones@ventanamicro.com
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: sunilvl@ventanamicro.com
-Message-ID: <mhng-d7d9cb6c-3d07-4286-aa68-e99df654a92b@palmer-ri-x1c9a>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281D063D2
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 19:01:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682535666;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oFdLJHsrqN60nE0C03236pi06MOAH4N9QqcEh7mRCHQ=;
+	b=Kw+oSnVtnybl6jUypRVHQN2iUmLrC9JYMVTR9G5IMKDxTPJ8xEmpmLJhRShxCOBXGXOmXO
+	0xsLOeJiQkjVOEwUG+bO5NJCdSqIAAoOWSZhLy6IEpSI7PHGjZGdCReyajEcPTNcOlc9sY
+	Jyrm+ADm4OpS1eAv7oLzLODnlARqQ4U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-O_xs575lMo-LaHsAYRl0qA-1; Wed, 26 Apr 2023 15:01:05 -0400
+X-MC-Unique: O_xs575lMo-LaHsAYRl0qA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29F29800B35
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 19:01:05 +0000 (UTC)
+Received: from [172.64.15.55] (unknown [10.30.34.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 198562027045;
+	Wed, 26 Apr 2023 19:01:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
+ mainline.kernel.org-clang, 5c7ecada)
+Date: Wed, 26 Apr 2023 19:01:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <26253.123042615010501414@us-mta-644.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 04 Apr 2023 11:20:24 PDT (-0700), sunilvl@ventanamicro.com wrote:
-> smp_setup() currently assumes DT-based platforms. To enable ACPI,
-> first make this a wrapper function and move existing code to
-> a separate DT-specific function.
->
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/kernel/smpboot.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-> index 00b53913d4c6..26214ddefaa4 100644
-> --- a/arch/riscv/kernel/smpboot.c
-> +++ b/arch/riscv/kernel/smpboot.c
-> @@ -70,7 +70,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
->  	}
->  }
->
-> -void __init setup_smp(void)
-> +static void __init of_parse_and_init_cpus(void)
->  {
->  	struct device_node *dn;
->  	unsigned long hart;
-> @@ -116,6 +116,11 @@ void __init setup_smp(void)
->  	}
->  }
->
-> +void __init setup_smp(void)
-> +{
-> +	of_parse_and_init_cpus();
-> +}
-> +
->  static int start_secondary_cpu(int cpu, struct task_struct *tidle)
->  {
->  	if (cpu_ops[cpu]->cpu_start)
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
+
+
+Kernel information:
+    Commit message: Merge tag 'f2fs-for-6.4-rc1' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/jaegeuk/f2fs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86145
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34019=
+7
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
