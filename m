@@ -1,215 +1,84 @@
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31A71FD7;
-	Tue, 25 Apr 2023 23:18:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682464687; x=1714000687;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OqE97e/5quysDLOggWApe/fW7t0vRea+1h8tHOqK3uU=;
-  b=YEU4A/h/DmvwNdmOIb+ZGtDLnUJgTy8FPe9ufub5AKwcGbYRnu0EPh4g
-   GYnm9gGmVq5i+vI3bKEratK37nWcObmTbrSs3kfZF7L/GF4lsAK1MNYsL
-   24GLFXRUOI5IZwYg31dnpY1z3tm50MAu4skqIKo/tV8g5CuN8hoIBTb6m
-   Z7b8mucGz3XKpxXLVaN1C2HlO/0dPznvAHwI9MYzqXPLBf08HHTGmjS68
-   M0XeKuU9Emaa/E4ebjmgyHjplLJHdms6HkT8omj1oupzs7UbJmXnGArnz
-   LX8T015qejwnNbFWa4YIOilpoGvl9+/vOlEORPe3yR+46e2r7Bms0c8cF
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="344387407"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="344387407"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 16:18:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="724178143"
-X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
-   d="scan'208";a="724178143"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2023 16:18:04 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1prRvA-000jrU-0b;
-	Tue, 25 Apr 2023 23:18:04 +0000
-Date: Wed, 26 Apr 2023 07:17:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vinod Govindapillai <vinod.govindapillai@intel.com>,
-	intel-gfx@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ville.syrjala@intel.com
-Subject: Re: [Intel-gfx] [PATCH v2 5/8] drm/i915: modify max_bw to return
- index to intel_bw_info
-Message-ID: <202304260700.y79nyqxs-lkp@intel.com>
-References: <20230425202826.1144429-6-vinod.govindapillai@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA6A110B
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 01:11:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682471468;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fENkqravDavluPnvEpmkLRr/7AsKUaPp2GJSWTPQ/ZI=;
+	b=DuCFdug1CFIRFrikMTYHeMTm1Pz/vuAhY6QOb/98QxSNGWJvWvTqRj3oYQmBkEmuj5G5SN
+	EpqhS3aXzH+GRNI7IaTUKVLccyTbTbeRki9OPVIRgiGJrP5B5diPzr/3BWVI5Yy5VGjyiI
+	wnIee52wR3tdcVv5Afk4sQ++U2UuoDY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-96-a43YYrizOqmtbnZOOL3Qeg-1; Tue, 25 Apr 2023 21:11:06 -0400
+X-MC-Unique: a43YYrizOqmtbnZOOL3Qeg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E23E51C0A584
+	for <llvm@lists.linux.dev>; Wed, 26 Apr 2023 01:11:05 +0000 (UTC)
+Received: from [172.64.2.76] (unknown [10.30.34.88])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id CD6D94E3C5;
+	Wed, 26 Apr 2023 01:11:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4o+t77iP?= SKIPPED: Test report for master (6.3.0,
+ mainline.kernel.org-clang, 4ea95696)
+Date: Wed, 26 Apr 2023 01:11:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425202826.1144429-6-vinod.govindapillai@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+Message-Id: <34422.123042521110600287@us-mta-96.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Vinod,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on drm-tip/drm-tip]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vinod-Govindapillai/drm-i915-fix-the-derating-percentage-for-MTL/20230426-043120
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-patch link:    https://lore.kernel.org/r/20230425202826.1144429-6-vinod.govindapillai%40intel.com
-patch subject: [Intel-gfx] [PATCH v2 5/8] drm/i915: modify max_bw to return index to intel_bw_info
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230426/202304260700.y79nyqxs-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/aad4c33c841b54fa494a8e76da11b72f20bee83b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vinod-Govindapillai/drm-i915-fix-the-derating-percentage-for-MTL/20230426-043120
-        git checkout aad4c33c841b54fa494a8e76da11b72f20bee83b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304260700.y79nyqxs-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_bw.c:833:7: warning: variable 'idx' is uninitialized when used here [-Wuninitialized]
-                   if (idx > ARRAY_SIZE(i915->display.bw.max))
-                       ^~~
-   drivers/gpu/drm/i915/display/intel_bw.c:825:19: note: initialize the variable 'idx' to silence this warning
-                   unsigned int idx;
-                                   ^
-                                    = 0
-   1 warning generated.
+    Overall result: SKIPPED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
-vim +/idx +833 drivers/gpu/drm/i915/display/intel_bw.c
+Kernel information:
+    Commit message: Merge tag 'media/v6.4-1' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/mchehab/linux-media
 
-   804	
-   805	static int icl_find_qgv_points(struct drm_i915_private *i915,
-   806				       unsigned int data_rate,
-   807				       unsigned int num_active_planes,
-   808				       const struct intel_bw_state *old_bw_state,
-   809				       struct intel_bw_state *new_bw_state)
-   810	{
-   811		unsigned int max_bw_point = 0;
-   812		unsigned int max_bw = 0;
-   813		unsigned int num_psf_gv_points = i915->display.bw.max[0].num_psf_gv_points;
-   814		unsigned int num_qgv_points = i915->display.bw.max[0].num_qgv_points;
-   815		u16 psf_points = 0;
-   816		u16 qgv_points = 0;
-   817		int i;
-   818		int ret;
-   819	
-   820		ret = intel_atomic_lock_global_state(&new_bw_state->base);
-   821		if (ret)
-   822			return ret;
-   823	
-   824		for (i = 0; i < num_qgv_points; i++) {
-   825			unsigned int idx;
-   826			unsigned int max_data_rate;
-   827	
-   828			if (DISPLAY_VER(i915) > 11)
-   829				tgl_max_bw_index(i915, num_active_planes, i);
-   830			else
-   831				icl_max_bw_index(i915, num_active_planes, i);
-   832	
- > 833			if (idx > ARRAY_SIZE(i915->display.bw.max))
-   834				continue;
-   835	
-   836			max_data_rate = i915->display.bw.max[idx].deratedbw[i];
-   837	
-   838			/*
-   839			 * We need to know which qgv point gives us
-   840			 * maximum bandwidth in order to disable SAGV
-   841			 * if we find that we exceed SAGV block time
-   842			 * with watermarks. By that moment we already
-   843			 * have those, as it is calculated earlier in
-   844			 * intel_atomic_check,
-   845			 */
-   846			if (max_data_rate > max_bw) {
-   847				max_bw_point = i;
-   848				max_bw = max_data_rate;
-   849			}
-   850			if (max_data_rate >= data_rate)
-   851				qgv_points |= BIT(i);
-   852	
-   853			drm_dbg_kms(&i915->drm, "QGV point %d: max bw %d required %d\n",
-   854				    i, max_data_rate, data_rate);
-   855		}
-   856	
-   857		for (i = 0; i < num_psf_gv_points; i++) {
-   858			unsigned int max_data_rate = adl_psf_bw(i915, i);
-   859	
-   860			if (max_data_rate >= data_rate)
-   861				psf_points |= BIT(i);
-   862	
-   863			drm_dbg_kms(&i915->drm, "PSF GV point %d: max bw %d"
-   864				    " required %d\n",
-   865				    i, max_data_rate, data_rate);
-   866		}
-   867	
-   868		/*
-   869		 * BSpec states that we always should have at least one allowed point
-   870		 * left, so if we couldn't - simply reject the configuration for obvious
-   871		 * reasons.
-   872		 */
-   873		if (qgv_points == 0) {
-   874			drm_dbg_kms(&i915->drm, "No QGV points provide sufficient memory"
-   875				    " bandwidth %d for display configuration(%d active planes).\n",
-   876				    data_rate, num_active_planes);
-   877			return -EINVAL;
-   878		}
-   879	
-   880		if (num_psf_gv_points > 0 && psf_points == 0) {
-   881			drm_dbg_kms(&i915->drm, "No PSF GV points provide sufficient memory"
-   882				    " bandwidth %d for display configuration(%d active planes).\n",
-   883				    data_rate, num_active_planes);
-   884			return -EINVAL;
-   885		}
-   886	
-   887		/*
-   888		 * Leave only single point with highest bandwidth, if
-   889		 * we can't enable SAGV due to the increased memory latency it may
-   890		 * cause.
-   891		 */
-   892		if (!intel_can_enable_sagv(i915, new_bw_state)) {
-   893			qgv_points = BIT(max_bw_point);
-   894			drm_dbg_kms(&i915->drm, "No SAGV, using single QGV point %d\n",
-   895				    max_bw_point);
-   896		}
-   897	
-   898		/*
-   899		 * We store the ones which need to be masked as that is what PCode
-   900		 * actually accepts as a parameter.
-   901		 */
-   902		new_bw_state->qgv_points_mask =
-   903			~(ICL_PCODE_REQ_QGV_PT(qgv_points) |
-   904			  ADLS_PCODE_REQ_PSF_PT(psf_points)) &
-   905			icl_qgv_points_mask(i915);
-   906	
-   907		/*
-   908		 * If the actual mask had changed we need to make sure that
-   909		 * the commits are serialized(in case this is a nomodeset, nonblocking)
-   910		 */
-   911		if (new_bw_state->qgv_points_mask != old_bw_state->qgv_points_mask) {
-   912			ret = intel_atomic_serialize_global_state(&new_bw_state->base);
-   913			if (ret)
-   914				return ret;
-   915		}
-   916	
-   917		return 0;
-   918	}
-   919	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86049
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/33988=
+6
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
