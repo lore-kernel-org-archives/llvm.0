@@ -1,110 +1,1798 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5A18460;
-	Thu, 27 Apr 2023 16:11:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682611902; x=1714147902;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8j7BMajVfsWd44Yp2KprOdW46ldBUmqAU1g/b3XFdwk=;
-  b=alPkQuzg9cRsbXiHkHpGmzG7n1jNnXdqiyENzvGES1nPYQKS9YFN9TrH
-   3gEOcfPsWPSzh/NuZixEpLoZLPFvMiRoZL+AgvtKLFTB7ZM4fbBkuzeCn
-   //uU4qDH4W5Y1us4JkiWhi3eUFwmHyYNaL3Y9UoH36ZemZPEocUCASSFz
-   ms05L3mzd98Y7ZWa2NyClArFslb+R1HUkLI9z1ZvwHE4/MjkxiTeToqhj
-   B2ry7D6aTMdotdPEdEGTHytH26Q0DNXo65pLTxf9rVnNsb4Hhhe4oFC9y
-   8oz9z0DZNKK/iiAWK+Tkiu9H5gHl1XCsp7614aYH0lhEZrowMceXjvSA1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="410546104"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="410546104"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 09:09:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="724979840"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="724979840"
-Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 Apr 2023 09:09:27 -0700
-Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ps4BS-0000Jh-1S;
-	Thu, 27 Apr 2023 16:09:26 +0000
-Date: Fri, 28 Apr 2023 00:09:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jarkko-tpmdd:next 1/1] include/linux/tpm.h:285:2: error:
- redefinition of enumerator 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE'
-Message-ID: <202304280042.LghqIBZQ-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7284323D5
+	for <llvm@lists.linux.dev>; Thu, 27 Apr 2023 16:50:12 +0000 (UTC)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-63b7588005fso7257297b3a.0
+        for <llvm@lists.linux.dev>; Thu, 27 Apr 2023 09:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1682614211; x=1685206211;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=v5EgcU8iZkvs0aYpVNN9VEnVp+x/lUnT4ft67Y3Crz4=;
+        b=sSqWg4Oc+wkOlKJP1WQK9VlsH3zB74Kxmhk+NGm7Qpx8g04RUE6hRzRuWLERvNgx92
+         ezogx8N7hMZvZU+MKYOXAUYpsIVWe7N4Wy4q+5elF7oUBC3/yWFJwNiIyjx6mmOqS0qI
+         c/dyf0WDv5AwxpHJ3dZLVAOSryo57ufHPtgWaW4qWCEeVA3D7C+iOLrZRTib48KJl4XN
+         J4egS5BJUuEjlfT7CU0gMXOawwtIonSA45cDU4qwnHrB/6eKQyvetGtw6cd7UOYPndjD
+         H6IadegrpEuLJlk1kcR7mbGfGe+uQizAv4LWKwdJjPzZi1VOvM6CVfG1fawFKtsJZFoZ
+         9G1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682614211; x=1685206211;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v5EgcU8iZkvs0aYpVNN9VEnVp+x/lUnT4ft67Y3Crz4=;
+        b=ecOT74kLuSxlRUulxj22XXn4qIX7ch+eVNU33KfkE/R9zhmHaXxoIHPaKNwDGooVIt
+         SibaOTuVW1kCdHHiIZztnzHu9+ZpARNTYVrdyzfRssGnL0qmQOKrh7fF7MS903pSsk+R
+         FAF7xmI+WOkAGvHYzCq7k5XRDcw7ngQ1k2hBtsIdCh7L1XHEpqo2ipvK1oxssI4EyJxz
+         ibWLe/pis2oUl7nd3B7avBbS0OmHvt1frRJy//jawDb+KYZ/tadRyxArOWUbEngmNOqd
+         gUOFUcMU4r3dDtTXfr15V/d/uiTD/lieegCk9FjGIDeOfm16dfdqmUXSeBMA5vJKvqPg
+         SXZg==
+X-Gm-Message-State: AC+VfDzaQcOUL6Gcq014wFLYNKk+nqq+Xj3/6Cop1Q5/XrvoPguez4EV
+	4zDzYCWK3JUuD/YgzedI+pXd/JdFd0wKwUAj+UY=
+X-Google-Smtp-Source: ACHHUZ6vy0k/zQe6OMKmPilDptff/WnJFwap3GipQmsRgLUCliyku0wpCxVfNmf/lt8simnwcSXyhw==
+X-Received: by 2002:a05:6a00:1acd:b0:63a:d2e4:cc35 with SMTP id f13-20020a056a001acd00b0063ad2e4cc35mr3411059pfv.31.1682614210276;
+        Thu, 27 Apr 2023 09:50:10 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id t65-20020a628144000000b0063b8b8580a7sm13322242pfd.29.2023.04.27.09.50.09
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 09:50:09 -0700 (PDT)
+Message-ID: <644aa7c1.620a0220.8da26.b07b@mx.google.com>
+Date: Thu, 27 Apr 2023 09:50:09 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20230427
+X-Kernelci-Report-Type: build
+Subject: next/master build: 179 builds: 5 failed, 174 passed, 8 errors,
+ 214 warnings (next-20230427)
+To: llvm@lists.linux.dev
+From: "kernelci.org bot" <bot@kernelci.org>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git next
-head:   e2f14081c68395f0b0f9072bbf5e56450b1cb3f8
-commit: e2f14081c68395f0b0f9072bbf5e56450b1cb3f8 [1/1] tpm: Re-enable TPM chip boostrapping non-tpm_tis TPM drivers
-config: riscv-buildonly-randconfig-r003-20230427 (https://download.01.org/0day-ci/archive/20230428/202304280042.LghqIBZQ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=e2f14081c68395f0b0f9072bbf5e56450b1cb3f8
-        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-        git fetch --no-tags jarkko-tpmdd next
-        git checkout e2f14081c68395f0b0f9072bbf5e56450b1cb3f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash security/keys/trusted-keys/
+next/master build: 179 builds: 5 failed, 174 passed, 8 errors, 214 warnings=
+ (next-20230427)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304280042.LghqIBZQ-lkp@intel.com/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20230427/
 
-All errors (new ones prefixed by >>):
+Tree: next
+Branch: master
+Git Describe: next-20230427
+Git Commit: 84e2893b4573da3bc0c9f24e2005442e420e3831
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 8 unique architectures
 
-   In file included from security/keys/trusted-keys/trusted_core.c:10:
-   In file included from include/keys/trusted-type.h:12:
->> include/linux/tpm.h:285:2: error: redefinition of enumerator 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE'
-           TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-           ^
-   include/linux/tpm.h:284:2: note: previous definition is here
-           TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-           ^
-   include/linux/tpm.h:286:2: error: redefinition of enumerator 'TPM_CHIP_FLAG_FIRMWARE_UPGRADE'
-           TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-           ^
-   include/linux/tpm.h:284:2: note: previous definition is here
-           TPM_CHIP_FLAG_FIRMWARE_UPGRADE          = BIT(7),
-           ^
-   2 errors generated.
+Build Failures Detected:
 
+arc:
+    haps_hs_smp_defconfig+kselftest: (gcc-10) FAIL
 
-vim +/TPM_CHIP_FLAG_FIRMWARE_UPGRADE +285 include/linux/tpm.h
+arm64:
+    allmodconfig: (clang-17) FAIL
 
-   275	
-   276	enum tpm_chip_flags {
-   277		TPM_CHIP_FLAG_BOOTSTRAPPED		= BIT(0),
-   278		TPM_CHIP_FLAG_TPM2			= BIT(1),
-   279		TPM_CHIP_FLAG_IRQ			= BIT(2),
-   280		TPM_CHIP_FLAG_VIRTUAL			= BIT(3),
-   281		TPM_CHIP_FLAG_HAVE_TIMEOUTS		= BIT(4),
-   282		TPM_CHIP_FLAG_ALWAYS_POWERED		= BIT(5),
-   283		TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED	= BIT(6),
-   284		TPM_CHIP_FLAG_FIRMWARE_UPGRADE		= BIT(7),
- > 285		TPM_CHIP_FLAG_FIRMWARE_UPGRADE		= BIT(7),
-   286		TPM_CHIP_FLAG_FIRMWARE_UPGRADE		= BIT(7),
-   287	};
-   288	
+arm:
+    rpc_defconfig: (gcc-10) FAIL
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+mips:
+    decstation_64_defconfig: (gcc-10) FAIL
+
+x86_64:
+    allmodconfig: (clang-17) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    axs103_defconfig (gcc-10): 2 warnings
+    axs103_smp_defconfig (gcc-10): 2 warnings
+    haps_hs_smp_defconfig+kselftest (gcc-10): 1 error
+    hsdk_defconfig (gcc-10): 2 warnings
+    vdk_hs38_defconfig (gcc-10): 2 warnings
+    vdk_hs38_smp_defconfig (gcc-10): 2 warnings
+
+arm64:
+    allmodconfig (clang-17): 1 error, 1 warning
+    defconfig (clang-17): 3 warnings
+
+arm:
+    aspeed_g5_defconfig (clang-17): 3 warnings
+    aspeed_g5_defconfig (gcc-10): 2 warnings
+    at91_dt_defconfig (gcc-10): 2 warnings
+    axm55xx_defconfig (gcc-10): 2 warnings
+    bcm2835_defconfig (gcc-10): 2 warnings
+    davinci_all_defconfig (gcc-10): 2 warnings
+    hisi_defconfig (gcc-10): 2 warnings
+    imx_v4_v5_defconfig (gcc-10): 2 warnings
+    imxrt_defconfig (gcc-10): 2 warnings
+    ixp4xx_defconfig (gcc-10): 2 warnings
+    keystone_defconfig (gcc-10): 2 warnings
+    milbeaut_m10v_defconfig (gcc-10): 2 warnings
+    mmp2_defconfig (gcc-10): 2 warnings
+    moxart_defconfig (gcc-10): 2 warnings
+    multi_v5_defconfig (gcc-10): 2 warnings
+    multi_v5_defconfig (clang-17): 3 warnings
+    multi_v7_defconfig (clang-17): 3 warnings
+    multi_v7_defconfig (gcc-10): 2 warnings
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (gcc-10): 2 warni=
+ngs
+    multi_v7_defconfig+CONFIG_SMP=3Dn (gcc-10): 2 warnings
+    multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (gcc-10): 2 warnings
+    multi_v7_defconfig+debug (gcc-10): 2 warnings
+    mvebu_v5_defconfig (gcc-10): 2 warnings
+    mvebu_v7_defconfig (gcc-10): 2 warnings
+    mxs_defconfig (gcc-10): 2 warnings
+    nhk8815_defconfig (gcc-10): 2 warnings
+    orion5x_defconfig (gcc-10): 2 warnings
+    pxa_defconfig (gcc-10): 2 warnings
+    qcom_defconfig (gcc-10): 2 warnings
+    rpc_defconfig (gcc-10): 2 errors
+    s3c6400_defconfig (gcc-10): 2 warnings
+    s5pv210_defconfig (gcc-10): 2 warnings
+    sama5_defconfig (gcc-10): 2 warnings
+    sama7_defconfig (gcc-10): 2 warnings
+    socfpga_defconfig (gcc-10): 2 warnings
+    sp7021_defconfig (gcc-10): 2 warnings
+    spear13xx_defconfig (gcc-10): 2 warnings
+    spear3xx_defconfig (gcc-10): 2 warnings
+    spear6xx_defconfig (gcc-10): 2 warnings
+    spitz_defconfig (gcc-10): 2 warnings
+    stm32_defconfig (gcc-10): 2 warnings
+    sunxi_defconfig (gcc-10): 2 warnings
+    tegra_defconfig (gcc-10): 2 warnings
+    u8500_defconfig (gcc-10): 2 warnings
+    vexpress_defconfig (gcc-10): 2 warnings
+    vf610m4_defconfig (gcc-10): 2 warnings
+    vt8500_v6_v7_defconfig (gcc-10): 2 warnings
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 2 warnings
+    32r2el_defconfig+debug (gcc-10): 2 warnings
+    32r2el_defconfig+kselftest (gcc-10): 2 warnings
+    bmips_be_defconfig (gcc-10): 2 warnings
+    bmips_stb_defconfig (gcc-10): 2 warnings
+    cavium_octeon_defconfig (gcc-10): 2 warnings
+    ci20_defconfig (gcc-10): 2 warnings
+    cobalt_defconfig (gcc-10): 2 warnings
+    cu1000-neo_defconfig (gcc-10): 2 warnings
+    cu1830-neo_defconfig (gcc-10): 2 warnings
+    db1xxx_defconfig (gcc-10): 2 warnings
+    decstation_64_defconfig (gcc-10): 2 warnings
+    decstation_defconfig (gcc-10): 2 warnings
+    decstation_r4k_defconfig (gcc-10): 2 warnings
+    fuloong2e_defconfig (gcc-10): 1 error, 2 warnings
+    gcw0_defconfig (gcc-10): 2 warnings
+    ip27_defconfig (gcc-10): 2 warnings
+    jazz_defconfig (gcc-10): 2 warnings
+    loongson1b_defconfig (gcc-10): 2 warnings
+    loongson1c_defconfig (gcc-10): 2 warnings
+    loongson2k_defconfig (gcc-10): 1 error
+    loongson3_defconfig (gcc-10): 1 error
+    pic32mzda_defconfig (gcc-10): 2 warnings
+    qi_lb60_defconfig (gcc-10): 2 warnings
+    rm200_defconfig (gcc-10): 2 warnings
+    rs90_defconfig (gcc-10): 2 warnings
+
+riscv:
+    defconfig (clang-17): 3 warnings
+    defconfig (gcc-10): 2 warnings
+    defconfig+debug (gcc-10): 2 warnings
+    defconfig+kselftest (gcc-10): 2 warnings
+    rv32_defconfig (clang-17): 3 warnings
+    rv32_defconfig (gcc-10): 2 warnings
+
+sparc:
+    allnoconfig (gcc-10): 1 warning
+    sparc32_defconfig (gcc-10): 2 warnings
+    sparc64_defconfig (gcc-10): 6 warnings
+    sparc64_defconfig+debug (gcc-10): 4 warnings
+    tinyconfig (gcc-10): 1 warning
+
+x86_64:
+    allmodconfig (clang-17): 1 error, 2 warnings
+    allnoconfig (gcc-10): 3 warnings
+    x86_64_defconfig (gcc-10): 3 warnings
+    x86_64_defconfig+amdgpu (gcc-10): 3 warnings
+    x86_64_defconfig+crypto (gcc-10): 3 warnings
+    x86_64_defconfig+ima (gcc-10): 3 warnings
+    x86_64_defconfig+kselftest (rustc-1.62): 3 warnings
+    x86_64_defconfig+x86-chromebook (gcc-10): 3 warnings
+    x86_64_defconfig+x86-chromebook+amdgpu (gcc-10): 3 warnings
+    x86_64_defconfig+x86_kvm_guest (gcc-10): 3 warnings
+
+Errors summary:
+
+    3    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=
+=80=98-mhard-float=E2=80=99
+    2    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable =
+'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    1    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or =
+directory
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=
+=3D0x'
+    1    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=
+=3D0x'
+
+Warnings summary:
+
+    73   fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=
+=99 [-Wunused-variable]
+    73   fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=
+=99 [-Wunused-variable]
+    10   fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-va=
+riable]
+    10   fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-var=
+iable]
+    8    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    7    vmlinux.o: warning: objtool: iovec_from_user+0x6d: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    7    vmlinux.o: warning: objtool: __import_iovec+0x1b8: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    6    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bea: redunda=
+nt UACCESS disable
+    5    2 warnings generated.
+    3    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initializ=
+e the variable 'ret' to silence this warning
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to=
+ !ENDBR: .text+0x141146
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to=
+ !ENDBR: .text+0x1412bb
+    1    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to =
+!ENDBR: native_write_cr4+0x4
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bfe: redunda=
+nt UACCESS disable
+    1    lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0x52: cal=
+l to copy_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: __import_iovec+0x171: call to co=
+py_iovec_from_user.part.0() with UACCESS enabled
+    1    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redu=
+ndant UACCESS disable
+    1    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7683: sta=
+ck state mismatch: cfa1=3D4+360 cfa2=3D4+352
+    1    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variabl=
+e 'ret' is uninitialized when used here [-Wuninitialized]
+    1    1 warning generated.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+debug (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings,=
+ 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-17) =E2=80=94 FAIL, 1 error, 1 warning, 0 sectio=
+n mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, clang-17) =E2=80=94 FAIL, 1 error, 2 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable 'ret'=
+ is uninitialized when used here [-Werror,-Wuninitialized]
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    fs/reiserfs/reiserfs.o: warning: objtool: balance_leaf+0x7683: stack st=
+ate mismatch: cfa1=3D4+360 cfa2=3D4+352
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    lib/iov_iter.o: warning: objtool: .altinstr_replacement+0x1f: redundant=
+ UACCESS disable
+    lib/iov_iter.o: warning: objtool: iovec_from_user.part.0+0x52: call to =
+copy_iovec_from_user.part.0() with UACCESS enabled
+    lib/iov_iter.o: warning: objtool: __import_iovec+0x171: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings=
+, 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+cu1830-neo_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-10) =E2=80=94 FAIL, 0 errors, 2 warnings=
+, 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section m=
+ismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 're=
+t' is uninitialized when used here [-Wuninitialized]
+    drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the=
+ variable 'ret' to silence this warning
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+crypto (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+debug (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+ima (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 2 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+debug (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warni=
+ngs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-10) =E2=80=94 FAIL, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    net/bpfilter/main.c:3:10: fatal error: sys/uio.h: No such file or direc=
+tory
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+debug (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+imxrt_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+loongson2k_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 =
+section mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-10) =E2=80=94 PASS, 1 error, 0 warnings, 0 s=
+ection mismatches
+
+Errors:
+    cc1: error: =E2=80=98-mloongson-mmi=E2=80=99 must be used with =E2=80=
+=98-mhard-float=E2=80=99
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings,=
+ 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0 =
+section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0 =
+section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-10) =E2=80=
+=94 PASS, 0 errors, 2 warnings, 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2=
+ warnings, 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_THUMB2_KERNEL=3Dy (arm, gcc-10) =E2=80=94 PASS, 0=
+ errors, 2 warnings, 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+debug (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings=
+, 0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_sdcard_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-10) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r7,=3D0x'
+    arch/arm/kernel/head.S:319: Error: missing expression -- `ldr r3,=3D0x'
+
+---------------------------------------------------------------------------=
+-----
+rs90_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, clang-17) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sama7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sp7021_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sparc32_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 6 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig+debug (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warning=
+s, 0 section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, =
+0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable 'i' [-Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable 'i' [-Wunused-variabl=
+e]
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, =
+0 section mismatches
+
+Warnings:
+    fs/ext4/super.c:1262:6: warning: unused variable =E2=80=98i=E2=80=99 [-=
+Wunused-variable]
+    fs/ext4/super.c:5200:15: warning: unused variable =E2=80=98i=E2=80=99 [=
+-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+wpcm450_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bea: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x6d: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x1b8: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, clang-17) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bea: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x6d: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x1b8: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+crypto (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bfe: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x6d: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x1b8: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+debug (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+ima (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings,=
+ 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bea: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x6d: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x1b8: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 3=
+ warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !END=
+BR: .text+0x1412bb
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x3e: relocation to !END=
+BR: .text+0x141146
+    vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xcc: relocation to !ENDB=
+R: native_write_cr4+0x4
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+rust (x86_64, rustc-1.62) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, =
+3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bea: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x6d: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x1b8: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86-chromebook+amdgpu (x86_64, gcc-10) =E2=80=94 PASS, 0 e=
+rrors, 3 warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bea: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x6d: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x1b8: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+x86_kvm_guest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3=
+ warnings, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x1bea: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x6d: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x1b8: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---
+For more info write to <info@kernelci.org>
