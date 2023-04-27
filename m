@@ -1,103 +1,114 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BEDC2CB;
-	Thu, 27 Apr 2023 19:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682623544; x=1714159544;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hsETfvRRCT/qQ1dm1hVNMwYqK5ebhpqNjwpqtmUMPrQ=;
-  b=e+BghhBl8gFt0Cgcn4mfpNOYJn4KJmIKD1cXqQrRXWdlUZNT+clwCrIL
-   MQfdUtbf7Y/7flyHu1SS9qmi0TUzFEirxnadls6F6eT3OWzGLoIrX8okM
-   s1jGIFRwVRu4gMtX49tuX/lpglI/YIDDt1frar9bqzSlCWJAB7DH/67XQ
-   wocFbQPW4pxlrkCYkoAGRmyqzAnFqtfHo4/IqwjbGoSVqSu47/diZ6LKx
-   8PDycG2ho56efAIdbKLTJlDuyIfXRG+cYLvsK4JrTknCE7c1ICFgJyb05
-   CgHlx+BVUimKsyEY4C/8IAPEt8NYdUSbUcIyrngp4JLTlAiWvE8AstBcP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="347567012"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="347567012"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:25:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="763963995"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="763963995"
-Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Apr 2023 12:25:24 -0700
-Received: from kbuild by b95e16499b55 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ps7F6-00004v-0o;
-	Thu, 27 Apr 2023 19:25:24 +0000
-Date: Fri, 28 Apr 2023 03:24:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:dt/header-cleanups 55/57] drivers/regulator/max8660.c:502:21:
- error: use of undeclared identifier 'max8660_dt_ids'; did you mean
- 'max8660_id'?
-Message-ID: <202304280341.iexmDsfI-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07769C2CB;
+	Thu, 27 Apr 2023 19:35:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24230C4339B;
+	Thu, 27 Apr 2023 19:35:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1682624111;
+	bh=I6bjmJKyg+OsI5C9yWHH3qaPQ1SmKzUJt4SHAnBFRZI=;
+	h=From:Date:Subject:To:Cc:From;
+	b=XierVmVdpa9Cp39YuWLeh+yshOeehlTOz9gNsgUitHVikKGFTxIiAKZkigJbZrsrg
+	 vgQa+Q3Ck2JIRvcGCVf3wpvIWrAypEQdMXGq1d1TO+aixd+IJz/1+t1VFZyja6lkkM
+	 MyoDXHe54cW6Tg9mh9XJ060LVRxv1g7MZMunUP5XiW6dIOZNp7+H4dBL9gwCtU6h+/
+	 Qg3IGXNqxWg5xgmmNvPpl+LSW9OUfesBRR/jjrB2ZTx7ori0yCkmb3fldCh/4J2gPe
+	 Ai+yXz746miKIZ6kO6lUawp5qy9F5179DlH2rfO5zvywSC/rpSwUudk3SS1HDoSanB
+	 wr23RJp6sCcPQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 27 Apr 2023 12:34:53 -0700
+Subject: [PATCH] powerpc/boot: Disable power10 features after BOOTAFLAGS
+ assignment
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230427-remove-power10-args-from-boot-aflags-clang-v1-1-9107f7c943bc@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFzOSmQC/x2OwQqDMBBEf0Vy7kKM0kp/pfSwSTcaMFnZFS2I/
+ 97Y45thHnMYJUmk5tkcRmhLmrhUaG+NCROWkSB9KhtnXWd79wChzBvBwjtJawFlVIjCGTzzChh
+ nrEGY6xTcfQh9R0NoYzBV6FEJvGAJ06XMqCvJVSxCMX3/L17v8/wBDfVlOJUAAAA=
+To: mpe@ellerman.id.au
+Cc: npiggin@gmail.com, christophe.leroy@csgroup.eu, ndesaulniers@google.com, 
+ trix@redhat.com, linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2693; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=I6bjmJKyg+OsI5C9yWHH3qaPQ1SmKzUJt4SHAnBFRZI=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCle5/I47l3VVrhda/xi+qvzUqkHPLpLjyWoL7h32nDxZ
+ 0XFY7urOkpZGMQ4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEUl8z/OF2N5n/qTdontgL
+ j/9b712ou3PowoKTqg/552x/apAX9DCekeF31rJjPwrXT1okOJnber27/ht53bCIeqOQgo7b8Wv
+ 3TuQDAA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git dt/header-cleanups
-head:   d03f4bcb40575c1caf4deb8072eb2f9486e51b25
-commit: a581a78403b6af4ee0aa9c6ee6701e92dc2555f6 [55/57] Use of_device_get_match_data
-config: s390-buildonly-randconfig-r001-20230427 (https://download.01.org/0day-ci/archive/20230428/202304280341.iexmDsfI-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?id=a581a78403b6af4ee0aa9c6ee6701e92dc2555f6
-        git remote add robh https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
-        git fetch --no-tags robh dt/header-cleanups
-        git checkout a581a78403b6af4ee0aa9c6ee6701e92dc2555f6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/regulator/ lib/
+When building the boot wrapper assembly files with clang after
+commit 648a1783fe25 ("powerpc/boot: Fix boot wrapper code generation
+with CONFIG_POWER10_CPU"), the following warnings appear for each file
+built:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304280341.iexmDsfI-lkp@intel.com/
+  '-prefixed' is not a recognized feature for this target (ignoring feature)
+  '-pcrel' is not a recognized feature for this target (ignoring feature)
 
-All errors (new ones prefixed by >>):
+While it is questionable whether or not LLVM should be emitting a
+warning when passed negative versions of code generation flags when
+building assembly files (since it does not emit a warning for the
+altivec and vsx flags), it is easy enough to work around this by just
+moving the disabled flags to BOOTCFLAGS after the assignment of
+BOOTAFLAGS, so that they are not added when building assembly files.
+Do so to silence the warnings.
 
->> drivers/regulator/max8660.c:502:21: error: use of undeclared identifier 'max8660_dt_ids'; did you mean 'max8660_id'?
-                   .of_match_table = max8660_dt_ids,
-                                     ^~~~~~~~~~~~~~
-                                     max8660_id
-   drivers/regulator/max8660.c:491:35: note: 'max8660_id' declared here
-   static const struct i2c_device_id max8660_id[] = {
-                                     ^
->> drivers/regulator/max8660.c:502:21: error: incompatible pointer types initializing 'const struct of_device_id *' with an expression of type 'const struct i2c_device_id[3]' [-Werror,-Wincompatible-pointer-types]
-                   .of_match_table = max8660_dt_ids,
-                                     ^~~~~~~~~~~~~~
-   2 errors generated.
+Cc: stable@vger.kernel.org
+Fixes: 648a1783fe25 ("powerpc/boot: Fix boot wrapper code generation with CONFIG_POWER10_CPU")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1839
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+I do not think that 648a1783fe25 is truly to blame for this but the
+Fixes tag will help the stable team ensure that this change gets
+backported with 648a1783fe25. This is the minimal fix for the problem
+but the true fix is separating AFLAGS and CFLAGS, which should be done
+by this in-flight series by Nick:
 
+https://lore.kernel.org/20230426055848.402993-1-npiggin@gmail.com/
+---
+ arch/powerpc/boot/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-vim +502 drivers/regulator/max8660.c
+diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
+index 85cde5bf04b7..771b79423bbc 100644
+--- a/arch/powerpc/boot/Makefile
++++ b/arch/powerpc/boot/Makefile
+@@ -34,8 +34,6 @@ endif
+ 
+ BOOTCFLAGS    := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+ 		 -fno-strict-aliasing -O2 -msoft-float -mno-altivec -mno-vsx \
+-		 $(call cc-option,-mno-prefixed) $(call cc-option,-mno-pcrel) \
+-		 $(call cc-option,-mno-mma) \
+ 		 $(call cc-option,-mno-spe) $(call cc-option,-mspe=no) \
+ 		 -pipe -fomit-frame-pointer -fno-builtin -fPIC -nostdinc \
+ 		 $(LINUXINCLUDE)
+@@ -71,6 +69,10 @@ BOOTAFLAGS	:= -D__ASSEMBLY__ $(BOOTCFLAGS) -nostdinc
+ 
+ BOOTARFLAGS	:= -crD
+ 
++BOOTCFLAGS	+= $(call cc-option,-mno-prefixed) \
++		   $(call cc-option,-mno-pcrel) \
++		   $(call cc-option,-mno-mma)
++
+ ifdef CONFIG_CC_IS_CLANG
+ BOOTCFLAGS += $(CLANG_FLAGS)
+ BOOTAFLAGS += $(CLANG_FLAGS)
 
-   497	
-   498	static struct i2c_driver max8660_driver = {
-   499		.probe_new = max8660_probe,
-   500		.driver		= {
-   501			.name	= "max8660",
- > 502			.of_match_table = max8660_dt_ids,
-   503		},
-   504		.id_table	= max8660_id,
-   505	};
-   506	
+---
+base-commit: 169f8997968ab620d750d9a45e15c5288d498356
+change-id: 20230427-remove-power10-args-from-boot-aflags-clang-268c43e8c1fc
 
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Nathan Chancellor <nathan@kernel.org>
+
