@@ -1,43 +1,50 @@
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA5A1867;
-	Thu, 27 Apr 2023 06:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0E91FCC;
+	Thu, 27 Apr 2023 08:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682578097; x=1714114097;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+x5OGVpOtE0g1KlEEMXNWoueG3GSjsfmnGbwcc6bKi0=;
-  b=aDG2BXVaVOQJzM1ZvIXWiiTfihemaue3wsMejjjf69C1sq+76+3fLMcE
-   90fRUrFd18M7iulmPoo9BrkbBC6hHVkGy3IJUhxJ/rje4ioSSoqNRw+In
-   yb2SbnyQAAUY1eCO0pbAJCiLGD+uTcKuzD8/RiiJP5lXuJNm9EfrQRtTm
-   xqbAtoqlcm7KK97sP6mJ5zyqpXTwyE2wABzXKxWYY/V4uoSknz1wjD9DD
-   KglavilAo9FXA15hV9l8At1gloP69NUbJmWT7AkPOLlfZ8gtF7XroU+uR
-   SvlIcIm6YKJF8qI1nr1/5g4qxv28/vOcn0Aqv856rWgkxUgIsX+JJv/dq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="346106492"
+  t=1682585602; x=1714121602;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PdNhUJSX/iPV5VcAroLPn/fmTZiuZY8KaHlnELWC/K4=;
+  b=hOHmVc6wGT7zLEJb1UolwIcx5anIhrr4rUOL62mTVIMjlA9nRUKwdkY6
+   l6aLNzPC7W4JajDFsuVLqvYqOtnMggeKLuONnY8GLKk/y+GdDqEffuMNl
+   qiC1ueg6fCB9kZnuAb3NdfHfCQtRJO9fTtQDxDcc75TSO8vFRKiW3QARJ
+   VUVkW7fwRvTTmRPMZpjIOibauqq2Z++5zYuaLGfFGauQGRCEeEwHhB3gS
+   FQQZZMphKH8bOwJzI9RD2GDEL8YPDc0Ae57iB1HOsc+bDfKfP8tyCDuoQ
+   D8sHWE+RUniQ+pQOPKVe4eJyaW79nlidpmkJkuRsctc1iCGUOP+LJCJyx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="349327866"
 X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="346106492"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 23:48:16 -0700
+   d="scan'208";a="349327866"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 01:53:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="783605604"
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="688332868"
 X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="783605604"
+   d="scan'208";a="688332868"
 Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Apr 2023 23:48:15 -0700
+  by orsmga007.jf.intel.com with ESMTP; 27 Apr 2023 01:53:18 -0700
 Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1prvQM-000041-33;
-	Thu, 27 Apr 2023 06:48:14 +0000
-Date: Thu, 27 Apr 2023 14:48:06 +0800
+	id 1prxNN-00008D-1G;
+	Thu, 27 Apr 2023 08:53:17 +0000
+Date: Thu, 27 Apr 2023 16:52:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jejb@linux.ibm.com,
+	martin.petersen@oracle.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.04.26a 38/51] arch/x86/kernel/nmi.c:441:6:
- warning: no previous prototype for function 'set_nmi_torture'
-Message-ID: <202304271448.5uG6ip4V-lkp@intel.com>
+	bblock@linux.ibm.com, acelan.kao@canonical.com,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] PM: suspend: Define pm_suspend_target_state
+Message-ID: <202304271651.DsSWc2rx-lkp@intel.com>
+References: <20230427050603.612145-1-kai.heng.feng@canonical.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,55 +53,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230427050603.612145-1-kai.heng.feng@canonical.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.04.26a
-head:   56b38a90a12f76e463a7381d8cff854926fa2b59
-commit: e5bf47f3a53ddfad8e0c56b6cbf048de8d82b033 [38/51] x86/nmi: Add a set_nmi_torture() function to control NMI testing
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230427/202304271448.5uG6ip4V-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+Hi Kai-Heng,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master pavel-leds/for-next v6.3 next-20230426]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kai-Heng-Feng/ata-libata-Defer-rescan-on-suspended-device/20230427-130726
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230427050603.612145-1-kai.heng.feng%40canonical.com
+patch subject: [PATCH v3 1/2] PM: suspend: Define pm_suspend_target_state
+config: mips-randconfig-r002-20230427 (https://download.01.org/0day-ci/archive/20230427/202304271651.DsSWc2rx-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=e5bf47f3a53ddfad8e0c56b6cbf048de8d82b033
-        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-        git fetch --no-tags paulmck-rcu dev.2023.04.26a
-        git checkout e5bf47f3a53ddfad8e0c56b6cbf048de8d82b033
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/03ca901d88f622ddd3bfd75b9f1b62d99881e430
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kai-Heng-Feng/ata-libata-Defer-rescan-on-suspended-device/20230427-130726
+        git checkout 03ca901d88f622ddd3bfd75b9f1b62d99881e430
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304271448.5uG6ip4V-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304271651.DsSWc2rx-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function 'set_nmi_torture' [-Wmissing-prototypes]
-   void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-        ^
-   arch/x86/kernel/nmi.c:441:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/set_nmi_torture +441 arch/x86/kernel/nmi.c
-
-   439	
-   440	/* Set the test values as desired. */
- > 441	void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
-   442	{
-   443		WRITE_ONCE(nmi_delay, nmi_delay_in);
-   444		WRITE_ONCE(nmi_halt1, nmi_halt1_in);
-   445		WRITE_ONCE(nmi_halt2, nmi_halt2_in);
-   446		WRITE_ONCE(nmi_halt3, nmi_halt3_in);
-   447		pr_info("%s: Set NMI test parameters nmi_delay=%d nmi_halt1=%d nmi_halt2=%d nmi_halt3=%d\n",
-   448			__func__, nmi_delay, nmi_halt1, nmi_halt2, nmi_halt3);
-   449	}
-   450	EXPORT_SYMBOL_GPL(set_nmi_torture);
-   451	
+>> ld.lld: error: undefined symbol: pm_suspend_target_state
+   >>> referenced by wakeup.c
+   >>>               drivers/base/power/wakeup.o:(device_wakeup_enable) in archive vmlinux.a
+   >>> referenced by wakeup.c
+   >>>               drivers/base/power/wakeup.o:(device_wakeup_enable) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
