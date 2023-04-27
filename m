@@ -1,62 +1,47 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683C323D1
-	for <llvm@lists.linux.dev>; Thu, 27 Apr 2023 13:13:17 +0000 (UTC)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-959a626b622so811483566b.0
-        for <llvm@lists.linux.dev>; Thu, 27 Apr 2023 06:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682601195; x=1685193195;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ymSyk174Q/aRoWNbYUHHG8erPdr3iK0BpQYJmy801k=;
-        b=HIgpg5N7XJjzbxz+z7IgxgVQ5128JI4dtyixvRnwGndbaq5YVIPtJHd+DaOorca26k
-         cr99XyR833joae9EIrXDFvGYDfgdx97lSuMToDnUqFhu9JA7SVMQJHER3oDi1Rp3QEOF
-         mLPJ2w5t3aMH0JrLeMU3g1mTm+pQghwAf7n/nH6OPPuRRH8u1MJicYy4tnsZoD/6nenc
-         EeThR0OHBw47zlfBPnB+cq15TJ0QLrtuGCvLMwLcZZYUg6DqV/RYw9pkk1E3rpyPuXst
-         ayDxj8TjQBJExMKsUnsMDqZQTfzm6bZlQ6b/oOXxuNOUqTuU/9i+0PZUQfGkDAoFnKXE
-         v4wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682601195; x=1685193195;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ymSyk174Q/aRoWNbYUHHG8erPdr3iK0BpQYJmy801k=;
-        b=VlZTNB/rSipQnxCUXn2dQWfjRGFO3GTi6x+ekvzjHuVydjKS3SauQQzRuSGP4mGxG+
-         SNEly8jO8LbSIPoAkJmWfP4KxQvyjqM/Z/bdac0Ddw9Gd79vsAseY+VmojC6ctFqxWWM
-         ZhMROojRb4tI20dkhluZ7zu9ssvIQLIRa7jnCdqDfVBbc4YhwN9gwj0l4i5J2rM+1cAt
-         0qIzQ3vcBIeChUxQq0tHZX7ShkHmN5A7fz3Oo5nRqDF7+4SEzUI/TDqUilzjumt/FShx
-         w5hKB763R/ad48THZJ2NlAzsVSi6t2VcONF7NQoeyXImSdvZXKdgkLqY98l1aUsGZ6Y7
-         7cUw==
-X-Gm-Message-State: AC+VfDwPefvM/mDIpsB6GG6mq3WHhzmXJCwfOeuTh1As1t2nyjVKFH6g
-	VP5BN4lwX/WcS4C1HkNaGnYLww==
-X-Google-Smtp-Source: ACHHUZ4WhZAaEZw48L4mS8JWz5hV+DtJHTNQLlKB9/bS0XJh3GNfgim97pYJpFirPWLxY6K5pRGJaA==
-X-Received: by 2002:a17:907:7da9:b0:94b:cd7c:59f4 with SMTP id oz41-20020a1709077da900b0094bcd7c59f4mr1742934ejc.16.1682601195517;
-        Thu, 27 Apr 2023 06:13:15 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id t25-20020a17090616d900b009534603453dsm9503863ejd.131.2023.04.27.06.13.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 06:13:14 -0700 (PDT)
-Date: Thu, 27 Apr 2023 15:13:13 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Sunil V L <sunilvl@ventanamicro.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev, 
-	corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, 
-	lenb@kernel.org, daniel.lezcano@linaro.org, tglx@linutronix.de, 
-	qianweili@huawei.com, wangzhou1@hisilicon.com, herbert@gondor.apana.org.au, 
-	Marc Zyngier <maz@kernel.org>, luzmaximilian@gmail.com, hdegoede@redhat.com, 
-	markgross@kernel.org, nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com, 
-	rafael@kernel.org, davem@davemloft.net, rafael.j.wysocki@intel.com
-Subject: Re: [PATCH V4 08/23] RISC-V: ACPI: Cache and retrieve the RINTC
- structure
-Message-ID: <q7bug5j62ceniiif5joz5i73g7lbyebawbokcang4ctit4i634@e5bd6zqozbau>
-References: <20230404182037.863533-9-sunilvl@ventanamicro.com>
- <mhng-fd6c3622-ce6c-4895-8dc9-7dbaa2ab14f4@palmer-ri-x1c9a>
- <ZEo+6rwM+c6DvlMM@sunil-laptop>
- <qqukqrc45zqyjh5bwpjpuiweogwtapuw7qqjjpubjwvteum6ig@esjfwqdivhpa>
- <ZEpUCD+eq/NL7LXJ@sunil-laptop>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A822F2B;
+	Thu, 27 Apr 2023 14:16:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682604965; x=1714140965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eCwAykhxfez5wbK3yQdYOYy7KHTQG9/cq1djBX12nws=;
+  b=kLHMlU19NypahvBmP9TcM1wA2o8eUOvF3saGHPaTwnOQHXMsSa04PeHX
+   ispoMnL2kReO7ARDTBwV3MMwtYswDzzC8lJ2Mtl2XCpvdU6fxgyyAoiMY
+   D+vBAvm+7eDFgNGFSxlVXMAyO858WptBJSkTy8VgPEh72WCrFd+RBmDCI
+   b55Q/lF4fcvT4SfdOfVZSGcQJ8SxrqS+Gr+nkBju5jb8oefnAzk5+LPuc
+   YL/7y2jNE1MyB/S2h28UKD31RCBLd53LzGQ7LhLr2eW1p588YFiv1S8DR
+   t4uTshcv1zFGTi/3ReN0D/qI7Dio5uNXs4nHtNpVrVGnByAQ68dQ55eV3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="336416849"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="336416849"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 06:55:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="694393565"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="694393565"
+Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2023 06:55:23 -0700
+Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ps25i-0000Fh-1P;
+	Thu, 27 Apr 2023 13:55:22 +0000
+Date: Thu, 27 Apr 2023 21:54:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+	gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+	mathias.nyman@intel.com, linux-usb@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Subject: Re: [PATCH v2 1/2] USB: Extend pci resume function to handle PM
+ events
+Message-ID: <202304272147.qSiPDNIh-lkp@intel.com>
+References: <20230427104805.3560591-2-Basavaraj.Natikar@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,161 +50,103 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEpUCD+eq/NL7LXJ@sunil-laptop>
+In-Reply-To: <20230427104805.3560591-2-Basavaraj.Natikar@amd.com>
 
-On Thu, Apr 27, 2023 at 04:22:56PM +0530, Sunil V L wrote:
-> On Thu, Apr 27, 2023 at 12:25:42PM +0200, Andrew Jones wrote:
-> > On Thu, Apr 27, 2023 at 02:52:50PM +0530, Sunil V L wrote:
-> > > Hi Palmer,
-> > > 
-> > > On Wed, Apr 26, 2023 at 11:45:00AM -0700, Palmer Dabbelt wrote:
-> > > > On Tue, 04 Apr 2023 11:20:22 PDT (-0700), sunilvl@ventanamicro.com wrote:
-> > > > > RINTC structures in the MADT provide mapping between the hartid
-> > > > > and the CPU. This is required many times even at run time like
-> > > > > cpuinfo. So, instead of parsing the ACPI table every time, cache
-> > > > > the RINTC structures and provide a function to get the correct
-> > > > > RINTC structure for a given cpu.
-> > > > > 
-> > > > > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > > > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > ---
-> > > > >  arch/riscv/include/asm/acpi.h |  2 ++
-> > > > >  arch/riscv/kernel/acpi.c      | 60 +++++++++++++++++++++++++++++++++++
-> > > > >  2 files changed, 62 insertions(+)
-> > > > > 
-> > > > > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-> > > > > index 9be52b6ffae1..1606dce8992e 100644
-> > > > > --- a/arch/riscv/include/asm/acpi.h
-> > > > > +++ b/arch/riscv/include/asm/acpi.h
-> > > > > @@ -59,6 +59,8 @@ static inline bool acpi_has_cpu_in_madt(void)
-> > > > > 
-> > > > >  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
-> > > > > 
-> > > > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
-> > > > > +u32 get_acpi_id_for_cpu(int cpu);
-> > > > >  #endif /* CONFIG_ACPI */
-> > > > > 
-> > > > >  #endif /*_ASM_ACPI_H*/
-> > > > > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
-> > > > > index 81d448c41714..40ab55309c70 100644
-> > > > > --- a/arch/riscv/kernel/acpi.c
-> > > > > +++ b/arch/riscv/kernel/acpi.c
-> > > > > @@ -24,6 +24,66 @@ EXPORT_SYMBOL(acpi_disabled);
-> > > > >  int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
-> > > > >  EXPORT_SYMBOL(acpi_pci_disabled);
-> > > > > 
-> > > > > +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
-> > > > > +
-> > > > > +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
-> > > > > +{
-> > > > > +	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
-> > > > > +	int cpuid;
-> > > > > +
-> > > > > +	if (!(rintc->flags & ACPI_MADT_ENABLED))
-> > > > > +		return 0;
-> > > > > +
-> > > > > +	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
-> > > > 
-> > > > Unless I'm missing something, this races with CPUs coming online.  Maybe
-> > > > that's a rare enough case we don't care, but I think we'd also just have
-> > > > simpler logic if we fixed it...
-> > > > 
-> > > This depend only on cpuid_to_hartid_map filled up. I wish I could
-> > > initialize this RINTC mapping in setup_smp() itself like ARM64. But in
-> > > RISC-V, this file smpboot.c gets built only when CONFIG_SMP is enabled.
-> > > Hence, we need to initialize this array outside of setup_smp().
-> > > 
-> > > I can update the code to initialize this from setup_arch() immediately
-> > > after setup_smp() if ACPI is enabled. That should avoid the global
-> > > variable check also. Let me know if you prefer this.
-> > > 
-> > > > > +	/*
-> > > > > +	 * When CONFIG_SMP is disabled, mapping won't be created for
-> > > > > +	 * all cpus.
-> > > > > +	 * CPUs more than NR_CPUS, will be ignored.
-> > > > > +	 */
-> > > > > +	if (cpuid >= 0 && cpuid < NR_CPUS)
-> > > > > +		cpu_madt_rintc[cpuid] = *rintc;
-> > > > > +
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static int acpi_init_rintc_array(void)
-> > > > > +{
-> > > > > +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) > 0)
-> > > > > +		return 0;
-> > > > > +
-> > > > > +	return -ENODEV;
-> > > > > +}
-> > > > > +
-> > > > > +/*
-> > > > > + * Instead of parsing (and freeing) the ACPI table, cache
-> > > > > + * the RINTC structures since they are frequently used
-> > > > > + * like in  cpuinfo.
-> > > > > + */
-> > > > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
-> > > > > +{
-> > > > > +	static bool rintc_init_done;
-> > > > 
-> > > > ... basically just get rid of this global variable, and instead have a
-> > > > 
-> > > >    if (!&cpu_madt_rintc[cpu])
-> > > >        ... parse ...
-> > > >    return &cpu_madt_rintc[cpu];
-> > > > 
-> > > > that'd probably let us get rid of a handful of these helpers too, as now
-> > > > it's just a call to the parsing bits.
-> > > > 
-> > > I am afraid this (!&cpu_madt_rintc[cpu]) check won't work since we are
-> > > not caching the RINTC pointers but actual contents itself. So, the
-> > > address is always valid. However, as per Drew's earlier feedback I am
-> > > going to reduce one helper. I am planning to send the next version of
-> > > this patch once 6.4 rc1 is available since the ACPICA patches are merged
-> > > now.
-> > > 
-> > > > > +
-> > > > > +	if (!rintc_init_done) {
-> > > > > +		if (acpi_init_rintc_array()) {
-> > > > > +			pr_err("No valid RINTC entries exist\n");
-> > > > > +			return NULL;
-> > > > > +		}
-> > > > > +
-> > > > > +		rintc_init_done = true;
-> > > > > +	}
-> > > > > +
-> > > > > +	return &cpu_madt_rintc[cpu];
-> > > > > +}
-> > > > > +
-> > > > > +u32 get_acpi_id_for_cpu(int cpu)
-> > > > > +{
-> > > > > +	struct acpi_madt_rintc *rintc = acpi_cpu_get_madt_rintc(cpu);
-> > > > > +
-> > > > > +	BUG_ON(!rintc);
-> > > > 
-> > > > We should have some better error reporting here.  It looks like all the
-> > > > callerss of get_acpi_id_for_cpu() are tolerant of a nonsense ID being
-> > > > returned, so maybe we just pr_warn() something users can understand and then
-> > > > return -1 or something?
-> > > > 
-> > > 
-> > > RINTC is mandatory for ACPI systems. Also, all 32bit values are valid
-> > > for UID. So, there is no bogus value we can return. 
-> > > 
-> > > Actually, I just realized this check is redundant. It will never be NULL
-> > > since it is a static array. So, we can just get rid of the BUG.
-> > 
-> > It can be NULL on the first call of acpi_cpu_get_madt_rintc(), which is
-> > a good time to BUG if there's isn't an RINTC.
-> > 
-> Sorry, I mean if we change the initialization to get called from
-> setup_arch, then we can get rid of this check along with global variable
-> check, correct?
+Hi Basavaraj,
 
-Sounds good to me, but now I think we're pushing the question of whether
-to BUG or not on a missing RINTC to that new init function, because
-otherwise we'll still end up in get_acpi_id_for_cpu() eventually with
-or without a valid rintc from which we get the uid (and the uid has no
-specified bogus value).
+kernel test robot noticed the following build errors:
 
-Thanks,
-drew
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3 next-20230426]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Basavaraj-Natikar/USB-Extend-pci-resume-function-to-handle-PM-events/20230427-185141
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230427104805.3560591-2-Basavaraj.Natikar%40amd.com
+patch subject: [PATCH v2 1/2] USB: Extend pci resume function to handle PM events
+config: hexagon-randconfig-r045-20230427 (https://download.01.org/0day-ci/archive/20230427/202304272147.qSiPDNIh-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c56600f81d90e04002ac435d27ccd0358b560d88
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Basavaraj-Natikar/USB-Extend-pci-resume-function-to-handle-PM-events/20230427-185141
+        git checkout c56600f81d90e04002ac435d27ccd0358b560d88
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/host/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304272147.qSiPDNIh-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/usb/host/xhci-histb.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/usb/host/xhci-histb.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/usb/host/xhci-histb.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/usb/host/xhci-histb.c:370:27: error: passing 'int' to parameter of incompatible type 'pm_message_t' (aka 'struct pm_message')
+           return xhci_resume(xhci, 0);
+                                    ^
+   drivers/usb/host/xhci.h:2143:53: note: passing argument to parameter 'msg' here
+   int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg);
+                                                       ^
+   6 warnings and 1 error generated.
+
+
+vim +370 drivers/usb/host/xhci-histb.c
+
+c508f41da07882 Jianguo Sun 2018-05-21  360  
+c508f41da07882 Jianguo Sun 2018-05-21  361  static int __maybe_unused xhci_histb_resume(struct device *dev)
+c508f41da07882 Jianguo Sun 2018-05-21  362  {
+c508f41da07882 Jianguo Sun 2018-05-21  363  	struct xhci_hcd_histb *histb = dev_get_drvdata(dev);
+c508f41da07882 Jianguo Sun 2018-05-21  364  	struct usb_hcd *hcd = histb->hcd;
+c508f41da07882 Jianguo Sun 2018-05-21  365  	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+c508f41da07882 Jianguo Sun 2018-05-21  366  
+c508f41da07882 Jianguo Sun 2018-05-21  367  	if (!device_may_wakeup(dev))
+c508f41da07882 Jianguo Sun 2018-05-21  368  		xhci_histb_host_enable(histb);
+c508f41da07882 Jianguo Sun 2018-05-21  369  
+c508f41da07882 Jianguo Sun 2018-05-21 @370  	return xhci_resume(xhci, 0);
+c508f41da07882 Jianguo Sun 2018-05-21  371  }
+c508f41da07882 Jianguo Sun 2018-05-21  372  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
