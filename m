@@ -1,288 +1,220 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E1A23D9;
-	Thu, 27 Apr 2023 11:28:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682594905; x=1714130905;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Bn+jPFqMyZnCiD0SMVzPtcCJOD/TagAWR6RzB26J/5Y=;
-  b=G+XXD2KzbUVrcEK1oDp/tK7ISxR+lg1k2vvRM2Jjh3AwVZHGcX9pBv/Q
-   efmIApp6pF6rywyeG1C1oq25u4Ih4MDWuyTNU2Auy9DhU50uhctRBLW+C
-   eVGf5ONrW1wp3m0KU9VjQC+Pn8BAF4n6XF1LiVtHHdSptqZF+qKNgfqov
-   7m40Z5tO+0MrjdectPwrgGpoAsWd4Ju0zU21lBRQ4M2kTLUwUgZe2QSSS
-   LLz7/w0Qw9WuCsEh8K4upXqeIOAXtOOHn34WUhelAStw0KvT9MaK5V/nc
-   aHaJZNEArrL0lNmoDUHGRPZTGKFS45cRyjhq52SYWvZNEg0otYO4n25w4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="336359765"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="336359765"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 04:28:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="818495943"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="818495943"
-Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Apr 2023 04:28:20 -0700
-Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1prznP-0000CD-34;
-	Thu, 27 Apr 2023 11:28:19 +0000
-Date: Thu, 27 Apr 2023 19:28:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dexuan Cui <decui@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dcui-tdx:decui/michaelv7dda/tdx/v5-dda 12/15]
- drivers/hv/vmbus_drv.c:2178:74: warning: format specifies type 'unsigned
- long long' but the argument has type 'resource_size_t' (aka 'unsigned int')
-Message-ID: <202304271958.WL8xZISX-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49CC23D9;
+	Thu, 27 Apr 2023 11:54:06 +0000 (UTC)
+Received: from [IPV6:2405:201:0:21ea:73f6:2283:f432:3936] (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: shreeya)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 39EE266032B2;
+	Thu, 27 Apr 2023 12:54:03 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1682596444;
+	bh=j0QYDp6weoRHl94DG/abJ5MIE+9RrKbIHWwFqclcQC0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=WnBu7RaywkO2jB4Nl3Qj21vNHdZiEaCuHw2AoDdOG9U3DcVY+lB2iGU0HRO4QVPHg
+	 u30BEUg8hOFnQ9+IvRD0XTSc2kqcDDbR3ITI8DFVK9AgQdQS2drmYYNSBty2X4TS62
+	 IAvMhtz2bCPp+GaUEBrqYlHgwSUbozmiimRg/hDf5F0lMXH2objz4og94qfr2dzZhA
+	 bVJzoGzgz2YWrUNmJJPAPowwlDE0EE3dZqkkMn6uSjzOGYLfEEJ86KU1cNXYhfVtHO
+	 LYAhEFqJFR6qM9JMrOLZICris5YASdLa0RUl0ksLle2R81sK47ya+yJK9BBNVv4DaD
+	 xI9Y3q5haRiDg==
+Message-ID: <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
+Date: Thu, 27 Apr 2023 17:23:58 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Marek <michal.lkml@markovi.net>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com>
+Content-Language: en-US
+From: Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <20220919170828.3718437-1-ndesaulniers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://github.com/dcui/tdx decui/michaelv7dda/tdx/v5-dda
-head:   c5a39762e134045437ecf0d75ec545ca8edc0025
-commit: 65dbf0f0d0b04aba312e56e7855e2b1f9bc77d97 [12/15] [Workaround for DDA]: hardcode MMIO _CRS in vmbus_walk_resources() for now
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230427/202304271958.WL8xZISX-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/dcui/tdx/commit/65dbf0f0d0b04aba312e56e7855e2b1f9bc77d97
-        git remote add dcui-tdx https://github.com/dcui/tdx
-        git fetch --no-tags dcui-tdx decui/michaelv7dda/tdx/v5-dda
-        git checkout 65dbf0f0d0b04aba312e56e7855e2b1f9bc77d97
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hv/
+Hi Nick,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304271958.WL8xZISX-lkp@intel.com/
+On 19/09/22 22:38, Nick Desaulniers wrote:
+> cc-ifversion is GCC specific. Replace it with compiler specific
+> variants. Update the users of cc-ifversion to use these new macros.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/350
+> Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
+> Suggested-by: Bill Wendling <morbo@google.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-All warnings (new ones prefixed by >>):
+KernelCI found this patch causes a regression in the
+baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
+see the bisection report for more details [2].
 
->> drivers/hv/vmbus_drv.c:2178:74: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-                                                             ~~~~           ^~~~~
-                                                             %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2178:81: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-                                                                   ~~~~            ^~~
-                                                                   %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2181:76: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-                                                               ~~~~           ^~~~~
-                                                               %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2181:83: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-                                                                     ~~~~            ^~~
-                                                                     %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2187:74: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-                                                             ~~~~           ^~~~~
-                                                             %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2187:81: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-                                                                   ~~~~            ^~~
-                                                                   %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2190:76: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-                                                               ~~~~           ^~~~~
-                                                               %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2190:83: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-                   printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-                                                                     ~~~~            ^~~
-                                                                     %x
-   include/linux/printk.h:455:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:427:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
->> drivers/hv/vmbus_drv.c:2188:25: warning: implicit conversion from 'long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68182605824 to 3758096384 [-Wconstant-conversion]
-                   start = 0xfe0000000;
-                         ~ ^~~~~~~~~~~
-   drivers/hv/vmbus_drv.c:2189:23: warning: implicit conversion from 'long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68719476735 to 4294967295 [-Wconstant-conversion]
-                   end = 0xfffffffff;
-                       ~ ^~~~~~~~~~~
-   10 warnings generated.
+Let me know if you have any questions.
 
 
-vim +2178 drivers/hv/vmbus_drv.c
+[1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
+[2] https://groups.io/g/kernelci-results/message/40804
 
-  2153	
-  2154	
-  2155	/*
-  2156	 * VMBUS is an acpi enumerated device. Get the information we
-  2157	 * need from DSDT.
-  2158	 */
-  2159	static acpi_status vmbus_walk_resources(struct acpi_resource *res, void *ctx)
-  2160	{
-  2161		resource_size_t start = 0;
-  2162		resource_size_t end = 0;
-  2163		struct resource *new_res;
-  2164		struct resource **old_res = &hyperv_mmio;
-  2165		struct resource **prev_res = NULL;
-  2166		struct resource r;
-  2167	
-  2168		switch (res->type) {
-  2169	
-  2170		/*
-  2171		 * "Address" descriptors are for bus windows. Ignore
-  2172		 * "memory" descriptors, which are for registers on
-  2173		 * devices.
-  2174		 */
-  2175		case ACPI_RESOURCE_TYPE_ADDRESS32:
-  2176			start = res->data.address32.address.minimum;
-  2177			end = res->data.address32.address.maximum;
-> 2178	                printk("cdx: vmbus_walk_resources: mem32: %llx, %llx\n", start, end);
-  2179	                start = 0xf8000000;
-  2180	                end = 0xffffffff;
-  2181	                printk("cdx: vmbus_walk_resources: mem32-2: %llx, %llx\n", start, end);
-  2182			break;
-  2183	
-  2184		case ACPI_RESOURCE_TYPE_ADDRESS64:
-  2185			start = res->data.address64.address.minimum;
-  2186			end = res->data.address64.address.maximum;
-  2187	                printk("cdx: vmbus_walk_resources: mem64: %llx, %llx\n", start, end);
-> 2188	                start = 0xfe0000000;
-  2189	                end = 0xfffffffff;
-  2190	                printk("cdx: vmbus_walk_resources: mem64-2: %llx, %llx\n", start, end);
-  2191			break;
-  2192	
-  2193		/*
-  2194		 * The IRQ information is needed only on ARM64, which Hyper-V
-  2195		 * sets up in the extended format. IRQ information is present
-  2196		 * on x86/x64 in the non-extended format but it is not used by
-  2197		 * Linux. So don't bother checking for the non-extended format.
-  2198		 */
-  2199		case ACPI_RESOURCE_TYPE_EXTENDED_IRQ:
-  2200			if (!acpi_dev_resource_interrupt(res, 0, &r)) {
-  2201				pr_err("Unable to parse Hyper-V ACPI interrupt\n");
-  2202				return AE_ERROR;
-  2203			}
-  2204			/* ARM64 INTID for VMbus */
-  2205			vmbus_interrupt = res->data.extended_irq.interrupts[0];
-  2206			/* Linux IRQ number */
-  2207			vmbus_irq = r.start;
-  2208	               printk("cdx: vmbus_walk_resources: irq=%d\n", vmbus_irq);
-  2209			return AE_OK;
-  2210	
-  2211		default:
-  2212			/* Unused resource type */
-  2213	               printk("cdx: vmbus_walk_resources: default type=%d\n", res->type);
-  2214			return AE_OK;
-  2215	
-  2216		}
-  2217		/*
-  2218		 * Ignore ranges that are below 1MB, as they're not
-  2219		 * necessary or useful here.
-  2220		 */
-  2221		if (end < 0x100000)
-  2222			return AE_OK;
-  2223	
-  2224		new_res = kzalloc(sizeof(*new_res), GFP_ATOMIC);
-  2225		if (!new_res)
-  2226			return AE_NO_MEMORY;
-  2227	
-  2228		/* If this range overlaps the virtual TPM, truncate it. */
-  2229		if (end > VTPM_BASE_ADDRESS && start < VTPM_BASE_ADDRESS)
-  2230			end = VTPM_BASE_ADDRESS;
-  2231	
-  2232		new_res->name = "hyperv mmio";
-  2233		new_res->flags = IORESOURCE_MEM;
-  2234		new_res->start = start;
-  2235		new_res->end = end;
-  2236	
-  2237		/*
-  2238		 * If two ranges are adjacent, merge them.
-  2239		 */
-  2240		do {
-  2241			if (!*old_res) {
-  2242				*old_res = new_res;
-  2243				break;
-  2244			}
-  2245	
-  2246			if (((*old_res)->end + 1) == new_res->start) {
-  2247				(*old_res)->end = new_res->end;
-  2248				kfree(new_res);
-  2249				break;
-  2250			}
-  2251	
-  2252			if ((*old_res)->start == new_res->end + 1) {
-  2253				(*old_res)->start = new_res->start;
-  2254				kfree(new_res);
-  2255				break;
-  2256			}
-  2257	
-  2258			if ((*old_res)->start > new_res->end) {
-  2259				new_res->sibling = *old_res;
-  2260				if (prev_res)
-  2261					(*prev_res)->sibling = new_res;
-  2262				*old_res = new_res;
-  2263				break;
-  2264			}
-  2265	
-  2266			prev_res = old_res;
-  2267			old_res = &(*old_res)->sibling;
-  2268	
-  2269		} while (1);
-  2270	
-  2271		return AE_OK;
-  2272	}
-  2273	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Shreeya Patel
+
+#regzbot introduced: 88b61e3bff93
+
+> ---
+> Changes v3 -> v4:
+> * Split into its own patch again from series, as per Masahiro.
+> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
+>    clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
+>
+>   Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
+>   Makefile                                    |  6 ++---
+>   drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
+>   scripts/Makefile.compiler                   | 10 ++++---
+>   scripts/Makefile.extrawarn                  |  4 +--
+>   5 files changed, 29 insertions(+), 22 deletions(-)
+>
+> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+> index 11a296e52d68..ee7e3ea1fbe1 100644
+> --- a/Documentation/kbuild/makefiles.rst
+> +++ b/Documentation/kbuild/makefiles.rst
+> @@ -682,22 +682,27 @@ more details, with real examples.
+>   	In the above example, -Wno-unused-but-set-variable will be added to
+>   	KBUILD_CFLAGS only if gcc really accepts it.
+>   
+> -    cc-ifversion
+> -	cc-ifversion tests the version of $(CC) and equals the fourth parameter
+> -	if version expression is true, or the fifth (if given) if the version
+> -	expression is false.
+> +    gcc-min-version
+> +	gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater than
+> +	or equal to the provided value and evaluates to y if so.
+>   
+>   	Example::
+>   
+> -		#fs/reiserfs/Makefile
+> -		ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
+> +		cflags-$(call gcc-min-version, 70100) := -foo
+>   
+> -	In this example, ccflags-y will be assigned the value -O1 if the
+> -	$(CC) version is less than 4.2.
+> -	cc-ifversion takes all the shell operators:
+> -	-eq, -ne, -lt, -le, -gt, and -ge
+> -	The third parameter may be a text as in this example, but it may also
+> -	be an expanded variable or a macro.
+> +	In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
+> +	$(CONFIG_GCC_VERSION) is >= 7.1.
+> +
+> +    clang-min-version
+> +	clang-min-version tests if the value of $(CONFIG_CLANG_VERSION) is greater
+> +	than or equal to the provided value and evaluates to y if so.
+> +
+> +	Example::
+> +
+> +		cflags-$(call clang-min-version, 110000) := -foo
+> +
+> +	In this example, cflags-y will be assigned the value -foo if $(CC) is clang
+> +	and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
+>   
+>       cc-cross-prefix
+>   	cc-cross-prefix is used to check if there exists a $(CC) in path with
+> diff --git a/Makefile b/Makefile
+> index 298f69060f10..411c8480b37e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
+>   
+>   KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+>   KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>   
+>   ifdef CONFIG_CC_IS_CLANG
+>   KBUILD_CPPFLAGS += -Qunused-arguments
+> @@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
+>   KBUILD_CFLAGS += -Wno-maybe-uninitialized
+>   endif
+>   
+> -ifdef CONFIG_CC_IS_GCC
+>   # The allocators already balk at large sizes, so silence the compiler
+>   # warnings for bounds checks involving those possible values. While
+>   # -Wno-alloc-size-larger-than would normally be used here, earlier versions
+> @@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
+>   # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
+>   # choice, we must perform a versioned check to disable this warning.
+>   # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
+> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901, -Wno-alloc-size-larger-than)
+> -endif
+> +KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
+> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>   
+>   # disable invalid "can't wrap" optimizations for signed / pointers
+>   KBUILD_CFLAGS	+= -fno-strict-overflow
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+> index cb81ed2fbd53..d70838edba80 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
+>   endif
+>   
+>   ifdef CONFIG_CC_IS_GCC
+> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
+> +ifneq ($(call gcc-min-version, 70100),y)
+>   IS_OLD_GCC = 1
+>   endif
+>   endif
+> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> index 94d0d40cddb3..9d18fb91890e 100644
+> --- a/scripts/Makefile.compiler
+> +++ b/scripts/Makefile.compiler
+> @@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
+>   cc-disable-warning = $(call try-run,\
+>   	$(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
+>   
+> -# cc-ifversion
+> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
+> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || echo $(4))
+> +# gcc-min-version
+> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
+> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
+> +
+> +# clang-min-version
+> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
+> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
+>   
+>   # ld-option
+>   # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 6ae482158bc4..5769c1939d40 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -48,7 +48,7 @@ else
+>   ifdef CONFIG_CC_IS_CLANG
+>   KBUILD_CFLAGS += -Wno-initializer-overrides
+>   # Clang before clang-16 would warn on default argument promotions.
+> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
+> +ifneq ($(call clang-min-version, 160000),y)
+>   # Disable -Wformat
+>   KBUILD_CFLAGS += -Wno-format
+>   # Then re-enable flags that were part of the -Wformat group that aren't
+> @@ -56,7 +56,7 @@ KBUILD_CFLAGS += -Wno-format
+>   KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
+>   KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
+>   # Requires clang-12+.
+> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
+> +ifeq ($(call clang-min-version, 120000),y)
+>   KBUILD_CFLAGS += -Wformat-insufficient-args
+>   endif
+>   endif
