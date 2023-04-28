@@ -1,248 +1,162 @@
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD26723A4;
-	Fri, 28 Apr 2023 07:41:49 +0000 (UTC)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1psIjg-00085X-3P; Fri, 28 Apr 2023 09:41:44 +0200
-Message-ID: <325ae81d-b3a5-71b3-39e9-96408968ab0b@leemhuis.info>
-Date: Fri, 28 Apr 2023 09:41:42 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C8923A4;
+	Fri, 28 Apr 2023 08:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682669978; x=1714205978;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dcZgewPwrSPmsLdZR4E15639TTsYN4j0rB9eKfZUsjU=;
+  b=GzC0m+lVmSxoOj4oLCq68nIhZ5OxsXyVKk9N3HcvzWrSzH73ar3DfxJ0
+   tg5IbyPMc2zv8ZLICTCT5q8NpOkAZzH3Gjf2J5aG9SwgJg9iC9T3eQYGn
+   UxJQn/mm0sgszwyKYjwQ0hIxadDxwJQ1buQvrr6HyqwbGtyrUSUFn2qRW
+   QIYciOwEeP+VyxspWo5HOubBuWjVEnXA3auy4u2fo9CI5/r8J3hQbNsgm
+   HNrlLO/2qW0AQR04GpUbBxSNP70Y0Nw6PzqY0tX1R16OC23kYPCeIEpSx
+   E1Tx62trj3u57FyQCwvqKTcIopRSw1xMaUjxYlzi3RRBHRMNQX/ceMV2G
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="410774330"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="410774330"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 01:19:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="697448855"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="697448855"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Apr 2023 01:19:27 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1psJKA-0000Ip-1v;
+	Fri, 28 Apr 2023 08:19:26 +0000
+Date: Fri, 28 Apr 2023 16:18:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vadim Fedorenko <vadfed@meta.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v7 5/8] ice: implement dpll interface to control cgu
+Message-ID: <202304281647.9vCSasdW-lkp@intel.com>
+References: <20230428002009.2948020-6-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, de-DE
-To: Shreeya Patel <shreeya.patel@collabora.com>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: Michal Marek <michal.lkml@markovi.net>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919170828.3718437-1-ndesaulniers@google.com>
- <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-In-Reply-To: <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1682667709;8659d099;
-X-HE-SMSGID: 1psIjg-00085X-3P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428002009.2948020-6-vadfed@meta.com>
 
-Hi Shreeya!
+Hi Vadim,
 
-On 27.04.23 13:53, Shreeya Patel wrote:
-> On 19/09/22 22:38, Nick Desaulniers wrote:
->> cc-ifversion is GCC specific. Replace it with compiler specific
->> variants. Update the users of cc-ifversion to use these new macros.
->>
->> Link: https://github.com/ClangBuiltLinux/linux/issues/350
->> Link:
->> https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
->> Suggested-by: Bill Wendling <morbo@google.com>
->> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> KernelCI found this patch causes a regression in the
-> baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
-> see the bisection report for more details [2].
-> 
-> Let me know if you have any questions.
-> 
-> [1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
-> [2] https://groups.io/g/kernelci-results/message/40804> [...]
-> #regzbot introduced: 88b61e3bff93
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-How much of this text is auto generated? I ask for two reasons:
+[auto build test ERROR on v6.3]
+[cannot apply to tnguy-next-queue/dev-queue linus/master next-20230427]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-* You made regzbot track this, which is great, but didn't specify a
-title. That is fine in general, if the subject round about says what the
-regression is about. But in this case it doesn't; hence it would be
-great if you in the future could specify one through "#regzbot title:"
-or adjust the mail's subject (I guess the former is what developers will
-prefer).
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/dpll-spec-Add-Netlink-spec-in-YAML/20230428-082340
+base:   457391b0380335d5e9a5babdec90ac53928b23b4
+patch link:    https://lore.kernel.org/r/20230428002009.2948020-6-vadfed%40meta.com
+patch subject: [RFC PATCH v7 5/8] ice: implement dpll interface to control cgu
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230428/202304281647.9vCSasdW-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/08659ac96f7a68ef1966cf8784cfcfbe8cc96370
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vadim-Fedorenko/dpll-spec-Add-Netlink-spec-in-YAML/20230428-082340
+        git checkout 08659ac96f7a68ef1966cf8784cfcfbe8cc96370
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-* I'm not a developer that has to look into bugs like this, but from my
-experience I expect a lot more developers are likely willing to look
-into reports like this if you specified what the actual problem is --
-ideally with the relevant error messages.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304281647.9vCSasdW-lkp@intel.com/
 
-Side note: I for one still am unsure what this is actually about after
-looking at the page you provided as [1] and clicking on a few links
-there (which took me a few minutes, which I guess not everyone is
-willing to invest). I noticed two kernel warning in the log (one from
-"arch/arm/kernel/insn.c:48 __arm_gen_branch+0x88/0xa4", the other
-"kernel/trace/ftrace.c:2176 ftrace_bug+0x340/0x3b4") and a complaint
-UBSAN (btw: those newlines in the logs make things harder to read, at
-least for me).
+All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-To check if those were old or new problems, I tired to go back in the
-history and on page 9 found an entry for the last succeeding test. But
-clicking on the logs got me a 404 :-/
+>> drivers/net/ethernet/intel/ice/ice_dpll.c:156:7: warning: variable 'pin_num' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+if (pin == pf->dplls.rclk.pin)
+^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:162:18: note: uninitialized use occurs here
+for (i = 0; i < pin_num; i++)
+^~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:156:3: note: remove the 'if' if its condition is always true
+if (pin == pf->dplls.rclk.pin)
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:144:13: note: initialize the variable 'pin_num' to silence this warning
+int pin_num, i;
+^
+= 0
+>> drivers/net/ethernet/intel/ice/ice_dpll.c:419:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+} else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:423:6: note: uninitialized use occurs here
+if (ret)
+^~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:419:9: note: remove the 'if' if its condition is always true
+} else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:414:9: note: initialize the variable 'ret' to silence this warning
+int ret;
+^
+= 0
+drivers/net/ethernet/intel/ice/ice_dpll.c:456:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+} else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:460:6: note: uninitialized use occurs here
+if (ret)
+^~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:456:9: note: remove the 'if' if its condition is always true
+} else if (pin_type == ICE_DPLL_PIN_TYPE_OUTPUT) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:451:9: note: initialize the variable 'ret' to silence this warning
+int ret;
+^
+= 0
+>> drivers/net/ethernet/intel/ice/ice_dpll.c:486:1: warning: no previous prototype for function 'ice_dpll_pin_state_update' [-Wmissing-prototypes]
+ice_dpll_pin_state_update(struct ice_pf *pf, struct ice_dpll_pin *pin,
+^
+drivers/net/ethernet/intel/ice/ice_dpll.c:485:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+int
+^
+static
+drivers/net/ethernet/intel/ice/ice_dpll.c:525:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+} else if (pin_type == ICE_DPLL_PIN_TYPE_RCLK_SOURCE) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:545:9: note: uninitialized use occurs here
+return ret;
+^~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:525:9: note: remove the 'if' if its condition is always true
+} else if (pin_type == ICE_DPLL_PIN_TYPE_RCLK_SOURCE) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/intel/ice/ice_dpll.c:489:9: note: initialize the variable 'ret' to silence this warning
+int ret;
+^
+= 0
+>> drivers/net/ethernet/intel/ice/ice_dpll.c:1487:45: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
+if (d->dpll_state == ICE_CGU_STATE_LOCKED &&
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+6 warnings generated.
+--
+>> ERROR: modpost: "__divdi3" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_is_phy_rclk_present" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_is_cgu_present" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_is_clock_mux_present_e810t" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_get_cgu_rclk_pin_info" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_get_cgu_state" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_cgu_get_pin_name" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_cgu_get_pin_type" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
+>> ERROR: modpost: "ice_cgu_get_pin_freq_supp" [drivers/net/ethernet/intel/ice/ice.ko] undefined!
 
-Then I looked at the logs on [1] again and in the html view "Boot
-result: FAIL". Is that the actual problem?
-
-Ciao, Thorsten
-
-P.S.: let me update the regzbot title while at it:
-
-#regzbot title: kernelci: qemu_arm-virt-gicv3-uefi stopped booting
-
->> ---
->> Changes v3 -> v4:
->> * Split into its own patch again from series, as per Masahiro.
->> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
->>    clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
->>
->>   Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
->>   Makefile                                    |  6 ++---
->>   drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
->>   scripts/Makefile.compiler                   | 10 ++++---
->>   scripts/Makefile.extrawarn                  |  4 +--
->>   5 files changed, 29 insertions(+), 22 deletions(-)
->>
->> diff --git a/Documentation/kbuild/makefiles.rst
->> b/Documentation/kbuild/makefiles.rst
->> index 11a296e52d68..ee7e3ea1fbe1 100644
->> --- a/Documentation/kbuild/makefiles.rst
->> +++ b/Documentation/kbuild/makefiles.rst
->> @@ -682,22 +682,27 @@ more details, with real examples.
->>       In the above example, -Wno-unused-but-set-variable will be added to
->>       KBUILD_CFLAGS only if gcc really accepts it.
->>   -    cc-ifversion
->> -    cc-ifversion tests the version of $(CC) and equals the fourth
->> parameter
->> -    if version expression is true, or the fifth (if given) if the
->> version
->> -    expression is false.
->> +    gcc-min-version
->> +    gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is
->> greater than
->> +    or equal to the provided value and evaluates to y if so.
->>         Example::
->>   -        #fs/reiserfs/Makefile
->> -        ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
->> +        cflags-$(call gcc-min-version, 70100) := -foo
->>   -    In this example, ccflags-y will be assigned the value -O1 if the
->> -    $(CC) version is less than 4.2.
->> -    cc-ifversion takes all the shell operators:
->> -    -eq, -ne, -lt, -le, -gt, and -ge
->> -    The third parameter may be a text as in this example, but it may
->> also
->> -    be an expanded variable or a macro.
->> +    In this example, cflags-y will be assigned the value -foo if
->> $(CC) is gcc and
->> +    $(CONFIG_GCC_VERSION) is >= 7.1.
->> +
->> +    clang-min-version
->> +    clang-min-version tests if the value of $(CONFIG_CLANG_VERSION)
->> is greater
->> +    than or equal to the provided value and evaluates to y if so.
->> +
->> +    Example::
->> +
->> +        cflags-$(call clang-min-version, 110000) := -foo
->> +
->> +    In this example, cflags-y will be assigned the value -foo if
->> $(CC) is clang
->> +    and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
->>         cc-cross-prefix
->>       cc-cross-prefix is used to check if there exists a $(CC) in path
->> with
->> diff --git a/Makefile b/Makefile
->> index 298f69060f10..411c8480b37e 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
->>     KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
->>   KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
->> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->>     ifdef CONFIG_CC_IS_CLANG
->>   KBUILD_CPPFLAGS += -Qunused-arguments
->> @@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
->>   KBUILD_CFLAGS += -Wno-maybe-uninitialized
->>   endif
->>   -ifdef CONFIG_CC_IS_GCC
->>   # The allocators already balk at large sizes, so silence the compiler
->>   # warnings for bounds checks involving those possible values. While
->>   # -Wno-alloc-size-larger-than would normally be used here, earlier
->> versions
->> @@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
->>   # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
->>   # choice, we must perform a versioned check to disable this warning.
->>   # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
->> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901,
->> -Wno-alloc-size-larger-than)
->> -endif
->> +KBUILD_CFLAGS-$(call gcc-min-version, 90100) +=
->> -Wno-alloc-size-larger-than
->> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->>     # disable invalid "can't wrap" optimizations for signed / pointers
->>   KBUILD_CFLAGS    += -fno-strict-overflow
->> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile
->> b/drivers/gpu/drm/amd/display/dc/dml/Makefile
->> index cb81ed2fbd53..d70838edba80 100644
->> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
->> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
->> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
->>   endif
->>     ifdef CONFIG_CC_IS_GCC
->> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
->> +ifneq ($(call gcc-min-version, 70100),y)
->>   IS_OLD_GCC = 1
->>   endif
->>   endif
->> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
->> index 94d0d40cddb3..9d18fb91890e 100644
->> --- a/scripts/Makefile.compiler
->> +++ b/scripts/Makefile.compiler
->> @@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
->>   cc-disable-warning = $(call try-run,\
->>       $(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip
->> $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
->>   -# cc-ifversion
->> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
->> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] &&
->> echo $(3) || echo $(4))
->> +# gcc-min-version
->> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
->> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
->> +
->> +# clang-min-version
->> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
->> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] &&
->> echo y)
->>     # ld-option
->>   # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
->> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
->> index 6ae482158bc4..5769c1939d40 100644
->> --- a/scripts/Makefile.extrawarn
->> +++ b/scripts/Makefile.extrawarn
->> @@ -48,7 +48,7 @@ else
->>   ifdef CONFIG_CC_IS_CLANG
->>   KBUILD_CFLAGS += -Wno-initializer-overrides
->>   # Clang before clang-16 would warn on default argument promotions.
->> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
->> +ifneq ($(call clang-min-version, 160000),y)
->>   # Disable -Wformat
->>   KBUILD_CFLAGS += -Wno-format
->>   # Then re-enable flags that were part of the -Wformat group that aren't
->> @@ -56,7 +56,7 @@ KBUILD_CFLAGS += -Wno-format
->>   KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
->>   KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
->>   # Requires clang-12+.
->> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
->> +ifeq ($(call clang-min-version, 120000),y)
->>   KBUILD_CFLAGS += -Wformat-insufficient-args
->>   endif
->>   endif
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
