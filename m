@@ -1,27 +1,27 @@
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A193C1D;
-	Fri, 28 Apr 2023 13:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F573C1D;
+	Fri, 28 Apr 2023 13:34:27 +0000 (UTC)
 Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Q7Cr62NnTz9sq1;
-	Fri, 28 Apr 2023 15:19:34 +0200 (CEST)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Q7D0j30Z1z9tGS;
+	Fri, 28 Apr 2023 15:27:01 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1682687974;
+	t=1682688421;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FJlju9q/eAU8ml78a1QSBBVVPLx9rSH3QXnsOVJfvYs=;
-	b=Eseaet8TiXC+lDflCmfqa8prVUWyyPIGWW6RCEydsSquXFNsjcZh0HXnxjKJOCEwDc2kZc
-	zhL5wPyoJu/KPJey1ijcIb6bmQlzK9APjcUW568SjHWFDC7nSj/nWDMIVN6+X7Rztwv88k
-	Gt22HvbdzCUZEc0nP2R2G/HHFmZf9kKrFBjNmFwTUlwVoLbNzQU7hrFuU7QU3v3ciqb3ta
-	OG6TeJ5rsnvrwlutix2m5llaJKwyazHng39ZGMHhbBImLoUyct5mhV9Uzk/CZl7IpWiJl4
-	oSU546TOHYBNLdEbnBW6Hv/Z2dWa/dzkikul6uVrDALw7+kVGa5Oyo9AMSDDCg==
-Message-ID: <07ac0981b78fa9d12c549a6ad9fbadb0c7308cad.camel@mailbox.org>
+	bh=Jokpb9zEfNADES/X1MOGhXWxjheyPFqy3mpj2JQq8d4=;
+	b=W3M1Pjne8snTgQt3MQAk0hrHGaXif9iVrJ9cd+ru33ewX9CxYWVvFs9T09yEEsLYFekvdS
+	YxN5H71dLnGFh4Z5NlkAamN1X641J1nkR1ov62YUx6KlnPHEewowj0KYtBYy5m6B6nss5u
+	NX6Naa0kgl8x8kDMEVWCnE5KkXs9KgWeSimWbfaNn6Qzn5HVYnLii+tB/iIZqd4M/TyMmO
+	WIgFv/p+zCj5cCytYR8pU/WZfkzzxh3OVMJDe+PovUqIgJqwJDkOKXAqKjmQrejbFlyRR3
+	hBR0ELZqcLMlDmO5nJ6fi97u4Epio84l46XQUC0RXcerZ+bbngezKLT2PnvWzA==
+Message-ID: <f40dfa8b8ef8a85b14645fc797875fd5dcdfc42c.camel@mailbox.org>
 Subject: Re: Library: [RFC PATCH] btree_blue - a btree with linear travesal
  function and more
 From: liuwf <liuwf@mailbox.org>
@@ -29,7 +29,7 @@ To: kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
 	=?ISO-8859-1?Q?J=F6rn?= Engel
 	 <joern@purestorage.com>, Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 28 Apr 2023 09:18:18 -0400
+Date: Fri, 28 Apr 2023 09:26:52 -0400
 In-Reply-To: <202304250319.8IOPqkLH-lkp@intel.com>
 References: <6d35bd15e3ec81bcde81b776a369d47ee1f373d2.camel@mailbox.org>
 	 <202304250319.8IOPqkLH-lkp@intel.com>
@@ -41,8 +41,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: p919wemu45hsmyqrym9jmgtn773rwsp9
-X-MBO-RS-ID: c0db376ba55feecd4ee
+X-MBO-RS-META: b7zkwmytt9krys5d541mtdfr7jp5a3zm
+X-MBO-RS-ID: 7399590616d1d16d9b1
 
 On Tue, 2023-04-25 at 03:31 +0800, kernel test robot wrote:
 > Hi liuwf,
@@ -186,8 +186,6 @@ On Tue, 2023-04-25 at 03:31 +0800, kernel test robot wrote:
 >    179  
 > 
 
-thanks very much. following is the new version and test data.
-
 This version(V4) removed some struct members, code pathes that are reserved 
 in the V1 for feature, but I think they are not needed any more, so this 
 lighter version of can get a bit more perf than V1.
@@ -209,7 +207,7 @@ give.
 1000000 inserts to a empty tree ...
 
 					btree	rbtree	maple tree
-** btree_blue is faster than others	50%	280%	460%
+** btree_blue is fatser than others	50%	280%	460%
 
 maple tree 1000000 inserts use time: 	1129420872 ns
 rbtree 1000000 inserts use time: 	 758329853 ns
@@ -249,6 +247,7 @@ maple tree 1000000 deletes use time: 		1624949238 ns
 rbtree 1000000 deletes use time: 		 556931279 ns
 btree 1000000 deletes use time: 		 299593684 ns
 btree_blue 1000000 deletes use time: 		 217870837 ns
+
 
 
 
@@ -1434,7 +1433,5 @@ index 000000000000..496e0a1ad3c9
 base-commit: fbe1871b562af6e9cffcf622247e821d1dd16c64
 -- 
 2.30.2
-
-
 
 
