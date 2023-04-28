@@ -1,111 +1,84 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE27E847B;
-	Fri, 28 Apr 2023 17:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682704426; x=1714240426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aRx7+mpDK8aR3HdTkR8Ocvm6w1M4ROBM1nP0BJX1Q1U=;
-  b=QxkMxGr7RYtiLnKf6ggprWlVG7byXPOvaa3kT9hfP7IA0sOS/iOr9vGg
-   O12BmzwsYqk2L5Y3uKlPoxFAWSHSU5lOjhV+5iH8s7JiBL3Ec/w0x4Y77
-   +7idRmV4UII6miamy6ZfsIosvAM7ORV0gTc95tH0ZugY3yaJo8gfopJHV
-   IkyF8HgfVkAlMCm3eKSV7l9b8pD4UU8nD+ksg6ywvgGWSAsvvSvo6CgyB
-   d6vGm+3S2y8tgei/h2TfwxpG4J8V6A8wplyDP3qKKmQVSlg7TN2fcTEtX
-   R0X5KRyOBFrVCB5JxGyDe+mBiH8OxQJb9H991dkCmNjWleBwnB0AlhhYH
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="349839383"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="349839383"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 10:53:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="688899459"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="688899459"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 28 Apr 2023 10:53:40 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1psSHr-0000aR-0S;
-	Fri, 28 Apr 2023 17:53:39 +0000
-Date: Sat, 29 Apr 2023 01:53:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yi-De Wu <yi-de.wu@mediatek.com>,
-	Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
-	Ze-Yu Wang <ze-yu.wang@mediatek.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	David Bradil <dbrazdil@google.com>,
-	Trilok Soni <quic_tsoni@quicinc.com>,
-	Jade Shih <jades.shih@mediatek.com>,
-	Miles Chen <miles.chen@mediatek.com>,
-	Ivan Tseng <ivan.tseng@mediatek.com>,
-	My Chuang <my.chuang@mediatek.com>,
-	Shawn Hsiao <shawn.hsiao@mediatek.com>,
-	PeiLun Suei <peilun.suei@mediatek.com>,
-	Liju Chen <liju-clr.chen@mediatek.com>
-Subject: Re: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor
- support
-Message-ID: <202304290120.5Ad0n6XR-lkp@intel.com>
-References: <20230428103622.18291-4-yi-de.wu@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0551E883E
+	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 19:01:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682708467;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bIyrfniFsouNIVffxUOo7SDXvTzGLB5AgoXXUb624g8=;
+	b=egmPP51qgFAU3XrsJBlhz2x5VFs+72GHTaYOEdymzLDo6kJfNJtemT4veFn/DIm+ohEh/y
+	pN9dLjHeLsCvdM2V4il6W5ljiJ9ZNa6YTbJ4+pBvLEreNLCbbWgfaGctOBLNUrv+D+s3V6
+	BA0fpNhf/iUgCVNTJ4YjuHiv/VFTTRk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-wgvMRS0xNQybY6hZO-tAwA-1; Fri, 28 Apr 2023 15:01:05 -0400
+X-MC-Unique: wgvMRS0xNQybY6hZO-tAwA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 075FBA0F386
+	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 19:01:05 +0000 (UTC)
+Received: from [172.64.3.52] (unknown [10.30.33.173])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id DE651C15BA0;
+	Fri, 28 Apr 2023 19:01:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
+ mainline.kernel.org-clang, 22b8cc3e)
+Date: Fri, 28 Apr 2023 19:01:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428103622.18291-4-yi-de.wu@mediatek.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <97194.123042815010501748@us-mta-564.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yi-De,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on robh/for-next arnd-asm-generic/master linus/master v6.3 next-20230427]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230428103622.18291-4-yi-de.wu%40mediatek.com
-patch subject: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor support
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230429/202304290120.5Ad0n6XR-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0e3f05a6e4547eb309032d047115a47d8f59641d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
-        git checkout 0e3f05a6e4547eb309032d047115a47d8f59641d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Kernel information:
+    Commit message: Merge tag 'x86_mm_for_6.4' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/tip/tip
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304290120.5Ad0n6XR-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86515
 
-All errors (new ones prefixed by >>):
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34150=
+0
 
->> usr/include/linux/gzvm.h:15: included file 'asm-x86/gzvm_arch.h' is not exported
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
