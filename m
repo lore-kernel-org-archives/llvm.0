@@ -1,160 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56FA15AC
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 11:01:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682679694;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8FNSaMSD7Q8vEAsFaraOE1zJ68DTNEvMPl+/4aXFhrA=;
-	b=CteHX0bYE+1fYJ1wICb1DtMM3JmxpolMiW0bg8aSE7vtEABPbgkfUXvqFfVUyWrGl/LKl9
-	oTkhcjZh1DMQ+/+n8ar+sj39LydW/4p8VvxaAcptX6huUmxjmj42HBzPKeP+BnavHhcpi8
-	pmj0+kf56XIeTbgp746WSerCMExLac0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-94Kuk6ZuNSGPG8uzv8ySYg-1; Fri, 28 Apr 2023 07:01:33 -0400
-X-MC-Unique: 94Kuk6ZuNSGPG8uzv8ySYg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19599858F0E
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 11:01:33 +0000 (UTC)
-Received: from [172.64.15.55] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 029A4C15BA0;
-	Fri, 28 Apr 2023 11:01:32 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 23 of 353): Test report for master
- (6.3.0, mainline.kernel.org-clang, d06f5a3f)
-Date: Fri, 28 Apr 2023 11:01:32 -0000
-To: llvm@lists.linux.dev, yizhan@redhat.com, omosnace@redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754153C1D;
+	Fri, 28 Apr 2023 13:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682688278; x=1714224278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oB6VWPH6ulg8K295XZM6A23hQpKHxYtitORTOenls3A=;
+  b=ByAzJ1VAV7m1TAx4GZ7ZsnTyMIyPSsS9/JdbmoSn4Y7MPVh5dNf8TAze
+   sFYS3ghv6FSE2IWCP9RjyFGiqInBoVzWOlYyG/H1oIT2bnjjsmb2iEtnc
+   Un1KjndOsn5gA7xrrl6RUB67KhiFi9pVceLCF9coD2z4QmaNaiSXiQJwv
+   jhJ2XM8ljp/4gK0cJiJSkQks/IfWW/l3XK4SWNL3VkBJo83EnF6njR2dV
+   Qq0FvOaj+mn20ZdcpGE+WvLG3figdO8q/3CC3hiiJwGAVxO20BODoKug4
+   Jq9L+kpZQ79p5ZfyxWyW3rTf01TYipfYUVK3iQN/5dZKyHt+bL/Q1bwD1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="347769122"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="347769122"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 06:24:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="819010528"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="819010528"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Apr 2023 06:24:34 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1psO5R-0000SF-10;
+	Fri, 28 Apr 2023 13:24:33 +0000
+Date: Fri, 28 Apr 2023 21:24:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daejun Park <daejun7.park@samsung.com>,
+	"jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+	"chao@kernel.org" <chao@kernel.org>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"mhiramat@kernel.org" <mhiramat@kernel.org>,
+	"linux-f2fs-devel@lists.sourceforge.net" <linux-f2fs-devel@lists.sourceforge.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Seokhwan Kim <sukka.kim@samsung.com>,
+	Yonggil Song <yonggil.song@samsung.com>,
+	beomsu kim <beomsu7.kim@samsung.com>,
+	Daejun Park <daejun7.park@samsung.com>
+Subject: Re: [PATCH v3] f2fs: add async reset zone command support
+Message-ID: <202304282103.nYW33DnO-lkp@intel.com>
+References: <20230428025646epcms2p35acbea45ee80d36808861edba8a3c84a@epcms2p3>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <17465.123042807013300804@us-mta-635.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428025646epcms2p35acbea45ee80d36808861edba8a3c84a@epcms2p3>
 
-Hi, we tested your kernel and here are the results:
+Hi Daejun,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on jaegeuk-f2fs/dev-test]
+[also build test ERROR on jaegeuk-f2fs/dev linus/master next-20230427]
+[cannot apply to v6.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: cdx: fix build failure due to sysfs 'bus_type' argument=
- needing to be const
+url:    https://github.com/intel-lab-lkp/linux/commits/Daejun-Park/f2fs-add-async-reset-zone-command-support/20230428-105944
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+patch link:    https://lore.kernel.org/r/20230428025646epcms2p35acbea45ee80d36808861edba8a3c84a%40epcms2p3
+patch subject: [PATCH v3] f2fs: add async reset zone command support
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230428/202304282103.nYW33DnO-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2f3e641e3de509a5ed879fb10fdf3377fd9ca0d9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daejun-Park/f2fs-add-async-reset-zone-command-support/20230428-105944
+        git checkout 2f3e641e3de509a5ed879fb10fdf3377fd9ca0d9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/f2fs/
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86337
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304282103.nYW33DnO-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7997713
-         ppc64le - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7997775
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7997945
-           s390x - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7997985
-          x86_64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7997803
-          x86_64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7997804
-          x86_64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7997866
-          x86_64 (debug) - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7997903
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-                  x86_64 (debug) - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                 aarch64 - Storage - blktests - blk
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
+>> fs/f2fs/segment.c:1789:5: error: implicit declaration of function '__submit_zone_reset_cmd' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                                   __submit_zone_reset_cmd(sbi, dc, REQ_SYNC,
+                                   ^
+   1 error generated.
 
 
+vim +/__submit_zone_reset_cmd +1789 fs/f2fs/segment.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  1775	
+  1776	/* This should be covered by global mutex, &sit_i->sentry_lock */
+  1777	static void f2fs_wait_discard_bio(struct f2fs_sb_info *sbi, block_t blkaddr)
+  1778	{
+  1779		struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+  1780		struct discard_cmd *dc;
+  1781		bool need_wait = false;
+  1782	
+  1783		mutex_lock(&dcc->cmd_lock);
+  1784		dc = __lookup_discard_cmd(sbi, blkaddr);
+  1785		if (dc) {
+  1786			if (f2fs_sb_has_blkzoned(sbi) && bdev_is_zoned(dc->bdev)) {
+  1787				/* force submit zone reset */
+  1788				if (dc->state == D_PREP)
+> 1789					__submit_zone_reset_cmd(sbi, dc, REQ_SYNC,
+  1790								&dcc->wait_list, NULL);
+  1791				dc->ref++;
+  1792				need_wait = true;
+  1793			} else {
+  1794				if (dc->state == D_PREP) {
+  1795					__punch_discard_cmd(sbi, dc, blkaddr);
+  1796				} else {
+  1797					dc->ref++;
+  1798					need_wait = true;
+  1799				}
+  1800			}
+  1801		}
+  1802		mutex_unlock(&dcc->cmd_lock);
+  1803	
+  1804		if (need_wait)
+  1805			__wait_one_discard_bio(sbi, dc);
+  1806	}
+  1807	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
