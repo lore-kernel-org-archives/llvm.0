@@ -1,168 +1,428 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out187-15.us.a.mail.aliyun.com (out187-15.us.a.mail.aliyun.com [47.90.187.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0092567
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 09:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682674889;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pqd63gHXc68KezpS9AdU4EPd2xMfV3j9Qyyf/7JAiFU=;
-	b=XX2VFmLXtOrHeogGmUmBv0Okk1CqeM6fKTjh9lCZ1SuGtn4UF0GEXZscPlZDlqAHlXWpdd
-	evUp3oqQvSA8Wi6iqqJ1n9AjHPNvsEmHmxpQzI0eHIK/xXxuTB6mOFefEI1jRtw91J4T2F
-	zxanpjAQY25im7BptU8sOX7b7w5LySc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-275-kNupKzfdM860mdzL7tWqkg-1; Fri, 28 Apr 2023 05:41:28 -0400
-X-MC-Unique: kNupKzfdM860mdzL7tWqkg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD3A2885621
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 09:41:27 +0000 (UTC)
-Received: from [172.64.15.55] (unknown [10.30.34.186])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 9BC381121314;
-	Fri, 28 Apr 2023 09:41:27 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 33 of 353): Test report for master
- (6.3.0, mainline.kernel.org-clang, 35fab927)
-Date: Fri, 28 Apr 2023 09:41:27 -0000
-To: czhong@redhat.com, yizhan@redhat.com, omosnace@redhat.com,
- llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F99A28ED
+	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 09:52:57 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047194;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=35;SR=0;TI=SMTPD_---.STFQGKD_1682675559;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STFQGKD_1682675559)
+          by smtp.aliyun-inc.com;
+          Fri, 28 Apr 2023 17:52:41 +0800
+From: "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To: linux-kernel@vger.kernel.org
+Cc: "Thomas Garnier" <thgarnie@chromium.org>,
+  "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
+  "Kees Cook" <keescook@chromium.org>,
+  "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
+  "Brian Gerst" <brgerst@gmail.com>,
+  "Thomas Gleixner" <tglx@linutronix.de>,
+  "Ingo Molnar" <mingo@redhat.com>,
+  "Borislav Petkov" <bp@alien8.de>,
+  "Dave Hansen" <dave.hansen@linux.intel.com>,
+   <x86@kernel.org>,
+  "H. Peter Anvin" <hpa@zytor.com>,
+  "Andy Lutomirski" <luto@kernel.org>,
+  "Juergen Gross" <jgross@suse.com>,
+  "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+  "Darren Hart" <dvhart@infradead.org>,
+  "Andy Shevchenko" <andy@infradead.org>,
+  "Nathan Chancellor" <nathan@kernel.org>,
+  "Nick Desaulniers" <ndesaulniers@google.com>,
+  "Tom Rix" <trix@redhat.com>,
+  "Peter Zijlstra" <peterz@infradead.org>,
+  "=?UTF-8?B?TWlrZSBSYXBvcG9ydCAoSUJNKQ==?=" <rppt@kernel.org>,
+  "Ashok Raj" <ashok.raj@intel.com>,
+  "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
+  "Catalin Marinas" <catalin.marinas@arm.com>,
+  "Guo Ren" <guoren@kernel.org>,
+  "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+  "Jason A. Donenfeld" <Jason@zx2c4.com>,
+  "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>,
+  "Kim Phillips" <kim.phillips@amd.com>,
+  "David Woodhouse" <dwmw@amazon.co.uk>,
+  "Josh Poimboeuf" <jpoimboe@kernel.org>,
+   <xen-devel@lists.xenproject.org>,
+   <platform-driver-x86@vger.kernel.org>,
+   <llvm@lists.linux.dev>
+Subject: [PATCH RFC 16/43] x86-64: Use per-cpu stack canary if supported by compiler
+Date: Fri, 28 Apr 2023 17:50:56 +0800
+Message-Id: <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-Message-Id: <68646.123042805412800133@us-mta-275.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+From: Brian Gerst <brgerst@gmail.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+From: Brian Gerst <brgerst@gmail.com>
 
+If the compiler supports it, use a standard per-cpu variable for the
+stack protector instead of the old fixed location.  Keep the fixed
+location code for compatibility with older compilers.
 
-Kernel information:
-    Commit message: Merge tag 'for-linus-6.4-rc1-tag' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/xen/tip
+[Hou Wenlong: Disable it on Clang, adapt new code change and adapt
+missing GS set up path in pvh_start_xen()]
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86342
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+Co-developed-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc: Thomas Garnier <thgarnie@chromium.org>
+Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Cc: Kees Cook <keescook@chromium.org>
+---
+ arch/x86/Kconfig                      | 12 ++++++++++++
+ arch/x86/Makefile                     | 21 ++++++++++++++-------
+ arch/x86/entry/entry_64.S             |  6 +++++-
+ arch/x86/include/asm/processor.h      | 17 ++++++++++++-----
+ arch/x86/include/asm/stackprotector.h | 16 +++++++---------
+ arch/x86/kernel/asm-offsets_64.c      |  2 +-
+ arch/x86/kernel/cpu/common.c          | 15 +++++++--------
+ arch/x86/kernel/head_64.S             | 16 ++++++++++------
+ arch/x86/kernel/vmlinux.lds.S         |  4 +++-
+ arch/x86/platform/pvh/head.S          |  8 ++++++++
+ arch/x86/xen/xen-head.S               | 14 +++++++++-----
+ 11 files changed, 88 insertions(+), 43 deletions(-)
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-         aarch64 - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999348
-         aarch64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999395
-         ppc64le - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999457
-           s390x - Storage - blktests - blk
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999794
-           s390x - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999834
-           s390x - Storage - block zstd smoke test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999836
-          x86_64 - Storage - blktests - nvme-tcp
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999705
-          x86_64 - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999750
-          x86_64 (debug) - Libkcapi AF_ALG test
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-7999510
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
-oo big
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1571
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - net
-        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
-e of undeclared identifier 'NF_NAT_MANIP_SRC'
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1418
-            Affected tests:
-                  x86_64 (debug) - kselftests upstream - bpf
-                  x86_64 (debug) - kselftests upstream - bpf_test_progs
-        Issue: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx]
-            URL: https://lore.kernel.org/all/CA+QYu4qTtXgVegAd7S5bjJQye+kmt=
-PaFau4dg3YPU2tH9faBjg@mail.gmail.com/T/#u
-            Affected tests:
-                  x86_64 (debug) - Boot test
-        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
-iled
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
-            Affected tests:
-                  x86_64 - Storage - blktests - blk
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
-            Affected tests:
-                  x86_64 - xfstests - nfsv4.2
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                 ppc64le - selinux-policy: serge-testsuite
-        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
-r
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1580
-            Affected tests:
-                 aarch64 - kdump - kexec_boot
-                 aarch64 - kdump - kexec-file-load
-        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
-': No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1544
-            Affected tests:
-                 aarch64 - Firmware test suite
-        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
-o such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1611
-            Affected tests:
-                 aarch64 - Firmware test suite
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 68e5da464b96..55cce8cdf9bd 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -410,6 +410,18 @@ config CC_HAS_SANE_STACKPROTECTOR
+ 	  the compiler produces broken code or if it does not let us control
+ 	  the segment on 32-bit kernels.
+ 
++config CC_HAS_CUSTOMIZED_STACKPROTECTOR
++	bool
++	# Although clang supports -mstack-protector-guard-reg option, it
++	# would generate GOT reference for __stack_chk_guard even with
++	# -fno-PIE flag.
++	default y if (!CC_IS_CLANG && $(cc-option,-mstack-protector-guard-reg=gs))
++
++config STACKPROTECTOR_FIXED
++	bool
++	depends on X86_64 && STACKPROTECTOR
++	default !CC_HAS_CUSTOMIZED_STACKPROTECTOR
++
+ menu "Processor type and features"
+ 
+ config SMP
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index b39975977c03..57e4dbbf501d 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -111,13 +111,7 @@ ifeq ($(CONFIG_X86_32),y)
+         # temporary until string.h is fixed
+         KBUILD_CFLAGS += -ffreestanding
+ 
+-	ifeq ($(CONFIG_STACKPROTECTOR),y)
+-		ifeq ($(CONFIG_SMP),y)
+-			KBUILD_CFLAGS += -mstack-protector-guard-reg=fs -mstack-protector-guard-symbol=__stack_chk_guard
+-		else
+-			KBUILD_CFLAGS += -mstack-protector-guard=global
+-		endif
+-	endif
++	percpu_seg := fs
+ else
+         BITS := 64
+         UTS_MACHINE := x86_64
+@@ -167,6 +161,19 @@ else
+         KBUILD_CFLAGS += -mcmodel=kernel
+         KBUILD_RUSTFLAGS += -Cno-redzone=y
+         KBUILD_RUSTFLAGS += -Ccode-model=kernel
++
++	percpu_seg := gs
++endif
++
++ifeq ($(CONFIG_STACKPROTECTOR),y)
++	ifneq ($(CONFIG_STACKPROTECTOR_FIXED),y)
++		ifeq ($(CONFIG_SMP),y)
++			KBUILD_CFLAGS += -mstack-protector-guard-reg=$(percpu_seg) \
++					 -mstack-protector-guard-symbol=__stack_chk_guard
++		else
++			KBUILD_CFLAGS += -mstack-protector-guard=global
++		endif
++	endif
+ endif
+ 
+ #
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 6f2297ebb15f..df79b7aa65bb 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -229,6 +229,10 @@ SYM_INNER_LABEL(entry_SYSRETQ_end, SYM_L_GLOBAL)
+ 	int3
+ SYM_CODE_END(entry_SYSCALL_64)
+ 
++#ifdef CONFIG_STACKPROTECTOR_FIXED
++#define __stack_chk_guard fixed_percpu_data + FIXED_stack_canary
++#endif
++
+ /*
+  * %rdi: prev task
+  * %rsi: next task
+@@ -252,7 +256,7 @@ SYM_FUNC_START(__switch_to_asm)
+ 
+ #ifdef CONFIG_STACKPROTECTOR
+ 	movq	TASK_stack_canary(%rsi), %rbx
+-	movq	%rbx, PER_CPU_VAR(fixed_percpu_data) + FIXED_stack_canary
++	movq	%rbx, PER_CPU_VAR(__stack_chk_guard)
+ #endif
+ 
+ 	/*
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 2a5ec5750ba7..3890f609569d 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -379,6 +379,8 @@ struct irq_stack {
+ } __aligned(IRQ_STACK_SIZE);
+ 
+ #ifdef CONFIG_X86_64
++
++#ifdef CONFIG_STACKPROTECTOR_FIXED
+ struct fixed_percpu_data {
+ 	/*
+ 	 * GCC hardcodes the stack canary as %gs:40.  Since the
+@@ -394,21 +396,26 @@ struct fixed_percpu_data {
+ 
+ DECLARE_PER_CPU_FIRST(struct fixed_percpu_data, fixed_percpu_data) __visible;
+ DECLARE_INIT_PER_CPU(fixed_percpu_data);
++#endif /* CONFIG_STACKPROTECTOR_FIXED */
+ 
+ static inline unsigned long cpu_kernelmode_gs_base(int cpu)
+ {
++#ifdef CONFIG_STACKPROTECTOR_FIXED
+ 	return (unsigned long)per_cpu(fixed_percpu_data.gs_base, cpu);
++#else
++#ifdef CONFIG_SMP
++	return per_cpu_offset(cpu);
++#else
++	return 0;
++#endif
++#endif
+ }
+ 
+ extern asmlinkage void ignore_sysret(void);
+ 
+ /* Save actual FS/GS selectors and bases to current->thread */
+ void current_save_fsgs(void);
+-#else	/* X86_64 */
+-#ifdef CONFIG_STACKPROTECTOR
+-DECLARE_PER_CPU(unsigned long, __stack_chk_guard);
+-#endif
+-#endif	/* !X86_64 */
++#endif	/* X86_64 */
+ 
+ struct perf_event;
+ 
+diff --git a/arch/x86/include/asm/stackprotector.h b/arch/x86/include/asm/stackprotector.h
+index 00473a650f51..24aa0e2ad0dd 100644
+--- a/arch/x86/include/asm/stackprotector.h
++++ b/arch/x86/include/asm/stackprotector.h
+@@ -36,6 +36,12 @@
+ 
+ #include <linux/sched.h>
+ 
++#ifdef CONFIG_STACKPROTECTOR_FIXED
++#define __stack_chk_guard fixed_percpu_data.stack_canary
++#else
++DECLARE_PER_CPU(unsigned long, __stack_chk_guard);
++#endif
++
+ /*
+  * Initialize the stackprotector canary value.
+  *
+@@ -51,25 +57,17 @@ static __always_inline void boot_init_stack_canary(void)
+ {
+ 	unsigned long canary = get_random_canary();
+ 
+-#ifdef CONFIG_X86_64
++#ifdef CONFIG_STACKPROTECTOR_FIXED
+ 	BUILD_BUG_ON(offsetof(struct fixed_percpu_data, stack_canary) != 40);
+ #endif
+ 
+ 	current->stack_canary = canary;
+-#ifdef CONFIG_X86_64
+-	this_cpu_write(fixed_percpu_data.stack_canary, canary);
+-#else
+ 	this_cpu_write(__stack_chk_guard, canary);
+-#endif
+ }
+ 
+ static inline void cpu_init_stack_canary(int cpu, struct task_struct *idle)
+ {
+-#ifdef CONFIG_X86_64
+-	per_cpu(fixed_percpu_data.stack_canary, cpu) = idle->stack_canary;
+-#else
+ 	per_cpu(__stack_chk_guard, cpu) = idle->stack_canary;
+-#endif
+ }
+ 
+ #else	/* STACKPROTECTOR */
+diff --git a/arch/x86/kernel/asm-offsets_64.c b/arch/x86/kernel/asm-offsets_64.c
+index bb65371ea9df..f39baf90126c 100644
+--- a/arch/x86/kernel/asm-offsets_64.c
++++ b/arch/x86/kernel/asm-offsets_64.c
+@@ -56,7 +56,7 @@ int main(void)
+ 
+ 	BLANK();
+ 
+-#ifdef CONFIG_STACKPROTECTOR
++#ifdef CONFIG_STACKPROTECTOR_FIXED
+ 	OFFSET(FIXED_stack_canary, fixed_percpu_data, stack_canary);
+ 	BLANK();
+ #endif
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 3ea06b0b4570..972b1babf731 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -2051,10 +2051,6 @@ DEFINE_PER_CPU_ALIGNED(struct pcpu_hot, pcpu_hot) = {
+ EXPORT_PER_CPU_SYMBOL(pcpu_hot);
+ 
+ #ifdef CONFIG_X86_64
+-DEFINE_PER_CPU_FIRST(struct fixed_percpu_data,
+-		     fixed_percpu_data) __aligned(PAGE_SIZE) __visible;
+-EXPORT_PER_CPU_SYMBOL_GPL(fixed_percpu_data);
+-
+ static void wrmsrl_cstar(unsigned long val)
+ {
+ 	/*
+@@ -2102,15 +2098,18 @@ void syscall_init(void)
+ 	       X86_EFLAGS_IOPL|X86_EFLAGS_NT|X86_EFLAGS_RF|
+ 	       X86_EFLAGS_AC|X86_EFLAGS_ID);
+ }
+-
+-#else	/* CONFIG_X86_64 */
++#endif	/* CONFIG_X86_64 */
+ 
+ #ifdef CONFIG_STACKPROTECTOR
++#ifdef CONFIG_STACKPROTECTOR_FIXED
++DEFINE_PER_CPU_FIRST(struct fixed_percpu_data,
++		     fixed_percpu_data) __aligned(PAGE_SIZE) __visible;
++EXPORT_PER_CPU_SYMBOL_GPL(fixed_percpu_data);
++#else
+ DEFINE_PER_CPU(unsigned long, __stack_chk_guard);
+ EXPORT_PER_CPU_SYMBOL(__stack_chk_guard);
+ #endif
+-
+-#endif	/* CONFIG_X86_64 */
++#endif
+ 
+ /*
+  * Clear all 6 debug registers:
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 21f0556d3ac0..61f1873d0ff7 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -68,7 +68,13 @@ SYM_CODE_START_NOALIGN(startup_64)
+ 
+ 	/* Setup GSBASE to allow stack canary access for C code */
+ 	movl	$MSR_GS_BASE, %ecx
++#if defined(CONFIG_STACKPROTECTOR_FIXED)
+ 	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
++#elif defined(CONFIG_SMP)
++	movabs	$__per_cpu_load, %rdx
++#else
++	xorl	%edx, %edx
++#endif
+ 	movl	%edx, %eax
+ 	shrq	$32,  %rdx
+ 	wrmsr
+@@ -283,16 +289,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	movl %eax,%fs
+ 	movl %eax,%gs
+ 
+-	/* Set up %gs.
+-	 *
+-	 * The base of %gs always points to fixed_percpu_data. If the
+-	 * stack protector canary is enabled, it is located at %gs:40.
++	/*
++	 * Set up GS base.
+ 	 * Note that, on SMP, the boot cpu uses init data section until
+ 	 * the per cpu areas are set up.
+ 	 */
+ 	movl	$MSR_GS_BASE,%ecx
+-#ifndef CONFIG_SMP
+-	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
++#if !defined(CONFIG_SMP) && defined(CONFIG_STACKPROTECTOR_FIXED)
++	leaq	__per_cpu_load(%rip), %rdx
+ #endif
+ 	movl	%edx, %eax
+ 	shrq	$32, %rdx
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 25f155205770..f02dcde9f8a8 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -500,12 +500,14 @@ SECTIONS
+  */
+ #define INIT_PER_CPU(x) init_per_cpu__##x = ABSOLUTE(x) + __per_cpu_load
+ INIT_PER_CPU(gdt_page);
+-INIT_PER_CPU(fixed_percpu_data);
+ INIT_PER_CPU(irq_stack_backing_store);
+ 
++#ifdef CONFIG_STACKPROTECTOR_FIXED
++INIT_PER_CPU(fixed_percpu_data);
+ #ifdef CONFIG_SMP
+ . = ASSERT((fixed_percpu_data == 0),
+            "fixed_percpu_data is not at start of per-cpu area");
+ #endif
++#endif
+ 
+ #endif /* CONFIG_X86_64 */
+diff --git a/arch/x86/platform/pvh/head.S b/arch/x86/platform/pvh/head.S
+index b093996b7e19..5842fe0e4f96 100644
+--- a/arch/x86/platform/pvh/head.S
++++ b/arch/x86/platform/pvh/head.S
+@@ -96,8 +96,16 @@ SYM_CODE_START_LOCAL(pvh_start_xen)
+ 1:
+ 	/* Set base address in stack canary descriptor. */
+ 	mov $MSR_GS_BASE,%ecx
++#if defined(CONFIG_STACKPROTECTOR_FIXED)
+ 	mov $_pa(INIT_PER_CPU_VAR(fixed_percpu_data)), %eax
+ 	xor %edx, %edx
++#elif defined(CONFIG_SMP)
++	mov $__per_cpu_load, %rax
++	cdq
++#else
++	xor %eax, %eax
++	xor %edx, %edx
++#endif
+ 	wrmsr
+ 
+ 	call xen_prepare_pvh
+diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
+index 643d02900fbb..09eaf59e8066 100644
+--- a/arch/x86/xen/xen-head.S
++++ b/arch/x86/xen/xen-head.S
+@@ -51,15 +51,19 @@ SYM_CODE_START(startup_xen)
+ 
+ 	leaq	(__end_init_task - PTREGS_SIZE)(%rip), %rsp
+ 
+-	/* Set up %gs.
+-	 *
+-	 * The base of %gs always points to fixed_percpu_data.  If the
+-	 * stack protector canary is enabled, it is located at %gs:40.
++	/*
++	 * Set up GS base.
+ 	 * Note that, on SMP, the boot cpu uses init data section until
+ 	 * the per cpu areas are set up.
+ 	 */
+ 	movl	$MSR_GS_BASE,%ecx
+-	movq	$INIT_PER_CPU_VAR(fixed_percpu_data),%rax
++#if defined(CONFIG_STACKPROTECTOR_FIXED)
++	leaq	INIT_PER_CPU_VAR(fixed_percpu_data)(%rip), %rdx
++#elif defined(CONFIG_SMP)
++	movabs	$__per_cpu_load, %rdx
++#else
++	xorl	%eax, %eax
++#endif
+ 	cdq
+ 	wrmsr
+ 
+-- 
+2.31.1
 
