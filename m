@@ -1,84 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0551E883E
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 19:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1682708467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bIyrfniFsouNIVffxUOo7SDXvTzGLB5AgoXXUb624g8=;
-	b=egmPP51qgFAU3XrsJBlhz2x5VFs+72GHTaYOEdymzLDo6kJfNJtemT4veFn/DIm+ohEh/y
-	pN9dLjHeLsCvdM2V4il6W5ljiJ9ZNa6YTbJ4+pBvLEreNLCbbWgfaGctOBLNUrv+D+s3V6
-	BA0fpNhf/iUgCVNTJ4YjuHiv/VFTTRk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-wgvMRS0xNQybY6hZO-tAwA-1; Fri, 28 Apr 2023 15:01:05 -0400
-X-MC-Unique: wgvMRS0xNQybY6hZO-tAwA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 075FBA0F386
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 19:01:05 +0000 (UTC)
-Received: from [172.64.3.52] (unknown [10.30.33.173])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id DE651C15BA0;
-	Fri, 28 Apr 2023 19:01:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
- mainline.kernel.org-clang, 22b8cc3e)
-Date: Fri, 28 Apr 2023 19:01:04 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819F8883E;
+	Fri, 28 Apr 2023 19:36:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682710603; x=1714246603;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jyu45+ZzxksvpMm8r+3+9KUykJKqifdkE/eWGUPo/u8=;
+  b=kgrUJ4duTP0ko77opE/jiSkf2ucVpFFryKZtpTy4SxUl9+7cGNgGjHqd
+   rDNA4eM/3Wjb+yonB1daeteQlObcEs0hLfrF7MlGwO4/BMSWccFyHt1TS
+   KTZnlSNg21Ok5Vy18+0sgKT0BmC0Py2DXTx4D7RpAy+hxPlVua3UzOOMw
+   1e9fC3PYHu31UGnFVCKjfWLK+0yyQZ7XeJJBCF/fZXy/ShjXvemk4cepc
+   NE971HFecWeacwjSyG2r6OzRotgmNfpfpXrulgsbB6c9+Xx6ir5RU8bO5
+   LehJFW/UCR33TSspq4AiAYzejqYGao00Cgeq8Gm5i7obr2R1/gp3taTnp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="346605892"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="346605892"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 12:36:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="941212438"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="941212438"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Apr 2023 12:36:42 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1psTtZ-0000dX-0L;
+	Fri, 28 Apr 2023 19:36:41 +0000
+Date: Sat, 29 Apr 2023 03:36:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Asahi Lina <lina@asahilina.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:gpu/rust-rebased 121/187] mm/shmem.c:96:8: warning:
+ 'const' type qualifier on return type has no effect
+Message-ID: <202304290305.uavuDXMr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-Message-Id: <97194.123042815010501748@us-mta-564.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/AsahiLinux/linux gpu/rust-rebased
+head:   e8ecda1e3b7f3e01508b712df489f21260c4c9c6
+commit: b9d83a7aa2d40b09c37253fa71af3e0f4654625d [121/187] shmem: 16K on 4K hack
+config: powerpc-randconfig-r035-20230428 (https://download.01.org/0day-ci/archive/20230429/202304290305.uavuDXMr-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/b9d83a7aa2d40b09c37253fa71af3e0f4654625d
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux gpu/rust-rebased
+        git checkout b9d83a7aa2d40b09c37253fa71af3e0f4654625d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304290305.uavuDXMr-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> mm/shmem.c:96:8: warning: 'const' type qualifier on return type has no effect [-Wignored-qualifiers]
+   static const unsigned long shmem_base_nr(struct address_space *mapping) {
+          ^~~~~~
+   1 warning generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'x86_mm_for_6.4' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/tip/tip
+vim +/const +96 mm/shmem.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/86515
+    95	
+  > 96	static const unsigned long shmem_base_nr(struct address_space *mapping) {
+    97		return 1L << mapping->order;
+    98	}
+    99	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34150=
-0
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
