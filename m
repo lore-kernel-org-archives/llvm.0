@@ -1,64 +1,83 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738143D86
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 15:22:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ObFqb5BDmMg75VURSfwaRS1WNbglIFkai9QniJhx8m4=; b=ofjldNKGNAboYyyizE5X9fXe5v
-	ZECX/MjUW9VZAnH4i5cPG6ZPlfJx697aSrS+hW4+MQWrz2GaGJTNZKGfTGwzeBzQq80A2egcmtHsv
-	1mghY2IwxRhk038jLeuk5gwgxYf15Iaw49O745UNZE2t4bGiI825VZGO9S/v5wfHTWUa/9hTuSc5y
-	tagA/JI7fEIkjL1A+DqDsFvSCYBt46XQWLecSNBxX4U/NWIVg+4Ar2IlulvFY2/NEF1VbeFgDaYn0
-	U8jheldPF/YoLurtIZslA5NOInjPl4yJn3GIDfJRHFh/o0gt2mp+fq7dvbTSmQbBrSkY8w/hebDrp
-	ksbCQpJQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1psPvD-00DMsj-1Q;
-	Fri, 28 Apr 2023 15:22:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(Client did not present a certificate)
-	by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CC5DD300300;
-	Fri, 28 Apr 2023 17:22:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B34A732220BBA; Fri, 28 Apr 2023 17:22:06 +0200 (CEST)
-Date: Fri, 28 Apr 2023 17:22:06 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc: linux-kernel@vger.kernel.org, Thomas Garnier <thgarnie@chromium.org>,
-	Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-	Kees Cook <keescook@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>, bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH RFC 00/43] x86/pie: Make kernel image's virtual address
- flexible
-Message-ID: <20230428152206.GA1464060@hirez.programming.kicks-ass.net>
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6447D3D67
+	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 16:19:03 +0000 (UTC)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-95678d891d6so1861331166b.1
+        for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 09:19:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682698741; x=1685290741;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CVN1XAdeRtzZczE1pl99FKVVPYo2NA5UfAXorfmQJT0=;
+        b=DUK3Ns56NvijkZIlrqtg0j1jgDjSVi+ciJCnpPpInJBFxqJPPx+3ryTUhgKgUU3Ym9
+         pWj9G/sVJ+JR8Es+5fK8ogTSU6h+LGFLMCPBdprbX0/DmPEPXi0urOs4KSDGQI3mdR1/
+         8X7K6FeYXccuC8m53uar34aAztMEyrYas7prE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682698741; x=1685290741;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CVN1XAdeRtzZczE1pl99FKVVPYo2NA5UfAXorfmQJT0=;
+        b=iAtngDqjLgUGlFZkpFLkteq3lf9VU5SOHKY2oWijU6YZ7DrIbw6BwQrwsQEAYxQxWX
+         ROIMlV7jaoE1IB5HhWokBRtPCenXcjQJyg0F8LP7pU0GCe0bVP5GGPL5QhPaat+iuHS+
+         rI4ygUcgF4g1XWBGxTu0XjBhXwxjV+yi8YK66QQ9Sl7INi+CNUbb2lpNRHLWXocksvXg
+         xxCVBVHvMwTjo7FYLdkwgjpaD5CszU086SxGnnGlTHc+axSfzCaeSt/I1KwIqyDNHNW1
+         ybmT9dajMeOYH5b0JOr4uLOCL4OIeTghGZC6J2JMArB1iBuwWiWh2qUiW90OC0p8kXPn
+         +hiA==
+X-Gm-Message-State: AC+VfDxTUyuFsC37+knL15AcyeYpxm9Tjc//qXeONj+XGvoOq5zlNmS2
+	KBEBP14deZkAd1w/g3jAh38YNVUOZZc53MwxH1qYuA==
+X-Google-Smtp-Source: ACHHUZ4ugbaOSpCWUwaPvPhxfvVcnlY1G6eGDrIanA8Nsyl4JzADcjLKO5xRepdlQzK1ifQ898IJBw==
+X-Received: by 2002:a17:907:3c81:b0:95f:7edb:def2 with SMTP id gl1-20020a1709073c8100b0095f7edbdef2mr5940646ejc.69.1682698741096;
+        Fri, 28 Apr 2023 09:19:01 -0700 (PDT)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id e17-20020aa7d7d1000000b00508480633bdsm9374430eds.74.2023.04.28.09.19.00
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 09:19:00 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-505035e3368so17621537a12.0
+        for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 09:19:00 -0700 (PDT)
+X-Received: by 2002:aa7:ca51:0:b0:509:f221:cedc with SMTP id
+ j17-20020aa7ca51000000b00509f221cedcmr5009557edt.35.1682698740150; Fri, 28
+ Apr 2023 09:19:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+References: <6d35bd15e3ec81bcde81b776a369d47ee1f373d2.camel@mailbox.org>
+ <202304250319.8IOPqkLH-lkp@intel.com> <f40dfa8b8ef8a85b14645fc797875fd5dcdfc42c.camel@mailbox.org>
+In-Reply-To: <f40dfa8b8ef8a85b14645fc797875fd5dcdfc42c.camel@mailbox.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 28 Apr 2023 09:18:43 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiPxPOg5-G+CaHiyNt_QBqoWx0bt7UGCKSdHyd42fQkpQ@mail.gmail.com>
+Message-ID: <CAHk-=wiPxPOg5-G+CaHiyNt_QBqoWx0bt7UGCKSdHyd42fQkpQ@mail.gmail.com>
+Subject: Re: Library: [RFC PATCH] btree_blue - a btree with linear travesal
+ function and more
+To: liuwf <liuwf@mailbox.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	=?UTF-8?Q?J=C3=B6rn_Engel?= <joern@purestorage.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Apr 28, 2023 at 6:27=E2=80=AFAM liuwf <liuwf@mailbox.org> wrote:
+>
+> btree_blue also needs to mature (debug, stable), and some APIs are needed=
+ to
+> give.
 
-For some raison I didn't get 0/n but did get all of the others. Please
-keep your Cc list consistent.
+You would also need to include what the use-case would be, and
+benchmarks for a real load.
 
-On Fri, Apr 28, 2023 at 05:50:40PM +0800, Hou Wenlong wrote:
+Honestly, pure insert/remove numbers are kind of pointless. Most users
+that care deeply about performance also happen to care about locking
+overhead etc even more, and so high-performance users often need it to
+br RCU-safe too.
 
->   - It is not allowed to reference global variables in an alternative
->     section since RIP-relative addressing is not fixed in
->     apply_alternatives(). Fortunately, all disallowed relocations in the
->     alternative section can be captured by objtool. I believe that this
->     issue can also be fixed by using objtool.
+Finally, we'd want more of a background for you before adding anything
+like this anyway. I can't find this email address anywhere in the
+kernel source history.
 
-https://lkml.kernel.org/r/Y9py2a5Xw0xbB8ou@hirez.programming.kicks-ass.net
+          Linus
