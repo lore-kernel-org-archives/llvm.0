@@ -1,296 +1,160 @@
-Received: from out0-200.mail.aliyun.com (out0-200.mail.aliyun.com [140.205.0.200])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD6E28ED
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 10:22:39 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047201;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---.STCEPEV_1682675495;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STCEPEV_1682675495)
-          by smtp.aliyun-inc.com;
-          Fri, 28 Apr 2023 17:51:36 +0800
-From: "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To: linux-kernel@vger.kernel.org
-Cc: "Thomas Garnier" <thgarnie@chromium.org>,
-  "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
-  "Kees Cook" <keescook@chromium.org>,
-  "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
-  "Nathan Chancellor" <nathan@kernel.org>,
-  "Nick Desaulniers" <ndesaulniers@google.com>,
-  "Tom Rix" <trix@redhat.com>,
-   <bpf@vger.kernel.org>,
-   <llvm@lists.linux.dev>
-Subject: [PATCH RFC 00/43] x86/pie: Make kernel image's virtual address flexible
-Date: Fri, 28 Apr 2023 17:50:40 +0800
-Message-Id: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
-X-Mailer: git-send-email 2.31.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56FA15AC
+	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 11:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682679694;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8FNSaMSD7Q8vEAsFaraOE1zJ68DTNEvMPl+/4aXFhrA=;
+	b=CteHX0bYE+1fYJ1wICb1DtMM3JmxpolMiW0bg8aSE7vtEABPbgkfUXvqFfVUyWrGl/LKl9
+	oTkhcjZh1DMQ+/+n8ar+sj39LydW/4p8VvxaAcptX6huUmxjmj42HBzPKeP+BnavHhcpi8
+	pmj0+kf56XIeTbgp746WSerCMExLac0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-94Kuk6ZuNSGPG8uzv8ySYg-1; Fri, 28 Apr 2023 07:01:33 -0400
+X-MC-Unique: 94Kuk6ZuNSGPG8uzv8ySYg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19599858F0E
+	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 11:01:33 +0000 (UTC)
+Received: from [172.64.15.55] (unknown [10.30.34.186])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 029A4C15BA0;
+	Fri, 28 Apr 2023 11:01:32 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (SKIPPED 23 of 353): Test report for master
+ (6.3.0, mainline.kernel.org-clang, d06f5a3f)
+Date: Fri, 28 Apr 2023 11:01:32 -0000
+To: llvm@lists.linux.dev, yizhan@redhat.com, omosnace@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Message-Id: <17465.123042807013300804@us-mta-635.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Purpose:
+Hi, we tested your kernel and here are the results:
 
-These patches make the changes necessary to build the kernel as Position
-Independent Executable (PIE) on x86_64. A PIE kernel can be relocated
-below the top 2G of the virtual address space. And this patchset
-provides an example to allow kernel image to be relocated in top 512G of
-the address space.
-
-The ultimate purpose for PIE kernel is to increase the security of the
-the kernel and also the fleixbility of the kernel image's virtual
-address, which can be even in the low half of the address space. More
-locations the kernel can fit in, this means an attacker could guess
-harder.
-
-The patchset is based on Thomas Garnier's X86 PIE patchset v6[1] and
-v11[2]. However, some design changes are made and some bugs are fixed by
-testing with different configurations and compilers.
-
-  Important changes:
-  - For fixmap area, move vsyscall page out of fixmap area and unify
-    __FIXADDR_TOP for x86. Then fixmap area could be relocated together
-    with kernel image.
-
-  - For compile-time base address of kernel image, keep it in top 2G of
-    address space. Introduce a new variable to store the run-time base
-    address and adapt for VA/PA transition during runtime.
-
-  - For percpu section, keep it as zero mapping for SMP. Because
-    compile-time base address of kernel image still resides in top 2G of
-    address space, then RIP-relative reference can still be used when
-    percpu section is zero mapping. However, when do relocation for
-    percpu variable references, percpu variable should be treated as
-    normal variable and absolute references should be relocated
-    accordingly. In addition, the relocation offset should be subtracted
-    from the GS base in order to ensure correct operation.
-
-  - For x86/boot/head64.c, don't build it as mcmodel=large. Instead, use
-    data relocation to acqiure global symbol's value and make
-    fixup_pointer() as a nop when running in identity mapping. This is
-    because not all global symbol references in the code use
-    fixup_pointer(), e.g. variables in macro related to 5-level paging,
-    which can be optimized by GCC as relative referencs. If build it as
-    mcmodel=large, there will be more fixup_pointer() calls, resulting
-    in uglier code. Actually, if build it as PIE even when
-    CONFIG_X86_PIE is disabled, then all fixup_pointer() could be
-    dropped. However stack protector would be broken if per-cpu stack
-    protector is not supported.
-
-  Limitations:
-  - Since I am not familiar with XEN, it has been disabled for now as it
-    is not adapted for PIE. This is due to the assignment of wrong
-    pointers (with low address values) to x86_ini_ops when running in
-    identity mapping. This issue can be resolved by building pagetable
-    eraly and jumping to high kernel address as soon as possible.
-
-  - It is not allowed to reference global variables in an alternative
-    section since RIP-relative addressing is not fixed in
-    apply_alternatives(). Fortunately, all disallowed relocations in the
-    alternative section can be captured by objtool. I believe that this
-    issue can also be fixed by using objtool.
-
-  - For module loading, only allow to load module without GOT for
-    simplicity. Only weak global variable referencs are using GOT.
-
-  Tests:
-    I only have tested booting with GCC 5.1.0 (min version), GCC 12.2.0
-    and CLANG 15.0.7. And I have also run the following tests for both
-    default configuration and Ubuntu configuration.
-
-Performance/Size impact (GCC 12.2.0):
-
-Size of vmlinux (Default configuration):
- File size:
- - PIE disabled: +0.012%
- - PIE enabled: -2.219%
- instructions:
- - PIE disabled: same
- - PIE enabled: +1.383%
- .text section:
- - PIE disabled: same
- - PIE enabled: +0.589%
-
-Size of vmlinux (Ubuntu configuration):
- File size:
- - PIE disabled: same
- - PIE enabled: +2.391%
- instructions:
- - PIE disabled: +0.013%
- - PIE enabled: +1.566%
- .text section:
- - PIE disabled: same
- - PIE enabled: +0.055%
-
-The .text section size increase is due to more instructions required for
-PIE code. There are two reasons that have been mentioned in previous
-mailist. Firstly, switch folding is disabled under PIE [3]. Secondly,
-two instructions are needed for PIE to represent a single instruction
-with sign extension, such as when accessing an array element. While only
-one instruction is required when using mcmode=kernel, for PIE, it needs
-to use lea to get the base of the array first.
-
-Hackbench (50% and 1600% on thread/process for pipe/sockets):
- - PIE disabled: no significant change (avg -/+ 0.5% on default config).
- - PIE enabled: -2% to +2% in average (default config).
-
-Kernbench (average of 10 Half and Optimal runs):
- Elapsed Time:
- - PIE disabled: no significant change (avg -0.2% on ubuntu config)
- - PIE enabled: average -0.2% to +0.2%
- System Time:
- - PIE disabled: no significant change (avg -0.5% on ubuntu config)
- - PIE enabled: average -0.5% to +0.5%
-
-[1] https://lore.kernel.org/all/20190131192533.34130-1-thgarnie@chromium.org
-[2] https://lore.kernel.org/all/20200228000105.165012-1-thgarnie@chromium.org
-[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82303
-
-Brian Gerst (1):
-  x86-64: Use per-cpu stack canary if supported by compiler
-
-Hou Wenlong (29):
-  x86/irq: Adapt assembly for PIE support
-  x86,rethook: Adapt assembly for PIE support
-  x86/paravirt: Use relative reference for original instruction
-  x86/Kconfig: Introduce new Kconfig for PIE kernel building
-  x86/PVH: Use fixed_percpu_data to set up GS base
-  x86/pie: Enable stack protector only if per-cpu stack canary is
-    supported
-  x86/percpu: Use PC-relative addressing for percpu variable references
-  x86/tools: Explicitly include autoconf.h for hostprogs
-  x86/percpu: Adapt percpu references relocation for PIE support
-  x86/ftrace: Adapt assembly for PIE support
-  x86/pie: Force hidden visibility for all symbol references
-  x86/boot/compressed: Adapt sed command to generate voffset.h when PIE
-    is enabled
-  x86/pie: Add .data.rel.* sections into link script
-  KVM: x86: Adapt assembly for PIE support
-  x86/PVH: Adapt PVH booting for PIE support
-  x86/bpf: Adapt BPF_CALL JIT codegen for PIE support
-  x86/modules: Adapt module loading for PIE support
-  x86/boot/64: Use data relocation to get absloute address when PIE is
-    enabled
-  objtool: Add validation for x86 PIE support
-  objtool: Adapt indirect call of __fentry__() for PIE support
-  x86/pie: Build the kernel as PIE
-  x86/vsyscall: Don't use set_fixmap() to map vsyscall page
-  x86/xen: Pin up to VSYSCALL_ADDR when vsyscall page is out of fixmap
-    area
-  x86/fixmap: Move vsyscall page out of fixmap area
-  x86/fixmap: Unify FIXADDR_TOP
-  x86/boot: Fill kernel image puds dynamically
-  x86/mm: Sort address_markers array when X86 PIE is enabled
-  x86/pie: Allow kernel image to be relocated in top 512G
-  x86/boot: Extend relocate range for PIE kernel image
-
-Thomas Garnier (13):
-  x86/crypto: Adapt assembly for PIE support
-  x86: Add macro to get symbol address for PIE support
-  x86: relocate_kernel - Adapt assembly for PIE support
-  x86/entry/64: Adapt assembly for PIE support
-  x86: pm-trace: Adapt assembly for PIE support
-  x86/CPU: Adapt assembly for PIE support
-  x86/acpi: Adapt assembly for PIE support
-  x86/boot/64: Adapt assembly for PIE support
-  x86/power/64: Adapt assembly for PIE support
-  x86/alternatives: Adapt assembly for PIE support
-  x86/ftrace: Adapt ftrace nop patching for PIE support
-  x86/mm: Make the x86 GOT read-only
-  x86/relocs: Handle PIE relocations
-
- Documentation/x86/x86_64/mm.rst              |   4 +
- arch/x86/Kconfig                             |  36 +++++-
- arch/x86/Makefile                            |  33 +++--
- arch/x86/boot/compressed/Makefile            |   2 +-
- arch/x86/boot/compressed/kaslr.c             |  55 +++++++++
- arch/x86/boot/compressed/misc.c              |   4 +-
- arch/x86/boot/compressed/misc.h              |   9 ++
- arch/x86/crypto/aegis128-aesni-asm.S         |   6 +-
- arch/x86/crypto/aesni-intel_asm.S            |   2 +-
- arch/x86/crypto/aesni-intel_avx-x86_64.S     |   3 +-
- arch/x86/crypto/aria-aesni-avx-asm_64.S      |  30 ++---
- arch/x86/crypto/camellia-aesni-avx-asm_64.S  |  30 ++---
- arch/x86/crypto/camellia-aesni-avx2-asm_64.S |  30 ++---
- arch/x86/crypto/camellia-x86_64-asm_64.S     |   8 +-
- arch/x86/crypto/cast5-avx-x86_64-asm_64.S    |  50 ++++----
- arch/x86/crypto/cast6-avx-x86_64-asm_64.S    |  44 ++++---
- arch/x86/crypto/crc32c-pcl-intel-asm_64.S    |   3 +-
- arch/x86/crypto/des3_ede-asm_64.S            |  96 ++++++++++-----
- arch/x86/crypto/ghash-clmulni-intel_asm.S    |   4 +-
- arch/x86/crypto/sha256-avx2-asm.S            |  18 ++-
- arch/x86/entry/calling.h                     |  17 ++-
- arch/x86/entry/entry_64.S                    |  22 +++-
- arch/x86/entry/vdso/Makefile                 |   2 +-
- arch/x86/entry/vsyscall/vsyscall_64.c        |   7 +-
- arch/x86/include/asm/alternative.h           |   6 +-
- arch/x86/include/asm/asm.h                   |   1 +
- arch/x86/include/asm/fixmap.h                |  28 +----
- arch/x86/include/asm/irq_stack.h             |   2 +-
- arch/x86/include/asm/kmsan.h                 |   6 +-
- arch/x86/include/asm/nospec-branch.h         |  10 +-
- arch/x86/include/asm/page_64.h               |   8 +-
- arch/x86/include/asm/page_64_types.h         |   8 ++
- arch/x86/include/asm/paravirt.h              |  17 ++-
- arch/x86/include/asm/paravirt_types.h        |  12 +-
- arch/x86/include/asm/percpu.h                |  29 ++++-
- arch/x86/include/asm/pgtable_64_types.h      |  10 +-
- arch/x86/include/asm/pm-trace.h              |   2 +-
- arch/x86/include/asm/processor.h             |  17 ++-
- arch/x86/include/asm/sections.h              |   5 +
- arch/x86/include/asm/stackprotector.h        |  16 ++-
- arch/x86/include/asm/sync_core.h             |   6 +-
- arch/x86/include/asm/vsyscall.h              |  13 ++
- arch/x86/kernel/acpi/wakeup_64.S             |  31 ++---
- arch/x86/kernel/alternative.c                |   8 +-
- arch/x86/kernel/asm-offsets_64.c             |   2 +-
- arch/x86/kernel/callthunks.c                 |   2 +-
- arch/x86/kernel/cpu/common.c                 |  15 ++-
- arch/x86/kernel/ftrace.c                     |  46 ++++++-
- arch/x86/kernel/ftrace_64.S                  |   9 +-
- arch/x86/kernel/head64.c                     |  77 +++++++++---
- arch/x86/kernel/head_64.S                    |  68 ++++++++---
- arch/x86/kernel/kvm.c                        |  21 +++-
- arch/x86/kernel/module.c                     |  27 +++++
- arch/x86/kernel/paravirt.c                   |   4 +
- arch/x86/kernel/relocate_kernel_64.S         |   2 +-
- arch/x86/kernel/rethook.c                    |   8 ++
- arch/x86/kernel/setup.c                      |   6 +
- arch/x86/kernel/vmlinux.lds.S                |  10 +-
- arch/x86/kvm/svm/vmenter.S                   |  10 +-
- arch/x86/kvm/vmx/vmenter.S                   |   2 +-
- arch/x86/lib/cmpxchg16b_emu.S                |   8 +-
- arch/x86/mm/dump_pagetables.c                |  36 +++++-
- arch/x86/mm/fault.c                          |   1 -
- arch/x86/mm/init_64.c                        |  10 +-
- arch/x86/mm/ioremap.c                        |   5 +-
- arch/x86/mm/kasan_init_64.c                  |   4 +-
- arch/x86/mm/pat/set_memory.c                 |   2 +-
- arch/x86/mm/pgtable.c                        |  13 ++
- arch/x86/mm/pgtable_32.c                     |   3 -
- arch/x86/mm/physaddr.c                       |  14 +--
- arch/x86/net/bpf_jit_comp.c                  |  17 ++-
- arch/x86/platform/efi/efi_thunk_64.S         |   4 +
- arch/x86/platform/pvh/head.S                 |  29 ++++-
- arch/x86/power/hibernate_asm_64.S            |   4 +-
- arch/x86/tools/Makefile                      |   4 +-
- arch/x86/tools/relocs.c                      | 113 ++++++++++++++++-
- arch/x86/xen/mmu_pv.c                        |  32 +++--
- arch/x86/xen/xen-asm.S                       |  10 +-
- arch/x86/xen/xen-head.S                      |  14 ++-
- include/asm-generic/vmlinux.lds.h            |  12 ++
- scripts/Makefile.lib                         |   1 +
- scripts/recordmcount.c                       |  81 ++++++++-----
- tools/objtool/arch/x86/decode.c              |  10 +-
- tools/objtool/builtin-check.c                |   4 +-
- tools/objtool/check.c                        | 121 +++++++++++++++++++
- tools/objtool/include/objtool/builtin.h      |   1 +
- 86 files changed, 1202 insertions(+), 410 deletions(-)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-Patchset is based on tip/master.
-base-commit: 01cbd032298654fe4c85e153dd9a224e5bc10194
---
-2.31.1
+Kernel information:
+    Commit message: cdx: fix build failure due to sysfs 'bus_type' argument=
+ needing to be const
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86337
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+         aarch64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7997713
+         ppc64le - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7997775
+           s390x - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7997945
+           s390x - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7997985
+          x86_64 - Storage - blktests - blk
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7997803
+          x86_64 - Storage - blktests - nvme-tcp
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7997804
+          x86_64 - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7997866
+          x86_64 (debug) - Libkcapi AF_ALG test
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+7997903
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: kselftests upstream - net: FAIL: Ping received ICMP Packet t=
+oo big
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1571
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - net
+        Issue: kselftest build - bpf: progs/test_bpf_nf.c:160:42: error: us=
+e of undeclared identifier 'NF_NAT_MANIP_SRC'
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1418
+            Affected tests:
+                  x86_64 (debug) - kselftests upstream - bpf
+                  x86_64 (debug) - kselftests upstream - bpf_test_progs
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1983604#c3
+            Affected tests:
+                  x86_64 - xfstests - nfsv4.2
+                  x86_64 (debug) - xfstests - nfsv4.2
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                 ppc64le - selinux-policy: serge-testsuite
+        Issue: Storage blktests - blk: scsi/007: Reading from scsi_debug fa=
+iled
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2027550
+            Affected tests:
+                 aarch64 - Storage - blktests - blk
+        Issue: kdump - kexec_boot: image_arm64_probe: Bad arm64 image heade=
+r
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1580
+            Affected tests:
+                 aarch64 - kdump - kexec_boot
+                 aarch64 - kdump - kexec-file-load
+        Issue: Firmware test suite: mv: cannot stat 'dtcompilerparser.tab.c=
+': No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1544
+            Affected tests:
+                 aarch64 - Firmware test suite
+        Issue: Firmware test suite: cannot stat 'dtcompilerparser.tab.c': N=
+o such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1611
+            Affected tests:
+                 aarch64 - Firmware test suite
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
