@@ -1,51 +1,27 @@
-Received: from out187-5.us.a.mail.aliyun.com (out187-5.us.a.mail.aliyun.com [47.90.187.5])
+Received: from out0-200.mail.aliyun.com (out0-200.mail.aliyun.com [140.205.0.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28EF28ED
-	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 09:58:25 +0000 (UTC)
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047192;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---.STCEPaY_1682675567;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STCEPaY_1682675567)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD6E28ED
+	for <llvm@lists.linux.dev>; Fri, 28 Apr 2023 10:22:39 +0000 (UTC)
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047201;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---.STCEPEV_1682675495;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STCEPEV_1682675495)
           by smtp.aliyun-inc.com;
-          Fri, 28 Apr 2023 17:52:48 +0800
+          Fri, 28 Apr 2023 17:51:36 +0800
 From: "Hou Wenlong" <houwenlong.hwl@antgroup.com>
 To: linux-kernel@vger.kernel.org
 Cc: "Thomas Garnier" <thgarnie@chromium.org>,
   "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
   "Kees Cook" <keescook@chromium.org>,
   "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
-  "Andy Lutomirski" <luto@kernel.org>,
-  "Thomas Gleixner" <tglx@linutronix.de>,
-  "Ingo Molnar" <mingo@redhat.com>,
-  "Borislav Petkov" <bp@alien8.de>,
-  "Dave Hansen" <dave.hansen@linux.intel.com>,
-   <x86@kernel.org>,
-  "H. Peter Anvin" <hpa@zytor.com>,
-  "Peter Zijlstra" <peterz@infradead.org>,
-  "Josh Poimboeuf" <jpoimboe@kernel.org>,
-  "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>,
-  "Dennis Zhou" <dennis@kernel.org>,
-  "Tejun Heo" <tj@kernel.org>,
-  "Christoph Lameter" <cl@linux.com>,
-  "Paolo Bonzini" <pbonzini@redhat.com>,
-  "Wanpeng Li" <wanpengli@tencent.com>,
-  "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-  "Juergen Gross" <jgross@suse.com>,
-  "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
   "Nathan Chancellor" <nathan@kernel.org>,
   "Nick Desaulniers" <ndesaulniers@google.com>,
   "Tom Rix" <trix@redhat.com>,
-  "David Woodhouse" <dwmw@amazon.co.uk>,
-  "Brian Gerst" <brgerst@gmail.com>,
-   <linux-mm@kvack.org>,
-   <kvm@vger.kernel.org>,
-   <xen-devel@lists.xenproject.org>,
+   <bpf@vger.kernel.org>,
    <llvm@lists.linux.dev>
-Subject: [PATCH RFC 18/43] x86/percpu: Use PC-relative addressing for percpu variable references
-Date: Fri, 28 Apr 2023 17:50:58 +0800
-Message-Id: <175116f75c38c15d8d73a03301eab805fea13a0a.1682673543.git.houwenlong.hwl@antgroup.com>
+Subject: [PATCH RFC 00/43] x86/pie: Make kernel image's virtual address flexible
+Date: Fri, 28 Apr 2023 17:50:40 +0800
+Message-Id: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,284 +30,267 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For PIE binary, all symbol references are PC-relative addressing, even
-for percpu variable. So to keep compatible with PIE, add %rip suffix in
-percpu assembly macros if PIE is enabled. However, relocation of percpu
-variable references is broken now for PIE. It would be fixed later.
+Purpose:
 
-Suggested-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc: Thomas Garnier <thgarnie@chromium.org>
-Cc: Kees Cook <keescook@chromium.org>
----
- arch/x86/entry/calling.h             | 17 ++++++++++++----
- arch/x86/include/asm/nospec-branch.h | 10 +++++-----
- arch/x86/include/asm/percpu.h        | 29 +++++++++++++++++++++++++---
- arch/x86/kernel/head_64.S            |  2 +-
- arch/x86/kernel/kvm.c                | 21 ++++++++++++++++----
- arch/x86/lib/cmpxchg16b_emu.S        |  8 ++++----
- arch/x86/xen/xen-asm.S               | 10 +++++-----
- 7 files changed, 71 insertions(+), 26 deletions(-)
+These patches make the changes necessary to build the kernel as Position
+Independent Executable (PIE) on x86_64. A PIE kernel can be relocated
+below the top 2G of the virtual address space. And this patchset
+provides an example to allow kernel image to be relocated in top 512G of
+the address space.
 
-diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
-index f6907627172b..11328578741d 100644
---- a/arch/x86/entry/calling.h
-+++ b/arch/x86/entry/calling.h
-@@ -173,7 +173,7 @@ For 32-bit we have the following conventions - kernel is built with
- .endm
- 
- #define THIS_CPU_user_pcid_flush_mask   \
--	PER_CPU_VAR(cpu_tlbstate) + TLB_STATE_user_pcid_flush_mask
-+	PER_CPU_VAR(cpu_tlbstate + TLB_STATE_user_pcid_flush_mask)
- 
- .macro SWITCH_TO_USER_CR3_NOSTACK scratch_reg:req scratch_reg2:req
- 	ALTERNATIVE "jmp .Lend_\@", "", X86_FEATURE_PTI
-@@ -370,8 +370,8 @@ For 32-bit we have the following conventions - kernel is built with
- .endm
- 
- .macro SAVE_AND_SET_GSBASE scratch_reg:req save_reg:req
-+	GET_PERCPU_BASE \scratch_reg \save_reg
- 	rdgsbase \save_reg
--	GET_PERCPU_BASE \scratch_reg
- 	wrgsbase \scratch_reg
- .endm
- 
-@@ -407,15 +407,24 @@ For 32-bit we have the following conventions - kernel is built with
-  * Thus the kernel would consume a guest's TSC_AUX if an NMI arrives
-  * while running KVM's run loop.
-  */
--.macro GET_PERCPU_BASE reg:req
-+#ifdef CONFIG_X86_PIE
-+.macro GET_PERCPU_BASE reg:req scratch_reg:req
-+	LOAD_CPU_AND_NODE_SEG_LIMIT \reg
-+	andq	$VDSO_CPUNODE_MASK, \reg
-+	leaq	__per_cpu_offset(%rip), \scratch_reg
-+	movq	(\scratch_reg, \reg, 8), \reg
-+.endm
-+#else
-+.macro GET_PERCPU_BASE reg:req scratch_reg:req
- 	LOAD_CPU_AND_NODE_SEG_LIMIT \reg
- 	andq	$VDSO_CPUNODE_MASK, \reg
- 	movq	__per_cpu_offset(, \reg, 8), \reg
- .endm
-+#endif /* CONFIG_X86_PIE */
- 
- #else
- 
--.macro GET_PERCPU_BASE reg:req
-+.macro GET_PERCPU_BASE reg:req scratch_reg:req
- 	movq	pcpu_unit_offsets(%rip), \reg
- .endm
- 
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index edb2b0cb8efe..d8fd935e0697 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -59,13 +59,13 @@
- 
- #ifdef CONFIG_CALL_THUNKS_DEBUG
- # define CALL_THUNKS_DEBUG_INC_CALLS				\
--	incq	%gs:__x86_call_count;
-+	incq	%gs:(__x86_call_count)__percpu_rel;
- # define CALL_THUNKS_DEBUG_INC_RETS				\
--	incq	%gs:__x86_ret_count;
-+	incq	%gs:(__x86_ret_count)__percpu_rel;
- # define CALL_THUNKS_DEBUG_INC_STUFFS				\
--	incq	%gs:__x86_stuffs_count;
-+	incq	%gs:(__x86_stuffs_count)__percpu_rel;
- # define CALL_THUNKS_DEBUG_INC_CTXSW				\
--	incq	%gs:__x86_ctxsw_count;
-+	incq	%gs:(__x86_ctxsw_count)__percpu_rel;
- #else
- # define CALL_THUNKS_DEBUG_INC_CALLS
- # define CALL_THUNKS_DEBUG_INC_RETS
-@@ -95,7 +95,7 @@
- 	CALL_THUNKS_DEBUG_INC_CALLS
- 
- #define INCREMENT_CALL_DEPTH					\
--	sarq	$5, %gs:pcpu_hot + X86_call_depth;		\
-+	sarq	$5, %gs:(pcpu_hot + X86_call_depth)__percpu_rel;\
- 	CALL_THUNKS_DEBUG_INC_CALLS
- 
- #define ASM_INCREMENT_CALL_DEPTH				\
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index 13c0d63ed55e..a627a073c6ea 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -4,16 +4,26 @@
- 
- #ifdef CONFIG_X86_64
- #define __percpu_seg		gs
-+#ifdef CONFIG_X86_PIE
-+#define __percpu_rel		(%rip)
-+#else
-+#define __percpu_rel
-+#endif /* CONFIG_X86_PIE */
- #else
- #define __percpu_seg		fs
-+#define __percpu_rel
- #endif
- 
- #ifdef __ASSEMBLY__
- 
- #ifdef CONFIG_SMP
--#define PER_CPU_VAR(var)	%__percpu_seg:var
-+/* Compatible with Position Independent Code */
-+#define PER_CPU_VAR(var)	%__percpu_seg:(var)##__percpu_rel
-+/* Rare absolute reference */
-+#define PER_CPU_VAR_ABS(var)	%__percpu_seg:var
- #else /* ! SMP */
--#define PER_CPU_VAR(var)	var
-+#define PER_CPU_VAR(var)	(var)##__percpu_rel
-+#define PER_CPU_VAR_ABS(var)	var
- #endif	/* SMP */
- 
- #ifdef CONFIG_X86_64_SMP
-@@ -148,10 +158,23 @@ do {									\
- 	(typeof(_var))(unsigned long) pfo_val__;			\
- })
- 
-+/*
-+ * Position Independent code uses relative addresses only.
-+ * The 'P' modifier prevents RIP-relative addressing in GCC,
-+ * so use 'a' modifier instead. Howerver, 'P' modifier allows
-+ * RIP-relative addressing in Clang but Clang doesn't support
-+ * 'a' modifier.
-+ */
-+#if defined(CONFIG_X86_PIE) && defined(CONFIG_CC_IS_GCC)
-+#define __percpu_stable_arg	__percpu_arg(a[var])
-+#else
-+#define __percpu_stable_arg	__percpu_arg(P[var])
-+#endif
-+
- #define percpu_stable_op(size, op, _var)				\
- ({									\
- 	__pcpu_type_##size pfo_val__;					\
--	asm(__pcpu_op2_##size(op, __percpu_arg(P[var]), "%[val]")	\
-+	asm(__pcpu_op2_##size(op, __percpu_stable_arg, "%[val]")	\
- 	    : [val] __pcpu_reg_##size("=", pfo_val__)			\
- 	    : [var] "p" (&(_var)));					\
- 	(typeof(_var))(unsigned long) pfo_val__;			\
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 61f1873d0ff7..1eed50b7d1ac 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -396,7 +396,7 @@ SYM_CODE_START(start_cpu0)
- 	UNWIND_HINT_END_OF_STACK
- 
- 	/* Find the idle task stack */
--	movq	PER_CPU_VAR(pcpu_hot) + X86_current_task, %rcx
-+	movq	PER_CPU_VAR(pcpu_hot + X86_current_task), %rcx
- 	movq	TASK_threadsp(%rcx), %rsp
- 
- 	jmp	.Ljump_to_C_code
-diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-index 1cceac5984da..32d7b201f4f0 100644
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -794,14 +794,27 @@ PV_CALLEE_SAVE_REGS_THUNK(__kvm_vcpu_is_preempted);
- 
- extern bool __raw_callee_save___kvm_vcpu_is_preempted(long);
- 
-+#ifndef CONFIG_X86_PIE
-+#define KVM_CHECK_VCPU_PREEMPTED			\
-+	"movq	__per_cpu_offset(,%rdi,8), %rax;"	\
-+	"cmpb	$0, " __stringify(KVM_STEAL_TIME_preempted) "+steal_time(%rax);"
-+#else
-+#define KVM_CHECK_VCPU_PREEMPTED			\
-+	"pushq	%rdi;"					\
-+	"leaq	__per_cpu_offset(%rip), %rax;"		\
-+	"movq	(%rax,%rdi,8), %rax;"			\
-+	"leaq	steal_time(%rip), %rdi;"		\
-+	"cmpb	$0, (%rax, %rdi, 1);"			\
-+	"popq	%rdi;"
-+#endif
-+
- /*
-  * Hand-optimize version for x86-64 to avoid 8 64-bit register saving and
-  * restoring to/from the stack.
-  */
--#define PV_VCPU_PREEMPTED_ASM						     \
-- "movq   __per_cpu_offset(,%rdi,8), %rax\n\t"				     \
-- "cmpb   $0, " __stringify(KVM_STEAL_TIME_preempted) "+steal_time(%rax)\n\t" \
-- "setne  %al\n\t"
-+#define PV_VCPU_PREEMPTED_ASM		\
-+	KVM_CHECK_VCPU_PREEMPTED	\
-+	"setne  %al\n\t"
- 
- DEFINE_PARAVIRT_ASM(__raw_callee_save___kvm_vcpu_is_preempted,
- 		    PV_VCPU_PREEMPTED_ASM, .text);
-diff --git a/arch/x86/lib/cmpxchg16b_emu.S b/arch/x86/lib/cmpxchg16b_emu.S
-index 33c70c0160ea..891c5e9fd868 100644
---- a/arch/x86/lib/cmpxchg16b_emu.S
-+++ b/arch/x86/lib/cmpxchg16b_emu.S
-@@ -27,13 +27,13 @@ SYM_FUNC_START(this_cpu_cmpxchg16b_emu)
- 	pushfq
- 	cli
- 
--	cmpq PER_CPU_VAR((%rsi)), %rax
-+	cmpq PER_CPU_VAR_ABS((%rsi)), %rax
- 	jne .Lnot_same
--	cmpq PER_CPU_VAR(8(%rsi)), %rdx
-+	cmpq PER_CPU_VAR_ABS(8(%rsi)), %rdx
- 	jne .Lnot_same
- 
--	movq %rbx, PER_CPU_VAR((%rsi))
--	movq %rcx, PER_CPU_VAR(8(%rsi))
-+	movq %rbx, PER_CPU_VAR_ABS((%rsi))
-+	movq %rcx, PER_CPU_VAR_ABS(8(%rsi))
- 
- 	popfq
- 	mov $1, %al
-diff --git a/arch/x86/xen/xen-asm.S b/arch/x86/xen/xen-asm.S
-index 9e5e68008785..448958ddbaf8 100644
---- a/arch/x86/xen/xen-asm.S
-+++ b/arch/x86/xen/xen-asm.S
-@@ -28,7 +28,7 @@
-  * non-zero.
-  */
- SYM_FUNC_START(xen_irq_disable_direct)
--	movb $1, PER_CPU_VAR(xen_vcpu_info) + XEN_vcpu_info_mask
-+	movb $1, PER_CPU_VAR(xen_vcpu_info + XEN_vcpu_info_mask)
- 	RET
- SYM_FUNC_END(xen_irq_disable_direct)
- 
-@@ -69,7 +69,7 @@ SYM_FUNC_END(check_events)
- SYM_FUNC_START(xen_irq_enable_direct)
- 	FRAME_BEGIN
- 	/* Unmask events */
--	movb $0, PER_CPU_VAR(xen_vcpu_info) + XEN_vcpu_info_mask
-+	movb $0, PER_CPU_VAR(xen_vcpu_info + XEN_vcpu_info_mask)
- 
- 	/*
- 	 * Preempt here doesn't matter because that will deal with any
-@@ -78,7 +78,7 @@ SYM_FUNC_START(xen_irq_enable_direct)
- 	 */
- 
- 	/* Test for pending */
--	testb $0xff, PER_CPU_VAR(xen_vcpu_info) + XEN_vcpu_info_pending
-+	testb $0xff, PER_CPU_VAR(xen_vcpu_info + XEN_vcpu_info_pending)
- 	jz 1f
- 
- 	call check_events
-@@ -97,7 +97,7 @@ SYM_FUNC_END(xen_irq_enable_direct)
-  * x86 use opposite senses (mask vs enable).
-  */
- SYM_FUNC_START(xen_save_fl_direct)
--	testb $0xff, PER_CPU_VAR(xen_vcpu_info) + XEN_vcpu_info_mask
-+	testb $0xff, PER_CPU_VAR(xen_vcpu_info + XEN_vcpu_info_mask)
- 	setz %ah
- 	addb %ah, %ah
- 	RET
-@@ -113,7 +113,7 @@ SYM_FUNC_END(xen_read_cr2);
- 
- SYM_FUNC_START(xen_read_cr2_direct)
- 	FRAME_BEGIN
--	_ASM_MOV PER_CPU_VAR(xen_vcpu_info) + XEN_vcpu_info_arch_cr2, %_ASM_AX
-+	_ASM_MOV PER_CPU_VAR(xen_vcpu_info + XEN_vcpu_info_arch_cr2), %_ASM_AX
- 	FRAME_END
- 	RET
- SYM_FUNC_END(xen_read_cr2_direct);
--- 
+The ultimate purpose for PIE kernel is to increase the security of the
+the kernel and also the fleixbility of the kernel image's virtual
+address, which can be even in the low half of the address space. More
+locations the kernel can fit in, this means an attacker could guess
+harder.
+
+The patchset is based on Thomas Garnier's X86 PIE patchset v6[1] and
+v11[2]. However, some design changes are made and some bugs are fixed by
+testing with different configurations and compilers.
+
+  Important changes:
+  - For fixmap area, move vsyscall page out of fixmap area and unify
+    __FIXADDR_TOP for x86. Then fixmap area could be relocated together
+    with kernel image.
+
+  - For compile-time base address of kernel image, keep it in top 2G of
+    address space. Introduce a new variable to store the run-time base
+    address and adapt for VA/PA transition during runtime.
+
+  - For percpu section, keep it as zero mapping for SMP. Because
+    compile-time base address of kernel image still resides in top 2G of
+    address space, then RIP-relative reference can still be used when
+    percpu section is zero mapping. However, when do relocation for
+    percpu variable references, percpu variable should be treated as
+    normal variable and absolute references should be relocated
+    accordingly. In addition, the relocation offset should be subtracted
+    from the GS base in order to ensure correct operation.
+
+  - For x86/boot/head64.c, don't build it as mcmodel=large. Instead, use
+    data relocation to acqiure global symbol's value and make
+    fixup_pointer() as a nop when running in identity mapping. This is
+    because not all global symbol references in the code use
+    fixup_pointer(), e.g. variables in macro related to 5-level paging,
+    which can be optimized by GCC as relative referencs. If build it as
+    mcmodel=large, there will be more fixup_pointer() calls, resulting
+    in uglier code. Actually, if build it as PIE even when
+    CONFIG_X86_PIE is disabled, then all fixup_pointer() could be
+    dropped. However stack protector would be broken if per-cpu stack
+    protector is not supported.
+
+  Limitations:
+  - Since I am not familiar with XEN, it has been disabled for now as it
+    is not adapted for PIE. This is due to the assignment of wrong
+    pointers (with low address values) to x86_ini_ops when running in
+    identity mapping. This issue can be resolved by building pagetable
+    eraly and jumping to high kernel address as soon as possible.
+
+  - It is not allowed to reference global variables in an alternative
+    section since RIP-relative addressing is not fixed in
+    apply_alternatives(). Fortunately, all disallowed relocations in the
+    alternative section can be captured by objtool. I believe that this
+    issue can also be fixed by using objtool.
+
+  - For module loading, only allow to load module without GOT for
+    simplicity. Only weak global variable referencs are using GOT.
+
+  Tests:
+    I only have tested booting with GCC 5.1.0 (min version), GCC 12.2.0
+    and CLANG 15.0.7. And I have also run the following tests for both
+    default configuration and Ubuntu configuration.
+
+Performance/Size impact (GCC 12.2.0):
+
+Size of vmlinux (Default configuration):
+ File size:
+ - PIE disabled: +0.012%
+ - PIE enabled: -2.219%
+ instructions:
+ - PIE disabled: same
+ - PIE enabled: +1.383%
+ .text section:
+ - PIE disabled: same
+ - PIE enabled: +0.589%
+
+Size of vmlinux (Ubuntu configuration):
+ File size:
+ - PIE disabled: same
+ - PIE enabled: +2.391%
+ instructions:
+ - PIE disabled: +0.013%
+ - PIE enabled: +1.566%
+ .text section:
+ - PIE disabled: same
+ - PIE enabled: +0.055%
+
+The .text section size increase is due to more instructions required for
+PIE code. There are two reasons that have been mentioned in previous
+mailist. Firstly, switch folding is disabled under PIE [3]. Secondly,
+two instructions are needed for PIE to represent a single instruction
+with sign extension, such as when accessing an array element. While only
+one instruction is required when using mcmode=kernel, for PIE, it needs
+to use lea to get the base of the array first.
+
+Hackbench (50% and 1600% on thread/process for pipe/sockets):
+ - PIE disabled: no significant change (avg -/+ 0.5% on default config).
+ - PIE enabled: -2% to +2% in average (default config).
+
+Kernbench (average of 10 Half and Optimal runs):
+ Elapsed Time:
+ - PIE disabled: no significant change (avg -0.2% on ubuntu config)
+ - PIE enabled: average -0.2% to +0.2%
+ System Time:
+ - PIE disabled: no significant change (avg -0.5% on ubuntu config)
+ - PIE enabled: average -0.5% to +0.5%
+
+[1] https://lore.kernel.org/all/20190131192533.34130-1-thgarnie@chromium.org
+[2] https://lore.kernel.org/all/20200228000105.165012-1-thgarnie@chromium.org
+[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82303
+
+Brian Gerst (1):
+  x86-64: Use per-cpu stack canary if supported by compiler
+
+Hou Wenlong (29):
+  x86/irq: Adapt assembly for PIE support
+  x86,rethook: Adapt assembly for PIE support
+  x86/paravirt: Use relative reference for original instruction
+  x86/Kconfig: Introduce new Kconfig for PIE kernel building
+  x86/PVH: Use fixed_percpu_data to set up GS base
+  x86/pie: Enable stack protector only if per-cpu stack canary is
+    supported
+  x86/percpu: Use PC-relative addressing for percpu variable references
+  x86/tools: Explicitly include autoconf.h for hostprogs
+  x86/percpu: Adapt percpu references relocation for PIE support
+  x86/ftrace: Adapt assembly for PIE support
+  x86/pie: Force hidden visibility for all symbol references
+  x86/boot/compressed: Adapt sed command to generate voffset.h when PIE
+    is enabled
+  x86/pie: Add .data.rel.* sections into link script
+  KVM: x86: Adapt assembly for PIE support
+  x86/PVH: Adapt PVH booting for PIE support
+  x86/bpf: Adapt BPF_CALL JIT codegen for PIE support
+  x86/modules: Adapt module loading for PIE support
+  x86/boot/64: Use data relocation to get absloute address when PIE is
+    enabled
+  objtool: Add validation for x86 PIE support
+  objtool: Adapt indirect call of __fentry__() for PIE support
+  x86/pie: Build the kernel as PIE
+  x86/vsyscall: Don't use set_fixmap() to map vsyscall page
+  x86/xen: Pin up to VSYSCALL_ADDR when vsyscall page is out of fixmap
+    area
+  x86/fixmap: Move vsyscall page out of fixmap area
+  x86/fixmap: Unify FIXADDR_TOP
+  x86/boot: Fill kernel image puds dynamically
+  x86/mm: Sort address_markers array when X86 PIE is enabled
+  x86/pie: Allow kernel image to be relocated in top 512G
+  x86/boot: Extend relocate range for PIE kernel image
+
+Thomas Garnier (13):
+  x86/crypto: Adapt assembly for PIE support
+  x86: Add macro to get symbol address for PIE support
+  x86: relocate_kernel - Adapt assembly for PIE support
+  x86/entry/64: Adapt assembly for PIE support
+  x86: pm-trace: Adapt assembly for PIE support
+  x86/CPU: Adapt assembly for PIE support
+  x86/acpi: Adapt assembly for PIE support
+  x86/boot/64: Adapt assembly for PIE support
+  x86/power/64: Adapt assembly for PIE support
+  x86/alternatives: Adapt assembly for PIE support
+  x86/ftrace: Adapt ftrace nop patching for PIE support
+  x86/mm: Make the x86 GOT read-only
+  x86/relocs: Handle PIE relocations
+
+ Documentation/x86/x86_64/mm.rst              |   4 +
+ arch/x86/Kconfig                             |  36 +++++-
+ arch/x86/Makefile                            |  33 +++--
+ arch/x86/boot/compressed/Makefile            |   2 +-
+ arch/x86/boot/compressed/kaslr.c             |  55 +++++++++
+ arch/x86/boot/compressed/misc.c              |   4 +-
+ arch/x86/boot/compressed/misc.h              |   9 ++
+ arch/x86/crypto/aegis128-aesni-asm.S         |   6 +-
+ arch/x86/crypto/aesni-intel_asm.S            |   2 +-
+ arch/x86/crypto/aesni-intel_avx-x86_64.S     |   3 +-
+ arch/x86/crypto/aria-aesni-avx-asm_64.S      |  30 ++---
+ arch/x86/crypto/camellia-aesni-avx-asm_64.S  |  30 ++---
+ arch/x86/crypto/camellia-aesni-avx2-asm_64.S |  30 ++---
+ arch/x86/crypto/camellia-x86_64-asm_64.S     |   8 +-
+ arch/x86/crypto/cast5-avx-x86_64-asm_64.S    |  50 ++++----
+ arch/x86/crypto/cast6-avx-x86_64-asm_64.S    |  44 ++++---
+ arch/x86/crypto/crc32c-pcl-intel-asm_64.S    |   3 +-
+ arch/x86/crypto/des3_ede-asm_64.S            |  96 ++++++++++-----
+ arch/x86/crypto/ghash-clmulni-intel_asm.S    |   4 +-
+ arch/x86/crypto/sha256-avx2-asm.S            |  18 ++-
+ arch/x86/entry/calling.h                     |  17 ++-
+ arch/x86/entry/entry_64.S                    |  22 +++-
+ arch/x86/entry/vdso/Makefile                 |   2 +-
+ arch/x86/entry/vsyscall/vsyscall_64.c        |   7 +-
+ arch/x86/include/asm/alternative.h           |   6 +-
+ arch/x86/include/asm/asm.h                   |   1 +
+ arch/x86/include/asm/fixmap.h                |  28 +----
+ arch/x86/include/asm/irq_stack.h             |   2 +-
+ arch/x86/include/asm/kmsan.h                 |   6 +-
+ arch/x86/include/asm/nospec-branch.h         |  10 +-
+ arch/x86/include/asm/page_64.h               |   8 +-
+ arch/x86/include/asm/page_64_types.h         |   8 ++
+ arch/x86/include/asm/paravirt.h              |  17 ++-
+ arch/x86/include/asm/paravirt_types.h        |  12 +-
+ arch/x86/include/asm/percpu.h                |  29 ++++-
+ arch/x86/include/asm/pgtable_64_types.h      |  10 +-
+ arch/x86/include/asm/pm-trace.h              |   2 +-
+ arch/x86/include/asm/processor.h             |  17 ++-
+ arch/x86/include/asm/sections.h              |   5 +
+ arch/x86/include/asm/stackprotector.h        |  16 ++-
+ arch/x86/include/asm/sync_core.h             |   6 +-
+ arch/x86/include/asm/vsyscall.h              |  13 ++
+ arch/x86/kernel/acpi/wakeup_64.S             |  31 ++---
+ arch/x86/kernel/alternative.c                |   8 +-
+ arch/x86/kernel/asm-offsets_64.c             |   2 +-
+ arch/x86/kernel/callthunks.c                 |   2 +-
+ arch/x86/kernel/cpu/common.c                 |  15 ++-
+ arch/x86/kernel/ftrace.c                     |  46 ++++++-
+ arch/x86/kernel/ftrace_64.S                  |   9 +-
+ arch/x86/kernel/head64.c                     |  77 +++++++++---
+ arch/x86/kernel/head_64.S                    |  68 ++++++++---
+ arch/x86/kernel/kvm.c                        |  21 +++-
+ arch/x86/kernel/module.c                     |  27 +++++
+ arch/x86/kernel/paravirt.c                   |   4 +
+ arch/x86/kernel/relocate_kernel_64.S         |   2 +-
+ arch/x86/kernel/rethook.c                    |   8 ++
+ arch/x86/kernel/setup.c                      |   6 +
+ arch/x86/kernel/vmlinux.lds.S                |  10 +-
+ arch/x86/kvm/svm/vmenter.S                   |  10 +-
+ arch/x86/kvm/vmx/vmenter.S                   |   2 +-
+ arch/x86/lib/cmpxchg16b_emu.S                |   8 +-
+ arch/x86/mm/dump_pagetables.c                |  36 +++++-
+ arch/x86/mm/fault.c                          |   1 -
+ arch/x86/mm/init_64.c                        |  10 +-
+ arch/x86/mm/ioremap.c                        |   5 +-
+ arch/x86/mm/kasan_init_64.c                  |   4 +-
+ arch/x86/mm/pat/set_memory.c                 |   2 +-
+ arch/x86/mm/pgtable.c                        |  13 ++
+ arch/x86/mm/pgtable_32.c                     |   3 -
+ arch/x86/mm/physaddr.c                       |  14 +--
+ arch/x86/net/bpf_jit_comp.c                  |  17 ++-
+ arch/x86/platform/efi/efi_thunk_64.S         |   4 +
+ arch/x86/platform/pvh/head.S                 |  29 ++++-
+ arch/x86/power/hibernate_asm_64.S            |   4 +-
+ arch/x86/tools/Makefile                      |   4 +-
+ arch/x86/tools/relocs.c                      | 113 ++++++++++++++++-
+ arch/x86/xen/mmu_pv.c                        |  32 +++--
+ arch/x86/xen/xen-asm.S                       |  10 +-
+ arch/x86/xen/xen-head.S                      |  14 ++-
+ include/asm-generic/vmlinux.lds.h            |  12 ++
+ scripts/Makefile.lib                         |   1 +
+ scripts/recordmcount.c                       |  81 ++++++++-----
+ tools/objtool/arch/x86/decode.c              |  10 +-
+ tools/objtool/builtin-check.c                |   4 +-
+ tools/objtool/check.c                        | 121 +++++++++++++++++++
+ tools/objtool/include/objtool/builtin.h      |   1 +
+ 86 files changed, 1202 insertions(+), 410 deletions(-)
+
+
+Patchset is based on tip/master.
+base-commit: 01cbd032298654fe4c85e153dd9a224e5bc10194
+--
 2.31.1
 
