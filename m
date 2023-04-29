@@ -1,43 +1,49 @@
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB01B136A;
-	Sat, 29 Apr 2023 02:38:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30EA17E9;
+	Sat, 29 Apr 2023 02:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682735933; x=1714271933;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dp3X/yASmQiiD959DkbT8iui/72T5wLzIHBrlFwIWt8=;
-  b=BbflXDjj/S3B8q36nIAGN94ZHAVo5lGCMNHptcVRo+xQWaoDGJzGjqDe
-   cEdD+ikpxf5Rg/Cb8nx9RPwDdTyHdQqTrwb4tgKO2Ri/zjUZytnUbitt3
-   6G+heWp+2ZKU0/rm5kuIgGzuzbdeC3eiDfKBGxytQdBb+M4KZIU+4VrgJ
-   ZNvxN8rfkFMaeVrQgygVJDLPgxQhW768WH6HzHD5qCl7Pme9eZOnbY+WR
-   DLqoAT081NujVS8+z/NryFKp/hUT3VxeRmkI4ZFAdeArbePeDcXxkfmmZ
-   BnOjeuic+m3hr+6MYeY909mVoRkZG1Fkytnvni4TABy2tjFTVirDIOoLe
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="345353385"
+  t=1682735935; x=1714271935;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=raEleY/CIN8OLflT7QsvmQGNlj3pjj/mEyGW4jOjITc=;
+  b=GbLhKYN5E0Pcd1PcMaRDaoHb4ybAAlmojbyyetjOVSXH6bQmE7ungHLW
+   0Y+Q+dU/FH4cJZNaAVP+6yvFalx04mBiQU9wl1/VlBCXpZNoDGdc17MaD
+   vaaNfpimYvMQqzM8W1weRf1eFEPyrLQwxD19GDNJCR/dLn2x3ffDi2r2T
+   QkW5mwOufhMeMqVvQ7CPNKmM+uPd/nmgdWBfr7z/CqbObFXu0aLrISQlq
+   tdtCkG7s1+b75fBR+B/GbM3xIyzDK+lQp/nRmmYpEW74dRuEjUGJoJDla
+   519pw22TaXmKCSQEtBBKU8qkXo20auZTxqt+y+pJvPiY9fPCy2nLDGEMI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="345353386"
 X-IronPort-AV: E=Sophos;i="5.99,236,1677571200"; 
-   d="scan'208";a="345353385"
+   d="scan'208";a="345353386"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 19:38:53 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 19:38:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="806639169"
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="806639170"
 X-IronPort-AV: E=Sophos;i="5.99,236,1677571200"; 
-   d="scan'208";a="806639169"
+   d="scan'208";a="806639170"
 Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
   by fmsmga002.fm.intel.com with ESMTP; 28 Apr 2023 19:38:51 -0700
 Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1psaU7-0000qJ-01;
-	Sat, 29 Apr 2023 02:38:51 +0000
-Date: Sat, 29 Apr 2023 10:38:00 +0800
+	id 1psaU6-0000qH-3C;
+	Sat, 29 Apr 2023 02:38:50 +0000
+Date: Sat, 29 Apr 2023 10:37:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [avpatel:riscv_sbi_nested_v1 70/73]
- arch/riscv/kvm/vcpu_switch.S:259:81: error: invalid reassignment of
- non-absolute variable '.L__sym_size___kvm_riscv_switch_to'
-Message-ID: <202304291023.8amhE0cz-lkp@intel.com>
+To: Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
+	linux-security-module@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jmorris@namei.org,
+	keescook@chromium.org, john.johansen@canonical.com,
+	penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+	mic@digikod.net
+Subject: Re: [PATCH v10 07/11] LSM: Helpers for attribute names and filling
+ lsm_ctx
+Message-ID: <202304291044.WjF3wC86-lkp@intel.com>
+References: <20230428203417.159874-8-casey@schaufler-ca.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,76 +52,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230428203417.159874-8-casey@schaufler-ca.com>
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_nested_v1
-head:   00757ea0bfa14ae06d3f42144633ba253d6d5f5e
-commit: 98d148d301f859d6cd0d15148dd7b4a9e82afe16 [70/73] RISC-V: KVM: Use SBI sync SRET call when available
-config: riscv-randconfig-r034-20230428 (https://download.01.org/0day-ci/archive/20230429/202304291023.8amhE0cz-lkp@intel.com/config)
+Hi Casey,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/perf/core]
+[also build test ERROR on acme/perf/core shuah-kselftest/next shuah-kselftest/fixes v6.3]
+[cannot apply to linus/master next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/LSM-Maintain-a-table-of-LSM-attribute-data/20230429-053458
+base:   tip/perf/core
+patch link:    https://lore.kernel.org/r/20230428203417.159874-8-casey%40schaufler-ca.com
+patch subject: [PATCH v10 07/11] LSM: Helpers for attribute names and filling lsm_ctx
+config: riscv-randconfig-r003-20230428 (https://download.01.org/0day-ci/archive/20230429/202304291044.WjF3wC86-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
         # install riscv cross compiling tool for clang build
         # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/98d148d301f859d6cd0d15148dd7b4a9e82afe16
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_nested_v1
-        git checkout 98d148d301f859d6cd0d15148dd7b4a9e82afe16
+        # https://github.com/intel-lab-lkp/linux/commit/9830f4776196e33bee604b8ce3339177f8fd37f8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Casey-Schaufler/LSM-Maintain-a-table-of-LSM-attribute-data/20230429-053458
+        git checkout 9830f4776196e33bee604b8ce3339177f8fd37f8
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304291023.8amhE0cz-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304291044.WjF3wC86-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/riscv/kvm/vcpu_switch.S:259:81: error: invalid reassignment of non-absolute variable '.L__sym_size___kvm_riscv_switch_to'
-   .type __kvm_riscv_switch_to STT_FUNC ; .set .L__sym_size___kvm_riscv_switch_to, .-__kvm_riscv_switch_to ; .size __kvm_riscv_switch_to, .L__sym_size___kvm_riscv_switch_to
-                                                                                   ^
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   In file included from arch/riscv/include/asm/kvm_host.h:21:
+   In file included from arch/riscv/include/asm/kvm_vcpu_pmu.h:12:
+   In file included from include/linux/perf/riscv_pmu.h:12:
+   In file included from include/linux/perf_event.h:62:
+>> include/linux/security.h:516:9: error: use of undeclared identifier 'LSM_ATTR_UNDEF'
+           return LSM_ATTR_UNDEF;
+                  ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:114: arch/riscv/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1286: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +259 arch/riscv/kvm/vcpu_switch.S
+vim +/LSM_ATTR_UNDEF +516 include/linux/security.h
 
-98d148d301f859 Anup Patel 2022-10-09  230  
-98d148d301f859 Anup Patel 2022-10-09  231  	/*
-98d148d301f859 Anup Patel 2022-10-09  232  	 * Parameters:
-98d148d301f859 Anup Patel 2022-10-09  233  	 * A0 <= Pointer to struct kvm_vcpu_arch
-98d148d301f859 Anup Patel 2022-10-09  234  	 * A1 <= SBI extension ID
-98d148d301f859 Anup Patel 2022-10-09  235  	 * A2 <= SBI function ID
-98d148d301f859 Anup Patel 2022-10-09  236  	 * A3 <= Flags for SBI sync SRET call
-98d148d301f859 Anup Patel 2022-10-09  237  	 */
-98d148d301f859 Anup Patel 2022-10-09  238  ENTRY(__kvm_riscv_nacl_switch_to)
-98d148d301f859 Anup Patel 2022-10-09  239  	SAVE_HOST_GPRS
-98d148d301f859 Anup Patel 2022-10-09  240  
-98d148d301f859 Anup Patel 2022-10-09  241  	SAVE_HOST_AND_RESTORE_GUEST_CSRS __kvm_riscv_nacl_switch_to_return
-98d148d301f859 Anup Patel 2022-10-09  242  
-98d148d301f859 Anup Patel 2022-10-09  243  	/* Resume Guest using SBI nested acceleration */
-98d148d301f859 Anup Patel 2022-10-09  244  	add	a6, a2, zero
-98d148d301f859 Anup Patel 2022-10-09  245  	add	a7, a1, zero
-98d148d301f859 Anup Patel 2022-10-09  246  	ecall
-98d148d301f859 Anup Patel 2022-10-09  247  
-98d148d301f859 Anup Patel 2022-10-09  248  	/* Back to Host */
-98d148d301f859 Anup Patel 2022-10-09  249  	.align 2
-98d148d301f859 Anup Patel 2022-10-09  250  __kvm_riscv_nacl_switch_to_return:
-98d148d301f859 Anup Patel 2022-10-09  251  	SAVE_GUEST_GPRS
-98d148d301f859 Anup Patel 2022-10-09  252  
-98d148d301f859 Anup Patel 2022-10-09  253  	SAVE_GUEST_AND_RESTORE_HOST_CSRS
-98d148d301f859 Anup Patel 2022-10-09  254  
-98d148d301f859 Anup Patel 2022-10-09  255  	RESTORE_HOST_GPRS
-34bde9d8b9e6e5 Anup Patel 2021-09-27  256  
-34bde9d8b9e6e5 Anup Patel 2021-09-27  257  	/* Return to C code */
-34bde9d8b9e6e5 Anup Patel 2021-09-27  258  	ret
-34bde9d8b9e6e5 Anup Patel 2021-09-27 @259  ENDPROC(__kvm_riscv_switch_to)
-9f7013265112a9 Anup Patel 2021-09-27  260  
-
-:::::: The code at line 259 was first introduced by commit
-:::::: 34bde9d8b9e6e5249db3c07cf1ebfe75c23c671c RISC-V: KVM: Implement VCPU world-switch
-
-:::::: TO: Anup Patel <anup.patel@wdc.com>
-:::::: CC: Anup Patel <anup@brainfault.org>
+   513	
+   514	static inline u64 lsm_name_to_attr(const char *name)
+   515	{
+ > 516		return LSM_ATTR_UNDEF;
+   517	}
+   518	
 
 -- 
 0-DAY CI Kernel Test Service
