@@ -1,45 +1,43 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744B7320C;
-	Sat, 29 Apr 2023 16:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E17353AF;
+	Sat, 29 Apr 2023 17:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682786410; x=1714322410;
+  t=1682789532; x=1714325532;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xmzzKOvu+aP2cy3ZFi6Mqj8gl7Dl2IXdInHmOoKIdCo=;
-  b=fH6QXHpRnwXtrLjHbkeVlkwMjLBscTJa05JfuTSyIwoslZpjM1Zwm0Np
-   MG4TauFb1WTk6FPksSXx+ShUwRMTTu0ghwf38DqAAmVVqNciy5t2dm/V+
-   RLPF72jiLawAn6dh99vV/sjXe5FCnBcz3IJdY1qZs8DYRJXuqh9xBimuJ
-   m16Kv6v5vkRuAaeyhahPgAP4aXXfj5ySTR9xe6wLgD5dS3yWHwZnIr2tg
-   yWBVbnk0aablSYlllCuW5c0Y0kdUt26DWkLx1EJUnhql/nx5Y1rjOdukh
-   FCzpT1FYW6kjVEDDpEQADdAuCBIiP9ZqD381A7CHs3VAGvwqm85b78C1G
+  bh=mwdT8XScnd6KIMjj8KX8ojN17rcAoGyF+B45hF9Ms+k=;
+  b=ZN+/NTaER2k/VE1TC75fnGYOjn7YLkSHFUC9cuuPQu0X8dRck7O/c26y
+   G7yH1mdvkDgh/pza//jhoAXo60rHTZH3TUe5NtMV2nL0m/WzK2lrVrl37
+   s648X8Nbz9tQI2IwGNhViV0ZfuBZRDzu43R6d5RW6bJgsAxTvWAtYkAP1
+   SEp51gvcTqJp6sgwznv3927fYB32HtdJV3Wub0eJLASkHySPVzYB/7CH2
+   SjBf19R9Ajba4D59pNZwCm4IulP7sWYc+rjsY5NS+A/qqp1AZEwqTzVQP
+   HXBsmk8Ii3O7DyAEHkGg1yu/X69AEvmMY9r7Vlaic7K2rpGL2NWwvwRsw
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="337051851"
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="346744356"
 X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
-   d="scan'208";a="337051851"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 09:40:09 -0700
+   d="scan'208";a="346744356"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 10:32:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="869622961"
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="725802293"
 X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
-   d="scan'208";a="869622961"
+   d="scan'208";a="725802293"
 Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Apr 2023 09:40:07 -0700
+  by orsmga008.jf.intel.com with ESMTP; 29 Apr 2023 10:32:09 -0700
 Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1psncF-0001Fp-0P;
-	Sat, 29 Apr 2023 16:40:07 +0000
-Date: Sun, 30 Apr 2023 00:40:03 +0800
+	id 1psoQb-0001HN-0g;
+	Sat, 29 Apr 2023 17:32:09 +0000
+Date: Sun, 30 Apr 2023 01:31:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: drivers/bluetooth/btnxpuart.c:1277:34: warning: unused variable
- 'nxpuart_of_match_table'
-Message-ID: <202304300014.vFGw6Dr0-lkp@intel.com>
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
+ warning: unused variable 'samsung_jpeg_match'
+Message-ID: <202304300103.Z3PkWr6d-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,85 +47,131 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+Hi Mauro,
+
+First bad commit (maybe != root cause):
+
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   89d77f71f493a3663b10fa812d17f472935d24be
-commit: 689ca16e523278470c38832a3010645a78c544d8 Bluetooth: NXP: Add protocol support for NXP Bluetooth chipsets
-date:   6 days ago
-config: hexagon-randconfig-r045-20230428 (https://download.01.org/0day-ci/archive/20230430/202304300014.vFGw6Dr0-lkp@intel.com/config)
+commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+date:   1 year, 1 month ago
+config: s390-randconfig-r011-20230430 (https://download.01.org/0day-ci/archive/20230430/202304300103.Z3PkWr6d-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=689ca16e523278470c38832a3010645a78c544d8
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 689ca16e523278470c38832a3010645a78c544d8
+        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/i2c/busses/ drivers/media/platform/samsung/s5p-jpeg/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304300014.vFGw6Dr0-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304300103.Z3PkWr6d-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/bluetooth/btnxpuart.c:10:
-   In file included from include/linux/serdev.h:10:
-   In file included from include/linux/iopoll.h:14:
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __raw_readb(PCI_IOBASE + addr);
                              ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/bluetooth/btnxpuart.c:10:
-   In file included from include/linux/serdev.h:10:
-   In file included from include/linux/iopoll.h:14:
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
                                                            ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/bluetooth/btnxpuart.c:10:
-   In file included from include/linux/serdev.h:10:
-   In file included from include/linux/iopoll.h:14:
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
    In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writeb(value, PCI_IOBASE + addr);
                                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
                                                          ~~~~~~~~~~ ^
->> drivers/bluetooth/btnxpuart.c:1277:34: warning: unused variable 'nxpuart_of_match_table' [-Wunused-const-variable]
-   static const struct of_device_id nxpuart_of_match_table[] = {
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
+   static const struct of_device_id samsung_jpeg_match[] = {
                                     ^
-   7 warnings generated.
+   13 warnings generated.
 
 
-vim +/nxpuart_of_match_table +1277 drivers/bluetooth/btnxpuart.c
+vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
 
-  1276	
-> 1277	static const struct of_device_id nxpuart_of_match_table[] = {
-  1278		{ .compatible = "nxp,88w8987-bt", .data = &w8987_data },
-  1279		{ .compatible = "nxp,88w8997-bt", .data = &w8997_data },
-  1280		{ }
-  1281	};
-  1282	MODULE_DEVICE_TABLE(of, nxpuart_of_match_table);
-  1283	
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
+
+:::::: The code at line 3126 was first introduced by commit
+:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+
+:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
 
 -- 
 0-DAY CI Kernel Test Service
