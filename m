@@ -1,52 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E39A15A5;
-	Sat, 29 Apr 2023 01:13:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD3BBC433D2;
-	Sat, 29 Apr 2023 01:13:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1682730816;
-	bh=ngfPZVB4srf8It2rTrkDVVsU3/xInNiqv4mthWXVBAg=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=YByXy/Gxb8rdH9bv+tVMpoWPcjsI4UMpMmrhkyBFnCZDhnssNLOuOsOL16ZAk2FEj
-	 LyRQ+P5amSDee9Uoaxw+a2Km5va14pRfWjf5rj+B6GQOksyHrW6mPR7TlOhIlxGi99
-	 1jCnMMkYrEm51jikCusY52ZDKzumqzfnzzhiaqT0woEWVt88QUj9KIXuRLDyzTAorc
-	 8obl6LmsMZbcuDXQ1GiXzadIkpZhCy/03G3CRuAQpbIkqfDhVjZMLCpdtJqR7ZuaJi
-	 6Jb72ltOsHlrGsnZ5djaERvKjXsduEfzUz5T13QQRiqIt1HeVjzLjahuR4TRg/DgNI
-	 TWt5JaowrSWEQ==
-Message-ID: <e181f270191e30d99554496517bd321d.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D212817CB
+	for <llvm@lists.linux.dev>; Sat, 29 Apr 2023 01:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1682731208;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=76hn3ihwqY/zOiQ+458LJo+xi1LbCiWBG6dK3E/g3po=;
+	b=FetRpRQRn+/UlaQvhFOvJMhHz6tSX2ul7CLauR4+/YJrQ69z5k4h60kt8WdGAEDK6QH3lu
+	87vP+HoGDB3X+fPJSDYz3OOsLJVh4xheAtwrI7F5SRDLghsZDgrvYEGpoMExzeqFaGOS3r
+	TGSUqKKB+JCeRaqntj4mZ/q9O6eDaqQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-41-954lsqj1PVmlXR8Xp4IIYg-1; Fri, 28 Apr 2023 21:20:06 -0400
+X-MC-Unique: 954lsqj1PVmlXR8Xp4IIYg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1C35A0F380
+	for <llvm@lists.linux.dev>; Sat, 29 Apr 2023 01:20:06 +0000 (UTC)
+Received: from [172.64.3.52] (unknown [10.30.33.173])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 8EE552166B5E;
+	Sat, 29 Apr 2023 01:20:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
+ mainline.kernel.org-clang, 70cc1b53)
+Date: Sat, 29 Apr 2023 01:20:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Message-Id: <87363.123042821200700177@us-mta-41.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230324145056.GA428955@dev-arch.thelio-3990X>
-References: <202303221947.pXP2v4xJ-lkp@intel.com> <81b2a67f89d7f46dd27f6d05606e753f.sboyd@kernel.org> <20230322195933.GA2828949@dev-arch.thelio-3990X> <00c24196e5ceb60b7d69967b73910264.sboyd@kernel.org> <20230324145056.GA428955@dev-arch.thelio-3990X>
-Subject: Re: [clk:clk-sunplus 1/1] drivers/clk/clk-sp7021.c:316:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigne...
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Qin Jian <qinjian@cqplus1.com>, kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-To: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 28 Apr 2023 18:13:34 -0700
-User-Agent: alot/0.10
 
-Quoting Nathan Chancellor (2023-03-24 07:50:56)
-> On Wed, Mar 22, 2023 at 04:48:43PM -0700, Stephen Boyd wrote:
-> > Quoting Nathan Chancellor (2023-03-22 12:59:33)
-> >=20
-> > > It looks like clang is
-> > > complaining that mask is an unsigned int and it is being compared
-> > > against ~0ull, which will always be false. This makes the warning go
-> > > away for me, which is similar to commit cfd6fb45cfaf ("crypto: ccree -
-> > > avoid out-of-range warnings from clang"), but I am not sure if that is
-> > > correct or not.
-> >=20
-> > Cool thanks. Can you send it as a proper patch?
->=20
-> Sure thing, I will do so when I am back online next week.
->=20
+Hi, we tested your kernel and here are the results:
 
-Did you send the patch?
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
+
+
+Kernel information:
+    Commit message: Merge tag 'powerpc-6.4-1' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/powerpc/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/86557
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34164=
+7
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
