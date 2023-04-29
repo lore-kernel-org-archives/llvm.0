@@ -1,140 +1,121 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636263229;
-	Sat, 29 Apr 2023 20:57:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682801835; x=1714337835;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GCpS8Md9HBlN5esDuVnjzs96fcxvDfOrl6RLc+7G9ao=;
-  b=K1LrdkoRNafDvUoe+hHGelgV8XVfEv9+LJJs73bg1uur6lIn99sAlOwA
-   gqf4gPfpjSK9BdVpgiEuP2k6lw8ijdfgaJcezvCVBXmgMzflgo1imaWYG
-   i35mEiq5iVU9YVbTBg33mgUd5COVaqNFmRk04qO3TnxczN4cARgROqfF+
-   Ct+6fDN7IG+Wy0pXzF3mM7FmR/F2K2cFe+biXdjIkHJjWlWGgSF2gKJSE
-   +YN8YV5ZDX3Xy6r6QGyOW1GNDxV1MjSTOdBiVUpRrNZ8df+3FO17hXJCK
-   y2yLqC4HkITewtRyQzsRBN210zrXgOE5qMXAL4jnM4+BnykJy9CiJAs/f
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="332302408"
-X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
-   d="scan'208";a="332302408"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 13:57:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="764780633"
-X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
-   d="scan'208";a="764780633"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Apr 2023 13:57:12 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1psrd2-0001LZ-0N;
-	Sat, 29 Apr 2023 20:57:12 +0000
-Date: Sun, 30 Apr 2023 04:56:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [linux-stable-rc:linux-5.15.y 9996/9999]
- arch/riscv/mm/init.c:755:16: warning: mixing declarations and code is a C99
- extension
-Message-ID: <202304300429.SXZOA5up-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1593229
+	for <llvm@lists.linux.dev>; Sat, 29 Apr 2023 22:04:01 +0000 (UTC)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailout.west.internal (Postfix) with ESMTP id 1AF34320046F;
+	Sat, 29 Apr 2023 18:03:59 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 29 Apr 2023 18:04:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:sender
+	:subject:subject:to:to; s=fm2; t=1682805838; x=1682892238; bh=Gr
+	mqce6ZIJAbv3KbdF0ct03pH7DdnZSbJCu9rKvBOnM=; b=kHHb4rtp+yPy3s7m38
+	B1j1tuD1k6ByyxZ48YbM3uYxhOiB2y899vyLR+fOzWEHV77iur6WNXrBKoRaIT36
+	P5OaNf8QEQ/mYhbM/yrYmJtomxrewagdh+6E76raNIZFeGMzHLYAQxMPiw1qMRSo
+	me/Y40ouP15vZgGXB7WrvLYxc84dO4zFkZ5gmoy1ONiQKF7PTwBTGl18vjHxsms1
+	Kc0vClOvskb95oZRMoec7LL8eg2FfHngoy51PwRdDGZNrjN9Un+LTadGEoE9ZawW
+	uglrLWgR61xyg4w1lZmUn233Hztxz5qR9932hxUhrVSzeoKrCg8SZAGQfYtYQX8z
+	xpaw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1682805838; x=1682892238; bh=Grmqce6ZIJAbv
+	3KbdF0ct03pH7DdnZSbJCu9rKvBOnM=; b=MMrZtAZHNU7EYXbvuOQsbH6mV0Wwm
+	VXZL0ZC7WkD7kjqW2N7IyVI/0hR//uPY3IuwYmhxPkNB393vb5QGvRoWL6sISBsU
+	nDVJFqLNdru0cs76bICTBBOfOtHA7ul9r+6/FANJ/xbzzB5P/BQvdtOKu7JTaIKj
+	G/Jxn/De0I5VSRfMKWsD7n5zJbTwhudzbHje3xAMBPsHP+ajKNyHHuqKa6aXna6c
+	ib1i/R5IZAyGJf8e4M0BBuxrMasz/OOZqDDJ3+FOmKCjH1rH8Ds15yf3kbNcJ5ZW
+	gVmVQU2j3758GdoLjI3fgHUNEuudJnXMbC77stGf/lcFielwYwPHhgc4Q==
+X-ME-Sender: <xms:TZRNZFT2EXwN5UO-Xsjt7zE3LpHYELtdMtboXri5YxR34JSR8iLGCw>
+    <xme:TZRNZOx1Wyz-iYney1On1BMyu62bu2sZn9fPturHm7prYAERpSpOckml2qbRG4nNa
+    HBsxanEWoXEl2B6vmM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvuddgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:TZRNZK2V02OQohtQCwSYMF-4RxAH31CJgrR2Dg4Dep5Ac0UIQRuJlw>
+    <xmx:TZRNZNCU79_mZRfF0LcTxh3YJR9iqagKTdU6yxR2CZehTNkmts571Q>
+    <xmx:TZRNZOgAuWRaPoHxUQK_9i8ZaW-MPqwI-q1gIWl6W30FuuaE6tIEuA>
+    <xmx:TpRNZFTHVIieBfzEbvTBy3D7ZYqGvvzwSxBtAzppY5SJUHdIuNEkUA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id C7107B60086; Sat, 29 Apr 2023 18:03:57 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Message-Id: <96947fdc-835f-4bfa-b112-4ba9991cfe5f@app.fastmail.com>
+In-Reply-To: <b6341f73-3ad2-4fcf-8612-e026751019b5@app.fastmail.com>
+References: <20230421130111.4041641-1-tudor.ambarus@linaro.org>
+ <5d13e927-3713-4b9e-b007-6be5671d46f2@app.fastmail.com>
+ <e46dd2bb-16d1-0c99-56f0-f8c2c4bbc79b@linaro.org>
+ <b6341f73-3ad2-4fcf-8612-e026751019b5@app.fastmail.com>
+Date: Sun, 30 Apr 2023 00:03:26 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Tudor Ambarus" <tudor.ambarus@linaro.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>, "Tom Rix" <trix@redhat.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>
+Cc: joneslee@google.com, "Peter Zijlstra" <peterz@infradead.org>,
+ "Kees Cook" <keescook@chromium.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ zhaoyang.huang@unisoc.com, "Liam R. Howlett" <liam.howlett@oracle.com>,
+ "Randy Dunlap" <rdunlap@infradead.org>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, "Mark Brown" <broonie@kernel.org>,
+ "Dmitry Vyukov" <dvyukov@google.com>, nogikh@google.com,
+ "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: [PATCH] Kconfig.debug: disable CONFIG_FRAME_WARN for KASAN_STACK &&
+ CC_IS_CLANG by default
+Content-Type: text/plain
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-head:   64fb7ad7e758c85ebeb0c8c500e4175c65bf5778
-commit: 067df57aea8ea9d1d84c53d9925d58759ac90824 [9996/9999] riscv: Move early dtb mapping into the fixmap region
-config: riscv-randconfig-r026-20230430 (https://download.01.org/0day-ci/archive/20230430/202304300429.SXZOA5up-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=067df57aea8ea9d1d84c53d9925d58759ac90824
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.15.y
-        git checkout 067df57aea8ea9d1d84c53d9925d58759ac90824
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+On Fri, Apr 21, 2023, at 17:28, Arnd Bergmann wrote:
+> On Fri, Apr 21, 2023, at 17:10, Tudor Ambarus wrote:
+>> On 4/21/23 15:30, Arnd Bergmann wrote:
+>
+> The main problem with stack frame usage is that the compiler cannot know
+> during compile time what the other functions are going to use, so it's
+> always a bit of guesswork, and we just try to make the limit as small
+> as possible without causing too much work addressing the warnings.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304300429.SXZOA5up-lkp@intel.com/
+Hi Tudor,
 
-All warnings (new ones prefixed by >>):
+One follow-up here regarding the risk of actually overflowing the
+stack on production systems: There is a possible feature that I've
+discussed with Ard in the past, if we add a user-configurable stack offset
+for syscall entry, it becomes possible to test kernels with an
+artificially low stack size to find out the most critical call chain
+that one can hit from user space.
 
->> arch/riscv/mm/init.c:755:16: warning: mixing declarations and code is a C99 extension [-Wdeclaration-after-statement]
-           unsigned long idx = pgd_index(__fix_to_virt(FIX_FDT));
-                         ^
-   1 warning generated.
+You mentioned elsewhere that you are using syzkaller for testing for bugs,
+and this would be the perfect way to exercise the modified kernels as
+well, since it can hit all kinds of unusual call chains.
 
+We already call add_random_kstack_offset() on four architectures (arm64,
+powerpc, s390 and x86), and the same location could add a fixed offset
+that is configurable e.g. system-wide using sysctl() or per task using
+prctl(), depending on what makes this more useful for testing.
 
-vim +755 arch/riscv/mm/init.c
+When CONFIG_VMAP_STACK is set, the result should be a process crash
+with a full call chain printed to see how it got this bad, similar to
+what you get with a KASAN violation. This probably makes most sense
+with KASAN_STACK disabled to see which functions are the most critical
+in real systems, though testing with KASAN_STACK enabled could also
+give some hints at which of the warnings you see are worth fixing first.
 
-   731	
-   732	static void __init setup_vm_final(void)
-   733	{
-   734		uintptr_t va, map_size;
-   735		phys_addr_t pa, start, end;
-   736		u64 i;
-   737	
-   738		/**
-   739		 * MMU is enabled at this point. But page table setup is not complete yet.
-   740		 * fixmap page table alloc functions should be used at this point
-   741		 */
-   742		pt_ops.alloc_pte = alloc_pte_fixmap;
-   743		pt_ops.get_pte_virt = get_pte_virt_fixmap;
-   744	#ifndef __PAGETABLE_PMD_FOLDED
-   745		pt_ops.alloc_pmd = alloc_pmd_fixmap;
-   746		pt_ops.get_pmd_virt = get_pmd_virt_fixmap;
-   747	#endif
-   748		/* Setup swapper PGD for fixmap */
-   749	#if !defined(CONFIG_64BIT)
-   750		/*
-   751		 * In 32-bit, the device tree lies in a pgd entry, so it must be copied
-   752		 * directly in swapper_pg_dir in addition to the pgd entry that points
-   753		 * to fixmap_pte.
-   754		 */
- > 755		unsigned long idx = pgd_index(__fix_to_virt(FIX_FDT));
-   756	
-   757		set_pgd(&swapper_pg_dir[idx], early_pg_dir[idx]);
-   758	#endif
-   759		create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
-   760				   __pa_symbol(fixmap_pgd_next),
-   761				   PGDIR_SIZE, PAGE_TABLE);
-   762	
-   763		/* Map all memory banks in the linear mapping */
-   764		for_each_mem_range(i, &start, &end) {
-   765			if (start >= end)
-   766				break;
-   767			if (start <= __pa(PAGE_OFFSET) &&
-   768			    __pa(PAGE_OFFSET) < end)
-   769				start = __pa(PAGE_OFFSET);
-   770			if (end >= __pa(PAGE_OFFSET) + memory_limit)
-   771				end = __pa(PAGE_OFFSET) + memory_limit;
-   772	
-   773			map_size = best_map_size(start, end - start);
-   774			for (pa = start; pa < end; pa += map_size) {
-   775				va = (uintptr_t)__va(pa);
-   776	
-   777				create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
-   778						   pgprot_from_va(va));
-   779			}
-   780		}
-   781	
+If you would like to run tests with this, I might be able to come
+up with a prototype patch for it.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+       Arnd
