@@ -1,42 +1,43 @@
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14344360;
-	Sat, 29 Apr 2023 09:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F3B15C1;
+	Sat, 29 Apr 2023 10:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682759940; x=1714295940;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=C9roh1onm5l/yUnBl07e/i/H8cnW6hZkszYvhIiuGmY=;
-  b=mgxZeGekAddZLypazBpM0lZFUjr1hP+sryXMux6pV3531w7N9JdIVC4k
-   PR9MNk4aNZG2U8eSZd8yDLGiHuPzru1ab8PXGQhikqvw9i2XnQ0K2q4V7
-   hX7K1acr+D5oqq/Fro4p8gQrTT+H3Bmc0nbQ6ZBhkLyoLfrcqah5HqHXs
-   SfXoNekncSEBjWvZCeDEtv1/iuZc6ChUCYH8D8VaTeXzfSBCRUDh3cS/A
-   x5o0QPf5JrlMSznGYdybm2pcK5kvv2kW9I1O9P6LIXs1q3nYLO3zVCjxh
-   qjnyjoGwmPWkhkKHAzTEWm7znkP2QFv37fadEiOC5Na9YYm2sPf83nupR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="332255031"
-X-IronPort-AV: E=Sophos;i="5.99,236,1677571200"; 
-   d="scan'208";a="332255031"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 02:18:59 -0700
+  t=1682764262; x=1714300262;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zTOqmkEbQ+DxMgDz3Z8f38DUCSFgfHq12Q6zBdQDTjM=;
+  b=mronZ8iwqdswUm5L1mqHP608+Z5hV1i52rVbw4QpKbkHihLeQhcD0Pxm
+   WkFBXOSXjtLEu2CLIhmxtqYLmz/60+k9y2GuURYgDjppIpUbToxtQ3SN6
+   t2GA5PbMFRv29rzxhlZ5O0jrAfJihILjYszmLf27jtz9zzYDqi0T7l5L1
+   S5gaisNgtezHXICOxdz7ZLlJFRivxBi5Xni+3uRLw9dO743vtMRRBHPhr
+   LddyV2bruSotL8Icb8+XdqBrz+GHaSNcU7Xt8IqXCXyM+E8nrclH7w52X
+   I7qxSbMDNIvE3gFBm0bzy3kOSBUWCKe3co4klfdpk5RCCsWKfIER9Z0Sq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="434222275"
+X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
+   d="scan'208";a="434222275"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 03:31:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="695122384"
-X-IronPort-AV: E=Sophos;i="5.99,236,1677571200"; 
-   d="scan'208";a="695122384"
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="941448765"
+X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
+   d="scan'208";a="941448765"
 Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 29 Apr 2023 02:18:58 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 29 Apr 2023 03:31:00 -0700
 Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1psgjK-00011d-07;
-	Sat, 29 Apr 2023 09:18:58 +0000
-Date: Sat, 29 Apr 2023 17:18:18 +0800
+	id 1pshr1-000140-1H;
+	Sat, 29 Apr 2023 10:30:59 +0000
+Date: Sat, 29 Apr 2023 18:30:19 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [stable:linux-5.4.y 5552/8186] arch/x86/entry/entry_64.o: warning:
- objtool: If this is a retpoline, please patch it in with alternatives and
- annotate it with ANNOTATE_NOSPEC_ALTERNATIVE.
-Message-ID: <202304291717.QluBp0vi-lkp@intel.com>
+To: Kees Cook <keescook@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/scsi/fcoe/fcoe_ctlr.c:1871:13: warning: stack frame size
+ (1072) exceeds limit (1024) in 'fcoe_ctlr_recv_work'
+Message-ID: <202304291839.L1PvCRkL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,43 +47,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: Peter Zijlstra <peterz@infradead.org>
-CC: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: Alexandre Chartre <alexandre.chartre@oracle.com>
-CC: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-
-Hi Peter,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
-head:   ea7862c507eca54ea6caad9dcfc8bba5e749fbde
-commit: 8afd1c7da2b0484e752b28a9122efa02d284806e [5552/8186] x86/speculation: Change FILL_RETURN_BUFFER to work with objtool
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230429/202304291717.QluBp0vi-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   89d77f71f493a3663b10fa812d17f472935d24be
+commit: 54d9469bc515dc5fcbc20eecbe19cea868b70d68 fortify: Add run-time WARN for cross-field memcpy()
+date:   8 months ago
+config: riscv-randconfig-r015-20230429 (https://download.01.org/0day-ci/archive/20230429/202304291839.L1PvCRkL-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=8afd1c7da2b0484e752b28a9122efa02d284806e
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.4.y
-        git checkout 8afd1c7da2b0484e752b28a9122efa02d284806e
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54d9469bc515dc5fcbc20eecbe19cea868b70d68
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 54d9469bc515dc5fcbc20eecbe19cea868b70d68
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/scsi/fcoe/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304291717.QluBp0vi-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304291839.L1PvCRkL-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/entry/entry_64.o: warning: objtool: .entry.text+0x191: unsupported intra-function call
->> arch/x86/entry/entry_64.o: warning: objtool: If this is a retpoline, please patch it in with alternatives and annotate it with ANNOTATE_NOSPEC_ALTERNATIVE.
---
-   arch/x86/kvm/vmx/vmenter.o: warning: objtool: vmx_vmexit()+0xc: unsupported intra-function call
->> arch/x86/kvm/vmx/vmenter.o: warning: objtool: If this is a retpoline, please patch it in with alternatives and annotate it with ANNOTATE_NOSPEC_ALTERNATIVE.
+>> drivers/scsi/fcoe/fcoe_ctlr.c:1871:13: warning: stack frame size (1072) exceeds limit (1024) in 'fcoe_ctlr_recv_work' [-Wframe-larger-than]
+   static void fcoe_ctlr_recv_work(struct work_struct *recv_work)
+               ^
+   677/1072 (63.15%) spills, 395/1072 (36.85%) variables
+   1 warning generated.
+
+
+vim +/fcoe_ctlr_recv_work +1871 drivers/scsi/fcoe/fcoe_ctlr.c
+
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1866  
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1867  /**
+70b51aabf3b03f drivers/scsi/fcoe/libfcoe.c Robert Love 2009-11-03  1868   * fcoe_ctlr_recv_work() - Worker thread function for receiving FIP frames
+70b51aabf3b03f drivers/scsi/fcoe/libfcoe.c Robert Love 2009-11-03  1869   * @recv_work: Handle to a FCoE controller
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1870   */
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17 @1871  static void fcoe_ctlr_recv_work(struct work_struct *recv_work)
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1872  {
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1873  	struct fcoe_ctlr *fip;
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1874  	struct sk_buff *skb;
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1875  
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1876  	fip = container_of(recv_work, struct fcoe_ctlr, recv_work);
+1f4aed818d26eb drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-11-03  1877  	while ((skb = skb_dequeue(&fip->fip_recv_list)))
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1878  		fcoe_ctlr_recv_handler(fip, skb);
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1879  }
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1880  
+
+:::::: The code at line 1871 was first introduced by commit
+:::::: 97c8389d54b9665c38105ea72a428a44b97ff2f6 [SCSI] fcoe, libfcoe: Add support for FIP. FCoE discovery and keep-alive.
+
+:::::: TO: Joe Eykholt <jeykholt@cisco.com>
+:::::: CC: James Bottomley <James.Bottomley@HansenPartnership.com>
 
 -- 
 0-DAY CI Kernel Test Service
