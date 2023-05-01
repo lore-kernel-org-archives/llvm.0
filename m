@@ -1,66 +1,61 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2623D6C
-	for <llvm@lists.linux.dev>; Mon,  1 May 2023 20:41:00 +0000 (UTC)
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1aaff9c93a5so6821465ad.2
-        for <llvm@lists.linux.dev>; Mon, 01 May 2023 13:41:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E82B882F
+	for <llvm@lists.linux.dev>; Mon,  1 May 2023 20:43:01 +0000 (UTC)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-50bc3a5f462so127a12.1
+        for <llvm@lists.linux.dev>; Mon, 01 May 2023 13:43:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682973660; x=1685565660;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BzodmvecAOvYrWkgm/9ZHrB6pQmt4shyul87nQAQ0OU=;
-        b=xqw/TXH50CBN795wf99dH/04PU1QB5BO8g62fgmxIsCaVB4PjGTWW1fEmqEccG84gz
-         NOiVGi6eqrDlysDL8R8j3ZJTI5eqkhlk8QpMGnICOI72B7e5GBgXVT2pmifK7oQAZT/5
-         5RUDotLZyY5pU69uQiCPb6azT+l8TKAGNRS5c6EACG57kqDJu/F0eQAl4R2g5a+WsQJd
-         il7FB3p/YovbCACllDHGBUqYDlqgWq7fPqycrd0hXdhpVWOFzG9NFyxTnX4ZqZFmNQhB
-         tW/crLp/fW1jnTcPaoSPORQuZ/wBJFVEruvn4zGYivp+Sq6igwaFSCtBZivDXrCCZwOm
-         wSJQ==
+        d=google.com; s=20221208; t=1682973779; x=1685565779;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1A2MsfOVZEuiK++YzvE3jgo2ph5eAEBNJeE4uEbOkUI=;
+        b=uBTWnNsfaf1l/JhsC0LFpNB4hezl72p/9PNZ2t0uCvhL+nZlD/G+6957v1IWQP9Iki
+         if0lMy/8Wc9m3QBUd6I43Q2XFwgXyDQyw9Crd5Sm04PUbJ9rd6HbHtODGVGZGrMxux4v
+         ZwsnGyaJRshgw49yimM+PT6HVOgVjF4y+fBMQ7lFavBgJpXpHRxMcI1kOV8ZS2vxT2c2
+         TNf0+myyRGBojJaA7NKW9u0E++cfViJHE0kHJ1/rFkrRR5c4rFBtE8iEnXQMuaumGWKb
+         JtqDDRDs4kTEuGhusHHcEyFq4FXbc9YhW3YweYyVgM4EXtmBdckCU180SKZ/6QK5NJ/g
+         BCkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682973660; x=1685565660;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BzodmvecAOvYrWkgm/9ZHrB6pQmt4shyul87nQAQ0OU=;
-        b=XBfX5T2ujmzcGrKshBWXImQCcV2nsppmjScjmd2e8k+pDNhNJ/1HkuL30pVx9hBXkH
-         ZzMeJ//GrSYS+c4bvW2rvR2KG97GhgdaLyRHBGkIELe2Yw8bmBiRezRPOFaQFR6N1cbs
-         XKWSz+BDZ2ZvoCNZ/gCqGMnEDfRUtM2mg/98yY5U6WvFin81PkpOqoheXcCrlfN4thyA
-         ptTYuT/ZQ3xkloDiSnLL/ZWg0IVIg/g2Yy5FjJgqnKFSAExShfUF16GLXbKOHND0Y4Bo
-         KTesgrTcJAcXSrHpRblpavR/i/Ah1lW8fMSYXs9sOva1zu5Bz+ZLVIpsL06crYcgo8dw
-         reoQ==
-X-Gm-Message-State: AC+VfDwQct2KX7Q3uJkCIcFE6UYcrzd7bUdGOjrOdFXV0cOSaEGv80YP
-	+Zid8xAXKwL+h969du9Y1T7LYLw9FhhnvtihwykMQg==
-X-Google-Smtp-Source: ACHHUZ5twQnZfjrmsr/14DAq+yMtRmngb+p0eUHSa/wWU9u65+hR7C+aFs4pqg+f9bJrh0yONBlQAcwRbVtUzAlmVX0=
-X-Received: by 2002:a17:902:c412:b0:19f:3234:fec5 with SMTP id
- k18-20020a170902c41200b0019f3234fec5mr19024343plk.51.1682973660141; Mon, 01
- May 2023 13:41:00 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682973779; x=1685565779;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1A2MsfOVZEuiK++YzvE3jgo2ph5eAEBNJeE4uEbOkUI=;
+        b=BW2HE4IV84hj2AeDwDlesprorLR23wlSAHFft9W7jKabsVJPake8xwL+rlW5O/Lc3v
+         GuRKH8c7dYoou+AzUiSaelbaevmSdoPtZCJswbmxXpAm551RIX55WLam4oDJVQyNiWmM
+         Gm/BOJvy84fyHoAFXYCLMInpQSs6edFiBO+65IxqDS9QhIXSHT0bzgMROeEjmaKe3gtq
+         wo/KIuTLjwp9gGtvIhhbNK63LPZ+qMsmoQTWikroPXQn6L425SQtZGBLBMLCN9BwUpr/
+         dINdht40GfgwKBI20rdnvY9z6haBodeGsrzEQAagSBJ6U5CdIpivdMRLOT+EHQ8G4rI4
+         3lGA==
+X-Gm-Message-State: AC+VfDxtbwQEnjJL9PKGrFIjUcg5bxPzgvxkWmaShf4wr8pcsPvMCnvx
+	eEjnor03OsV0n9rFHtvf84Qq5b8/p38hXrQd/Bbe3cbG3x5hwcY+aw==
+X-Google-Smtp-Source: ACHHUZ6djo1a4sKJncxcR3YAoBK7JMPt1nQ7pgJIknNW4EMWbum/yS7zn723t9FGJwqP+NUMF4fUYOdyrszkYHCCf1U=
+X-Received: by 2002:a05:6402:530e:b0:502:368:66a8 with SMTP id
+ eo14-20020a056402530e00b00502036866a8mr18956edb.1.1682973779038; Mon, 01 May
+ 2023 13:42:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAGG=3QX47xreqeOB-zKn_zb+fTDr-d2Ebef5-URZrtQbzdS4gQ@mail.gmail.com>
-In-Reply-To: <CAGG=3QX47xreqeOB-zKn_zb+fTDr-d2Ebef5-URZrtQbzdS4gQ@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 1 May 2023 13:40:48 -0700
-Message-ID: <CAKwvOdnYZov5hyPVT-7zjKR+BK9Df+rN64JxU+7vhbweMm1yDA@mail.gmail.com>
-Subject: Re: Test
-To: Bill Wendling <morbo@google.com>
-Cc: clang-built-linux <llvm@lists.linux.dev>
+References: <CAGG=3QWao2bQ0R8yzkjZQwiwGcDf2u67fztPAv09S1ixDUxYrg@mail.gmail.com>
+In-Reply-To: <CAGG=3QWao2bQ0R8yzkjZQwiwGcDf2u67fztPAv09S1ixDUxYrg@mail.gmail.com>
+From: Bill Wendling <morbo@google.com>
+Date: Mon, 1 May 2023 13:42:42 -0700
+Message-ID: <CAGG=3QXHK2XhBBV0XwUok-Cop_+xJZtB_D1=qMS6HwWoKs8Hag@mail.gmail.com>
+Subject: Fwd: [Announcement] Clang-Built Linux Meetup 2023 Dates
+To: clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-ack
+We plan to hold this year's Clang-Built Linux Meetup on the 11th of
+November in Richmond VA. (the Saturday before the Linux Plumbers
+Conference). It'll be a time to discuss Clang-specific topics and give
+people an opportunity to present their work and/or do a dry run of
+their LPC talks. We'll also have hacking sessions, bug hunts, and
+future planning.
 
-On Mon, May 1, 2023 at 1:40=E2=80=AFPM Bill Wendling <morbo@google.com> wro=
-te:
->
-> Sorry for the spam.
->
+Further details will be forthcoming later this month.
 
-
---=20
-Thanks,
-~Nick Desaulniers
+Share and enjoy!
+-bw
