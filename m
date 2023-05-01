@@ -1,68 +1,195 @@
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69C08C05;
-	Mon,  1 May 2023 22:01:20 +0000 (UTC)
-Received: from [77.22.52.211] (helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1ptba2-00037i-9M; Tue, 02 May 2023 00:01:10 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Miguel Ojeda <ojeda@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>, Tom Rix <trix@redhat.com>,
- Will Deacon <will@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
- Nicolin Chen <nicolinc@nvidia.com>
-Subject:
- Re: [PATCH v4 00/17] Consolidate the error handling around device attachment
-Date: Tue, 02 May 2023 00:01:08 +0200
-Message-ID: <5903096.CbtlEUcBR6@diego>
-In-Reply-To: <0-v4-79d0c229580a+650-iommu_err_unwind_jgg@nvidia.com>
-References: <0-v4-79d0c229580a+650-iommu_err_unwind_jgg@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94638C19
+	for <llvm@lists.linux.dev>; Mon,  1 May 2023 22:03:41 +0000 (UTC)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1aaea3909d1so19438545ad.2
+        for <llvm@lists.linux.dev>; Mon, 01 May 2023 15:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682978621; x=1685570621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kRTLMNTnm7jLZvB7zImjhZAt3fQDl4d7j0DZ12oTynU=;
+        b=SjoF/r87Ly7yb6mvY51eSWl0JYzfx8DkLAIFlt/yn3D9JR9u/h7EvQaoz28Q3iyxKb
+         TYLfVRASlDNwxevx7mcP837OBGWdBVmG7CQHoIwl+8/YozQMIH/dLexjMDonVVUnY9KF
+         s74MXE6bgpXZFjb5F5pLihucV4fChoUXpjjjwvvZR+dSw1/fbnFntxEkUDAM+Bp/xknF
+         48LUniyfNp1aNmywghTzLzLwdfq9TB4y01rDtJt7gmCu4vQTVl9iqcaQWmDfVOvpwOWF
+         7Y/bR4qfax8rOe+j0dvK/5AsB/bPN+BqEFiDOPZTHkUUjo6YsB0qihELNFSuoLJtr8ll
+         LoEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682978621; x=1685570621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kRTLMNTnm7jLZvB7zImjhZAt3fQDl4d7j0DZ12oTynU=;
+        b=f+h6p14YhLvr8AJIUCzd0eSQbkzh+924STT1g0Y+ODu8w/rm2s3hOkDtVnecOjbs7Z
+         R8epIM+g6ZJCbMR/CgpQw5xlyq/4ptyRjyZ8ciru5DIanmolDGPWt7LURPQ8lMmzIL2c
+         CUyyKmAMxbhkUnb2YzZ1aEhsGBzuOUMfswy9AqU/Tjs8oKq7sYtwtKKuqFOGe6FH8LVO
+         mbEBYlqEP6OXoVs6CfCTzBIAGp8rcVbk0hGl+QJUz98p+TjQbfOWdhO1OgInRKd2BGkd
+         YVwWSZ5lT042gJINarQA9+LY05+48J6b7WV2njlq2qDwB01ALzsX4Qg4aMw84pXkdjsR
+         8z2A==
+X-Gm-Message-State: AC+VfDyiZOCqyEaIx0AOlhhpOAsKQ1LAiRFkeZf6ZtlTWcB6LS7HpdXw
+	/Uls/Fe+x8tUDPtUqXnTBkTW4J4r7wQ1N9Q/bkIBCw==
+X-Google-Smtp-Source: ACHHUZ69l7W0VZmoQayM1+G45wrpcB67SZor/fcZ2EER9a8ynjRBz6vl/JpFgbsNvZ9YiY5Tv3cti85nPas34SFyNts=
+X-Received: by 2002:a17:902:db03:b0:1a9:8ff5:af51 with SMTP id
+ m3-20020a170902db0300b001a98ff5af51mr20717089plx.60.1682978620861; Mon, 01
+ May 2023 15:03:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20230501-sp7021-field_prep-warning-v1-1-5b36d71feefe@kernel.org> <20230501213714.GA1007102@dev-arch.thelio-3990X>
+In-Reply-To: <20230501213714.GA1007102@dev-arch.thelio-3990X>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 1 May 2023 15:03:29 -0700
+Message-ID: <CAKwvOdkgSpKMkOGR9qNMxscxuYuYDxnsqTSZDmUtLP5QLSWWMA@mail.gmail.com>
+Subject: Re: [PATCH] clk: sp7021: Adjust width of _m in HWM_FIELD_PREP()
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: qinjian@cqplus1.com, mturquette@baylibre.com, sboyd@kernel.org, 
+	trix@redhat.com, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+	Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Am Mittwoch, 12. April 2023, 15:51:30 CEST schrieb Jason Gunthorpe:
-> Jason Gunthorpe (17):
->   iommu: Replace iommu_group_device_count() with list_count_nodes()
->   iommu: Add for_each_group_device()
->   iommu: Make __iommu_group_set_domain() handle error unwind
->   iommu: Use __iommu_group_set_domain() for __iommu_attach_group()
->   iommu: Use __iommu_group_set_domain() in iommu_change_dev_def_domain()
->   iommu: Replace __iommu_group_dma_first_attach() with set_domain
->   iommu: Remove iommu_group_do_dma_first_attach() from
->     iommu_group_add_device()
->   iommu: Replace iommu_group_do_dma_first_attach with
->     __iommu_device_set_domain
->   iommu: Fix iommu_probe_device() to attach the right domain
->   iommu: Do iommu_group_create_direct_mappings() before attach
->   iommu: Remove the assignment of group->domain during default domain
->     alloc
->   iommu: Consolidate the code to calculate the target default domain
->     type
->   iommu: Revise iommu_group_alloc_default_domain()
->   iommu: Consolidate the default_domain setup to one function
->   iommu: Allow IOMMU_RESV_DIRECT to work on ARM
->   iommu: Remove __iommu_group_for_each_dev()
->   iommu: Tidy the control flow in iommu_group_store_type()
+On Mon, May 1, 2023 at 2:37=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> On Mon, May 01, 2023 at 02:34:47PM -0700, Nathan Chancellor wrote:
+> > When building with clang + W=3D1, there is a warning around an internal
+> > comparison check within the FIELD_PREP() macro, due to a 32-bit variabl=
+e
+> > comparison against ~0ull:
+> >
+> >   drivers/clk/clk-sp7021.c:316:8: error: result of comparison of consta=
+nt 18446744073709551615 with expression of type 'typeof (_Generic((_m), ...=
+' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out=
+-of-range-compare]
+> >           r0 |=3D HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
+> >                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_=
+PREP'
+> >           (_m << 16) | FIELD_PREP(_m, value);     \
+> >                        ^~~~~~~~~~~~~~~~~~~~~
+> >   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP=
+'
+> >                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: "); =
+   \
+> >                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD=
+_CHECK'
+> >                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >  =
+   \
+> >                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~=
+~~~~
+> >   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limi=
+t=3D0 to see all)
+> >   include/linux/compiler_types.h:397:22: note: expanded from macro 'com=
+piletime_assert'
+> >           _compiletime_assert(condition, msg, __compiletime_assert_, __=
+COUNTER__)
+> >           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~
+> >   include/linux/compiler_types.h:385:23: note: expanded from macro '_co=
+mpiletime_assert'
+> >           __compiletime_assert(condition, msg, prefix, suffix)
+> >           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >   include/linux/compiler_types.h:377:9: note: expanded from macro '__co=
+mpiletime_assert'
+> >                   if (!(condition))                                    =
+   \
+> >                         ^~~~~~~~~
+> >
+> > This is expected given the tyoes of the input. Increase the size of the
 
-This probably will need an update for Greg's recent
-b18d0a0f92a8 ("iommu: make the pointer to struct bus_type constant")
+s/tyoes/types/
 
-I've fixed that locally for me for testing, and with that:
+Thanks for the patch!
 
-On both arm32+arm64 Rockchip boards (rk3288-pinky + px30-minievb)
-the display keeps working, so
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Tested-by: Heiko Stuebner <heiko@sntech.de>
+Nathan, do you think anything can be done in FIELD_PREP or even
+__BF_FIELD_CHECK using _Static_assert (or static_assert from
+include/linux/build_bug.h) to help elucidate to developers that their
+mask is too small?  I guess the line 71 of include/linux/bitfield.h
+that is trying to warn via BUILD_BUG_ON is itself triggering a
+-Wtautological-constant-out-of-range-compare warning that is perhaps
+distracting from what the issue is?
+
+If you're able to reproduce the issue locally still, does this seem to work=
+?
+```
+diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
+index ebfa12f69501..762a27b5ae15 100644
+--- a/include/linux/bitfield.h
++++ b/include/linux/bitfield.h
+@@ -62,15 +62,15 @@
+
+ #define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)                      \
+        ({                                                              \
++               static_assert(__bf_cast_unsigned(_mask, _mask) <=3D       \
++                             __bf_cast_unsigned(_reg, ~0ull),          \
++                             _pfx "type of reg too small for mask");   \
+                BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
+                                 _pfx "mask is not constant");          \
+                BUILD_BUG_ON_MSG((_mask) =3D=3D 0, _pfx "mask is zero");   =
+ \
+                BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
+                                 ~((_mask) >> __bf_shf(_mask)) & (_val) : 0=
+, \
+                                 _pfx "value too large for the field"); \
+-               BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
+-                                __bf_cast_unsigned(_reg, ~0ull),       \
+-                                _pfx "type of reg too small for mask"); \
+                __BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +                 \
+                                              (1ULL << __bf_shf(_mask))); \
+        })
+
+```
 
 
+> > temporary variable in HWM_FIELD_PREP() to eliminate the warning, which
+> > follows the logic of commit cfd6fb45cfaf ("crypto: ccree - avoid
+> > out-of-range warnings from clang") for the same reasons.
+>
+> Gah, I forgot:
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/202303221947.pXP2v4xJ-lkp@intel.com/
+>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  drivers/clk/clk-sp7021.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
+> > index 8fec14120105..11d22043ddd7 100644
+> > --- a/drivers/clk/clk-sp7021.c
+> > +++ b/drivers/clk/clk-sp7021.c
+> > @@ -41,7 +41,7 @@ enum {
+> >  /* HIWORD_MASK FIELD_PREP */
+> >  #define HWM_FIELD_PREP(mask, value)          \
+> >  ({                                           \
+> > -     u32 _m =3D mask;                          \
+> > +     u64 _m =3D mask;                          \
+> >       (_m << 16) | FIELD_PREP(_m, value);     \
+> >  })
+> >
+> >
+> > ---
+> > base-commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
+> > change-id: 20230501-sp7021-field_prep-warning-223f17aeea8e
+> >
+> > Best regards,
+> > --
+> > Nathan Chancellor <nathan@kernel.org>
+> >
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
