@@ -1,143 +1,126 @@
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721E4567B
-	for <llvm@lists.linux.dev>; Mon,  1 May 2023 17:18:46 +0000 (UTC)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-b9246a5f3feso4778506276.1
-        for <llvm@lists.linux.dev>; Mon, 01 May 2023 10:18:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862CB567B
+	for <llvm@lists.linux.dev>; Mon,  1 May 2023 17:28:06 +0000 (UTC)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-55a76ed088aso9195107b3.2
+        for <llvm@lists.linux.dev>; Mon, 01 May 2023 10:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682961525; x=1685553525;
+        d=google.com; s=20221208; t=1682962085; x=1685554085;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EDAy0yw2Hl6Xad3kepfPR0FriSjDMaQH5Y0jnLgi2V4=;
-        b=oDAyKLSdxWeDf2Rr539YuGPN8WIpEGf8MZUyaYq5jr+2u5r+cTYAw2jASoneiiCznU
-         2SvyyFMMDnvtDUHjWd0FR1VXwxNkJF1Db2fr3bNgMpEqVPMJ7oTUtw4hQgx3+k8EZndj
-         FscTv8obyqztv1iAv4Pz/neD2LiCUt46YSdAA=
+        bh=F4J1wW6ZIe1hoHuRYqE7svyxxnPA1ra65cb/MrhmkaE=;
+        b=FTRc7sWuNG8eLjLZJERvcy2If+D1/M9Z3ZbGnYEcLYc5kWurCPC4gPknO19bQvB6dR
+         RpVb8/LCZFDuihbEQpwS962n1cbMoUECfJO4YdUXPfndif0+WlSBLNCmYnRf9OPzu9M0
+         U03vBG8gO+wS4LLNn+I2relwlXA+7uLdS3nPWtBLiJCBWpPMO/Za5lstdB4WVBwxvRDX
+         XtI8T+ofxhPsKxSu7jMyla4Mrw7U6yRxKOtkzsj+VD8+VLJyqGOiw3VS0itCnULidYjX
+         eaLcerbd5ocg/AGCs93ObyoaEZcRWRShbA0inlkO0JdZtPiC+ivv7Ln9ArJdMNXJan6v
+         I2fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682961525; x=1685553525;
+        d=1e100.net; s=20221208; t=1682962085; x=1685554085;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EDAy0yw2Hl6Xad3kepfPR0FriSjDMaQH5Y0jnLgi2V4=;
-        b=JZ1wNejwI/p7x8zfIFPI8CHjGaeI+rtpy3K+PC16inMxIkfEow3eEY06uVObHM6yf1
-         F3jN+e2+4N8Dyv4o5/4dbD03vZuAqVWOTPffOTS/CcGGWUvQ5iR69e5C1ruCd8H/CpKp
-         aruzaP7UZvSEOrBxNxzuVQy4JvuoAJr5THzriUfvuEb43Ziufi18XNF1PsWVq6bh0cLZ
-         MCey4ixrxH4YjEuFnysqjOXld1nw+yzcODjXsaNJDZ7rd4rZTNUZqLkLLOPiLwGKvhOD
-         GfC8Zy8QjGl8wMH3Z0oBwAwiOOpx1Gma6xqYGUwSKhlhwRQAhLifgIvFlB4Gy/COSXUm
-         arYQ==
-X-Gm-Message-State: AC+VfDy5uaafpOLiWK8AkwVeRwGt4m2ktH3vNVg4NQoFPOUEZejfdtvb
-	esic+WB5b74SZnGw+bcjNsOLNyG9ECidWz7UKOuSCQ==
-X-Google-Smtp-Source: ACHHUZ49DuqPozlJ4Toh+0ypEPsnOtwsD74mu38CnVKUHUAT6BfkiYl6rbc3wkEpDkbmjJ/NTxFrGQ==
-X-Received: by 2002:a25:4f56:0:b0:b9d:689d:7430 with SMTP id d83-20020a254f56000000b00b9d689d7430mr10056339ybb.49.1682961525210;
-        Mon, 01 May 2023 10:18:45 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id a82-20020a251a55000000b00b8f3e224dcesm950211yba.13.2023.05.01.10.18.44
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 10:18:45 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-b9dcd91a389so3096343276.2
-        for <llvm@lists.linux.dev>; Mon, 01 May 2023 10:18:44 -0700 (PDT)
-X-Received: by 2002:a17:902:f70f:b0:1a8:1c9a:f68 with SMTP id
- h15-20020a170902f70f00b001a81c9a0f68mr17818554plo.36.1682961504069; Mon, 01
- May 2023 10:18:24 -0700 (PDT)
+        bh=F4J1wW6ZIe1hoHuRYqE7svyxxnPA1ra65cb/MrhmkaE=;
+        b=Q3YFG9ltVlyIcLoyk0zDnZn7NSu4qPZv05oW1S5CrQpUDDb3dw0hvNd2QjxpzmUQx1
+         l59bpY8f8NzNEwR0k9JWD5VedwFYvb2MtnTZa6qaithg/G+BpOQW7buTR0FLidczqUco
+         HqiCEFtF1t9Hz46QDrCwxSr2cG+JQCYHXflzjWml15JFn/y0uiFvdi1z5Cl8Bqw9Jtg6
+         id4CTEvIz4/jd+R6ZqvIFt0w6SkBgR99r396UbVHy8xqxkTkkK3lkY4AApUrdi6KOUAW
+         D8WCWn0pbPU+iV0xQ7MJIQkYFmnjmV3TgRgaFPYIys7Zf+fSswN4xF+IQNZcmCs2KRBZ
+         ULFA==
+X-Gm-Message-State: AC+VfDxzDaHYfCCIjVdxstsyDrqu+myNA2sJazc4AcMrmJcZ4l/iF8yQ
+	GNKK6wyzKQ9VF5u4jcV6dQ5Sw3mpG1lSbn9F9jJAUw==
+X-Google-Smtp-Source: ACHHUZ6kqU2PwjzY2J/yMoDy54WU0F8kBtv0P35BHGV0x1LGtfyW847NkgLN3cXY31QFPPS86lheBvtvWEXsSvz4Zu4=
+X-Received: by 2002:a0d:f881:0:b0:54f:b6b3:b5e5 with SMTP id
+ i123-20020a0df881000000b0054fb6b3b5e5mr13729629ywf.18.1682962085319; Mon, 01
+ May 2023 10:28:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org>
- <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org> <CAKwvOd=9RMivtkKX27nDDsagH5yCWjpAOvpE2uaW38KYC57vtg@mail.gmail.com>
-In-Reply-To: <CAKwvOd=9RMivtkKX27nDDsagH5yCWjpAOvpE2uaW38KYC57vtg@mail.gmail.com>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 1 May 2023 19:18:12 +0200
-X-Gmail-Original-Message-ID: <CANiDSCtDfPffUQTuH3JiPWC+87FBtpog7kT954PSoiTbB_fmJQ@mail.gmail.com>
-Message-ID: <CANiDSCtDfPffUQTuH3JiPWC+87FBtpog7kT954PSoiTbB_fmJQ@mail.gmail.com>
-Subject: Re: [PATCH v6 4/4] risc/purgatory: Add linker script
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
-	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
-	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Simon Horman <horms@kernel.org>, llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, stable@vger.kernel.org
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com> <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
+In-Reply-To: <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 1 May 2023 10:27:53 -0700
+Message-ID: <CAKwvOd=zgjWdg2+_bg3QByh_2hve8yoKzCfEBZ5md+k8ytkqcQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 16/43] x86-64: Use per-cpu stack canary if supported
+ by compiler
+To: Hou Wenlong <houwenlong.hwl@antgroup.com>, Brian Gerst <brgerst@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>, x86@kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Nick
-
-Thanks for catching this. It should have said
-
-risc/purgatory: Remove profile optimization flags
-
-Will fix it on my local branch in case there is a next version of the
-series. Otherwise, please the maintainer fix the subject.
-
-Thanks!
-
-On Mon, 1 May 2023 at 18:19, Nick Desaulniers <ndesaulniers@google.com> wro=
-te:
+On Fri, Apr 28, 2023 at 2:52=E2=80=AFAM Hou Wenlong <houwenlong.hwl@antgrou=
+p.com> wrote:
 >
-> On Mon, May 1, 2023 at 5:39=E2=80=AFAM Ricardo Ribalda <ribalda@chromium.=
-org> wrote:
-> >
-> > If PGO is enabled, the purgatory ends up with multiple .text sections.
-> > This is not supported by kexec and crashes the system.
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_purago=
-ry")
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> From: Brian Gerst <brgerst@gmail.com>
 >
-> Hi Ricardo,
-> Thanks for the series.  Does this patch 4/4 need a new online commit
-> description? It's not adding a linker script (maybe an earlier version
-> was).
+> From: Brian Gerst <brgerst@gmail.com>
 >
-> > ---
-> >  arch/riscv/purgatory/Makefile | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makef=
-ile
-> > index 5730797a6b40..cf3a44121a90 100644
-> > --- a/arch/riscv/purgatory/Makefile
-> > +++ b/arch/riscv/purgatory/Makefile
-> > @@ -35,6 +35,11 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
-> >  CFLAGS_string.o :=3D -D__DISABLE_EXPORTS
-> >  CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS
-> >
-> > +# When profile optimization is enabled, llvm emits two different overl=
-apping
-> > +# text sections, which is not supported by kexec. Remove profile optim=
-ization
-> > +# flags.
-> > +KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=
-=3D%,$(KBUILD_CFLAGS))
-> > +
-> >  # When linking purgatory.ro with -r unresolved symbols are not checked=
-,
-> >  # also link a purgatory.chk binary without -r to check for unresolved =
-symbols.
-> >  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
-> >
-> > --
-> > 2.40.1.495.gc816e09b53d-goog
-> >
+> If the compiler supports it, use a standard per-cpu variable for the
+> stack protector instead of the old fixed location.  Keep the fixed
+> location code for compatibility with older compilers.
 >
+> [Hou Wenlong: Disable it on Clang, adapt new code change and adapt
+> missing GS set up path in pvh_start_xen()]
 >
-> --
-> Thanks,
-> ~Nick Desaulniers
+> Signed-off-by: Brian Gerst <brgerst@gmail.com>
+> Co-developed-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> Cc: Thomas Garnier <thgarnie@chromium.org>
+> Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/x86/Kconfig                      | 12 ++++++++++++
+>  arch/x86/Makefile                     | 21 ++++++++++++++-------
+>  arch/x86/entry/entry_64.S             |  6 +++++-
+>  arch/x86/include/asm/processor.h      | 17 ++++++++++++-----
+>  arch/x86/include/asm/stackprotector.h | 16 +++++++---------
+>  arch/x86/kernel/asm-offsets_64.c      |  2 +-
+>  arch/x86/kernel/cpu/common.c          | 15 +++++++--------
+>  arch/x86/kernel/head_64.S             | 16 ++++++++++------
+>  arch/x86/kernel/vmlinux.lds.S         |  4 +++-
+>  arch/x86/platform/pvh/head.S          |  8 ++++++++
+>  arch/x86/xen/xen-head.S               | 14 +++++++++-----
+>  11 files changed, 88 insertions(+), 43 deletions(-)
+>
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 68e5da464b96..55cce8cdf9bd 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -410,6 +410,18 @@ config CC_HAS_SANE_STACKPROTECTOR
+>           the compiler produces broken code or if it does not let us cont=
+rol
+>           the segment on 32-bit kernels.
+>
+> +config CC_HAS_CUSTOMIZED_STACKPROTECTOR
+> +       bool
+> +       # Although clang supports -mstack-protector-guard-reg option, it
+> +       # would generate GOT reference for __stack_chk_guard even with
+> +       # -fno-PIE flag.
+> +       default y if (!CC_IS_CLANG && $(cc-option,-mstack-protector-guard=
+-reg=3Dgs))
 
+Hi Hou,
+I've filed this bug against LLVM and will work with LLVM folks at
+Intel to resolve:
+https://github.com/llvm/llvm-project/issues/62481
+Can you please review that report and let me know here or there if I
+missed anything? Would you also mind including a link to that in the
+comments in the next version of this patch?
+
+Less relevant issues I filed looking at some related codegen:
+https://github.com/llvm/llvm-project/issues/62482
+https://github.com/llvm/llvm-project/issues/62480
+
+And we should probably look into:
+https://github.com/llvm/llvm-project/issues/22476
 
 
 --=20
-Ricardo Ribalda
+Thanks,
+~Nick Desaulniers
