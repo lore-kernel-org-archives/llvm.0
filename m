@@ -1,69 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9362633D2;
-	Mon,  1 May 2023 16:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE0DEC433D2;
-	Mon,  1 May 2023 16:28:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1682958533;
-	bh=eQe5BjstwjDxSkWatIvKMKXf95VAWSpUZA1at5L08gA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pTq2pSOgs7ZnmBSgYTO2jLJEusa5tlOTodp/Ye0qtjHeEr8PTeHHa0aWk/GTxz/sS
-	 brPriewy7vmjsBBjXzoN/ZvC+0ggMkC8jjEQ2mjYcPc/w+HgXin9bXDuOAEBcG6lok
-	 lW5mf/Ri/nm0eGhU+gpTWrJIMHWOyJ/aETp1sozaxwSVp7Y6MbNAldXwUr5cngMRIS
-	 0dT2dXmzrJ8VXipSKOkvYD95u6WpnvZ3N9YN4Revf4UfaRUmkDb/GgLdQaAZUssWne
-	 YwFnreDNIkMYDM0i2004wvv8/FRawUEyi3SRTG/BkA+NZD4FDbONwWS10IX/s2Cj8q
-	 W1PfiHKEMwe6A==
-Date: Mon, 1 May 2023 09:28:51 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Qin Jian <qinjian@cqplus1.com>, kernel test robot <lkp@intel.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [clk:clk-sunplus 1/1] drivers/clk/clk-sp7021.c:316:8: warning:
- result of comparison of constant 18446744073709551615 with expression of
- type 'typeof (_Generic((_m), char: (unsigned char)0, unsigned char:
- (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigne...
-Message-ID: <20230501162851.GA2906609@dev-arch.thelio-3990X>
-References: <202303221947.pXP2v4xJ-lkp@intel.com>
- <81b2a67f89d7f46dd27f6d05606e753f.sboyd@kernel.org>
- <20230322195933.GA2828949@dev-arch.thelio-3990X>
- <00c24196e5ceb60b7d69967b73910264.sboyd@kernel.org>
- <20230324145056.GA428955@dev-arch.thelio-3990X>
- <e181f270191e30d99554496517bd321d.sboyd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721E4567B
+	for <llvm@lists.linux.dev>; Mon,  1 May 2023 17:18:46 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-b9246a5f3feso4778506276.1
+        for <llvm@lists.linux.dev>; Mon, 01 May 2023 10:18:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682961525; x=1685553525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EDAy0yw2Hl6Xad3kepfPR0FriSjDMaQH5Y0jnLgi2V4=;
+        b=oDAyKLSdxWeDf2Rr539YuGPN8WIpEGf8MZUyaYq5jr+2u5r+cTYAw2jASoneiiCznU
+         2SvyyFMMDnvtDUHjWd0FR1VXwxNkJF1Db2fr3bNgMpEqVPMJ7oTUtw4hQgx3+k8EZndj
+         FscTv8obyqztv1iAv4Pz/neD2LiCUt46YSdAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682961525; x=1685553525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EDAy0yw2Hl6Xad3kepfPR0FriSjDMaQH5Y0jnLgi2V4=;
+        b=JZ1wNejwI/p7x8zfIFPI8CHjGaeI+rtpy3K+PC16inMxIkfEow3eEY06uVObHM6yf1
+         F3jN+e2+4N8Dyv4o5/4dbD03vZuAqVWOTPffOTS/CcGGWUvQ5iR69e5C1ruCd8H/CpKp
+         aruzaP7UZvSEOrBxNxzuVQy4JvuoAJr5THzriUfvuEb43Ziufi18XNF1PsWVq6bh0cLZ
+         MCey4ixrxH4YjEuFnysqjOXld1nw+yzcODjXsaNJDZ7rd4rZTNUZqLkLLOPiLwGKvhOD
+         GfC8Zy8QjGl8wMH3Z0oBwAwiOOpx1Gma6xqYGUwSKhlhwRQAhLifgIvFlB4Gy/COSXUm
+         arYQ==
+X-Gm-Message-State: AC+VfDy5uaafpOLiWK8AkwVeRwGt4m2ktH3vNVg4NQoFPOUEZejfdtvb
+	esic+WB5b74SZnGw+bcjNsOLNyG9ECidWz7UKOuSCQ==
+X-Google-Smtp-Source: ACHHUZ49DuqPozlJ4Toh+0ypEPsnOtwsD74mu38CnVKUHUAT6BfkiYl6rbc3wkEpDkbmjJ/NTxFrGQ==
+X-Received: by 2002:a25:4f56:0:b0:b9d:689d:7430 with SMTP id d83-20020a254f56000000b00b9d689d7430mr10056339ybb.49.1682961525210;
+        Mon, 01 May 2023 10:18:45 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id a82-20020a251a55000000b00b8f3e224dcesm950211yba.13.2023.05.01.10.18.44
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 10:18:45 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-b9dcd91a389so3096343276.2
+        for <llvm@lists.linux.dev>; Mon, 01 May 2023 10:18:44 -0700 (PDT)
+X-Received: by 2002:a17:902:f70f:b0:1a8:1c9a:f68 with SMTP id
+ h15-20020a170902f70f00b001a81c9a0f68mr17818554plo.36.1682961504069; Mon, 01
+ May 2023 10:18:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e181f270191e30d99554496517bd321d.sboyd@kernel.org>
+References: <20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org>
+ <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org> <CAKwvOd=9RMivtkKX27nDDsagH5yCWjpAOvpE2uaW38KYC57vtg@mail.gmail.com>
+In-Reply-To: <CAKwvOd=9RMivtkKX27nDDsagH5yCWjpAOvpE2uaW38KYC57vtg@mail.gmail.com>
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Mon, 1 May 2023 19:18:12 +0200
+X-Gmail-Original-Message-ID: <CANiDSCtDfPffUQTuH3JiPWC+87FBtpog7kT954PSoiTbB_fmJQ@mail.gmail.com>
+Message-ID: <CANiDSCtDfPffUQTuH3JiPWC+87FBtpog7kT954PSoiTbB_fmJQ@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] risc/purgatory: Add linker script
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
+	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
+	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Simon Horman <horms@kernel.org>, llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 28, 2023 at 06:13:34PM -0700, Stephen Boyd wrote:
-> Quoting Nathan Chancellor (2023-03-24 07:50:56)
-> > On Wed, Mar 22, 2023 at 04:48:43PM -0700, Stephen Boyd wrote:
-> > > Quoting Nathan Chancellor (2023-03-22 12:59:33)
-> > > 
-> > > > It looks like clang is
-> > > > complaining that mask is an unsigned int and it is being compared
-> > > > against ~0ull, which will always be false. This makes the warning go
-> > > > away for me, which is similar to commit cfd6fb45cfaf ("crypto: ccree -
-> > > > avoid out-of-range warnings from clang"), but I am not sure if that is
-> > > > correct or not.
-> > > 
-> > > Cool thanks. Can you send it as a proper patch?
-> > 
-> > Sure thing, I will do so when I am back online next week.
-> > 
-> 
-> Did you send the patch?
+Hi Nick
 
-Ugh, I am so sorry, I never added that to my TOOD list so I never
-rememebered after I got back :/ I will make sure to send the patch
-today.
+Thanks for catching this. It should have said
 
-Cheers,
-Nathan
+risc/purgatory: Remove profile optimization flags
+
+Will fix it on my local branch in case there is a next version of the
+series. Otherwise, please the maintainer fix the subject.
+
+Thanks!
+
+On Mon, 1 May 2023 at 18:19, Nick Desaulniers <ndesaulniers@google.com> wro=
+te:
+>
+> On Mon, May 1, 2023 at 5:39=E2=80=AFAM Ricardo Ribalda <ribalda@chromium.=
+org> wrote:
+> >
+> > If PGO is enabled, the purgatory ends up with multiple .text sections.
+> > This is not supported by kexec and crashes the system.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_purago=
+ry")
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+>
+> Hi Ricardo,
+> Thanks for the series.  Does this patch 4/4 need a new online commit
+> description? It's not adding a linker script (maybe an earlier version
+> was).
+>
+> > ---
+> >  arch/riscv/purgatory/Makefile | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makef=
+ile
+> > index 5730797a6b40..cf3a44121a90 100644
+> > --- a/arch/riscv/purgatory/Makefile
+> > +++ b/arch/riscv/purgatory/Makefile
+> > @@ -35,6 +35,11 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
+> >  CFLAGS_string.o :=3D -D__DISABLE_EXPORTS
+> >  CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS
+> >
+> > +# When profile optimization is enabled, llvm emits two different overl=
+apping
+> > +# text sections, which is not supported by kexec. Remove profile optim=
+ization
+> > +# flags.
+> > +KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=
+=3D%,$(KBUILD_CFLAGS))
+> > +
+> >  # When linking purgatory.ro with -r unresolved symbols are not checked=
+,
+> >  # also link a purgatory.chk binary without -r to check for unresolved =
+symbols.
+> >  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+> >
+> > --
+> > 2.40.1.495.gc816e09b53d-goog
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+--=20
+Ricardo Ribalda
