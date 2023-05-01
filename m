@@ -1,145 +1,180 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CD77465
-	for <llvm@lists.linux.dev>; Mon,  1 May 2023 19:55:18 +0000 (UTC)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-54fb6ac1e44so40616177b3.1
-        for <llvm@lists.linux.dev>; Mon, 01 May 2023 12:55:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682970917; x=1685562917;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A6/Qwr73DpjqVyRdRECBbxXjLLTahq/uJGnivC6mAq8=;
-        b=nOGV79JHEufvcYn2AKhdk79/ViXSWov22Cy33zWA1Gtst+eCDvoVa3OWWz5HNIcCII
-         UZejZi5Uegh9PTt5hwbCSATYVQ0siN0O+UgoBQWNisA50H9K9bZk9Wrc9Z0OQeeEfA/+
-         +yThvmo2Fno7BKwBTkUAF3LbTzoNv7/LwN0wU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682970917; x=1685562917;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A6/Qwr73DpjqVyRdRECBbxXjLLTahq/uJGnivC6mAq8=;
-        b=LDv4gswVCR6OOs6a5Pk1f4d4b9fsbaohgaFmY3cPeMARSgD8AA8pOPF79VNhdR1jKb
-         OAb6d4CgwoN4BSfGndQkusJAL6JhJWh+P1IS//UhHPhFpILaoj8rUzjFEx4Wa+50aMnA
-         c+ecDOeE7gb+m1TpZ5hA9d1EO1Kc/qkIpnIsnZmn/WOpoNkreR7oavTNkHuXI4kAcp09
-         hgmXV5cFz8aGt7FkhV92rHKkR/atY2w4UgmxxkKBeZABEaBFjVo/d3g2Y66CRAO8JGST
-         YF+hTsKiARNqbZmeVcoIB8moMAgqS5vSFUkdth/rUI97XCCGanasEu2kjBcI1jsw0mjQ
-         OTTw==
-X-Gm-Message-State: AC+VfDzL7BtqZY2nmgOFSN68gexg5PJxllPQogn3jeQnuEIEJvTMcyvL
-	IR2aZaKsrV446xO5B4DNKFivpiAmNBKit0F1blQPmQ==
-X-Google-Smtp-Source: ACHHUZ6a3YHHWr1rqzp19yy1agG5MoEgQpVz+KtGGQ8piyMRTygF756+G9a2uVZVYDMTo5esyKxzLQ==
-X-Received: by 2002:a0d:dd03:0:b0:559:deed:f363 with SMTP id g3-20020a0ddd03000000b00559deedf363mr8862607ywe.2.1682970917260;
-        Mon, 01 May 2023 12:55:17 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id i125-20020a255483000000b00b9a65b05384sm2854494ybb.15.2023.05.01.12.55.16
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 12:55:16 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-b9a6869dd3cso4512422276.2
-        for <llvm@lists.linux.dev>; Mon, 01 May 2023 12:55:16 -0700 (PDT)
-X-Received: by 2002:a05:6a20:a28a:b0:e6:f7e8:1e4d with SMTP id
- a10-20020a056a20a28a00b000e6f7e81e4dmr13625249pzl.33.1682970895325; Mon, 01
- May 2023 12:54:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CF07465;
+	Mon,  1 May 2023 20:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682972716; x=1714508716;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nKKuxnHlHHOfLMDWAGdwGaWNiFsG+GVcxFg/oVtMFmI=;
+  b=lPZtM7bwfgL7daQ66Dh0A4KxHuGzFumY/NDLTBje/AZTndZKkK91rkH6
+   h3PpDtJSTzwxherOrOlTQTewO4Xy5B6cl44xHokdwID84I8VCHTg8MduA
+   Sn09aFrPSUmIUmDvh+L5GxzlrJF9SrjVBBLAwRgmHszNuUvUoMOuQU5ln
+   hMHmmVNstDiG16x5rmH4uAPmqPIT/whsysiv0b/q/pqxDbpBtM4Jq8CaZ
+   nIN8nNgqOK5d5KM8BJV3a/4qnYfQsXkwMCU9p0A4RCA7wwH9giZ53n0u5
+   MQSh5XUefyB55KHW2ong7bG/EDQ+oidHNcRWaBWGK0OmSTkIR7rVzQs+y
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="337352565"
+X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
+   d="scan'208";a="337352565"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 13:25:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="690010479"
+X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
+   d="scan'208";a="690010479"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 01 May 2023 13:25:14 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pta5B-0000cX-1D;
+	Mon, 01 May 2023 20:25:13 +0000
+Date: Tue, 2 May 2023 04:25:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mhiramat:topic/fprobe-event-ext 4/11]
+ kernel/trace/trace_fprobe.c:853:13: error: use of undeclared identifier
+ 'MODULE_STATE_GOING'
+Message-ID: <202305020453.afTJ3VVp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org>
- <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org> <20230501-cottage-overjoyed-1aeb9d72d309@spud>
-In-Reply-To: <20230501-cottage-overjoyed-1aeb9d72d309@spud>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Mon, 1 May 2023 21:54:43 +0200
-X-Gmail-Original-Message-ID: <CANiDSCufbm80g4AqukpiuER17OXhD-yRNmTZRz7s_x-Xi9BDCw@mail.gmail.com>
-Message-ID: <CANiDSCufbm80g4AqukpiuER17OXhD-yRNmTZRz7s_x-Xi9BDCw@mail.gmail.com>
-Subject: Re: [PATCH v6 4/4] risc/purgatory: Add linker script
-To: Conor Dooley <conor@kernel.org>
-Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
-	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
-	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Simon Horman <horms@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Conor
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
+head:   32e07b49d560e18af3ea10fc794fa755eedceb83
+commit: eb808ed99f69516d0c445a8a7eb0cfeb9c818410 [4/11] tracing/probes: Add tracepoint support on fprobe_events
+config: s390-buildonly-randconfig-r001-20230430 (https://download.01.org/0day-ci/archive/20230502/202305020453.afTJ3VVp-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=eb808ed99f69516d0c445a8a7eb0cfeb9c818410
+        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
+        git fetch --no-tags mhiramat topic/fprobe-event-ext
+        git checkout eb808ed99f69516d0c445a8a7eb0cfeb9c818410
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/trace/
 
-On Mon, 1 May 2023 at 19:41, Conor Dooley <conor@kernel.org> wrote:
->
-> Hey Ricardo,
->
-> On Mon, May 01, 2023 at 02:38:22PM +0200, Ricardo Ribalda wrote:
-> > If PGO is enabled, the purgatory ends up with multiple .text sections.
-> > This is not supported by kexec and crashes the system.
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory")
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  arch/riscv/purgatory/Makefile | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-> > index 5730797a6b40..cf3a44121a90 100644
-> > --- a/arch/riscv/purgatory/Makefile
-> > +++ b/arch/riscv/purgatory/Makefile
-> > @@ -35,6 +35,11 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS
-> >  CFLAGS_string.o := -D__DISABLE_EXPORTS
-> >  CFLAGS_ctype.o := -D__DISABLE_EXPORTS
-> >
-> > +# When profile optimization is enabled, llvm emits two different overlapping
-> > +# text sections, which is not supported by kexec. Remove profile optimization
-> > +# flags.
-> > +KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%,$(KBUILD_CFLAGS))
->
-> With the caveat of not being au fait with the workings of either PGO or
-> of purgatory, how come you modify KBUILD_CFLAGS here rather than the
-> purgatory specific PURGATORY_CFLAGS that are used later in the file?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305020453.afTJ3VVp-lkp@intel.com/
 
-Definitely, not a Makefile expert here, but when I tried this:
+All errors (new ones prefixed by >>):
 
-@@ -35,6 +40,7 @@ PURGATORY_CFLAGS_REMOVE := -mcmodel=kernel
- PURGATORY_CFLAGS := -mcmodel=large -ffreestanding
--fno-zero-initialized-in-bss -g0
- PURGATORY_CFLAGS += $(DISABLE_STACKLEAK_PLUGIN) -DDISABLE_BRANCH_PROFILING
- PURGATORY_CFLAGS += -fno-stack-protector
-+PURGATORY_CFLAGS := $(filter-out -fprofile-sample-use=%
--fprofile-use=%,$(KBUILD_CFLAGS))
+   In file included from kernel/trace/trace_fprobe.c:15:
+   In file included from kernel/trace/trace_dynevent.h:14:
+   In file included from kernel/trace/trace.h:9:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from kernel/trace/trace_fprobe.c:15:
+   In file included from kernel/trace/trace_dynevent.h:14:
+   In file included from kernel/trace/trace.h:9:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from kernel/trace/trace_fprobe.c:15:
+   In file included from kernel/trace/trace_dynevent.h:14:
+   In file included from kernel/trace/trace.h:9:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> kernel/trace/trace_fprobe.c:853:13: error: use of undeclared identifier 'MODULE_STATE_GOING'
+           if (val != MODULE_STATE_GOING)
+                      ^
+>> kernel/trace/trace_fprobe.c:858:13: error: incomplete definition of type 'struct tp_module'
+                   if (tp_mod->mod == tf->mod) {
+                       ~~~~~~^
+   kernel/trace/trace_fprobe.c:849:9: note: forward declaration of 'struct tp_module'
+           struct tp_module *tp_mod = data;
+                  ^
+   12 warnings and 2 errors generated.
 
-It did not work.
 
-Fixes: bde971a83bbf ("KVM: arm64: nvhe: Fix build with profile optimization")
+vim +/MODULE_STATE_GOING +853 kernel/trace/trace_fprobe.c
 
-does this approach, so this is what I tried and worked.
-
-Thanks!
->
-> Cheers,
-> Conor.
->
-> > +
-> >  # When linking purgatory.ro with -r unresolved symbols are not checked,
-> >  # also link a purgatory.chk binary without -r to check for unresolved symbols.
-> >  PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
-> >
-> > --
-> > 2.40.1.495.gc816e09b53d-goog
-> >
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
-
-
+   845	
+   846	static int __tracepoint_probe_module_cb(struct notifier_block *self,
+   847						unsigned long val, void *data)
+   848	{
+   849		struct tp_module *tp_mod = data;
+   850		struct trace_fprobe *tf;
+   851		struct dyn_event *pos;
+   852	
+ > 853		if (val != MODULE_STATE_GOING)
+   854			return NOTIFY_DONE;
+   855	
+   856		mutex_lock(&event_mutex);
+   857		for_each_trace_fprobe(tf, pos) {
+ > 858			if (tp_mod->mod == tf->mod) {
+   859				tracepoint_probe_unregister(tf->tpoint,
+   860						tf->tpoint->probestub, NULL);
+   861				tf->tpoint = NULL;
+   862				tf->mod = NULL;
+   863			}
+   864		}
+   865		mutex_unlock(&event_mutex);
+   866	
+   867		return NOTIFY_DONE;
+   868	}
+   869	
 
 -- 
-Ricardo Ribalda
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
