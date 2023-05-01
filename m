@@ -1,29 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5B28C05;
-	Mon,  1 May 2023 21:37:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136E3C433EF;
-	Mon,  1 May 2023 21:37:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1682977036;
-	bh=TbwlViufFEIhz3VjcV/zsYukgrEOYlIWPd8kMF7ZOAY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UFNAAZ9nrBeaF3tgZeYaqqEQpYgwoyjHjmvnIMcFG0grdmMeprfiFu0p6c2L0g7vX
-	 hyqiLsPFowrvFMUdnvb75U0RKCgh1mc+zdCTPIFyz8L1H7bMJFOCUG/Rdkuqq5CcZu
-	 mpbz5vYQlOD1iVAkc3J4uHXAKbE8o3s7zOdNy83eOX/bAFPR8TrjqgcuCeJkwxpQIc
-	 RiPu4PaLycuFYNkduFMc0ZWhqG03fgxrUdsV2Xu6X4NcxaS+F3DFs/PBlx2AUuLWaL
-	 nHQJ9AUgQ9vHv1VEKC0gFMa0/TzLRESDZOWn3xnWwD8m30+P/GXm7zKdRKxPFlDWrs
-	 wgxATUjy2UYxw==
-Date: Mon, 1 May 2023 14:37:14 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: qinjian@cqplus1.com, mturquette@baylibre.com, sboyd@kernel.org
-Cc: ndesaulniers@google.com, trix@redhat.com,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] clk: sp7021: Adjust width of _m in HWM_FIELD_PREP()
-Message-ID: <20230501213714.GA1007102@dev-arch.thelio-3990X>
-References: <20230501-sp7021-field_prep-warning-v1-1-5b36d71feefe@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630418C05;
+	Mon,  1 May 2023 21:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682977166; x=1714513166;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=LzAmLSrCES/WUz/ZJTnFg7SytKP5sGxjmFjvU+3g7As=;
+  b=XTJOUu2vbkz6hgkpAeshjzSXgMTdogAFJCynJDGu6x71/kbeIPHluJcl
+   VnVNpoBJ9cm1EH2VV8ak5lf28uAlGwl0wFLAgALvoZE5MuU80u6RJ9N37
+   43AuT7KCi8cca2BU2ddBtLcmuTkFbQBySRfe8I3ZUJmrdhah/AdPwGTOg
+   q9fAZrPnyqmnHE0++5/NqptBttks86T86sLD1nndXiimEok/zsjkDa/Pb
+   YLbhDX+yJZJCf+sM3vp6/UgNVB+nb4l7jARrP7vJTW8HQudn9KZlImXos
+   B+G7XG7Vx40sMXmfKW5Yk8Efg4vgPvXfnC76o8gRFnjpRL20BEdYbZmDf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="332593833"
+X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
+   d="scan'208";a="332593833"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 14:39:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="807586132"
+X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
+   d="scan'208";a="807586132"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 01 May 2023 14:39:15 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ptbEp-0000fJ-06;
+	Mon, 01 May 2023 21:39:15 +0000
+Date: Tue, 2 May 2023 05:38:30 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: bmi160_setup_irq() falls through to
+ next function bmi160_data_rdy_trigger_set_state()
+Message-ID: <202305020511.5BjMPdOi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -32,70 +44,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230501-sp7021-field_prep-warning-v1-1-5b36d71feefe@kernel.org>
 
-On Mon, May 01, 2023 at 02:34:47PM -0700, Nathan Chancellor wrote:
-> When building with clang + W=1, there is a warning around an internal
-> comparison check within the FIELD_PREP() macro, due to a 32-bit variable
-> comparison against ~0ull:
-> 
->   drivers/clk/clk-sp7021.c:316:8: error: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((_m), ...' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->           r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIELD_PREP'
->           (_m << 16) | FIELD_PREP(_m, value);     \
->                        ^~~~~~~~~~~~~~~~~~~~~
->   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PREP'
->                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIELD_CHECK'
->                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
->                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
->   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
->   include/linux/compiler_types.h:397:22: note: expanded from macro 'compiletime_assert'
->           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   include/linux/compiler_types.h:385:23: note: expanded from macro '_compiletime_assert'
->           __compiletime_assert(condition, msg, prefix, suffix)
->           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   include/linux/compiler_types.h:377:9: note: expanded from macro '__compiletime_assert'
->                   if (!(condition))                                       \
->                         ^~~~~~~~~
-> 
-> This is expected given the tyoes of the input. Increase the size of the
-> temporary variable in HWM_FIELD_PREP() to eliminate the warning, which
-> follows the logic of commit cfd6fb45cfaf ("crypto: ccree - avoid
-> out-of-range warnings from clang") for the same reasons.
+CC: linux-kernel@vger.kernel.org
+TO: Josh Poimboeuf <jpoimboe@redhat.com>
+CC: Peter Zijlstra <peterz@infradead.org>
 
-Gah, I forgot:
+Hi Josh,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/202303221947.pXP2v4xJ-lkp@intel.com/
+FYI, the error/warning still remains.
 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/clk/clk-sp7021.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
-> index 8fec14120105..11d22043ddd7 100644
-> --- a/drivers/clk/clk-sp7021.c
-> +++ b/drivers/clk/clk-sp7021.c
-> @@ -41,7 +41,7 @@ enum {
->  /* HIWORD_MASK FIELD_PREP */
->  #define HWM_FIELD_PREP(mask, value)		\
->  ({						\
-> -	u32 _m = mask;				\
-> +	u64 _m = mask;				\
->  	(_m << 16) | FIELD_PREP(_m, value);	\
->  })
->  
-> 
-> ---
-> base-commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
-> change-id: 20230501-sp7021-field_prep-warning-223f17aeea8e
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c8c655c34e33544aec9d64b660872ab33c29b5f1
+commit: 08feafe8d1958febf3a9733a3d1564d8fc23340e objtool: Fix function fallthrough detection for vmlinux
+date:   1 year ago
+config: x86_64-randconfig-r014-20230501 (https://download.01.org/0day-ci/archive/20230502/202305020511.5BjMPdOi-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=08feafe8d1958febf3a9733a3d1564d8fc23340e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 08feafe8d1958febf3a9733a3d1564d8fc23340e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305020511.5BjMPdOi-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> vmlinux.o: warning: objtool: bmi160_setup_irq() falls through to next function bmi160_data_rdy_trigger_set_state()
+   vmlinux.o: warning: objtool: do_syscall_64()+0x1e: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x2b: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x29: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: sync_regs()+0x23: call to memcpy() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret()+0x36: call to memset() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_task_stack()+0x10: call to task_stack_page() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: in_entry_stack()+0xd: call to cpu_entry_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi()+0xf1: call to __kasan_check_read() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_page_fault()+0x47: call to __kasan_check_read() leaves .noinstr.text section
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
