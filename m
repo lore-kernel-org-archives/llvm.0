@@ -1,93 +1,115 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF9B20F8
-	for <llvm@lists.linux.dev>; Mon,  1 May 2023 12:44:27 +0000 (UTC)
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-63b5ce4f069so2923754b3a.1
-        for <llvm@lists.linux.dev>; Mon, 01 May 2023 05:44:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D7033D2
+	for <llvm@lists.linux.dev>; Mon,  1 May 2023 16:19:22 +0000 (UTC)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-63b5465fb99so2067238b3a.1
+        for <llvm@lists.linux.dev>; Mon, 01 May 2023 09:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682945067; x=1685537067;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U+/m/Q8rJDfBtNlvA5MoeSZihLHMU+hMCap0lrbB/rs=;
-        b=cwwHyIgX4KWvvBvY8nSBkLAFNRsKMYzp6WW1Di0i93YYJQgPlYiPsZZCu6Q8jvx894
-         ycO1ma38TjwwxCTgtSZueTlcY4Th+uxr3S4GZBnOqQEH/2pBTsxgbr9pWx/8L3JZczbj
-         MnpoznAqXqI5UK+Sm37GsXne1PqltuZm1m4Xu8tVG+/im46OIrq2m1j0tSR/GAxO8Bh4
-         VdlXDlQkolJTQQTRdSXDTZdb4WP2mQUEn80kYCVF+/O11w7FZ444LzumBUmo4iRb4nVZ
-         uU5vUU+SbF4ykTZ8FxZUOcJJPtSPqDIpmNPWpIGo5upiSDMbV64yvLxaou3JoJtoNA5f
-         aYLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682945067; x=1685537067;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1682957962; x=1685549962;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U+/m/Q8rJDfBtNlvA5MoeSZihLHMU+hMCap0lrbB/rs=;
-        b=VrGlobqyzuGbKP2p19iRxCNUN9em2H1b+6eP5Zu9lWO7wo7AhUUdd6jm7QDyG1LmYw
-         jD1UG5kCfThZZiq3/QFl4zD/+dZdcLUqSOkw50zqGRpeHpsDJSbqM1HF7vPy8P3ZjPG/
-         IhUvFytVC3SuYWxwdCGEv9QyPTTbMf+GxABxjUyLoCY5ZNBj+Gi3G5C6XQUYnJGHjT8w
-         aFdK6PlA+WwojQnBLCl7tT/kJ0sl5+XWTgpJ/b1zCp44hTdy862YeDFIWCC19MxNKPNj
-         UOcrKFj4qnckn1+sC7dbrPUQMCKDRijwCik2ZHL3xjrCLl9TE83UFAUwL0JIc6gaHWdh
-         nSyg==
-X-Gm-Message-State: AC+VfDwDwomCvM5lMCTHmMHbRU5JEnl0yHWcuBup2/73r3c9KkF7r7hL
-	/5IAcZanemM9CZ0v+x85mQXKGQ==
-X-Google-Smtp-Source: ACHHUZ7UwoeVcV7NcPNRh+PYPFK4S9ad6FQ4bVggkB4CDQoyhbAx7EDtp4SCD00iu4lmGkebBwMNsA==
-X-Received: by 2002:a05:6a20:6f03:b0:f8:b39b:b24e with SMTP id gt3-20020a056a206f0300b000f8b39bb24emr14578405pzb.11.1682945067231;
-        Mon, 01 May 2023 05:44:27 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id v17-20020a62c311000000b005a8bf239f5csm19690294pfg.193.2023.05.01.05.44.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 05:44:26 -0700 (PDT)
-Date: Mon, 01 May 2023 05:44:26 -0700 (PDT)
-X-Google-Original-Date: Mon, 01 May 2023 05:44:09 PDT (-0700)
-Subject:     Re: [PATCH v6 4/4] risc/purgatory: Add linker script
-In-Reply-To: <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org>
-CC: ebiederm@xmission.com, prudo@linux.vnet.ibm.com, dyoung@redhat.com,
-  akpm@linux-foundation.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-  dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, nathan@kernel.org, trix@redhat.com,
-  mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-  Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu, bhe@redhat.com, prudo@redhat.com,
-  kexec@lists.infradead.org, linux-kernel@vger.kernel.org, zwisler@google.com, rostedt@goodmis.org,
-  horms@kernel.org, ndesaulniers@google.com, llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-  linux-riscv@lists.infradead.org, ribalda@chromium.org, stable@vger.kernel.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: ribalda@chromium.org
-Message-ID: <mhng-6809e805-0a92-401b-af74-fef93eeda1ae@palmer-ri-x1c9a>
+        bh=4FGuwB8DZaGL5fmexOM8fuvxUhs14V0EADfy1lJEIKY=;
+        b=Nyhxg6KoMv5DCAGM6mCPXn6ItenAW7c9QV20p31a0qYhzUuuPPWSPWIEunfg7MZGBX
+         hvbJsvBo3U58pWAw2c/kzLOQD9kLiPrO9QMsDd8VQrqPikgs1wq+zpmPFHQoHQQ569Cy
+         oTOiyB6hPuBk4CiO6pz8Fe2zoWRqemoOGGEzUT+dk/zKc6lKhWSQ7lhp4GHBG4Kyt+eU
+         OH3MEzklYYBX4u7sk6s8IPDnNBCU1hsEL08Nv2qA8Hvoi+GhrZ2f+H+kkWkLB8XpVuRY
+         CBn0WlzlKP0alqt8rt8XACki8K5zYFOz2BaMXAdhGnP35ait50bb1lKSXSTzcVMgF/gW
+         gP5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682957962; x=1685549962;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4FGuwB8DZaGL5fmexOM8fuvxUhs14V0EADfy1lJEIKY=;
+        b=KSTBXJE+lSkIcGRbANozXB1iicGjuwwEy85OuaD8R0p3+vzp8FpLoSZE/dEhC0slv9
+         LGmHe3l/1ZoBWXEEdBjMA/WtXHf3sj6kVFumvBIJGSxsC8+DM1Bv+8Zf3p2zWebuVxtg
+         yQoaB0WVxTPVzp/4vO2c0Sg7MTcmmaW7Dp4IR3eqSNMVdn2JJtCnbChlPFTVm7pQSBE6
+         u1E4cLNaL0Ma5WV7wDfKBzt/3UUbLkIVf0bloEJYpHoLD/3h5QFCQFq9yvdHtKQcWoJW
+         MQmqrhoheQLTmOY4RTQ9q1cLhJnQmnIvrRHk1oODVQXreO+f9KHa8yCJFiSMciLSrJQs
+         l18w==
+X-Gm-Message-State: AC+VfDyrkh5FnS3JTXaQCI/JKYhc09Qvz6r4XiHcON78joDJ1Wf5b+25
+	54jlsEJISr4LYJE0z7m3V++glExLzfhsHZC5lD2UnQ==
+X-Google-Smtp-Source: ACHHUZ6RwItANJ/R5G0kwGBHYfYxEFLhUkM0VFd5rJeaVtkIhzWcYIQu18UznRkT5L5a5Vr226WpFX8ruirZ7cWLUO8=
+X-Received: by 2002:a05:6a20:1588:b0:f9:1f3e:cccb with SMTP id
+ h8-20020a056a20158800b000f91f3ecccbmr17087658pzj.10.1682957961585; Mon, 01
+ May 2023 09:19:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+References: <20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org> <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org>
+In-Reply-To: <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 1 May 2023 09:19:10 -0700
+Message-ID: <CAKwvOd=9RMivtkKX27nDDsagH5yCWjpAOvpE2uaW38KYC57vtg@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] risc/purgatory: Add linker script
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Eric Biederman <ebiederm@xmission.com>, Philipp Rudo <prudo@linux.vnet.ibm.com>, 
+	Dave Young <dyoung@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>, 
+	Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Ross Zwisler <zwisler@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Simon Horman <horms@kernel.org>, llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 01 May 2023 05:38:22 PDT (-0700), ribalda@chromium.org wrote:
+On Mon, May 1, 2023 at 5:39=E2=80=AFAM Ricardo Ribalda <ribalda@chromium.or=
+g> wrote:
+>
 > If PGO is enabled, the purgatory ends up with multiple .text sections.
 > This is not supported by kexec and crashes the system.
 >
 > Cc: stable@vger.kernel.org
-> Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory")
+> Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory=
+")
 > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+Hi Ricardo,
+Thanks for the series.  Does this patch 4/4 need a new online commit
+description? It's not adding a linker script (maybe an earlier version
+was).
+
 > ---
 >  arch/riscv/purgatory/Makefile | 5 +++++
 >  1 file changed, 5 insertions(+)
 >
-> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefil=
+e
 > index 5730797a6b40..cf3a44121a90 100644
 > --- a/arch/riscv/purgatory/Makefile
 > +++ b/arch/riscv/purgatory/Makefile
-> @@ -35,6 +35,11 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS
->  CFLAGS_string.o := -D__DISABLE_EXPORTS
->  CFLAGS_ctype.o := -D__DISABLE_EXPORTS
+> @@ -35,6 +35,11 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
+>  CFLAGS_string.o :=3D -D__DISABLE_EXPORTS
+>  CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS
 >
-> +# When profile optimization is enabled, llvm emits two different overlapping
-> +# text sections, which is not supported by kexec. Remove profile optimization
+> +# When profile optimization is enabled, llvm emits two different overlap=
+ping
+> +# text sections, which is not supported by kexec. Remove profile optimiz=
+ation
 > +# flags.
-> +KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%,$(KBUILD_CFLAGS))
+> +KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile-use=
+=3D%,$(KBUILD_CFLAGS))
 > +
 >  # When linking purgatory.ro with -r unresolved symbols are not checked,
->  # also link a purgatory.chk binary without -r to check for unresolved symbols.
->  PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
+>  # also link a purgatory.chk binary without -r to check for unresolved sy=
+mbols.
+>  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+>
+> --
+> 2.40.1.495.gc816e09b53d-goog
+>
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+
+--=20
+Thanks,
+~Nick Desaulniers
