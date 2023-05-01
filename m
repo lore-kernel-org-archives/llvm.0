@@ -1,249 +1,187 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30F88C05
-	for <llvm@lists.linux.dev>; Mon,  1 May 2023 22:15:35 +0000 (UTC)
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1aaea3909d1so19545655ad.2
-        for <llvm@lists.linux.dev>; Mon, 01 May 2023 15:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682979335; x=1685571335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0raH1j8ZUKh/4UCAXmruhx5VLOti7TNZ6SAauWoXEBk=;
-        b=EqofVeRkP6qKn+AFCEdWEoQwXkRwWVvec95qDbq8HeK6vMA68+P1RGt1KssyIGeLdL
-         /tidnKMvryR1PR6Hpn29CbgyWCqYZ5fxYSVCSssm64L0/g+bwjRC2QplRHP60mzb901U
-         88mG1efHI5AW8gUEITxjRKtLyGSd7StlZxTEOasUC8pUt0i+OHlukmlzuyPRPCDmJAlQ
-         Rn7RvNB1ilI61Mg/lhvU4bgkM3TFKnFp/GFuV52RkYXVfe2miETmw0aSD1KOoU0VAwG0
-         rX0RqbILc2etOWcns02LhmqWmls83kR6vECdz55rKQEzogUsA+oJMj8HQWy+o/P1IgKz
-         1AeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682979335; x=1685571335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0raH1j8ZUKh/4UCAXmruhx5VLOti7TNZ6SAauWoXEBk=;
-        b=KsSm7HzU960MTKzODlCzfDTEo+E01w9cV3q+k6ZnPjSH36gSCS+HCQ/FcZf3vkMSLr
-         u3RIFwBVtZzQOaKLsykv7XU9bvb9eP6I2QSi2PgLZJGgJxIfX6m3/h9nDB/opFuEtDXY
-         jSVPFCrPGZnVmo6373GIiGfcFvOQH8tCozwPmzUgnKcHJxib+aJGQvdcIrusQqHlpB/F
-         dk49N7LVwZK/3ODXEUBBbs/uAxqKlCzEHvpM45CXYbIgXymukryYMdEpjTovLzKd67q1
-         uDJBZSoJFwi++4BobYYztkmIxRL/nrwXcoybgbeefQSgcjITQrdZbK0G+L1m6A4Rcx9C
-         TW5w==
-X-Gm-Message-State: AC+VfDylqHjp1XVQtxVMnx3fpa7Tq/p/rvUHIgQFwpDocLGL0r3ti+gP
-	iwZXSDYG3d5vVm2PZlU2V0cB2nm4InJTzSatp+dL8A==
-X-Google-Smtp-Source: ACHHUZ7SJ+lx1QcWYu/jxX/bM1Lg29Q4d4/tH6ynO/js+mvlBne7nKLId+HZvdaDY6JxiY/hDxZpydQmcN9fpXM6uhA=
-X-Received: by 2002:a17:903:32cc:b0:1aa:f3c4:74e5 with SMTP id
- i12-20020a17090332cc00b001aaf3c474e5mr5834252plr.0.1682979335031; Mon, 01 May
- 2023 15:15:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78A72F48;
+	Mon,  1 May 2023 23:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682984121; x=1714520121;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pkLc5ZP/dOvD7lQT0PQ1IrPetzjCfx8doT8UwYt0P10=;
+  b=mTHdnwpMoAUGAa8rFwO4dtqk7U3mqQZDOmpjlhnHbOfu8+tcX/PsoYAO
+   LuGSFcTSxnNATXBUO4QjL71SOEV0BxptA1ihsISbOT1P1b79JoQDWijJd
+   2aXWAVSJck1mr+ivt4O2+N6lDS+Kek24WxoQlC+5yhVyg8yy0VmBNOMXE
+   SwnCHeWnRo2mui0bD6g8CEbwPpOeFhiTIlrBEYmFnzN9jhoMWdUh3/ah+
+   SwwhSLSrKG3Qu1AWHGXglgDfB8yFs4996b7qhHaoq62gKIT/rz5XiVaEz
+   coLu7IMX6MbWsTBD9dplo/TETmo/2/rMovkz4grQXtuVP9DewY7aKnMu7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="347074294"
+X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
+   d="scan'208";a="347074294"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 16:35:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="760864044"
+X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
+   d="scan'208";a="760864044"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 May 2023 16:35:17 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ptd36-0000hY-20;
+	Mon, 01 May 2023 23:35:16 +0000
+Date: Tue, 2 May 2023 07:34:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@kernel.org>, Yishai Hadas <yishaih@nvidia.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Arnd Bergmann <arnd@arndb.de>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH 2/2] net/mlx4: avoid overloading user/kernel pointers
+Message-ID: <202305020739.Q8ObXAba-lkp@intel.com>
+References: <20230418114730.3674657-2-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20230501-sp7021-field_prep-warning-v1-1-5b36d71feefe@kernel.org>
- <20230501213714.GA1007102@dev-arch.thelio-3990X> <CAKwvOdkgSpKMkOGR9qNMxscxuYuYDxnsqTSZDmUtLP5QLSWWMA@mail.gmail.com>
-In-Reply-To: <CAKwvOdkgSpKMkOGR9qNMxscxuYuYDxnsqTSZDmUtLP5QLSWWMA@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 1 May 2023 15:15:22 -0700
-Message-ID: <CAKwvOdm_prtk1UQNJQGidZm44Lk582S3p=of0y46+rVjnSgXJg@mail.gmail.com>
-Subject: Re: [PATCH] clk: sp7021: Adjust width of _m in HWM_FIELD_PREP()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: qinjian@cqplus1.com, mturquette@baylibre.com, sboyd@kernel.org, 
-	trix@redhat.com, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418114730.3674657-2-arnd@kernel.org>
 
-On Mon, May 1, 2023 at 3:03=E2=80=AFPM Nick Desaulniers <ndesaulniers@googl=
-e.com> wrote:
->
-> On Mon, May 1, 2023 at 2:37=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
-> >
-> > On Mon, May 01, 2023 at 02:34:47PM -0700, Nathan Chancellor wrote:
-> > > When building with clang + W=3D1, there is a warning around an intern=
-al
-> > > comparison check within the FIELD_PREP() macro, due to a 32-bit varia=
-ble
-> > > comparison against ~0ull:
-> > >
-> > >   drivers/clk/clk-sp7021.c:316:8: error: result of comparison of cons=
-tant 18446744073709551615 with expression of type 'typeof (_Generic((_m), .=
-..' (aka 'unsigned int') is always false [-Werror,-Wtautological-constant-o=
-ut-of-range-compare]
-> > >           r0 |=3D HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-> > >                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   drivers/clk/clk-sp7021.c:45:15: note: expanded from macro 'HWM_FIEL=
-D_PREP'
-> > >           (_m << 16) | FIELD_PREP(_m, value);     \
-> > >                        ^~~~~~~~~~~~~~~~~~~~~
-> > >   include/linux/bitfield.h:114:3: note: expanded from macro 'FIELD_PR=
-EP'
-> > >                   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ")=
-;    \
-> > >                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   include/linux/bitfield.h:71:53: note: expanded from macro '__BF_FIE=
-LD_CHECK'
-> > >                   BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >=
-     \
-> > >                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^=
-~~~~~~
-> > >   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-li=
-mit=3D0 to see all)
-> > >   include/linux/compiler_types.h:397:22: note: expanded from macro 'c=
-ompiletime_assert'
-> > >           _compiletime_assert(condition, msg, __compiletime_assert_, =
-__COUNTER__)
-> > >           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~
-> > >   include/linux/compiler_types.h:385:23: note: expanded from macro '_=
-compiletime_assert'
-> > >           __compiletime_assert(condition, msg, prefix, suffix)
-> > >           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   include/linux/compiler_types.h:377:9: note: expanded from macro '__=
-compiletime_assert'
-> > >                   if (!(condition))                                  =
-     \
-> > >                         ^~~~~~~~~
-> > >
-> > > This is expected given the tyoes of the input. Increase the size of t=
-he
->
-> s/tyoes/types/
->
-> Thanks for the patch!
->
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> Nathan, do you think anything can be done in FIELD_PREP or even
-> __BF_FIELD_CHECK using _Static_assert (or static_assert from
-> include/linux/build_bug.h) to help elucidate to developers that their
-> mask is too small?  I guess the line 71 of include/linux/bitfield.h
-> that is trying to warn via BUILD_BUG_ON is itself triggering a
-> -Wtautological-constant-out-of-range-compare warning that is perhaps
-> distracting from what the issue is?
->
-> If you're able to reproduce the issue locally still, does this seem to wo=
-rk?
-> ```
-> diff --git a/include/linux/bitfield.h b/include/linux/bitfield.h
-> index ebfa12f69501..762a27b5ae15 100644
-> --- a/include/linux/bitfield.h
-> +++ b/include/linux/bitfield.h
-> @@ -62,15 +62,15 @@
->
->  #define __BF_FIELD_CHECK(_mask, _reg, _val, _pfx)                      \
->         ({                                                              \
-> +               static_assert(__bf_cast_unsigned(_mask, _mask) <=3D      =
- \
-> +                             __bf_cast_unsigned(_reg, ~0ull),          \
-> +                             _pfx "type of reg too small for mask");   \
->                 BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),          \
->                                  _pfx "mask is not constant");          \
->                 BUILD_BUG_ON_MSG((_mask) =3D=3D 0, _pfx "mask is zero"); =
-   \
->                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
->                                  ~((_mask) >> __bf_shf(_mask)) & (_val) :=
- 0, \
->                                  _pfx "value too large for the field"); \
-> -               BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-> -                                __bf_cast_unsigned(_reg, ~0ull),       \
-> -                                _pfx "type of reg too small for mask"); =
-\
->                 __BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +                 \
->                                               (1ULL << __bf_shf(_mask)));=
- \
->         })
->
-> ```
+Hi Arnd,
 
-Hmmm....maybe not:
-```
-drivers/gpu/drm/i915/i915_hwmon.c:97:14: error: static assertion
-expression is not an integral constant expression
-        reg_value =3D REG_FIELD_GET(field_msk, reg_value);
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./drivers/gpu/drm/i915/i915_reg_defs.h:87:44: note: expanded from
-macro 'REG_FIELD_GET'
-#define REG_FIELD_GET(__mask, __val)    ((u32)FIELD_GET(__mask, __val))
-                                              ^~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/bitfield.h:154:3: note: expanded from macro 'FIELD_GET'
-                __BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");       \
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/bitfield.h:65:17: note: expanded from macro '__BF_FIELD_CHE=
-CK'
-                static_assert(__bf_cast_unsigned(_mask, _mask) <=3D       \
-                ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/bitfield.h:61:70: note: expanded from macro '__bf_cast_unsi=
-gned'
-#define __bf_cast_unsigned(type, x)     ((__unsigned_scalar_typeof(type))(x=
-))
-                                                                         ^
-./include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert=
-'
-#define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr=
-)
-                                 ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~=
-~
-./include/linux/build_bug.h:78:56: note: expanded from macro '__static_asse=
-rt'
-#define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-                                                       ^~~~
-```
-so there's probably a use of REG_FIELD_GET that is
-__builtin_constant_p but not an integral constant expression. That's
-too bad...
+kernel test robot noticed the following build warnings:
 
->
->
-> > > temporary variable in HWM_FIELD_PREP() to eliminate the warning, whic=
-h
-> > > follows the logic of commit cfd6fb45cfaf ("crypto: ccree - avoid
-> > > out-of-range warnings from clang") for the same reasons.
-> >
-> > Gah, I forgot:
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Link: https://lore.kernel.org/202303221947.pXP2v4xJ-lkp@intel.com/
-> >
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  drivers/clk/clk-sp7021.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
-> > > index 8fec14120105..11d22043ddd7 100644
-> > > --- a/drivers/clk/clk-sp7021.c
-> > > +++ b/drivers/clk/clk-sp7021.c
-> > > @@ -41,7 +41,7 @@ enum {
-> > >  /* HIWORD_MASK FIELD_PREP */
-> > >  #define HWM_FIELD_PREP(mask, value)          \
-> > >  ({                                           \
-> > > -     u32 _m =3D mask;                          \
-> > > +     u64 _m =3D mask;                          \
-> > >       (_m << 16) | FIELD_PREP(_m, value);     \
-> > >  })
-> > >
-> > >
-> > > ---
-> > > base-commit: d54c1fd4a51e8fbc7f9da86b0cd338a4f7cd2bb2
-> > > change-id: 20230501-sp7021-field_prep-warning-223f17aeea8e
-> > >
-> > > Best regards,
-> > > --
-> > > Nathan Chancellor <nathan@kernel.org>
-> > >
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Arnd-Bergmann/net-mlx4-avoid-overloading-user-kernel-pointers/20230418-195238
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20230418114730.3674657-2-arnd%40kernel.org
+patch subject: [PATCH 2/2] net/mlx4: avoid overloading user/kernel pointers
+config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20230502/202305020739.Q8ObXAba-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1389cdaec07839abb7b8aacb2b16f37d4affd8d3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Arnd-Bergmann/net-mlx4-avoid-overloading-user-kernel-pointers/20230418-195238
+        git checkout 1389cdaec07839abb7b8aacb2b16f37d4affd8d3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/firmware/ drivers/hwmon/ drivers/mfd/ drivers/net/ethernet/mellanox/mlx4/ drivers/pinctrl/ drivers/power/supply/ drivers/staging/media/atomisp/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305020739.Q8ObXAba-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/mellanox/mlx4/en_cq.c:141:53: warning: expression which evaluates to zero treated as a null pointer constant of type 'void *' [-Wnon-literal-null-conversion]
+                               cq->vector, 0, timestamp_en, &cq->wqres.buf, false);
+                                                                            ^~~~~
+   1 warning generated.
 
 
+vim +141 drivers/net/ethernet/mellanox/mlx4/en_cq.c
 
---=20
-Thanks,
-~Nick Desaulniers
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22   88  
+76532d0c7e74249 drivers/net/ethernet/mellanox/mlx4/en_cq.c Alexander Guller  2011-10-09   89  int mlx4_en_activate_cq(struct mlx4_en_priv *priv, struct mlx4_en_cq *cq,
+76532d0c7e74249 drivers/net/ethernet/mellanox/mlx4/en_cq.c Alexander Guller  2011-10-09   90  			int cq_idx)
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22   91  {
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22   92  	struct mlx4_en_dev *mdev = priv->mdev;
+80a62deedf9d449 drivers/net/ethernet/mellanox/mlx4/en_cq.c Thomas Gleixner   2020-12-10   93  	int irq, err = 0;
+ec693d47010e830 drivers/net/ethernet/mellanox/mlx4/en_cq.c Amir Vadai        2013-04-23   94  	int timestamp_en = 0;
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31   95  	bool assigned_eq = false;
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22   96  
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22   97  	cq->dev = mdev->pndev[priv->port];
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22   98  	cq->mcq.set_ci_db  = cq->wqres.db.db;
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22   99  	cq->mcq.arm_db     = cq->wqres.db.db + 1;
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  100  	*cq->mcq.set_ci_db = 0;
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  101  	*cq->mcq.arm_db    = 0;
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  102  	memset(cq->buf, 0, cq->buf_size);
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  103  
+ccc109b8ed24c6a drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2016-11-02  104  	if (cq->type == RX) {
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  105  		if (!mlx4_is_eq_vector_valid(mdev->dev, priv->port,
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  106  					     cq->vector)) {
+de1618034ae5704 drivers/net/ethernet/mellanox/mlx4/en_cq.c Ido Shamay        2015-05-31  107  			cq->vector = cpumask_first(priv->rx_ring[cq->ring]->affinity_mask);
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  108  
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  109  			err = mlx4_assign_eq(mdev->dev, priv->port,
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  110  					     &cq->vector);
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  111  			if (err) {
+b0f6446377e72bc drivers/net/ethernet/mellanox/mlx4/en_cq.c Carol L Soto      2015-08-27  112  				mlx4_err(mdev, "Failed assigning an EQ to CQ vector %d\n",
+b0f6446377e72bc drivers/net/ethernet/mellanox/mlx4/en_cq.c Carol L Soto      2015-08-27  113  					 cq->vector);
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  114  				goto free_eq;
+1fb9876e9bf895e drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2011-03-22  115  			}
+35f6f45368632f2 drivers/net/ethernet/mellanox/mlx4/en_cq.c Amir Vadai        2014-06-29  116  
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  117  			assigned_eq = true;
+1fb9876e9bf895e drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2011-03-22  118  		}
+80a62deedf9d449 drivers/net/ethernet/mellanox/mlx4/en_cq.c Thomas Gleixner   2020-12-10  119  		irq = mlx4_eq_get_irq(mdev->dev, cq->vector);
+197d23707729579 drivers/net/ethernet/mellanox/mlx4/en_cq.c Thomas Gleixner   2020-12-10  120  		cq->aff_mask = irq_get_effective_affinity_mask(irq);
+1fb9876e9bf895e drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2011-03-22  121  	} else {
+76532d0c7e74249 drivers/net/ethernet/mellanox/mlx4/en_cq.c Alexander Guller  2011-10-09  122  		/* For TX we use the same irq per
+76532d0c7e74249 drivers/net/ethernet/mellanox/mlx4/en_cq.c Alexander Guller  2011-10-09  123  		ring we assigned for the RX    */
+76532d0c7e74249 drivers/net/ethernet/mellanox/mlx4/en_cq.c Alexander Guller  2011-10-09  124  		struct mlx4_en_cq *rx_cq;
+76532d0c7e74249 drivers/net/ethernet/mellanox/mlx4/en_cq.c Alexander Guller  2011-10-09  125  
+76532d0c7e74249 drivers/net/ethernet/mellanox/mlx4/en_cq.c Alexander Guller  2011-10-09  126  		cq_idx = cq_idx % priv->rx_ring_num;
+41d942d56cfd210 drivers/net/ethernet/mellanox/mlx4/en_cq.c Eugenia Emantayev 2013-11-07  127  		rx_cq = priv->rx_cq[cq_idx];
+76532d0c7e74249 drivers/net/ethernet/mellanox/mlx4/en_cq.c Alexander Guller  2011-10-09  128  		cq->vector = rx_cq->vector;
+1fb9876e9bf895e drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2011-03-22  129  	}
+1fb9876e9bf895e drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2011-03-22  130  
+ccc109b8ed24c6a drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2016-11-02  131  	if (cq->type == RX)
+41d942d56cfd210 drivers/net/ethernet/mellanox/mlx4/en_cq.c Eugenia Emantayev 2013-11-07  132  		cq->size = priv->rx_ring[cq->ring]->actual_size;
+38aab07c14adbf3 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2009-05-24  133  
+ccc109b8ed24c6a drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2016-11-02  134  	if ((cq->type != RX && priv->hwtstamp_config.tx_type) ||
+ccc109b8ed24c6a drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2016-11-02  135  	    (cq->type == RX && priv->hwtstamp_config.rx_filter))
+ec693d47010e830 drivers/net/ethernet/mellanox/mlx4/en_cq.c Amir Vadai        2013-04-23  136  		timestamp_en = 1;
+ec693d47010e830 drivers/net/ethernet/mellanox/mlx4/en_cq.c Amir Vadai        2013-04-23  137  
+f3301870161ca29 drivers/net/ethernet/mellanox/mlx4/en_cq.c Moshe Shemesh     2017-06-21  138  	cq->mcq.usage = MLX4_RES_USAGE_DRIVER;
+ec693d47010e830 drivers/net/ethernet/mellanox/mlx4/en_cq.c Amir Vadai        2013-04-23  139  	err = mlx4_cq_alloc(mdev->dev, cq->size, &cq->wqres.mtt,
+ec693d47010e830 drivers/net/ethernet/mellanox/mlx4/en_cq.c Amir Vadai        2013-04-23  140  			    &mdev->priv_uar, cq->wqres.db.dma, &cq->mcq,
+e45678973dcbb13 drivers/net/ethernet/mellanox/mlx4/en_cq.c Daniel Jurgens    2018-11-21 @141  			    cq->vector, 0, timestamp_en, &cq->wqres.buf, false);
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  142  	if (err)
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  143  		goto free_eq;
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  144  
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  145  	cq->mcq.event = mlx4_en_cq_event;
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  146  
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  147  	switch (cq->type) {
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  148  	case TX:
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  149  		cq->mcq.comp = mlx4_en_tx_irq;
+16d083e28f1a4f6 drivers/net/ethernet/mellanox/mlx4/en_cq.c Jakub Kicinski    2022-05-04  150  		netif_napi_add_tx(cq->dev, &cq->napi, mlx4_en_poll_tx_cq);
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  151  		napi_enable(&cq->napi);
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  152  		break;
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  153  	case RX:
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  154  		cq->mcq.comp = mlx4_en_rx_irq;
+b48b89f9c189d24 drivers/net/ethernet/mellanox/mlx4/en_cq.c Jakub Kicinski    2022-09-27  155  		netif_napi_add(cq->dev, &cq->napi, mlx4_en_poll_rx_cq);
+0276a330617a0cf drivers/net/ethernet/mellanox/mlx4/en_cq.c Eugenia Emantayev 2013-12-19  156  		napi_enable(&cq->napi);
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  157  		break;
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  158  	case TX_XDP:
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  159  		/* nothing regarding napi, it's shared with rx ring */
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  160  		cq->xdp_busy = false;
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  161  		break;
+6c78511b0503c9b drivers/net/ethernet/mellanox/mlx4/en_cq.c Tariq Toukan      2017-06-15  162  	}
+0276a330617a0cf drivers/net/ethernet/mellanox/mlx4/en_cq.c Eugenia Emantayev 2013-12-19  163  
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  164  	return 0;
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  165  
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  166  free_eq:
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  167  	if (assigned_eq)
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  168  		mlx4_release_eq(mdev->dev, cq->vector);
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  169  	cq->vector = mdev->dev->caps.num_comp_vectors;
+c66fa19c405a366 drivers/net/ethernet/mellanox/mlx4/en_cq.c Matan Barak       2015-05-31  170  	return err;
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  171  }
+c27a02cd94d6695 drivers/net/mlx4/en_cq.c                   Yevgeny Petrilin  2008-10-22  172  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
