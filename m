@@ -1,43 +1,50 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A29F62F;
-	Mon,  1 May 2023 04:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02464375;
+	Mon,  1 May 2023 05:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682914439; x=1714450439;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fZecFb9gf/Ehy6i/AFgWcjHsi5h5BCGAD3yY96wdAFM=;
-  b=Bf+fSCowTZBKg6AstmbohrN6Utv3IYCjdiegHqoCu/Zka4Tdq8zPFqzT
-   /h+J3fwT2KsfQ1yXC0/jAa3qnM0H9fD4J4yU5BXQNcWc8Gx8V99TgLwxK
-   bkf2muQScwiRuGZHY1noWRWOOJfdEef+5596eZDfGT8fdREDfTL0/g5KU
-   L+pD8wasJ0X3nibv2TJZCqzb0tFdGGTBj7RjVDrKdijmDP5/1lxhPisDp
-   YdR+U8PNXm5uxrKo876RtoSdxuUsJTAspaCKwRr/GPzlRrbhI7M3csPsW
-   moclwqcqeePYAOOiPAtAX+SnwKDRmQWJeklUuZqq0FIe2nintfjWOj5+v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="350154164"
+  t=1682918103; x=1714454103;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ux9Ts+3V9zBCVDNMcJUyurtBq8zr7ey0DE6a6V0SDgM=;
+  b=dje08TvY0V09h0jrETXZzMMKulHvU21UzID/BEUyryBlsHZfbUahMzxJ
+   L7sZhHCzYo4iBZUHkXR5r2urcOvFP7ynqzJkCSOERhG27g4BcPRbvXnCW
+   h88drY7r184nP7PX9FZY2i4tiu8vr4tsTzkJdagq4Ouw6nx+dev++f5lV
+   pSuoeAd22LEvxjx4fgB2y9IJPktzM40lKCSjrelPop34CCj4bYXfzzvJz
+   HVLey1bueqXMhQ3raW+o9MepM2oLwJLSDoa3s66kWH8RyimQYMBSICHHr
+   j0g73a/9FVVuBtyIG7x9ZrkweakR4qwMnHA3QVkTWveeCxB/WLxg/2MGQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="376132466"
 X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="350154164"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 21:13:58 -0700
+   d="scan'208";a="376132466"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 22:15:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="726222424"
+X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="765181857"
 X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="726222424"
+   d="scan'208";a="765181857"
 Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 30 Apr 2023 21:13:57 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 30 Apr 2023 22:14:58 -0700
 Received: from kbuild by e3434d64424d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ptKvE-0000IZ-2t;
-	Mon, 01 May 2023 04:13:56 +0000
-Date: Mon, 1 May 2023 12:13:35 +0800
+	id 1ptLsH-0000JV-23;
+	Mon, 01 May 2023 05:14:57 +0000
+Date: Mon, 1 May 2023 13:14:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [lunn:leds-offload-support-reduced-auto-netdev 15/21]
- drivers/leds/led-class.c:362:15: error: no member named 'fwnode' in 'struct
- led_classdev'
-Message-ID: <202305011226.xx58ePkg-lkp@intel.com>
+To: Tom Rix <trix@redhat.com>, chunkuang.hu@kernel.org,
+	p.zabel@pengutronix.de, chunfeng.yun@mediatek.com, vkoul@kernel.org,
+	kishon@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+	linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] phy: mediatek: rework the floating point comparisons to
+ fixed point
+Message-ID: <202305011302.fwiJuq8v-lkp@intel.com>
+References: <20230501025716.2905609-1-trix@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,130 +53,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230501025716.2905609-1-trix@redhat.com>
 
-tree:   https://github.com/lunn/linux.git leds-offload-support-reduced-auto-netdev
-head:   f1ffe7d8f875fe17f996d112a87846ad06e9eab3
-commit: ff5cab2905c761adcb9d203303c5d4bd48e0aab9 [15/21] drivers: led: led-class: Keep fwnode from init_data for triggers
-config: riscv-randconfig-r023-20230430 (https://download.01.org/0day-ci/archive/20230501/202305011226.xx58ePkg-lkp@intel.com/config)
+Hi Tom,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20230428]
+[cannot apply to linus/master pza/reset/next pza/imx-drm/next mbgg-mediatek/for-next v6.3 v6.3-rc7 v6.3-rc6 v6.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tom-Rix/phy-mediatek-rework-the-floating-point-comparisons-to-fixed-point/20230501-110044
+base:   next-20230428
+patch link:    https://lore.kernel.org/r/20230501025716.2905609-1-trix%40redhat.com
+patch subject: [PATCH] phy: mediatek: rework the floating point comparisons to fixed point
+config: arm64-randconfig-r026-20230430 (https://download.01.org/0day-ci/archive/20230501/202305011302.fwiJuq8v-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://github.com/lunn/linux/commit/ff5cab2905c761adcb9d203303c5d4bd48e0aab9
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn leds-offload-support-reduced-auto-netdev
-        git checkout ff5cab2905c761adcb9d203303c5d4bd48e0aab9
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/7a707b74a3a3ce9d018ee340e478e5c75301c894
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tom-Rix/phy-mediatek-rework-the-floating-point-comparisons-to-fixed-point/20230501-110044
+        git checkout 7a707b74a3a3ce9d018ee340e478e5c75301c894
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/leds/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/phy/mediatek/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305011226.xx58ePkg-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305011302.fwiJuq8v-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/leds/led-class.c:362:15: error: no member named 'fwnode' in 'struct led_classdev'
-                                   led_cdev->fwnode = init_data->fwnode;
-                                   ~~~~~~~~  ^
-   1 error generated.
+   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+           if (ret)
+               ^~~
+   drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:216:12: note: initialize the variable 'ret' to silence this warning
+           int i, ret;
+                     ^
+                      = 0
+>> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:331:32: warning: result of comparison of constant 74175000000 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           } else if ((pixel_clk * 1000) >= 74175 * MEGA && pixel_clk <= 300 * MEGA) {
+                      ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~
+>> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:336:58: warning: result of comparison of constant 74175000000 with expression of type 'u32' (aka 'unsigned int') is always true [-Wtautological-constant-out-of-range-compare]
+           } else if (pixel_clk >= 27 * MEGA && (pixel_clk * 1000) < 74175 * MEGA) {
+                                                ~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +362 drivers/leds/led-class.c
+vim +331 drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
 
-   326	
-   327	/**
-   328	 * led_classdev_register_ext - register a new object of led_classdev class
-   329	 *			       with init data.
-   330	 *
-   331	 * @parent: parent of LED device
-   332	 * @led_cdev: the led_classdev structure for this device.
-   333	 * @init_data: LED class device initialization data
-   334	 */
-   335	int led_classdev_register_ext(struct device *parent,
-   336				      struct led_classdev *led_cdev,
-   337				      struct led_init_data *init_data)
-   338	{
-   339		char composed_name[LED_MAX_NAME_SIZE];
-   340		char final_name[LED_MAX_NAME_SIZE];
-   341		const char *proposed_name = composed_name;
-   342		int ret;
-   343	
-   344		if (init_data) {
-   345			if (init_data->devname_mandatory && !init_data->devicename) {
-   346				dev_err(parent, "Mandatory device name is missing");
-   347				return -EINVAL;
-   348			}
-   349			ret = led_compose_name(parent, init_data, composed_name);
-   350			if (ret < 0)
-   351				return ret;
-   352	
-   353			if (init_data->fwnode) {
-   354				fwnode_property_read_string(init_data->fwnode,
-   355					"linux,default-trigger",
-   356					&led_cdev->default_trigger);
+   303	
+   304	static int mtk_hdmi_pll_drv_setting(struct clk_hw *hw)
+   305	{
+   306		struct mtk_hdmi_phy *hdmi_phy = to_mtk_hdmi_phy(hw);
+   307		void __iomem *regs = hdmi_phy->regs;
+   308		u8 data_channel_bias, clk_channel_bias;
+   309		u8 impedance, impedance_en;
+   310		u32 tmds_clk;
+   311		u32 pixel_clk = hdmi_phy->pll_rate;
+   312	
+   313		tmds_clk = pixel_clk;
+   314	
+   315		/* bias & impedance setting:
+   316		 * 3G < data rate <= 6G: enable impedance 100ohm,
+   317		 *      data channel bias 24mA, clock channel bias 20mA
+   318		 * pixel clk >= HD,  74.175MHZ <= pixel clk <= 300MHZ:
+   319		 *      enalbe impedance 100ohm
+   320		 *      data channel 20mA, clock channel 16mA
+   321		 * 27M =< pixel clk < 74.175: disable impedance
+   322		 *      data channel & clock channel bias 10mA
+   323		 */
+   324	
+   325		/* 3G < data rate <= 6G, 300M < tmds rate <= 594M */
+   326		if (tmds_clk > 300 * MEGA && tmds_clk <= 594 * MEGA) {
+   327			data_channel_bias = 0x3c; /* 24mA */
+   328			clk_channel_bias = 0x34; /* 20mA */
+   329			impedance_en = 0xf;
+   330			impedance = 0x36; /* 100ohm */
+ > 331		} else if ((pixel_clk * 1000) >= 74175 * MEGA && pixel_clk <= 300 * MEGA) {
+   332			data_channel_bias = 0x34; /* 20mA */
+   333			clk_channel_bias = 0x2c; /* 16mA */
+   334			impedance_en = 0xf;
+   335			impedance = 0x36; /* 100ohm */
+ > 336		} else if (pixel_clk >= 27 * MEGA && (pixel_clk * 1000) < 74175 * MEGA) {
+   337			data_channel_bias = 0x14; /* 10mA */
+   338			clk_channel_bias = 0x14; /* 10mA */
+   339			impedance_en = 0x0;
+   340			impedance = 0x0;
+   341		} else {
+   342			return -EINVAL;
+   343		}
+   344	
+   345		/* bias */
+   346		mtk_phy_update_field(regs + HDMI_1_CFG_1, RG_HDMITX21_DRV_IBIAS_D0, data_channel_bias);
+   347		mtk_phy_update_field(regs + HDMI_1_CFG_1, RG_HDMITX21_DRV_IBIAS_D1, data_channel_bias);
+   348		mtk_phy_update_field(regs + HDMI_1_CFG_1, RG_HDMITX21_DRV_IBIAS_D2, data_channel_bias);
+   349		mtk_phy_update_field(regs + HDMI_1_CFG_0, RG_HDMITX21_DRV_IBIAS_CLK, clk_channel_bias);
+   350	
+   351		/* impedance */
+   352		mtk_phy_update_field(regs + HDMI_1_CFG_0, RG_HDMITX21_DRV_IMP_EN, impedance_en);
+   353		mtk_phy_update_field(regs + HDMI_1_CFG_2, RG_HDMITX21_DRV_IMP_D0_EN1, impedance);
+   354		mtk_phy_update_field(regs + HDMI_1_CFG_2, RG_HDMITX21_DRV_IMP_D1_EN1, impedance);
+   355		mtk_phy_update_field(regs + HDMI_1_CFG_2, RG_HDMITX21_DRV_IMP_D2_EN1, impedance);
+   356		mtk_phy_update_field(regs + HDMI_1_CFG_2, RG_HDMITX21_DRV_IMP_CLK_EN1, impedance);
    357	
-   358				if (fwnode_property_present(init_data->fwnode,
-   359							    "retain-state-shutdown"))
-   360					led_cdev->flags |= LED_RETAIN_AT_SHUTDOWN;
-   361				if (IS_ENABLED(CONFIG_LEDS_TRIGGERS))
- > 362					led_cdev->fwnode = init_data->fwnode;
-   363			}
-   364		} else {
-   365			proposed_name = led_cdev->name;
-   366		}
-   367	
-   368		ret = led_classdev_next_name(proposed_name, final_name, sizeof(final_name));
-   369		if (ret < 0)
-   370			return ret;
-   371	
-   372		mutex_init(&led_cdev->led_access);
-   373		mutex_lock(&led_cdev->led_access);
-   374		led_cdev->dev = device_create_with_groups(leds_class, parent, 0,
-   375					led_cdev, led_cdev->groups, "%s", final_name);
-   376		if (IS_ERR(led_cdev->dev)) {
-   377			mutex_unlock(&led_cdev->led_access);
-   378			return PTR_ERR(led_cdev->dev);
-   379		}
-   380		if (init_data && init_data->fwnode)
-   381			device_set_node(led_cdev->dev, init_data->fwnode);
-   382	
-   383		if (ret)
-   384			dev_warn(parent, "Led %s renamed to %s due to name collision",
-   385					proposed_name, dev_name(led_cdev->dev));
-   386	
-   387		if (led_cdev->flags & LED_BRIGHT_HW_CHANGED) {
-   388			ret = led_add_brightness_hw_changed(led_cdev);
-   389			if (ret) {
-   390				device_unregister(led_cdev->dev);
-   391				led_cdev->dev = NULL;
-   392				mutex_unlock(&led_cdev->led_access);
-   393				return ret;
-   394			}
-   395		}
-   396	
-   397		led_cdev->work_flags = 0;
-   398	#ifdef CONFIG_LEDS_TRIGGERS
-   399		init_rwsem(&led_cdev->trigger_lock);
-   400	#endif
-   401	#ifdef CONFIG_LEDS_BRIGHTNESS_HW_CHANGED
-   402		led_cdev->brightness_hw_changed = -1;
-   403	#endif
-   404		/* add to the list of leds */
-   405		down_write(&leds_list_lock);
-   406		list_add_tail(&led_cdev->node, &leds_list);
-   407		up_write(&leds_list_lock);
-   408	
-   409		if (!led_cdev->max_brightness)
-   410			led_cdev->max_brightness = LED_FULL;
-   411	
-   412		led_update_brightness(led_cdev);
-   413	
-   414		led_init_core(led_cdev);
-   415	
+   358		return 0;
+   359	}
+   360	
 
 -- 
 0-DAY CI Kernel Test Service
