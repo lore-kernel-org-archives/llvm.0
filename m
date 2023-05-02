@@ -1,131 +1,117 @@
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4204510E4;
-	Tue,  2 May 2023 11:58:11 +0000 (UTC)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1ptodz-00072b-Gd; Tue, 02 May 2023 13:58:07 +0200
-Message-ID: <b61b60cb-0e8e-0a27-5f7b-71e7639e02f6@leemhuis.info>
-Date: Tue, 2 May 2023 13:58:06 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886661396;
+	Tue,  2 May 2023 12:28:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683030508; x=1714566508;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qdK9ZCfjM/VCR79/TkJmrZ0wJaDOUM+rryu9bdTqOrk=;
+  b=iHiCAqY4CFZEa3ulcyHAhJCIYKC9rLXZ8tUWE4Ae99GjiCNofU0bdVFH
+   6igpRnUe/AACAxuVKozuNAVuPkGD1ttGksksaMJ22PYaObRjluVz7Lhhr
+   01TDkGru5gvHf61DriF6gNivmXCxt8wIpJgLF3GhUUJBoS+gVw7j83YZe
+   sWfOBwXYaZGEWyjQdF+7Ej8gwH/3UPGUNZKOPByFWtt/imrGB7d48sRE+
+   ty71qJzzfguoUfZ/k/WkAp0osYX0CjTqlBtRMj7hvrYWHjUHZCnoizqdZ
+   vplmsnwJIY1RbsYL0/pNIiXa0G5pmNWQuIwvTHwbkcDH4mz6Rlam+lbJf
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="413825445"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="413825445"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 05:28:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="840277778"
+X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
+   d="scan'208";a="840277778"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 02 May 2023 05:28:24 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ptp7H-00012e-15;
+	Tue, 02 May 2023 12:28:23 +0000
+Date: Tue, 2 May 2023 20:27:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
+	lgirdwood@gmail.com, perex@perex.cz,
+	pierre-louis.bossart@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kevin-lu@ti.com,
+	shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+	navada@ti.com, gentuser@gmail.com,
+	Shenghao Ding <13916275206@139.com>
+Subject: Re: [PATCH v1 4/5] ASoC: tas2781: Add tas2781 driver
+Message-ID: <202305022033.LiI7Ojm4-lkp@intel.com>
+References: <20230502053254.27085-1-13916275206@139.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-Content-Language: en-US, de-DE
-To: Shreeya Patel <shreeya.patel@collabora.com>,
- Nick Desaulniers <ndesaulniers@google.com>
-Cc: Michal Marek <michal.lkml@markovi.net>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
- Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev,
- kernelci@lists.linux.dev,
- "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
- Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
- ricardo.canuelo@collabora.com, denys.f@collabora.com
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919170828.3718437-1-ndesaulniers@google.com>
- <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
- <325ae81d-b3a5-71b3-39e9-96408968ab0b@leemhuis.info>
- <1209349b-9634-c1ca-d2ee-182e8dec2de5@collabora.com>
-From: "Linux regression tracking (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <1209349b-9634-c1ca-d2ee-182e8dec2de5@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683028691;b202daa3;
-X-HE-SMSGID: 1ptodz-00072b-Gd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230502053254.27085-1-13916275206@139.com>
 
-On 02.05.23 11:48, Shreeya Patel wrote:
-> On 28/04/23 13:11, Thorsten Leemhuis wrote:
->> On 27.04.23 13:53, Shreeya Patel wrote:
->>> On 19/09/22 22:38, Nick Desaulniers wrote:
->>>> cc-ifversion is GCC specific. Replace it with compiler specific
->>>> variants. Update the users of cc-ifversion to use these new macros.
->>>>
->>>> Link: https://github.com/ClangBuiltLinux/linux/issues/350
->>>> Link:
->>>> https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
->>>> Suggested-by: Bill Wendling <morbo@google.com>
->>>> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->>>> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
->>> KernelCI found this patch causes a regression in the
->>> baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
->>> see the bisection report for more details [2].
->>>
->>> Let me know if you have any questions.
->>>
->>> [1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
->>> [2] https://groups.io/g/kernelci-results/message/40804> [...]
->>> #regzbot introduced: 88b61e3bff93
->> How much of this text is auto generated? I ask for two reasons:
-> 
-> None of this text is auto generated yet but we plan to do it soon once
-> we think the format of the reporting email is good enough for people to
-> understand
-> and look into it. Which is why your comments are really helpful here.
+Hi Shenghao,
 
-Thx, glad to hear that. FWIW and YMMV, but I'm not sure if fully
-automating things is a good idea, as a bad report or two might be enough
-to make some developers start ignoring kernelci reports; a quick human
-review with small adjustments might help prevent that, as it's hard to
-get that ship turned around later (that's why regzbot up to this day
-doesn't send any mails automatically).
+kernel test robot noticed the following build errors:
 
->> * You made regzbot track this, which is great, but didn't specify a
->> title. That is fine in general, if the subject round about says what the
->> regression is about. But in this case it doesn't; hence it would be
->> great if you in the future could specify one through "#regzbot title:"
->> or adjust the mail's subject (I guess the former is what developers will
->> prefer).
-> 
-> Noted. If I think the title is not very explanatory then I'll change it
-> to reflect the problem in future.
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Many thx!
+url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-dt-bindings-Add-tas2781-amplifier/20230502-133533
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230502053254.27085-1-13916275206%40139.com
+patch subject: [PATCH v1 4/5] ASoC: tas2781: Add tas2781 driver
+config: hexagon-randconfig-r045-20230430 (https://download.01.org/0day-ci/archive/20230502/202305022033.LiI7Ojm4-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2ce0b86d1a6546d78dc4151d98a67537b8cc8669
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shenghao-Ding/ASoC-dt-bindings-Add-tas2781-amplifier/20230502-133533
+        git checkout 2ce0b86d1a6546d78dc4151d98a67537b8cc8669
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-> [...]
-> 
-> I understand that it might be more helpful to atleast put little more
-> information about what is causing the regression here.
-> I'll provide some more details in future for it to be easy for
-> developers to look into it.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305022033.LiI7Ojm4-lkp@intel.com/
 
-Yeah, especially a obvious "what's the actual problem (in 10 words or
-less)" afaics would have been really good here.
+All errors (new ones prefixed by >>):
 
->> To check if those were old or new problems, I tired to go back in the
->> history and on page 9 found an entry for the last succeeding test. But
->> clicking on the logs got me a 404 :-/
->>
->> Then I looked at the logs on [1] again and in the html view "Boot
->> result: FAIL". Is that the actual problem?
-> 
-> Unfortunately, we do have some broken links in the current KernelCI
-> dashboard [...]
+>> ld.lld: error: duplicate symbol: dvc_tlv
+   >>> defined at tas2781.h:148 (include/sound/tas2781.h:148)
+   >>>            drivers/firmware/ti/tasdevice-fmw.o:(dvc_tlv) in archive vmlinux.a
+   >>> defined at tas2781.h:148 (include/sound/tas2781.h:148)
+   >>>            sound/soc/codecs/tas2781-lib.o:(.rodata+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: amp_vol_tlv
+   >>> defined at tas2781.h:149 (include/sound/tas2781.h:149)
+   >>>            drivers/firmware/ti/tasdevice-fmw.o:(amp_vol_tlv) in archive vmlinux.a
+   >>> defined at tas2781.h:149 (include/sound/tas2781.h:149)
+   >>>            sound/soc/codecs/tas2781-lib.o:(.rodata+0x10) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: dvc_tlv
+   >>> defined at tas2781.h:148 (include/sound/tas2781.h:148)
+   >>>            drivers/firmware/ti/tasdevice-fmw.o:(dvc_tlv) in archive vmlinux.a
+   >>> defined at tas2781.h:148 (include/sound/tas2781.h:148)
+   >>>            sound/soc/codecs/tas2781-i2c.o:(.rodata+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: amp_vol_tlv
+   >>> defined at tas2781.h:149 (include/sound/tas2781.h:149)
+   >>>            drivers/firmware/ti/tasdevice-fmw.o:(amp_vol_tlv) in archive vmlinux.a
+   >>> defined at tas2781.h:149 (include/sound/tas2781.h:149)
+   >>>            sound/soc/codecs/tas2781-i2c.o:(.rodata+0x10) in archive vmlinux.a
 
-Happens :-D
-
-> What I can do from my side is to attach logs of the working kernel if I
-> can get them through LAVA.
-> But one thing to note is that even LAVA stores limited logs and we won't
-> be able to provide them always like in this case
-> since the regression has been happening from a long time.
-
-Before going down that route I'd work out with Nick why things work for
-him, maybe all that isn't needed.
-
-> Thanks for your input though, we will work on it and get a better format
-> ready for reporting the regressions.
-
-Thx for your work!
-
-Ciao, Thorsten
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
