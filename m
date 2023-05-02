@@ -1,43 +1,49 @@
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7573F7E;
-	Tue,  2 May 2023 14:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB7A33EA;
+	Tue,  2 May 2023 15:13:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683037349; x=1714573349;
+  t=1683040413; x=1714576413;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sAT1zMVCGSR7/HgtTUT6Yg2Kj7uvkvQeKWVMoefN+rs=;
-  b=NKL6McJXTcObE0BVs/EJOLhYIV0jmYdOYzsyeZjXhwS1J2yWhNAagxbE
-   aL+Fijl2aE4HpWkO6PUzLiW1v8sob9Cg0iujwrw1ZpYWikXoOjQip/2pG
-   0/6ZX6XfXotpSYIslf9IqTTh4fNsLPTGEXv6yKc6hYbTojqovIIEXtqqd
-   c+RaXljncq7VQHtwW1Lsnp5Fz/OyJpfbDLf+9+MhBgJ66WxuA7d/M+NAW
-   Osg9HrheL3ToDL5swbZCIehvlh2fZ1HBzg3thSWvTpahD2u4aVGa6Z8Ju
-   c7n9O2T/T/mbHTWThJ7Q/LMivj87vCZZe5aHXg9O36tDIPg2o76/sNQtt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="337532170"
+  bh=g1JhWMaHg8dPkL+NAKckASazi0K2qxrFUTSspRCvr6g=;
+  b=XREJCc4m96aLKXP9ZNRYZOGxv+t/ZFHirXPTQIx+auqBwiz20LA4LWb3
+   IKwkVLiYEY4guLqJumwkWT3BbdZ71bbbSIDq+7NVfxjQTNVp0YuirfvwI
+   crRd3gf8iXe7vEglQhOUlZBIFn4XO7Rrk8xffXM4iU4pQNBA2MxFvPG4v
+   x4FqqQi700KAw/I9FOrVEtvGhN6bE3fEG0/1HiRCFaGkhUuLAchQA+tQT
+   ZuQsDbLR960pnMxSulRf4MrOarxQYlKDfK5vYVoyZP1MyUI+9eZ1w6iTN
+   M5fui1f+LhYOX7DWL18hX+2X3MJ8+92/1Ay3wuPfhuWccKY8D8rqjUhRA
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="345902483"
 X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="337532170"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 07:22:28 -0700
+   d="scan'208";a="345902483"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 08:13:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="785682785"
+X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="646568393"
 X-IronPort-AV: E=Sophos;i="5.99,244,1677571200"; 
-   d="scan'208";a="785682785"
+   d="scan'208";a="646568393"
 Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 May 2023 07:22:27 -0700
+  by orsmga003.jf.intel.com with ESMTP; 02 May 2023 08:13:28 -0700
 Received: from kbuild by e3434d64424d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ptqte-000162-2J;
-	Tue, 02 May 2023 14:22:26 +0000
-Date: Tue, 2 May 2023 22:21:36 +0800
+	id 1ptrh1-00017U-32;
+	Tue, 02 May 2023 15:13:27 +0000
+Date: Tue, 2 May 2023 23:13:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: "larry.lai" <larry.lai@yunjingtech.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC RESEND 1/3] mfd: Add support for UP board CPLD/FPGA
-Message-ID: <202305022231.zyZXagsH-lkp@intel.com>
-References: <20230425152135.30745-2-larry.lai@yunjingtech.com>
+To: Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
+	lgirdwood@gmail.com, perex@perex.cz,
+	pierre-louis.bossart@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kevin-lu@ti.com,
+	shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+	linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+	navada@ti.com, gentuser@gmail.com,
+	Shenghao Ding <13916275206@139.com>
+Subject: Re: [PATCH v1 4/5] ASoC: tas2781: Add tas2781 driver
+Message-ID: <202305022338.ZA1okoZW-lkp@intel.com>
+References: <20230502053254.27085-1-13916275206@139.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,108 +52,121 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425152135.30745-2-larry.lai@yunjingtech.com>
+In-Reply-To: <20230502053254.27085-1-13916275206@139.com>
 
-Hi larry.lai,
+Hi Shenghao,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 4fe89d07dcc2804c8b562f6c7896a45643d34b2f]
+[auto build test ERROR on broonie-sound/for-next]
+[also build test ERROR on tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/larry-lai/mfd-Add-support-for-UP-board-CPLD-FPGA/20230425-232744
-base:   4fe89d07dcc2804c8b562f6c7896a45643d34b2f
-patch link:    https://lore.kernel.org/r/20230425152135.30745-2-larry.lai%40yunjingtech.com
-patch subject: [RFC RESEND 1/3] mfd: Add support for UP board CPLD/FPGA
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20230502/202305022231.zyZXagsH-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-dt-bindings-Add-tas2781-amplifier/20230502-133533
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230502053254.27085-1-13916275206%40139.com
+patch subject: [PATCH v1 4/5] ASoC: tas2781: Add tas2781 driver
+config: s390-randconfig-r025-20230501 (https://download.01.org/0day-ci/archive/20230502/202305022338.ZA1okoZW-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cb16ef420038f2bede2deb3878b529f0e6ea7729
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/2ce0b86d1a6546d78dc4151d98a67537b8cc8669
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review larry-lai/mfd-Add-support-for-UP-board-CPLD-FPGA/20230425-232744
-        git checkout cb16ef420038f2bede2deb3878b529f0e6ea7729
+        git fetch --no-tags linux-review Shenghao-Ding/ASoC-dt-bindings-Add-tas2781-amplifier/20230502-133533
+        git checkout 2ce0b86d1a6546d78dc4151d98a67537b8cc8669
         # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=s390 
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305022231.zyZXagsH-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305022338.ZA1okoZW-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   drivers/mfd/upboard-fpga.c:448:49: warning: data argument not used by format string [-Wformat-extra-args]
-                   dev_err(fpga->dev, "Failed to add GPIO LEDs", ret);
-                                      ~~~~~~~~~~~~~~~~~~~~~~~~~  ^
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^
->> drivers/mfd/upboard-fpga.c:486:20: error: assigning to 'struct regmap_config *' from 'const struct regmap_config *const' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-           fpga->cpld_config = fpga_data->cpld_config;
-                             ^ ~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +486 drivers/mfd/upboard-fpga.c
-
-   465	
-   466	static int __init upboard_fpga_probe(struct platform_device *pdev)
-   467	{
-   468		struct upboard_fpga *fpga;
-   469		const struct acpi_device_id *id;
-   470		const struct upboard_fpga_data *fpga_data;
-   471		int ret;
-   472		struct device *dev = &pdev->dev;
-   473	
-   474		id = acpi_match_device(upboard_fpga_acpi_match, dev);
-   475		if (!id)
-   476			return -ENODEV;
-   477	
-   478		fpga_data = (const struct upboard_fpga_data *) id->driver_data;
-   479	
-   480		fpga = devm_kzalloc(dev, sizeof(*fpga), GFP_KERNEL);
-   481		if (!fpga)
-   482			return -ENOMEM;
-   483	
-   484		platform_set_drvdata(pdev, fpga);
-   485		fpga->regmap = devm_regmap_init(dev, NULL, fpga, fpga_data->cpld_config);
- > 486		fpga->cpld_config = fpga_data->cpld_config;
-   487	
-   488		if (IS_ERR(fpga->regmap))
-   489			return PTR_ERR(fpga->regmap);
-   490	
-   491		ret = upboard_fpga_gpio_init(fpga);
-   492		if (ret) {
-   493			/*
-   494			 * This is for compatiable with some upboards w/o FPGA firmware,
-   495			 * so just showing debug info and do not return directly.
-   496			 */
-   497			dev_warn(dev, "Failed to initialize FPGA common GPIOs: %d", ret);
-   498		} else {
-   499			upboard_fpga_show_firmware_info(fpga);
-   500		}
-   501	
-   502		/* register GPIO LEDs */
-   503		ret = upboard_led_gpio_register(fpga);
-   504		if (ret) {
-   505			/*
-   506			 * This is for compatiable with some upboards w/o LEDs.
-   507			 */
-   508			dev_warn(dev, "Failed to register LEDs: %d", ret);
-   509		}
-   510	
-   511		return devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
-   512					    fpga_data->cells,
-   513					    fpga_data->ncells,
-   514					    NULL, 0, NULL);
-   515	}
-   516	
+   In file included from sound/soc/codecs/tas2781-i2c.c:24:
+   In file included from include/linux/of_gpio.h:14:
+   In file included from include/linux/gpio/driver.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from sound/soc/codecs/tas2781-i2c.c:24:
+   In file included from include/linux/of_gpio.h:14:
+   In file included from include/linux/gpio/driver.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from sound/soc/codecs/tas2781-i2c.c:24:
+   In file included from include/linux/of_gpio.h:14:
+   In file included from include/linux/gpio/driver.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> sound/soc/codecs/tas2781-i2c.c:40:34: warning: unused variable 'tasdevice_of_match' [-Wunused-const-variable]
+   static const struct of_device_id tasdevice_of_match[] = {
+                                    ^
+   13 warnings generated.
+--
+   s390x-linux-ld: DWARF error: could not find abbrev number 48
+>> sound/soc/codecs/tas2781-lib.o:(.rodata+0x0): multiple definition of `dvc_tlv'; s390x-linux-ld: DWARF error: could not find abbrev number 9338
+   drivers/firmware/ti/tasdevice-fmw.o:(.rodata+0x2a0): first defined here
+>> s390x-linux-ld: sound/soc/codecs/tas2781-lib.o:(.rodata+0x20): multiple definition of `amp_vol_tlv'; drivers/firmware/ti/tasdevice-fmw.o:(.rodata+0x2c0): first defined here
+   s390x-linux-ld: DWARF error: could not find abbrev number 1109429
+>> sound/soc/codecs/tas2781-i2c.o:(.rodata+0x20): multiple definition of `dvc_tlv'; drivers/firmware/ti/tasdevice-fmw.o:(.rodata+0x2a0): first defined here
+   s390x-linux-ld: sound/soc/codecs/tas2781-i2c.o:(.rodata+0x40): multiple definition of `amp_vol_tlv'; drivers/firmware/ti/tasdevice-fmw.o:(.rodata+0x2c0): first defined here
 
 -- 
 0-DAY CI Kernel Test Service
