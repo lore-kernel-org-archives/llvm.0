@@ -1,172 +1,322 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28697E;
-	Tue,  2 May 2023 07:46:36 +0000 (UTC)
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-3f09b4a1584so20913615e9.2;
-        Tue, 02 May 2023 00:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683013595; x=1685605595;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OR9YpJn1XmXl3Ur0RRGrvM6I+ArJCgZTqUBRtnIQvME=;
-        b=FJ3zAj+RDHf4b7+E9OTJr+7SDCvUicN1UEdSiMGqfFqCL6r8rfn5/zDeQwMngS4IRR
-         yUb4a5inKTmz9Ef++XRGQYTKa8WYnY9XW/G5qKCcP3/cjBxYTpb6G0X16cHr3DlY117Y
-         emsAuKhus2tM9OAWNLO3SbALLsw64qBfgY2WBUEPzbFNTn2oc6FZVkXiEtkFv/r7N0ZH
-         5iMpGgcyV6WzvbA/td/yr/rnb36RxLlcaHdNHSMEA7MGKjJJkTZ97AE6Jnav5ce7vlj4
-         rnHJy1E+mhO4YryXCDy+NSnVthbiFlvHvMxxIHKF9izPSS4Xp56/KCr4yqeHH8j9q8tj
-         5QFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683013595; x=1685605595;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OR9YpJn1XmXl3Ur0RRGrvM6I+ArJCgZTqUBRtnIQvME=;
-        b=Yog8XFOlMRtU9aZD8P3XIZ8VuFJs5T0UXB6YvxIuOhLx+1hOXz5ctWfnBO5hK3WI0K
-         jqd0wAFMJyogg9LAGfWxftvdw5OjihoFbwZSNLUNgC0mAJ+NKHl1+ovFulG//ePApJNR
-         xJXXOjEKcA19Iu81d2LEpuMfGOOgzHtG/FNrXIeTF9pNz7jdf1FdCcnqt6cBrNKH5gq3
-         OJmwL3CYZzOcJLgP0gDm4xBauyExVwNDLH9GUGx31y+yb/CGp71Wkw+SqFIOjFLRZw/z
-         BOCxYEnmQUwKhSFLYhAzXtdbBMmywb+hb3WBczGL7nk8hQug2ybjMst0bIDIxFPC0AQz
-         4Sug==
-X-Gm-Message-State: AC+VfDwT3exLM1V6QwXhgJumDmluOw0CujNvMGSIc9mK2szI1iG3CjFN
-	9xgpWmnMXviqjKMywLYHvG8=
-X-Google-Smtp-Source: ACHHUZ4Z/HfrPUlnrmtGlOLEbKEp7/fLkwmU2jsyp311hPN2hRmhdn1ZW0lpXljWY1CXaFwbFQ4akQ==
-X-Received: by 2002:a05:6000:11c5:b0:2f5:83a8:a9a9 with SMTP id i5-20020a05600011c500b002f583a8a9a9mr10911632wrx.16.1683013594719;
-        Tue, 02 May 2023 00:46:34 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id o3-20020a05600c378300b003ef5f77901dsm34412183wmr.45.2023.05.02.00.46.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 00:46:33 -0700 (PDT)
-Date: Tue, 2 May 2023 08:46:33 +0100
-From: Lorenzo Stoakes <lstoakes@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Jason Gunthorpe <jgg@ziepe.ca>,
-	Jens Axboe <axboe@kernel.dk>, Matthew Wilcox <willy@infradead.org>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Christian Benvenuti <benve@cisco.com>,
-	Nelson Escobar <neescoba@cisco.com>,
-	Bernard Metzler <bmt@zurich.ibm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Bjorn Topel <bjorn@kernel.org>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing
- to file-backed mappings
-Message-ID: <db733020-c6c7-43f9-9cbf-0e5fb18b2f01@lucifer.local>
-References: <dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes@gmail.com>
- <202305021142.vBYXxxEh-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF12A45;
+	Tue,  2 May 2023 09:48:49 +0000 (UTC)
+Received: from [IPV6:2405:201:0:21ea:73f6:2283:f432:3936] (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: shreeya)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 8C9AA66029AB;
+	Tue,  2 May 2023 10:48:44 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1683020927;
+	bh=BTDP5HQlkjzIWb3E0kJ/uZm+RAC0iF2hvRKA0Tg7Bn0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PWvIxPMjXhzU3qoNaB3i1oE/ZQ9YV4vibOjIaRY4pw/dcd3S1e3c2jvAf5J+6ZZiy
+	 zK5t2UyNs8SWVt07L3g6O1TO41J1HkI3g7cC/BHclvKCTmr+EJlDESje9Oyw4fniVz
+	 gUL9Tyy1pmehNS8gUjzagLwuieX66RRcGHAUy+pPsVZQMhQ6qZq9cDPNRyqryIeuNf
+	 F+qnJ2tM+NSVh/I7oOiQM3v1o9KtxYdgAKwsUHWh/k/SM457ZNAv9FXZ0vpW42v3wD
+	 M/u8BbZEPH+sQI450thEGix9czWItzeXo7AphxYUjTW1ASqzP5tV9Wri+qUz+L1Ml4
+	 NUi5mRhReHwbA==
+Message-ID: <1209349b-9634-c1ca-d2ee-182e8dec2de5@collabora.com>
+Date: Tue, 2 May 2023 15:18:41 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305021142.vBYXxxEh-lkp@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+To: Thorsten Leemhuis <regressions@leemhuis.info>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Marek <michal.lkml@markovi.net>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev,
+ kernelci@lists.linux.dev,
+ "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+ Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+ ricardo.canuelo@collabora.com, denys.f@collabora.com
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com>
+ <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
+ <325ae81d-b3a5-71b3-39e9-96408968ab0b@leemhuis.info>
+Content-Language: en-US
+From: Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <325ae81d-b3a5-71b3-39e9-96408968ab0b@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 02, 2023 at 11:33:29AM +0800, kernel test robot wrote:
-> Hi Lorenzo,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on akpm-mm/mm-everything]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-mmap-separate-writenotify-and-dirty-tracking-logic/20230502-071520
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/dee4f4ad6532b0f94d073da263526de334d5d7e0.1682981880.git.lstoakes%40gmail.com
-> patch subject: [PATCH v6 3/3] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to file-backed mappings
-> config: arm-randconfig-r013-20230502 (https://download.01.org/0day-ci/archive/20230502/202305021142.vBYXxxEh-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://github.com/intel-lab-lkp/linux/commit/602bb9fab888bd9176b8eeb80a0da68499c343ed
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Lorenzo-Stoakes/mm-mmap-separate-writenotify-and-dirty-tracking-logic/20230502-071520
->         git checkout 602bb9fab888bd9176b8eeb80a0da68499c343ed
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202305021142.vBYXxxEh-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
-> >> mm/gup.c:114:49: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
->    static bool stabilise_mapping_rcu(struct folio *)
->                                                    ^
->    1 warning generated.
->
->
-> vim +114 mm/gup.c
->
->    108
->    109	static void unlock_rcu(void)
->    110	{
->    111		rcu_read_unlock();
->    112	}
->    113	#else
->  > 114	static bool stabilise_mapping_rcu(struct folio *)
->    115	{
->    116		return true;
->    117	}
->    118
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+Hi Thorsten,
 
-Am slightly surprised that's a C2x extension :)
+On 28/04/23 13:11, Thorsten Leemhuis wrote:
+> Hi Shreeya!
+>
+> On 27.04.23 13:53, Shreeya Patel wrote:
+>> On 19/09/22 22:38, Nick Desaulniers wrote:
+>>> cc-ifversion is GCC specific. Replace it with compiler specific
+>>> variants. Update the users of cc-ifversion to use these new macros.
+>>>
+>>> Link: https://github.com/ClangBuiltLinux/linux/issues/350
+>>> Link:
+>>> https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
+>>> Suggested-by: Bill Wendling <morbo@google.com>
+>>> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>>> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>> KernelCI found this patch causes a regression in the
+>> baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
+>> see the bisection report for more details [2].
+>>
+>> Let me know if you have any questions.
+>>
+>> [1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
+>> [2] https://groups.io/g/kernelci-results/message/40804> [...]
+>> #regzbot introduced: 88b61e3bff93
+> How much of this text is auto generated? I ask for two reasons:
 
--fix patch attached
+None of this text is auto generated yet but we plan to do it soon once
+we think the format of the reporting email is good enough for people to 
+understand
+and look into it. Which is why your comments are really helpful here.
 
-----8<----
-From 829cb87ddd84e4496310b12d26e65de11d5b9e53 Mon Sep 17 00:00:00 2001
-From: Lorenzo Stoakes <lstoakes@gmail.com>
-Date: Tue, 2 May 2023 08:40:48 +0100
-Subject: [PATCH] mm/gup: disallow FOLL_LONGTERM GUP-fast writing to
- file-backed mappings
 
-Fix compiler warning.
+>
+> * You made regzbot track this, which is great, but didn't specify a
+> title. That is fine in general, if the subject round about says what the
+> regression is about. But in this case it doesn't; hence it would be
+> great if you in the future could specify one through "#regzbot title:"
+> or adjust the mail's subject (I guess the former is what developers will
+> prefer).
 
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- mm/gup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 431618048a03..ffc3caf120fc 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -111,7 +111,7 @@ static void unlock_rcu(void)
- 	rcu_read_unlock();
- }
- #else
--static bool stabilise_mapping_rcu(struct folio *)
-+static bool stabilise_mapping_rcu(struct folio *folio)
- {
- 	return true;
- }
---
-2.40.1
+Noted. If I think the title is not very explanatory then I'll change it 
+to reflect the problem in future.
+
+
+> * I'm not a developer that has to look into bugs like this, but from my
+> experience I expect a lot more developers are likely willing to look
+> into reports like this if you specified what the actual problem is --
+> ideally with the relevant error messages.
+>
+> Side note: I for one still am unsure what this is actually about after
+> looking at the page you provided as [1] and clicking on a few links
+> there (which took me a few minutes, which I guess not everyone is
+> willing to invest). I noticed two kernel warning in the log (one from
+> "arch/arm/kernel/insn.c:48 __arm_gen_branch+0x88/0xa4", the other
+> "kernel/trace/ftrace.c:2176 ftrace_bug+0x340/0x3b4") and a complaint
+> UBSAN (btw: those newlines in the logs make things harder to read, at
+> least for me).
+
+For this particular regression, it is possible that the following kernel 
+warnings/errors could be the reason of failure.
+
+
+   572 20:30:46.811318  <3>[    0.417001][    T1] UBSAN: 
+array-index-out-of-bounds in ../arch/arm/mach-sunxi/mc_smp.c:811:29
+   574 20:30:46.812203  <3>[    0.417963][    T1] index 2 is out of 
+range for type 'sunxi_mc_smp_data [2]'
+
+
+and
+
+   426 20:30:44.726421  <4>[    0.000000][    T0] WARNING: CPU: 0 PID: 0 
+at kernel/trace/ftrace.c:2176 ftrace_bug+0x340/0x3b4
+   428 20:30:44.727284  <4>[    0.000000][    T0] Modules linked in:
+   430 20:30:44.728487  <4>[    0.000000][    T0] CPU: 0 PID: 0 Comm: 
+swapper Tainted: G        W          6.3.0 #1
+.........
+
+I understand that it might be more helpful to atleast put little more 
+information about what is causing the regression here.
+I'll provide some more details in future for it to be easy for 
+developers to look into it.
+
+> To check if those were old or new problems, I tired to go back in the
+> history and on page 9 found an entry for the last succeeding test. But
+> clicking on the logs got me a 404 :-/
+>
+> Then I looked at the logs on [1] again and in the html view "Boot
+> result: FAIL". Is that the actual problem?
+
+Unfortunately, we do have some broken links in the current KernelCI 
+dashboard but the KernelCI team
+is working on a new API and database interface which will fix these issues.
+It might not be worth to spend time to fix issues on the current 
+dashboard since the process for getting the archived
+logs is not very straightforward.
+
+What I can do from my side is to attach logs of the working kernel if I 
+can get them through LAVA.
+But one thing to note is that even LAVA stores limited logs and we won't 
+be able to provide them always like in this case
+since the regression has been happening from a long time.
+
+Thanks for your input though, we will work on it and get a better format 
+ready for reporting the regressions.
+
+
+Thanks,
+Shreeya Patel
+
+>
+> Ciao, Thorsten
+>
+> P.S.: let me update the regzbot title while at it:
+>
+> #regzbot title: kernelci: qemu_arm-virt-gicv3-uefi stopped booting
+>
+>>> ---
+>>> Changes v3 -> v4:
+>>> * Split into its own patch again from series, as per Masahiro.
+>>> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
+>>>     clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
+>>>
+>>>    Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
+>>>    Makefile                                    |  6 ++---
+>>>    drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
+>>>    scripts/Makefile.compiler                   | 10 ++++---
+>>>    scripts/Makefile.extrawarn                  |  4 +--
+>>>    5 files changed, 29 insertions(+), 22 deletions(-)
+>>>
+>>> diff --git a/Documentation/kbuild/makefiles.rst
+>>> b/Documentation/kbuild/makefiles.rst
+>>> index 11a296e52d68..ee7e3ea1fbe1 100644
+>>> --- a/Documentation/kbuild/makefiles.rst
+>>> +++ b/Documentation/kbuild/makefiles.rst
+>>> @@ -682,22 +682,27 @@ more details, with real examples.
+>>>        In the above example, -Wno-unused-but-set-variable will be added to
+>>>        KBUILD_CFLAGS only if gcc really accepts it.
+>>>    -    cc-ifversion
+>>> -    cc-ifversion tests the version of $(CC) and equals the fourth
+>>> parameter
+>>> -    if version expression is true, or the fifth (if given) if the
+>>> version
+>>> -    expression is false.
+>>> +    gcc-min-version
+>>> +    gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is
+>>> greater than
+>>> +    or equal to the provided value and evaluates to y if so.
+>>>          Example::
+>>>    -        #fs/reiserfs/Makefile
+>>> -        ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
+>>> +        cflags-$(call gcc-min-version, 70100) := -foo
+>>>    -    In this example, ccflags-y will be assigned the value -O1 if the
+>>> -    $(CC) version is less than 4.2.
+>>> -    cc-ifversion takes all the shell operators:
+>>> -    -eq, -ne, -lt, -le, -gt, and -ge
+>>> -    The third parameter may be a text as in this example, but it may
+>>> also
+>>> -    be an expanded variable or a macro.
+>>> +    In this example, cflags-y will be assigned the value -foo if
+>>> $(CC) is gcc and
+>>> +    $(CONFIG_GCC_VERSION) is >= 7.1.
+>>> +
+>>> +    clang-min-version
+>>> +    clang-min-version tests if the value of $(CONFIG_CLANG_VERSION)
+>>> is greater
+>>> +    than or equal to the provided value and evaluates to y if so.
+>>> +
+>>> +    Example::
+>>> +
+>>> +        cflags-$(call clang-min-version, 110000) := -foo
+>>> +
+>>> +    In this example, cflags-y will be assigned the value -foo if
+>>> $(CC) is clang
+>>> +    and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
+>>>          cc-cross-prefix
+>>>        cc-cross-prefix is used to check if there exists a $(CC) in path
+>>> with
+>>> diff --git a/Makefile b/Makefile
+>>> index 298f69060f10..411c8480b37e 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
+>>>      KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+>>>    KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+>>> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>>>      ifdef CONFIG_CC_IS_CLANG
+>>>    KBUILD_CPPFLAGS += -Qunused-arguments
+>>> @@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
+>>>    KBUILD_CFLAGS += -Wno-maybe-uninitialized
+>>>    endif
+>>>    -ifdef CONFIG_CC_IS_GCC
+>>>    # The allocators already balk at large sizes, so silence the compiler
+>>>    # warnings for bounds checks involving those possible values. While
+>>>    # -Wno-alloc-size-larger-than would normally be used here, earlier
+>>> versions
+>>> @@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
+>>>    # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
+>>>    # choice, we must perform a versioned check to disable this warning.
+>>>    # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
+>>> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901,
+>>> -Wno-alloc-size-larger-than)
+>>> -endif
+>>> +KBUILD_CFLAGS-$(call gcc-min-version, 90100) +=
+>>> -Wno-alloc-size-larger-than
+>>> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>>>      # disable invalid "can't wrap" optimizations for signed / pointers
+>>>    KBUILD_CFLAGS    += -fno-strict-overflow
+>>> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>>> b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>>> index cb81ed2fbd53..d70838edba80 100644
+>>> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>>> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>>> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
+>>>    endif
+>>>      ifdef CONFIG_CC_IS_GCC
+>>> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
+>>> +ifneq ($(call gcc-min-version, 70100),y)
+>>>    IS_OLD_GCC = 1
+>>>    endif
+>>>    endif
+>>> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+>>> index 94d0d40cddb3..9d18fb91890e 100644
+>>> --- a/scripts/Makefile.compiler
+>>> +++ b/scripts/Makefile.compiler
+>>> @@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
+>>>    cc-disable-warning = $(call try-run,\
+>>>        $(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip
+>>> $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
+>>>    -# cc-ifversion
+>>> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
+>>> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] &&
+>>> echo $(3) || echo $(4))
+>>> +# gcc-min-version
+>>> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
+>>> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
+>>> +
+>>> +# clang-min-version
+>>> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
+>>> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] &&
+>>> echo y)
+>>>      # ld-option
+>>>    # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+>>> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+>>> index 6ae482158bc4..5769c1939d40 100644
+>>> --- a/scripts/Makefile.extrawarn
+>>> +++ b/scripts/Makefile.extrawarn
+>>> @@ -48,7 +48,7 @@ else
+>>>    ifdef CONFIG_CC_IS_CLANG
+>>>    KBUILD_CFLAGS += -Wno-initializer-overrides
+>>>    # Clang before clang-16 would warn on default argument promotions.
+>>> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
+>>> +ifneq ($(call clang-min-version, 160000),y)
+>>>    # Disable -Wformat
+>>>    KBUILD_CFLAGS += -Wno-format
+>>>    # Then re-enable flags that were part of the -Wformat group that aren't
+>>> @@ -56,7 +56,7 @@ KBUILD_CFLAGS += -Wno-format
+>>>    KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
+>>>    KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
+>>>    # Requires clang-12+.
+>>> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
+>>> +ifeq ($(call clang-min-version, 120000),y)
+>>>    KBUILD_CFLAGS += -Wformat-insufficient-args
+>>>    endif
+>>>    endif
+>>
