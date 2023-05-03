@@ -1,195 +1,302 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818B6BE4C;
-	Wed,  3 May 2023 20:58:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683147515; x=1714683515;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=g2Jhm9JCN1ufFaAMvraCMRp8lbUi7LFZ3NAXboYQDG8=;
-  b=XVsUZbyOJTlMTVwVeE0xfetHCUcww4EGbeOmdNOQn/LSgb3R8nuRhW0d
-   nea9L7z0cMfL/iU7RtXuwhmbdioxEwCGmm3eD4L2OmtWCoNirtHCucrjz
-   kohH4+wgx0jXAxUIY7fcwnsMrKNEwekI+dmXTqJCq8sOhtKwawpyjlCd1
-   wwrTGxGmch9k5/eQpBilTnaKcKNeY1PSaHOKS0Xy6D0soeLu0vmsEBqE7
-   FkonVeO61+tHSmur2SbJHSgOLv7jZykmqnoc8PndN5cKtgDflopVU21cn
-   J8plar2snmjBWDhvemMP9desYGa+2g6MHjgfTpv5YeclWmCWy1l85wef7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="329126187"
-X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
-   d="scan'208";a="329126187"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 13:58:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="699569362"
-X-IronPort-AV: E=Sophos;i="5.99,248,1677571200"; 
-   d="scan'208";a="699569362"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 03 May 2023 13:58:33 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1puJYW-0002HI-21;
-	Wed, 03 May 2023 20:58:32 +0000
-Date: Thu, 4 May 2023 04:57:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v7 02/13] media: AV1: Make sure that bit depth in
- correctly initialize
-Message-ID: <202305040452.AOtjEcoR-lkp@intel.com>
-References: <20230503083438.85139-3-benjamin.gaignard@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C5EBE4C;
+	Wed,  3 May 2023 21:03:03 +0000 (UTC)
+Received: from [IPV6:2405:201:0:21ea:73f6:2283:f432:3936] (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: shreeya)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 93B5F66003B2;
+	Wed,  3 May 2023 22:02:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1683147776;
+	bh=hzfSzlnUhcdX0pDlyFO/dCFvQF8XqY2dMwF+cxcXcf0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Zg0hDE4B/b/ZjpBq5avJ3zHsxx82UAa3wo+J2BcsvMjpB81v894LqIcXBWt2jy6Om
+	 MPCvvgDfRk9luMU8VKxFCl1DWC+pEDDaytCN2jlZ3j5U/WjuObinSeYzy/TlUU3DRR
+	 MGzkLJxAypuPtuq5pVBSx9Hp1DKzvOhIx3tpn8hGqmXnOnDjWTJNU6X8O/QIu38Hcb
+	 XhirDyu+8kQcXjPc0ParrssKW9d4G+RkLwwQz0mqyCpDRmBByIVYZ6dRoP+5v0gqdk
+	 TG4EfRsGlI9zAz8e1Cvyb8t2pc87NNBeA9LJ7rQnUmsREnxeaZ1FE3AVSVLR3Dvvvm
+	 PjP3/6ElfvapA==
+Message-ID: <89961dfc-d40f-78e4-5d34-b86b7d152182@collabora.com>
+Date: Thu, 4 May 2023 02:32:49 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230503083438.85139-3-benjamin.gaignard@collabora.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Michal Marek <michal.lkml@markovi.net>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ clang-built-linux <llvm@lists.linux.dev>, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, regressions@lists.linux.dev,
+ "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+ Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+ denys.f@collabora.com, ricardo.canuelo@collabora.com,
+ kernelci@lists.linux.dev
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com>
+ <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
+ <CAKwvOdmSrAxx-YY1Na3BSdYuxXCPKK+F0K5V6i+adTn_bVJEsw@mail.gmail.com>
+Content-Language: en-US
+From: Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <CAKwvOdmSrAxx-YY1Na3BSdYuxXCPKK+F0K5V6i+adTn_bVJEsw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Benjamin,
+Hi Nick,
 
-kernel test robot noticed the following build errors:
+On 28/04/23 22:57, Nick Desaulniers wrote:
+> On Thu, Apr 27, 2023 at 4:54 AM Shreeya Patel
+> <shreeya.patel@collabora.com> wrote:
+>> Hi Nick,
+>>
+>> On 19/09/22 22:38, Nick Desaulniers wrote:
+>>> cc-ifversion is GCC specific. Replace it with compiler specific
+>>> variants. Update the users of cc-ifversion to use these new macros.
+>>>
+>>> Link: https://github.com/ClangBuiltLinux/linux/issues/350
+>>> Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
+>>> Suggested-by: Bill Wendling <morbo@google.com>
+>>> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>>> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>> KernelCI found this patch causes a regression in the
+>> baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
+>> see the bisection report for more details [2].
+>>
+>> Let me know if you have any questions.
+>>
+>>
+>> [1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
+> Hi Shreeya,
+> Thanks for the report.
+>
+> When I click the above link, then click `multi_v7_defconfig+debug` to
+> get the config necessary to reproduce, I get an HTTP 404.
+> https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/kernel.config
+>
+> Same for zImage
+> https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/zImage
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on rockchip/for-next linus/master v6.3 next-20230428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Apologies for the broken links. We will try to fix the important ones if 
+we can but in the meantime,
+following is the correct link that you can refer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/dt-bindings-media-rockchip-vpu-Add-rk3588-vpu-compatible/20230503-163702
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230503083438.85139-3-benjamin.gaignard%40collabora.com
-patch subject: [PATCH v7 02/13] media: AV1: Make sure that bit depth in correctly initialize
-config: i386-randconfig-a011-20230501 (https://download.01.org/0day-ci/archive/20230504/202305040452.AOtjEcoR-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b6ab729a6726070daaa93896fdbd8e11c8c8a26d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Benjamin-Gaignard/dt-bindings-media-rockchip-vpu-Add-rk3588-vpu-compatible/20230503-163702
-        git checkout b6ab729a6726070daaa93896fdbd8e11c8c8a26d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/media/v4l2-core/
+config :-
+https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/config/kernel.config
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305040452.AOtjEcoR-lkp@intel.com/
+zImage :-
+https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/kernel/zImage
 
-All errors (new ones prefixed by >>):
+If you notice, they are present under the kernel directory and same way 
+you can find links for other kernel
+builds if you'd like to check them out.
 
->> drivers/media/v4l2-core/v4l2-ctrls-core.c:161:7: error: use of undeclared identifier 'V4L2_CTRL_TYPE_AV1_SEQUENCE'; did you mean 'V4L2_CTRL_TYPE_MPEG2_SEQUENCE'?
-           case V4L2_CTRL_TYPE_AV1_SEQUENCE:
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-                V4L2_CTRL_TYPE_MPEG2_SEQUENCE
-   include/uapi/linux/videodev2.h:1893:2: note: 'V4L2_CTRL_TYPE_MPEG2_SEQUENCE' declared here
-           V4L2_CTRL_TYPE_MPEG2_SEQUENCE       = 0x0251,
-           ^
->> drivers/media/v4l2-core/v4l2-ctrls-core.c:163:17: error: incomplete definition of type 'struct v4l2_ctrl_av1_sequence'
-                   p_av1_sequence->bit_depth = 8;
-                   ~~~~~~~~~~~~~~^
-   drivers/media/v4l2-core/v4l2-ctrls-core.c:114:9: note: forward declaration of 'struct v4l2_ctrl_av1_sequence'
-           struct v4l2_ctrl_av1_sequence *p_av1_sequence;
-                  ^
->> drivers/media/v4l2-core/v4l2-ctrls-core.c:161:7: error: duplicate case value 'V4L2_CTRL_TYPE_MPEG2_SEQUENCE'
-           case V4L2_CTRL_TYPE_AV1_SEQUENCE:
-                ^
-   drivers/media/v4l2-core/v4l2-ctrls-core.c:123:7: note: previous case defined here
-           case V4L2_CTRL_TYPE_MPEG2_SEQUENCE:
-                ^
-   3 errors generated.
+> If I click on the log
+> https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm-virt-gicv3-uefi.txt
+> It looks like the machine powered up, then powered off. Is the test
+> actually failing?
+
+I recommend checking the html logs from the kernelci dashboard.
+Also, FYI baseline.login test failure means that the device failed to 
+boot which I think is causing by the issues that you pointed out.
+
+<3>[    0.417001][    T1] UBSAN: array-index-out-of-bounds in
+../arch/arm/mach-sunxi/mc_smp.c:811:29
+
+And potentially another issue with ftrace
+
+<4>[    0.000000][    T0] WARNING: CPU: 0 PID: 0 at
+kernel/trace/ftrace.c:2176 ftrace_bug+0x340/0x3b4
 
 
-vim +161 drivers/media/v4l2-core/v4l2-ctrls-core.c
+Let me know if you need more information from my side to reproduce this 
+on your end.
 
-   103	
-   104	static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
-   105				      union v4l2_ctrl_ptr ptr)
-   106	{
-   107		struct v4l2_ctrl_mpeg2_sequence *p_mpeg2_sequence;
-   108		struct v4l2_ctrl_mpeg2_picture *p_mpeg2_picture;
-   109		struct v4l2_ctrl_mpeg2_quantisation *p_mpeg2_quant;
-   110		struct v4l2_ctrl_vp8_frame *p_vp8_frame;
-   111		struct v4l2_ctrl_vp9_frame *p_vp9_frame;
-   112		struct v4l2_ctrl_fwht_params *p_fwht_params;
-   113		struct v4l2_ctrl_h264_scaling_matrix *p_h264_scaling_matrix;
-   114		struct v4l2_ctrl_av1_sequence *p_av1_sequence;
-   115		void *p = ptr.p + idx * ctrl->elem_size;
-   116	
-   117		if (ctrl->p_def.p_const)
-   118			memcpy(p, ctrl->p_def.p_const, ctrl->elem_size);
-   119		else
-   120			memset(p, 0, ctrl->elem_size);
-   121	
-   122		switch ((u32)ctrl->type) {
-   123		case V4L2_CTRL_TYPE_MPEG2_SEQUENCE:
-   124			p_mpeg2_sequence = p;
-   125	
-   126			/* 4:2:0 */
-   127			p_mpeg2_sequence->chroma_format = 1;
-   128			break;
-   129		case V4L2_CTRL_TYPE_MPEG2_PICTURE:
-   130			p_mpeg2_picture = p;
-   131	
-   132			/* interlaced top field */
-   133			p_mpeg2_picture->picture_structure = V4L2_MPEG2_PIC_TOP_FIELD;
-   134			p_mpeg2_picture->picture_coding_type =
-   135						V4L2_MPEG2_PIC_CODING_TYPE_I;
-   136			break;
-   137		case V4L2_CTRL_TYPE_MPEG2_QUANTISATION:
-   138			p_mpeg2_quant = p;
-   139	
-   140			memcpy(p_mpeg2_quant->intra_quantiser_matrix,
-   141			       mpeg2_intra_quant_matrix,
-   142			       ARRAY_SIZE(mpeg2_intra_quant_matrix));
-   143			/*
-   144			 * The default non-intra MPEG-2 quantisation
-   145			 * coefficients are all 16, as per the specification.
-   146			 */
-   147			memset(p_mpeg2_quant->non_intra_quantiser_matrix, 16,
-   148			       sizeof(p_mpeg2_quant->non_intra_quantiser_matrix));
-   149			break;
-   150		case V4L2_CTRL_TYPE_VP8_FRAME:
-   151			p_vp8_frame = p;
-   152			p_vp8_frame->num_dct_parts = 1;
-   153			break;
-   154		case V4L2_CTRL_TYPE_VP9_FRAME:
-   155			p_vp9_frame = p;
-   156			p_vp9_frame->profile = 0;
-   157			p_vp9_frame->bit_depth = 8;
-   158			p_vp9_frame->flags |= V4L2_VP9_FRAME_FLAG_X_SUBSAMPLING |
-   159				V4L2_VP9_FRAME_FLAG_Y_SUBSAMPLING;
-   160			break;
- > 161		case V4L2_CTRL_TYPE_AV1_SEQUENCE:
-   162			p_av1_sequence = p;
- > 163			p_av1_sequence->bit_depth = 8;
-   164			break;
-   165		case V4L2_CTRL_TYPE_FWHT_PARAMS:
-   166			p_fwht_params = p;
-   167			p_fwht_params->version = V4L2_FWHT_VERSION;
-   168			p_fwht_params->width = 1280;
-   169			p_fwht_params->height = 720;
-   170			p_fwht_params->flags = V4L2_FWHT_FL_PIXENC_YUV |
-   171				(2 << V4L2_FWHT_FL_COMPONENTS_NUM_OFFSET);
-   172			break;
-   173		case V4L2_CTRL_TYPE_H264_SCALING_MATRIX:
-   174			p_h264_scaling_matrix = p;
-   175			/*
-   176			 * The default (flat) H.264 scaling matrix when none are
-   177			 * specified in the bitstream, this is according to formulas
-   178			 *  (7-8) and (7-9) of the specification.
-   179			 */
-   180			memset(p_h264_scaling_matrix, 16, sizeof(*p_h264_scaling_matrix));
-   181			break;
-   182		}
-   183	}
-   184	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Shreeya Patel
+> I was able to boot ARCH=arm defconfig with CC=arm-linux-gnueabihf-gcc
+> (Debian 10.2.1-6) in QEMU just fine.  So I'm going to need some more
+> information to help reproduce what specifically is failing.
+>
+> Linux version 6.3.0 (root@61385772abae) (arm-linux-gnueabihf-gcc
+> (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian)
+> 2.35.2) #1 SMP Fri Apr 28 17:19:59 UTC 2023
+>
+> ---
+>
+> It does look like UBSAN is flagging an array OOB:
+>
+> <3>[    0.417001][    T1] UBSAN: array-index-out-of-bounds in
+> ../arch/arm/mach-sunxi/mc_smp.c:811:29
+>
+> And potentially another issue with ftrace
+>
+> <4>[    0.000000][    T0] WARNING: CPU: 0 PID: 0 at
+> kernel/trace/ftrace.c:2176 ftrace_bug+0x340/0x3b4
+>
+>
+>
+>> [2] https://groups.io/g/kernelci-results/message/40804
+>>
+>>
+>> Thanks,
+>> Shreeya Patel
+>>
+>> #regzbot introduced: 88b61e3bff93
+>>
+>>> ---
+>>> Changes v3 -> v4:
+>>> * Split into its own patch again from series, as per Masahiro.
+>>> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
+>>>     clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
+>>>
+>>>    Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
+>>>    Makefile                                    |  6 ++---
+>>>    drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
+>>>    scripts/Makefile.compiler                   | 10 ++++---
+>>>    scripts/Makefile.extrawarn                  |  4 +--
+>>>    5 files changed, 29 insertions(+), 22 deletions(-)
+>>>
+>>> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+>>> index 11a296e52d68..ee7e3ea1fbe1 100644
+>>> --- a/Documentation/kbuild/makefiles.rst
+>>> +++ b/Documentation/kbuild/makefiles.rst
+>>> @@ -682,22 +682,27 @@ more details, with real examples.
+>>>        In the above example, -Wno-unused-but-set-variable will be added to
+>>>        KBUILD_CFLAGS only if gcc really accepts it.
+>>>
+>>> -    cc-ifversion
+>>> -     cc-ifversion tests the version of $(CC) and equals the fourth parameter
+>>> -     if version expression is true, or the fifth (if given) if the version
+>>> -     expression is false.
+>>> +    gcc-min-version
+>>> +     gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater than
+>>> +     or equal to the provided value and evaluates to y if so.
+>>>
+>>>        Example::
+>>>
+>>> -             #fs/reiserfs/Makefile
+>>> -             ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
+>>> +             cflags-$(call gcc-min-version, 70100) := -foo
+>>>
+>>> -     In this example, ccflags-y will be assigned the value -O1 if the
+>>> -     $(CC) version is less than 4.2.
+>>> -     cc-ifversion takes all the shell operators:
+>>> -     -eq, -ne, -lt, -le, -gt, and -ge
+>>> -     The third parameter may be a text as in this example, but it may also
+>>> -     be an expanded variable or a macro.
+>>> +     In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
+>>> +     $(CONFIG_GCC_VERSION) is >= 7.1.
+>>> +
+>>> +    clang-min-version
+>>> +     clang-min-version tests if the value of $(CONFIG_CLANG_VERSION) is greater
+>>> +     than or equal to the provided value and evaluates to y if so.
+>>> +
+>>> +     Example::
+>>> +
+>>> +             cflags-$(call clang-min-version, 110000) := -foo
+>>> +
+>>> +     In this example, cflags-y will be assigned the value -foo if $(CC) is clang
+>>> +     and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
+>>>
+>>>        cc-cross-prefix
+>>>        cc-cross-prefix is used to check if there exists a $(CC) in path with
+>>> diff --git a/Makefile b/Makefile
+>>> index 298f69060f10..411c8480b37e 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
+>>>
+>>>    KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+>>>    KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+>>> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>>>
+>>>    ifdef CONFIG_CC_IS_CLANG
+>>>    KBUILD_CPPFLAGS += -Qunused-arguments
+>>> @@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
+>>>    KBUILD_CFLAGS += -Wno-maybe-uninitialized
+>>>    endif
+>>>
+>>> -ifdef CONFIG_CC_IS_GCC
+>>>    # The allocators already balk at large sizes, so silence the compiler
+>>>    # warnings for bounds checks involving those possible values. While
+>>>    # -Wno-alloc-size-larger-than would normally be used here, earlier versions
+>>> @@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
+>>>    # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
+>>>    # choice, we must perform a versioned check to disable this warning.
+>>>    # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
+>>> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901, -Wno-alloc-size-larger-than)
+>>> -endif
+>>> +KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
+>>> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>>>
+>>>    # disable invalid "can't wrap" optimizations for signed / pointers
+>>>    KBUILD_CFLAGS       += -fno-strict-overflow
+>>> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>>> index cb81ed2fbd53..d70838edba80 100644
+>>> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>>> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>>> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
+>>>    endif
+>>>
+>>>    ifdef CONFIG_CC_IS_GCC
+>>> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
+>>> +ifneq ($(call gcc-min-version, 70100),y)
+>>>    IS_OLD_GCC = 1
+>>>    endif
+>>>    endif
+>>> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+>>> index 94d0d40cddb3..9d18fb91890e 100644
+>>> --- a/scripts/Makefile.compiler
+>>> +++ b/scripts/Makefile.compiler
+>>> @@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
+>>>    cc-disable-warning = $(call try-run,\
+>>>        $(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
+>>>
+>>> -# cc-ifversion
+>>> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
+>>> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || echo $(4))
+>>> +# gcc-min-version
+>>> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
+>>> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
+>>> +
+>>> +# clang-min-version
+>>> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
+>>> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
+>>>
+>>>    # ld-option
+>>>    # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+>>> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+>>> index 6ae482158bc4..5769c1939d40 100644
+>>> --- a/scripts/Makefile.extrawarn
+>>> +++ b/scripts/Makefile.extrawarn
+>>> @@ -48,7 +48,7 @@ else
+>>>    ifdef CONFIG_CC_IS_CLANG
+>>>    KBUILD_CFLAGS += -Wno-initializer-overrides
+>>>    # Clang before clang-16 would warn on default argument promotions.
+>>> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
+>>> +ifneq ($(call clang-min-version, 160000),y)
+>>>    # Disable -Wformat
+>>>    KBUILD_CFLAGS += -Wno-format
+>>>    # Then re-enable flags that were part of the -Wformat group that aren't
+>>> @@ -56,7 +56,7 @@ KBUILD_CFLAGS += -Wno-format
+>>>    KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
+>>>    KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
+>>>    # Requires clang-12+.
+>>> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
+>>> +ifeq ($(call clang-min-version, 120000),y)
+>>>    KBUILD_CFLAGS += -Wformat-insufficient-args
+>>>    endif
+>>>    endif
+>
+>
