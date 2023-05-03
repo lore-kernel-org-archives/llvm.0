@@ -1,44 +1,43 @@
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE52927704;
-	Wed,  3 May 2023 17:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D4627704;
+	Wed,  3 May 2023 17:24:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683133433; x=1714669433;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=w2UlgMVK12rFSIwNdRPU4T/oyYTu3FSGNPrxLdrLjqk=;
-  b=TaUeSf7+SxjY63Py2BQC64IZUKMUR9fTMpvvqFzmYH9ceTACG9msPkX0
-   pwq6YQlP9cfCXDnpx/RczCzAInYA48IPbqG024G6s2BaBo4f0Uu7WVIRx
-   QQ0NBniJFP91lnSspjPPrNUT6EzhQ60gKcIBgpND8TpHzXy384fXXzAW8
-   72wh9Ba4v5XLbB30ZQQvhDXZJekuzwO/n2Zgh6wm5NIpmnx64nqcvF7xU
-   7gbGMbHPoUMWJ2rNrzc3ysJsaw03fIxUdFtqjmbuQRY1ujjVYsmAlGARb
-   kjhI1fDuuxSJB4vnieyLU9QaEdTl7g6ks/3oHiOd0r5B0FBR5O+CBbm6z
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="329067134"
+  t=1683134671; x=1714670671;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ictUyULjurCrIeBuakXm/Hst2gHg3co35QIND7kUM3M=;
+  b=nBT6OtB3fbtBlwLZkeVTPgtT0faMc3RRKb24e1W+3iNVfIhRnbIJZArJ
+   m3P5K0IOMQkVO37UYIqfNi2da2NJm92bank8porGeMPO25XGe9z28lEzi
+   dQmAHX99vEspH/9IUVK5tsBHreEtJl66stkcI18G71EkIoYOsATwYTDhO
+   EmE2itCTMR+VpyaFGPXpg5/pzF42qNHMAOyYo++F7+4CVKJSgOI4S+4NW
+   goKS/83uuwM1WmXxJXqg5Ljm2SqAlCGgUyMB1mIs4P9OAVk1zZ++vOpxh
+   7Qbi/SbcUvE0Dj7PaZzNXuELPbjwqGvBOFFeOV/j+Ys8ezDhglwVGiKWX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="328337462"
 X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
-   d="scan'208";a="329067134"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 10:03:38 -0700
+   d="scan'208";a="328337462"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 10:24:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="1026578335"
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="808353882"
 X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
-   d="scan'208";a="1026578335"
+   d="scan'208";a="808353882"
 Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 03 May 2023 10:03:25 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 03 May 2023 10:24:26 -0700
 Received: from kbuild by e3434d64424d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1puFsy-00029o-2u;
-	Wed, 03 May 2023 17:03:24 +0000
-Date: Thu, 4 May 2023 01:03:06 +0800
+	id 1puGDJ-0002AG-1W;
+	Wed, 03 May 2023 17:24:25 +0000
+Date: Thu, 4 May 2023 01:23:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+To: Raghavendra K T <raghavendra.kt@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:b4/virt-to-pfn-v6-4-rc1 11/12]
- drivers/net/xen-netback/netback.c:692:23: error: incompatible integer to
- pointer conversion passing 'unsigned long' to parameter of type 'const void
- *'
-Message-ID: <202305040041.ysofvjPz-lkp@intel.com>
+Subject: Re: [RFC PATCH V1 1/2] sched/numa: Introduce per vma scan counter
+Message-ID: <202305040103.BRgS5gsL-lkp@intel.com>
+References: <abd037023141f25f79c6bbbb801c8405e4c449a1.1683033105.git.raghavendra.kt@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,94 +46,161 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <abd037023141f25f79c6bbbb801c8405e4c449a1.1683033105.git.raghavendra.kt@amd.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git b4/virt-to-pfn-v6-4-rc1
-head:   042946296cd2b01e67500f6ca02c750fbd5d0046
-commit: abe98e4b9a19f13cca92d0121e49563052302103 [11/12] arm64: memory: Make virt_to_pfn() a static inline
-config: arm64-randconfig-r001-20230502 (https://download.01.org/0day-ci/archive/20230504/202305040041.ysofvjPz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
+Hi Raghavendra,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master next-20230428]
+[cannot apply to tip/sched/core tip/master tip/auto-latest v6.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Raghavendra-K-T/sched-numa-Introduce-per-vma-scan-counter/20230503-100717
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/abd037023141f25f79c6bbbb801c8405e4c449a1.1683033105.git.raghavendra.kt%40amd.com
+patch subject: [RFC PATCH V1 1/2] sched/numa: Introduce per vma scan counter
+config: x86_64-randconfig-a016-20230501 (https://download.01.org/0day-ci/archive/20230504/202305040103.BRgS5gsL-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=abe98e4b9a19f13cca92d0121e49563052302103
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator b4/virt-to-pfn-v6-4-rc1
-        git checkout abe98e4b9a19f13cca92d0121e49563052302103
+        # https://github.com/intel-lab-lkp/linux/commit/2e4296f7fd895ddd9ab683b8bd350f3aa654d91d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Raghavendra-K-T/sched-numa-Introduce-per-vma-scan-counter/20230503-100717
+        git checkout 2e4296f7fd895ddd9ab683b8bd350f3aa654d91d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/sched/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305040041.ysofvjPz-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305040103.BRgS5gsL-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/xen-netback/netback.c:692:23: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const void *' [-Wint-conversion]
-                   page = virt_to_page(idx_to_kaddr(queue, pending_idx));
-                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/memory.h:364:50: note: expanded from macro 'virt_to_page'
-   #define virt_to_page(x)         pfn_to_page(virt_to_pfn(x))
-                                                           ^
-   include/asm-generic/memory_model.h:37:40: note: expanded from macro '__pfn_to_page'
-   #define __pfn_to_page(pfn)      (vmemmap + (pfn))
-                                               ^~~
-   arch/arm64/include/asm/memory.h:337:53: note: passing argument to parameter 'kaddr' here
-   static inline unsigned long virt_to_pfn(const void *kaddr)
-                                                       ^
-   1 error generated.
+>> kernel/sched/fair.c:2940:6: warning: variable 'windows' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (scan_size < MAX_SCAN_WINDOW)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:2944:2: note: uninitialized use occurs here
+           windows /= 2;
+           ^~~~~~~
+   kernel/sched/fair.c:2940:2: note: remove the 'if' if its condition is always true
+           if (scan_size < MAX_SCAN_WINDOW)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/sched/fair.c:2937:22: note: initialize the variable 'windows' to silence this warning
+           unsigned int windows;
+                               ^
+                                = 0
+   kernel/sched/fair.c:6191:6: warning: no previous prototype for function 'init_cfs_bandwidth' [-Wmissing-prototypes]
+   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+        ^
+   kernel/sched/fair.c:6191:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+   ^
+   static 
+   kernel/sched/fair.c:12003:6: warning: no previous prototype for function 'task_vruntime_update' [-Wmissing-prototypes]
+   void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
+        ^
+   kernel/sched/fair.c:12003:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
+   ^
+   static 
+   kernel/sched/fair.c:12613:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
+   void free_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12613:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void free_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:12615:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
+   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+       ^
+   kernel/sched/fair.c:12615:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
+   ^
+   static 
+   kernel/sched/fair.c:12620:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
+   void online_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12620:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void online_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:12622:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
+   void unregister_fair_sched_group(struct task_group *tg) { }
+        ^
+   kernel/sched/fair.c:12622:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void unregister_fair_sched_group(struct task_group *tg) { }
+   ^
+   static 
+   kernel/sched/fair.c:535:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
+   static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
+                      ^
+   kernel/sched/fair.c:556:19: warning: unused function 'tg_is_idle' [-Wunused-function]
+   static inline int tg_is_idle(struct task_group *tg)
+                     ^
+   kernel/sched/fair.c:3606:20: warning: unused function 'load_avg_is_decayed' [-Wunused-function]
+   static inline bool load_avg_is_decayed(struct sched_avg *sa)
+                      ^
+   kernel/sched/fair.c:6164:20: warning: unused function 'cfs_bandwidth_used' [-Wunused-function]
+   static inline bool cfs_bandwidth_used(void)
+                      ^
+   kernel/sched/fair.c:6172:20: warning: unused function 'sync_throttle' [-Wunused-function]
+   static inline void sync_throttle(struct task_group *tg, int cpu) {}
+                      ^
+   kernel/sched/fair.c:6197:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
+   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+                                       ^
+   kernel/sched/fair.c:6201:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
+   static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+                      ^
+   kernel/sched/fair.c:9235:19: warning: unused function 'check_misfit_status' [-Wunused-function]
+   static inline int check_misfit_status(struct rq *rq, struct sched_domain *sd)
+                     ^
+   15 warnings generated.
 
 
-vim +692 drivers/net/xen-netback/netback.c
+vim +2940 kernel/sched/fair.c
 
-f942dc2552b8bf Ian Campbell 2011-03-15  664  
-e9ce7cb6b10740 Wei Liu      2014-06-04  665  static void xenvif_fill_frags(struct xenvif_queue *queue, struct sk_buff *skb)
-f942dc2552b8bf Ian Campbell 2011-03-15  666  {
-f942dc2552b8bf Ian Campbell 2011-03-15  667  	struct skb_shared_info *shinfo = skb_shinfo(skb);
-f942dc2552b8bf Ian Campbell 2011-03-15  668  	int nr_frags = shinfo->nr_frags;
-f942dc2552b8bf Ian Campbell 2011-03-15  669  	int i;
-f53c3fe8dad725 Zoltan Kiss  2014-03-06  670  	u16 prev_pending_idx = INVALID_PENDING_IDX;
-f53c3fe8dad725 Zoltan Kiss  2014-03-06  671  
-f942dc2552b8bf Ian Campbell 2011-03-15  672  	for (i = 0; i < nr_frags; i++) {
-f942dc2552b8bf Ian Campbell 2011-03-15  673  		skb_frag_t *frag = shinfo->frags + i;
-f942dc2552b8bf Ian Campbell 2011-03-15  674  		struct xen_netif_tx_request *txp;
-ea066ad158631f Ian Campbell 2011-10-05  675  		struct page *page;
-ea066ad158631f Ian Campbell 2011-10-05  676  		u16 pending_idx;
-f942dc2552b8bf Ian Campbell 2011-03-15  677  
-ea066ad158631f Ian Campbell 2011-10-05  678  		pending_idx = frag_get_pending_idx(frag);
-f942dc2552b8bf Ian Campbell 2011-03-15  679  
-f53c3fe8dad725 Zoltan Kiss  2014-03-06  680  		/* If this is not the first frag, chain it to the previous*/
-bdab82759b8e36 Zoltan Kiss  2014-04-02  681  		if (prev_pending_idx == INVALID_PENDING_IDX)
-f53c3fe8dad725 Zoltan Kiss  2014-03-06  682  			skb_shinfo(skb)->destructor_arg =
-e9ce7cb6b10740 Wei Liu      2014-06-04  683  				&callback_param(queue, pending_idx);
-bdab82759b8e36 Zoltan Kiss  2014-04-02  684  		else
-e9ce7cb6b10740 Wei Liu      2014-06-04  685  			callback_param(queue, prev_pending_idx).ctx =
-e9ce7cb6b10740 Wei Liu      2014-06-04  686  				&callback_param(queue, pending_idx);
-f53c3fe8dad725 Zoltan Kiss  2014-03-06  687  
-e9ce7cb6b10740 Wei Liu      2014-06-04  688  		callback_param(queue, pending_idx).ctx = NULL;
-f53c3fe8dad725 Zoltan Kiss  2014-03-06  689  		prev_pending_idx = pending_idx;
-f53c3fe8dad725 Zoltan Kiss  2014-03-06  690  
-e9ce7cb6b10740 Wei Liu      2014-06-04  691  		txp = &queue->pending_tx_info[pending_idx].req;
-e9ce7cb6b10740 Wei Liu      2014-06-04 @692  		page = virt_to_page(idx_to_kaddr(queue, pending_idx));
-ea066ad158631f Ian Campbell 2011-10-05  693  		__skb_fill_page_desc(skb, i, page, txp->offset, txp->size);
-f942dc2552b8bf Ian Campbell 2011-03-15  694  		skb->len += txp->size;
-f942dc2552b8bf Ian Campbell 2011-03-15  695  		skb->data_len += txp->size;
-f942dc2552b8bf Ian Campbell 2011-03-15  696  		skb->truesize += txp->size;
-f942dc2552b8bf Ian Campbell 2011-03-15  697  
-f53c3fe8dad725 Zoltan Kiss  2014-03-06  698  		/* Take an extra reference to offset network stack's put_page */
-e9ce7cb6b10740 Wei Liu      2014-06-04  699  		get_page(queue->mmap_pages[pending_idx]);
-f942dc2552b8bf Ian Campbell 2011-03-15  700  	}
-f942dc2552b8bf Ian Campbell 2011-03-15  701  }
-f942dc2552b8bf Ian Campbell 2011-03-15  702  
-
-:::::: The code at line 692 was first introduced by commit
-:::::: e9ce7cb6b107407e4798e8905b18ad8b642766f6 xen-netback: Factor queue-specific data into queue struct
-
-:::::: TO: Wei Liu <wei.liu2@citrix.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+  2933	
+  2934	static bool vma_is_accessed(struct vm_area_struct *vma)
+  2935	{
+  2936		unsigned long pids;
+  2937		unsigned int windows;
+  2938		unsigned int scan_size = READ_ONCE(sysctl_numa_balancing_scan_size);
+  2939	
+> 2940		if (scan_size < MAX_SCAN_WINDOW)
+  2941			windows = MAX_SCAN_WINDOW / scan_size;
+  2942	
+  2943		/* Allow only half of the windows for disjoint set cases */
+  2944		windows /= 2;
+  2945	
+  2946		windows = max(VMA_DISJOINT_SET_ACCESS_THRESH, windows);
+  2947	
+  2948		/*
+  2949		 * Make sure to allow scanning of disjoint vma set for the first
+  2950		 * few times.
+  2951		 * OR At mm level allow unconditional access first two times, so that
+  2952		 * all the (pages) of VMAs get prot_none fault introduced irrespective
+  2953		 * of accesses.
+  2954		 * This is also done to avoid any side effect of task scanning
+  2955		 * amplifying the unfairness of disjoint set of VMAs' access.
+  2956		 */
+  2957		if (READ_ONCE(vma->numab_state->scan_counter) < windows ||
+  2958			READ_ONCE(current->mm->numa_scan_seq) < 2)
+  2959			return true;
+  2960	
+  2961		pids = vma->numab_state->access_pids[0] | vma->numab_state->access_pids[1];
+  2962	
+  2963		return test_bit(hash_32(current->pid, ilog2(BITS_PER_LONG)), &pids);
+  2964	}
+  2965	
 
 -- 
 0-DAY CI Kernel Test Service
