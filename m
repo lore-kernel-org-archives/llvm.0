@@ -1,84 +1,105 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B31F156FC
-	for <llvm@lists.linux.dev>; Thu,  4 May 2023 21:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1683234662;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uASqFQi26mI1tXkEL0F3upLNU3iDtJWdDChvbQo3jps=;
-	b=SMDDa2rhQonsqXF0amTiqn+7okDikBTNxOHRaGjD6oDu8jvE7Bkip8AMrhhQ16gDNxUWFs
-	BCSaNxkw1xeeOfc5Byiqj6SDJACByBqGOJadEZ5b+ZVFjZUXmhEAFTZXpRHD7Gl9nn4Jeh
-	m3TLAIk4fznxoORUgzlfmluJ8QYP/ec=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-xP47Y6ehOEKStCEwJro9Kg-1; Thu, 04 May 2023 17:11:01 -0400
-X-MC-Unique: xP47Y6ehOEKStCEwJro9Kg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FFCB185A7A4
-	for <llvm@lists.linux.dev>; Thu,  4 May 2023 21:11:01 +0000 (UTC)
-Received: from [172.64.0.115] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 7F538492C13;
-	Thu,  4 May 2023 21:11:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
- mainline.kernel.org-clang, 671e148d)
-Date: Thu, 04 May 2023 21:11:01 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DAF156F0
+	for <llvm@lists.linux.dev>; Thu,  4 May 2023 21:18:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC7AC433D2;
+	Thu,  4 May 2023 21:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1683235110;
+	bh=TxYeoSXKxOHRLPFJsvXYPhN8fWjJV7GYIjZiQWu6XWc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EpQHRsKjHtgCM7M9XrBRxB099JjBNG22++T1N66aaJozyGrUty3HE/XNKb41aSMda
+	 C+LrH6YvgIyhYC6fR8SMmr8LocvmhCj/9PgqcC3hwy6a1YgPooHZaIsiPHCTFyn16Y
+	 ESoUj9GLawnXJXjg7kPONM/kD3h7Ja/V/9+gMEpKFo2SjV9WGWaAUXdem0i7vqsq4+
+	 oJdiOwMCury/ESM3Ljr3dBSL4ecchhjYWL0zYb/jgNTOXMgsQ3P1Rt+FcaSpFIFIcO
+	 +8zi2Kzw4qR7uRPddc0dsUtFUXG4/Cv/jASODrH0Q1eJFQICzZm0k9ysvNF0DVoPJT
+	 EGyKESyfi1okQ==
+Date: Thu, 4 May 2023 14:18:27 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Bill Wendling <morbo@google.com>,
+	Qing Zhao <qing.zhao@oracle.com>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] Compiler Attributes: Add __counted_by macro
+Message-ID: <20230504211827.GA1666363@dev-arch.thelio-3990X>
+References: <20230504181636.never.222-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-Message-Id: <43492.123050417110101934@us-mta-613.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504181636.never.222-kees@kernel.org>
 
-Hi, we tested your kernel and here are the results:
+On Thu, May 04, 2023 at 11:16:40AM -0700, Kees Cook wrote:
+> In an effort to annotate all flexible array members with their run-time
+> size information, the "element_count" attribute is being introduced by
+> Clang[1] and GCC[2] in future releases. This annotation will provide
+> the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
+> to perform run-time bounds checking on otherwise unknown-size flexible
+> arrays.
+> 
+> Even though the attribute is under development, we can start the
+> annotation process in the kernel. This requires defining a macro for
+> it, even if we have to change the name of the actual attribute later.
+> Since it is likely that this attribute may change its name to "counted_by"
+> in the future (to better align with a future total bytes "sized_by"
+> attribute), name the wrapper macro "__counted_by", which also reads more
+> clearly (and concisely) in structure definitions.
+> 
+> [1] https://reviews.llvm.org/D148381
+> [2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> 
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Qing Zhao <qing.zhao@oracle.com>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
+I agree with Miguel's comment formatting and content suggestions. Thanks
+for the links, they look good. If we have to update the name of the
+attribute later, it is not the end of the world, as getting the coversion
+started at this phase will make the roll out quicker.
 
-Kernel information:
-    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/arm64/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/87269
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34394=
-5
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> ---
+>  include/linux/compiler_attributes.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index e659cb6fded3..9d63fe2024d5 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -123,6 +123,18 @@
+>  # define __designated_init
+>  #endif
+>  
+> +/*
+> + * Optional: future support coming in clang 17 and gcc 14
+> + *
+> + *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> + * clang: https://reviews.llvm.org/D148381
+> + */
+> +#if __has_attribute(__element_count__)
+> +# define __counted_by(member)		__attribute__((__element_count__(member)))
+> +#else
+> +# define __counted_by(member)
+> +#endif
+> +
+>  /*
+>   * Optional: only supported since clang >= 14.0
+>   *
+> -- 
+> 2.34.1
+> 
