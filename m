@@ -1,20 +1,20 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7C0111BE;
-	Thu,  4 May 2023 19:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A569FC4339B;
-	Thu,  4 May 2023 19:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3647119522;
+	Thu,  4 May 2023 19:51:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875ADC4339C;
+	Thu,  4 May 2023 19:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683229857;
-	bh=JPFLuWv5ECkMX9GAW5RhhjSKJsNeEO+VEL1KV8L62HU=;
+	s=k20201202; t=1683229905;
+	bh=ENDo6/89J1yGoBlmK71uujreDBJABABZbczYgDdCfyA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EpEHCqehkpc8bmxJoRMoo79Jdv4nYmuFboWi8VFUjXzOK64DI7KpsFn/IaW/QblWA
-	 j2bBLdgPkiHLqvcGT7LpGUfH9eXxGXIPhtc/tQuO/nLm5DObXFvsS76jh/uSh75/l7
-	 ziSywGFSOCb3GzPIvdxb1wA4EkIJ/JCi5Ma8dDBGbWCScwjBXW+jVh66J39EP5TURY
-	 TkfHExLhlSWxehMl58X/fVuupXtJ/bz03fQh3zxiQEB2AXxIq0EsuhRy/reQvlJUBL
-	 2w8R60mPwhxZsYDleHR6AHEEFp3+XSxEwzIvMr287NVxmom3rZpbjRaAQW+HwdlDit
-	 4/mJv8bwd8Twg==
+	b=nEAP5x7+WTc6k45p5G6sqt9GUyowRcW1BTUmDzJd4DJzmiywxkGfII0trURt+2XJK
+	 jV8gVICQWtvdn1rOQc3Dms7IkDugBssFkj5cz3P9Gd1AtgB2m2gDnEhoH+IgFNTFJB
+	 LzNUqJKt5S30+gPBSS/sDG/zSgz0igHZ/3LT57fh8UAJLY5hNTuNN4OKdTbgcKNJi1
+	 LaU/73FSvFcrP8k8lOb8gmzkp5t47Ro7HVMkqrFseY+da/EyhZiHk9O+gFz5JzQhMx
+	 V8tYR6yvATR8Lse4o1vAm55wirl5Ph1pZC1ZNPr7YTh/mWNASrFZVn2AvdEoKWMfPy
+	 M0JlnjBCu+4cg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -29,12 +29,12 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
 	mkl@pengutronix.de,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 05/18] net: pasemi: Fix return type of pasemi_mac_start_tx()
-Date: Thu,  4 May 2023 15:50:27 -0400
-Message-Id: <20230504195042.3808716-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 04/13] net: pasemi: Fix return type of pasemi_mac_start_tx()
+Date: Thu,  4 May 2023 15:51:21 -0400
+Message-Id: <20230504195132.3808946-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504195042.3808716-1-sashal@kernel.org>
-References: <20230504195042.3808716-1-sashal@kernel.org>
+In-Reply-To: <20230504195132.3808946-1-sashal@kernel.org>
+References: <20230504195132.3808946-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/ethernet/pasemi/pasemi_mac.c b/drivers/net/ethernet/pasemi/pasemi_mac.c
-index 040a15a828b41..c1d7bd168f1d1 100644
+index e2c280913fbbb..8238a70161599 100644
 --- a/drivers/net/ethernet/pasemi/pasemi_mac.c
 +++ b/drivers/net/ethernet/pasemi/pasemi_mac.c
-@@ -1423,7 +1423,7 @@ static void pasemi_mac_queue_csdesc(const struct sk_buff *skb,
+@@ -1435,7 +1435,7 @@ static void pasemi_mac_queue_csdesc(const struct sk_buff *skb,
  	write_dma_reg(PAS_DMA_TXCHAN_INCR(txring->chan.chno), 2);
  }
  
