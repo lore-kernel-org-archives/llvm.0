@@ -1,84 +1,77 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A819471
-	for <llvm@lists.linux.dev>; Thu,  4 May 2023 23:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1683241864;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=fNbN3r1MAhT1KPnGgzqI6/iC5ynR3kASoUnXTcR/WNM=;
-	b=QnRlYUBIjqF1I+CWztqvSnZivNyfmOzI9WuuQTHM/+IdrZnQtko7gsbCcViGjPrmjMN0J5
-	kkFLRvHe9szGeyK+vU4tsRiTC/Hy6XW4F3Ng7jWRh9aN6G8aoKCTjwQx8ZLGhwNvivrBDV
-	6OV6sP64htG7+MSOiHEKLT0GK/OTx9Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-179-0f0jMxkkMSCgeYoWf_xb7w-1; Thu, 04 May 2023 19:11:02 -0400
-X-MC-Unique: 0f0jMxkkMSCgeYoWf_xb7w-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99C20884340
-	for <llvm@lists.linux.dev>; Thu,  4 May 2023 23:11:02 +0000 (UTC)
-Received: from [172.64.0.115] (unknown [10.30.32.245])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 8640D492B00;
-	Thu,  4 May 2023 23:11:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
- mainline.kernel.org-clang, 3c4aa443)
-Date: Thu, 04 May 2023 23:11:02 -0000
-To: llvm@lists.linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062A0156C1
+	for <llvm@lists.linux.dev>; Thu,  4 May 2023 23:44:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77593C433EF;
+	Thu,  4 May 2023 23:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1683243865;
+	bh=sqd3QxYIfp81aQWLqFP3GRC/sgGTwPJBsZB6PBO7r2Y=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=GD2uU/jjt2I4vxxcAYmCkSt9/FKI7Jo9pEiCdvmCuRLh2n2m9V9IlVd85TsMmmrjc
+	 8Rsz6eBRutQE0tSg6DVUZDyfaYKsMC4IPAduSQKLhmUq8TjKV+FblEKicwIpI9X6iH
+	 IvCG5Nx+6ZvLCmQVY5QADGjtIkzMCx1fkHWMoGcDxs42e4twc4+iFe0JNKysHEp52f
+	 z9oPDg/X6kmOJY5yvwSJFMS3AuYPb7Db7HGpePcnLlwWlUJroLtEIqiBLUXNZy7F4S
+	 T7Ba/jTOM/plLO4CsuGcA0MqLn/akmND1F40hQf6g56VDttox+BRlNTSiMvDd8PiW+
+	 9HK0QpzS5edvA==
+Date: Thu, 04 May 2023 16:44:24 -0700
+From: Kees Cook <kees@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Kees Cook <keescook@chromium.org>
+CC: Miguel Ojeda <ojeda@kernel.org>, Bill Wendling <morbo@google.com>,
+ Qing Zhao <qing.zhao@oracle.com>,
+ "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] Compiler Attributes: Add __counted_by macro
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CANiq72nZNU-x_8ONmtzainxDUMedFT+FHww1xu9Ho07gxfAD9w@mail.gmail.com>
+References: <20230504181636.never.222-kees@kernel.org> <CANiq72nZNU-x_8ONmtzainxDUMedFT+FHww1xu9Ho07gxfAD9w@mail.gmail.com>
+Message-ID: <40D4BB7A-2583-45B9-B76A-E174CAC4B248@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-Message-Id: <05789.123050419110200421@us-mta-179.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On May 4, 2023 11:27:32 AM PDT, Miguel Ojeda <miguel=2Eojeda=2Esandonis@gma=
+il=2Ecom> wrote:
+>On Thu, May 4, 2023 at 8:16=E2=80=AFPM Kees Cook <keescook@chromium=2Eorg=
+> wrote:
+>>
+>> + * Optional: future support coming in clang 17 and gcc 14
+>
+>Should we just say:
+>
+>    Optional: only supported since clang >=3D 17
+>    Optional: only supported since gcc >=3D 14
+>
+>even if they are in the future? That way we avoid changing it later=2E
+>If somebody asks, you already say it it is in the future the commit
+>message, so it should be clear enough=2E=2E=2E :)
+>
+>And if the compilers end up not supporting it on those versions for
+>some unexpected reason, well, we will need to fix the comment either
+>way=2E
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-              Test: SKIPPED
+Yeah, fair point!
+
+>
+>(I can change it on my side if you prefer)
+
+Sure, thanks! (But I'm happy to send a v2 if that's easier for you, too=2E=
+)
+
+-Kees
 
 
-Kernel information:
-    Commit message: Merge tag 'ceph-for-6.4-rc1' of https://github.com/ceph=
-/ceph-client
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/87284
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34400=
-4
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--=20
+Kees Cook
