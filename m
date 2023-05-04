@@ -1,44 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C824C80;
-	Thu,  4 May 2023 09:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D190EA2D;
+	Thu,  4 May 2023 10:16:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683193521; x=1714729521;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q5a9e3mnYSq9FjsodT7QCz33ZCAD93Ab7YNWb/WcGsA=;
-  b=k9UV2VsR743QQkXsQpH4o9DdJe+TIO+Adydu6seRl531iEzU7XaJDI+W
-   jc+HtsS4b5kdsKyQcCILeE1sJRkWSl6FnCwZJAe9JFLBbbe5r6E/0ly+n
-   h+VxGBocJmGOI7CUqqp4PbXJ5juwBEqyLlw+t9Otb638uYVprdZX21k9g
-   3zKJ7w4b+RQ4EJz5L8VMdZF6PtDEbv94N40qUWYdV+iy8UQkQKfwWJcFV
-   8cumdRg864HXet7DLPQyqRwud113TnliSdILFoLdzSMaL3y59vaF+QLdq
-   abmjGfCI7AMdocUbSrawzjYtjDB0mrer8mFazpFonzYVSz9azwBUTwcWN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="348929908"
+  t=1683195385; x=1714731385;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EnVwmbutFKiPklxgJrhOzJkmouvnKx/lrrbvgBZN/2A=;
+  b=fFSrEFH5S4nk3TTIoe+byHw0n3H0XY4TZJUPPRKVHzF4+Xabl+1mb2ZF
+   3680zDeAaV4wAMgtPnSaMbE/IKCogLauBLKua8iY8gYgu9VOwAH6Yxp2C
+   q7NYHhRJUAtF6BrDpMRLWgTeD2dWCu6F7p2yATBvhEGnCBQ4n+Zx+EET2
+   sIkBlMghirihvhtnY2xSKMlO91Wwo+fPz6kKNU9ykL42jQqw0CCpbeFyo
+   RjvTP4yYoimL6iW7TXc4qVobef55TjXKNbRppSFroDt852myIrBlHMq1O
+   S5W5rb/qfhbtl2nCI24DaF7YMqFbyriLCImF0l39ReTeFtRM498z5RLMy
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="350985093"
 X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="348929908"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 02:45:21 -0700
+   d="scan'208";a="350985093"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 03:16:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="761834543"
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="691061706"
 X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="761834543"
+   d="scan'208";a="691061706"
 Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 May 2023 02:45:19 -0700
+  by orsmga007.jf.intel.com with ESMTP; 04 May 2023 03:16:21 -0700
 Received: from kbuild by e3434d64424d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1puVWY-0002oY-2a;
-	Thu, 04 May 2023 09:45:18 +0000
-Date: Thu, 4 May 2023 17:44:39 +0800
+	id 1puW0b-0002qH-05;
+	Thu, 04 May 2023 10:16:21 +0000
+Date: Thu, 4 May 2023 18:16:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To: Ard Biesheuvel <ardb@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v7 06/13] media: verisilicon: Add AV1 decoder mode and
- controls
-Message-ID: <202305041733.x1AsEHVR-lkp@intel.com>
-References: <20230503083438.85139-7-benjamin.gaignard@collabora.com>
+Subject: [ardb:x86-efistub-cleanup 9/12]
+ arch/x86/boot/compressed/pgtable_64.c:212:1: error: expected statement
+Message-ID: <202305041840.yntDMMut-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,335 +45,154 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230503083438.85139-7-benjamin.gaignard@collabora.com>
 
-Hi Benjamin,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on linus/master next-20230428]
-[cannot apply to rockchip/for-next pza/reset/next pza/imx-drm/next v6.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Gaignard/dt-bindings-media-rockchip-vpu-Add-rk3588-vpu-compatible/20230503-163702
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230503083438.85139-7-benjamin.gaignard%40collabora.com
-patch subject: [PATCH v7 06/13] media: verisilicon: Add AV1 decoder mode and controls
-config: hexagon-randconfig-r045-20230503 (https://download.01.org/0day-ci/archive/20230504/202305041733.x1AsEHVR-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-efistub-cleanup
+head:   b5c6e7e9fc7da4ab714f4d1e399b84d7e3f66f88
+commit: 67dd00f48bd9e38b1bbf430b3708ec63e88361d1 [9/12] x86: decompressor: Merge trampoline cleanup with switching code
+config: x86_64-randconfig-a012-20230501 (https://download.01.org/0day-ci/archive/20230504/202305041840.yntDMMut-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/642a5efcf056c52dfebc8243905c004ffe088065
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Benjamin-Gaignard/dt-bindings-media-rockchip-vpu-Add-rk3588-vpu-compatible/20230503-163702
-        git checkout 642a5efcf056c52dfebc8243905c004ffe088065
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=67dd00f48bd9e38b1bbf430b3708ec63e88361d1
+        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+        git fetch --no-tags ardb x86-efistub-cleanup
+        git checkout 67dd00f48bd9e38b1bbf430b3708ec63e88361d1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305041733.x1AsEHVR-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305041840.yntDMMut-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
-   In file included from include/media/v4l2-mem2mem.h:16:
-   In file included from include/media/videobuf2-v4l2.h:16:
-   In file included from include/media/videobuf2-core.h:18:
-   In file included from include/linux/dma-buf.h:16:
-   In file included from include/linux/iosys-map.h:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/media/platform/verisilicon/hantro_drv.c:531:10: error: use of undeclared identifier 'V4L2_CID_STATELESS_AV1_FRAME'
-                           .id = V4L2_CID_STATELESS_AV1_FRAME,
-                                 ^
->> drivers/media/platform/verisilicon/hantro_drv.c:536:10: error: use of undeclared identifier 'V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY'
-                           .id = V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY,
-                                 ^
->> drivers/media/platform/verisilicon/hantro_drv.c:537:14: error: use of undeclared identifier 'V4L2_AV1_MAX_TILE_COUNT'
-                           .dims = { V4L2_AV1_MAX_TILE_COUNT },
-                                     ^
->> drivers/media/platform/verisilicon/hantro_drv.c:542:10: error: use of undeclared identifier 'V4L2_CID_STATELESS_AV1_SEQUENCE'
-                           .id = V4L2_CID_STATELESS_AV1_SEQUENCE,
-                                 ^
->> drivers/media/platform/verisilicon/hantro_drv.c:547:10: error: use of undeclared identifier 'V4L2_CID_STATELESS_AV1_FILM_GRAIN'
-                           .id = V4L2_CID_STATELESS_AV1_FILM_GRAIN,
-                                 ^
->> drivers/media/platform/verisilicon/hantro_drv.c:556:21: error: invalid application of 'sizeof' to an incomplete type 'const struct hantro_ctrl[]'
-           int i, num_ctrls = ARRAY_SIZE(controls);
-                              ^~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:55:32: note: expanded from macro 'ARRAY_SIZE'
-   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-                                  ^~~~~
->> drivers/media/platform/verisilicon/hantro_drv.c:1028:46: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-           vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:76:40: note: expanded from macro 'DMA_BIT_MASK'
-   #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-                                          ^~~~~
-   7 warnings and 6 errors generated.
+>> arch/x86/boot/compressed/pgtable_64.c:212:1: error: expected statement
+   }
+   ^
+   1 error generated.
 
 
-vim +/V4L2_CID_STATELESS_AV1_FRAME +531 drivers/media/platform/verisilicon/hantro_drv.c
+vim +212 arch/x86/boot/compressed/pgtable_64.c
 
-   365	
-   366	#define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
-   367						 V4L2_JPEG_ACTIVE_MARKER_COM | \
-   368						 V4L2_JPEG_ACTIVE_MARKER_DQT | \
-   369						 V4L2_JPEG_ACTIVE_MARKER_DHT)
-   370	
-   371	static const struct hantro_ctrl controls[] = {
-   372		{
-   373			.codec = HANTRO_JPEG_ENCODER,
-   374			.cfg = {
-   375				.id = V4L2_CID_JPEG_COMPRESSION_QUALITY,
-   376				.min = 5,
-   377				.max = 100,
-   378				.step = 1,
-   379				.def = 50,
-   380				.ops = &hantro_jpeg_ctrl_ops,
-   381			},
-   382		}, {
-   383			.codec = HANTRO_JPEG_ENCODER,
-   384			.cfg = {
-   385				.id = V4L2_CID_JPEG_ACTIVE_MARKER,
-   386				.max = HANTRO_JPEG_ACTIVE_MARKERS,
-   387				.def = HANTRO_JPEG_ACTIVE_MARKERS,
-   388				/*
-   389				 * Changing the set of active markers/segments also
-   390				 * messes up the alignment of the JPEG header, which
-   391				 * is needed to allow the hardware to write directly
-   392				 * to the output buffer. Implementing this introduces
-   393				 * a lot of complexity for little gain, as the markers
-   394				 * enabled is already the minimum required set.
-   395				 */
-   396				.flags = V4L2_CTRL_FLAG_READ_ONLY,
-   397			},
-   398		}, {
-   399			.codec = HANTRO_MPEG2_DECODER,
-   400			.cfg = {
-   401				.id = V4L2_CID_STATELESS_MPEG2_SEQUENCE,
-   402			},
-   403		}, {
-   404			.codec = HANTRO_MPEG2_DECODER,
-   405			.cfg = {
-   406				.id = V4L2_CID_STATELESS_MPEG2_PICTURE,
-   407			},
-   408		}, {
-   409			.codec = HANTRO_MPEG2_DECODER,
-   410			.cfg = {
-   411				.id = V4L2_CID_STATELESS_MPEG2_QUANTISATION,
-   412			},
-   413		}, {
-   414			.codec = HANTRO_VP8_DECODER,
-   415			.cfg = {
-   416				.id = V4L2_CID_STATELESS_VP8_FRAME,
-   417			},
-   418		}, {
-   419			.codec = HANTRO_H264_DECODER,
-   420			.cfg = {
-   421				.id = V4L2_CID_STATELESS_H264_DECODE_PARAMS,
-   422			},
-   423		}, {
-   424			.codec = HANTRO_H264_DECODER,
-   425			.cfg = {
-   426				.id = V4L2_CID_STATELESS_H264_SPS,
-   427				.ops = &hantro_ctrl_ops,
-   428			},
-   429		}, {
-   430			.codec = HANTRO_H264_DECODER,
-   431			.cfg = {
-   432				.id = V4L2_CID_STATELESS_H264_PPS,
-   433			},
-   434		}, {
-   435			.codec = HANTRO_H264_DECODER,
-   436			.cfg = {
-   437				.id = V4L2_CID_STATELESS_H264_SCALING_MATRIX,
-   438			},
-   439		}, {
-   440			.codec = HANTRO_H264_DECODER,
-   441			.cfg = {
-   442				.id = V4L2_CID_STATELESS_H264_DECODE_MODE,
-   443				.min = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
-   444				.def = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
-   445				.max = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED,
-   446			},
-   447		}, {
-   448			.codec = HANTRO_H264_DECODER,
-   449			.cfg = {
-   450				.id = V4L2_CID_STATELESS_H264_START_CODE,
-   451				.min = V4L2_STATELESS_H264_START_CODE_ANNEX_B,
-   452				.def = V4L2_STATELESS_H264_START_CODE_ANNEX_B,
-   453				.max = V4L2_STATELESS_H264_START_CODE_ANNEX_B,
-   454			},
-   455		}, {
-   456			.codec = HANTRO_H264_DECODER,
-   457			.cfg = {
-   458				.id = V4L2_CID_MPEG_VIDEO_H264_PROFILE,
-   459				.min = V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE,
-   460				.max = V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
-   461				.menu_skip_mask =
-   462				BIT(V4L2_MPEG_VIDEO_H264_PROFILE_EXTENDED),
-   463				.def = V4L2_MPEG_VIDEO_H264_PROFILE_MAIN,
-   464			}
-   465		}, {
-   466			.codec = HANTRO_HEVC_DECODER,
-   467			.cfg = {
-   468				.id = V4L2_CID_STATELESS_HEVC_DECODE_MODE,
-   469				.min = V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
-   470				.max = V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
-   471				.def = V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
-   472			},
-   473		}, {
-   474			.codec = HANTRO_HEVC_DECODER,
-   475			.cfg = {
-   476				.id = V4L2_CID_STATELESS_HEVC_START_CODE,
-   477				.min = V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
-   478				.max = V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
-   479				.def = V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
-   480			},
-   481		}, {
-   482			.codec = HANTRO_HEVC_DECODER,
-   483			.cfg = {
-   484				.id = V4L2_CID_MPEG_VIDEO_HEVC_PROFILE,
-   485				.min = V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
-   486				.max = V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10,
-   487				.def = V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
-   488			},
-   489		}, {
-   490			.codec = HANTRO_HEVC_DECODER,
-   491			.cfg = {
-   492				.id = V4L2_CID_MPEG_VIDEO_HEVC_LEVEL,
-   493				.min = V4L2_MPEG_VIDEO_HEVC_LEVEL_1,
-   494				.max = V4L2_MPEG_VIDEO_HEVC_LEVEL_5_1,
-   495			},
-   496		}, {
-   497			.codec = HANTRO_HEVC_DECODER,
-   498			.cfg = {
-   499				.id = V4L2_CID_STATELESS_HEVC_SPS,
-   500				.ops = &hantro_hevc_ctrl_ops,
-   501			},
-   502		}, {
-   503			.codec = HANTRO_HEVC_DECODER,
-   504			.cfg = {
-   505				.id = V4L2_CID_STATELESS_HEVC_PPS,
-   506			},
-   507		}, {
-   508			.codec = HANTRO_HEVC_DECODER,
-   509			.cfg = {
-   510				.id = V4L2_CID_STATELESS_HEVC_DECODE_PARAMS,
-   511			},
-   512		}, {
-   513			.codec = HANTRO_HEVC_DECODER,
-   514			.cfg = {
-   515				.id = V4L2_CID_STATELESS_HEVC_SCALING_MATRIX,
-   516			},
-   517		}, {
-   518			.codec = HANTRO_VP9_DECODER,
-   519			.cfg = {
-   520				.id = V4L2_CID_STATELESS_VP9_FRAME,
-   521				.ops = &hantro_vp9_ctrl_ops,
-   522			},
-   523		}, {
-   524			.codec = HANTRO_VP9_DECODER,
-   525			.cfg = {
-   526				.id = V4L2_CID_STATELESS_VP9_COMPRESSED_HDR,
-   527			},
-   528		}, {
-   529			.codec = HANTRO_AV1_DECODER,
-   530			.cfg = {
- > 531				.id = V4L2_CID_STATELESS_AV1_FRAME,
-   532			},
-   533		}, {
-   534			.codec = HANTRO_AV1_DECODER,
-   535			.cfg = {
- > 536				.id = V4L2_CID_STATELESS_AV1_TILE_GROUP_ENTRY,
- > 537				.dims = { V4L2_AV1_MAX_TILE_COUNT },
-   538			},
-   539		}, {
-   540			.codec = HANTRO_AV1_DECODER,
-   541			.cfg = {
- > 542				.id = V4L2_CID_STATELESS_AV1_SEQUENCE,
-   543			},
-   544		}, {
-   545			.codec = HANTRO_AV1_DECODER,
-   546			.cfg = {
- > 547				.id = V4L2_CID_STATELESS_AV1_FILM_GRAIN,
-   548			},
-   549		},
-   550	};
-   551	
-   552	static int hantro_ctrls_setup(struct hantro_dev *vpu,
-   553				      struct hantro_ctx *ctx,
-   554				      int allowed_codecs)
-   555	{
- > 556		int i, num_ctrls = ARRAY_SIZE(controls);
-   557	
-   558		v4l2_ctrl_handler_init(&ctx->ctrl_handler, num_ctrls);
-   559	
-   560		for (i = 0; i < num_ctrls; i++) {
-   561			if (!(allowed_codecs & controls[i].codec))
-   562				continue;
-   563	
-   564			v4l2_ctrl_new_custom(&ctx->ctrl_handler,
-   565					     &controls[i].cfg, NULL);
-   566			if (ctx->ctrl_handler.error) {
-   567				vpu_err("Adding control (%d) failed %d\n",
-   568					controls[i].cfg.id,
-   569					ctx->ctrl_handler.error);
-   570				v4l2_ctrl_handler_free(&ctx->ctrl_handler);
-   571				return ctx->ctrl_handler.error;
-   572			}
-   573		}
-   574		return v4l2_ctrl_handler_setup(&ctx->ctrl_handler);
-   575	}
-   576	
+1b3a62643660020 Kirill A. Shutemov 2018-08-01  103  
+ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  104  asmlinkage void set_paging_levels(void *rmode)
+4440977be1347d4 Kirill A. Shutemov 2018-02-09  105  {
+67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  106  	static u8 __section(".pgtable") __aligned(PAGE_SIZE) pgtable[PAGE_SIZE];
+ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  107  	void (*toggle_la57)(void *trampoline, bool enable_5lvl);
+67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  108  	void *trampoline_pgtable;
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  109  	bool l5_required;
+08529078d8d9adf Kirill A. Shutemov 2017-12-04  110  
+372fddf70904174 Kirill A. Shutemov 2018-05-18  111  	/* Initialize boot_params. Required for cmdline_find_option_bool(). */
+372fddf70904174 Kirill A. Shutemov 2018-05-18  112  	boot_params = rmode;
+372fddf70904174 Kirill A. Shutemov 2018-05-18  113  
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  114  	/*
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  115  	 * Check if LA57 is desired and supported.
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  116  	 *
+372fddf70904174 Kirill A. Shutemov 2018-05-18  117  	 * There are several parts to the check:
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  118  	 *   - if the kernel supports 5-level paging: CONFIG_X86_5LEVEL=y
+372fddf70904174 Kirill A. Shutemov 2018-05-18  119  	 *   - if user asked to disable 5-level paging: no5lvl in cmdline
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  120  	 *   - if the machine supports 5-level paging:
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  121  	 *     + CPUID leaf 7 is supported
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  122  	 *     + the leaf has the feature bit set
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  123  	 *
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  124  	 * That's substitute for boot_cpu_has() in early boot code.
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  125  	 */
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  126  	if (IS_ENABLED(CONFIG_X86_5LEVEL) &&
+372fddf70904174 Kirill A. Shutemov 2018-05-18  127  			!cmdline_find_option_bool("no5lvl") &&
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  128  			native_cpuid_eax(0) >= 7 &&
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  129  			(native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 & 31)))) {
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  130  		l5_required = 1;
+a403d798182f4f7 Kirill A. Shutemov 2018-02-26  131  	}
+08529078d8d9adf Kirill A. Shutemov 2017-12-04  132  
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  133  	/*
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  134  	 * We are not going to use the trampoline if we
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  135  	 * are already in the desired paging mode.
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  136  	 */
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  137  	if (l5_required == !!(native_read_cr4() & X86_CR4_LA57))
+67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  138  		goto out;
+3548e131ec6a822 Kirill A. Shutemov 2018-02-26  139  
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  140  	trampoline_32bit = (unsigned long *)find_trampoline_placement();
+3548e131ec6a822 Kirill A. Shutemov 2018-02-26  141  
+fb5268354d20b82 Kirill A. Shutemov 2018-02-26  142  	/* Preserve trampoline memory */
+fb5268354d20b82 Kirill A. Shutemov 2018-02-26  143  	memcpy(trampoline_save, trampoline_32bit, TRAMPOLINE_32BIT_SIZE);
+fb5268354d20b82 Kirill A. Shutemov 2018-02-26  144  
+32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  145  	/* Clear trampoline memory first */
+32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  146  	memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
+32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  147  
+32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  148  	/* Copy trampoline code in place */
+ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  149  	toggle_la57 = memcpy(trampoline_32bit +
+86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  150  			TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
+32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  151  			&trampoline_32bit_src, TRAMPOLINE_32BIT_CODE_SIZE);
+32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  152  
+86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  153  	/*
+86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  154  	 * Avoid the need for a stack in the 32-bit trampoline code, by using
+86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  155  	 * LJMP rather than LRET to return back to long mode.  LJMP takes an
+86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  156  	 * immediate absolute address, so we have to adjust that based on the
+86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  157  	 * placement of the trampoline.
+86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  158  	 */
+ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  159  	*(u32 *)((u8 *)toggle_la57 + trampoline_ljmp_imm_offset) +=
+ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  160  						(unsigned long)toggle_la57;
+86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  161  
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  162  	/*
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  163  	 * The code below prepares page table in trampoline memory.
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  164  	 *
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  165  	 * The new page table will be used by trampoline code for switching
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  166  	 * from 4- to 5-level paging or vice versa.
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  167  	 */
+67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  168  	trampoline_pgtable = trampoline_32bit +
+67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  169  			     TRAMPOLINE_32BIT_PGTABLE_OFFSET / sizeof(unsigned long);
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  170  
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  171  	if (l5_required) {
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  172  		/*
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  173  		 * For 4- to 5-level paging transition, set up current CR3 as
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  174  		 * the first and the only entry in a new top-level page table.
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  175  		 */
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  176  		trampoline_32bit[TRAMPOLINE_32BIT_PGTABLE_OFFSET] = __native_read_cr3() | _PAGE_TABLE_NOENC;
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  177  	} else {
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  178  		unsigned long src;
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  179  
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  180  		/*
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  181  		 * For 5- to 4-level paging transition, copy page table pointed
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  182  		 * by first entry in the current top-level page table as our
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  183  		 * new top-level page table.
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  184  		 *
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  185  		 * We cannot just point to the page table from trampoline as it
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  186  		 * may be above 4G.
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  187  		 */
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  188  		src = *(unsigned long *)__native_read_cr3() & PAGE_MASK;
+67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  189  		memcpy(trampoline_pgtable, (void *)src, PAGE_SIZE);
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  190  	}
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  191  
+cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  192  	toggle_la57(trampoline_32bit, l5_required);
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  193  
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  194  	/*
+67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  195  	 * Move the top level page table out of trampoline memory.
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  196  	 */
+589bb62be316401 Kirill A. Shutemov 2018-05-16  197  	memcpy(pgtable, trampoline_pgtable, PAGE_SIZE);
+589bb62be316401 Kirill A. Shutemov 2018-05-16  198  	native_write_cr3((unsigned long)pgtable);
+e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  199  
+fb5268354d20b82 Kirill A. Shutemov 2018-02-26  200  	/* Restore trampoline memory */
+fb5268354d20b82 Kirill A. Shutemov 2018-02-26  201  	memcpy(trampoline_32bit, trampoline_save, TRAMPOLINE_32BIT_SIZE);
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  202  
+67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  203  out:
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  204  	/* Initialize variables for 5-level paging */
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  205  #ifdef CONFIG_X86_5LEVEL
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  206  	if (__read_cr4() & X86_CR4_LA57) {
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  207  		__pgtable_l5_enabled = 1;
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  208  		pgdir_shift = 48;
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  209  		ptrs_per_p4d = 512;
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  210  	}
+e5ceb9a02402b98 Arvind Sankar      2020-10-10  211  #endif
+fb5268354d20b82 Kirill A. Shutemov 2018-02-26 @212  }
+
+:::::: The code at line 212 was first introduced by commit
+:::::: fb5268354d20b82c12569e325b0d051c09f983f7 x86/boot/compressed/64: Save and restore trampoline memory
+
+:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
