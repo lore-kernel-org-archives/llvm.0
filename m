@@ -1,46 +1,45 @@
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62497E;
-	Thu,  4 May 2023 13:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A50186A;
+	Thu,  4 May 2023 13:53:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683205324; x=1714741324;
+  t=1683208427; x=1714744427;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ee9nLZwjbDNeRswfIOmfPuxFBiAj4K/k63dxw8tvPdU=;
-  b=WH0PpKgmbQl94QB4Ct+tnPkraSkyP8xrjxsXErmvoHe972l/unNEh480
-   a8xcY4rS6ndYFsBrhRDI7HOZnkeNtrv8F0FSUrGCfjAr/3SqBA8Q/il9+
-   AYJTy96igfMTU8Gq0uw6F3B7IpwPesey/Ky1RN8TdO2qVFvlkkyVPjiYA
-   ff/Tbucm9fQ/eqW7JxArMAvFzgyisAmIdh8VgjqGAgtQLW/7iuUbYzzQU
-   zQepfSUQQTml1SzxmVDU9c+DBZVPFu1bckSK/B0qPbvMOP8cXGjYtV2e7
-   e8Ys2cNXLw2FYHX4RG5whqn9CN9DFEePgLgklPkpkBoczY11irH5031DM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="412108743"
+  bh=WEqqw2WjGn2ach3jrBpiz/7f7lwc75WsIqJmwc6gsz0=;
+  b=fVJj7oWcpl4sayjU1ODgX9RTMpWv58A8386jyiYQIXY6kJRr8U1ZP0Un
+   U8Roa2zQsTocORN1AbRv9S6nDnht5ePxUHPbcqw2ShZxkh5RoYQWx2pRG
+   OroVWlJTPASQrD3P9g2Oks+GnHzvxbNb0GN5AfcnuBTKUaqfj2+sHReQf
+   zAsfdotqVzN0oaD00Jy0EKjopBJsjbc3SIH+OrKszVk8+uhjn2xtYN2Zs
+   vjFtOXjiQBw8HrhUo1ebrRJE75N1swqBtFrRW0Y6K20s+/ziATAxvju4w
+   F1DwUOJ2UpTN44nkv44jc1dCSUYx4NZZwNpxKwgT/ett9qL9LgqiFn/kV
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="329293908"
 X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="412108743"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 06:02:03 -0700
+   d="scan'208";a="329293908"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 06:53:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="691126068"
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="697040476"
 X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="691126068"
-Received: from lkp-server01.sh.intel.com (HELO 646801eb55b5) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 04 May 2023 06:02:01 -0700
-Received: from kbuild by 646801eb55b5 with local (Exim 4.96)
+   d="scan'208";a="697040476"
+Received: from lkp-server01.sh.intel.com (HELO d0e14d8700eb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 04 May 2023 06:53:41 -0700
+Received: from kbuild by d0e14d8700eb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1puYau-00001J-31;
-	Thu, 04 May 2023 13:02:00 +0000
-Date: Thu, 4 May 2023 21:01:35 +0800
+	id 1puZOv-00001K-0f;
+	Thu, 04 May 2023 13:53:41 +0000
+Date: Thu, 4 May 2023 21:53:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Nancy.Lin" <nancy.lin@mediatek.com>
+To: oushixiong <oushixiong@kylinos.cn>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c:415:10: warning:
- cast to smaller integer type 'enum mtk_ovl_adaptor_comp_type' from 'const
- void *'
-Message-ID: <202305042054.ZtWME9OU-lkp@intel.com>
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:614:36:
+ warning: unused variable 'mtk_jpeg_enc_ioctl_ops'
+Message-ID: <202305042146.j4ZxuvpM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,94 +49,191 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Nancy.Lin,
-
-FYI, the error/warning still remains.
-
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   1a5304fecee523060f26e2778d9d8e33c0562df3
-commit: 453c3364632a1f305db7d425dc9f8d6711cd3491 drm/mediatek: Add ovl_adaptor support for MT8195
-date:   6 weeks ago
-config: arm64-randconfig-r004-20230504 (https://download.01.org/0day-ci/archive/20230504/202305042054.ZtWME9OU-lkp@intel.com/config)
+commit: 4ae47770d57bff0193fbbf48d56c18759cad5f6e media: mtk-jpegenc: Fix a compilation issue
+date:   7 weeks ago
+config: hexagon-randconfig-r045-20230503 (https://download.01.org/0day-ci/archive/20230504/202305042146.j4ZxuvpM-lkp@intel.com/config)
 compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=453c3364632a1f305db7d425dc9f8d6711cd3491
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ae47770d57bff0193fbbf48d56c18759cad5f6e
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 453c3364632a1f305db7d425dc9f8d6711cd3491
+        git checkout 4ae47770d57bff0193fbbf48d56c18759cad5f6e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/mediatek/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305042054.ZtWME9OU-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305042146.j4ZxuvpM-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c:415:10: warning: cast to smaller integer type 'enum mtk_ovl_adaptor_comp_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-                   type = (enum mtk_ovl_adaptor_comp_type)of_id->data;
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:11:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:11:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:11:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:31:28: warning: unused variable 'mtk_jpeg_enc_formats' [-Wunused-variable]
+   static struct mtk_jpeg_fmt mtk_jpeg_enc_formats[] = {
+                              ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:79:28: warning: unused variable 'mtk_jpeg_dec_formats' [-Wunused-variable]
+   static struct mtk_jpeg_fmt mtk_jpeg_dec_formats[] = {
+                              ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:614:36: warning: unused variable 'mtk_jpeg_enc_ioctl_ops' [-Wunused-const-variable]
+   static const struct v4l2_ioctl_ops mtk_jpeg_enc_ioctl_ops = {
+                                      ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:644:36: warning: unused variable 'mtk_jpeg_dec_ioctl_ops' [-Wunused-const-variable]
+   static const struct v4l2_ioctl_ops mtk_jpeg_dec_ioctl_ops = {
+                                      ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:884:29: warning: unused variable 'mtk_jpeg_dec_qops' [-Wunused-const-variable]
+   static const struct vb2_ops mtk_jpeg_dec_qops = {
+                               ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:893:29: warning: unused variable 'mtk_jpeg_enc_qops' [-Wunused-const-variable]
+   static const struct vb2_ops mtk_jpeg_enc_qops = {
+                               ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1366:34: warning: unused variable 'mtk_jpeg_enc_m2m_ops' [-Wunused-const-variable]
+   static const struct v4l2_m2m_ops mtk_jpeg_enc_m2m_ops = {
+                                    ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1370:34: warning: unused variable 'mtk_jpeg_multicore_enc_m2m_ops' [-Wunused-const-variable]
+   static const struct v4l2_m2m_ops mtk_jpeg_multicore_enc_m2m_ops = {
+                                    ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1374:34: warning: unused variable 'mtk_jpeg_multicore_dec_m2m_ops' [-Wunused-const-variable]
+   static const struct v4l2_m2m_ops mtk_jpeg_multicore_dec_m2m_ops = {
+                                    ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1378:34: warning: unused variable 'mtk_jpeg_dec_m2m_ops' [-Wunused-const-variable]
+   static const struct v4l2_m2m_ops mtk_jpeg_dec_m2m_ops = {
+                                    ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1461:20: warning: unused function 'mtk_jpeg_enc_irq' [-Wunused-function]
+   static irqreturn_t mtk_jpeg_enc_irq(int irq, void *priv)
+                      ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1481:20: warning: unused function 'mtk_jpeg_dec_irq' [-Wunused-function]
+   static irqreturn_t mtk_jpeg_dec_irq(int irq, void *priv)
+                      ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1645:29: warning: unused variable 'mt8173_jpeg_dec_clocks' [-Wunused-variable]
+   static struct clk_bulk_data mt8173_jpeg_dec_clocks[] = {
+                               ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1650:29: warning: unused variable 'mtk_jpeg_clocks' [-Wunused-variable]
+   static struct clk_bulk_data mtk_jpeg_clocks[] = {
+                               ^
+   20 warnings generated.
 
 
-vim +415 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+vim +/mtk_jpeg_enc_ioctl_ops +614 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
 
-   391	
-   392	static int ovl_adaptor_comp_init(struct device *dev, struct component_match **match)
-   393	{
-   394		struct mtk_disp_ovl_adaptor *priv = dev_get_drvdata(dev);
-   395		struct device_node *node, *parent;
-   396		struct platform_device *comp_pdev;
-   397	
-   398		parent = dev->parent->parent->of_node->parent;
-   399	
-   400		for_each_child_of_node(parent, node) {
-   401			const struct of_device_id *of_id;
-   402			enum mtk_ovl_adaptor_comp_type type;
-   403			int id;
-   404	
-   405			of_id = of_match_node(mtk_ovl_adaptor_comp_dt_ids, node);
-   406			if (!of_id)
-   407				continue;
-   408	
-   409			if (!of_device_is_available(node)) {
-   410				dev_dbg(dev, "Skipping disabled component %pOF\n",
-   411					node);
-   412				continue;
-   413			}
-   414	
- > 415			type = (enum mtk_ovl_adaptor_comp_type)of_id->data;
-   416			id = ovl_adaptor_comp_get_id(dev, node, type);
-   417			if (id < 0) {
-   418				dev_warn(dev, "Skipping unknown component %pOF\n",
-   419					 node);
-   420				continue;
-   421			}
-   422	
-   423			comp_pdev = of_find_device_by_node(node);
-   424			if (!comp_pdev)
-   425				return -EPROBE_DEFER;
-   426	
-   427			priv->ovl_adaptor_comp[id] = &comp_pdev->dev;
-   428	
-   429			drm_of_component_match_add(dev, match, compare_of, node);
-   430			dev_dbg(dev, "Adding component match for %pOF\n", node);
-   431		}
-   432	
-   433		if (!*match) {
-   434			dev_err(dev, "No match device for ovl_adaptor\n");
-   435			return -ENODEV;
-   436		}
-   437	
-   438		return 0;
-   439	}
-   440	
+52f68114857fe5 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c kyrie wu        2022-09-29  613  
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14 @614  static const struct v4l2_ioctl_ops mtk_jpeg_enc_ioctl_ops = {
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  615  	.vidioc_querycap                = mtk_jpeg_querycap,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  616  	.vidioc_enum_fmt_vid_cap	= mtk_jpeg_enum_fmt_vid_cap,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  617  	.vidioc_enum_fmt_vid_out	= mtk_jpeg_enum_fmt_vid_out,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  618  	.vidioc_try_fmt_vid_cap_mplane	= mtk_jpeg_try_fmt_vid_cap_mplane,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  619  	.vidioc_try_fmt_vid_out_mplane	= mtk_jpeg_try_fmt_vid_out_mplane,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  620  	.vidioc_g_fmt_vid_cap_mplane    = mtk_jpeg_g_fmt_vid_mplane,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  621  	.vidioc_g_fmt_vid_out_mplane    = mtk_jpeg_g_fmt_vid_mplane,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  622  	.vidioc_s_fmt_vid_cap_mplane    = mtk_jpeg_s_fmt_vid_cap_mplane,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  623  	.vidioc_s_fmt_vid_out_mplane    = mtk_jpeg_s_fmt_vid_out_mplane,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  624  	.vidioc_qbuf                    = v4l2_m2m_ioctl_qbuf,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  625  	.vidioc_subscribe_event         = mtk_jpeg_subscribe_event,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  626  	.vidioc_g_selection		= mtk_jpeg_enc_g_selection,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  627  	.vidioc_s_selection		= mtk_jpeg_enc_s_selection,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  628  
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  629  	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  630  	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  631  	.vidioc_reqbufs                 = v4l2_m2m_ioctl_reqbufs,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  632  	.vidioc_querybuf                = v4l2_m2m_ioctl_querybuf,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  633  	.vidioc_dqbuf                   = v4l2_m2m_ioctl_dqbuf,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  634  	.vidioc_expbuf                  = v4l2_m2m_ioctl_expbuf,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  635  	.vidioc_streamon                = v4l2_m2m_ioctl_streamon,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  636  	.vidioc_streamoff               = v4l2_m2m_ioctl_streamoff,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  637  
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  638  	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
+8f1f08a6337efe drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c kyrie wu        2022-09-29  639  
+8f1f08a6337efe drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c kyrie wu        2022-09-29  640  	.vidioc_encoder_cmd		= v4l2_m2m_ioctl_encoder_cmd,
+8f1f08a6337efe drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c kyrie wu        2022-09-29  641  	.vidioc_try_encoder_cmd		= v4l2_m2m_ioctl_try_encoder_cmd,
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  642  };
+45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  643  
+2ac8015f156b55 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14 @644  static const struct v4l2_ioctl_ops mtk_jpeg_dec_ioctl_ops = {
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  645  	.vidioc_querycap                = mtk_jpeg_querycap,
+7e98b7b542a456 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Boris Brezillon 2019-06-04  646  	.vidioc_enum_fmt_vid_cap	= mtk_jpeg_enum_fmt_vid_cap,
+7e98b7b542a456 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Boris Brezillon 2019-06-04  647  	.vidioc_enum_fmt_vid_out	= mtk_jpeg_enum_fmt_vid_out,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  648  	.vidioc_try_fmt_vid_cap_mplane	= mtk_jpeg_try_fmt_vid_cap_mplane,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  649  	.vidioc_try_fmt_vid_out_mplane	= mtk_jpeg_try_fmt_vid_out_mplane,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  650  	.vidioc_g_fmt_vid_cap_mplane    = mtk_jpeg_g_fmt_vid_mplane,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  651  	.vidioc_g_fmt_vid_out_mplane    = mtk_jpeg_g_fmt_vid_mplane,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  652  	.vidioc_s_fmt_vid_cap_mplane    = mtk_jpeg_s_fmt_vid_cap_mplane,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  653  	.vidioc_s_fmt_vid_out_mplane    = mtk_jpeg_s_fmt_vid_out_mplane,
+52f68114857fe5 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c kyrie wu        2022-09-29  654  	.vidioc_qbuf                    = mtk_jpeg_qbuf,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  655  	.vidioc_subscribe_event         = mtk_jpeg_subscribe_event,
+2ac8015f156b55 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Xia Jiang       2020-08-14  656  	.vidioc_g_selection		= mtk_jpeg_dec_g_selection,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  657  
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  658  	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  659  	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  660  	.vidioc_reqbufs                 = v4l2_m2m_ioctl_reqbufs,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  661  	.vidioc_querybuf                = v4l2_m2m_ioctl_querybuf,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  662  	.vidioc_dqbuf                   = v4l2_m2m_ioctl_dqbuf,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  663  	.vidioc_expbuf                  = v4l2_m2m_ioctl_expbuf,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  664  	.vidioc_streamon                = v4l2_m2m_ioctl_streamon,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  665  	.vidioc_streamoff               = v4l2_m2m_ioctl_streamoff,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  666  
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  667  	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
+bf8460d2f4e6a1 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c kyrie wu        2022-09-29  668  
+bf8460d2f4e6a1 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c kyrie wu        2022-09-29  669  	.vidioc_decoder_cmd = v4l2_m2m_ioctl_decoder_cmd,
+bf8460d2f4e6a1 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c kyrie wu        2022-09-29  670  	.vidioc_try_decoder_cmd = v4l2_m2m_ioctl_try_decoder_cmd,
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  671  };
+b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c      Rick Chang      2016-12-14  672  
+
+:::::: The code at line 614 was first introduced by commit
+:::::: 45f13a57d8134459f02fbee0b1711eddc3260af7 media: platform: Add jpeg enc feature
+
+:::::: TO: Xia Jiang <xia.jiang@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
