@@ -1,45 +1,42 @@
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5E47C;
-	Thu,  4 May 2023 03:39:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3191386;
+	Thu,  4 May 2023 08:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683171588; x=1714707588;
+  t=1683188413; x=1714724413;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dsQcmKbYZXf2UuY5dEl6DNe64J4x62YVEs9O1kzwEa8=;
-  b=B9laHwba0n7iVVy36hA61wpdxVtJRg7Cv02Rk0RZPtgbbJOtD+jTr4uR
-   FosyBasvxEBuLwb3GuoW2rQhZrMH8/TPTX6PFlu9CSE1qAkfUXg97P9m/
-   rQpnwrg3M/9JNITBZtl5GJ9RKWojjq1ppIwNP0SrYWZJxv55BDUyuaPZp
-   z7sMcSyiJ4s0dylbFZKehi5zkhj3K1tSO3F+UeGvt3K3ol63+kNLmvKze
-   ztnHOPE0Mz61GjMzOjiBPP0OPAAS5H7B/IgRLoBTsg8QBr3tkUK1umgmd
-   JWjysh15lLeuWo0SJvVj4IdjMUfoStcqAKBCTEeEx5LwIiRKAhIK7wMxX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="348869735"
+  bh=TlKcmFTlJNDQFRTqKNLCnVrDrInDcddmrrNlsjK8HhY=;
+  b=AIElkm/dpnx1cD8t9YPpaMd8xZ46OastTDnK+JHO6K/pU10h2mRJ1rtC
+   TRB0NY7YfRretIhzK/9+sKg9t9kKzJ2NG3VxsOfXdS+UqBW9BtD2IxVLc
+   qUx7HIf9TW/xuesmmgW+oQY1RJoaViBTjCGX/ODWxLIc8Ynrfx5XEo/8K
+   XFjxZPFkaxNiG8PlbbNz6JxaE5VE0gkWrv5JrZ3dp3a00cLXunY79biNF
+   xBBPSZKq90BLQyJKsHzfGFEYF43QM8d7WTKX8m2cHea3T4Z4sMu0tJUCV
+   iGJK6H37aacWNd0k3idIILPk2Zim8chn+aynwECr3RxmATQYJlukojYxJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="333238859"
 X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="348869735"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 20:39:48 -0700
+   d="scan'208";a="333238859"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 01:20:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="871199392"
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="647224226"
 X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="871199392"
+   d="scan'208";a="647224226"
 Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2023 20:39:45 -0700
+  by orsmga003.jf.intel.com with ESMTP; 04 May 2023 01:20:11 -0700
 Received: from kbuild by e3434d64424d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1puPon-0002WK-01;
-	Thu, 04 May 2023 03:39:45 +0000
-Date: Thu, 4 May 2023 11:39:40 +0800
+	id 1puUCA-0002i0-1i;
+	Thu, 04 May 2023 08:20:10 +0000
+Date: Thu, 4 May 2023 16:20:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <maxime@cerno.tech>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.10.y 5083/9999]
- drivers/gpu/drm/vc4/vc4_dsi.c:617:35: warning: unused variable 'dsi0_regs'
-Message-ID: <202305041150.phd1FixR-lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:crypto-krb5 17/21] net/rxrpc/rxgk.c:571:9: warning:
+ variable 'resp_len' set but not used
+Message-ID: <202305041638.gVqnL90S-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,75 +46,108 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Maxime,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
-head:   f1b32fda06d2cfb8eea9680b0ba7a8b0d5b81eeb
-commit: 6cc1edddcf02f69664887ea7ed4b604481ae300e [5083/9999] drm/vc4: dsi: Introduce a variant structure
-config: riscv-randconfig-r025-20230503 (https://download.01.org/0day-ci/archive/20230504/202305041150.phd1FixR-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git crypto-krb5
+head:   c2bc708ea35105bd4b41269dcc6296037f0272c6
+commit: 8be0de0a71d068addc309ef72528238c7ecf340e [17/21] rxrpc: rxgk: Implement the yfs-rxgk security class (GSSAPI)
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20230504/202305041638.gVqnL90S-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=6cc1edddcf02f69664887ea7ed4b604481ae300e
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.10.y
-        git checkout 6cc1edddcf02f69664887ea7ed4b604481ae300e
+        # https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?id=8be0de0a71d068addc309ef72528238c7ecf340e
+        git remote add dhowells-fs https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git
+        git fetch --no-tags dhowells-fs crypto-krb5
+        git checkout 8be0de0a71d068addc309ef72528238c7ecf340e
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/vc4/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/hwmon/ drivers/net/ethernet/mellanox/mlx5/core/ net/rxrpc/ net/wireless/./
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305041150.phd1FixR-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305041638.gVqnL90S-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/vc4/vc4_dsi.c:617:35: warning: unused variable 'dsi0_regs' [-Wunused-const-variable]
-   static const struct debugfs_reg32 dsi0_regs[] = {
-                                     ^
+>> net/rxrpc/rxgk.c:571:9: warning: variable 'resp_len' set but not used [-Wunused-but-set-variable]
+           size_t resp_len, auth_len, authx_len, auth_offset, authx_offset;
+                  ^
    1 warning generated.
 
 
-vim +/dsi0_regs +617 drivers/gpu/drm/vc4/vc4_dsi.c
+vim +/resp_len +571 net/rxrpc/rxgk.c
 
-4078f5757144234 Eric Anholt 2017-01-31  616  
-3051719af11eb48 Eric Anholt 2019-02-20 @617  static const struct debugfs_reg32 dsi0_regs[] = {
-3051719af11eb48 Eric Anholt 2019-02-20  618  	VC4_REG32(DSI0_CTRL),
-3051719af11eb48 Eric Anholt 2019-02-20  619  	VC4_REG32(DSI0_STAT),
-3051719af11eb48 Eric Anholt 2019-02-20  620  	VC4_REG32(DSI0_HSTX_TO_CNT),
-3051719af11eb48 Eric Anholt 2019-02-20  621  	VC4_REG32(DSI0_LPRX_TO_CNT),
-3051719af11eb48 Eric Anholt 2019-02-20  622  	VC4_REG32(DSI0_TA_TO_CNT),
-3051719af11eb48 Eric Anholt 2019-02-20  623  	VC4_REG32(DSI0_PR_TO_CNT),
-3051719af11eb48 Eric Anholt 2019-02-20  624  	VC4_REG32(DSI0_DISP0_CTRL),
-3051719af11eb48 Eric Anholt 2019-02-20  625  	VC4_REG32(DSI0_DISP1_CTRL),
-3051719af11eb48 Eric Anholt 2019-02-20  626  	VC4_REG32(DSI0_INT_STAT),
-3051719af11eb48 Eric Anholt 2019-02-20  627  	VC4_REG32(DSI0_INT_EN),
-3051719af11eb48 Eric Anholt 2019-02-20  628  	VC4_REG32(DSI0_PHYC),
-3051719af11eb48 Eric Anholt 2019-02-20  629  	VC4_REG32(DSI0_HS_CLT0),
-3051719af11eb48 Eric Anholt 2019-02-20  630  	VC4_REG32(DSI0_HS_CLT1),
-3051719af11eb48 Eric Anholt 2019-02-20  631  	VC4_REG32(DSI0_HS_CLT2),
-3051719af11eb48 Eric Anholt 2019-02-20  632  	VC4_REG32(DSI0_HS_DLT3),
-3051719af11eb48 Eric Anholt 2019-02-20  633  	VC4_REG32(DSI0_HS_DLT4),
-3051719af11eb48 Eric Anholt 2019-02-20  634  	VC4_REG32(DSI0_HS_DLT5),
-3051719af11eb48 Eric Anholt 2019-02-20  635  	VC4_REG32(DSI0_HS_DLT6),
-3051719af11eb48 Eric Anholt 2019-02-20  636  	VC4_REG32(DSI0_HS_DLT7),
-3051719af11eb48 Eric Anholt 2019-02-20  637  	VC4_REG32(DSI0_PHY_AFEC0),
-3051719af11eb48 Eric Anholt 2019-02-20  638  	VC4_REG32(DSI0_PHY_AFEC1),
-3051719af11eb48 Eric Anholt 2019-02-20  639  	VC4_REG32(DSI0_ID),
-4078f5757144234 Eric Anholt 2017-01-31  640  };
-4078f5757144234 Eric Anholt 2017-01-31  641  
-
-:::::: The code at line 617 was first introduced by commit
-:::::: 3051719af11eb48dc8947826cfb66dbe0f281c7d drm/vc4: Use drm_print_regset32() for our debug register dumping.
-
-:::::: TO: Eric Anholt <eric@anholt.net>
-:::::: CC: Eric Anholt <eric@anholt.net>
+   555	
+   556	/*
+   557	 * Construct the response.
+   558	 *
+   559	 * struct RXGK_Response {
+   560	 *	rxgkTime start_time;
+   561	 *	RXGK_Data token;
+   562	 *	opaque authenticator<RXGK_MAXAUTHENTICATOR>
+   563	 * };
+   564	 */
+   565	static int rxgk_construct_response(struct rxrpc_connection *conn,
+   566					   struct sk_buff *challenge,
+   567					   const u8 *nonce)
+   568	{
+   569		struct rxgk_context *gk;
+   570		struct rxrpc_txbuf *txb;
+ > 571		size_t resp_len, auth_len, authx_len, auth_offset, authx_offset;
+   572		__be32 *xdr;
+   573		int ret;
+   574	
+   575		gk = rxgk_get_key(conn, NULL);
+   576		if (IS_ERR(gk))
+   577			return PTR_ERR(gk);
+   578	
+   579		auth_len = 20 + 4 /* appdatalen */ + 12 + (1 + 4) * 4;
+   580		authx_len = crypto_krb5_how_much_buffer(gk->krb5,
+   581							KRB5_ENCRYPT_MODE, true,
+   582							auth_len, &auth_offset);
+   583	
+   584		resp_len  = 8;
+   585		resp_len += 4 + xdr_round_up(gk->key->ticket.len);
+   586		resp_len += 4 + xdr_round_up(authx_len);
+   587	
+   588		ret = -ENOMEM;
+   589		txb = rxrpc_alloc_response_txbuf(conn, challenge);
+   590		if (!txb)
+   591			goto error_gk;
+   592	
+   593		txb->wire.cksum = htons(gk->key_number);
+   594		xdr = (void *)txb->data;
+   595	
+   596		*xdr++ = htonl(upper_32_bits(conn->rxgk.start_time));
+   597		*xdr++ = htonl(lower_32_bits(conn->rxgk.start_time));
+   598		*xdr++ = htonl(gk->key->ticket.len);
+   599		memcpy(xdr, gk->key->ticket.data, xdr_round_up(gk->key->ticket.len));
+   600		xdr += xdr_round_up(gk->key->ticket.len) / sizeof(*xdr);
+   601		*xdr++ = htonl(authx_len);
+   602	
+   603		authx_offset = (u8 *)xdr - txb->data;
+   604		auth_offset += authx_offset;
+   605	
+   606		xdr = (void *)txb->data + auth_offset;
+   607		rxgk_construct_authenticator(conn, nonce, xdr);
+   608	
+   609		ret = rxgk_encrypt_txb(gk->krb5, &gk->resp_enc, txb,
+   610				       authx_offset, authx_len,
+   611				       auth_offset, auth_len, false);
+   612		if (ret < 0)
+   613			goto error;
+   614	
+   615		txb->len = authx_offset + ret;
+   616	
+   617		ret = rxgk_send_response(conn, txb);
+   618	error:
+   619		rxrpc_put_txbuf(txb, rxrpc_txbuf_put_response_tx);
+   620	error_gk:
+   621		rxgk_put(gk);
+   622		_leave(" = %d", ret);
+   623		return ret;
+   624	}
+   625	
 
 -- 
 0-DAY CI Kernel Test Service
