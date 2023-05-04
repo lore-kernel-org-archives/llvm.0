@@ -1,96 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B77719BDD;
-	Thu,  4 May 2023 19:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB81C4339B;
-	Thu,  4 May 2023 19:52:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1683229941;
-	bh=hveISeaU9FkwcltR0ICWbAguyn61drmwjK/h450Kasw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QDmdAX/1AYyP0EPsy1Fw2jKXaSwAs5E8TSZn30p6xXBiQ90bddh1ax8KsgupL0F97
-	 aDFbWRG9X3RFzh+s9lkgcwklMFHXPilEVbs0DPJLPeSJ+mK//EGMx4x8AzeBXIlyZL
-	 h40jivL8QtA8oWaOuA/mFZZ8w2crvZtttMBvyd2WNYkUkPHte3sxrilICOovIYWs3t
-	 cLgFGSbqKswtrh+GWfIwqq52AfZiU0C9ScwFqnE3QDjD3TWuce/IFiE4ZUJr0DOXhH
-	 vooyJQ8AEBhHbAk0I38EHP+o2CVjgVrZOU/TQGc0bkecwtQlAVSDLR8KCEYBhFM9Nm
-	 aTEaT2KhW9wqg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Sasha Levin <sashal@kernel.org>,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	ndesaulniers@google.com,
-	mkl@pengutronix.de,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.14 04/13] net: pasemi: Fix return type of pasemi_mac_start_tx()
-Date: Thu,  4 May 2023 15:51:56 -0400
-Message-Id: <20230504195207.3809116-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504195207.3809116-1-sashal@kernel.org>
-References: <20230504195207.3809116-1-sashal@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EDA7C;
+	Thu,  4 May 2023 20:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683232674; x=1714768674;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iMnt368wKhWGIoYHS+ZZOrPdI1k/gxyzl+kPiQhQ+Wk=;
+  b=NicP+cy8XUqa+vfy0sB4NtKEAdHFIVieNWrqKShgeNurp7NdUs3kf8iC
+   X2isvGYighWfkOO+vUZX0q2NS2Ca7C0k2MK5H5xjj7xtOEHIqG0cj0I8p
+   92FcWyLJDIV9vEda9BH/4vejIk55N2EO2X4CQ6fScMkuwkvQV1dTaL0g0
+   o1bHo0Ex/SfH8XRXR03Ms4Z6QnqYF7GyEQFuppuEzpMZ1mTZun49dLeuq
+   PJe01DRwj2POqwMdYCeaARwH1rd8Thq+0AXChnApRMlFnD8HdHVzWDp4l
+   JatGssvErHUyXsY8BtnpHp/nPijmg0ZFVJzk8udiFGARk5qRzQfUOGQbH
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="329413343"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="329413343"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 13:37:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="871489807"
+X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
+   d="scan'208";a="871489807"
+Received: from lkp-server01.sh.intel.com (HELO 64cf2984a3fe) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 04 May 2023 13:37:52 -0700
+Received: from kbuild by 64cf2984a3fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1pufi3-00008A-1O;
+	Thu, 04 May 2023 20:37:51 +0000
+Date: Fri, 5 May 2023 04:37:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Jiang <dave.jiang@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [djiang:cxl-qtg 14/28] drivers/cxl/acpi.c:228:11: warning: variable
+ 'entries' set but not used
+Message-ID: <202305050435.mm0pWJZl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl-qtg
+head:   c09d294a320a41a687ff2881bc080bf7d9ee5ce2
+commit: c858b2d3eecde666304c4dbee7e32bc781971dfd [14/28] cxl: Add support for _DSM Function for retrieving QTG ID
+config: i386-randconfig-a012-20230501 (https://download.01.org/0day-ci/archive/20230505/202305050435.mm0pWJZl-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/commit/?id=c858b2d3eecde666304c4dbee7e32bc781971dfd
+        git remote add djiang https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git
+        git fetch --no-tags djiang cxl-qtg
+        git checkout c858b2d3eecde666304c4dbee7e32bc781971dfd
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/
 
-[ Upstream commit c8384d4a51e7cb0e6587f3143f29099f202c5de1 ]
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305050435.mm0pWJZl-lkp@intel.com/
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-warning in clang aims to catch these at compile time, which reveals:
+All warnings (new ones prefixed by >>):
 
-  drivers/net/ethernet/pasemi/pasemi_mac.c:1665:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = pasemi_mac_start_tx,
-                                    ^~~~~~~~~~~~~~~~~~~
-  1 error generated.
+>> drivers/cxl/acpi.c:228:11: warning: variable 'entries' set but not used [-Wunused-but-set-variable]
+           int len, entries;
+                    ^
+   1 warning generated.
 
-->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of
-pasemi_mac_start_tx() to match the prototype's to resolve the warning.
-While PowerPC does not currently implement support for kCFI, it could in
-the future, which means this warning becomes a fatal CFI failure at run
-time.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Link: https://lore.kernel.org/r/20230319-pasemi-incompatible-pointer-types-strict-v1-1-1b9459d8aef0@kernel.org
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/ethernet/pasemi/pasemi_mac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+vim +/entries +228 drivers/cxl/acpi.c
 
-diff --git a/drivers/net/ethernet/pasemi/pasemi_mac.c b/drivers/net/ethernet/pasemi/pasemi_mac.c
-index 6ccdce21ca9b5..c891ee70099a7 100644
---- a/drivers/net/ethernet/pasemi/pasemi_mac.c
-+++ b/drivers/net/ethernet/pasemi/pasemi_mac.c
-@@ -1436,7 +1436,7 @@ static void pasemi_mac_queue_csdesc(const struct sk_buff *skb,
- 	write_dma_reg(PAS_DMA_TXCHAN_INCR(txring->chan.chno), 2);
- }
- 
--static int pasemi_mac_start_tx(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t pasemi_mac_start_tx(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct pasemi_mac * const mac = netdev_priv(dev);
- 	struct pasemi_mac_txring * const txring = tx_ring(mac);
+   200	
+   201	/**
+   202	 * cxl_acpi_evaluate_qtg_dsm - Retrieve QTG ids via ACPI _DSM
+   203	 * @handle: ACPI handle
+   204	 * @input: bandwidth and latency data
+   205	 *
+   206	 * Issue QTG _DSM with accompanied bandwidth and latency data in order to get
+   207	 * the QTG IDs that are suitable for the performance point in order of most
+   208	 * suitable to least suitable. Return first QTG ID.
+   209	 */
+   210	static int cxl_acpi_evaluate_qtg_dsm(acpi_handle handle,
+   211					     struct qtg_dsm_input *input)
+   212	{
+   213		union acpi_object *out_obj, *out_buf, *pkg;
+   214		union acpi_object in_buf = {
+   215			.buffer = {
+   216				.type = ACPI_TYPE_BUFFER,
+   217				.pointer = (u8 *)input,
+   218				.length = cpu_to_le32(sizeof(*input)),
+   219			},
+   220		};
+   221		union acpi_object in_obj = {
+   222			.package = {
+   223				.type = ACPI_TYPE_PACKAGE,
+   224				.count = cpu_to_le32(1),
+   225				.elements = &in_buf
+   226			},
+   227		};
+ > 228		int len, entries;
+   229		u16 max_qtg;
+   230		int rc = 0;
+   231	
+   232		out_obj = acpi_evaluate_dsm(handle, &acpi_cxl_qtg_id_guid, 1, 1, &in_obj);
+   233		if (!out_obj)
+   234			return -ENXIO;
+   235	
+   236		if (out_obj->type != ACPI_TYPE_PACKAGE) {
+   237			rc = -ENXIO;
+   238			goto out;
+   239		}
+   240	
+   241		/* Check Max QTG ID */
+   242		pkg = &out_obj->package.elements[0];
+   243		if (pkg->type != ACPI_TYPE_BUFFER) {
+   244			rc = -ENXIO;
+   245			goto out;
+   246		}
+   247	
+   248		if (le32_to_cpu(pkg->buffer.length) != sizeof(u16)) {
+   249			rc = -ENXIO;
+   250			goto out;
+   251		}
+   252	
+   253		max_qtg = le16_to_cpu(*(__le16 *)pkg->buffer.pointer);
+   254	
+   255		/* Retrieve QTG IDs package */
+   256		pkg = &out_obj->package.elements[1];
+   257		if (pkg->type != ACPI_TYPE_PACKAGE) {
+   258			rc = -ENXIO;
+   259			goto out;
+   260		}
+   261	
+   262		out_buf = &pkg->package.elements[0];
+   263		if (out_buf->type != ACPI_TYPE_BUFFER) {
+   264			rc = -ENXIO;
+   265			goto out;
+   266		}
+   267	
+   268		len = le32_to_cpu(out_buf->buffer.length);
+   269	
+   270		/* It's legal to have 0 QTG entries */
+   271		if (len == 0) {
+   272			rc = -EEXIST;
+   273			goto out;
+   274		}
+   275	
+   276		/* Malformed package, not multiple of WORD size */
+   277		if (len % sizeof(u16)) {
+   278			rc = -ENXIO;
+   279			goto out;
+   280		}
+   281	
+   282		entries = len / sizeof(u16);
+   283		rc = le16_to_cpu(*(__le16 *)out_buf->buffer.pointer);
+   284		if (rc > max_qtg) {
+   285			rc = -ERANGE;
+   286			pr_warn("QTG ID %u greater than MAX %u\n", rc, max_qtg);
+   287		}
+   288	
+   289	out:
+   290		ACPI_FREE(out_obj);
+   291		return rc;
+   292	}
+   293	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
