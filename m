@@ -1,199 +1,239 @@
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D190EA2D;
-	Thu,  4 May 2023 10:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683195385; x=1714731385;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EnVwmbutFKiPklxgJrhOzJkmouvnKx/lrrbvgBZN/2A=;
-  b=fFSrEFH5S4nk3TTIoe+byHw0n3H0XY4TZJUPPRKVHzF4+Xabl+1mb2ZF
-   3680zDeAaV4wAMgtPnSaMbE/IKCogLauBLKua8iY8gYgu9VOwAH6Yxp2C
-   q7NYHhRJUAtF6BrDpMRLWgTeD2dWCu6F7p2yATBvhEGnCBQ4n+Zx+EET2
-   sIkBlMghirihvhtnY2xSKMlO91Wwo+fPz6kKNU9ykL42jQqw0CCpbeFyo
-   RjvTP4yYoimL6iW7TXc4qVobef55TjXKNbRppSFroDt852myIrBlHMq1O
-   S5W5rb/qfhbtl2nCI24DaF7YMqFbyriLCImF0l39ReTeFtRM498z5RLMy
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="350985093"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="350985093"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 03:16:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="691061706"
-X-IronPort-AV: E=Sophos;i="5.99,249,1677571200"; 
-   d="scan'208";a="691061706"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 04 May 2023 03:16:21 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1puW0b-0002qH-05;
-	Thu, 04 May 2023 10:16:21 +0000
-Date: Thu, 4 May 2023 18:16:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-efistub-cleanup 9/12]
- arch/x86/boot/compressed/pgtable_64.c:212:1: error: expected statement
-Message-ID: <202305041840.yntDMMut-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1F31391
+	for <llvm@lists.linux.dev>; Thu,  4 May 2023 10:32:02 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 7EE3A209F6;
+	Thu,  4 May 2023 10:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1683196320; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SysVoVEKW+NX4qyVGu/niFlwGn5aiW8M5/2sd3Frq6w=;
+	b=juSzgQlFlUDuBImH9ZJN/4cvnNQiKW1CsIfyP7OnP0w5p0L5JLGR4eMvuerD53YtoDxppF
+	iCPh2YubO9R5cvjksS70oKLJ4ICxj2GC8yaeouEoRVXZdyQ6AV7PLoLgCnqQ5JJ9R9/XXD
+	TURNTorKdCr0S6/Vh9F0rphyrPDr8dI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+	(No client certificate requested)
+	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C1EE133F7;
+	Thu,  4 May 2023 10:31:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+	by imap2.suse-dmz.suse.de with ESMTPSA
+	id sf/UHJ+JU2ShewAAMHmgww
+	(envelope-from <jgross@suse.com>); Thu, 04 May 2023 10:31:59 +0000
+Message-ID: <edd4b974-08de-0769-0dba-f945ed06f222@suse.com>
+Date: Thu, 4 May 2023 12:31:59 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH RFC 16/43] x86-64: Use per-cpu stack canary if supported
+ by compiler
+Content-Language: en-US
+To: Hou Wenlong <houwenlong.hwl@antgroup.com>, linux-kernel@vger.kernel.org
+Cc: Thomas Garnier <thgarnie@chromium.org>,
+ Lai Jiangshan <jiangshan.ljs@antgroup.com>, Kees Cook
+ <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Andy Lutomirski <luto@kernel.org>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Darren Hart <dvhart@infradead.org>, Andy Shevchenko <andy@infradead.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, "Mike Rapoport (IBM)"
+ <rppt@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Guo Ren <guoren@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Kim Phillips <kim.phillips@amd.com>, David Woodhouse <dwmw@amazon.co.uk>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, xen-devel@lists.xenproject.org,
+ platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+ <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
+From: Juergen Gross <jgross@suse.com>
+In-Reply-To: <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------dy9uFmhcjqIP2UV6JYsq3Ms5"
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-efistub-cleanup
-head:   b5c6e7e9fc7da4ab714f4d1e399b84d7e3f66f88
-commit: 67dd00f48bd9e38b1bbf430b3708ec63e88361d1 [9/12] x86: decompressor: Merge trampoline cleanup with switching code
-config: x86_64-randconfig-a012-20230501 (https://download.01.org/0day-ci/archive/20230504/202305041840.yntDMMut-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=67dd00f48bd9e38b1bbf430b3708ec63e88361d1
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb x86-efistub-cleanup
-        git checkout 67dd00f48bd9e38b1bbf430b3708ec63e88361d1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------dy9uFmhcjqIP2UV6JYsq3Ms5
+Content-Type: multipart/mixed; boundary="------------ov0MDEHsfp47A5JSPZkJ0II7";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Hou Wenlong <houwenlong.hwl@antgroup.com>, linux-kernel@vger.kernel.org
+Cc: Thomas Garnier <thgarnie@chromium.org>,
+ Lai Jiangshan <jiangshan.ljs@antgroup.com>, Kees Cook
+ <keescook@chromium.org>, Brian Gerst <brgerst@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Andy Lutomirski <luto@kernel.org>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Darren Hart <dvhart@infradead.org>, Andy Shevchenko <andy@infradead.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, "Mike Rapoport (IBM)"
+ <rppt@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Guo Ren <guoren@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Kim Phillips <kim.phillips@amd.com>, David Woodhouse <dwmw@amazon.co.uk>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, xen-devel@lists.xenproject.org,
+ platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev
+Message-ID: <edd4b974-08de-0769-0dba-f945ed06f222@suse.com>
+Subject: Re: [PATCH RFC 16/43] x86-64: Use per-cpu stack canary if supported
+ by compiler
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+ <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
+In-Reply-To: <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305041840.yntDMMut-lkp@intel.com/
+--------------ov0MDEHsfp47A5JSPZkJ0II7
+Content-Type: multipart/mixed; boundary="------------AE0inQaMWfJGKdJPNCVK0Np8"
 
-All errors (new ones prefixed by >>):
+--------------AE0inQaMWfJGKdJPNCVK0Np8
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->> arch/x86/boot/compressed/pgtable_64.c:212:1: error: expected statement
-   }
-   ^
-   1 error generated.
+T24gMjguMDQuMjMgMTE6NTAsIEhvdSBXZW5sb25nIHdyb3RlOg0KPiBGcm9tOiBCcmlhbiBH
+ZXJzdCA8YnJnZXJzdEBnbWFpbC5jb20+DQo+IA0KPiBGcm9tOiBCcmlhbiBHZXJzdCA8YnJn
+ZXJzdEBnbWFpbC5jb20+DQo+IA0KPiBJZiB0aGUgY29tcGlsZXIgc3VwcG9ydHMgaXQsIHVz
+ZSBhIHN0YW5kYXJkIHBlci1jcHUgdmFyaWFibGUgZm9yIHRoZQ0KPiBzdGFjayBwcm90ZWN0
+b3IgaW5zdGVhZCBvZiB0aGUgb2xkIGZpeGVkIGxvY2F0aW9uLiAgS2VlcCB0aGUgZml4ZWQN
+Cj4gbG9jYXRpb24gY29kZSBmb3IgY29tcGF0aWJpbGl0eSB3aXRoIG9sZGVyIGNvbXBpbGVy
+cy4NCj4gDQo+IFtIb3UgV2VubG9uZzogRGlzYWJsZSBpdCBvbiBDbGFuZywgYWRhcHQgbmV3
+IGNvZGUgY2hhbmdlIGFuZCBhZGFwdA0KPiBtaXNzaW5nIEdTIHNldCB1cCBwYXRoIGluIHB2
+aF9zdGFydF94ZW4oKV0NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEJyaWFuIEdlcnN0IDxicmdl
+cnN0QGdtYWlsLmNvbT4NCj4gQ28tZGV2ZWxvcGVkLWJ5OiBIb3UgV2VubG9uZyA8aG91d2Vu
+bG9uZy5od2xAYW50Z3JvdXAuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBIb3UgV2VubG9uZyA8
+aG91d2VubG9uZy5od2xAYW50Z3JvdXAuY29tPg0KPiBDYzogVGhvbWFzIEdhcm5pZXIgPHRo
+Z2FybmllQGNocm9taXVtLm9yZz4NCj4gQ2M6IExhaSBKaWFuZ3NoYW4gPGppYW5nc2hhbi5s
+anNAYW50Z3JvdXAuY29tPg0KPiBDYzogS2VlcyBDb29rIDxrZWVzY29va0BjaHJvbWl1bS5v
+cmc+DQo+IC0tLQ0KPiAgIGFyY2gveDg2L0tjb25maWcgICAgICAgICAgICAgICAgICAgICAg
+fCAxMiArKysrKysrKysrKysNCj4gICBhcmNoL3g4Ni9NYWtlZmlsZSAgICAgICAgICAgICAg
+ICAgICAgIHwgMjEgKysrKysrKysrKysrKystLS0tLS0tDQo+ICAgYXJjaC94ODYvZW50cnkv
+ZW50cnlfNjQuUyAgICAgICAgICAgICB8ICA2ICsrKysrLQ0KPiAgIGFyY2gveDg2L2luY2x1
+ZGUvYXNtL3Byb2Nlc3Nvci5oICAgICAgfCAxNyArKysrKysrKysrKystLS0tLQ0KPiAgIGFy
+Y2gveDg2L2luY2x1ZGUvYXNtL3N0YWNrcHJvdGVjdG9yLmggfCAxNiArKysrKysrLS0tLS0t
+LS0tDQo+ICAgYXJjaC94ODYva2VybmVsL2FzbS1vZmZzZXRzXzY0LmMgICAgICB8ICAyICst
+DQo+ICAgYXJjaC94ODYva2VybmVsL2NwdS9jb21tb24uYyAgICAgICAgICB8IDE1ICsrKysr
+KystLS0tLS0tLQ0KPiAgIGFyY2gveDg2L2tlcm5lbC9oZWFkXzY0LlMgICAgICAgICAgICAg
+fCAxNiArKysrKysrKysrLS0tLS0tDQo+ICAgYXJjaC94ODYva2VybmVsL3ZtbGludXgubGRz
+LlMgICAgICAgICB8ICA0ICsrKy0NCj4gICBhcmNoL3g4Ni9wbGF0Zm9ybS9wdmgvaGVhZC5T
+ICAgICAgICAgIHwgIDggKysrKysrKysNCj4gICBhcmNoL3g4Ni94ZW4veGVuLWhlYWQuUyAg
+ICAgICAgICAgICAgIHwgMTQgKysrKysrKysrLS0tLS0NCj4gICAxMSBmaWxlcyBjaGFuZ2Vk
+LCA4OCBpbnNlcnRpb25zKCspLCA0MyBkZWxldGlvbnMoLSkNCj4gDQoNCi4uLg0KDQo+IGRp
+ZmYgLS1naXQgYS9hcmNoL3g4Ni94ZW4veGVuLWhlYWQuUyBiL2FyY2gveDg2L3hlbi94ZW4t
+aGVhZC5TDQo+IGluZGV4IDY0M2QwMjkwMGZiYi4uMDllYWY1OWU4MDY2IDEwMDY0NA0KPiAt
+LS0gYS9hcmNoL3g4Ni94ZW4veGVuLWhlYWQuUw0KPiArKysgYi9hcmNoL3g4Ni94ZW4veGVu
+LWhlYWQuUw0KPiBAQCAtNTEsMTUgKzUxLDE5IEBAIFNZTV9DT0RFX1NUQVJUKHN0YXJ0dXBf
+eGVuKQ0KPiAgIA0KPiAgIAlsZWFxCShfX2VuZF9pbml0X3Rhc2sgLSBQVFJFR1NfU0laRSko
+JXJpcCksICVyc3ANCj4gICANCj4gLQkvKiBTZXQgdXAgJWdzLg0KPiAtCSAqDQo+IC0JICog
+VGhlIGJhc2Ugb2YgJWdzIGFsd2F5cyBwb2ludHMgdG8gZml4ZWRfcGVyY3B1X2RhdGEuICBJ
+ZiB0aGUNCj4gLQkgKiBzdGFjayBwcm90ZWN0b3IgY2FuYXJ5IGlzIGVuYWJsZWQsIGl0IGlz
+IGxvY2F0ZWQgYXQgJWdzOjQwLg0KPiArCS8qDQo+ICsJICogU2V0IHVwIEdTIGJhc2UuDQo+
+ICAgCSAqIE5vdGUgdGhhdCwgb24gU01QLCB0aGUgYm9vdCBjcHUgdXNlcyBpbml0IGRhdGEg
+c2VjdGlvbiB1bnRpbA0KPiAgIAkgKiB0aGUgcGVyIGNwdSBhcmVhcyBhcmUgc2V0IHVwLg0K
+PiAgIAkgKi8NCj4gICAJbW92bAkkTVNSX0dTX0JBU0UsJWVjeA0KPiAtCW1vdnEJJElOSVRf
+UEVSX0NQVV9WQVIoZml4ZWRfcGVyY3B1X2RhdGEpLCVyYXgNCj4gKyNpZiBkZWZpbmVkKENP
+TkZJR19TVEFDS1BST1RFQ1RPUl9GSVhFRCkNCj4gKwlsZWFxCUlOSVRfUEVSX0NQVV9WQVIo
+Zml4ZWRfcGVyY3B1X2RhdGEpKCVyaXApLCAlcmR4DQo+ICsjZWxpZiBkZWZpbmVkKENPTkZJ
+R19TTVApDQo+ICsJbW92YWJzCSRfX3Blcl9jcHVfbG9hZCwgJXJkeA0KDQpTaG91bGRuJ3Qg
+YWJvdmUgMiB0YXJnZXRzIGJlICVyYXg/DQoNCj4gKyNlbHNlDQo+ICsJeG9ybAklZWF4LCAl
+ZWF4DQo+ICsjZW5kaWYNCj4gICAJY2RxDQo+ICAgCXdybXNyDQo+ICAgDQoNCg0KSnVlcmdl
+bg0K
+--------------AE0inQaMWfJGKdJPNCVK0Np8
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-vim +212 arch/x86/boot/compressed/pgtable_64.c
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-1b3a62643660020 Kirill A. Shutemov 2018-08-01  103  
-ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  104  asmlinkage void set_paging_levels(void *rmode)
-4440977be1347d4 Kirill A. Shutemov 2018-02-09  105  {
-67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  106  	static u8 __section(".pgtable") __aligned(PAGE_SIZE) pgtable[PAGE_SIZE];
-ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  107  	void (*toggle_la57)(void *trampoline, bool enable_5lvl);
-67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  108  	void *trampoline_pgtable;
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  109  	bool l5_required;
-08529078d8d9adf Kirill A. Shutemov 2017-12-04  110  
-372fddf70904174 Kirill A. Shutemov 2018-05-18  111  	/* Initialize boot_params. Required for cmdline_find_option_bool(). */
-372fddf70904174 Kirill A. Shutemov 2018-05-18  112  	boot_params = rmode;
-372fddf70904174 Kirill A. Shutemov 2018-05-18  113  
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  114  	/*
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  115  	 * Check if LA57 is desired and supported.
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  116  	 *
-372fddf70904174 Kirill A. Shutemov 2018-05-18  117  	 * There are several parts to the check:
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  118  	 *   - if the kernel supports 5-level paging: CONFIG_X86_5LEVEL=y
-372fddf70904174 Kirill A. Shutemov 2018-05-18  119  	 *   - if user asked to disable 5-level paging: no5lvl in cmdline
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  120  	 *   - if the machine supports 5-level paging:
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  121  	 *     + CPUID leaf 7 is supported
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  122  	 *     + the leaf has the feature bit set
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  123  	 *
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  124  	 * That's substitute for boot_cpu_has() in early boot code.
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  125  	 */
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  126  	if (IS_ENABLED(CONFIG_X86_5LEVEL) &&
-372fddf70904174 Kirill A. Shutemov 2018-05-18  127  			!cmdline_find_option_bool("no5lvl") &&
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  128  			native_cpuid_eax(0) >= 7 &&
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  129  			(native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 & 31)))) {
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  130  		l5_required = 1;
-a403d798182f4f7 Kirill A. Shutemov 2018-02-26  131  	}
-08529078d8d9adf Kirill A. Shutemov 2017-12-04  132  
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  133  	/*
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  134  	 * We are not going to use the trampoline if we
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  135  	 * are already in the desired paging mode.
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  136  	 */
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  137  	if (l5_required == !!(native_read_cr4() & X86_CR4_LA57))
-67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  138  		goto out;
-3548e131ec6a822 Kirill A. Shutemov 2018-02-26  139  
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  140  	trampoline_32bit = (unsigned long *)find_trampoline_placement();
-3548e131ec6a822 Kirill A. Shutemov 2018-02-26  141  
-fb5268354d20b82 Kirill A. Shutemov 2018-02-26  142  	/* Preserve trampoline memory */
-fb5268354d20b82 Kirill A. Shutemov 2018-02-26  143  	memcpy(trampoline_save, trampoline_32bit, TRAMPOLINE_32BIT_SIZE);
-fb5268354d20b82 Kirill A. Shutemov 2018-02-26  144  
-32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  145  	/* Clear trampoline memory first */
-32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  146  	memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
-32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  147  
-32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  148  	/* Copy trampoline code in place */
-ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  149  	toggle_la57 = memcpy(trampoline_32bit +
-86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  150  			TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
-32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  151  			&trampoline_32bit_src, TRAMPOLINE_32BIT_CODE_SIZE);
-32fcefa2bfc8961 Kirill A. Shutemov 2018-02-26  152  
-86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  153  	/*
-86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  154  	 * Avoid the need for a stack in the 32-bit trampoline code, by using
-86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  155  	 * LJMP rather than LRET to return back to long mode.  LJMP takes an
-86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  156  	 * immediate absolute address, so we have to adjust that based on the
-86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  157  	 * placement of the trampoline.
-86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  158  	 */
-ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  159  	*(u32 *)((u8 *)toggle_la57 + trampoline_ljmp_imm_offset) +=
-ccc1fb1f8cf153e Ard Biesheuvel     2023-05-03  160  						(unsigned long)toggle_la57;
-86a7ad834a45ea9 Ard Biesheuvel     2023-05-03  161  
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  162  	/*
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  163  	 * The code below prepares page table in trampoline memory.
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  164  	 *
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  165  	 * The new page table will be used by trampoline code for switching
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  166  	 * from 4- to 5-level paging or vice versa.
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  167  	 */
-67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  168  	trampoline_pgtable = trampoline_32bit +
-67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  169  			     TRAMPOLINE_32BIT_PGTABLE_OFFSET / sizeof(unsigned long);
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  170  
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  171  	if (l5_required) {
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  172  		/*
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  173  		 * For 4- to 5-level paging transition, set up current CR3 as
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  174  		 * the first and the only entry in a new top-level page table.
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  175  		 */
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  176  		trampoline_32bit[TRAMPOLINE_32BIT_PGTABLE_OFFSET] = __native_read_cr3() | _PAGE_TABLE_NOENC;
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  177  	} else {
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  178  		unsigned long src;
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  179  
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  180  		/*
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  181  		 * For 5- to 4-level paging transition, copy page table pointed
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  182  		 * by first entry in the current top-level page table as our
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  183  		 * new top-level page table.
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  184  		 *
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  185  		 * We cannot just point to the page table from trampoline as it
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  186  		 * may be above 4G.
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  187  		 */
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  188  		src = *(unsigned long *)__native_read_cr3() & PAGE_MASK;
-67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  189  		memcpy(trampoline_pgtable, (void *)src, PAGE_SIZE);
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  190  	}
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  191  
-cc303efcfd8c7a4 Ard Biesheuvel     2023-05-03  192  	toggle_la57(trampoline_32bit, l5_required);
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  193  
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  194  	/*
-67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  195  	 * Move the top level page table out of trampoline memory.
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  196  	 */
-589bb62be316401 Kirill A. Shutemov 2018-05-16  197  	memcpy(pgtable, trampoline_pgtable, PAGE_SIZE);
-589bb62be316401 Kirill A. Shutemov 2018-05-16  198  	native_write_cr3((unsigned long)pgtable);
-e9d0e6330eb81ca Kirill A. Shutemov 2018-02-26  199  
-fb5268354d20b82 Kirill A. Shutemov 2018-02-26  200  	/* Restore trampoline memory */
-fb5268354d20b82 Kirill A. Shutemov 2018-02-26  201  	memcpy(trampoline_32bit, trampoline_save, TRAMPOLINE_32BIT_SIZE);
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  202  
-67dd00f48bd9e38 Ard Biesheuvel     2023-05-03  203  out:
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  204  	/* Initialize variables for 5-level paging */
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  205  #ifdef CONFIG_X86_5LEVEL
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  206  	if (__read_cr4() & X86_CR4_LA57) {
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  207  		__pgtable_l5_enabled = 1;
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  208  		pgdir_shift = 48;
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  209  		ptrs_per_p4d = 512;
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  210  	}
-e5ceb9a02402b98 Arvind Sankar      2020-10-10  211  #endif
-fb5268354d20b82 Kirill A. Shutemov 2018-02-26 @212  }
+--------------AE0inQaMWfJGKdJPNCVK0Np8--
 
-:::::: The code at line 212 was first introduced by commit
-:::::: fb5268354d20b82c12569e325b0d051c09f983f7 x86/boot/compressed/64: Save and restore trampoline memory
+--------------ov0MDEHsfp47A5JSPZkJ0II7--
 
-:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+--------------dy9uFmhcjqIP2UV6JYsq3Ms5
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmRTiZ8FAwAAAAAACgkQsN6d1ii/Ey/C
+/Qf7BVOcd5ra8zfx6EPiAv74I4RpWlIuL3rn0B5v6bOo0FFa4n4zj9VOvcYOUGlraDWF3O8GumNw
+Cb2IMVqEVZErE9qRr7deURIsoKwrXg8XsZZjyjfJHu8zKP0vbrA0de6Vd5j4KtUt9Zbex5+iSI6o
+znSFEHTx2lXV8YGE6XnBxHulxsAoSOpevs72mkXEZvqkplnfYYm1wbXEdHz1Kv7YDAzhn8sDHmIc
+kXp/CLT/2dmoEhI/S5jdbBan7ywy6EL+49FsfPxbNoHu4grjSjXTW000ltfEWEQL8ZA3GPAsM3PX
+xoMnuhBcTopWMqDtZyEsrsTuG79jnYi0WXwT9+wWmQ==
+=o9bz
+-----END PGP SIGNATURE-----
+
+--------------dy9uFmhcjqIP2UV6JYsq3Ms5--
