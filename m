@@ -1,87 +1,130 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B7CC2E2
-	for <llvm@lists.linux.dev>; Fri,  5 May 2023 15:37:37 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3f1950f569eso13733435e9.2
-        for <llvm@lists.linux.dev>; Fri, 05 May 2023 08:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683301056; x=1685893056;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MMQANphqIg54PwzmueerEA1nz6ede73K9wjbTi5bw3k=;
-        b=a3xV0hgeH2+HOW7KQ0n46spF34Mt6cZU8UE6reMTk2Op3pdqgwaIFTbRbmk+e/aQE5
-         RYAMOUEy+fGor1eIm/k7tig6rEzQMOVfL+NVK1QXrIVSfsQt571I3B/Zi3VXe1weaVC/
-         4eomzoHkj+3Vi/NW1q3m/SEAtqWO3jFWjEISvcnd6qBERWdECqpy2CgdFDUJ+tyIH+2S
-         TPs5UtZBwBc/Fnz+SGWOVXs6AsnX8fEaUzPGEI3GH/eyteKctZoFKyigjIjqhB+FSMKh
-         k/g9upF9q7vnODKBoVtt7O8XVD8aYy+d5l91r51H/v49ETPGi28RYnTNUroqmb/D0HmJ
-         jaUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683301056; x=1685893056;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MMQANphqIg54PwzmueerEA1nz6ede73K9wjbTi5bw3k=;
-        b=Gn5kMOrP04aP/fcx/0s/Y6Kw1w29CGUS0IRH3dF0/rHb2JGMeRVqWkRYVoKlHiL+hS
-         2Gfw3R6X5EAvMRWbjNzZQVldKilzwb2GFJs77PZ7oejhYtUq4ClbWCNNPcJVAzRS19ra
-         hNEKcywmSViYZEHKmlJC4UIqnsb/8JwThOe/tOkBkgXqVqyyeAj2X1u/RlUyXSBHO829
-         mDCNCmF0zCPGWj/9URzcL5escNrRZmTIKZyqrUpXPtS0W2u7hJMoHVIyl4j783qJAqEd
-         Kpnzf+NSvLcoShIvNdY49g0k6EpGcXJbS7ksoXLOQwWm/P1Hh7N+qBCrzpG5HR9GEnvN
-         gFiA==
-X-Gm-Message-State: AC+VfDzAH8LkhcEI8fb6hh7YU1vZArjjykp6eap8bMwyz+wyw3XB84WS
-	kHnQzIfOJGHrjI9FEV8XBzk=
-X-Google-Smtp-Source: ACHHUZ6YF0JN2q50Mb4Rc5IWpAQlQaY8t82WbF1TW53ociZHjEHxERnMkxklnJoCQ9mt5l5ZwvQpug==
-X-Received: by 2002:adf:f2c2:0:b0:306:3be9:6ab with SMTP id d2-20020adff2c2000000b003063be906abmr1905923wrp.54.1683301055966;
-        Fri, 05 May 2023 08:37:35 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id l8-20020a5d4bc8000000b0030631f199f9sm2696499wrt.34.2023.05.05.08.37.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 May 2023 08:37:34 -0700 (PDT)
-Message-ID: <db9c3190-28d8-199f-f4f0-a12524d0451e@gmail.com>
-Date: Fri, 5 May 2023 17:37:33 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D508BE0;
+	Fri,  5 May 2023 15:44:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683301464; x=1714837464;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lbTzMAvAr3LREHg1QmVWQGp0MTSnNPitDvtk32wqL+w=;
+  b=VvBHb2rSlfDG6ZwkFcZ64vCawBdENLZAjAFeIKijwBCrnX9rSRvHHlrK
+   S6ZaIgLnRkfyPEWX9drVlLxZVuHp7ghJxn1j6rPI3gSJ557zbek0wCMnH
+   bqUsh8jqTZjBb7dC9aQWVVmmfTfVYsYiiyVUEVCrl8QNeOTajupjlVPit
+   pKxaJsOlr3bL9lXAkGmlTOOqTCM7oo9MWWB181lyqzXysVq6E1kn7C9+v
+   rnoXA904jE1HT5ryiHzNylqhP0lM6J3yYvhIqQE+2/TH7GXMqgqbnRJXM
+   bs33ZNrvDvuIgPeWoymEKJttoIFp5ACGO1acjZxWpCHy89y9w8r7VmPkR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="329590810"
+X-IronPort-AV: E=Sophos;i="5.99,252,1677571200"; 
+   d="scan'208";a="329590810"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 08:44:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10701"; a="871901080"
+X-IronPort-AV: E=Sophos;i="5.99,252,1677571200"; 
+   d="scan'208";a="871901080"
+Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 05 May 2023 08:44:20 -0700
+Received: from kbuild by fe5d646e317d with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1puxbY-0000hZ-10;
+	Fri, 05 May 2023 15:44:20 +0000
+Date: Fri, 5 May 2023 23:43:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jocelyn Falempe <jfalempe@redhat.com>, dri-devel@lists.freedesktop.org,
+	tzimmermann@suse.de, airlied@redhat.com, javierm@redhat.com,
+	lyude@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jocelyn Falempe <jfalempe@redhat.com>
+Subject: Re: [PATCH 4/4] drm/mgag200: Use DMA to copy the framebuffer to the
+ VRAM
+Message-ID: <202305052344.TAIFBCMZ-lkp@intel.com>
+References: <20230505124337.854845-5-jfalempe@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] phy: mediatek: fix returning garbage
-Content-Language: en-US, ca-ES, es-ES
-To: Vinod Koul <vkoul@kernel.org>, Tom Rix <trix@redhat.com>
-Cc: chunkuang.hu@kernel.org, p.zabel@pengutronix.de,
- chunfeng.yun@mediatek.com, kishon@kernel.org,
- angelogioacchino.delregno@collabora.com, nathan@kernel.org,
- ndesaulniers@google.com, granquet@baylibre.com,
- dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20230414122253.3171524-1-trix@redhat.com>
- <ZFTMPWp8LhwA9uHz@matsya>
-From: Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <ZFTMPWp8LhwA9uHz@matsya>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230505124337.854845-5-jfalempe@redhat.com>
+
+Hi Jocelyn,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 457391b0380335d5e9a5babdec90ac53928b23b4]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jocelyn-Falempe/drm-mgag200-Rename-constant-MGAREG_Status-to-MGAREG_STATUS/20230505-204705
+base:   457391b0380335d5e9a5babdec90ac53928b23b4
+patch link:    https://lore.kernel.org/r/20230505124337.854845-5-jfalempe%40redhat.com
+patch subject: [PATCH 4/4] drm/mgag200: Use DMA to copy the framebuffer to the VRAM
+config: i386-randconfig-a013-20230501 (https://download.01.org/0day-ci/archive/20230505/202305052344.TAIFBCMZ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b3cab0043427adee56c6f3169cdfa15526dd331c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jocelyn-Falempe/drm-mgag200-Rename-constant-MGAREG_Status-to-MGAREG_STATUS/20230505-204705
+        git checkout b3cab0043427adee56c6f3169cdfa15526dd331c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/mgag200/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305052344.TAIFBCMZ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/mgag200/mgag200_dma.c:86:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+           int ret;
+               ^
+   1 warning generated.
 
 
+vim +/ret +86 drivers/gpu/drm/mgag200/mgag200_dma.c
 
-On 05/05/2023 11:28, Vinod Koul wrote:
-> On 14-04-23, 08:22, Tom Rix wrote:
->> clang reports
->> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:298:6: error: variable
->>    'ret' is uninitialized when used here [-Werror,-Wuninitialized]
->>          if (ret)
->>              ^~~
->> ret should have been set by the preceding call to mtk_hdmi_pll_set_hw.
-> 
-> I have applied "phy: mediatek: hdmi: mt8195: fix uninitialized variable
-> usage in pll_calc"
+    81	
+    82	void mgag200_dma_run_cmd(struct mga_device *mdev)
+    83	{
+    84		struct drm_device *dev = &mdev->base;
+    85		u32 primend;
+  > 86		int ret;
+    87	
+    88		/* Add a last block to trigger the softrap interrupt */
+    89		mgag200_dma_add_block(mdev,
+    90				MGAREG_DMAPAD, 0,
+    91				MGAREG_DMAPAD, 0,
+    92				MGAREG_DMAPAD, 0,
+    93				MGAREG_SOFTRAP, 0);
+    94	
+    95		primend = mdev->cmd_handle + mdev->cmd_idx * sizeof(struct mga_cmd_block);
+    96	
+    97		// Use primary DMA to send the commands
+    98		WREG32(MGAREG_PRIMADDR, (u32) mdev->cmd_handle);
+    99		WREG32(MGAREG_PRIMEND, primend);
+   100		mdev->dma_in_use = 1;
+   101	
+   102		ret = wait_event_timeout(mdev->waitq, mdev->dma_in_use == 0, HZ);
+   103	
+   104		if (mdev->dma_in_use) {
+   105			drm_err(dev, "DMA transfert timed out\n");
+   106			/* something goes wrong, reset the DMA engine */
+   107			WREG8(MGAREG_OPMODE, MGAOPM_DMA_BLIT);
+   108			mdev->dma_in_use = 0;
+   109		}
+   110	
+   111		/* reset command index to start a new sequence */
+   112		mdev->cmd_idx = 0;
+   113	}
+   114	
 
-Thanks Vinod, that was on my list for today as well. I was a bit puzzled because 
-you took the patch that added it, but I wasn't sure if you would take the fix. 
-How do you want to handle things like this in the future?
-
-Regards,
-Matthias
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
