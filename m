@@ -1,106 +1,84 @@
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026EC7E;
-	Fri,  5 May 2023 02:29:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683253742; x=1714789742;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=M5nyEpGjpvE+AA6AA5PM78a92mwPYSJnVCV4LkRnUk8=;
-  b=hyCLKd+k+VKUDKNSByOKltqGXb/P7pKQUy3MSMkOqSox4084sIi+e2YK
-   HPk2IRnM+M9ZF7DE0k3GLRj5yEM6LSyNn71MiFvc0i1Dpcv47uBLoIB6V
-   xa8CoJ+zWBK2fQuPm8XyIHd0Ivh2qYUx4igDEGL4W76mRhlV039p4Q001
-   B2iopN5Bd1EA+ellIn2ArTzqN0fFn3xbMhx7Gwe5d3eHlraKldE2GKTmR
-   njcNc+4/pMfnrD90vChL2LdQIno2gVlceBQZWmTw1siUpLxprhwC9moko
-   RrTEzjE4/A2EVpQR4nuhJvhq1Gkg2EyANNvYa6oJ1WH7JeqlHMbP/euj5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="352142540"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="352142540"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2023 19:28:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="700164949"
-X-IronPort-AV: E=Sophos;i="5.99,250,1677571200"; 
-   d="scan'208";a="700164949"
-Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 04 May 2023 19:28:49 -0700
-Received: from kbuild by fe5d646e317d with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1pulBg-00001h-2e;
-	Fri, 05 May 2023 02:28:48 +0000
-Date: Fri, 5 May 2023 10:28:38 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	matthieu.baerts@tessares.net
-Subject: [matttbe-net-next:b4/mptcp-issue-368-selftests-old-kernels
- 17827/30000] .topdeps: warning: ignored by one of the .gitignore files
-Message-ID: <202305051041.QtaLXJQ4-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE8A1376
+	for <llvm@lists.linux.dev>; Fri,  5 May 2023 03:01:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683255665;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ow8NQUHJ6Qt5ilTeuxyKNXyrZHEhuZx9HtEBNwUWDB8=;
+	b=ZRU/GlU0oaXfMOy/xQpcXfpmrsTjcHbPS+UAwLn589lCWiU7qSSM/NOZznfF8Vj50nFD1H
+	C0dIcfY/Mfzx0VYkM46XEk40YaZkD6440glofLSDKg620w5O0OD/36FnvbAgarw5kW6v2+
+	WeHIJbRG1VqIltodhVkIJayXarFUuGs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-631-7bZLX1LiMx6ZrG7oGL0FIQ-1; Thu, 04 May 2023 23:01:03 -0400
+X-MC-Unique: 7bZLX1LiMx6ZrG7oGL0FIQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93A6485C6E3
+	for <llvm@lists.linux.dev>; Fri,  5 May 2023 03:01:03 +0000 (UTC)
+Received: from [172.64.0.115] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7CB092026D16;
+	Fri,  5 May 2023 03:01:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
+ mainline.kernel.org-clang, 78b421b6)
+Date: Fri, 05 May 2023 03:01:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Message-Id: <72987.123050423010303945@us-mta-631.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jenkins,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/matttbe/net-next.git b4/mptcp-issue-368-selftests-old-kernels
-head:   71ffa0bf649c2228f63bcb4633c8b02bb2b266af
-commit: e8a6a7e84c5b102e6d35e436f83832915f6022ee [17827/30000] tgupdate: merge t/upstream base into t/upstream
-config: i386-randconfig-a011-20230501 (https://download.01.org/0day-ci/archive/20230505/202305051041.QtaLXJQ4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/matttbe/net-next.git/commit/?id=e8a6a7e84c5b102e6d35e436f83832915f6022ee
-        git remote add matttbe-net-next https://git.kernel.org/pub/scm/linux/kernel/git/matttbe/net-next.git
-        git fetch --no-tags matttbe-net-next b4/mptcp-issue-368-selftests-old-kernels
-        git checkout e8a6a7e84c5b102e6d35e436f83832915f6022ee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305051041.QtaLXJQ4-lkp@intel.com/
+Kernel information:
+    Commit message: Merge tag 'linux-watchdog-6.4-rc1' of git://www.linux-w=
+atchdog.org/linux-watchdog
 
-All warnings (new ones prefixed by >>):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/87290
 
-   .b4-config: warning: ignored by one of the .gitignore files
-   .cirrus.yml: warning: ignored by one of the .gitignore files
-   .git_markup: warning: ignored by one of the .gitignore files
-   .github/workflows/build-validation.yml: warning: ignored by one of the .gitignore files
-   .github/workflows/checkpatch.yml: warning: ignored by one of the .gitignore files
-   .github/workflows/notif.yml: warning: ignored by one of the .gitignore files
-   .github/workflows/update-tg-tree.yml: warning: ignored by one of the .gitignore files
->> .topdeps: warning: ignored by one of the .gitignore files
->> .topmsg: warning: ignored by one of the .gitignore files
-   drivers/clk/.kunitconfig: warning: ignored by one of the .gitignore files
-   drivers/gpu/drm/tests/.kunitconfig: warning: ignored by one of the .gitignore files
-   drivers/gpu/drm/vc4/tests/.kunitconfig: warning: ignored by one of the .gitignore files
-   drivers/hid/.kunitconfig: warning: ignored by one of the .gitignore files
-   fs/ext4/.kunitconfig: warning: ignored by one of the .gitignore files
-   fs/fat/.kunitconfig: warning: ignored by one of the .gitignore files
-   kernel/kcsan/.kunitconfig: warning: ignored by one of the .gitignore files
-   lib/kunit/.kunitconfig: warning: ignored by one of the .gitignore files
-   mm/kfence/.kunitconfig: warning: ignored by one of the .gitignore files
-   net/sunrpc/.kunitconfig: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34402=
+5
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
