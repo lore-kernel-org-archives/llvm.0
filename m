@@ -1,43 +1,42 @@
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DE71C08;
-	Fri,  5 May 2023 08:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD39185F;
+	Fri,  5 May 2023 08:49:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683275959; x=1714811959;
+  t=1683276551; x=1714812551;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N6ldFumAt9eAwUaXzZtJ/78unA5GyIfcWVCTVVLPtpU=;
-  b=DITleetBkiD6A5PJFoCbrdCyu7JrZjhIuEvrm34b+XOb6AVPjY/pls+L
-   C6ey2z3AbKzbeHTm4bNl3lAviwdUrHR52Se3GwVUljuYUxjhLhOmVoya1
-   uZvYG9EvW1Wh8h+BksfUkCPutbgIkc6OvdJ5Qpn4Sd7kYMg4IJ2DAKKJy
-   2zh0aP4L85zxYj2f6IiHHVNN9DS6tLpNcbjLOxO/7scEkbFt9DoG3E3s2
-   FdydwPOLBddxSpXlJXZDqKhszmspwvxCId2KN0hguuhNsE4vgJtwlB+tZ
-   0ayDn+up0teasQoe8w2FlobCRWxc0mAJrXDZvZ9SeOHgloDbXAaMWDjB8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="377239982"
+  bh=lxs+KV773DobhD2r5JBWqLlyIfA6+rU12SjXWWIT6bY=;
+  b=lJXg3xCRxXB+8HTCx3moWkl11AdZ5hBLWkfx6raGzKKEwGgLsApgesf+
+   4sJxTlNueDVxX4LSMLr0V5B0jKQbdvLc1MXJYDyBwC7IEdn2lvgbZQwlH
+   D6orb42MzZRd5XMoZOLz67xpNLWhq7i3/nIbvF+XwS77FUrShBSZMxI+w
+   YJ0rLt9XquKaYB6jbS2efiSdkKGtHVp+Gh8WgPgIkPguiwKyES+cv0jT9
+   Bz6TAUSNc2206gg5axpozi1IP5NkSWPr3ignzEMbCBtbL3b/qLKmADlLv
+   +eAmM8oCYKnJgAsot8JEGN3ntcVcugLV6Lyr7yjtPHRnYQzSUcRg+M3WD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="338349385"
 X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
-   d="scan'208";a="377239982"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 01:39:10 -0700
+   d="scan'208";a="338349385"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2023 01:49:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="1027372341"
+X-IronPort-AV: E=McAfee;i="6600,9927,10700"; a="762357503"
 X-IronPort-AV: E=Sophos;i="5.99,251,1677571200"; 
-   d="scan'208";a="1027372341"
+   d="scan'208";a="762357503"
 Received: from lkp-server01.sh.intel.com (HELO fe5d646e317d) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 May 2023 01:39:09 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 05 May 2023 01:49:09 -0700
 Received: from kbuild by fe5d646e317d with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1puqy4-0000Pl-2U;
-	Fri, 05 May 2023 08:39:08 +0000
-Date: Fri, 5 May 2023 16:38:12 +0800
+	id 1pur7l-0000Qv-0f;
+	Fri, 05 May 2023 08:49:09 +0000
+Date: Fri, 5 May 2023 16:48:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Faycal Benmlih <faycal.benmlih@intel.com>
+To: Manisha Chinthapally <manisha.chinthapally@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mchinth:socwatch_linux_6_3 25/91]
- drivers/platform/x86/socperf/socperfdrv.c:203:13: warning: no previous
- prototype for function 'SOCPERF_Read_Data3'
-Message-ID: <202305051606.G5JrvA1P-lkp@intel.com>
+Subject: [mchinth:socwatch_linux_6_3 1/1] scripts/Makefile.clean:12:
+ drivers/platform/x86/sepdk/Makefile: No such file or directory
+Message-ID: <202305051636.55IpYo15-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,253 +46,65 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Faycal,
+Hi Manisha,
 
-FYI, the error/warning still remains.
+First bad commit (maybe != root cause):
 
 tree:   https://github.com/mchinth/linux socwatch_linux_6_3
 head:   db51827dc3d8fd27fd6312b14811fa2e0c4abe87
-commit: e65547c5a9bb37e907edecece4da7cb12dadea96 [25/91] platform/x86: Use $(srctree) instead of $(src) to adapt to kbuild regression
-config: i386-randconfig-a011-20230501 (https://download.01.org/0day-ci/archive/20230505/202305051606.G5JrvA1P-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+commit: db51827dc3d8fd27fd6312b14811fa2e0c4abe87 [1/1] Platform/X86 Remove sepdk driver from this branch
+config: hexagon-buildonly-randconfig-r005-20230430 (https://download.01.org/0day-ci/archive/20230505/202305051636.55IpYo15-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/mchinth/linux/commit/e65547c5a9bb37e907edecece4da7cb12dadea96
+        # https://github.com/mchinth/linux/commit/db51827dc3d8fd27fd6312b14811fa2e0c4abe87
         git remote add mchinth https://github.com/mchinth/linux
         git fetch --no-tags mchinth socwatch_linux_6_3
-        git checkout e65547c5a9bb37e907edecece4da7cb12dadea96
+        git checkout db51827dc3d8fd27fd6312b14811fa2e0c4abe87
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/platform/x86/sepdk/pax/ drivers/platform/x86/socperf/ drivers/platform/x86/socwatch/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon distclean
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305051606.G5JrvA1P-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305051636.55IpYo15-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/platform/x86/socperf/socperfdrv.c:203:13: warning: no previous prototype for function 'SOCPERF_Read_Data3' [-Wmissing-prototypes]
-   extern VOID SOCPERF_Read_Data3(PVOID data_buffer)
-               ^
-   drivers/platform/x86/socperf/socperfdrv.c:203:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   extern VOID SOCPERF_Read_Data3(PVOID data_buffer)
-          ^
->> drivers/platform/x86/socperf/socperfdrv.c:885:1: warning: no previous prototype for function 'SOCPERF_Switch_Group3' [-Wmissing-prototypes]
-   SOCPERF_Switch_Group3(VOID)
-   ^
-   drivers/platform/x86/socperf/socperfdrv.c:884:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   extern OS_STATUS
-          ^
-   drivers/platform/x86/socperf/include/lwpmudrv_defines.h:372:19: note: expanded from macro 'OS_STATUS'
-   #define OS_STATUS int
-                     ^
->> drivers/platform/x86/socperf/socperfdrv.c:1070:6: warning: no previous prototype for function 'lwpmudrv_Stop_Mem' [-Wmissing-prototypes]
-   VOID lwpmudrv_Stop_Mem(VOID)
-        ^
-   drivers/platform/x86/socperf/socperfdrv.c:1070:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   VOID lwpmudrv_Stop_Mem(VOID)
-   ^
-   static 
->> drivers/platform/x86/socperf/socperfdrv.c:1155:15: warning: no previous prototype for function 'socperf_Service_IOCTL' [-Wmissing-prototypes]
-   IOCTL_OP_TYPE socperf_Service_IOCTL(IOCTL_USE_INODE struct file *filp,
-                 ^
-   drivers/platform/x86/socperf/socperfdrv.c:1155:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   IOCTL_OP_TYPE socperf_Service_IOCTL(IOCTL_USE_INODE struct file *filp,
-   ^
-   static 
-   drivers/platform/x86/socperf/inc/control.h:84:23: note: expanded from macro 'IOCTL_OP_TYPE'
-   #define IOCTL_OP_TYPE S32
-                         ^
-   drivers/platform/x86/socperf/socperfdrv.c:1299:33: error: expected expression
-           status = socperf_Service_IOCTL(IOCTL_USE_INODE filp, _IOC_NR(cmd),
-                                          ^
-   drivers/platform/x86/socperf/inc/control.h:85:25: note: expanded from macro 'IOCTL_USE_INODE'
-   #define IOCTL_USE_INODE struct inode *inode,
-                           ^
->> drivers/platform/x86/socperf/socperfdrv.c:1274:6: warning: no previous prototype for function 'socperf_Device_Control' [-Wmissing-prototypes]
-   long socperf_Device_Control(IOCTL_USE_INODE struct file *filp,
-        ^
-   drivers/platform/x86/socperf/socperfdrv.c:1274:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   long socperf_Device_Control(IOCTL_USE_INODE struct file *filp,
-   ^
-   static 
->> drivers/platform/x86/socperf/socperfdrv.c:1358:5: warning: no previous prototype for function 'SOCPERF_Abnormal_Terminate' [-Wmissing-prototypes]
-   int SOCPERF_Abnormal_Terminate(void)
-       ^
-   drivers/platform/x86/socperf/socperfdrv.c:1358:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int SOCPERF_Abnormal_Terminate(void)
-   ^
-   static 
-   drivers/platform/x86/socperf/socperfdrv.c:1389:2: error: field designator 'ioctl' does not refer to any field in type 'struct file_operations'
-           IOCTL_OP = socperf_Device_Control,
-           ^
-   drivers/platform/x86/socperf/inc/control.h:83:19: note: expanded from macro 'IOCTL_OP'
-   #define IOCTL_OP .ioctl
-                     ^
-   6 warnings and 2 errors generated.
---
->> drivers/platform/x86/socwatch/sw_output_buffer.c:301:7: warning: variable 'wrapped' set but not used [-Wunused-but-set-variable]
-           bool wrapped = false;
-                ^
->> drivers/platform/x86/socwatch/sw_output_buffer.c:299:25: warning: variable 'write_index' set but not used [-Wunused-but-set-variable]
-           size_t read_index = 0, write_index = 0, dst_index = 0;
-                                  ^
->> drivers/platform/x86/socwatch/sw_output_buffer.c:398:6: warning: no previous prototype for function 'reset_output_buffers' [-Wmissing-prototypes]
-   void reset_output_buffers(void)
-        ^
-   drivers/platform/x86/socwatch/sw_output_buffer.c:398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void reset_output_buffers(void)
-   ^
-   static 
-   3 warnings generated.
---
->> drivers/platform/x86/socwatch/sw_collector.c:86:1: warning: no previous prototype for function 'sw_copy_driver_interface_info_i' [-Wmissing-prototypes]
-   sw_copy_driver_interface_info_i(const struct sw_driver_interface_info *info)
-   ^
-   drivers/platform/x86/socwatch/sw_collector.c:85:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct sw_driver_interface_info *
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:116:5: warning: no previous prototype for function 'sw_init_driver_interface_info_i' [-Wmissing-prototypes]
-   int sw_init_driver_interface_info_i(struct sw_driver_interface_info *info)
-       ^
-   drivers/platform/x86/socwatch/sw_collector.c:116:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sw_init_driver_interface_info_i(struct sw_driver_interface_info *info)
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:138:5: warning: no previous prototype for function 'sw_init_ops_i' [-Wmissing-prototypes]
-   int sw_init_ops_i(const struct sw_hw_ops **ops,
-       ^
-   drivers/platform/x86/socwatch/sw_collector.c:138:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sw_init_ops_i(const struct sw_hw_ops **ops,
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:157:8: warning: no previous prototype for function 'sw_get_payload_size_i' [-Wmissing-prototypes]
-   size_t sw_get_payload_size_i(const struct sw_driver_interface_info *info)
-          ^
-   drivers/platform/x86/socwatch/sw_collector.c:157:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   size_t sw_get_payload_size_i(const struct sw_driver_interface_info *info)
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:175:1: warning: no previous prototype for function 'sw_alloc_collector_msg_i' [-Wmissing-prototypes]
-   sw_alloc_collector_msg_i(const struct sw_driver_interface_info *info,
-   ^
-   drivers/platform/x86/socwatch/sw_collector.c:174:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   sw_driver_msg_t *
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:211:26: warning: no previous prototype for function 'sw_alloc_ops_i' [-Wmissing-prototypes]
-   const struct sw_hw_ops **sw_alloc_ops_i(pw_u16_t num_io_descriptors)
-                            ^
-   drivers/platform/x86/socwatch/sw_collector.c:211:7: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   const struct sw_hw_ops **sw_alloc_ops_i(pw_u16_t num_io_descriptors)
-         ^
-         static 
->> drivers/platform/x86/socwatch/sw_collector.c:323:6: warning: no previous prototype for function 'sw_free_driver_interface_info_i' [-Wmissing-prototypes]
-   void sw_free_driver_interface_info_i(struct sw_driver_interface_info *info)
-        ^
-   drivers/platform/x86/socwatch/sw_collector.c:323:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sw_free_driver_interface_info_i(struct sw_driver_interface_info *info)
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:329:6: warning: no previous prototype for function 'sw_free_ops_i' [-Wmissing-prototypes]
-   void sw_free_ops_i(const struct sw_hw_ops **ops)
-        ^
-   drivers/platform/x86/socwatch/sw_collector.c:329:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sw_free_ops_i(const struct sw_hw_ops **ops)
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:335:5: warning: no previous prototype for function 'sw_reset_driver_interface_info_i' [-Wmissing-prototypes]
-   int sw_reset_driver_interface_info_i(struct sw_driver_interface_info *info)
-       ^
-   drivers/platform/x86/socwatch/sw_collector.c:335:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int sw_reset_driver_interface_info_i(struct sw_driver_interface_info *info)
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:453:6: warning: no previous prototype for function 'sw_free_collector_msg_i' [-Wmissing-prototypes]
-   void sw_free_collector_msg_i(sw_driver_msg_t *msg)
-        ^
-   drivers/platform/x86/socwatch/sw_collector.c:453:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sw_free_collector_msg_i(sw_driver_msg_t *msg)
-   ^
-   static 
->> drivers/platform/x86/socwatch/sw_collector.c:459:6: warning: no previous prototype for function 'sw_handle_per_cpu_msg_i' [-Wmissing-prototypes]
-   void sw_handle_per_cpu_msg_i(void *info, enum sw_wakeup_action action)
-        ^
-   drivers/platform/x86/socwatch/sw_collector.c:459:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void sw_handle_per_cpu_msg_i(void *info, enum sw_wakeup_action action)
-   ^
-   static 
-   11 warnings generated.
---
-   drivers/platform/x86/socwatch/sw_telem.c:239:32: error: implicit declaration of function 'ioremap_nocache' [-Werror,-Wimplicit-function-declaration]
-           s_punitInterfaceAddr = (u64 *)ioremap_nocache(
-                                         ^
-   drivers/platform/x86/socwatch/sw_telem.c:239:32: note: did you mean 'ioremap_cache'?
-   arch/x86/include/asm/io.h:185:22: note: 'ioremap_cache' declared here
-   extern void __iomem *ioremap_cache(resource_size_t offset, unsigned long size);
-                        ^
-   drivers/platform/x86/socwatch/sw_telem.c:280:27: error: implicit declaration of function 'ioremap_nocache' [-Werror,-Wimplicit-function-declaration]
-           s_pmcIPCCmdAddr = (u64 *)ioremap_nocache(
-                                    ^
->> drivers/platform/x86/socwatch/sw_telem.c:671:5: warning: no previous prototype for function 'read_telem' [-Wmissing-prototypes]
-   int read_telem(u64 *dst, enum telemetry_unit unit, bool should_retry)
-       ^
-   drivers/platform/x86/socwatch/sw_telem.c:671:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int read_telem(u64 *dst, enum telemetry_unit unit, bool should_retry)
-   ^
-   static 
-   1 warning and 2 errors generated.
---
->> drivers/platform/x86/socwatch/sw_output_buffer.c:299:25: warning: variable 'write_index' set but not used [-Wunused-but-set-variable]
-           size_t read_index = 0, write_index = 0, dst_index = 0;
-                                  ^
->> drivers/platform/x86/socwatch/sw_output_buffer.c:301:7: warning: variable 'wrapped' set but not used [-Wunused-but-set-variable]
-           bool wrapped = false;
-                ^
->> drivers/platform/x86/socwatch/sw_output_buffer.c:398:6: warning: no previous prototype for function 'reset_output_buffers' [-Wmissing-prototypes]
-   void reset_output_buffers(void)
-        ^
-   drivers/platform/x86/socwatch/sw_output_buffer.c:398:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void reset_output_buffers(void)
-   ^
-   static 
-   3 warnings generated.
+>> scripts/Makefile.clean:12: drivers/platform/x86/sepdk/Makefile: No such file or directory
+>> make[6]: *** No rule to make target 'drivers/platform/x86/sepdk/Makefile'.
+   make[6]: Failed to remake makefile 'drivers/platform/x86/sepdk/Makefile'.
+   make[5]: *** [scripts/Makefile.clean:59: drivers/platform/x86/sepdk] Error 2
+   make[5]: Target '__clean' not remade because of errors.
+   make[4]: *** [scripts/Makefile.clean:59: drivers/platform/x86] Error 2
+   make[4]: Target '__clean' not remade because of errors.
+   make[3]: *** [scripts/Makefile.clean:59: drivers/platform] Error 2
+   make[3]: Target '__clean' not remade because of errors.
+   make[2]: *** [scripts/Makefile.clean:59: drivers] Error 2
+   make[2]: Target '__clean' not remade because of errors.
+   make[1]: *** [Makefile:2030: _clean_.] Error 2
+   make[1]: Target 'distclean' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'distclean' not remade because of errors.
 
 
-vim +/SOCPERF_Read_Data3 +203 drivers/platform/x86/socperf/socperfdrv.c
+vim +12 scripts/Makefile.clean
 
-f57492d07625dd Manisha Chinthapally 2019-05-01  189  
-f57492d07625dd Manisha Chinthapally 2019-05-01  190  /* ------------------------------------------------------------------------- */
-f57492d07625dd Manisha Chinthapally 2019-05-01  191  /*!
-f57492d07625dd Manisha Chinthapally 2019-05-01  192   * @fn       VOID SOCPERF_Read_Data
-f57492d07625dd Manisha Chinthapally 2019-05-01  193   *
-f57492d07625dd Manisha Chinthapally 2019-05-01  194   * @brief    Reads counter data
-f57492d07625dd Manisha Chinthapally 2019-05-01  195   *
-f57492d07625dd Manisha Chinthapally 2019-05-01  196   * @param    param   data_buffer - buffer for reading counter data.
-f57492d07625dd Manisha Chinthapally 2019-05-01  197   *
-f57492d07625dd Manisha Chinthapally 2019-05-01  198   * @return  None
-f57492d07625dd Manisha Chinthapally 2019-05-01  199   *
-f57492d07625dd Manisha Chinthapally 2019-05-01  200   * <I>Special Notes:</I>
-f57492d07625dd Manisha Chinthapally 2019-05-01  201   *              <NONE>
-f57492d07625dd Manisha Chinthapally 2019-05-01  202   */
-f57492d07625dd Manisha Chinthapally 2019-05-01 @203  extern VOID SOCPERF_Read_Data3(PVOID data_buffer)
-f57492d07625dd Manisha Chinthapally 2019-05-01  204  {
-f57492d07625dd Manisha Chinthapally 2019-05-01  205  	if (dispatch_uncore && dispatch_uncore->read_current_data) {
-f57492d07625dd Manisha Chinthapally 2019-05-01  206  		dispatch_uncore->read_current_data(data_buffer);
-f57492d07625dd Manisha Chinthapally 2019-05-01  207  	}
-f57492d07625dd Manisha Chinthapally 2019-05-01  208  	SOCPERF_PRINT_DEBUG("%s called\n", __func__);
-f57492d07625dd Manisha Chinthapally 2019-05-01  209  }
-f57492d07625dd Manisha Chinthapally 2019-05-01  210  EXPORT_SYMBOL(SOCPERF_Read_Data3);
-f57492d07625dd Manisha Chinthapally 2019-05-01  211  
+^1da177e4c3f41 Linus Torvalds  2005-04-16   7  
+4f1933620f5714 Paul Smith      2006-03-05   8  PHONY := __clean
+^1da177e4c3f41 Linus Torvalds  2005-04-16   9  __clean:
+^1da177e4c3f41 Linus Torvalds  2005-04-16  10  
+3204a7fb98a3bc Masahiro Yamada 2021-02-28  11  include $(srctree)/scripts/Kbuild.include
+a2430b25c31840 Masahiro Yamada 2022-11-19 @12  include $(kbuild-file)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  13  
 
-:::::: The code at line 203 was first introduced by commit
-:::::: f57492d07625dddac7920eccdb5be08c55ee16fa platform/x86: SOCPERF3 support for sep & socwatch
+:::::: The code at line 12 was first introduced by commit
+:::::: a2430b25c31840a6dcbf95c65415d5fee2984dbc kbuild: add kbuild-file macro
 
-:::::: TO: Manisha Chinthapally <manisha.chinthapally@intel.com>
-:::::: CC: Faycal Benmlih <faycal.benmlih@intel.com>
+:::::: TO: Masahiro Yamada <masahiroy@kernel.org>
+:::::: CC: Masahiro Yamada <masahiroy@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
