@@ -1,206 +1,84 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BF9156EF
-	for <llvm@lists.linux.dev>; Fri,  5 May 2023 19:06:41 +0000 (UTC)
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1a7ff4a454eso628755ad.0
-        for <llvm@lists.linux.dev>; Fri, 05 May 2023 12:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683313601; x=1685905601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D/pJFPF6XDQ2lM0mX2EEDsBVu2i8kXIUDFE5knvpspY=;
-        b=WDRbXcJjx3hmzwNQnY1YucpNmSqW22C7wbZapKWHkAVi0+1W9aRoOUOaiAZcy2TY2f
-         WEoQPHvUgbeWt47I3LcSn35vzGAx94JZfTGcOtUakPkEZ+6Ia7JwTo50Hg7i9PONj1U/
-         TlTS3MRfDzzBgvWBwQgcRgB+s/ZSD164i7aci7hL9wH9XO+r5vblWLbmKHjgXzHPZj/k
-         cbucdU0kQzD4nfmYhsU1oW+thEuVxiNkjVggTUZEpmKaZ5dOJe+9oLzXwVXTLCRWIbRt
-         jj1w6YoVRScIfu51NuzCnP5PsqOvhuWu2ly5Am5R1TNqKKt1nrWzaXnEB3QnKIg/grWu
-         gPQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683313601; x=1685905601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D/pJFPF6XDQ2lM0mX2EEDsBVu2i8kXIUDFE5knvpspY=;
-        b=iueH3kYFnrDH5Sbc+/7M66eif46Pn1UBdrYG3nXrD1rl+YCtsfxqb84Mum7L87L+IH
-         yFX4xzkLH3XLtyufJkldhF0kWNdBFoA8qu876xIm1tFwGK8/DK9GXegjbFKYKx35uisk
-         +H/0HBzVn1A0wVjBqFi/D2+kHMV/XCYHi5uF725jNetXpiRxdvf03sL7UKCW6B9Ao7fI
-         dVmsCAwDJ+FZJgH3fKEfuEMt0cAMhEukAqyobhrMZkYRPLp51xWGPdLfG30t/47eCg0O
-         N6rk4jfh1u27RASCoev2yADEFTFEo2uJ0KNRHzaAptVT2DfUiy3m2PHmHHZhuzMm4Zyg
-         e71A==
-X-Gm-Message-State: AC+VfDx+gOw5ewQpTrdg3wWML5bgJ+f2P0yRPOegXqOToDd98dvzroDM
-	eyFRqZBknt6IqJSDMkOPARtt/7QNorQ1YLcq1mYcxQ==
-X-Google-Smtp-Source: ACHHUZ6Gm4a1l0IBB74DNpxBl+mkjinCwczPciXZj1XpQLD0ljcS3eVgQV/VDAUs5XQkWlavJssNoUxeJjDl1SP+9BQ=
-X-Received: by 2002:a17:902:d2c3:b0:1aa:e90c:d437 with SMTP id
- n3-20020a170902d2c300b001aae90cd437mr22203plc.8.1683313600977; Fri, 05 May
- 2023 12:06:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685962F33
+	for <llvm@lists.linux.dev>; Fri,  5 May 2023 20:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1683317406;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QzASPoIAvCn7lrR4GEN2tdCUrxmRnmr+1bc9EdgI/jQ=;
+	b=YxlM0A72XtyiJ9Oy3ZFxaqbeyFzIt0LxFNY4xKH0GNMPmq1Yj0L2E1S8umSbgkT7u+QVbb
+	EbuZFo1gfNqPkGpg1CdaGR9TK1Q6GqUrLvQigWRFoEXlfOsDgx/DsGeJdfrrpMPUBzMoGi
+	xkHXIM8O7KcQgc+0J7yqCxOoResl8co=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-2C4tcnRlOLi4KfpwlG8HfA-1; Fri, 05 May 2023 16:10:05 -0400
+X-MC-Unique: 2C4tcnRlOLi4KfpwlG8HfA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CEDE8857DD9
+	for <llvm@lists.linux.dev>; Fri,  5 May 2023 20:10:04 +0000 (UTC)
+Received: from [172.64.0.115] (unknown [10.30.32.245])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id B38331121331;
+	Fri,  5 May 2023 20:10:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.3.0,
+ mainline.kernel.org-clang, 7163a211)
+Date: Fri, 05 May 2023 20:10:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <7cee0c83225ffd8cf8fd0065bea9348f6db3b12a.1682673543.git.houwenlong.hwl@antgroup.com>
- <CAKwvOd=zgjWdg2+_bg3QByh_2hve8yoKzCfEBZ5md+k8ytkqcQ@mail.gmail.com>
- <20230505061420.GB103506@k08j02272.eu95sqa> <CAKwvOdkWt8FpqegyaGRNdF067dwwFEGze-nqR+yF=TA1FnTozg@mail.gmail.com>
-In-Reply-To: <CAKwvOdkWt8FpqegyaGRNdF067dwwFEGze-nqR+yF=TA1FnTozg@mail.gmail.com>
-From: Fangrui Song <maskray@google.com>
-Date: Fri, 5 May 2023 12:06:29 -0700
-Message-ID: <CAFP8O3JEa95NRKKJZSGNphqAGEm-VEGdTg9zgLZtuE-7U_zi8A@mail.gmail.com>
-Subject: Re: [PATCH RFC 16/43] x86-64: Use per-cpu stack canary if supported
- by compiler
-To: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc: Brian Gerst <brgerst@gmail.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>, x86@kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Message-Id: <20129.123050516100500377@us-mta-553.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 5, 2023 at 11:02=E2=80=AFAM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Thu, May 4, 2023 at 11:14=E2=80=AFPM Hou Wenlong <houwenlong.hwl@antgr=
-oup.com> wrote:
-> >
-> > On Tue, May 02, 2023 at 01:27:53AM +0800, Nick Desaulniers wrote:
-> > > On Fri, Apr 28, 2023 at 2:52=E2=80=AFAM Hou Wenlong <houwenlong.hwl@a=
-ntgroup.com> wrote:
-> > > >
-> > > > +config CC_HAS_CUSTOMIZED_STACKPROTECTOR
-> > > > +       bool
-> > > > +       # Although clang supports -mstack-protector-guard-reg optio=
-n, it
-> > > > +       # would generate GOT reference for __stack_chk_guard even w=
-ith
-> > > > +       # -fno-PIE flag.
-> > > > +       default y if (!CC_IS_CLANG && $(cc-option,-mstack-protector=
--guard-reg=3Dgs))
-> > >
-> > > Hi Hou,
-> > > I've filed this bug against LLVM and will work with LLVM folks at
-> > > Intel to resolve:
-> > > https://github.com/llvm/llvm-project/issues/62481
-> > > Can you please review that report and let me know here or there if I
-> > > missed anything? Would you also mind including a link to that in the
-> > > comments in the next version of this patch?
-> > >
-> > Hi Nick,
-> >
-> > Thanks for your help, I'll include the link in the next version.
-> > Actually, I had post an issue on github too when I test the patch on
-> > LLVM. But no replies. :(.
->
-> Ah, sorry about that.  The issue tracker is pretty high volume and
-> stuff gets missed.  With many users comes many bug reports.  We could
-> be better about triage though.  If it's specific to the Linux kernel,
-> https://github.com/ClangBuiltLinux/linux/issues is a better issue
-> tracker to use; we can move bug reports upstream to
-> https://github.com/llvm/llvm-project/issues/ when necessary. It's
-> linked off of clangbuiltlinux.github.io if you lose it.
->
-> > https://github.com/llvm/llvm-project/issues/60116
-> >
-> > There is another problem I met for this patch, some unexpected code
-> > are generated:
-> >
-> > do_one_initcall: (init/main.o)
-> > ......
-> > movq    __stack_chk_guard(%rip), %rax
-> > movq    %rax,0x2b0(%rsp)
-> >
-> > The complier generates wrong instruction, no GOT reference and gs
-> > register. I only see it in init/main.c file. I have tried to move the
-> > function into another file and compiled it with same cflags. It could
-> > generate right instruction for the function in another file.
->
-> The wrong instruction or the wrong operand?  This is loading the
-> canary into the stack slot in the fn prolog.  Perhaps the expected
-> cflag is not getting set (or being removed) from init/main.c? You
-> should be able to do:
->
-> $ make LLVM=3D1 init/main.o V=3D1
->
-> to see how clang was invoked to see if the expected flag was there, or no=
-t.
->
-> >
-> > The LLVM chain toolsare built by myself:
-> > clang version 15.0.7 (https://github.com/llvm/llvm-project.git
-> > 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
->
-> Perhaps worth rebuilding with top of tree, which is clang 17.
->
-> >
-> > > Less relevant issues I filed looking at some related codegen:
-> > > https://github.com/llvm/llvm-project/issues/62482
-> > > https://github.com/llvm/llvm-project/issues/62480
-> > >
-> > > And we should probably look into:
-> > > https://github.com/llvm/llvm-project/issues/22476
-> > >
-> > >
-> >
-> > Except for per-cpu stack canary patch, there is another issue I post on
-> > github: https://github.com/llvm/llvm-project/issues/60096
->
-> Thanks, I'll bring that up with Intel, too.
->
-> >
-> > The related patch is:
-> > https://lore.kernel.org/lkml/175116f75c38c15d8d73a03301eab805fea13a0a.1=
-682673543.git.houwenlong.hwl@antgroup.com/
-> >
-> > I couldn't find the related documentation about that, hope you can help
-> > me too.
-> >
-> > One more problem that I didn't post is:
-> > https://lore.kernel.org/lkml/8d6bbaf66b90cf1a8fd2c5da98f5e094b9ffcb27.1=
-682673543.git.houwenlong.hwl@antgroup.com/
->
-> Mind filing another bug for this in llvm's issue tracker? We can
-> discuss there if LLD needs to be doing something different.
->
-> Thanks for uncovering these and helping us get them fixed up!
-> --
-> Thanks,
-> ~Nick Desaulniers
+Hi, we tested your kernel and here are the results:
 
-In my opinion, Clang's behavior is working as intended. The Linux
-kernel should support R_X86_64_REX_GOTPCRELX, and the solution is
-straightforward: treat R_X86_64_REX_GOTPCRELX the same way as
-R_X86_64_PC32 (-shared -Bsymbolic), assuming that every symbol is
-defined, which means that every symbol is non-preemptible.
-
-Clang's `-fno-pic` option chooses `R_X86_64_REX_GOTPCRELX` which is
-correct, although it differs from GCC's `-fno-pic` option.
-
-The compiler doesn't know whether `__stack_chk_guard` will be provided
-by the main executable (`libc.a`) or a shared object (`libc.so`,
-available on some ports of glibc but not x86, on musl this is
-available for all ports).
-(Also see `__stack_chk_guard` on
-https://maskray.me/blog/2022-12-18-control-flow-integrity)
-
-If an `R_X86_64_32` relocation is used and `__stack_chk_guard` is
-defined by a shared object, copy relocation.
-We will need an ELF hack called [copy
-relocation](https://maskray.me/blog/2021-01-09-copy-relocations-canonical-p=
-lt-entries-and-protected).
-
-The instruction movq __stack_chk_guard@GOTPCREL(%rip), %rbx produces
-an R_X86_64_REX_GOTPCRELX relocation.
-If `__stack_chk_guard` is non-preemptible, linkers can [optimize the
-access to be direct](https://maskray.me/blog/2021-08-29-all-about-global-of=
-fset-table#got-optimization).
-
-Although we could technically use the
-`-fno-direct-access-external-data` option to switch between
-`R_X86_64_REX_GOTPCRELX` and `R_X86_64_32`, I think there is no
-justification to complicate the compiler.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+              Test: SKIPPED
 
 
+Kernel information:
+    Commit message: Merge tag 'acpi-6.4-rc1-3' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/rafael/linux-pm
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/87434
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/34450=
+6
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
